@@ -7,6 +7,28 @@
 </div>
 <?php endif; ?>
 
+<p>Logging currently set to log: <b>
+<?php 
+	switch ($log_threshold)
+	{
+		case 0:
+			echo 'Nothing';
+			break;
+		case 1:
+			echo 'Only Errors (including PHP)';
+			break;
+		case 2:
+			echo 'Debug and Error messages';
+			break;
+		case 3:
+			echo 'Information, Debug and Error messages';
+			break;
+		case 4:
+			echo 'All messages';
+			break;
+	}
+?>
+</b>.</p>
 
 
 <?php if (isset($log_files) && is_array($log_files) && count($log_files) > 1) : ?>
@@ -34,6 +56,12 @@
 	<?php endforeach; ?>
 	</tbody>
 </table>
+<?php else: ?>
+
+<div class="notification information">
+	<p>There are currently no logs available.</p>
+</div>
+
 <?php endif; ?>
 
 
