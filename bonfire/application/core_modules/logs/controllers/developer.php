@@ -9,6 +9,9 @@ class Developer extends Admin_Controller {
 		parent::__construct();
 		
 		Template::set('toolbar_title', 'System Logs');
+		
+		// Logging enabled?
+		Template::set('log_threshold', $this->config->item('log_threshold'));
 	}
 	
 	//--------------------------------------------------------------------
@@ -16,9 +19,6 @@ class Developer extends Admin_Controller {
 	public function index() 
 	{
 		$this->load->helper('file');
-		
-		// Logging enabled?
-		Template::set('log_threshold', $this->config->item('log_threshold'));
 		
 		// Log Files
 		Template::set('log_files', get_filenames($this->config->item('log_path')));
@@ -43,9 +43,6 @@ class Developer extends Admin_Controller {
 				Template::set_message('Unable to save log settings. Check the write permissions on <b>appication/config.php</b> and try again.', 'error');
 			}
 		}
-	
-		// Log Threshold
-		Template::set('log_threshold', $this->config->item('log_threshold'));
 	
 		Template::render();
 	}
