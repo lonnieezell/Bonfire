@@ -1,0 +1,32 @@
+<?php echo $this->load->view('developer/sub_nav.php', null, true); ?>
+<br/>
+
+<h2>Viewing: <?php echo $log_file ?></h2>
+
+<br/>
+
+<?php if (!isset($log_content) || empty($log_content)) : ?>
+<div class="notification attention">
+	<p>Either the log file could not be located, or it was empty.</p>
+</div>
+<?php else : ?>
+
+	<?php foreach ($log_content as $row) : ?>
+	<?php 
+		$class = '';
+		
+		if (strpos($row, 'ERROR') !== false)
+		{
+			$class="error";
+		} else
+		if (strpos($row, 'DEBUG') !== false)
+		{
+			$class="attention";
+		}		
+	?>
+	<div style="border-bottom: 1px solid #ccc; color: #222;" <?php echo 'class="'. $class .'"' ?>>
+		<?php echo $row; ?>
+	</div>
+	<?php endforeach; ?>
+
+<?php endif; ?>
