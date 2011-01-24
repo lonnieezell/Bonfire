@@ -37,6 +37,7 @@ a:hover {
 ol, ul {
 	list-style-position: inside;
 }
+p { margin: 0.5em 0; }
 
 /* MISC EFFECTS */
 .text-right { text-align: right; }
