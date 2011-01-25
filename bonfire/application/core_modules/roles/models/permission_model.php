@@ -96,6 +96,53 @@ class Permission_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/**
+	 * Sets the permissions for a single role. 
+	 * 
+	 * The permissions array is a simple array with the values being equal
+	 * to the name of the permission to set. All other permissions are set
+	 * to 0.
+	 */
+	public function set_for_role($role_id=null, $permissions = array()) 
+	{
+		if (empty($role_id) || !is_numeric($role_id))
+		{
+			return false;
+		}
+		
+		$role = $this->find_by('role_id', $role_id);
+		
+		if (!$role)
+		{
+			return false;
+		}
+		
+		if (is_array($role)) { $role = (array)$role[0]; }
+				
+		// ActiveRecord doesn't like this style of parameters (with the '.' as dividers)
+		// so we build it ourself.
+		$sets = '';
+		
+		foreach ($role as $name => $value)
+		{
+			if ($name == 'permission_id' || $name == 'role_id') { continue; }
+			
+			$sets .= ", `$name`=";
+			$sets .= in_array($name, $permissions) ? '1' : '0';
+		}
+		
+		$sets = trim($sets, ', ');
+				
+		$sql = "UPDATE {$this->db->dbprefix}{$this->table} 
+				SET $sets
+				WHERE `role_id`=$role_id
+		";		
+		
+		return $this->db->query($sql);
+	}
+	
+	//--------------------------------------------------------------------
+	
 }
 
 // End Permission Model
