@@ -19,12 +19,6 @@
 		<p class="small" style="margin-left: 28%">Max. 255 characters.</p>
 	</div>
 	
-	<div class="text-right">
-		<br/>
-		<input type="submit" name="submit" value="Save Role" /> or <?php echo anchor('admin/settings/roles', 'Cancel'); ?>
-	</div>
-	
-	
 	<!-- Permissions -->
 	<fieldset>
 		<legend>Permissions</legend>
@@ -34,5 +28,10 @@
 		<?php echo modules::run('roles/settings/matrix'); ?>
 	
 	</fieldset>
+	
+	<div class="text-right">
+		<br/>
+		<input type="submit" name="submit" value="Save Role" /> or <?php echo anchor('admin/settings/roles', 'Cancel'); ?>
+	</div>
 
 <?php echo form_close(); ?>

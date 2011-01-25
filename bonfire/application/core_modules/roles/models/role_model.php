@@ -11,5 +11,31 @@ class Role_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	public function __construct() 
+	{
+		parent::__construct();
+		
+		if (!class_exists('Permission_model'))
+		{
+			$this->load->model('permission_model');
+		}
+	}
+	
+	//--------------------------------------------------------------------
 
+	public function find($id=null) 
+	{
+		$role = parent::find($id);
+		
+		if (!$role) { return false; }
+		
+		// Grab our permissions for the role.
+		$permissions = $this->permission_model->find_for_role($id);
+		$role->permissions = $permissions[0];
+		
+		return $role;
+	}
+	
+	//--------------------------------------------------------------------
+			
 }

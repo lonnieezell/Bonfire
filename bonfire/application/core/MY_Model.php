@@ -208,6 +208,20 @@ class MY_Model extends CI_Model {
 	
 	//---------------------------------------------------------------
 	
+	public function update_where($field=null, $value=null, $data=null) 
+	{
+		if (empty($field) || empty($value) || !is_array($data))
+		{
+			$this->error = 'Not enough data.';
+			return false;
+		}
+			
+		return $this->db->update($this->table, $data, array($field => $value));
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
 	/**
 	 * delete()
 	 *
