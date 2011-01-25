@@ -118,3 +118,4 @@ ERROR - 2011-01-24 22:39:58 --> Severity: Notice  --> Undefined property: stdCla
 ERROR - 2011-01-24 22:41:08 --> Query error: Unknown column 'bf_user.role_id' in 'on clause'
 ERROR - 2011-01-24 22:41:35 --> Severity: Notice  --> Undefined property: stdClass::$banned /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/views/settings/user_form.php 12
 ERROR - 2011-01-24 22:41:51 --> Severity: Notice  --> Undefined property: stdClass::$banned /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/views/settings/user_form.php 12
+ERROR - 2011-01-24 22:52:46 --> Unable to load the requested class: menus
