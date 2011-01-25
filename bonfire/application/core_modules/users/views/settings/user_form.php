@@ -9,7 +9,7 @@
 
 <p class="small">Required fields are in <b>bold</b>.</p>
 
-<?php if (isset($user) && $user->banned) : ?>
+<?php if (isset($user) && $user->role_name == 'Banned') : ?>
 <div class="notification attention">
 	<p>This user has been banned from the site.</p>
 </div>
