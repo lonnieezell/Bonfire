@@ -82,7 +82,7 @@ class Settings extends Admin_Controller {
 	
 		Template::set('toolbar_title', 'Edit Role');
 		Template::set_view('settings/role_form');
-		Template::render();
+		Template::render();		
 	}
 	
 	//--------------------------------------------------------------------
@@ -205,7 +205,7 @@ class Settings extends Admin_Controller {
 	//--------------------------------------------------------------------
 	
 	public function save_role($type='insert', $id=0) 
-	{
+	{	
 		$this->form_validation->set_rules('role_name', 'Role Name', 'required|trim|strip_tags|alpha|max_length[60]|xss_clean');
 		$this->form_validation->set_rules('description', 'Description', 'trim|strip_tags|max_length[255]|xss_clean');
 		
@@ -214,15 +214,36 @@ class Settings extends Admin_Controller {
 			return false;
 		}
 		
+		// Grab our permissions out of the POST vars, if it's there.
+		// We'll need it later.
+		$permissions = $this->input->post('role_permissions');
+		unset($_POST['role_permissions']);
+		
 		if ($type == 'insert')
 		{
-			return $this->role_model->insert($_POST);
+			$id = $this->role_model->insert($_POST);
+			
+			if (is_numeric($id))
+			{
+				$return = true;
+			} else
+			{
+				$return = false;
+			}
 		}
 		else if ($type == 'update')
 		{
-			return $this->role_model->update($id, $_POST);
+			$return = $this->role_model->update($id, $_POST);
 		}
 		
+		// Save the permissions.
+		if (!$this->permission_model->set_for_role($id, $permissions))
+		{
+			$this->error = 'There was an error saving the permissions.';
+		}
+		
+		unset($permissions);
+		return $return;
 	}
 	
 	//--------------------------------------------------------------------
