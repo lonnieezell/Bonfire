@@ -55,6 +55,15 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	public function find($id=null) 
+	{
+		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
+	
+		return parent::find($id);
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	public function find_all($show_deleted=false) 
 	{
