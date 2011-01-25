@@ -45,7 +45,6 @@ class Admin_Controller extends Base_Controller {
 		parent::__construct();
 		
 		// Load additional libraries
-		$this->load->library('menus');
 		$this->load->helper('form');
 		
 		$this->load->library('form_validation');
