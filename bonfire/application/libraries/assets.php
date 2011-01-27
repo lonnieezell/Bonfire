@@ -24,9 +24,9 @@ class Assets {
 	 *	An instance of the CI app
 	 *
 	 * @var 	object
-	 * @access	protected
+	 * @access	private
 	 */
-	protected static $ci;
+	private static $ci;
 	
 	/**
 	 * The base string to be prepended to all asset url's.
@@ -94,9 +94,9 @@ class Assets {
 	 */
 	public function __construct()
 	{
-		self::$ci =& get_instance();
-	
 		self::init();
+		
+		self::$ci =& get_instance();
 	}
 
 	//--------------------------------------------------------------------
@@ -154,7 +154,7 @@ class Assets {
 			// If not styles are in the system, base it on the media type.
 			if (!count(self::$styles))
 			{
-				$styles = array($media);
+				$styles[] = $media;
 			} else
 			{
 				$styles = self::$styles;
@@ -170,6 +170,8 @@ class Assets {
 		{
 			$styles = array($style);
 		}
+		
+		var_dump(self::$ci);
 		
 		// Add a style named for the controller so it will be looked for.
 		$styles[] = self::$ci->router->class;
