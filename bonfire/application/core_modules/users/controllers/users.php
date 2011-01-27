@@ -33,6 +33,7 @@ class Users extends Front_Controller {
 			}
 		}
 	
+		Template::set_theme('auth');
 		Template::set_view('users/users/login');
 		Template::render();
 	}
@@ -49,6 +50,7 @@ class Users extends Front_Controller {
 	
 	public function forgot_password() 
 	{
+		Template::set_theme('auth');
 		Template::set_view('users/users/forgot_password');
 		Template::render();
 	}

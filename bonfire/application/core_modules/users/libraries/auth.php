@@ -41,17 +41,22 @@ class Auth {
 		if ($user)
 		{
 			// Validate the password
-			if (!function_exists('dohash'))
+			if (!function_exists('do_hash'))
 			{
 				$this->ci->load->helper('security');
 			}
 
-			if ( dohash($user->salt . $password) == $user->password_hash)
+			if ( do_hash($user->salt . $password) == $user->password_hash)
 			{ 
+				// We've successfully validated the login, so setup the session
 				$this->setup_session($user->id, $user->password_hash, $user->email, null, $remember);
 				
-				// Log the last login date
-				$this->ci->user_model->update($user->id, array('last_login' => date('Y-m-d H:i:s', time())));
+				// Save the login info
+				$data = array(
+					'last_login'	=> date('Y-m-d H:i:s', time()),
+					'last_ip'		=> $this->ci->input->ip_address()
+				);
+				$this->ci->user_model->update($user->id, $data);
 				
 				return true;
 			}
@@ -103,13 +108,13 @@ class Auth {
 			
 			if ($user !== false)
 			{
-				if (!function_exists('dohash')) 
+				if (!function_exists('do_hash')) 
 				{
 					$this->ci->load->helper('security');
 				}
 				
 				// Ensure user_token is still equivalent to the SHA1 of the user_id and password_hash
-				if (dohash($this->ci->session->userdata('user_id') . $user->password_hash) === $this->ci->session->userdata('user_token')) 
+				if (do_hash($this->ci->session->userdata('user_id') . $user->password_hash) === $this->ci->session->userdata('user_token')) 
 				{ 
 					$this->logged_in = true;
 					return TRUE;
@@ -203,7 +208,7 @@ class Auth {
 		
 		$data = array(
 			'user_id'		=> $id,
-			'user_token'	=> dohash($id . $password_hash),
+			'user_token'	=> do_hash($id . $password_hash),
 			'email'			=> $email,
 			'role'			=> $role_id,
 			'logged_in'		=> true,

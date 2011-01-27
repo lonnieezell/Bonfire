@@ -1,32 +1,28 @@
-<h1>Login</h1>
+<div id="login">
 
-<?php if (auth_errors()) : ?>
-<div class="notification error">
-	<?php echo auth_errors(); ?>
-</div>
-<?php endif; ?>
-
-<?php echo form_open('login'); ?>
-<div class="login row">
-	<div class="column size1of2">
-		<label>Email</label>
-		<input type="email" name="email" id="email"  value="<?php echo set_value('email'); ?>" tabindex="1" />
-		
-		<br /><br /><input type="checkbox" name="remember_me" value="1" tabindex="3" /> Remember me for two weeks
+	<div class="header">
+		<h1>My Name Is</h1>
 	</div>
 	
-	<div class="column size1of2">
-		<label>Password</label>
-		<input type="password" name="password" id="password" value="" tabindex="2" />
-		
-		<br /><br /><?php echo anchor('/forgot_password', 'I forgot my password.'); ?>
+	<?php if (auth_errors()) : ?>
+	<div class="notification error">
+		<?php echo auth_errors(); ?>
 	</div>
+	<?php endif; ?>
+	
+	<?php echo form_open('login'); ?>
+		<input type="email" name="email" id="email"  value="<?php echo set_value('email'); ?>" tabindex="1" placeholder="email" />
+
+		<input type="password" name="password" id="password" value="" tabindex="2" placeholder="password" />
+		
+		<div class="small">
+			<input type="checkbox" name="remember_me" value="1" tabindex="3" /> Remember me for two weeks
+		</div>
+	
+		<input type="submit" name="submit" id="submit" value="Let Me In" tabindex="5" />	
+	
+	<?php echo form_close(); ?>
+	
+	<div class="footer"></div>
+
 </div>
-
-<div class="text-right">
-	<br />
-	<input type="submit" name="submit" id="submit" value="Log Me In" tabindex="5" />
-</div>
-
-
-<?php echo form_close(); ?>
