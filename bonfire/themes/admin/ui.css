@@ -61,8 +61,8 @@
 }
 .ui-tabs .ui-tabs-nav li { list-style: none; float: left; position: relative; bottom: -2px; margin: 0 .2em 1px 0; padding: 0; white-space: nowrap; -webkit-border-top-left-radius: 5px; -webkit-border-top-left-radius: 5px; -moz-border-radius-topleft: 5px; -moz-border-radius-topright: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px; }
 .ui-tabs .ui-tabs-nav li a { float: left; padding: .5em 1em; text-decoration: none; }
-.ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; padding-bottom: 2px; background: #f9f9f9 !important; position: relative; margin-top: -0.5em; border-bottom: 0 !important; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; padding-bottom: 2px; background: #fcfcfd !important; position: relative; margin-top: -0.5em; border-bottom: 0 !important; }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; padding: 0.7em 1.2em; font-weight: bold; }
 .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
-.ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
+.ui-tabs .ui-tabs-panel { display: block; border: 1px solid #ccc; border-top: 0; padding: 1em 1.4em; background: #fcfcfd; }
 .ui-tabs .ui-tabs-hide { display: none !important; }

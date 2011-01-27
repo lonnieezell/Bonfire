@@ -44,6 +44,8 @@ class Admin_Controller extends Base_Controller {
 	{
 		parent::__construct();
 		
+		$this->auth->restrict();
+		
 		// Load additional libraries
 		$this->load->helper('form');
 		

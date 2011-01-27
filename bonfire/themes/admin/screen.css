@@ -57,6 +57,16 @@ p { margin: 0.5em 0; }
 .constrained {
 	max-width: 680px !important;
 }
+.panel {
+	margin: 10px 0;
+	padding: 10px;
+	border: 1px solid #ccc;
+	background: #fcfcfd;
+}
+.panel.dark {
+	border: 1px solid #999;
+	background: #d8d8d8;
+}
 
 /* GRIDS */
 .row:after,.last-column:after{clear:both;display:block;visibility:hidden;overflow:hidden;height:0 !important;line-height:0;font-size:xx-large;content:" x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ";}
@@ -329,11 +339,11 @@ label.required {
 	font-weight: bold;
 }
 form div {
-	margin-bottom: 1em;
+	margin-bottom: 0;
 }
 form div label {
 	display: inline-block;
-	width: 25%; 
+	width: 15%; 
 	margin-right: 2%;
 	text-align: right;
 }
@@ -344,8 +354,55 @@ form div textarea {
 	width: 60%;
 	display: inline-block;
 }
+form input[type=text],
+form input[type=email],
+form input[type=password],
+form textarea{
+	border: 1px solid #ccc;
+	background: #fff;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	padding: 3px 5px;
+	font-size: 1em;
+}
+/* Within a constrained area */
+.constrained div label {
+	width: 25%;
+	margin-right: 2%;
+}
+.constrained div input[type=text],
+.constrained div input[type=email],
+.constrained div input[type=password],
+.constrained div textarea {
+	width: 60%;
+}
+/* Within a panel */
+form div.panel textarea {
+	width: 98.5%; 
+	display: block;
+	border: 1px solid #a7a7a7;
+}
+
 form .indent {
 	margin-left: 28%;
+}
+div.submits {
+	margin-top: 30px;
+	padding: 20px 0;
+	text-align: right;
+	border-top: 1px solid #ccc;
+}
+form label.horizontal,
+form textarea.horizontal {
+	display: block;
+	text-align: left;
+	width: 96%;
+}
+form div input[type=text].big {
+	display: block;
+	width: 96%;
+	font-size: 1.5em;
 }
 
 /* TABLES */

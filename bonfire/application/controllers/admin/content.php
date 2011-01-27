@@ -14,8 +14,8 @@ class Content extends Admin_Controller {
 	//--------------------------------------------------------------------	
 
 	public function index() 
-	{
-		Template::set_view('admin/stats/index');
+	{	
+		Template::set_view('admin/content/index');
 		Template::render();
 	}
 	
