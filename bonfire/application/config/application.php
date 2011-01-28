@@ -2,5 +2,15 @@
 
 $config['site.title'] = 'Bonfire';
 $config['site.system_email'] = 'lonnieje@gmail.com';
-$config['site.status'] = '1';
-$config['site.list_limit'] = '25';
+$config['site.status'] = 1;
+$config['site.list_limit'] = 25;
+
+//--------------------------------------------------------------------
+// !AUTHENTICATION
+//--------------------------------------------------------------------
+
+// Should users be able to use a 'remember me' functionality?
+$config['auth.allow_remember'] = 1;
+
+// How long should a user be remembered in the system? In seconds.
+$config['auth.remember_length'] = 1209600;	
