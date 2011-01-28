@@ -77,6 +77,22 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	public function find_by($field=null, $value=null) 
+	{
+		if ($field == 'both')
+		{
+			$field = array(
+				'username'	=> $value,
+				'email'		=> $value
+			);
+			
+			return parent::find_by($field, null, 'or');
+		}
+		
+		return parent::find_by($field, $value);
+	}
+	
+	//--------------------------------------------------------------------
 	
 	
 	//--------------------------------------------------------------------

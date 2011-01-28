@@ -14,7 +14,7 @@ class Users extends Front_Controller {
 	//--------------------------------------------------------------------
 	
 	public function login() 
-	{
+	{	$this->output->enable_profiler(true);
 		if ($this->input->post('submit'))
 		{
 			if ($this->input->post('remember_me') == '1')
@@ -27,7 +27,7 @@ class Users extends Front_Controller {
 			}
 		
 			// Try to login
-			if ($this->auth->try_login($this->input->post('email'), $this->input->post('password'), $remember) === true)
+			if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === true)
 			{
 				redirect('admin/dashboard');
 			}

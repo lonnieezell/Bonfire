@@ -11,8 +11,11 @@
 	<?php endif; ?>
 	
 	<?php echo form_open('login'); ?>
-		<input type="email" name="email" id="email"  value="<?php echo set_value('email'); ?>" tabindex="1" placeholder="email" />
+	
+		<label><?php echo config_item('auth.login_type') == 'both' ? 'Username/Email' : ucwords(config_item('auth.login_type')) ?></label>
+		<input type="text" name="login" id="login_value"  value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo config_item('auth.login_type') == 'both' ? 'Username/Email' : ucwords(config_item('auth.login_type')) ?>" />
 
+		<label>Password</label>
 		<input type="password" name="password" id="password" value="" tabindex="2" placeholder="password" />
 		
 		<?php if ($this->config->item('auth.allow_remember')) : ?>

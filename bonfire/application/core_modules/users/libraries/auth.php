@@ -28,20 +28,21 @@ class Auth {
 	/**
 	 *	Attempt to log the user in.
 	 *
-	 * @param	string	$email		The user's email address
+	 * @param	string	$login		The user's login credentials (email/username)
 	 * @param	string	$password	The user's password
 	 * @param	bool	$remember	Whether the user should be remembered in the system.
 	 */ 
-	public function try_login($email=null, $password=null, $remember=false) 
+	public function login($login=null, $password=null, $remember=false) 
 	{
-		if (empty($email) || empty($password))
+		if (empty($login) || empty($password))
 		{
-			$this->errors[] = 'Both Email and Password fields must be filled out.';
+			$error = config_item('auth.login_type') == 'both' ? 'Username/Email' : ucfirst(config_item('auth.login_type'));
+			$this->errors[] = $error .' and Password fields must be filled out.';
 			return false;
 		}
 	
 		// Grab the user from the db
-		$user = $this->ci->user_model->select('id, email, username, salt, password_hash')->find_by('email', $email);
+		$user = $this->ci->user_model->select('id, email, username, salt, password_hash')->find_by(config_item('auth.login_type'), $login);
 		
 		if (is_array($user))
 		{
@@ -58,7 +59,7 @@ class Auth {
 
 			if ( do_hash($user->salt . $password) == $user->password_hash)
 			{ 
-				$this->clear_login_attempts($email);
+				$this->clear_login_attempts($login);
 			
 				// We've successfully validated the login, so setup the session
 				$this->setup_session($user->id, $user->password_hash, $user->email, null, $remember);
@@ -382,15 +383,18 @@ class Auth {
 		}
 		
 		$cookie = get_cookie('autologin');
-		list($user_id, $token) = explode('~', $cookie);
-		
-		// Now we can delete the cookie
-		delete_cookie('autologin');		
-		
-		// And clean up the database
-		$this->ci->db->where('user_id', $user_id);
-		$this->ci->db->where('token', $token);
-		$this->ci->db->delete('user_cookies');
+		if ($cookie)
+		{
+			list($user_id, $token) = explode('~', $cookie);
+			
+			// Now we can delete the cookie
+			delete_cookie('autologin');		
+			
+			// And clean up the database
+			$this->ci->db->where('user_id', $user_id);
+			$this->ci->db->where('token', $token);
+			$this->ci->db->delete('user_cookies');
+		}
 		
 		// Also perform a clean up of any autologins older than 2 months
 		$this->ci->db->where('created_on', '< DATE_SUB(CURDATE(), INTERVAL 2 MONTH)');

@@ -59,6 +59,7 @@ class Settings extends Admin_Controller {
 			'site.status'		=> $_POST['status'],
 			'site.list_limit'	=> $_POST['list_limit'],
 			
+			'auth.login_type'		=> $_POST['login_type'],
 			'auth.allow_remember'	=> isset($_POST['allow_remember']) ? 1 : 0,
 			'auth.remember_length'	=> (int)$_POST['remember_length']
 		);
