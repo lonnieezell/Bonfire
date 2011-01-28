@@ -31,7 +31,27 @@
 		<p class="small indent">When viewing reports, how many items should be listed at a time?</p>
 	</div>
 	
-	<div class="text-right">
+	<fieldset>
+		<legend>Security</legend>
+		
+		<div>
+			<label>Allow 'Remember Me'?</label>
+			<input type="checkbox" name="allow_remember" id="allow_remember" value="1" <?php echo config_item('auth.allow_remember') == 1 ? 'checked="checked"' : set_checkbox('auth.allow_remember', 1); ?> />
+		</div>
+		
+		<div>
+			<label>Remember Users for</label>
+			<select name="remember_length" id="remember_length">
+				<option value="604800"  <?php echo config_item('auth.remember_length') == '604800' ?  'selected="selected"' : '' ?>>1 Week</option>
+				<option value="1209600" <?php echo config_item('auth.remember_length') == '1209600' ? 'selected="selected"' : '' ?>>2 Weeks</option>
+				<option value="1814400" <?php echo config_item('auth.remember_length') == '1814400' ? 'selected="selected"' : '' ?>>3 Weeks</option>
+				<option value="2592000" <?php echo config_item('auth.remember_length') == '2592000' ? 'selected="selected"' : '' ?>>30 Days</option>
+			</select>
+		</div>
+	
+	</fieldset>
+	
+	<div class="submits">
 		<input type="submit" name="submit" value="Save Settings" />
 	</div>
 

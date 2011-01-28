@@ -7,6 +7,7 @@ class Auth {
 	public	$errors	= array();
 	
 	private $logged_in = null;
+	private $ip_address;
 	
 	//--------------------------------------------------------------------
 	
@@ -14,13 +15,22 @@ class Auth {
 	{		
 		$this->ci =& get_instance();
 		
+		$this->ip_address = $this->ci->input->ip_address();
+		
 		log_message('debug', 'Auth class initialized.');
+		
+		// Try to log the user in from session/cookie data
+		$this->autologin();
 	}
 	
 	//--------------------------------------------------------------------
 	
 	/**
 	 *	Attempt to log the user in.
+	 *
+	 * @param	string	$email		The user's email address
+	 * @param	string	$password	The user's password
+	 * @param	bool	$remember	Whether the user should be remembered in the system.
 	 */ 
 	public function try_login($email=null, $password=null, $remember=false) 
 	{
@@ -31,7 +41,7 @@ class Auth {
 		}
 	
 		// Grab the user from the db
-		$user = $this->ci->user_model->select('id, email, salt, password_hash')->find_by('email', $email);
+		$user = $this->ci->user_model->select('id, email, username, salt, password_hash')->find_by('email', $email);
 		
 		if (is_array($user))
 		{
@@ -48,19 +58,28 @@ class Auth {
 
 			if ( do_hash($user->salt . $password) == $user->password_hash)
 			{ 
+				$this->clear_login_attempts($email);
+			
 				// We've successfully validated the login, so setup the session
 				$this->setup_session($user->id, $user->password_hash, $user->email, null, $remember);
 				
 				// Save the login info
 				$data = array(
 					'last_login'	=> date('Y-m-d H:i:s', time()),
-					'last_ip'		=> $this->ci->input->ip_address()
+					'last_ip'		=> $this->ip_address
 				);
 				$this->ci->user_model->update($user->id, $data);
 				
 				return true;
 			}
 			
+			// Bad password
+			else
+			{
+				$this->increase_login_attempts($email);
+			}
+			// Bad username
+			$this->increase_login_attempts($email);
 			$this->errors[] = 'Incorrect email or password.';
 		}
 		
@@ -71,10 +90,8 @@ class Auth {
 	
 	public function logout() 
 	{
-		// Destroy the autologin cookie
-		$this->ci->load->helper('cookie');
-		
-		delete_cookie('autologin');
+		// Destroy the autologin information
+		$this->delete_autologin();
 	
 		// Destroy the session
 		$this->ci->session->sess_destroy();
@@ -132,22 +149,18 @@ class Auth {
 	 * Checks that a user is logged in (and, optionally of the correct role)
 	 * and, if not, send them to the login screen.
 	 *
-	 * Valid Role id constants are: 
-	 * 		ROLE_ADMINISTRATOR
-	 *		ROLE_MANAGER
-	 *		ROLE_CUSTOMER
 	 */
-	public function restrict($role_id=null) 
+	public function restrict($role_name=null) 
 	{	
-		if ($this->is_logged_in() === false)
-		{
-			redirect('/login');
-		}
-		
-		// Role Check
-		if (!empty($role_id) && $this->role_id() >= $role_id)
+		// Check to see if the user has the proper role
+		if (!empty($role_name) && $this->role_id() >= $role_id)
 		{
 			Template::set('You do not have permission to access this page.', 'attention');
+			redirect('login');
+		}
+	
+		if ($this->is_logged_in() === false)
+		{
 			redirect('login');
 		}
 	}
@@ -184,18 +197,216 @@ class Auth {
 	
 	public function logged_in() 
 	{
-		return $this->ci->session->userdata('logged_in');
+		return $this->logged_in;
 	}
 	
 	//--------------------------------------------------------------------
 	
 	//--------------------------------------------------------------------
+	// !LOGIN ATTEMPTS
+	//--------------------------------------------------------------------
+	
+	/**
+	 * Records a login attempt into the database.
+	 *
+	 * @param	string	$login	The login id used (typically email)
+	 * @return	void
+	 */
+	protected function increase_login_attempts($login=null) 
+	{
+		if (empty($this->ip_address) || empty($login))
+		{
+			return;
+		}
+		
+		$this->ci->db->insert('login_attempts', array('ip_address' => $this->ip_address, 'login' => $login));
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/** 
+	 * Clears all login attempts for this user, as well as cleans out old
+	 * logins.
+	 *
+	 * @param	string	$login		The login credentials (typically email)
+	 * @param	int		$expires	The time (in seconds) that attempts older than will be deleted
+	 * @return	void
+	 */
+	protected function clear_login_attempts($login=null, $expires = 86400) 
+	{
+		if (empty($this->ip_address) || empty($login))
+		{
+			return;
+		}
+	
+		$this->ci->db->where(array('ip_address' => $this->ip_address, 'login' => $login));
+		
+		// Purge obsolete login attempts
+		$this->ci->db->or_where('UNIX_TIMESTAMP(time) <', time() - $expires);
+
+		$this->ci->db->delete('login_attempts');
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/**
+	 * Get number of attempts to login occured from given IP-address or login
+	 *
+	 * @param	string
+	 * @param	string
+	 * @return	int
+	 */
+	function num_login_attempts($login=null)
+	{
+		$this->ci->db->select('1', FALSE);
+		$this->ci->db->where('ip_address', $this->ip_address);
+		if (strlen($login) > 0) $this->ci->db->or_where('login', $login);
+
+		$query = $this->ci->db->get('login_attempts');
+		return $query->num_rows();
+	}
+	
+	//--------------------------------------------------------------------
+	// !AUTO-LOGIN 
+	//--------------------------------------------------------------------
+	
+	/**
+	 * Autologin()
+	 *
+	 * Attempts to log the user in based on an existing 'autologin' cookie.
+	 *
+	 * @return	bool
+	 */
+	private function autologin() 
+	{
+		if ($this->logged_in || $this->ci->config->item('auth.allow_remember') == false) 
+		{ 
+			return true; 
+		}
+		
+		$return = false;
+		$this->ci->load->helper('cookie');
+		
+		$cookie = get_cookie('autologin', true);
+		
+		if (!$cookie) {	return;	}
+		
+		// We have a cookie, so split it into user_id and token
+		list($user_id, $test_token) = explode('~', $cookie);
+		
+		// Try to pull a match from the database
+		$this->ci->db->where( array('user_id' => $user_id, 'token' => $test_token) );
+		$query = $this->ci->db->get('user_cookies');
+		
+		if ($query->num_rows() == 1)
+		{
+			// We have a match
+			$return = true;
+		}
+		
+		unset($query);
+		return $return;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
+	/**
+	 *	Create the auto-login entry in the database. This method uses
+	 * Charles Miller's thoughts at: 
+	 * http://fishbowl.pastiche.org/2004/01/19/persistent_login_cookie_best_practice/
+	 * 
+	 * @param	int		$user_id
+	 * @param	string	$old_token	The previous token that was used to login with.
+	 */
+	private function create_autologin($user_id=0, $old_token=null) 
+	{
+		if (empty($user_id) || $this->ci->config->item('auth.allow_remember') == false)
+		{
+			return false;
+		}
+		
+		// Generate a random string for our token
+		if (!function_exists('random_string')) { $this->load->helper('string'); }
+		
+		$token = random_string('alnum', 128);
+		
+		// If an old_token is presented, we're refreshing the autologin information
+		// otherwise we're creating a new one.
+		if (empty($old_token))
+		{
+			// Create a new token
+			$data = array(
+				'user_id'		=> $user_id,
+				'token'			=> $token,
+				'created_on'	=> date('Y-m-d H:i:s')
+			);
+			$this->ci->db->insert('user_cookies', $data);
+		}
+		else
+		{
+			// Refresh the token
+			$this->ci->db->where('user_id', $user_id);
+			$this->ci->db->where('token', $old_token);
+			$this->ci->db->set('token', $token);
+			$this->ci->db->set('created_on', date('Y-m-d H:i:s'));
+			$this->ci->db->update('user_cookies');
+		}
+		
+		if ($this->ci->db->affected_rows())
+		{
+			// Create the autologin cookie
+			$this->ci->input->set_cookie('autologin', $user_id .'~'. $token, $this->ci->config->item('auth.remember_length'));	
+		
+			return true;
+		} else
+		{
+			return false;
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
+	private function delete_autologin() 
+	{
+		if ($this->ci->config->item('auth.allow_remember') == false)
+		{
+			return;
+		}
+	
+		// First things first.. grab the cookie so we know what row
+		// in the user_cookies table to delete.
+		if (!function_exists('delete_cookie'))
+		{
+			$this->ci->load->helper('cookie');
+		}
+		
+		$cookie = get_cookie('autologin');
+		list($user_id, $token) = explode('~', $cookie);
+		
+		// Now we can delete the cookie
+		delete_cookie('autologin');		
+		
+		// And clean up the database
+		$this->ci->db->where('user_id', $user_id);
+		$this->ci->db->where('token', $token);
+		$this->ci->db->delete('user_cookies');
+		
+		// Also perform a clean up of any autologins older than 2 months
+		$this->ci->db->where('created_on', '< DATE_SUB(CURDATE(), INTERVAL 2 MONTH)');
+		$this->ci->db->delete('user_cookies');
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
+	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 	
-	private function setup_session($id=0, $password_hash=null, $email='', $role_id=0, $remember=false) 
+	private function setup_session($user_id=0, $password_hash=null, $email='', $role_id=0, $remember=false) 
 	{
-		if (empty($id) || empty($email))
+		if (empty($user_id) || empty($email))
 		{
 			return false;
 		}
@@ -207,8 +418,8 @@ class Auth {
 		}
 		
 		$data = array(
-			'user_id'		=> $id,
-			'user_token'	=> do_hash($id . $password_hash),
+			'user_id'		=> $user_id,
+			'user_token'	=> do_hash($user_id . $password_hash),
 			'email'			=> $email,
 			'role'			=> $role_id,
 			'logged_in'		=> true,
@@ -219,15 +430,7 @@ class Auth {
 		// Should we remember the user?
 		if ($remember === true)
 		{
-			$this->ci->load->helper('cookie');
-			
-			$cookie = array(
-					'name' 		=> 'autologin',
-					'value'		=> serialize($data),
-					'expire'	=> 60*60*24*14			// Two weeks
-				);
-		
-			set_cookie($cookie);
+			return $this->create_autologin($user_id);
 		}
 		
 		return true;
