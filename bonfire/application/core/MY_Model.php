@@ -111,15 +111,33 @@ class MY_Model extends CI_Model {
 	//--------------------------------------------------------------------
 	
 	
-	public function find_by($field='', $value='')
+	public function find_by($field='', $value='', $type='and')
 	{
-		if (empty($field) || empty($value))
+		if (empty($field) || (!is_array($field) && empty($value)))
 		{
 			$this->error = 'Not enough information to find by.';
 			return false;
 		}
 	
-		$this->db->where($field, $value);
+		if (is_array($field))
+		{
+			foreach ($field as $key => $value)
+			{
+				if ($type == 'or')
+				{
+					$this->db->or_where($key, $value);
+				}
+				else
+				{
+					$this->db->where($key, $value);
+				}
+			}
+		}
+		else
+		{
+			$this->db->where($field, $value);
+		}
+		
 		$query = $this->db->get($this->table);
 		
 		if ($query && $query->num_rows() > 0)
