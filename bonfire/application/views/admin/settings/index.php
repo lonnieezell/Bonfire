@@ -35,6 +35,15 @@
 		<legend>Security</legend>
 		
 		<div>
+			<label>Login Type</label>
+			<select name="login_type">
+				<option value="email" <?php echo config_item('auth.login_type') == 'email' ? 'selected="selected"' : ''; ?>>Email Only</option>
+				<option value="username" <?php echo config_item('auth.login_type') == 'username' ? 'selected="selected"' : ''; ?>>Username Only</option>
+				<option value="both" <?php echo config_item('auth.login_type') == 'both' ? 'selected="selected"' : ''; ?>>Email or Username</option>
+			</select>
+		</div>
+		
+		<div>
 			<label>Allow 'Remember Me'?</label>
 			<input type="checkbox" name="allow_remember" id="allow_remember" value="1" <?php echo config_item('auth.allow_remember') == 1 ? 'checked="checked"' : set_checkbox('auth.allow_remember', 1); ?> />
 		</div>
