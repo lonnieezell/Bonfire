@@ -14,7 +14,7 @@ class Users extends Front_Controller {
 	//--------------------------------------------------------------------
 	
 	public function login() 
-	{	$this->output->enable_profiler(true);
+	{	
 		if ($this->input->post('submit'))
 		{
 			if ($this->input->post('remember_me') == '1')
