@@ -35,5 +35,7 @@ and possibly even more...
 
 If you're interested in helping out, fork the project and start coding! I'd love to have you on board. You can always shoot me an email at lonnieje@gmail.com and we can talk about how you'll best fit it and what the best place to start coding would be.
 
+*NOTE: Latest database dump can be found under bonfire/db/backups. Import that into a new database, and setup your database connections and you should be good to go.*
+
 Let's make this the best kick-start to any CodeIgniter project. 
 
