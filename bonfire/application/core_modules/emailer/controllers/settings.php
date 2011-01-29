@@ -87,6 +87,14 @@ class Settings extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
+	public function emails() 
+	{
+		Template::set('toolbar_title', 'Email Contents');
+		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+	
 }
 
 // End Admin class

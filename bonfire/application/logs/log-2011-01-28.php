@@ -43,3 +43,8 @@ ERROR - 2011-01-28 22:08:13 --> Severity: Warning  --> Cannot modify header info
 ERROR - 2011-01-28 22:08:13 --> Severity: Warning  --> Cannot modify header information - headers already sent by (output started at /Volumes/MyData/WebSites/Bonfire/bonfire/index.php:3) /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/codeigniter/libraries/Session.php 670
 ERROR - 2011-01-28 22:08:13 --> Severity: Warning  --> Cannot modify header information - headers already sent by (output started at /Volumes/MyData/WebSites/Bonfire/bonfire/index.php:3) /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/codeigniter/libraries/Session.php 670
 ERROR - 2011-01-28 22:19:49 --> Severity: Notice  --> Undefined property: CI::$form_validation /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/third_party/MX/Controller.php 57
+ERROR - 2011-01-28 22:42:45 --> Severity: Notice  --> Undefined property: CI_Form_validation::$run /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/controllers/users.php 59
+ERROR - 2011-01-28 22:43:23 --> Severity: Notice  --> Undefined property: CI_Form_validation::$run /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/controllers/users.php 60
+ERROR - 2011-01-28 23:05:01 --> 404 Page Not Found --> settings/emails
+ERROR - 2011-01-28 23:25:55 --> Severity: Notice  --> Undefined variable: config_item /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/views/_emails/forgot_password.php 1
+ERROR - 2011-01-28 23:26:14 --> Severity: Notice  --> Undefined variable: new_pass /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/views/_emails/forgot_password.php 7
