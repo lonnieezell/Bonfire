@@ -30,7 +30,6 @@ class Emailer {
 	 * 
 	 * $data = array(
 	 *		'to'			=> '',		// either string or array
-	 *		'from'			=> '',		// if string, must be email, otherwise array('email', 'Name')
 	 *		'subject'		=> '',		// string
 	 *		'message'		=> '',		// string
 	 * 		'alt_message'	=> ''		// optional (text alt to html email)
@@ -48,7 +47,7 @@ class Emailer {
 		$alt_message = isset($data['alt_message']) ? $data['alt_message'] : false;
 		
 		// If we don't have everything, return false.
-		if ($to == false || $from == false || $subject == false || $message == false)
+		if ($to == false || $subject == false || $message == false)
 		{
 			$this->errors[] = 'One or more required fields are missing.';
 			return false;
