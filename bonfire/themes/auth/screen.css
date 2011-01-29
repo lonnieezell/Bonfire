@@ -49,7 +49,7 @@ html, body {
 }
 .foot a:link,
 .foot a:visited {
-	color: #889;
+	color: #667;
 	font-size: 0.825em;
 	line-height: 2.0;
 	padding: 10px 20px;
@@ -65,25 +65,35 @@ body {
 	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.33, #d8d8d8), color-stop(1, #f9f9f9));
 	background-image: -moz-linear-gradient(center bottom, #101130 33%, #3d5585 100%);
 	position: relative;
+	
+	display: -webkit-box;
+   	-webkit-box-orient: vertical;
+   	-webkit-box-pack: center;
+   	-webkit-box-align: center;
+   	
+   	display: -moz-box;
+   	-moz-box-orient: vertical;
+   	-moz-box-pack: center;
+   	-moz-box-align: center;
+   	
+   	display: box;
+   	box-orient: vertical;
+   	box-pack: center;
+   	box-align: center;
 }
 
 /* LOGIN BOX */
-#login {
-	position: absolute;
-	left: 50%;
-	top: 50%;
+.box {
 	width: 20em;
-	margin-left: -10em;
-	margin-top: -18%;
 	background: #f9f9f9;
-	border: 1px solid #222;
+	border: 1px solid #888;
 	-webkit-border-radius: 15px;
 	-moz-border-radius: 15px;
 	border-radius: 15px;
 	-webkit-box-shadow: 0 0 50px #888;
 	text-align: center;
 }
-#login .header {
+.box .header {
 	background: #33496E;
 	padding: 10px 20px;
 	text-align: center;
@@ -99,18 +109,6 @@ body {
 	font-weight: normal;
 	color: #ffd;
 	
-}
-#login .footer {
-	position: relative;
-	background: #33496E;
-	height: 7px;
-	margin: 5px 2px 0px 2px;
-	-webkit-border-bottom-left-radius: 15px;
-	-webkit-border-bottom-right-radius: 15px;
-	-moz-border-radius-bottomleft: 15px;
-	-moz-border-radius-bottomright: 15px;
-	border-bottom-left-radius: 15px;
-	border-bottom-right-radius: 15px;
 }
 form {
 	margin: 0;

@@ -50,6 +50,13 @@ class Users extends Front_Controller {
 	
 	public function forgot_password() 
 	{
+		$this->load->library('form_validation');
+	
+		if ($this->input->post('submit'))
+		{
+			$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|xss_clean');
+		}
+	
 		Template::set_theme('auth');
 		Template::set_view('users/users/forgot_password');
 		Template::render();

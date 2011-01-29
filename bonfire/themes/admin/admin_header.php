@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo Template::theme_url('screen.css') ?>" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Template::theme_url('ui.css') ?>" />
 	
-	<script src="<?php echo Template::theme_url('js/head.min.js') ?>"></script>
+	<script src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
 </head>
 <body>
 
