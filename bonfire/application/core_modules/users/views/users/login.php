@@ -4,7 +4,7 @@
 			<h1>My Name Is...</h1>
 		</div>
 		
-		<?php if (auth_errors()) : ?>
+		<?php if (auth_errors() || validation_errors()) : ?>
 		<div class="notification error">
 			<?php echo auth_errors(); ?>
 		</div>
