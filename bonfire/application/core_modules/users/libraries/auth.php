@@ -42,7 +42,7 @@ class Auth {
 		}
 	
 		// Grab the user from the db
-		$user = $this->ci->user_model->select('id, email, username, salt, password_hash, temp_password_hash')->find_by(config_item('auth.login_type'), $login);
+		$user = $this->ci->user_model->select('id, email, username, role_id, salt, password_hash, temp_password_hash')->find_by(config_item('auth.login_type'), $login);
 		
 		if (is_array($user))
 		{
@@ -61,9 +61,8 @@ class Auth {
 			if ( do_hash($user->salt . $password) == $user->password_hash || do_hash($password . $user->salt . $user->email) == $user->temp_password_hash)
 			{ 
 				$this->clear_login_attempts($login);
-			
 				// We've successfully validated the login, so setup the session
-				$this->setup_session($user->id, $user->password_hash, $user->email, null, $remember);
+				$this->setup_session($user->id, $user->password_hash, $user->email, $user->role_id, $remember);
 				
 				// Save the login info
 				$data = array(
@@ -205,6 +204,34 @@ class Auth {
 	}
 	
 	//--------------------------------------------------------------------
+	
+	public function has_permission($permission = null, $role_id=null) 
+	{
+		if (empty($permission))
+		{
+			return false;
+		}
+	
+		// If not role is being provided, assume it's for the current
+		// logged in user.
+		if (empty($role_id))
+		{
+			$role_id = $this->role_id();
+		}
+				
+		$perms = $this->ci->permission_model->find_for_role($role_id);
+		if (is_array($perms)) $perms = $perms[0];
+		
+		if (isset($perms->$permission) && $perms->$permission == 1)
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	//--------------------------------------------------------------------
 	// !LOGIN ATTEMPTS
@@ -428,7 +455,7 @@ class Auth {
 			'user_id'		=> $user_id,
 			'user_token'	=> do_hash($user_id . $password_hash),
 			'email'			=> $email,
-			'role'			=> $role_id,
+			'role_id'		=> $role_id,
 			'logged_in'		=> true,
 		);
 		
