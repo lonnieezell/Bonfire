@@ -16,7 +16,13 @@
 	<div style="vertical-align: top">
 		<label>Description</label>
 		<textarea name="description" rows="3"><?php echo isset($role) ? $role->description : '' ?></textarea>
-		<p class="small" style="margin-left: 28%">Max. 255 characters.</p>
+		<p class="small indent">Max. 255 characters.</p>
+	</div>
+	
+	<div>
+		<label>Default Role?</label>
+		<input type="checkbox" name="default" value="1" <?php echo isset($role) && $role->default == 1 ? 'checked="checked"' : '' ?> />
+		<p class="small indent">Check if this role should be assigned to all new users.</p>
 	</div>
 	
 	<!-- Permissions -->
