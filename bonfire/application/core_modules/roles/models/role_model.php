@@ -38,6 +38,22 @@ class Role_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	public function update($id=null, $data=null) 
+	{
+		// If this one is set to default, then we need to
+		// reset all others to NOT be default
+		if (isset($data['default']) && $data['default']  == 1)
+		{
+			$this->db->set('default', 0);
+			$this->db->update($this->table);
+		}
+		
+		return parent::update($id, $data);
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
 	/** 
 	 *	Returns the id of the default role.	
 	 */
