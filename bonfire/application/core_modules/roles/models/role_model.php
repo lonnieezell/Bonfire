@@ -37,5 +37,23 @@ class Role_model extends MY_Model {
 	}
 	
 	//--------------------------------------------------------------------
-			
+	
+	/** 
+	 *	Returns the id of the default role.	
+	 */
+	public function default_role_id() 
+	{
+		$this->db->where('default', 1);
+		$query = $this->db->get($this->table);
+		
+		if ($query->num_rows() == 1)
+		{
+			return $query->row()->role_id;
+		}	
+		
+		return false;
+	}
+	
+	//--------------------------------------------------------------------
+	
 }

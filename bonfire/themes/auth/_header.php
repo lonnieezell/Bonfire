@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	
-	<title>Login to <?php echo $this->config->item('site.title') ?></title>
+	<title><?php echo $page_title ?> @ <?php echo $this->config->item('site.title') ?></title>
 	
 	<link rel="stylesheet" type="text/css" href="<?php echo Template::theme_url('screen.css') ?>" />
 	

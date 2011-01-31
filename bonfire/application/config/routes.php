@@ -43,6 +43,7 @@ $route['404_override'] = '';
 
 // Authorization
 $route['login']				= 'users/login';
+$route['register']			= 'users/register';
 $route['logout']			= 'users/logout';
 $route['forgot_password']	= 'users/forgot_password';
 
