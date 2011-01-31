@@ -44,6 +44,11 @@
 		</div>
 		
 		<div>
+			<label>Use Usernames?</label>
+			<input type="checkbox" name="use_usernames" id="use_usernames" value="1" <?php echo config_item('auth.use_usernames') == 1 ? 'checked="checked"' : set_checkbox('auth.use_usernames', 1); ?> />
+		</div>
+		
+		<div>
 			<label>Allow 'Remember Me'?</label>
 			<input type="checkbox" name="allow_remember" id="allow_remember" value="1" <?php echo config_item('auth.allow_remember') == 1 ? 'checked="checked"' : set_checkbox('auth.allow_remember', 1); ?> />
 		</div>

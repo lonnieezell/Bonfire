@@ -23,8 +23,11 @@ class User_model extends MY_Model {
 		$data['password_hash'] = $password;
 		$data['salt'] = $salt;
 		
-		$data['zipcode'] = (int)$data['zipcode'];
-		$data['zip_extra'] = (int)$data['zip_extra'];
+		$data['zipcode'] = isset($data['zipcode']) ? (int)$data['zipcode'] : null;
+		$data['zip_extra'] = isset($data['zip_extra']) ? (int)$data['zip_extra'] : null;
+		
+		// What's the default role?
+		$data['role_id'] = $this->role_model->default_role_id();
 		
 		return parent::insert($data);
 	}

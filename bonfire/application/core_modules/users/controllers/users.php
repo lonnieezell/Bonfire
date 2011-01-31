@@ -9,6 +9,7 @@ class Users extends Front_Controller {
 		parent::__construct();
 		
 		$this->load->helper('form');
+		$this->load->library('form_validation');
 	}
 	
 	//--------------------------------------------------------------------
@@ -35,6 +36,7 @@ class Users extends Front_Controller {
 	
 		Template::set_theme('auth');
 		Template::set_view('users/users/login');
+		Template::set('page_title', 'Login');
 		Template::render();
 	}
 	
@@ -50,8 +52,6 @@ class Users extends Front_Controller {
 	
 	public function forgot_password() 
 	{
-		$this->load->library('form_validation');
-	
 		if (isset($_POST['submit']))
 		{
 			$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|xss_clean');
@@ -101,10 +101,84 @@ class Users extends Front_Controller {
 	
 		Template::set_theme('auth');
 		Template::set_view('users/users/forgot_password');
+		Template::set('page_title', 'Password Reset');
 		Template::render();
 	}
 	
 	//--------------------------------------------------------------------
+	
+	public function register() 
+	{
+		if ($this->input->post('submit'))
+		{
+			// Validate input
+			$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|max_length[120]|callback_unique_email|xsx_clean');
+			if (config_item('auth.use_usernames'))
+			{
+				$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|callback_unique_username|xsx_clean');
+			}
+			$this->form_validation->set_rules('password', 'Password', 'required|trim|strip_tags|min_length[8]|max_length[120]|xsx_clean');
+			$this->form_validation->set_rules('pass_confirm', 'Password (again)', 'required|trim|strip_tags|matches[password]');
+			
+			if ($this->form_validation->run() !== false)
+			{
+				// Time to save the user...
+				$data = array(
+					'email'		=> $_POST['email'],
+					'username'	=> isset($_POST['username']) ? $_POST['username'] : '',
+					'password'	=> $_POST['password']
+				);
+				
+				if ($this->user_model->insert($data))
+				{
+					redirect('login');
+				}
+			}
+		}
+	
+		Template::set_theme('auth');
+		Template::set_view('users/users/register');
+		Template::set('page_title', 'Register');
+		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
+	//--------------------------------------------------------------------
+	// !PRIVATE METHODS
+	//--------------------------------------------------------------------
+	
+	private function unique_email($email) 
+	{
+		if ($this->user_model->is_unique('email', $email) == true)
+		{
+			return true;
+		}
+		else
+		{
+			$this->form_validation->set_message('unique_email', 'That email address is already in use.');
+			return false;
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
+	private function unique_username($username) 
+	{
+		if ($this->user_model->is_unique('username', $username) == true)
+		{
+			return true;
+		}
+		else 
+		{
+			$this->form_validation->set_message('unique_username', 'That username is already in use.');
+			return false;
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 }
 

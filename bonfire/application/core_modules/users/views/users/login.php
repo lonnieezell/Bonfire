@@ -4,6 +4,8 @@
 			<h1>My Name Is...</h1>
 		</div>
 		
+		<?php echo Template::message(); ?>
+		
 		<?php if (auth_errors() || validation_errors()) : ?>
 		<div class="notification error">
 			<?php echo auth_errors(); ?>

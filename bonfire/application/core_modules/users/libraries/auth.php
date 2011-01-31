@@ -164,6 +164,7 @@ class Auth {
 	
 		if ($this->is_logged_in() === false)
 		{
+			Template::set_message('You must be logged in to view that page.', 'error');
 			redirect('login');
 		}
 	}
