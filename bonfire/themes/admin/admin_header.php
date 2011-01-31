@@ -22,11 +22,21 @@
 		<?php endif; ?>
 		
 		<div id="toolbar-left">
-			<a href="<?php echo site_url('admin/content') ?>" <?php echo check_class('content') ?> id="tb_content" title="Content">Content</a>
-			<a href="<?php echo site_url('admin/stats') ?>" <?php echo check_class('stats') ?> id="tb_stats" title="Statistics">Statistics</a>
-			<a href="<?php echo site_url('admin/appearance') ?>" <?php echo check_class('appearance') ?> id="tb_appearance" title="Appearance">Appearance</a>
-			<a href="<?php echo site_url('admin/settings') ?>" <?php echo check_class('settings') ?> id="tb_settings" title="Settings">Settings</a>
-			<a href="<?php echo site_url('admin/developer') ?>" <?php echo check_class('developer') ?> id="tb_developer" title="Developer Tools">Developer Tools</a>
+			<?php if ($this->auth->has_permission('Site.Content.View')) :?>
+				<a href="<?php echo site_url('admin/content') ?>" <?php echo check_class('content') ?> id="tb_content" title="Content">Content</a>
+			<?php endif; ?>
+			<?php if ($this->auth->has_permission('Site.Statistics.View')) :?>
+				<a href="<?php echo site_url('admin/stats') ?>" <?php echo check_class('stats') ?> id="tb_stats" title="Statistics">Statistics</a>
+			<?php endif; ?>
+			<?php if ($this->auth->has_permission('Site.Appearance.View')) :?>
+				<a href="<?php echo site_url('admin/appearance') ?>" <?php echo check_class('appearance') ?> id="tb_appearance" title="Appearance">Appearance</a>
+			<?php endif; ?>
+			<?php if ($this->auth->has_permission('Site.Settings.View')) :?>
+				<a href="<?php echo site_url('admin/settings') ?>" <?php echo check_class('settings') ?> id="tb_settings" title="Settings">Settings</a>
+			<?php endif; ?>
+			<?php if ($this->auth->has_permission('Site.Developer.View')) :?>
+				<a href="<?php echo site_url('admin/developer') ?>" <?php echo check_class('developer') ?> id="tb_developer" title="Developer Tools">Developer Tools</a>
+			<?php endif; ?>
 		</div>	<!-- /toolbar-left -->
 	</div>
 
