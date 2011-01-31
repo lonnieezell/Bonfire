@@ -12,6 +12,9 @@ $config['site.list_limit'] = 25;
 // Type of login allowed ('email', 'username', 'both')
 $config['auth.login_type'] = 'email';
 
+// Whether usernames are used in the system
+$config['auth.use_usernames'] = 1;
+
 // Should users be able to use a 'remember me' functionality?
 $config['auth.allow_remember'] = 1;
 
