@@ -6,6 +6,9 @@ class Developer extends Admin_Controller {
 	{
 		parent::__construct();
 		
+		$this->auth->restrict('Site.Developer.View');
+		$this->auth->restrict('Bonfire.Database.Manage');
+		
 		$this->config->load('migrations');
 		$this->load->library('Migrations');	
 	}

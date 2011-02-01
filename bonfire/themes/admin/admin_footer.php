@@ -10,9 +10,9 @@
 	
 	<script>
 		head.js(
-			"<?php echo Template::theme_url('js/jquery-1.4.4.min.js'); ?>",
+			"<?php echo base_url() .'assets/js/jquery-1.4.4.min.js'; ?>",
 			"<?php echo Template::theme_url('js/jquery-ui-1.8.8.min.js'); ?>",
-			"<?php echo Template::theme_url('js/admin_global.js'); ?>"
+			"<?php echo Template::theme_url('/js/admin_global.js'); ?>"
 		);
 	</script>
 </body>

@@ -42,7 +42,7 @@
 <?php endif; ?>
 
 <script>
-head.ready('jquery', function() {
+head.ready(function() {
 	// Horizontal Check-all
 	$('.matrix-title a').click(function(){
 		var rows 		= $(this).parents('tr');

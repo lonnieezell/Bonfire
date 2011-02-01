@@ -10,7 +10,14 @@
 |
 */
 
-
+// Allows us to perform good redirects to previous pages.
+$hook['post_controller'][] = array(
+								'class'		=> 'App_hooks',
+								'function'	=> 'prep_redirect',
+								'filename'	=> 'App_hooks.php',
+								'filepath'	=> 'hooks',
+								'params'	=> ''
+							);
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */
