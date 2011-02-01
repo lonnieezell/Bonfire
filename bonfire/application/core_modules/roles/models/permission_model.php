@@ -111,17 +111,19 @@ class Permission_model extends MY_Model {
 		}
 		
 		$role = $this->find_by('role_id', $role_id);
-		
 		if (!$role)
 		{
-			return false;
+			// No permissions set for this role yet, so
+			// create an empty set.
+			$this->insert(array('role_id'=>$role_id));		
 		}
-		
+
 		if (is_array($role)) { $role = (array)$role[0]; }
 				
 		// ActiveRecord doesn't like this style of parameters (with the '.' as dividers)
 		// so we build it ourself.
 		$sets = '';
+		
 		
 		foreach ($role as $name => $value)
 		{

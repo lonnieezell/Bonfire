@@ -8,7 +8,7 @@ class Auth {
 	
 	private $logged_in = null;
 	private $ip_address;
-	
+		
 	//--------------------------------------------------------------------
 	
 	public function __construct() 
@@ -18,7 +18,7 @@ class Auth {
 		$this->ip_address = $this->ci->input->ip_address();
 		
 		log_message('debug', 'Auth class initialized.');
-		
+				
 		// Try to log the user in from session/cookie data
 		$this->autologin();
 	}
@@ -152,20 +152,28 @@ class Auth {
 	 * and, if not, send them to the login screen.
 	 *
 	 */
-	public function restrict($role_name=null) 
+	public function restrict($permission=null) 
 	{	
-		// Check to see if the user has the proper role
-		if (!empty($role_name) && $this->role_id() >= $role_id)
+		if (empty($permission))
 		{
-			Template::set('You do not have permission to access this page.', 'attention');
-			redirect('login');
+			return false;
 		}
 	
+		// If user isn't logged in, don't need to check permissions
 		if ($this->is_logged_in() === false)
 		{
 			Template::set_message('You must be logged in to view that page.', 'error');
 			redirect('login');
 		}
+		
+		// Check to see if the user has the proper permissions
+		if (!$this->has_permission($permission))
+		{ 
+			Template::set_message('You do not have permission to access that page.', 'attention');
+			redirect($this->ci->session->userdata('previous_page'));
+		} 
+		
+		return true;
 	}
 	
 	//--------------------------------------------------------------------
@@ -212,21 +220,21 @@ class Auth {
 			return false;
 		}
 	
-		// If not role is being provided, assume it's for the current
+		// If no role is being provided, assume it's for the current
 		// logged in user.
 		if (empty($role_id))
 		{
 			$role_id = $this->role_id();
 		}
-				
+		
 		$perms = $this->ci->permission_model->find_for_role($role_id);
 		if (is_array($perms)) $perms = $perms[0];
-		
+				
 		if (isset($perms->$permission) && $perms->$permission == 1)
 		{
 			return true;
 		}
-		
+
 		return false;
 	}
 	

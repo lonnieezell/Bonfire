@@ -8,6 +8,8 @@ class Stats extends Admin_Controller {
 	{
 		parent::__construct();
 		
+		$this->auth->restrict('Site.Statistics.View');
+		
 		Template::set('toolbar_title', 'Statistics');
 	}
 	

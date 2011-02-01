@@ -8,6 +8,8 @@ class Settings extends Admin_Controller {
 	{
 		parent::__construct();
 		
+		$this->auth->restrict('Site.Settings.View');
+		
 		Template::set('toolbar_title', 'Site Settings');
 		
 		$this->load->helper('config_file');

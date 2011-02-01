@@ -8,6 +8,9 @@ class Developer extends Admin_Controller {
 	{
 		parent::__construct();
 		
+		$this->auth->restrict('Site.Developer.View');
+		$this->auth->restrict('Bonfire.Logs.View');
+		
 		Template::set('toolbar_title', 'System Logs');
 		
 		// Logging enabled?

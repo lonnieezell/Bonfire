@@ -13,6 +13,8 @@ class Developer extends Admin_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		
+		$this->auth->restrict('Bonfire.Database.Manage');
 						
 		$this->backup_folder = APPPATH . $this->backup_folder;
 				
