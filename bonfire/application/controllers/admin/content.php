@@ -9,6 +9,8 @@ class Content extends Admin_Controller {
 		parent::__construct();
 		
 		Template::set('toolbar_title', 'Content');
+		
+		$this->auth->restrict('Site.Content.View');
 	}
 	
 	//--------------------------------------------------------------------	

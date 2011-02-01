@@ -8,6 +8,8 @@ class Developer extends Admin_Controller {
 	{
 		parent::__construct();
 		
+		$this->auth->restrict('Site.Developer.View');
+		
 		Template::set('toolbar_title', 'Developer Tools');
 	}
 	

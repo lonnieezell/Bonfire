@@ -9,6 +9,8 @@ class Appearance extends Admin_Controller {
 		parent::__construct();
 		
 		Template::set('toolbar_title', 'Appearance');
+		
+		$this->auth->restrict('Site.Appearance.View');
 	}
 	
 	//--------------------------------------------------------------------	

@@ -8,6 +8,9 @@ class Settings extends Admin_Controller {
 	{
 		parent::__construct();
 		
+		$this->auth->restrict('Site.Settings.View');
+		$this->auth->restrict('Bonfire.Emailer.Manage');
+		
 		$this->load->helper('config_file');
 	}
 	

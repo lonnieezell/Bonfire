@@ -2,6 +2,16 @@
 
 class Content extends Admin_Controller {
 
+	public function __construct() 
+	{
+		parent::__construct();
+		
+		$this->auth->restrict('Site.Content.View');
+	}
+	
+	//--------------------------------------------------------------------
+	
+
 	public function index() 
 	{
 		Template::set('toolbar_title', 'Manage Pages');

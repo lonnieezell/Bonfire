@@ -8,6 +8,9 @@ class Settings extends Admin_Controller {
 	{
 		parent::__construct();
 		
+		$this->auth->restrict('Site.Settings.View');
+		$this->auth->restrict('Bonfire.Users.View');
+		
 		$this->load->model('roles/role_model');
 	}
 	
@@ -57,6 +60,8 @@ class Settings extends Admin_Controller {
 	
 	public function create() 
 	{
+		$this->auth->restrict('Bonfire.Users.Add');
+	
 		$this->load->helper('address');
 	
 		if ($this->input->post('submit'))
@@ -83,6 +88,8 @@ class Settings extends Admin_Controller {
 	
 	public function edit() 
 	{
+		$this->auth->restrict('Bonfire.Users.Manage');
+		
 		$this->load->helper('address');
 		
 		$user_id = $this->uri->segment(5);
@@ -112,6 +119,8 @@ class Settings extends Admin_Controller {
 	
 	public function do_action() 
 	{
+		$this->auth->restrict('Bonfire.Users.Manage');
+	
 		$actionable = $this->input->post('actionable') ? $this->input->post('actionable') : false;
 	
 		if (!$this->input->post('action') || $actionable == false)

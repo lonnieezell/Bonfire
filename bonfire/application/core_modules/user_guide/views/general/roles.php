@@ -16,3 +16,15 @@
 <p>New Roles can be created by the Administrator, or any role that has the <var>Bonfire.Roles.Manage</var> permission.</p>
 
 <h2>Permissions</h2>
+
+
+
+<h2>Function Reference</h2>
+
+<p>The following is a list of all public functions available to the developer to help use permissions.</p>
+
+<h3>has_permission(<kbd>$permission</kbd>)</h3>
+
+<p>Verifies whether the current logged-in user has the required permission. This function is made available from the <dfn>application_helper.php</dfn> file, but is simply a shorthand for <b>$this->auth->has_permission()</b>.</p>
+
+<pre>&lt;?php if (has_permission(<kbd>'Site.Signin.Allow'</kbd>)) : ?></pre>
