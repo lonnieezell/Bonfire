@@ -1,21 +1,13 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/**
- * Template Class
- *
- * The Template class makes the creation of consistently themed web pages across your
- * entire site simple and as automatic as possible.
- * 
- * @author Lonnie Ezell
- * @license http://creativecommons.org/licenses/by-sa/3.0/
- * @package Ocular Layout Library
- * @version 3.0a
- */
- 
 /*
-	CHANGES: 
-		- Modified get() method to also return class methods, if they exist.
-		- Added a set_view method since setting it as a public class member was 
-			a) wrong and b) not working with the static class.
+	Class: Template
+	
+	The Template class makes the creation of consistently themed web pages across your
+	entire site simple and as automatic as possible. It supports parent/child themes, 
+	controller-named automatic overrides, and more.
+	
+	Version - 3.0
+	Author	- Lonnie Ezell
 */
 class Template {
 
@@ -130,13 +122,14 @@ class Template {
 
 	//--------------------------------------------------------------------
 
-	/**
-	 * __construct function.
-	 *
-	 * This is purely here for CI's benefit. 
-	 * 
-	 * @access public
-	 * @return void
+	/*
+		Method: __construct()
+		
+		This constructor is here purely for CI's benefit, as this is a
+		static class.
+		
+		Return:
+			void
 	 */
 	public function __construct() 
 	{	
@@ -147,14 +140,14 @@ class Template {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * init function
-	 * 
-	 * Grabs an instance of the CI superobject, loads the Ocular config
-	 * file, and sets our default layout.
-	 *
-	 * @access 	public
-	 * @return	void
+	/*
+		Method: init()
+		
+		Grabs an instance of the CI superobject, loads the Ocular config
+		file, and sets our default layout.
+	
+		Return:	
+			void
 	 */
 	public static function init() 
 	{
@@ -180,16 +173,18 @@ class Template {
 	//--------------------------------------------------------------------
 	
 	
-	/**
-	 * render function.
-	 *
-	 * Renders out the specified layout, which starts the process
-	 * of rendering the page content. Also determines the correct
-	 * view to use based on the current controller/method.
-	 * 
-	 * @access public
-	 * @param 	string 	$layout. (default: '')
-	 * @return void
+	/*
+		Method: render()
+		
+		Renders out the specified layout, which starts the process
+		of rendering the page content. Also determines the correct
+		view to use based on the current controller/method.
+		
+		Parameters:
+		 	$layout	- The name of the a layout to use. This overrides any current or default layouts set.
+		 	
+		Return:
+			void
 	 */
 	public static function render($layout=null) 
 	{
@@ -227,13 +222,14 @@ class Template {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Renders the current page. 
-	 *
-	 * Uses a view based on the controller/function being run. (See __constructor).
-	 * 
-	 * @access public
-	 * @return void
+	/*
+		Method: yield()
+		Renders the current page into the layout. 
+		
+		Uses a view based on the controller/function being run. (See __constructor).
+		
+		Return:
+			a string containing the output of the render process.
 	 */
 	public static function yield() 
 	{ 	
@@ -252,15 +248,19 @@ class Template {
 	// !BLOCKS
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Stores the block named $name in the blocks array for later rendering.
-	 * The $current_view variable is the name of an existing view. If it is empty,
-	 * your script should still function as normal.
-	 * 
-	 * @access public
-	 * @param string $name. (default: '')
-	 * @param string $view. (default: '')
-	 * @return void
+	/*
+		Method: set_block()
+	
+		Stores the block named $name in the blocks array for later rendering.
+		The $current_view variable is the name of an existing view. If it is empty,
+		your script should still function as normal.
+		
+		Parameters:
+			$block_name	- the name of the block. Must match the name in the block() method.
+			$view_name	- the name of the view file to render.
+		
+		Return:
+			void
 	 */
 	public static function set_block($block_name='', $view_name='') 
 	{		
@@ -273,20 +273,26 @@ class Template {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Renders a "block" to the view.
-	 *
-	 * A block is a partial view contained in a view file in the 
-	 * application/views folder. It can be used for sidebars,
-	 * headers, footers, or any other recurring element within
-	 * a site. It is recommended to set a default when calling
-	 * this function within a layout. The default will be rendered
-	 * if no methods override the view (using the set_block() method).
-	 * 
-	 * @access public
-	 * @param string $name. (default: '')
-	 * @param string $default_view. (default: '')
-	 * @return void
+	/*
+		Method: block()
+	
+		Renders a "block" to the view.
+		
+		A block is a partial view contained in a view file in the 
+		application/views folder. It can be used for sidebars,
+		headers, footers, or any other recurring element within
+		a site. It is recommended to set a default when calling
+		this function within a layout. The default will be rendered
+		if no methods override the view (using the set_block() method).
+		
+		Parameters:
+			$block_name		- The name of the block to render.
+			$default_view	- The view to render if no other view has been set with the set_block() method.
+			$data			- An array of data to pass to the view.
+			$themed			- Whether we should look in the themes or standard view locations.
+
+		Return:
+			void
 	 */
 	public static function block($block_name='', $default_view='', $data=array(), $themed=false)
 	{		
@@ -311,7 +317,7 @@ class Template {
 
 		if (empty($block_name)) 
 		{ 
-			log_message('debug', 'Ocular was unable to find the default block: ' . $default_view);
+			log_message('debug', '[Template] Unable to find the default block: ' . $default_view);
 			return;
 		}
 		
@@ -326,14 +332,15 @@ class Template {
 	// !THEME PATHS
 	//--------------------------------------------------------------------
 	
-	/**
-	 * add_theme_path method
-	 * 
-	 * Theme paths allow you to have multiple locations for themes to be
-	 * stored. This might be used for separating themes for different sub-
-	 * applications, or a core theme and user-submitted themes.
-	 *
-	 * @param	string	$path	A new path where themes can be found.
+	/*
+		Method: add_theme_path()
+		
+		Theme paths allow you to have multiple locations for themes to be
+		stored. This might be used for separating themes for different sub-
+		applications, or a core theme and user-submitted themes.
+		
+		Parameters:
+			$path	- A new path where themes can be found.
 	 */
 	public static function add_theme_path($path=null) 
 	{
@@ -368,11 +375,14 @@ class Template {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * remove_theme_path method
-	 *
-	 * @param	string	$path	The path to remove from the theme paths.
-	 * @return	void
+	/*
+		Method: remove_theme_path()
+		
+		Parameters:
+			$path	- The path to remove from the theme paths.
+
+		Return:
+			void
 	 */
 	public static function remove_theme_path($path=null) 
 	{
@@ -389,15 +399,17 @@ class Template {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * set_theme method
-	 *
-	 * Stores the name of the active theme to use. This theme should be
-	 * relative to one of the 'template.theme_paths' folders.
-	 *
-	 * @access	public
-	 * @param	string	$theme	The name of the active theme
-	 * @return	void
+	/*
+		Method: set_theme()
+		
+		Stores the name of the active theme to use. This theme should be
+		relative to one of the 'template.theme_paths' folders.
+		
+		Parameters:
+			$theme	- The name of the active theme.
+
+		Return: 
+			void
 	 */
 	public static function set_theme($theme=null) 
 	{
@@ -417,10 +429,13 @@ class Template {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Returns the active theme.
-	 * 
-	 * @return	string	The name of the active theme.
+	/*
+		Method: theme()
+	
+		Returns the active theme.
+		
+		Return:
+			The name of the active theme.
 	 */
 	public static function theme() 
 	{
@@ -429,10 +444,13 @@ class Template {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 *	Returns the full url to a file in the currently active theme.
-	 *
-	 * @return	string	The full url (including http://) to the resource.
+	/*
+		Method: theme_url()
+	
+		Returns the full url to a file in the currently active theme.
+		
+		Return:
+			The full url (including http://) to the resource.
 	 */
 	public static function theme_url($resource='') 
 	{
@@ -454,13 +472,18 @@ class Template {
 	//--------------------------------------------------------------------
 	
 	
-	/**
-	 * Set the current view to render.
-	 * 
-	 * @param	string	$view	The name of the view file to render as content.
-	 * @return	void
+	/*
+		Method: set_view()
+		
+		Set the current view to render.
+		
+		Parameter:
+			$view	- The name of the view file to render as content.
+			
+		Return:
+			void
 	 */
-	public function set_view($view=null) 
+	public static function set_view($view=null) 
 	{
 		if (empty($view) || !is_string($view))
 		{
@@ -473,13 +496,16 @@ class Template {
 	//--------------------------------------------------------------------
 	
 	
-	/**
-	 * Makes it easy to save information to be rendered within the views.
-	 * 
-	 * @access public
-	 * @param string $name. (default: '')
-	 * @param string $value. (default: '')
-	 * @return void
+	/*
+		Method: set()
+		
+		Makes it easy to save information to be rendered within the views. 
+		As of 3.0, can also set any of the class properties.
+		
+		Parameters:
+			$var_name	- The name of the variable to set
+			$value		- The value to set it to.
+		@return void
 	 */
 	public static function set($var_name='', $value='') 
 	{		
@@ -510,11 +536,17 @@ class Template {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 *	Returns a variable that has been previously set, or false if not exists.
-	 *
-	 * @param	string	$var_name	The name of the data item to return.
-	 * @return	string/bool
+	/*
+		Method: get()
+		
+		Returns a variable that has been previously set, or false if not exists.
+		As of 3.0, will also return class properties.
+		
+		Parameter:
+			$var_name	- The name of the data item to return.
+			
+		Return: 
+			The value of the class property or view data.
 	 */
 	public static function get($var_name=null) 
 	{
@@ -538,13 +570,16 @@ class Template {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * parse_views method
-	 *
-	 * Set whether or not the views will be passed through CI's parser.
-	 *
-	 * @param	bool	$parse	Should we parse views?
-	 * @return	void
+	/*
+		Method: parse_views()
+		
+		Set whether or not the views will be passed through CI's parser.
+		
+		Parameter:
+			$parse	- boolean value. Should we parse views?
+			
+		Return:
+			void
 	 */
 	public function parse_views($parse) 
 	{
@@ -554,16 +589,20 @@ class Template {
 	//--------------------------------------------------------------------
 	
 	
-	/**
-	 * Sets a status message (for displaying small success/error messages).
-	 * This function is used in place of the session->flashdata function,
-	 * because you don't always want to have to refresh the page to get the
-	 * message to show up. 
-	 * 
-	 * @access public
-	 * @param string $message. (default: '')
-	 * @param string $type. (default: 'info')
-	 * @return void
+	/*
+		Method: set_message()
+	
+		Sets a status message (for displaying small success/error messages).
+		This function is used in place of the session->flashdata function,
+		because you don't always want to have to refresh the page to get the
+		message to show up. 
+		
+		Parameters:
+			$message	- A string with the message to save.
+			$type		- A string to be included as the CSS class of the containing div.
+			
+		Return:
+			void
 	 */
 	public static function set_message($message='', $type='info') 
 	{
@@ -580,14 +619,16 @@ class Template {
 	
 	//---------------------------------------------------------------
 	
-	/**
-	 * Displays a status message (small success/error messages).
-	 * If data exists in 'message' session flashdata, that will 
-	 * override any other messages. The renders the message based
-	 * on the template provided in the config file ('OCU_message_template').
-	 * 
-	 * @access public
-	 * @return void
+	/*
+		Method: message()
+	
+		Displays a status message (small success/error messages).
+		If data exists in 'message' session flashdata, that will 
+		override any other messages. The renders the message based
+		on the template provided in the config file ('OCU_message_template').
+		
+		Return:
+			A string with the results of inserting the message into the message template.
 	 */
 	public static function message() 
 	{
@@ -638,14 +679,17 @@ class Template {
 	
 	//---------------------------------------------------------------
 	
-	/**
-	 *	Loads a view based on the current themes.
-	 *
-	 * @param	string	$view		The view to load.
-	 * @param	array	$data		An array of data elements to be made available to the views
-	 * @param	string	$override	The name of a view to check for first (used for controller-based layouts)
-	 * @param	bool	$is_themed	Whether it should check in the theme folder first.
-	 * @return	string	$output		The results of loading the view
+	/*
+		Method: load_view()
+	
+		Loads a view based on the current themes.
+		
+		Parameters:
+			$view		- The view to load.
+			$data		- An array of data elements to be made available to the views
+			$override	- The name of a view to check for first (used for controller-based layouts)
+			$is_themed	- Whether it should check in the theme folder first.
+			&$output	- A pointer to the variable to store the output of the loaded view into.
 	 */
 	public static function load_view($view=null, $data=null, $override='', $is_themed=true, &$output) 
 	{ 
@@ -699,15 +743,18 @@ class Template {
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 	
-	/** 
-	 * find_file method
-	 *
-	 * Searches through the the active theme and the default theme to try to find
-	 * a view file. If found, it returns the rendered view.
-	 *
-	 * @param	string	$view		The name of the view to find.
-	 * @param	array	$data		An array of key/value pairs to pass to the views.
-	 * @return	string				The content of the file, if found, else empty.
+	/*
+		Method: find_file
+		
+		Searches through the the active theme and the default theme to try to find
+		a view file. If found, it returns the rendered view.
+		
+		Parameters:
+			$view	- The name of the view to find.
+			$data   -  An array of key/value pairs to pass to the views.
+		
+		Return:
+			The content of the file, if found, else empty.
 	 */
 	private function find_file($view=null, $data=null) 
 	{
@@ -778,6 +825,16 @@ class Template {
 
 //--------------------------------------------------------------------
 
+/*
+	Function: theme_view()
+	
+	A shorthand method that allows views (from the current/default themes)
+	to be included in any other view.
+	
+	Parameters:
+		$view	- the name of the view to render.
+		$data	- an array of data to pass to the view.
+*/
 function theme_view($view=null, $data=null)
 {
 	if (empty($view)) return '';
@@ -791,6 +848,18 @@ function theme_view($view=null, $data=null)
 
 //--------------------------------------------------------------------
 
+/*
+	Function: check_class()
+	
+	A simple helper method for checking menu items against the current
+	class that is running.
+	
+	Parameter:
+		$item	- The name of the class to check against.
+		
+	Return:
+		Either <b>class="current"</b> or an empty string.
+*/
 function check_class($item='')
 {
 	$ci =& get_instance();
@@ -805,6 +874,18 @@ function check_class($item='')
 
 //--------------------------------------------------------------------
 
+/*
+	Function: check_method()
+	
+	A simple helper method for checking menu items against the current
+	class' method that is being executed (as far as the Router knows.)
+	
+	Parameter:
+		$item	- The name of the method to check against.
+		
+	Return:
+		Either <b>class="current"</b> or an empty string.
+*/
 function check_method($item='')
 {
 	$ci =& get_instance();
@@ -819,12 +900,12 @@ function check_method($item='')
 
 //--------------------------------------------------------------------
 
-/**
- * Will create a breadcrumb from either the uri->segments or
- * from a key/value paired array passed into it. 
- *
- * @since 2.12
- */
+/*
+	Function: breadcrumb()
+
+	Will create a breadcrumb from either the uri->segments or
+	from a key/value paired array passed into it. 	
+*/
 function breadcrumb($my_segments=null) 
 {
 	$ci =& get_instance();
