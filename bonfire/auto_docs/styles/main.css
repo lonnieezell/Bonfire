@@ -10,7 +10,7 @@
    directory, the changes will automatically be applied to all your projects
    that use this style the next time Natural Docs is run on them.
 
-   This file is part of Natural Docs, which is Copyright © 2003-2010 Greg Valure.
+   This file is part of Natural Docs, which is Copyright Â© 2003-2010 Greg Valure.
    Natural Docs is licensed under version 3 of the GNU Affero General Public
    License (AGPL).  Refer to License.txt for the complete details.
 
@@ -20,15 +20,16 @@
 */
 
 body {
-    font: 10pt Verdana, Arial, sans-serif;
-    color: #000000;
+    font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
     margin: 0; padding: 0;
     }
 
 .ContentPage,
 .IndexPage,
 .FramedMenuPage {
-    background-color: #E8E8E8;
+    background-color: #333;
     }
 .FramedContentPage,
 .FramedIndexPage,
@@ -44,7 +45,9 @@ a:hover { color: #900000; text-decoration: underline }
 a:active { color: #FF0000; text-decoration: underline }
 
 td {
-    vertical-align: top }
+    vertical-align: top;
+	padding: 0.3em;
+}
 
 img { border: 0;  }
 
@@ -111,17 +114,18 @@ blockquote {
         text-align: center;
         padding: 5px 10px 15px 10px;
         border-bottom: 1px dotted #000000;
-        margin-bottom: 15px }
+        margin-bottom: 15px;
+        color: #fff; }
 
     .MSubTitle {
-        font-size: 9pt; font-weight: normal; font-variant: normal;
+        font-size: 9pt; font-weight: normal; font-variant: normal; color: #d9d9d9;
         margin-top: 1ex; margin-bottom: 5px }
 
 
     .MEntry a:link,
     .MEntry a:hover,
-    .MEntry a:visited { color: #606060; margin-right: 0 }
-    .MEntry a:active { color: #A00000; margin-right: 0 }
+    .MEntry a:visited { color: #d9d9d9; margin-right: 0 }
+    .MEntry a:active { color: #eee; margin-right: 0 }
 
 
     .MGroup {
@@ -134,8 +138,8 @@ blockquote {
 
     .MGroup a:link,
     .MGroup a:hover,
-    .MGroup a:visited { color: #545454; margin-right: 10px }
-    .MGroup a:active { color: #A00000; margin-right: 10px }
+    .MGroup a:visited { color: #d9d9d9; margin-right: 10px }
+    .MGroup a:active { color: #fff; margin-right: 10px }
 
 
     .MFile,
@@ -274,7 +278,7 @@ blockquote {
 
 
 #Content {
-    padding-bottom: 15px;
+    padding: 20px 40px 0;
     }
 
 .ContentPage #Content {
@@ -292,15 +296,15 @@ blockquote {
 
 
     .CTopic {
-        font-size: 10pt;
+        font-size: 14px;
         margin-bottom: 3em;
         }
 
 
     .CTitle {
         font-size: 12pt; font-weight: bold;
-        border-width: 0 0 1px 0; border-style: solid; border-color: #A0A0A0;
-        margin: 0 15px .5em 15px }
+        border-bottom: 1px solid #999;
+        margin: 28px 0px 16px; }
 
     .CGroup .CTitle {
         font-size: 16pt; font-variant: small-caps;
@@ -320,11 +324,13 @@ blockquote {
         margin-left: 0; margin-right: 0 }
 
     #MainTopic .CTitle {
-        font-size: 20pt;
-        color: #FFFFFF; background-color: #7070C0;
-        padding: 10px 15px 10px 15px;
-        border-width: 0 0 3px 0; border-color: #000000;
-        margin-left: 0; margin-right: 0 }
+        font-size: 24px;
+        color: #e13300;
+        background: transparent;
+        padding: 3px 0px 7px 3px;
+        border-bottom: 1px solid #666;
+        border-top: 0;
+        margin: 0 0 20px; }
 
     .CBody {
         margin-left: 15px; margin-right: 15px }
@@ -439,12 +445,12 @@ blockquote {
         padding: 0;
         }
 
-    .CFunction .Prototype {
-        background-color: #F4F4F4; border-color: #D0D0D0 }
-    .CProperty .Prototype {
-        background-color: #F4F4FF; border-color: #C0C0E8 }
+    .CFunction .Prototype,
+    .CProperty .Prototype,
     .CVariable .Prototype {
-        background-color: #FFFFF0; border-color: #E0E0A0 }
+        background-color: #FFFFF0; border-color: #E0E0A0;
+        color: #002166;
+       }
 
     .CClass .Prototype {
         border-width: 1px 2px 2px 1px; border-style: solid; border-color: #A0A0A0;
@@ -504,9 +510,9 @@ blockquote {
         font-size: 9pt; width: 100% }
 
     .SEntry {
-        width: 30% }
+        width: 20% }
     .SDescription {
-        width: 70% }
+        width: 80% }
 
 
     .SMarked {
