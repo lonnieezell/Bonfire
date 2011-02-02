@@ -20,3 +20,31 @@ $config['auth.allow_remember'] = 1;
 
 // How long should a user be remembered in the system? In seconds.
 $config['auth.remember_length'] = 1209600;	
+
+//--------------------------------------------------------------------
+// !MODULES
+//--------------------------------------------------------------------
+
+/*
+	These module settings determine what permissions are needed to view
+	modules in the left-hand sidebar.
+*/
+$config['module_permissions'] = array(
+	'content'		=> array(
+	),
+	'statistics'	=> array(
+	
+	),
+	'appearance'	=> array(
+	
+	),
+	'settings'		=> array(
+		'database'	=> 'Bonfire.Database.Manage',
+		'emailer'	=> 'Bonfire.Emailer.Manage',
+		'roles'		=> 'Bonfire.Roles.Manage',
+		'users'		=> 'Bonfire.Users.View'
+	),
+	'developer'		=> array(
+		'database'	=> 'Bonfire.Database.Manage',		
+	)
+);
