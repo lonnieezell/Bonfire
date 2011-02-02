@@ -3,8 +3,9 @@
 	Class: Template
 	
 	The Template class makes the creation of consistently themed web pages across your
-	entire site simple and as automatic as possible. It supports parent/child themes, 
-	controller-named automatic overrides, and more.
+	entire site simple and as automatic as possible. 
+	
+	It supports parent/child themes, controller-named automatic overrides, and more.
 	
 	Version - 3.0
 	Author	- Lonnie Ezell
@@ -13,110 +14,86 @@ class Template {
 
 	private static $debug = false;
 
-	/**
-	 * Stores the name of the active theme (folder)
-	 * with a trailing slash. 
-	 * 
-	 * (default value: '')
-	 * 
-	 * @var string
-	 * @access protected
+	/*
+		Var: $active_theme
+		Stores the name of the active theme (folder)
+		with a trailing slash. 
 	 */
 	protected static $active_theme = '';
 	
-	/**
-	 * Stores the default theme from the config file
-	 * for a slight performance increase.
-	 *
-	 * @var string
-	 * @access protected
+	/*
+		Var: $default_theme
+		Stores the default theme from the config file
+		for a slight performance increase.
 	 */
 	 protected static $default_theme = '';
 
-	/**
-	 * The view to load. Normally not set unless
-	 * you need to bypass the automagic.
-	 * 
-	 * @var mixed
-	 * @access public
+	/*
+		Var: $current_view
+		The view to load. Normally not set unless
+		you need to bypass the automagic.
 	 */
 	protected static $current_view;
 	
-	/**
-	 * The layout to render the views into.
-	 * 
-	 * @var mixed
-	 * @access public
+	/*
+		Var: $layout
+		The layout to render the views into.
 	 */
 	public static $layout;
 	
-	/**
-	 * parse_views
-	 * 
-	 * If true, CodeIgniter's Template Parser will be used to 
-	 * parse the view. If false, the view is displayed with
-	 * no parsing. Used by the yield() and block() 
-	 * 
-	 * @var mixed
-	 * @access public
+	/*
+		Var: $parse_views
+		If true, CodeIgniter's Template Parser will be used to 
+		parse the view. If false, the view is displayed with
+		no parsing. Used by the yield() and block() 
 	 */
 	public static $parse_views = false;
 	
-	/**
-	 * The data to be passed into the views.
-	 * The keys are the names of the variables
-	 * and the values are the values.
-	 * 
-	 * @var mixed
-	 * @access protected
+	/*
+		Var: $data
+		The data to be passed into the views.
+		The keys are the names of the variables
+		and the values are the values.
 	 */
 	protected static $data = array();
 	
-	/**
-	 * An array of blocks. The key is the name
-	 * to reference it by, and the value is the file.
-	 * The class will loop through these, parse them,
-	 * and push them into the layout.
-	 * 
-	 * (default value: array())
-	 * 
-	 * @var array
-	 * @access protected
+	/*
+		Var: $blocks
+		An array of blocks. The key is the name
+		to reference it by, and the value is the file.
+		The class will loop through these, parse them,
+		and push them into the layout.
 	 */
 	protected static $blocks = array();
 	
-	/**
-	 * Holds a simple array to store the status Message
-	 * that gets displayed using the message() function.
-	 *
-	 * @var array
-	 * @access protected
+	/*
+		Var: $message
+		Holds a simple array to store the status Message
+		that gets displayed using the message() function.
 	 */
 	protected static $message;
 
-	/**
-	 * An array of paths to look for themes.
-	 *
-	 * @var array
-	 * @access protected
+	/*
+		Var: $theme_paths
+		An array of paths to look for themes.
 	 */
 	protected static $theme_paths	= array();	
 	
-	/**
-	 * The full server path to the site root.
+	/*
+		Var: $site_path
+		The full server path to the site root.
 	 */
 	public static $site_path;
 	
-	/**
-	 * Stores CI's default view path.
+	/*
+		Var: $orig_view_path
+		Stores CI's default view path.
 	 */
 	protected static $orig_view_path;
 	
-	/**
-	 * An instance of the CI super object.
-	 * 
-	 * @var mixed
-	 * @access private
+	/*	
+		Var: $ci
+		An instance of the CI super object.
 	 */
 	private static $ci;
 
