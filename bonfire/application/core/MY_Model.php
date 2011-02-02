@@ -1,36 +1,59 @@
-<?php
-/**
- * Base_Model
- *
- * The Base model implements standard CRUD functions that can be
- * used and overriden by module models. This helps to maintain
- * a standard interface to program to, and makes module creation
- * faster.
- *
- * Database functions make it easy to keep the database structure
- * up to date, and even install the tables initially. All tables
- * are assumed to have a field called 'id', unless $use_id = false.
- * 
- * The model will handle validation of the the objects (through the
- * validate() method) and will use the $rules array.
- *
- *
- * @author Lonnie Ezell
- * @version 1.2
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+/*
+	Class: MY_Model
+	
+	The Base model implements standard CRUD functions that can be
+	used and overriden by module models. This helps to maintain
+	a standard interface to program to, and makes module creation
+	faster.
+	
+	Author:
+		Lonnie Ezell
  */
 class MY_Model extends CI_Model {
 	
-	public $error 		= '';		// Stores custom errors 
+	/*
+		Var: $error
+		Stores custom errors that can be used in UI error reporting.
+	*/
+	public $error 		= '';
 	
-	protected $table 	= '';		// The name of the database table.
+	/*
+		Var: $table
+		The name of the db table this model primarily uses.
+	*/
+	protected $table 	= '';
 	
-	protected $key		= 'id';		// the primary key of the table. Used as the 'id' throughout.
+	/*
+		Var: $key
+		The primary key of the table. Used as the 'id' throughout.
+	*/
+	protected $key		= 'id';
 	
-	protected $set_created	= TRUE;	// Whether or not to auto-create and fill a 'created_on' field 
-	protected $set_modified = TRUE;	// Whether or not to auto-create and fill a 'modified_on' field
+	/*
+		Var: $set_created
+		Whether or not to auto-fill a 'created_on' field on inserts.
+	*/
+	protected $set_created	= TRUE;
 	
-	protected $date_format = 'int';	// Valid types: 'int', 'datetime', 'date'
+	/*
+		Var: $set_modified
+		Whether or not to auto-fill a 'modified_on' field on updates.
+	*/
+	protected $set_modified = TRUE;
 	
+	/*
+		Var: $date_format
+		The type of date/time field used for created_on and modified_on fields. 
+		Valid types are: 'int', 'datetime', 'date'
+	*/
+	protected $date_format = 'int';
+	
+	/*
+		Var: $soft_deletes
+		If false, the delete() method will perform a true delete of that row.
+		If true, a 'deleted' field will be set to 1.
+	*/
 	protected $soft_deletes = FALSE;
 	
 	//---------------------------------------------------------------
@@ -42,6 +65,17 @@ class MY_Model extends CI_Model {
 	
 	//---------------------------------------------------------------
 	
+	/*
+		Method: find()
+		
+		Searches for a single row in the database.
+		
+		Parameter:
+			$id		- The primary key of the record to search for.
+			
+		Return:
+			An object representing the db row, or false.
+	*/
 	public function find($id='')
 	{
 		if ($this->_function_check($id) === FALSE)
