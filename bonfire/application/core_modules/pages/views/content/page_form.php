@@ -1,5 +1,11 @@
 <?php echo $this->load->view('content/sub_nav', null, true); ?>
 
+<?php if (validation_errors()) : ?>
+<div class="notification error">
+	<p><?php echo validation_errors(); ?></p>
+</div>
+<?php endif; ?>
+
 <?php echo form_open($this->uri->uri_string()); ?>
 
 	<!-- Tab Area -->
@@ -23,8 +29,10 @@
 			
 			<input type="checkbox" name="published" value="1" style="margin-left: 2em" /> Published?<br/>
 			
-			<label style="width: auto">Page Alias:</label> <?php echo site_url(); ?><span id="alias-span"></span>
-			<input type="text" name="alias" id="alisa-input" style="display: ; width: 25%;" />
+			<label style="width: auto">Page Alias:</label> <?php echo site_url(); ?><span id="alias-span"><?php echo isset($page) ? $page->alias : set_value('alias') ?></span>
+			<input type="text" name="page_alias" id="alias-input" style="display: ; width: 25%;" value="<?php echo isset($page) ? $page->alias : set_value('alias') ?>" />
+			
+			<a href="#" id="details-toggle" class="align-right">Show Details</a>
 			
 			<br />
 			
@@ -105,5 +113,23 @@
 head.ready(function() {
 	// Tabs
 	$('.tabs').tabs();
+	
+	// Details toggle
+	$('#details-toggle').click(function(){
+		var status = $(this).text();
+		
+		if (status == 'Show Details')
+		{
+			$('#page-info').slideDown();
+			$(this).text('Hide Details');
+		}
+		else
+		{
+			$('#page-info').slideUp();
+			$(this).text('Show Details');
+		}
+	
+		return false;
+	});
 });
 </script>
