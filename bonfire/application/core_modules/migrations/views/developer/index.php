@@ -17,7 +17,7 @@
 		<br />
 		<?php if ($latest_version > $installed_version) : ?>
 		<div class="notification attention">
-			<p>Your database is not up to date. <?php echo anchor('admin/developer/migrations/migrate', 'Install Latest Version'); ?></p>
+			<p>Your database is not up to date. <?php echo anchor('admin/developer/migrations/migrate_to/'. $latest_version, 'Install Latest Version'); ?></p>
 		</div>
 		<?php endif; ?>
 	

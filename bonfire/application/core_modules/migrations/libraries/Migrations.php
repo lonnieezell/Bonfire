@@ -371,6 +371,21 @@ class Migrations {
 	
 	//--------------------------------------------------------------------
 	
+	public function get_available_versions() 
+	{
+		$files = glob($this->migrations_path . '*_*'.EXT);
+		
+		for ($i=0; $i < count($files); $i++)
+		{
+			$files[$i] = str_ireplace($this->migrations_path, '', $files[$i]);
+		}
+		
+		return $files;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
 	public function do_sql_migration($sql='') 
 	{
 		if (empty($sql))
@@ -382,8 +397,11 @@ class Migrations {
 		$queries = explode(';', $sql);
 		
 		foreach ($queries as $q)
-		{
-			$this->_ci->db->query(trim($q));
+		{		
+			if (trim($q))
+			{
+				$this->_ci->db->query(trim($q));
+			}
 		}
 	}
 	
