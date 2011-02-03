@@ -7,6 +7,8 @@ class Content extends Admin_Controller {
 		parent::__construct();
 		
 		$this->auth->restrict('Site.Content.View');
+		
+		$this->load->model('Page_model', 'page_model', true);
 	}
 	
 	//--------------------------------------------------------------------
@@ -14,6 +16,8 @@ class Content extends Admin_Controller {
 
 	public function index() 
 	{
+		Template::set('pages', $this->page_model->find_all());
+	
 		Template::set('toolbar_title', 'Manage Pages');
 		Template::render();
 	}
@@ -22,9 +26,87 @@ class Content extends Admin_Controller {
 	
 	public function create() 
 	{
+		if ($this->input->post('submit'))
+		{
+			if ($this->save_page())
+			{
+				Template::set_message('Successfully saved Page.', 'success');
+				redirect('admin/content/pages');
+			}
+		}
+	
 		Template::set('toolbar_title', 'Create New Page');
 		Template::set_view('content/page_form');
 		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function edit($id=0) 
+	{
+		if ($this->input->post('submit'))
+		{
+			if ($this->save_page($id, 'update'))
+			{
+				Template::set_message('Successfully saved Page.', 'success');
+				redirect('admin/content/pages');
+			}
+		}
+	
+		Template::set('page', $this->page_model->find($id));
+	
+		Template::set('toolbar_title', 'Create New Page');
+		Template::set_view('content/page_form');
+		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+	
+	private function save_page($id=0, $type='insert') 
+	{
+		$this->form_validation->set_rules('page_title', 'Title', 'required|trim|max_length[255]|xss_clean');
+		$this->form_validation->set_rules('page_alias', 'Alias', 'required|trim|strip_tags|max_length[255]|xss_clean');
+		$this->form_validation->set_rules('body', 'Page Body', 'trim|xss_clean');
+		
+		if ($this->form_validation->run() === false)
+		{
+			return false;
+		}
+		
+		// Build our page content
+		$data = array(
+			'page_title'	=> $_POST['page_title'],
+			'long_title'	=> isset($_POST['long_title']) ? $_POST['long_title'] : '',
+			'alias'			=> $_POST['page_alias'],
+			'description'	=> isset($_POST['description']) ? $_POST['description'] : '',
+			'published'		=> isset($_POST['published']) ? 1 : 0,
+			'pub_date'		=> isset($_POST['pub_date']) ? $_POST['pub_date'] : '0000-00-00 00:00:00',
+			'unpub_date'	=> isset($_POST['unpub_date']) ? $_POST['unpub_date'] : '0000-00-00 00:00:00',
+			'body'			=> !empty($_POST['body']) ? htmlentities($_POST['body']) : '',
+			'summary'		=> isset($_POST['summary']) ? $_POST['summary'] : '',
+			'rich_text'		=> isset($_POST['rich_text']) ? 1 : 0,
+			'searchable'	=> isset($_POST['searchable']) ? 1 : 0,
+			'cacheable'		=> isset($_POST['cacheable']) ? 1 : 0,
+			'is_folder'		=> isset($_POST['is_folder']) ? 1 : 0,
+			'deleted'		=> isset($_POST['deleted']) ? 1 : 0,
+		);
+		
+		if ($type=='insert')
+		{
+			$data['created_by'] = $this->auth->user_id();
+		
+			$id = $this->page_model->insert($data);
+			
+			if ($id) { $result = true; }
+		}
+		else if ($type == 'update')
+		{
+			$data['modified_by'] = $this->auth->user_id();
+			
+			$result = $this->page_model->update($id, $data);
+		}
+		
+		return $result;
 	}
 	
 	//--------------------------------------------------------------------
