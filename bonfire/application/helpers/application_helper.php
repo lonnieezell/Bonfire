@@ -8,7 +8,7 @@
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
-// !AUTH HELPERS
+// !USER HELPERS
 //--------------------------------------------------------------------
 
 /** 
@@ -30,6 +30,40 @@ function has_permission($permission=null)
 }
 
 //--------------------------------------------------------------------
+
+/**
+ * Creates an image link based on Gravatar for the specified user.
+ * It will default to the site's generic image if none is found for
+ * the user.
+ */
+function gravatar_link($email=null, $size=48, $alt='', $title='', $class='', $id='') 
+{
+	// Set our default image based on required size.
+	$default_image = Template::theme_url('images/user.png');
+	
+	// Set our minimum site rating to PG
+	$rating = 'PG';
+	
+	// Border color 
+	$border = 'd6d6d6';
+	
+	// URL for Gravatar
+	$gravatarURL = "http://www.gravatar.com/avatar.php?gravatar_id=%s&default=%s&size=%s&border=%s&rating=%s";
+	
+	$avatarURL = sprintf
+	(
+		$gravatarURL, 
+		md5($email), 
+		$default_image,
+		$size,
+		$border,
+		$rating
+	);
+	
+	return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" class="'. $class .'" id="'. $id .'" />';
+}
+
+//---------------------------------------------------------------
 
 //--------------------------------------------------------------------
 // !MODULE HELPERS

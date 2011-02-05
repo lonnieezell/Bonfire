@@ -171,13 +171,14 @@ class Template {
 		$layout = empty($layout) ? self::$layout : $layout;
 
 		// Is it in an AJAX call? If so, override the layout
-		/*if ($this->is_ajax())
+		if (self::$ci->input->is_ajax_request())
 		{
 			$layout = self::$ci->config->item('template.ajax_layout');
 			self::$ci->output->set_header("Cache-Control: no-store, no-cache, must-revalidate");
 			self::$ci->output->set_header("Cache-Control: post-check=0, pre-check=0");
-			self::$ci->output->set_header("Pragma: no-cache"); 
-		}*/
+			self::$ci->output->set_header("Pragma: no-cache");
+			self::$ci->output->set_header('Content-Type: text/html');
+		}
 		
 		// Grab our current view name, based on controller/method
 		// which routes to views/controller/method.
@@ -648,7 +649,7 @@ class Template {
 		// (This was a very rare occurence, but clearing should resolve the problem.
 		if (class_exists('CI_Session'))
 		{
-			self::$ci->session->flashdata('message', '');
+			self::$ci->session->set_flashdata('message', '');
 		}
 		
 		return $template;

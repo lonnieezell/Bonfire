@@ -12,6 +12,8 @@ class Settings extends Admin_Controller {
 		$this->auth->restrict('Bonfire.Users.View');
 		
 		$this->load->model('roles/role_model');
+		
+		Assets::add_js($this->load->view('settings/users_js', null, true), 'inline');
 	}
 	
 	//--------------------------------------------------------------------
@@ -51,6 +53,8 @@ class Settings extends Admin_Controller {
 		Template::set('users', $this->user_model->limit($this->limit, $offset)->find_all());
 		Template::set('total_users', $total_users);
 		Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
+		
+		Template::set('user_count', $this->user_model->count_all());
 	
 		Template::set('toolbar_title', 'User Management');
 		Template::render();
@@ -99,7 +103,7 @@ class Settings extends Admin_Controller {
 			if ($this->save_user('update', $user_id))
 			{
 				Template::set_message('User successfully created.', 'success');
-				redirect('admin/settings/users');
+				//redirect('admin/settings/users');
 			}
 			else 
 			{
@@ -117,37 +121,51 @@ class Settings extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
-	public function do_action() 
-	{
-		$this->auth->restrict('Bonfire.Users.Manage');
+	public function delete() 
+	{	
+		$id = $this->uri->segment(5);
 	
-		$actionable = $this->input->post('actionable') ? $this->input->post('actionable') : false;
-	
-		if (!$this->input->post('action') || $actionable == false)
-		{
-			redirect('/admin/settings/users');
-		}
-		
-		switch (strtolower($this->input->post('action')))
-		{
-			case 'ban':
-				foreach ($actionable as $id)
-				{
-					$this->user_model->update($id, array('banned' => 1));
-				}
-				break;
-			case 'delete':
-				foreach ($actionable as $id)
-				{
-					$this->user_model->delete($id);
-				}
-				break;
+		if (!empty($id))
+		{	
+			$this->auth->restrict('Bonfire.Users.Manage');
+
+			if ($this->user_model->delete($id))
+			{
+				Template::set_message('The User was successfully deleted.', 'success');
+			} else
+			{
+				Template::set_message('We could not delete the user: '. $this->user_model->error, 'success');
+			}
 		}
 		
 		redirect('/admin/settings/users');
 	}
 	
 	//--------------------------------------------------------------------
+	
+	//--------------------------------------------------------------------
+	// !HMVC METHODS
+	//--------------------------------------------------------------------
+	
+	public function login_attempts($limit=15) 
+	{
+		$attempts = $this->user_model->get_login_attempts($limit);
+		
+		return $this->load->view('settings/login_attempts', array('login_attempts' => $attempts), true);
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function access_logs($limit=15) 
+	{
+		$logs = $this->user_model->get_access_logs($limit);
+		
+		return $this->load->view('settings/access_logs', array('access_logs' => $logs), true);
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
 		
 	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
