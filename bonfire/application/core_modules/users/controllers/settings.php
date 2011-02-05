@@ -14,6 +14,7 @@ class Settings extends Admin_Controller {
 		$this->load->model('roles/role_model');
 		
 		Assets::add_js($this->load->view('settings/users_js', null, true), 'inline');
+		
 	}
 	
 	//--------------------------------------------------------------------
@@ -57,7 +58,7 @@ class Settings extends Admin_Controller {
 		Template::set('user_count', $this->user_model->count_all());
 	
 		Template::set('toolbar_title', 'User Management');
-		Template::render();
+		Template::render('for_ui');
 	}
 	
 	//--------------------------------------------------------------------

@@ -61,10 +61,8 @@
 	</header>
 
 	<div class="page">
-		<div class="inner scrollable" id="main-page">
-			<div class="padded">
-				<?php echo Template::yield(); ?>			
-			</div>
+		<div class="inner" id="main-page">
+			<?php echo Template::yield(); ?>			
 		</div>
 	</div>	<!-- /page -->
 
