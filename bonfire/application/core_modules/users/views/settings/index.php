@@ -1,97 +1,84 @@
-<?php echo $this->load->view('settings/sub_nav', null, true); ?>
-
-<?php echo form_open('admin/settings/users', 'style="padding-bottom: 0"'); ?>
-
-	<div>
-		<p>Show only users with role 
+<div class="v-split">
+	<!-- Users List -->
+	<div class="vertical-panel">
 		
-			<select name="filter_by_role_id">
-				<option></option>
+		<div class="panel-header">
+			<!-- Search Form -->
+			<input type="search" id="user-search" value="" placeholder="search..." style="display: inline; width: 50%;" />
+			
+			<select id="role-filter" style="display: inline; max-width: 40%;">
+				<option value="0">Show role...</option>
 			<?php foreach ($roles as $role) : ?>
-				<option value="<?php echo $role->role_id ?>" <?php echo isset($filter) && $filter == $role->role_id ? 'selected="selected"' : '' ?>><?php echo $role->role_name ?></option>
+				<option><?php echo $role->role_name ?></option>
 			<?php endforeach; ?>
 			</select>
-			
-			<input type="submit" name="filter_submit" value="Go" />
+		</div>
+	
+		<?php if (isset($users) && is_array($users)) : ?>
 		
-		</p>
-	</div>
-<?php echo form_close(); ?>
-
-<?php if (isset($users) && is_array($users)) : ?>
-<?php echo form_open('admin/settings/users/do_action', 'id="action_form"'); ?>
-	<table cellpadding="0" cellspacing="0">
-		<thead>
-			<tr>
-				<th style="width: 2em">
-					<input type="checkbox" name="select_all" id="select_all" />
-				</th>
-				<th>Name</th>
-				<th>Email</th>
-				<th>Role</th>
-				<th style="width: 6em">Last Login</th>
-			</tr>
-		</thead>
-		<tfoot>
-			<tr>
-				<td colspan="5">
-					With Selected: 
-					<select name="action">
-						<option value="0">-----</option>
-						<option>Delete</option>
-						<option>Ban</option>
-					</select>
-					
-					<input type="submit" name="submit" value="Go" style="width: auto;" />
-				</td>
-			</tr>
-		</tfoot>
-		<tbody>
+		<div class="scrollable">
+			<div class="list-view" id="user-list">
 			<?php foreach ($users as $user) : ?>
-			<tr>
-				<td>
-					<input type="checkbox" name="actionable[]" value="<?php echo $user->id ?>" />
-				</td>
-				<td><?php echo !empty($user->first_name) ? $user->first_name .' '. $user->last_name : ' -- '; ?></td>
-				<td><?php echo anchor('admin/settings/users/edit/'. $user->id, $user->email) ?></td>
-				<td>
-					<?php 
-					foreach ($roles as $role)
-					{
-						if ($role->role_id == $user->role_id)
-						{
-							echo $role->role_name;
-							break;
-						}
-					}
-					?>
-				</td>
-				<td>
-					<?php echo isset($user->last_login) && $user->last_login != '0000-00-00 00:00:00' ? date('m/d/Y', strtotime($user->last_login)) : 'N/A' ?>
-				</td>
-			</tr>
+				<div class="list-item" data-user_id="<?php echo $user->id ?>" data-role="<?php echo $user->role_name ?>">
+					<?php echo gravatar_link($user->email, 32); ?>
+				
+					<p>
+						<b><?php echo config_item('auth.login_type') == 'username' ? $user->username : $user->email; ?></b><br/>
+						<?php echo $user->role_name ?>
+					</p>
+				</div>
 			<?php endforeach; ?>
-		</tbody>
-	</table>
+			</div>	<!-- /list -->
+		</div>
+		
+		<?php else : ?>
+		
+			<div class="notification information">
+				<p>No users found.</p>
+			</div>
+		
+		<?php endif; ?>
+	</div>	<!-- /users-list -->
 	
-	<?php echo form_close(); ?>
-	
-	<?php echo $this->pagination->create_links(); ?>
-
-<?php else : ?>
-
-	<div class="notification information">
-		<p>No users found.</p>
-	</div>
-
-<?php endif; ?>
-
-<script>
-head.ready(function() {
-	$('#select_all').click(function() {
-		var is_checked = $(this).attr('checked');
-	
-		$('#action_form input[type=checkbox]').attr('checked', is_checked);
-	});
-});
-</script>
+	<!-- User Editor -->
+	<div id="content">
+		<div class="scrollable" id="ajax-content">
+			<div class="inner">
+			
+				<div class="row" style="margin-bottom: 2.5em">
+					<div class="column size1of2">
+						<img src="<?php echo Template::theme_url('images/user.png') ?>" style="vertical-align: bottom; position: relative; top: -5px; margin-right: 1em;" />	
+						
+						<span class="big-text"><b><?php echo $user_count ?></b></span> &nbsp; users
+					</div>
+					
+					<div class="column size1of2">
+					
+					</div>
+				</div>
+			
+			
+				<div class="box create rounded">
+					<a class="button good ajaxify" href="<?php echo site_url('admin/settings/users/create'); ?>">Create New User</a>
+				
+					<h3>Create A New User</h3>
+					
+					<p>Create new accounts for other users in your circle.</p>
+				</div>	
+				
+				<div class="row" style="margin-top: 3em">
+					<!-- Access Logs -->
+					<div class="column size1of2">
+						<?php echo modules::run('users/settings/access_logs'); ?>
+					</div>
+					
+					<!-- Access Logs -->
+					<div class="column size1of2">
+						<?php echo modules::run('users/settings/login_attempts'); ?>
+					</div>
+				</div>
+				
+			</div>	<!-- /inner -->
+		</div>	<!-- /scrollable -->
+	</div>	<!-- /content -->
+</div> <!-- /v-split -->

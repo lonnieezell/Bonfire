@@ -75,6 +75,8 @@ class User_model extends MY_Model {
 			$this->db->where('deleted', 0);
 		}
 		
+		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
+		
 		return parent::find_all();
 	}
 	
@@ -91,6 +93,8 @@ class User_model extends MY_Model {
 			
 			return parent::find_by($field, null, 'or');
 		}
+		
+		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
 		
 		return parent::find_by($field, $value);
 	}
@@ -125,6 +129,37 @@ class User_model extends MY_Model {
 		}
 		
 		return random_string('alnum', 7);
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
+	//--------------------------------------------------------------------
+	// !HMVC METHOD HELPERS
+	//--------------------------------------------------------------------
+	
+	public function get_login_attempts($limit=15) 
+	{
+		$this->db->limit($limit);
+		$this->db->order_by('login', 'desc');
+		$query = $this->db->get('login_attempts');
+		
+		if ($query->num_rows())
+		{
+			return $query->result();
+		}
+		
+		return false;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function get_access_logs($limit=15) 
+	{
+		$this->db->limit($limit);
+		$this->db->order_by('last_login', 'desc');
+			
+		return $this->find_all();
 	}
 	
 	//--------------------------------------------------------------------

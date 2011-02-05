@@ -42,7 +42,7 @@ class Auth {
 		}
 	
 		// Grab the user from the db
-		$user = $this->ci->user_model->select('id, email, username, role_id, salt, password_hash, temp_password_hash')->find_by(config_item('auth.login_type'), $login);
+		$user = $this->ci->user_model->select('id, email, username, users.role_id, salt, password_hash, temp_password_hash')->find_by(config_item('auth.login_type'), $login);
 		
 		if (is_array($user))
 		{
@@ -236,6 +236,43 @@ class Auth {
 		}
 
 		return false;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function role_name_by_id($role_id=0) 
+	{
+		if (empty($role_id) || !is_numeric($role_id))
+		{
+			return '';
+		}
+		
+		$roles = array();
+		
+		// If we already stored the role names, use those...
+		if (isset($this->role_names))
+		{
+			$roles = $this->role_names;
+		}
+		else 
+		{
+			$results = $this->ci->role_model->select('role_id, role_name')->find_all();
+			
+			foreach ($results as $role)
+			{
+				$roles[$role->role_id] = $role->role_name;
+			}
+			
+			unset($results);
+		}
+		
+		// Try to return the role name
+		if (isset($roles[$role_id]))
+		{
+			return $roles[$role_id];
+		}
+		
+		return '';
 	}
 	
 	//--------------------------------------------------------------------
