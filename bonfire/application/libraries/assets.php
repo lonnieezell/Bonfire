@@ -94,9 +94,9 @@ class Assets {
 	 */
 	public function __construct()
 	{
-		self::init();
-		
 		self::$ci =& get_instance();
+	
+		self::init();
 	}
 
 	//--------------------------------------------------------------------
@@ -114,6 +114,8 @@ class Assets {
 	 */
 	public static function init() 
 	{		
+		self::$ci->config->load('assets');
+	
 		// Store our settings
 		self::$asset_url		= self::$ci->config->item('assets.url');
 		self::$asset_base		= self::$ci->config->item('assets.base_url');
@@ -264,9 +266,9 @@ class Assets {
 		{
 			foreach ($script as $s)
 			{
-				if (!isset(self::$$type[$script]))
+				if (!isset(self::$$type[$s]))
 				{
-					self::${$type}[] = $script;
+					self::${$type}[] = $s;
 				}
 			}
 		}
@@ -297,7 +299,7 @@ class Assets {
 				self::${$type}[] = $s;
 			}
 		}
-		
+			
 		// Render out the scripts/links
 		self::external_js();
 		self::inline_js();
@@ -343,16 +345,16 @@ class Assets {
 		
 			$attr = array(
 				'type'	=> 'text/javascript',
-				'src'	=> $is_themed ?
-				
-					// It's theemed, so don't add the base
-					self::$asset_url . $script :
+				'src'	=> strpos($script, 'http:') !== false ?
+					
+					// It has a full url built in, so leave it alone
+					$script :
 					
 					// Otherwise, build the full url
 					self::$asset_url . self::$asset_base . self::$asset_folders['js'] .'/'. $script
 			);
 			
-			$return .= '<script'. $this->attributes($attr) ." ></script>\n";
+			$return .= '<script'. self::attributes($attr) ." ></script>\n";
 		}
 		
 		echo $return;

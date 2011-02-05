@@ -1,6 +1,3 @@
-<?php echo $this->load->view('settings/sub_nav', null, true); ?>
-<br/>
-
 <?php if (validation_errors()) : ?>
 <div class="notification error">
 	<?php echo validation_errors(); ?>
@@ -15,7 +12,7 @@
 </div>
 <?php endif; ?>
 
-<?php echo form_open($this->uri->uri_string(), 'class="constrained"'); ?>
+<?php echo form_open($this->uri->uri_string(), 'class="constrained ajax-form"'); ?>
 
 	<div>
 		<label>First Name</label>
@@ -87,9 +84,18 @@
 
 	</fieldset>
 	
-	<div class="text-right spacer">
+	<div class="submits">
 		<input type="submit" name="submit" value="Save User" /> or <?php echo anchor('admin/settings/users', 'Cancel'); ?>
 	</div>
 
+	<?php if (isset($user)) : ?>
+	<div class="box delete rounded">
+		<a class="button" id="delete-me" href="<?php echo site_url('admin/settings/users/delete/'. $user->id); ?>">Delete this Account</a>
+		
+		<h3>Delete this Account</h3>
+		
+		<p>Deleting this account will revoke all of their privileges on the site.</p>
+	</div>
+	<?php endif; ?>
 
 <?php echo form_close(); ?>

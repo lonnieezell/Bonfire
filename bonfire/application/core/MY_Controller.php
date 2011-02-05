@@ -67,7 +67,7 @@ class Admin_Controller extends Base_Controller {
 		$this->limit = 25;
 		
 		// Basic setup
-		Template::set_theme('admin');
+		Template::set_theme('html5_admin');
 	}
 	
 	//--------------------------------------------------------------------
