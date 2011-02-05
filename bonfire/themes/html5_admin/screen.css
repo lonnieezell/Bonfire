@@ -71,6 +71,9 @@ html[xmlns] .clearfix {
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
+.padded {
+	padding: 1em 2em;
+}
 
 /* !MISC EFFECTS */
 .text-left { text-align: left; }
@@ -99,6 +102,7 @@ html[xmlns] .clearfix {
 	margin-top: 0.6em;
 }
 
+/* BUTTONS */
 button,
 a.button,
 input[type=submit] {
@@ -252,6 +256,58 @@ p.error {
 	font-size: 85%;
 	line-height: 2.5;
 }
+
+/* TABLES */
+table {
+	width: 100%;
+	margin-top: 20px;
+}
+table td {
+	border: 0;
+}
+thead th {
+	border-bottom: 1px solid #ccc;
+	text-align: left;
+	padding-left: 5px;
+	color: #777;
+}
+tbody td {
+	border-bottom: 1px solid #ccc;
+	padding: 7px 5px;
+}
+tfoot td {
+	text-align: right;
+	padding: 15px 20px 0 20px;
+}
+tbody tr:nth-child(even) { background-color: #e8e8e8; }
+table a { font-weight: bold; }
+.banned { background: #f0cece; }
+.merchant { background: #a2b4ee; }
+.admin { background: #d5f0ce; }
+
+.matrix td { text-align: center; }
+td.matrix-title {
+	background: #dbe3f0;
+	border-bottom: 1px solid #aab;
+	border-right: 1px solid #aab;
+	text-align: left;
+}
+.matrix th {
+	padding: 7px 5px;
+	background: #dbe3f0;
+	margin: 0;
+	border-right: 1px solid #aab;
+	border-bottom: 1px solid #aab;
+}
+
+/* PAGINATION */
+.pagination {
+	margin: 20px 10px;
+}
+.pagination a {
+	padding: 0 5px;
+}
+
 /* !BASIC STRUCTURE */
 .main-head, .page, .main-foot {
 }
