@@ -45,6 +45,8 @@ class Developer extends Admin_Controller {
 	*/
 	public function enable() 
 	{
+		$this->auth->restrict('Bonfire.Logs.Manage');
+	
 		if ($this->input->post('submit'))
 		{
 			$this->load->helper('config_file');
@@ -93,6 +95,8 @@ class Developer extends Admin_Controller {
 	*/
 	public function purge() 
 	{
+		$this->auth->restrict('Bonfire.Logs.Manage');
+	
 		$this->load->helper('file');
 		
 		delete_files($this->config->item('log_path'));
