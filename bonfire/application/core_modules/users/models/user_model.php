@@ -137,6 +137,19 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	public function delete($id=0, $purge=false) 
+	{
+		if ($purge === true)
+		{
+			// temporarily set the soft_deletes to true.
+			$this->soft_deletes = false;
+		}
+		
+		return parent::delete($id);
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	//--------------------------------------------------------------------
 	// !AUTH HELPER METHODS
