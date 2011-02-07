@@ -21,6 +21,11 @@ class Developer extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: index()
+		
+		Lists all log files and allows you to change the log_threshold.
+	*/
 	public function index() 
 	{
 		$this->load->helper('file');
@@ -33,6 +38,11 @@ class Developer extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: enable()
+		
+		Saves the logging threshold value.
+	*/
 	public function enable() 
 	{
 		if ($this->input->post('submit'))
@@ -44,7 +54,7 @@ class Developer extends Admin_Controller {
 				Template::set_message('Log settings successfully saved.', 'success');
 			} else
 			{
-				Template::set_message('Unable to save log settings. Check the write permissions on <b>appication/config.php</b> and try again.', 'error');
+				Template::set_message('Unable to save log settings. Check the write permissions on <b>application/config.php</b> and try again.', 'error');
 			}
 		}
 	
@@ -53,6 +63,14 @@ class Developer extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: view()
+		
+		Shows the contents of a single log file.
+		
+		Parameter: 
+			$file	- the full name of the file to view (including extension).
+	*/
 	public function view($file='') 
 	{
 		if (empty($file))
@@ -64,6 +82,22 @@ class Developer extends Admin_Controller {
 		Template::set('log_file', $file .EXT);
 		Template::set('log_content', file($this->config->item('log_path') . $file));
 		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: purge()
+		
+		Deletes all existing log files.
+	*/
+	public function purge() 
+	{
+		$this->load->helper('file');
+		
+		delete_files($this->config->item('log_path'));
+	
+		redirect('admin/developer/logs');
 	}
 	
 	//--------------------------------------------------------------------

@@ -584,9 +584,8 @@ form div input[type=text].big {
 }
 .list-item > img:first-child {
 	float: left;
-	border: 1px solid #e6e7e9;
 	padding: 3px;
-	margin: 2px 18px 0 10px;
+	margin: 5px 18px 0 10px;
 }
 .panel-header {
 	background: #d6d7d9;
