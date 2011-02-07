@@ -101,6 +101,42 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	public function count_by_roles() 
+	{
+		$sql = "SELECT role_name, COUNT(1) as count
+				FROM bf_users, bf_roles
+				WHERE bf_users.role_id = bf_roles.role_id
+				GROUP BY bf_users.role_id";
+		
+		$query = $this->db->query($sql);
+		
+		if ($query->num_rows())
+		{
+			return $query->result();
+		}
+
+		return false;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function count_all($get_deleted = false) 
+	{	
+		if ($get_deleted)
+		{
+			// Get only the deleted users
+			$this->db->where('deleted', 1);
+		}
+		else 
+		{
+			$this->db->where('deleted', 0);
+		}
+		
+		return $this->db->count_all_results('users');
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	//--------------------------------------------------------------------
 	// !AUTH HELPER METHODS

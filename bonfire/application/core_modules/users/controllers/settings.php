@@ -74,7 +74,7 @@ class Settings extends Admin_Controller {
 			if ($this->save_user())
 			{
 				Template::set_message('User successfully created.', 'success');
-				redirect('admin/settings/users');
+				Template::redirect('admin/settings/users');
 			}
 			else 
 			{
