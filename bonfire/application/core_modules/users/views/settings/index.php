@@ -53,7 +53,9 @@
 					</div>
 					
 					<div class="column size1of2">
-					
+						<img src="<?php echo Template::theme_url('images/user.png') ?>" style="vertical-align: bottom; position: relative; top: -5px; margin-right: 1em;" />	
+						
+						<span class="big-text"><b><?php echo $deleted_users ?></b></span> &nbsp; deleted users
 					</div>
 				</div>
 			
