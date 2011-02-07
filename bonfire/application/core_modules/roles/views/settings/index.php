@@ -8,6 +8,8 @@
 			<div class="list-view" id="role-list">
 				<?php foreach ($roles as $role) : ?>
 					<div class="list-item" data-id="<?php echo $role->role_id ?>">
+						<img src="<?php echo Template::theme_url('images/customers.png') ?>" />
+					
 						<p>
 							<b><?php echo $role->role_name ?></b><br/>
 							<span class="small"><?php echo $role->description ?></span>
