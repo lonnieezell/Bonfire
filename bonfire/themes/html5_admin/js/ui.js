@@ -333,9 +333,9 @@ $('.v-split').splitter({
 // !LISTVIEWS
 //--------------------------------------------------------------------
 $('.list-view .list-item').click(function(){
-	var user_id = $(this).attr('data-user_id');
+	var id = $(this).attr('data-id');
 	
-	$.publish('list-view/list-item/click', [user_id]);
+	$.publish('list-view/list-item/click', [id]);
 });
 
 //--------------------------------------------------------------------

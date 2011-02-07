@@ -168,7 +168,7 @@ class Template {
 		$output = '';
 	
 		// We need to know which layout to render
-		$layout = empty($layout) ? self::$layout : $layout;
+		$layout = empty($layout) ? self::$layout : $layout;		
 
 		// Is it in an AJAX call? If so, override the layout
 		if (self::$ci->input->is_ajax_request())
@@ -656,6 +656,28 @@ class Template {
 	}
 	
 	//---------------------------------------------------------------
+	
+	/*
+		Method: redirect()
+		
+		Returns a javascript solution for page redirection. This is especially
+		handy when you want to redirect out of an ajax request to a standard
+		http request.
+		
+		Parameter:
+			$url	- The url to redirect to. If not a full url, will wrap it
+						in site_url().
+	*/
+	public function redirect($url=null) 
+	{
+		$url = strpos($url, 'http') == false ? site_url($url) : $url;
+		
+		echo "<script>window.location='$url'</script>";
+		exit();
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	/*
 		Method: load_view()

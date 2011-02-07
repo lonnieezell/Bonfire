@@ -19,7 +19,7 @@
 		<div class="scrollable">
 			<div class="list-view" id="user-list">
 			<?php foreach ($users as $user) : ?>
-				<div class="list-item" data-user_id="<?php echo $user->id ?>" data-role="<?php echo $user->role_name ?>">
+				<div class="list-item" data-id="<?php echo $user->id ?>" data-role="<?php echo $user->role_name ?>">
 					<?php echo gravatar_link($user->email, 32); ?>
 				
 					<p>

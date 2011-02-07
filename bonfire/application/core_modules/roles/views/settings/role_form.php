@@ -1,12 +1,10 @@
-<?php echo $this->load->view('settings/sub_nav', null, true); ?>
-
 <?php if (validation_errors()) : ?>
 <div class="notification error">
 	<?php echo validation_errors(); ?>
 </div>
 <?php endif; ?>
 
-<?php echo form_open($this->uri->uri_string(), 'class="constrained"'); ?>
+<?php echo form_open($this->uri->uri_string(), 'class="constrained ajax-form"'); ?>
 
 	<div>
 		<label>Role Name</label>
@@ -40,4 +38,17 @@
 		<input type="submit" name="submit" value="Save Role" /> or <?php echo anchor('admin/settings/roles', 'Cancel'); ?>
 	</div>
 
+	<br/>
+
+	<?php if (isset($role)) : ?>
+	<div class="box delete rounded">
+		<a class="button" id="delete-me" href="<?php echo site_url('admin/settings/roles/delete/'. $role->role_id); ?>">Delete this Role</a>
+		
+		<h3>Delete this Role</h3>
+		
+		<p>Deleting this role will convert all users that are currently assigned it to the site's default role.</p>
+	</div>
+	<?php endif; ?>
 <?php echo form_close(); ?>
+
+<?php $this->load->view('settings/roles_js'); ?>

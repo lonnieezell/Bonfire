@@ -11,7 +11,7 @@
 	/*
 		Ajax form submittal
 	*/
-	$('form').ajaxForm({
+	$('form.ajax-form').ajaxForm({
 		target: '#content',
 	});
 

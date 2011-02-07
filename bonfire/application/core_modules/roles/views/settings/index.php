@@ -1,69 +1,85 @@
-<?php echo $this->load->view('settings/sub_nav', null, true); ?>
-
-<br/>
-<p>Every user in your site is assigned to at least one role. Roles determine what the users are allowed to do.</p>
-
-<?php if (isset($roles) && is_array($roles) && count($roles)) : ?>
-<?php echo form_open('admin/settings/roles/do_action', 'id="action_form"'); ?>
-	<table cellspacing="0">
-		<thead>
-			<tr>
-				<th style="width: 2em">
-					<input type="checkbox" name="select_all" id="select_all" />
-				</th>
-				<th>Role</th>
-				<th>Description</th>
-			</tr>
-		</thead>
-		<tfoot>
-			<tr>
-				<td colspan="3">
-					With Selected: 
-					<select name="action" id="action-select">
-						<option value="0">-----</option>
-						<option>Delete</option>
-						<option>Set Default</option>
-					</select>
+<div class="v-split">
+	
+	<!-- Role List -->
+	<div class="vertical-panel">
+	
+	<?php if (isset($roles) && is_array($roles) && count($roles)) : ?>
+		<div class="scrollable">
+			<div class="list-view" id="role-list">
+				<?php foreach ($roles as $role) : ?>
+					<div class="list-item" data-id="<?php echo $role->role_id ?>">
+						<p>
+							<b><?php echo $role->role_name ?></b><br/>
+							<span class="small"><?php echo $role->description ?></span>
+						</p>
+					</div>
+				<?php endforeach; ?>
+			</div>	<!-- /list-view -->
+		</div>
+	
+	<?php else: ?>
+	
+	<div class="notification attention">
+		<p>There aren't any roles in the system. <?php echo anchor('admin/settings/roles/create', 'Create a new role.') ?></p>
+	</div>
+	
+	<?php endif; ?>
+	</div>
+	
+	<!-- Role Editor -->
+	<div id="content">
+		<div class="scrollable" id="ajax-content">
+			<div class="inner">
+				
+				<div class="box create rounded">
+					<a class="button good ajaxify" href="<?php echo site_url('admin/settings/roles/create'); ?>">Create New Role</a>
+				
+					<h3>Create A New Role</h3>
 					
-					<input type="submit" name="submit" value="Apply" style="width: auto;" />
-				</td>
-			</tr>
-		</tfoot>
-		<tbody>
-		<?php foreach ($roles as $role) : ?>
-			<tr>
-				<td>
-				<?php if ($role->can_delete == 1) : ?>
-					<input type="checkbox" name="actionable[]" value="<?php echo $role->role_id ?>" />
+					<p>Every user needs a role. Make sure you have all that you need.</p>
+				</div>	
+				
+				
+				<br/>
+				
+				<?php if (isset($role_counts) && is_array($role_counts) && count($role_counts)) : ?>
+				
+					<h2>Account Distribution</h2>
+					
+					<table cellspacing="0">
+						<thead>
+							<tr>
+								<th>Account Type</th>
+								<th class="text-center"># Users</th>
+								<th class="text-center">% Users</th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php foreach ($roles as $role) : ?>
+							<tr>
+								<td><?php echo anchor('admin/settings/roles/edit/'. $role->role_id, $role->role_name, 'class="ajaxify"') ?></td>
+								<td align="center"><?php
+										$count = 0; 
+										foreach ($role_counts as $r)
+										{
+											if ($role->role_name == $r->role_name)
+											{
+												$count = $r->count;
+											}						
+										}
+										
+										echo $count;
+									?>
+								</td>
+								<td align="center"><?php echo $count ? (($count / $total_users) * 100) .'%' : '--'; ?></td>
+							</tr>
+						<?php endforeach; ?>
+						</tbody>
+					</table>
+				
 				<?php endif; ?>
-				</td>
-				<td>
-					<?php echo anchor('admin/settings/roles/edit/'. $role->role_id, $role->role_name) ?>
-					<?php echo $role->default == 1 ? '<span style="color: green">(default)</span>' : ''; ?>
-				</td>
-				<td><?php echo $role->description ?></td>
-			</tr>
-		<?php endforeach; ?>
-		</tbody>
-	</table>
-	
-	<?php echo form_close(); ?>
-
-<?php else: ?>
-
-<div class="notification attention">
-	<p>There aren't any roles in the system. <?php echo anchor('admin/settings/roles/create', 'Create a new role.') ?></p>
+				
+			</div>	<!-- /inner -->
+		</div>	<!-- /ajax-content -->
+	</div>	<!-- /content -->
 </div>
-
-<?php endif; ?>
-
-<script>
-head.ready(function() {
-	// Select All Toggle
-	$('#select_all').click(function() {
-		var is_checked = $(this).attr('checked');
-	
-		$('#action_form input[type=checkbox]').attr('checked', is_checked);
-	});
-});
-</script>

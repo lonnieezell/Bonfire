@@ -12,26 +12,24 @@ class Settings extends Admin_Controller {
 		$this->auth->restrict('Bonfire.Roles.Manage');
 		
 		$this->load->model('role_model');
+		
+		Assets::add_js($this->load->view('settings/roles_js', null, true), 'inline');
 	}
-	
-	//--------------------------------------------------------------------
-
-	public function _remap($method) 
-	{ 
-		if (method_exists($this, $method))
-		{
-			$this->$method();
-		}
-	}
-	
+		
 	//--------------------------------------------------------------------
 		
 	public function index() 
 	{
+		// Get User Counts
+		Template::set('role_counts', $this->user_model->count_by_roles());
+		Template::set('total_users', $this->user_model->count_all());
+		
+		Template::set('deleted_users', $this->user_model->count_all(true));
+	
 		Template::set('roles', $this->role_model->find_all());
 	
 		Template::set('toolbar_title', 'Manage User Roles');
-		Template::render();
+		Template::render('for_ui');
 	}
 	
 	//--------------------------------------------------------------------
@@ -43,11 +41,11 @@ class Settings extends Admin_Controller {
 			if ($this->save_role())
 			{
 				Template::set_message('Role successfully created.', 'success');
-				redirect('admin/settings/roles');
+				Template::redirect('/admin/settings/roles');
 			}
 			else 
 			{
-				Template::set_message('There was a problem creating the role: '. $this->role_model->error);
+				Template::set_message('There was a problem creating the role: '. $this->role_model->error, 'error');
 			}
 		}
 	
@@ -65,15 +63,17 @@ class Settings extends Admin_Controller {
 		if (empty($id))
 		{
 			Template::set_message('Invalid Role ID.', 'error');
-			redirect('admin/settings/roles');
+			redirect('/admin/settings/roles');
 		}
+	
+		$this->auth->restrict('Bonfire.Roles.Manage');
 	
 		if ($this->input->post('submit'))
 		{
 			if ($this->save_role('update', $id))
 			{
 				Template::set_message('Role successfully saved.', 'success');
-				redirect('admin/settings/roles');
+				//redirect('admin/settings/roles');
 			}
 			else 
 			{
@@ -90,35 +90,21 @@ class Settings extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
-	public function do_action() 
-	{
-		$actionable = $this->input->post('actionable') ? $this->input->post('actionable') : false;
+	public function delete() 
+	{	
+		$id = $this->uri->segment(5);
 	
-		if (!$this->input->post('action') || $actionable == false)
-		{
-			redirect('/admin/settings/roles');
-		}
-		
-		switch (strtolower($this->input->post('action')))
-		{
-			case 'set default':
-				if (count($actionable) > 1)
-				{
-					Template::set_message('You may only select one item to set as default role for new visitors.', 'error');
-					break;
-				}
-				// Otherwise, save it.
-				foreach ($actionable as $id)
-				{
-					$this->role_model->update($id, array('default' => 1));
-				}
-				break;
-			case 'delete':
-				foreach ($actionable as $id)
-				{
-					$this->role_model->delete($id);
-				}
-				break;
+		if (!empty($id))
+		{	
+			$this->auth->restrict('Bonfire.Roles.Manage');
+
+			if ($this->role_model->delete($id))
+			{
+				Template::set_message('The Role was successfully deleted.', 'success');
+			} else
+			{
+				Template::set_message('We could not delete the role: '. $this->role_model->error, 'error');
+			}
 		}
 		
 		redirect('/admin/settings/roles');
@@ -209,7 +195,14 @@ class Settings extends Admin_Controller {
 	
 	public function save_role($type='insert', $id=0) 
 	{	
-		$this->form_validation->set_rules('role_name', 'Role Name', 'required|trim|strip_tags|alpha|max_length[60]|xss_clean');
+		if ($type ==  'insert')
+		{
+			$this->form_validation->set_rules('role_name', 'Role Name', 'required|trim|strip_tags|callback_unique_role|max_length[60]|xss_clean');
+		}
+		else 
+		{
+			$this->form_validation->set_rules('role_name', 'Role Name', 'trim|strip_tags|max_length[60]|xss_clean');
+		}
 		$this->form_validation->set_rules('description', 'Description', 'trim|strip_tags|max_length[255]|xss_clean');
 		
 		if ($this->form_validation->run() === false)
@@ -240,13 +233,28 @@ class Settings extends Admin_Controller {
 		}
 		
 		// Save the permissions.
-		if (!$this->permission_model->set_for_role($id, $permissions))
+		if ($permissions && !$this->permission_model->set_for_role($id, $permissions))
 		{
 			$this->error = 'There was an error saving the permissions.';
 		}
 		
 		unset($permissions);
 		return $return;
+	}
+	
+	//--------------------------------------------------------------------
+
+	public function unique_role($str) 
+	{	
+		if ($this->role_model->is_unique('role_name', $str))
+		{
+			return true;
+		}
+		else
+		{
+			$this->form_validation->set_message('unique_role', 'The %s role is already in use. Please choose another.');
+			return false;
+		}
 	}
 	
 	//--------------------------------------------------------------------
