@@ -385,6 +385,19 @@ class MY_Model extends CI_Model {
 	// !CHAINABLE UTILITY METHODS
 	//--------------------------------------------------------------------
 	
+	public function where($field=null, $value=null) 
+	{
+		if (!empty($field) && !empty($value))
+		{
+			$this->db->where($field, $value);
+		}
+		
+		return $this;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
 	public function select($selects=null) 
 	{
 		if (!empty($selects))
