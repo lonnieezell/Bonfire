@@ -15,6 +15,8 @@ class Developer extends Admin_Controller {
 		
 		// Logging enabled?
 		Template::set('log_threshold', $this->config->item('log_threshold'));
+		
+		Assets::add_js($this->load->view('developer/logs_js', null, true), 'inline');
 	}
 	
 	//--------------------------------------------------------------------
@@ -24,9 +26,9 @@ class Developer extends Admin_Controller {
 		$this->load->helper('file');
 		
 		// Log Files
-		Template::set('log_files', get_filenames($this->config->item('log_path')));
+		Template::set('logs', get_filenames($this->config->item('log_path')));
 	
-		Template::render();
+		Template::render('for_ui');
 	}
 	
 	//--------------------------------------------------------------------
@@ -40,14 +42,13 @@ class Developer extends Admin_Controller {
 			if (write_config('config', array('log_threshold' => $_POST['log_threshold'])))
 			{
 				Template::set_message('Log settings successfully saved.', 'success');
-				redirect($this->uri->uri_string());
 			} else
 			{
 				Template::set_message('Unable to save log settings. Check the write permissions on <b>appication/config.php</b> and try again.', 'error');
 			}
 		}
 	
-		Template::render();
+		redirect('admin/developer/logs');
 	}
 	
 	//--------------------------------------------------------------------
@@ -61,7 +62,7 @@ class Developer extends Admin_Controller {
 		}
 				
 		Template::set('log_file', $file .EXT);
-		Template::set('log_content', file($this->config->item('log_path') . $file .EXT));
+		Template::set('log_content', file($this->config->item('log_path') . $file));
 		Template::render();
 	}
 	
