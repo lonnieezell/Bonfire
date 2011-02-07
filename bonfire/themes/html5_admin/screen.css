@@ -84,7 +84,7 @@ html[xmlns] .clearfix {
 .align-right { float: right; margin: 0 0 1.5em 1em; }
 
 .big-text { font-size: 2.4em; }
-.small { font-size: 85%; }
+.small { font-size: 85%; color: #777; }
 
 /* !BOXES */
 .box {
@@ -586,7 +586,7 @@ form div input[type=text].big {
 	float: left;
 	border: 1px solid #e6e7e9;
 	padding: 3px;
-	margin: 2px 10px 0 0;
+	margin: 2px 18px 0 10px;
 }
 .panel-header {
 	background: #d6d7d9;
