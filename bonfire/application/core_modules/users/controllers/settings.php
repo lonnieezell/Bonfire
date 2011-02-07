@@ -53,6 +53,7 @@ class Settings extends Admin_Controller {
 	
 		Template::set('users', $this->user_model->limit($this->limit, $offset)->find_all());
 		Template::set('total_users', $total_users);
+		Template::set('deleted_users', $this->user_model->count_all(true));
 		Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
 		
 		Template::set('user_count', $this->user_model->count_all());
