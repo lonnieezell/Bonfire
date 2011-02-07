@@ -592,6 +592,13 @@ form div input[type=text].big {
 	border-bottom: 1px solid #899;
 	padding: 5px 10px;
 }
+h2.panel-title {
+	text-align: center;
+	font-size: 1.2em;
+	line-height: 2.0em;
+	background: #d6d7d9;
+	border-bottom: 1px solid #899;
+}
 .placeholder {
 	color: #AAAAAA;
 }

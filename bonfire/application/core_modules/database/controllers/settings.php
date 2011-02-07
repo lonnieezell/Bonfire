@@ -13,33 +13,48 @@ class Settings extends Admin_Controller {
 		$this->load->helper('config_file');
 		
 		Template::set('toolbar_title', 'Database Settings');
+		
+		Assets::add_js($this->load->view('settings/database_js', null, true), 'inline');
 	}
 	
 	//--------------------------------------------------------------------
 	
 
 	public function index() 
+	{		
+		Template::set('settings', read_db_config());
+	
+		Template::render('for_ui');
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function edit() 
 	{
-		if (isset($_POST['submit']))
+		$server_type = $this->uri->segment(5);
+	
+		
+		if ($this->input->post('submit'))
 		{
-			if (write_db_config($_POST) === TRUE)
+			unset($_POST['server_type'], $_POST['submit']);
+		
+			if (write_db_config(array($server_type => $_POST)) === TRUE)
 			{
 				Template::set_message('Your settings were successfully saved.', 'success');
-				redirect($this->uri->uri_string());
 			} else 
 			{
 				Template::set_message('There was an error saving the settings.', 'error');
 			}
 		}
 		
-		Template::set('settings', read_db_config());
+		Template::set('db_settings', read_db_config($server_type));
 	
+		Template::set('server_type', $server_type);
 		Template::render();
 	}
 	
 	//--------------------------------------------------------------------
 	
-
 }
 
 // End Database Settings class
