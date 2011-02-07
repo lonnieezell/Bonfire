@@ -339,10 +339,24 @@ $('.list-view .list-item').click(function(){
 });
 
 //--------------------------------------------------------------------
-//  !misc effect
+//  !MISC EFFECTS
 //--------------------------------------------------------------------
+
+/* 
+	3 second fader
+*/
 $('.fade-me').delay(3000).fadeOut(500);
 
+/*
+	Hook up ajax links
+*/
 $('.ajaxify').ajaxify({
 	target: '#content'
+});
+
+/*
+	Check all functionality
+*/
+$(".check-all").click(function(){
+	$("table input[type=checkbox]").attr('checked', $(this).is(':checked'));
 });
