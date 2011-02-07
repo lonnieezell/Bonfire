@@ -1426,3 +1426,898 @@ DEBUG - 2011-02-07 08:10:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bo
 DEBUG - 2011-02-07 08:10:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/html5_admin//ajax.php
 DEBUG - 2011-02-07 08:10:20 --> Final output sent to browser
 DEBUG - 2011-02-07 08:10:20 --> Total execution time: 0.0955
+DEBUG - 2011-02-07 08:10:59 --> Config Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:10:59 --> URI Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Router Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Output Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Input Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Security Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:10:59 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:10:59 --> Language Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:10:59 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:10:59 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:10:59 --> Session Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:10:59 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Session routines successfully run
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:10:59 --> Template library loaded
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:10:59 --> Assets library loaded.
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:10:59 --> Auth class initialized.
+DEBUG - 2011-02-07 08:10:59 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:10:59 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:10:59 --> Model Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:10:59 --> Model Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:10:59 --> Model Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Language Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Config Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Developer MX_Controller Initialized
+DEBUG - 2011-02-07 08:10:59 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:10:59 --> Model Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Helper loaded: form_helper
+DEBUG - 2011-02-07 08:10:59 --> Form Validation Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Pagination Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Helper loaded: security_helper
+DEBUG - 2011-02-07 08:10:59 --> File loaded: bonfire/application/controllers/../core_modules/subnav/controllers/subnav.php
+DEBUG - 2011-02-07 08:10:59 --> Subnav MX_Controller Initialized
+DEBUG - 2011-02-07 08:10:59 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Helper loaded: directory_helper
+ERROR - 2011-02-07 08:10:59 --> Severity: Notice  --> Undefined index:  logs /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/subnav/controllers/subnav.php 36
+ERROR - 2011-02-07 08:10:59 --> Severity: Notice  --> Undefined index:  migrations /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/subnav/controllers/subnav.php 36
+DEBUG - 2011-02-07 08:10:59 --> File loaded: bonfire/application/views/admin/developer/index.php
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/html5_admin//index.php
+DEBUG - 2011-02-07 08:10:59 --> Final output sent to browser
+DEBUG - 2011-02-07 08:10:59 --> Total execution time: 0.0908
+DEBUG - 2011-02-07 08:10:59 --> Config Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:10:59 --> URI Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Router Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Output Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Input Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Security Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:10:59 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:10:59 --> Language Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:10:59 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:10:59 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:10:59 --> Session Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:10:59 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Session routines successfully run
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:10:59 --> Template library loaded
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:10:59 --> Assets library loaded.
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:10:59 --> Auth class initialized.
+DEBUG - 2011-02-07 08:10:59 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:10:59 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:10:59 --> Model Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:10:59 --> Model Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:10:59 --> Model Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Language Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Config Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Home MX_Controller Initialized
+DEBUG - 2011-02-07 08:10:59 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:10:59 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:10:59 --> Model Class Initialized
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_header.php
+DEBUG - 2011-02-07 08:10:59 --> File loaded: bonfire/application/views/home/index.php
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_footer.php
+DEBUG - 2011-02-07 08:10:59 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/index.php
+DEBUG - 2011-02-07 08:10:59 --> Final output sent to browser
+DEBUG - 2011-02-07 08:10:59 --> Total execution time: 0.0680
+DEBUG - 2011-02-07 08:11:00 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:00 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:00 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:00 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:00 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:00 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Session garbage collection performed.
+DEBUG - 2011-02-07 08:11:00 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:00 --> Template library loaded
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:00 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:00 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:00 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:00 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:00 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:00 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Developer MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:00 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:00 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: form_helper
+DEBUG - 2011-02-07 08:11:00 --> Form Validation Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Pagination Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: security_helper
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/logs/views/developer/logs_js.php
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: file_helper
+DEBUG - 2011-02-07 08:11:00 --> File loaded: bonfire/application/controllers/../core_modules/subnav/controllers/subnav.php
+DEBUG - 2011-02-07 08:11:00 --> Subnav MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:00 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: directory_helper
+ERROR - 2011-02-07 08:11:00 --> Severity: Notice  --> Undefined index:  logs /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/subnav/controllers/subnav.php 36
+ERROR - 2011-02-07 08:11:00 --> Severity: Notice  --> Undefined index:  migrations /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/subnav/controllers/subnav.php 36
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/logs/views/developer/index.php
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/html5_admin//for_ui.php
+DEBUG - 2011-02-07 08:11:00 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:00 --> Total execution time: 0.0889
+DEBUG - 2011-02-07 08:11:00 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:00 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:00 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:00 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:00 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:00 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Session garbage collection performed.
+DEBUG - 2011-02-07 08:11:00 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:00 --> Template library loaded
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:00 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:00 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:00 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:00 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:00 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:00 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:00 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Home MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:00 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:00 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:00 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_header.php
+DEBUG - 2011-02-07 08:11:00 --> File loaded: bonfire/application/views/home/index.php
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_footer.php
+DEBUG - 2011-02-07 08:11:00 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/index.php
+DEBUG - 2011-02-07 08:11:00 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:00 --> Total execution time: 0.0688
+DEBUG - 2011-02-07 08:11:03 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:03 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:03 --> CSRF token verified 
+DEBUG - 2011-02-07 08:11:03 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:03 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:03 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:03 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:03 --> Template library loaded
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:03 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:03 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:03 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Developer MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:03 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: form_helper
+DEBUG - 2011-02-07 08:11:03 --> Form Validation Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Pagination Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: security_helper
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/logs/views/developer/logs_js.php
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: config_file_helper
+DEBUG - 2011-02-07 08:11:03 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:03 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:03 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:03 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:03 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:03 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:03 --> Template library loaded
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:03 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:03 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:03 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Developer MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:03 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: form_helper
+DEBUG - 2011-02-07 08:11:03 --> Form Validation Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Pagination Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: security_helper
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/logs/views/developer/logs_js.php
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: file_helper
+DEBUG - 2011-02-07 08:11:03 --> File loaded: bonfire/application/controllers/../core_modules/subnav/controllers/subnav.php
+DEBUG - 2011-02-07 08:11:03 --> Subnav MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:03 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: directory_helper
+ERROR - 2011-02-07 08:11:03 --> Severity: Notice  --> Undefined index:  logs /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/subnav/controllers/subnav.php 36
+ERROR - 2011-02-07 08:11:03 --> Severity: Notice  --> Undefined index:  migrations /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/subnav/controllers/subnav.php 36
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/logs/views/developer/index.php
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/html5_admin//for_ui.php
+DEBUG - 2011-02-07 08:11:03 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:03 --> Total execution time: 0.0967
+DEBUG - 2011-02-07 08:11:03 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:03 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:03 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:03 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:03 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:03 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:03 --> Template library loaded
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:03 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:03 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:03 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:03 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Home MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:03 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:03 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:03 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_header.php
+DEBUG - 2011-02-07 08:11:03 --> File loaded: bonfire/application/views/home/index.php
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_footer.php
+DEBUG - 2011-02-07 08:11:03 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/index.php
+DEBUG - 2011-02-07 08:11:03 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:03 --> Total execution time: 0.0832
+DEBUG - 2011-02-07 08:11:17 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:17 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:17 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:17 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:17 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:17 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:17 --> Template library loaded
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:17 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:17 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:17 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:17 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:17 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:17 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Settings MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:17 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:17 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: form_helper
+DEBUG - 2011-02-07 08:11:17 --> Form Validation Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Pagination Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: security_helper
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: config_file_helper
+DEBUG - 2011-02-07 08:11:17 --> File loaded: bonfire/application/controllers/../core_modules/subnav/controllers/subnav.php
+DEBUG - 2011-02-07 08:11:17 --> Subnav MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:17 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: directory_helper
+DEBUG - 2011-02-07 08:11:17 --> File loaded: bonfire/application/views/admin/settings/index.php
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/html5_admin//index.php
+DEBUG - 2011-02-07 08:11:17 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:17 --> Total execution time: 0.0881
+DEBUG - 2011-02-07 08:11:17 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:17 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:17 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:17 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:17 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:17 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:17 --> Template library loaded
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:17 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:17 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:17 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:17 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:17 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:17 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:17 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Home MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:17 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:17 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:17 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_header.php
+DEBUG - 2011-02-07 08:11:17 --> File loaded: bonfire/application/views/home/index.php
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_footer.php
+DEBUG - 2011-02-07 08:11:17 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/index.php
+DEBUG - 2011-02-07 08:11:17 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:17 --> Total execution time: 0.0729
+DEBUG - 2011-02-07 08:11:19 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:19 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:19 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:19 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:19 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:19 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:19 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:19 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:19 --> Template library loaded
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:19 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:19 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:19 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:19 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:19 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:19 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:19 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Settings MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:19 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:19 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Helper loaded: form_helper
+DEBUG - 2011-02-07 08:11:19 --> Form Validation Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Pagination Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Helper loaded: security_helper
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/roles_js.php
+DEBUG - 2011-02-07 08:11:19 --> File loaded: bonfire/application/controllers/../core_modules/subnav/controllers/subnav.php
+DEBUG - 2011-02-07 08:11:19 --> Subnav MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:19 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Helper loaded: directory_helper
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/index.php
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/html5_admin//for_ui.php
+DEBUG - 2011-02-07 08:11:19 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:19 --> Total execution time: 0.0898
+DEBUG - 2011-02-07 08:11:19 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:19 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:19 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:19 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:19 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:19 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:19 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:19 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:19 --> Template library loaded
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:19 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:19 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:19 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:19 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:19 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:19 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:19 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Home MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:19 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:19 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:19 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_header.php
+DEBUG - 2011-02-07 08:11:19 --> File loaded: bonfire/application/views/home/index.php
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_footer.php
+DEBUG - 2011-02-07 08:11:19 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/index.php
+DEBUG - 2011-02-07 08:11:19 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:19 --> Total execution time: 0.0678
+DEBUG - 2011-02-07 08:11:20 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:20 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:20 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:20 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:20 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:20 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:20 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:20 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:20 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:20 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:20 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:20 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:20 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:20 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:20 --> Template library loaded
+DEBUG - 2011-02-07 08:11:20 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:20 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:20 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:20 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:20 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:20 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:20 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:20 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:20 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:20 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Settings MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:20 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:20 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:20 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Helper loaded: form_helper
+DEBUG - 2011-02-07 08:11:20 --> Form Validation Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Pagination Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> Helper loaded: security_helper
+DEBUG - 2011-02-07 08:11:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/roles_js.php
+DEBUG - 2011-02-07 08:11:20 --> File already loaded: bonfire/application/controllers/../core_modules/roles/controllers/settings.php
+DEBUG - 2011-02-07 08:11:20 --> Settings MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:20 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/roles_js.php
+DEBUG - 2011-02-07 08:11:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/matrix.php
+DEBUG - 2011-02-07 08:11:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/roles_js.php
+DEBUG - 2011-02-07 08:11:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/role_form.php
+DEBUG - 2011-02-07 08:11:20 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/html5_admin//ajax.php
+DEBUG - 2011-02-07 08:11:20 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:20 --> Total execution time: 0.0844
+DEBUG - 2011-02-07 08:11:51 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:51 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:51 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:51 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:51 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:51 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:51 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:51 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:51 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:51 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:51 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:51 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:51 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:51 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:51 --> Template library loaded
+DEBUG - 2011-02-07 08:11:51 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:51 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:51 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:51 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:51 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:51 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:51 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:51 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:51 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:51 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:51 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Settings MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:51 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:51 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:51 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:51 --> Helper loaded: form_helper
+DEBUG - 2011-02-07 08:11:52 --> Form Validation Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Pagination Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Helper loaded: security_helper
+DEBUG - 2011-02-07 08:11:52 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/roles_js.php
+DEBUG - 2011-02-07 08:11:52 --> File loaded: bonfire/application/controllers/../core_modules/subnav/controllers/subnav.php
+DEBUG - 2011-02-07 08:11:52 --> Subnav MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:52 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Helper loaded: directory_helper
+DEBUG - 2011-02-07 08:11:52 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/index.php
+DEBUG - 2011-02-07 08:11:52 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/html5_admin//for_ui.php
+DEBUG - 2011-02-07 08:11:52 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:52 --> Total execution time: 0.1064
+DEBUG - 2011-02-07 08:11:52 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:52 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:52 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:52 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:52 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:52 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:52 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:52 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:52 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:52 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:52 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:52 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:52 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:52 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:52 --> Template library loaded
+DEBUG - 2011-02-07 08:11:52 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:52 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:52 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:52 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:52 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:52 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:52 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:52 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:52 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:52 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:52 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Home MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:52 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:52 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:52 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:52 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_header.php
+DEBUG - 2011-02-07 08:11:52 --> File loaded: bonfire/application/views/home/index.php
+DEBUG - 2011-02-07 08:11:52 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/_footer.php
+DEBUG - 2011-02-07 08:11:52 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/default/index.php
+DEBUG - 2011-02-07 08:11:52 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:52 --> Total execution time: 0.0797
+DEBUG - 2011-02-07 08:11:53 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Hooks Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Utf8 Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> UTF-8 Support Enabled
+DEBUG - 2011-02-07 08:11:53 --> URI Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Router Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Output Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Input Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Security Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> CRSF cookie Set
+DEBUG - 2011-02-07 08:11:53 --> Global POST and COOKIE data sanitized
+DEBUG - 2011-02-07 08:11:53 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:53 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:53 --> Config file loaded: bonfire/application/config/application.php
+DEBUG - 2011-02-07 08:11:53 --> Helper loaded: url_helper
+DEBUG - 2011-02-07 08:11:53 --> Helper loaded: application_helper
+DEBUG - 2011-02-07 08:11:53 --> Session Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Helper loaded: string_helper
+DEBUG - 2011-02-07 08:11:53 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:53 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Session routines successfully run
+DEBUG - 2011-02-07 08:11:53 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:53 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:53 --> Config file loaded: bonfire/application/config/template.php
+DEBUG - 2011-02-07 08:11:53 --> Template library loaded
+DEBUG - 2011-02-07 08:11:53 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:53 --> Config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:53 --> Config file loaded: bonfire/application/config/assets.php
+DEBUG - 2011-02-07 08:11:53 --> Assets library loaded.
+DEBUG - 2011-02-07 08:11:53 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/libraries/auth.php
+DEBUG - 2011-02-07 08:11:53 --> Auth class initialized.
+DEBUG - 2011-02-07 08:11:53 --> Helper loaded: cookie_helper
+DEBUG - 2011-02-07 08:11:53 --> XSS Filtering completed
+DEBUG - 2011-02-07 08:11:53 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/permission_model.php
+DEBUG - 2011-02-07 08:11:53 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/models/role_model.php
+DEBUG - 2011-02-07 08:11:53 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Controller Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Language Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Config Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Settings MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:53 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Database config for dev environment is not found. Trying global config.
+DEBUG - 2011-02-07 08:11:53 --> Database Driver Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/users/models/user_model.php
+DEBUG - 2011-02-07 08:11:53 --> Model Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Helper loaded: form_helper
+DEBUG - 2011-02-07 08:11:53 --> Form Validation Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Pagination Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> Helper loaded: security_helper
+DEBUG - 2011-02-07 08:11:53 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/roles_js.php
+DEBUG - 2011-02-07 08:11:53 --> File already loaded: bonfire/application/controllers/../core_modules/roles/controllers/settings.php
+DEBUG - 2011-02-07 08:11:53 --> Settings MX_Controller Initialized
+DEBUG - 2011-02-07 08:11:53 --> Loader Class Initialized
+DEBUG - 2011-02-07 08:11:53 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/roles_js.php
+DEBUG - 2011-02-07 08:11:53 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/matrix.php
+DEBUG - 2011-02-07 08:11:53 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/roles_js.php
+DEBUG - 2011-02-07 08:11:53 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application/core_modules/roles/views/settings/role_form.php
+DEBUG - 2011-02-07 08:11:53 --> File loaded: /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/themes/html5_admin//ajax.php
+DEBUG - 2011-02-07 08:11:53 --> Final output sent to browser
+DEBUG - 2011-02-07 08:11:53 --> Total execution time: 0.0850
