@@ -2,7 +2,7 @@
 	<!-- List -->
 	<div class="vertical-panel">
 	
-		<?php if (isset($logs) && is_array($logs)) : ?>
+		<?php if (isset($logs) && is_array($logs) && count($logs)) : ?>
 		
 		<div class="scrollable">
 			<div class="list-view" id="user-list">
@@ -75,7 +75,7 @@
 			
 			<!-- Purge? -->
 			<div class="box delete rounded">
-				<a class="button" id="delete-me" href="<?php echo site_url('admin/developer/logs/purge/'); ?>">Delete Log Files</a>
+				<a class="button" id="delete-me" href="<?php echo site_url('admin/developer/logs/purge/'); ?>" onclick="return confirm('Are you sure you want to delete all log files?')">Delete Log Files</a>
 				
 				<h3>Delete all log files?</h3>
 				
