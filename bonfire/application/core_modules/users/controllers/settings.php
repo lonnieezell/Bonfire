@@ -154,6 +154,26 @@ class Settings extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
+	public function purge() 
+	{
+		$user_id = $this->uri->segment(5);
+		
+		// Handle a single-user purge
+		if (!empty($user_id))
+		{
+			$this->user_model->delete($user_id, true);	
+		}
+		// Handle purging all deleted users...
+		else
+		{
+		
+		}
+		
+		redirect('admin/settings/users/deleted');
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	//--------------------------------------------------------------------
 	// !HMVC METHODS
