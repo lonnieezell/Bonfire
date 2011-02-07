@@ -84,6 +84,7 @@ html[xmlns] .clearfix {
 .align-right { float: right; margin: 0 0 1.5em 1em; }
 
 .big-text { font-size: 2.4em; }
+.small { font-size: 85%; }
 
 /* !BOXES */
 .box {
