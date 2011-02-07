@@ -90,7 +90,7 @@
 
 	<?php if (isset($user)) : ?>
 	<div class="box delete rounded">
-		<a class="button" id="delete-me" href="<?php echo site_url('admin/settings/users/delete/'. $user->id); ?>">Delete this Account</a>
+		<a class="button" id="delete-me" href="<?php echo site_url('admin/settings/users/delete/'. $user->id); ?>" onclick="return confirm('Are you sure you want to delete this user account?')">Delete this Account</a>
 		
 		<h3>Delete this Account</h3>
 		
