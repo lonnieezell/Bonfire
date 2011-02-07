@@ -1,6 +1,3 @@
-<?php echo $this->load->view('developer/sub_nav.php', null, true); ?>
-<br/>
-
 <h2>Viewing: <?php echo $log_file ?></h2>
 
 <?php if (!isset($log_content) || empty($log_content)) : ?>
