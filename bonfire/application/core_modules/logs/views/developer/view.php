@@ -36,7 +36,6 @@
 <?php endif; ?>
 
 <script>
-head.ready(function(){
 	// Filter Hook
 	$('#filter').change(function(){
 		// Are we filtering at all? 
@@ -60,5 +59,4 @@ head.ready(function(){
 			}
 		});
 	});
-});
 </script>
