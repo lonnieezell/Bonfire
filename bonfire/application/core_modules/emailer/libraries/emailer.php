@@ -1,16 +1,58 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/*
+	Class: Emailer
+	
+	The Emailer core module makes sending emails a breeze. It uses the 
+	default CodeIgniter email library, but extends the functionality to 
+	provide the ability to queue emails to be processed later by a CRON
+	job, allowing you to limit the number of emails that are sent per/hour
+	if you have a picky mail server or ISP.
+	
+	It also provides the ability to use HTML email templates, though only
+	one template is supported at the moment. 
+	
+	Package: 
+		Core Modules
+*/
 class Emailer {
 
-	/** 
-	 *	Whether to queue emails or send immediately.
-	 */ 
+	/*
+		Var: $queue_emails
+		
+		Whether to send emails immediately or queue them by default.
+		
+		If true, will queue emails into the database to be sent later. 
+		If false, will send the email immediately.
+	*/ 
 	public $queue_emails = false;
 	
+	/*
+		Var: $errors
+		
+		An array of errors generated during the course of the script running.
+	*/
 	public $errors = array();
 	
+	/*
+		Var: $debug
+		
+		A private variable for reporting extra information about the 
+		running of the script and the sending of immediate emails.
+		
+		Access: 
+			Private
+	*/
 	private $debug = false;
 	
+	/*
+		Var: $ci
+		
+		A pointer to the CodeIgniter instance.
+		
+		Access:
+			Private
+	*/
 	private $ci;
 
 	//--------------------------------------------------------------------
@@ -22,19 +64,29 @@ class Emailer {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 *	Handles sending the emails.
-	 *
-	 * Information about the email should be sent in the $data
-	 * array. It looks like: 
-	 * 
-	 * $data = array(
-	 *		'to'			=> '',		// either string or array
-	 *		'subject'		=> '',		// string
-	 *		'message'		=> '',		// string
-	 * 		'alt_message'	=> ''		// optional (text alt to html email)
-	 * );
-	 */
+	/*
+		Method: send()
+	
+		Handles sending the emails and routing to the appropriate methods
+		for queueing or sending.
+		
+		Information about the email should be sent in the $data
+		array. It looks like: 
+		
+		$data = array(
+		    'to'			=> '',		// either string or array
+		    'subject'		=> '',		// string
+		    'message'		=> '',		// string
+		    'alt_message'	=> ''		// optional (text alt to html email)
+		);
+		
+		Parameters:
+			$data			- An array of required information need to send the email.
+			$queue_override	- If true, will queue the email, no matter what the default setting is.
+			
+		Return:
+			true/false		Whether the operation was successful or not.
+	*/
 	public function send($data=array(), $queue_override=false) 
 	{
 		$this->ci->config->load('email');
@@ -67,10 +119,25 @@ class Emailer {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Add the email to the database to be sent out during a cron job.
-	 */
-	private function queue_email(&$to=null, &$from=null, &$subject=null, &$message=null, &$alt_message=false) 
+	/*
+		Method: queue_email()
+		
+		Add the email to the database to be sent out during a cron job.
+		
+		Parameters:
+			$to				- The email to send the message to
+			$from			- The from email (Ignored in this method, but kept for consistency with the send_email method.
+			$subject		- The subject line of the email
+			$message		- The text to be inserted into the template for HTML emails.
+			$alt_message	- An optional, text-only version of the message to be sent with HTML emails.
+			
+		Return:
+			true/false		Whether it was successful or not.
+			
+		Access: 
+			Private
+	*/
+	private function queue_email(&$to=null, &$from, &$subject=null, &$message=null, &$alt_message=false) 
 	{
 		$this->ci->db->set('to_email', $to);
 		$this->ci->db->set('subject', $subject);
@@ -85,9 +152,24 @@ class Emailer {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Sends the email immediately.
-	 */
+	/*
+		Method: send_email()
+	
+		Sends the email immediately.
+		
+		Parameters:
+			$to				- The email to send the message to
+			$from			- The from email.
+			$subject		- The subject line of the email
+			$message		- The text to be inserted into the template for HTML emails.
+			$alt_message	- An optional, text-only version of the message to be sent with HTML emails.
+			
+		Return:
+			true/false		Whether it was successful or not.
+		
+		Access: 
+			Private
+	*/
 	private function send_email(&$to=null, &$from=null, &$subject=null, &$message=null, &$alt_message=false) 
 	{
 		$this->ci->load->library('email');
@@ -113,10 +195,21 @@ class Emailer {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Process the email queue in chunks.
-	 */
-	public function process_queue($limit=0) 
+	/*
+		Method: process_queue()
+	
+		Process the email queue in chunks. 
+		
+		Parameters:
+			$limit	- An int specifying how many emails to process at once. 
+					  Defaults to 33 which, if processed every 5 minutes, equals 400/hour
+					  And should keep you safe with most ISP's. Always check your ISP's 
+					  terms of service to verify, though.
+					  
+		Return: 
+			true/false	Whether the method was successful or not.
+	*/
+	public function process_queue($limit=33) 
 	{
 		//$limit = 33; // 33 emails every 5 minutes = 400 emails/hour.
 		$this->ci->load->library('email');
