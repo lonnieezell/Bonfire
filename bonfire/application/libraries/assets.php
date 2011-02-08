@@ -1,14 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/**
- * Assets Class
- *
- * The Assets class works with the Template class to provide powerful theme/
- * template functionality.
- * 
- * @author Lonnie Ezell
- * @license http://creativecommons.org/licenses/by-sa/3.0/
- * @package Ocular Layout Library
- * @version 3.0a
+/*
+	Class: Assets Class
+	
+	The Assets class works with the Template class to provide powerful theme/
+	template functionality.
+	
+	Version: 3.0a
  */
 class Assets {
 
@@ -18,23 +15,15 @@ class Assets {
 	 * @var		bool
 	 * @access	private
 	 */
-	private static $debug = false;
+	private static $debug = true;
 
 	/**
 	 *	An instance of the CI app
 	 *
 	 * @var 	object
-	 * @access	private
+	 * @access	protected
 	 */
-	private static $ci;
-	
-	/**
-	 * The base string to be prepended to all asset url's.
-	 *
-	 * @var		string
-	 * @access	private
-	 */
-	private static $asset_url		='/';
+	protected static $ci;
 	
 	/**
 	 * The base folder (relative to the template.site_root config setting)
@@ -53,7 +42,11 @@ class Assets {
 	 * @var 	array
 	 * @access	private
 	 */
-	private static $asset_folders 		= array();
+	private static $asset_folders 	= array(
+										'css'		=> 'css',
+										'js'		=> 'js',
+										'images'	=> 'images'
+									);
 
 	/**
 	 * An array of inline scripts to be placed at the 
@@ -114,11 +107,20 @@ class Assets {
 	 */
 	public static function init() 
 	{		
-		self::$ci->config->load('assets');
+		
+		/*
+			It is recommended to combine as many config files as sensible into
+			a single file for performance reasons. To handle these situations,
+			we should check to see if the config file is already loaded before 
+			loading it ourself.
+		*/
+		if (config_item('assets.base_url') === false)
+		{
+			self::$ci->config->load('assets');
+		}
 	
 		// Store our settings
-		self::$asset_url		= self::$ci->config->item('assets.url');
-		self::$asset_base		= self::$ci->config->item('assets.base_url');
+		self::$asset_base		= self::$ci->config->item('assets.base_folder');
 		self::$asset_folders	= self::$ci->config->item('assets.asset_folders');
 
 		log_message('debug', 'Assets library loaded.');
@@ -145,7 +147,7 @@ class Assets {
 	 * @param	string			The media to assign to the style(s) being passed in.
 	 * @return	string			A string containing all necessary links.
 	 */
-	public static function css($style=null, $media='screen', $is_themed=false) 
+	public static function css($style=null, $media='screen') 
 	{
 		$styles = array();
 		$return = '';
@@ -172,8 +174,6 @@ class Assets {
 		{
 			$styles = array($style);
 		}
-		
-		var_dump(self::$ci);
 		
 		// Add a style named for the controller so it will be looked for.
 		$styles[] = self::$ci->router->class;
@@ -259,7 +259,7 @@ class Assets {
 		{
 			if (!isset(self::$$type[$script]))
 			{
-				self::${$type}[] = $script;
+				array_unshift(self::${$type}, $script);
 			}
 		}
 		else if (is_array($script))
@@ -286,9 +286,9 @@ class Assets {
 		
 		// If a string is passed, it's a single script, so override
 		// any that are already set
-		if (!empty($script) && is_string($script))
+		if (!empty($script))
 		{
-			self::$external_js($script);
+			self::external_js((string)$script);
 			return;
 		}
 		// If an array was passed, loop through them, adding each as we go.
@@ -334,7 +334,16 @@ class Assets {
 		} else 
 		{
 			$scripts = self::$external_scripts;
+			
+			// Make sure we check for a 'global.js' file.
+			$scripts[] = 'global';
+			
+			// Add a style named for the controller so it will be looked for.
+			$scripts[] = self::$ci->router->class;
 		}
+		
+		// Try to find them
+		$scripts = self::find_files($scripts, 'js');
 	
 		foreach ($scripts as $script)
 		{
@@ -477,7 +486,7 @@ class Assets {
 	 * @param	string	$type	either 'css' or 'js'.
 	 * @return	array			The complete list of files with url paths.
 	 */
-	private function find_files(&$files=array(), $type='css') 
+	private function find_files($files=array(), $type='css') 
 	{
 		// Grab the theme paths from the template library.
 		$paths = Template::get('theme_paths');
@@ -491,29 +500,103 @@ class Assets {
 		{
 			echo "Active Theme = $active_theme<br/>";
 			echo "Default Theme = $default_theme<br/>";
-			echo 'File to find: '; print_r($files);
+			echo 'Site Path = '. $site_path .'<br/>';
+			echo 'File(s) to find: '; print_r($files);
 		}
 		
 		foreach ($files as $file)
 		{
+			// If it contains an external URL, we're all done here.
+			if (strpos($file, 'http', 0) !== false)
+			{
+				$new_files[] = $file;
+				continue;
+			}
+			
+			$found = false;
+		
 			// We need to check all of the possible theme_paths
 			foreach ($paths as $path)
 			{				
-				if (self::$debug) { echo '[Assets] Looking for: <b>'. $site_path . $path .'/'. $default_theme . $file .".{$type}</b><br/>"; }
+				if (self::$debug) { 
+					echo '[Assets] Looking in: <ul><li>'. $site_path . $path .'/'. $default_theme . $file .".{$type}</li>"; 
+					echo '<li>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}</li>";
+					
+					if (!empty(self::$active_theme)) 
+					{
+						echo '<li>'. $site_path . $path .'/'. $active_theme . $file .".{$type}</li>";
+						echo '<li>'. $site_path . $path .'/'. $active_theme . $type .'/'. $file .".{$type}</li>";
+					}
+					
+					echo '<li>'. $site_path . self::$asset_base .'/'. $type .'/'. $file .".{$type}</li>";
+					
+					echo '</ul>';
+				}
 				
-				// First, check the default theme. Add it to the array
+				/*
+					DEFAULT THEME
+				
+					First, check the default theme. Add it to the array. We check here first so that it
+					will get overwritten by anything in the active theme.
+				*/
 				if (is_file($site_path . $path .'/'. $default_theme . $file .".{$type}"))
 				{
-					$new_files[] = base_url() . self::$asset_base . $path .'/'. $default_theme . $file .".{$type}";
-				} 
+					$new_files[] = base_url() . $path .'/'. $default_theme . $file .".{$type}";
+					$found = true;
+					
+					if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $file .".{$type}" ."</b><br/>"; 
+				}
+				/*
+					If it wasn't found in the default theme root folder, look in default_theme/$type/
+				*/
+				else if (is_file($site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}"))
+				{
+					$new_files[] = base_url() . $path .'/'. $default_theme . $type .'/'. $file .".$type";
+					$found = true;
+					
+					if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
+				}
 				
-				// Now check the active theme. 
+				/*
+					ACTIVE THEME
+					
+					By grabbing a copy from both the default theme and the active theme, we can
+					handle simple CSS-only overrides for a theme, completely changing it's appearance
+					through a simple child css file.
+				*/ 
 				if (!empty($active_theme) && is_file($site_path . $path .'/'. $active_theme . $file .".{$type}"))
 				{
-					$new_files[] = base_url() . self::$asset_base . $path .'/'. $active_theme . $file .".{$type}";
-					continue;
+					$new_files[] = base_url() . $path .'/'. $active_theme . $file .".{$type}";
+					$found = true;
+					
+					if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $active_theme . $file .".{$type}" ."</b><br/>";
 				} 
+				/*
+					If it wasn't found in the active theme root folder, look in active_theme/$type/
+				*/
+				else if (is_file($site_path . $path .'/'. $active_theme . $type .'/'. $file .".{$type}"))
+				{
+					$new_files[] = base_url() . $path .'/'. $active_theme . $type .'/'. $file .".$type";
+					$found = true;
+					
+					if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $active_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
+				}
 				
+				/*
+					ASSET BASE
+					
+					If the file hasn't been found, yet, we have one more place to look for it: 
+					in the folder specified by 'assets.base_folder', and under the $type sub-folder.
+				*/
+				if (!$found)
+				{
+					if (is_file($site_path . self::$asset_base .'/'. $type .'/'. $file .".{$type}"))
+					{
+						$new_files[] = base_url() . self::$asset_base .'/'. $type .'/'. $file .".{$type}";
+
+						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
+					}
+				}
 			}			
 		}
 		

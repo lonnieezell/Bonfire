@@ -1,5 +1,3 @@
-<?php echo $this->load->view('content/sub_nav', null, true); ?>
-
 <?php if (validation_errors()) : ?>
 <div class="notification error">
 	<p><?php echo validation_errors(); ?></p>
@@ -11,63 +9,16 @@
 	<!-- Tab Area -->
 	<div class="tabs">
 		
-		<ul>
-			<li><a href="#content-tab">Page Content</a></li>
-			<li><a href="#setting-tab">Options</a></li>
-		</ul>
-		
 		<!-- Page Content -->
 		<div id="content-tab">
 			
-			<!-- ID -->
-			<?php if (isset($page)) : ?>
-			
-			<?php endif; ?>
+			<a href="#" class="page-changer" id="page-two-link">Options &raquo;</a>
 			
 			<!-- Title -->
-			<input type="text" name="page_title" id="page_title" class="big" style="width: 80%; display: inline-block;" placeholder="Enter Title here" value="<?php echo isset($page) ? $page->page_title : set_value('page_title') ?>" />
+			<h2 class="page-title"><?php echo $page->page_title ?></h2>
 			
-			<input type="checkbox" name="published" value="1" style="margin-left: 2em" /> Published?<br/>
-			
-			<label style="width: auto">Page Alias:</label> <?php echo site_url(); ?><span id="alias-span"><?php echo isset($page) ? $page->alias : set_value('alias') ?></span>
-			<input type="text" name="page_alias" id="alias-input" style="display: ; width: 25%;" value="<?php echo isset($page) ? $page->alias : set_value('alias') ?>" />
-			
-			<a href="#" id="details-toggle" class="align-right">Show Details</a>
-			
-			<br />
-			
-			<div id="page-info" style="display: none">
-				<!-- Long Title -->
-				<div>
-					<label>Long Title</label>
-					<input type="text" name="long_title" value="<?php echo isset($page) ? $page->long_title : set_value('long_title') ?>" />
-				</div>
-				<!-- Description -->
-				<div>
-					<label>Description</label>
-					<input type="text" name="description" value="<?php echo isset($page) ? $page->description : set_value('description') ?>" />
-				</div>
-				<!-- Alias -->
-				<div>
-					<label>Page Alias</label>
-					<input type="text" name="alias" id="alias" value="<?php echo isset($page) ? $page->alias : set_value('alias') ?>" />
-				</div>
-				<!-- Summary -->
-				<div>
-					<label>Summary</label>
-					<textarea name="summary" rows="3"><?php echo isset($page) ? $page->summary : set_value('summary') ?></textarea>
-				</div>
-				<!-- Parent -->
-				<div>
-					<label>Parent Page</label>
-					<select name="parent_id">
-						<option value="0">None</option>
-					</select>
-				</div>
-			
-			</div>	<!-- /page-info -->
-			
-			<textarea name="body" id="body" class="horizontal" rows="20"><?php echo isset($page) ? $page->body : set_value('body') ; ?></textarea>
+			<textarea name="body" id="body"><?php echo $page->body; ?></textarea>
+				
 			
 		</div>
 		
