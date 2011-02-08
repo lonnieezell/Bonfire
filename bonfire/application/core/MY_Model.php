@@ -21,24 +21,36 @@ class MY_Model extends CI_Model {
 	/*
 		Var: $table
 		The name of the db table this model primarily uses.
+		
+		Access:
+			Protected
 	*/
 	protected $table 	= '';
 	
 	/*
 		Var: $key
 		The primary key of the table. Used as the 'id' throughout.
+		
+		Access:
+			Protected
 	*/
 	protected $key		= 'id';
 	
 	/*
 		Var: $set_created
 		Whether or not to auto-fill a 'created_on' field on inserts.
+		
+		Access: 
+			Protected
 	*/
 	protected $set_created	= TRUE;
 	
 	/*
 		Var: $set_modified
 		Whether or not to auto-fill a 'modified_on' field on updates.
+		
+		Access:
+			Protected
 	*/
 	protected $set_modified = TRUE;
 	
@@ -46,6 +58,9 @@ class MY_Model extends CI_Model {
 		Var: $date_format
 		The type of date/time field used for created_on and modified_on fields. 
 		Valid types are: 'int', 'datetime', 'date'
+		
+		Access: 
+			protected
 	*/
 	protected $date_format = 'int';
 	
@@ -53,6 +68,9 @@ class MY_Model extends CI_Model {
 		Var: $soft_deletes
 		If false, the delete() method will perform a true delete of that row.
 		If true, a 'deleted' field will be set to 1.
+		
+		Access:
+			Protected
 	*/
 	protected $soft_deletes = FALSE;
 	
@@ -95,6 +113,19 @@ class MY_Model extends CI_Model {
 	
 	//---------------------------------------------------------------
 	
+	/*
+		Method: find_all()
+		
+		Returns all records in the table. 
+		
+		By default, there is no 'where' clause, but you can filter
+		the results that are returned by using either CodeIgniter's
+		Active Record functions before calling this function, or 
+		through method chaining with the where() method of this class.
+		
+		Return:
+			An array of objects representing the results, or FALSE on failure or empty set.
+	*/
 	public function find_all()
 	{
 		if ($this->_function_check() === FALSE)
@@ -117,34 +148,46 @@ class MY_Model extends CI_Model {
 	
 	//---------------------------------------------------------------
 	
-	public function find_all_by($field=null, $value='') 
-	{
-		if ($this->_function_check() === FALSE)
-		{
-			return FALSE;
-		}
+	/*
+		Method: find_all_by()
 		
+		A convenience method that combines a where() and find_all()
+		call into a single call.
+		
+		Paremeters:
+			$field	- The table field to search in.
+			$value	- The value that field should be.
+			
+		Return:
+			An array of objects representing the results, or FALSE on failure or empty set.
+	*/
+	public function find_all_by($field=null, $value='') 
+	{		
 		if (empty($field)) return false;
 
 		// Setup our field/value check
 		$this->db->where($field, $value);
 		
-		$this->db->from($this->table);
-		
-		$query = $this->db->get();
-		
-		if (!empty($query) && $query->num_rows() > 0)
-		{
-			return $query->result();
-		}
-		
-		$this->error = 'DB Error: '. mysql_error();
-		return false;
+		return $this->find_all();
 	}
 	
 	//--------------------------------------------------------------------
 	
-	
+	/*
+		Method: find_by()
+		
+		Returns the first result that matches the field/values passed.
+		
+		Parameters:
+			$field	- Either a string or an array of fields to match against.
+					  If an array is passed it, the $value parameter is ignored
+					  since the array is expected to have key/value pairs in it.
+			$value	- The value to match on the $field. Only used when $field is a string.
+			$type	- The type of where clause to create. Either 'and' or 'or'. 
+			
+		Return: 
+			An object representing the first result returned.
+	*/
 	public function find_by($field='', $value='', $type='and')
 	{
 		if (empty($field) || (!is_array($field) && empty($value)))
@@ -176,7 +219,7 @@ class MY_Model extends CI_Model {
 		
 		if ($query && $query->num_rows() > 0)
 		{
-			return $query->result();
+			return $query->result()->row();
 		}
 		
 		return false;
@@ -184,29 +227,17 @@ class MY_Model extends CI_Model {
 	
 	//---------------------------------------------------------------
 	
-	// $fieldsvalues is an associative array
-	
-	public function find_by_array($fieldsvalues, $selects=null)
-	{
-		if (empty($fieldsvalues))
-		{
-			$this->error = 'Not enough information to find by.';
-			return false;
-		}
+	/*
+		Method: insert()
 		
-		$this->db->where($fieldsvalues);
-		$query = $this->db->get($this->table);
+		Inserts a row of data into the database.
 		
-		if ($query && $query->num_rows() > 0)
-		{
-			return $query->result();
-		}
-		
-		return false;
-	}	
-	
-	//---------------------------------------------------------------
-	
+		Parameters:
+			$data	- an array of key/value pairs to insert.
+			
+		Return:
+			Either the $id of the row inserted, or false on failure.
+	*/
 	public function insert($data=null)
 	{
 		if ($this->_function_check(FALSE, $data) === FALSE)
@@ -236,6 +267,18 @@ class MY_Model extends CI_Model {
 	
 	//---------------------------------------------------------------
 	
+	/*
+		Method: update()
+		
+		Updates an existing row in the database.
+		
+		Parameters:
+			$id		- The primary_key value of the row to update.
+			$data	- An array of key/value pairs to update.
+			
+		Return:
+			true/false
+	*/
 	public function update($id=null, $data=null)
 	{
 		
@@ -255,11 +298,26 @@ class MY_Model extends CI_Model {
 		{
 			return true;
 		}
-
+	
+		return false;
 	}
 	
 	//---------------------------------------------------------------
 	
+	/*
+		Method: update_where()
+		
+		A convenience method that allows you to use any field/value pair
+		as the 'where' portion of your update.
+		
+		Parameters:
+			$field	- The field to match on.
+			$value	- The value to search the $field for.
+			$data	- An array of key/value pairs to update.
+			
+		Return:
+			true/false
+	*/
 	public function update_where($field=null, $value=null, $data=null) 
 	{
 		if (empty($field) || empty($value) || !is_array($data))
@@ -274,12 +332,18 @@ class MY_Model extends CI_Model {
 	//--------------------------------------------------------------------
 	
 	
-	/**
-	 * delete()
-	 *
-	 * Performs a delete on the record specified. If $this->soft_deletes is TRUE,
-	 * it will attempt to set a field 'deleted' on the current record
-	 * to '1', to allow the data to remain in the database.
+	/*
+		Method: delete()
+		
+		Performs a delete on the record specified. If $this->soft_deletes is TRUE,
+		it will attempt to set a field 'deleted' on the current record
+		to '1', to allow the data to remain in the database.
+		
+		Parameters:
+			$id		- The primary_key value to match against.
+			
+		Return:
+			true/false
 	 */
 	public function delete($id=null)
 	{
@@ -316,6 +380,18 @@ class MY_Model extends CI_Model {
 	// HELPER FUNCTIONS
 	//---------------------------------------------------------------
 	
+	/*
+		Method: is_unique()
+		
+		Checks whether a field/value pair exists within the table.
+		
+		Parameters:
+			$field	- The field to search for.
+			$value	- The value to match $field against.
+			
+		Return:
+			true/false
+	*/
 	public function is_unique($field='', $value='')
 	{
 		if (empty($field) || empty($value))
@@ -337,6 +413,14 @@ class MY_Model extends CI_Model {
 	
 	//---------------------------------------------------------------
 	
+	/*
+		Method: count_all()
+		
+		Returns the number of rows in the table.
+		
+		Return:
+			int
+	*/
 	public function count_all()
 	{
 		return $this->db->count_all($this->table);
@@ -344,6 +428,18 @@ class MY_Model extends CI_Model {
 	
 	//---------------------------------------------------------------
 	
+	/*
+		Method: count_by()
+		
+		Returns the number of elements that match the field/value pair.
+		
+		Parameters:
+			$field	- The field to search for.
+			$value	- The value to match $field against.
+			
+		Return:
+			int
+	*/
 	public function count_by($field='', $value='') 
 	{
 		if (empty($field) || empty($value))
@@ -359,6 +455,18 @@ class MY_Model extends CI_Model {
 	
 	//---------------------------------------------------------------
 	
+	/*
+		Method: get_field()
+		
+		A convenience method to return only a single field of the specified row.
+		
+		Parameters:
+			$field	- The field to search for.
+			$value	- The value to match $field against.
+			
+		Return:
+			An object with the field value in it.
+	*/
 	public function get_field($id=null, $field='') 
 	{
 		if (!is_numeric($id) || $id === 0 || empty($field))
