@@ -139,8 +139,8 @@ class Assets {
 		root (where index.php resides).
 		
 		Parameters:		
-			$style	The style(s) to have links rendered for.
-			$media	The media to assign to the style(s) being passed in.
+			$style	- The style(s) to have links rendered for.
+			$media	- The media to assign to the style(s) being passed in.
 
 		Return: 
 		   A string containing all necessary links.
@@ -207,8 +207,8 @@ class Assets {
 		Adds a file to be the CSS queue to be rendered out.
 		
 		Parameters:
-			$style	The style(s) to be added
-			$media	The type of media the stylesheet styles.
+			$style	- The style(s) to be added
+			$media	- The type of media the stylesheet styles.
 		
 		Return:	
 			void
@@ -251,8 +251,8 @@ class Assets {
 		Adds scripts to the array to be served with the js() method, below.
 		
 		Parameters:
-			$script		The script(s) to be added to the queue.
-			$type		Either 'external' or 'inline'
+			$script		- The script(s) to be added to the queue.
+			$type		- Either 'external' or 'inline'
 		
 		Return:	
 			void
@@ -297,9 +297,9 @@ class Assets {
 		root (where index.php resides).
 		
 		Paremeters:
-			$script	The name of the script to link to (optional)
-			$type	Whether the script should be linked to externally or rendered inline.
-					Acceptable values: 'external' or 'inline'
+			$script	- The name of the script to link to (optional)
+			$type	- Whether the script should be linked to externally or rendered inline.
+					  Acceptable values: 'external' or 'inline'
 					
 		Return: 
 			void
@@ -348,7 +348,7 @@ class Assets {
 		scripts will full urls are not checked, but are simply included.
 		
 		Parameters:
-			$new_js		either a string or an array containing the names of files to link to.
+			$new_js		- either a string or an array containing the names of files to link to.
 
 		Return: 
 			void
@@ -457,8 +457,8 @@ class Assets {
 		A simple helper to build image tags.
 		
 		Parameters:
-			$image			The name of the image file
-			$extra_attrs	An of key/value pairs that are attributes that should be added to the tag, such as height, width, class, etc.
+			$image			- The name of the image file
+			$extra_attrs	- An of key/value pairs that are attributes that should be added to the tag, such as height, width, class, etc.
 			
 		Return: 
 			A string containing the image tag.
@@ -495,7 +495,7 @@ class Assets {
 			Dan Horrigan (Stuff library)
 		
 		Parameters:
-			$attributes	An array of key/value pairs representing the attributes.
+			$attributes	- An array of key/value pairs representing the attributes.
 			
 		Return: 
 			A string containing the rendered attributes.
@@ -553,8 +553,8 @@ class Assets {
 			private
 			
 		Parameters:
-			@param	$files	an array of file names to search for.
-			@param	$type	either 'css' or 'js'.
+			$files	- An array of file names to search for.
+			$type	- Either 'css' or 'js'.
 		
 		Return:
 			array			The complete list of files with url paths.
