@@ -335,6 +335,10 @@ $('.v-split').splitter({
 $('.list-view .list-item').click(function(){
 	var id = $(this).attr('data-id');
 	
+	// Set current class
+	$(this).siblings().removeClass('current');
+	$(this).addClass('current');
+	
 	$.publish('list-view/list-item/click', [id]);
 });
 

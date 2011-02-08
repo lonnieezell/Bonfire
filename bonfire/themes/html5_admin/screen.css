@@ -579,6 +579,10 @@ form div input[type=text].big {
 	min-height: 3.33em;
 	overflow: hidden;
 }
+.list-item.current {
+	background-color: #eee;
+	border-bottom: 1px solid #a5a5a5;
+}
 .list-item p {
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -611,4 +615,30 @@ input[type=search] {
 	-moz-border-radius: 15px;
 	border-radius: 15px;
 	padding: 1px 10px;
+}
+
+/* Sliding Pages */
+a.page-changer:link,
+a.page-changer:visited {
+	font-size: 1.375em;
+	line-height: 1.0em;
+	color: #ccd;
+	text-decoration: none;
+	cursor: pointer;
+	float: right;
+}
+a.page-changer:hover {
+	text-decoration: none;
+	color: #aab;
+}
+
+/* Pages - Admin */
+.page-title {
+	border-bottom: 1px solid #ccd;
+	line-height: 1.0em;
+	padding-bottom: 0.5em;
+}
+.page-body {
+	height: 100%;
+	width: 100%;
 }
