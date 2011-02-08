@@ -9,82 +9,75 @@
  */
 class Assets {
 
-	/**
-	 * Whether or not debug messages should be displayed.
-	 *
-	 * @var		bool
-	 * @access	private
-	 */
-	private static $debug = true;
+	/*
+		Var: $debug
+		
+		Whether or not debug messages should be displayed.
+	*/
+	private static $debug = false;
 
-	/**
-	 *	An instance of the CI app
-	 *
-	 * @var 	object
-	 * @access	protected
-	 */
+	/*
+		Var: $ci
+		
+		An instance of the CI app
+	*/
 	protected static $ci;
 	
-	/**
-	 * The base folder (relative to the template.site_root config setting)
-	 * that all of the assets are stored in.
-	 *
-	 * @var		string
-	 * @access	private
-	 */
+	/*
+		Var: $asset_base
+		
+		The base folder (relative to the template.site_root config setting)
+		that all of the assets are stored in.
+	*/
 	private static $asset_base		= 'assets/';
 	
-	/**
-	 * The names of the folders for the various assets.
-	 * These are set in the assets config file, and 
-	 * default to 'js', 'css', and 'images'.
-	 *
-	 * @var 	array
-	 * @access	private
-	 */
+	/*
+		Var: $asset_folders
+		
+		The names of the folders for the various assets.
+		These are set in the assets config file, and 
+		default to 'js', 'css', and 'images'.
+	*/
 	private static $asset_folders 	= array(
 										'css'		=> 'css',
 										'js'		=> 'js',
 										'images'	=> 'images'
 									);
 
-	/**
-	 * An array of inline scripts to be placed at the 
-	 * end of the page.
-	 *
-	 * @var		array
-	 * @access	private
-	 */
+	/*
+		Var: $inline_scripts
+		
+		An array of inline scripts to be placed at the 
+		end of the page.
+	*/
 	private static $inline_scripts		= array();
 	
-	/**
-	 * An array of external (linked) javascript files
-	 * to be called at the end of the page.
-	 *
-	 * @var		array
-	 * @access	private
-	 */
+	/*
+		Var: $external_scripts
+		
+		An array of external (linked) javascript files
+		to be called at the end of the page.
+	*/
 	private static $external_scripts 	= array();
 	
-	/**
-	 * An array of css files to be placed at the
-	 * beginning of the file.
-	 * 
-	 * @var		array
-	 * @access	private
-	 */
+	/*
+		Var: $styles
+		
+		An array of css files to be placed at the
+		beginning of the file.
+	*/
 	private static $styles				= array();	
 
 	//--------------------------------------------------------------------
 
-	/**
-	 * Constructor.
-	 * 
-	 * This if here solely for CI loading to work. Just calls the init( ) method.
-	 *
-	 * @access public
-	 * @return void
-	 */
+	/*
+		Method: __construct()
+		
+		This if here solely for CI loading to work. Just calls the init( ) method.
+		
+		Return: 
+			void
+	*/
 	public function __construct()
 	{
 		self::$ci =& get_instance();
@@ -94,16 +87,16 @@ class Assets {
 
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Constructor.
-	 * 
-	 * Load the assets config file, and inserts the base
-	 * css and js into our array for later use. This ensures
-	 * that these files will be processed first, in the order
-	 * the user is expecting, prior to and later-added files.
-	 *
-	 * @access public
-	 * @return void
+	/*
+		Method: init()
+		
+		Load the assets config file, and inserts the base
+		css and js into our array for later use. This ensures
+		that these files will be processed first, in the order
+		the user is expecting, prior to and later-added files.
+		
+		Return: 
+			void
 	 */
 	public static function init() 
 	{		
@@ -133,20 +126,25 @@ class Assets {
 	// !STYLESHEET METHODS
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Renders links to stylesheets, with the $asset_url prepended. 
-	 * If a single filename is passed, it will only create a single link
-	 * for that file, otherwise, it will include any styles that have
-	 * been added with add_css below. If no style is passed it will default
-	 * to the theme's style.css file.
-	 *
-	 * When passing a filename, the filepath should be relative to the site
-	 * root (where index.php resides).
-	 *
-	 * @param	string/array	The style(s) to have links rendered for.
-	 * @param	string			The media to assign to the style(s) being passed in.
-	 * @return	string			A string containing all necessary links.
-	 */
+	/*
+		Method: css()
+
+		Renders links to stylesheets, with the $asset_url prepended. 
+		If a single filename is passed, it will only create a single link
+		for that file, otherwise, it will include any styles that have
+		been added with add_css below. If no style is passed it will default
+		to the theme's style.css file.
+		
+		When passing a filename, the filepath should be relative to the site
+		root (where index.php resides).
+		
+		Parameters:		
+			$style	The style(s) to have links rendered for.
+			$media	The media to assign to the style(s) being passed in.
+
+		Return: 
+		   A string containing all necessary links.
+	*/
 	public static function css($style=null, $media='screen') 
 	{
 		$styles = array();
@@ -203,13 +201,18 @@ class Assets {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Adds a file to be the CSS queue to be rendered out.
-	 *
-	 * @param	string/array	The style(s) to be added
-	 * @param	string			The type of media the stylesheet styles.
-	 * @return	void
-	 */
+	/*
+		Method: add_css()
+	
+		Adds a file to be the CSS queue to be rendered out.
+		
+		Parameters:
+			$style	The style(s) to be added
+			$media	The type of media the stylesheet styles.
+		
+		Return:	
+			void
+	*/
 	public static function add_css($style=null, $media='screen') 
 	{
 		if (empty($style)) return;
@@ -242,13 +245,18 @@ class Assets {
 	// !JAVASCRIPT METHODS
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Adds scripts to the array to be served with the js() method, below.
-	 *
-	 * @param	script/array	$script		The script(s) to be added to the queue.
-	 * @param	script			$type		Either 'external' or 'inline'
-	 * @return	void
-	 */
+	/*
+		Method: add_js()
+		
+		Adds scripts to the array to be served with the js() method, below.
+		
+		Parameters:
+			$script		The script(s) to be added to the queue.
+			$type		Either 'external' or 'inline'
+		
+		Return:	
+			void
+	*/
 	public static function add_js($script=null, $type='external') 
 	{
 		if (empty($script)) return;
@@ -276,9 +284,26 @@ class Assets {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 *
-	 */
+	/*
+		Method: js()
+		
+		Renders links to stylesheets, with the $asset_url prepended. 
+		If a single filename is passed, it will only create a single link
+		for that file, otherwise, it will include any styles that have
+		been added with add_css below. If no style is passed it will default
+		to the theme's style.css file.
+		
+		When passing a filename, the filepath should be relative to the site
+		root (where index.php resides).
+		
+		Paremeters:
+			$script	The name of the script to link to (optional)
+			$type	Whether the script should be linked to externally or rendered inline.
+					Acceptable values: 'external' or 'inline'
+					
+		Return: 
+			void
+	*/
 	public function js($script=null, $type='external') 
 	{
 		$type .= '_scripts';
@@ -307,16 +332,28 @@ class Assets {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * _external_js function.
-	 *
-	 * This private method does the actual work of generating the
-	 * links to the js files. It is called by the js() method.
-	 * 
-	 * @access private
-	 * @return void
-	 */
-	public function external_js($new_js=null, $is_themed=false) 
+	/*
+		Method: external_js()
+		
+		Does the actual work of generating the links to the js files. 
+		It is called by the js() method, but can be used on it's own.
+		
+		If no script are passed into the first parameter, links are created for
+		all scripts within the self::$external_scripts array. If one or 
+		more scripts are passed in the first parameter, only these script files
+		will be used to create links with, and any stored in self::$external_scripts
+		will be ignored.
+		
+		Note that links will not be rendered for files that cannot be found, though
+		scripts will full urls are not checked, but are simply included.
+		
+		Parameters:
+			$new_js		either a string or an array containing the names of files to link to.
+
+		Return: 
+			void
+	*/
+	public function external_js($new_js=null) 
 	{
 		$return = '';
 		$scripts = array();
@@ -371,18 +408,17 @@ class Assets {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * _inline_js function.
-	 *
-	 * This private method does the actual work of generating the
-	 * inline js code. All code is wrapped by open and close tags
-	 * specified in the config file, so that you can modify it to
-	 * use your favorite js library.
-	 * 
-	 * It is called by the js() method.
-	 * 
-	 * @access private
-	 * @return void
+	/*
+		Method: inline_js()
+		
+		Does the actual work of generating the inline js code. All code is 
+		wrapped by open and close tags specified in the config file, so that 
+		you can modify it to use your favorite js library.
+		
+		It is called by the js() method.
+		
+		Return: 
+			void
 	 */
 	public static function inline_js() 
 	{
@@ -415,6 +451,18 @@ class Assets {
 	// !IMAGE METHODS
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: image()
+		
+		A simple helper to build image tags.
+		
+		Parameters:
+			$image			The name of the image file
+			$extra_attrs	An of key/value pairs that are attributes that should be added to the tag, such as height, width, class, etc.
+			
+		Return: 
+			A string containing the image tag.
+	*/
 	public static function image($image=null, $extra_attrs=array()) 
 	{
 		if (empty($image)) return '';
@@ -438,18 +486,20 @@ class Assets {
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Attr
-	 *
-	 * Converts an array of attribute into a string
-	 *
-	 * @author	Dan Horrigan (Stuff library)
-	 *
-	 * @access	public
-	 * @param	array	The attribute array
-	 * @return	string	The attribute string
-	 * @return	string
-	 */
+	/*
+		Method: attributes()
+		
+		Converts an array of attribute into a string
+		
+		Author:
+			Dan Horrigan (Stuff library)
+		
+		Parameters:
+			$attributes	An array of key/value pairs representing the attributes.
+			
+		Return: 
+			A string containing the rendered attributes.
+	*/
 	private static function attributes($attributes=null) 
 	{
 		if (empty($attributes))
@@ -473,18 +523,41 @@ class Assets {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Locates file by looping through the active and default themes. 
-	 *
-	 * Since CSS and JS should be allowed to override each other, we include
-	 * both the files of this name from the active theme and the default theme.
-	 * The file from the default theme should be resolved first so the active
-	 * theme can override it.
-	 *
-	 * @access	private
-	 * @param	array	$files	an array of file names to search for.
-	 * @param	string	$type	either 'css' or 'js'.
-	 * @return	array			The complete list of files with url paths.
+	/*
+		Method: find_files()
+		
+		Locates file by looping through the active and default themes, and
+		then the assets folder (as specified in the config file). 
+		
+		Files are searched for in this order...
+			1 - active_theme/
+			2 - active_theme/type/
+			3 - default_theme/
+			4 - default_theme/type/
+			5 - asset_base/type
+			
+		Where 'type' is either 'css' or 'js'.
+		
+		If the file is not found, it is removed from the array. If the file
+		is found, a full url is created, using base_path(), unless the path
+		already includes 'http' at the beginning of the filename, in which case
+		it is simply included in the return files.
+		
+		For CSS files, if a script of the same name is found in both the 
+		default_theme and the active_theme folders (or their type sub-folder),
+		they are both returned, with the default_theme linked to first, so that
+		active_theme styles can override those in the default_theme without
+		having to recreate the entire stylesheet.
+		
+		Access: 
+			private
+			
+		Parameters:
+			@param	$files	an array of file names to search for.
+			@param	$type	either 'css' or 'js'.
+		
+		Return:
+			array			The complete list of files with url paths.
 	 */
 	private function find_files($files=array(), $type='css') 
 	{
