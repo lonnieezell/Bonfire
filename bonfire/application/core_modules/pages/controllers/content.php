@@ -9,6 +9,10 @@ class Content extends Admin_Controller {
 		$this->auth->restrict('Site.Content.View');
 		
 		$this->load->model('Page_model', 'page_model', true);
+		$this->load->helper('text');
+		
+		Assets::add_js($this->load->view('content/page_js', null, true), 'inline');
+		Assets::add_js('markitup/jquery.markitup.js');
 	}
 	
 	//--------------------------------------------------------------------
@@ -19,7 +23,7 @@ class Content extends Admin_Controller {
 		Template::set('pages', $this->page_model->find_all());
 	
 		Template::set('toolbar_title', 'Manage Pages');
-		Template::render();
+		Template::render('for_ui');
 	}
 	
 	//--------------------------------------------------------------------
@@ -41,6 +45,17 @@ class Content extends Admin_Controller {
 	}
 	
 	//--------------------------------------------------------------------
+	
+	public function view($page_id=0) 
+	{
+		Template::set('page', $this->page_model->find($page_id));
+		
+		Template::set_view('content/page_form');
+		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	public function edit($id=0) 
 	{
