@@ -1,5 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-
+/*
+	Controller: Logs/Developer
+*/
 class Developer extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
