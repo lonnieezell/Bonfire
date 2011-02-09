@@ -493,6 +493,18 @@ class MY_Model extends CI_Model {
 	// !CHAINABLE UTILITY METHODS
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: where()
+		
+		Sets the where portion of the query in a chainable format.
+		
+		Parameters:
+			$field	- The field to search the db on.
+			$value	- The value to match the field against.
+			
+		Return:
+			An instance of this class.
+	*/
 	public function where($field=null, $value=null) 
 	{
 		if (!empty($field) && !empty($value))
@@ -505,7 +517,17 @@ class MY_Model extends CI_Model {
 	
 	//--------------------------------------------------------------------
 	
-	
+	/*
+		Method: select()
+		
+		Sets the select portion of the query in a chainable format.
+		
+		Parameters:
+			$selects	- A string representing the selection.
+			
+		Return:
+			An instance of this class.
+	*/
 	public function select($selects=null) 
 	{
 		if (!empty($selects))
@@ -518,6 +540,18 @@ class MY_Model extends CI_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: limit()
+		
+		Sets the limit portion of the query in a chainable format.
+		
+		Parameters:
+			$limit	- An int showing the max results to return.
+			$offset	- An in showing how far into the results to start returning info.
+			
+		Return:
+			An instance of this class.
+	*/
 	public function limit($limit=0, $offset=0) 
 	{
 		$this->db->limit($limit, $offset);
@@ -527,16 +561,24 @@ class MY_Model extends CI_Model {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * order_by()
-	 *
-	 * Inserts a chainable order_by method from either a string or an
-	 * array of field/order combinations. If the $field value is an array,
-	 * it should look like: 
-	 *	array(
-	 *		'field1' => 'asc',
-	 *		'field2' => 'desc'
-	 *	);
+	/*
+		Method: order_by()
+		
+		Inserts a chainable order_by method from either a string or an
+		array of field/order combinations. If the $field value is an array,
+		it should look like:
+		 
+		 array(
+		 	'field1' => 'asc',
+		 	'field2' => 'desc'
+		 );
+		 
+		 Parameters:
+		 	$field	- The field to order the results by.
+		 	$order	- Which direction to order the results ('asc' or 'desc')
+		 	
+		 Return:
+		 	An instance of this class.
 	 */
 	public function order_by($field=null, $order='asc') 
 	{
@@ -560,66 +602,19 @@ class MY_Model extends CI_Model {
 	
 	//--------------------------------------------------------------------
 	
-	
-	//---------------------------------------------------------------
-	// FILE FUNCTIONS
-	//---------------------------------------------------------------
-	
-	public function create_file($file=null, $body=null, $ext='.php') 
-	{
-		if (empty($file))
-		{
-			$this->error = 'Unable to create file: no filename given.';
-			return false;
-		}
-		
-		if (empty($body))
-		{
-			// Let the user create an empty file...
-			$body = '';
-		}
-		
-		// Open the file for writing. Note that the $file should contain
-		// the full path WITH the filename (minus extension)
-		$handle = $this->fopen_recursive($file . $ext, 'w+');
-		
-		if ($handle === FALSE)
-		{
-			$this->error = 'Unable to open file '. $file . $ext .' for writing.';
-			return false;
-		}
-		
-		// Grab a lock
-		if (flock($handle, LOCK_EX) === FALSE)
-		{
-			$this->error = 'Unable to acquire lock for file: ' . $file . $ext;
-			fclose($handle);
-			return false;
-		}
-		
-		// Write the content to the file
-		if (fwrite($handle, $body) === FALSE)
-		{
-			$this->error = 'Unable to write to file: ' . $file . $ext;
-		}
-		
-		fclose($handle);
-		
-		if (!empty($this->error))
-		{
-			return false;
-		}
-		
-		return true;
-		
-	}
-	
-	//---------------------------------------------------------------
-	
 	//---------------------------------------------------------------
 	// !UTILITY FUNCTIONS
 	//---------------------------------------------------------------
 	
+	/*
+		Method: _function_check()
+		
+		A utility method that does some error checking and cleanup for other methods:
+		
+		- Makes sure that a table has been set at $this->table.
+		- If passed in, will make sure that $id is of the valid type.
+		- If passed in, will verify the $data is not empty.
+	*/
 	protected function _function_check($id=FALSE, &$data=FALSE) 
 	{
 		// Does the model have a table set?
@@ -662,33 +657,31 @@ class MY_Model extends CI_Model {
 		
 		return true;
 	}
-	
-	//---------------------------------------------------------------
-	
-	public function fopen_recursive($path, $mode, $chmod=0755)
-    {
-        $directory = dirname($path);
-        $file = basename($path);
-        if (!is_dir($directory)) {
-            if (!mkdir($directory, $chmod, 1)) {
-                return FALSE;
-            }
-        }
-        
-        return fopen ($path, $mode);
-    }
     
     //---------------------------------------------------------------
 	
-	/**
-	 * set_date()
-	 *
-	 * A utility function to allow child models to use the type of
-	 * date/time format that they prefer.
-	 */
-	private function set_date() 
+	/*
+		Method: set_date()
+		
+		A utility function to allow child models to use the type of
+		date/time format that they prefer. This is primarily used for
+		setting created_on and modified_on values, but can be used by
+		inheriting classes.
+		
+		The available time formats are:
+			'int'		- Stores the date as an integer timestamp.
+			'datetime'	- Stores the date and time in the SQL datetime format.
+			'date'		- Stores teh date (only) in the SQL date format.
+			
+		Parameters:
+			$user_date	- An optional PHP timestamp to be converted.
+			
+		Return:
+			The current/user time converted to the proper format.
+	*/
+	protected function set_date($user_date=null) 
 	{
-		$curr_date = time();
+		$curr_date = !empty($user_date) ? $user_date : time();
 		
 		switch ($this->date_format)
 		{
@@ -708,9 +701,9 @@ class MY_Model extends CI_Model {
 	
 } 
 
-// END: Class Base_model
+// END: Class MY_model
 
 /* End of file MY_Model.php */
-/* Location: ./app/core/MY_Model.php */
+/* Location: ./application/core/MY_Model.php */
 
 
