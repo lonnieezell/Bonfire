@@ -2,6 +2,10 @@
 
 class Install extends Base_Controller {
 
+	protected $errors = '';
+
+	//--------------------------------------------------------------------
+
 	public function __construct() 
 	{
 		parent::__construct();
@@ -26,7 +30,15 @@ class Install extends Base_Controller {
 			
 			if ($this->form_validation->run() !== false)
 			{
-			
+				if ($this->setup())
+				{
+					Template::set_message('You are good to go! Happy coding!', 'success');
+					redirect('/login');
+				}
+				else 
+				{
+					Template::set('There was an error setting up your database: '. $this->errors, 'error');
+				}
 			}
 		}
 	
@@ -35,5 +47,58 @@ class Install extends Base_Controller {
 	
 	//--------------------------------------------------------------------
 	
-
+	//--------------------------------------------------------------------
+	// !PRIVATE METHODS
+	//--------------------------------------------------------------------
+	
+	public function setup() 
+	{
+		//
+		// First, save the information to the config/application.php file.
+		//
+		$this->load->helper('config_file');
+		
+		$config = array(
+			'site.title'	=> $this->input->post('site_title'),
+			'site.system_email'	=> $this->input->post('email')
+		);
+		
+		if (write_config('application', $config) === false)
+		{
+			$this->errors = 'Unable to write to config/application.php. Make sure that it is writable and try again.';
+			return false;
+		}
+		
+		//
+		// Now install the database tables.
+		//
+		$this->load->library('migrations/Migrations');
+	
+		if ($this->migration->version($this->config->item('migrations_version')) != 1)
+		{
+			$this->errors = 'There was an error setting up the database. Please check your settings and try again.';
+		}
+		
+		//
+		// Install the user in the users table so they can actually login.
+		//
+		$data = array(
+			'role_id'	=> 1,
+			'email'		=> $this->input->post('email'),
+			'username'	=> $this->input->post('username'),
+			'password'	=> $this->input->post('password')
+		);
+		
+		if ($this->user_model->insert($data) == false)
+		{
+			$this->errors = 'There was an error creating your account in the database: '. $this->user_model->error;
+			return false;
+		}
+		
+		// We made it to the end, so we're good to go!
+		return true;
+	}
+	
+	//--------------------------------------------------------------------
+	
 }
