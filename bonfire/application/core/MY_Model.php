@@ -219,7 +219,7 @@ class MY_Model extends CI_Model {
 		
 		if ($query && $query->num_rows() > 0)
 		{
-			return $query->result()->row();
+			return $query->result();
 		}
 		
 		return false;
