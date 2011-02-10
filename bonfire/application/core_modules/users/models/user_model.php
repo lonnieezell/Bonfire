@@ -27,7 +27,10 @@ class User_model extends MY_Model {
 		$data['zip_extra'] = isset($data['zip_extra']) ? (int)$data['zip_extra'] : null;
 		
 		// What's the default role?
-		$data['role_id'] = $this->role_model->default_role_id();
+		if (!isset($data['role_id']))
+		{
+			$data['role_id'] = $this->role_model->default_role_id();
+		}
 		
 		return parent::insert($data);
 	}
