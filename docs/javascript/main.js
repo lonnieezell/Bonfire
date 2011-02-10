@@ -1,4 +1,4 @@
-// This file is part of Natural Docs, which is Copyright ï¿½ 2003-2010 Greg Valure
+// This file is part of Natural Docs, which is Copyright © 2003-2010 Greg Valure
 // Natural Docs is licensed under version 3 of the GNU Affero General Public License (AGPL)
 // Refer to License.txt for the complete details
 
@@ -14,7 +14,7 @@
 var agt=navigator.userAgent.toLowerCase();
 var browserType;
 var browserVer;
- 
+
 if (agt.indexOf("opera") != -1)
     {
     browserType = "Opera";
