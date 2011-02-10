@@ -1,1 +1,1 @@
-/Volumes/MyData/WebSites/NaturalDocs/NaturalDocs -i /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application -o HTML /Volumes/MyData/WebSites/Bonfire/bonfire/docs/ -p /Volumes/MyData/WebSites/Bonfire/natural -s bonfire
+/Volumes/MyData/WebSites/NaturalDocs/NaturalDocs -i /Volumes/MyData/WebSites/Bonfire/bonfire/bonfire/application -i /Volumes/MyData/WebSites/Bonfire/bonfire/docs/_guides/ -o HTML /Volumes/MyData/WebSites/Bonfire/bonfire/docs/ -p /Volumes/MyData/WebSites/Bonfire/natural -s bonfire
