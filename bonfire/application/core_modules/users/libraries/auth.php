@@ -1,16 +1,61 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Auth {
-
-	public $ci;
+/*
+	Class: Auth
 	
+	Provides authentication functions for logging users in/out, restricting access
+	to controllers, and managing login attempts. 
+	
+	Security and ease-of-use are the two primary goals of the Auth system in Bonfire. 
+	This lib will be constantly updated to reflect the latest security practices that
+	we learn about, while maintaining the simple API.
+	
+	Author: 
+		Lonnie Ezell
+*/
+class Auth {
+	
+	/*
+		Var: $errors
+		An array of errors generated.
+	*/
 	public	$errors	= array();
 	
-	private $logged_in = null;
+	/*
+		Var: $logged_in
+		Stores the logged in value after the first test to improve performance.
+		
+		Access:
+			Private
+	*/
+	private $logged_in = false;
+	
+	/*
+		Var: $ip_address
+		Stores the ip_address of the current user for performance reasons.
+		
+		Access:
+			Private
+	*/
 	private $ip_address;
+	
+	/*
+		Var: $ci
+		A pointer to the CodeIgniter instance.
+		
+		Access:
+			Private
+	*/
+	private $ci;
 		
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: __construct()
+		
+		Grabs a pointer to the CI instance, gets the user's IP address,
+		and attempts to automatically log in the user.
+	*/
 	public function __construct() 
 	{		
 		$this->ci =& get_instance();
@@ -25,12 +70,18 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 *	Attempt to log the user in.
-	 *
-	 * @param	string	$login		The user's login credentials (email/username)
-	 * @param	string	$password	The user's password
-	 * @param	bool	$remember	Whether the user should be remembered in the system.
+	/*
+		Method: login()
+	
+		Attempt to log the user in.
+		
+		Parameters:
+			$login		The user's login credentials (email/username)
+			$password	The user's password
+			$remember	Whether the user should be remembered in the system.
+			
+		Return:
+			true/false on success/failure.
 	 */ 
 	public function login($login=null, $password=null, $remember=false) 
 	{
@@ -90,6 +141,14 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: logout()
+		
+		Destroys the autologin information and the current session.
+		
+		Return:
+			void
+	*/
 	public function logout() 
 	{
 		// Destroy the autologin information
@@ -101,9 +160,14 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Checks the session for the required info, then 
-	 * verifies against the database.
+	/*
+		Method: is_logged_in()
+	
+		Checks the session for the required info, then 
+		verifies against the database.
+		
+		Return:
+			true/false
 	 */
 	public function is_logged_in() 
 	{
@@ -147,10 +211,23 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Checks that a user is logged in (and, optionally of the correct role)
-	 * and, if not, send them to the login screen.
-	 *
+	/*
+		Method: restrict()
+	
+		Checks that a user is logged in (and, optionally of the correct role)
+		and, if not, send them to the login screen.
+		
+		If no permission is checked, will simply verify that the user is logged in.
+		If a permission is passed in to the first parameter, will check the user's role
+		and verify that role has the appropriate permission.
+		
+		Parameters:
+			$permission	- (Optional) A string representing the permission to check for.
+			
+		Return:
+			true		- if the user has the appropriate access permissions.
+			redirect	- to the previous page if the user doesn't have permissions.
+			redirect	- '/login' page if the user is not logged in.
 	 */
 	public function restrict($permission=null) 
 	{	
@@ -184,6 +261,14 @@ class Auth {
 	// !UTILITY METHODS
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: user_id()
+		
+		Retrieves the user_id from the current session.
+		
+		Return:
+			The user's id.
+	*/
 	public function user_id() 
 	{
 		return $this->ci->session->userdata('user_id');
@@ -191,6 +276,14 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: email()
+		
+		Retrieves the email address from the current session.
+		
+		Return:
+			The user's email.
+	*/
 	public function email() 
 	{
 		return $this->ci->session->userdata('email');
@@ -198,7 +291,14 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
-	
+	/*
+		Method: role_id()
+		
+		Retrieves the role_id from the current session.
+		
+		Return:
+			The user's role_id.
+	*/
 	public function role_id() 
 	{
 		return $this->ci->session->userdata('role_id');
@@ -206,13 +306,19 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
-	public function logged_in() 
-	{
-		return $this->logged_in;
-	}
-	
-	//--------------------------------------------------------------------
-	
+	/*
+		Method: has_permission()
+
+		Verifies that the user is logged in and has the appropriate access permissions.
+		
+		Parameters:
+			$permission	- A string with the permission to check for, ie 'Site.Signin.Allow'
+			$role_id	- The id of the role to check the permission against. If not role_id is
+							passed into the method, then it assumes it to be the current user's role_id.
+							
+		Return:
+			true/false
+	*/
 	public function has_permission($permission = null, $role_id=null) 
 	{
 		if (empty($permission))
@@ -240,6 +346,17 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: role_name_by_id()
+		
+		Retrieves the role_name for the request role.
+		
+		Parameters:
+			$role_id	- An int representing the role_id.
+			
+		Return:
+			A string with the name of the matched role.
+	*/
 	public function role_name_by_id($role_id=0) 
 	{
 		if (empty($role_id) || !is_numeric($role_id))
@@ -282,11 +399,16 @@ class Auth {
 	// !LOGIN ATTEMPTS
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Records a login attempt into the database.
-	 *
-	 * @param	string	$login	The login id used (typically email)
-	 * @return	void
+	/*
+		Method: increase_login_attempts()
+	
+		Records a login attempt into the database.
+		
+		Parameters:
+			$login	- The login id used (typically email or username)
+			
+		Return:
+			void
 	 */
 	protected function increase_login_attempts($login=null) 
 	{
@@ -300,13 +422,18 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
-	/** 
-	 * Clears all login attempts for this user, as well as cleans out old
-	 * logins.
-	 *
-	 * @param	string	$login		The login credentials (typically email)
-	 * @param	int		$expires	The time (in seconds) that attempts older than will be deleted
-	 * @return	void
+	/*	
+		Method: clear_login_attempts()
+		
+		Clears all login attempts for this user, as well as cleans out old
+		logins.
+		
+		Parameters:
+			$login		- The login credentials (typically email)
+			$expires	- The time (in seconds) that attempts older than will be deleted
+
+		Return:
+			void
 	 */
 	protected function clear_login_attempts($login=null, $expires = 86400) 
 	{
@@ -325,12 +452,18 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Get number of attempts to login occured from given IP-address or login
-	 *
-	 * @param	string
-	 * @param	string
-	 * @return	int
+	/*
+		Method: num_login_attempts()
+	
+		Get number of attempts to login occured from given IP-address and/or login
+		
+		Parameters:
+			$login	- (Optional) The login id to check for (email/username). 
+						If no login is passed in, it will only check against 
+						the IP Address of the current user.
+						
+		Return:
+			An int with the number of attempts.
 	 */
 	function num_login_attempts($login=null)
 	{
@@ -346,12 +479,13 @@ class Auth {
 	// !AUTO-LOGIN 
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Autologin()
-	 *
-	 * Attempts to log the user in based on an existing 'autologin' cookie.
-	 *
-	 * @return	bool
+	/*
+		Method: autologin()
+		
+		Attempts to log the user in based on an existing 'autologin' cookie.
+		
+		Return:
+			true/false - Whether the user was successfully logged in.
 	 */
 	private function autologin() 
 	{
@@ -387,13 +521,22 @@ class Auth {
 	//--------------------------------------------------------------------
 	
 	
-	/**
-	 *	Create the auto-login entry in the database. This method uses
-	 * Charles Miller's thoughts at: 
-	 * http://fishbowl.pastiche.org/2004/01/19/persistent_login_cookie_best_practice/
-	 * 
-	 * @param	int		$user_id
-	 * @param	string	$old_token	The previous token that was used to login with.
+	/*
+		Method: create_autologin()
+	
+		Create the auto-login entry in the database. This method uses
+		Charles Miller's thoughts at: 
+		http://fishbowl.pastiche.org/2004/01/19/persistent_login_cookie_best_practice/
+		
+		Parameters:
+			$user_id	- An int representing the user_id.
+			$old_token	- The previous token that was used to login with.
+			
+		Return:
+			true/false	- Whether the autologin was created or not.
+			
+		Access:
+			Private
 	 */
 	private function create_autologin($user_id=0, $old_token=null) 
 	{
@@ -443,6 +586,17 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: delete_autologin()
+		
+		Deletes the autologin cookie for the current user.
+		
+		Return:
+			void
+			
+		Access:
+			Private
+	*/
 	private function delete_autologin() 
 	{
 		if ($this->ci->config->item('auth.allow_remember') == false)
@@ -478,11 +632,25 @@ class Auth {
 	
 	//--------------------------------------------------------------------
 	
-	
-	//--------------------------------------------------------------------
-	// !PRIVATE METHODS
-	//--------------------------------------------------------------------
-	
+	/*
+		Method: setup_session()
+		
+		Creates the session information for the current user. Will also create
+		an autologin cookie if required.
+		
+		Parameters:
+			$user_id		- An int with the user's id 
+			$password_hash	- The user's password hash. Used to create a new, unique user_token.
+			$email			- The user's email address.
+			$role_id		- The user's role_id
+			$remember		- A boolean (true/false). Whether to keep the user logged in.
+			
+		Return: 
+			true/false on success/failure.
+			
+		Access:
+			Private
+	*/
 	private function setup_session($user_id=0, $password_hash=null, $email='', $role_id=0, $remember=false) 
 	{
 		if (empty($user_id) || empty($email))
@@ -521,8 +689,15 @@ class Auth {
 
 // End Auth class
 
-/**
- * A utility function for showing authentication errors.
+//--------------------------------------------------------------------
+
+/*
+	Function: auth_errors()
+
+	A utility function for showing authentication errors.
+	
+	Return:
+		A string with a <ul> tag of any auth errors, or an empty string if no errors exist.
  */
 if (!function_exists('auth_errors'))
 {
@@ -549,3 +724,26 @@ if (!function_exists('auth_errors'))
 }
 
 //--------------------------------------------------------------------
+
+/*
+	Function: has_permission()
+	
+	A convenient shorthand for checking user permissions.
+	
+	Parameters:
+		$permission	- The permission to check for, ie 'Site.Signin.Allow'
+	
+	Return:
+		true/false
+ */ 
+function has_permission($permission=null)
+{
+	$ci =& get_instance();
+	
+	if (class_exists('Auth'))
+	{
+		return $ci->auth->has_permission($permission); 
+	}
+	
+	return false;
+}

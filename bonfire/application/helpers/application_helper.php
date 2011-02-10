@@ -14,31 +14,6 @@
 //--------------------------------------------------------------------
 
 /*
-	Function: has_permission()
-	
-	A convenient shorthand for checking user permissions.
-	
-	Parameters:
-		$permission	- The permission to check for, ie 'Site.Signin.Allow'
-	
-	Return:
-		true/false
- */ 
-function has_permission($permission=null)
-{
-	$ci =& get_instance();
-	
-	if (class_exists('Auth'))
-	{
-		return $ci->auth->has_permission($permission); 
-	}
-	
-	return false;
-}
-
-//--------------------------------------------------------------------
-
-/*
 	Function: gravatar_link()
 
 	Creates an image link based on Gravatar for the specified email address.
