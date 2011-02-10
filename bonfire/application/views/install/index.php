@@ -41,7 +41,7 @@
 	
 	<div>
 		<label>Your Email</label>
-		<input type="text" name="email" id="email" placeholder="me@home.com" value="" />
+		<input type="email" name="email" id="email" placeholder="me@home.com" value="" />
 		<p class="small">Please double-check your password before continuing.</p>
 	</div>
 	

@@ -74,7 +74,7 @@ class Install extends Base_Controller {
 		//
 		$this->load->library('migrations/Migrations');
 	
-		if ($this->migration->version($this->config->item('migrations_version')) != 1)
+		if ($this->migrations->version($this->config->item('migrations_version')) != 1)
 		{
 			$this->errors = 'There was an error setting up the database. Please check your settings and try again.';
 		}
