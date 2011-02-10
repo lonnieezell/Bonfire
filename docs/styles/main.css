@@ -57,8 +57,10 @@ img { border: 0;  }
     paragraphs, no indent) instead of print-style paragraphs (no blank line,
     indented.)
 */
-p {
-    text-indent: 5ex; margin: 0 }
+/*p {
+    text-indent: 5ex; 
+    margin: 0 
+}*/
 
 
 /*  Opera doesn't break with just wbr, but will if you add this.  */
