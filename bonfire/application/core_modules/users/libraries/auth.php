@@ -28,7 +28,7 @@ class Auth {
 		Access:
 			Private
 	*/
-	private $logged_in = false;
+	private $logged_in = null;
 	
 	/*
 		Var: $ip_address
@@ -242,7 +242,7 @@ class Auth {
 			Template::set_message('You must be logged in to view that page.', 'error');
 			redirect('login');
 		}
-		
+	
 		// Check to see if the user has the proper permissions
 		if (!$this->has_permission($permission))
 		{ 
