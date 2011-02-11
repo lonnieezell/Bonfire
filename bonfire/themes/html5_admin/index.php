@@ -68,7 +68,14 @@
 		</div>
 	</div>	<!-- /page -->
 
-	<?php echo Assets::js(); ?>
+	<script>
+		head.js(	<?php echo site_url('assets/js/jquery-1.5.min.js'); ?>,
+					<?php echo Template::theme_url('js/jquery.form.js'); ?>,
+					<?php echo Template::theme_url('js/common.js'); ?>,
+					<?php echo Template::theme_url('js/jquery.ajaxify.min.js'); ?>,
+					<?php echo Template::theme_url('js/ui.js'); ?>
+		);
+	</script>
 
 </body>
 </html>
