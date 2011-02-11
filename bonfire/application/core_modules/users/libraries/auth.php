@@ -231,20 +231,15 @@ class Auth {
 	 */
 	public function restrict($permission=null) 
 	{	
-		if (empty($permission))
-		{
-			return false;
-		}
-	
 		// If user isn't logged in, don't need to check permissions
 		if ($this->is_logged_in() === false)
 		{
 			Template::set_message('You must be logged in to view that page.', 'error');
 			redirect('login');
 		}
-	
+
 		// Check to see if the user has the proper permissions
-		if (!$this->has_permission($permission))
+		if (!empty($permission) && !$this->has_permission($permission))
 		{ 
 			Template::set_message('You do not have permission to access that page.', 'attention');
 			redirect($this->ci->session->userdata('previous_page'));
@@ -485,16 +480,15 @@ class Auth {
 		Attempts to log the user in based on an existing 'autologin' cookie.
 		
 		Return:
-			true/false - Whether the user was successfully logged in.
+			void
 	 */
 	private function autologin() 
 	{
-		if ($this->logged_in || $this->ci->config->item('auth.allow_remember') == false) 
+		if ($this->ci->config->item('auth.allow_remember') == false) 
 		{ 
-			return true; 
+			return; 
 		}
 		
-		$return = false;
 		$this->ci->load->helper('cookie');
 		
 		$cookie = get_cookie('autologin', true);
@@ -507,15 +501,27 @@ class Auth {
 		// Try to pull a match from the database
 		$this->ci->db->where( array('user_id' => $user_id, 'token' => $test_token) );
 		$query = $this->ci->db->get('user_cookies');
-		
+				
 		if ($query->num_rows() == 1)
-		{
-			// We have a match
-			$return = true;
+		{ 	
+			// Save logged in status to save on db access later.
+			$this->logged_in = true;
+			
+			// If a session doesn't exist, we need to refresh our autologin token
+			// and get the session started.
+			if (!$this->ci->session->userdata('user_id'))
+			{
+				// Grab the current user info for the session
+				$this->ci->load->model('users/User_model', 'user_model', true);
+				$user = $this->ci->user_model->select('id, email, password_hash, users.role_id')->find($user_id);
+				
+				if (!$user) { return; }
+				
+				$this->setup_session($user->id, $user->password_hash, $user->email, $user->role_id, true, $test_token);
+			}
 		}
 		
-		unset($query);
-		return $return;
+		unset($query, $user);
 	}
 	
 	//--------------------------------------------------------------------
@@ -651,7 +657,7 @@ class Auth {
 		Access:
 			Private
 	*/
-	private function setup_session($user_id=0, $password_hash=null, $email='', $role_id=0, $remember=false) 
+	private function setup_session($user_id=0, $password_hash=null, $email='', $role_id=0, $remember=false, $old_token=null) 
 	{
 		if (empty($user_id) || empty($email))
 		{
@@ -662,6 +668,10 @@ class Auth {
 		if (!class_exists('CI_Session'))
 		{
 			$this->ci->load->library('session');
+		}
+		if (!function_exists('do_hash'))
+		{
+			$this->ci->load->helper('security');
 		}
 		
 		$data = array(
@@ -677,7 +687,7 @@ class Auth {
 		// Should we remember the user?
 		if ($remember === true)
 		{
-			return $this->create_autologin($user_id);
+			return $this->create_autologin($user_id, $old_token);
 		}
 		
 		return true;
