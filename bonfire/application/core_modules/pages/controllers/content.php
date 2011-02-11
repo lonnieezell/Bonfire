@@ -13,6 +13,7 @@ class Content extends Admin_Controller {
 		
 		Assets::add_js($this->load->view('content/page_js', null, true), 'inline');
 		Assets::add_js('markitup/jquery.markitup.js');
+		Assets::add_js('jquery-ui-1.8.8.min.js');
 	}
 	
 	//--------------------------------------------------------------------

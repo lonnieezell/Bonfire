@@ -107,7 +107,7 @@ class Assets {
 			we should check to see if the config file is already loaded before 
 			loading it ourself.
 		*/
-		if (config_item('assets.base_url') === false)
+		if (config_item('assets.base_folder') === false)
 		{
 			self::$ci->config->load('assets');
 		}
