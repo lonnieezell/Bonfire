@@ -47,7 +47,7 @@
 			<div class="inner">
 			
 				<div class="box create rounded">
-					<a class="button good ajaxify" href="<?php echo site_url('admin/settings/pages/create'); ?>">Create New Page</a>
+					<a class="button good ajaxify" href="<?php echo site_url('admin/content/pages/create'); ?>">Create New Page</a>
 				
 					<h3>Create A New Page</h3>
 					
