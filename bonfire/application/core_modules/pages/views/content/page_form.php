@@ -9,22 +9,22 @@
 	<!-- Tab Area -->
 	<div class="tabs">
 		
+		<ul>
+			<li><a href="#content-tab">Content</a></li>
+			<li><a href="#options-tab">Options</a></li>
+		</ul>
+		
 		<!-- Page Content -->
 		<div id="content-tab">
-			
-			<a href="#" class="page-changer" id="page-two-link">Options &raquo;</a>
-			
 			<!-- Title -->
-			<h2 class="page-title"><?php echo $page->page_title ?></h2>
+			<h2 class="page-title"><?php echo isset($page) ? $page->page_title : '' ?></h2>
 			
-			<textarea name="body" id="body"><?php echo $page->body; ?></textarea>
-				
-			
+			<textarea name="body" id="body"><?php echo isset($page) ? $page->body : ''; ?></textarea>			
 		</div>
 		
 		
 		<!-- Page Settings -->
-		<div id="setting-tab">
+		<div id="options-tab">
 			<!-- Container? -->
 			<div>
 				<label>Container?</label>
@@ -61,26 +61,6 @@
 <?php echo form_close(); ?>
 
 <script>
-head.ready(function() {
 	// Tabs
 	$('.tabs').tabs();
-	
-	// Details toggle
-	$('#details-toggle').click(function(){
-		var status = $(this).text();
-		
-		if (status == 'Show Details')
-		{
-			$('#page-info').slideDown();
-			$(this).text('Hide Details');
-		}
-		else
-		{
-			$('#page-info').slideUp();
-			$(this).text('Show Details');
-		}
-	
-		return false;
-	});
-});
 </script>
