@@ -1,0 +1,57 @@
+/* RESET */
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video 
+{
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  vertical-align:baseline;
+  background:transparent;
+}                 
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display:block; }
+
+/* BASICS */
+
+html { font-size: 100%; }
+body {
+	font-size: 0.875em;
+	font-family: Helvetica, Arial, sans-serif;
+	line-height: 1.5;
+	background: #eee;
+	color: #333;
+}
+
+a:link, a:visited { text-decoration: none; color: white }
+a:active, a:hover { text-decoration: none; color: black; background-color: yellow }
+
+h1 {
+	font-size: 1.25em;
+}
+
+/* HEADER */
+.head {
+	background: #2A476A;
+	color: #f6f6f6;
+	padding: 0 1em;
+}
+.head h1 {
+	font-size: 1.25em;
+	line-height: 2.0;
+	display: inline;
+	margin-right: 2em;
+}
+.main {
+	padding: 1em 2em;
+}
+form {
+	display: inline;
+	color: #ccc;
+}
+
+
+/* TEST RESULTS */
+#results { width: 100% }
+.err, .pas { color: white; font-weight: bold; margin: 2px 0; padding: 5px; vertical-align: top; }
+.err { background-color: red }
+.pas { background-color: green }
+.detail { padding: 8px 0 8px 20px }
