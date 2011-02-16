@@ -50,7 +50,7 @@ class Assets {
 		An array of inline scripts to be placed at the 
 		end of the page.
 	*/
-	private static $inline_scripts		= array();
+	protected static $inline_scripts		= array();
 	
 	/*
 		Var: $external_scripts
@@ -58,7 +58,7 @@ class Assets {
 		An array of external (linked) javascript files
 		to be called at the end of the page.
 	*/
-	private static $external_scripts 	= array();
+	protected static $external_scripts 	= array();
 	
 	/*
 		Var: $styles
@@ -304,7 +304,7 @@ class Assets {
 		Return: 
 			void
 	*/
-	public function js($script=null, $type='external') 
+	public static function js($script=null, $type='external') 
 	{
 		$type .= '_scripts';
 		$return = '';
@@ -353,7 +353,7 @@ class Assets {
 		Return: 
 			void
 	*/
-	public function external_js($new_js=null) 
+	public static function external_js($new_js=null) 
 	{
 		$return = '';
 		$scripts = array();
