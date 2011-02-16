@@ -2,3 +2,6 @@
 bonfire/application/logs/*
 bonfire/application/cache/*
 *.bak
+
+# Testing ignoring database configuration.. it should be fine since it's already in there, but I don't know the other ramifications.
+bonfire/application/config/database.php
