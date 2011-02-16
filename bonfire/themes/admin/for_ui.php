@@ -75,6 +75,7 @@
 					'<?php echo Template::theme_url('js/ui.js'); ?>'
 		);
 	</script>
+	<?php Assets::js(); ?>
 
 </body>
 </html>

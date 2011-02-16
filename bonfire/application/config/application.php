@@ -185,5 +185,5 @@ $config['assets.asset_folders'] = array(
 	to wrap all of your inline scripts into. By default, it is
 	setup to work with jQuery.
 */
-$config['assets.js_opener'] = '$(head).ready(function(){'. "\n";
+$config['assets.js_opener'] = 'head.ready(function(){'. "\n";
 $config['assets.js_closer'] = '});'. "\n";
