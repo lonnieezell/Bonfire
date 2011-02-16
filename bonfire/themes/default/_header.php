@@ -15,17 +15,13 @@
 	
 		<!-- Header -->
 		<div class="head text-right">
-			<a href="#">ABOUT</a>
-			<a href="#">HELP</a>
-			<a href="#">CONTACT</a>
-			<a href="#">BLOG</a>
+			<?php if ($this->auth->is_logged_in()) : ?>
+				<?php echo anchor('logout','Logout'); ?>
+			<?php else : ?>
+				<?php echo anchor('login','Login'); ?>
+			<?php endif; ?>
 		</div>
-		
-		<!-- Masthead -->
-		<div class="masthead">
-			<img src="/assets/images/home-temp.gif">
-		</div>
-	
+
 		<?php echo Template::message(); ?>
 		
 		<div class="main">
