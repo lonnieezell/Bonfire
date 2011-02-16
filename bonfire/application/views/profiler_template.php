@@ -1,0 +1,210 @@
+<style type="text/css">
+	#codeigniter-profiler { clear: both; background: #101010; padding: 0 5px; font-family: Helvetica, sans-serif; font-size: 10px; line-height: 12px; position: absolute; top: 0; right: 0; width: auto; min-width: 45em; max-width: 90%; z-index: 1000; -webkit-border-bottom-left-radius: 7px; -moz-border-radius-bottomleft: 7px; border-bottom-left-radius: 7px; -webkit-box-shadow: -1px 1px 10px #999; }
+	.ci-profiler-box { padding: 10px; margin: 0 0 10px 0; max-height: 400px; overflow: auto; color: #fff; font-family: Monaco, 'Lucida Console', 'Courier New', monospace; font-size: 11px; }
+	.ci-profiler-box h2 { font-family: Helvetica, sans-serif; font-weight: normal; }
+	
+	#ci-profiler-menu a:link, #ci-profiler-menu a:visited { display: inline-block; padding: 7px 0; margin: 0; color: #ccc; text-decoration: none; font-weight: lighter; cursor: pointer; text-align: center; width: 23%; border-bottom: 4px solid #444; }
+	#ci-profiler-menu a:hover, #ci-profiler-menu a.current { background-color: #222; border-color: #999; }
+	#ci-profiler-menu a span { display: block; font-weight: bold; font-size: 16px; line-height: 1.2; }
+	
+	#ci-profiler-menu-time span, #ci-profiler-benchmarks h2 { color: #B72F09; }
+	#ci-profiler-menu-memory span, #ci-profiler-benchmarks h2 { color: #953FA1; }
+	#ci-profiler-menu-queries span, #ci-profiler-queries h2 { color: #3769A0; }
+	#ci-profiler-menu-vars span, #ci-profiler-vars h2 { color: #D28C00; }
+	
+	#codeigniter-profiler table { width: 100%; }
+	#codeigniter-profiler table.main td { padding: 7px 15px; text-align: left; vertical-align: top; color: #fff; border-bottom: 1px dotted #444; line-height: 1.5; }
+	#codeigniter-profiler table.main tr:hover { background: #292929; }
+	#codeigniter-profiler table.main code { font-family: inherit; padding: 0; background: transparent; border: 0; color: #fff; }
+	
+	#codeigniter-profiler table .hilight { color: #FFFD70 !important; }
+	
+	#ci-profiler-menu-exit { background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIhSURBVDjLlZPrThNRFIWJicmJz6BWiYbIkYDEG0JbBiitDQgm0PuFXqSAtKXtpE2hNuoPTXwSnwtExd6w0pl2OtPlrphKLSXhx07OZM769qy19wwAGLhM1ddC184+d18QMzoq3lfsD3LZ7Y3XbE5DL6Atzuyilc5Ciyd7IHVfgNcDYTQ2tvDr5crn6uLSvX+Av2Lk36FFpSVENDe3OxDZu8apO5rROJDLo30+Nlvj5RnTlVNAKs1aCVFr7b4BPn6Cls21AWgEQlz2+Dl1h7IdA+i97A/geP65WhbmrnZZ0GIJpr6OqZqYAd5/gJpKox4Mg7pD2YoC2b0/54rJQuJZdm6Izcgma4TW1WZ0h+y8BfbyJMwBmSxkjw+VObNanp5h/adwGhaTXF4NWbLj9gEONyCmUZmd10pGgf1/vwcgOT3tUQE0DdicwIod2EmSbwsKE1P8QoDkcHPJ5YESjgBJkYQpIEZ2KEB51Y6y3ojvY+P8XEDN7uKS0w0ltA7QGCWHCxSWWpwyaCeLy0BkA7UXyyg8fIzDoWHeBaDN4tQdSvAVdU1Aok+nsNTipIEVnkywo/FHatVkBoIhnFisOBoZxcGtQd4B0GYJNZsDSiAEadUBCkstPtN3Avs2Msa+Dt9XfxoFSNYF/Bh9gP0bOqHLAm2WUF1YQskwrVFYPWkf3h1iXwbvqGfFPSGW9Eah8HSS9fuZDnS32f71m8KFY7xs/QZyu6TH2+2+FAAAAABJRU5ErkJggg==) 0% 0% no-repeat; padding-left: 20px; position: absolute; right: 5px; top: 10px; }
+</style>
+
+<script type="text/javascript">
+var ci_profiler_bar = {
+
+	// current toolbar section thats open
+	current: null,
+	
+	// current vars and config section open
+	currentvar: null,
+	
+	// current config section open
+	currentli: null,
+	
+	// toggle a toolbar section
+	show : function(obj, el) {
+		if (obj == ci_profiler_bar.current) {
+			ci_profiler_bar.off(obj);
+			ci_profiler_bar.current = null;
+		} else {
+			ci_profiler_bar.off(ci_profiler_bar.current);
+			ci_profiler_bar.on(obj);
+			ci_profiler_bar.remove_class(ci_profiler_bar.current, 'current');
+			ci_profiler_bar.current = obj;
+			//ci_profiler_bar.add_class(el, 'current');
+		}
+	},
+	
+	// turn an element on
+	on : function(obj) {
+		if (document.getElementById(obj) != null)
+			document.getElementById(obj).style.display = '';
+	},
+	
+	// turn an element off
+	off : function(obj) {
+		if (document.getElementById(obj) != null)
+			document.getElementById(obj).style.display = 'none';
+	},
+	
+	// toggle an element
+	toggle : function(obj) {
+		if (typeof obj == 'string')
+			obj = document.getElementById(obj);
+			
+		if (obj)
+			obj.style.display = obj.style.display == 'none' ? '' : 'none';
+	},
+	
+	// close the toolbar
+	close : function() {
+		document.getElementById('codeigniter-profiler').style.display = 'none';
+	},
+	
+	// Add class to element
+	add_class : function(obj, class) {
+		alert(obj);
+		document.getElementById(obj).className += " "+ class;
+	},
+	
+	// Remove class from element
+	remove_class : function(obj, class) {
+		if (obj != undefined) {
+			document.getElementById(obj).className = document.getElementById(obj).className.replace(/\bclass\b/, '');
+		}
+	}
+};
+</script>
+
+<div id="codeigniter-profiler">
+	
+	<div id="ci-profiler-menu">
+		
+		<!-- Benchmarks -->
+		<?php if ($sections['benchmarks']) :?>
+			<a href="#" id="ci-profiler-menu-time" onclick="ci_profiler_bar.show('ci-profiler-benchmarks', 'ci-profiler-menu-time'); return false;">
+				<span><?php echo $this->benchmark->elapsed_time('total_execution_time_start', 'total_execution_time_end') ?> s</span>
+				Load Time
+			</a>
+			<a href="#" id="ci-profiler-menu-memory" onclick="ci_profiler_bar.show('ci-profiler-benchmarks', 'ci-profiler-menu-memory'); return false;">
+				<span><?php echo (! function_exists('memory_get_usage')) ? '0' : round(memory_get_usage()/1024/1024, 2).' MB' ?></span>
+				Memory Used
+			</a>
+		<?php endif; ?>
+		
+		<!-- Queries -->
+		<?php if ($sections['queries']) : ?>
+			<a href="#" id="ci-profiler-menu-queries" onclick="ci_profiler_bar.show('ci-profiler-queries', 'ci-profiler-menu-queries'); return false;">
+				<span><?php echo is_array($sections['queries']) ? count($sections['queries']) : 0 ?> Queries</span>
+				Database
+			</a>
+		<?php endif; ?>
+		
+		<!-- Vars and Config -->
+		<?php if ($sections['http_headers'] || $sections['get'] || $sections['config'] || $sections['post'] || $sections['uri_string'] || $sections['controller_info']) : ?>
+			<a href="#" id="ci-profiler-menu-vars" onclick="ci_profiler_bar.show('ci-profiler-vars', 'ci-profiler-menu-vars'); return false;">
+				<span>vars</span> &amp; Config
+			</a>
+		<?php endif; ?>
+		
+		<a href="#" id="ci-profiler-menu-exit" onclick="ci_profiler_bar.close(); return false;" style="width: 2em"></a>
+	</div>
+
+<?php if (count($sections) > 0) : ?>
+
+	<!-- Benchmarks -->
+	<?php if ($sections['benchmarks']) :?>
+		<div id="ci-profiler-benchmarks" class="ci-profiler-box" style="display: none">
+			<h2><?php echo lang('profiler_benchmarks') ?></h2>
+			
+			<?php if (is_array($sections['benchmarks'])) : ?>
+				
+				<table class="main">
+				<?php foreach ($sections['benchmarks'] as $key => $val) : ?>
+					<tr><td><?php echo $key ?></td><td class="hilight"><?php echo $val ?></td></tr>
+				<?php endforeach; ?>
+				</table>
+
+			<?php else : ?>
+
+				<?php echo $sections['benchmarks']; ?>
+
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
+	
+	<!-- Queries -->
+	<?php if ($sections['queries']) :?>
+		<div id="ci-profiler-queries" class="ci-profiler-box" style="display: none">
+			<h2><?php echo lang('profiler_queries') ?></h2>
+			
+			<?php if (is_array($sections['queries'])) : ?>
+				
+				<table class="main" cellspacing="0">
+				<?php foreach ($sections['queries'] as $key => $val) : ?>
+					<tr><td class="hilight"><?php echo $key ?></td><td><?php echo $val ?></td></tr>
+				<?php endforeach; ?>
+				</table>
+
+			<?php else : ?>
+
+				<?php echo $sections['queries']; ?>
+
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
+	
+	<!-- Vars and Config -->
+	<?php if ($sections['http_headers'] || $sections['get'] || $sections['config'] || $sections['post'] || $sections['uri_string'] || $sections['controller_info']) :?>
+		<div id="ci-profiler-vars" class="ci-profiler-box" style="display: none">
+			
+			<?php foreach (array('get', 'post', 'uri_string', 'controller_info', 'http_headers', 'config') as $section) : ?>
+				
+				<?php if ($sections[$section]) :?>
+					
+					<h2><?php echo lang('profiler_'. $section) ?></h2>
+					
+					<?php if (is_array($sections[$section])) : ?>
+						
+						<table class="main">
+						<?php foreach ($sections[$section] as $key => $val) : ?>
+							<tr><td class="hilight"><?php echo $key ?></td><td><?php echo htmlspecialchars($val) ?></td></tr>
+						<?php endforeach; ?>
+						</table>
+		
+					<?php else : ?>
+		
+						<?php echo $sections[$section]; ?>
+		
+					<?php endif; ?>
+				<?php endif; ?>
+				
+			<?php endforeach; ?>
+		</div>		
+	<?php endif; ?>
+
+	
+<?php else: ?>
+
+	<p class="ci-profiler-box"><?php echo lang('profiler_no_profiles') ?></p>
+
+<?php endif; ?>
+
+</div>	<!-- /codeigniter_profiler -->
+
+<pre>
+<?php //print_r($sections); ?>
+</pre>
