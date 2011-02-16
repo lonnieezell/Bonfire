@@ -30,7 +30,7 @@ class Users extends Front_Controller {
 			// Try to login
 			if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === true)
 			{
-				redirect('admin/dashboard');
+				redirect('admin/content');
 			}
 		}
 	
