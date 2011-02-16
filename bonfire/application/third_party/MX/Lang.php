@@ -12,8 +12,8 @@
  *
  * Install this file as application/third_party/MX/Lang.php
  *
- * @copyright	Copyright (c) Wiredesignz 2010-11-12
- * @version 	5.3.5
+ * @copyright	Copyright (c) 2011 Wiredesignz
+ * @version 	5.4
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,15 +33,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  **/
-if (CI_VERSION < 2) {
-	class CI_Lang extends CI_Language {}
-}
-
 class MX_Lang extends CI_Lang
 {
 	public function load($langfile, $lang = '', $return = FALSE, $_module = NULL)	{
-		if (is_array($langfile)) 
-			return $this->load_many($langfile);
+		
+		if (is_array($langfile)) return $this->load_many($langfile);
 			
 		$deft_lang = CI::$APP->config->item('language');
 		$idiom = ($lang == '') ? $deft_lang : $lang;

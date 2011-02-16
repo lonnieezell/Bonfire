@@ -1,6 +1,6 @@
 <?php (defined('BASEPATH')) OR exit('No direct script access allowed');
 
-/* load MX core classes */
+/** load the CI class for Modular Extensions **/
 require dirname(__FILE__).'/Base.php';
 
 /**
@@ -15,8 +15,8 @@ require dirname(__FILE__).'/Base.php';
  *
  * Install this file as application/third_party/MX/Controller.php
  *
- * @copyright	Copyright (c) Wiredesignz 2010-11-12
- * @version 	5.3.5
+ * @copyright	Copyright (c) 2011 Wiredesignz
+ * @version 	5.4
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -36,7 +36,7 @@ require dirname(__FILE__).'/Base.php';
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  **/
-class MX_Controller
+class MX_Controller 
 {
 	public $autoload = array();
 	
