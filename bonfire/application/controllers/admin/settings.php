@@ -70,6 +70,7 @@ class Settings extends Admin_Controller {
 			'pages.default_searchable'	=> isset($_POST['default_searchable']) ? 1 : 0,
 			'pages.default_cacheable'	=> isset($_POST['default_cacheable']) ? 1 : 0,
 			'pages.track_hits'			=> isset($_POST['track_hits']) ? 1 : 0,
+			'pages.rte'					=> $_POST['rte'],
 		);
 		
 		return write_config('application', $data);
