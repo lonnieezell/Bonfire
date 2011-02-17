@@ -175,28 +175,28 @@ class Assets {
 		
 		// Add a style named for the controller so it will be looked for.
 		$styles[] = self::$ci->router->class;
-		
+
 		$styles = self::find_files($styles);
-		
+
 		// Loop through the styles, spitting out links for each one.
 		foreach ($styles as $s)
 		{
-			if (substr($s, -4) != '.css') 
+			if (substr($s['file'], -4) != '.css') 
 			{ 
-				$s .= '.css'; 
+				$s['file'] .= '.css'; 
 			}
 		
 			$attr = array(
 				'rel'	=> 'stylesheet',
 				'type'	=> 'text/css',
-				'href'	=> $s,
-				'media'	=> $media
+				'href'	=> $s['file'],
+				'media'	=> !empty($s['media']) ? $s['media'] : $media
 			);
 			
 			$return .= '<link'. self::attributes($attr) ." />\n";
 		}
 		
-		return $return;
+		echo $return;
 	}
 	
 	//--------------------------------------------------------------------
@@ -597,7 +597,7 @@ class Assets {
 		$default_theme = Template::get('default_theme');
 		
 		$new_files = array();
-		
+
 		if (self::$debug)
 		{
 			echo "Active Theme = $active_theme<br/>";
@@ -608,8 +608,19 @@ class Assets {
 		
 		foreach ($files as $file)
 		{
+			// If it's an array, we're dealing with css and it has both 
+			// a file and media keys. Store them for later use.
+			if (is_array($file))
+			{	
+				$media = $file['media'];
+				$file = $file['file'];
+			}
+			
+			// Strip out the file type for consistency
+			$file = str_replace('.'. $type, '', $file);
+		
 			// If it contains an external URL, we're all done here.
-			if (strpos($file, 'http', 0) !== false)
+			if (strpos((string)$file, 'http', 0) !== false)
 			{
 				$new_files[] = $file;
 				continue;
@@ -624,7 +635,7 @@ class Assets {
 					echo '[Assets] Looking in: <ul><li>'. $site_path . $path .'/'. $default_theme . $file .".{$type}</li>"; 
 					echo '<li>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}</li>";
 					
-					if (!empty(self::$active_theme)) 
+					if (!empty($active_theme)) 
 					{
 						echo '<li>'. $site_path . $path .'/'. $active_theme . $file .".{$type}</li>";
 						echo '<li>'. $site_path . $path .'/'. $active_theme . $type .'/'. $file .".{$type}</li>";
@@ -643,7 +654,8 @@ class Assets {
 				*/
 				if (is_file($site_path . $path .'/'. $default_theme . $file .".{$type}"))
 				{
-					$new_files[] = base_url() . $path .'/'. $default_theme . $file .".{$type}";
+					$file_path = base_url() . $path .'/'. $default_theme . $file .".{$type}";
+					$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
 					$found = true;
 					
 					if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $file .".{$type}" ."</b><br/>"; 
@@ -653,7 +665,8 @@ class Assets {
 				*/
 				else if (is_file($site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}"))
 				{
-					$new_files[] = base_url() . $path .'/'. $default_theme . $type .'/'. $file .".$type";
+					$file_path = base_url() . $path .'/'. $default_theme . $type .'/'. $file .".$type";
+					$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
 					$found = true;
 					
 					if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
@@ -668,7 +681,8 @@ class Assets {
 				*/ 
 				if (!empty($active_theme) && is_file($site_path . $path .'/'. $active_theme . $file .".{$type}"))
 				{
-					$new_files[] = base_url() . $path .'/'. $active_theme . $file .".{$type}";
+					$file_path = base_url() . $path .'/'. $active_theme . $file .".{$type}";
+					$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
 					$found = true;
 					
 					if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $active_theme . $file .".{$type}" ."</b><br/>";
@@ -678,7 +692,8 @@ class Assets {
 				*/
 				else if (is_file($site_path . $path .'/'. $active_theme . $type .'/'. $file .".{$type}"))
 				{
-					$new_files[] = base_url() . $path .'/'. $active_theme . $type .'/'. $file .".$type";
+					$file_path = base_url() . $path .'/'. $active_theme . $type .'/'. $file .".$type";
+					$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
 					$found = true;
 					
 					if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $active_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
@@ -694,7 +709,8 @@ class Assets {
 				{
 					if (is_file($site_path . self::$asset_base .'/'. $type .'/'. $file .".{$type}"))
 					{
-						$new_files[] = base_url() . self::$asset_base .'/'. $type .'/'. $file .".{$type}";
+						$file_path = base_url() . self::$asset_base .'/'. $type .'/'. $file .".{$type}";
+						$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
 
 						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
 					}

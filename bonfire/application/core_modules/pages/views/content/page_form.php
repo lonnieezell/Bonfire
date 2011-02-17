@@ -4,7 +4,7 @@
 </div>
 <?php endif; ?>
 
-<?php echo form_open($this->uri->uri_string()); ?>
+<?php echo form_open($this->uri->uri_string(), 'class="ajax-form"'); ?>
 
 	<!-- Tab Area -->
 	<div class="tabs">
@@ -33,18 +33,18 @@
 			<!-- Rich Text? -->
 			<div>
 				<label>Rich Text?</label>
-				<input type="checkbox" name="rich_text" value="1" <?php echo (isset($page) && $page->rich_text == '1') || config_item('pages.default_rich_text') == '1' ? 'checked="checked"' : set_checkbox('rich_text', '1'); ?> />
+				<input type="checkbox" name="rich_text" value="1" <?php echo (isset($page) && $page->rich_text == '1') || (!isset($page) && config_item('pages.default_rich_text') == '1') ? 'checked="checked"' : set_checkbox('rich_text', '1'); ?> />
 			</div>
 			
 			<!-- Searchable? -->
 			<div>
 				<label>Searchable?</label>
-				<input type="checkbox" name="searchable" value="1" <?php echo (isset($page) && $page->searchable == '1') || config_item('pages.default_searchable') ? 'checked="checked"' : set_checkbox('searchable', '1'); ?> />
+				<input type="checkbox" name="searchable" value="1" <?php echo (isset($page) && $page->searchable == '1') || (!isset($page) && config_item('pages.default_searchable')) ? 'checked="checked"' : set_checkbox('searchable', '1'); ?> />
 			</div>
 			<!-- Cachable? -->
 			<div>
 				<label>Cacheable?</label>
-				<input type="checkbox" name="cacheable" value="1" <?php echo (isset($page) && $page->cacheable == '1') || config_item('pages.default_cacheable') ? 'checked="checked"' : set_checkbox('cacheable', '1'); ?> />
+				<input type="checkbox" name="cacheable" value="1" <?php echo (isset($page) && $page->cacheable == '1') || (!isset($page) && config_item('pages.default_cacheable')) ? 'checked="checked"' : set_checkbox('cacheable', '1'); ?> />
 			</div>
 			<!-- Deleted? -->
 			<div>
@@ -63,4 +63,7 @@
 <script>
 	// Tabs
 	$('.tabs').tabs();
+	
+	// Our editor
+	$('#body').markItUp();
 </script>
