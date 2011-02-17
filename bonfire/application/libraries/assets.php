@@ -257,7 +257,7 @@ class Assets {
 		Return:	
 			void
 	*/
-	public static function add_js($script=null, $type='external') 
+	public static function add_js($script=null, $type='external', $prepend=false) 
 	{
 		if (empty($script)) return;
 
@@ -267,17 +267,36 @@ class Assets {
 		{
 			if (!isset(self::$$type[$script]))
 			{
-				array_unshift(self::${$type}, $script);
+				if ($prepend)
+				{
+					array_unshift(self::${$type}, $script);
+				}
+				else
+				{
+					array_push(self::${$type}, $script);
+				}
 			}
 		}
 		else if (is_array($script))
 		{
+			$temp = array();
+		
+			// Remove any potential duplicates
 			foreach ($script as $s)
 			{
 				if (!isset(self::$$type[$s]))
 				{
-					self::${$type}[] = $s;
+					$temp[] = $s;
 				}
+			}
+			
+			if ($prepend)
+			{
+				self::${$type} = array_merge($temp, self::${$type});
+			}
+			else
+			{
+				self::${$type} = array_merge(self::${$type}, $temp);
 			}
 		}
 	}
@@ -380,6 +399,7 @@ class Assets {
 			// Add a style named for the controller so it will be looked for.
 			$scripts[] = self::$ci->router->class;
 		}
+
 		
 		// Try to find them
 		$scripts = self::find_files($scripts, 'js');
