@@ -81,7 +81,7 @@ class Content extends Admin_Controller {
 	private function save_page($id=0, $type='insert') 
 	{
 		$this->form_validation->set_rules('page_title', 'Title', 'required|trim|max_length[255]|xss_clean');
-		$this->form_validation->set_rules('page_alias', 'Alias', 'required|trim|strip_tags|max_length[255]|xss_clean');
+		//$this->form_validation->set_rules('page_alias', 'Alias', 'required|trim|strip_tags|max_length[255]|xss_clean');
 		$this->form_validation->set_rules('body', 'Page Body', 'trim|xss_clean');
 		
 		if ($this->form_validation->run() === false)
@@ -93,7 +93,7 @@ class Content extends Admin_Controller {
 		$data = array(
 			'page_title'	=> $_POST['page_title'],
 			'long_title'	=> isset($_POST['long_title']) ? $_POST['long_title'] : '',
-			'alias'			=> $_POST['page_alias'],
+			'alias'			=> isset($_POST['page_alias']) ? $_POST['alias'] : '',
 			'description'	=> isset($_POST['description']) ? $_POST['description'] : '',
 			'published'		=> isset($_POST['published']) ? 1 : 0,
 			'pub_date'		=> isset($_POST['pub_date']) ? $_POST['pub_date'] : '0000-00-00 00:00:00',
