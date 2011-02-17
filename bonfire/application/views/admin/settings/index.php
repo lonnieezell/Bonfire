@@ -75,6 +75,16 @@
 		</div>
 		
 		<div>
+			<label>RTE Type</label>
+			<select name="rte">
+				<option value="html" <?php echo config_item('pages.rte') == 'html' ? 'selected="selected"' : '' ?>>HTML</option>
+				<option value="markdown" <?php echo config_item('pages.rte') == 'markdown' ? 'selected="selected"' : '' ?>>Markdown</option>
+				<option value="textile" <?php echo config_item('pages.rte') == 'textile' ? 'selected="selected"' : '' ?>>Textile</option>
+				<option value="tinymce" <?php echo config_item('pages.rte') == 'tinymce' ? 'selected="selected"' : '' ?>>TinyMCE</option>
+			</select>
+		</div>
+		
+		<div>
 			<label>Searchable by default?</label>
 			<input type="checkbox" name="default_searchable" value="1" <?php echo config_item('pages.default_searchable') == 1 ?  'checked="checked"' : '' ?> />
 		</div>

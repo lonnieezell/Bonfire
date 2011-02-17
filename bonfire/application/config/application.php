@@ -200,7 +200,7 @@ $config['assets.js_closer'] = '});'. "\n";
 	
 	The choices are: 'html', 'markdown', 'textile', 'tinymce'
 */
-$config['pages.rte'] = '';
+$config['pages.rte'] = 'markdown';
 
 /*
 	These items set the default settings for new pages within the system.
