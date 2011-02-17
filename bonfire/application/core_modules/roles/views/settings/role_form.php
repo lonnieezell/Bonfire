@@ -50,5 +50,3 @@
 	</div>
 	<?php endif; ?>
 <?php echo form_close(); ?>
-
-<?php $this->load->view('settings/roles_js'); ?>
