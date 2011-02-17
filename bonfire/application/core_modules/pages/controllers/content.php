@@ -14,6 +14,9 @@ class Content extends Admin_Controller {
 		Assets::add_js($this->load->view('content/page_js', null, true), 'inline');
 		Assets::add_js('markitup/jquery.markitup');
 		Assets::add_js('jquery-ui-1.8.8.min');
+		Assets::add_js('markitup/sets/default/set');
+		Assets::add_css('markitup/skins/markitup/style.css');
+		Assets::add_css('markitup/sets/default/style.css');
 	}
 	
 	//--------------------------------------------------------------------
@@ -86,7 +89,7 @@ class Content extends Admin_Controller {
 		{
 			return false;
 		}
-		
+		print_r($_POST);
 		// Build our page content
 		$data = array(
 			'page_title'	=> $_POST['page_title'],
