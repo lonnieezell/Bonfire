@@ -17,9 +17,9 @@
 		<!-- Page Content -->
 		<div id="content-tab">
 			<!-- Title -->
-			<h2 class="page-title"><?php echo isset($page) ? $page->page_title : '' ?></h2>
+			<input type="text" name="page_title" class="big" value="<?php echo isset($page) ? $page->page_title : '' ?>" placeholder="Page Title..." />
 			
-			<textarea name="body" id="body"><?php echo isset($page) ? $page->body : ''; ?></textarea>			
+			<textarea name="body" id="body" rows="18" style="width: 96%" placeholder="Content..."><?php echo isset($page) ? $page->body : ''; ?></textarea>			
 		</div>
 		
 		
