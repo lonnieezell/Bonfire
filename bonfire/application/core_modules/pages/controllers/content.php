@@ -12,8 +12,8 @@ class Content extends Admin_Controller {
 		$this->load->helper('text');
 		
 		Assets::add_js($this->load->view('content/page_js', null, true), 'inline');
-		Assets::add_js('markitup/jquery.markitup.js');
-		Assets::add_js('jquery-ui-1.8.8.min.js');
+		Assets::add_js('markitup/jquery.markitup');
+		Assets::add_js('jquery-ui-1.8.8.min');
 	}
 	
 	//--------------------------------------------------------------------
@@ -40,7 +40,6 @@ class Content extends Admin_Controller {
 			}
 		}
 	
-		Template::set('toolbar_title', 'Create New Page');
 		Template::set_view('content/page_form');
 		Template::render();
 	}
@@ -71,7 +70,6 @@ class Content extends Admin_Controller {
 	
 		Template::set('page', $this->page_model->find($id));
 	
-		Template::set('toolbar_title', 'Create New Page');
 		Template::set_view('content/page_form');
 		Template::render();
 	}
