@@ -349,11 +349,13 @@ class Assets {
 		
 		Parameters:
 			$new_js		- either a string or an array containing the names of files to link to.
+			$list		- if true, will echo out a list of scriptnames, enclosed in quotes and 
+							comma separated. Convenient for using with third-party js loaders.
 
 		Return: 
 			void
 	*/
-	public static function external_js($new_js=null) 
+	public static function external_js($new_js=null, $list=false) 
 	{
 		$return = '';
 		$scripts = array();
@@ -400,10 +402,17 @@ class Assets {
 					self::$asset_url . self::$asset_base . self::$asset_folders['js'] .'/'. $script
 			);
 			
-			$return .= '<script'. self::attributes($attr) ." ></script>\n";
+			if ($list)
+			{
+				$return .= '"'. $attr['src'] .'", ';
+			}
+			else 
+			{
+				$return .= '<script'. self::attributes($attr) ." ></script>\n";
+			}
 		}
 		
-		echo $return;
+		echo trim($return, ', ');
 	}
 	
 	//--------------------------------------------------------------------
