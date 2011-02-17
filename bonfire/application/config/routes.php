@@ -73,5 +73,7 @@ $route['admin/developer/(:any)/(:any)/(:any)']		= "$1/developer/$2/$3";
 $route['admin/developer/(:any)/(:any)'] = "$1/developer/$2";
 $route['admin/developer/(:any)']		= "$1/developer/index";
 
+$route['admin']	= 'admin/home';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

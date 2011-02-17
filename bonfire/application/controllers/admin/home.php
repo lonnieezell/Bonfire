@@ -7,17 +7,13 @@ class Home extends Admin_Controller {
 		parent::__construct();
 		
 		$this->auth->restrict();
-	}
-	
-	//--------------------------------------------------------------------
-	
+	}	
 
 	//--------------------------------------------------------------------
 	
 	public function index() 
 	{
-		Template::set_view('admin/home/index');
-		Template::render();
+		redirect('admin/content');
 	}
 	
 	//--------------------------------------------------------------------
