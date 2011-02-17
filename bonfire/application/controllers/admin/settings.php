@@ -33,7 +33,7 @@ class Settings extends Admin_Controller {
 		
 		// Read our current settings
 		Template::set('settings', read_config('application'));
-	
+
 		Template::set_view('admin/settings/index');
 		Template::render();
 	}
@@ -64,7 +64,12 @@ class Settings extends Admin_Controller {
 			'auth.login_type'		=> $_POST['login_type'],
 			'auth.use_usernames'	=> isset($_POST['use_usernames']) ? 1 : 0,
 			'auth.allow_remember'	=> isset($_POST['allow_remember']) ? 1 : 0,
-			'auth.remember_length'	=> (int)$_POST['remember_length']
+			'auth.remember_length'	=> (int)$_POST['remember_length'],
+			
+			'pages.default_rich_text'	=> isset($_POST['default_rich_text']) ? 1 : 0,
+			'pages.default_searchable'	=> isset($_POST['default_searchable']) ? 1 : 0,
+			'pages.default_cacheable'	=> isset($_POST['default_cacheable']) ? 1 : 0,
+			'pages.track_hits'			=> isset($_POST['track_hits']) ? 1 : 0,
 		);
 		
 		return write_config('application', $data);
