@@ -18,6 +18,8 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo Template::theme_url('screen.css') ?>" />
 	<link rel="stylesheet" type="text/css" href="<?php echo Template::theme_url('ui.css') ?>" />
 	
+	<?php Assets::css(); ?>
+	
 	<script src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
 </head>
 <body>
