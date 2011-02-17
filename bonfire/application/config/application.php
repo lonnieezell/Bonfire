@@ -207,5 +207,5 @@ $config['pages.rte'] = '';
 */
 $config['pages.default_cacheable'] = 1;	// Are pages cacheable by default? 
 $config['pages.default_searchable'] = 1;	// Are pages searchable by default?
-$config['pages.default_rich_text'] = 0;	// Is the RTE enabled by default?
+$config['pages.default_rich_text'] = 1;	// Is the RTE enabled by default?
 $config['pages.track_hits'] = 0;	// Should page hits be tracked in the system?
