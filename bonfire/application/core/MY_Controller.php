@@ -26,7 +26,8 @@ class Base_Controller extends MX_Controller {
 		parent::__construct();
 		
 		$this->load->model('users/User_model', 'user_model', true);
-		//$this->session->set_userdata('previous_page', $this->uri->uri_string()); 	
+		
+		$this->lang->load('application');
 	}
 	
 	//--------------------------------------------------------------------
