@@ -65,6 +65,31 @@
 	
 	</fieldset>
 	
+	<!-- Pages -->
+	<fieldset>
+		<legend>Pages</legend>
+		
+		<div>
+			<label>Enable RTE for pages?</label>
+			<input type="checkbox" name="default_rich_text" value="1" <?php echo config_item('pages.default_rich_text') == 1 ?  'checked="checked"' : '' ?> />
+		</div>
+		
+		<div>
+			<label>Searchable by default?</label>
+			<input type="checkbox" name="default_searchable" value="1" <?php echo config_item('pages.default_searchable') == 1 ?  'checked="checked"' : '' ?> />
+		</div>
+		
+		<div>
+			<label>Cacheable by default?</label>
+			<input type="checkbox" name="default_cacheable" value="1" <?php echo config_item('pages.default_cacheable') == '1' ?  'checked="checked"' : '' ?> />
+		</div>
+		
+		<div>
+			<label>Track Page Hits?</label>
+			<input type="checkbox" name="track_hits" value="1" <?php echo config_item('pages.track_hits') == '1' ?  'checked="checked"' : '' ?> />
+		</div>
+	</fieldset>
+	
 	<div class="submits">
 		<input type="submit" name="submit" value="Save Settings" />
 	</div>
