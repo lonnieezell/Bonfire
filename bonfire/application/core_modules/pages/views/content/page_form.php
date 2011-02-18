@@ -19,7 +19,7 @@
 			<!-- Title -->
 			<input type="text" name="page_title" class="big" value="<?php echo isset($page) ? $page->page_title : '' ?>" placeholder="Page Title..." />
 			
-			<textarea name="body" id="body" rows="18" style="width: 96%" placeholder="Content..."><?php echo isset($page) ? $page->body : ''; ?></textarea>			
+			<textarea name="body" id="page_body" rows="18" style="width: 96%" placeholder="Content..."><?php echo isset($page) ? $page->body : ''; ?></textarea>			
 		</div>
 		
 		
@@ -63,7 +63,4 @@
 <script>
 	// Tabs
 	$('.tabs').tabs();
-	
-	// Our editor
-	$('#body').markItUp();
 </script>
