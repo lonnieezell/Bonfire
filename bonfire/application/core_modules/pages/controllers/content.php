@@ -12,11 +12,9 @@ class Content extends Admin_Controller {
 		$this->load->helper('text');
 		
 		Assets::add_js($this->load->view('content/page_js', null, true), 'inline');
-		Assets::add_js('markitup/jquery.markitup');
 		Assets::add_js('jquery-ui-1.8.8.min');
-		Assets::add_js('markitup/sets/default/set');
-		Assets::add_css('markitup/skins/markitup/style.css');
-		Assets::add_css('markitup/sets/default/style.css');
+		
+		$this->setup_rte();
 	}
 	
 	//--------------------------------------------------------------------
@@ -42,7 +40,8 @@ class Content extends Admin_Controller {
 				redirect('admin/content/pages');
 			}
 		}
-	
+			
+		Template::set('padding_style', '');
 		Template::set_view('content/page_form');
 		Template::render();
 	}
@@ -53,6 +52,7 @@ class Content extends Admin_Controller {
 	{
 		Template::set('page', $this->page_model->find($page_id));
 		
+		Template::set('padding_style', '');
 		Template::set_view('content/page_form');
 		Template::render();
 	}
@@ -73,6 +73,7 @@ class Content extends Admin_Controller {
 	
 		Template::set('page', $this->page_model->find($id));
 	
+		Template::set('padding_style', '');
 		Template::set_view('content/page_form');
 		Template::render();
 	}
@@ -124,6 +125,13 @@ class Content extends Admin_Controller {
 		}
 		
 		return $result;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	private function setup_rte() 
+	{
+		//Assets::add_js('tiny_mce/tiny_mce');
 	}
 	
 	//--------------------------------------------------------------------

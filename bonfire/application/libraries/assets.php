@@ -181,15 +181,24 @@ class Assets {
 		// Loop through the styles, spitting out links for each one.
 		foreach ($styles as $s)
 		{
-			if (substr($s['file'], -4) != '.css') 
-			{ 
-				$s['file'] .= '.css'; 
+			if (is_array($s))
+			{
+				if (substr($s['file'], -4) != '.css') 
+				{ 
+					$s['file'] .= '.css'; 
+				}
+			} else
+			{
+				if (substr($s, -4) != '.css') 
+				{ 
+					$s .= '.css'; 
+				}
 			}
 		
 			$attr = array(
 				'rel'	=> 'stylesheet',
 				'type'	=> 'text/css',
-				'href'	=> $s['file'],
+				'href'	=> is_array($s) ? $s['file'] : $s,
 				'media'	=> !empty($s['media']) ? $s['media'] : $media
 			);
 			
