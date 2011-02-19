@@ -14,6 +14,9 @@ class Content extends Admin_Controller {
 		Assets::add_js($this->load->view('content/page_js', null, true), 'inline');
 		Assets::add_js('jquery-ui-1.8.8.min');
 		Assets::add_js('markitup/jquery.markitup');
+		Assets::add_js('markitup/sets/textile/set');
+		Assets::add_css('markitup/skins/simple/style');
+		Assets::add_css('markitup/sets/textile/style');
 		
 		$this->setup_rte();
 	}
