@@ -13,10 +13,6 @@ class Content extends Admin_Controller {
 		
 		Assets::add_js($this->load->view('content/page_js', null, true), 'inline');
 		Assets::add_js('jquery-ui-1.8.8.min');
-		Assets::add_js('markitup/jquery.markitup');
-		Assets::add_js('markitup/sets/textile/set');
-		Assets::add_css('markitup/skins/simple/style');
-		Assets::add_css('markitup/sets/textile/style');
 		
 		$this->setup_rte();
 	}
@@ -135,7 +131,30 @@ class Content extends Admin_Controller {
 	
 	private function setup_rte() 
 	{
-		//Assets::add_js('tiny_mce/tiny_mce');
+		if ($this->config->item('pages.rte') != 'tinymce')
+		{
+			Assets::add_js('markitup/jquery.markitup');
+			Assets::add_css('markitup/skins/simple/style');
+		}
+		
+		switch ($this->config->item('pages.rte'))
+		{
+			case 'html':
+				Assets::add_js('markitup/sets/html/set');
+				Assets::add_css('markitup/sets/html/style');
+				break;
+			case 'markdown':
+				Assets::add_js('markitup/sets/markdown/set');
+				Assets::add_css('markitup/sets/markdown/style');
+				break;
+			case 'textile':
+				Assets::add_js('markitup/sets/textile/set');
+				Assets::add_css('markitup/sets/textile/style');
+				break;
+			case 'tinymce':
+				break;
+		}
+		
 	}
 	
 	//--------------------------------------------------------------------
