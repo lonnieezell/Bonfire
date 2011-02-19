@@ -716,13 +716,28 @@ class Assets {
 				*/
 				if (!$found)
 				{
+					// Assets/type folder
 					if (is_file($site_path . self::$asset_base .'/'. $type .'/'. $file .".{$type}"))
 					{
 						$file_path = base_url() . self::$asset_base .'/'. $type .'/'. $file .".{$type}";
 						$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
 
 						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
-					}
+					} 
+					
+					/*
+						ASSETS ROOT
+						
+						Finally, one last check to see if it is simply under assets/. This is useful for
+						keeping collections of scripts (say, TinyMCE or MarkItUp together for easy upgrade.
+					*/
+					else if (is_file($site_path . self::$asset_base .'/'. $file .".{$type}"))
+					{
+						$file_path = base_url() . self::$asset_base .'/'. $file .".{$type}";
+						$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
+
+						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
+					} 
 				}
 			}			
 		}
