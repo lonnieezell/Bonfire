@@ -63,4 +63,6 @@
 <script>
 	// Tabs
 	$('.tabs').tabs();
+	
+	$('#page_body').markItUp(mySettings);
 </script>
