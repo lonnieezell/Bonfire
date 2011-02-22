@@ -90,7 +90,7 @@ class Content extends Admin_Controller {
 		{
 			return false;
 		}
-		print_r($_POST);
+
 		// Build our page content
 		$data = array(
 			'page_title'	=> $_POST['page_title'],
@@ -103,6 +103,7 @@ class Content extends Admin_Controller {
 			'body'			=> !empty($_POST['body']) ? htmlentities($_POST['body']) : '',
 			'summary'		=> isset($_POST['summary']) ? $_POST['summary'] : '',
 			'rich_text'		=> isset($_POST['rich_text']) ? 1 : 0,
+			'rte_type'		=> isset($_POST['rte_type']) ? $_POST['rte_type'] : null,
 			'searchable'	=> isset($_POST['searchable']) ? 1 : 0,
 			'cacheable'		=> isset($_POST['cacheable']) ? 1 : 0,
 			'is_folder'		=> isset($_POST['is_folder']) ? 1 : 0,
