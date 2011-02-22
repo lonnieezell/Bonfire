@@ -19,7 +19,13 @@
 			<!-- Title -->
 			<input type="text" name="page_title" class="big" value="<?php echo isset($page) ? $page->page_title : '' ?>" placeholder="Page Title..." />
 			
-			<textarea name="body" id="page_body" rows="18" style="width: 96%" placeholder="Content..."><?php echo isset($page) ? $page->body : ''; ?></textarea>			
+			<textarea name="body" id="page_body" rows="18" style="width: 96%" placeholder="Content..."><?php echo isset($page) ? $page->body : ''; ?></textarea>
+			
+			<select name="rte_type">
+				<option value="html" <?php echo config_item('pages.rte') == 'html' ? 'selected="selected"' : ''; ?>>HTML</option>
+				<option value="html" <?php echo config_item('pages.rte') == 'markdown' ? 'selected="selected"' : ''; ?>>Markdown</option>
+				<option value="html" <?php echo config_item('pages.rte') == 'textile' ? 'selected="selected"' : ''; ?>>Textile</option>
+			</select>			
 		</div>
 		
 		
@@ -51,7 +57,22 @@
 				<label>Deleted?</label>
 				<input type="checkbox" name="deleted" value="1" <?php echo isset($page) && $page->deleted == '1' ? 'checked="checked"' : set_checkbox('deleted', '1'); ?> />
 			</div>
+		
+		
+			<br/>
+			<?php if (isset($page)) : ?>
+			<div class="box delete rounded">
+				<a class="button" id="delete-me" href="<?php echo site_url('admin/content/pages/delete/'. $page->page_id); ?>" onclick="return confirm('Are you sure you want to delete this page?')">Delete this Page</a>
+				
+				<h3>Delete this Page</h3>
+				
+				<p>Deleting this page is a permanent action and cannot be undone.</p>
+			</div>
+			<?php endif; ?>
+		
+		
 		</div>
+		
 	</div>
 	
 	<div class="submits">
