@@ -6,6 +6,9 @@
 
 <?php echo form_open($this->uri->uri_string(), 'class="ajax-form"'); ?>
 
+	<input type="hidden" name="rte_type" value="<?php echo isset($page) ? $page->rte_type : '' ?>" />
+	<input type="hidden" name="revision" value="<?php echo isset($page) ? $page->revision : '' ?>" />
+
 	<!-- Tab Area -->
 	<div class="tabs">
 		
