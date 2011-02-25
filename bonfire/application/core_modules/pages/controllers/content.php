@@ -95,7 +95,7 @@ class Content extends Admin_Controller {
 		$data = array(
 			'page_title'	=> $_POST['page_title'],
 			'long_title'	=> isset($_POST['long_title']) ? $_POST['long_title'] : '',
-			'alias'			=> isset($_POST['page_alias']) ? $_POST['alias'] : '',
+			'alias'			=> isset($_POST['alias']) ? $_POST['alias'] : '',
 			'description'	=> isset($_POST['description']) ? $_POST['description'] : '',
 			'published'		=> isset($_POST['published']) ? 1 : 0,
 			'pub_date'		=> isset($_POST['pub_date']) ? $_POST['pub_date'] : '0000-00-00 00:00:00',

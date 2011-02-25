@@ -20,10 +20,22 @@
 		<!-- Page Content -->
 		<div id="content-tab">
 			<!-- Title -->
-			<input type="text" name="page_title" class="big" value="<?php echo isset($page) ? $page->page_title : '' ?>" placeholder="Page Title..." />
+			<input type="text" name="page_title" id="page_title" class="big" value="<?php echo isset($page) ? $page->page_title : '' ?>" placeholder="Page Title..." />
 			
 			<div style="padding: 1em 0 0.25em 0">
-				<p class="small"><b>Alias:</b> <?php echo site_url(); ?><span><?php echo isset($page) ? $page->alias : '' ?></span></p>
+				<p class="small"><b>Alias:</b> <?php echo site_url(); ?><span id="alias-span" style="letter-spacing: 1px"><?php echo isset($page) ? $page->alias : '' ?></span> 
+					
+					<span id="alias-edit-span">
+						<a href="#" id="alias-edit" class="button small">Change</a>
+					</span>
+					
+					<span id="alias-form" style="display: none">
+						<input type="text" name="alias" id="alias-input" style="width: 25%" value="<?php echo isset($page) ? $page->alias : '' ?>" <?php echo isset($page) && !empty($page->alias) ? 'data-alias="true" data-orig="'. $page->alias .'"' : ''; ?>  />
+						
+						<a href="#" id="alias-save" class="button small">OK</a> 
+						<a href="#" id="alias-cancel">Cancel</a>
+					</span>
+				</p>
 			</div>
 			
 			<textarea name="body" id="page_body" rows="18" style="width: 96%" placeholder="Content..."><?php echo isset($page) ? $page->body : ''; ?></textarea>
@@ -92,5 +104,56 @@
 	// Tabs
 	$('.tabs').tabs();
 	
+	// Enable the editor
 	$('#page_body').markItUp(mySettings);
+	
+	//--------------------------------------------------------------------
+	// Alias functionality
+	//--------------------------------------------------------------------
+	$('#page_title').keyup(function() {
+		// Has the user set a specific alias? If so, we don't touch it.
+		if ($('#alias-input').attr('data-alias') != 'true' || $('#alias-input').attr('data-orig') != undefined)
+		{
+			var new_alias = $('#page_title').val().toLowerCase().replace(/[^a-zA-Z0-9_]/g,'-');
+			
+			$('#alias-span').text(new_alias);
+			$('#alias-input').val(new_alias);
+		}
+	});
+	
+	// Alias Edit
+	$('#alias-edit').click(function(e) {
+		e.preventDefault();
+		
+		$('#alias-form').css('display', 'inline');
+		$('#alias-edit-span').css('display', 'none');
+	});
+	
+	// Alias Cancel
+	$('#alias-cancel').click(function(e) {
+		e.preventDefault();
+		
+		// Reset values
+		$('#alias-input').val($('#alias-input').attr('data-orig'));
+		
+		$('#alias-form').css('display', 'none');
+		$('#alias-edit-span').css('display', 'inline');
+	});
+	
+	// Alias Edit OK
+	$('#alias-save').click(function(e) {
+		e.preventDefault();
+		
+		var new_val = $('#alias-input').val();
+		
+		// Change our default store..
+		$('#alias-input').attr('data-orig', new_val);
+		
+		// Update display
+		$('#alias-span').text(new_val);
+		
+		// Show the proper stuff
+		$('#alias-form').css('display', 'none');
+		$('#alias-edit-span').css('display', 'inline');
+	});
 </script>
