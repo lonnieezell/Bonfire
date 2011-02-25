@@ -162,10 +162,15 @@ a.button:hover {
 }
 .button.small,
 input[type=submit] {
-	padding: 0 1em;
+	padding: 0.3em 1em 0.2em 1em;
 	font-size: 12px;
+	font-weight: normal;
 	line-height: 26px;
 	height: 27px;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	top: -1px;
 }
 .button.small:hover,
 .button.good:hover,
