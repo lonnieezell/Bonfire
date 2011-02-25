@@ -1,5 +1,5 @@
 $.subscribe('list-view/list-item/click', function(page_id) {
-	$('#content').load('<?php echo site_url('admin/content/pages/view/') ?>/'+ page_id);
+	$('#content').load('<?php echo site_url('admin/content/pages/edit/') ?>/'+ page_id);
 	
 	
 });

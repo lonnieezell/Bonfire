@@ -67,7 +67,7 @@ class Content extends Admin_Controller {
 			if ($this->save_page($id, 'update'))
 			{
 				Template::set_message('Successfully saved Page.', 'success');
-				redirect('admin/content/pages');
+				//redirect('admin/content/pages');
 			}
 		}
 	
@@ -108,6 +108,7 @@ class Content extends Admin_Controller {
 			'cacheable'		=> isset($_POST['cacheable']) ? 1 : 0,
 			'is_folder'		=> isset($_POST['is_folder']) ? 1 : 0,
 			'deleted'		=> isset($_POST['deleted']) ? 1 : 0,
+			'revision'		=> $_POST['revision'],
 		);
 		
 		if ($type=='insert')
