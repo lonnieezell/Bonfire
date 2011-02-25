@@ -24,6 +24,8 @@ class Page_model extends MY_Model {
 			return false;
 		}
 		
+		$return = false;
+		
 		// Grab our existing page so we can save a version of it
 		$old_page = $this->find($id);
 		
@@ -31,15 +33,12 @@ class Page_model extends MY_Model {
 		$data['revision'] += 1;
 		
 		// Save the new page data
-		if (parent::update($id, $data))
-		{
-			// Save the version
-			$this->save_version($id, $old_page);
-			
-			return true;
-		}
+		$return = parent::update($id, $data);
 		
-		return false;
+		// Save the version
+		$this->save_version($id, $old_page);
+					
+		return $return;
 	}
 	
 	//--------------------------------------------------------------------
@@ -65,14 +64,17 @@ class Page_model extends MY_Model {
 			true/false
 	*/
 	public function save_version($id=0, $data=null) 
-	{
+	{	
+		// Make sure data is an array
+		$data = (array)$data;
+	
 		// Sanity check
-		if (empty($id) || !is_numeric($id) || !is_array($data))
+		if (empty($id) || !is_numeric($id))
 		{
 			$this->error = 'Not enough data.';
 			return false;
 		}
-		
+
 		// Data check
 		if (!isset($data['body']) || !isset($data['rte_type']) || !isset($data['revision']))
 		{
