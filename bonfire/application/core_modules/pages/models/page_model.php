@@ -85,7 +85,7 @@ class Page_model extends MY_Model {
 		// Save it! 
 		$new_data = array(
 			'page_id'		=> $id,
-			'revision'		=> $data['revision'] -1,
+			'revision'		=> $data['revision'],
 			'body'			=> $data['body'],
 			'rte_type'		=> $data['rte_type'],
 			'created_on'	=> date('Y-m-d H:i:s', time()),
