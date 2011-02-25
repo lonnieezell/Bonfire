@@ -37,7 +37,7 @@ class Content extends Admin_Controller {
 			if ($this->save_page())
 			{
 				Template::set_message('Successfully saved Page.', 'success');
-				redirect('admin/content/pages');
+				Template::redirect('admin/content/pages');
 			}
 		}
 			
@@ -67,7 +67,7 @@ class Content extends Admin_Controller {
 			if ($this->save_page($id, 'update'))
 			{
 				Template::set_message('Successfully saved Page.', 'success');
-				//redirect('admin/content/pages');
+				Template::redirect('admin/content/pages');
 			}
 		}
 	
@@ -112,7 +112,7 @@ class Content extends Admin_Controller {
 		);
 		
 		if ($type=='insert')
-		{
+		{	
 			$data['created_by'] = $this->auth->user_id();
 		
 			$id = $this->page_model->insert($data);
