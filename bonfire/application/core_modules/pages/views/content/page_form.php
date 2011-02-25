@@ -22,12 +22,16 @@
 			<!-- Title -->
 			<input type="text" name="page_title" class="big" value="<?php echo isset($page) ? $page->page_title : '' ?>" placeholder="Page Title..." />
 			
+			<div style="padding: 1em 0 0.25em 0">
+				<p class="small"><b>Alias:</b> <?php echo site_url(); ?><span><?php echo isset($page) ? $page->alias : '' ?></span></p>
+			</div>
+			
 			<textarea name="body" id="page_body" rows="18" style="width: 96%" placeholder="Content..."><?php echo isset($page) ? $page->body : ''; ?></textarea>
 			
 			<select name="rte_type">
-				<option value="html" <?php echo config_item('pages.rte') == 'html' ? 'selected="selected"' : ''; ?>>HTML</option>
-				<option value="html" <?php echo config_item('pages.rte') == 'markdown' ? 'selected="selected"' : ''; ?>>Markdown</option>
-				<option value="html" <?php echo config_item('pages.rte') == 'textile' ? 'selected="selected"' : ''; ?>>Textile</option>
+				<option value="html" <?php echo (isset($page) && $page->rte_type == 'html') ? 'selected="selected"' : ''; ?>>HTML</option>
+				<option value="markdown" <?php echo (isset($page) && $page->rte_type == 'markdown') ? 'selected="selected"' : ''; ?>>Markdown</option>
+				<option value="textile" <?php echo (isset($page) && $page->rte_type == 'textile') ? 'selected="selected"' : ''; ?>>Textile</option>
 			</select>			
 		</div>
 		
