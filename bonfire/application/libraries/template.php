@@ -607,17 +607,19 @@ class Template {
 		If data exists in 'message' session flashdata, that will 
 		override any other messages. The renders the message based
 		on the template provided in the config file ('OCU_message_template').
+	
+		Parameters:
+			$message	- a string to be the message. (Optional) If included, will override
+							any other messages in the system.
+			$type		- the class to attached to the div. (i.e. 'information', 'attention', 'error', 'success')
 		
 		Return:
 			A string with the results of inserting the message into the message template.
 	 */
-	public static function message() 
-	{
-		$message = '';		// The message body.
-		$type	 = '';		// The message type (used for class)
-	
+	public static function message($message='', $type='information') 
+	{	
 		// Does session data exist? 
-		if (class_exists('CI_Session'))
+		if (empty($message) && class_exists('CI_Session'))
 		{
 			$message = self::$ci->session->flashdata('message');
 			
