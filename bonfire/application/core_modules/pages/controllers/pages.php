@@ -40,6 +40,8 @@ class Pages extends Front_Controller {
 			return false;
 		}
 		
+		$message = '';
+		
 		// Find the page in the database that matches the alias
 		$page = $this->page_model->find_by('alias', $alias);
 		
@@ -55,12 +57,31 @@ class Pages extends Front_Controller {
 		{ 
 			if (has_permission('Bonfire.Pages.Manage'))
 			{
-				$page->body = Template::message('This page is <b>not published</b>.') . $page->body;
+				$message = Template::message('This page is <b>not published</b>.', 'attention');
 			} else
 			{
 				show_404();
 			}
 		}
+		
+		
+		switch ($page->rte_type)
+		{
+			case 'html':
+				$this->load->helper('typography');
+				$page->body = auto_typography($page->body);
+				break;
+			case 'markdown':
+				$this->load->helper('markdown');
+				$page->body = Markdown($page->body);
+				break;
+			case 'textile':
+				$this->load->library('textile');
+				$page->body = $this->textile->TextileThis($page->body);
+		}
+		
+		// Add our admin message, if any
+		$page->body = $message . $page->body;
 		
 		return $page;
 	}
