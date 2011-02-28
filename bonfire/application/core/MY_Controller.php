@@ -28,6 +28,12 @@ class Base_Controller extends MX_Controller {
 		$this->load->model('users/User_model', 'user_model', true);
 		
 		$this->lang->load('application');
+		
+		// Dev Bar?
+		if (ENVIRONMENT == 'dev')
+		{
+			$this->output->enable_profiler(true);
+		}
 	}
 	
 	//--------------------------------------------------------------------

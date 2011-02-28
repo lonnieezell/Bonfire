@@ -153,10 +153,13 @@ class Assets {
 		// If no style(s) has been passed in, use all that have been added.
 		if (empty($style))
 		{
-			// If not styles are in the system, base it on the media type.
+			// If no styles are in the system, base it on the media type.
 			if (!count(self::$styles))
 			{
-				$styles[] = $media;
+				$styles[] = array(
+								'file'	=> $media,
+								'media'	=> $media
+							);
 			} else
 			{
 				$styles = self::$styles;

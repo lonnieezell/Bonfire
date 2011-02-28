@@ -1,0 +1,180 @@
+/* RESET */
+html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, abbr, address, cite, code, del, dfn, em, img, ins, kbd, q, samp, small, strong, sub, sup, var, b, i, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, time, mark, audio, video 
+{
+  margin:0;
+  padding:0;
+  border:0;
+  outline:0;
+  vertical-align:baseline;
+  background:transparent;
+}                 
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display:block; }
+
+/* !BASE STYLES */
+
+html, body {
+	width: 100%;
+	height: 100%;
+	max-height: 100%;
+	font-size: 100%;
+	overflow: hidden;
+}
+body {
+	font-size: 14px;
+	line-height: 1.5;
+	background: #f1f1f1;
+	font-family: Georgia, "Bitstream Charter", serif;
+	color: #202020;
+}
+h1, h2, h3, h4, h5, h6 {
+	font-family: "Helvetica Neue",Arial,Helvetica,"Nimbus Sans L",sans-serif;
+	font-weight: bolder;
+	color: #111;
+	line-height: 2.5em;
+}
+h1 { font-weight: normal; }
+a:link, a:visited {
+	text-decoration: none;
+	color: #0134C5;
+}
+a:hover {
+	text-decoration: underline;
+}
+
+ol, ul {
+	margin: 1em;
+	list-style-position: inside;
+}
+p { margin: 0.5em 0; }
+b, strong { color: #222; }
+.constrained { max-width: 680px !important; }
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+.clearfix {
+	display: inline-block;
+}
+html[xmlns] .clearfix {
+	display: block;
+}
+* html .clearfix {
+	height: 1%;
+}
+.rounded {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.padded {
+	padding: 1em 2em;
+}
+
+/* !MISC EFFECTS */
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+
+.align-left { float: left; margin: 0 1em 1.5em 0; }
+.align-right { float: right; margin: 0 0 1.5em 1em; }
+
+.big-text { font-size: 2.4em; }
+.small { font-size: 85%; color: #777; }
+
+/* GRIDS */
+.row:after,.last-column:after{clear:both;display:block;visibility:hidden;overflow:hidden;height:0 !important;line-height:0;font-size:xx-large;content:" x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ";}
+.row{*zoom:1;}
+.column{float:left;}
+.size1of1{float:none;}
+.size1of2{width:50%;}
+.size1of3{width:33.33333%;}
+.size2of3{width:66.66666%;}
+.size1of4{width:25%;}
+.size3of4{width:75%;}
+.size1of5{width:20%;}
+.size2of5{width:40%;}
+.size3of5{width:60%;}
+.size4of5{width:80%;}
+.last-column{display:table-cell;float:none;width:auto;*display:block;*zoom:1;_position:relative;_left:-3px;_margin-right:-3px;}
+
+/* !NOTIFICATIONS */
+.notification {
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	margin:  10px 0 20px 0;
+	padding: 5px 20px;
+}
+#message {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	font-size: 0.75em;
+	z-index: 100;
+	text-align: center;
+}
+#message .notification {
+	display: block;
+	margin: 0 auto;
+	width: auto !important;
+}
+.notification p, .notification ul {
+	margin: 0;
+	padding: 0;
+	line-height: 1.5;
+	text-indent: none;
+}
+.attention {
+    background: #fffbcc;
+    border-color: #e6db55;
+    color: #666452;
+}
+.information {
+	background: #dbe3f0;
+	border-color: #a2b4ee;
+	color: #383b46;
+}
+.success {
+	background: #d5f0ce;
+	border-color: #9adf8f;
+	color: #556652;
+}
+.error {
+	background-color: #f0cece;
+	border-color:  #df8f8f;
+	color:  #533232;
+}
+p.error {
+	color: #ff3f3f;
+	background-color: transparent;
+	font-size: 75%;
+}
+.notification h1 {
+	margin: 0;
+}
+.notification.small {
+	margin-top: 7px;
+	padding: 0 20px;
+}
+.notification.small p {
+	margin: 0 !important;
+	font-size: 85%;
+	line-height: 2.5;
+}
+
+/* BASIC STRUCTURE */
+.body {
+	width: 940px;
+	background: #fff;
+	margin: 20px auto 0 auto;
+	padding: 0 20px;
+}
+.foot {
+	border-top: 3px solid #222;
+	padding: 10px 0;
+	margin-top: 20px;
+}
