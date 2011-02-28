@@ -39,7 +39,7 @@
 */
 
 $route['default_controller'] = "home";
-$route['404_override'] = '';
+$route['404_override'] = 'pages';
 
 // Authorization
 $route['login']				= 'users/login';
