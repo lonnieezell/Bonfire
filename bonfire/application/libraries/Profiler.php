@@ -64,6 +64,12 @@ class CI_Profiler {
 				$this->_compile_{$section} = TRUE;
 			}
 		}
+		
+		// Make sure the Console is loaded.
+		if (!class_exists('Console'))
+		{
+			$this->CI->load->library('Console');
+		}
 
 		$this->set_sections($config);
 	}
