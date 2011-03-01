@@ -2,7 +2,7 @@
 
 $config['site.title'] = 'My Great Bonfire App';
 $config['site.system_email'] = 'lonnie@dotdigitalstudios.com';
-$config['site.status'] = 1;
+$config['site.status'] = 0;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
 
 //--------------------------------------------------------------------
@@ -208,4 +208,5 @@ $config['pages.rte'] = 'html';
 $config['pages.default_cacheable'] = 1;	// Are pages cacheable by default? 
 $config['pages.default_searchable'] = 1;	// Are pages searchable by default?
 $config['pages.default_rich_text'] = 1;	// Is the RTE enabled by default?
-$config['pages.track_hits'] = 1;	// Should page hits be tracked in the system?
+$config['pages.track_hits'] = 1;		// Should page hits be tracked in the system?
+$config['pages.home_page_alias'] = 'page-12';	// The home page

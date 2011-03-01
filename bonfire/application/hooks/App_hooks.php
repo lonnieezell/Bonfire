@@ -29,7 +29,17 @@ class App_hooks {
 	
 	//--------------------------------------------------------------------
 	
-
+	public function check_site_status() 
+	{
+		if ($this->ci->config->item('site.status') == 1)
+		{
+			include (APPPATH .'errors/offline'. EXT);
+			die();
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
 }
 
 // End App_hooks class

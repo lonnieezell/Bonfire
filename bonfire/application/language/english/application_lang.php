@@ -25,6 +25,7 @@ $lang['bf_week']				= 'Week';
 $lang['bf_weeks']				= 'Weeks';
 $lang['bf_days']				= 'Days';
 
+$lang['bf_home_page']			= 'Home Page';
 $lang['bf_pages']				= 'Pages';
 $lang['bf_enable_rte']			= 'Enable RTE for pages?';
 $lang['bf_rte_type']			= 'RTE Type';
