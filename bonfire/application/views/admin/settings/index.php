@@ -70,6 +70,20 @@
 		<legend><?php echo lang('bf_pages') ?></legend>
 		
 		<div>
+			<label><?php echo lang('bf_home_page') ?></label>
+			<select name="home_page_alias">
+			<?php if (isset($pages)) : ?>
+				<option value=""></option>
+				<?php foreach ($pages as $page) : ?>
+					<option value="<?php echo $page->alias ?>" <?php echo $page->alias == config_item('pages.home_page_alias') ? 'selected="selected"' : '' ?>> <?php echo $page->page_title ?></option>
+				<?php endforeach; ?>
+			<?php endif; ?>
+			</select>
+		</div>
+	
+		<br/>
+		
+		<div>
 			<label><?php echo lang('bf_enable_rte') ?></label>
 			<input type="checkbox" name="default_rich_text" value="1" <?php echo config_item('pages.default_rich_text') == 1 ?  'checked="checked"' : '' ?> />
 		</div>

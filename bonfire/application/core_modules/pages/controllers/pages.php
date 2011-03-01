@@ -31,6 +31,17 @@ class Pages extends Front_Controller {
 		global $OUT;
 		$output = null;
 		$alias = $this->uri->uri_string();
+		
+		// Are we displaying the home page? 
+		if (empty($alias))
+		{
+			$alias = config_item('pages.home_page_alias');
+			
+			if (empty($alias))
+			{
+				show_404();
+			}
+		}
 	
 		// Try to get it from the cache
 		$page = $this->cache->get('pages_'. $alias);

@@ -12,6 +12,29 @@ class Page_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	public function find_all($show_unpublished=false, $show_deleted=false) 
+	{
+		if ($show_unpublished === false)
+		{
+			$this->db->where('published', 1);
+		}
+	
+		if ($show_deleted === true)
+		{
+			$this->db->where('deleted', 1);
+		} 
+		else 
+		{
+			$this->db->where('deleted', 0);
+		}
+		
+		
+		return parent::find_all();
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
 	/*
 		Updates an existing page and saves a version of the old data.	
 	*/
