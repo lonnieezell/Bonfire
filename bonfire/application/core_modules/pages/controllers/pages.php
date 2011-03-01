@@ -119,7 +119,7 @@ class Pages extends Front_Controller {
 		// If the user can manage pages, show the page, whether it's 
 		// published or note.
 		$today = date('Y-m-d H:i:s', time());
-		if ($page->published == 0 || $page->pub_date > $today || $page->unpub_date < $today)
+		if ($page->published == 0 || ($page->published == 1 && ($page->pub_date > $today || ($page->unpub_date != '0000-00-00 00:00:00' && $page->unpub_date < $today))))
 		{ 
 			if (has_permission('Bonfire.Pages.Manage'))
 			{
