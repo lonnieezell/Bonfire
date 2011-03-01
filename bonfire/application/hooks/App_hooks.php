@@ -31,7 +31,7 @@ class App_hooks {
 	
 	public function check_site_status() 
 	{
-		if ($this->ci->config->item('site.status') == 1)
+		if ($this->ci->config->item('site.status') == 0 && $this->ci->auth->role_id() != 1 && $this->ci->auth->role_id() != 6)
 		{
 			include (APPPATH .'errors/offline'. EXT);
 			die();

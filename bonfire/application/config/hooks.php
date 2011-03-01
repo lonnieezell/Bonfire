@@ -18,6 +18,15 @@ $hook['post_controller'][] = array(
 								'filepath'	=> 'hooks',
 								'params'	=> ''
 							);
+							
+// Maintenance Mode
+$hook['post_controller_constructor'][] = array(
+								'class'		=> 'App_hooks',
+								'function'	=> 'check_site_status',
+								'filename'	=> 'App_hooks.php',
+								'filepath'	=> 'hooks',
+								'params'	=> ''
+							);
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */
