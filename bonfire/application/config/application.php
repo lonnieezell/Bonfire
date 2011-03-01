@@ -2,7 +2,7 @@
 
 $config['site.title'] = 'My Great Bonfire App';
 $config['site.system_email'] = 'lonnie@dotdigitalstudios.com';
-$config['site.status'] = 0;		// 0 = offline, 1 = online
+$config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
 
 //--------------------------------------------------------------------
