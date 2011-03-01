@@ -7,8 +7,6 @@ class Pages extends Front_Controller {
 	public function __construct() 
 	{
 		parent::__construct();
-		
-		$this->load->model('Page_model', 'page_model', true);
 	}
 
 	//--------------------------------------------------------------------
@@ -22,13 +20,45 @@ class Pages extends Front_Controller {
 	}
 	
 	//--------------------------------------------------------------------
-	
+
+	/*
+		Method: index()
+		
+		Loads and displays the page.	
+	*/
 	public function index() 
 	{		
-		$page = $this->get_page($this->uri->uri_string());
+		global $OUT;
+		$alias = $this->uri->uri_string();
+	
+		// Try to get it from the cache
+		$page = $this->cache->get('pages_'. $alias);
 		
-		Template::set('body_content', $page->body);
-		Template::render();
+		// No cache? Then get it from the db
+		if (!$page)
+		{  
+			$page = $this->get_page($alias);
+			
+			// Render the page.
+			Template::set('body_content', $page->body);
+			Template::render();
+			
+			// If set, cache this bad boy.
+			if ($page->cacheable)
+			{ 
+				$output = $OUT->get_output();
+				
+				$this->cache->save('pages_'. $alias, $output, 60*60*24*365);	// 365 days - is deleted on page update.
+			}
+		}
+		
+		// Render the output
+		if (!isset($output))
+		{
+			$output =& $page;
+		}
+		
+		$OUT->set_output($output);
 	}
 	
 	//--------------------------------------------------------------------
@@ -39,6 +69,8 @@ class Pages extends Front_Controller {
 		{
 			return false;
 		}
+		
+		$this->load->model('Page_model', 'page_model', true);
 		
 		$message = '';
 		
