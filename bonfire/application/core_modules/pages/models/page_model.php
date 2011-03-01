@@ -37,6 +37,12 @@ class Page_model extends MY_Model {
 		
 		// Save the version
 		$this->save_version($id, $old_page);
+		
+		// Clear this page's cache
+		if (isset($data['alias']) && !empty($data['alias']))
+		{
+			$this->cache->delete('pages_'. $data['alias']);
+		}
 					
 		return $return;
 	}

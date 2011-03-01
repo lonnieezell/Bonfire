@@ -12,6 +12,12 @@ class Home extends Base_Controller {
 
 	function index()
 	{
+		
+		Console::log('Testing the base log feature.');
+		Console::log(array('test1', 'test2'));
+		Console::log_memory();
+		Console::log_memory(array('test'), 'Test Array');
+		
 		Template::render();
 	}
 	
