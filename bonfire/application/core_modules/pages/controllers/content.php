@@ -22,7 +22,7 @@ class Content extends Admin_Controller {
 
 	public function index() 
 	{
-		Template::set('pages', $this->page_model->find_all());
+		Template::set('pages', $this->page_model->find_all(true));
 	
 		Template::set('toolbar_title', 'Manage Pages');
 		Template::render('for_ui');
