@@ -29,13 +29,14 @@ class Pages extends Front_Controller {
 	public function index() 
 	{		
 		global $OUT;
+		$output = null;
 		$alias = $this->uri->uri_string();
 	
 		// Try to get it from the cache
 		$page = $this->cache->get('pages_'. $alias);
 		
 		// No cache? Then get it from the db
-		if (!$page)
+		if ($page == false)
 		{  
 			$page = $this->get_page($alias);
 			
@@ -43,19 +44,19 @@ class Pages extends Front_Controller {
 			Template::set('body_content', $page->body);
 			Template::render();
 			
+			$output = $OUT->get_output();
+			
 			// If set, cache this bad boy.
 			if ($page->cacheable)
-			{ 
-				$output = $OUT->get_output();
-				
+			{ 	
 				$this->cache->save('pages_'. $alias, $output, 60*60*24*365);	// 365 days - is deleted on page update.
 			}
 		}
 		
 		// Render the output
-		if (!isset($output))
-		{
-			$output =& $page;
+		if (empty($output) && $page != false)
+		{ 
+			$output = $page;
 		}
 		
 		$OUT->set_output($output);
