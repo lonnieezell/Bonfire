@@ -59,10 +59,32 @@ class Pages extends Front_Controller {
 		}
 		
 		$OUT->set_output($output);
+		
+		// Should we track page hits?
+		if (config_item('pages.track_hits'))
+		{
+			$this->track_hit(null, $alias);
+		}
 	}
 	
 	//--------------------------------------------------------------------
 	
+	//--------------------------------------------------------------------
+	// !PRIVATE METHODS
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: get_page()
+	
+		Retrieves the page from the database, check permissions,
+		process the document according to rte_type.
+		
+		Parameters:
+			$alias	- the alias to find.
+			
+		Return:
+			A stdObject with all of the page details.
+	*/
 	private function get_page($alias=null) 
 	{
 		if (empty($alias))
@@ -116,6 +138,58 @@ class Pages extends Front_Controller {
 		$page->body = $message . $page->body;
 		
 		return $page;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: track_hits()
+		
+		Saves a view of the page to the database as a 'hit'.
+		
+		Parameters:
+			$page_id	- The (int) of the page to record a hit for.
+			$page_alias	- The alias of the page to record a hit for.
+			
+		Return:
+			void 
+	*/
+	private function track_hit($page_id=0, $page_alias='') 
+	{
+		if (empty($page_id) && empty($page_alias))
+		{
+			return;
+		}
+		
+		// Make sure the page model is loaded.
+		if (!class_exists('Page_model'))
+		{
+			$this->load->model('Page_model', 'page_model', true);
+		}
+		$this->load->model('pages/Tracking_model', 'tracking_model', true);
+		
+		// We can either find the information via the id or alias.
+		if ($page_id)
+		{
+			$data = array(
+				'resource_id'	=> $page_id,
+				'ip_address'	=> $this->input->ip_address(),
+			);
+		} 
+		else if ($page_alias !== '')
+		{
+			$id = $this->page_model->select('page_id')->find_by('alias', $page_alias);
+			
+			if (is_array($id)) $id = $id[0];
+		
+			$data = array(
+				'resource_id'	=> $id->page_id,
+				'ip_address'	=> $this->input->ip_address(),
+			);
+		}
+		
+		// Save it
+		$this->tracking_model->insert($data);
 	}
 	
 	//--------------------------------------------------------------------
