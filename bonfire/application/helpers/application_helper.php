@@ -85,7 +85,7 @@ function module_folders()
  
 	Returns a list of all modules in the system.
 */
-function module_list()
+function module_list($exclude_core=false)
 {
 	if (!function_exists('directory_map'))
 	{
@@ -97,6 +97,13 @@ function module_list()
 
 	foreach (module_folders() as $folder)
 	{
+		// If we're excluding core modules and this module
+		// is in the 'core_modules' folder... ignore it.
+		if ($exclude_core && strpos($folder, 'core_modules') !== false)
+		{
+			continue;
+		}
+		
 		$map = array_merge($map, directory_map($folder, 1));
 	}
 	
@@ -134,6 +141,76 @@ function module_controller_exists($controller=null, $module=null)
 	}
 	
 	return false;
+}
+
+//--------------------------------------------------------------------
+
+/*
+	Function: module_files()
+	
+	Returns an associative array of files within one or more modules.
+	
+	Parameters:
+		$module_name	- If not NULL, will return only files from that module.
+		$module_folder	- if not NULL, will return only files within that folder of each module (ie 'views')
+		$exclude_core	- Whether we should ignore all core modules.
+		
+	Return:
+		An associative array, like: array('module_name' => array('folder' => array('file1', 'file2')))
+*/
+function module_files($module_name=null, $module_folder=null, $exclude_core=false) 
+{
+	if (!function_exists('directory_map'))
+	{
+		$ci =& get_instance();
+		$ci->load->helper('directory');
+	}
+
+	$files = array();
+
+	foreach (module_folders() as $path)
+	{
+		// If we're ignoring core modules and we find the core_module folder... skip it.
+		if ($exclude_core === true && strpos($path, 'core_modules') !== false)
+		{
+			continue;
+		}
+		
+		if (!empty($module_name) && is_dir($path . $module_name))
+		{
+			$path = $path . $module_name;
+		}
+		
+		$modules = directory_map($path);
+		
+		// If the element is not an array, we know that it's a file, 
+		// so we ignore it, otherwise it is assumbed to be a module.
+		if (!is_array($modules) || !count($modules))
+		{
+			continue;
+		}
+
+		foreach ($modules as $mod_name => $values)
+		{
+			if (is_array($values))
+			{
+				// Add just the specified folder for this module
+				if (!empty($module_folder) && isset($values[$module_folder]))
+				{
+					$files[$mod_name] = array(
+						$module_folder	=> $values[$module_folder]
+					);
+				}
+				// Add the entire module
+				else
+				{
+					$files[$mod_name] = $values;
+				}
+			}
+		}
+	}
+	
+	return $files;
 }
 
 //--------------------------------------------------------------------

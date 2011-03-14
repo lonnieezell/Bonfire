@@ -31,7 +31,7 @@ $config['auth.remember_length'] = 1209600;
 */
 $config['module_permissions'] = array(
 	'content'		=> array(
-		'pages'		=> 'Site.Content.View'
+		'views'		=> 'Site.Content.View'
 	),
 	'statistics'	=> array(
 	
