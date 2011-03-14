@@ -45,7 +45,8 @@ class CI_Profiler {
 										'http_headers',
 										'config',
 										'files',
-										'console'
+										'console',
+										'userdata'
 										);
 	protected $_sections = array();		// Stores _compile_x() results 
 
@@ -418,6 +419,37 @@ class CI_Profiler {
 		//echo '<pre>'; print_r($logs); echo '</pre>';
 		
 		return $logs;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	function _compile_userdata()
+	{
+		$output = array();
+	
+		$compiled_userdata = $this->CI->session->all_userdata();
+		
+		if (count($compiled_userdata))
+		{		
+			foreach ($compiled_userdata as $key => $val)
+			{
+				if (is_numeric($key))
+				{
+					$output[$key] = "'$val'";
+				}
+				
+				if (is_array($val))
+				{
+					$output[$key] = htmlspecialchars(stripslashes(print_r($val, true)));
+				}
+				else
+				{
+					$output[$key] = htmlspecialchars(stripslashes($val));
+				}
+			}
+		}
+		
+		return $output;
 	}
 	
 	//--------------------------------------------------------------------

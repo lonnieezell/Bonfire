@@ -65,55 +65,6 @@
 	
 	</fieldset>
 	
-	<!-- Pages -->
-	<fieldset>
-		<legend><?php echo lang('bf_pages') ?></legend>
-		
-		<div>
-			<label><?php echo lang('bf_home_page') ?></label>
-			<select name="home_page_alias">
-			<?php if (isset($pages)) : ?>
-				<option value=""></option>
-				<?php foreach ($pages as $page) : ?>
-					<option value="<?php echo $page->alias ?>" <?php echo $page->alias == config_item('pages.home_page_alias') ? 'selected="selected"' : '' ?>> <?php echo $page->page_title ?></option>
-				<?php endforeach; ?>
-			<?php endif; ?>
-			</select>
-		</div>
-	
-		<br/>
-		
-		<div>
-			<label><?php echo lang('bf_enable_rte') ?></label>
-			<input type="checkbox" name="default_rich_text" value="1" <?php echo config_item('pages.default_rich_text') == 1 ?  'checked="checked"' : '' ?> />
-		</div>
-		
-		<div>
-			<label><?php echo lang('bf_rte_type') ?></label>
-			<select name="rte">
-				<option value="html" <?php echo config_item('pages.rte') == 'html' ? 'selected="selected"' : '' ?>>HTML</option>
-				<option value="markdown" <?php echo config_item('pages.rte') == 'markdown' ? 'selected="selected"' : '' ?>>Markdown</option>
-				<option value="textile" <?php echo config_item('pages.rte') == 'textile' ? 'selected="selected"' : '' ?>>Textile</option>
-				<option value="tinymce" <?php echo config_item('pages.rte') == 'tinymce' ? 'selected="selected"' : '' ?>>TinyMCE</option>
-			</select>
-		</div>
-		
-		<div>
-			<label><?php echo lang('bf_searchable_default') ?></label>
-			<input type="checkbox" name="default_searchable" value="1" <?php echo config_item('pages.default_searchable') == 1 ?  'checked="checked"' : '' ?> />
-		</div>
-		
-		<div>
-			<label><?php echo lang('bf_cacheable_default') ?></label>
-			<input type="checkbox" name="default_cacheable" value="1" <?php echo config_item('pages.default_cacheable') == '1' ?  'checked="checked"' : '' ?> />
-		</div>
-		
-		<div>
-			<label><?php echo lang('bf_track_hits') ?></label>
-			<input type="checkbox" name="track_hits" value="1" <?php echo config_item('pages.track_hits') == '1' ?  'checked="checked"' : '' ?> />
-		</div>
-	</fieldset>
-	
 	<div class="submits">
 		<input type="submit" name="submit" value="Save Settings" />
 	</div>
