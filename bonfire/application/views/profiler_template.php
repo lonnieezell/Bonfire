@@ -1,12 +1,18 @@
 <style type="text/css">
-	#codeigniter-profiler { clear: both; background: #222; opacity: 0.45; padding: 0 5px; font-family: Helvetica, sans-serif; font-size: 10px; line-height: 12px; position: absolute; top: 0; right: 0; width: auto; min-width: 52em; max-width: 90%; z-index: 1000; -webkit-border-bottom-left-radius: 7px; -moz-border-radius-bottomleft: 7px; border-bottom-left-radius: 7px; -webkit-box-shadow: -1px 1px 10px #999; }
+	#codeigniter-profiler { clear: both; background: #222; opacity: 0.45; padding: 0 5px; font-family: Helvetica, sans-serif; font-size: 10px !important; line-height: 12px; position: absolute; width: auto; min-width: 52em; max-width: 90%; z-index: 1000; }
 	#codeigniter-profiler:hover { background: #101010; opacity: 1.0; }
-	.ci-profiler-box { padding: 10px; margin: 0 0 10px 0; max-height: 400px; overflow: auto; color: #fff; font-family: Monaco, 'Lucida Console', 'Courier New', monospace; font-size: 11px; }
+	
+	#codeigniter-profiler.bottom-right { bottom:0; top: auto; -webkit-border-top-left-radius: 7px; -moz-border-radius-topleft: 7px; border-top-left-radius: 7px; -webkit-box-shadow: -1px -1px 10px #222; -moz-box-shadow: -1px -1px 10px #222; box-shadow: -1px -1px 10px #222; }	
+	#codeigniter-profiler.bottom-left { bottom:0; top: auto; -webkit-border-top-right-radius: 7px; -moz-border-radius-topright: 7px; border-top-right-radius: 7px; -webkit-box-shadow: 1px -1px 10px #222; -moz-box-shadow: 1px -1px 10px #222; box-shadow: 1px -1px 10px #222; }
+	#codeigniter-profiler.top-left { top:0; left: 0; -webkit-border-bottom-right-radius: 7px; -moz-border-radius-bottomright: 7px; border-bottom-right-radius: 7px;-webkit-box-shadow: 1px 1px 10px #222; -moz-box-shadow: 1px 1px 10px #222; box-shadow: 1px 1px 10px #222; }	
+	#codeigniter-profiler.top-right { top: 0; right: 0; -webkit-border-bottom-left-radius: 7px; -moz-border-radius-bottomleft: 7px; border-bottom-left-radius: 7px; -webkit-box-shadow: -1px 1px 10px #222; -moz-box-shadow: -1px 1px 10px #222; box-shadow: -1px 1px 10px #222; }	
+	
+	.ci-profiler-box { padding: 10px; margin: 0 0 10px 0; max-height: 400px; overflow: auto; color: #fff; font-family: Monaco, 'Lucida Console', 'Courier New', monospace; font-size: 11px !important; }
 	.ci-profiler-box h2 { font-family: Helvetica, sans-serif; font-weight: normal; }
 	
 	#ci-profiler-menu a:link, #ci-profiler-menu a:visited { display: inline-block; padding: 7px 0; margin: 0; color: #ccc; text-decoration: none; font-weight: lighter; cursor: pointer; text-align: center; width: 15.5%; border-bottom: 4px solid #444; }
 	#ci-profiler-menu a:hover, #ci-profiler-menu a.current { background-color: #222; border-color: #999; }
-	#ci-profiler-menu a span { display: block; font-weight: bold; font-size: 16px; line-height: 1.2; }
+	#ci-profiler-menu a span { display: block; font-weight: bold; font-size: 16px !important; line-height: 1.2; }
 	
 	#ci-profiler-menu-time span, #ci-profiler-benchmarks h2 { color: #B72F09; }
 	#ci-profiler-menu-memory span, #ci-profiler-memory h2 { color: #953FA1; }
@@ -17,11 +23,11 @@
 	
 	#codeigniter-profiler table { width: 100%; }
 	#codeigniter-profiler table.main td { padding: 7px 15px; text-align: left; vertical-align: top; color: #fff; border-bottom: 1px dotted #444; line-height: 1.5; background: #101010 !important; }
-	#codeigniter-profiler table.main tr:hover { background: #292929; }
+	#codeigniter-profiler table.main tr:hover td { background: #292929 !important; }
 	#codeigniter-profiler table.main code { font-family: inherit; padding: 0; background: transparent; border: 0; color: #fff; }
 	
-	#codeigniter-profiler table .hilight { color: #FFFD70 !important; }
-	#codeigniter-profiler table .faded { color: #aaa !important; }
+	#codeigniter-profiler table td .hilight { color: #FFFD70 !important; }
+	#codeigniter-profiler table td .faded { color: #aaa !important; }
 	
 	#ci-profiler-menu-exit { background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIhSURBVDjLlZPrThNRFIWJicmJz6BWiYbIkYDEG0JbBiitDQgm0PuFXqSAtKXtpE2hNuoPTXwSnwtExd6w0pl2OtPlrphKLSXhx07OZM769qy19wwAGLhM1ddC184+d18QMzoq3lfsD3LZ7Y3XbE5DL6Atzuyilc5Ciyd7IHVfgNcDYTQ2tvDr5crn6uLSvX+Av2Lk36FFpSVENDe3OxDZu8apO5rROJDLo30+Nlvj5RnTlVNAKs1aCVFr7b4BPn6Cls21AWgEQlz2+Dl1h7IdA+i97A/geP65WhbmrnZZ0GIJpr6OqZqYAd5/gJpKox4Mg7pD2YoC2b0/54rJQuJZdm6Izcgma4TW1WZ0h+y8BfbyJMwBmSxkjw+VObNanp5h/adwGhaTXF4NWbLj9gEONyCmUZmd10pGgf1/vwcgOT3tUQE0DdicwIod2EmSbwsKE1P8QoDkcHPJ5YESjgBJkYQpIEZ2KEB51Y6y3ojvY+P8XEDN7uKS0w0ltA7QGCWHCxSWWpwyaCeLy0BkA7UXyyg8fIzDoWHeBaDN4tQdSvAVdU1Aok+nsNTipIEVnkywo/FHatVkBoIhnFisOBoZxcGtQd4B0GYJNZsDSiAEadUBCkstPtN3Avs2Msa+Dt9XfxoFSNYF/Bh9gP0bOqHLAm2WUF1YQskwrVFYPWkf3h1iXwbvqGfFPSGW9Eah8HSS9fuZDnS32f71m8KFY7xs/QZyu6TH2+2+FAAAAABJRU5ErkJggg==) 0% 0% no-repeat; padding-left: 20px; position: absolute; right: 5px; top: 10px; }
 </style>
@@ -93,7 +99,7 @@ var ci_profiler_bar = {
 };
 </script>
 
-<div id="codeigniter-profiler">
+<div id="codeigniter-profiler" class="bottom-left">
 	
 	<div id="ci-profiler-menu">
 		
@@ -106,7 +112,7 @@ var ci_profiler_bar = {
 		<?php endif; ?>
 		
 		<!-- Benchmarks -->
-		<?php if ($sections['benchmarks']) :?>
+		<?php if (isset($sections['benchmarks'])) :?>
 			<a href="#" id="ci-profiler-menu-time" onclick="ci_profiler_bar.show('ci-profiler-benchmarks', 'ci-profiler-menu-time'); return false;">
 				<span><?php echo $this->benchmark->elapsed_time('total_execution_time_start', 'total_execution_time_end') ?> s</span>
 				Load Time
@@ -118,7 +124,7 @@ var ci_profiler_bar = {
 		<?php endif; ?>
 		
 		<!-- Queries -->
-		<?php if ($sections['queries']) : ?>
+		<?php if (isset($sections['queries'])) : ?>
 			<a href="#" id="ci-profiler-menu-queries" onclick="ci_profiler_bar.show('ci-profiler-queries', 'ci-profiler-menu-queries'); return false;">
 				<span><?php echo is_array($sections['queries']) ? count($sections['queries']) : 0 ?> Queries</span>
 				Database
@@ -126,14 +132,14 @@ var ci_profiler_bar = {
 		<?php endif; ?>
 		
 		<!-- Vars and Config -->
-		<?php if ($sections['http_headers'] || $sections['get'] || $sections['config'] || $sections['post'] || $sections['uri_string'] || $sections['controller_info']) : ?>
+		<?php if (isset($sections['http_headers']) || isset($sections['get']) || isset($sections['config']) || isset($sections['post']) || isset($sections['uri_string']) || isset($sections['controller_info'])) : ?>
 			<a href="#" id="ci-profiler-menu-vars" onclick="ci_profiler_bar.show('ci-profiler-vars', 'ci-profiler-menu-vars'); return false;">
 				<span>vars</span> &amp; Config
 			</a>
 		<?php endif; ?>
 		
 		<!-- Files -->
-		<?php if ($sections['files']) : ?>
+		<?php if (isset($sections['files'])) : ?>
 			<a href="#" id="ci-profiler-menu-files" onclick="ci_profiler_bar.show('ci-profiler-files', 'ci-profiler-menu-files'); return false;">
 				<span><?php echo is_array($sections['files']) ? count($sections['files']) : 0 ?></span> Files
 			</a>
@@ -145,7 +151,7 @@ var ci_profiler_bar = {
 <?php if (count($sections) > 0) : ?>
 
 	<!-- Console -->
-	<?php if ($sections['console']) :?>
+	<?php if (isset($sections['console'])) :?>
 		<div id="ci-profiler-console" class="ci-profiler-box" style="display: none">
 			<h2>Console</h2>
 			
@@ -182,7 +188,7 @@ var ci_profiler_bar = {
 	<?php endif; ?>
 	
 	<!-- Memory -->
-	<?php if ($sections['console']) :?>
+	<?php if (isset($sections['console'])) :?>
 		<div id="ci-profiler-memory" class="ci-profiler-box" style="display: none">
 			<h2>Memory Usage</h2>
 			
@@ -213,9 +219,9 @@ var ci_profiler_bar = {
 	<?php endif; ?>
 
 	<!-- Benchmarks -->
-	<?php if ($sections['benchmarks']) :?>
+	<?php if (isset($sections['benchmarks'])) :?>
 		<div id="ci-profiler-benchmarks" class="ci-profiler-box" style="display: none">
-			<h2><?php echo lang('profiler_benchmarks') ?></h2>
+			<h2>Benchmarks</h2>
 			
 			<?php if (is_array($sections['benchmarks'])) : ?>
 				
@@ -234,9 +240,9 @@ var ci_profiler_bar = {
 	<?php endif; ?>
 	
 	<!-- Queries -->
-	<?php if ($sections['queries']) :?>
+	<?php if (isset($sections['queries'])) :?>
 		<div id="ci-profiler-queries" class="ci-profiler-box" style="display: none">
-			<h2><?php echo lang('profiler_queries') ?></h2>
+			<h2>Queries</h2>
 			
 			<?php if (is_array($sections['queries'])) : ?>
 				
@@ -255,12 +261,29 @@ var ci_profiler_bar = {
 	<?php endif; ?>
 	
 	<!-- Vars and Config -->
-	<?php if ($sections['http_headers'] || $sections['get'] || $sections['config'] || $sections['post'] || $sections['uri_string'] || $sections['controller_info']) :?>
+	<?php if (isset($sections['http_headers']) || isset($sections['get']) || isset($sections['config']) || isset($sections['post']) || isset($sections['uri_string']) || isset($sections['controller_info']) || isset($sections['userdata'])) :?>
 		<div id="ci-profiler-vars" class="ci-profiler-box" style="display: none">
 			
+			<!-- User Data -->
+			<?php if (isset($sections['userdata'])) :?>
+					
+					<h2>Session User Data</h2>
+					
+					<?php if (is_array($sections['userdata'])) : ?>
+						
+						<table class="main">
+						<?php foreach ($sections['userdata'] as $key => $val) : ?>
+							<tr><td class="hilight"><?php echo $key ?></td><td><?php echo htmlspecialchars($val) ?></td></tr>
+						<?php endforeach; ?>
+						</table>
+		
+					<?php endif; ?>
+				<?php endif; ?>
+			
+			<!-- The Rest -->
 			<?php foreach (array('get', 'post', 'uri_string', 'controller_info', 'http_headers', 'config') as $section) : ?>
 				
-				<?php if ($sections[$section]) :?>
+				<?php if (isset($sections[$section])) :?>
 					
 					<h2><?php echo lang('profiler_'. $section) ?></h2>
 					
@@ -284,7 +307,7 @@ var ci_profiler_bar = {
 	<?php endif; ?>
 	
 	<!-- Files -->
-	<?php if ($sections['files']) :?>
+	<?php if (isset($sections['files'])) :?>
 		<div id="ci-profiler-files" class="ci-profiler-box" style="display: none">
 			<h2>Loaded Files</h2>
 			

@@ -33,13 +33,6 @@ class Settings extends Admin_Controller {
 		
 		// Read our current settings
 		Template::set('settings', read_config('application'));
-		
-		// Get our published pages so we can select a default
-		if (!class_exists('Page_Model'))
-		{
-			$this->load->model('pages/Page_model', 'page_model', true);
-		}
-		Template::set('pages', $this->page_model->find_all());
 
 		Template::set_view('admin/settings/index');
 		Template::render();
@@ -72,13 +65,6 @@ class Settings extends Admin_Controller {
 			'auth.use_usernames'	=> isset($_POST['use_usernames']) ? 1 : 0,
 			'auth.allow_remember'	=> isset($_POST['allow_remember']) ? 1 : 0,
 			'auth.remember_length'	=> (int)$this->input->post('remember_length'),
-			
-			'pages.home_page_alias'		=> $this->input->post('home_page_alias'),
-			'pages.default_rich_text'	=> isset($_POST['default_rich_text']) ? 1 : 0,
-			'pages.default_searchable'	=> isset($_POST['default_searchable']) ? 1 : 0,
-			'pages.default_cacheable'	=> isset($_POST['default_cacheable']) ? 1 : 0,
-			'pages.track_hits'			=> isset($_POST['track_hits']) ? 1 : 0,
-			'pages.rte'					=> $this->input->post('rte'),
 		);
 		
 		return write_config('application', $data);
