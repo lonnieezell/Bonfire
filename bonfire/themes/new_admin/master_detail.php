@@ -10,7 +10,7 @@
 	<!-- Fix the mobile Safari auto-zoom bug -->
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	
-	<script src="<?php echo base_url('assets/js/head.min.js') ?>"></script>
+	<?php Assets::js('modernizr-1.7.min.js'); ?>
 </head>
 <body>
 
@@ -65,11 +65,6 @@
 	</div>
 	
 	<?php Template::block('nav_bottom', ''); ?>
-	
-	<script>
-		head.js(<?php echo Assets::external_js(null, true) ?>);
-	</script>
-	<?php echo Assets::inline_js(); ?>
 
 </body>
 </html>

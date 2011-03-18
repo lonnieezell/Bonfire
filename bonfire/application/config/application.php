@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$config['site.title'] = 'My Great Bonfire App';
+$config['site.title'] = 'My Bonfire App';
 $config['site.system_email'] = 'lonnie@dotdigitalstudios.com';
 $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;

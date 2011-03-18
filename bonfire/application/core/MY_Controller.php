@@ -114,7 +114,7 @@ class Admin_Controller extends Base_Controller {
 		
 		// Basic setup
 		Template::set_theme('new_admin');
-		Assets::add_css(array('notifications.css', 'buttons.css'));
+		Assets::add_css(array('ui.css', 'notifications.css', 'buttons.css'));
 	}
 	
 	//--------------------------------------------------------------------

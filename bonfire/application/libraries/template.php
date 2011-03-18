@@ -64,7 +64,7 @@ class Template {
 		The class will loop through these, parse them,
 		and push them into the layout.
 	 */
-	protected static $blocks = array();
+	public static $blocks = array();
 	
 	/*
 		Var: $message
@@ -304,7 +304,7 @@ class Template {
 		
 		self::load_view($block_name, $data, false, $themed, $output);
 		
-		return $output;
+		echo $output;
 	}
 	
 	//--------------------------------------------------------------------

@@ -35,7 +35,7 @@ class Developer extends Admin_Controller {
 		// Log Files
 		Template::set('logs', get_filenames($this->config->item('log_path')));
 	
-		Template::render('for_ui');
+		Template::render('master_detail');
 	}
 	
 	//--------------------------------------------------------------------
