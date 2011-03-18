@@ -33,7 +33,7 @@ class Base_Controller extends MX_Controller {
 		if (ENVIRONMENT == 'dev')
 		{
 			$this->load->library('Console');
-			$this->output->enable_profiler(true);
+			$this->output->enable_profiler(false);
 		}
 		
 		$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
@@ -113,7 +113,8 @@ class Admin_Controller extends Base_Controller {
 		$this->limit = 25;
 		
 		// Basic setup
-		Template::set_theme('admin');
+		Template::set_theme('new_admin');
+		Assets::add_css(array('notifications.css', 'buttons.css'));
 	}
 	
 	//--------------------------------------------------------------------
