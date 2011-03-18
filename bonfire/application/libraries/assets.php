@@ -141,11 +141,12 @@ class Assets {
 		Parameters:		
 			$style	- The style(s) to have links rendered for.
 			$media	- The media to assign to the style(s) being passed in.
+			$bypass_inheritance	- If true, will skip the check for parent theme styles.
 
 		Return: 
 		   A string containing all necessary links.
 	*/
-	public static function css($style=null, $media='screen') 
+	public static function css($style=null, $media='screen', $bypass_inheritance=false) 
 	{
 		$styles = array();
 		$return = '';
@@ -153,17 +154,13 @@ class Assets {
 		// If no style(s) has been passed in, use all that have been added.
 		if (empty($style))
 		{
-			// If no styles are in the system, base it on the media type.
-			if (!count(self::$styles))
-			{
-				$styles[] = array(
-								'file'	=> $media,
-								'media'	=> $media
-							);
-			} else
-			{
-				$styles = self::$styles;
-			}
+			// Make sure to include a file based on media type.
+			$styles[] = array(
+				'file'	=> $media,
+				'media'	=> $media
+			);
+						
+			$styles = array_merge($styles, self::$styles);
 		} 
 		// If an array has been passed, merge it with any added styles.
 		else if (is_array($style))
@@ -179,7 +176,7 @@ class Assets {
 		// Add a style named for the controller so it will be looked for.
 		$styles[] = self::$ci->router->class;
 
-		$styles = self::find_files($styles);
+		$styles = self::find_files($styles, 'css', $bypass_inheritance);
 
 		// Loop through the styles, spitting out links for each one.
 		foreach ($styles as $s)
@@ -600,7 +597,7 @@ class Assets {
 		Return:
 			array			The complete list of files with url paths.
 	 */
-	private function find_files($files=array(), $type='css') 
+	private function find_files($files=array(), $type='css', $bypass_inheritance=false) 
 	{
 		// Grab the theme paths from the template library.
 		$paths = Template::get('theme_paths');
@@ -658,30 +655,33 @@ class Assets {
 					echo '</ul>';
 				}
 				
-				/*
-					DEFAULT THEME
-				
-					First, check the default theme. Add it to the array. We check here first so that it
-					will get overwritten by anything in the active theme.
-				*/
-				if (is_file($site_path . $path .'/'. $default_theme . $file .".{$type}"))
+				if (!$bypass_inheritance)
 				{
-					$file_path = base_url() . $path .'/'. $default_theme . $file .".{$type}";
-					$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
-					$found = true;
+					/*
+						DEFAULT THEME
 					
-					if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $file .".{$type}" ."</b><br/>"; 
-				}
-				/*
-					If it wasn't found in the default theme root folder, look in default_theme/$type/
-				*/
-				else if (is_file($site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}"))
-				{
-					$file_path = base_url() . $path .'/'. $default_theme . $type .'/'. $file .".$type";
-					$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
-					$found = true;
-					
-					if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
+						First, check the default theme. Add it to the array. We check here first so that it
+						will get overwritten by anything in the active theme.
+					*/
+					if (is_file($site_path . $path .'/'. $default_theme . $file .".{$type}"))
+					{
+						$file_path = base_url() . $path .'/'. $default_theme . $file .".{$type}";
+						$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
+						$found = true;
+						
+						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $file .".{$type}" ."</b><br/>"; 
+					}
+					/*
+						If it wasn't found in the default theme root folder, look in default_theme/$type/
+					*/
+					else if (is_file($site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}"))
+					{
+						$file_path = base_url() . $path .'/'. $default_theme . $type .'/'. $file .".$type";
+						$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
+						$found = true;
+						
+						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
+					}
 				}
 				
 				/*
