@@ -421,7 +421,6 @@ class Assets {
 			}
 		
 			$attr = array(
-				'type'	=> 'text/javascript',
 				'src'	=> strpos($script, 'http:') !== false ?
 					
 					// It has a full url built in, so leave it alone
