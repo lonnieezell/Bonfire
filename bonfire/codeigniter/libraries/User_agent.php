@@ -84,7 +84,16 @@ class CI_User_agent {
 	 */
 	private function _load_agent_file()
 	{
-		if ( ! @include(APPPATH.'config/user_agents'.EXT))
+		if (file_exists(APPPATH.'config/'.ENVIRONMENT.'/user_agents'.EXT))
+		{
+			$_ua_path = APPPATH.'config/'.ENVIRONMENT.'/user_agents'.EXT;
+		}
+		else
+		{
+			$_ua_path = APPPATH.'config/user_agents'.EXT;
+		}
+
+		if ( ! @include($_ua_path))
 		{
 			return FALSE;
 		}
@@ -375,7 +384,11 @@ class CI_User_agent {
 	 */
 	public function is_referral()
 	{
-		return ( ! isset($_SERVER['HTTP_REFERER']) OR $_SERVER['HTTP_REFERER'] == '');
+		if ( ! isset($_SERVER['HTTP_REFERER']) OR $_SERVER['HTTP_REFERER'] == '')
+		{
+			return FALSE;
+		}
+		return TRUE;
 	}
 
 	// --------------------------------------------------------------------
