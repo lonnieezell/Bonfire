@@ -4,6 +4,15 @@
 	<table cellspacing="0">
 		<tbody>
 			<tr>
+				<td>CodeIgniter Version</td>
+				<td>
+					<?php 
+						echo CI_CORE == true ? 'Core ' : 'Reactor ';
+						echo CI_VERSION;
+					?>
+				</td>
+			</tr>
+			<tr>
 				<td>PHP Version</td>
 				<td><?php echo phpversion(); ?></td>
 			</tr>
