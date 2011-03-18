@@ -1,0 +1,65 @@
+/* !NOTIFICATIONS */
+.notification {
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	margin:  10px 0 20px 0;
+	padding: 5px 20px;
+}
+#message {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	font-size: 0.75em;
+	z-index: 100;
+	text-align: center;
+}
+#message .notification {
+	display: block;
+	margin: 0 auto;
+	width: auto !important;
+}
+.notification p, .notification ul {
+	margin: 0 auto;
+	padding: 0;
+	line-height: 1.5;
+	text-indent: none;
+	max-width: 55em;
+}
+.attention {
+    background: #fffbcc;
+    border-color: #e6db55;
+    color: #666452;
+}
+.information {
+	background: #dbe3f0;
+	border-color: #a2b4ee;
+	color: #383b46;
+}
+.success {
+	background: #d5f0ce;
+	border-color: #9adf8f;
+	color: #556652;
+}
+.error {
+	background-color: #f0cece;
+	border-color:  #df8f8f;
+	color:  #533232;
+}
+p.error {
+	color: #ff3f3f;
+	background-color: transparent;
+	font-size: 75%;
+}
+.notification h1 {
+	margin: 0;
+}
+.notification.small {
+	margin-top: 7px;
+	padding: 0 20px;
+}
+.notification.small p {
+	margin: 0 !important;
+	font-size: 85%;
+	line-height: 2.5;
+}

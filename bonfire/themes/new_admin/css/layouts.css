@@ -1,0 +1,35 @@
+/*--------------------------------------------------------------------
+// !LAYOUTS
+//-------------------------------------------------------------------*/
+
+/* !Default Layout: 992px */
+body {
+	width: 992px;
+	-webkit-text-size-adjust: 100%; /* Stops Mobile Safari from auto-adjusting font-sizes */
+}
+
+/* !Tablet Layout: 748px */
+@media only screen and (min-width: 748px) and (max-width: 991px) {
+	
+	body { width: 748px; }
+}
+
+/* !Mobile Layout: 320px; */
+@media only screen and (max-width: 767px) {
+	
+	body {
+		width: 320px;
+		font-size: 13px;
+		.split-view > div:first-child { display: none; }
+	}
+}
+
+/* !Wide Mobile Layout: 480px; */
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+	
+	body {
+		width: 480px;
+		font-size: 13px;
+		.split-view > div:first-child { display: none; }
+	}
+}

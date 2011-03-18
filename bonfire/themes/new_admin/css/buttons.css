@@ -1,0 +1,75 @@
+/* BUTTONS */
+button,
+a.button,
+input[type=submit] {
+	height:34px;
+	padding: 0 1em;
+	position:relative;
+	top:1px;
+	margin-left:10px;
+	font-weight:bold;
+	font-size:12px;
+	line-height: 34px;
+	color:#333;
+	text-shadow:1px 1px 0 #fff;
+	white-space:nowrap;
+	border:none;
+	overflow:visible;
+	background:#ddd;
+	background:-webkit-gradient(linear,0% 0,0% 100%,from(#fff),to(#e1e1e1));
+	background:-moz-linear-gradient(-90deg,#fff,#e1e1e1);
+	border: 1px solid #cbcbcb;
+	border-bottom:1px solid #ababab;
+	-webkit-border-radius:4px;
+	-moz-border-radius:4px;
+	border-radius:4px;
+/*	-webkit-box-shadow:0 1px 4px rgba(0,0,0,0.3);
+	-moz-box-shadow:0 1px 4px rgba(0,0,0,0.3);
+	box-shadow:0 1px 4px rgba(0,0,0,0.3); */
+	cursor:pointer;
+}
+button:hover,
+a.button:hover {
+	color:#000;
+	text-shadow:1px 1px 0 rgba(255,255,255,0.5);
+	background:#f7f7f7;filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#ffffff',endColorstr='#eeeeee');
+	background:-webkit-gradient(linear,0% 0,0% 100%,from(#fff),to(#eee));
+	background:-moz-linear-gradient(-90deg,#fff,#eee);
+	border-bottom-color:#f7f7f7;
+	text-decoration: none;
+}
+.delete button:hover,
+.delete a.button:hover {
+	color:#fff;
+	text-shadow:-1px -1px 0 rgba(0,0,0,0.3);
+	background:#b33630;
+	filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#cc3f39',endColorstr='#931610');
+	background:-webkit-gradient(linear,0% 0,0% 100%,from(#cc3f39),to(#931610));
+	background:-moz-linear-gradient(-90deg,#cc3f39,#931610);
+	border-bottom-color:#cd504a;
+}
+.delete h3 {
+	color: #931610;
+}
+.create h3 {
+	color: #068300;
+}
+.button.small,
+input[type=submit] {
+	padding: 0.3em 1em 0.2em 1em;
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 0.95;
+	height: 27px;
+	top: -1px;
+}
+.button.small:hover,
+.button.good:hover,
+input[type=submit]:hover {
+	color: #fff;
+	background: #36b330;
+	background:-webkit-gradient(linear,0% 0,0% 100%,from(#339900),to(#006633));
+	background:-moz-linear-gradient(-90deg,#339900,#006633);
+	text-shadow:-1px -1px 0 #131;
+	border-bottom-color: #003333;
+}
