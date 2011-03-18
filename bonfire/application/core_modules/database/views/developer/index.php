@@ -1,5 +1,3 @@
-<?php echo $this->load->view('developer/sub_nav', null, true); ?>
-
 <?php if (isset($tables) && is_array($tables) && count($tables) > 0) : ?>
 	<?php echo form_open('admin/developer/database/') ?>
 	<table cellspacing="0">

@@ -18,6 +18,7 @@ class Developer extends Admin_Controller {
 						
 		$this->backup_folder = APPPATH . $this->backup_folder;
 				
+		Template::set_block('sub_nav', 'developer/_sub_nav');
 		Template::set('sidebar', 'admin/sidebar');
 	}
 

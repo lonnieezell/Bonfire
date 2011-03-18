@@ -1,5 +1,3 @@
-<?php echo $this->load->view('emailer/settings/sub_nav', null, true); ?>
-
 <?php if (validation_errors()) : ?>
 <div class="notification error">
 	<?php echo validation_errors(); ?>
@@ -11,7 +9,7 @@
 	<div>
 		<label>System Email Address</label>
 		<input type="email" name="sender_email" class="medium" value="<?php echo isset($sender_email) ? $sender_email : set_value('sender_email') ?>" />
-		<p class="small" style="margin-left:28%">The email that all system-generated emails are sent from.</p>
+		<p class="small indent">The email that all system-generated emails are sent from.</p>
 	</div>
 	
 	<div>
@@ -40,16 +38,16 @@
 	<div id="smtp">
 		<label>SMTP Server Address</label>
 		<input type="text" name="smtp_host" class="medium" value="<?php echo isset($smtp_host) ? $smtp_host : set_value('smtp_host') ?>" />
-		
+		<br/>
 		<label>SMTP Username</label>
 		<input type="text" name="smtp_user" class="medium" value="<?php echo isset($smtp_user) ? $smtp_user : set_value('smtp_user') ?>" />
-		
+		<br/>
 		<label>SMTP Password</label>
 		<input type="text" name="smtp_pass" class="medium" value="<?php echo isset($smtp_pass) ? $smtp_pass : set_value('smtp_pass') ?>" />
-		
+		<br/>
 		<label>SMTP Port</label>
 		<input type="text" name="smtp_port" class="medium" value="<?php echo isset($smtp_port) ? $smtp_port : set_value('smtp_port') ?>" />
-		
+		<br/>
 		<label>SMTP Timeout (seconds)</label>
 		<input type="text" name="smtp_timeout" class="medium" value="<?php echo isset($smtp_timeout) ? $smtp_timeout : set_value('smtp_timeout') ?>" />
 	</div>

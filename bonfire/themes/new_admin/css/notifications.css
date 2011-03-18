@@ -7,17 +7,25 @@
 }
 #message {
 	position: absolute;
-	top: 0;
+	top: 35px;
 	left: 0;
 	width: 100%;
-	font-size: 0.75em;
-	z-index: 100;
+	font-size: inherit;
+	z-index: 1000;
 	text-align: center;
+	-webkit-border-bottom-left-radius: 7px;
+	-webkit-border-bottom-right-radius: 7px;
+	-moz-border-radius-bottomleft: 7px;
+	-moz-border-radius-bottomright: 7px;
+	border-bottom-left-radius: 7px;
+	border-bottom-right-radius: 7px;
+	overflow: hidden;
 }
 #message .notification {
-	display: block;
+	display: inline-block;
 	margin: 0 auto;
 	width: auto !important;
+	max-width: 25em;
 }
 .notification p, .notification ul {
 	margin: 0 auto;

@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-// Emailer Admin Class
+// Emailer Settings Class
 
 class Settings extends Admin_Controller {
 
@@ -10,6 +10,8 @@ class Settings extends Admin_Controller {
 		
 		$this->auth->restrict('Site.Settings.View');
 		$this->auth->restrict('Bonfire.Emailer.Manage');
+		
+		Template::set_block('sub_nav', 'settings/_sub_nav');
 		
 		$this->load->helper('config_file');
 	}
