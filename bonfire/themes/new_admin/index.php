@@ -1,3 +1,12 @@
+<?php
+	// Setup our default assets to load.
+	Assets::add_js( array(
+		base_url() .'assets/js/jquery-1.5.min.js',
+		Template::theme_url('js/jquery.form.js'),
+		Template::theme_url('js/jquery.ajaxify.min.js'),
+		Template::theme_url('js/ui.js')
+	));
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -10,7 +19,7 @@
 	<!-- Fix the mobile Safari auto-zoom bug -->
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	
-	<script src="<?php echo base_url('assets/js/head.min.js') ?>"></script>
+	<script src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
 </head>
 <body>
 
