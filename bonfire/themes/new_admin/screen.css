@@ -13,7 +13,7 @@ th, td, caption { font-weight: normal; vertical-align: top;	text-align: left; }
 html, body { height: 100%; overflow: hidden; background: #fff; }
 body {
 	font-family:  Geneva, 'Helvetica Neue', Helvetica, Arial sans-serif;
-	color: #000;
+	color: #444;
 	position: relative;
 	font-size: 0.625em;		/* Reset base font size to 10px */
 }
@@ -25,7 +25,7 @@ hr {
 	height: 0;
 }
 
-a:link, a:visited {	text-decoration: none; }
+a:link, a:visited { color: #06c; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
 /* clearfix */
@@ -53,6 +53,9 @@ html[xmlns] .clearfix { display: block; }
 .size3of5{ width:60%; }
 .size4of5{ width:80%; }
 
+.hover-toggle .hover-item { visibility: hidden; }
+.hover-toggle:hover .hover-item { visibility: visible; }
+
 /* Selection styles */
 ::selection 	 	{background: #dbe3f0;}
 ::-moz-selection 	{background: ;}
@@ -61,9 +64,9 @@ img::-moz-selection	{background: transparent;}
 
 /* Basic Typography */
 body { font-size: 13px;	line-height: 18px; }
-h1, h2, h3, h4, h5, h6, p, table tr td, table tr th { padding-left: 18px; padding-right: 18px; }
+h1, h2, h3, h4, h5, h6, p, table tr td, table tr th, form { padding-left: 18px; padding-right: 18px; }
 table tr td:first-child, table tr th:first-child: { padding-right: 0; }
-p { margin-bottom: 9px; }
+p { margin-bottom: 9px; max-width: 50em; }
 h1, h2, h3, h4, h5, h6 { font-weight: bolder; color: #444; font-family: Arial, "Helvetica Neue", Helvetica, Arial, sans-serif; }
 h1, h2 { line-height: 45px; }
 h3, h4 { line-height: 36px; }
@@ -77,6 +80,7 @@ h5 { font-size: 14px; color: #000; }
 .text-center { text-align: center; }
 .text-right { text-align: right; }
 .text-justify { text-align: justify; }
+.small { font-size: 90%; font-weight: lighter; line-height: 1.2em; color: #999; font-family: Helvetica, sans-serif; }
 
 /* TABLES */
 table {
@@ -89,18 +93,16 @@ thead th {
 	border-bottom: 1px solid #ccc;
 	text-align: left;
 	padding-left: 5px;
-	color: #777;
+	color: #999;
 }
 tbody td {
-	border-bottom: 1px solid #ccc;
-	padding: 7px 5px;
+	padding: 3px 5px;
 }
 tfoot td {
 	text-align: right;
 	padding: 15px 20px 0 20px;
 }
-tbody tr:nth-child(even) { background-color: #e8e8e8; }
-table a { font-weight: bold; }
+tbody tr:nth-child(even) { background-color: #edf3fe; }
 .banned { background: #f0cece; }
 .merchant { background: #a2b4ee; }
 .admin { background: #d5f0ce; }
@@ -118,6 +120,58 @@ td.matrix-title {
 	margin: 0;
 	border-right: 1px solid #aab;
 	border-bottom: 1px solid #aab;
+}
+
+/* !FORMS */
+label { 
+	display: inline-block;
+	width: 15em; 
+	margin-right: 1.5em;
+	text-align: right;
+	line-height: 1.5;
+}
+input[type=text],
+input[type=email],
+input[type=password],
+textarea {
+	width: 60%;
+	max-width: 35em;
+	padding: 3px 8px;
+	border: 1px solid #ddd;
+	font-size: inherit;
+}
+textarea {
+	padding: 0 10px;
+	line-height: 1.5;
+	font-size: 0.875em;
+}
+select { min-width: 10em; font-size: 13px; }
+input.medium { width: 45%; }
+input.tiny { width: 3em !important; }
+fieldset {
+	margin-top: 40px;
+	border-top: 1px solid #ddd;
+	padding: 10px 0 10px 0;
+}
+fieldset legend {
+	font-weight: bold;
+	padding-right: 15px;
+	color: #347;
+}
+form div {
+	padding: 3px 0;
+}
+form .spacer {
+	margin-top: 30px;
+}
+form .indent {
+	margin-left: 18em;
+}
+div.submits {
+	margin-top: 30px;
+	padding: 20px 0;
+	text-align: right;
+	border-top: 1px solid #ccc;
 }
 
 /* !NOSCRIPT */
@@ -259,6 +313,13 @@ noscript {
 	font-weight: normal;
 	font-size: 20px;
 	line-height: 24px;
+}
+
+/* sub-nav */
+#sub-nav {
+	position: absolute;
+	right: 18px;
+	top: 4px;
 }
 
 /* !MAIN CONTENT */

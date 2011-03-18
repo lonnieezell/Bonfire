@@ -1,6 +1,3 @@
-<?php echo $this->load->view('emailer/settings/sub_nav', null, true); ?>
-
-<br/>
 <p>Emails are sent in HTML format. They can be customized by editing the header and footer, below.</p>
 
 <?php echo form_open('admin/settings/emailer/template'); ?>
