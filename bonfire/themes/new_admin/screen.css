@@ -28,6 +28,11 @@ hr {
 a:link, a:visited { color: #06c; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+ul, ol {
+	margin-left: 2em;
+	list-style-position: inside;
+}
+
 /* clearfix */
 .clearfix:after {
 	content: ".";
@@ -44,6 +49,12 @@ html[xmlns] .clearfix { display: block; }
 /* Misc Effects */
 .hover-toggle .hover-item { visibility: hidden; }
 .hover-toggle:hover .hover-item { visibility: visible; }
+.padded { padding: 20px; }
+.rounded {
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
 
 /* Grids */
 .row:after,.last-column:after{clear:both;display:block;visibility:hidden;overflow:hidden;height:0 !important;line-height:0;font-size:xx-large;content:" x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ";}
@@ -86,11 +97,32 @@ h5 { font-size: 14px; color: #000; }
 .text-right { text-align: right; }
 .text-justify { text-align: justify; }
 .small { font-size: 90%; font-weight: lighter; line-height: 1.2em; color: #999; font-family: Helvetica, sans-serif; }
+.big-text { font-size: 2.4em; }
+
+/* !BOXES */
+.box {
+	border: 1px solid #ccd;
+	padding: 0.5em 1em;
+	margin: 18px;
+}
+.box.delete {
+	border-color: #DCB5B5;
+}
+.box.create {
+	border-color: #aca;
+}
+.box button,
+.box a.button {
+	float: right; 
+	margin-top: 0.6em;
+	padding: 1.3em 2em;
+}
 
 /* TABLES */
 table {
 	width: 100%;
 	max-width: 100%;
+	margin-bottom: 18px;
 }
 table td {
 	border: 0;
@@ -145,6 +177,9 @@ textarea {
 	padding: 3px 8px;
 	border: 1px solid #ddd;
 	font-size: inherit;
+}
+input[type=checkbox] {
+	display: inline;
 }
 textarea {
 	padding: 0 10px;

@@ -87,11 +87,28 @@ h2.panel-title {
 .list-item {
 	border-bottom: 1px solid #ddd;
 	padding: 8px 0;
+	cursor: pointer;
 }
 .list-item img {
 	margin: 0 10px;
 	float: left;
 }
+.list-item p span {
+	color: #999;
+}
 .list-item p {
 	margin-bottom: 0;
+	font-size: 12px;
+}
+.list-item.with-icon p {
+	display: inline-block;
+	padding: 0;
+	width: 180px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.list-item.current {
+	background: #dbe3f0;
+	border-top: 1px solid #aaaabb;
+	border-bottom: 1px solid #aaaabb;
 }

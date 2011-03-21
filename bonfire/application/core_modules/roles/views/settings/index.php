@@ -1,13 +1,13 @@
-<div class="v-split">
+<div class="view split-view">
 	
 	<!-- Role List -->
-	<div class="vertical-panel">
+	<div class="view">
 	
 	<?php if (isset($roles) && is_array($roles) && count($roles)) : ?>
 		<div class="scrollable">
 			<div class="list-view" id="role-list">
 				<?php foreach ($roles as $role) : ?>
-					<div class="list-item" data-id="<?php echo $role->role_id ?>">
+					<div class="list-item with-icon" data-id="<?php echo $role->role_id ?>">
 						<img src="<?php echo Template::theme_url('images/customers.png') ?>" />
 					
 						<p>
@@ -29,9 +29,8 @@
 	</div>
 	
 	<!-- Role Editor -->
-	<div id="content">
+	<div id="content" class="view">
 		<div class="scrollable" id="ajax-content">
-			<div class="inner">
 				
 				<div class="box create rounded">
 					<a class="button good ajaxify" href="<?php echo site_url('admin/settings/roles/create'); ?>">Create New Role</a>
@@ -60,7 +59,7 @@
 						<?php foreach ($roles as $role) : ?>
 							<tr>
 								<td><?php echo anchor('admin/settings/roles/edit/'. $role->role_id, $role->role_name, 'class="ajaxify"') ?></td>
-								<td align="center"><?php
+								<td class="text-center"><?php
 										$count = 0; 
 										foreach ($role_counts as $r)
 										{
@@ -73,7 +72,7 @@
 										echo $count;
 									?>
 								</td>
-								<td align="center"><?php echo $count ? (($count / $total_users) * 100) .'%' : '--'; ?></td>
+								<td class="text-center"><?php echo $count ? number_format(($count / $total_users) * 100, 2) .'%' : '--'; ?></td>
 							</tr>
 						<?php endforeach; ?>
 						</tbody>
@@ -81,7 +80,6 @@
 				
 				<?php endif; ?>
 				
-			</div>	<!-- /inner -->
 		</div>	<!-- /ajax-content -->
 	</div>	<!-- /content -->
 </div>
