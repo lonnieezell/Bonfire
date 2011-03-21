@@ -2,12 +2,15 @@
 
 <?php echo form_open('admin/settings/emailer/template'); ?>
 
-	<label>Header</label>
-	<textarea name="header" rows="15"><?php echo htmlspecialchars_decode($this->load->view('email/_header', null, true)) ;?></textarea>
+	<div class="fancy-text">
+		<label>Header</label>
+		<textarea name="header" rows="15"><?php echo htmlspecialchars_decode($this->load->view('email/_header', null, true)) ;?></textarea>
+	</div>
 	
-	
-	<label>Footer</label>
-	<textarea name="footer" rows="15"><?php echo htmlspecialchars_decode($this->load->view('email/_footer', null, true)) ;?></textarea>
+	<div class="fancy-text">
+		<label>Footer</label>
+		<textarea name="footer" rows="15"><?php echo htmlspecialchars_decode($this->load->view('email/_footer', null, true)) ;?></textarea>
+	</div>
 
 	<div class="text-right">
 		<br/>
