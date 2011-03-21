@@ -335,3 +335,32 @@ noscript {
 	padding: 10px 0;
 }
 
+/*
+	WIDGETS
+*/
+
+/* Fancy Textareas */
+.fancy-text {
+	width: 700px;
+}
+.fancy-text label {
+	display: block;
+	color: #333;
+	line-height: 2.0;
+	text-shadow: 1px 1px 0px #fff;
+	width: 700px;
+	text-align: center;
+	margin: 0;
+	border: 1px solid #ddd;
+	border-bottom: 0;
+	background:-webkit-gradient(linear,0% 0,0% 100%,from(#fff),to(#e1e1e1));
+	background:-moz-linear-gradient(-90deg,#fff,#e1e1e1);
+	-webkit-border-top-right-radius: 7px;
+	-webkit-border-top-left-radius: 7px;
+}
+.fancy-text textarea {
+	display: block;
+	width: 700px;
+	max-width: 680px;
+	margin: 0 0 25px 0;
+}
