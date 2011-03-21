@@ -1,11 +1,8 @@
-<div class="v-split">
+<div class="view split-view">
 	<!-- Views List -->
-	<div class="vertical-panel">
+	<div class="view">
 		
 		<div class="panel-header">
-			<!-- Search Form -->
-			<input type="search" id="user-search" value="" placeholder="search..." style="display: inline; width: 50%;" />
-			
 			<?php if (isset($modules) && is_array($modules) && count($modules) > 1) :?>
 			<select id="view-filter" style="display: inline; max-width: 40%;">
 				<option value="0">Module...</option>
@@ -29,7 +26,8 @@
 					<?php foreach ($folders['views'] as $folder => $files) : ?>
 						<?php if (is_array($files)) :?>
 							<?php foreach ($files as $file) :?>
-							<div class="list-item" data-module="<?php echo $name ?>" data-view="<?php echo $folder .'/'. $file ?>">
+							<div class="list-item with-icon" data-id="<?php echo $name .':'. $folder .'/'. $file ?>">
+								<img src="<?php echo Template::theme_url('images/page.png') ?>" />
 								<p>
 									<b><?php echo ucfirst($name) ?></b><br/>
 									<?php echo $folder .'/'. $file ?>
@@ -37,10 +35,11 @@
 							</div>
 							<?php endforeach; ?>
 						<?php else: ?>
-						<div class="list-item" data-module="<?php echo $name ?>" data-view="<?php echo $files ?>">
+						<div class="list-item with-icon" data-id="<?php echo $name .':'. $files ?>"">
+							<img src="<?php echo Template::theme_url('images/page.png') ?>" />
 							<p>
 								<b><?php echo ucfirst($name) ?></b><br/>
-								<?php echo $files ?>
+								<span><?php echo $files ?></span>
 							</p>
 						</div>						
 						<?php endif; ?>
@@ -61,13 +60,11 @@
 	</div>	<!-- /vertical-panel -->
 	
 	<!-- Content -->
-	<div id="content">
+	<div id="content" class="view">
 		<div class="scrollable" id="ajax-content">
-			<div class="inner">
 				
 				<?php echo '<pre>'; print_r($module_files); ?>
 				
-			</div>
 		</div>	<!-- /ajax-content -->
 	</div>	<!-- /content -->
 </div>	<!-- /v-split -->

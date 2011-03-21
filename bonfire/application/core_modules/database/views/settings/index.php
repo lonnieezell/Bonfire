@@ -7,7 +7,7 @@
 		<div class="scrollable">
 			<div class="list-view" id="role-list">
 			
-				<div class="list-item" data-id="dev">
+				<div class="list-item with-icon" data-id="dev">
 					<img src="<?php echo Template::theme_url('images/database.png') ?>" />
 					
 					<p><b>Development</b><br/>
@@ -15,7 +15,7 @@
 					</p>
 				</div>
 				
-				<div class="list-item" data-id="test">
+				<div class="list-item with-icon" data-id="test">
 					<img src="<?php echo Template::theme_url('images/database.png') ?>" />
 					
 					<p><b>Staging/Test</b><br/>
@@ -23,7 +23,7 @@
 					</p>
 				</div>
 				
-				<div class="list-item" data-id="prod">
+				<div class="list-item with-icon" data-id="prod">
 					<img src="<?php echo Template::theme_url('images/database.png') ?>" />
 					
 					<p><b>Production</b><br/>
