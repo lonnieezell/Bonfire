@@ -33,7 +33,7 @@ class Subnav extends Base_Controller {
 		foreach ($this->actions as $module)
 		{
 			// Make sure the user has permission to view this page.
-			if (has_permission($permissions[$type][$module]) || !array_key_exists($module, $permissions[$type]))
+			if ((isset($permissions[$type][$module]) && has_permission($permissions[$type][$module])) || !array_key_exists($module, $permissions[$type]))
 			{
 				// Is this the current module? 
 				if ($module == $this->uri->segment(3))

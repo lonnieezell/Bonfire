@@ -1,5 +1,4 @@
-<h3>Database Restore</h3>
-	
+<br/>	
 <?php if (isset($results) && !empty($results)) : ?>
 	
 	<h3>Restore Results:</h3>
@@ -12,7 +11,7 @@
 		<p><?= $results ?></p>
 	</div>
 	
-	<div style="text-align: right">
+	<div class="text-right">
 		<a href="/admin/database/backups">Back to Database Tools</a>
 	</div>
 
@@ -31,8 +30,10 @@
 			</div>
 		</div>
 		
+		<div class="submits">
 			<button type="submit" name="submit" class="button">Restore</button> or 
 			<a href="/admin/developer/database/backups">Cancel</a>
+		</div>
 	
 	<?php echo form_close(); ?>
 <?php endif; ?>

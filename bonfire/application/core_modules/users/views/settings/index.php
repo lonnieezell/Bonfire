@@ -1,6 +1,6 @@
-<div class="v-split">
+<div class="view split-view">
 	<!-- Users List -->
-	<div class="vertical-panel">
+	<div class="view">
 		
 		<div class="panel-header">
 			<!-- Search Form -->
@@ -19,12 +19,12 @@
 		<div class="scrollable">
 			<div class="list-view" id="user-list">
 			<?php foreach ($users as $user) : ?>
-				<div class="list-item" data-id="<?php echo $user->id ?>" data-role="<?php echo $user->role_name ?>">
+				<div class="list-item with-icon" data-id="<?php echo $user->id ?>" data-role="<?php echo $user->role_name ?>">
 					<?php echo gravatar_link($user->email, 32); ?>
 				
 					<p>
 						<b><?php echo config_item('auth.login_type') == 'username' ? $user->username : $user->email; ?></b><br/>
-						<?php echo $user->role_name ?>
+						<span><?php echo $user->role_name ?></span>
 					</p>
 				</div>
 			<?php endforeach; ?>
@@ -41,9 +41,9 @@
 	</div>	<!-- /users-list -->
 	
 	<!-- User Editor -->
-	<div id="content">
+	<div id="content" class="view">
 		<div class="scrollable" id="ajax-content">
-			<div class="inner">
+			<div class="padded">
 			
 				<div class="row" style="margin-bottom: 2.5em">
 					<div class="column size1of2">

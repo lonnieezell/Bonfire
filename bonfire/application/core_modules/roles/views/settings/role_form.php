@@ -20,7 +20,7 @@
 	<div>
 		<label>Default Role?</label>
 		<input type="checkbox" name="default" value="1" <?php echo isset($role) && $role->default == 1 ? 'checked="checked"' : '' ?> />
-		<p class="small indent">Check if this role should be assigned to all new users.</p>
+		<p class="small" style="display: inline">Check if this role should be assigned to all new users.</p>
 	</div>
 	
 	<!-- Permissions -->

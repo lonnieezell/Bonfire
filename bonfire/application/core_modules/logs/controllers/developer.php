@@ -35,7 +35,7 @@ class Developer extends Admin_Controller {
 		// Log Files
 		Template::set('logs', get_filenames($this->config->item('log_path')));
 	
-		Template::render('master_detail');
+		Template::render();
 	}
 	
 	//--------------------------------------------------------------------
@@ -83,7 +83,7 @@ class Developer extends Admin_Controller {
 			redirect('admin/settings/developer/logs');
 		}
 				
-		Template::set('log_file', $file .EXT);
+		Template::set('log_file', $file);
 		Template::set('log_content', file($this->config->item('log_path') . $file));
 		Template::render();
 	}
