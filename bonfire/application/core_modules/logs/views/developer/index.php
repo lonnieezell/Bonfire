@@ -1,6 +1,6 @@
-<div class="v-split">
+<div class="view split-view">
 	<!-- List -->
-	<div class="vertical-panel">
+	<div class="view">
 	
 		<?php if (isset($logs) && is_array($logs) && count($logs)) : ?>
 		
@@ -33,9 +33,8 @@
 	</div>	<!-- /vertical-panel -->
 	
 	<!-- Editor -->
-	<div id="content">
+	<div id="content" class="view">
 		<div class="scrollable" id="ajax-content">
-			<div class="inner">
 				<?php if ($log_threshold == 0) : ?>
 				<div class="notification attention">
 					<p>Logging is not currently enabled.</p>
@@ -46,6 +45,7 @@
 				<?php echo form_open(site_url('admin/developer/logs/enable'), 'class="constrained"'); ?>
 
 				<div>
+					<br/>
 					<label>Log the following:</label>
 					<select name="log_threshold">
 						<option value="0" <?php echo ($log_threshold == 0) ? 'selected="selected"' : ''; ?>>0 - Nothing</option>
@@ -55,7 +55,7 @@
 						<option value="4" <?php echo ($log_threshold == 4) ? 'selected="selected"' : ''; ?>>4 - All Messages</option>
 					</select>						   
 					
-					<p class="small" style="margin-left: 28%">The higher log values also include all messages from the lower numbers. So, logging 2 - Debug Messages also logs 1 - Error Messages.</p>
+					<p class="small indent">The higher log values also include all messages from the lower numbers. So, logging 2 - Debug Messages also logs 1 - Error Messages.</p>
 				</div>
 			
 				<div class="submits">
@@ -71,6 +71,7 @@
 				<p>Logging can rapidly create very large files, if you log too much information. For live sites, you should probably log only Errors.</p>
 			</div>
 			
+			<?php if (isset($logs) && is_array($logs) && count($logs)) : ?>
 			<br/>
 			
 			<!-- Purge? -->
@@ -81,8 +82,8 @@
 				
 				<p>Deleting log files is permanent. There is no going back, so please make sure.</p>
 			</div>
+			<?php endif; ?>
 			
-			</div>	<!-- /inner -->
 		</div>	<!-- /scrollable -->
 	</div>	<!-- /content -->
 </div>	<!-- /vsplit -->

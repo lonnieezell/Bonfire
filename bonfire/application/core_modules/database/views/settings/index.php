@@ -43,7 +43,7 @@
 				<div class="notification attention">
 					<p class="text-center">You are currently running on the <b><?php echo ENVIRONMENT ?></b> server.</p>
 				</div>
-				
+
 				<div class="row">
 					<div class="column size1of3">
 						<h3>Development</h3>

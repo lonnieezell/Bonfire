@@ -29,7 +29,7 @@ class Settings extends Admin_Controller {
 		Template::set('roles', $this->role_model->find_all());
 	
 		Template::set('toolbar_title', 'Manage User Roles');
-		Template::render('for_ui');
+		Template::render();
 	}
 	
 	//--------------------------------------------------------------------

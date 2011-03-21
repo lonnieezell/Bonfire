@@ -1,10 +1,9 @@
-<div class="scrollable">
-	<div style="<?php echo isset($padding_style) ? $padding_style : 'padding: 1em 2em;'; ?>">
+<div class="scrollable" style="margin: 18px 0 36px 0">
 	<?php 
 		echo Template::message();
 		echo Template::yield(); 
 	?>
-	</div>
+	<br/>
 </div>
 
 <script>

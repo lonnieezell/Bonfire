@@ -1,4 +1,4 @@
-<h2>Viewing: <?php echo $log_file ?></h2>
+<h2><span style="font-weight: normal">Viewing:</span> <?php echo str_replace(EXT, '', $log_file) ?></h2>
 
 <?php if (!isset($log_content) || empty($log_content)) : ?>
 <div class="notification attention">
@@ -27,7 +27,7 @@
 				$class="attention";
 			}		
 		?>
-		<div style="border-bottom: 1px solid #999; padding: 5px 10px; color: #222;" <?php echo 'class="'. $class .'"' ?>>
+		<div style="border-bottom: 1px solid #999; padding: 5px 18px; color: #222;" <?php echo 'class="'. $class .'"' ?>>
 			<?php echo $row; ?>
 		</div>
 		<?php endforeach; ?>

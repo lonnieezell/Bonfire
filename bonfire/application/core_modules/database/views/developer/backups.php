@@ -1,3 +1,4 @@
+<br/>
 <?php if (isset($backups) && is_array($backups) && count($backups) > 0) : ?>
 	<?php echo form_open('/admin/developer/database/backups'); ?>
 		<table cellspacing="0">

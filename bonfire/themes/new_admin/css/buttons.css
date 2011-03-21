@@ -1,5 +1,6 @@
 /* BUTTONS */
 .button,
+a.button,
 input[type=submit],
 .button-group {
 	padding: 0.5em 1em;
@@ -34,6 +35,7 @@ input[type=submit]:hover {
 	box-shadow:0 1px 4px rgba(0,0,0,0.3);
 	border: 1px solid #ababab;
 	border-bottom: 1px solid #8b8b8b;
+	text-decoration: none;
 }
 .button:active,
 input[type=submit]:active {
@@ -76,3 +78,24 @@ input[type=submit]:active {
 	cursor: default;
 }
 
+.button.good:hover {
+	color: #fff;
+	background: #36b330;
+	background:-webkit-gradient(linear,0% 0,0% 100%,from(#339900),to(#006633));
+	background:-moz-linear-gradient(-90deg,#339900,#006633);
+	text-shadow:-1px -1px 0 #131;
+	border-bottom-color: #003333;
+}
+.delete button:hover,
+.delete a.button:hover {
+	color:#fff;
+	text-shadow:-1px -1px 0 rgba(0,0,0,0.3);
+	background:#b33630;
+	filter:progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#cc3f39',endColorstr='#931610');
+	background:-webkit-gradient(linear,0% 0,0% 100%,from(#cc3f39),to(#931610));
+	background:-moz-linear-gradient(-90deg,#cc3f39,#931610);
+	border-bottom-color:#cd504a;
+}
+.delete h3 {
+	color: #931610;
+}
