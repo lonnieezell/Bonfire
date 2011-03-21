@@ -32,7 +32,7 @@
 	padding: 0;
 	line-height: 1.5;
 	text-indent: none;
-	max-width: 55em;
+	max-width: none;
 }
 .attention {
     background: #fffbcc;

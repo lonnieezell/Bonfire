@@ -24,7 +24,7 @@ class Settings extends Admin_Controller {
 	{		
 		Template::set('settings', read_db_config());
 	
-		Template::render('for_ui');
+		Template::render();
 	}
 	
 	//--------------------------------------------------------------------
@@ -33,7 +33,6 @@ class Settings extends Admin_Controller {
 	{
 		$server_type = $this->uri->segment(5);
 	
-		
 		if ($this->input->post('submit'))
 		{
 			unset($_POST['server_type'], $_POST['submit']);
