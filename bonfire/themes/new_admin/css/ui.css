@@ -8,11 +8,13 @@
 	padding: 0;
 	position: relative;
 	overflow: hidden;
+	background: #fff;
 }
 
 .scrollable {
 	height: 100%;
 	overflow: auto;
+	position: relative;
 }
 
 .bar {
@@ -42,8 +44,17 @@
 }
 .bar a:hover { text-decoration: none; }
 
+/* TYPE */
+h2.panel-title {
+	font-size: 16px;
+	line-height: 2.0;
+	border-bottom: 1px solid #ddd;
+	color: #999;
+	margin-bottom: 5px;
+}
+
 /* !SPLIT VIEW */
-.split-view { background: #000; }
+.split-view { background: #777; }
 .split-view > div:first-child {
 	width: 250px;
 	position: absolute;
@@ -70,4 +81,17 @@
 }
 .tab-bar a.current {
 	background: #2c2c2c;
+}
+
+/* !LIST VIEWS */
+.list-item {
+	border-bottom: 1px solid #ddd;
+	padding: 8px 0;
+}
+.list-item img {
+	margin: 0 10px;
+	float: left;
+}
+.list-item p {
+	margin-bottom: 0;
 }
