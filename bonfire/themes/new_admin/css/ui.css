@@ -112,3 +112,14 @@ h2.panel-title {
 	border-top: 1px solid #aaaabb;
 	border-bottom: 1px solid #aaaabb;
 }
+
+/* Panel Header */
+.panel-header {
+	overflow: hidden;
+	border-bottom: 1px solid #ddd;
+	-webkit-box-shadow: 0 1px 5px #eee;
+	-moz-box-shadow: 0 1px 5px #eee;
+	box-shadow: 0 1px 5px #eee;
+	position: relative;
+	padding: 5px 9px;
+}
