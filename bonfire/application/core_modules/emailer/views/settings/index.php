@@ -53,7 +53,7 @@
 	</div>
 </fieldset>
 
-<div class="text-right">
+<div class="submits">
 	<input type="submit" name="submit" value="Save Settings" />
 </div>
 
