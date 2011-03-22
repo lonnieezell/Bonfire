@@ -1,6 +1,6 @@
 <br/>
 <?php if (isset($tables) && is_array($tables) && count($tables) > 0) : ?>
-	<?php echo form_open('admin/developer/database/') ?>
+	<?php echo form_open('admin/developer/database/', array('style' => 'padding: 0')) ?>
 	<table cellspacing="0">
 		<thead>
 			<tr>
