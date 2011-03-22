@@ -1,5 +1,5 @@
 <div class="notification information">
-	<p class="text-center">The tools available in the Developer's section are advanced tools, designed to make a developer's life a little easier. If used without the proper knowledge, they can be very dangerous. Use with care.</p>
+	<p class="text-center">The tools available in the Developer's section are advanced tools, designed to make a developer's life a little easier.<br/>If used without the proper knowledge, they can be very dangerous. Use with care.</p>
 </div>
 	<table cellspacing="0">
 		<tbody>
