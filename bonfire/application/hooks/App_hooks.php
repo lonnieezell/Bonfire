@@ -24,6 +24,11 @@ class App_hooks {
 	 */
 	public function prep_redirect() 
 	{
+		if (!class_exists('CI_Session'))
+		{
+			$this->ci->load->library('session');
+		}
+	
 		$this->ci->session->set_userdata('previous_page', $this->ci->uri->uri_string()); 
 	}
 	
