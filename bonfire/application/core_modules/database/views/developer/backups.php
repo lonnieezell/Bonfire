@@ -1,6 +1,6 @@
 <br/>
 <?php if (isset($backups) && is_array($backups) && count($backups) > 0) : ?>
-	<?php echo form_open('/admin/developer/database/backups'); ?>
+	<?php echo form_open('/admin/developer/database/delete'); ?>
 		<table cellspacing="0">
 			<thead>
 				<tr>
