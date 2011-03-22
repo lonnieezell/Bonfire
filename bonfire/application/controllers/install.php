@@ -3,6 +3,27 @@
 class Install extends Base_Controller {
 
 	protected $errors = '';
+	
+	/*
+		Var: $writable_folders
+		An array of folders the installer checks to make 
+		sure they can be written to.
+	*/
+	private $writeable_folders = array(
+		'cache',
+		'logs',
+		'config',
+		'db/backups'
+	);
+	
+	/*
+		Var: $writeable_files
+		An array of files the installer checks to make
+		sure they can be written to.
+	*/
+	private $writeable_files = array(
+		'config/application.php'
+	);
 
 	//--------------------------------------------------------------------
 
@@ -22,7 +43,7 @@ class Install extends Base_Controller {
 	
 	public function index() 
 	{ 
-		
+		$this->startup_check();
 	
 		if ($this->input->post('submit'))
 		{
@@ -55,7 +76,59 @@ class Install extends Base_Controller {
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 	
-	public function setup() 
+	/*
+		Method: startup_check()
+		
+		Verifies that the folders and files needed are writeable. Sets 
+		'startup_errors' as a string in the template if not.
+	*/
+	private function startup_check() 
+	{
+		$errors = '';
+		$folder_errors = '';
+		$file_errors = '';
+		
+		// Check Folders
+		foreach ($this->writeable_folders as $folder)
+		{
+			if (!is_writeable(APPPATH .$folder))
+			{
+				$folder_errors .= "<li>$folder</li>";
+			}
+		}
+		
+		if (!empty($folder_errors))
+		{
+			$errors = '<p>Please ensure that the following directories are writeable, and try again:</p><ul>' . $folder_errors .'</ul>';
+		}
+		
+		// Check files
+		foreach ($this->writeable_files as $file)
+		{
+			if (!is_writeable(APPPATH .$file))
+			{
+				$file_errors .= "<li>$file</li>";
+			}
+		}
+		
+		if (!empty($file_errors))
+		{
+			$errors .= '<p>Please ensure that the following files are writeable, and try again:</p><ul>' . $file_errors .'</ul>';
+		}
+		
+		// Make it available to the template lib if there are errors
+		if (!empty($errors))
+		{
+			Template::set('startup_errors', $errors);
+		}
+		
+		unset($errors, $folder_errors, $file_errors);
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
+	private function setup() 
 	{
 		//
 		// First, save the information to the config/application.php file.
