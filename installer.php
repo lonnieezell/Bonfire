@@ -1,6 +1,4 @@
 <?php
-
-
 /*
  *---------------------------------------------------------------
  * ENVIRONMENT
@@ -95,10 +93,10 @@ if (ENVIRONMENT == 'dev')
 	$routing['directory'] = '';
 
 	// The controller class file name.  Example:  Mycontroller.php
-	$routing['controller'] = 'install';
+	$routing['controller'] = 'Install';
 
 	// The controller function you wish to be called.
-	$routing['function']	= '';
+	$routing['function']	= 'index';
 
 
 /*
@@ -123,8 +121,6 @@ if (ENVIRONMENT == 'dev')
 // --------------------------------------------------------------------
 // END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
 // --------------------------------------------------------------------
-
-
 
 
 /*

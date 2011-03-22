@@ -172,7 +172,7 @@
 
 	// Set any routing overrides that may exist in the main index file
 	if (isset($routing))
-	{
+	{ 
 		$RTR->_set_overrides($routing);
 	}
 
