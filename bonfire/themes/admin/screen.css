@@ -315,6 +315,7 @@ noscript {
 	left: 0;
 	right: 0;
 	padding-left: 10px;
+	min-height: 28px;
 	margin: 0;
 	list-style: none;
 	background: #222 url(images/bg_fabric_dark.jpg) top left repeat;
