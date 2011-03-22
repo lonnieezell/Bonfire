@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Install extends Base_Controller {
+class Install extends CI_Controller {
 
 	protected $errors = '';
 
@@ -19,7 +19,7 @@ class Install extends Base_Controller {
 	//--------------------------------------------------------------------
 	
 	public function index() 
-	{
+	{ 
 		if ($this->input->post('submit'))
 		{
 			$this->form_validation->set_rules('site_title', 'Site Title', 'required|trim|strip_tags|min_length[1]|xss_clean');

@@ -45,7 +45,18 @@ class MX_Router extends CI_Router
 	
 	public function _validate_request($segments) {
 		
-		if (count($segments) == 0) return $segments;
+		if (count($segments) == 0) 
+		{
+			// If no segments exist, we need to check if a default controller has
+			// been set in the index.php (or equivalent) to override everything else.
+			
+			if ($this->directory)
+			{
+				echo 'here';
+			}
+			
+			return $segments;
+		}
 		
 		/* locate module controller */
 		if ($located = $this->locate($segments)) return $located;
@@ -122,7 +133,7 @@ class MX_Router extends CI_Router
 		}
 	}
 
-	public function set_class($class) {
+	public function set_class($class) { 
 		$this->class = $class.$this->config->item('controller_suffix');
 	}
 }
