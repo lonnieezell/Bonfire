@@ -33,6 +33,13 @@ p.small {
 	font-weight: lighter;
 	margin-left: 28%;
 }
+ul {
+	list-style-position: inside;
+	margin-left: 2em;
+}
+
+a:link, a:visited { color: #06c; text-decoration: none; }
+a:hover { text-decoration: underline; }
 
 .page, .foot {
 	width: 780px;
