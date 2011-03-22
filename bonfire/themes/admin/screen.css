@@ -117,6 +117,11 @@ h5 { font-size: 14px; color: #000; }
 	margin-top: 0.6em;
 	padding: 1.3em 2em;
 }
+.box .cancel {
+	position: absolute;
+	top: 6em;
+	right: 4em;
+}
 
 /* TABLES */
 table {

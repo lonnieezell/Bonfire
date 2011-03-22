@@ -222,15 +222,14 @@ class Developer extends Admin_Controller {
 	 * Deletes a database table.
 	 */
 	public function delete()
-	{
+	{	
 		// Make sure we have something to delete
 		if (isset($_POST['checked']) && is_array($_POST['checked']) && count($_POST['checked']) > 0)
 		{		
 			// Verify that we want to delete the files.
 			Template::set('files', $_POST['checked']);
 			
-			$this->template->current_view = 'developer/delete';
-			Template::set('toolbar_title', 'Delete Tables');
+			Template::set('toolbar_title', 'Delete Backup Files');
 			Template::render();
 		} else if (isset($_POST['files']) && is_array($_POST['files']) && count($_POST['files']) > 0)
 		{
