@@ -17,12 +17,12 @@
 
 	<div>
 		<label>Site Title</label>
-		<input type="text" name="site_title" id="site_title" placeholder="My Great Bonfire App" value="" />
+		<input type="text" name="site_title" id="site_title" placeholder="My Great Bonfire App" value="<?php echo set_value('site_title') ?>" />
 	</div>
 	
 	<div>
 		<label>Username</label>
-		<input type="text" name="username" id="username" value="" />
+		<input type="text" name="username" id="username" value="<?php echo set_value('username') ?>" />
 	</div>
 	
 	<br />
@@ -41,7 +41,7 @@
 	
 	<div>
 		<label>Your Email</label>
-		<input type="email" name="email" id="email" placeholder="me@home.com" value="" />
+		<input type="email" name="email" id="email" placeholder="me@home.com" value="<?php echo set_value('email') ?>" />
 		<p class="small">Please double-check your password before continuing.</p>
 	</div>
 	

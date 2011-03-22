@@ -33,9 +33,9 @@ class Base_Controller extends MX_Controller {
 		if (ENVIRONMENT == 'dev')
 		{
 			$this->load->library('Console');
-			$this->output->enable_profiler(false);
+			$this->output->enable_profiler(true);
 		}
-		
+
 		$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 	}
 	
