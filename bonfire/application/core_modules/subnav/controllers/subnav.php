@@ -21,7 +21,7 @@ class Subnav extends Base_Controller {
 		// Do we have any actions? 
 		if (!count($this->actions))
 		{
-			return '';
+			return '<ul class="nav-sub clearfix"></ul>';
 		}
 		
 		// Grab our module permissions so we know who can see what on the sidebar
