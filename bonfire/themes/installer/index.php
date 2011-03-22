@@ -26,7 +26,7 @@
 	</div>	<!-- /page -->
 	
 	<div class="foot">
-		<p>Powered by <strong>Bonfire</strong>.</p>
+		<p>Powered by <strong>Bonfire <?php echo BONFIRE_VERSION ?></strong></p>
 	</div>
 </body>
 </html>
