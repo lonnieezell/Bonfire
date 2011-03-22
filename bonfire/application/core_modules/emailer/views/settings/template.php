@@ -12,8 +12,7 @@
 		<textarea name="footer" rows="15"><?php echo htmlspecialchars_decode($this->load->view('email/_footer', null, true)) ;?></textarea>
 	</div>
 
-	<div class="text-right">
-		<br/>
+	<div class="submits">
 		<input type="submit" name="submit" id="submit" value="Save Template" /> or <?php echo anchor('admin/settings/emailer', 'Cancel'); ?>
 	</div>
 
