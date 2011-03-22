@@ -6,6 +6,8 @@
 
 <?php echo form_open('admin/settings/emailer', 'class="constrained"'); ?>
 	
+	<br/>
+	
 	<div>
 		<label>System Email Address</label>
 		<input type="email" name="sender_email" class="medium" value="<?php echo isset($sender_email) ? $sender_email : set_value('sender_email') ?>" />
