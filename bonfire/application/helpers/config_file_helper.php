@@ -155,46 +155,50 @@ function write_config($file='', $settings=null)
 /*
 	Function: read_db_config()
 
-	Retrieves the config/database.php file settings.
+	Retrieves the config/database.php file settings. Plays nice with CodeIgniter 2.0's
+	multiple environment support.
 	
 	Parameters:
-		$group	- (Optional) The database group to get. If empty, will return all groups.
+		$environment	- (Optional) The envinroment to get. If empty, will return all environments.
 		
 	Return:
 		An array of database settings.
  */  
-function read_db_config($group='') 
+function read_db_config($environment=null) 
 {
-	$file = 'database';
-	
-	if ( ! file_exists(APPPATH.'config/'.$file.EXT))
-	{
-		if ($fail_gracefully === TRUE)
-		{
-			return FALSE;
-		}
-		show_error('The configuration file '.$file.EXT.' does not exist.');
-	}
-	
-	include(APPPATH.'config/'.$file.EXT);
+	$files = array();
 
-	if ( ! isset($db) OR ! is_array($db))
+	$settings = array();
+
+	// Determine what environment to read.
+	if (empty($environment))
 	{
-		if ($fail_gracefully === TRUE)
+		$files['main'] 			= 'database';
+		$files['development']	= 'development/database';
+		$files['testing']		= 'testing/database';
+		$files['production']	= 'production/database';
+	} else 
+	{
+		$files[$environment]	= "$environment/database";
+	}
+	
+	// Grab our required settings
+	foreach ($files as $env => $file)
+	{
+		include(APPPATH.'config/'.$file.EXT);
+	
+		if ( ! isset($db) OR ! is_array($db))
 		{
 			return FALSE;
 		}
-		show_error('Your '.$file.EXT.' file does not appear to contain a valid configuration array.');
+		
+		$settings[$env] = $db;
+		unset($db);
 	}
 	
-	if (!empty($group))
-	{
-		return $db[$group];
-	} 
-	else 
-	{
-		return $db;
-	}
+	unset($files);
+	
+	return $settings;
 }
 
 //---------------------------------------------------------------

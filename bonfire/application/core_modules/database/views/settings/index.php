@@ -11,7 +11,7 @@
 					<img src="<?php echo Template::theme_url('images/database.png') ?>" />
 					
 					<p><b>Development</b><br/>
-					<?php echo $settings['dev']['hostname'] .'/'. $settings['dev']['database'] ?>
+					<?php echo $settings['development']['default']['hostname'] .'/'. $settings['development']['default']['database'] ?>
 					</p>
 				</div>
 				
@@ -19,7 +19,7 @@
 					<img src="<?php echo Template::theme_url('images/database.png') ?>" />
 					
 					<p><b>Staging/Test</b><br/>
-					<?php echo $settings['test']['hostname'] .'/'. $settings['test']['database'] ?>
+					<?php echo $settings['testing']['default']['hostname'] .'/'. $settings['testing']['default']['database'] ?>
 					</p>
 				</div>
 				
@@ -27,7 +27,7 @@
 					<img src="<?php echo Template::theme_url('images/database.png') ?>" />
 					
 					<p><b>Production</b><br/>
-					<?php echo $settings['prod']['hostname'] .'/'. $settings['prod']['database'] ?>
+					<?php echo $settings['production']['default']['hostname'] .'/'. $settings['production']['default']['database'] ?>
 					</p>
 				</div>
 			
@@ -51,35 +51,35 @@
 						<table>
 							<tr>
 								<td>Hostname</td>
-								<td><b><?php echo $settings['dev']['hostname'] ?></b></td>
+								<td><b><?php echo $settings['development']['default']['hostname'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Database</td>
-								<td><b><?php echo $settings['dev']['database'] ?></b></td>
+								<td><b><?php echo $settings['development']['default']['database'] ?></b></td>
 							</tr>
 							<tr>
 								<td>User</td>
-								<td><b><?php echo $settings['dev']['username'] ?></b></td>
+								<td><b><?php echo $settings['development']['default']['username'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Driver</td>
-								<td><b><?php echo $settings['dev']['dbdriver'] ?></b></td>
+								<td><b><?php echo $settings['development']['default']['dbdriver'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Prefix</td>
-								<td><b><?php echo $settings['dev']['dbprefix'] ?></b></td>
+								<td><b><?php echo $settings['development']['default']['dbprefix'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Debug On?</td>
-								<td><b><?php echo $settings['dev']['db_debug'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['development']['default']['db_debug'] = 1 ? 'Yes' : 'No' ?></b></td>
 							</tr>
 							<tr>
 								<td>Persistent?</td>
-								<td><b><?php echo $settings['dev']['pconnect'] == 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['development']['default']['pconnect'] == 1 ? 'Yes' : 'No' ?></b></td>
 							</tr>
 							<tr>
 								<td>Strict Mode?</td>
-								<td><b><?php echo $settings['dev']['stricton'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['development']['default']['stricton'] = 1 ? 'Yes' : 'No' ?></b></td>
 							</tr>
 						</table>
 					</div>
@@ -90,35 +90,35 @@
 						<table>
 							<tr>
 								<td>Hostname</td>
-								<td><b><?php echo $settings['test']['hostname'] ?></b></td>
+								<td><b><?php echo $settings['testing']['default']['hostname'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Database</td>
-								<td><b><?php echo $settings['test']['database'] ?></b></td>
+								<td><b><?php echo $settings['testing']['default']['database'] ?></b></td>
 							</tr>
 							<tr>
 								<td>User</td>
-								<td><b><?php echo $settings['test']['username'] ?></b></td>
+								<td><b><?php echo $settings['testing']['default']['username'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Driver</td>
-								<td><b><?php echo $settings['test']['dbdriver'] ?></b></td>
+								<td><b><?php echo $settings['testing']['default']['dbdriver'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Prefix</td>
-								<td><b><?php echo $settings['test']['dbprefix'] ?></b></td>
+								<td><b><?php echo $settings['testing']['default']['dbprefix'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Debug On?</td>
-								<td><b><?php echo $settings['test']['db_debug'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['testing']['default']['db_debug'] = 1 ? 'Yes' : 'No' ?></b></td>
 							</tr>
 							<tr>
 								<td>Persistent?</td>
-								<td><b><?php echo $settings['test']['pconnect'] == 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['testing']['default']['pconnect'] == 1 ? 'Yes' : 'No' ?></b></td>
 							</tr>
 							<tr>
 								<td>Strict Mode?</td>
-								<td><b><?php echo $settings['test']['stricton'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['testing']['default']['stricton'] = 1 ? 'Yes' : 'No' ?></b></td>
 							</tr>
 						</table>
 					</div>
@@ -129,35 +129,35 @@
 						<table>
 							<tr>
 								<td>Hostname</td>
-								<td><b><?php echo $settings['prod']['hostname'] ?></b></td>
+								<td><b><?php echo $settings['production']['default']['hostname'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Database</td>
-								<td><b><?php echo $settings['prod']['database'] ?></b></td>
+								<td><b><?php echo $settings['production']['default']['database'] ?></b></td>
 							</tr>
 							<tr>
 								<td>User</td>
-								<td><b><?php echo $settings['prod']['username'] ?></b></td>
+								<td><b><?php echo $settings['production']['default']['username'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Driver</td>
-								<td><b><?php echo $settings['prod']['dbdriver'] ?></b></td>
+								<td><b><?php echo $settings['production']['default']['dbdriver'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Prefix</td>
-								<td><b><?php echo $settings['prod']['dbprefix'] ?></b></td>
+								<td><b><?php echo $settings['production']['default']['dbprefix'] ?></b></td>
 							</tr>
 							<tr>
 								<td>Debug On?</td>
-								<td><b><?php echo $settings['prod']['db_debug'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['production']['default']['db_debug'] = 1 ? 'Yes' : 'No' ?></b></td>
 							</tr>
 							<tr>
 								<td>Persistent?</td>
-								<td><b><?php echo $settings['prod']['pconnect'] == 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['production']['default']['pconnect'] == 1 ? 'Yes' : 'No' ?></b></td>
 							</tr>
 							<tr>
 								<td>Strict Mode?</td>
-								<td><b><?php echo $settings['prod']['stricton'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['production']['default']['stricton'] = 1 ? 'Yes' : 'No' ?></b></td>
 							</tr>
 						</table>
 					</div>
