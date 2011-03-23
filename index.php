@@ -3,44 +3,47 @@
 
 /*
  *---------------------------------------------------------------
- * ENVIRONMENT
+ * APPLICATION ENVIRONMENT
  *---------------------------------------------------------------
  *
- * Bonfire will attempt to determine the environment you are running
- * in and set the ENVIRONMENT constant to the appropriate level. 
- * This is used throughout your application for easing deployment.
+ * You can load different configurations depending on your
+ * current environment. Setting the environment also influences
+ * things like logging and error reporting.
+ *
+ * This can be set to anything, but default usage is:
+ *
+ *     development
+ *     testing
+ *     production
+ *
+ * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-
-if (strpos($_SERVER['SERVER_NAME'], '.local') !== FALSE || strpos($_SERVER['SERVER_NAME'], 'dev.') !== FALSE || $_SERVER['SERVER_NAME'] == 'localhost')
-{
-	define('ENVIRONMENT', 'dev');
-}
-else if (strpos($_SERVER['SERVER_NAME'], 'staging.') !== FALSE || strpos($_SERVER['SERVER_NAME'], '.qa') !== FALSE)
-{
-	define('ENVIRONMENT', 'test');
-}
-else {
-	define('ENVIRONMENT', 'prod');
-}
+	define('ENVIRONMENT', 'development');
 
 /*
  *---------------------------------------------------------------
- * PHP ERROR REPORTING LEVEL
+ * ERROR REPORTING
  *---------------------------------------------------------------
  *
- * By default CI runs with error reporting set to ALL.  For security
- * reasons you are encouraged to change this to 0 when your site goes live.
- * For more info visit:  http://www.php.net/error_reporting
- *
+ * Different environments will require different levels of error reporting.
+ * By default development will show errors but testing and live will hide them.
  */
-if (ENVIRONMENT == 'dev')
-{
-	error_reporting(E_ALL);
-} else 
-{
-	error_reporting(0);
-} 
+
+	switch (ENVIRONMENT)
+	{
+		case 'development':
+			error_reporting(E_ALL);
+			break;
+	
+		case 'testing':
+		case 'production':
+			error_reporting(0);
+			break;
+
+		default:
+			exit('The application environment is not set correctly.');
+	}
 
 /*
  *---------------------------------------------------------------
