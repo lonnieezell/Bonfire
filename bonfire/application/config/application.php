@@ -6,6 +6,16 @@ $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
 
 //--------------------------------------------------------------------
+// !BACKUPS
+//--------------------------------------------------------------------
+//
+// A folder that all backup files will be written to. This should be
+// relative APPPATH. This is primarily used by MY_Config when writing
+// new files.
+//
+$config['site.backup_folder']	= 'archives/';
+
+//--------------------------------------------------------------------
 // !AUTHENTICATION
 //--------------------------------------------------------------------
 
