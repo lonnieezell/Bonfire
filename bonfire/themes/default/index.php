@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8" />
 	
-	<title><?php echo $page_title .' @ '. config_item('site.site_title'); ?></title>
+	<title><?php echo config_item('site.title'); ?></title>
 
 	<?php Assets::css(); ?>
 </head>
