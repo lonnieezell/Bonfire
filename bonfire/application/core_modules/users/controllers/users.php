@@ -34,7 +34,6 @@ class Users extends Front_Controller {
 			}
 		}
 	
-		Template::set_theme('auth');
 		Template::set_view('users/users/login');
 		Template::set('page_title', 'Login');
 		Template::render();
@@ -99,7 +98,6 @@ class Users extends Front_Controller {
 						
 		}
 	
-		Template::set_theme('auth');
 		Template::set_view('users/users/forgot_password');
 		Template::set('page_title', 'Password Reset');
 		Template::render();
@@ -136,7 +134,6 @@ class Users extends Front_Controller {
 			}
 		}
 	
-		Template::set_theme('auth');
 		Template::set_view('users/users/register');
 		Template::set('page_title', 'Register');
 		Template::render();
