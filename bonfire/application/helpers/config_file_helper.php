@@ -233,12 +233,17 @@ function write_db_config($settings=null)
 	// Clean up post
 	if (isset($_POST['submit'])) unset($_POST['submit']);
 	
-	// Load the file so we can loop through the lines
-	$contents = file_get_contents(APPPATH.'config/'.'database'.EXT);
-	
-	foreach ($settings as $group => $values)
+	foreach ($settings as $env => $values)
 	{
-		if ($group != 'submit')
+		if (strpos($env, '/') === false)
+		{
+			$env .= '/';
+		}
+	
+		// Load the file so we can loop through the lines
+		$contents = file_get_contents(APPPATH.'config/'. $env .'database'.EXT);
+	
+		if ($env != 'submit')
 		{
 			foreach ($values as $name => $value)
 			{
@@ -253,37 +258,40 @@ function write_db_config($settings=null)
 				}
 			
 				// Is the config setting in the file? 
-				$start = strpos($contents, '$db[\''.$group.'\'][\''. $name .'\']');
+				$start = strpos($contents, '$db[\'default\'][\''. $name .'\']');
 				$end = strpos($contents, ';', $start);
 				
 				$search = substr($contents, $start, $end-$start+1);
 				
-				$contents = str_replace($search, '$db[\''.$group.'\'][\''. $name .'\'] = '. $value .';', $contents);
+				$contents = str_replace($search, '$db[\'default\'][\''. $name .'\'] = '. $value .';', $contents);
 			}
+	
+			// Backup the file for safety
+			$source = APPPATH .'config/'. $env .'database'.EXT;
+			$dest_folder = APPPATH . config_item('site.backup_folder') .'config/'. $env;
+			$dest = $dest_folder .'database'.EXT.'.bak';
+			
+			// Make sure our directory exists
+			if (!is_dir($dest_folder))
+			{
+				mkdir($dest_folder, 0755, true);
+			}
+			
+			copy($source, $dest);
+			
+			// Make sure the file still has the php opening header in it...
+			if (!strpos($contents, '<?php') === FALSE)
+			{
+				$contents = '<?php' . "\n" . $contents;
+			}
+			
+			// Write the changes out...
+			$result = file_put_contents(APPPATH.'config/'.$env .'database'.EXT, $contents, LOCK_EX);
+			//$result = false;
 		}
 	}
 	
-	// Backup the file for safety
-	$source = APPPATH . 'config/database'.EXT;
-	$dest = APPPATH . 'config/database'.EXT.'.bak';
-	copy($source, $dest);
-	
-	// Make sure the file still has the php opening header in it...
-	if (!strpos($contents, '<?php') === FALSE)
-	{
-		$contents = '<?php' . "\n" . $contents;
-	}
-	
-	// Write the changes out...
-	$result = file_put_contents(APPPATH.'config/'.'database'.EXT, $contents, LOCK_EX);
-	//$result = false;
-	
-	if ($result === FALSE)
-	{
-		return false;
-	} else {
-		return true;
-	}
+	return $result;
 }
 
 //---------------------------------------------------------------

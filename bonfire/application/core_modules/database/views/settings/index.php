@@ -7,27 +7,27 @@
 		<div class="scrollable">
 			<div class="list-view" id="role-list">
 			
-				<div class="list-item with-icon" data-id="dev">
+				<div class="list-item with-icon" data-id="development">
 					<img src="<?php echo Template::theme_url('images/database.png') ?>" />
 					
 					<p><b>Development</b><br/>
-					<?php echo $settings['development']['default']['hostname'] .'/'. $settings['development']['default']['database'] ?>
+					<span><?php echo $settings['development']['default']['hostname'] .'/'. $settings['development']['default']['database'] ?></span>
 					</p>
 				</div>
 				
-				<div class="list-item with-icon" data-id="test">
+				<div class="list-item with-icon" data-id="testing">
 					<img src="<?php echo Template::theme_url('images/database.png') ?>" />
 					
 					<p><b>Staging/Test</b><br/>
-					<?php echo $settings['testing']['default']['hostname'] .'/'. $settings['testing']['default']['database'] ?>
+					<span><?php echo $settings['testing']['default']['hostname'] .'/'. $settings['testing']['default']['database'] ?></span>
 					</p>
 				</div>
 				
-				<div class="list-item with-icon" data-id="prod">
+				<div class="list-item with-icon" data-id="production">
 					<img src="<?php echo Template::theme_url('images/database.png') ?>" />
 					
 					<p><b>Production</b><br/>
-					<?php echo $settings['production']['default']['hostname'] .'/'. $settings['production']['default']['database'] ?>
+					<span><?php echo $settings['production']['default']['hostname'] .'/'. $settings['production']['default']['database'] ?></span>
 					</p>
 				</div>
 			

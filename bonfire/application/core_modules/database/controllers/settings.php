@@ -35,9 +35,11 @@ class Settings extends Admin_Controller {
 	
 		if ($this->input->post('submit'))
 		{
+			//echo '<pre>'; print_r($_POST); die();
+		
 			unset($_POST['server_type'], $_POST['submit']);
 		
-			if (write_db_config(array($server_type => $_POST)) === TRUE)
+			if (write_db_config(array($server_type => $_POST)) == TRUE)
 			{
 				Template::set_message('Your settings were successfully saved.', 'success');
 			} else 
@@ -46,7 +48,9 @@ class Settings extends Admin_Controller {
 			}
 		}
 		
-		Template::set('db_settings', read_db_config($server_type));
+		$settings = read_db_config($server_type);
+		
+		Template::set('db_settings', $settings[$server_type]);
 	
 		Template::set('server_type', $server_type);
 		Template::render();
