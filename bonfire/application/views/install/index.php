@@ -22,7 +22,7 @@
 	</div>
 	<?php endif; ?>
 	
-	<?php echo form_open(site_url('installer.php')) ?>
+	<?php echo form_open(site_url('install')) ?>
 	
 		<div>
 			<label>Site Title</label>

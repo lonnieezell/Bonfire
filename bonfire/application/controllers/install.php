@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Install extends Base_Controller {
+class Install extends MX_Controller {
 
 	protected $errors = '';
 	
@@ -32,7 +32,6 @@ class Install extends Base_Controller {
 		parent::__construct();
 		
 		$this->load->helper('form');
-		$this->load->library('form_validation');
 		
 		$this->output->enable_profiler(false);
 	}
@@ -41,6 +40,9 @@ class Install extends Base_Controller {
 	
 	public function index() 
 	{ 
+		$this->load->library('form_validation');
+		$this->form_validation->CI =& $this;
+	
 		$this->startup_check();
 	
 		if ($this->input->post('submit'))
