@@ -31,6 +31,8 @@ class Base_Controller extends MX_Controller {
 		// Auth setup
 		$this->load->model('users/User_model', 'user_model', true);
 		
+		$this->lang->load('application');
+		
 		// Dev Bar?
 		if (ENVIRONMENT == 'dev')
 		{
