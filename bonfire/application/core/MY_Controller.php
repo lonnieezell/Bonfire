@@ -25,9 +25,11 @@ class Base_Controller extends MX_Controller {
 	{
 		parent::__construct();
 		
-		$this->load->model('users/User_model', 'user_model', true);
+		// Our Autoload solution
+		$this->load->library('session');
 		
-		$this->lang->load('application');
+		// Auth setup
+		$this->load->model('users/User_model', 'user_model', true);
 		
 		// Dev Bar?
 		if (ENVIRONMENT == 'dev')

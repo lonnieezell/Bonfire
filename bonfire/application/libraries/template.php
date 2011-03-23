@@ -131,7 +131,7 @@ class Template {
 		// If the application config file hasn't been loaded, do it now
 		if (!self::$ci->config->item('template.theme_paths'))
 		{ 
-			self::$ci->config->load('template');
+			self::$ci->config->load('application');
 		}
 		
 		// Store our settings
