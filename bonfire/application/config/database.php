@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 | -------------------------------------------------------------------
 | DATABASE CONNECTIVITY SETTINGS
@@ -38,13 +38,13 @@
 | the active record class
 */
 
-$active_group = ENVIRONMENT;
+$active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = '';
+$db['default']['username'] = 'bonfire_dever';
 $db['default']['password'] = '';
-$db['default']['database'] = '';
+$db['default']['database'] = 'bonfire2_dev';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = 'bf_';
 $db['default']['pconnect'] = TRUE;
