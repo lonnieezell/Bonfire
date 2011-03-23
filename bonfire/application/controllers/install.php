@@ -31,8 +31,6 @@ class Install extends Base_Controller {
 	{
 		parent::__construct();
 		
-		Template::set_theme('installer');
-		
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 		
