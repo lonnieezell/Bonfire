@@ -25,22 +25,14 @@ class Base_Controller extends MX_Controller {
 	{
 		parent::__construct();
 		
-		// Our Autoload solution
-		$this->load->library('session');
-		
-		// Auth setup
-		$this->load->model('users/User_model', 'user_model', true);
-		
-		$this->lang->load('application');
-		
 		// Dev Bar?
-		if (ENVIRONMENT == 'dev')
+		if (ENVIRONMENT == 'development')
 		{
 			$this->load->library('Console');
 			$this->output->enable_profiler(true);
 		}
 
-		$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+		//$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 	}
 	
 	//--------------------------------------------------------------------
@@ -78,6 +70,50 @@ class Front_Controller extends Base_Controller {
 //--------------------------------------------------------------------
 
 /*
+	Class: Authenticated_Controller
+	
+	Provides a base class for all controllers that must check user login
+	status.
+	
+	Extends:
+		Base_Controller
+*/
+class Authenticated_Controller extends Base_Controller {
+
+	//--------------------------------------------------------------------
+	
+	public function __construct() 
+	{
+		parent::__construct();
+		
+		$this->load->database();
+		$this->load->library('session');
+		
+		// Auth setup
+		$this->load->library('users/auth');
+		$this->load->model('users/User_model', 'user_model', true);
+		$this->load->model('roles/permission_model');
+		$this->load->model('roles/role_model');
+		
+		// Make sure we're logged in.
+		$this->auth->restrict();
+		
+		// Load additional libraries
+		$this->load->helper('form');
+		$this->load->library('form_validation');
+		$this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
+	}
+	
+	//--------------------------------------------------------------------
+	
+
+}
+
+//--------------------------------------------------------------------
+
+// End Authenticated Controller
+
+/*
 	Class: Admin_Controller
 	
 	This class provides a base class for all admin-facing controllers. 
@@ -86,10 +122,10 @@ class Front_Controller extends Base_Controller {
 	Admin Theme.
 	
 	Extends:
-		Base_controller	
+		Authenticated_controller	
 */
 
-class Admin_Controller extends Base_Controller {
+class Admin_Controller extends Authenticated_Controller {
 	
 	//--------------------------------------------------------------------
 	
@@ -97,15 +133,11 @@ class Admin_Controller extends Base_Controller {
 	{
 		parent::__construct();
 		
-		$this->auth->restrict();
-		
-		// Load additional libraries
-		$this->load->helper('form');
-		
-		$this->load->library('form_validation');
-		$this->form_validation->CI =& $this;
+		$this->lang->load('application');
+		$this->load->helper('application');
 		
 		$this->load->library('pagination');
+		
 		
 		// Pagination config
 		$this->pager = array();
