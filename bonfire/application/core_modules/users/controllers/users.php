@@ -9,7 +9,14 @@ class Users extends Front_Controller {
 		parent::__construct();
 		
 		$this->load->helper('form');
-		$this->load->library('form_validation');
+		if (!class_exists('CI_Form_Validation'))
+		{
+			$this->load->library('form_validation');
+			$this->form_validation->CI =& get_instance();
+		}
+		
+		$this->load->database();
+		$this->load->library('users/auth');
 	}
 	
 	//--------------------------------------------------------------------
