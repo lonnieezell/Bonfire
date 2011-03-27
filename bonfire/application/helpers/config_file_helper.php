@@ -239,10 +239,16 @@ function write_db_config($settings=null)
 		{
 			$env .= '/';
 		}
-	
+		
+		// Is it the main file? 
+		if ($env == 'main' || $env == 'main/')
+		{
+			$env = '';
+		}
+
 		// Load the file so we can loop through the lines
 		$contents = file_get_contents(APPPATH.'config/'. $env .'database'.EXT);
-	
+
 		if ($env != 'submit')
 		{
 			foreach ($values as $name => $value)

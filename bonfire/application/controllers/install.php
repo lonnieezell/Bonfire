@@ -44,9 +44,75 @@ class Install extends MX_Controller {
 		$this->form_validation->CI =& $this;
 	
 		$this->startup_check();
+		
+		if (isset($_POST['hostname']) && isset($_POST['username']) && isset($_POST['database']) )
+		{ 
+			// Write the database config files
+			$this->load->helper('config_file');
+			
+			$dbname = strip_tags($this->input->post('database'));
+			
+			$data = array(
+				'main'	=> array(
+					'hostname'	=> strip_tags($this->input->post('hostname')),
+					'username'	=> strip_tags($this->input->post('username')),
+					'password'	=> strip_tags($this->input->post('password')),
+					'database'	=> $dbname
+				),
+				'development' => array(
+					'hostname'	=> strip_tags($this->input->post('hostname')),
+					'username'	=> strip_tags($this->input->post('username')),
+					'password'	=> strip_tags($this->input->post('password')),
+					'database'	=> $dbname
+				)
+			);
+			
+			if (write_db_config($data))
+			{
+				//
+				// Make sure the database exists, otherwise create it.
+				// CRAP! dbutil and database_forge require a running database driver,
+				// which seems to require a valid database, which we don't have. To get 
+				// past this, we'll deal only with MySQL for now and create things
+				// the old fashioned way. Eventually, we'll make this more generic.
+				//
+				$db = mysql_connect(strip_tags($this->input->post('hostname')), strip_tags($this->input->post('username')), strip_tags($this->input->post('password')));
+				
+				if (!$db)
+				{
+					die('Unable to connect to database: '. mysql_error());
+				}
+				
+				$db_selected = mysql_select_db($dbname, $db);
+				if (!$db_selected)
+				{
+					// Table doesn't exist, so create it.
+					if (!mysql_query("CREATE DATABASE $dbname", $db))
+					{
+						die('Unable to create database: '. mysql_error());
+					}
+					mysql_close($db);
+				}
+				 
+				redirect('install/account');
+			} else
+			{
+				Template::set_message('There was an error saving the settings. Please verify that your database and development/database config files are writeable.', 'attention');	
+			}
+		}
 	
+		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function account() 
+	{
 		if ($this->input->post('submit'))
 		{
+			$this->load->library('form_validation');
+			$this->form_validation->CI =& $this;
+		
 			$this->form_validation->set_rules('site_title', 'Site Title', 'required|trim|strip_tags|min_length[1]|xss_clean');
 			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('password', 'Password', 'required|trim|strip_tags|alpha_dash|min_length[8]|xss_clean');
@@ -71,6 +137,7 @@ class Install extends MX_Controller {
 	}
 	
 	//--------------------------------------------------------------------
+	
 	
 	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
@@ -146,6 +213,7 @@ class Install extends MX_Controller {
 			return false;
 		}
 		
+		
 		//
 		// Now install the database tables.
 		//
@@ -159,6 +227,7 @@ class Install extends MX_Controller {
 		//
 		// Install the user in the users table so they can actually login.
 		//
+		$this->load->model('users/User_model', 'user_model', true);
 		$data = array(
 			'role_id'	=> 1,
 			'email'		=> $this->input->post('email'),
