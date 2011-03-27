@@ -92,6 +92,11 @@ class Auth {
 			return false;
 		}
 	
+		if (!class_exists('User_model'))
+		{
+			$this->ci->load->model('users/User_model', 'user_model', true);
+		}
+	
 		// Grab the user from the db
 		$user = $this->ci->user_model->select('id, email, username, users.role_id, salt, password_hash, temp_password_hash')->find_by(config_item('auth.login_type'), $login);
 		
