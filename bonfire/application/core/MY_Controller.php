@@ -90,8 +90,8 @@ class Authenticated_Controller extends Base_Controller {
 		$this->load->library('session');
 		
 		// Auth setup
+		$this->load->model('users/User_model', 'user_model');
 		$this->load->library('users/auth');
-		$this->load->model('users/User_model', 'user_model', true);
 		$this->load->model('roles/permission_model');
 		$this->load->model('roles/role_model');
 		
@@ -137,7 +137,6 @@ class Admin_Controller extends Authenticated_Controller {
 		$this->load->helper('application');
 		
 		$this->load->library('pagination');
-		
 		
 		// Pagination config
 		$this->pager = array();
