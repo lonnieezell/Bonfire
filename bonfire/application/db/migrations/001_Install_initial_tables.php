@@ -49,58 +49,6 @@ CREATE TABLE `bf_login_attempts` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=32 ;
 
---
--- Dumping data for table `bf_login_attempts`
---
-
-
--- --------------------------------------------------------
-
---
--- Table structure for table `bf_pages`
---
-
-CREATE TABLE `bf_pages` (
-  `page_id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `page_title` varchar(255) NOT NULL DEFAULT '',
-  `long_title` varchar(255) NOT NULL DEFAULT '',
-  `description` varchar(255) NOT NULL DEFAULT '',
-  `alias` varchar(255) DEFAULT '',
-  `revision` int(5) NOT NULL DEFAULT '0',
-  `published` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `pub_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `unpub_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `parent` int(10) NOT NULL DEFAULT '0',
-  `is_folder` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `summary` text,
-  `body` mediumtext,
-  `rich_text` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `template` int(10) NOT NULL DEFAULT '0',
-  `searchable` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `cacheable` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `created_by` bigint(20) NOT NULL DEFAULT '0',
-  `created_on` datetime NOT NULL,
-  `modified_by` bigint(20) NOT NULL DEFAULT '0',
-  `modified_on` datetime DEFAULT NULL,
-  `deleted` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `deleted_on` datetime DEFAULT NULL,
-  `deleted_by` bigint(20) NOT NULL DEFAULT '0',
-  `published_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `published_by` bigint(20) NOT NULL DEFAULT '0',
-  `dont_hit` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`page_id`),
-  KEY `alias` (`alias`),
-  KEY `published` (`published`),
-  KEY `pub_date` (`pub_date`),
-  KEY `unpub_date` (`unpub_date`),
-  KEY `parent` (`parent`),
-  KEY `isfolder` (`is_folder`),
-  KEY `template` (`template`),
-  KEY `searchable` (`searchable`),
-  KEY `cacheable` (`cacheable`),
-  FULLTEXT KEY `content_ft_idx` (`page_title`,`long_title`,`description`,`summary`,`body`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
-
 -- --------------------------------------------------------
 
 --
@@ -162,22 +110,6 @@ INSERT INTO `bf_roles` VALUES(1, 'Administrator', 'Has full control over every a
 INSERT INTO `bf_roles` VALUES(2, 'Editor', 'Can handle day-to-day management, but does not have full power.', 0, 1);
 INSERT INTO `bf_roles` VALUES(3, 'Banned', 'Banned users are not allowed to sign into your site.', 0, 0);
 INSERT INTO `bf_roles` VALUES(6, 'Developer', 'Developers typically are the only ones that can access the developer tools. Otherwise identical to Administrators, at least until the site is handed off.', 0, 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `bf_schema_version`
---
-
-CREATE TABLE `bf_schema_version` (
-  `version` int(3) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `bf_schema_version`
---
-
-INSERT INTO `bf_schema_version` VALUES(0);
 
 -- --------------------------------------------------------
 

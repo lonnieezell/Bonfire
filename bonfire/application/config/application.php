@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$config['site.title'] = 'My Bonfire App';
+$config['site.title'] = 'Bonfire Testsite';
 $config['site.system_email'] = 'lonnieje@gmail.com';
 $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
@@ -195,7 +195,7 @@ $config['assets.asset_folders'] = array(
 	to wrap all of your inline scripts into. By default, it is
 	setup to work with jQuery.
 */
-$config['assets.js_opener'] = 'head.ready(function(){'. "\n";
+$config['assets.js_opener'] = '$(document).ready(function(){'. "\n";
 $config['assets.js_closer'] = '});'. "\n";
 
 
