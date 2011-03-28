@@ -1,5 +1,17 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/*
+	Class: Role_model
+	
+	Provides access and utility methods for handling role storage
+	in the database.
+	
+	Extends:
+		MY_Model
+	
+	Package:
+		Roles
+*/
 class Role_model extends MY_Model {
 
 	protected $table		= 'roles';
@@ -11,6 +23,12 @@ class Role_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: __construct()
+		
+		Class constructor. Will load the permission_model, if it's not 
+		already loaded.
+	*/
 	public function __construct() 
 	{
 		parent::__construct();
@@ -23,6 +41,18 @@ class Role_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 
+	/*
+		Method: find()
+		
+		Returns a single role, with an array of permissions.
+		
+		Parameters:
+			$id		- An int that matches the role_id of the role in question.
+			
+		Returns:
+			An array of information about the role, along with a sub-array
+			that contains the role's applicable permissions.
+	*/
 	public function find($id=null) 
 	{
 		$role = parent::find($id);
@@ -38,6 +68,19 @@ class Role_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: update()
+		
+		A simple update of the role. This does, however, clean things up
+		when setting this role as the default role for new users.
+		
+		Parameters:
+			$id		- An int, being the role_id
+			$data	- An array of key/value pairs to update the db with.
+			
+		Returns:
+			true/false
+	*/
 	public function update($id=null, $data=null) 
 	{
 		// If this one is set to default, then we need to
@@ -53,10 +96,14 @@ class Role_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
-	
-	/** 
-	 *	Returns the id of the default role.	
-	 */
+	/*
+		Method: default_role_id()
+		
+		Returns the id of the default role.	
+		
+		Return:
+			An int with the default role_id, or false if none found.
+	*/
 	public function default_role_id() 
 	{
 		$this->db->where('default', 1);

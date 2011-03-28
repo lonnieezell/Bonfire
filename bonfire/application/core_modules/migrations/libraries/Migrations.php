@@ -1,49 +1,85 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-/**
- * Migrations
- *
- * An open source utility for CodeIgniter inspired by Ruby on Rails
- *
- * @package		Migrations
- * @author		Mat’as Montes
- *
- * Raw SQL functions added by:
- *
- *	Lonnie Ezell
- *	http://lonnieezell.com
- *
- * Rewritten by: 
- * 
- * 	Phil Sturgeon
- *	http://philsturgeon.co.uk/
- * 
- * and
- * 
- * 	Spicer Matthews <spicer@cloudmanic.com>
- * 	Cloudmanic Labs, LLC
- *	http://www.cloudmanic.com/
- *
- */
+/*
+	Package: Migrations
+	
+	Migrations provide a simple method to version the contents of your database, and make 
+	those changes easily distributable to other developers in different server environments.
+	
+	Migrations are stored in specially-named PHP files under *bonfire/application/db/migrations/*.
+	Each migration file must be numbered consecutively, starting at *001* and growing larger 
+	with each new migration from there. The rest of the filename should tell what the migration does. 
+	
+	For example: 001_install_initial_schema.php
+	
+	The class inside of the file must extend the abstract Migration class and implement both the 
+	up() and down() methods to install and uninstall the tables/changes. The class itself should be
+	named: 
+	
+	:	class Migration_install_initial_schema extends Migration {
+	:
+	:		function up() {}
+	:
+	:		function down() {}
+	:	}
+	
+	
+	Author:
+		Mat’as Montes
+	
+	Rewritten by: 
+	
+		Phil Sturgeon
+	 http://philsturgeon.co.uk/
+	
+	and
+	
+		Spicer Matthews <spicer@cloudmanic.com>
+		Cloudmanic Labs, LLC
+	 http://www.cloudmanic.com/
+	
+	Raw SQL functions added by:
+	
+	 Lonnie Ezell
+	 http://lonnieezell.com
+*/
 
 // ------------------------------------------------------------------------
 
-/**
- * Migration Interface
- *
- * All migrations should implement this, forces up() and down() and gives 
- * access to the CI super-global.
- *
- * @package		Migrations
- * @author		Phil Sturgeon
- */
-
+/*
+	Class: Migration Interface
+	
+	All migrations should implement this, forces up() and down() and gives 
+	access to the CI super-global.
+	
+	Package: 
+		Migrations
+		
+	Author:
+		Phil Sturgeon
+*/
 abstract class Migration {
 	
-	public $migration_type = 'forge';	// Valid values = 'forge' or 'sql'
+	/*
+		Var: $migration_type
+		The type of migration being ran, either 'forge' or 'sql'.
+	*/
+	public $migration_type = 'forge';
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: up()
+		
+		Abstract method ran when increasing the schema version. Typically installs
+		new data to the database or creates new tables.
+	*/
 	public abstract function up();
+	
+	/*
+		Method: down()
+		
+		Abstract method ran when decreasing the schema version.
+	*/
 	public abstract function down();
 	
 	//--------------------------------------------------------------------
@@ -58,13 +94,16 @@ abstract class Migration {
 
 // ------------------------------------------------------------------------
 
-/**
- * Migrations Class
- *
- * Utility main controller.
- *
- * @package		Migrations
- * @author		Mat’as Montes
+/*
+	Class: Migrations Class
+	
+	Utility main controller.
+	
+	Package:
+		Migrations
+		
+	Author:
+		Mat’as Montes
  */
 class Migrations {
 	
@@ -117,7 +156,14 @@ class Migrations {
 	
 	//--------------------------------------------------------------------
 
-	// This will set if there should be verbose output or not
+	/*
+		Method: set_verbose()
+		
+		This will set if there should be verbose output or not
+		
+		Parameters:
+			$state	- true/false
+	*/
 	public function set_verbose($state)
 	{
 		$this->verbose = $state;
@@ -125,11 +171,13 @@ class Migrations {
 	
 	//--------------------------------------------------------------------
 
-	/**
-	* Installs the schema up to the last version
-	*
-	* @access	public
-	* @return	void	Outputs a report of the installation
+	/*
+		Method: install() 
+		
+		Installs the schema up to the last version
+		
+		Return:
+			void	- Outputs a report of the installation
 	*/
 	public function install() 
 	{
@@ -163,15 +211,19 @@ class Migrations {
 
 	// --------------------------------------------------------------------
 
-	/**
-	 * Migrate to a schema version
-	 *
-	 * Calls each migration step required to get to the schema version of
-	 * choice
-	 *
-	 * @access	public
-	 * @param $version integer	Target schema version
-	 * @return	mixed	TRUE if already latest, FALSE if failed, int if upgraded
+	/*
+		Method: version()
+	
+		Migrate to a schema version.
+		
+		Calls each migration step required to get to the schema version of
+		choice.
+		
+		Parameters:
+			$version	- An int that is the target version to migrate to.
+			
+		Return:
+			TRUE if already latest, FALSE if failed, int if upgraded
 	 */
 	function version($version) 
 	{	
@@ -327,12 +379,14 @@ class Migrations {
 
 	// --------------------------------------------------------------------
 
-	/**
-	 * Set's the schema to the latest migration
-	 *
-	 * @access	public
-	 * @return	mixed	TRUE if already latest, FALSE if failed, int if upgraded
-	 */
+	/*
+		Method: latest()
+	
+		Set's the schema to the latest migration
+		
+		Return:
+			TRUE if already latest, FALSE if failed, int if upgraded
+	*/
 	public function latest()
 	{
 		$version = $this->_ci->config->item('migrations_version');
@@ -341,11 +395,13 @@ class Migrations {
 
 	// --------------------------------------------------------------------
 
-	/**
-	 * Retrieves current schema version
-	 *
-	 * @access	public
-	 * @return	integer	Current Schema version
+	/*
+		Method: get_schema_version()
+		
+		Retrieves current schema version
+		
+		Return:
+			integer	- Current Schema version
 	 */
 	public function get_schema_version() 
 	{
@@ -356,11 +412,13 @@ class Migrations {
 
 	// --------------------------------------------------------------------
 	
-	/**
-	 * Retrieves the latest available version.
-	 *
-	 * @access	public
-	 * @return	integer	Latest available migration file.
+	/*
+		Method: get_latest_version()
+		
+		Retrieves the latest available version.
+		
+		Return:
+			integer	- Latest available migration file.
 	 */
 	public function get_latest_version() 
 	{
@@ -371,6 +429,17 @@ class Migrations {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: get_available_versions()
+		
+		Searches the migrations folder and returns a list of available migration files.
+		
+		Author:
+			Lonnie Ezell
+		
+		Returns:
+			array	- An array of migration files
+	*/
 	public function get_available_versions() 
 	{
 		$files = glob($this->migrations_path . '*_*'.EXT);
@@ -385,7 +454,22 @@ class Migrations {
 	
 	//--------------------------------------------------------------------
 	
-	
+	/*
+		Method: do_sql_migration()
+		
+		Executes raw SQL migrations. Will manually break the commands on a ';' so
+		that multiple commmands can be run at once. Very handy for using phpMyAdmin
+		dumps.
+		
+		Parameters:
+			$sql	- A string with one or more SQL commands to be run.
+			
+		Return: 
+			void
+			
+		Author:
+			Lonnie Ezell
+	*/
 	public function do_sql_migration($sql='') 
 	{
 		if (empty($sql))
@@ -408,12 +492,19 @@ class Migrations {
 	//--------------------------------------------------------------------
 	
 
-	/**
-	 * Stores the current schema version
-	 *
-	 * @access	private
-	 * @param $schema_version integer	Schema version reached
-	 * @return	void					Outputs a report of the migration
+	/*
+		Method: _update_schema_version()
+	
+		Stores the current schema version in the database.
+		
+		Access:
+			private
+			
+		Parameters:
+			$schema_version	- An integer with the latest Schema version reached
+			
+		Return:
+			void
 	 */
 	private function _update_schema_version($schema_version) 
 	{
