@@ -1,5 +1,29 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/*
+	Class: Permission_model
+	
+	Provides access and utility methods for handling permission storage
+	in the database.
+	
+	Permissions are a simple string made up of 3 parts: 
+		
+	- Domain	- A generic classification system
+	- Context	- Typically the module name
+	- Action	- The testable action (View, Manage, etc)
+	
+	Examples permissions would be: 
+	
+	- Site.Signin.Allow
+	- Site.Developer.View
+	- Bonfire.Users.Manage
+	
+	Extends:
+		MY_Model
+		
+	Package:
+		Roles
+*/
 class Permission_model extends MY_Model {
 
 	protected $table		= 'permissions';
@@ -11,9 +35,14 @@ class Permission_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Creates a new permission field on the permissions table.
-	 */
+	/*
+		Method: create()
+		
+		Creates a new permission field on the permissions table.
+		
+		Parameter:
+			$permission_name	- A string representation of the permission.
+	*/
 	public function create($permission_name=null) 
 	{
 		if (empty($permission_name))
@@ -47,9 +76,14 @@ class Permission_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Removes a permission field from the permissions table.
-	 */
+	/*
+		Method: delete()
+		
+		Removes a permission field from the permissions table.
+		
+		Parameters:
+			$permission_name	- A string matching the permission to remove.
+	*/
 	public function delete($permission_name=null) 
 	{
 		if (empty($permission_name))
@@ -77,12 +111,16 @@ class Permission_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 *	Returns the permissions array for a single role.
-	 *
-	 * @access	public
-	 * @param	int		$role_id		
-	 * @returns	object	The list of permissions
+	/*
+		Method: find_for_role()
+		
+		Returns the permissions array for a single role.
+		
+		Parameters:
+			$role_id	- The int id of the role to find permissions for.
+			
+		Returns:
+			object	- The list of permissions
 	 */
 	public function find_for_role($role_id=null) 
 	{
@@ -96,13 +134,17 @@ class Permission_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
-	/**
-	 * Sets the permissions for a single role. 
-	 * 
-	 * The permissions array is a simple array with the values being equal
-	 * to the name of the permission to set. All other permissions are set
-	 * to 0.
-	 */
+	/*
+		Method: set_for_role()
+		
+		Sets the permissions for a single role. 
+		
+		Parameters:
+			$role_id		- The int id of the target role.
+			$permissions	- A simple array with the values being equal
+							to the name of the permission to set. All other 
+							permissions are set to 0.
+	*/
 	public function set_for_role($role_id=null, $permissions = array()) 
 	{
 		if (empty($role_id) || !is_numeric($role_id))
