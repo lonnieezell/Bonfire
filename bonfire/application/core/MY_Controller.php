@@ -14,6 +14,9 @@
 	
 	Extends:
 		MX_Controller
+		
+	Package:
+		MY_Controller
 */
 class Base_Controller extends MX_Controller {
 	
