@@ -1,5 +1,6 @@
 .DS_Store
 bonfire/application/logs/*
+!bonfire/application/logs/index.html
 bonfire/application/cache/*
 *.bak
 
