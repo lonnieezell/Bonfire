@@ -61,6 +61,7 @@ class Settings extends Admin_Controller {
 			'site.status'		=> $this->input->post('status'),
 			'site.list_limit'	=> $this->input->post('list_limit'),
 			
+			'auth.allow_register'	=> isset($_POST['allow_register']) ? 1 : 0,
 			'auth.login_type'		=> $this->input->post('login_type'),
 			'auth.use_usernames'	=> isset($_POST['use_usernames']) ? 1 : 0,
 			'auth.allow_remember'	=> isset($_POST['allow_remember']) ? 1 : 0,

@@ -114,6 +114,13 @@ class Users extends Front_Controller {
 	
 	public function register() 
 	{
+		// Are users even allowed to register? 
+		if (!$this->config->item('auth.allow_register'))
+		{
+			Template::set_message('New account registrations are not allowed.', 'attention');
+			redirect('/');
+		}
+	
 		if ($this->input->post('submit'))
 		{
 			// Validate input
