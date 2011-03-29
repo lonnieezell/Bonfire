@@ -211,11 +211,11 @@ function read_db_config($environment=null)
 	Parameters:
 		$settings	- The array of database settings. Should be in the format:
 					array(
-						'group_name' => array(
+						'main' => array(
 							'setting1' => value,
 							...
 						),
-						'group_two' => array(
+						'development' => array(
 							...
 						)
 					);
