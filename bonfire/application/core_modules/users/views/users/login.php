@@ -14,7 +14,7 @@
 	<label>Password</label>
 	<input type="password" name="password" id="password" value="" tabindex="2" placeholder="password" />
 	
-	<?php if ($this->config->item('auth.allow_remember')) : ?>
+	<?php if (config_item('auth.allow_remember')) : ?>
 	<div class="small indent">
 		<input type="checkbox" name="remember_me" value="1" tabindex="3" /> Remember me for two weeks
 	</div>
@@ -27,6 +27,10 @@
 <?php echo form_close(); ?>
 		
 <p style="text-align: center">
+	<?php if (config_item('auth.allow_register')) : ?>
+		Don't have an account? <?php echo anchor('/register', 'Sign up today'); ?> &nbsp;&nbsp; &#8226; &nbsp;&nbsp;
+	<?php endif; ?>
+
 	<?php echo anchor('/forgot_password', 'Forgot Your Password?'); ?>
 </p>
 	

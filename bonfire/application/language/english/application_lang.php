@@ -17,6 +17,7 @@ $lang['bf_security']			= 'Security';
 $lang['bf_login_type']			= 'Login Type';
 $lang['bf_login_type_email']	= 'Email Only';
 $lang['bf_login_type_username']	= 'Username Only';
+$lang['bf_allow_register']		= 'Allow User Registrations?';
 $lang['bf_login_type_both']		= 'Email or Username';
 $lang['bf_use_usernames']		= 'Use Usernames';
 $lang['bf_allow_remember']		= 'Allow \'Remember Me\'?';
@@ -32,3 +33,12 @@ $lang['bf_rte_type']			= 'RTE Type';
 $lang['bf_searchable_default']	= 'Searchable by default?';
 $lang['bf_cacheable_default']	= 'Cacheable by default?';
 $lang['bf_track_hits']			= 'Track Page Hits?';
+
+$lang['bf_context_content']		= 'Content';
+$lang['bf_context_stats']		= 'Statistics';
+$lang['bf_context_looks']		= 'Appearance';
+$lang['bf_context_settings']	= 'Settings';
+$lang['bf_context_developer']	= 'Developer';
+
+$lang['bf_action_save']			= 'Save';
+$lang['bf_action_delete']		= 'Delete';
