@@ -40,6 +40,15 @@ class Auth {
 	private $ip_address;
 	
 	/*
+		Var: $perms
+		Stores permissions by role so we don't have to scour the database more than once.
+		
+		Access:
+			Private
+	*/
+	private $perms = array();
+	
+	/*
 		Var: $ci
 		A pointer to the CodeIgniter instance.
 		
@@ -338,9 +347,21 @@ class Auth {
 			$role_id = $this->role_id();
 		}
 		
-		$perms = $this->ci->permission_model->find_for_role($role_id);
-		if (is_array($perms)) $perms = $perms[0];
+		// Have we already checked this? 
+		if (isset($this->perms[$role_id]))
+		{
+			$perms = $this->perms[$role_id];
+		}
+		else
+		{
+			$perms = $this->ci->permission_model->find_for_role($role_id);
+			if (is_array($perms)) $perms = $perms[0];
+			
+			// Store it so we can reference later
+			$this->perms[$role_id] = $perms;
+		}
 				
+		// Did we pass?
 		if (isset($perms->$permission) && $perms->$permission == 1)
 		{
 			return true;
