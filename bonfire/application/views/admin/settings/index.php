@@ -35,6 +35,11 @@
 		<legend><?php echo lang('bf_security') ?></legend>
 		
 		<div>
+			<label><?php echo lang('bf_allow_register') ?></label>
+			<input type="checkbox" name="allow_register" id="allow_register" value="1" <?php echo config_item('auth.allow_register') == 1 ? 'checked="checked"' : set_checkbox('auth.allow_register', 1); ?> />
+		</div>
+		
+		<div>
 			<label><?php echo lang('bf_login_type') ?></label>
 			<select name="login_type">
 				<option value="email" <?php echo config_item('auth.login_type') == 'email' ? 'selected="selected"' : ''; ?>><?php echo lang('bf_login_type_email') ?></option>
@@ -66,7 +71,7 @@
 	</fieldset>
 	
 	<div class="submits">
-		<input type="submit" name="submit" value="Save Settings" />
+		<input type="submit" name="submit" value="<?php echo lang('bf_action_save') .' '. lang('bf_context_settings') ?>" />
 	</div>
 
 <?php echo form_close(); ?>

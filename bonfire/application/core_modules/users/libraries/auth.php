@@ -64,6 +64,11 @@ class Auth {
 		
 		log_message('debug', 'Auth class initialized.');
 				
+		if (!class_exists('CI_Session'))
+		{
+			$this->ci->load->library('session');
+		}
+				
 		// Try to log the user in from session/cookie data
 		$this->autologin();
 	}
