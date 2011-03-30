@@ -9,18 +9,15 @@ If you can run CodeIgniter Reactor 2.0 on your server, then you should be able t
 - <PHP at http://php.net> version 5.1.6 or newer.
 - <MySQL at http://www.mysql.com> 4+ database. Currently, other databases are not supported.
 
-
-About: Before You Install
-
-Before you can actually install Bonfire, you do need to take care of one thing manually. You must setup your database configuration.
-
-Bonfire uses the standard configuration that all CodeIgniter sites would use, so you would enter your database details in the *bonfire/application/config/database.php*. Enter your host, database name, username and password.
-
 About: Installing
 
-To start the installation process, simply head to http://yoursite.com/installer.php.
+To start the installation process, simply head to http://yoursite.com/install.
 
 You should be greeted by a Welcome screen that asks you for: 
+
+	Your Database information	- Enter the connection details for your database. Click Test DB.
+	
+	If all goes well, it should direct you to Step 2 (the final step), where you just need to enter your: 
 
 	Site Title	- The name of your site, as it will appear in the browser's title bar or tab.
 	Username	- Choose a username to log into the site with (if the site is setup that way).
