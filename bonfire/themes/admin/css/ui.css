@@ -123,3 +123,20 @@ h2.panel-title {
 	position: relative;
 	padding: 5px 9px;
 }
+
+/* Search - in list views */
+
+.panel-header a.list-search {
+	font-size: 12px;
+	float: right;
+	position: relative;
+	top: 4px;
+}
+.panel-header #search-form {
+	border-top: 1px solid #d6d6d6;
+	margin-top: 5px;
+}
+.panel-header input.list-search {
+	width: 100%;
+	margin: 8px 0 5px 0;
+}
