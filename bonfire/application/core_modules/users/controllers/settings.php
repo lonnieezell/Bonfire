@@ -58,6 +58,8 @@ class Settings extends Admin_Controller {
 		
 		Template::set('user_count', $this->user_model->count_all());
 	
+		$this->load->helper('ui/ui');
+	
 		Template::set('toolbar_title', 'User Management');
 		Template::render();
 	}
