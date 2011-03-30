@@ -2,16 +2,16 @@
 	<!-- Users List -->
 	<div class="view">
 		
-		<div class="panel-header">
-			<!-- Search Form -->
-			<input type="search" id="user-search" value="" placeholder="search..." style="display: inline; width: 50%;" />
-			
+		<div class="panel-header list-search">
+		
 			<select id="role-filter" style="display: inline; max-width: 40%;">
 				<option value="0">Show role...</option>
 			<?php foreach ($roles as $role) : ?>
 				<option><?php echo $role->role_name ?></option>
 			<?php endforeach; ?>
 			</select>
+			
+			<?php render_search_box(); ?>
 		</div>
 	
 		<?php if (isset($users) && is_array($users)) : ?>
