@@ -254,7 +254,10 @@ function write_db_config($settings=null)
 			foreach ($values as $name => $value)
 			{
 				// Convert on/off to TRUE/FALSE values
-				$value = strtolower($value);
+				// keep case settings for password... --troymccormick
+				if ($name != "password") {
+					$value = strtolower($value);
+				}
 				if ($value == 'on' || $value == 'yes' || $value == 'true') $value = 'TRUE';
 				if ($value == 'on' || $value == 'no' || $value == 'false') $value = 'FALSE';
 			
