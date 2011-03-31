@@ -42,3 +42,5 @@ $lang['bf_context_developer']	= 'Developer';
 
 $lang['bf_action_save']			= 'Save';
 $lang['bf_action_delete']		= 'Delete';
+
+$lang['bf_update_show_edge']	= 'View bleeding edge updates?';
