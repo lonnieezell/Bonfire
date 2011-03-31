@@ -254,9 +254,9 @@ function write_db_config($settings=null)
 			foreach ($values as $name => $value)
 			{
 				// Convert on/off to TRUE/FALSE values
-				$value = strtolower($value);
-				if ($value == 'on' || $value == 'yes' || $value == 'true') $value = 'TRUE';
-				if ($value == 'on' || $value == 'no' || $value == 'false') $value = 'FALSE';
+				//$value = strtolower($value);
+				if (strtolower($value) == 'on' || strtolower($value) == 'yes' || strtolower($value) == 'true') $value = 'TRUE';
+				if (strtolower($value) == 'on' || strtolower($value) == 'no' || strtolower($value) == 'false') $value = 'FALSE';
 			
 				if ($value != 'TRUE' && $value != 'FALSE')
 				{
