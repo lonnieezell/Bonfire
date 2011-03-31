@@ -70,6 +70,19 @@
 	
 	</fieldset>
 	
+	<?php if ($this->auth->has_permission('Site.Developer.View')) : ?>
+	<!-- Developer Settings -->
+	<fieldset>
+		<legend>Developer</legend>
+		
+		<div>
+			<label><?php echo lang('bf_update_show_edge') ?></label>
+			<input type="checkbox" name="update_check" value="1" <?php echo config_item('updates.bleeding_edge') == 1 ? 'checked="checked"' : set_checkbox('updates.bleeding_edge', 1); ?> />
+			<p class="small" style="display: inline">Leave unchecked to only check for new tagged updates. Check to see any new commits to the official repository.</p>
+		</div>
+	</fieldset>
+	<?php endif; ?>
+	
 	<div class="submits">
 		<input type="submit" name="submit" value="<?php echo lang('bf_action_save') .' '. lang('bf_context_settings') ?>" />
 	</div>

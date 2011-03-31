@@ -66,6 +66,8 @@ class Settings extends Admin_Controller {
 			'auth.use_usernames'	=> isset($_POST['use_usernames']) ? 1 : 0,
 			'auth.allow_remember'	=> isset($_POST['allow_remember']) ? 1 : 0,
 			'auth.remember_length'	=> (int)$this->input->post('remember_length'),
+			
+			'updates.bleeding_edge'	=> isset($_POST['update_check']) ? 1 : 0,
 		);
 		
 		return write_config('application', $data);
