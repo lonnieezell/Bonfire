@@ -148,10 +148,10 @@ class Auth {
 			// Bad password
 			else
 			{
-				$this->increase_login_attempts($email);
+				$this->increase_login_attempts($login);
 			}
 			// Bad username
-			$this->increase_login_attempts($email);
+			$this->increase_login_attempts($login);
 			$this->errors[] = 'Incorrect email or password.';
 		}
 		
