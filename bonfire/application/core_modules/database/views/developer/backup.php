@@ -7,7 +7,7 @@ form div input[type=text] { width: 45%; }
 	
 		<?php if (isset($tables) && is_array($tables) && count($tables) > 0) : ?>
 			<?php foreach ($tables as $table) : ?>
-				<input type="hidden" name="tables[]" value="<?= $table ?>" />
+				<input type="hidden" name="tables[]" value="<?php echo $table ?>" />
 			<?php endforeach; ?>
 		<?php endif; ?>
 		
@@ -17,7 +17,7 @@ form div input[type=text] { width: 45%; }
 		
 		<div>
 			<label for="file_name">File Name</label>
-			<input type="text" name="file_name" class="text-input input" value="<?= $file ?>" />
+			<input type="text" name="file_name" class="text-input input" value="<?php echo $file ?>" />
 		</div>
 
 		<br/>
@@ -54,7 +54,7 @@ form div input[type=text] { width: 45%; }
 		<div style="padding: 20px" class="small">
 			<p><strong>Backup Tables: &nbsp;&nbsp;</strong>
 				<?php foreach ($tables as $table) : ?>
-					<?= $table . '&nbsp;&nbsp;&nbsp;&nbsp;'; ?>
+					<?php echo $table . '&nbsp;&nbsp;&nbsp;&nbsp;'; ?>
 				<?php endforeach; ?>
 			</p>
 		</div>
