@@ -23,16 +23,16 @@
 			<?php foreach ($backups as $file => $atts) :?>
 				<tr class="hover-toggle">
 					<td class="column-check">
-						<input type="checkbox" value="<?= $file ?>" name="checked[]" />
+						<input type="checkbox" value="<?php echo $file ?>" name="checked[]" />
 					</td>
 					<td>
-						<?= $file ?>
+						<?php echo $file ?>
 						<div class="hover-item small">
-							<a href="/admin/developer/database/get_backup/<?= $file ?>" title="Download this file">Download</a> | 
-							<a href="/admin/developer/database/restore/<?= $file ?>" title="Restore this file">Restore</a>
+							<a href="/admin/developer/database/get_backup/<?php echo $file ?>" title="Download this file">Download</a> | 
+							<a href="/admin/developer/database/restore/<?php echo $file ?>" title="Restore this file">Restore</a>
 						</div>
 					</td>
-					<td><?= round($atts['size'] / 1024 , 3) ?> KB</td>
+					<td><?php echo round($atts['size'] / 1024 , 3) ?> KB</td>
 				</tr>
 			<?php endforeach; ?>
 			</tbody>

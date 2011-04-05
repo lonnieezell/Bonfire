@@ -8,7 +8,7 @@
 	</div>
 	
 	<div class="content-box" style="padding: 15px">
-		<p><?= $results ?></p>
+		<p><?php echo $results ?></p>
 	</div>
 	
 	<div class="text-right">
@@ -19,9 +19,9 @@
 
 	<?php echo form_open($this->uri->uri_string()); ?>
 	
-		<input type="hidden" name="filename" value="<?= $filename ?>" />
+		<input type="hidden" name="filename" value="<?php echo $filename ?>" />
 	
-		<h3>Restore database from file: <span style="color:#509b00"><?= $filename ?></span>?</h3>
+		<h3>Restore database from file: <span style="color:#509b00"><?php echo $filename ?></span>?</h3>
 		
 		<div class="notification attention png_bg">
 			<div>

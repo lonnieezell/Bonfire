@@ -9,7 +9,7 @@
 		
 		<?php if (isset($files) && is_array($files) && count($files) > 0) : ?>
 			<?php foreach ($files as $file) : ?>
-				<input type="hidden" name="files[]" value="<?= $file ?>" />
+				<input type="hidden" name="files[]" value="<?php echo $file ?>" />
 			<?php endforeach; ?>
 		
 		
@@ -17,7 +17,7 @@
 			
 			<ul>
 			<?php foreach($files as $file) : ?>
-				<li><?= $file ?></li>
+				<li><?php echo $file ?></li>
 			<?php endforeach; ?>
 			</ul>
 		
