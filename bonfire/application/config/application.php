@@ -9,6 +9,7 @@ $config['site.list_limit'] = 25;
 // !For Update messages
 //--------------------------------------------------------------------
 
+$config['updates.do_check'] = 0;		// Whether to check for updates or not.
 $config['updates.bleeding_edge'] = 1;	// Show update message when new commits exist? 
 $config['updates.last_commit']	= '';	// Stores the last installed commit ref
 
