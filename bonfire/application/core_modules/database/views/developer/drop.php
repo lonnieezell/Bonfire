@@ -1,10 +1,10 @@
 <h2>Delete Database Tables</h2>
 
-<?php echo form_open('admin/database/drop'); ?>
+<?php echo form_open('admin/developer/database/drop'); ?>
 	
 	<?php if (isset($tables) && is_array($tables) && count($tables) > 0) : ?>
 		<?php foreach ($tables as $table) : ?>
-			<input type="hidden" name="tables[]" value="<?= $table ?>" />
+			<input type="hidden" name="tables[]" value="<?php echo $table ?>" />
 		<?php endforeach; ?>
 	
 	
@@ -12,7 +12,7 @@
 		
 		<ul>
 		<?php foreach($tables as $file) : ?>
-			<li><?= $file ?></li>
+			<li><?php echo $file ?></li>
 		<?php endforeach; ?>
 		</ul>
 		

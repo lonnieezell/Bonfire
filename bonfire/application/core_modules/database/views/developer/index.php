@@ -36,10 +36,10 @@
 		<?php foreach ($tables as $table) : ?>
 			<tr>
 				<td class="column-check">
-					<input type="checkbox" value="<?= $table->Name ?>" name="checked[]" />
+					<input type="checkbox" value="<?php echo $table->Name ?>" name="checked[]" />
 				</td>
-				<td><?= $table->Name ?></td>
-				<td style="text-align: center"><?= $table->Rows?></td>
+				<td><?php echo $table->Name ?></td>
+				<td style="text-align: center"><?php echo $table->Rows?></td>
 				<td><?php echo byte_format($table->Data_length) ?></td>
 				<td><?php echo byte_format($table->Index_length) ?></td>
 				<td><?php echo byte_format($table->Data_free) ?></td>
