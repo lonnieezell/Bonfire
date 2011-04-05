@@ -1,5 +1,5 @@
 <div class="notification attention">
-	<p><?php echo $update_message ?></p>
+	<p><?php echo isset($update_message) ? $update_message : 'Update Checks are turned off in the config/application.php file.' ?></p>
 </div>
 
 <?php if (isset($commits) && is_array($commits) && count($commits)) : ?>
