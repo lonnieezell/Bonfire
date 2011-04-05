@@ -9,10 +9,12 @@ class Users extends Front_Controller {
 		parent::__construct();
 		
 		$this->load->helper('form');
-		if (!class_exists('CI_Form_Validation'))
+		$this->load->library('form_validation');
+		$this->form_validation->CI =& $this;
+		
+		if (!class_exists('User_model'))
 		{
-			$this->load->library('form_validation');
-			$this->form_validation->CI =& get_instance();
+			$this->load->model('users/User_model', 'user_model');
 		}
 		
 		$this->load->database();
@@ -120,6 +122,9 @@ class Users extends Front_Controller {
 			Template::set_message('New account registrations are not allowed.', 'attention');
 			redirect('/');
 		}
+		
+		$this->load->model('roles/permission_model');
+		$this->load->model('roles/role_model');
 	
 		if ($this->input->post('submit'))
 		{
@@ -140,9 +145,10 @@ class Users extends Front_Controller {
 					'username'	=> isset($_POST['username']) ? $_POST['username'] : '',
 					'password'	=> $_POST['password']
 				);
-				
+
 				if ($this->user_model->insert($data))
-				{
+				{	
+					Template::set_message('Your account has been created. Please log in.', 'success');
 					redirect('login');
 				}
 			}
@@ -155,14 +161,9 @@ class Users extends Front_Controller {
 	
 	//--------------------------------------------------------------------
 	
-	
-	//--------------------------------------------------------------------
-	// !PRIVATE METHODS
-	//--------------------------------------------------------------------
-	
-	private function unique_email($email) 
-	{
-		if ($this->user_model->is_unique('email', $email) == true)
+	public function unique_email($email) 
+	{ 
+		if ($this->user_model->is_unique('email', $email) === true)
 		{
 			return true;
 		}
@@ -175,9 +176,9 @@ class Users extends Front_Controller {
 	
 	//--------------------------------------------------------------------
 	
-	private function unique_username($username) 
+	public function unique_username($username) 
 	{
-		if ($this->user_model->is_unique('username', $username) == true)
+		if ($this->user_model->is_unique('username', $username) === true)
 		{
 			return true;
 		}
