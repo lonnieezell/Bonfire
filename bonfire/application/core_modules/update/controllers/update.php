@@ -24,6 +24,11 @@ class Update extends Admin_Controller {
 	{ 
 		$message = '';
 		
+		if (!$this->config->item('updates.do_check'))
+		{
+			return;
+		}
+		
 		/*
 			If they're living on the bleeding edge, then we need to find
 			the latest commit reference and compare to what this installed
