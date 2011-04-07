@@ -46,6 +46,11 @@
 			<input type="text" name="database" id="database" value="<?php echo set_value('database', 'bonfire_dev') ?>" />
 		</div>
 		
+		<div>
+			<label>Prefix</label>
+			<input type="text" name="db_prefix" value="<?php echo set_value('db_prefix', 'bf_'); ?>" />
+		</div>
+		
 		<div class="submits">
 			<input type="submit" name="submit" id="submit" value="Test Database" />
 		</div>

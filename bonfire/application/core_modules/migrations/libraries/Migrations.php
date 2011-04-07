@@ -86,7 +86,7 @@ abstract class Migration {
 	
 	function __get($var)
 	{
-		return CI_Base::get_instance()->$var;
+		return get_instance()->$var;
 	}
 	
 	//--------------------------------------------------------------------
@@ -180,7 +180,7 @@ class Migrations {
 			void	- Outputs a report of the installation
 	*/
 	public function install() 
-	{
+	{ 
 		// Load all *_*.php files in the migrations path
 		$files = glob($this->migrations_path.'*_*'.EXT);
 		$file_count = count($files);
@@ -230,7 +230,7 @@ class Migrations {
 		$schema_version = $this->get_schema_version();
 		$start = $schema_version;
 		$stop = $version;
-
+		
 		if ($version > $schema_version)
 		{
 			// Moving Up
