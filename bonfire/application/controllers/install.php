@@ -57,13 +57,15 @@ class Install extends MX_Controller {
 					'hostname'	=> strip_tags($this->input->post('hostname')),
 					'username'	=> strip_tags($this->input->post('username')),
 					'password'	=> strip_tags($this->input->post('password')),
-					'database'	=> $dbname
+					'database'	=> $dbname,
+					'dbprefix'	=> strip_tags($this->input->post('db_prefix'))
 				),
 				'development' => array(
 					'hostname'	=> strip_tags($this->input->post('hostname')),
 					'username'	=> strip_tags($this->input->post('username')),
 					'password'	=> strip_tags($this->input->post('password')),
-					'database'	=> $dbname
+					'database'	=> $dbname,
+					'dbprefix'	=> strip_tags($this->input->post('db_prefix'))
 				)
 			);
 			
@@ -219,7 +221,7 @@ class Install extends MX_Controller {
 		//
 		$this->load->library('migrations/Migrations');
 	
-		if ($this->migrations->version($this->config->item('migrations_version')) != 1)
+		if (!$this->migrations->install())
 		{
 			$this->errors = 'There was an error setting up the database. Please check your settings and try again.';
 		}
