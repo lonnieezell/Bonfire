@@ -146,6 +146,37 @@ function module_controller_exists($controller=null, $module=null)
 //--------------------------------------------------------------------
 
 /*
+	Function: module_file_path()
+	
+	Finds the path to a module's file.
+	
+	Parameters:
+		$module	- The name of the module to find.
+		$folder	- The folder within the module to search for the file (ie. controllers) 
+		$file	- The name of the file to search for.
+		
+	Returns:
+		A string with the full path to the file.
+*/
+function module_file_path($module=null, $folder=null, $file=null)
+{
+	if (empty($module) || empty($folder) || empty($file))
+	{
+		return false;
+	}
+	
+	foreach (module_folders() as $module_folder)
+	{
+		$test_file = $module_folder . $module .'/'. $folder .'/'. $file;
+	
+		if (is_file($test_file))
+		{
+			return $test_file;
+		}
+	}
+}
+
+/*
 	Function: module_files()
 	
 	Returns an associative array of files within one or more modules.
@@ -175,13 +206,16 @@ function module_files($module_name=null, $module_folder=null, $exclude_core=fals
 		{
 			continue;
 		}
-		
+	
 		if (!empty($module_name) && is_dir($path . $module_name))
 		{
 			$path = $path . $module_name;
+			$modules[$module_name] = directory_map($path);
 		}
-		
-		$modules = directory_map($path);
+		else 
+		{		
+			$modules = directory_map($path);
+		}
 		
 		// If the element is not an array, we know that it's a file, 
 		// so we ignore it, otherwise it is assumbed to be a module.
@@ -191,18 +225,18 @@ function module_files($module_name=null, $module_folder=null, $exclude_core=fals
 		}
 
 		foreach ($modules as $mod_name => $values)
-		{
+		{	
 			if (is_array($values))
 			{
 				// Add just the specified folder for this module
-				if (!empty($module_folder) && isset($values[$module_folder]))
+				if (!empty($module_folder) && isset($values[$module_folder]) && count($values[$module_folder]))
 				{
 					$files[$mod_name] = array(
 						$module_folder	=> $values[$module_folder]
 					);
 				}
 				// Add the entire module
-				else
+				else if (empty($module_folder))
 				{
 					$files[$mod_name] = $values;
 				}
@@ -210,7 +244,7 @@ function module_files($module_name=null, $module_folder=null, $exclude_core=fals
 		}
 	}
 	
-	return $files;
+	return count($files) ? $files : false;
 }
 
 //--------------------------------------------------------------------
