@@ -192,6 +192,12 @@ textarea {
 	font-size: 0.875em;
 }
 select { min-width: 10em; font-size: 13px; }
+select.multiple-select {
+	width: 702px;
+	border: 1px solid #ddd;
+	margin-top: -3px;
+}
+
 input.medium { width: 45%; }
 input.tiny { width: 3em !important; }
 fieldset {
