@@ -256,6 +256,8 @@ class Auth {
 			Template::set_message('You must be logged in to view that page.', 'error');
 			redirect('login');
 		}
+		
+		$this->load_permissions();
 
 		// Check to see if the user has the proper permissions
 		if (!empty($permission) && !$this->has_permission($permission))
@@ -347,6 +349,12 @@ class Auth {
 			$role_id = $this->role_id();
 		}
 		
+		// Load and store our permissions
+		if (!isset($this->perms) || !is_array($this->perms))
+		{
+			$this->load_permissions($role_id);
+		}
+		
 		// Have we already checked this? 
 		if (isset($this->perms[$role_id]))
 		{
@@ -354,11 +362,7 @@ class Auth {
 		}
 		else
 		{
-			$perms = $this->ci->permission_model->find_for_role($role_id);
-			if (is_array($perms)) $perms = $perms[0];
-			
-			// Store it so we can reference later
-			$this->perms[$role_id] = $perms;
+			$perms = $this->perms[$role_id];
 		}
 				
 		// Did we pass?
@@ -371,6 +375,17 @@ class Auth {
 	}
 	
 	//--------------------------------------------------------------------
+	
+	public function load_permissions() 
+	{
+		$perms = $this->ci->permission_model->find_all();
+		
+		// Store it so we can reference later
+		$this->perms = $perms;
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	/*
 		Method: role_name_by_id()
