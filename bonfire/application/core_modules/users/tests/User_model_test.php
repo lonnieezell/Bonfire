@@ -6,7 +6,7 @@ class User_model_test extends Unit_Tester {
 	{
 		parent::__construct();
 		
-		$this->load->model('users/User_model', 'user_model', true);
+		$this->ci->load->model('users/User_model', 'user_model', true);
 	}
 	
 	//--------------------------------------------------------------------
@@ -18,12 +18,7 @@ class User_model_test extends Unit_Tester {
 	
 	//--------------------------------------------------------------------
 
-	public function test_if_failing() 
-	{
-		$this->assert_true(false);
-	}
 	
-	//--------------------------------------------------------------------
 	
 	
 }
