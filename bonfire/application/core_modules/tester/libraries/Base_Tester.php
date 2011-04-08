@@ -5,7 +5,7 @@
 	
 	The base test class that all other test classes extend from.
 */
-class Base_Tester extends MX_Controller {
+class Base_Tester {
 
 	/*
 		Var: $ci

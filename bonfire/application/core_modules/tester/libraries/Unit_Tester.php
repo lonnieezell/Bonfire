@@ -22,13 +22,19 @@ class Unit_Tester extends Base_Tester {
 	*/
 	private $db_created	= false;
 	
+	/*
+		Var: $my_db
+		Stores the database connection used for this test only.
+	*/
+	private $my_db;
+	
 	//--------------------------------------------------------------------
 	
 	public function __construct() 
 	{
 		parent::__construct();
 		
-		$this->config->load('tester');
+		$this->ci->config->load('tester');
 	}
 	
 	//--------------------------------------------------------------------
@@ -38,6 +44,8 @@ class Unit_Tester extends Base_Tester {
 		if ($this->db_created === true)
 		{
 			$this->db_remove();
+			// Close our database
+			$this->my_db->close();
 		}
 	}
 	
@@ -65,11 +73,11 @@ class Unit_Tester extends Base_Tester {
 		}
 		
 		// Connect to the database
-		$sql = 'USE '. $this->config->item('tester.database');
-		$this->db->query($sql);
+		$sql = 'USE '. $this->ci->config->item('tester.database');
+		$this->my_db->query($sql);
 		
 		// We need to know the SQL to run.
-		$sql_path = $this->module_path .'tests/'. $this->config->item('tester.database');
+		$sql_path = $this->module_path .'tests/'. $this->ci->config->item('tester.database');
 		
 		if (file_exists($sql_path))
 		{
@@ -88,7 +96,7 @@ class Unit_Tester extends Base_Tester {
 			
 			if (!empty($statement))
 			{
-				$this->db->query($statement);
+				$this->my_db->query($statement);
 			}
 		}
 	}
@@ -112,9 +120,9 @@ class Unit_Tester extends Base_Tester {
 		
 		if (!$this->db_exists())
 		{
-			$this->load->dbforge();
+			$this->ci->load->dbforge();
 			
-			$this->dbforge->create_database($this->config->item('tester.database'));
+			$this->ci->dbforge->create_database($this->ci->config->item('tester.database'));
 		}
 		
 		$this->db_created = true;
@@ -133,13 +141,13 @@ class Unit_Tester extends Base_Tester {
 	*/
 	protected function db_connect() 
 	{
-		$dsn = $this->config->item('tester.dsn');
+		$dsn = $this->ci->config->item('tester.dsn');
 		
 		// No DSN provided? Create it from the test group 
 		// in the current environment.
 		if (empty($dsn))
 		{
-			$this->load->helper('config_file');
+			$this->ci->load->helper('config_file');
 			
 			$settings = read_db_config(ENVIRONMENT);
 			
@@ -152,7 +160,7 @@ class Unit_Tester extends Base_Tester {
 			$dsn = 'test';
 		}
 		
-		$this->load->database($dsn);
+		$this->my_db = $this->ci->load->database($dsn, true);
 	}
 	
 	//--------------------------------------------------------------------
@@ -167,11 +175,11 @@ class Unit_Tester extends Base_Tester {
 	*/
 	protected function db_exists() 
 	{
-		$db_name = $this->config->item('tester.database');
+		$db_name = $this->ci->config->item('tester.database');
 		
-		$this->load->dbutil();
+		$this->ci->load->dbutil();
 		
-		return $this->dbutil->database_exists($db_name);
+		return $this->ci->dbutil->database_exists($db_name);
 	}
 	
 	//--------------------------------------------------------------------
@@ -190,11 +198,11 @@ class Unit_Tester extends Base_Tester {
 		
 		if ($this->db_exists())
 		{
-			$this->load->dbforge();
+			$this->ci->load->dbforge();
 			
-			$db_name = $this->config->item('tester.database');
+			$db_name = $this->ci->config->item('tester.database');
 			
-			$this->dbforge->drop_database($db_name);
+			$this->ci->dbforge->drop_database($db_name);
 		}
 		
 		$this->db_created = false;
