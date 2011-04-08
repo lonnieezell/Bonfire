@@ -6,6 +6,8 @@ require_once(APPPATH .'core_modules/tester/libraries/Base_Tester.php');
 	Class: Unit_Test
 	
 	An abstract base class that all unit tests should extend from.
+	Provides unit-testing specific asserts, and database connection
+	and management methods.
 	
 	Inspired by Toast (http://jensroland.com/projects/toast/), 
 	SimpleTest (http://simpletest.org), and 
@@ -13,6 +15,193 @@ require_once(APPPATH .'core_modules/tester/libraries/Base_Tester.php');
 */
 class Unit_Tester extends Base_Tester {
 
+	/*
+		Var: $db_created
+		If true, we know we need to tear down the database
+		during the post() method.
+	*/
+	private $db_created	= false;
+	
+	//--------------------------------------------------------------------
+	
+	public function __construct() 
+	{
+		parent::__construct();
+		
+		$this->config->load('tester');
+	}
+	
+	//--------------------------------------------------------------------
+	
+	protected function post() 
+	{
+		if ($this->db_created === true)
+		{
+			$this->db_remove();
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
+
+	//--------------------------------------------------------------------
+	// !Database Methods
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: load_sql()
+		
+		Populates a database test results. Loads and/or creates the
+		database, if necessary.
+		
+		Parameters:
+			$file	- The name of the sql file (including extension);
+	*/
+	protected function load_sql($file=null) 
+	{
+		if (!$this->db_created)
+		{
+			$this->db_create();
+		}
+		
+		// Connect to the database
+		$sql = 'USE '. $this->config->item('tester.database');
+		$this->db->query($sql);
+		
+		// We need to know the SQL to run.
+		$sql_path = $this->module_path .'tests/'. $this->config->item('tester.database');
+		
+		if (file_exists($sql_path))
+		{
+			$sql = file_get_contents($sql_path);
+			$sql = str_replace('`', '', $sql);
+			$sql = preg_replace('#^/\*(.+)\*/$#U', '', $sql);
+			$sql = preg_replace('/^#(.+)$/U', '', $sql);
+		}
+		
+		$sql_statements = explode(";\n", $sql);
+		
+		// Now actually run the sql!
+		foreach ($sql_statements as $statement)
+		{
+			$statement = trim($statement);
+			
+			if (!empty($statement))
+			{
+				$this->db->query($statement);
+			}
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: db_create()
+		
+		Creates the database, if it doesn't exist.
+		
+		Parameters:
+			$connect	- Will connect to the databse if true.
+	*/
+	protected function db_create($connect=true) 
+	{
+		if ($connect)
+		{
+			$this->db_connect();
+		}
+		
+		if (!$this->db_exists())
+		{
+			$this->load->dbforge();
+			
+			$this->dbforge->create_database($this->config->item('tester.database'));
+		}
+		
+		$this->db_created = true;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: db_connect()
+		
+		Connects to the testing database. 
+		
+		Connection info is used from the tester config file, if present.
+		If that's not there, we will look in the current environment's
+		database config file for a group called 'test'.
+	*/
+	protected function db_connect() 
+	{
+		$dsn = $this->config->item('tester.dsn');
+		
+		// No DSN provided? Create it from the test group 
+		// in the current environment.
+		if (empty($dsn))
+		{
+			$this->load->helper('config_file');
+			
+			$settings = read_db_config(ENVIRONMENT);
+			
+			// If we don't have any db info, we can't continue....
+			if (!isset($settings[ENVIRONMENT]['test']))
+			{
+				show_error('Unable to find Test database configuration.');			
+			}
+			
+			$dsn = 'test';
+		}
+		
+		$this->load->database($dsn);
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: db_exists()
+		
+		Checks to see if the testing database already exists.
+		
+		Returns:
+			true/false
+	*/
+	protected function db_exists() 
+	{
+		$db_name = $this->config->item('tester.database');
+		
+		$this->load->dbutil();
+		
+		return $this->dbutil->database_exists($db_name);
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: db_remove()
+		
+		Drops the database, if it exists.
+	*/
+	public function db_remove($connect = true) 
+	{
+		if ($connect)
+		{
+			$this->db_connect();
+		}
+		
+		if ($this->db_exists())
+		{
+			$this->load->dbforge();
+			
+			$db_name = $this->config->item('tester.database');
+			
+			$this->dbforge->drop_database($db_name);
+		}
+		
+		$this->db_created = false;
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	//--------------------------------------------------------------------
 	// !Assertions

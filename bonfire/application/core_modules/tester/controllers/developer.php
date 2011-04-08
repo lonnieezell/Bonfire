@@ -57,9 +57,14 @@ class Developer extends Admin_Controller {
 			{
 				// Grab our test class			
 				$test_class = str_replace(EXT, '', end(explode('/', $test)));
-				require(module_file_path($module, 'tests', $test));
+				$module_file_path = module_file_path($module, 'tests', $test);
+				require($module_file_path);
 				
 				$class = new $test_class;
+				
+				// Tell it what module it's running. 
+				// (Saves us from manually doing it for every test class)
+				$class->set_module_path(dirname($module_file_path));
 				
 				// Run the tests
 				$class->run_all();
