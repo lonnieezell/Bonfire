@@ -55,27 +55,31 @@ class Developer extends Admin_Controller {
 			// Run all of the tests.
 			foreach ($tests as $test)
 			{
-				// Grab our test class			
-				$test_class = str_replace(EXT, '', end(explode('/', $test)));
-				$module_file_path = module_file_path($module, 'tests', $test);
-				require($module_file_path);
-				
-				$class = new $test_class;
-				
-				// Tell it what module it's running. 
-				// (Saves us from manually doing it for every test class)
-				$class->set_module_path(dirname($module_file_path));
-				
-				// Run the tests
-				$class->run_all();
-				
-				// Store our results for processing later.
-				$vars['results']['<b>'. $module. '</b> : '. ucwords(str_replace('_', ' ', $test_class))] = array(
-					'report'	=> $this->unit->report(),
-					'raw'		=> $this->unit->result(),
-					'passed'	=> 0,
-					'failed'	=> 0
-				);
+				// We need to make sure it's not a sql file!
+				if (strpos($test, '.sql') === false)
+				{
+					// Grab our test class			
+					$test_class = str_replace(EXT, '', end(explode('/', $test)));
+					$module_file_path = module_file_path($module, 'tests', $test);
+					require($module_file_path);
+					
+					$class = new $test_class;
+					
+					// Tell it what module it's running. 
+					// (Saves us from manually doing it for every test class)
+					$class->set_module_path(dirname($module_file_path));
+					
+					// Run the tests
+					$class->run_all();
+					
+					// Store our results for processing later.
+					$vars['results']['<b>'. $module. '</b> : '. ucwords(str_replace('_', ' ', $test_class))] = array(
+						'report'	=> $this->unit->report(),
+						'raw'		=> $this->unit->result(),
+						'passed'	=> 0,
+						'failed'	=> 0
+					);
+				}
 			}
 		}
 		

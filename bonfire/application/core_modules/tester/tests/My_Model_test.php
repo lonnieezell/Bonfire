@@ -23,7 +23,7 @@ class My_Model_test extends Unit_tester {
 	public function pre() 
 	{
 		// Create our database table and load in our SQL.
-		$this->load_sql('somefile.sql');
+		$this->load_sql('test_generic_schema.sql');
 	}
 	
 	//--------------------------------------------------------------------
