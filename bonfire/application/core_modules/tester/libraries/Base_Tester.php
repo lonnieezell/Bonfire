@@ -30,6 +30,13 @@ class Base_Tester extends MX_Controller {
 		Stores the collective messages from all of the tests.
 	*/
 	protected $messages	= array();
+	
+	/*
+		Var: $module_path
+		Stores the full server path to the module.
+		(Automatically set by the test runner)
+	*/
+	protected $module_path;
 
 	//--------------------------------------------------------------------
 
@@ -165,6 +172,25 @@ class Base_Tester extends MX_Controller {
 	//--------------------------------------------------------------------
 	// !UTILITY METHODS
 	//--------------------------------------------------------------------
+	
+	/*
+		Method: set_module_path()
+		
+		Saves the full server path to the current module.
+		
+		Parameters:
+			$path	- The path to store.
+	*/
+	public function set_module_path($path=null) 
+	{
+		if (!empty($path))
+		{
+			$this->module_path = $path;
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	/*
 		Method: describe_value()
