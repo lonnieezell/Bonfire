@@ -74,11 +74,29 @@ class MY_Model extends CI_Model {
 	*/
 	protected $soft_deletes = FALSE;
 	
+	/*
+		Var: $db
+		Stores the connection to the database.
+		We do it this way so that it's actually testable.
+	*/
+	protected $db;
+	
 	//---------------------------------------------------------------
 	
 	public function __construct()
 	{
 		parent::__construct();
+		
+		$ci =& get_instance();
+		
+		if (isset($ci->db))
+		{
+			$this->db =& $ci->db;
+		} else
+		{
+			$ci->load->database();
+			$this->db =& $ci->db;
+		}
 	}
 	
 	//---------------------------------------------------------------
@@ -102,7 +120,7 @@ class MY_Model extends CI_Model {
 		}
 		
 		$query = $this->db->get_where($this->table, array($this->table.'.'. $this->key => $id));
-		
+
 		if ($query->num_rows() == 1)
 		{
 			return $query->row();
@@ -695,6 +713,13 @@ class MY_Model extends CI_Model {
 				return date( 'Y-m-d', $curr_date);
 				break;
 		}
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function set_db(&$db_connection) 
+	{
+		$this->db = $db_connection;
 	}
 	
 	//--------------------------------------------------------------------

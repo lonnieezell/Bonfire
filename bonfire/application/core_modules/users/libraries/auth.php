@@ -348,23 +348,9 @@ class Auth {
 		{
 			$role_id = $this->role_id();
 		}
-		
-		// Load and store our permissions
-		if (!isset($this->perms) || !is_array($this->perms))
-		{
-			$this->load_permissions($role_id);
-		}
-		
-		// Have we already checked this? 
-		if (isset($this->perms[$role_id]))
-		{
-			$perms = $this->perms[$role_id];
-		}
-		else
-		{
-			$perms = $this->perms[$role_id];
-		}
-				
+		 
+		$perms = $this->perms[$role_id - 1];
+
 		// Did we pass?
 		if (isset($perms->$permission) && $perms->$permission == 1)
 		{
