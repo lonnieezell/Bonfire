@@ -391,7 +391,7 @@ class Base_Tester {
 		}
 		
 		return 'because ['. $this->describe_value($base) .'] differs from ['. 
-			$this->describe_value($compare) .'] by '. abs($base, $compare);
+			$this->describe_value($compare) .'] by '. abs($base) - abs($compare);
 	}
 	
 	//--------------------------------------------------------------------
