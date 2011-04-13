@@ -320,17 +320,14 @@ class Unit_Tester extends Base_Tester {
 	*/
 	protected function assert_not_equals($base, $check, $message=null) 
 	{
-		if (!empty($message))
-		{
-			$this->message = $message;
-		}
-	
 		if ($base != $check)
 		{
+			$this->message = !empty($message) ? $message : 'Not Equal expectation passes ['. $this->describe_difference($base, $check) .']';
 			return true;
 		}
 		else 
 		{
+			$this->message = !empty($message) ? $message : 'Not Equal expectation failed ['. $this->describe_difference($base, $check) .']';
 			$this->asserts = false;
 			return false;
 		}
@@ -352,10 +349,7 @@ class Unit_Tester extends Base_Tester {
 	*/
 	public function assert_empty($assertion, $message=null) 
 	{
-		if (!empty($message))
-		{
-			$this->message = $message;
-		}
+		$this->message = !empty($message) ? $message : 'Expected empty, got ['. $this->describe_value($assertion) .']';
 	
 		if (empty($assertion))
 		{
@@ -384,10 +378,7 @@ class Unit_Tester extends Base_Tester {
 	*/
 	public function assert_not_empty($assertion, $message=null) 
 	{
-		if (!empty($message))
-		{
-			$this->message = $message;
-		}
+		$this->message = !empty($message) ? $message : 'Expected not empty, got ['. $this->describe_value($assertion) .']';
 	
 		if (!empty($assertion))
 		{
@@ -416,10 +407,7 @@ class Unit_Tester extends Base_Tester {
 	*/
 	protected function assert_null($assertion, $message=null) 
 	{
-		if (!empty($message))
-		{
-			$this->message = $message;
-		}
+		$this->message = !empty($message) ? $message : 'Expected NULL, got ['. $this->describe_value($assertion) .']';
 	
 		if (is_null($assertion))
 		{
@@ -448,10 +436,7 @@ class Unit_Tester extends Base_Tester {
 	*/
 	protected function assert_not_null($assertion, $message=null) 
 	{
-		if (!empty($message))
-		{
-			$this->message = $message;
-		}
+		$this->message = !empty($message) ? $message : 'Expected not NULL, got ['. $this->describe_value($assertion) .']';
 	
 		if (!is_null($assertion))
 		{
@@ -481,7 +466,7 @@ class Unit_Tester extends Base_Tester {
 	*/
 	protected function assert_identical($base, $check, $message=null) 
 	{
-		$this->message = !empty($message) ? $message : 'Expected identical values: ['. $this->describe_value($base) .'] vs. ['. $this->describe_value($check) .']';
+		$this->message = !empty($message) ? $message : 'Expected identical values: ['. $this->describe_difference($base, $check, true) .']';
 	
 		if ($base === $check)
 		{
@@ -511,10 +496,7 @@ class Unit_Tester extends Base_Tester {
 	*/
 	protected function assert_not_identical($base, $check, $message=null) 
 	{
-		if (!empty($message))
-		{
-			$this->message = $message;
-		}
+		$this->message = !empty($message) ? $message : 'Expected identical values: ['. $this->describe_difference($base, $check, true) .']';
 	
 		if ($base !== $check)
 		{
