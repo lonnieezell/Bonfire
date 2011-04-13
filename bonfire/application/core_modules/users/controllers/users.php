@@ -35,6 +35,8 @@ class Users extends Front_Controller {
 			{
 				$remember = false;
 			}
+			
+			$this->load->database();
 		
 			// Try to login
 			if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === true)
