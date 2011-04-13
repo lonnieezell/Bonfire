@@ -74,29 +74,11 @@ class MY_Model extends CI_Model {
 	*/
 	protected $soft_deletes = FALSE;
 	
-	/*
-		Var: $db
-		Stores the connection to the database.
-		We do it this way so that it's actually testable.
-	*/
-	protected $db;
-	
 	//---------------------------------------------------------------
 	
 	public function __construct()
 	{
 		parent::__construct();
-		
-		$ci =& get_instance();
-		
-		if (isset($ci->db))
-		{
-			$this->db =& $ci->db;
-		} else
-		{
-			$ci->load->database();
-			$this->db =& $ci->db;
-		}
 	}
 	
 	//---------------------------------------------------------------
@@ -121,7 +103,7 @@ class MY_Model extends CI_Model {
 		
 		$query = $this->db->get_where($this->table, array($this->table.'.'. $this->key => $id));
 
-		if ($query->num_rows() == 1)
+		if ($query->num_rows())
 		{
 			return $query->row();
 		}
@@ -179,7 +161,7 @@ class MY_Model extends CI_Model {
 		Return:
 			An array of objects representing the results, or FALSE on failure or empty set.
 	*/
-	public function find_all_by($field=null, $value='') 
+	public function find_all_by($field=null, $value=null) 
 	{		
 		if (empty($field)) return false;
 
@@ -237,7 +219,7 @@ class MY_Model extends CI_Model {
 		
 		if ($query && $query->num_rows() > 0)
 		{
-			return $query->result();
+			return $query->row();
 		}
 		
 		return false;
@@ -468,7 +450,7 @@ class MY_Model extends CI_Model {
 		
 		$this->db->where($field, $value);
 		
-		return $this->db->count_all_results($this->table);
+		return (int)$this->db->count_all_results($this->table);
 	}
 	
 	//---------------------------------------------------------------
@@ -483,7 +465,7 @@ class MY_Model extends CI_Model {
 			$value	- The value to match $field against.
 			
 		Return:
-			An object with the field value in it.
+			The value of the field.
 	*/
 	public function get_field($id=null, $field='') 
 	{
@@ -499,7 +481,7 @@ class MY_Model extends CI_Model {
 		
 		if ($query && $query->num_rows() > 0)
 		{
-			return $query->row();
+			return $query->row()->$field;
 		}
 		
 		return false;
@@ -717,9 +699,23 @@ class MY_Model extends CI_Model {
 	
 	//--------------------------------------------------------------------
 	
-	public function set_db(&$db_connection) 
+	public function set_table($table='') 
 	{
-		$this->db = $db_connection;
+		$this->table = $table;
+	}
+	
+	//--------------------------------------------------------------------
+
+	public function set_date_format($format='int') 
+	{
+		$this->date_format = $format;
+	}
+	
+	//--------------------------------------------------------------------
+			
+	public function set_modified($modified=true) 
+	{
+		$this->set_modified = $modified;
 	}
 	
 	//--------------------------------------------------------------------

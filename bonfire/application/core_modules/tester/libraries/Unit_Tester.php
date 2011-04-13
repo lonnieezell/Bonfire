@@ -26,7 +26,7 @@ class Unit_Tester extends Base_Tester {
 		Var: $my_db
 		Stores the database connection used for this test only.
 	*/
-	private $my_db;
+	protected $my_db;
 	
 	//--------------------------------------------------------------------
 	
@@ -77,7 +77,7 @@ class Unit_Tester extends Base_Tester {
 		$this->my_db->query($sql);
 		
 		// We need to know the SQL to run.
-		$sql_path = $this->module_path .'tests/'. $this->ci->config->item('tester.database');
+		$sql_path = $this->module_path .'/'. $file;
 		
 		if (file_exists($sql_path))
 		{
@@ -88,7 +88,7 @@ class Unit_Tester extends Base_Tester {
 		}
 		
 		$sql_statements = explode(";\n", $sql);
-		
+
 		// Now actually run the sql!
 		foreach ($sql_statements as $statement)
 		{
@@ -481,10 +481,7 @@ class Unit_Tester extends Base_Tester {
 	*/
 	protected function assert_identical($base, $check, $message=null) 
 	{
-		if (!empty($message))
-		{
-			$this->message = $message;
-		}
+		$this->message = !empty($message) ? $message : 'Expected identical values: ['. $this->describe_value($base) .'] vs. ['. $this->describe_value($check) .']';
 	
 		if ($base === $check)
 		{
@@ -533,26 +530,23 @@ class Unit_Tester extends Base_Tester {
 	//--------------------------------------------------------------------
 	
 	/*
-		Method: assert_is_a()
+		Method: assert_is_type()
 		
-		Checks if the assertion is a type of class. Uses the PHP is_a() function.
+		Checks if the assertion is a type of class.
 		
 		Parameters:
 			$base		- The value to test.
-			$type		- The class name to compare against.
+			$type		- The type name to compare against.
 			$message	- An optional message to be used.
 			
 		Returns: 
 			true/false
 	*/
-	protected function assert_is_a($base, $type, $message=null) 
-	{
-		if (!empty($message))
-		{
-			$this->message = $message;
-		}
+	protected function assert_is_type($base, $type, $message=null) 
+	{ 
+		$this->message = !empty($message) ? $message : 'Expected type '. ucfirst($type) .', was ['. $this->get_type($base) .']';
 	
-		if (is_a($base, $type))
+		if (strtolower($this->get_type($base)) == strtolower($type))
 		{
 			return true;
 		}
@@ -566,9 +560,9 @@ class Unit_Tester extends Base_Tester {
 	//--------------------------------------------------------------------
 
 	/*
-		Method: assert_not_is_a()
+		Method: assert_not_is_type()
 		
-		Checks if the assertion is not a type of class. Uses the PHP is_a() function.
+		Checks if the assertion is not a type of class.
 		
 		Parameters:
 			$base		- The value to test.
@@ -578,14 +572,11 @@ class Unit_Tester extends Base_Tester {
 		Returns: 
 			true/false
 	*/
-	protected function assert_not_is_a($base, $type, $message='') 
+	protected function assert_not_is_type($base, $type, $message='') 
 	{
-		if (!empty($message))
-		{
-			$this->message = $message;
-		}
+		$this->message = !empty($message) ? $message : 'Expected not type '. ucfirst($type) .', was ['. $this->get_type($base) .']';
 	
-		if (!is_a($base, $type))
+		if (strtolower($this->get_type($base)) != strtolower($type))
 		{
 			return true;
 		}
