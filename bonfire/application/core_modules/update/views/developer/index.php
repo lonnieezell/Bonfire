@@ -4,6 +4,7 @@
 
 <?php if (isset($commits) && is_array($commits) && count($commits)) : ?>
 	<h3>New Bleeding Edge Commits</h3>
+	<p class="small">Branch: <b>develop</b></p>
 
 	<table>
 		<thead>
