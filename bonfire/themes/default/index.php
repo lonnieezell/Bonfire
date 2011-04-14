@@ -5,7 +5,7 @@
 	
 	<title><?php echo config_item('site.title'); ?></title>
 
-	<?php Assets::css(); ?>
+	<?php echo Assets::css(); ?>
 </head>
 <body>
 
@@ -31,6 +31,6 @@
 		<p>Powered by <a href="http://cibonfire.com" target="_blank">Bonfire <?php echo BONFIRE_VERSION ?></a></p>
 	</div>
 	
-	<?php Assets::js(); ?>
+	<?php echo Assets::js(); ?>
 </body>
 </html>

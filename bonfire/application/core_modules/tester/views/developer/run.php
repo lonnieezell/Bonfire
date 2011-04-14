@@ -32,37 +32,51 @@
 
 	<?php foreach ($results as $module => $result) : ?>
 	
-		<h4 class="notification <?php echo $result['failed'] > 0 ? 'error' : 'success' ?>"><?php echo $module ?> - 
+	<div class="module-results">
+		<div class="notification <?php echo $result['failed'] > 0 ? 'error' : 'success' ?>">
+			<?php echo $module ?> - 
 			Passed: <span class="success"><?php echo $result['passed'] ?></span>
 			Failed: <span class="error"><?php echo $result['failed'] ?></span>
-		</h4>
+			
+			<span style="float: right">
+				<a href="#" class="result-detail-toggle">Show/Hide Details</a>
+			</span>
+		</div>
 		
-		<?php foreach ($result['raw'] as $test) :?>
-			<?php if ($test['Result'] == 'Passed') : ?>
-			
-				<div class="result">
-					[Passed] <b><?php echo $test['Test Name'] ?></b>
-					<?php if (!empty($test['Notes'])) :?>
-						<p class="small"><?php echo $test['Notes'] ?></p>
-					<?php endif; ?>
-				</div>
-			
-			<?php else : ?>
-			
-				<div class="result">
-					[<span style="color: red">Failed</span>] <b><?php echo $test['Test Name'] ?></b>
-					<?php if (!empty($test['Notes'])) :?>
-						<p><?php echo $test['Notes'] ?></p>
-					<?php endif; ?>
-				</div>
-			
-			<?php endif; ?>
-		<?php endforeach; ?>
-	
+		<div class="result-list" style="display: <?php echo $result['failed'] > 0 ? 'block' : 'none' ?>">
+			<?php foreach ($result['raw'] as $test) :?>
+				<?php if ($test['Result'] == 'Passed') : ?>
+				
+					<div class="result">
+						[Passed] <b><?php echo $test['Test Name'] ?></b>
+						<?php if (!empty($test['Notes'])) :?>
+							<p class="small"><?php echo $test['Notes'] ?></p>
+						<?php endif; ?>
+					</div>
+				
+				<?php else : ?>
+				
+					<div class="result">
+						[<span style="color: red">Failed</span>] <b><?php echo $test['Test Name'] ?></b>
+						<?php if (!empty($test['Notes'])) :?>
+							<p><?php echo $test['Notes'] ?></p>
+						<?php endif; ?>
+					</div>
+				
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</div>
+	</div>
 	<?php endforeach; ?>
 
 <?php endif; ?>
 
-<pre>
-<?php //print_r($results); ?>
-</pre>
+<script>
+head.ready(function(){
+	$('a.result-detail-toggle').click(function(e){
+		e.preventDefault();
+		
+		$(this).parents('.module-results').children('.result-list').slideToggle();
+	});
+});
+</script>

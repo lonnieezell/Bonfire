@@ -79,7 +79,7 @@ class Console {
 	{
 		if (empty($data)) 
 		{ 
-			return; 
+			return false; 
 		}
 		
 		$log_item = array(
@@ -139,11 +139,11 @@ class Console {
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 	
-	public static function add_to_console($log=null, $item=null) 
+	private static function add_to_console($log=null, $item=null) 
 	{
 		if (empty($log) || empty($item)) 
 		{ 
-			return;
+			return false;
 		}
 		
 		self::$logs['console'][]	= $item;
