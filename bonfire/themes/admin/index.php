@@ -14,7 +14,7 @@
 	
 	<title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo config_item('site.title') ?></title>
 	
-	<?php Assets::css(null, 'screen', true); ?>
+	<?php echo Assets::css(null, 'screen', true); ?>
 	
 	<!-- Fix the mobile Safari auto-zoom bug -->
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>

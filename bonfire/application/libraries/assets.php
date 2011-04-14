@@ -165,12 +165,15 @@ class Assets {
 		// If an array has been passed, merge it with any added styles.
 		else if (is_array($style))
 		{	
-			$styles = array_merge($styles, self::$styles);
+			$styles = array_merge($style, self::$styles);
 		}
 		// If a single style has been passed in, render it only.
 		else 
 		{
-			$styles = array($style);
+			$styles[] = array(
+				'file'	=> $style,
+				'media'	=> $media
+			);
 		}
 		
 		// Add a style named for the controller so it will be looked for.
@@ -205,7 +208,7 @@ class Assets {
 			$return .= '<link'. self::attributes($attr) ." />\n";
 		}
 		
-		echo $return;
+		return $return;
 	}
 	
 	//--------------------------------------------------------------------
@@ -335,7 +338,7 @@ class Assets {
 	public static function js($script=null, $type='external') 
 	{
 		$type .= '_scripts';
-		$return = '';
+		$output = '';
 		
 		// If a string is passed, it's a single script, so override
 		// any that are already set
@@ -352,10 +355,12 @@ class Assets {
 				self::${$type}[] = $s;
 			}
 		}
-			
+		
 		// Render out the scripts/links
-		self::external_js();
-		self::inline_js();
+		$output  = self::external_js();
+		$output .=self::inline_js();
+		
+		return $output;
 	}
 	
 	//--------------------------------------------------------------------
@@ -440,7 +445,7 @@ class Assets {
 			}
 		}
 		
-		echo trim($return, ', ');
+		return trim($return, ', ');
 	}
 	
 	//--------------------------------------------------------------------
@@ -464,21 +469,25 @@ class Assets {
 		{
 			return;
 		}
+	
+		$output = '';
 		
 		// Create our shell opening
-		echo '<script type="text/javascript">' . "\n";
-		echo self::$ci->config->item('assets.js_opener') ."\n\n";
+		$output .= '<script type="text/javascript">' . "\n";
+		$output .= self::$ci->config->item('assets.js_opener') ."\n\n";
 		
 		// Loop through all available scripts
 		// inserting them inside the shell.
 		foreach(self::$inline_scripts as $script)
 		{
-			echo $script . "\n";
+			$output .= $script . "\n";
 		}
 		
 		// Close the shell.
-		echo "\n" . self::$ci->config->item('assets.js_closer') . "\n";
-		echo '</script>' . "\n";
+		$output .= "\n" . self::$ci->config->item('assets.js_closer') . "\n";
+		$output .= '</script>' . "\n";
+		
+		return $output;
 	}
 	
 	//--------------------------------------------------------------------
