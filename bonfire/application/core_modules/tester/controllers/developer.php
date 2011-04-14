@@ -69,11 +69,14 @@ class Developer extends Admin_Controller {
 					// (Saves us from manually doing it for every test class)
 					$class->set_module_path(dirname($module_file_path));
 					
+					// Clear previous unit results
+					$this->unit->reset();
+					
 					// Run the tests
 					$class->run_all();
 					
 					// Store our results for processing later.
-					$vars['results']['<b>'. $module. '</b> : '. ucwords(str_replace('_', ' ', $test_class))] = array(
+					$vars['results'][$module. ' : <b>'. ucwords(str_replace('_', ' ', $test_class)) .'</b>'] = array(
 						'report'	=> $this->unit->report(),
 						'raw'		=> $this->unit->result(),
 						'passed'	=> 0,
@@ -87,18 +90,24 @@ class Developer extends Admin_Controller {
 		$vars['total_passed']	= 0;
 		$vars['total_failed']	= 0;
 		
+	
 		if (count($vars['results']))
-		{
+		{	
 			foreach ($vars['results'] as $key => $result)
 			{
 				foreach ($result['raw'] as $k => $v)
 				{	
+					// We're not using the results so strip it.
+					unset($vars['results'][$key]['report']);
+				
 					if (isset($v['Result']))
 					{	
 						if (strtolower($v['Result']) == 'passed')
 						{
 							$vars['total_passed']++;
 							$vars['results'][$key]['passed']++;
+							
+							//print_r($vars['results'][$key]);
 						}
 						else
 						{
@@ -109,7 +118,7 @@ class Developer extends Admin_Controller {
 				}
 			}
 		}
-		
+
 		Template::set($vars);
 	
 		// display the results
