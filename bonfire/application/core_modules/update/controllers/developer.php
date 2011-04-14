@@ -21,7 +21,7 @@ class Developer extends Admin_Controller {
 			$this->load->helper('date');
 		
 			// Latest commits
-			Template::set('commits', $this->github_lib->user_timeline('ci-bonfire', 'Bonfire'));
+			Template::set('commits', $this->github_lib->user_timeline('ci-bonfire', 'Bonfire', 'develop'));
 			
 			$tags = $this->github_lib->repo_refs('ci-bonfire', 'Bonfire');
 	
