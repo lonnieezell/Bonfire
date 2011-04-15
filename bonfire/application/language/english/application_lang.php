@@ -25,6 +25,8 @@ $lang['bf_remember_time']		= 'Remember Users For';
 $lang['bf_week']				= 'Week';
 $lang['bf_weeks']				= 'Weeks';
 $lang['bf_days']				= 'Days';
+$lang['bf_userame']				= 'Username';
+$lang['bf_password']			= 'Password';
 
 $lang['bf_home_page']			= 'Home Page';
 $lang['bf_pages']				= 'Pages';
@@ -57,3 +59,9 @@ $lang['bf_files']				= 'Files';
 $lang['bf_file']				= 'File';
 
 $lang['bf_with_selected']		= 'With selected';
+
+$lang['bf_env_dev']				= 'Development';
+$lang['bf_env_test']			= 'Testing';
+$lang['bf_env_prod']			= 'Production';
+
+$lang['bf_user']				= 'User';
