@@ -7,25 +7,25 @@
 				<th style="width: 2em">
 					<input class="check-all" type="checkbox" />
 				</th>
-				<th>Table Name</th>
-				<th style="width: 5.5em"># Records</th>
-				<th>Data Size</th>
-				<th>Index Size</th>
-				<th>Data Free</th>
-				<th>Engine</th>
+				<th><?php echo lang('db_table_name'); ?></th>
+				<th style="width: 5.5em"># <?php echo lang('db_records'); ?></th>
+				<th><?php echo lang('db_data_size'); ?></th>
+				<th><?php echo lang('db_index_size'); ?></th>
+				<th><?php echo lang('db_data_free'); ?></th>
+				<th><?php echo lang('db_engine'); ?></th>
 			</tr>
 		</thead>
 		<tfoot>
 			<tr>
 				<td colspan="7">
-					With selected: 
+					<?php echo lang('bf_with_selected'); ?>: 
 					
 					<select name="action">
-						<option>Backup</option>
-						<option>Repair</option>
-						<option>Optimize</option>
+						<option><?php echo lang('db_backup'); ?></option>
+						<option><?php echo lang('db_repair'); ?></option>
+						<option><?php echo lang('db_optimize'); ?></option>
 						<option>------</option>
-						<option>Drop</option>
+						<option><?php echo lang('db_drop'); ?></option>
 					</select> 
 					&nbsp;&nbsp;
 					<input type="submit" namve="submit" value="Apply" />
@@ -51,7 +51,7 @@
 	<?php echo form_close(); ?>
 	<?php else : ?>
 		<div class="notification info">
-			<p>No tables were found for the current database.</p>
+			<p><?php echo lang('db_no_tables'); ?></p>
 		</div>
 		
 	<?php endif; ?>

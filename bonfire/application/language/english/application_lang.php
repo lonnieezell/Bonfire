@@ -42,5 +42,18 @@ $lang['bf_context_developer']	= 'Developer';
 
 $lang['bf_action_save']			= 'Save';
 $lang['bf_action_delete']		= 'Delete';
+$lang['bf_action_cancel']		= 'Cancel';
+$lang['bf_action_download']		= 'Download';
 
 $lang['bf_update_show_edge']	= 'View bleeding edge updates?';
+
+$lang['bf_yes']					= 'Yes';
+$lang['bf_no']					= 'No';
+$lang['bf_none']				= 'None';
+
+$lang['bf_or']					= 'or';
+$lang['bf_size']				= 'Size';
+$lang['bf_files']				= 'Files';
+$lang['bf_file']				= 'File';
+
+$lang['bf_with_selected']		= 'With selected';

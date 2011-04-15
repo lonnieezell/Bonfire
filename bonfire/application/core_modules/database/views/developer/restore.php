@@ -1,10 +1,10 @@
 <br/>	
 <?php if (isset($results) && !empty($results)) : ?>
 	
-	<h3>Restore Results:</h3>
+	<h3><?php echo lang('db_restore_results'); ?>:</h3>
 	
 	<div style="text-align: right; margin-bottom: 10px;">
-		<a href="/admin/database/backups">Back to Database Tools</a>
+		<a href="/admin/database/backups"><?php echo lang('db_back_to_tools'); ?></a>
 	</div>
 	
 	<div class="content-box" style="padding: 15px">
@@ -12,7 +12,7 @@
 	</div>
 	
 	<div class="text-right">
-		<a href="/admin/database/backups">Back to Database Tools</a>
+		<a href="/admin/database/backups"><?php echo lang('db_back_to_tools'); ?></a>
 	</div>
 
 <?php else : ?>
@@ -21,18 +21,17 @@
 	
 		<input type="hidden" name="filename" value="<?php echo $filename ?>" />
 	
-		<h3>Restore database from file: <span style="color:#509b00"><?php echo $filename ?></span>?</h3>
+		<h3><?php echo lang('db_restore_file'); ?>: <span style="color:#509b00"><?php echo $filename ?></span>?</h3>
 		
 		<div class="notification attention png_bg">
 			<div>
-				<p>Restoring a database from a backup file will result in some or all of your database being erased before restoring.</p>
-				<p><strong>This may result in a loss of data</strong>.</p>
+				<?php echo lang('db_restore_attention'); ?>
 			</div>
 		</div>
 		
 		<div class="submits">
-			<button type="submit" name="submit" class="button">Restore</button> or 
-			<a href="/admin/developer/database/backups">Cancel</a>
+			<button type="submit" name="submit" class="button"><?php echo lang('db_restore'); ?></button> <?php echo lang('bf_or'); ?> 
+			<a href="/admin/developer/database/backups"><?php echo lang('bf_action_cancel'); ?></a>
 		</div>
 	
 	<?php echo form_close(); ?>

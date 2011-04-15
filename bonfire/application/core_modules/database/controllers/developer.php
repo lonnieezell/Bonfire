@@ -18,6 +18,8 @@ class Developer extends Admin_Controller {
 						
 		$this->backup_folder = APPPATH . $this->backup_folder;
 				
+		$this->lang->load('database');		
+		
 		Template::set_block('sub_nav', 'developer/_sub_nav');
 		Template::set('sidebar', 'admin/sidebar');
 	}
@@ -320,7 +322,7 @@ class Developer extends Admin_Controller {
 			// Show our verification screen.
 			Template::set('tables', $tables);
 			
-			$this->template->current_view = 'developer/drop';
+			Template::set_view('developer/drop');
 			return true;
 		} else if (is_array($_POST['tables']))
 		{
