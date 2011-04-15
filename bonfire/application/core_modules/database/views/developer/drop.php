@@ -1,4 +1,4 @@
-<h2>Delete Database Tables</h2>
+<h2><?php echo lang('bf_action_delete'); ?> <?php echo lang('db_database'); ?> <?php echo lang('db_tables'); ?></h2>
 
 <?php echo form_open('admin/developer/database/drop'); ?>
 	
@@ -8,7 +8,7 @@
 		<?php endforeach; ?>
 	
 	
-		<h3>Really delete the following database tables?</h3>
+		<h3><?php echo lang('db_drop_confirm'); ?></h3>
 		
 		<ul>
 		<?php foreach($tables as $file) : ?>
@@ -17,13 +17,12 @@
 		</ul>
 		
 		<div class="notification attention png_bg">
-			<p>Deleting tables from the database will result in loss of data.</p>
-			<p><strong>This may make your application non-functional.</strong></p>
+			<?php echo lang('db_drop_attention'); ?>
 		</div>
 		
 		<div style="margin-top: 20px;">
-			<button type="submit" name="submit" class="button">Delete Tables</button> or 
-			<a href="/admin/database">Cancel</a>
+			<button type="submit" name="submit" class="button"><?php echo lang('bf_action_delete'); ?> <?php echo lang('db_tables'); ?></button> <?php echo lang('bf_or'); ?> 
+			<a href="/admin/database"><?php echo lang('bf_action_cancel'); ?></a>
 		</div>
 	
 	<?php endif; ?>
