@@ -34,6 +34,9 @@ class Install extends MX_Controller {
 		$this->load->helper('form');
 		
 		$this->output->enable_profiler(false);
+		
+		$this->lang->load('application');
+		$this->lang->load('install');
 	}
 	
 	//--------------------------------------------------------------------
