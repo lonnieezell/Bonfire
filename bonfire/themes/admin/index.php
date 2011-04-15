@@ -38,7 +38,7 @@
 			<a href="<?php echo site_url('logout') ?>" id="tb_logout" title="Logout">Logout</a>
 		</div>
 	
-		<h1><?php echo config_item('site.title') ?></h1>
+		<h1><a href="<?php echo site_url(); ?>" target="_blank"><?php echo config_item('site.title') ?></a></h1>
 		
 		<div id="toolbar-left">
 			<?php if (has_permission('Site.Content.View')) :?>
