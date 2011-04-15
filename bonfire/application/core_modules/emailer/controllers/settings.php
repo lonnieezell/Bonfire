@@ -14,6 +14,8 @@ class Settings extends Admin_Controller {
 		Template::set_block('sub_nav', 'settings/_sub_nav');
 		
 		$this->load->helper('config_file');
+		
+		$this->lang->load('emailer');
 	}
 	
 	//--------------------------------------------------------------------
