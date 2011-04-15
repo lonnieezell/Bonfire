@@ -40,3 +40,21 @@ $lang['db_restore_results']		= 'Restore Results';
 $lang['db_back_to_tools']		= 'Back to Database Tools';
 $lang['db_restore_file']		= 'Restore database from file';
 $lang['db_restore_attention']	= '<p>Restoring a database from a backup file will result in some or all of your database being erased before restoring.</p><p><strong>This may result in a loss of data</strong>.</p>';
+
+$lang['db_database_settings']	= 'Database Settings';
+$lang['db_hostname']			= 'Hostname';
+$lang['db_dbname']				= 'Database Name';
+$lang['db_advanced_options']	= 'Advanced Options';
+$lang['db_persistant_connect']	= 'Persistant Connection';
+$lang['db_display_errors']		= 'Display Database Errors';
+$lang['db_enable_caching']		= 'Enable Query Caching';
+$lang['db_cache_dir']			= 'Cache Directory';
+$lang['db_prefix']				= 'Prefix';
+
+$lang['db_servers']				= 'Servers';
+$lang['db_driver']				= 'Driver';
+$lang['db_persistant']			= 'Persistant';
+$lang['db_debug_on']			= 'Debug On';
+$lang['db_strict_mode']			= 'Strict Mode';
+$lang['db_running_on_1']		= 'You are currently running on the';
+$lang['db_running_on_2']		= 'server.';

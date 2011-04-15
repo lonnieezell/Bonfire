@@ -11,6 +11,7 @@ class Settings extends Admin_Controller {
 		$this->auth->restrict('Site.Settings.View');
 		
 		$this->load->helper('config_file');
+		$this->lang->load('database');
 		
 		Template::set('toolbar_title', 'Database Settings');
 		
