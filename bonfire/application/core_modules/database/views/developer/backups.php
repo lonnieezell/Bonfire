@@ -7,15 +7,15 @@
 					<th id="cb" class="column-check" style="width: 2em">
 						<input class="check-all" type="checkbox" />
 					</th>
-					<th>Filename</th>
-					<th style="width: 6.5em">Size</th>
+					<th><?php echo lang('db_filename'); ?></th>
+					<th style="width: 6.5em"><?php echo lang('bf_size'); ?></th>
 				</tr>
 			</thead>
 			<tfoot>
 				<tr>
 					<td colspan="3">
-						Delete selected backup files: 
-						<button type="submit" name="submit" class="button">Delete</button>
+						<?php echo lang('db_delete_note'); ?>
+						<button type="submit" name="submit" class="button"><?php echo lang('bf_action_delete'); ?></button>
 					</td>
 				</tr>
 			</tfoot>
@@ -28,8 +28,8 @@
 					<td>
 						<?php echo $file ?>
 						<div class="hover-item small">
-							<a href="/admin/developer/database/get_backup/<?php echo $file ?>" title="Download this file">Download</a> | 
-							<a href="/admin/developer/database/restore/<?php echo $file ?>" title="Restore this file">Restore</a>
+							<a href="/admin/developer/database/get_backup/<?php echo $file ?>" title="Download this file"><?php echo lang('bf_action_download'); ?></a> | 
+							<a href="/admin/developer/database/restore/<?php echo $file ?>" title="Restore this file"><?php echo lang('db_restore'); ?></a>
 						</div>
 					</td>
 					<td><?php echo round($atts['size'] / 1024 , 3) ?> KB</td>
@@ -42,6 +42,6 @@
 	
 	<?php else : ?>
 		<div class="notification attention">
-			<p>No previous backups were found.</p>
+			<p><?php echo lang('db_no_backups'); ?></p>
 		</div>
 	<?php endif; ?>

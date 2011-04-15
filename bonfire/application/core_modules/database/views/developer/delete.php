@@ -2,10 +2,10 @@
 
 <?php echo form_open($this->uri->uri_string()); ?>
 
-	<button type="submit" name="submit" class="button">Delete Files</button> 
-	<span class="cancel">or	<a href="/admin/developer/database/backups">Cancel</a></span>
+	<button type="submit" name="submit" class="button"><?php echo lang('bf_action_delete'); ?> <?php echo lang('bf_files'); ?></button> 
+	<span class="cancel"><?php echo lang('bf_or'); ?>	<a href="/admin/developer/database/backups"><?php echo lang('bf_action_cancel'); ?></a></span>
 
-	<h3>Delete Backup File<?php echo count($files) > 1 ? 's' : ''; ?></h3>
+	<h3><?php echo lang('bf_action_delete'); ?> <?php echo lang('db_backup'); ?> <?php echo lang('bf_file'); ?><?php echo count($files) > 1 ? 's' : ''; ?></h3>
 		
 		<?php if (isset($files) && is_array($files) && count($files) > 0) : ?>
 			<?php foreach ($files as $file) : ?>
@@ -13,7 +13,7 @@
 			<?php endforeach; ?>
 		
 		
-			<p><b>Really delete the following backup files?</b></p>
+			<p><b><?php echo lang('db_backup_delete_confirm'); ?></b></p>
 			
 			<ul>
 			<?php foreach($files as $file) : ?>
