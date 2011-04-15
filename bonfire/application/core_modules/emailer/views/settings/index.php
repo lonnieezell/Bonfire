@@ -9,13 +9,13 @@
 	<br/>
 	
 	<div>
-		<label>System Email Address</label>
+		<label><?php echo lang('em_system_email'); ?></label>
 		<input type="email" name="sender_email" class="medium" value="<?php echo isset($sender_email) ? $sender_email : set_value('sender_email') ?>" />
-		<p class="small indent">The email that all system-generated emails are sent from.</p>
+		<p class="small indent"><?php echo lang('em_system_email_note'); ?></p>
 	</div>
 	
 	<div>
-		<label>Email Server</label>
+		<label><?php echo lang('em_email_server'); ?></label>
 		<select name="protocol" id="server_type">
 			<option <?php echo isset($protocol) && $protocol == 'mail' ? 'selected="selected"' : ''; ?>>mail</option>
 			<option <?php echo isset($protocol) && $protocol == 'sendmail' ? 'selected="selected"' : ''; ?>>sendmail</option>
@@ -24,33 +24,33 @@
 	</div>
 	
 <fieldset>
-	<legend>Email Settings</legend>
+	<legend><?php echo lang('em_settings'); ?></legend>
 	<!-- PHP Mail -->
 	<div id="mail">
-		<p class="text-center"><b>Mail</b> uses the standard PHP mail function, so no settings are necessary.</p>
+		<p class="text-center"><?php echo lang('em_settings_note'); ?></p>
 	</div>
 
 	<!-- Sendmail -->
 	<div id="sendmail">
-		<label>Sendmail location</label>
+		<label>Sendmail <?php echo lang('em_location'); ?></label>
 		<input type="text" name="mailpath" class="medium" value="<?php echo isset($mailpath) ? $mailpath : '/usr/sbin/sendmail' ?>" />
 	</div>
 	
 	<!-- SMTP -->
 	<div id="smtp">
-		<label>SMTP Server Address</label>
+		<label>SMTP <?php echo lang('em_server_address'); ?></label>
 		<input type="text" name="smtp_host" class="medium" value="<?php echo isset($smtp_host) ? $smtp_host : set_value('smtp_host') ?>" />
 		<br/>
-		<label>SMTP Username</label>
+		<label>SMTP <?php echo lang('bf_username'); ?></label>
 		<input type="text" name="smtp_user" class="medium" value="<?php echo isset($smtp_user) ? $smtp_user : set_value('smtp_user') ?>" />
 		<br/>
-		<label>SMTP Password</label>
+		<label>SMTP <?php echo lang('bf_password'); ?></label>
 		<input type="text" name="smtp_pass" class="medium" value="<?php echo isset($smtp_pass) ? $smtp_pass : set_value('smtp_pass') ?>" />
 		<br/>
-		<label>SMTP Port</label>
+		<label>SMTP <?php echo lang('em_port'); ?></label>
 		<input type="text" name="smtp_port" class="medium" value="<?php echo isset($smtp_port) ? $smtp_port : set_value('smtp_port') ?>" />
 		<br/>
-		<label>SMTP Timeout (seconds)</label>
+		<label>SMTP <?php echo lang('em_timeout_secs'); ?></label>
 		<input type="text" name="smtp_timeout" class="medium" value="<?php echo isset($smtp_timeout) ? $smtp_timeout : set_value('smtp_timeout') ?>" />
 	</div>
 </fieldset>

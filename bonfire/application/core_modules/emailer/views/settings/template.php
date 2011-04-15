@@ -1,14 +1,14 @@
-<p>Emails are sent in HTML format. They can be customized by editing the header and footer, below.</p>
+<p><?php echo lang('em_template_note'); ?></p>
 
 <?php echo form_open('admin/settings/emailer/template'); ?>
 
 	<div class="fancy-text">
-		<label>Header</label>
+		<label><?php echo lang('em_header'); ?></label>
 		<textarea name="header" rows="15"><?php echo htmlspecialchars_decode($this->load->view('email/_header', null, true)) ;?></textarea>
 	</div>
 	
 	<div class="fancy-text">
-		<label>Footer</label>
+		<label><?php echo lang('em_footer'); ?></label>
 		<textarea name="footer" rows="15"><?php echo htmlspecialchars_decode($this->load->view('email/_footer', null, true)) ;?></textarea>
 	</div>
 

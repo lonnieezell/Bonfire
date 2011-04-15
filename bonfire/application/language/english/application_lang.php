@@ -25,7 +25,7 @@ $lang['bf_remember_time']		= 'Remember Users For';
 $lang['bf_week']				= 'Week';
 $lang['bf_weeks']				= 'Weeks';
 $lang['bf_days']				= 'Days';
-$lang['bf_userame']				= 'Username';
+$lang['bf_username']				= 'Username';
 $lang['bf_password']			= 'Password';
 
 $lang['bf_home_page']			= 'Home Page';
