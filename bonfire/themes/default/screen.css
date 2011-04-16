@@ -188,6 +188,7 @@ label {
 	margin-right: 2%;
 	text-align: right;
 }
+label.remember {width: 50%;}
 input[type=text],
 input[type=email],
 input[type=password] {

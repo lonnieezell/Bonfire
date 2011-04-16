@@ -9,7 +9,7 @@
 <p>Enter your email and we'll send a temporary password to you.</p>
 
 <?php echo form_open($this->uri->uri_string()); ?>
-	<label>Email</label>
+	<label for="email">Email</label>
 	<input type="email" name="email" id="email"  value="<?php echo set_value('email'); ?>"  />		
 
 <div class="submits">
