@@ -8,15 +8,15 @@
 
 <?php echo form_open('login'); ?>
 
-	<label><?php echo config_item('auth.login_type') == 'both' ? 'Username/Email' : ucwords(config_item('auth.login_type')) ?></label>
-	<input type="text" name="login" id="login_value"  value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo config_item('auth.login_type') == 'both' ? 'Username/Email' : ucwords(config_item('auth.login_type')) ?>" />
+	<label for="login_value"><?php echo config_item('auth.login_type') == 'both' ? 'Username/Email' : ucwords(config_item('auth.login_type')) ?></label>
+	<input type="text" name="login" id="login_value" value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo config_item('auth.login_type') == 'both' ? 'Username/Email' : ucwords(config_item('auth.login_type')) ?>" />
 
-	<label>Password</label>
+	<label for="password">Password</label>
 	<input type="password" name="password" id="password" value="" tabindex="2" placeholder="password" />
 	
 	<?php if (config_item('auth.allow_remember')) : ?>
 	<div class="small indent">
-		<input type="checkbox" name="remember_me" value="1" tabindex="3" /> Remember me for two weeks
+		<input type="checkbox" name="remember_me" id="remember_me" value="1" tabindex="3" /> 		<label for="remember_me" class="remember">Remember me for two weeks</label>
 	</div>
 	<?php endif; ?>
 
