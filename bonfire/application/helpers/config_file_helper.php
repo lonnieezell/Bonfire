@@ -140,7 +140,13 @@ function write_config($file='', $settings=null)
 	}
 	
 	// Write the changes out...
-	$result = file_put_contents(APPPATH.'config/'.$file.EXT, $contents, LOCK_EX);
+	if (!function_exists('write_file'))
+	{
+		$CI = get_instance();
+		$CI->load->helper('file');
+	}
+
+	$result = write_file(APPPATH.'config/'.$file.EXT, $contents);
 	
 	if ($result === FALSE)
 	{
@@ -291,9 +297,11 @@ function write_db_config($settings=null)
 				$contents = '<?php' . "\n" . $contents;
 			}
 			
+			$CI = get_instance();
+			$CI->load->helper('file');;
+			
 			// Write the changes out...
-			$result = file_put_contents(APPPATH.'config/'.$env .'database'.EXT, $contents, LOCK_EX);
-			//$result = false;
+			$result = write_file(APPPATH.'config/'.$env .'database'.EXT, $contents);
 		}
 	}
 	
