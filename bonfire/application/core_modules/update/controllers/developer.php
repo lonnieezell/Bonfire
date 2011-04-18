@@ -8,7 +8,9 @@ class Developer extends Admin_Controller {
 		
 		$this->auth->restrict('Site.Developer.View');
 		
-		Template::set('toolbar_title', 'Update Manager');
+		$this->lang->load('update');
+		
+		Template::set('toolbar_title', lang('up_toolbar_title'));
 	}
 	
 	//--------------------------------------------------------------------
