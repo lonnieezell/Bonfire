@@ -77,12 +77,11 @@ class Users extends Front_Controller {
 				if (count($user) == 1)
 				{
 					// User exists, so create a temp password.
-					$this->load->helper('string');
-					$this->load->helper('security');
+					$this->load->helpers(array('string', 'security'));
 					
 					$new_pass = random_string('alnum', 12);
 					
-					$hash = do_hash($new_pass . $user[0]->salt . $_POST['email']);
+					$hash = do_hash($new_pass . $user->salt . $_POST['email']);
 					
 					// Save the hash to the db so we can confirm it later.
 					$this->user_model->update_where('email', $_POST['email'], array('temp_password_hash' => $hash));
@@ -93,7 +92,7 @@ class Users extends Front_Controller {
 					$data = array(
 						'to'	=> $_POST['email'],
 						'subject'	=> 'Your Temporary Password',
-						'message'	=> $this->load->view('_emails/forgot_password', array('new_pass', $new_pass), true)
+						'message'	=> $this->load->view('_emails/forgot_password', array('new_pass' => $new_pass), true)
 					);
 					
 					if ($this->emailer->send($data))

@@ -38,6 +38,7 @@ class Settings extends Admin_Controller {
 			{
 				$data = array(
 					'sender_email'	=> $this->input->post('sender_email'),
+					'mailtype'		=> $this->input->post('mailtype'),
 					'protocol'		=> strtolower($_POST['protocol']),
 					'mailpath'		=> $_POST['mailpath'],
 					'smtp_host'		=> isset($_POST['smtp_host']) ? $_POST['smtp_host'] : '',
@@ -97,6 +98,27 @@ class Settings extends Admin_Controller {
 	public function emails() 
 	{
 		Template::set('toolbar_title', 'Email Contents');
+		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function test() 
+	{
+		$this->output->enable_profiler(false);
+
+		$this->load->library('emailer');
+		$this->emailer->enable_debug(true);
+		
+		$data = array(
+			'to'		=> $this->input->post('email'),
+			'subject'	=> lang('em_test_mail_subject'),
+			'message'	=> lang('em_test_mail_body')
+		);
+		
+		$results = $this->emailer->send($data, false);
+		
+		Template::set('results', $results);
 		Template::render();
 	}
 	
