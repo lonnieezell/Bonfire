@@ -19,6 +19,8 @@ class Developer extends Admin_Controller {
 		Template::set('log_threshold', $this->config->item('log_threshold'));
 		
 		Assets::add_js($this->load->view('developer/logs_js', null, true), 'inline');
+		
+		$this->lang->load('logs');
 	}
 	
 	//--------------------------------------------------------------------
