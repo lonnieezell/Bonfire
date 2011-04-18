@@ -67,3 +67,4 @@ $lang['bf_env_prod']			= 'Production';
 $lang['bf_user']				= 'User';
 $lang['bf_users']				= 'Users';
 $lang['bf_description']			= 'Description';
+$lang['bf_email']				= 'Email';

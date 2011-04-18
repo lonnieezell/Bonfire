@@ -54,12 +54,30 @@ class Emailer {
 			Private
 	*/
 	private $ci;
+	
+	/*
+		Var: $config
+		
+		Holds the config settings from config/email.php
+		
+		Access:
+			Private
+	*/
+	private $config	= array();
 
 	//--------------------------------------------------------------------
 	
 	public function __construct() 
 	{
 		$this->ci =& get_instance();
+		
+		// CI is refusing to read prefs from the config for some reason,
+		// So we'll do it manually...
+		if (!function_exists('read_config'))
+		{
+			$this->ci->load->helper('config_file');
+		}
+		$this->config = read_config('email');
 	}
 	
 	//--------------------------------------------------------------------
@@ -89,11 +107,9 @@ class Emailer {
 	*/
 	public function send($data=array(), $queue_override=false) 
 	{
-		$this->ci->config->load('email');
-	
 		// Make sure we have the information we need. 
 		$to = isset($data['to']) ? $data['to'] : false;
-		$from = $this->ci->config->item('sender_email');
+		$from = $this->config['sender_email'];
 		$subject = isset($data['subject']) ? $data['subject'] : false;
 		$message = isset($data['message']) ? $data['message'] : false;
 		$alt_message = isset($data['alt_message']) ? $data['alt_message'] : false;
@@ -171,8 +187,9 @@ class Emailer {
 			Private
 	*/
 	private function send_email(&$to=null, &$from=null, &$subject=null, &$message=null, &$alt_message=false) 
-	{
+	{	
 		$this->ci->load->library('email');
+		$this->ci->email->initialize($this->config);
 		
 		$this->ci->email->to($to);
 		$this->ci->email->from($from);
@@ -183,11 +200,11 @@ class Emailer {
 			$this->ci->email->set_alt_message($alt_message);
 		}
 				
-		$result = $this->ci->email->send();
+		$result['success'] = $this->ci->email->send();
 		
 		if ($this->debug)
 		{
-			echo $this->ci->email->print_debugger();
+			$result['debug'] = $this->ci->email->print_debugger();
 		}
 		
 		return $result;
@@ -269,5 +286,16 @@ class Emailer {
 	
 	//--------------------------------------------------------------------
 	
-
+	/*
+		Method: debug()
+		
+		Tells the emailer lib to show or hide the debugger string.
+	*/
+	public function enable_debug($show_debug=false) 
+	{
+		$this->debug = $show_debug;
+	}
+	
+	//--------------------------------------------------------------------
+	
 }
