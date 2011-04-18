@@ -2,14 +2,14 @@
 
 <?php if (!isset($log_content) || empty($log_content)) : ?>
 <div class="notification attention">
-	<p>Either the log file could not be located, or it was empty.</p>
+	<p><?php echo lang('log_not_found'); ?></p>
 </div>
 <?php else : ?>
 
 	<p>View &nbsp;&nbsp;
 		<select id="filter">
-			<option value="all">All entries</option>
-			<option value="error">Errors only</option>
+			<option value="all"><?php echo lang('log_show_all_entries'); ?></option>
+			<option value="error"><?php echo lang('log_show_errors'); ?></option>
 		</select>
 	</p>
 

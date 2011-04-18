@@ -26,7 +26,7 @@
 		<?php else : ?>
 		
 			<div class="notification information">
-				<p>No logs found.</p>
+				<p><?php echo lang('log_no_logs'); ?></p>
 			</div>
 		
 		<?php endif; ?>
@@ -37,7 +37,7 @@
 		<div class="scrollable" id="ajax-content">
 				<?php if ($log_threshold == 0) : ?>
 				<div class="notification attention">
-					<p>Logging is not currently enabled.</p>
+					<p><?php echo lang('log_not_enabled'); ?></p>
 				</div>
 				<?php endif; ?>
 			
@@ -46,21 +46,21 @@
 
 				<div>
 					<br/>
-					<label>Log the following:</label>
+					<label><?php echo lang('log_the_following'); ?></label>
 					<select name="log_threshold">
-						<option value="0" <?php echo ($log_threshold == 0) ? 'selected="selected"' : ''; ?>>0 - Nothing</option>
-						<option value="1" <?php echo ($log_threshold == 1) ? 'selected="selected"' : ''; ?>>1 - Error Message (including PHP Errors)</option>
-						<option value="2" <?php echo ($log_threshold == 2) ? 'selected="selected"' : ''; ?>>2 - Debug Messages</option>
-						<option value="3" <?php echo ($log_threshold == 3) ? 'selected="selected"' : ''; ?>>3 - Information Messages</option>
-						<option value="4" <?php echo ($log_threshold == 4) ? 'selected="selected"' : ''; ?>>4 - All Messages</option>
+						<option value="0" <?php echo ($log_threshold == 0) ? 'selected="selected"' : ''; ?>><?php echo lang('log_what_0'); ?></option>
+						<option value="1" <?php echo ($log_threshold == 1) ? 'selected="selected"' : ''; ?>><?php echo lang('log_what_1'); ?></option>
+						<option value="2" <?php echo ($log_threshold == 2) ? 'selected="selected"' : ''; ?>><?php echo lang('log_what_2'); ?></option>
+						<option value="3" <?php echo ($log_threshold == 3) ? 'selected="selected"' : ''; ?>><?php echo lang('log_what_3'); ?></option>
+						<option value="4" <?php echo ($log_threshold == 4) ? 'selected="selected"' : ''; ?>><?php echo lang('log_what_4'); ?></option>
 					</select>						   
 					
-					<p class="small indent">The higher log values also include all messages from the lower numbers. So, logging 2 - Debug Messages also logs 1 - Error Messages.</p>
+					<p class="small indent"><?php echo lang('log_what_note'); ?></p>
 				</div>
 			
 				<div class="submits">
 					<br/>
-					<input type="submit" name="submit" value="Save Log Settings" />
+					<input type="submit" name="submit" value="<?php echo lang('log_save_button'); ?>" />
 				</div>
 			
 			<?php echo form_close(); ?>
@@ -68,7 +68,7 @@
 			
 			
 			<div class="notification information">
-				<p>Logging can rapidly create very large files, if you log too much information. For live sites, you should probably log only Errors.</p>
+				<p><?php echo lang('log_big_file_note'); ?></p>
 			</div>
 			
 			<?php if (isset($logs) && is_array($logs) && count($logs)) : ?>
@@ -76,11 +76,9 @@
 			
 			<!-- Purge? -->
 			<div class="box delete rounded">
-				<a class="button" id="delete-me" href="<?php echo site_url('admin/developer/logs/purge/'); ?>" onclick="return confirm('Are you sure you want to delete all log files?')">Delete Log Files</a>
+				<a class="button" id="delete-me" href="<?php echo site_url('admin/developer/logs/purge/'); ?>" onclick="return confirm('Are you sure you want to delete all log files?')"><?php echo lang('log_delete_button'); ?></a>
 				
-				<h3>Delete all log files?</h3>
-				
-				<p>Deleting log files is permanent. There is no going back, so please make sure.</p>
+				<?php echo lang('log_delete_note'); ?>
 			</div>
 			<?php endif; ?>
 			
