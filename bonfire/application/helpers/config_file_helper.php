@@ -140,8 +140,11 @@ function write_config($file='', $settings=null)
 	}
 	
 	// Write the changes out...
-	$CI = get_instance();
-	$CI->load->helper('file');;
+	if (!function_exists('write_file'))
+	{
+		$CI = get_instance();
+		$CI->load->helper('file');
+	}
 
 	$result = write_file(APPPATH.'config/'.$file.EXT, $contents);
 	
