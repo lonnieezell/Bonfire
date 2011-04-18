@@ -13,7 +13,7 @@
 	Author: 
 		Lonnie Ezell
 */
-class Auth {
+class Auth  {
 	
 	/*
 		Var: $errors

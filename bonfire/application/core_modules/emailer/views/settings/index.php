@@ -15,6 +15,14 @@
 	</div>
 	
 	<div>
+		<label><?php echo lang('em_email_type'); ?></label>
+		<select name="mailtype">
+			<option value="text" <?php echo isset($mailtype) && $mailtype == 'text' ? 'selected="selected"' : ''; ?>>Text</option>
+			<option value="html" <?php echo isset($mailtype) && $mailtype == 'html' ? 'selected="selected"' : ''; ?>>HTML</option>
+		</select>
+	</div>
+	
+	<div>
 		<label><?php echo lang('em_email_server'); ?></label>
 		<select name="protocol" id="server_type">
 			<option <?php echo isset($protocol) && $protocol == 'mail' ? 'selected="selected"' : ''; ?>>mail</option>
@@ -61,6 +69,22 @@
 
 <?php echo form_close(); ?>
 
+<!-- Test Settings -->
+<h3><?php echo lang('em_test_header'); ?></h3>
+
+<p><?php echo lang('em_test_intro'); ?></p>
+
+<?php echo form_open('admin/settings/emailer/test', array('class' => 'ajax-form', 'id'=>'test-form')); ?>
+	
+	<div>
+		<label><?php echo lang('bf_email'); ?></label>
+		<input type="email" name="test_email" id="test-email" value="<?php echo config_item('site.system_email') ?>" /> 
+		<input type="submit" name="submit" value="<?php echo lang('em_test_button'); ?>" />
+	</div>
+	
+	<div id="test-ajax"></div>
+
+<?php echo form_close(); ?>
 <script>
 head.ready(function(){
 	// Server Settings
@@ -85,5 +109,20 @@ head.ready(function(){
 	// since js is active, hide the server settings
 	$('#server_type').trigger('change');
 
+	// Email Test
+	$('#test-form').submit(function(e){
+		e.preventDefault();
+		
+		var email	= $('#test-email').val();
+		var url		= $(this).attr('action');
+		
+		$('#test-ajax').load(
+			url,
+			{
+				email: email,
+				url: url
+			}
+		);
+	});
 });
 </script>
