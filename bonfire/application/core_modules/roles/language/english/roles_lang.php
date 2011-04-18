@@ -1,0 +1,20 @@
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+$lang['role_no_roles']				= 'There are not any roles in the system.';
+$lang['role_create_button']			= 'Create a new role.';
+$lang['role_create_note']			= 'Every user needs a role. Make sure you have all that you need.';
+$lang['role_distribution']			= 'Account Distribution';
+$lang['role_account_type']			= 'Account Type';
+
+$lang['role_name']					= 'Role Name';
+$lang['role_max_desc_length']		= 'Max. 255 characters.';
+$lang['role_default_role']			= 'Default Role';
+$lang['role_default_note']			= 'Check if this role should be assigned to all new users.';
+$lang['role_permissions']			= 'Permissions';
+$lang['role_permissions_check_note']	= 'Check all permissions that apply to this Role.';
+$lang['role_save_role']				= 'Save Role';
+$lang['role_delete_role']			= 'Delete this Role';
+$lang['role_delete_note']			= 'Deleting this role will convert all users that are currently assigned it to the site&rsquo;s default role.';
+
+$lang['role_roles']					= 'Roles';
+$lang['role_new_role']				= 'New Role';

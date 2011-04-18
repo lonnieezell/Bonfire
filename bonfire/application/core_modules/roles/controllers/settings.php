@@ -13,6 +13,8 @@ class Settings extends Admin_Controller {
 		
 		$this->load->model('role_model');
 		
+		$this->lang->load('roles');
+		
 		Assets::add_js($this->load->view('settings/roles_js', null, true), 'inline');
 	}
 		

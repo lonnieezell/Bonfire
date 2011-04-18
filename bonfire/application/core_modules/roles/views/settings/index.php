@@ -22,7 +22,7 @@
 	<?php else: ?>
 	
 	<div class="notification attention">
-		<p>There aren't any roles in the system. <?php echo anchor('admin/settings/roles/create', 'Create a new role.') ?></p>
+		<p><?php echo lang('role_no_roles'); ?> <?php echo anchor('admin/settings/roles/create', lang('role_create_button')) ?></p>
 	</div>
 	
 	<?php endif; ?>
@@ -33,11 +33,11 @@
 		<div class="scrollable" id="ajax-content">
 				
 				<div class="box create rounded">
-					<a class="button good ajaxify" href="<?php echo site_url('admin/settings/roles/create'); ?>">Create New Role</a>
+					<a class="button good ajaxify" href="<?php echo site_url('admin/settings/roles/create'); ?>"><?php echo lang('role_create_button'); ?></a>
 				
-					<h3>Create A New Role</h3>
+					<h3><?php echo ucwords(lang('role_create_button')); ?></h3>
 					
-					<p>Every user needs a role. Make sure you have all that you need.</p>
+					<p><?php echo lang('role_create_note'); ?></p>
 				</div>	
 				
 				
@@ -45,14 +45,14 @@
 				
 				<?php if (isset($role_counts) && is_array($role_counts) && count($role_counts)) : ?>
 				
-					<h2>Account Distribution</h2>
+					<h2><?php echo lang('role_distribution'); ?></h2>
 					
 					<table cellspacing="0">
 						<thead>
 							<tr>
-								<th>Account Type</th>
-								<th class="text-center"># Users</th>
-								<th class="text-center">% Users</th>
+								<th><?php echo lang('role_account_type'); ?></th>
+								<th class="text-center"># <?php echo lang('bf_users'); ?></th>
+								<th class="text-center">% <?php echo lang('bf_users'); ?></th>
 							</tr>
 						</thead>
 						<tbody>
