@@ -61,7 +61,7 @@ class Role_model extends MY_Model {
 		
 		// Grab our permissions for the role.
 		$permissions = $this->permission_model->find_for_role($id);
-		$role->permissions = $permissions[0];
+		$role->permissions = $permissions;
 		
 		return $role;
 	}
