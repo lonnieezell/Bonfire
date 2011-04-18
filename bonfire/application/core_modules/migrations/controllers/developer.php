@@ -11,6 +11,7 @@ class Developer extends Admin_Controller {
 		
 		$this->config->load('migrations');
 		$this->load->library('Migrations');	
+		$this->lang->load('migrations');
 	}
 
 	//--------------------------------------------------------------------
