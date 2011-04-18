@@ -1,17 +1,17 @@
 <div class="notification attention">
-	<p><?php echo isset($update_message) ? $update_message : 'Update Checks are turned off in the config/application.php file.' ?></p>
+	<p><?php echo isset($update_message) ? $update_message : lang('up_update_off_message') ?></p>
 </div>
 
 <?php if (isset($commits) && is_array($commits) && count($commits)) : ?>
-	<h3>New Bleeding Edge Commits</h3>
-	<p class="small">Branch: <b>develop</b></p>
+	<h3><?php echo lang('up_edge_commits'); ?></h3>
+	<p class="small"><?php echo lang('up_branch'); ?></p>
 
 	<table>
 		<thead>
 			<tr>
-				<th>Author</th>
-				<th style="width: 8em">Committed</th>
-				<th>Message</th>
+				<th><?php echo lang('up_author'); ?></th>
+				<th style="width: 8em"><?php echo lang('up_committed'); ?></th>
+				<th><?php echo lang('up_message'); ?></th>
 			</tr>
 		</thead>
 		<tbody>
