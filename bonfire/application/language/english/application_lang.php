@@ -46,6 +46,7 @@ $lang['bf_action_save']			= 'Save';
 $lang['bf_action_delete']		= 'Delete';
 $lang['bf_action_cancel']		= 'Cancel';
 $lang['bf_action_download']		= 'Download';
+$lang['bf_action_preview']		= 'Preview';
 
 $lang['bf_update_show_edge']	= 'View bleeding edge updates?';
 

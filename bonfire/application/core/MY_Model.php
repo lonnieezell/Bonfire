@@ -440,9 +440,9 @@ class MY_Model extends CI_Model {
 		Return:
 			int
 	*/
-	public function count_by($field='', $value='') 
+	public function count_by($field='', $value=NULL) 
 	{
-		if (empty($field) || empty($value))
+		if (empty($field))
 		{
 			$this->error = 'Not enough information to count results.';
 			return false;
