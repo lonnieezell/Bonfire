@@ -28,3 +28,13 @@ $lang['em_test_error']			= 'The email looks like it is not set correctly.';
 
 $lang['em_test_mail_subject']	= 'Congratulations! Your Bonfire Emailer is working!';
 $lang['em_test_mail_body']		= 'If you are seeing this email, then it appears your Bonfire Emailer is working!';
+
+$lang['em_stat_no_queue']		= 'You do not currently have any emails in the queue.';
+$lang['em_total_in_queue']		= 'Total Emails in Queue:';
+$lang['em_total_sent']			= 'Total Emails Sent:';
+
+$lang['em_sent']				= 'Sent';
+$lang['em_attempts']			= 'Attempts';
+$lang['em_id']					= 'ID';
+$lang['em_to']					= 'To';
+$lang['em_subject']				= 'Subject';

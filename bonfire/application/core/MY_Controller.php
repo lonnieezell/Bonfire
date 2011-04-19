@@ -152,7 +152,7 @@ class Admin_Controller extends Authenticated_Controller {
 		$this->pager['next_link'] 		= 'Next &raquo;';
 		$this->pager['prev_link'] 		= '&laquo; Previous';
 		
-		$this->limit = 25;
+		$this->limit = $this->config->item('site.list_limit');
 		
 		// Basic setup
 		Template::set_theme('admin');
