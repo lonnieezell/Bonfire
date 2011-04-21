@@ -28,10 +28,6 @@
 </tr>
  
 <tr>
-<td style="background-color:#FFFFFF;border-top:0px solid #333333;border-bottom:10px solid #FFFFFF;"><center><a href=""><IMG id=editableImg1 SRC="img/logo_header.jpg" BORDER="0" title="Your Company"  alt="Your Company" align="center"></a></center></td>
-</tr>
-
-
 </table>
 
 

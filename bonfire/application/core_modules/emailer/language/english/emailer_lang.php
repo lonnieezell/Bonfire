@@ -40,3 +40,4 @@ $lang['em_to']					= 'To';
 $lang['em_subject']				= 'Subject';
 
 $lang['em_missing_data']		= 'One or more required fields are missing.';
+$lang['em_no_debug']			= 'Email was queued. No debug data is available.';
