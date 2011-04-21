@@ -25,7 +25,7 @@ class Emailer {
 		If true, will queue emails into the database to be sent later. 
 		If false, will send the email immediately.
 	*/ 
-	public $queue_emails = false;
+	public $queue_emails = true;
 	
 	/*
 		Var: $errors
@@ -117,19 +117,24 @@ class Emailer {
 		// If we don't have everything, return false.
 		if ($to == false || $subject == false || $message == false)
 		{
-			$this->errors[] = 'One or more required fields are missing.';
+			$this->errors[] = lang('em_missing_data');
 			return false;
 		}
+		
+		// Wrap the $message in the email template.
+		$templated  = $this->ci->load->view('email/_header', null, true);
+		$templated .= $message;
+		$templated .= $this->ci->load->view('email/_footer', null, true);
 		
 		// Should we put it in the queue?
 		if ($queue_override == true || $this->queue_emails == true)
 		{
-			return $this->queue_email($to, $from, $subject, $message, $alt_message);
+			return $this->queue_email($to, $from, $subject, $templated, $alt_message);
 		}
 		// Otherwise, we're sending it right now.
 		else 
 		{
-			return $this->send_email($to, $from, $subject, $message, $alt_message);
+			return $this->send_email($to, $from, $subject, $templated, $alt_message);
 		}
 	}
 	
