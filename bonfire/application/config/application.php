@@ -3,7 +3,7 @@
 $config['site.title'] = 'Bonfire Testsite';
 $config['site.system_email'] = 'lonnieje@gmail.com';
 $config['site.status'] = 1;		// 0 = offline, 1 = online
-$config['site.list_limit'] = 1;
+$config['site.list_limit'] = 25;
 
 //--------------------------------------------------------------------
 // !For Update messages
