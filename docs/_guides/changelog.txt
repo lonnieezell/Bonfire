@@ -1,0 +1,15 @@
+Topic: Changelog
+
+Version 0.2
+
+Released: Currently under development
+
+Additions:
+- The Emailer class has a new setting, html or text email format.
+- Emailer class now has a way to test your email settings.
+- Emailer class has allows you to view the unsent emails in your queue under Statistics / Emailer.
+- A new Unit Testing framework has been started. Currently supports Unit Testing only. Web/Functional Testing coming later.
+
+Bugs: 
+- Upgraded to the latest version of head.js to fix a bug where AJAX page loads were not working in FF3 and IE.
+- Misc. bugfixes in the install routine that should allow for smooth installation in a larger number of cases.
