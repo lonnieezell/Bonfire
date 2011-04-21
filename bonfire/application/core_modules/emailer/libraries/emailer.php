@@ -25,7 +25,7 @@ class Emailer {
 		If true, will queue emails into the database to be sent later. 
 		If false, will send the email immediately.
 	*/ 
-	public $queue_emails = true;
+	public $queue_emails = false;
 	
 	/*
 		Var: $errors
