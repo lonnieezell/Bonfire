@@ -298,4 +298,27 @@ class Emailer {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: queue_emails()
+		
+		Specifies whether to queue emails in the send() method. 
+		
+		Default: 
+			false	- Do NOT queue emails. Instead, send them directly.
+			
+		Return:
+			void
+	*/	
+	public function queue_emails($queue=false) 
+	{
+		if ($queue !== true && $queue !== false)
+		{
+			return;
+		}
+	
+		$this->queue_emails = $queue;
+	}
+	
+	//--------------------------------------------------------------------
+	
 }
