@@ -21,7 +21,7 @@
 	#codeigniter-profiler table.main tr:hover td { background: #292929 !important; }
 	#codeigniter-profiler table.main code { font-family: inherit; padding: 0; background: transparent; border: 0; color: #fff; }
 	
-	#codeigniter-profiler table td .hilight { color: #FFFD70 !important; }
+	#codeigniter-profiler table td .hilight, #codeigniter-profiler .hilight { color: #FFFD70 !important; }
 	#codeigniter-profiler table td .faded { color: #aaa !important; }
 	
 	#ci-profiler-menu-exit { background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAIhSURBVDjLlZPrThNRFIWJicmJz6BWiYbIkYDEG0JbBiitDQgm0PuFXqSAtKXtpE2hNuoPTXwSnwtExd6w0pl2OtPlrphKLSXhx07OZM769qy19wwAGLhM1ddC184+d18QMzoq3lfsD3LZ7Y3XbE5DL6Atzuyilc5Ciyd7IHVfgNcDYTQ2tvDr5crn6uLSvX+Av2Lk36FFpSVENDe3OxDZu8apO5rROJDLo30+Nlvj5RnTlVNAKs1aCVFr7b4BPn6Cls21AWgEQlz2+Dl1h7IdA+i97A/geP65WhbmrnZZ0GIJpr6OqZqYAd5/gJpKox4Mg7pD2YoC2b0/54rJQuJZdm6Izcgma4TW1WZ0h+y8BfbyJMwBmSxkjw+VObNanp5h/adwGhaTXF4NWbLj9gEONyCmUZmd10pGgf1/vwcgOT3tUQE0DdicwIod2EmSbwsKE1P8QoDkcHPJ5YESjgBJkYQpIEZ2KEB51Y6y3ojvY+P8XEDN7uKS0w0ltA7QGCWHCxSWWpwyaCeLy0BkA7UXyyg8fIzDoWHeBaDN4tQdSvAVdU1Aok+nsNTipIEVnkywo/FHatVkBoIhnFisOBoZxcGtQd4B0GYJNZsDSiAEadUBCkstPtN3Avs2Msa+Dt9XfxoFSNYF/Bh9gP0bOqHLAm2WUF1YQskwrVFYPWkf3h1iXwbvqGfFPSGW9Eah8HSS9fuZDnS32f71m8KFY7xs/QZyu6TH2+2+FAAAAABJRU5ErkJggg==) 0% 0% no-repeat; padding-left: 20px; position: absolute; right: 5px; top: 10px; }
@@ -150,7 +150,7 @@ var ci_profiler_bar = {
 		<div id="ci-profiler-console" class="ci-profiler-box" style="display: none">
 			<h2>Console</h2>
 			
-			<?php if (is_array($sections['console'])) : ?>
+			<?php if (is_array($sections['console']) && is_array($sections['console']['console']) && count($sections['console']['console'])) : ?>
 				
 				<table class="main">
 				<?php foreach ($sections['console']['console'] as $log) : ?>
@@ -175,9 +175,7 @@ var ci_profiler_bar = {
 				</table>
 
 			<?php else : ?>
-
-				<?php echo $sections['console']; ?>
-
+				<p>No Console messages.</p>
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
@@ -187,7 +185,7 @@ var ci_profiler_bar = {
 		<div id="ci-profiler-memory" class="ci-profiler-box" style="display: none">
 			<h2>Memory Usage</h2>
 			
-			<?php if (is_array($sections['console'])) : ?>
+			<?php if (is_array($sections['console']) && is_array($sections['console']['console']) && count($sections['console']['console'])) : ?>
 				
 				<table class="main">
 				<?php foreach ($sections['console']['console'] as $log) : ?>
@@ -206,9 +204,7 @@ var ci_profiler_bar = {
 				</table>
 
 			<?php else : ?>
-
-				<?php echo $sections['console']; ?>
-
+				<p>No Memory logs.</p>
 			<?php endif; ?>
 		</div>
 	<?php endif; ?>
@@ -240,6 +236,11 @@ var ci_profiler_bar = {
 			<h2>Queries</h2>
 			
 			<?php if (is_array($sections['queries'])) : ?>
+				
+				<?php if ($sections['queries']['duplicates']) : ?>
+					<p class="hilight"><?php echo $sections['queries']['duplicates'] ?> DUPLICATE QUERIES.</p>
+					<?php unset($sections['queries']['duplicates']); ?>
+				<?php endif; ?>
 				
 				<table class="main" cellspacing="0">
 				<?php foreach ($sections['queries'] as $key => $val) : ?>

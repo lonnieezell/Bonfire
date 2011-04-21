@@ -149,6 +149,7 @@ class CI_Profiler {
 	{
 		$dbs = array();
 		$output = array();
+		$output['duplicates'] = 0;
 
 		// Let's determine which databases are currently connected to
 		foreach (get_object_vars($this->CI) as $CI_object)
@@ -180,17 +181,13 @@ class CI_Profiler {
 			{
 				foreach ($db->queries as $key => $val)
 				{
-					$time = number_format($db->query_times[$key], 4);
-
-					/*
-					$val = highlight_code($val, ENT_QUOTES);
-
-					foreach ($highlight as $bold)
+					// duplicates?
+					if (in_array($val, $output))
 					{
-						$val = str_replace($bold, '<strong>'.$bold.'</strong>', $val);
+						$output['duplicates']++;	
 					}
-					*/
-
+				
+					$time = number_format($db->query_times[$key], 4);
 					$output[$time] = $val;
 				}
 			}
