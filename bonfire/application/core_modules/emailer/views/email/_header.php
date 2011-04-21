@@ -1,5 +1,5 @@
 <html>
-<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor='#99CC00' >
+<body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor='#ececec' >
 
 
 <STYLE>
@@ -16,15 +16,15 @@
 
 
 
-<table width="100%" cellpadding="10" cellspacing="0" class="backgroundTable" bgcolor='#99CC00' >
+<table width="100%" cellpadding="10" cellspacing="0" class="backgroundTable" >
 <tr>
 <td valign="top" align="center">
 
 
-<table width="550" cellpadding="0" cellspacing="0">
+<table width="550" cellpadding="0" cellspacing="0" bgcolor="#fff" style="border: 1px solid #999">
 
 <tr>
-<td style="background-color:#FFCC66;border-top:0px solid #000000;border-bottom:1px solid #FFFFFF;text-align:center;" align="center"><span style="font-size:10px;color:#996600;line-height:200%;font-family:verdana;text-decoration:none;">Email not displaying correctly? <a href="*|ARCHIVE|*" style="font-size:10px;color:#996600;line-height:200%;font-family:verdana;text-decoration:none;">View it in your browser.</a></span></td>
+<td style="background-color:#333;color: #fff;text-align:center;" align="center"><span style="font-size:10px;line-height:200%;font-family:verdana;text-decoration:none;">Email not displaying correctly? <a href="*|ARCHIVE|*" style="font-size:10px;line-height:200%;font-family:verdana;text-decoration:none;">View it in your browser.</a></span></td>
 </tr>
  
 <tr>
