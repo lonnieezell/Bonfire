@@ -54,8 +54,8 @@ $config['module_permissions'] = array(
 	'content'		=> array(
 		'views'		=> 'Site.Content.View'
 	),
-	'statistics'	=> array(
-	
+	'stats'			=> array(
+		'emailer'	=> 'Bonfire.Emailer.View'
 	),
 	'appearance'	=> array(
 	
