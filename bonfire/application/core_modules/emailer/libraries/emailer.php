@@ -168,7 +168,14 @@ class Emailer {
 			$this->ci->db->set('alt_message', $alt_message);
 		}
 		
-		return $this->ci->db->insert('email_queue');
+		$result['success'] = $this->ci->db->insert('email_queue');
+		
+		if ($this->debug)
+		{
+			$result['debug'] = lang('em_no_debug');
+		}
+		
+		return $result;
 	}
 	
 	//--------------------------------------------------------------------
