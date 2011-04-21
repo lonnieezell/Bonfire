@@ -37,12 +37,15 @@ class Update extends Admin_Controller {
 		if ($this->config->item('updates.bleeding_edge'))
 		{ 
 			$commits = $this->github_lib->user_timeline('ci-bonfire', 'Bonfire');
-		
-			$last_commit = $commits[0]->id;
 			
-			if ($last_commit !== $this->config->item('updates.last_commit'))
+			if (is_array($commits))
 			{
-				$message .= 'A <b>bleeding edge</b> update to Bonfire is available.';
+				$last_commit = $commits[0]->id;
+			
+				if ($last_commit !== $this->config->item('updates.last_commit'))
+				{
+					$message .= 'A <b>bleeding edge</b> update to Bonfire is available.';
+				}
 			}
 			
 			unset($commits, $last_commit);
@@ -53,12 +56,15 @@ class Update extends Admin_Controller {
 		*/
 		$tags = $this->github_lib->repo_refs('ci-bonfire', 'Bonfire');
 
-		foreach ($tags as $tag => $ref)
+		if ($tags && is_array($tags))
 		{
-			if ($tag > BONFIRE_VERSION)
+			foreach ($tags as $tag => $ref)
 			{
-				$message .= ' Version <b>'. $tag .'</b> of Bonfire is available. You are currently running '. BONFIRE_VERSION;
-				break;
+				if ($tag > BONFIRE_VERSION)
+				{
+					$message .= ' Version <b>'. $tag .'</b> of Bonfire is available. You are currently running '. BONFIRE_VERSION;
+					break;
+				}
 			}
 		}
 		
