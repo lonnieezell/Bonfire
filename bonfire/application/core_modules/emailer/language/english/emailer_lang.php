@@ -38,3 +38,5 @@ $lang['em_attempts']			= 'Attempts';
 $lang['em_id']					= 'ID';
 $lang['em_to']					= 'To';
 $lang['em_subject']				= 'Subject';
+
+$lang['em_missing_data']		= 'One or more required fields are missing.';

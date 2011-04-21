@@ -8,6 +8,7 @@ Additions:
 - The Emailer class has a new setting, html or text email format.
 - Emailer class now has a way to test your email settings.
 - Emailer class has allows you to view the unsent emails in your queue under Statistics / Emailer.
+- Updated email class to wrap the $message in the email template by default.
 - A new Unit Testing framework has been started. Currently supports Unit Testing only. Web/Functional Testing coming later.
 
 Bugs: 
