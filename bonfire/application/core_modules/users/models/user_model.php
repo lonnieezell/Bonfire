@@ -106,19 +106,21 @@ class User_model extends MY_Model {
 	
 	public function count_by_roles() 
 	{
-		$sql = "SELECT role_name, COUNT(1) as count
-				FROM bf_users, bf_roles
-				WHERE bf_users.role_id = bf_roles.role_id
-				GROUP BY bf_users.role_id";
-		
-		$query = $this->db->query($sql);
-		
-		if ($query->num_rows())
-		{
-			return $query->result();
-		}
+		$prefix = $this->db->dbprefix;
 
-		return false;
+        $sql = "SELECT role_name, COUNT(1) as count
+                FROM {$prefix}users, {$prefix}roles
+                WHERE {$prefix}users.role_id = {$prefix}roles.role_id
+                GROUP BY {$prefix}users.role_id";
+
+        $query = $this->db->query($sql);
+
+        if ($query->num_rows())
+        {
+            return $query->result();
+        }
+
+        return false; 
 	}
 	
 	//--------------------------------------------------------------------
