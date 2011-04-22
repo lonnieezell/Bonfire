@@ -26,6 +26,10 @@ All wrapped up in an elegant interface that will make you proud when you hand th
 
 and possibly even more...
 
+## Stay Up To Date
+
+Follow Bonfire's progress and commits at Twitter by following [cibonfire](http://twitter.com/#!/cibonfire).
+
 ## Lend A Hand
 
 If you're interested in helping out, fork the project and start coding! I'd love to have you on board. You can always shoot me an email at lonnieje@gmail.com and we can talk about how you'll best fit it and what the best place to start coding would be.
