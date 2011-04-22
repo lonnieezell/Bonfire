@@ -1,4 +1,4 @@
-<div class="scrollable" style="margin: 18px 0 36px 0">
+<div class="scrollable" id="ajax-scroller" style="margin: 18px 0 36px 0">
 	<?php 
 		echo Template::message();
 		echo Template::yield(); 
