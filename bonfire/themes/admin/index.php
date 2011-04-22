@@ -75,6 +75,8 @@
 	
 	<?php Template::block('nav_bottom', ''); ?>
 	
+	<div id="debug"><!-- Stores the Profiler Results --></div>
+	
 	<script>
 		head.js(<?php echo Assets::external_js(null, true) ?>);
 	</script>
