@@ -10,6 +10,7 @@ html, body, div, span, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pr
 }                 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display:block; }
 
+html, body { height: 100%; position: relative; }
 body {
 	font-size: 100%;
 	font-family: Helvetica, Arial, sans-serif;
