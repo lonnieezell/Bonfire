@@ -69,3 +69,15 @@ $lang['bf_user']				= 'User';
 $lang['bf_users']				= 'Users';
 $lang['bf_description']			= 'Description';
 $lang['bf_email']				= 'Email';
+
+//--------------------------------------------------------------------
+// MY_Model
+//--------------------------------------------------------------------
+$lang['bf_model_no_data']		= 'No data available.';
+$lang['bf_model_invalid_id']	= 'Invalid ID passed to model.';
+$lang['bf_model_no_table']		= 'Model has unspecified database table.';
+$lang['bf_model_fetch_error']	= 'Not enough information to fetch field.';
+$lang['bf_model_count_error']	= 'Not enough information to count results.';
+$lang['bf_model_unique_error']	= 'Not enough information to check uniqueness.';
+$lang['bf_model_find_error']	= 'Not enough information to find by.';
+$lang['bf_model_bad_select']	= 'Invalid selection.';

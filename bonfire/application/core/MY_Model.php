@@ -142,7 +142,8 @@ class MY_Model extends CI_Model {
 			return $query->result();
 		}
 		
-		$this->error = 'Invalid selection.';
+		$this->error = $this->lang->line('bf_model_bad_select');
+		$this->logit($this->lang->line('bf_model_bad_select'));
 		return false;
 	}
 	
@@ -192,7 +193,8 @@ class MY_Model extends CI_Model {
 	{
 		if (empty($field) || (!is_array($field) && empty($value)))
 		{
-			$this->error = 'Not enough information to find by.';
+			$this->error = $this->lang->line('bf_model_find_error');
+			$this->logit($this->lang->line('bf_model_find_error'));
 			return false;
 		}
 	
@@ -322,7 +324,8 @@ class MY_Model extends CI_Model {
 	{
 		if (empty($field) || empty($value) || !is_array($data))
 		{
-			$this->error = 'Not enough data.';
+			$this->error = $this->lang->line('bf_model_no_data');
+			$this->logit($this->lang->line('bf_model_no_data'));
 			return false;
 		}
 			
@@ -396,7 +399,8 @@ class MY_Model extends CI_Model {
 	{
 		if (empty($field) || empty($value))
 		{
-			$this->error = 'Not enough information to check uniqueness.';
+			$this->error = $this->lang->line('bf_model_unique_error');
+			$this->logit($this->lang->line('bf_model_unique_error'));
 			return false;
 		}
 
@@ -444,7 +448,8 @@ class MY_Model extends CI_Model {
 	{
 		if (empty($field))
 		{
-			$this->error = 'Not enough information to count results.';
+			$this->error = $this->lang->line('bf_model_count_error');
+			$this->logit($this->lang->line('bf_model_count_error'));
 			return false;
 		}
 		
@@ -471,7 +476,8 @@ class MY_Model extends CI_Model {
 	{
 		if (!is_numeric($id) || $id === 0 || empty($field))
 		{
-			$this->error = 'Not enough information to fetch field.';
+			$this->error = $this->lang->line('bf_model_fetch_error');
+			$this->logit($this->lang->line('bf_model_fetch_error'));
 			return false;
 		}
 		
@@ -620,7 +626,8 @@ class MY_Model extends CI_Model {
 		// Does the model have a table set?
 		if (empty($this->table))
 		{
-			$this->error = 'Model has unspecified database table.';
+			$this->error = $this->lang->line('bf_model_no_table');
+			$this->logit($this->lang->line('bf_model_no_table'), 'error');
 			return false;
 		}
 		
@@ -629,7 +636,8 @@ class MY_Model extends CI_Model {
 		{
 			if (!is_numeric($id) || $id == 0)
 			{
-				$this->error = 'Invalid ID passed to model.';
+				$this->error = $this->lang->line('bf_model_invalid_id');
+				$this->logit($this->lang->line('bf_model_invalid_id'));
 				return false;
 			}
 		}
@@ -639,7 +647,8 @@ class MY_Model extends CI_Model {
 		{
 			if (!is_array($data) || count($data) == 0)
 			{
-				$this->error = 'No data available to insert.';
+				$this->error = $this->lang->line('bf_model_no_data');
+				$this->logit($this->lang->line('bf_model_no_data'));
 				return false;
 			}
 		}
