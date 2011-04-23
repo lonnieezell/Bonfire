@@ -74,7 +74,7 @@ class Base_Controller extends MX_Controller {
 			$message	- The string to write to the logs.
 			$level		- The log level, as per CI log_message method.
 	*/
-	private function logit($message='', $level='debug') 
+	protected function logit($message='', $level='debug') 
 	{
 		if (empty($message))
 		{
