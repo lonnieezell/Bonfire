@@ -699,6 +699,14 @@ class MY_Model extends CI_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: set_table()
+		
+		Allows you to set the table to use for all methods during runtime.
+		
+		Parameters:
+			$table	- The table name to use (do not include the prefix!)
+	*/
 	public function set_table($table='') 
 	{
 		$this->table = $table;
@@ -706,16 +714,59 @@ class MY_Model extends CI_Model {
 	
 	//--------------------------------------------------------------------
 
+	/*
+		Method: set_date_format()
+		
+		Sets the date_format to use for setting created_on and modified_on values.
+		
+		Parameters:
+			$format	- String describing format.
+						Valid values are: 'int', 'datetime', 'date'
+	*/
 	public function set_date_format($format='int') 
 	{
 		$this->date_format = $format;
 	}
 	
 	//--------------------------------------------------------------------
-			
+	
+	/*
+		Method: set_modified()
+		
+		Sets whether to auto-create modified_on dates in the update method.
+		
+		Parameters:
+			$modified	- true/false
+	*/
 	public function set_modified($modified=true) 
 	{
 		$this->set_modified = $modified;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: logit()
+		
+		Logs an error to the Console (if loaded) and to the log files.
+		
+		Parameters:
+			$message	- The string to write to the logs.
+			$level		- The log level, as per CI log_message method.
+	*/
+	private function logit($message='', $level='debug') 
+	{
+		if (empty($message))
+		{
+			return;
+		}
+		
+		if (class_exists('Console'))
+		{
+			Console::log($message);
+		}
+		
+		log_message($level, $message);
 	}
 	
 	//--------------------------------------------------------------------
