@@ -1,3 +1,9 @@
+<?php
+	// Setup our default assets to load.
+	Assets::add_js( array(
+		base_url() .'assets/js/jquery-1.5.min.js',
+	));
+?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,6 +12,8 @@
 	<title><?php echo config_item('site.title'); ?></title>
 
 	<?php echo Assets::css(); ?>
+	
+	<script src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
 </head>
 <body>
 
@@ -31,6 +39,11 @@
 		<p>Powered by <a href="http://cibonfire.com" target="_blank">Bonfire <?php echo BONFIRE_VERSION ?></a></p>
 	</div>
 	
-	<?php echo Assets::js(); ?>
+	<div id="debug"></div>
+	
+	<script>
+		head.js(<?php echo Assets::external_js(null, true) ?>);
+	</script>
+	<?php echo Assets::inline_js(); ?>
 </body>
 </html>
