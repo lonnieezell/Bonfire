@@ -140,7 +140,7 @@ class Settings extends Admin_Controller {
 		Template::set('user', $this->user_model->find($user_id));
 		Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
 		
-		Template::set('toolbar_title', lang('us_edit_user');
+		Template::set('toolbar_title', lang('us_edit_user'));
 		Template::set_view('settings/user_form');
 		Template::render();
 	}
