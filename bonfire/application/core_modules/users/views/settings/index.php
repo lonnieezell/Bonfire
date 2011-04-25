@@ -5,7 +5,7 @@
 		<div class="panel-header list-search">
 		
 			<select id="role-filter" style="display: inline; max-width: 40%;">
-				<option value="0">Show role...</option>
+				<option value="0"><?php echo lang('bf_action_show') .' '. lang('us_role'); ?>...</option>
 			<?php foreach ($roles as $role) : ?>
 				<option><?php echo $role->role_name ?></option>
 			<?php endforeach; ?>
@@ -34,7 +34,7 @@
 		<?php else : ?>
 		
 			<div class="notification information">
-				<p>No users found.</p>
+				<p><?php echo lang('no_users'); ?></p>
 			</div>
 		
 		<?php endif; ?>
@@ -61,11 +61,9 @@
 			
 			
 				<div class="box create rounded">
-					<a class="button good ajaxify" href="<?php echo site_url('admin/settings/users/create'); ?>">Create New User</a>
+					<a class="button good ajaxify" href="<?php echo site_url('admin/settings/users/create'); ?>"><?php echo lang('us_create_user'); ?></a>
 				
-					<h3>Create A New User</h3>
-					
-					<p>Create new accounts for other users in your circle.</p>
+					<?php echo lang('us_create_user_note'); ?>
 				</div>	
 				
 				<div class="row" style="margin-top: 3em">

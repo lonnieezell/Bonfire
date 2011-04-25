@@ -1,4 +1,4 @@
-<h3>Failed Login Attempts</h3>
+<h3><?php echo lang('us_failed_login_attempts'); ?></h3>
 						
 <?php if (isset($login_attempts) && is_array($login_attempts) && count($login_attempts)) : ?>
 
@@ -9,7 +9,5 @@
 	</ol>
 
 <?php else : ?>
-	<p>Congratulations!</p>
-	
-	<p>All of your users have good memories!</p>
+	<?php echo lang('us_failed_logins_note'); ?>
 <?php endif; ?>

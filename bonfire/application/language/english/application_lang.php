@@ -48,6 +48,7 @@ $lang['bf_weeks']				= 'Weeks';
 $lang['bf_days']				= 'Days';
 $lang['bf_username']			= 'Username';
 $lang['bf_password']			= 'Password';
+$lang['bf_password_confirm']	= 'Password (again)';
 
 $lang['bf_home_page']			= 'Home Page';
 $lang['bf_pages']				= 'Pages';
@@ -69,6 +70,11 @@ $lang['bf_action_cancel']		= 'Cancel';
 $lang['bf_action_download']		= 'Download';
 $lang['bf_action_preview']		= 'Preview';
 $lang['bf_action_search']		= 'Search';
+$lang['bf_action_purge']		= 'Purge';
+$lang['bf_action_restore']		= 'Restore';
+$lang['bf_action_show']			= 'Show';
+$lang['bf_action_login']		= 'Login';
+$lang['bf_actions']				= 'Actions';
 
 $lang['bf_update_show_edge']	= 'View bleeding edge updates?';
 
@@ -89,8 +95,14 @@ $lang['bf_env_prod']			= 'Production';
 
 $lang['bf_user']				= 'User';
 $lang['bf_users']				= 'Users';
+$lang['bf_username']			= 'Username';
 $lang['bf_description']			= 'Description';
 $lang['bf_email']				= 'Email';
+
+$lang['bf_both']				= 'both';
+$lang['bf_go_back']				= 'Go Back';
+$lang['bf_new']					= 'New';
+$lang['bf_required_note']		= 'Required fields are in <b>bold</b>.';
 
 //--------------------------------------------------------------------
 // MY_Model
