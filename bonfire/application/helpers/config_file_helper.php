@@ -151,7 +151,7 @@ function write_config($file='', $settings=null)
 	
 	// Backup the file for safety
 	$source = APPPATH . 'config/'.$file.EXT;
-	$dest = APPPATH . 'config/'.$file.EXT.'.bak';
+	$dest = APPPATH . 'archives/config/'.$file.EXT.'.bak';
 	if ($empty === false) copy($source, $dest);
 	
 	// Make sure the file still has the php opening header in it...
