@@ -36,6 +36,7 @@ class Settings extends Admin_Controller {
 		
 		Assets::add_js($this->load->view('settings/users_js', null, true), 'inline');
 		
+		$this->lang->load('users');
 	}
 	
 	//--------------------------------------------------------------------
@@ -81,7 +82,7 @@ class Settings extends Admin_Controller {
 	
 		$this->load->helper('ui/ui');
 	
-		Template::set('toolbar_title', 'User Management');
+		Template::set('toolbar_title', lang('us_user_management'));
 		Template::render();
 	}
 	
@@ -108,7 +109,7 @@ class Settings extends Admin_Controller {
 		
 		Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
 	
-		Template::set('toolbar_title', 'Create New User');
+		Template::set('toolbar_title', lang('us_create_user'));
 		Template::set_view('settings/user_form');
 		Template::render();
 	}
@@ -139,7 +140,7 @@ class Settings extends Admin_Controller {
 		Template::set('user', $this->user_model->find($user_id));
 		Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
 		
-		Template::set('toolbar_title', 'Edit User');
+		Template::set('toolbar_title', lang('us_edit_user');
 		Template::set_view('settings/user_form');
 		Template::render();
 	}
@@ -234,7 +235,7 @@ class Settings extends Admin_Controller {
 		}
 		else
 		{
-			$this->form_validation->set_message('unique_email', 'The %s address is already in use. Please choose another.');
+			$this->form_validation->set_message('unique_email', lang('us_email_in_use'));
 			return false;
 		}
 	}

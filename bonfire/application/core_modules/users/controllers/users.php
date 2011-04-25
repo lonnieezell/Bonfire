@@ -40,6 +40,8 @@ class Users extends Front_Controller {
 		
 		$this->load->database();
 		$this->load->library('users/auth');
+		
+		$this->lang->load('users');
 	}
 	
 	//--------------------------------------------------------------------

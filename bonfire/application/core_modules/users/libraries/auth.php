@@ -122,7 +122,7 @@ class Auth  {
 	{
 		if (empty($login) || empty($password))
 		{
-			$error = config_item('auth.login_type') == 'both' ? 'Username/Email' : ucfirst(config_item('auth.login_type'));
+			$error = config_item('auth.login_type') == lang('bf_both') ? lang('bf_username') .'/'. lang('bf_email') : ucfirst(config_item('auth.login_type'));
 			$this->errors[] = $error .' and Password fields must be filled out.';
 			return false;
 		}
@@ -173,7 +173,7 @@ class Auth  {
 			}
 			// Bad username
 			$this->increase_login_attempts($login);
-			$this->errors[] = 'Incorrect email or password.';
+			$this->errors[] = $this->ci->lang->line('us_bad_email_pass');
 		}
 		
 		return false;
@@ -274,7 +274,7 @@ class Auth  {
 		// If user isn't logged in, don't need to check permissions
 		if ($this->is_logged_in() === false)
 		{
-			Template::set_message('You must be logged in to view that page.', 'error');
+			Template::set_message( $this->ci->lang->line('us_must_login'), 'error');
 			redirect('login');
 		}
 		
@@ -283,7 +283,7 @@ class Auth  {
 		// Check to see if the user has the proper permissions
 		if (!empty($permission) && !$this->has_permission($permission))
 		{ 
-			Template::set_message('You do not have permission to access that page.', 'attention');
+			Template::set_message( $this->ci->lang->line('us_no_permission'), 'attention');
 			redirect($this->ci->session->userdata('previous_page'));
 		} 
 		
