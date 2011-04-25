@@ -26,7 +26,7 @@ if (!function_exists('render_search_box'))
 	function render_search_box()
 	{
 		$ci =& get_instance();
-		$search = $ci->config->item('bf_action_search');
+		$search = $ci->lang->line('bf_action_search');
 		$search_lower = strtolower($search);
 	
 		$form =<<<END

@@ -59,6 +59,8 @@ class Base_Controller extends MX_Controller {
 				$this->output->enable_profiler(true);
 			}
 		}
+		
+		$this->lang->load('application');
 
 		//$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 	}
