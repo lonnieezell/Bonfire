@@ -25,11 +25,14 @@ if (!function_exists('render_search_box'))
 {
 	function render_search_box()
 	{
+		$search = $this->config->item('bf_action_search');
+		$search_lower = strtolower($search);
+	
 		$form =<<<END
-<a href="#" class="list-search">Search...</a>
+<a href="#" class="list-search">{$search}...</a>
 			
 <div id="search-form" style="display: none">
-	<input type="search" class="list-search" value="" placeholder="search..."  />
+	<input type="search" class="list-search" value="" placeholder="{$search_lower}..."  />
 </div>
 END;
 	
