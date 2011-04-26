@@ -216,6 +216,8 @@ class Template {
 		
 		if (empty($output)) { show_error('Unable to find theme layout: '. $layout); }
 		
+		Events::trigger('after_layout_render', $output);
+		
 		global $OUT;
 		$OUT->set_output($output); 
 		
@@ -241,6 +243,8 @@ class Template {
 		if (self::$debug) { echo 'Current View = '. self::$current_view; }
 
 		self::load_view(self::$current_view, null, self::$ci->router->class .'/'. self::$ci->router->method, false, $output);
+		
+		Events::trigger('after_page_render', $output);
 		
 		return $output;
 	}
@@ -325,6 +329,9 @@ class Template {
 		}
 		
 		self::load_view($block_name, $data, false, $themed, $output);
+		
+		$block_data = array('block'=>$block_name, 'output'=>$output);
+		Events::trigger('after_block_render', $block_data );
 		
 		echo $output;
 	}
