@@ -163,6 +163,9 @@ class Auth  {
 				);
 				$this->ci->user_model->update($user->id, $data);
 				
+				$trigger_data = array('user_id'=>$user->id, 'role_id'=>$user->role_id);
+				Events::trigger('after_login', $trigger_data );
+				
 				return true;
 			}
 			
@@ -191,6 +194,13 @@ class Auth  {
 	*/
 	public function logout() 
 	{
+		$data = array(
+			'user_id'	=> $this->user_id(),
+			'role_id'	=> $this->role_id()
+		);
+	
+		Events::trigger('before_logout', $data);
+	
 		// Destroy the autologin information
 		$this->delete_autologin();
 	

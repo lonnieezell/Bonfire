@@ -53,13 +53,23 @@ class User_model extends MY_Model {
 			$data['role_id'] = $this->role_model->default_role_id();
 		}
 		
-		return parent::insert($data);
+		$id = parent::insert($data);
+		
+		Events::trigger('after_create_user', $id);
+		
+		return $id;
 	}
 	
 	//--------------------------------------------------------------------
 	
 	public function update($id=null, $data=array()) 
 	{
+		if ($id)
+		{
+			$trigger_data = array('user_id'=>$id, 'data'=>$data);
+			Events::trigger('before_user_update', $trigger_data);
+		}
+	
 		if (empty($data['pass_confirm']) && isset($data['password'])) 
 		{
 			unset($data['pass_confirm'], $data['password']);
@@ -77,7 +87,15 @@ class User_model extends MY_Model {
 			$data['zip_extra'] = (int)$data['zip_extra'];
 		}
 		
-		return parent::update($id, $data);
+		$return = parent::update($id, $data);
+		
+		if ($return)
+		{
+			$trigger_data = array('user_id'=>$id, 'data'=>$data);
+			Events::trigger('after_user_update', $trigger_data);
+		}
+		
+		return $return;
 	}
 	
 	//--------------------------------------------------------------------

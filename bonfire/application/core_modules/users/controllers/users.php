@@ -170,8 +170,8 @@ class Users extends Front_Controller {
 					'password'	=> $_POST['password']
 				);
 
-				if ($this->user_model->insert($data))
-				{	
+				if ($user_id = $this->user_model->insert($data))
+				{					
 					Template::set_message('Your account has been created. Please log in.', 'success');
 					redirect('login');
 				}

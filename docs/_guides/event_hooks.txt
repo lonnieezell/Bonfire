@@ -67,6 +67,21 @@ When this method is called, it searches the events array for any matching events
 About: Available System Event Points
 
 Controllers:
-	pre_controller				- Called prior to the controller constructor being ran. Payload is the name of the current controller.
-	post_controller_constructor	- Called just after the controller constructor is ran, but prior to the method being ran. Payload is the name of the current controller.
+	before_controller				- Called prior to the controller constructor being ran. Payload is the name of the current controller.
+	after_controller_constructor	- Called just after the controller constructor is ran, but prior to the method being ran. Payload is the name of the current controller.
+	
+Templates and Pages:
+	after_page_render				- Called just after the main view is rendered. Payload is the view's output.
+	after_layout_render				- Called just after the entire page is rendered. Payload is the current output.
+	after_block_render				- Called just after the block is rendered. Payload is an array with 'block' 
+										being the name of the block and 'output' being the rendered block's output.
+										
+Users:
+	after_login						- Called after successful login. Payload is an array of 'user_id' and 'role_id'.
+	before_logout					- Called just before logging the user out. Payload is an array of 'user_id' and 'role_id'.
+	after_create_user				- Called after a user is created. Payload is the new user's id.
+	before_user_update				- Called just prior to updating a user. Payload is an array of 'user_id' and 'data', where data is 
+										all of the update information passed into the method.
+	after_user_update				- Called just after updating a user. Payload is an array of 'user_id' and 'data', where data is 
+										all of the update information passed into the method.
 	
