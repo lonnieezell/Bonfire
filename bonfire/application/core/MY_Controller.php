@@ -47,7 +47,7 @@ class Base_Controller extends MX_Controller {
 	
 	public function __construct() 
 	{
-		Events::trigger('pre_controller', get_class($this));
+		Events::trigger('before_controller', get_class($this));
 	
 		parent::__construct();
 		
@@ -67,7 +67,7 @@ class Base_Controller extends MX_Controller {
 		//$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 		
 		// Pre-Controller Event
-		Events::trigger('post_controller_constructor', get_class($this));
+		Events::trigger('after_controller_constructor', get_class($this));
 	}
 	
 	//--------------------------------------------------------------------
