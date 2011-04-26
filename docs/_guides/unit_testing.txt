@@ -1,4 +1,4 @@
-Title: Unit Testing in Bonfire
+Title: Unit Testing
 
 Bonfire provides a Unit Testing framework that allows you to test Models, Libraries and Helpers. It extends the CodeIgniter Unit_Test class and was inspired by <FuelCMS at http://www.getfuelcms.com>, <SimpleTest at http://www.simpletest.org>, and <Toast at http://jensroland.com/projects/toast/>.
 
