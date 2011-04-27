@@ -133,7 +133,7 @@ class Auth  {
 		}
 	
 		// Grab the user from the db
-		$user = $this->ci->user_model->select('id, email, username, users.role_id, salt, password_hash, temp_password_hash')->find_by(config_item('auth.login_type'), $login);
+		$user = $this->ci->user_model->select('id, email, username, users.role_id, salt, password_hash')->find_by(config_item('auth.login_type'), $login);
 		
 		if (is_array($user))
 		{
@@ -148,8 +148,8 @@ class Auth  {
 				$this->ci->load->helper('security');
 			}
 
-			// Try both the primary password, then the temp password
-			if ( do_hash($user->salt . $password) == $user->password_hash || do_hash($password . $user->salt . $user->email) == $user->temp_password_hash)
+			// Try password
+			if ( do_hash($user->salt . $password) == $user->password_hash)
 			{ 
 				$this->clear_login_attempts($login);
 				// We've successfully validated the login, so setup the session
@@ -159,7 +159,6 @@ class Auth  {
 				$data = array(
 					'last_login'			=> date('Y-m-d H:i:s', time()),
 					'last_ip'				=> $this->ip_address,
-					'temp_password_hash'	=> null	// Clear any temp passwords. One time use only!
 				);
 				$this->ci->user_model->update($user->id, $data);
 				
