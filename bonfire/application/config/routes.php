@@ -42,10 +42,11 @@ $route['default_controller'] = "home";
 $route['404_override'] = '';
 
 // Authorization
-$route['login']				= 'users/login';
-$route['register']			= 'users/register';
-$route['logout']			= 'users/logout';
-$route['forgot_password']	= 'users/forgot_password';
+$route['login']					= 'users/login';
+$route['register']				= 'users/register';
+$route['logout']				= 'users/logout';
+$route['forgot_password']		= 'users/forgot_password';
+$route['reset_password/(:any)/(:any)']	= "users/reset_password/$1/$2";
 
 // Admin:content
 $route['admin/content/(:any)/(:any)/(:any)/(:any)']		= "$1/content/$2/$3/$4";

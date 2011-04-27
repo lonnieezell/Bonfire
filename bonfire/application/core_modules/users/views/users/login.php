@@ -2,7 +2,7 @@
 
 <?php if (auth_errors() || validation_errors()) : ?>
 <div class="notification error">
-	<?php echo auth_errors(); ?>
+	<?php echo auth_errors() . validation_errors(); ?>
 </div>
 <?php endif; ?>
 
