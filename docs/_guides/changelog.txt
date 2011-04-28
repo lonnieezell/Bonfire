@@ -12,6 +12,9 @@ Additions:
 - A new <Unit Testing> framework has been started. Currently supports Unit Testing only. Web/Functional Testing coming later.
 - A new <System Events> feature has been added.
 
+Enhancements:
+- Forgot Password feature was revised for better security.
+
 Bugs: 
 - Upgraded to the latest version of head.js to fix a bug where AJAX page loads were not working in FF3 and IE.
 - Misc. bugfixes in the install routine that should allow for smooth installation in a larger number of cases.
