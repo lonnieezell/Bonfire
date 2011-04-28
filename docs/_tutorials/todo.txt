@@ -1,0 +1,94 @@
+Title: ToDo Module
+
+This will take you through the process of creating a simple ToDo module. This module will provide an interface in the backend that allows users to create new items and check them off as finished, as well as be able to display a list of undone items in the front-end via HMVC. This will not be a very fancy module, it's just intended to get you up and running quickly writing your own modules.
+
+
+
+About: The Module's Structure
+
+Lay out the folders for your module.
+
+The first step in creating a new module is to create a home for it. All modules are stored in _bonfire/modules_. This keeps them organized and safe from upgrades.
+
+Create a new folder in _bonfire/modules_ named 'todo'. Inside this new folder, create three new folders: _controllers_, _models_, and _views_. Your folder structure should look like: 
+
+> bonfire/
+> 	modules/
+>		todo/
+>			controllers/
+>			models/
+>			views/
+
+
+About: The Data
+
+We will create a migration that will let us easily import our data.
+
+Create a new file under _bonfire/application/db/migrations/_ called *003_Create_todo_table.php*. This will hold the <Migrations> needed to create our new table to hold the todo items. 
+
+Create your migration. The file should look like: 
+
+> <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+>
+> class Migration_Create_todo_table extends Migration {
+> 
+> 	public function up() 
+> 	{
+> 		$this->dbforge->add_field('todo_id INT(10) NOT NULL AUTO_INCREMENT');
+> 		$this->dbforge->add_field('description VARCHAR(255) NOT NULL');
+> 		$this->dbforge->add_field('is_done TINYINT(1) DEFAULT 0 NOT NULL');
+> 		$this->dbforge->add_key('todo_id', true);
+> 		$this->dbforge->create_table('todos');
+> 	}
+> 	
+> 	//--------------------------------------------------------------------
+> 	
+> 	public function down() 
+> 	{
+> 		$this->dbforge->drop_table('todos');
+> 	}
+> 	
+> 	//--------------------------------------------------------------------
+> 	
+> }
+
+Now login to Bonfire and go to Developer / Migrations. It should tell you that the Installed Version is 2, and the Latest Available Version is 3. Click the *Install Latest Version* link. On this new page, choose *Migrate Database* to install the new table.
+
+About: The Model
+
+The model stores all of the functions that you need to access your data in the database. Since Bonfire comes with a base model we can extend, creating a simple model for the Todo module is an easy task. 
+
+Create a new file under _todo/models_ called *Todo_model.php*. The file should look like: 
+
+> <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+> 
+> class Todo_model extends MY_Model {
+> 
+> 	protected $table		= 'todos';
+> 	protected $key			= 'todo_id';
+> 	protected $soft_deletes	= false;
+> 	protected $date_format	= 'datetime';
+> 	protected $set_created	= false;
+> 	protected $set_modified = false;
+> 
+> }
+
+While not all of these options are needed, I've included them here for clarity. Read more about <My_Model>.
+
+Basically, this is telling the model:
+
+- Use the table 'todos'.
+- Our primary key is 'todo_id'.
+- Do not automatically set created_on or modified_on fields.
+
+You can always create new methods, or override the ones provided by <MY_Model> later, but this should do for our needs here.
+
+
+About: The Admin Pages
+
+Create the Admin pages that allow you to create new ToDo items.
+
+
+About: The Public-Facing 'widget'
+
+Use HMVC to create a simple list of items left to do that can be displayed in the frontend.
