@@ -21,3 +21,24 @@ In Bonfire, there are 6 distinct contexts that help to separate the logic of you
 With the exception of the Public context, creating a controller for your module for a specific controller is a simple as naming your controller to match the context. A controller for the _content_ context, would be named *content.php*, while one that shows up in the _settings_ context would be named *setting.php*. For the public context, the controller should be named the same as the module. For example, a  _Pages_ module would have a public controller called *pages.php*.
 
 Each module will automatically show up in the appropriate area of the Admin UI. Again, with the exception of public contexts, which are only available to the public-facing site.
+
+
+
+About: Creating New Modules
+
+To add new functionality to your site, you will generally be creating a new module. This is as simple as: 
+
+- Create a new folder under bonfire/modules. 
+- Inside that folder, create new folders for controllers, models, views, etc.
+- Create your controllers and views (and any other files that you might need, like language files, config files, etc.).
+
+Your controllers should extend one of the 4 main Controllers, though you will typically be extending the Front_Controller, the Authenticated_Controller, or the Admin_Controller. You can learn more about the types of controllers in the <Base_Controller> documentation.
+
+
+
+About: Mastering Modules
+
+To learn more about working with modules, you can:
+
+- Browse the <Modular Extensions HMVC at https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home> instructions.
+- Follow along with the <ToDo Module> tutorial.
