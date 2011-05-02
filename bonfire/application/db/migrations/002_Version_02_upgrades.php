@@ -15,7 +15,7 @@ class Migration_Version_02_upgrades extends Migration {
 		$this->dbforge->modify_column('users', array(
 			'temp_password_hash' => array(
 				'name'	=> 'reset_hash'
-			);
+			)
 		));
 		$this->dbforge->add_column('users', array(
 			'reset_by'	=> array(
@@ -35,7 +35,7 @@ class Migration_Version_02_upgrades extends Migration {
 		$this->dbforge->modify_column('users', array(
 			'reset_hash' => array(
 				'name'	=> 'temp_password_hash'
-			);
+			)
 		));
 		$this->dbforge->drop_column('users', 'reset_by');
 	}
