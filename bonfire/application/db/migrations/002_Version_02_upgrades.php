@@ -14,7 +14,9 @@ class Migration_Version_02_upgrades extends Migration {
 		// Users table changes
 		$this->dbforge->modify_column('users', array(
 			'temp_password_hash' => array(
-				'name'	=> 'reset_hash'
+				'name'	=> 'reset_hash',
+				'type'	=> 'VARCHAR',
+				'constraint'	=> 40
 			)
 		));
 		$this->dbforge->add_column('users', array(
