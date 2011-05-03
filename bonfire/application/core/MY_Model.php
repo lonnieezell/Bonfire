@@ -165,7 +165,7 @@ class MY_Model extends CI_Model {
 		}
 		
 		$this->error = $this->lang->line('bf_model_bad_select');
-		$this->logit('['. get_class($this) .'] '. $this->lang->line('bf_model_bad_select'));
+		$this->logit($this->lang->line('bf_model_bad_select'));
 		return false;
 	}
 	
@@ -216,7 +216,7 @@ class MY_Model extends CI_Model {
 		if (empty($field) || (!is_array($field) && empty($value)))
 		{
 			$this->error = $this->lang->line('bf_model_find_error');
-			$this->logit('['. get_class($this) .'] '.$this->lang->line('bf_model_find_error'));
+			$this->logit($this->lang->line('bf_model_find_error'));
 			return false;
 		}
 	
@@ -347,7 +347,7 @@ class MY_Model extends CI_Model {
 		if (empty($field) || empty($value) || !is_array($data))
 		{
 			$this->error = $this->lang->line('bf_model_no_data');
-			$this->logit('['. get_class($this) .'] '.$this->lang->line('bf_model_no_data'));
+			$this->logit($this->lang->line('bf_model_no_data'));
 			return false;
 		}
 			
@@ -422,7 +422,7 @@ class MY_Model extends CI_Model {
 		if (empty($field) || empty($value))
 		{
 			$this->error = $this->lang->line('bf_model_unique_error');
-			$this->logit('['. get_class($this) .'] '.$this->lang->line('bf_model_unique_error'));
+			$this->logit($this->lang->line('bf_model_unique_error'));
 			return false;
 		}
 
@@ -471,7 +471,7 @@ class MY_Model extends CI_Model {
 		if (empty($field))
 		{
 			$this->error = $this->lang->line('bf_model_count_error');
-			$this->logit('['. get_class($this) .'] '.$this->lang->line('bf_model_count_error'));
+			$this->logit($this->lang->line('bf_model_count_error'));
 			return false;
 		}
 		
@@ -499,7 +499,7 @@ class MY_Model extends CI_Model {
 		if (!is_numeric($id) || $id === 0 || empty($field))
 		{
 			$this->error = $this->lang->line('bf_model_fetch_error');
-			$this->logit('['. get_class($this) .'] '.$this->lang->line('bf_model_fetch_error'));
+			$this->logit($this->lang->line('bf_model_fetch_error'));
 			return false;
 		}
 		
@@ -649,7 +649,7 @@ class MY_Model extends CI_Model {
 		if (empty($this->table))
 		{
 			$this->error = $this->lang->line('bf_model_no_table');
-			$this->logit('['. get_class($this) .'] '.$this->lang->line('bf_model_no_table'), 'error');
+			$this->logit($this->lang->line('bf_model_no_table'), 'error');
 			return false;
 		}
 		
@@ -659,7 +659,7 @@ class MY_Model extends CI_Model {
 			if (!is_numeric($id) || $id == 0)
 			{
 				$this->error = $this->lang->line('bf_model_invalid_id');
-				$this->logit('['. get_class($this) .'] '.$this->lang->line('bf_model_invalid_id'));
+				$this->logit($this->lang->line('bf_model_invalid_id'));
 				return false;
 			}
 		}
@@ -670,7 +670,7 @@ class MY_Model extends CI_Model {
 			if (!is_array($data) || count($data) == 0)
 			{
 				$this->error = $this->lang->line('bf_model_no_data');
-				$this->logit('['. get_class($this) .'] '.$this->lang->line('bf_model_no_data'));
+				$this->logit($this->lang->line('bf_model_no_data'));
 				return false;
 			}
 		}
@@ -791,6 +791,8 @@ class MY_Model extends CI_Model {
 		{
 			return;
 		}
+		
+		$message = '['. get_class($this) .': '. __METHOD__ .'] '. $message;
 		
 		if (class_exists('Console'))
 		{
