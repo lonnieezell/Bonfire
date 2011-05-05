@@ -188,18 +188,21 @@ class Template {
 	public static function render($layout=null) 
 	{
 		$output = '';
+		$controller = self::$ci->router->class;
 	
 		// We need to know which layout to render
 		$layout = empty($layout) ? self::$layout : $layout;		
 
 		// Is it in an AJAX call? If so, override the layout
 		if (self::$ci->input->is_ajax_request())
-		{
+		{ 
 			$layout = self::$ci->config->item('template.ajax_layout');
 			self::$ci->output->set_header("Cache-Control: no-store, no-cache, must-revalidate");
 			self::$ci->output->set_header("Cache-Control: post-check=0, pre-check=0");
 			self::$ci->output->set_header("Pragma: no-cache");
 			self::$ci->output->set_header('Content-Type: text/html');
+			
+			$controller = null;
 		}
 		
 		// Grab our current view name, based on controller/method
@@ -208,11 +211,11 @@ class Template {
 		{		
 			self::$current_view =  self::$ci->router->class . '/' . self::$ci->router->method;
 		}
-		
+
 		//
 		// Time to render the layout
 		//
-		self::load_view($layout, self::$data, self::$ci->router->class, true, $output);
+		self::load_view($layout, self::$data, $controller, true, $output);
 		
 		if (empty($output)) { show_error('Unable to find theme layout: '. $layout); }
 		
@@ -746,7 +749,7 @@ class Template {
 		
 		// Just a normal view (possibly from a module, though.)
 		else 
-		{
+		{ 
 			// First check within our themes...
 			$output = self::find_file($view, $data, $theme);
 			
@@ -915,20 +918,30 @@ function check_class($item='')
 	class' method that is being executed (as far as the Router knows.)
 	
 	Parameter:
-		$item	- The name of the method to check against.
+		$item	- The name of the method to check against. Can be an array of names.
 		
 	Return:
 		Either <b>class="current"</b> or an empty string.
 */
-function check_method($item='')
+function check_method($item)
 {
 	$ci =& get_instance();
 
-	if (strtolower($ci->router->fetch_method()) == strtolower($item))
+	$items = array();
+
+	if (!is_array($item))
+	{
+		$items[] = $item;
+	} else
+	{
+		$items = $item;
+	}
+
+	if (in_array($ci->router->fetch_method(), $items))
 	{
 		return 'class="current"';
 	}
-	
+
 	return '';
 }
 
