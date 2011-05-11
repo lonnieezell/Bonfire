@@ -122,7 +122,7 @@ class Migrations {
 		$this->_ci->config->load('migrations');
 
 		$this->migrations_enabled = $this->_ci->config->item('migrations_enabled');
-		$this->migrations_path = $this->_ci->config->item('migrations_path');
+		$this->migrations_path = realpath($this->_ci->config->item('migrations_path'));
 
 		// Idiot check
 		$this->migrations_enabled AND $this->migrations_path OR show_error('Migrations has been loaded but is disabled or set up incorrectly.');
@@ -254,14 +254,14 @@ class Migrations {
 		for($i=$start; $i != $stop; $i += $step) 
 		{
 			$f = glob(sprintf($this->migrations_path . '%03d_*'.EXT, $i));
-			
+			logit($f);
 			// Only one migration per step is permitted
 			if (count($f) > 1)
 			{ 
 				$this->error = sprintf($this->_ci->lang->line("multiple_migrations_version"),$i);
 				return 0;
 			}
-			
+
 			// Migration step not found
 			if (count($f) == 0)
 			{ 
@@ -327,6 +327,8 @@ class Migrations {
 		
 			return TRUE;
 		}
+		
+		
 		
 		if ($this->verbose)
 		{
@@ -508,6 +510,8 @@ class Migrations {
 	 */
 	private function _update_schema_version($schema_version) 
 	{
+		logit('[Migrations] Schema updated to: '. $schema_version);
+	
 		return $this->_ci->db->update('schema_version', array(
 			'version' => $schema_version
 		));
