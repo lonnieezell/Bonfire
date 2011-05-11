@@ -39,9 +39,18 @@ class Developer extends Admin_Controller {
 	
 	public function index() 
 	{
+		if ($this->input->post('submit') == lang('mig_migrate_button'))
+		{
+			if ($version = $this->input->post('migration'))
+			{
+				redirect('/admin/developer/migrations/migrate_to/'. $version);
+			}
+		}
+	
 		Template::set('installed_version', $this->migrations->get_schema_version());
 		Template::set('latest_version', $this->migrations->get_latest_version());
 	
+		Template::set('migrations', $this->migrations->get_available_versions());
 		Template::set('toolbar_title', 'Database Migrations');
 		Template::render();
 	}
@@ -50,7 +59,7 @@ class Developer extends Admin_Controller {
 	
 	public function migrate_to($version=0) 
 	{
-		if ($this->input->post('submit') == 'Migrate Database')
+		if (!empty($version) && is_numeric($version))
 		{
 			$result = $this->migrations->version($version);
 			
@@ -63,13 +72,9 @@ class Developer extends Admin_Controller {
 			}
 			redirect('admin/developer/migrations');
 		}
-	
-		Template::set('installed_version', $this->migrations->get_schema_version());
-		Template::set('latest_version', $this->migrations->get_latest_version());
-		Template::set('migrations', $this->migrations->get_available_versions());
-	
-		Template::set('toolbar_title', 'Database Migrations');
-		Template::render();
+
+		Template::set_message('No version to migrate to.', 'error');
+		redirect('admin/developer/migrations');
 	}
 	
 	//--------------------------------------------------------------------
