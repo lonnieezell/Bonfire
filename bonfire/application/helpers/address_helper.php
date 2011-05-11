@@ -36,14 +36,15 @@
 	Parameters:
 		$selected_id	- The value of the item that should be selected when the dropdown is drawn.
 		$default_abbr	- The value of the item that should be selected if no other matches are found.
+		$select_name	- The name assigned to the select. Defaults to 'state_id'.
 		
 	Return:
-		A string withe the full html for the select input. 
+		A string with the full html for the select input. 
 */
 if (!function_exists('state_select'))
 {
 
-	function state_select($selected_id=0, $default_abbr='')
+	function state_select($selected_id=0, $default_abbr='', $select_name='state_id')
 	{
 		$ci =& get_instance();
 	
@@ -57,7 +58,7 @@ if (!function_exists('state_select'))
 		
 		$states = $query->result();
 		
-		$output = '<select name="state_id">';
+		$output = '<select name="'. $select_name .'">';
 		foreach ($states as $state)
 		{
 			$output .= "<option value='{$state->id}'";
@@ -72,4 +73,48 @@ if (!function_exists('state_select'))
 	
 	//--------------------------------------------------------------------
 
+}
+
+
+/*
+	Function: country_select()
+	
+	Creates a country-based dropdown form input.
+	
+	Parameters:
+		$selected_iso	- The value of the item that should be selected when the dropdown is drawn.
+		$default_iso	- The value of the item that should be selected if no other matches are found.
+		$select_name	- The name assigned to the select. Defaults to 'iso'.
+		
+	Returns:
+		A string with the full html for the select input.
+*/
+if (!function_exists('country_select'))
+{
+	function country_select($selected_iso=0, $default_iso='', $select_name='iso')
+	{
+		$ci =& get_instance();
+		
+		// First, grab the countries
+		$query = $ci->db->get('countries');
+		
+		if (!$query || $query->num_rows() == 0)
+		{
+			return;
+		}
+		
+		$countries = $query->result();
+		
+		$output = '<select name="'. $select_name .'">';
+		foreach ($countries as $country)
+		{
+			$output .= "<option value='{$country->iso}'";
+			$output .= ($country->iso == $selected_iso) ? ' selected="selected"' : '';
+			$output .= ($country->iso != $selected_iso) && ($default_iso == $country->iso) ? ' selected="selected"' : '';
+			$output .= ">{$country->printable_name}</option>\n";
+		}
+		$output .= "</select>\n";
+		
+		return $output;
+	}
 }

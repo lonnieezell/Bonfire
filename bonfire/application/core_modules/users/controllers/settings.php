@@ -260,8 +260,7 @@ class Settings extends Admin_Controller {
 		$this->form_validation->set_rules('street1', 'Street 1', 'trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('street2', 'Street 2', 'trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('city', 'City', 'trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('zipcode', 'Zipcode', 'trim|strip_tags|numeric|max_length[7]|xss_clean');
-		$this->form_validation->set_rules('zip_extra', 'Zipcode Extra', 'trim|strip_tags|numeric|max_length[5]|xss_clean');
+		$this->form_validation->set_rules('zipcode', 'Zipcode', 'trim|strip_tags|max_length[20]|xss_clean');
 		
 		if ($this->form_validation->run() === false)
 		{

@@ -73,13 +73,16 @@
 			<input type="text" name="city" value="<?php echo isset($user) ? $user->city : set_value('city') ?>" />
 		</div>
 		<div>
+			<label><?php echo lang('us_country') ?></label>
+			<?php echo country_select(isset($user) && !empty($user->country_iso) ? $user->country_iso : 'US', 'US'); ?>
+		</div>
+		<div>
 			<label><?php echo lang('us_state'); ?></label>
-			<?php echo state_select(isset($user) ? $user->state_id : 0, 'FL'); ?>
+			<?php echo state_select(isset($user) ? $user->state_id : 0, 'MO'); ?>
 		</div>
 		<div>
 			<label><?php echo lang('us_zipcode'); ?></label>
-			<input type="text" name="zipcode" size="7" maxlength="7" style="width: 6em; display: inline;" value="<?php echo isset($user) ? $user->zipcode : set_value('zipcode') ?>"  /> - 
-			<input type="text" name="zip_extra" size="5" maxlength="5" style="width: 4em; display: inline;" value="<?php echo isset($user) && $user->zip_extra ? $user->zip_extra : set_value('zip_extra') ?>"  /> 
+			<input type="text" name="zipcode" size="7" maxlength="7" style="width: 6em; display: inline;" value="<?php echo isset($user) ? $user->zipcode : set_value('zipcode', ' ') ?>"  /> 
 		</div>
 
 	</fieldset>
