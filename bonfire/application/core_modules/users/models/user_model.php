@@ -44,8 +44,14 @@ class User_model extends MY_Model {
 		$data['password_hash'] = $password;
 		$data['salt'] = $salt;
 		
-		$data['zipcode'] = isset($data['zipcode']) ? (int)$data['zipcode'] : null;
-		$data['zip_extra'] = isset($data['zip_extra']) ? (int)$data['zip_extra'] : null;
+		$data['zipcode'] = isset($data['zipcode']) ? $data['zipcode'] : null;
+		
+		// Handle the country
+		if (isset($data['iso']))
+		{
+			$data['country_iso'] = $data['iso'];
+			unset($data['iso']);
+		}
 		
 		// What's the default role?
 		if (!isset($data['role_id']))
@@ -81,10 +87,11 @@ class User_model extends MY_Model {
 			unset($data['password'], $data['pass_confirm']);
 		}
 		
-		if (isset($data['zipcode']))
+		// Handle the country
+		if (isset($data['iso']))
 		{
-			$data['zipcode'] = (int)$data['zipcode'];
-			$data['zip_extra'] = (int)$data['zip_extra'];
+			$data['country_iso'] = $data['iso'];
+			unset($data['iso']);
 		}
 		
 		$return = parent::update($id, $data);
