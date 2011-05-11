@@ -72,33 +72,6 @@ class Base_Controller extends MX_Controller {
 	
 	//--------------------------------------------------------------------
 	
-	
-	/*
-		Method: logit()
-		
-		Logs an error to the Console (if loaded) and to the log files.
-		
-		Parameters:
-			$message	- The string to write to the logs.
-			$level		- The log level, as per CI log_message method.
-	*/
-	protected function logit($message='', $level='debug') 
-	{
-		if (empty($message))
-		{
-			return;
-		}
-		
-		if (class_exists('Console'))
-		{
-			Console::log($message);
-		}
-		
-		log_message($level, $message);
-	}
-	
-	//--------------------------------------------------------------------
-	
 }
 
 // End Base_Controller class
