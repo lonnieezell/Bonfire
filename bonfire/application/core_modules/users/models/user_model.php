@@ -176,7 +176,7 @@ class User_model extends MY_Model {
 		if ($get_deleted)
 		{
 			// Get only the deleted users
-			$this->db->where('deleted', 1);
+			$this->db->where('deleted !=', 0);
 		}
 		else 
 		{
