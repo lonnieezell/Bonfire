@@ -84,6 +84,30 @@ function gravatar_link($email=null, $size=48, $alt='', $title='', $class='', $id
 
 //---------------------------------------------------------------
 
+/*
+	Method: logit()
+	
+	Logs an error to the Console (if loaded) and to the log files.
+	
+	Parameters:
+		$message	- The string to write to the logs.
+		$level		- The log level, as per CI log_message method.
+*/
+function logit($message='', $level='debug') 
+{	
+	if (empty($message))
+	{
+		return;
+	}
+	
+	if (class_exists('Console'))
+	{
+		Console::log($message);
+	}
+	
+	log_message($level, $message);
+}
+
 //--------------------------------------------------------------------
 // !MODULE HELPERS
 //--------------------------------------------------------------------
