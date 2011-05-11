@@ -11,7 +11,7 @@ if (browserType) {document.write("<div class=" + browserType + ">");if (browserV
 
 
 
-<div id=Content><div class="CSection"><div class=CTopic id=MainTopic><h1 class=CTitle><a name="ToDo_Module"></a>ToDo Module</h1><div class=CBody><p>This will take you through the process of creating a simple ToDo module.&nbsp; This module will provide an interface in the backend that allows users to create new items and check them off as finished, as well as be able to display a list of undone items in the front-end via HMVC.&nbsp; This will not be a very fancy module, it&rsquo;s just intended to get you up and running quickly writing your own modules.</p><!--START_ND_SUMMARY--><div class=Summary><div class=STitle>Summary</div><div class=SBorder><table border=0 cellspacing=0 cellpadding=0 class=STable><tr class="SMain"><td class=SEntry><a href="#ToDo_Module" >ToDo Module</a></td><td class=SDescription>This will take you through the process of creating a simple ToDo module. </td></tr><tr class="SGeneric SIndent1 SMarked"><td class=SEntry><a href="#The_Module's_Structure" >The Module&rsquo;s Structure</a></td><td class=SDescription>Lay out the folders for your module.</td></tr><tr class="SGeneric SIndent1"><td class=SEntry><a href="#The_Data" >The Data</a></td><td class=SDescription>We will create a migration that will let us easily import our data.</td></tr><tr class="SGeneric SIndent1 SMarked"><td class=SEntry><a href="#The_Model" >The Model</a></td><td class=SDescription>The model stores all of the functions that you need to access your data in the database. </td></tr><tr class="SGeneric SIndent1"><td class=SEntry><a href="#The_Admin_Pages" >The Admin Pages</a></td><td class=SDescription>Create the Admin pages that allow you to create new ToDo items.</td></tr><tr class="SGeneric SIndent1 SMarked"><td class=SEntry><a href="#The_Public-Facing'widget'" >The Public-Facing &lsquo;widget&rsquo;</a></td><td class=SDescription>Use HMVC to create a simple list of items left to do that can be displayed in the frontend.</td></tr></table></div></div><!--END_ND_SUMMARY--></div></div></div>
+<div id=Content><div class="CSection"><div class=CTopic id=MainTopic><h1 class=CTitle><a name="ToDo_Module"></a>ToDo Module</h1><div class=CBody><p>This will take you through the process of creating a simple ToDo module.&nbsp; This module will provide an interface in the backend that allows users to create new items and check them off as finished.&nbsp; This will not be a very fancy module, it&rsquo;s just intended to get you up and running quickly writing your own modules.</p><!--START_ND_SUMMARY--><div class=Summary><div class=STitle>Summary</div><div class=SBorder><table border=0 cellspacing=0 cellpadding=0 class=STable><tr class="SMain"><td class=SEntry><a href="#ToDo_Module" >ToDo Module</a></td><td class=SDescription>This will take you through the process of creating a simple ToDo module. </td></tr><tr class="SGeneric SIndent1 SMarked"><td class=SEntry><a href="#The_Module's_Structure" >The Module&rsquo;s Structure</a></td><td class=SDescription>Lay out the folders for your module.</td></tr><tr class="SGeneric SIndent1"><td class=SEntry><a href="#The_Data" >The Data</a></td><td class=SDescription>We will create a migration that will let us easily import our data.</td></tr><tr class="SGeneric SIndent1 SMarked"><td class=SEntry><a href="#The_Model" >The Model</a></td><td class=SDescription>The model stores all of the functions that you need to access your data in the database. </td></tr><tr class="SGeneric SIndent1"><td class=SEntry><a href="#The_Admin_Pages" >The Admin Pages</a></td><td class=SDescription>The next step is to create the Admin pages that allow you to create new ToDo items. </td></tr><tr class="SGeneric SIndent1 SMarked"><td class=SEntry><a href="#The_Form" >The Form</a></td><td class=SDescription>Now let&rsquo;s get our form built to allow creating new Todo items.</td></tr><tr class="SGeneric SIndent1"><td class=SEntry><a href="#Deleting_Items" >Deleting Items</a></td><td class=SDescription>The next thing we need to do is make the items actually able to be deleted. </td></tr></table></div></div><!--END_ND_SUMMARY--></div></div></div>
 
 <div class="CGeneric"><div class=CTopic><h3 class=CTitle><a name="The_Module's_Structure"></a>The Module&rsquo;s Structure</h3><div class=CBody><p>Lay out the folders for your module.</p><p>The first step in creating a new module is to create a home for it.&nbsp; All modules are stored in <u>bonfire/modules</u>.&nbsp; This keeps them organized and safe from upgrades.</p><h4 class=CHeading>Create a new folder in <u>bonfire/modules</u> named &lsquo;todo&rsquo;.&nbsp; Inside this new folder, create three new folders: <u>controllers</u>, <u>models</u>, and <u>views</u>.&nbsp; Your folder structure should look like</h4><blockquote><pre>bonfire/
   modules/
@@ -28,7 +28,7 @@ class Migration_Create_todo_table extends Migration {
   {
       $this-&gt;dbforge-&gt;add_field('todo_id INT(10) NOT NULL AUTO_INCREMENT');
       $this-&gt;dbforge-&gt;add_field('description VARCHAR(255) NOT NULL');
-      $this-&gt;dbforge-&gt;add_field('is_done TINYINT(1) DEFAULT 0 NOT NULL');
+      $this-&gt;dbforge-&gt;add_field('deleted TINYINT(1) DEFAULT 0 NOT NULL');
       $this-&gt;dbforge-&gt;add_key('todo_id', true);
       $this-&gt;dbforge-&gt;create_table('todos');
   }
@@ -50,16 +50,141 @@ class Todo_model extends MY_Model {
 
   protected $table        = 'todos';
   protected $key          = 'todo_id';
-  protected $soft_deletes = false;
+  protected $soft_deletes = true;
   protected $date_format  = 'datetime';
   protected $set_created  = false;
   protected $set_modified = false;
 
-}</pre></blockquote><p>While not all of these options are needed, I&rsquo;ve included them here for clarity.&nbsp; Read more about &lt;My_Model&gt;.</p><h4 class=CHeading>Basically, this is telling the model</h4><ul><li>Use the table &lsquo;todos&rsquo;.</li><li>Our primary key is &lsquo;todo_id&rsquo;.</li><li>Do not automatically set created_on or modified_on fields.</li></ul><p>You can always create new methods, or override the ones provided by <a href="../files/core/MY_Model-php.html#MY_Model" class=LClass id=link2 onMouseOver="ShowTip(event, 'tt2', 'link2')" onMouseOut="HideTip('tt2')">MY_Model</a> later, but this should do for our needs here.</p></div></div></div>
+}</pre></blockquote><p>While not all of these options are needed, I&rsquo;ve included them here for clarity.&nbsp; Read more about <a href="../files/core/MY_Model-php.html#MY_Model" class=LClass id=link2 onMouseOver="ShowTip(event, 'tt2', 'link2')" onMouseOut="HideTip('tt2')">MY_Model</a>.</p><h4 class=CHeading>Basically, this is telling the model</h4><ul><li>Use the table &lsquo;todos&rsquo;.</li><li>Our primary key is &lsquo;todo_id&rsquo;.</li><li>Do not automatically set created_on or modified_on fields.</li></ul><p>You can always create new methods, or override the ones provided by <a href="../files/core/MY_Model-php.html#MY_Model" class=LClass id=link3 onMouseOver="ShowTip(event, 'tt2', 'link3')" onMouseOut="HideTip('tt2')">MY_Model</a> later, but this should do for our needs here.</p></div></div></div>
 
-<div class="CGeneric"><div class=CTopic><h3 class=CTitle><a name="The_Admin_Pages"></a>The Admin Pages</h3><div class=CBody><p>Create the Admin pages that allow you to create new ToDo items.</p></div></div></div>
+<div class="CGeneric"><div class=CTopic><h3 class=CTitle><a name="The_Admin_Pages"></a>The Admin Pages</h3><div class=CBody><p>The next step is to create the Admin pages that allow you to create new ToDo items.&nbsp; The first step is to create the controller.</p><p>Create a new file in <u>bonfire/modules/todo/controllers/</u> called <b>content.php</b>.&nbsp; Create a skeleton controller that extends from Admin_Controller so that any permissions are verified at run time.</p><blockquote><pre>&lt;?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-<div class="CGeneric"><div class=CTopic><h3 class=CTitle><a name="The_Public-Facing'widget'"></a>The Public-Facing &lsquo;widget&rsquo;</h3><div class=CBody><p>Use HMVC to create a simple list of items left to do that can be displayed in the frontend.</p></div></div></div>
+class Content extends Admin_Controller {
+
+  public function __construct()
+  {
+      parent::__construct();
+
+      Template::set('toolbar_title', 'ToDo List');
+
+      $this-&gt;load-&gt;model('Todo_model', 'todo_model', true);
+  }
+
+  //--------------------------------------------------------------------
+
+}</pre></blockquote><p>Now login to Bonfire and click on Content.&nbsp; A new item in sub-menu has shown up, called Todo.&nbsp; Bonfire automatically recognizes that you have a content controller and creates a menu item for it.</p><p>Setting the toolbar_title in the constructor just allows for the white nav-bar to have a consistent name across all pages of this modules.</p><p>We also load the todo model here, so that it&rsquo;s available on every page load.</p><p>At this point clicking on the menu item will kick up a 404 error because there is not an index method yet.&nbsp; Let&rsquo;s take care of that now.</p><p>Create an index method in the controller.</p><blockquote><pre>public function index()
+{
+    Template::render();
+}</pre></blockquote><p>The render() methods looks for a view at <u>modules/todo/views/content/index.php</u>.&nbsp; Create a simple view file as a placeholder.&nbsp; Put something simple into it, like &lsquo;Hello&rsquo;.&nbsp; Click on the Todo menu item and you should see your new page.</p></div></div></div>
+
+<div class="CGeneric"><div class=CTopic><h3 class=CTitle><a name="The_Form"></a>The Form</h3><div class=CBody><p>Now let&rsquo;s get our form built to allow creating new Todo items.</p><p>You are free to use any of the form helper functions that you want, but I typically use straight HTML except for the form_open() and form_close() methods.</p><blockquote><pre>&lt;br/&gt;
+&lt;?php if (auth_errors() || validation_errors()) : ?&gt;
+&lt;div class=&quot;notification error&quot;&gt;
+  &lt;?php echo auth_errors() . validation_errors(); ?&gt;
+&lt;/div&gt;
+&lt;?php endif; ?&gt;
+
+&lt;?php echo form_open(current_url(), 'style=&quot;max-width: 700px&quot;') ?&gt;
+
+  &lt;input type=&quot;text&quot; name=&quot;description&quot; placeholder=&quot;What Do You Need To Do?&quot; value=&quot;&quot; /&gt;
+
+  &lt;div class=&quot;submits&quot;&gt;
+      &lt;input type=&quot;submit&quot; name=&quot;submit&quot; value=&quot;Create New Item&quot; /&gt;
+  &lt;/div&gt;
+
+&lt;?php echo form_close(); ?&gt;</pre></blockquote><p>Now, in your controller, make some code to handle it.&nbsp; Modify your controller to look like below.</p><blockquote><pre>public function index()
+  {
+      if ($this-&gt;input-&gt;post('submit'))
+      {
+          if ($this-&gt;create_item($_POST))
+          {
+              Template::set_message('New ToDo item successfully created', 'success');
+          }
+          else
+          {
+              Template::set_message('Error creating new ToDo item.', 'error');
+          }
+      }
+
+      Template::render();
+  }
+
+  //--------------------------------------------------------------------
+
+  private function create_item($vars)
+  {
+      $this-&gt;form_validation-&gt;set_rules('description', 'Description', 'required|trim|strip_tags|max_length[255]|xss_clean');
+
+      if ($this-&gt;form_validation-&gt;run() !== false)
+      {
+          $data = array(
+              'description'   =&gt; $vars['description']
+          );
+
+          return $this-&gt;todo_model-&gt;insert($data);
+      }
+
+      return false;
+  }
+
+  //--------------------------------------------------------------------</pre></blockquote><p>The index method now checks to see if a form has been submitted.&nbsp; If it has, it runs the <u>create item()</u> method, which validates the field and creates a new item, if successful.&nbsp; It then prints out a success or error message for the user, using the <u>Template::set message()</u> method.</p><p><b>Showing Your Todo Items</b></p><p>Now, let&rsquo;s modify the index method to actually push the results to the view.</p><blockquote><pre>public function index()
+{
+    if ($this-&gt;input-&gt;post('submit'))
+    {
+        if ($this-&gt;create_item($_POST))
+        {
+            Template::set_message('New ToDo item successfully created', 'success');
+        }
+        else
+        {
+            Template::set_message('Error creating new ToDo item.', 'error');
+        }
+    }
+
+    Template::set('items', $this-&gt;todo_model-&gt;order_by('todo_id', 'desc')-&gt;find_all_by('deleted', 0));
+
+    Template::render();
+}</pre></blockquote><p>The only new command here is the <u>Template::set()</u> method, which simply makes a variable name <u>$items</u> available in the view.</p><p>If you look at the call to todo_model, you will see that we are using method chaining and a helper method that&rsquo;s built into the MY_Model class, <u>order by()</u>.&nbsp; The MY_Model class provides a number of helper functions designed to be used just like this that make getting just the right results much easier.</p><p>Now, head over to the view, and add this code at the bottom of the file.</p><blockquote><pre>&lt;?php if (isset($items) &amp;&amp; is_array($items) &amp;&amp; count($items)) : ?&gt;
+&lt;h3&gt;ToDo Items&lt;/h3&gt;
+
+&lt;?php echo form_open('/admin/content/todo/delete', 'class=&quot;ajax-form&quot;'); ?&gt;
+&lt;table&gt;
+  &lt;tbody&gt;
+  &lt;?php foreach ($items as $item) : ?&gt;
+      &lt;tr&gt;
+          &lt;td style=&quot;width: 1em; text-align: center&quot;&gt;
+              &lt;input type=&quot;checkbox&quot; name=&quot;items[]&quot; value=&quot;1&quot; data-id=&quot;&lt;?php echo $item-&gt;todo_id ?&gt;&quot; /&gt;
+          &lt;/td&gt;
+          &lt;td&gt;&lt;?php echo $item-&gt;description ?&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+  &lt;?php endforeach; ?&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+&lt;?php echo form_close(); ?&gt;
+
+&lt;?php endif; ?&gt;</pre></blockquote><p>This creates a listing of all of the Todo items that still need to be done, along with a checkbox next to each to allow us to mark them as completed.</p></div></div></div>
+
+<div class="CGeneric"><div class=CTopic><h3 class=CTitle><a name="Deleting_Items"></a>Deleting Items</h3><div class=CBody><p>The next thing we need to do is make the items actually able to be deleted.&nbsp; We will do this with a little bit of jQuery ajax magic.</p><p>If you will notice the form_open() call above, we are assigning a class of <u>ajax form</u> to the class.&nbsp; This tells Bonfire that this form should be submitted via AJAX.&nbsp; The url will be pulled from the form open tag, and all of the checked items will be serialized and sent as POST vars to the url.</p><p>At the bottom of your view, add the following javascript.</p><blockquote><pre>&lt;script&gt;
+head.ready(function() {
+  $('#task-form input[type=checkbox]').change(function() {
+      var cid = $(this).attr('data-id');
+
+      // Remove it from the display, with a fade effect
+      $(this).parents('tr').fadeOut(300);
+
+      // Tell the server to remove it.
+      $.post('/admin/content/todo/delete/'+ cid);
+  });
+});
+&lt;/script&gt;</pre></blockquote><p>This javascript simply watches each checkbox in the <u>task-form</u> for a click.&nbsp; It then fades the table row out and calls a function in the server that deletes it.&nbsp; For this example, we&rsquo;re not dealing with errors and success messages, but in a production app, you&rsquo;d probably want to do that.</p><p>Now we need to create the <u>delete()</u> method, so open up the content.php controller and add the following method.</p><blockquote><pre>public function delete()
+  {
+      $id = $this-&gt;uri-&gt;segment(5);
+
+      $this-&gt;todo_model-&gt;delete($id);
+
+      echo 'true';
+      die();
+  }</pre></blockquote><p>This simply grabs the id of the task to delete and deletes it.&nbsp; If you remember in the model, we set <u>soft deletes</u> to true.&nbsp; This tells MY_Model to simply change the record&rsquo;s delete column to a &lsquo;1&rsquo; instead of the default &lsquo;0&rsquo;.&nbsp; That way, the records are still there.&nbsp; If <u>soft deletes</u> was false, the record would actually be deleted from the database.</p><p>And there you have it!&nbsp; A basic Todo manager.&nbsp; Using the knowledge you have developed, you should be able to jump in and start working on your own sites.</p><p>Happy coding!</p></div></div></div>
 
 </div><!--Content-->
 
