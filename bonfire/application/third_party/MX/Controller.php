@@ -47,7 +47,7 @@ class MX_Controller
 		
 		/* copy a loader instance and initialize */
 		$this->load = clone load_class('Loader');
-		$this->load->_init();	
+		$this->load->_init($this);	
 		
 		/* autoload module items */
 		$this->load->_autoloader($this->autoload);
