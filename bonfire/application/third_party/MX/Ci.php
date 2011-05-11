@@ -42,6 +42,7 @@ class CI
 	
 	public function __construct() {
 		
+		/* assign the application instance */
 		self::$APP = CI_Controller::get_instance();
 		
 		/* assign the core loader */
@@ -56,4 +57,5 @@ class CI
 	}
 }
 
+/* create the application object */
 new CI;
