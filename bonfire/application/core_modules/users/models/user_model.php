@@ -201,13 +201,13 @@ class User_model extends MY_Model {
 	
 	public function hash_password($old='') 
 	{
-		if (!function_exists('dohash'))
+		if (!function_exists('do_hash'))
 		{
 			$this->load->helper('security');
 		}
 	
 		$salt = $this->generate_salt();
-		$pass = dohash($salt . $old);
+		$pass = do_hash($salt . $old);
 		
 		return array($pass, $salt);
 	}
