@@ -222,7 +222,7 @@ Now, head over to the view, and add this code at the bottom of the file.
 > <?php if (isset($items) && is_array($items) && count($items)) : ?>
 > <h3>ToDo Items</h3>
 > 
-> <?php echo form_open('/admin/content/todo/delete', 'class="ajax-form"'); ?>
+> <?php echo form_open(current_url() .'/delete', 'class="ajax-form"'); ?>
 > <table>
 > 	<tbody>
 > 	<?php foreach ($items as $item) : ?>
@@ -254,14 +254,14 @@ At the bottom of your view, add the following javascript.
 
 > <script>
 > head.ready(function() {
-> 	$('#task-form input[type=checkbox]').change(function() {
+> 	$('.todo-form input[type=checkbox]').change(function() {
 > 		var cid = $(this).attr('data-id');
 > 		
 > 		// Remove it from the display, with a fade effect
 > 		$(this).parents('tr').fadeOut(300);
 > 		
 > 		// Tell the server to remove it.
-> 		$.post('/admin/content/todo/delete/'+ cid);
+> 		$.post('<?php echo current_url();?>/delete/'+ cid);
 > 	});
 > });
 > </script>
