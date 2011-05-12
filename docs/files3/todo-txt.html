@@ -147,7 +147,7 @@ class Content extends Admin_Controller {
 }</pre></blockquote><p>The only new command here is the <u>Template::set()</u> method, which simply makes a variable name <u>$items</u> available in the view.</p><p>If you look at the call to todo_model, you will see that we are using method chaining and a helper method that&rsquo;s built into the MY_Model class, <u>order by()</u>.&nbsp; The MY_Model class provides a number of helper functions designed to be used just like this that make getting just the right results much easier.</p><p>Now, head over to the view, and add this code at the bottom of the file.</p><blockquote><pre>&lt;?php if (isset($items) &amp;&amp; is_array($items) &amp;&amp; count($items)) : ?&gt;
 &lt;h3&gt;ToDo Items&lt;/h3&gt;
 
-&lt;?php echo form_open('/admin/content/todo/delete', 'class=&quot;ajax-form&quot;'); ?&gt;
+&lt;?php echo form_open(current_url() .'/delete', 'class=&quot;ajax-form&quot;'); ?&gt;
 &lt;table&gt;
   &lt;tbody&gt;
   &lt;?php foreach ($items as $item) : ?&gt;
@@ -166,14 +166,14 @@ class Content extends Admin_Controller {
 
 <div class="CGeneric"><div class=CTopic><h3 class=CTitle><a name="Deleting_Items"></a>Deleting Items</h3><div class=CBody><p>The next thing we need to do is make the items actually able to be deleted.&nbsp; We will do this with a little bit of jQuery ajax magic.</p><p>If you will notice the form_open() call above, we are assigning a class of <u>ajax form</u> to the class.&nbsp; This tells Bonfire that this form should be submitted via AJAX.&nbsp; The url will be pulled from the form open tag, and all of the checked items will be serialized and sent as POST vars to the url.</p><p>At the bottom of your view, add the following javascript.</p><blockquote><pre>&lt;script&gt;
 head.ready(function() {
-  $('#task-form input[type=checkbox]').change(function() {
+  $('.todo-form input[type=checkbox]').change(function() {
       var cid = $(this).attr('data-id');
 
       // Remove it from the display, with a fade effect
       $(this).parents('tr').fadeOut(300);
 
       // Tell the server to remove it.
-      $.post('/admin/content/todo/delete/'+ cid);
+      $.post('&lt;?php echo current_url();?&gt;/delete/'+ cid);
   });
 });
 &lt;/script&gt;</pre></blockquote><p>This javascript simply watches each checkbox in the <u>task-form</u> for a click.&nbsp; It then fades the table row out and calls a function in the server that deletes it.&nbsp; For this example, we&rsquo;re not dealing with errors and success messages, but in a production app, you&rsquo;d probably want to do that.</p><p>Now we need to create the <u>delete()</u> method, so open up the content.php controller and add the following method.</p><blockquote><pre>public function delete()
