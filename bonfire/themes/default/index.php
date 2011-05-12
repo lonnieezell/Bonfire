@@ -13,7 +13,7 @@
 
 	<?php echo Assets::css(); ?>
 	
-	<script src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
+	<?php echo Assets::external_js('head.min.js'); ?>
 </head>
 <body>
 
