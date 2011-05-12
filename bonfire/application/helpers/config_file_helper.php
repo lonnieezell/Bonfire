@@ -136,7 +136,7 @@ function write_config($file='', $settings=null)
 			$val = $val;
 		} else
 		{
-			$val ="'$val'";
+			$val ="\"$val\"";
 		}
 		
 		if (!$empty)
