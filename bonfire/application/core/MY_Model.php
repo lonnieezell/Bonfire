@@ -777,6 +777,21 @@ class MY_Model extends CI_Model {
 	//--------------------------------------------------------------------
 	
 	/*
+		Method: set_soft_deletes()
+		
+		Sets whether soft deletes are used by the delete method.
+		
+		Parameters:
+			$soft	- true/false
+	*/
+	public function set_soft_deletes($soft=true) 
+	{
+		$this->soft_deletes = $soft;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
 		Method: logit()
 		
 		Logs an error to the Console (if loaded) and to the log files.
