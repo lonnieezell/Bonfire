@@ -35,8 +35,43 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: insert()
+		
+		Creates a new user in the database.
+		
+		Parameters:
+			$data	- An array of user information.
+		
+		Returns:
+			$id	- The ID of the new user.
+	*/
 	public function insert($data=array()) 
 	{
+		if (!$this->_function_check(false, $data))
+		{
+			return false;
+		}
+		
+		if (!isset($data['password']) || empty($data['password']))
+		{
+			$this->error = 'No Password present.';
+			return false;
+		}
+		
+		if (!isset($data['email']) || empty($data['email']))
+		{
+			$this->error = 'No Email given.';
+			return false;
+		}
+		
+		// Is this a unique email?
+		if ($this->is_unique('email', $data['email']) == false)
+		{
+			$this->error = 'Email already exists.';
+			return false;
+		}
+	
 		list($password, $salt) = $this->hash_password($data['password']);
 		
 		unset($data['password'], $data['pass_confirm'], $data['submit']);
