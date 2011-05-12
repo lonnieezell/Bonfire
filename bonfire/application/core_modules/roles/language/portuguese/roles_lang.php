@@ -21,21 +21,21 @@
 	THE SOFTWARE.
 */
 
-$lang['role_no_roles']				= 'There are not any roles in the system.';
-$lang['role_create_button']			= 'Create a new role.';
-$lang['role_create_note']			= 'Every user needs a role. Make sure you have all that you need.';
-$lang['role_distribution']			= 'Account Distribution';
-$lang['role_account_type']			= 'Account Type';
+$lang['role_no_roles']				= 'Não estão definidos Papeis';
+$lang['role_create_button']			= 'Criar um novo Papel';
+$lang['role_create_note']			= 'Todos os utilizadores devem ter um Papel (utilizador, editor, administrador,etc)';
+$lang['role_distribution']			= 'Distribuição';
+$lang['role_account_type']			= 'Tipo de Conta de Utilizador';
 
-$lang['role_name']					= 'Role Name';
-$lang['role_max_desc_length']		= 'Max. 255 characters.';
-$lang['role_default_role']			= 'Default Role';
-$lang['role_default_note']			= 'Check if this role should be assigned to all new users.';
-$lang['role_permissions']			= 'Permissions';
-$lang['role_permissions_check_note']	= 'Check all permissions that apply to this Role.';
-$lang['role_save_role']				= 'Save Role';
-$lang['role_delete_role']			= 'Delete this Role';
-$lang['role_delete_note']			= 'Deleting this role will convert all users that are currently assigned it to the site&rsquo;s default role.';
+$lang['role_name']					= 'Nome do Papel';
+$lang['role_max_desc_length']		= 'Max. 255 caracteres.';
+$lang['role_default_role']			= 'Papel por defeito';
+$lang['role_default_note']			= 'Verificar se deve ser aplicado a todos';
+$lang['role_permissions']			= 'Permissões';
+$lang['role_permissions_check_note']	= 'Verificar as permissões que se aplicamm a este grupo';
+$lang['role_save_role']				= 'Gravar';
+$lang['role_delete_role']			= 'DApagar este Papel';
+$lang['role_delete_note']			= 'Ao apagar este papel, todos os utilizadores serão convertidos para o Papel por defeito';
 
-$lang['role_roles']					= 'Roles';
-$lang['role_new_role']				= 'New Role';
+$lang['role_roles']					= 'Papeis';
+$lang['role_new_role']				= 'Novo Papel';

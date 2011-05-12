@@ -21,12 +21,12 @@
 	THE SOFTWARE.
 */
 
-$lang['up_toolbar_title']			= 'Update Manager';
+$lang['up_toolbar_title']			= 'Gestor de Updates';
 
-$lang['up_update_off_message']		= 'Update Checks are turned off in the config/application.php file.';
-$lang['up_edge_commits']			= 'New Bleeding Edge Commits';
+$lang['up_update_off_message']		= 'Os Update Checks são desactivados no config/application.php.';
+$lang['up_edge_commits']			= 'Commits novos detectados';
 $lang['up_branch']					= 'Branch: <b>develop</b>';
 
-$lang['up_author']					= 'Author';
+$lang['up_author']					= 'Autor';
 $lang['up_committed']				= 'Committed';
-$lang['up_message']					= 'Message';
+$lang['up_message']					= 'Msg';

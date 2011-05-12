@@ -21,55 +21,55 @@
 	THE SOFTWARE.
 */
 
-$lang['us_bad_email_pass']			= 'Incorrect email or password.';
-$lang['us_must_login']				= 'You must be logged in to view that page.';
-$lang['us_no_permission']			= 'You do not have permission to access that page.';
+$lang['us_bad_email_pass']			= 'Email ou Password Incorrectos.';
+$lang['us_must_login']				= 'Deve estar logado para ver a página.';
+$lang['us_no_permission']			= 'Não tem previlégios para ver esta página.';
 
-$lang['us_access_logs']				= 'Access Logs';
-$lang['us_logged_in_on']			= 'logged in on';
-$lang['us_no_access_message']		= '<p>Congratulations!</p><p>All of your users have good memories!</p>';
+$lang['us_access_logs']				= 'Logs de Acesso';
+$lang['us_logged_in_on']			= 'logado em';
+$lang['us_no_access_message']		= '<p>Uau!</p><p>Ninguém esqueceu-se da password!</p>';
 
-$lang['us_deleted_users']			= 'Deleted Users';
-$lang['us_purge_del_accounts']		= 'Purge Deleted Accounts';
-$lang['us_purge_del_note']			= '<h3>Purge Deleted Accounts</h3><p>Purging deleted accounts is a permanent action. There is no going back, so please make sure.</p>';
-$lang['us_no_deleted']				= 'There are not any deleted users in the database.';
+$lang['us_deleted_users']			= 'Utilizadores inactivos';
+$lang['us_purge_del_accounts']		= 'Apagar contas inactivas';
+$lang['us_purge_del_note']			= '<h3>Cuidado ao apagar contas inactivas</h3><p>Esta acção é definitiva.</p>';
+$lang['us_no_deleted']				= 'Não existem utilizadores inactivos.';
 
-$lang['us_role']					= 'Role';
-$lang['us_role_lower']				= 'role';
-$lang['us_no_users']				= 'No users found.';
-$lang['us_create_user']				= 'Create New User';
-$lang['us_create_user_note']		= '<h3>Create A New User</h3><p>Create new accounts for other users in your circle.</p>';
-$lang['us_edit_user']				= 'Edit User';
+$lang['us_role']					= 'Papel';
+$lang['us_role_lower']				= 'papel';
+$lang['us_no_users']				= 'Não foram encontrados utilizadores';
+$lang['us_create_user']				= 'Criar novo utilizador';
+$lang['us_create_user_note']		= '<h3>Criar novo utilizador</h3><p>Criar novos utilizadores.</p>';
+$lang['us_edit_user']				= 'Editar Utilizador';
 
-$lang['us_failed_login_attempts']	= 'Failed Login Attempts';
-$lang['us_failed_logins_note']		= '<p>Congratulations!</p><p>All of your users have good memories!</p>';
+$lang['us_failed_login_attempts']	= 'Tentativas de login falhadas';
+$lang['us_failed_logins_note']		= '<p>Uau!</p><p>Niguém esqueceu-se da password!</p>';
 
-$lang['us_banned_admin_note']		= 'This user has been banned from the site.';
-$lang['us_first_name']				= 'First Name';
-$lang['us_last_name']				= 'Last Name';
-$lang['us_address']					= 'Address';
-$lang['us_street_1']				= 'Street 1';
-$lang['us_street_2']				= 'Street 2';
-$lang['us_city']					= 'City';
-$lang['us_state']					= 'State';
-$lang['us_country']					= 'Country';
-$lang['us_zipcode']					= 'Zipcode';
-$lang['us_delete_account']			= 'Delete this Account';
-$lang['us_delete_account_note']		= '<h3>Delete this Account</h3><p>Deleting this account will revoke all of their privileges on the site.</p>';
-$lang['us_delete_account_confirm']	= 'Are you sure you want to delete this user account?';
+$lang['us_banned_admin_note']		= 'Utilizador desactivo.';
+$lang['us_first_name']				= 'Primeiro Nome';
+$lang['us_last_name']				= 'Ultimo Nome';
+$lang['us_address']					= 'Morada';
+$lang['us_street_1']				= 'Rua 1';
+$lang['us_street_2']				= 'Rua 2';
+$lang['us_city']					= 'Cidade';
+$lang['us_state']					= 'Estado';
+$lang['us_country']					= 'País';
+$lang['us_zipcode']					= 'CodPostal';
+$lang['us_delete_account']			= 'Apagar conta';
+$lang['us_delete_account_note']		= '<h3>Apagar Conta</h3><p>Os acessos serão eliminados.</p>';
+$lang['us_delete_account_confirm']	= 'Apagar MESMO esta conta de utilizador?';
 
-$lang['us_user_management']			= 'User Management';
-$lang['us_email_in_use']			= 'The %s address is already in use. Please choose another.';
+$lang['us_user_management']			= 'Gestão de Utilizadores';
+$lang['us_email_in_use']			= 'O endereço %s já está em uso.';
 
 $lang['us_reset_password']			= 'Reset Password';
-$lang['us_reset_note']				= 'Enter your email and we will send a temporary password to you.';
+$lang['us_reset_note']				= 'Inserir email para nova password.';
 
-$lang['us_login']					= 'My Name Is...';
-$lang['us_remember_note']			= 'Remember me for two weeks';
-$lang['us_no_account']				= 'Don&rsquo;t have an account?';
-$lang['us_sign_up']					= 'Sign up today';
-$lang['us_forgot_your_password']	= 'Forgot Your Password?';
+$lang['us_login']					= 'Login de Acesso';
+$lang['us_remember_note']			= 'Lembrar';
+$lang['us_no_account']				= 'Não possui conta?';
+$lang['us_sign_up']					= 'Pedir um Acesso';
+$lang['us_forgot_your_password']	= 'Esqueceu a password?';
 
-$lang['us_password_mins']			= 'Minimum 8 characters.';
-$lang['us_register']				= 'Register';
-$lang['us_already_registered']		= 'Already registered?';
+$lang['us_password_mins']			= 'Minimo 8 caracteres.';
+$lang['us_register']				= 'Registar';
+$lang['us_already_registered']		= 'Ir para Login';
