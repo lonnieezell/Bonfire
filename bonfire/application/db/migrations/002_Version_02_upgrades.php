@@ -7,7 +7,7 @@ class Migration_Version_02_upgrades extends Migration {
 		$prefix = $this->db->dbprefix;
 
 		// email Queue
-		if ($this->db->field_exists('`Bonfire.Emailer.View`', 'permissions') == false)
+		if ($this->db->field_exists('Bonfire.Emailer.View', 'permissions') == false)
 		{
 			$sql = "ALTER TABLE {$prefix}permissions
 					ADD COLUMN `Bonfire.Emailer.View` TINYINT(1) DEFAULT 0 NOT NULL";
@@ -15,24 +15,30 @@ class Migration_Version_02_upgrades extends Migration {
 		}
 		
 		// Users table changes
-		$this->dbforge->modify_column('users', array(
-			'temp_password_hash' => array(
-				'name'	=> 'reset_hash',
-				'type'	=> 'VARCHAR',
-				'constraint'	=> 40
-			)
-		));
-		$this->dbforge->add_column('users', array(
-			'reset_by'	=> array(
-				'type'			=> 'INT',
-				'constraint'	=> 10,
-				'null'			=> true
-			)
-		));
+		if ($this->db->field_exists('temp_password_hash', 'users') != false)
+		{
+			$this->dbforge->modify_column('users', array(
+				'temp_password_hash' => array(
+					'name'	=> 'reset_hash',
+					'type'	=> 'VARCHAR',
+					'constraint'	=> 40
+				)
+			));
+		}
+		if ($this->db->field_exists('reset_by', 'users') == false)
+		{
+			$this->dbforge->add_column('users', array(
+				'reset_by'	=> array(
+					'type'			=> 'INT',
+					'constraint'	=> 10,
+					'null'			=> true
+				)
+			));
+		}
 
 		// Add countries table for our users.
 		// Source: http://27.org/isocountrylist/
-		$this->dbforge->add_field("iso CHAR(2) NOT NULL");
+		$this->dbforge->add_field("iso CHAR(2) DEFAULT 'US' NOT NULL");
 		$this->dbforge->add_field("name VARCHAR(80) NOT NULL");
 		$this->dbforge->add_field("printable_name VARCHAR(80) NOT NULL");
 		$this->dbforge->add_field("iso3 CHAR(3)");
@@ -45,7 +51,7 @@ class Migration_Version_02_upgrades extends Migration {
 			'country_iso'	=> array(
 				'type'			=> 'CHAR',
 				'constraint'	=> 2,
-				'null'			=> false
+				'default'		=> 'US'
 			)
 		));
 		
@@ -315,7 +321,7 @@ class Migration_Version_02_upgrades extends Migration {
 			$this->db->query("ALTER TABLE `{$prefix}permissions` DROP COLUMN `Bonfire.Emailer.View`");
 		}
 		
-		if ($this->db->field_exists('reset_by', 'users'))
+		if ($this->db->field_exists('reset_hash', 'users'))
 		{
 			$this->dbforge->modify_column('users', array(
 				'reset_hash' => array(
