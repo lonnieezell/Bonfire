@@ -454,7 +454,8 @@ class Assets {
 					$script :
 					
 					// Otherwise, build the full url
-					self::$asset_url . self::$asset_base . self::$asset_folders['js'] .'/'. $script
+					self::$asset_url . self::$asset_base . self::$asset_folders['js'] .'/'. $script,
+						'type'=>'text/javascript'
 			);
 			
 			if ($list)
