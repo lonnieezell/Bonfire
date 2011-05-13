@@ -66,16 +66,25 @@ class Subnav extends Base_Controller {
 					$class = '';
 				}
 				
+				// Grab our module config array, if any.
+				$mod_config = module_config($module);
+				
+				$display_name = isset($mod_config['name']) ? $mod_config['name'] : $module;
+				
 				// Build our list item.
 				$list .= '<li><a href="'. site_url('admin/'. $type .'/'. $module) .'" '. $class;
-				// Icon
-				/*
-				if ($icon = module_icon($module))
-				{
-					$list .= ' style="background: url('. $icon .')"';
+				$list .= '>'. ucwords(str_replace('_', '', $display_name)) ."</a>\n";
+				
+				// Drop-down menus?
+				if (isset($mod_config['menus']) && isset($mod_config['menus'][$type]))
+				{ 
+					// Only works if it's a valid view...
+					$view = $this->load->view($mod_config['menus'][$type], null, true);
+					
+					$list .= $view;
 				}
-				*/
-				$list .= '>'. ucwords(str_replace('_', '', $module)) ."</a></li>\n";
+				
+				$list .= "</li>\n";
 			}
 		}
 		
