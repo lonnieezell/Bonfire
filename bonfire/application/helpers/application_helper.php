@@ -295,24 +295,55 @@ function module_files($module_name=null, $module_folder=null, $exclude_core=fals
 //--------------------------------------------------------------------
 
 /*
-	Returns the path to the module's icon.
-*/
-function module_icon($module=null)
-{
-	if (empty($module))
-	{
-		return '';
-	}
+	Function: module_config()
 	
-	// Find our module location
-	foreach (module_folders() as $folder)
+	Returns the 'module_config' array from a modules config/config.php file.
+	
+	Parameters:
+		$module_name	- The name of the module.
+		$return_full	- If true, will return the entire config array.
+						  If false, will return only the 'module_config' portion.
+						  
+	The 'module_config' contains more information about a module, and even provide 
+	enhanced features within the UI. All fields are optional.
+	
+	$config['module_config'] = array(
+		'name'			=> 'Blog', 			// The name that is displayed in the UI
+		'description'	=> 'Simple Blog',	// May appear at various places within the UI
+		'author'		=> 'Your Name',		// The name of the module's author
+		'homepage'		=> 'http://...',	// The module's home on the web
+		'version'		=> '1.0.1',			// Currently installed version
+		'menu'			=> 'path/to/view'	// A view file containing an <ul> that will be the sub-menu in the main nav.
+	);
+	
+	Author: 
+		Liam Rutherford (http://www.liamr.com)
+						  
+	Returns:
+		An array of config settings, or an empty array if empty/not found.
+*/
+function module_config($module_name=null, $return_full=false)
+{
+	$config_param = array();
+
+	$config_file = FCPATH .'bonfire/modules/' . $module_name . '/config/config.php';
+	
+	if (file_exists($config_file)) 
 	{
-		if (is_file($folder . $module .'/icon.png'))
+		include($config_file);
+	
+		/* Check for the optional module_config and serialize if exists*/
+		if (isset($config['module_config'])) 
 		{
-			$icon = $folder . $module .'/icon.png';
-			return base_url() . str_replace(FCPATH, '', $icon);
+			$config_param =$config;
+		}
+		else if ($return_full === true && isset($config) && is_array($config))
+		{
+			$config_param = $config;
 		}
 	}
 	
-	return '';
+	return $config_param;
 }
+
+//--------------------------------------------------------------------
