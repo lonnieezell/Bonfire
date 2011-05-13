@@ -313,7 +313,9 @@ function module_files($module_name=null, $module_folder=null, $exclude_core=fals
 		'author'		=> 'Your Name',		// The name of the module's author
 		'homepage'		=> 'http://...',	// The module's home on the web
 		'version'		=> '1.0.1',			// Currently installed version
-		'menu'			=> 'path/to/view'	// A view file containing an <ul> that will be the sub-menu in the main nav.
+		'menu'			=> array(			// A view file containing an <ul> that will be the sub-menu in the main nav.
+			'context'	=> 'path/to/view'
+		)
 	);
 	
 	Author: 
@@ -326,16 +328,16 @@ function module_config($module_name=null, $return_full=false)
 {
 	$config_param = array();
 
-	$config_file = FCPATH .'bonfire/modules/' . $module_name . '/config/config.php';
+	$config_file = module_file_path($module_name, 'config', 'config.php');
 	
 	if (file_exists($config_file)) 
-	{
+	{ 
 		include($config_file);
 	
 		/* Check for the optional module_config and serialize if exists*/
 		if (isset($config['module_config'])) 
-		{
-			$config_param =$config;
+		{	
+			$config_param =$config['module_config'];
 		}
 		else if ($return_full === true && isset($config) && is_array($config))
 		{
