@@ -119,7 +119,7 @@ class Migrations {
 	{
 		$this->_ci =& get_instance();
 		
-		$this->_ci->config->load('migrations');
+		$this->_ci->config->load('migrations/migrations');
 
 		$this->migrations_enabled = $this->_ci->config->item('migrations_enabled');
 		$this->migrations_path = realpath($this->_ci->config->item('migrations_path'));
