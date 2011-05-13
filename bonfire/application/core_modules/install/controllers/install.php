@@ -34,6 +34,7 @@ class Install extends MX_Controller {
 		'cache',
 		'logs',
 		'config',
+        'archives',
 		'db/backups'
 	);
 	
@@ -43,7 +44,9 @@ class Install extends MX_Controller {
 		sure they can be written to.
 	*/
 	private $writeable_files = array(
-		'config/application.php'
+		'config/application.php',
+        'config/database.php',
+        'config/development/database.php'
 	);
 
 	//--------------------------------------------------------------------
