@@ -334,25 +334,60 @@ noscript {
 	left: 0;
 	right: 0;
 	padding-left: 10px;
-	min-height: 28px;
+	padding-bottom: 0;
+	height: 28px;
 	margin: 0;
 	list-style: none;
 	background: #222 url(images/bg_fabric_dark.jpg) top left repeat;
 	border-bottom: 1px solid #999;
 	z-index: 3;
 }
+.nav-sub li { position: relative; display: inline-block; }
 .nav-sub a:link,
 .nav-sub a:visited {
 	display: block;
 	width: auto;
 	float: left;
-	padding: 3px 10px;
+	padding: 0px 10px 0px 10px;
 	font-size: 14px;
-	line-height: 21px;
+	line-height: 28px;
+	height: 28px;
 	color: #abb;
+	cursor: pointer !important;
 }
 .nav-sub a.current {
 	color: #f7f7f7;
+}
+.nav-sub li ul {
+	position: absolute;
+	margin-left: 0;
+	top: 27px;
+	display: none;
+	opacity: 0;
+	z-index: 20;
+	background: #fff;
+	border: 1px solid #ccc;
+	-webkit-border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	-moz-border-radius-bottomleft: 5px;
+	-moz-border-radius-bottomright: 5px;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+	-webkit-box-shadow: 0 1px 5px #ccc;
+}
+.nav-sub li:hover ul {
+	display: block;
+	opacity: 0.94;
+	margin-left: 10px;
+}
+.nav-sub ul li { 
+	list-style: none; 
+	min-width: 150px;
+}
+.nav-sub ul a:link,
+.nav-sub ul a:visited {
+	float: none;
+	color: #444;
 }
 
 /* !NAV BAR */
