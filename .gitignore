@@ -3,6 +3,7 @@ bonfire/application/logs/*
 !bonfire/application/logs/index.html
 bonfire/application/cache/*
 *.bak
+nbproject/
 
 # Testing ignoring database configuration.. it should be fine since it's already in there, but I don't know the other ramifications.
 bonfire/application/config/database.php
