@@ -238,6 +238,7 @@ noscript {
 /* !TOOLBAR */
 #toolbar {
 	background-color: #2a476a;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#405a87', endColorstr='#263857');
 	background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(36,53,83)), color-stop(1, rgb(64,90,135)));
 	background-image: -moz-linear-gradient(center bottom, rgb(36,53,83) 0%, rgb(64,90,135) 100%);
 	border-bottom: 1px solid #394949;
@@ -272,18 +273,12 @@ noscript {
 	vertical-align: middle;
 	z-index: 90;
 }
-#toolbar h1 {
-	color: #f6f6f6;
-	font-size: 22px;
-	line-height: 29px;
-	text-shadow: -1px -1px 1px #222;
-	padding-top: 4px;
-}
 #toolbar a:link,
 #toolbar a:visited {
-	display: inline-block;
+	display: block;
 	height: 24px;
 	width: 24px;
+	float: left;
 	padding: 5px 10px;
 	text-indent: -9999px;
 	opacity: 0.5;
@@ -301,9 +296,18 @@ noscript {
 	border-top: 0;
 	border-bottom: 0;
 }
+#toolbar h1 {
+	color: #f6f6f6;
+	font-size: 22px;
+	line-height: 29px;
+	text-shadow: -1px -1px 1px #222;
+	padding-top: 4px;
+}
 #toolbar h1 a:link, #toolbar h1 a:visited {
 	text-indent: 0;
 	width: auto;
+	display: block;
+	float: none;
 	height: auto;
 	padding: 0;
 	color: #fff;
@@ -342,7 +346,7 @@ noscript {
 	border-bottom: 1px solid #999;
 	z-index: 3;
 }
-.nav-sub li { position: relative; display: inline-block; }
+.nav-sub li { position: relative; display: block; width: auto; float: left; }
 .nav-sub a:link,
 .nav-sub a:visited {
 	display: block;
@@ -448,6 +452,7 @@ noscript {
 	margin: 0;
 	border: 1px solid #ddd;
 	border-bottom: 0;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#e1e1e1');
 	background:-webkit-gradient(linear,0% 0,0% 100%,from(#fff),to(#e1e1e1));
 	background:-moz-linear-gradient(-90deg,#fff,#e1e1e1);
 	-webkit-border-top-right-radius: 7px;
