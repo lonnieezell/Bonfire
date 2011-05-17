@@ -308,7 +308,7 @@ class Template {
 	{		
 		if (empty($block_name)) 
 		{
-			log_message('debug', '[Template] No block name provided.');
+			logit('[Template] No block name provided.');
 			return;
 		}
 
@@ -327,7 +327,7 @@ class Template {
 
 		if (empty($block_name)) 
 		{ 
-			log_message('debug', '[Template] Unable to find the default block: ' . $default_view);
+			logit('[Template] Unable to find default block: ' . $default_view);
 			return;
 		}
 		
@@ -381,7 +381,7 @@ class Template {
 			return false;
 		} else 
 		{
-			log_message('debug', "[Template] Cannot add theme folder: $path does not exist");
+			logit("[Template] Cannot add theme folder: $path does not exist");
 			return false;
 		}
 	}
