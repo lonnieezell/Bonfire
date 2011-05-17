@@ -58,6 +58,9 @@ h2.panel-title {
 
 /* !SPLIT VIEW */
 .split-view { background: #777; }
+.split-view > div {
+	left: 251px;
+}
 .split-view > div:first-child {
 	width: 250px;
 	position: absolute;
@@ -66,10 +69,10 @@ h2.panel-title {
 	height: 100%;
 }
 .split-view > div:last-child {
+	display: block;
 	position: absolute;
 	top: 0;
 	left: 251px;
-	right: 0;
 	bottom: 0;
 }
 
