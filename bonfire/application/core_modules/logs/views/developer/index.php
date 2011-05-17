@@ -1,5 +1,5 @@
 <div class="view split-view">
-	<!-- List -->
+	
 	<div class="view">
 	
 		<?php if (isset($logs) && is_array($logs) && count($logs)) : ?>
@@ -30,9 +30,9 @@
 			</div>
 		
 		<?php endif; ?>
-	</div>	<!-- /vertical-panel -->
+	</div>	
 	
-	<!-- Editor -->
+	
 	<div id="content" class="view">
 		<div class="scrollable" id="ajax-content">
 				<?php if ($log_threshold == 0) : ?>
