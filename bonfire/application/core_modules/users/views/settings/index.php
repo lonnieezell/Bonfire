@@ -4,7 +4,7 @@
 		
 		<div class="panel-header list-search">
 		
-			<select id="role-filter" style="display: inline; max-width: 40%;">
+			<select id="role-filter" style="display: inline-block; max-width: 40%;">
 				<option value="0"><?php echo lang('bf_action_show') .' '. lang('us_role'); ?>...</option>
 			<?php foreach ($roles as $role) : ?>
 				<option><?php echo $role->role_name ?></option>
