@@ -58,13 +58,15 @@ h2.panel-title {
 
 /* !SPLIT VIEW */
 .split-view { 
-	background: #777; 
+	background: #fff; 
 	position: absolute;
 	top: 0;
 	left: 0;
 	bottom: 0;
-	right: 0;	
+	right: 0;
 }
+.lt-ie9 .split-view { overflow: auto; }
+.lt-ie8 .split-view { overflow: hidden; }
 .split-view > div {
 	display: block;
 	left: 251px;
@@ -84,6 +86,7 @@ h2.panel-title {
 	left: 0;
 	top: 0;
 	height: 100%;
+	border-right: 1px solid #777;
 }
 .split-view > div:last-child {
 	display: block;
