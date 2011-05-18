@@ -60,6 +60,14 @@ h2.panel-title {
 .split-view { background: #777; }
 .split-view > div {
 	left: 251px;
+	*left: 0;
+	*bottom: 0;
+	*top: 0;
+	*width: 249px;
+	*border-right: 1px solid #999;
+	*float: left;
+	*display: table-cell;
+	*height: 100%;
 }
 .split-view > div:first-child {
 	width: 250px;

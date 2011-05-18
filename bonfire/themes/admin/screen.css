@@ -145,6 +145,7 @@ tfoot td {
 	text-align: right;
 	padding: 15px 20px 0 20px;
 }
+.ie tbody tr.odd td { background-color: #edf3fe !important; }
 tbody tr:nth-child(even) { background-color: #edf3fe; }
 .banned { background: #f0cece; }
 .merchant { background: #a2b4ee; }
@@ -365,6 +366,7 @@ noscript {
 .nav-sub li ul {
 	position: absolute;
 	margin-left: 0;
+	left: 0;
 	top: 27px;
 	display: none;
 	opacity: 0;
@@ -378,6 +380,8 @@ noscript {
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 	-webkit-box-shadow: 0 1px 5px #ccc;
+	-moz-box-shadow: 0 1px 5px #ccc;
+	box-shadow: 0 1px 5px #ccc;
 }
 .nav-sub li:hover ul {
 	display: block;
@@ -433,6 +437,9 @@ noscript {
 	overflow-y: auto;
 	z-index: 1;
 }
+#content {
+	*width: 100%;
+}
 
 /*
 	WIDGETS
@@ -452,7 +459,7 @@ noscript {
 	margin: 0;
 	border: 1px solid #ddd;
 	border-bottom: 0;
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff', endColorstr='#e1e1e1');
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e1e1e1');
 	background:-webkit-gradient(linear,0% 0,0% 100%,from(#fff),to(#e1e1e1));
 	background:-moz-linear-gradient(-90deg,#fff,#e1e1e1);
 	-webkit-border-top-right-radius: 7px;

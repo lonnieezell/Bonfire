@@ -318,7 +318,7 @@ class Template {
 			$block_name = self::$blocks[$block_name];
 		} 
 		// Otherwise, use the default view.
-		else if (!empty($default_view))
+		else
 		{
 			$block_name = $default_view;
 		}
