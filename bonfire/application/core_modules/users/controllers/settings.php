@@ -96,8 +96,11 @@ class Settings extends Admin_Controller {
 	
 		if ($this->input->post('submit'))
 		{
-			if ($this->save_user())
+			if ($id = $this->save_user())
 			{
+				$user = $this->user_model->find($id);
+				$this->activity_model->log_activity($this->auth->user_id(), 'created a new '. $user->role_name .' user: '. $user->email, 'users');
+				
 				Template::set_message('User successfully created.', 'success');
 				Template::redirect('admin/settings/users');
 			}
@@ -128,6 +131,9 @@ class Settings extends Admin_Controller {
 		{
 			if ($this->save_user('update', $user_id))
 			{
+				$user = $this->user_model->find($user_id);
+				$this->activity_model->log_activity($this->auth->user_id(), 'modified user: '. $user->email, 'users');
+			
 				Template::set_message('User successfully created.', 'success');
 				//redirect('admin/settings/users');
 			}
@@ -157,6 +163,8 @@ class Settings extends Admin_Controller {
 
 			if ($this->user_model->delete($id))
 			{
+				$user = $this->user_model->find($id);
+				$this->activity_model->log_activity($this->auth->user_id(), 'deleted user: '. $user->email, 'users');
 				Template::set_message('The User was successfully deleted.', 'success');
 			} else
 			{

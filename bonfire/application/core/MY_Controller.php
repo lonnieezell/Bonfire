@@ -124,6 +124,8 @@ class Authenticated_Controller extends Base_Controller {
 		$this->load->database();
 		$this->load->library('session');
 		
+		$this->load->model('activities/Activity_model', 'activity_model', true);
+		
 		// Auth setup
 		$this->load->model('users/User_model', 'user_model');
 		$this->load->library('users/auth');
