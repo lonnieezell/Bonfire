@@ -311,6 +311,12 @@ class Template {
 			logit('[Template] No block name provided.');
 			return;
 		}
+		
+		if (empty($default_view)) 
+		{ 
+			logit('[Template] No default block provided for `' . $block_name . '`');
+			return;
+		}
 
 		// If a block has been set previously use that
 		if (isset(self::$blocks[$block_name]))
@@ -324,12 +330,6 @@ class Template {
 		}
 
 		if (self::$debug) { echo "Looking for block: <b>{$block_name}</b>."; }
-
-		if (empty($block_name)) 
-		{ 
-			logit('[Template] No default block provided for ' . $block_name);
-			return;
-		}
 		
 		self::load_view($block_name, $data, false, $themed, $output);
 		
