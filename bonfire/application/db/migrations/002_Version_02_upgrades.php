@@ -47,13 +47,16 @@ class Migration_Version_02_upgrades extends Migration {
 		$this->dbforge->create_table('countries');
 		
 		// Add a country_iso field so that we can use with users.
-		$this->dbforge->add_column('users', array(
-			'country_iso'	=> array(
-				'type'			=> 'CHAR',
-				'constraint'	=> 2,
-				'default'		=> 'US'
-			)
-		));
+		if ($this->db->field_exists('country_iso', 'users') == false)
+		{
+			$this->dbforge->add_column('users', array(
+				'country_iso'	=> array(
+					'type'			=> 'CHAR',
+					'constraint'	=> 2,
+					'default'		=> 'US'
+				)
+			));
+		}
 		
 		// Change zipcode back to string
 		$this->dbforge->modify_column('users', array(
@@ -66,7 +69,10 @@ class Migration_Version_02_upgrades extends Migration {
 			));
 		
 		// Remove the zip_extra field
-		$this->dbforge->drop_column('users', 'zip_extra');
+		if ($this->db->field_exists('zip_extra', 'users'))
+		{
+			$this->dbforge->drop_column('users', 'zip_extra');
+		}
 		
 		// And... the countries themselves. (whew!)
 		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AF','AFGHANISTAN','Afghanistan','AFG','004');");
@@ -308,6 +314,15 @@ class Migration_Version_02_upgrades extends Migration {
 		$this->db->query("INSERT INTO {$prefix}countries VALUES ('YE','YEMEN','Yemen','YEM','887');");
 		$this->db->query("INSERT INTO {$prefix}countries VALUES ('ZM','ZAMBIA','Zambia','ZMB','894');");
 		$this->db->query("INSERT INTO {$prefix}countries VALUES ('ZW','ZIMBABWE','Zimbabwe','ZWE','716');");
+		
+		// Activity Table
+		$this->dbforge->add_field('activity_id BIGINT(20) NOT NULL AUTO_INCREMENT');
+		$this->dbforge->add_field('user_id BIGINT(20) NOT NULL DEFAULT 0');
+		$this->dbforge->add_field('activity VARCHAR(255) NOT NULL');
+		$this->dbforge->add_field('module VARCHAR(255) NOT NULL');
+		$this->dbforge->add_field('created_on DATETIME NOT NULL');
+		$this->dbforge->add_key('activity_id', true);
+		$this->dbforge->create_table('activities');
 	}
 	
 	//--------------------------------------------------------------------
@@ -368,6 +383,9 @@ class Migration_Version_02_upgrades extends Migration {
 					'null'			=> true
 				)
 			));
+			
+		// Activity Table
+		$this->dbforge->drop_table('activities');
 	}
 	
 	//--------------------------------------------------------------------

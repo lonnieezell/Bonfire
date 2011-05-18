@@ -69,7 +69,7 @@
 				<div class="row" style="margin-top: 3em">
 					<!-- Access Logs -->
 					<div class="column size1of2">
-						<?php echo modules::run('users/settings/access_logs'); ?>
+						<?php echo modules::run('activities/activities/activity_list', 'users'); ?>
 					</div>
 					
 					<!-- Access Logs -->

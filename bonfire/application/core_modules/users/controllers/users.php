@@ -42,6 +42,11 @@ class Users extends Front_Controller {
 		
 		$this->load->library('users/auth');
 		
+		if (!class_exists('Activity_model'))
+		{
+			$this->load->model('activities/Activity_model', 'activity_model', true);
+		}
+		
 		$this->lang->load('users');
 	}
 	
@@ -61,6 +66,7 @@ class Users extends Front_Controller {
 			// Try to login
 			if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === true)
 			{
+				$this->activity_model->log_activity($this->auth->user_id(), 'logged in from '. $this->input->ip_address(), 'users');
 				redirect('admin/content');
 			}
 		}
@@ -189,6 +195,7 @@ class Users extends Front_Controller {
 				
 				if ($this->user_model->update($this->input->post('user_id'), $data))
 				{
+					$this->activity_model->log_activity($this->input->post('user_id'), 'reset their password.', 'users');
 					Template::set_message('Please login using your new password.', 'success');
 					redirect('/login');
 				}
@@ -258,6 +265,7 @@ class Users extends Front_Controller {
 
 				if ($user_id = $this->user_model->insert($data))
 				{					
+					$this->activity_model->log_activity($user_id, 'registered a new account.', 'users');
 					Template::set_message('Your account has been created. Please log in.', 'success');
 					redirect('login');
 				}

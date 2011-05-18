@@ -55,6 +55,16 @@ html[xmlns] .clearfix { display: block; }
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
+ul.clean { 
+	list-style-position: inside; 
+	border-top: 1px solid #eee; 
+}
+ul.clean li { 
+	list-style: none; 
+	border-bottom: 1px solid #eee;
+	padding: 5px 0;
+}
+
 
 /* Grids */
 .row:after,.last-column:after{clear:both;display:block;visibility:hidden;overflow:hidden;height:0 !important;line-height:0;font-size:xx-large;content:" x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ";}
