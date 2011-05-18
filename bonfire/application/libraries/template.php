@@ -318,7 +318,7 @@ class Template {
 			$block_name = self::$blocks[$block_name];
 		} 
 		// Otherwise, use the default view.
-		else 
+		else if (!empty($default_view))
 		{
 			$block_name = $default_view;
 		}
@@ -327,7 +327,7 @@ class Template {
 
 		if (empty($block_name)) 
 		{ 
-			logit('[Template] Unable to find default block: ' . $default_view);
+			logit('[Template] No default block provided for ' . $block_name);
 			return;
 		}
 		
