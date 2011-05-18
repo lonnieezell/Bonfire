@@ -57,17 +57,26 @@ h2.panel-title {
 }
 
 /* !SPLIT VIEW */
-.split-view { background: #777; }
+.split-view { 
+	background: #777; 
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;	
+}
 .split-view > div {
+	display: block;
 	left: 251px;
+	background: #fff;
 	*left: 0;
 	*bottom: 0;
 	*top: 0;
 	*width: 249px;
 	*border-right: 1px solid #999;
 	*float: left;
-	*display: table-cell;
 	*height: 100%;
+	*min-height: 100%;
 }
 .split-view > div:first-child {
 	width: 250px;
@@ -145,6 +154,9 @@ h2.panel-title {
 	float: right;
 	position: relative;
 	top: 4px;
+	*position: absolute;
+	*right: 10px;
+	*top: 7px;
 }
 .panel-header #search-form {
 	border-top: 1px solid #d6d6d6;
