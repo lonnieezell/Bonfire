@@ -52,7 +52,7 @@
 						<span class="big-text"><b><?php echo $user_count ?></b></span> &nbsp; users
 					</div>
 					
-					<div class="column size1of2">
+					<div class="column size1of2 last-column">
 						<img src="<?php echo Template::theme_url('images/user.png') ?>" style="vertical-align: bottom; position: relative; top: -5px; margin-right: 1em;" />	
 						
 						<span class="big-text"><b><?php echo $deleted_users ?></b></span> &nbsp; <?php echo anchor('admin/settings/users/deleted', 'deleted users', 'class="ajaxify"') ?>
@@ -73,7 +73,7 @@
 					</div>
 					
 					<!-- Access Logs -->
-					<div class="column size1of2">
+					<div class="column size1of2 last-column">
 						<?php echo modules::run('users/settings/login_attempts'); ?>
 					</div>
 				</div>

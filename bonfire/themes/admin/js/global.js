@@ -90,6 +90,11 @@ head.ready(function(){
 		Notification fades
 	*/
 	$('.fade-me').delay(5000).slideUp(450);
+	
+	/* 
+		Table Stripes
+	*/
+	$('table tr').filter(':odd').addClass('odd');
 });
 
 

@@ -81,15 +81,15 @@ var ci_profiler_bar = {
 	},
 	
 	// Add class to element
-	add_class : function(obj, class) {
+	add_class : function(obj, my_class) {
 		alert(obj);
-		document.getElementById(obj).className += " "+ class;
+		document.getElementById(obj).className += " "+ my_class;
 	},
 	
 	// Remove class from element
-	remove_class : function(obj, class) {
+	remove_class : function(obj, my_class) {
 		if (obj != undefined) {
-			document.getElementById(obj).className = document.getElementById(obj).className.replace(/\bclass\b/, '');
+			document.getElementById(obj).className = document.getElementById(obj).className.replace(/\bmy_class\b/, '');
 		}
 	}
 };
