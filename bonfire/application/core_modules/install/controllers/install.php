@@ -157,7 +157,7 @@ class Install extends MX_Controller {
 				}
 				else 
 				{
-					Template::set('There was an error setting up your database: '. $this->errors, 'error');
+					Template::set_message('There was an error setting up your database: '. $this->errors, 'error');
 				}
 			}
 		}
@@ -225,7 +225,7 @@ class Install extends MX_Controller {
 	
 	
 	private function setup() 
-	{
+	{ 
 		//
 		// First, save the information to the config/application.php file.
 		//
@@ -251,6 +251,7 @@ class Install extends MX_Controller {
 		if (!$this->migrations->install())
 		{
 			$this->errors = 'There was an error setting up the database. Please check your settings and try again.';
+			return false;
 		}
 		
 		//
