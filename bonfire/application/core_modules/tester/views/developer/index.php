@@ -9,7 +9,7 @@
 			<label>Available Modules</label>
 		</div>
 	
-		<select name="tests" multiple="multiple" class="multiple-select" size="15">
+		<select name="tests[]" multiple="multiple" class="multiple-select" size="15">
 		<?php foreach ($test_map as $module => $tests) :?>
 			<option value="<?php echo $module ?>"><?php echo ucwords(str_replace('_', ' ', $module)) ?></option>
 		<?php endforeach; ?>
