@@ -22,7 +22,7 @@
 	
 		<div>
 			<label><?php echo lang('in_site_title'); ?></label>
-			<input type="text" name="site_title" id="site_title" placeholder="My Great Bonfire App" value="<?php echo set_value('site_title') ?>" />
+			<input type="text" name="site_title" id="site_title" placeholder="My Great Bonfire App" value="<?php echo isset($settings['site.title']) ? $settings['site.title'] : set_value('site.title') ?>" />
 		</div>
 		
 		<div>

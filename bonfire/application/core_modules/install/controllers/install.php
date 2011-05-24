@@ -161,6 +161,10 @@ class Install extends MX_Controller {
 				}
 			}
 		}
+		else 
+		{
+			Template::set('settings', read_config('application'));
+		}
 		
 		Template::render();
 	}
