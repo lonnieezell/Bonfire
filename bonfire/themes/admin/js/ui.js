@@ -101,7 +101,10 @@
     }
 })(jQuery);
 
-$('input[placeholder], textarea[placeholder]').placeholder();
+if (head.placeholder == false)
+{
+	$('input[placeholder], textarea[placeholder]').placeholder();
+}
 
 
 //--------------------------------------------------------------------
