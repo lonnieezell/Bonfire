@@ -222,7 +222,7 @@ Now, head over to the view, and add this code at the bottom of the file.
 > <?php if (isset($items) && is_array($items) && count($items)) : ?>
 > <h3>ToDo Items</h3>
 > 
-> <?php echo form_open(current_url() .'/delete', 'class="ajax-form"'); ?>
+> <?php echo form_open(current_url() .'/delete', 'class="ajax-form todo-form"'); ?>
 > <table>
 > 	<tbody>
 > 	<?php foreach ($items as $item) : ?>
