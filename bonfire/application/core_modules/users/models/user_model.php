@@ -21,6 +21,11 @@
 	THE SOFTWARE.
 */
 
+/*
+	Class: User_model
+	
+	The central way to access and perform CRUD on users.
+*/
 class User_model extends MY_Model {
 
 	protected $table		= 'users';
@@ -103,6 +108,20 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: update()
+		
+		Updates an existing user. Before saving, it will:
+			- generate a new password/salt combo if both password and pass_confirm are passed in.
+			- store the country code
+			
+		Parameters:
+			$id		- An INT with the user's ID.
+			$data	- An array of key/value pairs to update for the user.
+			
+		Returns: 
+			true/false
+	*/
 	public function update($id=null, $data=array()) 
 	{
 		if ($id)
@@ -142,6 +161,18 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: find()
+		
+		Finds an individual user record. Also returns role information for 
+		the user.
+		
+		Parameters:
+			$id	- An INT with the user's ID.
+			
+		Returns:
+			An object with the user's information.
+	*/
 	public function find($id=null) 
 	{
 		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
@@ -151,7 +182,18 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
-	
+	/*
+		Method: find_all()
+		
+		Returns all user records, and their associated role information. 
+		
+		Parameters:
+			$show_deleted	- If false, will only return non-deleted users. If true, will
+				return both deleted and non-deleted users.
+				
+		Returns:
+			An array of objects with each user's information.
+	*/
 	public function find_all($show_deleted=false) 
 	{
 		if ($show_deleted === false)
@@ -166,6 +208,20 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: find_by()
+		
+		Locates a single user based on a field/value match, with their role information.
+		If the $field string is 'both', then it will attempt to find the user
+		where their $value field matches either the username or email on record.
+		
+		Parameters:
+			$field	- A string with the field to match.
+			$value	- A string with the value to search for.
+			
+		Returns:
+			An object with the user's info, or false on failure.
+	*/
 	public function find_by($field=null, $value=null) 
 	{
 		if ($field == 'both')
@@ -185,6 +241,14 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: count_by_roles()
+		
+		Returns the number of users that belong to each role.
+		
+		Returns:
+			An array of objects representing the number in each role.
+	*/
 	public function count_by_roles() 
 	{
 		$prefix = $this->db->dbprefix;
@@ -206,6 +270,18 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: count_all()
+		
+		Counts all users in the system. 
+		
+		Parameters:
+			$get_deleted	- If false, will only return active users. If true, 
+				will return both deleted and active users.
+				
+		Returns: 
+			An INT with the number of users found.
+	*/
 	public function count_all($get_deleted = false) 
 	{	
 		if ($get_deleted)
@@ -223,6 +299,19 @@ class User_model extends MY_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: delete()
+		
+		Performs a standard delete, but also allows for purging of a record.
+		
+		Parameters:
+			$id		- An INT with the record ID to delete.
+			$purge	- If false, will perform a soft-delete. If true, will permenantly
+				delete the record.
+				
+		Returns:
+			true/false
+	*/
 	public function delete($id=0, $purge=false) 
 	{
 		if ($purge === true)
@@ -241,6 +330,17 @@ class User_model extends MY_Model {
 	// !AUTH HELPER METHODS
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: hash_password()
+		
+		Generates a new salt and password hash for the given password.
+		
+		Parameters:
+			$old	- The password to hash.
+			
+		Returns:
+			An array with the hashed password and new salt.
+	*/
 	public function hash_password($old='') 
 	{
 		if (!function_exists('do_hash'))
@@ -273,6 +373,17 @@ class User_model extends MY_Model {
 	// !HMVC METHOD HELPERS
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: get_login_attempts()
+		
+		Returns the most recent login attempts and their description.
+		
+		Parameters:
+			$limit	- An INT which is the number of results to return.
+			
+		Returns:
+			An array of objects with the login information.
+	*/	
 	public function get_login_attempts($limit=15) 
 	{
 		$this->db->limit($limit);
@@ -285,16 +396,6 @@ class User_model extends MY_Model {
 		}
 		
 		return false;
-	}
-	
-	//--------------------------------------------------------------------
-	
-	public function get_access_logs($limit=15) 
-	{
-		$this->db->limit($limit);
-		$this->db->order_by('last_login', 'desc');
-			
-		return $this->find_all();
 	}
 	
 	//--------------------------------------------------------------------
