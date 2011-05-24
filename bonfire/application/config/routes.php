@@ -57,7 +57,7 @@ $route['admin/content/(:any)']				= "$1/content/index";
 // Admin:appearance
 $route['admin/appearance/(:any)/(:any)/(:any)']		= "$1/appearance/$2/$3";
 $route['admin/appearance/(:any)/(:any)'] 	= "$1/appearance/$2";
-$route['admin/appearance/(:any)']			= "$1/dappearance/index";
+$route['admin/appearance/(:any)']			= "$1/appearance/index";
 
 // Admin:stats
 $route['admin/stats/(:any)/(:any)/(:any)']		= "$1/stats/$2/$3";
