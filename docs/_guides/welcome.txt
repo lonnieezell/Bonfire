@@ -1,0 +1,23 @@
+Title: Welcome to Bonfire
+
+Bonfire helps you build CodeIgniter-based PHP web applications even faster, by providing powerful tools and a beautiful interface you won't be ashamed to show your client.
+
+- Ready to customize Admin Interface.
+- User Management with Role-Based Access Control.
+- Fully Modular codebase. Built around HMVC.
+- Database backup, migration, and maintenance.
+- Powerful, parent/child capable theme engine.
+- Simple Email Queue to keep your ISP happy.
+- and more...
+
+About: The Vision
+
+I had a few goals in mind as I started, and they continue to solidify as development goes forward.
+
+*Modular Everything*. We must be able to drop code from another project into this one and have it work. This is how many of us make a living. Let's leave the development time for what makes this project unique.
+
+*Mobile Editing*. I would love to be able to work on my projects away from my main computer. Away from my office. A change of scenery is a good thing occasionally. Bonfire should support maintaining and doing small edits on your app whether you are at a desk, using a tablet, or even a phone. Obviously, it has a long way to go to meet this requirement.
+
+*High Performance*. Studies have shown that shaving milliseconds off of your apps performance can make a huge difference to the success of your business. Google now gives bonus points to faster sites in their search results. Now more than ever, performance is crucial. This will continually be an area of concern, and an area that I don't know enough about.
+
+*Developer Productivity*. I'll admit it. I'm jealous of the command-line tools that other frameworks have. I love the idea of the time-savings that the code generators give you. Bonfire should provide a UI into similar tools. Also for tools that help a developer make a quick change without having to log into several different web sites. It should help with the best practices involved with building a site locally, then deploying to testing and production servers, and make this as easy as possible for even the newer CodeIgniter developers.

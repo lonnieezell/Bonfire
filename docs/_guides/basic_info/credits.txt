@@ -1,0 +1,11 @@
+Title: Credits
+
+Bonfire would never exist without the hard work and tireless effort to create a high-quality product that <EllisLab at http://ellislab.com> and the Reactor team have put into <CodeIgniter at http://codeigniter.com>. 
+
+HMVC and the modular basis of Bonfire could not exist without Wiredesignz's <Modular Extensions HMVC at https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc>.
+
+Migrations provided by code originally written by Mat’as Montes, then modified by <Phil Sturgeon at http://philsturgeon.co.uk/>, <Spicer Matthews at http://www.cloudmanic.com/>.
+
+Icons provided by the free <PC 100 Icon Pack at http://pc.de/icons/>.
+
+The following Javascript libraries were used: <jQuery at http://jquery.com>, <head.js at http://headjs.com>, <pub/sub at https://github.com/phiggins42/bloody-jquery-plugins/blob/master/pubsub.js> by Peter Higgins, <Ajaxify at http://max.jsrhost.com/ajaxify/>, <jQuery Form at http://malsup.com/jquery/form/>, <Placeholder at http://webcloud.se>.
