@@ -1,0 +1,7 @@
+Title: Server Requirements
+
+Bonfire is designed to meet very similar requirements to what CodeIgniter itself uses. 
+
+- *Apache or comparable web server*. Bonfire is designed to take advantage of mod_rewrite and has not been fully tested when mod_rewrite is not available.
+- *PHP version 5.1.6 or higher*. As far as I know at the moment. Is tested under both 5.2.13 and 5.3.2.
+- *MySQL 4 or higher*. While I have tried to make it as database agnostic as possible, there are a few places that we were forced to write MySQL specific code. We will try to remove this restriction in future versions to open it up to more databases as CodeIgniter's database engines continue to improve. 
