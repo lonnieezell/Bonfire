@@ -18,14 +18,21 @@
    Such documentation is not covered by Natural Docs' copyright and licensing,
    and may have its own copyright and distribution terms as decided by its author.
 */
-
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
 body {
-    font-family: "Lucida Grande", Verdana, Geneva, Arial, sans-serif;
-    font-size: 14px;
-    color: #333;
-    margin: 0; padding: 0;
+    font-size: 15px;
+    line-height: 22px;
+    color: #222;
+    background: #e6e6e3;
     }
-
+body, .MGroupContent a {
+	font-family: Helvetica, Arial, sans-serif;
+}
 .ContentPage,
 .IndexPage,
 .FramedMenuPage {
@@ -40,9 +47,9 @@ body {
 
 
 a:link,
-a:visited { color: #900000; text-decoration: none }
-a:hover { color: #900000; text-decoration: underline }
-a:active { color: #FF0000; text-decoration: underline }
+a:visited { color: #06C; text-decoration: none }
+a:hover { color: #06C; text-decoration: underline }
+a:active { color: #06C; text-decoration: underline }
 
 td {
     vertical-align: top;
@@ -94,54 +101,59 @@ blockquote {
 
 
 #Menu {
-    font-size: 9pt;
+    font-size: 13px;
+    line-height: 1.3;
     padding: 10px 0 0 0;
+    background: #DBE3F0;
     }
 .ContentPage #Menu,
 .IndexPage #Menu {
     position: absolute;
     top: 0;
     left: 0;
-    width: 31ex;
-    overflow: hidden;
+    bottom: 0;
+    overflow-y: auto;
+    width: 230px;
+    font-size: 15px;
+    color: #000;
+    border-right: 1px solid #ccc;
     }
-.ContentPage .Firefox #Menu,
-.IndexPage .Firefox #Menu {
-    width: 27ex;
-    }
-
 
     .MTitle {
-        font-size: 16pt; font-weight: bold; font-variant: small-caps;
+    	font-size: 24px;
+       	font-weight: bold;
         text-align: center;
         padding: 5px 10px 15px 10px;
         border-bottom: 1px dotted #000000;
         margin-bottom: 15px;
-        color: #fff; }
+       }
 
     .MSubTitle {
-        font-size: 9pt; font-weight: normal; font-variant: normal; color: #d9d9d9;
+        font-size: 9pt; font-weight: normal; font-variant: normal;
         margin-top: 1ex; margin-bottom: 5px }
 
 
     .MEntry a:link,
     .MEntry a:hover,
-    .MEntry a:visited { color: #d9d9d9; margin-right: 0 }
-    .MEntry a:active { color: #eee; margin-right: 0 }
+    .MEntry a:visited { color: #222; margin-right: 0; }
+    .MEntry a:active { margin-right: 0 }
 
 
     .MGroup {
-        font-variant: small-caps; font-weight: bold;
+        font-weight: bold;
         margin: 1em 0 1em 10px;
+        color: #000;
         }
 
     .MGroupContent {
-        font-variant: normal; font-weight: normal }
+        font-size: 13px;
+        font-weight: normal;
+     }
 
     .MGroup a:link,
     .MGroup a:hover,
-    .MGroup a:visited { color: #d9d9d9; margin-right: 10px }
-    .MGroup a:active { color: #fff; margin-right: 10px }
+    .MGroup a:visited { margin-right: 10px }
+    .MGroup a:active { margin-right: 10px }
 
 
     .MFile,
@@ -161,22 +173,15 @@ blockquote {
     #MSelected {
         color: #000000; background-color: #FFFFFF;
         /*  Replace padding with border.  */
-        padding: 0 10px 0 10px;
-        border-width: 1px 2px 2px 0; border-style: solid; border-color: #000000;
-        margin-right: 5px;
+        padding: 3px 0;
+        border: 1px solid #ccc;
+        border-left: none;
+        border-right: none;
         }
 
     /*  Close off the left side when its in a group.  */
     .MGroup #MSelected {
         padding-left: 9px; border-left-width: 1px }
-
-    /*  A treat for Mozilla users.  Blatantly non-standard.  Will be replaced with CSS 3 attributes when finalized/supported.  */
-    .Firefox #MSelected {
-        -moz-border-radius-topright: 10px;
-        -moz-border-radius-bottomright: 10px }
-    .Firefox .MGroup #MSelected {
-        -moz-border-radius-topleft: 10px;
-        -moz-border-radius-bottomleft: 10px }
 
 
     #MSearchPanel {
@@ -280,19 +285,18 @@ blockquote {
 
 
 #Content {
+	position: absolute;
+	top: 0;
+	left: 230px;
+	bottom: 0;
+	right: 0;
+	overflow-y: auto;
     padding: 20px 40px 0;
+    background: #f6f6f3;
     }
 
 .ContentPage #Content {
-    border-width: 0 0 1px 1px;
-    border-style: solid;
-    border-color: #000000;
-    background-color: #FFFFFF;
     font-size: 9pt;  /* To make 31ex match the menu's 31ex. */
-    margin-left: 31ex;
-    }
-.ContentPage .Firefox #Content {
-    margin-left: 27ex;
     }
 
 
@@ -305,7 +309,7 @@ blockquote {
 
     .CTitle {
         font-size: 12pt; font-weight: bold;
-        border-bottom: 1px solid #999;
+        border-bottom: 1px solid #ccc;
         margin: 28px 0px 16px; }
 
     .CGroup .CTitle {
@@ -326,11 +330,11 @@ blockquote {
         margin-left: 0; margin-right: 0 }
 
     #MainTopic .CTitle {
+    	color: #000;
         font-size: 24px;
-        color: #e13300;
         background: transparent;
         padding: 3px 0px 7px 3px;
-        border-bottom: 1px solid #666;
+        border-bottom: 1px solid #999;
         border-top: 0;
         margin: 0 0 20px; }
 
@@ -493,9 +497,9 @@ blockquote {
 
 
     .SBorder {
-        background-color: #FFFFF0;
+        background-color: #fff;
         padding: 15px;
-        border: 1px solid #C0C060 }
+        border: 1px solid #ddd; }
 
     /* In a frame IE 6 will make them too long unless you set the width to 100%.  Without frames it will be correct without a width
         or slightly too long (but not enough to scroll) with a width.  This arbitrary weirdness simply astounds me.  IE 7 has the same
@@ -503,22 +507,18 @@ blockquote {
     .FramedContentPage .IE .SBorder {
         width: 100% }
 
-    /*  A treat for Mozilla users.  Blatantly non-standard.  Will be replaced with CSS 3 attributes when finalized/supported.  */
-    .Firefox .SBorder {
-        -moz-border-radius: 20px }
-
-
     .STable {
         font-size: 9pt; width: 100% }
 
     .SEntry {
         width: 20% }
     .SDescription {
+    	line-height: 1.35;
         width: 80% }
 
 
     .SMarked {
-        background-color: #F8F8D8 }
+        background-color: #EDF3FE; }
 
     .SDescription { padding-left: 2ex }
     .SIndent1 .SEntry { padding-left: 1.5ex }   .SIndent1 .SDescription { padding-left: 3.5ex }
@@ -587,10 +587,6 @@ blockquote {
         padding: 2px 2ex;
         font-size: 10pt;
         background-color: #F4F4F4; color: #606060;
-        }
-
-    .Firefox .CHEntry {
-        -moz-border-radius: 4px;
         }
 
     .CHCurrent .CHEntry {
