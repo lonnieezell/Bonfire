@@ -48,32 +48,11 @@ $route['logout']				= 'users/logout';
 $route['forgot_password']		= 'users/forgot_password';
 $route['reset_password/(:any)/(:any)']	= "users/reset_password/$1/$2";
 
-// Admin:content
-$route['admin/content/(:any)/(:any)/(:any)/(:any)']		= "$1/content/$2/$3/$4";
-$route['admin/content/(:any)/(:any)/(:any)']		= "$1/content/$2/$3";
-$route['admin/content/(:any)/(:any)'] 		= "$1/content/$2";
-$route['admin/content/(:any)']				= "$1/content/index";
-
-// Admin:appearance
-$route['admin/appearance/(:any)/(:any)/(:any)']		= "$1/appearance/$2/$3";
-$route['admin/appearance/(:any)/(:any)'] 	= "$1/appearance/$2";
-$route['admin/appearance/(:any)']			= "$1/appearance/index";
-
-// Admin:stats
-$route['admin/stats/(:any)/(:any)/(:any)']		= "$1/stats/$2/$3";
-$route['admin/stats/(:any)/(:any)'] 		= "$1/stats/$2";
-$route['admin/stats/(:any)']				= "$1/stats/index";
-
-// Admin:settings
-$route['admin/settings/(:any)/(:any)/(:any)']		= "$1/settings/$2/$3";
-$route['admin/settings/(:any)/(:any)']		= "$1/settings/$2";
-$route['admin/settings/(:any)']				= "$1/settings/index";
-
-// Admin:developer
-$route['admin/developer/php_info']				= "admin/developer/php_info"; 
-$route['admin/developer/(:any)/(:any)/(:any)']		= "$1/developer/$2/$3";
-$route['admin/developer/(:any)/(:any)'] = "$1/developer/$2";
-$route['admin/developer/(:any)']		= "$1/developer/index";
+// Contexts
+$route['admin/([a-z_]+)/(:any)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$4/$5";
+$route['admin/([a-z_]+)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$5";
+$route['admin/([a-z_]+)/(:any)/(:any)'] 		= "$2/$1/$3";
+$route['admin/([a-z_]+)/(:any)']				= "$2/$1/index";
 
 $route['admin']	= 'admin/home';
 
