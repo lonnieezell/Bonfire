@@ -26,7 +26,7 @@
 	
 	The central way to access and perform CRUD on users.
 */
-class User_model extends MY_Model {
+class User_model extends BF_Model {
 
 	protected $table		= 'users';
 	protected $soft_deletes	= true;

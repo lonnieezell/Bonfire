@@ -28,7 +28,7 @@
 	in both core- and custom-modules.
 */
 
-class Activity_model extends MY_Model {
+class Activity_model extends BF_Model {
 
 	protected $table		= 'activities';
 	protected $key			= 'activity_id';

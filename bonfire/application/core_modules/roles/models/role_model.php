@@ -33,7 +33,7 @@
 	Package:
 		Roles
 */
-class Role_model extends MY_Model {
+class Role_model extends BF_Model {
 
 	protected $table		= 'roles';
 	protected $key			= 'role_id';
