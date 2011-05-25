@@ -21,8 +21,8 @@
 	THE SOFTWARE.
 */
 
-$config['site.title'] = 'Bonfire Testsite';
-$config['site.system_email'] = 'lonnieje@gmail.com';
+$config['site.title'] = "Bonfire Testsite";
+$config['site.system_email'] = "lonnieje@gmail.com";
 $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
 
@@ -52,7 +52,7 @@ $config['site.backup_folder']	= 'archives/';
 $config['auth.allow_register'] = 1;
 
 // Type of login allowed ('email', 'username', 'both')
-$config['auth.login_type'] = 'email';
+$config['auth.login_type'] = "email";
 
 // Whether usernames are used in the system
 $config['auth.use_usernames'] = 1;
