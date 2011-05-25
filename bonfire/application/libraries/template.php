@@ -312,7 +312,7 @@ class Template {
 			return;
 		}
 		
-		if (empty($default_view)) 
+		if (empty($block_name) && empty($default_view)) 
 		{ 
 			logit('[Template] No default block provided for `' . $block_name . '`');
 			return;
@@ -330,7 +330,7 @@ class Template {
 		}
 
 		if (self::$debug) { echo "Looking for block: <b>{$block_name}</b>."; }
-		
+
 		self::load_view($block_name, $data, false, $themed, $output);
 		
 		$block_data = array('block'=>$block_name, 'output'=>$output);
