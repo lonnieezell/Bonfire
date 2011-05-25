@@ -288,6 +288,12 @@ class Install extends MX_Controller {
 			return false;
 		}
 		
+		// Create a unique encryption key
+		$this->load->helper('string');
+		$key = random_string('unique', 40);
+		
+		write_config('config', array('encryption_key' => $key));
+		
 		// We made it to the end, so we're good to go!
 		return true;
 	}
