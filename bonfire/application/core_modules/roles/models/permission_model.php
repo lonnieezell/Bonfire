@@ -45,7 +45,7 @@
 	Package:
 		Roles
 */
-class Permission_model extends MY_Model {
+class Permission_model extends BF_Model {
 
 	protected $table		= 'permissions';
 	protected $key			= 'permission_id';
