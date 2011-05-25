@@ -1,0 +1,28 @@
+<IfModule mod_rewrite.c>
+
+	# Make sure directory listing is disabled
+	Options +FollowSymLinks -Indexes
+	RewriteEngine on
+	
+	# Send request via index.php (if it's not an existing file/folder)
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	
+	<IfModule mod_php5.c>
+		RewriteRule ^(.*)$ index.php/$1 [L]
+	</IfModule>
+
+	<IfModule !mod_php5.c>
+		RewriteRule ^(.*)$ index.php?/$1 [L]
+	</IfModule>
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    # If we don't have mod_rewrite installed, all 404's
+    # can be sent to index.php, and everything works as normal.
+    # Submitted by: ElliotHaughin
+
+    ErrorDocument 404 index.php
+</IfModule>
+	
+	
