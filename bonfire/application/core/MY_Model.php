@@ -24,6 +24,17 @@
 /*
 	Class: MY_Model
 	
+	This simply extends BF_Model for backwards compatibility, 
+	and to provide a placeholder class that your project can customize
+	extend as needed.
+*/
+class MY_Model extends BF_Model { }
+
+//--------------------------------------------------------------------
+
+/*
+	Class: BF_Model
+	
 	The Base model implements standard CRUD functions that can be
 	used and overriden by module models. This helps to maintain
 	a standard interface to program to, and makes module creation
@@ -32,7 +43,7 @@
 	Author:
 		Lonnie Ezell
  */
-class MY_Model extends CI_Model {
+class BF_Model extends CI_Model {
 	
 	/*
 		Var: $error

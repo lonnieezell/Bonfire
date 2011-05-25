@@ -21,7 +21,7 @@
 	THE SOFTWARE.
 */
 
-class Emailer_model extends MY_Model {
+class Emailer_model extends BF_Model {
 
 	protected $table		= 'email_queue';
 	protected $key			= 'id';
