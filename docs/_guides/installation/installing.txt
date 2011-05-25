@@ -11,7 +11,18 @@ Upload all of the files/folders from your package to your web server or developm
 > /docs
 > index.php
 
-About: Step 2 - The Install Script
+
+About: Step 2 - Configuration File
+
+In order for Bonfire to run, you must prepare a valid configuration file. 
+
+- Copy _bonfire/application/config/config.example.php_ file and rename it _bonfire/application/config/config.php_. 
+- If you do not have mod_rewrite installed on your server, change the Index File to include index.php
+
+> $config['index_page'] = 'index.php';
+
+
+About: Step 3 - The Install Script
 
 To start the installation process, head to http://yoursite.com/install.
 
