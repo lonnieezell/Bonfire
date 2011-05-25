@@ -3,10 +3,18 @@ bonfire/application/logs/*
 !bonfire/application/logs/index.html
 bonfire/application/cache/*
 *.bak
+
+# NetBeans project files
 nbproject/
 
-# Testing ignoring database configuration.. it should be fine since it's already in there, but I don't know the other ramifications.
+# Ignore Custom config files
 bonfire/application/config/database.php
+bonfire/application/config/config.php
+bonfire/application/config/email.php
+bonfire/application/config/development/*
+bonfire/application/config/testing/*
+bonfire/application/config/production/*
+
 # Ignore all custom modules.
 bonfire/modules/*
 /*.project

@@ -219,6 +219,24 @@ class Install extends MX_Controller {
 		}
 		
 		unset($errors, $folder_errors, $file_errors);
+		
+		/*
+			Copies generic file versions to their appropriate spots. 
+			This provides a safe way to perform upgrades, as well
+			as simplifying what will need to be modified when some
+			sweeping changes are made. 
+		*/
+		if (!file_exists(APPPATH .'config/database.php'))
+		{
+			// Database
+			copy(APPPATH .'config/database_format.php', APPPATH .'config/development/datababase.php');
+			copy(APPPATH .'config/database_format.php', APPPATH .'config/production/datababase.php');
+			copy(APPPATH .'config/database_format.php', APPPATH .'config/testing/datababase.php');
+			copy(APPPATH .'config/database_format.php', APPPATH .'config/datababase.php');
+			
+			// Email
+			copy(APPPATH .'config/email_format.php', APPPATH .'config/email.php');
+		}
 	}
 	
 	//--------------------------------------------------------------------
