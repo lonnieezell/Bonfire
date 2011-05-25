@@ -35,7 +35,8 @@ class Install extends MX_Controller {
 		'logs',
 		'config',
         'archives',
-		'db/backups'
+		'db/backups',
+		'db/migrations'
 	);
 	
 	/*
@@ -44,9 +45,7 @@ class Install extends MX_Controller {
 		sure they can be written to.
 	*/
 	private $writeable_files = array(
-		'config/application.php',
-        'config/database.php',
-        'config/development/database.php'
+		'config/application.php'
 	);
 
 	//--------------------------------------------------------------------
@@ -229,10 +228,10 @@ class Install extends MX_Controller {
 		if (!file_exists(APPPATH .'config/database.php'))
 		{
 			// Database
-			copy(APPPATH .'config/database_format.php', APPPATH .'config/development/datababase.php');
-			copy(APPPATH .'config/database_format.php', APPPATH .'config/production/datababase.php');
-			copy(APPPATH .'config/database_format.php', APPPATH .'config/testing/datababase.php');
-			copy(APPPATH .'config/database_format.php', APPPATH .'config/datababase.php');
+			copy(APPPATH .'config/database_format.php', APPPATH .'config/development/database.php');
+			copy(APPPATH .'config/database_format.php', APPPATH .'config/production/database.php');
+			copy(APPPATH .'config/database_format.php', APPPATH .'config/testing/database.php');
+			copy(APPPATH .'config/database_format.php', APPPATH .'config/database.php');
 			
 			// Email
 			copy(APPPATH .'config/email_format.php', APPPATH .'config/email.php');
