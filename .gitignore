@@ -15,6 +15,11 @@ bonfire/application/config/development/*
 bonfire/application/config/testing/*
 bonfire/application/config/production/*
 
+# but leave the config folders there
+!bonfire/application/config/development/index.html
+!bonfire/application/config/testing/index.html
+!bonfire/application/config/production/index.html
+
 # Ignore all custom modules.
 bonfire/modules/*
 /*.project
