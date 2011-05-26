@@ -378,8 +378,11 @@ class Auth  {
 		{
 			$role_id = $this->role_id();
 		}
-		 
-		$perms = $this->perms[$role_id - 1];
+
+		$this->ci->load->helper('array');
+		$index = array_index_by_key('role_id', $role_id, $this->perms, true);
+
+		$perms = $this->perms[$index];
 
 		// Did we pass?
 		if (isset($perms->$permission) && $perms->$permission == 1)
