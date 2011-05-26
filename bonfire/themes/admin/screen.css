@@ -84,7 +84,7 @@ ul.clean li {
 
 /* Selection styles */
 ::selection 	 	{background: #dbe3f0;}
-::-moz-selection 	{background: ;}
+::-moz-selection 	{background: #dbe3f0;}
 img::selection 		{background: transparent;}
 img::-moz-selection	{background: transparent;}
 
