@@ -4,11 +4,11 @@
 
 .view {
 	height: 100%;
-	width: 100%;
+	display: block;
 	padding: 0;
 	position: relative;
 	overflow: hidden;
-	background: #fff;
+	background: red;
 }
 
 .scrollable {
