@@ -10,12 +10,12 @@ table {	border-collapse: collapse; border-spacing: 0; }
 th, td, caption { font-weight: normal; vertical-align: top;	text-align: left; }
 
 /* !BASE STYLES */
-html, body { height: 100%; overflow: hidden; background: #fff; }
+html, body { height: 100%; background: #fff; position: relative;  }
 body {
 	font-family:  Geneva, 'Helvetica Neue', Helvetica, Arial sans-serif;
 	color: #444;
-	position: relative;
 	font-size: 0.625em;		/* Reset base font size to 10px */
+	overflow: visible;
 }
 section { overflow: auto; height: 100%; }
 hr {
@@ -341,6 +341,10 @@ noscript {
 	padding: 7px 0 0 0;
 }
 
+#header {
+	overflow: hidden;
+}
+
 /* !SUB-NAVIGATION */
 .nav-sub {
 	display: block;
@@ -417,9 +421,9 @@ noscript {
 	border-bottom: 1px solid #ddd;
 	margin-bottom: 10px;
 	padding: 5px 0;
-	-webkit-box-shadow: 0 1px 10px #ddd;
-	-moz-box-shadow: 0 1px 10px #ddd;
-	box-shadow: 0 1px 10px #ddd;
+	-webkit-box-shadow: 0px 1px 10px #ddd;
+	-moz-box-shadow: -12px 1px 10px #ddd;
+	box-shadow: 0px 1px 10px #ddd;
 	z-index: 2;
 }
 #nav-bar h1 {
