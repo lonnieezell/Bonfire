@@ -1,0 +1,43 @@
+Title: Bonfire Overview
+
+Bonfire is designed to give you a powerful head-start when creating your web applications. Here we'll cover the big-picture of what it supports and provides you, and point you to the concepts you need to understand to get the most out of the framework. 
+
+
+About: Bonfire is Built on CodeIgniter
+
+Underneath the shiny UI you have the full power of the popular, and very fast, <CodeIgniter PHP Framework at http://codeigniter.com>. This framework is simple to use, flexible, powerful, and leaves you in control of the code. It is well-supported with a large community and a host of third-party libraries to use. 
+
+
+About: Bonfire is a Web Application Skeleton
+
+Unlike many of the excellent CMS's built on top of CodeIgniter, like <PyroCMS at http://pyrocms.com>, Bonfire is not intended to be used to create simple websites, though it certainly could. Instead, Bonfire is designed to power web applications. The difference between a _web site_ and a _web application_ is a sometimes subtle one, but an important one. 
+
+A web site typically consists of static pages, maybe a blog, and a few forms. A web application, on the other hand, is designed to provide one or more unique tools for the user. Much like a desktop application. 
+
+
+About: Bonfire Hearts HTML5
+
+Bonfire currently supports, and encourages developers to support, the emerging HTML5 and CSS3 technologies. These techs provide many tools for streamlining both the semantics and functionality of modern web applications. Our use of HTML5 will continue to grow and new helpers and libraries will evolve to support this technology. 
+
+
+
+About: Bonfire is Modular
+
+At the core of Bonfire are a growing selection of modules that are meant to work together. Nearly all development work that you do using Bonfire, will be creating modules. This means that the work you do on one web app will transfer to your new app with little to no changes.
+
+
+
+About: Bonfire Gives You Access Control
+
+A robust role-based access control (RBAC) is at the heart of Bonfire's user system. We chose RBAC instead of the more thorough Access Control Lists because of it's relative simplicity and the fact that it provides all of the flexibility that most web apps will ever need. You can create new permissions and restrict access to any controller or method.
+
+
+About: Bonfire Speeds Up Development
+
+Bonfire borrows ideas from other frameworks that were typically used on the command-line and wraps it up in a UI for ease of use. Tools like working with your database, code generation and more make your job easier and faster.
+
+
+
+About: Bonfire has a Growing Community of Users
+
+It didn't take long after Bonfire was announced at version 0.1 for people to start taking notice. And start taking part. You can learn more about how to develop with Bonfire in the <Community Forums at http://forums.cibonfire.com>.
