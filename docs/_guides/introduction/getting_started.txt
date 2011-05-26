@@ -1,0 +1,12 @@
+Title: Getting Started
+
+Getting started with Bonfire might require a bit of a learning curve, but we're doing our best to minimize it and make it as fun to use as possible. 
+
+About: Suggested Knowledge
+
+This documentation assumes that you have some working knowledge of CodeIgniter, itself, as it is meant for CodeIgniter developers. While it is possible to learn CI at the same time you are learning Bonfire, it's a higher hill to climb.
+
+The following guides will give you the essential knowledge needed before you can really dig into the code...
+
+- <CodeIgniter User Guide at http://codeigniter.com/user_guide/>
+- <Modular Extensions - HMVC at https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/>
