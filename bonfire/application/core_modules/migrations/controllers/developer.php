@@ -58,7 +58,12 @@ class Developer extends Admin_Controller {
 	//--------------------------------------------------------------------
 	
 	public function migrate_to($version=0) 
-	{
+	{	
+		if (empty($version))
+		{
+			$version = $this->uri->segment(5);
+		}
+	
 		if (!empty($version) && is_numeric($version))
 		{
 			$result = $this->migrations->version($version);
