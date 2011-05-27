@@ -1,20 +1,21 @@
 <IfModule mod_rewrite.c>
-
 	# Make sure directory listing is disabled
 	Options +FollowSymLinks -Indexes
 	RewriteEngine on
 	
-	# Send request via index.php (if it's not an existing file/folder)
-	RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond %{REQUEST_FILENAME} !-d
+	#Removes access to the system folder by users.
+    #Additionally this will allow you to create a System.php controller,
+    #previously this would not have been possible.
+    #'system' can be replaced if you have renamed your system folder.
+    RewriteCond %{REQUEST_URI} ^bonfire/codeigniter.*
+    RewriteRule ^(.*)$ /index.php?/$1 [L]
 	
-	<IfModule mod_php5.c>
-		RewriteRule ^(.*)$ index.php/$1 [L]
-	</IfModule>
-
-	<IfModule !mod_php5.c>
-		RewriteRule ^(.*)$ index.php?/$1 [L]
-	</IfModule>
+	#Checks to see if the user is attempting to access a valid file,
+    #such as an image or css document, if this isn't true it sends the
+    #request to index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php?/$1 [L]
 </IfModule>
 
 <IfModule !mod_rewrite.c>
@@ -24,5 +25,4 @@
 
     ErrorDocument 404 index.php
 </IfModule>
-	
 	
