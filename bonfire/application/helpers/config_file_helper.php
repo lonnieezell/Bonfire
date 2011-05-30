@@ -187,11 +187,13 @@ function write_config($file='', $settings=null)
 	
 	Parameters:
 		$environment	- (Optional) The envinroment to get. If empty, will return all environments.
+		$new_db	(str)		- (Optional) Returns an new db config array with parameter as $db active_group name
+		$fail_gracefully	- true/false. Whether to halt on errors or simply return false.
 		
 	Return:
-		An array of database settings.
+		An array of database settings or abrupt failure (when $fail_gracefully == FALSE)
  */  
-function read_db_config($environment=null) 
+function read_db_config($environment=null, $new_db = NULL, $fail_gracefully = TRUE)
 {
 	$files = array();
 
@@ -211,12 +213,45 @@ function read_db_config($environment=null)
 	
 	// Grab our required settings
 	foreach ($files as $env => $file)
-	{
-		include(APPPATH.'config/'.$file.EXT);
-	
-		if ( ! isset($db) OR ! is_array($db))
+	{	
+		if ( file_exists(APPPATH.'config/'.$file.EXT))
 		{
-			return FALSE;
+			include(APPPATH.'config/'.$file.EXT);
+		}
+		else if ($fail_gracefully === FALSE)
+			{
+				show_error('The configuration file '.$file.EXT.' does not exist.');
+			}
+	
+		//Acts as a reseter for given environment and active_group
+		if (empty($db) && ($new_db !== NULL)) 
+			//Do I wanna make sure we won't overwrite existing $db?
+			//If not, removing empty($db) will always return a new db array for given ENV
+		{ 
+			$db[$new_db]['hostname'] = '';
+			$db[$new_db]['username'] = '';
+			$db[$new_db]['password'] = '';
+			$db[$new_db]['database'] = '';
+			$db[$new_db]['dbdriver'] = 'mysql';
+			$db[$new_db]['dbprefix'] = '';
+			$db[$new_db]['pconnect'] = TRUE;
+			$db[$new_db]['db_debug'] = TRUE;
+			$db[$new_db]['cache_on'] = FALSE;
+			$db[$new_db]['cachedir'] = '';
+			$db[$new_db]['char_set'] = 'utf8';
+			$db[$new_db]['dbcollat'] = 'utf8_general_ci';
+			$db[$new_db]['swap_pre'] = '';
+			$db[$new_db]['autoinit'] = TRUE;
+			$db[$new_db]['stricton'] = TRUE;
+			$db[$new_db]['stricton'] = TRUE;
+		}
+	
+		
+		 //found file but is empty or clearly malformed
+		if (empty($db) OR ! is_array($db))
+		{
+			logit('[Config_File_Helper] Corrupt DB ENV file: '.$env,'debug');
+			continue;
 		}
 		
 		$settings[$env] = $db;
@@ -254,6 +289,7 @@ function write_db_config($settings=null)
 {	
 	if (!is_array($settings	))
 	{
+		logit('[Config_File_Helper] Invalid write_db_config PARAMETER!');
 		return false;
 	}
 	
@@ -275,6 +311,12 @@ function write_db_config($settings=null)
 
 		// Load the file so we can loop through the lines
 		$contents = file_get_contents(APPPATH.'config/'. $env .'database'.EXT);
+
+		if (empty($contents) OR ! is_array($contents))
+		{
+			logit('[Config_File_Helper] Error getting db file contents. Loading default database_format.php');
+			$contents = file_get_contents(APPPATH.'config/database_format'.EXT);
+		}
 
 		if ($env != 'submit')
 		{
@@ -298,7 +340,7 @@ function write_db_config($settings=null)
 				
 				$contents = str_replace($search, '$db[\'default\'][\''. $name .'\'] = '. $value .';', $contents);
 			}
-	
+
 			// Backup the file for safety
 			$source = APPPATH .'config/'. $env .'database'.EXT;
 			$dest_folder = APPPATH . config_item('site.backup_folder') .'config/'. $env;
@@ -328,8 +370,5 @@ function write_db_config($settings=null)
 	
 	return $result;
 }
-
 //---------------------------------------------------------------
-	
-
 // End Config helper

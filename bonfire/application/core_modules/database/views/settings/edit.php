@@ -1,4 +1,4 @@
-<h2>&lsquo;<?php echo $server_type ?>&rsquo; <?php echo lang('db_database_settings'); ?> </h2>
+<h2>&lsquo;<em><?php echo $server_type ?></em>&rsquo;  -  <?php echo lang('db_database_settings'); ?> </h2>
 
 <?php echo form_open($this->uri->uri_string(), 'class="constrained ajax-form"') ?>
 			
@@ -61,7 +61,7 @@
 		
 
 	<div class="submits">
-		<input type="submit" name="submit" value="Save Settings" />
+		<input type="submit" name="submit" value="<?php echo lang('bf_action_save') ?>" />
 	</div>
 
 <?php echo form_close(); ?>

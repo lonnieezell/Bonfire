@@ -1,7 +1,10 @@
 <div class="view split-view">
 	<!-- List -->
 	<div class="view">
-	
+	<?php  empty ($settings['development']) ? $settings['development'] =array_shift(read_db_config('development','default')) :'';?>
+	<?php  empty ($settings['testing']) ? $settings['testing'] =array_shift(read_db_config('testing','default')) :'';?>
+	<?php  empty ($settings['production']) ? $settings['production'] =array_shift(read_db_config('production','default')) :'';?>
+
 		<h2 class="panel-title"><?php echo lang('db_servers'); ?></h2>
 		
 		<div class="scrollable">
@@ -71,15 +74,15 @@
 							</tr>
 							<tr>
 								<td><?php echo lang('db_debug_on'); ?>?</td>
-								<td><b><?php echo $settings['development']['default']['db_debug'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['development']['default']['db_debug'] = 1 ? lang('bf_yes') : lang('bf_yes') ?></b></td>
 							</tr>
 							<tr>
 								<td><?php echo lang('db_persistant'); ?>?</td>
-								<td><b><?php echo $settings['development']['default']['pconnect'] == 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['development']['default']['pconnect'] == 1 ? lang('bf_yes') : lang('bf_yes') ?></b></td>
 							</tr>
 							<tr>
 								<td><?php echo lang('db_strict_mode'); ?>?</td>
-								<td><b><?php echo $settings['development']['default']['stricton'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['development']['default']['stricton'] = 1 ? lang('bf_yes') : lang('bf_yes') ?></b></td>
 							</tr>
 						</table>
 					</div>
@@ -110,15 +113,15 @@
 							</tr>
 							<tr>
 								<td><?php echo lang('db_debug_on'); ?>?</td>
-								<td><b><?php echo $settings['testing']['default']['db_debug'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['testing']['default']['db_debug'] = 1 ? lang('bf_yes') : lang('bf_yes') ?></b></td>
 							</tr>
 							<tr>
 								<td><?php echo lang('db_persistant'); ?>?</td>
-								<td><b><?php echo $settings['testing']['default']['pconnect'] == 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['testing']['default']['pconnect'] == 1 ? lang('bf_yes') : lang('bf_yes') ?></b></td>
 							</tr>
 							<tr>
 								<td><?php echo lang('db_strict_mode'); ?>?</td>
-								<td><b><?php echo $settings['testing']['default']['stricton'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['testing']['default']['stricton'] = 1 ? lang('bf_yes') : lang('bf_yes') ?></b></td>
 							</tr>
 						</table>
 					</div>
@@ -149,15 +152,15 @@
 							</tr>
 							<tr>
 								<td>Debug On?</td>
-								<td><b><?php echo $settings['production']['default']['db_debug'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['production']['default']['db_debug'] = 1 ? lang('bf_yes') : lang('bf_yes') ?></b></td>
 							</tr>
 							<tr>
 								<td><?php echo lang('db_persistant'); ?>?</td>
-								<td><b><?php echo $settings['production']['default']['pconnect'] == 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['production']['default']['pconnect'] == 1 ? lang('bf_yes') : lang('bf_yes') ?></b></td>
 							</tr>
 							<tr>
 								<td><?php echo lang('db_strict_mode'); ?>?</td>
-								<td><b><?php echo $settings['production']['default']['stricton'] = 1 ? 'Yes' : 'No' ?></b></td>
+								<td><b><?php echo $settings['production']['default']['stricton'] = 1 ? lang('bf_yes') : lang('bf_yes') ?></b></td>
 							</tr>
 						</table>
 					</div>
