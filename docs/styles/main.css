@@ -22,13 +22,12 @@ html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
-	overflow: hidden;
 }
 body {
     font-size: 15px;
     line-height: 22px;
     color: #222;
-    background: #e6e6e3;
+    background: #f6f6f3;
     }
 body, .MGroupContent a {
 	font-family: Helvetica, Arial, sans-serif;
@@ -36,7 +35,7 @@ body, .MGroupContent a {
 .ContentPage,
 .IndexPage,
 .FramedMenuPage {
-    background-color: #333;
+    background-color: #f6f6f3;
     }
 .FramedContentPage,
 .FramedIndexPage,
@@ -101,19 +100,19 @@ blockquote {
 
 
 #Menu {
+	float: left;
+	width: 229px;
+	margin-left: -230px;
+	display: inline;
     font-size: 13px;
     line-height: 1.3;
     padding: 10px 0 0 0;
-    background: #DBE3F0;
+    position: relative;
+    z-index: 5;
+    background: #dbe3f0;
     }
 .ContentPage #Menu,
 .IndexPage #Menu {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    overflow-y: auto;
-    width: 230px;
     font-size: 15px;
     color: #000;
     border-right: 1px solid #ccc;
@@ -283,15 +282,15 @@ blockquote {
 
 
 
-
+#Container {
+	padding-left: 230px;
+}
 #Content {
-	position: absolute;
-	top: 0;
-	left: 230px;
-	bottom: 0;
-	right: 0;
-	overflow-y: auto;
-    padding: 20px 40px 0;
+	float: left;
+	width: 100%;
+    padding: 20px 0;
+    border-left: 230px solid #DBE3F0;
+    margin-left: -230px;
     background: #f6f6f3;
     }
 
@@ -751,6 +750,7 @@ blockquote {
 
 
 #Footer {
+	display: none;
     font-size: 8pt;
     color: #989898;
     text-align: right;
