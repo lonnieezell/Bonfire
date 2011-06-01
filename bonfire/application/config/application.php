@@ -63,6 +63,25 @@ $config['auth.allow_remember'] = 1;
 // How long should a user be remembered in the system? In seconds.
 $config['auth.remember_length'] = 1209600;	
 
+
+//--------------------------------------------------------------------
+// CONTEXTS
+//--------------------------------------------------------------------
+
+/*
+	Contexts provide the main sections of the admin area. Only two are
+	required: 'settings' and 'developer'. 
+	
+	The name of the context displayed in the UI is determined by 
+	language strings as defined in application_lang.php. The string
+	must follow the format: context_content_name.
+	
+	The icon displayed is chosen automatically from the 
+	theme/images/context_context_name.png files.
+*/
+$config['contexts'] = array( 'content', 'reports', 'settings', 'developer' );
+
+
 //--------------------------------------------------------------------
 // !MODULES
 //--------------------------------------------------------------------
