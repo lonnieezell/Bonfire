@@ -18,7 +18,7 @@ Enhancements:
 - Forgot Password feature was revised for better security.
 - Users can have countries stored with their profile. A country table added to db as well as a country_select function to the helper.
 - Migrations has better interface. Supports both up/down migrations anytime.
-- Modules can have a settings array that allows for drop-down menus, custom names, and more.
+- Modules can have a settings array that allows for drop-down menus, custom names, and more. Added module_config() method to application helper.
 - Initial translation to Portuguese. 
 
 Bugs: 
