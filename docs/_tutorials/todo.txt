@@ -58,7 +58,7 @@ About: The Model
 
 The model stores all of the functions that you need to access your data in the database. Since Bonfire comes with a base model we can extend, creating a simple model for the Todo module is an easy task. 
 
-Create a new file under _todo/models_ called *Todo_model.php*. The file should look like: 
+Create a new file under _todo/models_ called *todo_model.php*. The file should look like: 
 
 > <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 > 
