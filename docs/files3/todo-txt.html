@@ -50,7 +50,7 @@ class Migration_Create_todo_table extends Migration {
 
 }</pre></blockquote><p>Now login to Bonfire and go to Developer / Migrations.&nbsp; It should tell you that the Installed Version is 2, and the Latest Available Version is 3.&nbsp; Click the <b>Install Latest Version</b> link.&nbsp; On this new page, choose <b>Migrate Database</b> to install the new table.</p></div></div></div>
 
-<div class="CGeneric"><div class=CTopic><h3 class=CTitle><a name="The_Model"></a>The Model</h3><div class=CBody><p>The model stores all of the functions that you need to access your data in the database.&nbsp; Since Bonfire comes with a base model we can extend, creating a simple model for the Todo module is an easy task.</p><h4 class=CHeading>Create a new file under <u>todo/models</u> called <b>Todo_model.php</b>.&nbsp; The file should look like</h4><blockquote><pre>&lt;?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<div class="CGeneric"><div class=CTopic><h3 class=CTitle><a name="The_Model"></a>The Model</h3><div class=CBody><p>The model stores all of the functions that you need to access your data in the database.&nbsp; Since Bonfire comes with a base model we can extend, creating a simple model for the Todo module is an easy task.</p><h4 class=CHeading>Create a new file under <u>todo/models</u> called <b>todo_model.php</b>.&nbsp; The file should look like</h4><blockquote><pre>&lt;?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Todo_model extends MY_Model {
 
