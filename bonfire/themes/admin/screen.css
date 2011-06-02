@@ -291,7 +291,7 @@ noscript {
 	width: 24px;
 	float: left;
 	padding: 5px 10px;
-	text-indent: -9999px;
+	color: transparent;
 	opacity: 0.5;
 }
 #toolbar a:hover {
