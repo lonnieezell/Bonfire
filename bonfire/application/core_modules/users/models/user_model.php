@@ -265,7 +265,7 @@ class User_model extends BF_Model {
 			return $query->result();
 		}
 
-		return false;
+        return false; 
 	}
 	
 	//--------------------------------------------------------------------
