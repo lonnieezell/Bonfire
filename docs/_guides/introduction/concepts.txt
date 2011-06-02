@@ -7,15 +7,6 @@ About: Contexts
 
 A *Context* is an area of similar responsibility, like _Settings_, _Reports_ or _Developer Tools_. The Contexts form the main navigation through Bonfire's admin area. There are three contexts that are required (as well as a Public Context), and you can create as many additional Contexts as you desire. 
 
-	Reports		- Should provide reporting functions related to your application.
-	Settings	- Any settings related to your module. These are typically items to are infrequently changed, like the number of events to show on per page, etc.
-	Developer	- This context is meant for tools designed to make the application developer's life easier and may include database tools, code generation, deploy helpers, etc.
-	Public		- This is a general category for any controllers that will directly show information to the public.
-	
-With the exception of the Public context, creating a controller for your module for a specific controller is a simple as naming your controller to match the context. A controller for the _content_ context, would be named *content.php*, while one that shows up in the _settings_ context would be named *setting.php*. For the public context, the controller should be named the same as the module. For example, a  _Pages_ module would have a public controller called *pages.php*.
-
-Each module will automatically show up in the appropriate area of the Admin UI. Again, with the exception of public contexts, which are only available to the public-facing site.
-
 
 
 About: Modules
