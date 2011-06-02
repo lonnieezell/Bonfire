@@ -59,6 +59,7 @@ class Base_Controller extends MX_Controller {
 			if (!$this->input->is_cli_request())
 			{
 				$this->output->enable_profiler(true);
+				Assets::add_css('profiler.css');
 			}
 		}
 		
