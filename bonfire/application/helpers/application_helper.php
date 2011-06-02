@@ -352,7 +352,7 @@ function module_config($module_name=null, $return_full=false)
 
 
 //--------------------------------------------------------------------
-// CONTEXT HELPERS
+// !CONTEXT HELPERS
 //--------------------------------------------------------------------
 
 /*
@@ -361,10 +361,14 @@ function module_config($module_name=null, $return_full=false)
 	Builds the navigation used in the admin theme for the main contexts
 	list. 
 	
+	Parameters:
+		$mode	- The type of toolbar buttons to create. 
+					Valid options are 'icon', 'text', 'both'
+	
 	Returns:
 		A string with the toolbar items required for the context nav.
 */
-function context_nav()
+function context_nav($mode='icon')
 { 
 	$contexts = config_item('contexts');
 	
@@ -399,7 +403,23 @@ function context_nav()
 			$id = 'tb_'. $context;
 			$title = lang('bf_context_'. $context);
 			
-			$nav .= "<a href='{$url}' {$class} id='{$id}' title='{$title}'>{$title}</a>";
+			
+			
+			$nav .= "<a href='{$url}' {$class} id='{$id}' title='{$title}'>";
+			
+			// Image
+			if ($mode=='icon' || $mode=='both')
+			{
+				$nav .= "<img src='". Template::theme_url('images/context_'. $context .'.png') ."' alt='{$title}' />"; 
+			}
+			
+			// Display String
+			if ($mode=='text' || $mode=='both')
+			{
+				$nav .= $title;
+			}
+			
+			$nav .= "</a>";
 		}
 	}
 	
