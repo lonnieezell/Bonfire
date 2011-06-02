@@ -4,7 +4,8 @@
 		base_url() .'assets/js/jquery-1.5.min.js',
 		Template::theme_url('js/jquery.form.js'),
 		Template::theme_url('js/jquery.ajaxify.min.js'),
-		Template::theme_url('js/ui.js')
+		Template::theme_url('js/ui.js'),
+		Template::theme_url('js/profiler.js')
 	));
 ?>
 <!doctype html>
