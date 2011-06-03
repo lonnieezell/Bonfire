@@ -145,7 +145,8 @@ class Migrations {
 		if ( ! $this->_ci->db->table_exists('schema_version'))
 		{
 			$this->_ci->dbforge->add_field(array(
-				'version' => array('type' => 'INT', 'constraint' => 3),
+				'version' => array('type' => 'INT', 'constraint' => 4, 'default' => 0),
+				'app_version' => array('type' => 'INT', 'constraint' => 4, 'default' => 0),
 			));
 			
 			$this->_ci->dbforge->create_table('schema_version', TRUE);
@@ -185,10 +186,12 @@ class Migrations {
 		Return:
 			void	- Outputs a report of the installation
 	*/
-	public function install() 
+	public function install($core=false) 
 	{ 
+		$migrations_path = $core ? $this->migrations_path .'core/' : $this->migrations_path;
+	
 		// Load all *_*.php files in the migrations path
-		$files = glob($this->migrations_path.'*_*'.EXT);
+		$files = glob($migrations_path.'*_*'.EXT);
 		$file_count = count($files);
 
 		for($i=0; $i < $file_count; $i++) 
@@ -208,7 +211,7 @@ class Migrations {
 			// Calculate the last migration step from existing migration
 			// filenames and procceed to the standard version migration
 			$last_version =	substr($last_migration,0,3);
-			return $this->version(intval($last_version,10));
+			return $this->version(intval($last_version,10), $core);
 		} else {
 			$this->error = $this->_ci->lang->line('no_migrations_found');
 			return 0;
@@ -231,12 +234,13 @@ class Migrations {
 		Return:
 			TRUE if already latest, FALSE if failed, int if upgraded
 	 */
-	function version($version) 
+	function version($version, $core=false) 
 	{	
-		$schema_version = $this->get_schema_version();
+		$schema_version = $this->get_schema_version($core);
 		$start = $schema_version;
 		$stop = $version;
-		
+		$migrations_path = $core ? $this->migrations_path .'core/' : $this->migrations_path;
+
 		if ($version > $schema_version)
 		{
 			// Moving Up
@@ -259,7 +263,7 @@ class Migrations {
 		// But first let's make sure that everything is the way it should be
 		for($i=$start; $i != $stop; $i += $step) 
 		{
-			$f = glob(sprintf($this->migrations_path . '%03d_*'.EXT, $i));
+			$f = glob(sprintf($migrations_path . '%03d_*'.EXT, $i));
 			logit($f);
 			// Only one migration per step is permitted
 			if (count($f) > 1)
@@ -372,9 +376,8 @@ class Migrations {
 				echo "<hr/>";
 			}
 			
-			
 			$schema_version += $step;
-			$this->_update_schema_version($schema_version);
+			$this->_update_schema_version($schema_version, $core);
 		}
 
 		if ($this->verbose)
@@ -408,14 +411,18 @@ class Migrations {
 		
 		Retrieves current schema version
 		
+		Parameters:
+			$core	- If true, will return core schema version.
+					  If false, will return app schema version.
+		
 		Return:
 			integer	- Current Schema version
 	 */
-	public function get_schema_version() 
+	public function get_schema_version($core=false) 
 	{
 		$row = $this->_ci->db->get('schema_version')->row();
 
-		return $row ? $row->version : 0;
+		return $core ? $row->version : $row->app_version;
 	}
 
 	// --------------------------------------------------------------------
@@ -425,12 +432,17 @@ class Migrations {
 		
 		Retrieves the latest available version.
 		
+		Parameters:
+			$core	- Show only Bonfire's core migrations.
+		
 		Return:
 			integer	- Latest available migration file.
 	 */
-	public function get_latest_version() 
+	public function get_latest_version($core=false) 
 	{
-		$f = glob($this->migrations_path . '*_*'.EXT);
+		$migrations_path = $core ? $this->migrations_path .'core/' : $this->migrations_path;
+
+		$f = glob($migrations_path .'*_*'.EXT);
 		
 		return count($f);
 	}
@@ -442,19 +454,24 @@ class Migrations {
 		
 		Searches the migrations folder and returns a list of available migration files.
 		
+		Parameters:
+			$core	- Show only Bonfire's core migrations.
+		
 		Author:
 			Lonnie Ezell
 		
 		Returns:
 			array	- An array of migration files
 	*/
-	public function get_available_versions() 
+	public function get_available_versions($core=false) 
 	{
-		$files = glob($this->migrations_path . '*_*'.EXT);
+		$migrations_path = $core ? $this->migrations_path .'core/' : $this->migrations_path;
+		
+		$files = glob($migrations_path .'*_*'.EXT);
 		
 		for ($i=0; $i < count($files); $i++)
 		{
-			$files[$i] = str_ireplace($this->migrations_path, '', $files[$i]);
+			$files[$i] = str_ireplace($migrations_path, '', $files[$i]);
 		}
 		
 		return $files;
@@ -510,16 +527,20 @@ class Migrations {
 			
 		Parameters:
 			$schema_version	- An integer with the latest Schema version reached
+			$core			- If true, it sets the core version.
+							  If false, it sets the app version.
 			
 		Return:
 			void
 	 */
-	private function _update_schema_version($schema_version) 
+	private function _update_schema_version($schema_version, $core=false) 
 	{
+		$core = $core ? '' : 'app_';
+		
 		logit('[Migrations] Schema updated to: '. $schema_version);
 	
 		return $this->_ci->db->update('schema_version', array(
-			'version' => $schema_version
+			$core.'version' => $schema_version
 		));
 	}
 	
