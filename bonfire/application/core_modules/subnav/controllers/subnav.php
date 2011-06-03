@@ -70,10 +70,11 @@ class Subnav extends Base_Controller {
 				$mod_config = module_config($module);
 				
 				$display_name = isset($mod_config['name']) ? $mod_config['name'] : $module;
+				$title = isset($mod_config['description']) ? $mod_config['description'] : $module;
 				
 				// Build our list item.
 				$list .= '<li><a href="'. site_url('admin/'. $type .'/'. $module) .'" '. $class;
-				$list .= '>'. ucwords(str_replace('_', '', $display_name)) ."</a>\n";
+				$list .= ' title="'. $title .'">'. ucwords(str_replace('_', '', $display_name)) ."</a>\n";
 				
 				// Drop-down menus?
 				if (isset($mod_config['menus']) && isset($mod_config['menus'][$type]))
