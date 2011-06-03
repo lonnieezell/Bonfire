@@ -6,4 +6,5 @@ $config['module_config'] = array(
 	'menus'	=> array(
 		'settings'	=> 'emailer/settings/menu'
 	),
+	'author'		=> 'Bonfire Team'
 );
