@@ -38,6 +38,22 @@ class Developer extends Admin_Controller {
 
 	public function index() 
 	{
+		$modules = module_list();
+		$configs = array();
+	
+		foreach ($modules as $module)
+		{
+			$configs[$module] = module_config($module);
+			
+			if (!isset($configs[$module]['name']))
+			{
+				$configs[$module]['name'] = ucwords($module);
+			}
+		}
+		
+		ksort($configs);
+		Template::set('modules', $configs);
+	
 		Template::set_view('admin/developer/index');
 		Template::render();
 	}

@@ -4,6 +4,8 @@
 	<p class="text-center">The tools available in the Developer's section are advanced tools, designed to make a developer's life a little easier.<br/>If used without the proper knowledge, they can be very dangerous. Use with care.</p>
 </div>
 
+<h2>System Information</h2>
+
 	<table cellspacing="0">
 		<tbody>
 			<tr>
@@ -80,4 +82,29 @@
 			</tr>
 		</tbody>
 	</table>
-</div>
+
+
+<h2>Installed Modules</h2>
+
+<?php if (isset($modules) && is_array($modules) && count($modules)) : ?>
+	<table>
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Version</th>
+				<th>Description</th>
+				<th>Author</th>
+			</tr>
+		</thead>
+		<tbody>
+		<?php foreach ($modules as $module => $config) : ?>
+			<tr>
+				<td><?php echo $config['name'] ?></td>
+				<td><?php echo isset($config['version']) ? $config['version'] : '---'; ?></td>
+				<td><?php echo isset($config['description']) ? $config['description'] : '---'; ?></td>
+				<td><?php echo isset($config['author']) ? $config['author'] : '---'; ?></td>
+			</tr>
+		<?php endforeach; ?>
+		</tbody>
+	</table>
+<?php endif; ?>

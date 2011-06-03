@@ -152,6 +152,18 @@ function module_list($exclude_core=false)
 		$map = array_merge($map, directory_map($folder, 1));
 	}
 	
+	// Clean out any html or php files
+	if ($count = count($map))
+	{
+		for ($i=0; $i < $count; $i++)
+		{
+			if (strpos($map[$i], '.html') !== false || strpos($map[$i], '.php') !== false)
+			{
+				unset($map[$i]);
+			}
+		}
+	}
+	
 	return $map;
 }
 
