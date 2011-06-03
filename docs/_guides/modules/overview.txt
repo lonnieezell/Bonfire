@@ -35,6 +35,21 @@ To add new functionality to your site, you will generally be creating a new modu
 Your controllers should extend one of the 4 main Controllers, though you will typically be extending the Front_Controller, the Authenticated_Controller, or the Admin_Controller. You can learn more about the types of controllers in the <Base_Controller> documentation.
 
 
+About: Module Config Files
+
+While not necessary, modules can have a _config.php_ file to enhance the way their module is displayed throughout the system. The format of the file is...
+
+>	$config['module_config'] = array(
+>		'name'			=> 'Blog', 			// The name that is displayed in the UI
+>		'description'	=> 'Simple Blog',	// May appear at various places within the UI
+>		'author'		=> 'Your Name',		// The name of the module's author
+>		'homepage'		=> 'http://...',	// The module's home on the web
+>		'version'		=> '1.0.1',			// Currently installed version
+>		'menu'			=> array(			// A view file containing an <ul> that will be the sub-menu in the main nav.
+>			'context'	=> 'path/to/view'
+>		)
+>	);
+
 
 About: Mastering Modules
 
