@@ -42,54 +42,60 @@ class Update extends Admin_Controller {
 		Checks with github for any Bonfire updates and notifies the develoepr.
 	*/
 	public function update_check() 
-	{ 
-		$message = '';
-		
+	{ 	
 		if (!$this->config->item('updates.do_check'))
 		{
 			return;
 		}
+		
+		$message = $this->cache->get('update_message');
 		
 		/*
 			If they're living on the bleeding edge, then we need to find
 			the latest commit reference and compare to what this installed
 			version is at.
 		*/
-		if ($this->config->item('updates.bleeding_edge'))
-		{ 
-			$commits = $this->github_lib->user_timeline('ci-bonfire', 'Bonfire');
-			
-			if (is_array($commits))
-			{
-				$last_commit = $commits[0]->id;
-			
-				if ($last_commit !== $this->config->item('updates.last_commit'))
-				{
-					$message .= 'A <b>bleeding edge</b> update to Bonfire is available.';
-				}
-			}
-			
-			unset($commits, $last_commit);
-		}
-		
-		/*
-			Also check for major, tagged releases.
-		*/
-		$tags = $this->github_lib->repo_refs('ci-bonfire', 'Bonfire');
-
-		if ($tags && is_array($tags))
+		if (empty($message))
 		{
-			foreach ($tags as $tag => $ref)
-			{
-				if ($tag > BONFIRE_VERSION)
+			if ($this->config->item('updates.bleeding_edge'))
+			{ 
+				$commits = $this->github_lib->user_timeline('ci-bonfire', 'Bonfire');
+				
+				if (is_array($commits))
 				{
-					$message .= ' Version <b>'. $tag .'</b> of Bonfire is available. You are currently running '. BONFIRE_VERSION;
-					break;
+					$last_commit = $commits[0]->id;
+				
+					if ($last_commit !== $this->config->item('updates.last_commit'))
+					{
+						$message .= 'A <b>bleeding edge</b> update to Bonfire is available.';
+					}
+				}
+				
+				unset($commits, $last_commit);
+			}
+			
+			/*
+				Also check for major, tagged releases.
+			*/
+			$tags = $this->github_lib->repo_refs('ci-bonfire', 'Bonfire');
+	
+			if ($tags && is_array($tags))
+			{
+				foreach ($tags as $tag => $ref)
+				{
+					if ($tag > BONFIRE_VERSION)
+					{
+						$message .= ' Version <b>'. $tag .'</b> of Bonfire is available. You are currently running '. BONFIRE_VERSION;
+						break;
+					}
 				}
 			}
-		}
+			
+			unset($tags);
 		
-		unset($tags);
+			// Cache the message for 1 hour
+			$this->cache->save('update_message', $message, 3600);	
+		}
 		
 		/*
 			Show the message(s)

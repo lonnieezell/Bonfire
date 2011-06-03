@@ -64,7 +64,7 @@ class Base_Controller extends MX_Controller {
 		
 		$this->lang->load('application');
 
-		//$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+		$this->load->driver('cache', array('adapter' => 'file'));
 		
 		// Pre-Controller Event
 		Events::trigger('after_controller_constructor', get_class($this));
