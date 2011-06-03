@@ -94,7 +94,7 @@ class Update extends Admin_Controller {
 			unset($tags);
 		
 			// Cache the message for 1 hour
-			$this->cache->save('update_message', $message, 3600);	
+			$this->cache->save('update_message', $message, 60*60*24);	
 		}
 		
 		/*
