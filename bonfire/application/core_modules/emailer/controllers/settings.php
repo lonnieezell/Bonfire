@@ -145,6 +145,62 @@ class Settings extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: queue()
+		
+		Displays all of the emails currently in the queue to be sent.
+	*/
+	public function queue() 
+	{
+		$offset = $this->uri->segment(5);
+
+		$this->load->model('Emailer_model', 'emailer_model', true);
+
+		Template::set('emails', $this->emailer_model->limit($this->limit, $offset)->find_all());
+		Template::set('total_in_queue', $this->emailer_model->count_by('date_sent IS NULL'));
+		Template::set('total_sent', $this->emailer_model->count_by('date_sent IS NOT NULL'));
+	
+		$total_emails = $this->emailer_model->count_all();
+	
+		$this->pager['base_url'] = site_url('admin/settings/emailer/queue');
+		$this->pager['total_rows'] = $total_emails;
+		$this->pager['per_page'] = $this->limit;
+		$this->pager['uri_segment']	= 5;
+		
+		$this->pagination->initialize($this->pager);
+	
+		Template::set('toolbar_title', 'Emailer Queue');
+		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: preview()
+	
+		Displays a preview of the email as stored in the database.
+		
+		Parameters:
+			$id		- an INT with the ID of the email to preview from the queue.
+	*/
+	public function preview($id=0) 
+	{
+		$this->output->enable_profiler(false);
+		
+		if (!empty($id) && is_numeric($id))
+		{
+			$email = $this->emailer_model->find($id);
+			
+			if ($email)
+			{
+				Template::set('email', $email);
+			
+				Template::render('blank');
+			}
+		}
+	}
+	
+	//--------------------------------------------------------------------
 }
 
 // End Admin class
