@@ -41,23 +41,30 @@ class Developer extends Admin_Controller {
 	{
 		if ($this->input->post('submit') == lang('mig_migrate_button'))
 		{
+			$core = $this->input->post('core_only') ? 1 : 0;
+			
 			if ($version = $this->input->post('migration'))
 			{
-				redirect('/admin/developer/migrations/migrate_to/'. $version);
+				redirect('/admin/developer/migrations/migrate_to/'. $version .'/'. $core);
 			}
 		}
 	
 		Template::set('installed_version', $this->migrations->get_schema_version());
 		Template::set('latest_version', $this->migrations->get_latest_version());
 	
-		Template::set('migrations', $this->migrations->get_available_versions());
+		Template::set('core_installed_version', $this->migrations->get_schema_version(true));
+		Template::set('core_latest_version', $this->migrations->get_latest_version(true));
+	
+		Template::set('core_migrations', $this->migrations->get_available_versions(true));
+		Template::set('app_migrations', $this->migrations->get_available_versions());
+		
 		Template::set('toolbar_title', 'Database Migrations');
 		Template::render();
 	}
 	
 	//--------------------------------------------------------------------
 	
-	public function migrate_to($version=0) 
+	public function migrate_to($version=0, $core=0) 
 	{	
 		if (empty($version))
 		{
@@ -66,7 +73,7 @@ class Developer extends Admin_Controller {
 	
 		if (!empty($version) && is_numeric($version))
 		{
-			$result = $this->migrations->version($version);
+			$result = $this->migrations->version($version, $core);
 			
 			if ($result)
 			{
