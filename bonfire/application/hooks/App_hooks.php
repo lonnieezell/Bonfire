@@ -30,6 +30,7 @@ class App_hooks {
 	public function __construct() 
 	{
 		$this->ci =& get_instance();
+	        $this->ci->load->library('users/auth');
 	}
 	
 	//--------------------------------------------------------------------
@@ -57,11 +58,14 @@ class App_hooks {
 	
 	public function check_site_status() 
 	{
-		if ($this->ci->config->item('site.status') == 0 && $this->ci->auth->role_id() != 1 && $this->ci->auth->role_id() != 6)
-		{
-			include (APPPATH .'errors/offline'. EXT);
-			die();
-		}
+        if ($this->ci->router->fetch_module() !== 'users') 
+        {
+    		if ($this->ci->config->item('site.status') == 0 && $this->ci->auth->role_id() != 1 && $this->ci->auth->role_id() != 6)
+    		{
+    			include (APPPATH .'errors/offline'. EXT);
+    			die();
+    		}            
+        }
 	}
 	
 	//--------------------------------------------------------------------
