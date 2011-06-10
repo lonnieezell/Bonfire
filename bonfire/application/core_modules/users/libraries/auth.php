@@ -361,11 +361,12 @@ class Auth  {
 			$permission	- A string with the permission to check for, ie 'Site.Signin.Allow'
 			$role_id	- The id of the role to check the permission against. If not role_id is
 							passed into the method, then it assumes it to be the current user's role_id.
+			$override	- Whether or not access is granted if this permission doesn't exist in the database
 							
 		Return:
 			true/false
 	*/
-	public function has_permission($permission = null, $role_id=null) 
+	public function has_permission($permission = null, $role_id=null, $override = FALSE) 
 	{
 		if (empty($permission))
 		{
@@ -379,13 +380,10 @@ class Auth  {
 			$role_id = $this->role_id();
 		}
 
-		$this->ci->load->helper('array');
-		$index = array_index_by_key('role_id', $role_id, $this->perms, true);
-
-		$perms = $this->perms[$index];
+		$perms = (object)$this->perms;
 
 		// Did we pass?
-		if (isset($perms->$permission) && $perms->$permission == 1)
+		if ((isset($perms->$permission) && $perms->$permission == 1) || (!in_array($permission, $this->perm_desc) && $override))
 		{
 			return true;
 		}
@@ -395,14 +393,30 @@ class Auth  {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: load_permission()
+
+		Load the permission details from the database into class properties
+		
+	*/
 	public function load_permissions() 
 	{
-		$perms = $this->ci->permission_model->find_all();
+		$perms_all = $this->ci->permission_model->find_all_by('status','active');
+		$perms = array();
+		foreach($perms_all as $key => $perm_details)
+		{
+			$perms[$perm_details->permission_id] = $perm_details->name;
+		}
 		
-		// Store it so we can reference later
-		$this->perms = $perms;
+		$this->perm_desc = $perms;
+		
+		$role_perms = $this->ci->role_permission_model->find_for_role($this->role_id());
+		foreach($role_perms as $key => $permission)
+		{
+			$this->perms[$perms[$permission->permission_id]] = 1;
+		}
 	}
-	
+
 	//--------------------------------------------------------------------
 	
 	
@@ -811,13 +825,13 @@ if (!function_exists('auth_errors'))
 	Return:
 		true/false
  */ 
-function has_permission($permission=null)
+function has_permission($permission=null, $override = FALSE)
 {
 	$ci =& get_instance();
 	
 	if (class_exists('Auth'))
 	{
-		return $ci->auth->has_permission($permission); 
+		return $ci->auth->has_permission($permission, null, $override); 
 	}
 	
 	return false;

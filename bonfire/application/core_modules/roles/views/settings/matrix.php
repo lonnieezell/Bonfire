@@ -20,10 +20,12 @@
 					<?php foreach ($fields['actions'] as $action) : ?>
 						<td>
 							<?php if (array_key_exists($action, $field_actions)) : ?>
-								<?php $perm_name = $domain_name .'.'. $field_name .'.'. $action; ?>
-								<input type="checkbox" name="role_permissions[]" class="" value="<?php echo $perm_name ?>" 
 								<?php 
-									if (isset($role) && isset($role->permissions->$perm_name) && $role->permissions->$perm_name == 1)
+									$perm_name = $domain_name .'.'. $field_name .'.'. $action;
+								?>
+								<input type="checkbox" name="role_permissions[]" class="" value="<?php echo $domains[$domain_name][$field_name][$action]['perm_id'] ?>" 
+								<?php 
+									if (isset($domains[$domain_name][$field_name][$action]['value']) && $domains[$domain_name][$field_name][$action]['value'] == 1)
 									{
 										echo 'checked="checked"';
 									}

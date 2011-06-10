@@ -129,7 +129,8 @@ class Authenticated_Controller extends Base_Controller {
 		// Auth setup
 		$this->load->model('users/User_model', 'user_model');
 		$this->load->library('users/auth');
-		$this->load->model('roles/permission_model');
+		$this->load->model('permissions/permission_model');
+		$this->load->model('roles/role_permission_model');
 		$this->load->model('roles/role_model');
 		
 		// Make sure we're logged in.
