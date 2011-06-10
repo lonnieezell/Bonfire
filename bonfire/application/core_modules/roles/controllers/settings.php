@@ -143,15 +143,24 @@ class Settings extends Admin_Controller {
 	 */
 	public function matrix() 
 	{
-		$permissions = $this->permission_model->find_all();
+		$id = (int)$this->uri->segment(5);
+		$role = $this->role_model->find($id);
+
+		$permissions_full = $role->permissions;
 		
-		// Grab a copy of one of the permission sets so that
-		// we can break it apart and examine it.
-		$template = (array)$permissions[0];
-		
-		// Clean it up.
-		unset($template['permission_id'], $template['role_id']);
-		
+		$role_permissions = $role->role_permissions;
+
+		$template = array();
+		foreach ($permissions_full as $key => $perm)
+		{
+			$template[$perm->name]['perm_id'] = $perm->permission_id;
+			$template[$perm->name]['value'] = 0;
+			if(isset($role_permissions[$perm->permission_id]) )
+			{
+				$template[$perm->name]['value'] = 1;
+			}
+		}
+
 		// Extract our pieces from each permission
 		$domains = array();
 		
@@ -188,7 +197,7 @@ class Settings extends Admin_Controller {
 				$domains[$domain]['actions'][] = $action;
 			}
 		}
-		
+
 		// Build the table(s) in the view to make things a little clearer,
 		// and return it!
 		return $this->load->view('settings/matrix', array('domains' => $domains), true);
@@ -224,7 +233,7 @@ class Settings extends Admin_Controller {
 		}
 		else 
 		{
-			$this->form_validation->set_rules('role_name', 'Role Name', 'trim|strip_tags|max_length[60]|xss_clean');
+			$this->form_validation->set_rules('role_name', 'Role Name', 'required|trim|strip_tags|max_length[60]|xss_clean');
 		}
 		$this->form_validation->set_rules('description', 'Description', 'trim|strip_tags|max_length[255]|xss_clean');
 		
@@ -237,7 +246,7 @@ class Settings extends Admin_Controller {
 		// We'll need it later.
 		$permissions = $this->input->post('role_permissions');
 		unset($_POST['role_permissions']);
-		
+
 		if ($type == 'insert')
 		{
 			$id = $this->role_model->insert($_POST);
@@ -256,7 +265,7 @@ class Settings extends Admin_Controller {
 		}
 		
 		// Save the permissions.
-		if ($permissions && !$this->permission_model->set_for_role($id, $permissions))
+		if ($permissions && !$this->role_permission_model->set_for_role($id, $permissions))
 		{
 			$this->error = 'There was an error saving the permissions.';
 		}

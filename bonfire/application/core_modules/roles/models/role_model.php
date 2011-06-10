@@ -78,11 +78,29 @@ class Role_model extends BF_Model {
 	{
 		$role = parent::find($id);
 		
-		if (!$role) { return false; }
-		
 		// Grab our permissions for the role.
-		$permissions = $this->permission_model->find_for_role($id);
-		$role->permissions = $permissions;
+		$permissions = $this->permission_model->find_all_by('status','active');
+		$permission_array = array();
+		foreach($permissions as $key => $permission)
+		{
+			$permission_array[$permission->name] = $permission;
+		}
+		$role->permissions = $permission_array;
+
+		if (!$id) { return $role; }
+		
+		
+		$role_permissions = $this->role_permission_model->find_for_role($id);
+		$permission_array = array();
+		if( is_array($role_permissions) && count($role_permissions))
+		{
+			foreach($role_permissions as $key => $permission)
+			{
+				$permission_array[$permission->permission_id] = 1;
+			}
+		}
+		$role->role_permissions = $permission_array;
+		
 		
 		return $role;
 	}
@@ -115,6 +133,26 @@ class Role_model extends BF_Model {
 		return parent::update($id, $data);
 	}
 	
+	function delete($id=0, $purge=false) 
+	{
+		if ($purge === true)
+		{
+			// temporarily set the soft_deletes to true.
+			$this->soft_deletes = false;
+		}
+		
+		// delete the ercord
+		$deleted = parent::delete($id);
+		
+		if( TRUE === $deleted )
+		{
+			// now delete the role_permissions for this permission
+			$this->role_permission_model->delete_for_role($id);
+		}
+		
+		return $deleted;
+	}
+
 	//--------------------------------------------------------------------
 	
 	/*
