@@ -27,14 +27,11 @@ class Modulebuilder
 	{
 
 		$this->CI = &get_instance();
-		$this->CI->load->library('form_validation');
-		$this->CI->load->library('zip');
-		$this->CI->load->library('session');
-		$this->CI->load->helper('url');
-		$this->CI->load->helper('file');
-		$this->CI->load->helper('download');
-		$this->CI->load->helper('security');
-		$this->options = $this->CI->config->item( 'modulebuilder' );
+		//$this->CI->load->library('form_validation');
+		//$this->CI->load->library('zip');
+		//$this->CI->load->helper('download');
+		//$this->CI->load->helper('security');
+		$this->options = $this->CI->config->item('modulebuilder');
 
 		// filenames 
 		$this->files = array(
@@ -43,15 +40,17 @@ class Modulebuilder
 	                        'controller' => 'myform',
 	                        'sql'  => 'sql'
 	                        );
-	
-
 	}
+	
+	//--------------------------------------------------------------------
 	
 	public function build_files($field_total, $module_name, $main_context, $contexts, $action_names, $db_required, $ajax_processing, $form_input_delimiters, $form_error_delimiters) {
 		
+		$this->CI->load->helper('inflector');
+		
 		// filenames 
 		$this->files = array(
-							'model' => $module_name.'_model',
+							'model' => singular($module_name).'_model',
 							'controller' => $main_context,
 							'javascript'  => $module_name,
 							'sql'  => 'sql',
@@ -88,7 +87,6 @@ class Modulebuilder
 			}
 			// javascript
 			if( $ajax_processing ) {
-
 				$content['javascript'] = $this->build_javascript($field_total, $module_file_name, $action_names);
 			}
 		}
@@ -127,8 +125,45 @@ class Modulebuilder
 		return $data;
 	}
 
+	//--------------------------------------------------------------------
 
-	// --------------------------------------------------------------------
+	/** Custom Form Validation Callback Rule
+	 *
+	 * Checks that one field doesn't match all the others.
+	 * This code is not really portable. Would of been nice to create a rule that accepted an array
+	 *
+	 * @access	public
+	 * @param	string
+	 * @param	fields array
+	 * @return	bool
+	 */
+
+	protected function no_match($str, $fieldno)
+	{		
+		for($counter=1; $this->field_total >= $counter; $counter++)
+		{
+			// nothing has been entered into this field so we don't need to check
+			// or the field being checked is the same as the field we are checking from
+			if ($_POST["view_field_name$counter"] == '' || $fieldno == $counter) 			
+			{
+				continue;				
+			}
+			
+			if ($str == $_POST["view_field_name$counter"])
+			{
+				$this->CI->form_validation->set_message('no_match', "Field names must be unique!");
+				return FALSE;
+			}
+		}
+		
+		return TRUE;
+	}
+
+	//--------------------------------------------------------------------
+	
+	//--------------------------------------------------------------------
+	// PRIVATE METHODS
+	//--------------------------------------------------------------------
 
 	private function _write_files($module_name, $content) {
 		
@@ -166,6 +201,8 @@ class Modulebuilder
 					}
 				}
 				elseif($type == 'views') {
+					$this->CI->load->helper('file');
+				
 					$view_files = $content['views'];
 					foreach($view_files as $view_context => $context_views)
 					{
@@ -226,7 +263,7 @@ class Modulebuilder
 		return $ret_val;
 	}
 	
-	// --------------------------------------------------------------------
+	//--------------------------------------------------------------------
 
    /** 
     * function build_view()
@@ -273,7 +310,7 @@ class Modulebuilder
 	}
 
 	
-	// --------------------------------------------------------------------
+	//--------------------------------------------------------------------
 
    /** 
     * function build_controller()
@@ -302,7 +339,7 @@ class Modulebuilder
 		return $controller;            
 	}
 
-	// --------------------------------------------------------------------
+	//--------------------------------------------------------------------
 
    /** 
     * function build_model()
@@ -320,15 +357,17 @@ class Modulebuilder
 			return FALSE;
 		}
 
-		$data['field_total'] = $field_total;
-		$data['controller_name'] = $module_name;
-		$data['action_names'] = $action_names;
+		$data['field_total']	= $field_total;
+		$data['model_name']		= $module_name;
+		$data['model_name_cap']	= ucfirst($module_name); 
+		$data['action_names']	= $action_names;
+		
 		$model = $this->CI->load->view('files/model', $data, TRUE);
 
 		return $model;
 	}
 	
-	// --------------------------------------------------------------------
+	//--------------------------------------------------------------------
 
    /** 
     * function build_javascript()
@@ -355,6 +394,8 @@ class Modulebuilder
 		return $javascript;
 	}
 	
+	//--------------------------------------------------------------------
+	
    /** 
     * function build_sql()
     *
@@ -374,81 +415,11 @@ class Modulebuilder
 		$data['module_name'] = $module_name;
 		$data['module_name_lower'] = strtolower($module_name);
 		$sql = $this->CI->load->view('files/migrations', $data, TRUE);
-/*
-		$sql = 'CREATE TABLE IF NOT EXISTS  `'.$controller_name.'` (
- id int(40) NOT NULL auto_increment,';
-		
-		for($counter=1; $field_total >= $counter; $counter++)
-		{
-			//Due to the requiredif rule if the first field is set the the others must be
-			if (set_value("view_field_label$counter") == NULL)
-			{
-				continue; 	// move onto next iteration of the loop
-			}
-
-		$sql .= '
- '.set_value("view_field_name$counter").' '.set_value("db_field_type$counter");
-		
-			if (!in_array(set_value("db_field_type$counter"), array('TEXT', 'DATETIME'))) // There are no doubt more types where a value/length isn't possible - needs investigating
-			{
-				$sql .= '('.set_value("db_field_length_value$counter").')';
-			}
-		
-
-		$sql .= ' NOT NULL,';
-		
-		}
-		
-		$sql .= '
- PRIMARY KEY (id)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;';
- * 
- */
 		
 		return $sql;
-		
-		
-		// ip_address varchar(16) DEFAULT '0' NOT NULL,
-		// user_agent varchar(50) NOT NULL,
-		// last_activity int(10) unsigned DEFAULT 0 NOT NULL,
-		// user_data text NOT NULL,
 	}
 	
-	// --------------------------------------------------------------------
-	
-	/** Custom Form Validation Callback Rule
-	 *
-	 * Checks that one field doesn't match all the others.
-	 * This code is not really portable. Would of been nice to create a rule that accepted an array
-	 *
-	 * @access	public
-	 * @param	string
-	 * @param	fields array
-	 * @return	bool
-	 */
-
-	function no_match($str, $fieldno)
-	{		
-		for($counter=1; $this->field_total >= $counter; $counter++)
-		{
-			// nothing has been entered into this field so we don't need to check
-			// or the field being checked is the same as the field we are checking from
-			if ($_POST["view_field_name$counter"] == '' || $fieldno == $counter) 			
-			{
-				continue;				
-			}
-			
-			if ($str == $_POST["view_field_name$counter"])
-			{
-				$this->CI->form_validation->set_message('no_match', "Field names must be unique!");
-				return FALSE;
-			}
-		}
-		
-		return TRUE;
-	}
-
-	// --------------------------------------------------------------------
+	//--------------------------------------------------------------------
 	
    	/**
    	* Makes directory, returns TRUE if exists or made
@@ -464,7 +435,7 @@ class Modulebuilder
 		return is_dir($pathname) || @mkdir($pathname, $mode);
    	}
    
-	// --------------------------------------------------------------------
+	//--------------------------------------------------------------------
 
     /**
      * Read a directory and add it to the zip.
@@ -506,5 +477,5 @@ class Modulebuilder
         }
 	}
 
-	// --------------------------------------------------------------------
+	//--------------------------------------------------------------------
 }
