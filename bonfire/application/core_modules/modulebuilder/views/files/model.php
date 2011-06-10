@@ -1,86 +1,18 @@
 <?php
+$model =<<<EOF
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-$model = '<?php
+class {$model_name_cap}_model extends BF_Model {
 
-class '.ucfirst($controller_name).'_model extends CI_Model {
+	protected \$table		= "{$model_name}";
+	protected \$key			= "{$model_name}_id";
+	protected \$soft_deletes	= false;
+	protected \$date_format	= "datetime";
+	protected \$set_created	= true;
+	protected \$set_modified = false;
 
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	// --------------------------------------------------------------------
-
-
-	/** 
-	 * Get a record by id
-	 *
-	 * @param	integer	$id
-	 * @return	mixed
-	 */
-	function get($id)
-	{
-		$query = $this->db->get_where("'.$controller_name.'", array("id" => $id));
-			
-		return $query->row_array();
-	}
-
-	/**
-	 * Get all records in the database
-	 *
-	 * @return 	mixed
-	 */
-	public function get_all()
-	{
-		return $this->db->get("'.$controller_name.'")->result_array();
-	}';
-
-
-	foreach($action_names as $key => $action_name) {
-
-		if ($action_name == 'index')
-		{
-			continue; 	// move onto next iteration of the loop
-		}
-$model .= '
-
-
-	/** 
-	 * function '.$action_name.'
-	 *
-	 * '.$action_name.' form data
-	 * @param	array	$form_data
-	 * @return	boolean	TRUE or FALSE
-	 */
-	function '.$action_name.'($form_data)
-	{
-		';
-		if( $action_name != 'insert' && $action_name != 'add') {
-			if($action_name == 'edit') {
-				$action_name = 'update';
-			}
-			$model .= '
-		$this->db->where("id", $form_data["id"]);			
-		$this->db->'.$action_name.'("'.$controller_name.'", $form_data);';
-		}
-		else {
-
-			$model .= '
-		$this->db->insert("'.$controller_name.'", $form_data);';
-		}
-		$model .= '
-		
-		if ($this->db->affected_rows() == \'1\')
-		{
-			return TRUE;
-		}
-		
-		return FALSE;
-	}';
-	} // end foreach
-	
-	$model .= '
 }
-';
-	echo $model;
+EOF;
+
+echo $model;
 ?>
