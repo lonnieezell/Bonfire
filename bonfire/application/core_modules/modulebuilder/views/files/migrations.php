@@ -7,8 +7,7 @@ class Migration_Install_'.$module_name_lower.' extends Migration {
 	public function up() 
 	{
 		$prefix = $this->db->dbprefix;
-	
-		// Email Queue
+
 		$this->dbforge->add_field(\'`id` int(11) NOT NULL AUTO_INCREMENT\');';
 		for($counter=1; $field_total >= $counter; $counter++)
 		{

@@ -1,22 +1,23 @@
 <?php
 
-$controller = '<?php 
+$controller = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allowed\');
 
 class '.ucfirst($controller_name).' extends Admin_Controller {
                
 	function __construct()
 	{
- 		parent::__construct();
-		$this->load->library(\'form_validation\');
-		$this->load->helper(\'form\');
-		$this->load->helper(\'url\');';
+ 		parent::__construct();';
+ 		
 		if( $db_required ) {
-		$controller .= '
-		$this->load->model(\''.$module_name_lower.'_model\');';
-		}
+$controller .= '
+			$this->load->model(\''.$module_name_lower.'_model\');';
+		};
+		
 $controller .= '
 
 		$this->form_validation->set_error_delimiters("'.$form_error_delimiters[0].'", "'.$form_error_delimiters[1].'");
+		
+		Template::set("toolbar_title", "Manage '.$module_name.'");
 	}
 	
 	';
@@ -29,19 +30,17 @@ $controller .= '
 	 *
 	 * list form data
 	 */
-	function index()
+	public function index()
 	{
 		$data = array();
-		$data["records_array"] = $this->'.$module_name_lower.'_model->get_all();
+		$data["records_array"] = $this->'.$module_name_lower.'_model->find_all();
 
 		Template::set_view("'.$controller_name.'/index");
 		Template::set("data", $data);
-		if (!Template::get("toolbar_title"))
-		{
-			Template::set("toolbar_title", "Manage '.$module_name.'");
-		}
 		Template::render();
 	}
+	
+	//--------------------------------------------------------------------
 	
 	';
 	}
@@ -64,7 +63,7 @@ $controller .= '
 	 *
 	 * '.$action_name.' form data
 	 */
-	function '.$action_name.'('.$id_val.')
+	public function '.$action_name.'('.$id_val.')
 	{';
 
 
@@ -133,7 +132,7 @@ $controller .= '
 			';
 			if($action_name != 'insert' && $action_name != 'add') {
 				$controller .= '
-			$data = $this->'.$module_name_lower.'_model->get($id);
+			$data = $this->'.$module_name_lower.'_model->find($id);
 				';
 			}
 			else {
@@ -145,10 +144,7 @@ $controller .= '
 			$controller .= '
 			Template::set_view("'.$controller_name.'/'.$action_name.'");
 			Template::set("data", $data);
-			if (!Template::get("toolbar_title"))
-			{
-				Template::set("toolbar_title", "Manage '.$module_name.'");
-			}
+
 			Template::render();
 		}
 		else // passed validation proceed to post success logic
@@ -186,12 +182,20 @@ $controller .= '
 		$controller .= '
 		}
 
-	}';
+	}
+	
+	//--------------------------------------------------------------------
+	
+	';
 	} // end foreach
 	
 	$controller .= '
-		
-	function _get_form_data()
+	
+	//--------------------------------------------------------------------
+	// PRIVATE METHODS
+	//--------------------------------------------------------------------
+	
+	private function _get_form_data()
 	{
 		$form_data = array(';
 		// loop to build form data array
@@ -220,6 +224,8 @@ $controller .= '
 		}
 		return $form_data;
 	}
+	
+	//--------------------------------------------------------------------
 }
 ';
 	
