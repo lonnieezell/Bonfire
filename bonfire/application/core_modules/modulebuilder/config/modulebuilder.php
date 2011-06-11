@@ -13,6 +13,11 @@ $config[ 'modulebuilder' ][ 'form_action_options' ] = array('index' => 'List',
 														'delete' => 'Delete');
 
 /*
+ * default primary key field
+ */
+$config[ 'modulebuilder' ][ 'primary_key_field' ] = 'id';
+
+/*
  * default form input delimiters
  */
 $config[ 'modulebuilder' ][ 'form_input_delimiters' ] = array('<p>','</p>');
