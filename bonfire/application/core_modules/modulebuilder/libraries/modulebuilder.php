@@ -38,7 +38,7 @@ class Modulebuilder
 	                        'model' => 'myform_model',
 	                        'view' => 'myform_view',
 	                        'controller' => 'myform',
-	                        'sql'  => 'sql'
+	                        'migration'  => 'migration'
 	                        );
 	}
 	
@@ -51,14 +51,14 @@ class Modulebuilder
 		// filenames 
 		$this->files = array(
 							'model' => singular($module_name).'_model',
-							'sql'  => 'sql',
+							'migration'  => 'migration',
 							);
 
 		$content = array();
 		$content['views'] = FALSE;
 		$content['controllers'] = FALSE;
 		$content['model'] = FALSE;
-		$content['sql'] = FALSE;
+		$content['migration'] = FALSE;
 		$content['lang'] = FALSE;
 
 		// Build the files
@@ -89,11 +89,11 @@ class Modulebuilder
 			
 			// db based files - migrations
 			if( $db_required ) {
-				$content['sql'] =  $this->build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names, $permission_details);
+				$content['migration'] =  $this->build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names, $permission_details);
 			}
 		}
 
-		if ($content['views'] == FALSE || $content['controllers'] == FALSE || ($db_required && ($content['model'] == FALSE || $content['sql'] == FALSE) ) ) // not correct syntax
+		if ($content['views'] == FALSE || $content['controllers'] == FALSE || ($db_required && ($content['model'] == FALSE || $content['migration'] == FALSE) ) ) // not correct syntax
 		{
 			// something went wrong when trying to build the form
 			log_message('error', "The form was not built. There was an error with one of the build_() functions. Probably caused by total fields variable not being set");
@@ -121,7 +121,7 @@ class Modulebuilder
 		$data['views'] = $content['views'];
 		$data['controllers'] = $content['controllers'];
 		$data['model'] = $content['model'];
-		$data['sql'] = $content['sql'];
+		$data['migration'] = $content['migration'];
 		$data['lang'] = $content['lang'];
 
 		return $data;
@@ -153,6 +153,7 @@ class Modulebuilder
 			@mkdir($this->options['output_path']."{$module_name}/views/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/language/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/language/english/",0777);
+			@mkdir($this->options['output_path']."{$module_name}/migrations/",0777);
 
 			foreach($content as $type => $value)
 			{
@@ -201,8 +202,8 @@ class Modulebuilder
 						$path = $this->options['output_path']."{$module_name}/{$type}s";
 						switch ($type)
 						{
-							case 'sql':
-								$file_name = "Install_".$file_name;
+							case 'migration':
+								$file_name = "001_Install_".$file_name;
 								break;
 							case 'model':
 								$file_name .= "_model";
@@ -393,9 +394,9 @@ class Modulebuilder
 		$data['permission_details'] = $permission_details;
 		$data['contexts'] = $contexts;
 		$data['action_names'] = $action_names;
-		$sql = $this->CI->load->view('files/migrations', $data, TRUE);
+		$migration = $this->CI->load->view('files/migrations', $data, TRUE);
 		
-		return $sql;
+		return $migration;
 	}
 	
 	//--------------------------------------------------------------------

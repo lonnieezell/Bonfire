@@ -43,7 +43,7 @@
 	<?php endforeach; ?>
 	</p>
 
-<?php if($sql): ?>
-	<h4>SQL file</h4>
-	<p><?php echo $module_name_lower;?>.sql</p>
+<?php if($migration): ?>
+	<h4>Migration file</h4>
+	<p>migrations/001_Install_<?php echo $module_name_lower;?>.php</p>
 <?php endif; ?>
