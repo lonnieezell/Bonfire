@@ -25,7 +25,7 @@ class Developer extends Admin_Controller {
 	{
 		parent::__construct();
 		
-		$this->auth->restrict('Bonfire.Database.Manage');
+		$this->auth->restrict('Site.Developer.View');
 		$this->load->library('modulebuilder');
 		$this->load->config('modulebuilder');
 		
@@ -81,13 +81,18 @@ class Developer extends Admin_Controller {
 	private function validate_form($field_total=0) 
 	{
 		$this->form_validation->set_rules("module_name",'Module Name',"trim|required|xss_clean");
-		$this->form_validation->set_rules("main_context",'Contexts',"required|xss_clean|is_array");
 		$this->form_validation->set_rules("contexts",'Contexts',"required|xss_clean|is_array");
 		$this->form_validation->set_rules("form_action",'Controller Actions',"required|xss_clean|is_array");
 		$this->form_validation->set_rules("db_required",'DB Required',"trim|xss_clean|is_numeric");
-		$this->form_validation->set_rules("ajax_processing",'Ajax Processing',"trim|xss_clean|is_numeric");
+		$this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean");
 		$this->form_validation->set_rules("form_input_delimiters",'Form Input Delimiters',"required|trim|xss_clean");
 		$this->form_validation->set_rules("form_error_delimiters",'Form Error Delimiters',"required|trim|xss_clean");
+		$this->form_validation->set_rules("permission_part1",'Permission Structure Part 1',"required|trim|xss_clean");
+		$this->form_validation->set_rules("permission_part2",'Permission Structure Part 2',"required|trim|xss_clean");
+		$this->form_validation->set_rules("permission_part3",'Permission Structure Part 3',"required|trim|xss_clean");
+		$this->form_validation->set_rules("permission_part1_other",'Permission Structure Part 1',"trim|xss_clean");
+		$this->form_validation->set_rules("permission_part2_other",'Permission Structure Part 2',"trim|xss_clean");
+		$this->form_validation->set_rules("permission_part3_other",'Permission Structure Part 3',"trim|xss_clean");
 		
 		for($counter=1; $field_total >= $counter; $counter++)
 		{
@@ -116,12 +121,14 @@ class Developer extends Admin_Controller {
 	private function build_module($field_total=0) 
 	{
 		$module_name = $this->input->post('module_name');
-		$main_context = $this->input->post('main_context');
 		$contexts = $this->input->post('contexts');
 		$action_names = $this->input->post('form_action');
 		
 		$db_required = isset($_POST['db_required']) ? TRUE : FALSE;
-		$ajax_processing = isset($_POST['ajax_processing']) ? TRUE : FALSE;
+		$primary_key_field = $this->input->post('primary_key_field');
+		if( $primary_key_field == '') {
+			$primary_key_field = $this->options['primary_key_field'];
+		}
 		
 		$form_input_delimiters = explode(',', $this->input->post('form_input_delimiters'));
 		
@@ -134,7 +141,22 @@ class Developer extends Admin_Controller {
 			$form_error_delimiters = $this->options['$form_error_delimiters'];
 		}
 		
-		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $main_context, $contexts, $action_names, $db_required, $ajax_processing, $form_input_delimiters, $form_error_delimiters);
+		// permission structure
+		$permission_details = array();
+		$permission_details[0] = $this->input->post('permission_part1');
+		$permission_details[1] = $this->input->post('permission_part2');
+		$permission_details[2] = $this->input->post('permission_part3');
+		if($permission_details[0] == 'Other') {
+			$permission_details[0] = $this->input->post('permission_part1_other');
+		}
+		if($permission_details[1] == 'Other') {
+			$permission_details[1] = $this->input->post('permission_part2_other');
+		}
+		if($permission_details[2] == 'Other') {
+			$permission_details[2] = $this->input->post('permission_part3_other');
+		}
+
+		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $permission_details);
 
 		// make the variables available to the view file
 		$data['module_name']		= $module_name;

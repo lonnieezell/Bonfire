@@ -45,14 +45,6 @@
 		</div>
 
 		<div>
-			<label for="contexts" class="block">Main Context</label>
-			<select name="main_context" id="main_context">
-			<?php foreach (config_item('contexts') as $context) :?>
-				<option value="<?php echo $context ?>" <?php echo set_select("main_context", $context); ?>><?php echo ucwords($context) ?></option>
-			<?php endforeach; ?>
-			</select>
-		</div>
-		<div>
 			<label for="contexts" class="block">Contexts Required</label>
 			
 			<?php foreach (config_item('contexts') as $context) : ?>
@@ -77,8 +69,12 @@
 		</div>
 		<br />
 		<div>
+			<label for="primary_key_field" class="block">Primary Key</label>
+			<input name="primary_key_field" id="primary_key_field" type="text" value="<?php echo set_value("primary_key_field", 'id'); ?>" />
+		</div>
+		<div>
 			<label for="form_input_delimiters" class="block">Form Input Delimiters</label>
-			<input name="form_input_delimiters" id="form_input_delimiters" type="text" value="<?php echo set_value("form_input_delimiters", '<p>,</p>'); ?>" />
+			<input name="form_input_delimiters" id="form_input_delimiters" type="text" value="<?php echo set_value("form_input_delimiters", '<div>,</div>'); ?>" />
 		</div>
 		<div>
 			<label for="form_error_delimiters" class="block">Form Error Delimiters</label>
@@ -86,13 +82,22 @@
 		</div>
 
 		<div>
-		<label for="db_required">Generate Migration</label>
-		<input name="db_required" id="db_required" type="checkbox" value="1" <?php echo set_checkbox("db_required", "1", true); ?> class="checkbox" />
+			<label for="db_required">Generate Migration</label>
+			<input name="db_required" id="db_required" type="checkbox" value="1" <?php echo set_checkbox("db_required", "1", true); ?> class="checkbox" />
 		</div>
+
 		<div>
-		<label for="ajax_processing">Require Javascript</label>
-		<input name="ajax_processing" id="ajax_processing" type="checkbox" value="1" <?php echo set_checkbox("ajax_processing", "1", true); ?> class="checkbox" />
+			<label for="permissions">Permissions Structure e.g. Context.Module.Action, Module.Context.Method</label>
+			<?php 
+				$permission_types_part1 = array('Module' => 'Module', 'Context' => 'Context', 'Other' => 'Other');
+				$permission_types_part2 = array('Context' => 'Context', 'Module' => 'Module', 'Other' => 'Other');
+				$permission_types_part3 = array('Action' => 'Action', 'Method' => 'Method', 'Other' => 'Other');
+			?>
+			<?php echo form_dropdown("permission_part1", $permission_types_part1, set_value("permission_part1")); ?> - if Other <input name="permission_part1_other" id="permission_part1_other" type="text" value="<?php echo set_value("permission_part1_other"); ?>" /><br />
+			<?php echo form_dropdown("permission_part2", $permission_types_part2, set_value("permission_part2")); ?> - if Other <input name="permission_part2_other" id="permission_part2_other" type="text" value="<?php echo set_value("permission_part2_other"); ?>" /><br />
+			<?php echo form_dropdown("permission_part3", $permission_types_part3, set_value("permission_part3")); ?> - if Other <input name="permission_part3_other" id="permission_part3_other" type="text" value="<?php echo set_value("permission_part3_other"); ?>" />
 		</div>
+		
 	</fieldset>
 		<div>
 
@@ -100,7 +105,7 @@
 		<?php 
 		$field_num_count = count($field_numbers);
 		for($ndx=0; $ndx < $field_num_count; $ndx++): ?>
-		<a href="/<?php echo $cur_url."/{$field_numbers[$ndx]}"; ?>/" <?php if ($field_numbers[$ndx] == $field_total) { echo 'class="current"'; } ?>><?php echo $field_numbers[$ndx]; ?></a><?php echo $ndx < $field_num_count - 1 ? ' | ' : '';?>
+		<a href="/<?php echo $cur_url."/index/{$field_numbers[$ndx]}"; ?>/" <?php if ($field_numbers[$ndx] == $field_total) { echo 'class="current"'; } ?>><?php echo $field_numbers[$ndx]; ?></a><?php echo $ndx < $field_num_count - 1 ? ' | ' : '';?>
 		<?php endfor; ?>
 
 		</div>
