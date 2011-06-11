@@ -24,7 +24,7 @@
 <div class="notification information">
 	<p><b>Fill out the fields you would like in your module (an "id" field is created automatically).  If you want to create the SQL for a DB table check "DB Required".</b></p>
 	
-	<p>This form will generate a full CodeIgniter module (controller and views) and if you choose model, Javascript and SQL files.</p>
+	<p>This form will generate a full CodeIgniter module (model, controller and views) and if you choose DB Migrations files.</p>
 	
 	<p>If DB field type is "enum" or "set", please enter the values using this format: 'a','b','c'...
 	<br />If you ever need to put a backslash ("\") or a single quote ("'") amongst those values, precede it with a backslash (for example '\\xyz' or 'a\'b').
