@@ -154,6 +154,20 @@ EOT;
 		{
 			$maxlength = 'maxlength="'.set_value("db_field_length_value$counter").'"';
 		}
+		$db_field_type = set_value("db_field_type$counter");
+		if ($db_field_type != NULL)
+		{
+			if ($db_field_type == 'DATE')
+			{
+				$view .= '
+			<script>$(function() {$(\'#'.$field_name.'\').datepicker({ dateFormat: \'yy-mm-dd\'});})</script>';
+			}
+			elseif ($db_field_type == 'DATETIME')
+			{
+				$view .= '
+			<script>$(function() {$(\'#'.$field_name.'\').datetimepicker({ dateFormat: \'yy-mm-dd\', timeFormat: \'hh:mm:ss\'});})</script>';
+			}
+		}
 
 		$view .= <<<EOT
 
