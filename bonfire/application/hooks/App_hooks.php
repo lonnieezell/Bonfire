@@ -64,7 +64,7 @@ class App_hooks {
 				$this->ci->load->library('users/auth');
 			}
 
-			if ($this->ci->auth->role_id() != 1 && $this->ci->auth->role_id() != 6)
+			if (!$this->ci->auth->has_permission('Site.Signin.Offline'))
 			{
 				include (APPPATH .'errors/offline'. EXT);
 				die();
