@@ -59,21 +59,29 @@ class Users extends Front_Controller {
 	*/
 	public function login() 
 	{	
-		if ($this->input->post('submit'))
+		// if the user is not logged in continue to show the login page
+		if ($this->auth->is_logged_in() === false)
 		{
-			$remember = $this->input->post('remember_me') == '1' ? true : false;
-		
-			// Try to login
-			if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === true)
+			if ($this->input->post('submit'))
 			{
-				$this->activity_model->log_activity($this->auth->user_id(), 'logged in from '. $this->input->ip_address(), 'users');
-				redirect('admin/content');
+				$remember = $this->input->post('remember_me') == '1' ? true : false;
+
+				// Try to login
+				if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === true)
+				{
+					$this->activity_model->log_activity($this->auth->user_id(), 'logged in from '. $this->input->ip_address(), 'users');
+					redirect('admin/content');
+				}
 			}
+
+			Template::set_view('users/users/login');
+			Template::set('page_title', 'Login');
+			Template::render();
 		}
-	
-		Template::set_view('users/users/login');
-		Template::set('page_title', 'Login');
-		Template::render();
+		else
+		{
+			redirect('admin/content');
+		}
 	}
 	
 	//--------------------------------------------------------------------
