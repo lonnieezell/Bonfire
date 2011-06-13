@@ -47,6 +47,7 @@
 		<div>
 			<label for="contexts" class="block">Contexts Required</label>
 			
+			<input name="contexts[]" type="checkbox" value="public" <?php echo set_checkbox("contexts[]", 'public', true); ?> /> Public
 			<?php foreach (config_item('contexts') as $context) : ?>
 				<input name="contexts[]" type="checkbox" value="<?php echo $context ?>" <?php echo set_checkbox("contexts[]", $context, true); ?> /> <?php echo ucwords($context) ?>
 			<?php endforeach; ?>
