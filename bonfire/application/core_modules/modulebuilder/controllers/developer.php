@@ -87,6 +87,7 @@ class Developer extends Admin_Controller {
 		$this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean");
 		$this->form_validation->set_rules("form_input_delimiters",'Form Input Delimiters',"required|trim|xss_clean");
 		$this->form_validation->set_rules("form_error_delimiters",'Form Error Delimiters',"required|trim|xss_clean");
+		$this->form_validation->set_rules("textarea_editor",'Textarea Editor',"trim|xss_clean");
 		$this->form_validation->set_rules("permission_part1",'Permission Structure Part 1',"required|trim|xss_clean");
 		$this->form_validation->set_rules("permission_part2",'Permission Structure Part 2',"required|trim|xss_clean");
 		$this->form_validation->set_rules("permission_part3",'Permission Structure Part 3',"required|trim|xss_clean");

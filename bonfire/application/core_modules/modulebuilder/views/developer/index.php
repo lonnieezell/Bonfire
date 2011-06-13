@@ -81,6 +81,13 @@
 			<label for="form_error_delimiters" class="block">Form Error Delimiters</label>
 			<input name="form_error_delimiters" id="form_error_delimiters" type="text" value="<?php echo set_value("form_error_delimiters", "<span class='error'>,</span>"); ?>" />
 		</div>
+		<div>
+			<label for="textarea_editor" class="block">Textarea Editor</label>
+			<?php 
+				$textarea_editors = array('' => 'None', 'ckeditor' => 'CKEditor', 'xinha' => 'Xinha');
+			?>
+			<?php echo form_dropdown("textarea_editor", $textarea_editors, set_value("textarea_editor")); ?>
+		</div>
 
 		<div>
 			<label for="db_required">Generate Migration</label>

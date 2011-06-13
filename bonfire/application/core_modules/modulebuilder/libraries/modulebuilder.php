@@ -264,6 +264,7 @@ class Modulebuilder
 		$data['primary_key_field'] = $primary_key_field;
 		$data['action_label'] = $action_label;
 		$data['form_input_delimiters'] = $form_input_delimiters;
+		$data['textarea_editor'] = $this->CI->input->post('textarea_editor');
 
 		$id_val = '';
 		if($action_name != 'insert' && $action_name != 'add') {
@@ -315,6 +316,7 @@ class Modulebuilder
 		$data['primary_key_field'] = $primary_key_field;
 		$data['db_required'] = $db_required;
 		$data['form_error_delimiters'] = $form_error_delimiters;
+		$data['textarea_editor'] = $this->CI->input->post('textarea_editor');
 		$controller = $this->CI->load->view('files/controller', $data, TRUE);
 		return $controller;            
 	}

@@ -19,6 +19,7 @@ $controller .= ' {
 		';
 $date_included = FALSE;
 $datetime_included = FALSE;
+$textarea_included = FALSE;
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$db_field_type = set_value("db_field_type$counter");
@@ -47,6 +48,19 @@ for($counter=1; $field_total >= $counter; $counter++)
 			Assets::add_js(\'jquery-ui-timepicker-addon.js\');';
 			$date_included = TRUE;
 			$datetime_included = TRUE;
+		}
+		elseif ($db_field_type == 'TEXT' AND $textarea_included === FALSE AND !empty($textarea_editor) )
+		{
+			// if a date field hasn't been included already then add in the jquery ui files
+			if ($textarea_editor == 'ckeditor') {
+				$controller .= '
+				Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
+			}
+			elseif ($textarea_editor == 'xinha') {
+//				$controller .= '
+//				Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
+			}
+			$textarea_included = TRUE;
 		}
 	}
 }
