@@ -16,7 +16,42 @@ $controller .= ' {
 		$this->lang->load(\''.$module_name_lower.'\');
 		
 		Assets::add_js($this->load->view(\''.$controller_name.'/js\', null, true), \'inline\');
-
+		';
+$date_included = FALSE;
+$datetime_included = FALSE;
+for($counter=1; $field_total >= $counter; $counter++)
+{
+	$db_field_type = set_value("db_field_type$counter");
+	$field_name = set_value("view_field_name$counter");
+	$view_datepicker = '';
+	if ($db_field_type != NULL)
+	{
+		if ($db_field_type == 'DATE' AND $date_included === FALSE)
+		{
+			$controller .= '
+			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
+			Assets::add_js(\'jquery-ui-1.8.8.min.js\');';
+			$date_included = TRUE;
+		}
+		elseif ($db_field_type == 'DATETIME' && $datetime_included === FALSE)
+		{
+			// if a date field hasn't been included already then add in the jquery ui files
+			if ($date_included === FALSE)
+			{
+				$controller .= '
+				Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
+				Assets::add_js(\'jquery-ui-1.8.8.min.js\');';
+			}
+			$controller .= '
+			Assets::add_css(\'jquery-ui-timepicker.css\');
+			Assets::add_js(\'jquery-ui-timepicker-addon.js\');';
+			$date_included = TRUE;
+			$datetime_included = TRUE;
+		}
+	}
+}
+		
+$controller .= '
 		Template::set("toolbar_title", "Manage '.$module_name.'");
 	}
 	

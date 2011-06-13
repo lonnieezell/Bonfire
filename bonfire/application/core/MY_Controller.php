@@ -186,6 +186,7 @@ class Admin_Controller extends Authenticated_Controller {
 		
 		// Basic setup
 		Template::set_theme('admin');
+		Assets::add_js(base_url() .'assets/js/jquery-1.5.min.js');
 		Assets::add_css(array('ui.css', 'notifications.css', 'buttons.css'));
 	}
 	

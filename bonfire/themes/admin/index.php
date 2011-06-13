@@ -1,7 +1,6 @@
 <?php
 	// Setup our default assets to load.
 	Assets::add_js( array(
-		base_url() .'assets/js/jquery-1.5.min.js',
 		Template::theme_url('js/jquery.form.js'),
 		Template::theme_url('js/jquery.ajaxify.min.js'),
 		Template::theme_url('js/ui.js')
