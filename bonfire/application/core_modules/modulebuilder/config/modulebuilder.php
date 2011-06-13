@@ -8,8 +8,8 @@ $config[ 'modulebuilder' ]['output_path'] = APPPATH."../modules/";
  * form actions which will appear in the list
  */
 $config[ 'modulebuilder' ][ 'form_action_options' ] = array('index' => 'List', 
-														'insert' => 'Insert',
-														'update' => 'Update', 
+														'create' => 'Create',
+														'edit' => 'Edit', 
 														'delete' => 'Delete');
 
 /*
