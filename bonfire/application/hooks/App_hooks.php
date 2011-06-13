@@ -57,10 +57,18 @@ class App_hooks {
 	
 	public function check_site_status() 
 	{
-		if ($this->ci->config->item('site.status') == 0 && $this->ci->auth->role_id() != 1 && $this->ci->auth->role_id() != 6)
+		if ($this->ci->config->item('site.status') == 0)
 		{
-			include (APPPATH .'errors/offline'. EXT);
-			die();
+			if (!class_exists('Auth'))
+			{
+				$this->ci->load->library('users/auth');
+			}
+
+			if (!$this->ci->auth->has_permission('Site.Signin.Offline'))
+			{
+				include (APPPATH .'errors/offline'. EXT);
+				die();
+			}
 		}
 	}
 	
