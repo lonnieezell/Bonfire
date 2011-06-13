@@ -15,7 +15,7 @@ $id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? "/".$'.$modul
 $view .= '?>';
 $view .= '
 <?php echo form_open($this->uri->uri_string(), \'class="constrained ajax-form"\'); ?>';
-
+$on_click = '';
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$maxlength = NULL; // reset this variable
@@ -82,7 +82,30 @@ EOT;
 	case('textarea'):
 		
 		$view .= "
-	<?php echo form_textarea( array( 'name' => '$field_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', $".$field_name.") ) )?>
+	<?php echo form_textarea( array( 'name' => '$field_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>";
+		if (!empty($textarea_editor) )
+		{
+			// if a date field hasn't been included already then add in the jquery ui files
+			if ($textarea_editor == 'ckeditor') {
+				$view .= '
+			<script type="text/javascript">
+					//<![CDATA[
+					if( !(\''.$field_name.'\' in CKEDITOR.instances)) {
+						CKEDITOR.replace( \''.$field_name.'\' );
+					}
+					//]]>
+					</script>';
+				if (empty($on_click))
+				{
+					$on_click .= ' onclick="javascript:';
+				}
+				$on_click .= 'CKEDITOR.instances.'.$field_name.'.destroy();';
+			}
+			elseif ($textarea_editor == 'xinha') {
+				//
+			}
+		}
+		$view .= "
 ".$form_input_delimiters[1];
 		break;
 						
@@ -182,14 +205,18 @@ EOT;
 
 
 } // end for loop
-$view .= <<<EOT
+if (!empty($on_click))
+{
+	$on_click .= '"';
+}
+$view .= '
 
 
 	<div class="text-right">
 		<br/>
-		<input type="submit" name="submit" value="{$action_label} {$module_name}" /> or <?php echo anchor('admin/{$controller_name}/{$module_name_lower}', lang('{$module_name_lower}_cancel')); ?>
+		<input type="submit" name="submit" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(\'admin/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\')); ?>
 	</div>
-EOT;
+';
 if($action_name != 'create') {
 $view .= '
 	<div class="box delete rounded">
