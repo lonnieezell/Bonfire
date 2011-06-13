@@ -36,6 +36,7 @@ class Migration_Install_initial_tables extends Migration {
 		$this->dbforge->add_field("`Site.Content.View` tinyint(1) NOT NULL DEFAULT '0'");
 		$this->dbforge->add_field("`Site.Statistics.View` tinyint(1) NOT NULL DEFAULT '0'");
 		$this->dbforge->add_field("`Site.Appearance.View` tinyint(1) NOT NULL DEFAULT '0'");
+		$this->dbforge->add_field("`Site.Signin.Offline` tinyint(1) NOT NULL DEFAULT '0'");
 		$this->dbforge->add_field("`Site.Settings.View` tinyint(1) NOT NULL DEFAULT '0'");
 		$this->dbforge->add_field("`Site.Developer.View` tinyint(1) NOT NULL DEFAULT '0'");
 		$this->dbforge->add_field("`Bonfire.Roles.Manage` tinyint(1) NOT NULL DEFAULT '0'");
@@ -50,10 +51,10 @@ class Migration_Install_initial_tables extends Migration {
 		$this->dbforge->add_key('role_id');
 		$this->dbforge->create_table('permissions');
 		
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(3, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(4, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+		$this->db->query("INSERT INTO {$prefix}permissions VALUES(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
+		$this->db->query("INSERT INTO {$prefix}permissions VALUES(2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+		$this->db->query("INSERT INTO {$prefix}permissions VALUES(3, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
+		$this->db->query("INSERT INTO {$prefix}permissions VALUES(4, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
 		
 		// Roles
 		$this->dbforge->add_field("`role_id` int(11) NOT NULL AUTO_INCREMENT");
