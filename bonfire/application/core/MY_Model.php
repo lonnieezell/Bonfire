@@ -21,15 +21,6 @@
 	THE SOFTWARE.
 */
 
-/*
-	Class: MY_Model
-	
-	This simply extends BF_Model for backwards compatibility, 
-	and to provide a placeholder class that your project can customize
-	extend as needed.
-*/
-class MY_Model extends BF_Model { }
-
 //--------------------------------------------------------------------
 
 /*
@@ -836,3 +827,11 @@ class BF_Model extends CI_Model {
 /* Location: ./application/core/MY_Model.php */
 
 
+/*
+	Class: MY_Model
+	
+	This simply extends BF_Model for backwards compatibility, 
+	and to provide a placeholder class that your project can customize
+	extend as needed.
+*/
+class MY_Model extends BF_Model { }
