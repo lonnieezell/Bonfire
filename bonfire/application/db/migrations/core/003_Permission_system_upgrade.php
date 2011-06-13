@@ -6,6 +6,34 @@ class Migration_Permission_system_upgrade extends Migration {
 	{
 		$prefix = $this->db->dbprefix;
 		
+		/*
+			Take care of a few preliminaries before updating: 
+			
+			- Add new Site.Signin.Offline permission
+			- Rename Site.Statistics.View to Site.Reports.View
+			- Remove Site.Appearance.View
+			
+			Then the rest of the update script handles transferring them
+			to the new tables. 
+		*/
+		if (!$this->db->field_exists('Site.Signin.Offline', 'permissions'))
+		{
+			$sql = "ALTER TABLE {$prefix}permissions ADD `Site.Signin.Offline` TINYINT(1) DEFAULT 0 NOT NULL";
+			$this->db->query($sql);
+		}
+		
+		if ($this->db->field_exists('Site.Statistics.View', 'permissions'))
+		{
+			$sql = "ALTER TABLE {$prefix}permissions CHANGE `Site.Statistics.View` `Site.Reports.View` TINYINT(1) DEFAULT 0 NOT NULL";
+			$this->db->query($sql);
+		}
+		
+		$sql = "ALTER TABLE {$prefix}permissions DROP COLUMN `Site.Appearance.View`";
+		$this->db->query($sql);
+		
+		/*
+			Do the actual update.
+		*/
 		// get the field names in the current bf_permissions table
 		$permissions_fields = $this->db->list_fields('permissions');
 		
@@ -105,7 +133,6 @@ class Migration_Permission_system_upgrade extends Migration {
 	public function down() 
 	{
 		$prefix = $this->db->dbprefix;
-	
 		
 		// Drop our countries table
 		$this->dbforge->drop_table('permissions');
