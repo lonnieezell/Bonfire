@@ -14,3 +14,4 @@ $lang['mig_migrate_button']			= 'Migrate Database';
 
 $lang['mig_app_migrations']			= "Application Migrations";
 $lang['mig_core_migrations']		= "Bonfire Core Migrations";
+$lang['mig_mod_migrations']			= "Module Migrations";
