@@ -48,6 +48,8 @@ class Developer extends Admin_Controller {
 				redirect('/admin/developer/migrations/migrate_to/'. $version .'/'. $core);
 			}
 		}
+		
+		Assets::add_js('jquery-ui-1.8.8.min');
 	
 		Template::set('installed_version', $this->migrations->get_schema_version());
 		Template::set('latest_version', $this->migrations->get_latest_version());
@@ -57,6 +59,8 @@ class Developer extends Admin_Controller {
 	
 		Template::set('core_migrations', $this->migrations->get_available_versions(true));
 		Template::set('app_migrations', $this->migrations->get_available_versions());
+		
+		Template::set('mod_migrations', module_files(null, 'migrations'));
 		
 		Template::set('toolbar_title', 'Database Migrations');
 		Template::render();
@@ -90,6 +94,16 @@ class Developer extends Admin_Controller {
 	}
 	
 	//--------------------------------------------------------------------
+	
+	public function migrate_module() 
+	{
+		$module = $this->uri->segment(5);
+		
+		echo 'Module = '. $module;
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 }
 

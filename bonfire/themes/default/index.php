@@ -26,7 +26,7 @@
 		
 		<div class="main">
 			<?php echo Template::message(); ?>
-			<?php echo Template::yield(); ?>
+			<?php echo isset($content) ? $content : Template::yield(); ?>
 
 		</div>	<!-- /main -->
 	</div>	<!-- /page -->

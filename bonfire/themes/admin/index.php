@@ -5,7 +5,9 @@
 		Template::theme_url('js/jquery.form.js'),
 		Template::theme_url('js/jquery.ajaxify.min.js'),
 		Template::theme_url('js/ui.js')
-	));
+	),
+	'external',
+	true);
 ?>
 <!doctype html>
 <html lang="en">
