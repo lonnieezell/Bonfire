@@ -51,16 +51,16 @@ class Developer extends Admin_Controller {
 		
 		Assets::add_js('jquery-ui-1.8.8.min');
 	
-		Template::set('installed_version', $this->migrations->get_schema_version());
-		Template::set('latest_version', $this->migrations->get_latest_version());
+		Template::set('installed_version', $this->migrations->get_schema_version('app_'));
+		Template::set('latest_version', $this->migrations->get_latest_version('app_'));
 	
-		Template::set('core_installed_version', $this->migrations->get_schema_version(true));
-		Template::set('core_latest_version', $this->migrations->get_latest_version(true));
+		Template::set('core_installed_version', $this->migrations->get_schema_version());
+		Template::set('core_latest_version', $this->migrations->get_latest_version());
 	
-		Template::set('core_migrations', $this->migrations->get_available_versions(true));
-		Template::set('app_migrations', $this->migrations->get_available_versions());
+		Template::set('core_migrations', $this->migrations->get_available_versions());
+		Template::set('app_migrations', $this->migrations->get_available_versions('app_'));
 		
-		Template::set('mod_migrations', module_files(null, 'migrations'));
+		Template::set('mod_migrations', $this->get_module_versions());
 		
 		Template::set('toolbar_title', 'Database Migrations');
 		Template::render();
@@ -68,20 +68,26 @@ class Developer extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
-	public function migrate_to($version=0, $core=0) 
+	public function migrate_to($version=0, $type='') 
 	{	
-		if (empty($version))
+		if (!is_numeric($version))
 		{
 			$version = $this->uri->segment(5);
 		}
-	
-		if (!empty($version) && is_numeric($version))
+		else 
 		{
-			$result = $this->migrations->version($version, $core);
+			$result = $this->migrations->version($version, $type);
 			
-			if ($result)
+			if ($result !== FALSE)
 			{
-				Template::set_message('Successfully migrated database to version '. $result, 'success');
+				if ($result === 0)
+				{
+					Template::set_message('Successfully uninstalled module\'s migrations.', 'success');
+				}
+				else 
+				{
+					Template::set_message('Successfully migrated database to version '. $result, 'success');
+				}
 			} else 
 			{
 				Template::set_message('There was an error migrating the database.', 'error');
@@ -97,14 +103,46 @@ class Developer extends Admin_Controller {
 	
 	public function migrate_module() 
 	{
-		$module = $this->uri->segment(5);
+		$module 	= $this->uri->segment(5);
+		$file 		= $this->input->post('version');
 		
-		echo 'Module = '. $module;
+		$version	= $file !== 'uninstall' ? (int)(substr($file, 0, 3)) : 0;
+		
+		$path = module_path($module, 'migrations');
+		
+		// Reset the migrations path for this run only.
+		$this->migrations->set_path($path);
+
+		// Do the migration
+		$this->migrate_to($version, $module .'_');
 	}
 	
 	//--------------------------------------------------------------------
 	
+	private function get_module_versions()
+	{
+		$mod_versions = array();
 	
+		$modules = module_files(null, 'migrations');
+		
+		if (!count($modules))
+		{
+			return false;
+		}
+
+		foreach ($modules as $module => $migrations)
+		{
+			$mod_versions[$module] = array(
+				'installed_version'	=> $this->migrations->get_schema_version($module .'_'),
+				'latest_version'	=> $this->migrations->get_latest_version($module .'_'),
+				'migrations'		=> $migrations['migrations']
+			);
+		}
+		
+		return $mod_versions;
+	}
+	
+	//--------------------------------------------------------------------
 }
 
 // End Migrations Developer Class

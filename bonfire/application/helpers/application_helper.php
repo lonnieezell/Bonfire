@@ -233,6 +233,40 @@ function module_file_path($module=null, $folder=null, $file=null)
 	}
 }
 
+//--------------------------------------------------------------------
+
+/*
+	Function module_path()
+	
+	Returns the path to the module and it's specified folder.
+	
+	Parameters: 
+		$module	- The name of the module (must match the folder name)
+		$folder	- The folder name to search for. (Optional)
+		
+	Returns:
+		A string with the path, relative to the front controller.
+*/
+function module_path($module=null, $folder=null)
+{
+	foreach (module_folders() as $module_folder)
+	{
+		if (is_dir($module_folder . $module))
+		{
+			if (!empty($folder) && is_dir($module_folder . $module .'/'. $folder))
+			{
+				return $module_folder . $module .'/'. $folder;
+			}
+			else
+			{
+				return $module_folder . $module .'/';
+			}
+		}
+	}
+}
+
+//--------------------------------------------------------------------
+
 /*
 	Function: module_files()
 	

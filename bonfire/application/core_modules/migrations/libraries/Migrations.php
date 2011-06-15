@@ -186,9 +186,9 @@ class Migrations {
 		Return:
 			void	- Outputs a report of the installation
 	*/
-	public function install($core=false) 
+	public function install($type='') 
 	{ 
-		$migrations_path = $core ? $this->migrations_path .'core/' : $this->migrations_path;
+		$migrations_path = $type == 'app_' ? $this->migrations_path .'core/' : $this->migrations_path;
 	
 		// Load all *_*.php files in the migrations path
 		$files = glob($migrations_path.'*_*'.EXT);
@@ -211,7 +211,7 @@ class Migrations {
 			// Calculate the last migration step from existing migration
 			// filenames and procceed to the standard version migration
 			$last_version =	substr($last_migration,0,3);
-			return $this->version(intval($last_version,10), $core);
+			return $this->version(intval($last_version,10), $type);
 		} else {
 			$this->error = $this->_ci->lang->line('no_migrations_found');
 			return 0;
@@ -234,12 +234,12 @@ class Migrations {
 		Return:
 			TRUE if already latest, FALSE if failed, int if upgraded
 	 */
-	function version($version, $core=false) 
+	function version($version, $type='') 
 	{	
-		$schema_version = $this->get_schema_version($core);
+		$schema_version = $this->get_schema_version($type);
 		$start = $schema_version;
 		$stop = $version;
-		$migrations_path = $core ? $this->migrations_path .'core/' : $this->migrations_path;
+		$migrations_path = $type =='app_' ? $this->migrations_path .'core/' : $this->migrations_path;
 
 		if ($version > $schema_version)
 		{
@@ -338,8 +338,7 @@ class Migrations {
 			return TRUE;
 		}
 		
-		
-		
+				
 		if ($this->verbose)
 		{
 			echo "<p>Current schema version: ".$schema_version."<br/>";
@@ -377,7 +376,7 @@ class Migrations {
 			}
 			
 			$schema_version += $step;
-			$this->_update_schema_version($schema_version, $core);
+			$this->_update_schema_version($schema_version, $type);
 		}
 
 		if ($this->verbose)
@@ -418,11 +417,13 @@ class Migrations {
 		Return:
 			integer	- Current Schema version
 	 */
-	public function get_schema_version($core=false) 
+	public function get_schema_version($type='') 
 	{
 		$row = $this->_ci->db->get('schema_version')->row();
 
-		return $core ? $row->version : $row->app_version;
+		$schema = $type .'version';
+		
+		return isset($row->$schema) ? $row->$schema : 0;
 	}
 
 	// --------------------------------------------------------------------
@@ -433,14 +434,26 @@ class Migrations {
 		Retrieves the latest available version.
 		
 		Parameters:
-			$core	- Show only Bonfire's core migrations.
+			$type	- A string that represents the name of the module, or 'app_' for 
+					  application migrations. If empty, it returns core migrations.
 		
 		Return:
 			integer	- Latest available migration file.
 	 */
-	public function get_latest_version($core=false) 
+	public function get_latest_version($type='') 
 	{
-		$migrations_path = $core ? $this->migrations_path .'core/' : $this->migrations_path;
+		switch ($type)
+		{
+			case '':
+				$migrations_path = $this->migrations_path .'core/';
+				break;
+			case 'app_':
+				$migrations_path = $this->migrations_path;
+				break;
+			default:
+				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
+				break;
+		}
 
 		$f = glob($migrations_path .'*_*'.EXT);
 		
@@ -463,9 +476,20 @@ class Migrations {
 		Returns:
 			array	- An array of migration files
 	*/
-	public function get_available_versions($core=false) 
+	public function get_available_versions($type='') 
 	{
-		$migrations_path = $core ? $this->migrations_path .'core/' : $this->migrations_path;
+		switch ($type)
+		{
+			case '':
+				$migrations_path = $this->migrations_path .'core/';
+				break;
+			case 'app_':
+				$migrations_path = $this->migrations_path;
+				break;
+			default:
+				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
+				break;
+		}
 		
 		$files = glob($migrations_path .'*_*'.EXT);
 		
@@ -527,24 +551,66 @@ class Migrations {
 			
 		Parameters:
 			$schema_version	- An integer with the latest Schema version reached
-			$core			- If true, it sets the core version.
-							  If false, it sets the app version.
+			$type			- A string that is appended with '_schema' to create
+								the field name to store in the database.
 			
 		Return:
 			void
 	 */
-	private function _update_schema_version($schema_version, $core=false) 
-	{
-		$core = $core ? '' : 'app_';
-		
+	private function _update_schema_version($schema_version, $type='') 
+	{	
 		logit('[Migrations] Schema updated to: '. $schema_version);
 	
+		// If the row doesn't exist, create it...
+		if (!$this->_ci->db->field_exists($type .'version', 'schema_version'))
+		{ 
+			$this->_ci->load->dbforge();
+			
+			$this->_ci->dbforge->add_column('schema_version', array(
+				$type .'version'	=> array(
+					'type'			=> 'INT',
+					'constraint'	=> 4,
+					'null'			=> true, 
+					'default'		=> 0
+				)
+			));
+
+		}
+	
 		return $this->_ci->db->update('schema_version', array(
-			$core.'version' => $schema_version
+			$type.'version' => $schema_version
 		));
 	}
 	
 	//--------------------------------------------------------------------
+	
+	/*
+		Method: set_path()
+		
+		Sets the base path that Migrations uses to find it's migrations
+		to a user-supplied path. The path will be converted to a full
+		system path (via realpath) and checked to make sure it's a folder.
+		
+		Parameters:
+			$path	- The path to set, relative to the front controller.
+	*/
+	public function set_path($path=null) 
+	{
+		if (empty($path))
+		{
+			return;
+		}
+		
+		$path = realpath($path);
+		
+		if (is_dir($path))
+		{
+			$this->migrations_path = $path .'/';
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
 }
 
 // End Migrations class
