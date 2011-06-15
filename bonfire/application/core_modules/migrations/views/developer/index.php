@@ -57,14 +57,26 @@ tr:hover { background: #f6f6f6; border-top: 1px solid #e7e7e7; border-bottom: 1p
 	
 			<?php if (isset($mod_migrations) && is_array($mod_migrations)) :?>
 				<table>
+					<thead>
+						<tr>
+							<th style="vertical-align: bottom;">Module</th>
+							<th style="width: 6em">Installed Version</th>
+							<th style="width: 6em">Latest Version</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
 					<tbody>
 						<?php foreach ($mod_migrations as $module => $migrations) : ?>
 							<?php echo form_open(site_url('admin/developer/migrations/migrate_module/'. $module)); ?>
 								<input type="hidden" name="is_module" value="1" />
 						<tr>
 							<td><?php echo ucfirst($module) ?></td>
+							<td><?php echo $migrations['installed_version'] ?></td>
+							<td><?php echo $migrations['latest_version'] ?></td>
 							<td style="width: 25em; text-align: right;">
-								<select name="">
+								<select name="version">
+									<option value="uninstall">Uninstall</option>
 								<?php foreach ($migrations as $migration) : ?>
 									<?php foreach ($migration as $filename) :?>
 										<option><?php echo $filename; ?></option>
