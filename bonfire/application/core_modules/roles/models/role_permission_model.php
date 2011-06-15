@@ -22,7 +22,7 @@
 */
 
 /*
-	Class: Role_ermission_model
+	Class: Role_permission_model
 	
 	Provides access and utility methods for handling permission storage
 	in the database.

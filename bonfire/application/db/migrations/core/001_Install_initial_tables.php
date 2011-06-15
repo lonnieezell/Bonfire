@@ -51,10 +51,11 @@ class Migration_Install_initial_tables extends Migration {
 		$this->dbforge->add_key('role_id');
 		$this->dbforge->create_table('permissions');
 		
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(3, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(4, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+		$this->db->query("INSERT INTO {$prefix}permissions VALUES(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
+		$this->db->query("INSERT INTO {$prefix}permissions VALUES(2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+		$this->db->query("INSERT INTO {$prefix}permissions VALUES(3, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
+		$this->db->query("INSERT INTO {$prefix}permissions VALUES(4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+		$this->db->query("INSERT INTO {$prefix}permissions VALUES(5, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
 		
 		// Roles
 		$this->dbforge->add_field("`role_id` int(11) NOT NULL AUTO_INCREMENT");
@@ -68,6 +69,7 @@ class Migration_Install_initial_tables extends Migration {
 		$this->db->query("INSERT INTO {$prefix}roles VALUES(1, 'Administrator', 'Has full control over every aspect of the site.', 0, 0)");
 		$this->db->query("INSERT INTO {$prefix}roles VALUES(2, 'Editor', 'Can handle day-to-day management, but does not have full power.', 0, 1)");
 		$this->db->query("INSERT INTO {$prefix}roles VALUES(3, 'Banned', 'Banned users are not allowed to sign into your site.', 0, 0)");
+		$this->db->query("INSERT INTO {$prefix}roles VALUES(4, 'User', 'This is the default user with access to login.', 1, 0)");
 		$this->db->query("INSERT INTO {$prefix}roles VALUES(6, 'Developer', 'Developers typically are the only ones that can access the developer tools. Otherwise identical to Administrators, at least until the site is handed off.', 0, 1)");
 		
 		// Sessions
