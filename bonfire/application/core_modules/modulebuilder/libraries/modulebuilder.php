@@ -31,37 +31,35 @@ class Modulebuilder
 		//$this->CI->load->library('zip');
 		//$this->CI->load->helper('download');
 		//$this->CI->load->helper('security');
+		$this->CI->load->config('modulebuilder');
 		$this->options = $this->CI->config->item('modulebuilder');
-
 		// filenames 
 		$this->files = array(
 	                        'model' => 'myform_model',
 	                        'view' => 'myform_view',
 	                        'controller' => 'myform',
-	                        'sql'  => 'sql'
+	                        'migration'  => 'migration'
 	                        );
 	}
 	
 	//--------------------------------------------------------------------
 	
-	public function build_files($field_total, $module_name, $main_context, $contexts, $action_names, $db_required, $ajax_processing, $form_input_delimiters, $form_error_delimiters) {
+	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $permission_details) {
 		
 		$this->CI->load->helper('inflector');
 		
 		// filenames 
 		$this->files = array(
 							'model' => singular($module_name).'_model',
-							'controller' => $main_context,
-							'javascript'  => $module_name,
-							'sql'  => 'sql',
+							'migration'  => 'migration',
 							);
 
 		$content = array();
 		$content['views'] = FALSE;
 		$content['controllers'] = FALSE;
 		$content['model'] = FALSE;
-		$content['javascript'] = FALSE;
-		$content['sql'] = FALSE;
+		$content['migration'] = FALSE;
+		$content['lang'] = FALSE;
 
 		// Build the files
 		if( $field_total ) {
@@ -72,26 +70,30 @@ class Modulebuilder
 				if($context_name == 'public') {
 					$context_name = $module_file_name;
 				}
-				$content['controllers'][$context_name] = $this->build_controller($field_total, $module_name, $context_name, $action_names, $db_required, $form_error_delimiters);
+				$content['controllers'][$context_name] = $this->build_controller($field_total, $module_name, $context_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters);
 
 				// view files
 				foreach($action_names as $key => $action_name) {
-
-					$content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $form_input_delimiters);
+					if ($action_name != 'delete' ) {
+						$content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
+					}
 				}
+				$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
 			}
-			// db based files - model and sql
+
+			// build the lang file
+			$content['lang'] = $this->build_lang($module_name);
+
+			// build the model file
+			$content['model'] = $this->build_model($field_total, $module_file_name, $action_names, $primary_key_field);
+			
+			// db based files - migrations
 			if( $db_required ) {
-				$content['sql'] =  $this->build_sql($field_total, $module_file_name);
-				$content['model'] = $this->build_model($field_total, $module_file_name, $action_names);
-			}
-			// javascript
-			if( $ajax_processing ) {
-				$content['javascript'] = $this->build_javascript($field_total, $module_file_name, $action_names);
+				$content['migration'] =  $this->build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names, $permission_details);
 			}
 		}
 
-		if ($content['views'] == FALSE || $content['controllers'] == FALSE || ($db_required && ($content['model'] == FALSE || $content['sql'] == FALSE) ) ) // not correct syntax
+		if ($content['views'] == FALSE || $content['controllers'] == FALSE || ($db_required && ($content['model'] == FALSE || $content['migration'] == FALSE) ) ) // not correct syntax
 		{
 			// something went wrong when trying to build the form
 			log_message('error', "The form was not built. There was an error with one of the build_() functions. Probably caused by total fields variable not being set");
@@ -119,14 +121,288 @@ class Modulebuilder
 		$data['views'] = $content['views'];
 		$data['controllers'] = $content['controllers'];
 		$data['model'] = $content['model'];
-		$data['javascript'] = $content['javascript'];
-		$data['sql'] = $content['sql'];
+		$data['migration'] = $content['migration'];
+		$data['lang'] = $content['lang'];
 
 		return $data;
 	}
 
 	//--------------------------------------------------------------------
+	
+	//--------------------------------------------------------------------
+	// PRIVATE METHODS
+	//--------------------------------------------------------------------
 
+	private function _write_files($module_name, $content) {
+		
+		$ret_val = array('status' => TRUE);
+		$error_msg = 'Module Builder:';
+
+		if (!is_dir($this->options['output_path']."{$module_name}/") && !@mkdir($this->options['output_path']."{$module_name}/",0777))
+		{
+			log_message('error', "failed to make directory ./forms/{$module_name}/");
+			$ret_val['status'] = FALSE;
+			$ret_val['error'] = $error_msg. " " .$this->options['output_path']."{$module_name}/";
+		}
+		else
+		{
+			// loop to save all the files to disk - considered using a db but this makes things more portable 
+			// and easier for a user to install
+			@mkdir($this->options['output_path']."{$module_name}/controllers/",0777);
+			@mkdir($this->options['output_path']."{$module_name}/models/",0777);
+			@mkdir($this->options['output_path']."{$module_name}/views/",0777);
+			@mkdir($this->options['output_path']."{$module_name}/language/",0777);
+			@mkdir($this->options['output_path']."{$module_name}/language/english/",0777);
+			@mkdir($this->options['output_path']."{$module_name}/migrations/",0777);
+
+			foreach($content as $type => $value)
+			{
+				if($type == 'controllers') {
+					foreach($content[$type] as $name => $value)
+					{
+						if($value != '') {
+							if ( ! write_file($this->options['output_path']."{$module_name}/{$type}/{$name}.php", $value))
+							{
+								log_message('error', "failed to write file ./forms/{$module_name}/{$type}/{$name}/");
+								$ret_val['status'] = FALSE;
+								$ret_val['error'] = $error_msg. " " .$this->options['output_path']."{$module_name}/{$type}/{$name}/";
+								break;
+							}
+						}
+					}
+				}
+				elseif($type == 'views') {
+					$this->CI->load->helper('file');
+					
+					$view_files = $content['views'];
+					foreach($view_files as $view_context => $context_views)
+					{
+						foreach($context_views as $action => $value)
+						{
+							if($action == 'display') {
+								$action = 'index';
+							}
+							$path = $module_name."/".$type."/".$view_context;
+							@mkdir($this->options['output_path']."{$path}",0777);
+							if ( ! write_file($this->options['output_path']."{$path}/{$action}.php", $value))
+							{
+								log_message('error', "failed to write file ./forms/{$path}/{$action}/");
+								$ret_val['status'] = FALSE;
+								$ret_val['error'] = $error_msg. " " .$this->options['output_path']."{$path}/{$action}/";
+								break;
+							}
+						}
+					}
+				}
+				else {
+					// check if the content is blank
+					if($value != '') {
+						$ext = 'php';
+						$file_name = $module_name;
+						$path = $this->options['output_path']."{$module_name}/{$type}s";
+						switch ($type)
+						{
+							case 'migration':
+								$file_name = "001_Install_".$file_name;
+								break;
+							case 'model':
+								$file_name .= "_model";
+								break;
+							case 'lang':
+								$file_name .= "_lang";
+								$path = $this->options['output_path']."{$module_name}/language/english";
+								break;
+
+							default:
+								break;
+						}
+
+						if( !is_dir($path) ) {
+							$path = $this->options['output_path']."{$module_name}";
+						}
+
+						if ( ! write_file($path."/{$file_name}." . $ext, $value))
+						{
+							log_message('error', "failed to write file $path/{$file_name}/");
+							$ret_val['status'] = FALSE;
+							$ret_val['error'] = $error_msg. " " .$path;
+							break;
+						}
+					}
+				}
+			}
+
+		
+		}
+	
+		return $ret_val;
+	}
+	
+	//--------------------------------------------------------------------
+
+   /** 
+    * function build_view()
+    *
+    * write view file
+    * @access private
+    * @param	integer $field_total
+    * @return string
+    *
+    */
+	private function build_view($field_total, $module_name, $controller_name, $action_name, $action_label, $primary_key_field, $form_input_delimiters)
+	{
+		if ($field_total == NULL)
+		{
+			  return FALSE;
+		}
+		  
+		$data['field_total'] = $field_total;
+		$data['module_name'] = $module_name;
+		$data['module_name_lower'] = strtolower($module_name);
+		$data['controller_name'] = $controller_name;
+		$data['action_name'] = $action_name;
+		$data['primary_key_field'] = $primary_key_field;
+		$data['action_label'] = $action_label;
+		$data['form_input_delimiters'] = $form_input_delimiters;
+		$data['textarea_editor'] = $this->CI->input->post('textarea_editor');
+
+		$id_val = '';
+		if($action_name != 'insert' && $action_name != 'add') {
+			$id_val = '$id';
+		}
+		$data['id_val'] = $id_val;
+		
+		$view_name = 'default';
+		if( $action_name == 'list' OR $action_name == 'index') {
+			$view_name = 'index';
+		}
+		elseif( $action_name == 'delete' ) {
+			$view_name = 'delete';
+		}
+		elseif( $action_name == 'js' ) {
+			$view_name = 'js';
+		}
+	
+		$view = $this->CI->load->view('files/view_'.$view_name, $data, TRUE);
+
+        return $view;
+
+	}
+
+	
+	//--------------------------------------------------------------------
+
+   /** 
+    * function build_controller()
+    *
+    * write view file
+    * @access private
+    * @param integer $field_total
+    * @return string
+ 	*
+	*/
+	private function build_controller($field_total, $module_name, $controller_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters)
+	{
+		if ($field_total == NULL)
+		{
+			return FALSE;
+		}
+		  
+		$data['field_total'] = $field_total;
+		$data['module_name'] = $module_name;
+		$data['module_name_lower'] = strtolower($module_name);
+		$data['controller_name'] = $controller_name;
+		$data['action_names'] = $action_names;
+		$data['primary_key_field'] = $primary_key_field;
+		$data['db_required'] = $db_required;
+		$data['form_error_delimiters'] = $form_error_delimiters;
+		$data['textarea_editor'] = $this->CI->input->post('textarea_editor');
+		$controller = $this->CI->load->view('files/controller', $data, TRUE);
+		return $controller;            
+	}
+
+	//--------------------------------------------------------------------
+
+   /** 
+    * function build_model()
+    *
+    * write model file
+    * @access private
+    * @param integer $field_total
+    * @return string
+    */
+
+	private function build_model($field_total, $module_name, $action_names, $primary_key_field)
+	{
+		if ($field_total == NULL)
+		{
+			return FALSE;
+		}
+
+		$data['field_total']		= $field_total;
+		$data['controller_name']	= $module_name;
+		$data['action_names']		= $action_names;
+		$data['primary_key_field']	= $primary_key_field;
+		
+		$model = $this->CI->load->view('files/model', $data, TRUE);
+
+		return $model;
+	}
+	
+	//--------------------------------------------------------------------
+
+	
+   /** 
+    * function build_lang()
+    *
+    * write language file
+    * @access private
+    * @param string $module_name	Module Name to use in the language file
+    * @return string
+    */
+
+	private function build_lang($module_name)
+	{
+		$data['module_name'] = $module_name;
+		$data['module_name_lower'] = strtolower($module_name);
+		$lang = $this->CI->load->view('files/lang', $data, TRUE);
+
+		return $lang;
+	}
+	
+	//--------------------------------------------------------------------
+
+	
+   /** 
+    * function build_sql()
+    *
+    * write view file
+    * @access private
+    * @param integer $field_total
+    * @return string
+    */
+
+	private function build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names, $permission_details)
+	{
+		if ($field_total == NULL)
+		{
+			return FALSE;
+		}
+		
+		$data['field_total'] = $field_total;
+		$data['module_name'] = $module_name;
+		$data['module_name_lower'] = strtolower($module_name);
+		$data['primary_key_field'] = $primary_key_field;
+		$data['permission_details'] = $permission_details;
+		$data['contexts'] = $contexts;
+		$data['action_names'] = $action_names;
+		$migration = $this->CI->load->view('files/migrations', $data, TRUE);
+		
+		return $migration;
+	}
+	
+	//--------------------------------------------------------------------
+	
 	/** Custom Form Validation Callback Rule
 	 *
 	 * Checks that one field doesn't match all the others.
@@ -160,267 +436,7 @@ class Modulebuilder
 	}
 
 	//--------------------------------------------------------------------
-	
-	//--------------------------------------------------------------------
-	// PRIVATE METHODS
-	//--------------------------------------------------------------------
 
-	private function _write_files($module_name, $content) {
-		
-		$ret_val = array('status' => TRUE);
-		$error_msg = 'Module Builder:';
-		
-		if (!is_dir($this->options['output_path']."{$module_name}/") && !@mkdir($this->options['output_path']."{$module_name}/",0777))
-		{
-			log_message('error', "failed to make directory ./forms/{$module_name}/");
-			$ret_val['status'] = FALSE;
-			$ret_val['error'] = $error_msg. " " .$this->options['output_path']."{$module_name}/";
-		}
-		else
-		{
-			// loop to save all the files to disk - considered using a db but this makes things more portable 
-			// and easier for a user to install
-			@mkdir($this->options['output_path']."{$module_name}/controllers/",0777);
-			@mkdir($this->options['output_path']."{$module_name}/models/",0777);
-			@mkdir($this->options['output_path']."{$module_name}/views/",0777);
-
-			foreach($content as $type => $value)
-			{
-				if($type == 'controllers') {
-					foreach($content[$type] as $name => $value)
-					{
-						if($value != '') {
-							if ( ! write_file($this->options['output_path']."{$module_name}/{$type}/{$name}.php", $value))
-							{
-								log_message('error', "failed to write file ./forms/{$module_name}/{$type}/{$name}/");
-								$ret_val['status'] = FALSE;
-								$ret_val['error'] = $error_msg. " " .$this->options['output_path']."{$module_name}/{$type}/{$name}/";
-								break;
-							}
-						}
-					}
-				}
-				elseif($type == 'views') {
-					$this->CI->load->helper('file');
-				
-					$view_files = $content['views'];
-					foreach($view_files as $view_context => $context_views)
-					{
-						foreach($context_views as $action => $value)
-						{
-							if($action == 'display') {
-								$action = 'index';
-							}
-							$path = $module_name."/".$type."/".$view_context;
-							@mkdir($this->options['output_path']."{$path}",0777);
-							if ( ! write_file($this->options['output_path']."{$path}/{$action}.php", $value))
-							{
-								log_message('error', "failed to write file ./forms/{$path}/{$action}/");
-								$ret_val['status'] = FALSE;
-								$ret_val['error'] = $error_msg. " " .$this->options['output_path']."{$path}/{$action}/";
-								break;
-							}
-						}
-					}
-				}
-				else {
-					$ext = 'php';
-					$file_name = $module_name;
-					switch ($type)
-					{
-						case 'javascript':
-							$ext = 'js';
-							break;
-						case 'sql':
-							$file_name = "Migrations_Install_".$file_name;
-							break;
-						case 'model':
-							$file_name .= "_model";
-							break;
-
-						default:
-							break;
-					}
-
-					$path = $this->options['output_path']."{$module_name}/{$type}s";
-					if( !is_dir($path) ) {
-						$path = $this->options['output_path']."{$module_name}";
-					}
-
-					if ( ! write_file($path."/{$file_name}." . $ext, $value))
-					{
-						log_message('error', "failed to write file $path/{$file_name}/");
-						$ret_val['status'] = FALSE;
-						$ret_val['error'] = $error_msg. " " .$path;
-						break;
-					}
-				}
-			}
-
-		
-		}
-	
-		return $ret_val;
-	}
-	
-	//--------------------------------------------------------------------
-
-   /** 
-    * function build_view()
-    *
-    * write view file
-    * @access private
-    * @param	integer $field_total
-    * @return string
-    *
-    */
-	private function build_view($field_total, $module_name, $controller_name, $action_name, $action_label, $form_input_delimiters)
-	{
-		if ($field_total == NULL)
-		{
-			  return FALSE;
-		}
-		  
-		$data['field_total'] = $field_total;
-		$data['module_name'] = $module_name;
-		$data['module_name_lower'] = strtolower($module_name);
-		$data['controller_name'] = $controller_name;
-		$data['action_name'] = $action_name;
-		$data['action_label'] = $action_label;
-		$data['form_input_delimiters'] = $form_input_delimiters;
-
-		$id_val = '';
-		if($action_name != 'insert' && $action_name != 'add') {
-			$id_val = '/$id';
-		}
-		$data['id_val'] = $id_val;
-		
-		$view_name = 'default';
-		if( $action_name == 'list' OR $action_name == 'index') {
-			$view_name = 'index';
-		}
-		elseif( $action_name == 'delete' ) {
-			$view_name = 'delete';
-		}
-	
-		$view = $this->CI->load->view('files/view_'.$view_name, $data, TRUE);
-
-        return $view;
-
-	}
-
-	
-	//--------------------------------------------------------------------
-
-   /** 
-    * function build_controller()
-    *
-    * write view file
-    * @access private
-    * @param integer $field_total
-    * @return string
- 	*
-	*/
-	private function build_controller($field_total, $module_name, $controller_name, $action_names, $db_required, $form_error_delimiters)
-	{
-		if ($field_total == NULL)
-		{
-			return FALSE;
-		}
-		  
-		$data['field_total'] = $field_total;
-		$data['module_name'] = $module_name;
-		$data['module_name_lower'] = strtolower($module_name);
-		$data['controller_name'] = $controller_name;
-		$data['db_required'] = $db_required;
-		$data['action_names'] = $action_names;
-		$data['form_error_delimiters'] = $form_error_delimiters;
-		$controller = $this->CI->load->view('files/controller', $data, TRUE);
-		return $controller;            
-	}
-
-	//--------------------------------------------------------------------
-
-   /** 
-    * function build_model()
-    *
-    * write view file
-    * @access private
-    * @param integer $field_total
-    * @return string
-    */
-
-	private function build_model($field_total, $module_name, $action_names)
-	{
-		if ($field_total == NULL)
-		{
-			return FALSE;
-		}
-
-		$data['field_total']	= $field_total;
-		$data['model_name']		= $module_name;
-		$data['model_name_cap']	= ucfirst($module_name); 
-		$data['action_names']	= $action_names;
-		
-		$model = $this->CI->load->view('files/model', $data, TRUE);
-
-		return $model;
-	}
-	
-	//--------------------------------------------------------------------
-
-   /** 
-    * function build_javascript()
-    *
-    * write view file
-    * @access private
-    * @param integer $field_total
-    * @return string
- 	*
-	*/
-
-	private function build_javascript($field_total, $controller_name, $action_names)
-	{
-		if ($field_total == NULL)
-		{
-			return FALSE;
-		}
-		  
-		$data['field_total'] = $field_total;
-		$data['controller_name'] = $controller_name;
-		$data['action_names'] = $action_names;
-		$javascript = $this->CI->load->view('files/javascript', $data, TRUE);
-		
-		return $javascript;
-	}
-	
-	//--------------------------------------------------------------------
-	
-   /** 
-    * function build_sql()
-    *
-    * write view file
-    * @access private
-    * @param integer $field_total
-    * @return string
-    */
-
-	private function build_sql($field_total, $module_name)
-	{
-		if ($field_total == NULL)
-		{
-			return FALSE;
-		}
-		$data['field_total'] = $field_total;
-		$data['module_name'] = $module_name;
-		$data['module_name_lower'] = strtolower($module_name);
-		$sql = $this->CI->load->view('files/migrations', $data, TRUE);
-		
-		return $sql;
-	}
-	
-	//--------------------------------------------------------------------
-	
    	/**
    	* Makes directory, returns TRUE if exists or made
    	*
@@ -434,48 +450,7 @@ class Modulebuilder
 		is_dir(dirname($pathname)) || mkdir_recursive(dirname($pathname), $mode);
 		return is_dir($pathname) || @mkdir($pathname, $mode);
    	}
-   
-	//--------------------------------------------------------------------
 
-    /**
-     * Read a directory and add it to the zip.
-     *
-     * This is a customised version of the standard zip library function
-     * The directory structure is removed and a readmefile is included if it exists
-     * 
-     * This function recursively reads a folder and everything it contains (including
-     * sub-folders) and creates a zip based on it.  Whatever directory structure
-     * is in the original file path will be recreated in the zip file.
-     *
-     * @access	public
-     * @param	string	path to source
-     * @return	bool
-     */	
-
-	private function read_dir($orig_path, $new_path = '')
-	{
-		$dir_path = $this->options['output_path'].$orig_path.$new_path;
-
-		if ($fp = @opendir($dir_path))
-		{
-			while (FALSE !== ($file = readdir($fp)))
-        	{
-				if (@is_dir($this->options['output_path'].$orig_path.$new_path.$file) && substr($file, 0, 1) != '.')
-				{
-					$this->read_dir($orig_path.$new_path, $file."/");
-        		}
-				elseif (substr($file, 0, 1) != ".")
-        		{
-					if (FALSE !== ($data = file_get_contents($this->options['output_path'].$orig_path."/".$new_path.$file)))
-        			{
-						$this->CI->zip->add_data($orig_path.$new_path.$file, $data);
-        			}
-        		}
-        	}
-    
-            return TRUE;
-        }
-	}
-
+	
 	//--------------------------------------------------------------------
 }

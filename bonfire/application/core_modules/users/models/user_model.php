@@ -77,6 +77,11 @@ class User_model extends BF_Model {
 			return false;
 		}
 	
+		if (empty($data['username'])) 
+		{
+		  unset($data['username']);
+		}
+
 		list($password, $salt) = $this->hash_password($data['password']);
 		
 		unset($data['password'], $data['pass_confirm'], $data['submit']);
@@ -84,8 +89,8 @@ class User_model extends BF_Model {
 		$data['password_hash'] = $password;
 		$data['salt'] = $salt;
 		
-		$data['zipcode'] = isset($data['zipcode']) ? $data['zipcode'] : null;
-		
+		$data['zipcode'] = !empty($data['zipcode']) ? $data['zipcode'] : null;
+
 		// Handle the country
 		if (isset($data['iso']))
 		{
@@ -130,6 +135,11 @@ class User_model extends BF_Model {
 			Events::trigger('before_user_update', $trigger_data);
 		}
 	
+		if (empty($data['username'])) 
+		{
+		  unset($data['username']);
+		}
+		
 		if (empty($data['pass_confirm']) && isset($data['password'])) 
 		{
 			unset($data['pass_confirm'], $data['password']);
@@ -139,15 +149,20 @@ class User_model extends BF_Model {
 			list($password, $salt) = $this->hash_password($data['password']);
 		
 			unset($data['password'], $data['pass_confirm']);
+
+			$data['password_hash'] = $password;
+			$data['salt'] = $salt;
 		}
 		
+		$data['zipcode'] = !empty($data['zipcode']) ? $data['zipcode'] : null;
+
 		// Handle the country
 		if (isset($data['iso']))
 		{
 			$data['country_iso'] = $data['iso'];
 			unset($data['iso']);
 		}
-		
+
 		$return = parent::update($id, $data);
 		
 		if ($return)
