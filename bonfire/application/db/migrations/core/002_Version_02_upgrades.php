@@ -7,34 +7,29 @@ class Migration_Version_02_upgrades extends Migration {
 		$prefix = $this->db->dbprefix;
 
 		// email Queue
-		if ($this->db->field_exists('Bonfire.Emailer.View', 'permissions') == false)
-		{
-			$sql = "ALTER TABLE {$prefix}permissions
-					ADD COLUMN `Bonfire.Emailer.View` TINYINT(1) DEFAULT 0 NOT NULL";
-			$this->db->query($sql);	
-		}
+		$sql = "ALTER TABLE {$prefix}permissions
+				ADD COLUMN `Bonfire.Emailer.View` TINYINT(1) DEFAULT 0 NOT NULL";
+		$this->db->query($sql);	
+		
+		$this->db->query("UPDATE {$prefix}permissions SET `Bonfire.Emailer.View`=1 WHERE `role_id`=1");
+
 		
 		// Users table changes
-		if ($this->db->field_exists('temp_password_hash', 'users') != false)
-		{
-			$this->dbforge->modify_column('users', array(
-				'temp_password_hash' => array(
-					'name'	=> 'reset_hash',
-					'type'	=> 'VARCHAR',
-					'constraint'	=> 40
-				)
-			));
-		}
-		if ($this->db->field_exists('reset_by', 'users') == false)
-		{
-			$this->dbforge->add_column('users', array(
-				'reset_by'	=> array(
-					'type'			=> 'INT',
-					'constraint'	=> 10,
-					'null'			=> true
-				)
-			));
-		}
+		$this->dbforge->modify_column('users', array(
+			'temp_password_hash' => array(
+				'name'	=> 'reset_hash',
+				'type'	=> 'VARCHAR',
+				'constraint'	=> 40
+			)
+		));
+
+		$this->dbforge->add_column('users', array(
+			'reset_by'	=> array(
+				'type'			=> 'INT',
+				'constraint'	=> 10,
+				'null'			=> true
+			)
+		));
 
 		// Add countries table for our users.
 		// Source: http://27.org/isocountrylist/
@@ -47,16 +42,13 @@ class Migration_Version_02_upgrades extends Migration {
 		$this->dbforge->create_table('countries');
 		
 		// Add a country_iso field so that we can use with users.
-		if ($this->db->field_exists('country_iso', 'users') == false)
-		{
-			$this->dbforge->add_column('users', array(
-				'country_iso'	=> array(
-					'type'			=> 'CHAR',
-					'constraint'	=> 2,
-					'default'		=> 'US'
-				)
-			));
-		}
+		$this->dbforge->add_column('users', array(
+			'country_iso'	=> array(
+				'type'			=> 'CHAR',
+				'constraint'	=> 2,
+				'default'		=> 'US'
+			)
+		));
 		
 		// Change zipcode back to string
 		$this->dbforge->modify_column('users', array(
@@ -69,10 +61,7 @@ class Migration_Version_02_upgrades extends Migration {
 			));
 		
 		// Remove the zip_extra field
-		if ($this->db->field_exists('zip_extra', 'users'))
-		{
-			$this->dbforge->drop_column('users', 'zip_extra');
-		}
+		$this->dbforge->drop_column('users', 'zip_extra');
 		
 		// And... the countries themselves. (whew!)
 		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AF','AFGHANISTAN','Afghanistan','AFG','004');");
