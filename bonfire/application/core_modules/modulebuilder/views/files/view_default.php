@@ -1,17 +1,22 @@
-<br />
 <?php
 
-$view = '<?php // Change the css classes to suit your needs    
-
-$attributes = array("class" => "", "id" => "'.$controller_name.'_'.$action_name.'");
-echo form_open("admin/'.$controller_name.'/'.$module_name_lower.'/'.$action_name.''.$id_val.'", $attributes);
-';
-if($action_name != 'insert' && $action_name != 'add') {
-$view .= '
-echo form_hidden("id", $id);';
+$view = '
+<?php if (validation_errors()) : ?>
+<div class="notification error">
+	<?php echo validation_errors(); ?>
+</div>
+<?php endif; ?>
+<?php // Change the css classes to suit your needs    
+if( isset($'.$module_name_lower.') ) {
+	$'.$module_name_lower.' = (array)$'.$module_name_lower.';
 }
+$id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? "/".$'.$module_name_lower.'[\''.$primary_key_field.'\'] : \'\';
+';
 $view .= '?>';
-
+$view .= '
+<?php echo form_open($this->uri->uri_string(), \'class="constrained ajax-form"\'); ?>';
+$on_click = '';
+$xinha_names = '';
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$maxlength = NULL; // reset this variable
@@ -77,19 +82,43 @@ EOT;
 
 	case('textarea'):
 		
+		if (!empty($textarea_editor) )
+		{
+			// if a date field hasn't been included already then add in the jquery ui files
+			if ($textarea_editor == 'ckeditor') {
+				$view .= '
+			<script type="text/javascript">
+					//<![CDATA[
+					if( !(\''.$field_name.'\' in CKEDITOR.instances)) {
+						CKEDITOR.replace( \''.$field_name.'\' );
+					}
+					//]]>
+					</script>';
+				if (empty($on_click))
+				{
+					$on_click .= ' onclick="javascript:';
+				}
+				$on_click .= 'CKEDITOR.instances.'.$field_name.'.destroy();';
+			}
+			elseif ($textarea_editor == 'xinha') {
+				//
+				if ($xinha_names != '')
+				{
+					$xinha_names .= ', ';
+				}
+				$xinha_names .= '\''.$field_name.'\'';
+
+			}
+		}
 		$view .= "
-	<?php echo form_error('$field_name'); ?>
-	
-							
-	<?php echo form_textarea( array( 'name' => '$field_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', $".$field_name.") ) )?>
-</p>";
+	<?php echo form_textarea( array( 'name' => '$field_name', 'id' => '$field_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>";
+		$view .= "
+".$form_input_delimiters[1];
 		break;
 						
 	case('radio'):
                         
 		$view .= '
-        <?php echo form_error(\''.$field_name.'\'); ?>
-        
 		<?php // Change or Add the radio values/labels/css classes to suit your needs ?>
 		<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option1" <?php echo $this->CI->form_validation->set_radio(\''.$field_name.'\', \'option1\'); ?> />
 		'. form_label('Radio option 1', $field_name) .'
@@ -103,21 +132,26 @@ EOT;
 
 	case('select'):
 	// decided to use ci form helper here as I think it makes selects/dropdowns a lot easier
-	$view .= <<<EOT
+		$select_options = array();
+		if (set_value("db_field_length_value$counter") != NULL)
+		{
+			$select_options = explode(',', set_value("db_field_length_value$counter"));
+		}
+		$view .= '
 
-        <?php echo form_error('{$field_name}'); ?>
-        
         <?php // Change the values in this array to populate your dropdown as required ?>
         
-EOT;
+';
 	 $view .= '<?php $options = array(';
-
+		foreach( $select_options as $key => $option)
+		{
+			$view .= '
+				'.strip_slashes($option).' => '.strip_slashes($option).',';
+		}
 	 $view .= '
-							  \'\'  => \'Please Select\',
-							  \'example_value1\'    => \'example option 1\'
-							); ?>
+); ?>
 
-        <br /><?php echo form_dropdown(\''.$field_name.'\', $options, set_value(\''.$field_name.'\'))?>
+        <?php echo form_dropdown(\''.$field_name.'\', $options, set_value(\''.$field_name.'\', isset($'.$module_name_lower.'[\''.$field_name.'\']) ? $'.$module_name_lower.'[\''.$field_name.'\'] : \'\'))?>
 '.$form_input_delimiters[1].'                                             
                         ';
 		break;
@@ -126,8 +160,6 @@ EOT;
 
 	$view .= <<<EOT
 
-        <?php echo form_error('{$field_name}'); ?>
-        
         <?php // Change the values/css classes to suit your needs ?>
         <br /><input type="checkbox" id="{$field_name}" name="{$field_name}" value="1" class="" <?php echo set_checkbox('{$field_name}', '1'); ?>> 
     <?php echo form_label('{$field_label}', '{$field_name}'); ?>               
@@ -152,11 +184,24 @@ EOT;
 		{
 			$maxlength = 'maxlength="'.set_value("db_field_length_value$counter").'"';
 		}
+		$db_field_type = set_value("db_field_type$counter");
+		if ($db_field_type != NULL)
+		{
+			if ($db_field_type == 'DATE')
+			{
+				$view .= '
+			<script>$(function() {$(\'#'.$field_name.'\').datepicker({ dateFormat: \'yy-mm-dd\'});})</script>';
+			}
+			elseif ($db_field_type == 'DATETIME')
+			{
+				$view .= '
+			<script>$(function() {$(\'#'.$field_name.'\').datetimepicker({ dateFormat: \'yy-mm-dd\', timeFormat: \'hh:mm:ss\'});})</script>';
+			}
+		}
 
 		$view .= <<<EOT
 
-        <?php echo form_error('{$field_name}'); ?>
-        <input id="{$field_name}" type="{$type}" name="{$field_name}" {$maxlength} value="<?php echo set_value('{$field_name}', \${$field_name}); ?>"  />
+        <input id="{$field_name}" type="{$type}" name="{$field_name}" {$maxlength} value="<?php echo set_value('{$field_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>"  />
 {$form_input_delimiters[1]}
 
 EOT;
@@ -167,16 +212,58 @@ EOT;
 
 
 } // end for loop
-$view .= <<<EOT
+if (!empty($on_click))
+{
+	$on_click .= '"';
+}
+$view .= '
 
 
-{$form_input_delimiters[0]}
-        <?php echo form_submit( 'submit', '$action_label'); ?> or <a href="/admin/{$controller_name}/{$module_name_lower}">Cancel</a>
-{$form_input_delimiters[1]}
+	<div class="text-right">
+		<br/>
+		<input type="submit" name="submit" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(\'admin/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\')); ?>
+	</div>
+';
+if ($xinha_names != '')
+{
+	$view .= '				
+				<script type="text/javascript"> 
 
+				var xinha_plugins =
+				[
+				 \'Linker\'
+				];
+				var xinha_editors =
+				[
+				  '.$xinha_names.'
+				];
+
+				function xinha_init()
+				{
+				  if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
+
+				  var xinha_config = new Xinha.Config();
+
+				  xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+
+				  Xinha.startEditors(xinha_editors);
+				}
+				xinha_init();
+				</script>';
+}
+if($action_name != 'create') {
+$view .= '
+	<div class="box delete rounded">
+		<a class="button" id="delete-me" href="<?php echo site_url(\'admin/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id); ?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')"><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></a>
+		
+		<h3><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></h3>
+		
+		<p><?php echo lang(\''.$module_name_lower.'_edit_text\'); ?></p>
+	</div>
 <?php echo form_close(); ?>
+';
+}
 
-EOT;
 
 echo $view;
 ?>
