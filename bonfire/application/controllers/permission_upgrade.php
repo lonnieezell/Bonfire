@@ -17,7 +17,7 @@ class Permission_upgrade extends Base_Controller {
 	{	
 		
 
-		$result = $this->migrations->version(3, TRUE);
+		$result = $this->migrations->version(3);
 			
 		if ($result)
 		{
