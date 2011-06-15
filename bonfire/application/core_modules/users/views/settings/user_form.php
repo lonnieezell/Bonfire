@@ -29,6 +29,13 @@
 		<input type="text" name="email" class="medium" value="<?php echo isset($user) ? $user->email : set_value('email') ?>" />
 	</div>
 	
+	<?php if (config_item('auth.use_usernames') == 1) : ?>
+	<div>
+		<label for="username"><?php echo lang('bf_username'); ?></label>
+		<input type="text" name="username" id="username" class="medium" value="<?php echo isset($user) ? $user->username : set_value('username') ?>" />
+	</div>
+
+	<?php endif; ?>
 	<br />
 	
 	<div>

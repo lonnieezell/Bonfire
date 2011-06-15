@@ -13,8 +13,6 @@
 
 <p class="important">
 <?php if (!isset($error)): ?>
-MVC+SQL as .zip - <a href="/<?php echo $cur_url."/download/{$module_name}"?>">Download</a>
-<?php else: // user isn't given the option to downoad the files if they were not successfully written to disk ?>
 <?php echo $error?>
 <?php endif; ?> 
 </p>
@@ -31,21 +29,21 @@ MVC+SQL as .zip - <a href="/<?php echo $cur_url."/download/{$module_name}"?>">Do
 	<p><?php echo $module_name_lower;?>_model.php</p>
 <?php endif; ?>
 
+<?php if($lang): ?>
+	<h4>Language file</h4>
+	<p><?php echo $module_name_lower;?>_lang.php</p>
+<?php endif; ?>
+
 	<h4>View files</h4>
 	<p>
 	<?php foreach($views as $context_name => $context_views): ?>
 		<?php  foreach($context_views as $view_name => $val): ?>
-		views/<?php echo $context_name."/".$context_name."_".$view_name;?>.php<br />
+		views/<?php echo $context_name."/".$view_name;?>.php<br />
 		<?php endforeach; ?>
 	<?php endforeach; ?>
 	</p>
 
-<?php if($javascript): ?>
-	<h4>Javascript file</h4>
-	<p><?php echo $module_name_lower;?>.js</p>
-<?php endif; ?>
-
-<?php if($sql): ?>
-	<h4>SQL file</h4>
-	<p><?php echo $module_name_lower;?>.sql</p>
+<?php if($migration): ?>
+	<h4>Migration file</h4>
+	<p>migrations/001_Install_<?php echo $module_name_lower;?>.php</p>
 <?php endif; ?>
