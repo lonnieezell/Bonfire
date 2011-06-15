@@ -16,17 +16,12 @@ class Migration_Permission_system_upgrade extends Migration {
 			Then the rest of the update script handles transferring them
 			to the new tables. 
 		*/
-		if (!$this->db->field_exists('Site.Signin.Offline', 'permissions'))
-		{
-			$sql = "ALTER TABLE {$prefix}permissions ADD `Site.Signin.Offline` TINYINT(1) DEFAULT 0 NOT NULL";
-			$this->db->query($sql);
-		}
-		
-		if ($this->db->field_exists('Site.Statistics.View', 'permissions'))
-		{
-			$sql = "ALTER TABLE {$prefix}permissions CHANGE `Site.Statistics.View` `Site.Reports.View` TINYINT(1) DEFAULT 0 NOT NULL";
-			$this->db->query($sql);
-		}
+		$sql = "ALTER TABLE {$prefix}permissions ADD `Site.Signin.Offline` TINYINT(1) DEFAULT 0 NOT NULL";
+		$this->db->query($sql);
+		$this->db->query("UPDATE {$prefix}permissions SET `Site.Signin.Offline`=1 WHERE `role_id`=1");
+
+		$sql = "ALTER TABLE {$prefix}permissions CHANGE `Site.Statistics.View` `Site.Reports.View` TINYINT(1) DEFAULT 0 NOT NULL";
+		$this->db->query($sql);
 		
 		$sql = "ALTER TABLE {$prefix}permissions DROP COLUMN `Site.Appearance.View`";
 		$this->db->query($sql);
@@ -36,18 +31,18 @@ class Migration_Permission_system_upgrade extends Migration {
 		*/
 		// get the field names in the current bf_permissions table
 		$permissions_fields = $this->db->list_fields('permissions');
-		
+
 		// get the current permissions assigned to each role
 		$sql = "SELECT * FROM {$prefix}permissions";
 		$permission_query = $this->db->query($sql);
-		
+
 		$old_permissions_array = array();
 		foreach ($permission_query->result_array() as $row)
 		{
 			$role_id = $row['role_id'];
 			$old_permissions_array[$role_id] = $row;
 		}
-		
+
 		// modify the permissions table
 		$this->dbforge->rename_table($prefix.'permissions', $prefix.'permissions_old');
 		
