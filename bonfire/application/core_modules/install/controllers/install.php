@@ -265,7 +265,7 @@ class Install extends MX_Controller {
 		//
 		$this->load->library('migrations/Migrations');
 	
-		if (!$this->migrations->install(true))
+		if (!$this->migrations->install())
 		{
 			$this->errors = 'There was an error setting up the database. Please check your settings and try again.';
 			return false;
