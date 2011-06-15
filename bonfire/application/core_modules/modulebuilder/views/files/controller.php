@@ -57,8 +57,9 @@ for($counter=1; $field_total >= $counter; $counter++)
 				Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
 			}
 			elseif ($textarea_editor == 'xinha') {
-//				$controller .= '
-//				Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
+				$controller .= '
+				Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
+				Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
 			}
 			$textarea_included = TRUE;
 		}

@@ -16,6 +16,7 @@ $view .= '?>';
 $view .= '
 <?php echo form_open($this->uri->uri_string(), \'class="constrained ajax-form"\'); ?>';
 $on_click = '';
+$xinha_names = '';
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$maxlength = NULL; // reset this variable
@@ -81,8 +82,6 @@ EOT;
 
 	case('textarea'):
 		
-		$view .= "
-	<?php echo form_textarea( array( 'name' => '$field_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>";
 		if (!empty($textarea_editor) )
 		{
 			// if a date field hasn't been included already then add in the jquery ui files
@@ -103,8 +102,16 @@ EOT;
 			}
 			elseif ($textarea_editor == 'xinha') {
 				//
+				if ($xinha_names != '')
+				{
+					$xinha_names .= ', ';
+				}
+				$xinha_names .= '\''.$field_name.'\'';
+
 			}
 		}
+		$view .= "
+	<?php echo form_textarea( array( 'name' => '$field_name', 'id' => '$field_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>";
 		$view .= "
 ".$form_input_delimiters[1];
 		break;
@@ -217,6 +224,33 @@ $view .= '
 		<input type="submit" name="submit" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(\'admin/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\')); ?>
 	</div>
 ';
+if ($xinha_names != '')
+{
+	$view .= '				
+				<script type="text/javascript"> 
+
+				var xinha_plugins =
+				[
+				 \'Linker\'
+				];
+				var xinha_editors =
+				[
+				  '.$xinha_names.'
+				];
+
+				function xinha_init()
+				{
+				  if(!Xinha.loadPlugins(xinha_plugins, xinha_init)) return;
+
+				  var xinha_config = new Xinha.Config();
+
+				  xinha_editors = Xinha.makeEditors(xinha_editors, xinha_config, xinha_plugins);
+
+				  Xinha.startEditors(xinha_editors);
+				}
+				xinha_init();
+				</script>';
+}
 if($action_name != 'create') {
 $view .= '
 	<div class="box delete rounded">
