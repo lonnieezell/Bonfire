@@ -24,7 +24,7 @@
 	
 	
 	Author:
-		Mat’as Montes
+		Matï¿½as Montes
 	
 	Rewritten by: 
 	
@@ -103,7 +103,7 @@ abstract class Migration {
 		Migrations
 		
 	Author:
-		Mat’as Montes
+		Matï¿½as Montes
  */
 class Migrations {
 	
@@ -188,8 +188,8 @@ class Migrations {
 	*/
 	public function install($type='') 
 	{ 
-		$migrations_path = $type == 'app_' ? $this->migrations_path .'core/' : $this->migrations_path;
-	
+		$migrations_path = $type == 'app_' ? $this->migrations_path : $this->migrations_path .'core/';
+
 		// Load all *_*.php files in the migrations path
 		$files = glob($migrations_path.'*_*'.EXT);
 		$file_count = count($files);
@@ -239,7 +239,7 @@ class Migrations {
 		$schema_version = $this->get_schema_version($type);
 		$start = $schema_version;
 		$stop = $version;
-		$migrations_path = $type =='app_' ? $this->migrations_path .'core/' : $this->migrations_path;
+		$migrations_path = $type =='app_' ? $this->migrations_path : $this->migrations_path .'core/';
 
 		if ($version > $schema_version)
 		{
