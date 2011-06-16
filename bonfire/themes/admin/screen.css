@@ -324,12 +324,6 @@ noscript {
 	color: #fff;
 	opacity: 1.0;
 }
-#tb_content { background: url(images/pencil.png) 10px 7px no-repeat; }
-#tb_stats { background: url(images/statistics.png) 10px 7px no-repeat; }
-#tb_appearance { background: url(images/brush.png) 10px 7px no-repeat; }
-#tb_settings { background: url(images/settings.png) 10px 7px no-repeat; }
-#tb_developer { background: url(images/config.png) 10px 7px no-repeat; }
-#tb_logout { background: url(images/logout.png) 10px 7px no-repeat; }
 
 #toolbar a#tb_email { 
 	text-indent: 0; 
