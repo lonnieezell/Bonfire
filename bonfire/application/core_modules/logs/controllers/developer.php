@@ -103,8 +103,13 @@ class Developer extends Admin_Controller {
 	{
 		if (empty($file))
 		{
+			$file = $this->uri->segment(5);
+		}
+		
+		if (empty($file))
+		{
 			Template::set_message('No log file provided.', 'error');
-			redirect('admin/settings/developer/logs');
+			Template::redirect('admin/developer/logs');
 		}
 				
 		Template::set('log_file', $file);
