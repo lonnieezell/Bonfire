@@ -83,7 +83,7 @@ $controller .= '
 	public function index()
 	{
 		$data = array();
-		$data["records_array"] = $this->'.$module_name_lower.'_model->find_all();
+		$data["records"] = $this->'.$module_name_lower.'_model->find_all();
 
 		Template::set_view("'.$controller_name.'/index");
 		Template::set("data", $data);
