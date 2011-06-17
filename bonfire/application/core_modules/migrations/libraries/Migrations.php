@@ -239,7 +239,19 @@ class Migrations {
 		$schema_version = $this->get_schema_version($type);
 		$start = $schema_version;
 		$stop = $version;
-		$migrations_path = $type =='app_' ? $this->migrations_path : $this->migrations_path .'core/';
+		
+		switch ($type)
+		{
+			case '':
+				$migrations_path = $this->migrations_path .'core/';
+				break;
+			case 'app_':
+				$migrations_path = $this->migrations_path;
+				break;
+			default:
+				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
+				break;
+		}
 
 		if ($version > $schema_version)
 		{
