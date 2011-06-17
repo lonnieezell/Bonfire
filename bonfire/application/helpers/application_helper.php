@@ -43,9 +43,10 @@
 	
 	Note that if gravatar does not have an image that matches the criteria,
 	it will return a link to an image under *your_theme/images/user.png*.
+	Also, by explicity omitting email you're denying http-req to gravatar.com
 	
 	Parameters:
-		$email	- The email address to check for.
+		$email	- The email address to check for. If null, defaults to theme img.
 		$size	- The width (and height) of the resulting image to grab.
 		$alt	- Alt text to be put in the link tag.
 		$title	- The title text to be put in the link tag.
