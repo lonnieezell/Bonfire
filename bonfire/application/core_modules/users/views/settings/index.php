@@ -20,7 +20,7 @@
 			<div class="list-view" id="user-list">
 			<?php foreach ($users as $user) : ?>
 				<div class="list-item with-icon" data-id="<?php echo $user->id ?>" data-role="<?php echo $user->role_name ?>">
-					<?php echo gravatar_link($user->email, 32); ?>
+					<?php echo gravatar_link($user->email, 32,'',$user->first_name.'&nbsp;'.$user->last_name); ?>
 				
 					<p>
 						<b><?php echo config_item('auth.login_type') == 'username' ? $user->username : $user->email; ?></b><br/>

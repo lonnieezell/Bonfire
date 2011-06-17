@@ -66,18 +66,26 @@ function gravatar_link($email=null, $size=48, $alt='', $title='', $class='', $id
 	// Border color 
 	$border = 'd6d6d6';
 	
-	// URL for Gravatar
-	$gravatarURL = "http://www.gravatar.com/avatar.php?gravatar_id=%s&default=%s&size=%s&border=%s&rating=%s";
+	// If email null, means we don't want gravatar.com HTTP request
+	if ( $email ) {
 	
-	$avatarURL = sprintf
-	(
-		$gravatarURL, 
-		md5($email), 
-		$default_image,
-		$size,
-		$border,
-		$rating
-	);
+		// URL for Gravatar
+		$gravatarURL = "http://www.gravatar.com/avatar.php?gravatar_id=%s&default=%s&size=%s&border=%s&rating=%s";
+		
+		$avatarURL = sprintf
+		(
+			$gravatarURL, 
+			md5($email), 
+			$default_image,
+			$size,
+			$border,
+			$rating
+		);
+	}	
+	else 
+	{
+		$avatarURL = $default_image ;
+	}
 	
 	return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" class="'. $class .'" id="'. $id .'" />';
 }
