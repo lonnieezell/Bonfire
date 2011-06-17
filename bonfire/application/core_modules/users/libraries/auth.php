@@ -153,7 +153,7 @@ class Auth  {
 			{ 
 				$this->clear_login_attempts($login);
 				// We've successfully validated the login, so setup the session
-				$this->setup_session($user->id, $user->password_hash, $user->email, $user->role_id, $remember);
+				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember);
 				
 				// Save the login info
 				$data = array(
@@ -236,7 +236,7 @@ class Auth  {
 		if ($this->ci->session->userdata('email') && $this->ci->session->userdata('user_id'))
 		{
 			// Grab the user account
-			$user = $this->ci->user_model->select('id, email, salt, password_hash')->find($this->ci->session->userdata('user_id'));
+			$user = $this->ci->user_model->select('id, username, email, salt, password_hash')->find($this->ci->session->userdata('user_id'));
 			
 			if ($user !== false)
 			{
@@ -318,6 +318,21 @@ class Auth  {
 	public function user_id() 
 	{
 		return $this->ci->session->userdata('user_id');
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: username()
+		
+		Retrieves the username from the current session.
+		
+		Return:
+			The user's username.
+	*/
+	public function username() 
+	{
+		return $this->ci->session->userdata('username');
 	}
 	
 	//--------------------------------------------------------------------
@@ -592,7 +607,7 @@ class Auth  {
 			{
 				// Grab the current user info for the session
 				$this->ci->load->model('users/User_model', 'user_model', true);
-				$user = $this->ci->user_model->select('id, email, password_hash, users.role_id')->find($user_id);
+				$user = $this->ci->user_model->select('id, username, email, password_hash, users.role_id')->find($user_id);
 				
 				if (!$user) { return; }
 				
@@ -736,7 +751,7 @@ class Auth  {
 		Access:
 			Private
 	*/
-	private function setup_session($user_id=0, $password_hash=null, $email='', $role_id=0, $remember=false, $old_token=null) 
+	private function setup_session($user_id=0, $username='', $password_hash=null, $email='', $role_id=0, $remember=false, $old_token=null) 
 	{
 		if (empty($user_id) || empty($email))
 		{
@@ -755,6 +770,7 @@ class Auth  {
 		
 		$data = array(
 			'user_id'		=> $user_id,
+			'username'		=> $username,
 			'user_token'	=> do_hash($user_id . $password_hash),
 			'email'			=> $email,
 			'role_id'		=> $role_id,
