@@ -125,7 +125,7 @@ class Developer extends Admin_Controller {
 	
 		$modules = module_files(null, 'migrations');
 		
-		if (!count($modules))
+		if ($modules === false)
 		{
 			return false;
 		}
