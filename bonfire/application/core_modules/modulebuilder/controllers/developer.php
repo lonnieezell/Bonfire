@@ -88,12 +88,6 @@ class Developer extends Admin_Controller {
 		$this->form_validation->set_rules("form_input_delimiters",'Form Input Delimiters',"required|trim|xss_clean");
 		$this->form_validation->set_rules("form_error_delimiters",'Form Error Delimiters',"required|trim|xss_clean");
 		$this->form_validation->set_rules("textarea_editor",'Textarea Editor',"trim|xss_clean");
-		$this->form_validation->set_rules("permission_part1",'Permission Structure Part 1',"required|trim|xss_clean");
-		$this->form_validation->set_rules("permission_part2",'Permission Structure Part 2',"required|trim|xss_clean");
-		$this->form_validation->set_rules("permission_part3",'Permission Structure Part 3',"required|trim|xss_clean");
-		$this->form_validation->set_rules("permission_part1_other",'Permission Structure Part 1',"trim|xss_clean");
-		$this->form_validation->set_rules("permission_part2_other",'Permission Structure Part 2',"trim|xss_clean");
-		$this->form_validation->set_rules("permission_part3_other",'Permission Structure Part 3',"trim|xss_clean");
 		
 		for($counter=1; $field_total >= $counter; $counter++)
 		{
@@ -142,22 +136,7 @@ class Developer extends Admin_Controller {
 			$form_error_delimiters = $this->options['$form_error_delimiters'];
 		}
 		
-		// permission structure
-		$permission_details = array();
-		$permission_details[0] = $this->input->post('permission_part1');
-		$permission_details[1] = $this->input->post('permission_part2');
-		$permission_details[2] = $this->input->post('permission_part3');
-		if($permission_details[0] == 'Other') {
-			$permission_details[0] = $this->input->post('permission_part1_other');
-		}
-		if($permission_details[1] == 'Other') {
-			$permission_details[1] = $this->input->post('permission_part2_other');
-		}
-		if($permission_details[2] == 'Other') {
-			$permission_details[2] = $this->input->post('permission_part3_other');
-		}
-
-		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $permission_details);
+		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters);
 
 		// make the variables available to the view file
 		$data['module_name']		= $module_name;

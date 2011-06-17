@@ -44,7 +44,7 @@ class Modulebuilder
 	
 	//--------------------------------------------------------------------
 	
-	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $permission_details) {
+	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters) {
 		
 		$this->CI->load->helper('inflector');
 		
@@ -89,7 +89,7 @@ class Modulebuilder
 			
 			// db based files - migrations
 			if( $db_required ) {
-				$content['migration'] =  $this->build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names, $permission_details);
+				$content['migration'] =  $this->build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names);
 			}
 		}
 
@@ -382,7 +382,7 @@ class Modulebuilder
     * @return string
     */
 
-	private function build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names, $permission_details)
+	private function build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names)
 	{
 		if ($field_total == NULL)
 		{
@@ -393,7 +393,6 @@ class Modulebuilder
 		$data['module_name'] = $module_name;
 		$data['module_name_lower'] = strtolower($module_name);
 		$data['primary_key_field'] = $primary_key_field;
-		$data['permission_details'] = $permission_details;
 		$data['contexts'] = $contexts;
 		$data['action_names'] = $action_names;
 		$migration = $this->CI->load->view('files/migrations', $data, TRUE);
