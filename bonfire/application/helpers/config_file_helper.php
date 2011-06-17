@@ -250,7 +250,7 @@ function read_db_config($environment=null, $new_db = NULL, $fail_gracefully = TR
 		 //found file but is empty or clearly malformed
 		if (empty($db) OR ! is_array($db))
 		{
-			logit('[Config_File_Helper] Corrupt DB ENV file: '.$env,'debug');
+			//logit('[Config_File_Helper] Corrupt DB ENV file: '.$env,'debug');
 			continue;
 		}
 		
@@ -314,7 +314,7 @@ function write_db_config($settings=null)
 
 		if (empty($contents) OR ! is_array($contents))
 		{
-			logit('[Config_File_Helper] Error getting db file contents. Loading default database_format.php');
+			//logit('[Config_File_Helper] Error getting db file contents. Loading default database_format.php');
 			$contents = file_get_contents(APPPATH.'config/database_format'.EXT);
 		}
 
