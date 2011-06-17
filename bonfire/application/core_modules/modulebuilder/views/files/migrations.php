@@ -20,7 +20,7 @@ class Migration_Install_'.$module_name_lower.' extends Migration {
 		$migrations .= '
 		$this->dbforge->add_field(\'`'.set_value("view_field_name$counter").'` '.set_value("db_field_type$counter");
 		
-			if (!in_array(set_value("db_field_type$counter"), array('TEXT', 'DATETIME'))) // There are no doubt more types where a value/length isn't possible - needs investigating
+			if (!in_array(set_value("db_field_type$counter"), array('TEXT', 'DATE', 'DATETIME'))) // There are no doubt more types where a value/length isn't possible - needs investigating
 			{
 				$migrations .= '('.set_value("db_field_length_value$counter").')';
 			}
@@ -34,52 +34,25 @@ class Migration_Install_'.$module_name_lower.' extends Migration {
 		$this->dbforge->create_table(\''.$module_name_lower.'\');
 
 		// permissions';
-		if ($this->db->table_exists("role_permissions") == false) {
-			// original permissions
-		}
-		else {
-			// new permissions system
-			
-			foreach($contexts as $context) {
+		foreach($contexts as $context) {
+			if ($context != 'public')
+			{
 				$permission = '';
-				if( $permission_details[0] == "Context") {
-					$permission = lang('bf_context_'.strtolower($context)).".";
-				}
-				elseif($permission_details[0] == "Module") {
-					$permission = $module_name.".";
-				}
-				else {
-					$permission = $permission_details[0].".";
-				}
-				if( $permission_details[1] == "Context") {
-					$permission .= lang('bf_context_'.strtolower($context)).".";
-				}
-				elseif($permission_details[1] == "Module") {
-					$permission .= $module_name.".";
-				}
-				else {
-					$permission .= $permission_details[1].".";
-				}
+				$permission = $module_name.".";
+				$permission .= lang('bf_context_'.strtolower($context)).".";
 				foreach($action_names as $action_name) {
 					$action_permission = '';
 					$action_name = ucfirst($action_name);
 					if($action_name == 'Index') {
 						$action_name = 'View';
 					}
-					if( $permission_details[2] == "Action") {
-						$action_permission = $permission . $action_name;
-					}
-					elseif($permission_details[2] == "Method") {
-						$action_permission = $permission . $action_name;
-					}
-					else {
-						$action_permission = $permission . $permission_details[1];
-					}
+					$action_permission = $permission . $action_name;
 					$migrations .= '
 					$this->db->query("INSERT INTO {$prefix}permissions VALUES (0,\''.$action_permission.'\',\'\',\'active\');");';
 				}
 			}
 		}
+
 		$migrations .= '
 
 	}
@@ -88,7 +61,36 @@ class Migration_Install_'.$module_name_lower.' extends Migration {
 	
 	public function down() 
 	{
+		$prefix = $this->db->dbprefix;
+
 		$this->dbforge->drop_table(\''.$module_name_lower.'\');
+		// permissions';
+		foreach($contexts as $context) {
+			if ($context != 'public')
+			{
+				$permission = '';
+				$permission = $module_name.".";
+				$permission .= lang('bf_context_'.strtolower($context)).".";
+				foreach($action_names as $action_name) {
+					$action_permission = '';
+					$action_name = ucfirst($action_name);
+					if($action_name == 'Index') {
+						$action_name = 'View';
+					}
+					$action_permission = $permission . $action_name;
+					$migrations .= '
+					$query = $this->db->query("SELECT permission_id FROM {$prefix}permissions WHERE name=\''.$action_permission.'\';");
+					foreach ($query->result_array() as $row)
+					{
+						$permission_id = $row[\'permission_id\'];
+						$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id=\'$permission_id\';");
+					}
+					$this->db->query("DELETE FROM {$prefix}permissions WHERE name=\''.$action_permission.'\';");';
+				}
+			}
+		}
+
+		$migrations .= '
 	}
 	
 	//--------------------------------------------------------------------

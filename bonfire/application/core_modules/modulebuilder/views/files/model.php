@@ -5,7 +5,7 @@ $model =<<<EOF
 class {$controller_name}_model extends BF_Model {
 
 	protected \$table		= "{$controller_name}";
-	protected \$key			= "{$primary_key_field}_id";
+	protected \$key			= "{$primary_key_field}";
 	protected \$soft_deletes	= false;
 	protected \$date_format	= "datetime";
 	protected \$set_created	= true;
