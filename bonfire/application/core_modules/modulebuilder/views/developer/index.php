@@ -94,18 +94,6 @@
 			<input name="db_required" id="db_required" type="checkbox" value="1" <?php echo set_checkbox("db_required", "1", true); ?> class="checkbox" />
 		</div>
 
-		<div>
-			<label for="permissions">Permissions Structure e.g. Context.Module.Action, Module.Context.Method</label>
-			<?php 
-				$permission_types_part1 = array('Module' => 'Module', 'Context' => 'Context', 'Other' => 'Other');
-				$permission_types_part2 = array('Context' => 'Context', 'Module' => 'Module', 'Other' => 'Other');
-				$permission_types_part3 = array('Action' => 'Action', 'Method' => 'Method', 'Other' => 'Other');
-			?>
-			<?php echo form_dropdown("permission_part1", $permission_types_part1, set_value("permission_part1")); ?> - if Other <input name="permission_part1_other" id="permission_part1_other" type="text" value="<?php echo set_value("permission_part1_other"); ?>" /><br />
-			<?php echo form_dropdown("permission_part2", $permission_types_part2, set_value("permission_part2")); ?> - if Other <input name="permission_part2_other" id="permission_part2_other" type="text" value="<?php echo set_value("permission_part2_other"); ?>" /><br />
-			<?php echo form_dropdown("permission_part3", $permission_types_part3, set_value("permission_part3")); ?> - if Other <input name="permission_part3_other" id="permission_part3_other" type="text" value="<?php echo set_value("permission_part3_other"); ?>" />
-		</div>
-		
 	</fieldset>
 		<div>
 
