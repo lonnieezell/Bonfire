@@ -284,6 +284,8 @@ class Auth  {
 		if ($this->is_logged_in() === false)
 		{
 			Template::set_message( $this->ci->lang->line('us_must_login'), 'error');
+			$this->ci->load->helper('cookie');
+			set_redirect_cookie($this->ci->uri->uri_string());
 			redirect('login');
 		}
 		
