@@ -271,8 +271,8 @@ class Settings extends Admin_Controller {
 	
 	private function save_user($type='insert', $id=0) 
 	{
-		$this->form_validation->set_rules('first_name', 'First Name', 'trim|strip_tags|alpha|max_length[20]|xss_clean');
-		$this->form_validation->set_rules('last_name', 'Last Name', 'trim|strip_tags|alpha|max_length[20]|xss_clean');
+		$this->form_validation->set_rules('first_name', lang('us_first_name'), 'trim|strip_tags|max_length[20]|xss_clean');
+		$this->form_validation->set_rules('last_name', lang('us_last_name'), 'trim|strip_tags|max_length[20]|xss_clean');
 		if ($type == 'insert')
 		{
 			$this->form_validation->set_rules('email', 'Email', 'required|trim|callback_unique_email|valid_email|max_length[120]|xss_clean');
