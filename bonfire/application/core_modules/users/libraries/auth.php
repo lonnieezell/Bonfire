@@ -362,7 +362,8 @@ class Auth  {
 	*/
 	public function user_name() 
 	{
-		return $this->ci->session->userdata('user_name');
+		// daK - temporarly disabled, returning username
+		return $this->ci->session->userdata('username');
 	}
 	
 	//--------------------------------------------------------------------	
@@ -759,7 +760,6 @@ class Auth  {
 			$email			- The user's email address.
 			$role_id		- The user's role_id
 			$remember		- A boolean (true/false). Whether to keep the user logged in.
-			$user_name		- The user's made name.
 			
 		Return: 
 			true/false on success/failure.
@@ -790,7 +790,6 @@ class Auth  {
 			'user_token'	=> do_hash($user_id . $password_hash),
 			'email'			=> $email,
 			'role_id'		=> $role_id,
-			'user_name'		=> $user_name,
 			'logged_in'		=> true,
 		);
 		
