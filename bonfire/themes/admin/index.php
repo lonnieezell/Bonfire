@@ -43,7 +43,7 @@
 		<!-- Nav Bar -->
 		<div id="toolbar">
 			<div id="toolbar-right">
-				<a href="<?php echo site_url('admin/settings/users/edit/'. $this->auth->user_id()) ?>" id="tb_email"></p><?php echo config_item('auth.login_type') == 'username' ? $this->auth->username() : $this->auth->email() ?></a>
+				<a href="<?php echo site_url('admin/settings/users/edit/'. $this->auth->user_id()) ?>" id="tb_email" title="<?php echo lang('bf_user_settings') ?>"><?php echo config_item('auth.login_type') == 'username' ? $this->auth->username() : $this->auth->email() ?></a>
 				<a href="<?php echo site_url('logout') ?>" id="tb_logout" title="Logout">Logout</a>
 			</div>
 		
