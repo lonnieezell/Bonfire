@@ -223,6 +223,7 @@ $view .= '
 		<br/>
 		<input type="submit" name="submit" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(\'admin/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\')); ?>
 	</div>
+	<?php echo form_close(); ?>
 ';
 if ($xinha_names != '')
 {
@@ -260,7 +261,6 @@ $view .= '
 		
 		<p><?php echo lang(\''.$module_name_lower.'_edit_text\'); ?></p>
 	</div>
-<?php echo form_close(); ?>
 ';
 }
 
