@@ -38,7 +38,7 @@
 	<p>
 	<?php foreach($views as $context_name => $context_views): ?>
 		<?php  foreach($context_views as $view_name => $val): ?>
-		views/<?php echo $context_name."/".$view_name;?>.php<br />
+		views/<?php echo $context_name == $module_name_lower ? $view_name : $context_name."/".$view_name;?>.php<br />
 		<?php endforeach; ?>
 	<?php endforeach; ?>
 	</p>

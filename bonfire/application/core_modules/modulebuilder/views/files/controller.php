@@ -9,9 +9,19 @@ $controller .= ' {
 	function __construct()
 	{
  		parent::__construct();
-		
-		$this->auth->restrict(\''.ucfirst($module_name).'.'.ucfirst($controller_name).'.View\');
-		
+';
+		if($controller_name == $module_name_lower)
+		{
+		$controller .= '
+		$this->load->library(\'form_validation\');
+		$this->load->database();';
+			
+		}
+		else {
+		$controller .= '
+		$this->auth->restrict(\''.ucfirst($module_name).'.'.ucfirst($controller_name).'.View\');';
+		}
+$controller .= '
 		$this->load->model(\''.$module_name_lower.'_model\');
 		$this->lang->load(\''.$module_name_lower.'\');
 		
