@@ -281,7 +281,7 @@ class BF_Model extends CI_Model {
 		}
 	
 		// Add the created field
-		if ($this->set_created === TRUE && !array_key_exists('created', $data))
+		if ($this->set_created === TRUE && !array_key_exists('created_on', $data))
 		{
 			$data['created_on'] = $this->set_date();
 		}
