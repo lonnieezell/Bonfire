@@ -183,6 +183,11 @@ class Modulebuilder
 								$action = 'index';
 							}
 							$path = $module_name."/".$type."/".$view_context;
+							// put the public views into the main views folder
+							if ($view_context == $module_name)
+							{
+								$path = $module_name."/".$type;
+							}
 							@mkdir($this->options['output_path']."{$path}",0777);
 							if ( ! write_file($this->options['output_path']."{$path}/{$action}.php", $value))
 							{
