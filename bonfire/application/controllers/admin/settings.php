@@ -67,9 +67,9 @@ class Settings extends Admin_Controller {
 	
 	private function save_settings() 
 	{
-		$this->form_validation->set_rules('title', 'Site Name', 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('system_email', 'Site Email', 'required|trim|strip_tags|valid_email|xss_clean');
-		$this->form_validation->set_rules('list_limit', 'List Limit', 'required|trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('title', lang('bf_site_name'), 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('system_email', lang('bf_site_email'), 'required|trim|strip_tags|valid_email|xss_clean');
+		$this->form_validation->set_rules('list_limit','Items <em>p.p.</em>', 'required|trim|strip_tags|numeric|xss_clean');
 		
 		if ($this->form_validation->run() === false)
 		{
