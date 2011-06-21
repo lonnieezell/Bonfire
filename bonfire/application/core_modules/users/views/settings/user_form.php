@@ -29,22 +29,21 @@
 		<input type="text" name="email" class="medium" value="<?php echo isset($user) ? $user->email : set_value('email') ?>" />
 	</div>
 	
-	<?php if (config_item('auth.use_usernames') == 1) : ?>
+	<?php if ( config_item('auth.login_type') !== 'email') : ?>
 	<div>
 		<label for="username"><?php echo lang('bf_username'); ?></label>
 		<input type="text" name="username" id="username" class="medium" value="<?php echo isset($user) ? $user->username : set_value('username') ?>" />
 	</div>
-
 	<?php endif; ?>
-	<br />
-	
+
+	<br />	
 	<div>
 		<label class="required"><?php echo lang('bf_password'); ?></label>
-		<input type="password" name="password" value="" />
+		<input type="password" id="password" name="password" value="" />
 	</div>
 	<div>
 		<label class="required"><?php echo lang('bf_password_confirm'); ?></label>
-		<input type="password" name="pass_confirm" value="" />
+		<input type="password" id="pass_confirm" name="pass_confirm" value="" />
 	</div>
 	
 	<?php if (has_permission('Bonfire.Roles.Manage')) :?>
