@@ -289,13 +289,14 @@ class Auth  {
 		
 		Parameters:
 			$permission	- (Optional) A string representing the permission to check for.
+			$uri		- (Optional) A string representing an URI to redirect, if false
 			
 		Return:
 			true		- if the user has the appropriate access permissions.
 			redirect	- to the previous page if the user doesn't have permissions.
 			redirect	- '/login' page if the user is not logged in.
 	 */
-	public function restrict($permission=null) 
+	public function restrict($permission=null, $uri=null) 
 	{	
 		// If user isn't logged in, don't need to check permissions
 		if ($this->is_logged_in() === false)
@@ -306,9 +307,13 @@ class Auth  {
 		
 		// Check to see if the user has the proper permissions
 		if (!empty($permission) && !$this->has_permission($permission))
-		{ 
-			Template::set_message( $this->ci->lang->line('us_no_permission'), 'attention');
-			Template::redirect($this->ci->session->userdata('previous_page'));
+		{
+			if ($uri) 
+				Template::redirect($uri);
+			else
+				Template::redirect($this->ci->session->userdata('previous_page'));
+
+			Template::set_message( lang('us_no_permission'), 'attention');
 		} 
 		
 		return true;
