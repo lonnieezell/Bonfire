@@ -6,12 +6,13 @@ class Migration_Add_login_destination extends Migration {
 	{
 		$prefix = $this->db->dbprefix;
 		
-		$this->dbforge->add_column('roles',
-			'login_destination'	=> array(
-				'type'			=> 'VARCHAR',
-				'constraint'	=> 255,
-				'null'			=> false,
-				'default'		=> '/'
+		$this->dbforge->add_column('roles', array(
+				'login_destination'	=> array(
+					'type'			=> 'VARCHAR',
+					'constraint'	=> 255,
+					'null'			=> false,
+					'default'		=> '/'
+				)
 			)
 		);
 	}
