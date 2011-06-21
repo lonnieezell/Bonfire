@@ -32,7 +32,7 @@
 		<div class="scrollable" id="ajax-content">
 				
 			<div class="box create rounded">
-				<a class="button good ajaxify" href="/admin/settings/permissions/create"><?php echo lang('permissions_create_new_button');?></a>
+				<a class="button good ajaxify" href="<?php echo site_url('/admin/settings/permissions/create'); ?>"><?php echo lang('permissions_create_new_button');?></a>
 
 				<h3><?php echo lang('permissions_create_new');?></h3>
 
