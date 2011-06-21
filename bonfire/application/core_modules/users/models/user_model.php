@@ -101,6 +101,12 @@ class User_model extends BF_Model {
 		// What's the default role?
 		if (!isset($data['role_id']))
 		{
+			// We better have a guardian here
+			if (!class_exists('Role_model'))
+			{
+				$this->load->model('roles/Role_model','role_model');
+			}
+
 			$data['role_id'] = $this->role_model->default_role_id();
 		}
 		
