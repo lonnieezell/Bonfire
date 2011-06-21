@@ -58,7 +58,14 @@ class Users extends Front_Controller {
 		Presents the login function and allows the user to actually login.
 	*/
 	public function login() 
-	{	
+	{
+		$this->load->helper('cookie');
+		if (!class_exists('CI_Session'))
+		{
+			$this->load->library('session');
+		}
+		$previous_page = $this->session->userdata('previous_page');
+
 		// if the user is not logged in continue to show the login page
 		if ($this->auth->is_logged_in() === false)
 		{
@@ -70,9 +77,16 @@ class Users extends Front_Controller {
 				if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === true)
 				{
 					$this->activity_model->log_activity($this->auth->user_id(), 'logged in from '. $this->input->ip_address(), 'users');
-					redirect('admin/content');
+
+					// Redirect to suitable page
+					$redirect_uri = get_cookie('bf_login_redirect') ? get_cookie('bf_login_redirect') : '';
+					delete_redirect_cookie();
+					redirect($redirect_uri);
 				}
 			}
+
+			// Set redirect to previous page before showing the login page
+			$previous_page && set_redirect_cookie($previous_page, false);
 
 			Template::set_view('users/users/login');
 			Template::set('page_title', 'Login');
@@ -80,7 +94,9 @@ class Users extends Front_Controller {
 		}
 		else
 		{
-			redirect('admin/content');
+			// Don't redirect to any login page when already logged in
+			$redirect_uri = preg_match('/login$/', $previous_page) ? '' : $previous_page;
+			redirect($redirect_uri);
 		}
 	}
 	
