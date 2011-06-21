@@ -139,7 +139,14 @@ class Auth  {
 		}
 	
 		// Grab the user from the db
-		$user = $this->ci->user_model->select('id, email, username, first_name, last_name, users.role_id, salt, password_hash, login_destination')->find_by(config_item('auth.login_type'), $login);
+		$selects = 'id, email, username, first_name, last_name, users.role_id, salt, password_hash';
+		
+		if (config_item('auth.do_login_redirect'))
+		{
+			$selects .= ', login_destination';
+		}
+		
+		$user = $this->ci->user_model->select($selects)->find_by(config_item('auth.login_type'), $login);
 		
 		if (is_array($user))
 		{
