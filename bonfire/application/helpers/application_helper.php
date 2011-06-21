@@ -43,9 +43,10 @@
 	
 	Note that if gravatar does not have an image that matches the criteria,
 	it will return a link to an image under *your_theme/images/user.png*.
+	Also, by explicity omitting email you're denying http-req to gravatar.com
 	
 	Parameters:
-		$email	- The email address to check for.
+		$email	- The email address to check for. If null, defaults to theme img.
 		$size	- The width (and height) of the resulting image to grab.
 		$alt	- Alt text to be put in the link tag.
 		$title	- The title text to be put in the link tag.
@@ -66,18 +67,26 @@ function gravatar_link($email=null, $size=48, $alt='', $title='', $class='', $id
 	// Border color 
 	$border = 'd6d6d6';
 	
-	// URL for Gravatar
-	$gravatarURL = "http://www.gravatar.com/avatar.php?gravatar_id=%s&default=%s&size=%s&border=%s&rating=%s";
+	// If email null, means we don't want gravatar.com HTTP request
+	if ( $email ) {
 	
-	$avatarURL = sprintf
-	(
-		$gravatarURL, 
-		md5($email), 
-		$default_image,
-		$size,
-		$border,
-		$rating
-	);
+		// URL for Gravatar
+		$gravatarURL = "http://www.gravatar.com/avatar.php?gravatar_id=%s&default=%s&size=%s&border=%s&rating=%s";
+		
+		$avatarURL = sprintf
+		(
+			$gravatarURL, 
+			md5($email), 
+			$default_image,
+			$size,
+			$border,
+			$rating
+		);
+	}	
+	else 
+	{
+		$avatarURL = $default_image ;
+	}
 	
 	return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" class="'. $class .'" id="'. $id .'" />';
 }

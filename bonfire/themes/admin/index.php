@@ -43,8 +43,8 @@
 		<!-- Nav Bar -->
 		<div id="toolbar">
 			<div id="toolbar-right">
-				<a href="<?php echo site_url('admin/settings/users/edit/'. $this->auth->user_id()) ?>" id="tb_email"><?php echo $this->auth->email() ?></a>
-				<a href="<?php echo site_url('logout') ?>" id="tb_logout" title="Logout"><img src='http://bf.localhost/bonfire/themes/admin/images/logout.png' alt='Content' /></a>
+				<a href="<?php echo site_url('admin/settings/users/edit/'. $this->auth->user_id()) ?>" id="tb_email" title="<?php echo lang('bf_user_settings') ?>"><?php echo config_item('auth.login_type') == 'username' ? $this->auth->username() : $this->auth->email() ?></a>
+				<a href="<?php echo site_url('logout') ?>" id="tb_logout" title="Logout">Logout</a>
 			</div>
 		
 			<h1><a href="<?php echo site_url(); ?>" target="_blank"><?php echo config_item('site.title') ?></a></h1>

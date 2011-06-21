@@ -133,7 +133,7 @@ class Auth  {
 		}
 	
 		// Grab the user from the db
-		$user = $this->ci->user_model->select('id, email, username, users.role_id, salt, password_hash')->find_by(config_item('auth.login_type'), $login);
+		$user = $this->ci->user_model->select('id, email, username, first_name, last_name, users.role_id, salt, password_hash')->find_by(config_item('auth.login_type'), $login);
 		
 		if (is_array($user))
 		{
@@ -153,7 +153,7 @@ class Auth  {
 			{ 
 				$this->clear_login_attempts($login);
 				// We've successfully validated the login, so setup the session
-				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember);
+				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', ucwords($user->first_name.' '.$user->last_name));
 				
 				// Save the login info
 				$data = array(
@@ -236,7 +236,7 @@ class Auth  {
 		if ($this->ci->session->userdata('email') && $this->ci->session->userdata('user_id'))
 		{
 			// Grab the user account
-			$user = $this->ci->user_model->select('id, username, email, salt, password_hash')->find($this->ci->session->userdata('user_id'));
+			$user = $this->ci->user_model->select('id, username, email, first_name, last_name, salt, password_hash')->find($this->ci->session->userdata('user_id'));
 			
 			if ($user !== false)
 			{
@@ -353,6 +353,22 @@ class Auth  {
 	//--------------------------------------------------------------------
 	
 	/*
+		Method: user_name()
+		
+		Retrieves the user name from the current session.
+		
+		Return:
+			The user's first and last name.
+	*/
+	public function user_name() 
+	{
+		// daK - temporarly disabled, returning username
+		return $this->ci->session->userdata('username');
+	}
+	
+	//--------------------------------------------------------------------	
+	
+	/*		
 		Method: role_id()
 		
 		Retrieves the role_id from the current session.
@@ -607,11 +623,11 @@ class Auth  {
 			{
 				// Grab the current user info for the session
 				$this->ci->load->model('users/User_model', 'user_model', true);
-				$user = $this->ci->user_model->select('id, username, email, password_hash, users.role_id')->find($user_id);
+				$user = $this->ci->user_model->select('id, username, email, first_name ,last_name, password_hash, users.role_id')->find($user_id);
 				
 				if (!$user) { return; }
 				
-				$this->setup_session($user->id, $user->password_hash, $user->email, $user->role_id, true, $test_token);
+				$this->setup_session($user->id, $user->password_hash, $user->email, $user->role_id, true, $test_token, ucwords($user->first_name.' '.$user->last_name));
 			}
 		}
 		
@@ -751,7 +767,7 @@ class Auth  {
 		Access:
 			Private
 	*/
-	private function setup_session($user_id=0, $username='', $password_hash=null, $email='', $role_id=0, $remember=false, $old_token=null) 
+	private function setup_session($user_id=0, $username='', $password_hash=null, $email='', $role_id=0, $remember=false, $old_token=null,$user_name='') 
 	{
 		if (empty($user_id) || empty($email))
 		{

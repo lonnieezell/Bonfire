@@ -72,7 +72,9 @@ class Settings extends Admin_Controller {
 		
 		$settings = read_db_config($server_type);
 		
-		Template::set('db_settings', $settings[$server_type]);
+		if (! empty ($settings))
+
+			Template::set('db_settings', $settings[$server_type]);
 	
 		Template::set('server_type', $server_type);
 		Template::render();
