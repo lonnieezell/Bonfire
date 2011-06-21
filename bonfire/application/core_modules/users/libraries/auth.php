@@ -46,7 +46,7 @@ class Auth  {
 		Var: $login_destination
 		The url to redirect to on successful login.
 	*/
-	public	$login_desitnation = '/';
+	public	$login_destination = '/';
 	
 	/*
 		Var: $logged_in
