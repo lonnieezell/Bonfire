@@ -22,17 +22,6 @@
 */
 
 /*
-	Class: MY_Model
-	
-	This simply extends BF_Model for backwards compatibility, 
-	and to provide a placeholder class that your project can customize
-	extend as needed.
-*/
-class MY_Model extends BF_Model { }
-
-//--------------------------------------------------------------------
-
-/*
 	Class: BF_Model
 	
 	The Base model implements standard CRUD functions that can be
@@ -829,6 +818,19 @@ class BF_Model extends CI_Model {
 	//--------------------------------------------------------------------
 	
 } 
+
+// END: Class BF_model
+
+//--------------------------------------------------------------------
+
+/*
+	Class: MY_Model
+	
+	This simply extends BF_Model for backwards compatibility, 
+	and to provide a placeholder class that your project can customize
+	extend as needed.
+*/
+class MY_Model extends BF_Model { }
 
 // END: Class MY_model
 
