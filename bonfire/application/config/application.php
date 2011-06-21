@@ -64,7 +64,7 @@ $config['auth.allow_remember'] = 1;
 $config['auth.remember_length'] = 1209600;
 
 // Should we do a custom login redirect, or just go to '/'?
-$config['auth.do_login_redirect'] = 1;
+$config['auth.do_login_redirect'] = 0;
 
 
 //--------------------------------------------------------------------
