@@ -66,6 +66,8 @@ $config['auth.remember_length'] = 1209600;
 // Should we do a custom login redirect, or just go to '/'?
 $config['auth.do_login_redirect'] = 0;
 
+// Does User accounts have extended profile? (ex: address, dob, ...).
+$config['auth.use_extended_profile'] = 1;
 
 //--------------------------------------------------------------------
 // CONTEXTS
