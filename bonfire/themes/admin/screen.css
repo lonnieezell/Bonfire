@@ -324,6 +324,7 @@ noscript {
 	color: #fff;
 	opacity: 1.0;
 }
+#tb_logout { background: url(images/logout.png) 10px 7px no-repeat; }
 
 #toolbar a#tb_email { 
 	text-indent: 0; 

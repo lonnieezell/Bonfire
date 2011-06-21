@@ -34,7 +34,7 @@ $view = '
 		<div class="scrollable" id="ajax-content">
 				
 			<div class="box create rounded">
-				<a class="button good ajaxify" href="/admin/'.$controller_name.'/'.$module_name_lower.'/create"><?php echo lang(\''.$module_name_lower.'_create_new_button\');?></a>
+				<a class="button good ajaxify" href="<?php echo site_url(\'/admin/'.$controller_name.'/'.$module_name_lower.'/create\')?>"><?php echo lang(\''.$module_name_lower.'_create_new_button\');?></a>
 
 				<h3><?php echo lang(\''.$module_name_lower.'_create_new\');?></h3>
 
