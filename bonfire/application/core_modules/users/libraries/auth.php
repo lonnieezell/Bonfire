@@ -43,6 +43,12 @@ class Auth  {
 	public	$errors	= array();
 	
 	/*
+		Var: $login_destination
+		The url to redirect to on successful login.
+	*/
+	public	$login_desitnation = '/';
+	
+	/*
 		Var: $logged_in
 		Stores the logged in value after the first test to improve performance.
 		
@@ -133,7 +139,7 @@ class Auth  {
 		}
 	
 		// Grab the user from the db
-		$user = $this->ci->user_model->select('id, email, username, first_name, last_name, users.role_id, salt, password_hash')->find_by(config_item('auth.login_type'), $login);
+		$user = $this->ci->user_model->select('id, email, username, first_name, last_name, users.role_id, salt, password_hash, login_destination')->find_by(config_item('auth.login_type'), $login);
 		
 		if (is_array($user))
 		{
@@ -152,6 +158,7 @@ class Auth  {
 			if ( do_hash($user->salt . $password) == $user->password_hash)
 			{ 
 				$this->clear_login_attempts($login);
+				
 				// We've successfully validated the login, so setup the session
 				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', ucwords($user->first_name.' '.$user->last_name));
 				
@@ -164,6 +171,9 @@ class Auth  {
 				
 				$trigger_data = array('user_id'=>$user->id, 'role_id'=>$user->role_id);
 				Events::trigger('after_login', $trigger_data );
+				
+				// Save our redirect location
+				$this->login_destination = !empty($user->login_destination) ? $user->login_destination : '/';
 				
 				return true;
 			}
@@ -355,7 +365,8 @@ class Auth  {
 	/*
 		Method: user_name()
 		
-		Retrieves the user name from the current session.
+		Retrieves the user's name from the current session.
+		Built from the user's first_name and last_name fields.
 		
 		Return:
 			The user's first and last name.
@@ -390,7 +401,7 @@ class Auth  {
 		
 		Parameters:
 			$permission	- A string with the permission to check for, ie 'Site.Signin.Allow'
-			$role_id	- The id of the role to check the permission against. If not role_id is
+			$role_id	- The id of the role to check the permission against. If role_id is not
 							passed into the method, then it assumes it to be the current user's role_id.
 			$override	- Whether or not access is granted if this permission doesn't exist in the database
 							

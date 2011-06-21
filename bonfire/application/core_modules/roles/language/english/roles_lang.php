@@ -39,3 +39,6 @@ $lang['role_delete_note']			= 'Deleting this role will convert all users that ar
 
 $lang['role_roles']					= 'Roles';
 $lang['role_new_role']				= 'New Role';
+
+$lang['role_login_destination']		= 'Login Destination';
+$lang['role_destination_note']		= 'The site URL to redirect to on successful login.';

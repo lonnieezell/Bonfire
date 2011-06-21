@@ -18,6 +18,12 @@
 	</div>
 	
 	<div>
+		<label><?php echo lang('role_login_destination'); ?>?</label>
+		<input type="text" name="login_destination" class="medium" value="<?php echo isset($role) ? $role->login_destination : '' ?>"  />
+		<p class="small indent"><?php echo lang('role_destination_note'); ?></p>
+	</div>
+	
+	<div>
 		<label><?php echo lang('role_default_role'); ?>?</label>
 		<input type="checkbox" name="default" value="1" <?php echo isset($role) && $role->default == 1 ? 'checked="checked"' : '' ?> />
 		<p class="small" style="display: inline"><?php echo lang('role_default_note'); ?></p>

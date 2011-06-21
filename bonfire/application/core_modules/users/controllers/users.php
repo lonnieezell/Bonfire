@@ -70,7 +70,20 @@ class Users extends Front_Controller {
 				if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === true)
 				{
 					$this->activity_model->log_activity($this->auth->user_id(), 'logged in from '. $this->input->ip_address(), 'users');
-					redirect('admin/content');
+					
+					/*
+						In many cases, we will have set a destination for a 
+						particular user-role to redirect to. This is helpful for
+						cases where we are presenting different information to different
+						roles that might cause the base destination to be not available.
+					*/
+					if (config_item('auth.do_login_redirect'))
+					{
+						Template::redirect($this->auth->login_destination);
+					} else
+					{
+						Template::redirect('/');
+					}
 				}
 			}
 
