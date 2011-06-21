@@ -303,7 +303,7 @@ class Auth  {
 		if (!empty($permission) && !$this->has_permission($permission))
 		{ 
 			Template::set_message( $this->ci->lang->line('us_no_permission'), 'attention');
-			redirect($this->ci->session->userdata('previous_page'));
+			Template::redirect($this->ci->session->userdata('previous_page'));
 		} 
 		
 		return true;
