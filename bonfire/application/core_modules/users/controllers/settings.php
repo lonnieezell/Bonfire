@@ -79,6 +79,8 @@ class Settings extends Admin_Controller {
 		Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
 		
 		Template::set('user_count', $this->user_model->count_all());
+		
+		Template::set('login_attempts', $this->user_model->get_login_attempts($this->limit) );
 	
 		$this->load->helper('ui/ui');
 	
@@ -228,15 +230,6 @@ class Settings extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	// !HMVC METHODS
-	//--------------------------------------------------------------------
-	
-	public function login_attempts($limit=15) 
-	{
-		$attempts = $this->user_model->get_login_attempts($limit);
-		
-		return $this->load->view('settings/login_attempts', array('login_attempts' => $attempts), true);
-	}
-	
 	//--------------------------------------------------------------------
 	
 	public function access_logs($limit=15) 
