@@ -180,15 +180,21 @@ class CI_Profiler {
 			else
 			{
 				foreach ($db->queries as $key => $val)
-				{
+				{	
 					// duplicates?
-					if (in_array($val, $output))
+					if (in_array($val, $output, true) !== false)
+					{	
+						$output['duplicates']++;
+						$duplicate = true;
+					} else
 					{
-						$output['duplicates']++;	
+						$duplicate = false;
 					}
 				
 					$time = number_format($db->query_times[$key], 4);
-					$output[$time] = $val;
+					$query = $duplicate ? '<span class="ci-profiler-duplicate">'. $val .'</span>' : $val;
+					
+					$output[$time] = $query;
 				}
 			}
 
