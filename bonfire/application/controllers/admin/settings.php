@@ -87,6 +87,7 @@ class Settings extends Admin_Controller {
 			'auth.use_usernames'	=> isset($_POST['use_usernames']) ? $this->input->post('use_usernames') : 0,
 			'auth.allow_remember'	=> isset($_POST['allow_remember']) ? 1 : 0,
 			'auth.remember_length'	=> (int)$this->input->post('remember_length'),
+			'auth.use_extended_profile' => isset($_POST['use_ext_profile']) ? 1 : 0,
 			
 			'updates.bleeding_edge'	=> isset($_POST['update_check']) ? 1 : 0,
 		);

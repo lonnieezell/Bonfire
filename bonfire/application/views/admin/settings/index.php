@@ -87,6 +87,11 @@
 			<label><?php echo lang('bf_update_show_edge') ?></label>
 			<input type="checkbox" name="update_check" value="1" <?php echo config_item('updates.bleeding_edge') == 1 ? 'checked="checked"' : set_checkbox('updates.bleeding_edge', 1); ?> />
 			<p class="small" style="display: inline"><?php echo lang('bf_update_info_edge') ?></p>
+		</div>		
+		<div>
+			<label><?php echo lang('bf_ext_profile_show') ?></label>
+			<input type="checkbox" name="use_ext_profile" value="1" <?php echo config_item('auth.use_extended_profile') == 1 ? 'checked="checked"' : set_checkbox('auth.use_extended_profile', 1); ?> />
+			<p class="small" style="display: inline"><?php echo lang('bf_ext_profile_info') ?></p>
 		</div>
 	</fieldset>
 	<?php endif; ?>
