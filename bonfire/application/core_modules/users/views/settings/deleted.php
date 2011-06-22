@@ -33,7 +33,7 @@
 	<br/><br/>
 
 	<div class="box delete rounded">
-		<a class="button delete ajaxify" href="<?php echo site_url('admin/settings/users/create'); ?>"><?php echo lang('us_purge_del_accounts'); ?></a>
+		<a class="button delete ajaxify" href="<?php echo site_url('admin/settings/users/purge'); ?>"><?php echo lang('us_purge_del_accounts'); ?></a>
 	
 		<?php echo lang('us_purge_del_note'); ?>
 	</div>	
