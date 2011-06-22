@@ -194,17 +194,29 @@ class Settings extends Admin_Controller {
 		$user_id = $this->uri->segment(5);
 		
 		// Handle a single-user purge
-		if (!empty($user_id))
+		if (!empty($user_id) && is_numeric($user_id))
 		{
 			$this->user_model->delete($user_id, true);	
 		}
 		// Handle purging all deleted users...
 		else
 		{
+			// Find all deleted accounts
+			$users = $this->user_model->where('deleted', 1)
+									  ->find_all(true);
 		
+			if (is_array($users))
+			{
+				foreach ($users as $user)
+				{
+					$this->user_model->delete($user->id, true);
+				}
+			}
 		}
 		
-		redirect('admin/settings/users/deleted');
+		Template::set_message('Users Purged.', 'success');
+		
+		redirect('admin/settings/users');
 	}
 	
 	//--------------------------------------------------------------------
