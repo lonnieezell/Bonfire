@@ -179,10 +179,18 @@ class CI_Profiler {
 			}
 			else
 			{
+				$counts = array_count_values($db->queries);
+				
+				/*
+				echo '<pre>';
+				print_r($db->queries);
+				die(print_r($counts));
+				*/
+				
 				foreach ($db->queries as $key => $val)
 				{	
 					// duplicates?
-					if (in_array($val, $output, true) !== false)
+					if ($counts[$val] > 1)
 					{	
 						$output['duplicates']++;
 						$duplicate = true;
@@ -198,10 +206,10 @@ class CI_Profiler {
 					$explain = strpos($val, 'sql_mode') === false ? $this->CI->db->query('EXPLAIN '. $val) : null;
 					if (!is_null($explain))
 					{
-						$query .= $this->build_sql_explain($explain->row());
+						$query .= $this->build_sql_explain($explain->row(), $time);
 					}
 					
-					$output[$time] = $query;
+					$output[] = $query;
 				}
 			}
 
@@ -212,7 +220,7 @@ class CI_Profiler {
 	
 	//--------------------------------------------------------------------
 	
-	private function build_sql_explain($data)
+	private function build_sql_explain($data, $time)
 	{	
 		$output = '<span class="ci-profiler-db-explain">';
 		
@@ -221,6 +229,7 @@ class CI_Profiler {
 		$output .= ' - Type: <em>'. $data->type .'</em>';
 		$output .= ' - Rows: <em>'. $data->rows .'</em>';
 		$output .= ' - Extra: <em>'. $data->Extra .'</em>';
+		$output .= ' - Speed: <em>'. $time .'</em>';
 		
 		$output .= '</span>';
 		
