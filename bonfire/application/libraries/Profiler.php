@@ -224,12 +224,12 @@ class CI_Profiler {
 	{	
 		$output = '<span class="ci-profiler-db-explain">';
 		
-		$output .= 'Possible keys: <em>'. $data->possible_keys .'</em>';
+		$output .= 'Speed: <em>'. $time .'</em>';
+		$output .= ' - Possible keys: <em>'. $data->possible_keys .'</em>';
 		$output .= ' - Key Used: <em>'. $data->key .'</em>';
 		$output .= ' - Type: <em>'. $data->type .'</em>';
 		$output .= ' - Rows: <em>'. $data->rows .'</em>';
 		$output .= ' - Extra: <em>'. $data->Extra .'</em>';
-		$output .= ' - Speed: <em>'. $time .'</em>';
 		
 		$output .= '</span>';
 		
