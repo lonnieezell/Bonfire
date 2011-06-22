@@ -194,12 +194,36 @@ class CI_Profiler {
 					$time = number_format($db->query_times[$key], 4);
 					$query = $duplicate ? '<span class="ci-profiler-duplicate">'. $val .'</span>' : $val;
 					
+					// Explain the query
+					$explain = strpos($val, 'sql_mode') === false ? $this->CI->db->query('EXPLAIN '. $val) : null;
+					if (!is_null($explain))
+					{
+						$query .= $this->build_sql_explain($explain->row());
+					}
+					
 					$output[$time] = $query;
 				}
 			}
 
 		}
 
+		return $output;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	private function build_sql_explain($data)
+	{	
+		$output = '<span class="ci-profiler-db-explain">';
+		
+		$output .= 'Possible keys: <em>'. $data->possible_keys .'</em>';
+		$output .= ' - Key Used: <em>'. $data->key .'</em>';
+		$output .= ' - Type: <em>'. $data->type .'</em>';
+		$output .= ' - Rows: <em>'. $data->rows .'</em>';
+		$output .= ' - Extra: <em>'. $data->Extra .'</em>';
+		
+		$output .= '</span>';
+		
 		return $output;
 	}
 
