@@ -261,7 +261,7 @@ class Users extends Front_Controller {
 			redirect('/');
 		}
 		
-		$this->load->model('roles/permission_model');
+		$this->load->model('permissions/permission_model');
 		$this->load->model('roles/role_model');
 	
 		if ($this->input->post('submit'))
