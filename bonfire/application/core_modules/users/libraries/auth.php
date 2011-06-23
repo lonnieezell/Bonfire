@@ -304,8 +304,6 @@ class Auth  {
 			redirect('login');
 		}
 		
-		$this->load_permissions();
-
 		// Check to see if the user has the proper permissions
 		if (!empty($permission) && !$this->has_permission($permission))
 		{ 
@@ -429,8 +427,12 @@ class Auth  {
 			$role_id = $this->role_id();
 		}
 
-		$perms = (object)$this->perms;
+		if (empty($this->perms)) {
+			$this->load_permissions();
+		}
 
+		$perms = (object)$this->perms;
+		
 		// Did we pass?
 		if ((isset($perms->$permission) && $perms->$permission == 1) || (!in_array($permission, $this->perm_desc) && $override))
 		{
