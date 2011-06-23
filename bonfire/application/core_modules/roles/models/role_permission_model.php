@@ -242,10 +242,6 @@ class Role_permission_model extends BF_Model {
 	 */
 	public function find_for_role($role_id=null) 
 	{
-		if (empty($role_id) || !is_numeric($role_id))
-		{
-			return false;
-		}
 		parent::select('permission_id');
 		return parent::find_all_by('role_id', $role_id);
 	}

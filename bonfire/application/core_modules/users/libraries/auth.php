@@ -460,9 +460,13 @@ class Auth  {
 		$this->perm_desc = $perms;
 		
 		$role_perms = $this->ci->role_permission_model->find_for_role($this->role_id());
-		foreach($role_perms as $key => $permission)
+		
+		if (is_array($role_perms))
 		{
-			$this->perms[$perms[$permission->permission_id]] = 1;
+			foreach($role_perms as $key => $permission)
+			{
+				$this->perms[$perms[$permission->permission_id]] = 1;
+			}
 		}
 	}
 
