@@ -47,6 +47,7 @@
 		<input type="password" name="pass_confirm" value="" />
 	</div>
 	
+	<?php if (has_permission('Bonfire.Roles.Manage')) :?>
 	<fieldset>
 		<legend><?php echo lang('us_role'); ?></legend>
 		
@@ -63,6 +64,7 @@
 			</select>
 		</div>
 	</fieldset>
+	<?php endif; ?>
 	
 	<fieldset>
 		<legend><?php echo lang('us_address'); ?></legend>
