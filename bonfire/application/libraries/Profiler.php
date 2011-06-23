@@ -203,7 +203,7 @@ class CI_Profiler {
 					$query = $duplicate ? '<span class="ci-profiler-duplicate">'. $val .'</span>' : $val;
 					
 					// Explain the query
-					$explain = strpos($val, 'sql_mode') === false ? $this->CI->db->query('EXPLAIN '. $val) : null;
+					$explain = strpos($val, 'SELECT') !== false ? $this->CI->db->query('EXPLAIN '. $val) : null;
 					if (!is_null($explain))
 					{
 						$query .= $this->build_sql_explain($explain->row(), $time);
