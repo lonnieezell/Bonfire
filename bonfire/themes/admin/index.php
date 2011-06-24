@@ -77,6 +77,7 @@
 		head.js(<?php echo Assets::external_js(null, true) ?>);
 	</script>
 	<?php echo Assets::inline_js(); ?>
+	<?php echo Assets::combine_js(); ?>
 
 </body>
 </html>
