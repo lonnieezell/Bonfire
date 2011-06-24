@@ -41,7 +41,7 @@ class Developer extends Admin_Controller {
 	{
 		if ($this->input->post('submit') == lang('mig_migrate_button'))
 		{
-			$core = $this->input->post('core_only') ? 1 : 0;
+			$core = $this->input->post('core_only') ? '' : 'app_';
 			
 			if ($version = $this->input->post('migration'))
 			{
@@ -69,30 +69,29 @@ class Developer extends Admin_Controller {
 	//--------------------------------------------------------------------
 	
 	public function migrate_to($version=0, $type='') 
-	{	
+	{
 		if (!is_numeric($version))
 		{
 			$version = $this->uri->segment(5);
 		}
-		else 
+		
+		$result = $this->migrations->version($version, $type);
+		
+		if ($result !== FALSE)
 		{
-			$result = $this->migrations->version($version, $type);
-			
-			if ($result !== FALSE)
+			if ($result === 0)
 			{
-				if ($result === 0)
-				{
-					Template::set_message('Successfully uninstalled module\'s migrations.', 'success');
-				}
-				else 
-				{
-					Template::set_message('Successfully migrated database to version '. $result, 'success');
-				}
-			} else 
-			{
-				Template::set_message('There was an error migrating the database.', 'error');
+				Template::set_message('Successfully uninstalled module\'s migrations.', 'success');
+				redirect('admin/developer/migrations');
 			}
-			redirect('admin/developer/migrations');
+			else 
+			{
+				Template::set_message('Successfully migrated database to version '. $result, 'success');
+				redirect('admin/developer/migrations');
+			}
+		} else 
+		{
+			Template::set_message('There was an error migrating the database.', 'error');
 		}
 
 		Template::set_message('No version to migrate to.', 'error');
