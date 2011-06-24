@@ -83,6 +83,14 @@ class Assets {
 	protected static $external_scripts 	= array();
 	
 	/*
+		Var: $combine_scripts
+		
+		An array of js code to combine into one js file
+		to be called at the end of the page.
+	*/
+	protected static $combine_scripts 	= array();
+	
+	/*
 		Var: $styles
 		
 		An array of css files to be placed at the
@@ -509,6 +517,36 @@ class Assets {
 		// Close the shell.
 		$output .= "\n" . self::$ci->config->item('assets.js_closer') . "\n";
 		$output .= '</script>' . "\n";
+		
+		return $output;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: combine_js()
+		
+		Does the actual work of generating the combined js code. All code is 
+		wrapped by open and close tags specified in the config file, so that 
+		you can modify it to use your favorite js library.
+		
+		It is called by the js() method.
+		
+		Return: 
+			void
+	 */
+	public static function combine_js() 
+	{
+		// Are there any scripts to include? 
+		if (count(self::$combine_scripts) == 0)
+		{
+			return;
+		}
+	
+		$output = '';
+
+		// Create our shell opening
+		$output .= '<script type="text/javascript" src="'.  site_url('loader/js/'.implode('~', str_replace("/", "-", self::$combine_scripts))) .'"></script>' . "\n";
 		
 		return $output;
 	}

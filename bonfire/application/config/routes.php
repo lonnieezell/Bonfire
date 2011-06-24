@@ -48,6 +48,8 @@ $route['logout']				= 'users/logout';
 $route['forgot_password']		= 'users/forgot_password';
 $route['reset_password/(:any)/(:any)']	= "users/reset_password/$1/$2";
 
+$route['loader/(:any)/(:any)']	= "ui/loader/$1/$2";
+
 // Contexts
 $route['admin/([a-z_]+)/(:any)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$4/$5";
 $route['admin/([a-z_]+)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$5";
