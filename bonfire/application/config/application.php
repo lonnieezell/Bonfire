@@ -251,26 +251,3 @@ $config['assets.asset_folders'] = array(
 */
 $config['assets.js_opener'] = 'head.ready(function(){'. "\n";
 $config['assets.js_closer'] = '});'. "\n";
-
-
-
-//--------------------------------------------------------------------
-// !PAGES
-//--------------------------------------------------------------------
-
-/*
-	Specifies the name of the RTE to use for the pages editors, and 
-	other editors throughout the system. Defaults to none.
-	
-	The choices are: 'html', 'markdown', 'textile', 'tinymce'
-*/
-$config['pages.rte'] = 'html';
-
-/*
-	These items set the default settings for new pages within the system.
-*/
-$config['pages.default_cacheable'] = 1;	// Are pages cacheable by default? 
-$config['pages.default_searchable'] = 1;	// Are pages searchable by default?
-$config['pages.default_rich_text'] = 1;	// Is the RTE enabled by default?
-$config['pages.track_hits'] = 1;		// Should page hits be tracked in the system?
-$config['pages.home_page_alias'] = 'page-12';	// The home page
