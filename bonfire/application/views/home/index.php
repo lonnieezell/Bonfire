@@ -20,7 +20,16 @@
 
 <p>If you are new to Bonfire, you should start by reading the <?php echo anchor('/docs', 'docs') ?>.</p>
 
+<?php if ($logged_in) : ?>
+
+<p style="text-align: center">
+	<?php echo anchor('/admin', 'Dive into bonfire\'s Springboard'); ?>
+</p>
+
+<?php else :?>
+
 <p style="text-align: center">
 	<?php echo anchor('/login', 'Login'); ?>
 </p>
 
+<?php endif;?>
