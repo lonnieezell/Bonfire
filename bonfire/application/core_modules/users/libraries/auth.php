@@ -250,7 +250,7 @@ class Auth  {
 		}
 		
 		// Is there any session data we can use? 
-		if ($this->ci->session->userdata('email') && $this->ci->session->userdata('user_id'))
+		if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
 		{
 			// Grab the user account
 			$user = $this->ci->user_model->select('id, username, email, first_name, last_name, salt, password_hash')->find($this->ci->session->userdata('user_id'));
@@ -350,8 +350,14 @@ class Auth  {
 		Return:
 			The user's username.
 	*/
-	public function username() 
+	public function username()
 	{
+		// if we're using "both" as login type, is session identity a username?
+		if (config_item('auth.login_type') !== 'email' && (config_item('auth.user_usernames')))
+		{	
+			return $this->ci->session->userdata('identity');
+		}
+		
 		return $this->ci->session->userdata('username');
 	}
 	
@@ -367,7 +373,18 @@ class Auth  {
 	*/
 	public function email() 
 	{
-		return $this->ci->session->userdata('email');
+		// let's make sure we have an email at session userdata
+		$this->ci->load->helper('email');
+		
+		if (valid_email($this->ci->session->userdata('identity')))
+		{
+			// Grab the session var's identity and return his email
+			return $this->ci->session->userdata('identity');
+		}		
+		
+		// We may have to grab the user from the db and return his email
+		return $this->ci->user_model->get_field($this->ci->session->userdata('user_id'),'email');
+			
 	}
 	
 	//--------------------------------------------------------------------
@@ -385,8 +402,24 @@ class Auth  {
 	{
 		// daK - temporarly disabled, returning username
 		return $this->ci->session->userdata('username');
+	}	
+	//--------------------------------------------------------------------
+
+	/*
+		Method: identity()
+		
+		Retrieves the logged identity from the current session.
+		Built from the user's login options.
+		
+		Return:
+			string	- The identity used to login.
+	*/
+	public function identity() 
+	{
+
+		return $this->ci->session->userdata('identity');
 	}
-	
+
 	//--------------------------------------------------------------------	
 	
 	/*		
@@ -656,7 +689,7 @@ class Auth  {
 				
 				if (!$user) { return; }
 				
-				$this->setup_session($user->id, $user->password_hash, $user->email, $user->role_id, true, $test_token, ucwords($user->first_name.' '.$user->last_name));
+				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, true, $test_token, ucwords($user->first_name.' '.$user->last_name));
 			}
 		}
 		
@@ -798,11 +831,18 @@ class Auth  {
 	*/
 	private function setup_session($user_id=0, $username='', $password_hash=null, $email='', $role_id=0, $remember=false, $old_token=null,$user_name='') 
 	{
-		if (empty($user_id) || empty($email))
+		if (empty($user_id) || (empty($email) && empty($username)))
 		{
 			return false;
 		}
 		
+		// What are we using as login identity?
+		// If "both", defaults to email, unless we display usernames globally
+		if ((config_item('auth.login_type') ==  'both'))
+			$login = config_item('auth.use_usernames') ? $username : $email;
+		else 
+			$login = (config_item('auth.login_type') == 'username') ? $username : $email;
+
 		// Save the user's session info
 		if (!class_exists('CI_Session'))
 		{
@@ -817,7 +857,7 @@ class Auth  {
 			'user_id'		=> $user_id,
 			'username'		=> $username,
 			'user_token'	=> do_hash($user_id . $password_hash),
-			'email'			=> $email,
+			'identity'		=> $login,
 			'role_id'		=> $role_id,
 			'logged_in'		=> true,
 		);
