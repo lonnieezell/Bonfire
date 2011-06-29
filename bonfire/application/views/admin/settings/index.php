@@ -50,7 +50,15 @@
 		
 		<div>
 			<label><?php echo lang('bf_use_usernames') ?></label>
-			<input type="checkbox" name="use_usernames" id="use_usernames" value="1" <?php echo config_item('auth.use_usernames') == 1 ? 'checked="checked"' : set_checkbox('auth.use_usernames', 1); ?> />
+			<label style="display: inline" class="text-left"><?php echo lang('bf_username') ?>
+				<input type="radio" name="use_usernames" id="use_usernames" value="1" <?php echo config_item('auth.use_usernames') == 1 ? 'checked="checked"' : set_radio('auth.use_usernames', 1); ?> />
+			</label>
+			<label style="display: inline" class="text-left"><?php echo lang('bf_use_own_name') ?>
+				<input type="radio" name="use_usernames" id="use_usernames" value="2" <?php echo config_item('auth.use_usernames') == 2 ? 'checked="checked"' : set_radio('auth.use_usernames', 2); ?> />
+			</label>
+			<label style="display: inline" class="text-left"><?php echo lang('bf_email') ?>
+				<input type="radio" name="use_usernames" id="use_usernames" value="0" <?php echo config_item('auth.use_usernames') == 0 ? 'checked="checked"' : set_radio('auth.use_usernames', 0); ?> />
+			</label>
 		</div>
 		
 		<div>
@@ -78,7 +86,12 @@
 		<div>
 			<label><?php echo lang('bf_update_show_edge') ?></label>
 			<input type="checkbox" name="update_check" value="1" <?php echo config_item('updates.bleeding_edge') == 1 ? 'checked="checked"' : set_checkbox('updates.bleeding_edge', 1); ?> />
-			<p class="small" style="display: inline">Leave unchecked to only check for new tagged updates. Check to see any new commits to the official repository.</p>
+			<p class="small" style="display: inline"><?php echo lang('bf_update_info_edge') ?></p>
+		</div>		
+		<div>
+			<label><?php echo lang('bf_ext_profile_show') ?></label>
+			<input type="checkbox" name="use_ext_profile" value="1" <?php echo config_item('auth.use_extended_profile') == 1 ? 'checked="checked"' : set_checkbox('auth.use_extended_profile', 1); ?> />
+			<p class="small" style="display: inline"><?php echo lang('bf_ext_profile_info') ?></p>
 		</div>
 	</fieldset>
 	<?php endif; ?>
