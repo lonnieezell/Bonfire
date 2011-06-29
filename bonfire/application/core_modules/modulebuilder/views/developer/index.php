@@ -9,18 +9,6 @@
 	}
 ?>
 
-<?php if ($this->session->flashdata('error')): ?>
-<div class="top_error"><?php echo $this->session->flashdata('error')?></div>
-<?php endif; ?>
-
-<?php // echo validation_errors(); for debuggging only ?>
-	
-<?php if ($form_error): ?>
-<div class="important">
-<h4>Please correct the errors below.</h4>
-</div>
-<?php endif; ?>
-
 <div class="notification information">
 	<p><b>Fill out the fields you would like in your module (an "id" field is created automatically).  If you want to create the SQL for a DB table check "DB Required".</b></p>
 	
@@ -30,6 +18,19 @@
 	<br />If you ever need to put a backslash ("\") or a single quote ("'") amongst those values, precede it with a backslash (for example '\\xyz' or 'a\'b').
 	</p>
 </div>
+
+<?php if ($this->session->flashdata('error')): ?>
+<div class="top_error"><?php echo $this->session->flashdata('error')?></div>
+<?php endif; ?>
+<div class="notification error">
+<?php echo validation_errors();  ?>
+</div>
+<?php if ($form_error): ?>
+<div class="important">
+<h4>Please correct the errors below.</h4>
+</div>
+<?php endif; ?>
+
 
 <?php echo form_open($cur_url."/index/".$field_total."/", 'class="constrained"'); ?>
 <div>  
@@ -47,9 +48,9 @@
 		<div>
 			<label for="contexts" class="block">Contexts Required</label>
 			
-			<input name="contexts[]" type="checkbox" value="public" <?php echo set_checkbox("contexts[]", 'public', true); ?> /> Public
+			<input name="contexts[]" type="checkbox" value="public" <?php echo set_checkbox("contexts", 'public', true); ?> /> Public
 			<?php foreach (config_item('contexts') as $context) : ?>
-				<input name="contexts[]" type="checkbox" value="<?php echo $context ?>" <?php echo set_checkbox("contexts[]", $context, true); ?> /> <?php echo ucwords($context) ?>
+				<input name="contexts[]" type="checkbox" value="<?php echo $context ?>" <?php echo set_checkbox("contexts", $context, true); ?> /> <?php echo ucwords($context) ?>
 			<?php endforeach; ?>
 		</div>
 		<div>
