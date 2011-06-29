@@ -28,6 +28,13 @@ $lang['us_no_permission']			= 'You do not have permission to access that page.';
 $lang['us_access_logs']				= 'Access Logs';
 $lang['us_logged_in_on']			= 'logged in on';
 $lang['us_no_access_message']		= '<p>Congratulations!</p><p>All of your users have good memories!</p>';
+$lang['us_log_create']				= 'created a new';
+$lang['us_log_edit']				= 'modified user';
+$lang['us_log_delete']				= 'deleted user';
+$lang['us_log_logged']				= 'logged in from';
+$lang['us_log_reset']				= 'reset their password.';
+$lang['us_log_register']			= 'registered a new account.';
+
 
 $lang['us_deleted_users']			= 'Deleted Users';
 $lang['us_purge_del_accounts']		= 'Purge Deleted Accounts';
