@@ -67,9 +67,9 @@ class Settings extends Admin_Controller {
 	
 	private function save_settings() 
 	{
-		$this->form_validation->set_rules('title', 'Site Name', 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('system_email', 'Site Email', 'required|trim|strip_tags|valid_email|xss_clean');
-		$this->form_validation->set_rules('list_limit', 'List Limit', 'required|trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('title', lang('bf_site_name'), 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('system_email', lang('bf_site_email'), 'required|trim|strip_tags|valid_email|xss_clean');
+		$this->form_validation->set_rules('list_limit','Items <em>p.p.</em>', 'required|trim|strip_tags|numeric|xss_clean');
 		
 		if ($this->form_validation->run() === false)
 		{
@@ -84,9 +84,10 @@ class Settings extends Admin_Controller {
 			
 			'auth.allow_register'	=> isset($_POST['allow_register']) ? 1 : 0,
 			'auth.login_type'		=> $this->input->post('login_type'),
-			'auth.use_usernames'	=> isset($_POST['use_usernames']) ? 1 : 0,
+			'auth.use_usernames'	=> isset($_POST['use_usernames']) ? $this->input->post('use_usernames') : 0,
 			'auth.allow_remember'	=> isset($_POST['allow_remember']) ? 1 : 0,
 			'auth.remember_length'	=> (int)$this->input->post('remember_length'),
+			'auth.use_extended_profile' => isset($_POST['use_ext_profile']) ? 1 : 0,
 			
 			'updates.bleeding_edge'	=> isset($_POST['update_check']) ? 1 : 0,
 		);

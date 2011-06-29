@@ -31,7 +31,7 @@ $lang['bf_site_email_help']		= 'The default email that system-generated emails a
 $lang['bf_site_status']			= 'Site Status';
 $lang['bf_online']				= 'Online';
 $lang['bf_offline']				= 'Offline';
-$lang['bf_top_number']			= 'Top How Many?';
+$lang['bf_top_number']			= 'Items <em>per</em> page:';
 $lang['bf_top_number_help']		= 'When viewing reports, how many items should be listed at a time?';
 
 $lang['bf_security']			= 'Security';
@@ -40,7 +40,8 @@ $lang['bf_login_type_email']	= 'Email Only';
 $lang['bf_login_type_username']	= 'Username Only';
 $lang['bf_allow_register']		= 'Allow User Registrations?';
 $lang['bf_login_type_both']		= 'Email or Username';
-$lang['bf_use_usernames']		= 'Use Usernames';
+$lang['bf_use_usernames']		= 'User display across bonfire:';
+$lang['bf_use_own_name']		= 'Use Own Name';
 $lang['bf_allow_remember']		= 'Allow \'Remember Me\'?';
 $lang['bf_remember_time']		= 'Remember Users For';
 $lang['bf_week']				= 'Week';
@@ -71,6 +72,10 @@ $lang['bf_action_login']		= 'Login';
 $lang['bf_actions']				= 'Actions';
 
 $lang['bf_update_show_edge']	= 'View bleeding edge updates?';
+$lang['bf_update_info_edge']	= 'Leave unchecked to only check for new tagged updates. Check to see any new commits to the official repository.';
+
+$lang['bf_ext_profile_show']	= 'Does User accounts have extended profile?';
+$lang['bf_ext_profile_info']	= 'Check \"Extended Profiles\" to have extra profile data available from users table, ex: address fields.';
 
 $lang['bf_yes']					= 'Yes';
 $lang['bf_no']					= 'No';
