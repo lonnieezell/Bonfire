@@ -101,7 +101,7 @@ class Settings extends Admin_Controller {
 			if ($id = $this->save_user())
 			{
 				$user = $this->user_model->find($id);
-				$this->activity_model->log_activity($this->auth->user_id(), 'created a new '. $user->role_name .' user: '. $user->email, 'users');
+				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_create').' '. $user->role_name . ': '.(config_item('auth.use_usernames') ? $user->username : $user->email), 'users');
 				
 				Template::set_message('User successfully created.', 'success');
 				Template::redirect('admin/settings/users');
@@ -134,7 +134,8 @@ class Settings extends Admin_Controller {
 			if ($this->save_user('update', $user_id))
 			{
 				$user = $this->user_model->find($user_id);
-				$this->activity_model->log_activity($this->auth->user_id(), 'modified user: '. $user->email, 'users');
+
+				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_edit') .': '.(config_item('auth.use_usernames') ? $user->username : $user->email), 'users');
 			
 				Template::set_message('User successfully updated.', 'success');
 				//redirect('admin/settings/users');
@@ -166,7 +167,7 @@ class Settings extends Admin_Controller {
 			if ($this->user_model->delete($id))
 			{
 				$user = $this->user_model->find($id);
-				$this->activity_model->log_activity($this->auth->user_id(), 'deleted user: '. $user->email, 'users');
+				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_delete') . ': '.(config_item('auth.use_usernames') ? $user->username : $user->email), 'users');
 				Template::set_message('The User was successfully deleted.', 'success');
 			} else
 			{
