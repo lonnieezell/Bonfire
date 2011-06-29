@@ -167,7 +167,7 @@ class Auth  {
 				$this->clear_login_attempts($login);
 				
 				// We've successfully validated the login, so setup the session
-				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', ucwords($user->first_name.' '.$user->last_name));
+				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', $this->abbrev_name($user->first_name.' '.$user->last_name));
 				
 				// Save the login info
 				$data = array(
@@ -464,7 +464,7 @@ class Auth  {
 		}
 		/* 
 			TODO: Consider an optional parameter for picking custom var session.
-					Also not accepting str, making it auth private
+					Also not accepting str, making it auth private, and duplicate it as an helper with parameter
 		*/
 		
 	return $name;
@@ -739,7 +739,7 @@ class Auth  {
 				
 				if (!$user) { return; }
 				
-				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, true, $test_token, ucwords($user->first_name.' '.$user->last_name));
+				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, true, $test_token, $this->abbrev_name($user->first_name.' '.$user->last_name));
 			}
 		}
 		
@@ -892,12 +892,12 @@ class Auth  {
 		if ((config_item('auth.login_type') ==  'both'))
 			$login = config_item('auth.use_usernames') ? $username : $email;
 		else 
-			$login = (config_item('auth.login_type') == 'username') ? $username : $email;
+			$login = config_item('auth.login_type') == 'username' ? $username : $email;
 
 		// For backward compatibility, defaults to username
 		// If we're displaying user own name, make sure it's there.
 	
-		$us_custom = config_item('auth.use_usernames') == 2 ? $this->abbrev_name($user_name) : $username;
+		$us_custom = config_item('auth.use_usernames') == 2 ? $user_name : $username;
 		
 		// Save the user's session info
 		if (!class_exists('CI_Session'))
