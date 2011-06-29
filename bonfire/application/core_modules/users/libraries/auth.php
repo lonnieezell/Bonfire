@@ -423,6 +423,41 @@ class Auth  {
 	//--------------------------------------------------------------------	
 	
 	/*		
+		Method: abbrev_name()
+		
+		Retrieves first and last name from given string.
+		
+		Return:
+			string	- The First and Last name from given parameter.
+	*/	
+	public function abbrev_name( $name = '') 
+	{
+		Console::log($name);
+		
+		if ($name)
+		
+		{
+			list( $fname, $lname ) = explode( ' ', $name, 2 );
+			if ( is_null($lname) ) //Meaning only one name was entered...
+			{
+				$lastname = ' ';
+			}
+			else
+			{
+				$lname = explode( ' ', $lname );
+				$size = sizeof($lname);
+				$lastname = $lname[$size-1];
+			}
+		return $fname.' '.$lastname ;
+			
+		}
+		
+	return $name;
+	}
+	
+	//--------------------------------------------------------------------	
+	
+	/*		
 		Method: role_id()
 		
 		Retrieves the role_id from the current session.
@@ -843,6 +878,11 @@ class Auth  {
 		else 
 			$login = (config_item('auth.login_type') == 'username') ? $username : $email;
 
+		// For backward compatibility, let's pre-define a username session var
+		// Are we using the user made name as primary display option? Set custom var session.
+		// Let's abbreviate name to spare some kbs
+		$us_custom = config_item('auth.use_usernames') == 2 ? $this->abbrev_name($user_name) : $username; // :'' ;
+		
 		// Save the user's session info
 		if (!class_exists('CI_Session'))
 		{
