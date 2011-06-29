@@ -353,12 +353,15 @@ class Auth  {
 	public function username()
 	{
 		// if we're using "both" as login type, is session identity a username?
-		if (config_item('auth.login_type') !== 'email' && (config_item('auth.user_usernames')))
+		if 	(config_item('auth.login_type') == 'username' OR 
+			(config_item('auth.login_type') !== 'email' && (config_item('auth.user_usernames'))))
 		{	
 			return $this->ci->session->userdata('identity');
 		}
 		
-		return $this->ci->session->userdata('username');
+		// TODO: consider optional bool to force using custom session var
+		// just in case, and backport guarantee, we're returning custom session var 
+		return $this->ci->session->userdata('auth_custom');
 	}
 	
 	//--------------------------------------------------------------------
@@ -392,16 +395,27 @@ class Auth  {
 	/*
 		Method: user_name()
 		
-		Retrieves the user's name from the current session.
+		Retrieves the logged user's name.
 		Built from the user's first_name and last_name fields.
 		
 		Return:
-			The user's first and last name.
+			The logged user's first and last name.
 	*/
 	public function user_name() 
 	{
-		// daK - temporarly disabled, returning username
-		return $this->ci->session->userdata('username');
+		/* 
+		  TODO: Should we user an optional parameter to make it read from session?
+			// if true parameter
+			// Did we set a custom var for this?
+			// return $this->ci->session->userdata('auth_custom');
+		*/
+		// We have to grab the user from the db and return his name. 
+		$user = $this->ci->user_model->select('id, first_name, last_name')
+				->find($this->ci->session->userdata('user_id'));
+		
+		return ($user->first_name.' '.$user->last_name);
+
+
 	}	
 	//--------------------------------------------------------------------
 
@@ -409,7 +423,7 @@ class Auth  {
 		Method: identity()
 		
 		Retrieves the logged identity from the current session.
-		Built from the user's login options.
+		Built from the user's submited login.
 		
 		Return:
 			string	- The identity used to login.
@@ -431,14 +445,11 @@ class Auth  {
 			string	- The First and Last name from given parameter.
 	*/	
 	public function abbrev_name( $name = '') 
-	{
-		Console::log($name);
-		
-		if ($name)
-		
+	{		
+		if (is_string($name))
 		{
 			list( $fname, $lname ) = explode( ' ', $name, 2 );
-			if ( is_null($lname) ) //Meaning only one name was entered...
+			if ( is_null($lname) ) // Meaning only one name was entered...
 			{
 				$lastname = ' ';
 			}
@@ -446,11 +457,15 @@ class Auth  {
 			{
 				$lname = explode( ' ', $lname );
 				$size = sizeof($lname);
-				$lastname = $lname[$size-1];
+				$lastname = $lname[$size-1]; //
 			}
-		return $fname.' '.$lastname ;
+		return trim($fname.' '.$lastname) ;
 			
 		}
+		/* 
+			TODO: Consider an optional parameter for picking custom var session.
+					Also not accepting str, making it auth private
+		*/
 		
 	return $name;
 	}
@@ -853,8 +868,9 @@ class Auth  {
 		
 		Parameters:
 			$user_id		- An int with the user's id 
+			$auth_custom	- A contentor for user auth custom data. 
 			$password_hash	- The user's password hash. Used to create a new, unique user_token.
-			$email			- The user's email address.
+			$identity		- The user's login identity used: email or username
 			$role_id		- The user's role_id
 			$remember		- A boolean (true/false). Whether to keep the user logged in.
 			
@@ -878,10 +894,10 @@ class Auth  {
 		else 
 			$login = (config_item('auth.login_type') == 'username') ? $username : $email;
 
-		// For backward compatibility, let's pre-define a username session var
-		// Are we using the user made name as primary display option? Set custom var session.
-		// Let's abbreviate name to spare some kbs
-		$us_custom = config_item('auth.use_usernames') == 2 ? $this->abbrev_name($user_name) : $username; // :'' ;
+		// For backward compatibility, defaults to username
+		// If we're displaying user own name, make sure it's there.
+	
+		$us_custom = config_item('auth.use_usernames') == 2 ? $this->abbrev_name($user_name) : $username;
 		
 		// Save the user's session info
 		if (!class_exists('CI_Session'))
@@ -895,7 +911,7 @@ class Auth  {
 		
 		$data = array(
 			'user_id'		=> $user_id,
-			'username'		=> $username,
+			'auth_custom'	=> $us_custom,
 			'user_token'	=> do_hash($user_id . $password_hash),
 			'identity'		=> $login,
 			'role_id'		=> $role_id,
