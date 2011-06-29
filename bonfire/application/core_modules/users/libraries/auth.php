@@ -376,16 +376,26 @@ class Auth  {
 	*/
 	public function email() 
 	{
-		// let's make sure we have an email at session userdata
+		//TODO: Is it worth to define a class valid_email() instead of loading CI helper?
 		$this->ci->load->helper('email');
 		
-		if (valid_email($this->ci->session->userdata('identity')))
-		{
-			// Grab the session var's identity and return his email
-			return $this->ci->session->userdata('identity');
-		}		
+		// let's make sure we don't have an email at session userdata
 		
-		// We may have to grab the user from the db and return his email
+		if ( valid_email($this->ci->session->userdata('identity')))
+		{
+			return	$this->ci->session->userdata('identity');
+		}	
+		else if	( valid_email($this->ci->session->userdata('auth_custom')))
+			{
+				return	$this->ci->session->userdata('auth_custom');
+			}
+			else
+			{
+				// We may have to grab the user from the db and return his email
+				logit('[Auth.email()] - Why are we going through DB?');
+			}	
+	
+		// Should I take this out and return false, leaving it to model?
 		return $this->ci->user_model->get_field($this->ci->session->userdata('user_id'),'email');
 			
 	}
@@ -870,16 +880,21 @@ class Auth  {
 		}
 		
 		// What are we using as login identity?
+		//Should I use _identity_login() and move bellow code?
+		
 		// If "both", defaults to email, unless we display usernames globally
 		if ((config_item('auth.login_type') ==  'both'))
 			$login = config_item('auth.use_usernames') ? $username : $email;
 		else 
 			$login = config_item('auth.login_type') == 'username' ? $username : $email;
 
-		// For backward compatibility, defaults to username
-		// If we're displaying user own name, we'll use it.
-
-		$us_custom = config_item('auth.use_usernames') == 2 ? $user_name : $username;
+		// TODO: consider taking this out of setup_session()
+		if (config_item('auth.use_usernames') == 0  && config_item('auth.login_type') ==  'username')
+			// if we've a username at identity, and don't want made user name, let's have an email nearby.
+			$us_custom = $email;
+		else
+			// For backward compatibility, defaults to username
+			$us_custom = config_item('auth.use_usernames') == 2 ? $user_name : $username;
 		
 		// Save the user's session info
 		if (!class_exists('CI_Session'))
