@@ -29,6 +29,13 @@
 		<p class="small" style="display: inline"><?php echo lang('role_default_note'); ?></p>
 	</div>
 	
+	<div>
+		<label><?php echo lang('role_can_delete_role'); ?>?</label>
+		<input type="radio" name="can_delete" value="1" <?php echo isset($role) && $role->can_delete == 1 ? 'checked="checked"' : '' ?> />Yes
+		<input type="radio" name="can_delete" value="0" <?php echo isset($role) && $role->can_delete == 0 ? 'checked="checked"' : '' ?> />No
+		<p class="small" style="display: inline"><?php echo lang('role_can_delete_note'); ?></p>
+	</div>
+	
 	<!-- Permissions -->
 	<fieldset>
 		<legend><?php echo lang('role_permissions'); ?></legend>
