@@ -132,6 +132,28 @@ class Role_model extends BF_Model {
 		
 		return parent::update($id, $data);
 	}
+    
+    //--------------------------------------------------------------------
+    
+    /*
+        Method: can_delete_role()
+    
+        Verifies that a role can be deleted
+    
+        Return:
+            True/False
+    */
+    function can_delete_role($id=0)
+    {
+        $delete_role = parent::find($id);
+    
+        if ($delete_role->can_delete == 1)
+        {
+            return TRUE;    
+        }
+    
+        return FALSE;
+    }
 	
 	function delete($id=0, $purge=false) 
 	{
@@ -140,6 +162,13 @@ class Role_model extends BF_Model {
 			// temporarily set the soft_deletes to true.
 			$this->soft_deletes = false;
 		}
+        
+        // check if can be deleted
+        if ($this->can_delete_role($id) == FALSE)
+        {
+            $this->error = 'This role can not be deleted.';
+            return false;
+        }
 		
 		// delete the ercord
 		$deleted = parent::delete($id);
