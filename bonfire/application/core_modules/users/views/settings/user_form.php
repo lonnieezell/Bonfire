@@ -65,7 +65,7 @@
 	</fieldset>
 	<?php endif; ?>
 
-	<?php  if (config_item('auth.use_extended_profile')) :?>
+	<?php  if ( ! config_item('auth.use_extended_profile')) :?>
 	<fieldset>
 		<legend><?php echo lang('us_address'); ?></legend>
 		
