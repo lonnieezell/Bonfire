@@ -167,7 +167,7 @@ class Auth  {
 				$this->clear_login_attempts($login);
 				
 				// We've successfully validated the login, so setup the session
-				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', $this->abbrev_name($user->first_name.' '.$user->last_name));
+				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', abbrev_name($user->first_name.' '.$user->last_name));
 				
 				// Save the login info
 				$data = array(
@@ -443,42 +443,6 @@ class Auth  {
 	//--------------------------------------------------------------------	
 	
 	/*		
-		Method: abbrev_name()
-		
-		Retrieves first and last name from given string.
-		
-		Return:
-			string	- The First and Last name from given parameter.
-	*/	
-	public function abbrev_name( $name = '') 
-	{		
-		if (is_string($name))
-		{
-			list( $fname, $lname ) = explode( ' ', $name, 2 );
-			if ( is_null($lname) ) // Meaning only one name was entered...
-			{
-				$lastname = ' ';
-			}
-			else
-			{
-				$lname = explode( ' ', $lname );
-				$size = sizeof($lname);
-				$lastname = $lname[$size-1]; //
-			}
-		return trim($fname.' '.$lastname) ;
-			
-		}
-		/* 
-			TODO: Consider an optional parameter for picking custom var session.
-					Also not accepting str, making it auth private, and duplicate it as an helper with parameter
-		*/
-		
-	return $name;
-	}
-	
-	//--------------------------------------------------------------------	
-	
-	/*		
 		Method: role_id()
 		
 		Retrieves the role_id from the current session.
@@ -745,7 +709,7 @@ class Auth  {
 				
 				if (!$user) { return; }
 				
-				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, true, $test_token, $this->abbrev_name($user->first_name.' '.$user->last_name));
+				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, true, $test_token, abbrev_name($user->first_name.' '.$user->last_name));
 			}
 		}
 		
@@ -896,8 +860,10 @@ class Auth  {
 		Access:
 			Private
 	*/
+
 	private function setup_session($user_id=0, $username='', $password_hash=null, $email='', $role_id=0, $remember=false, $old_token=null,$user_name='') 
 	{
+
 		if (empty($user_id) || (empty($email) && empty($username)))
 		{
 			return false;
@@ -912,7 +878,7 @@ class Auth  {
 
 		// For backward compatibility, defaults to username
 		// If we're displaying user own name, we'll use it.
-	
+
 		$us_custom = config_item('auth.use_usernames') == 2 ? $user_name : $username;
 		
 		// Save the user's session info
@@ -945,6 +911,26 @@ class Auth  {
 		return true;
 	}
 	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: _identity_login()
+		
+		Returns the identity to be used upon user registration.
+		
+		Return:
+			
+			
+		Access:
+			Private
+	*/	
+
+	private function _identity_login ()
+	{
+		//Should I move indentity conditional code from setup_session() here?
+		//Or should conditional code be moved to auth->identity(), 
+		//  and if Optional true is passed, it would then determine wich identity to store in userdata?
+	}
 	//--------------------------------------------------------------------
 	
 }
@@ -1008,4 +994,40 @@ function has_permission($permission=null, $override = FALSE)
 	}
 	
 	return false;
+}
+
+//--------------------------------------------------------------------	
+
+/*		
+	Function: abbrev_name()
+	
+	Retrieves first and last name from given string.
+	
+	Return:
+		string	- The First and Last name from given parameter.
+*/	
+function abbrev_name( $name = '') 
+{		
+	if (is_string($name))
+	{
+		list( $fname, $lname ) = explode( ' ', $name, 2 );
+		if ( is_null($lname) ) // Meaning only one name was entered...
+		{
+			$lastname = ' ';
+		}
+		else
+		{
+			$lname = explode( ' ', $lname );
+			$size = sizeof($lname);
+			$lastname = $lname[$size-1]; //
+		}
+	return trim($fname.' '.$lastname) ;
+		
+	}
+	/* 
+		TODO: Consider an optional parameter for picking custom var session.
+			Making it auth private, and using auth custom var
+	*/
+	
+return $name;
 }
