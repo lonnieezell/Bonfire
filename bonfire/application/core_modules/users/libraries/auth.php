@@ -358,10 +358,24 @@ class Auth  {
 		{	
 			return $this->ci->session->userdata('identity');
 		}
-		
+		else // email logintype with username has a username session var
+			if (config_item('auth.use_usernames') == 1) 
+			{
+				return $this->ci->session->userdata('auth_custom');
+			}
+			
 		// TODO: consider optional bool to force using custom session var
-		// just in case, and backport guarantee, we're returning custom session var 
-		return $this->ci->session->userdata('auth_custom');
+		// don't know if we should give a db call option here
+		logit('[Auth.username()] - Why are we going through DB?' , 'warn');
+		
+		// We have to grab the user from the db and return his username. 
+		$user = $this->ci->user_model->select('username')
+				->find($this->ci->session->userdata('user_id'));
+		
+		return $user->username;
+		
+		
+		
 	}
 	
 	//--------------------------------------------------------------------
