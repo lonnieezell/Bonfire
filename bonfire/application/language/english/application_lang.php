@@ -75,7 +75,7 @@ $lang['bf_update_show_edge']	= 'View bleeding edge updates?';
 $lang['bf_update_info_edge']	= 'Leave unchecked to only check for new tagged updates. Check to see any new commits to the official repository.';
 
 $lang['bf_ext_profile_show']	= 'Does User accounts have extended profile?';
-$lang['bf_ext_profile_info']	= 'Check \"Extended Profiles\" to have extra profile data available from users table, ex: address fields.';
+$lang['bf_ext_profile_info']	= 'Check "Extended Profiles" to have extra profile meta-data available option(wip), omiting some default bonfire fields (eg: address).';
 
 $lang['bf_yes']					= 'Yes';
 $lang['bf_no']					= 'No';
