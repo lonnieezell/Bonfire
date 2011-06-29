@@ -66,8 +66,9 @@ $config['auth.remember_length'] = 1209600;
 // Should we do a custom login redirect, or just go to '/'?
 $config['auth.do_login_redirect'] = 0;
 
-// Does User accounts have extended profile? (ex: address, dob, ...).
-$config['auth.use_extended_profile'] = 1;
+// Does User accounts have extended profile? Enabling will allow meta user data (wip)
+// 	also omits some default springboard user fields (eg: omits address fields) to allow customization.
+$config['auth.use_extended_profile'] = 0;
 
 //--------------------------------------------------------------------
 // CONTEXTS
