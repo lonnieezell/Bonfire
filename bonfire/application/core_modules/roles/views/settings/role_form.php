@@ -46,7 +46,7 @@
 
 	<br/>
 
-	<?php if (isset($role)) : ?>
+	<?php if ($role->can_delete) : ?>
 	<div class="box delete rounded">
 		<a class="button" id="delete-me" href="<?php echo site_url('admin/settings/roles/delete/'. $role->role_id); ?>" onclick="return confirm('Are you sure you want to delete this role?')"><?php echo lang('role_delete_role'); ?></a>
 		
