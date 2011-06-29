@@ -40,16 +40,16 @@ class Developer extends Admin_Controller {
 	public function index()
 	{
 		$hide_form = false;
-		$field_total = 6;
+		$this->field_total = 6;
 		$last_seg = $this->uri->segment( $this->uri->total_segments() );
 
 		if (is_numeric($last_seg)) {
-			$field_total = $last_seg;
+			$this->field_total = $last_seg;
 		}
 		
-		if ($this->validate_form($field_total) == FALSE) // validation hasn't been passed
+		if ($this->validate_form($this->field_total) == FALSE) // validation hasn't been passed
 		{
-			Template::set('field_total', $field_total);
+			Template::set('field_total', $this->field_total);
 			
 			if (!empty($_POST))
 			{
@@ -65,7 +65,7 @@ class Developer extends Admin_Controller {
 		}
 		else // passed validation proceed to second page
 		{
-			$this->build_module($field_total);
+			$this->build_module($this->field_total);
 			
 			Template::set_view('developer/output');
 		}
@@ -93,19 +93,36 @@ class Developer extends Admin_Controller {
 		{
 			if ($counter != 1) // better to do it this way round as this statement will be fullfilled more than the one below
 			{
-				$this->form_validation->set_rules("view_field_label$counter",'Label','trim|xss_clean');       
+				$this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|xss_clean');
 			}
 			else
 			{
 				// the first field always needs to be required i.e. we need to have at least one field in our form
-				$this->form_validation->set_rules("view_field_label$counter",'Label','trim|required|xss_clean');
+				$this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|required|xss_clean');
 			}
 			
-			$this->form_validation->set_rules("view_field_name$counter",'Name',"trim|requiredif[view_field_label$counter]|callback_no_match[$counter]|xss_clean");
-			$this->form_validation->set_rules("view_field_type$counter",'Field Type',"trim|requiredif[view_field_label$counter]|xss_clean");
-			$this->form_validation->set_rules("db_field_type$counter",'DB Field Type',"trim|requiredif[view_field_label$counter]|xss_clean");
-			$this->form_validation->set_rules("db_field_length_value$counter",'DB Field Length',"trim|requiredif[view_field_label$counter]|xss_clean");
-			$this->form_validation->set_rules('validation_rules'.$counter.'[]','Validation Rules','trim|xss_clean');
+			$name_required = '';
+			$label = $_POST["view_field_label$counter"];
+			if( !empty($label) )
+			{
+				$name_required = 'required|';
+			}
+			$this->form_validation->set_rules("view_field_name$counter","Name $counter","trim|".$name_required."callback_no_match[$counter]|xss_clean");
+			$this->form_validation->set_rules("view_field_type$counter","Field Type $counter","trim|required|xss_clean");
+			$this->form_validation->set_rules("db_field_type$counter","DB Field Type $counter","trim|xss_clean");
+			
+			// make sure that the length field is required if the DB Field type requires a length
+			$db_len_required = '';
+			$field_type = $_POST["db_field_type$counter"];
+			if( !empty($label) && !($field_type == 'TEXT' 
+				OR $field_type == 'DATE' OR $field_type == 'TIME' OR $field_type == 'DATETIME'
+				OR $field_type == 'TIMESTAMP' OR $field_type == 'YEAR'
+				 OR $field_type == 'TINYBLOB' OR $field_type == 'BLOB' OR $field_type == 'MEDIUMBLOB' OR $field_type == 'LONGBLOB') )
+			{
+				$db_len_required = 'required|';
+			}
+			$this->form_validation->set_rules("db_field_length_value$counter","DB Field Length $counter","trim|".$db_len_required."xss_clean");
+			$this->form_validation->set_rules('validation_rules'.$counter.'[]',"Validation Rules $counter",'trim|xss_clean');
 		}
 		
 		return $this->form_validation->run();
@@ -149,4 +166,38 @@ class Developer extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
+	
+	/** Custom Form Validation Callback Rule
+	 *
+	 * Checks that one field doesn't match all the others.
+	 * This code is not really portable. Would of been nice to create a rule that accepted an array
+	 *
+	 * @access	public
+	 * @param	string
+	 * @param	fields array
+	 * @return	bool
+	 */
+
+	function no_match($str, $fieldno)
+	{		
+		for($counter=1; $this->field_total >= $counter; $counter++)
+		{
+			// nothing has been entered into this field so we don't need to check
+			// or the field being checked is the same as the field we are checking from
+			if ($_POST["view_field_name$counter"] == '' || $fieldno == $counter) 			
+			{
+				continue;				
+			}
+
+			if ($str == $_POST["view_field_name{$counter}"])
+			{
+				$this->form_validation->set_message('no_match', "Field names ($fieldno & $counter) must be unique!");
+				return FALSE;
+			}
+		}
+
+		return TRUE;
+	}
+
+
 }
