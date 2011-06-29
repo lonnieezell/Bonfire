@@ -868,11 +868,21 @@ class Auth  {
 		
 		Parameters:
 			$user_id		- An int with the user's id 
-			$auth_custom	- A contentor for user auth custom data. 
+			$username		- The user's username
 			$password_hash	- The user's password hash. Used to create a new, unique user_token.
-			$identity		- The user's login identity used: email or username
+			$email			- The user's email address			
 			$role_id		- The user's role_id
 			$remember		- A boolean (true/false). Whether to keep the user logged in.
+			$old_token		- User's db token to test against
+			$user_name		- User's made name for displaying options
+
+		Session Userdata:
+			$user_id		- From parameter $user_id
+			$auth_custom	- A contentor for user auth custom data. Defaults to username
+			$password_hash	- Unique user_token.
+			$identity		- The user's login identity used: email or username
+			$role_id		- From parameter $role_id
+			$logged_in		- A boolean (true/false) login state for performance usage
 			
 		Return: 
 			true/false on success/failure.
@@ -895,7 +905,7 @@ class Auth  {
 			$login = config_item('auth.login_type') == 'username' ? $username : $email;
 
 		// For backward compatibility, defaults to username
-		// If we're displaying user own name, make sure it's there.
+		// If we're displaying user own name, we'll use it.
 	
 		$us_custom = config_item('auth.use_usernames') == 2 ? $user_name : $username;
 		
