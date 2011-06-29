@@ -294,7 +294,7 @@ class Settings extends Admin_Controller {
 		{
 			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|callback_unique_username|xsx_clean');
 		}
-		if (config_item('auth.use_extended_profile'))
+		if  ( ! config_item('auth.use_extended_profile'))
 		{
 			$this->form_validation->set_rules('street1', 'Street 1', 'trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('street2', 'Street 2', 'trim|strip_tags|xss_clean');
