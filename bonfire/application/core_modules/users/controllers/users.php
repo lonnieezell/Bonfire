@@ -69,7 +69,7 @@ class Users extends Front_Controller {
 				// Try to login
 				if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === true)
 				{
-					$this->activity_model->log_activity($this->auth->user_id(), 'logged in from '. $this->input->ip_address(), 'users');
+					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged').': ' . $this->input->ip_address(), 'users');
 					
 					/*
 						In many cases, we will have set a destination for a 
@@ -216,7 +216,7 @@ class Users extends Front_Controller {
 				
 				if ($this->user_model->update($this->input->post('user_id'), $data))
 				{
-					$this->activity_model->log_activity($this->input->post('user_id'), 'reset their password.', 'users');
+					$this->activity_model->log_activity($this->input->post('user_id'), lang('us_log_reset') , 'users');
 					Template::set_message('Please login using your new password.', 'success');
 					redirect('/login');
 				}
@@ -286,7 +286,7 @@ class Users extends Front_Controller {
 
 				if ($user_id = $this->user_model->insert($data))
 				{					
-					$this->activity_model->log_activity($user_id, 'registered a new account.', 'users');
+					$this->activity_model->log_activity($user_id, lang('us_log_register') , 'users');
 					Template::set_message('Your account has been created. Please log in.', 'success');
 					redirect('login');
 				}

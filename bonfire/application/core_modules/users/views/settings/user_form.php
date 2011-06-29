@@ -29,22 +29,21 @@
 		<input type="text" name="email" class="medium" value="<?php echo isset($user) ? $user->email : set_value('email') ?>" />
 	</div>
 	
-	<?php if (config_item('auth.use_usernames') == 1) : ?>
+	<?php if ( config_item('auth.login_type') !== 'email' OR config_item('auth.use_usernames')) : ?>
 	<div>
 		<label for="username"><?php echo lang('bf_username'); ?></label>
 		<input type="text" name="username" id="username" class="medium" value="<?php echo isset($user) ? $user->username : set_value('username') ?>" />
 	</div>
-
 	<?php endif; ?>
-	<br />
-	
+
+	<br />	
 	<div>
 		<label class="required"><?php echo lang('bf_password'); ?></label>
-		<input type="password" name="password" value="" />
+		<input type="password" id="password" name="password" value="" />
 	</div>
 	<div>
 		<label class="required"><?php echo lang('bf_password_confirm'); ?></label>
-		<input type="password" name="pass_confirm" value="" />
+		<input type="password" id="pass_confirm" name="pass_confirm" value="" />
 	</div>
 	
 	<?php if (has_permission('Bonfire.Roles.Manage')) :?>
@@ -65,7 +64,8 @@
 		</div>
 	</fieldset>
 	<?php endif; ?>
-	
+
+	<?php  if ( ! config_item('auth.use_extended_profile')) :?>
 	<fieldset>
 		<legend><?php echo lang('us_address'); ?></legend>
 		
@@ -95,9 +95,10 @@
 		</div>
 
 	</fieldset>
+	<?php endif; ?>
 	
 	<div class="submits">
-		<input type="submit" name="submit" value="Save User" /> or <?php echo anchor('admin/settings/users', 'Cancel'); ?>
+		<input type="submit" name="submit" value="<?php echo lang('bf_action_save') ?> " /> <?php echo lang('bf_or') ?> <?php echo anchor('admin/settings/users', lang('bf_action_cancel')); ?>
 	</div>
 
 	<?php if (isset($user)) : ?>
