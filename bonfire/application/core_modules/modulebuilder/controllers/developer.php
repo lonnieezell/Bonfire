@@ -102,7 +102,7 @@ class Developer extends Admin_Controller {
 			}
 			
 			$name_required = '';
-			$label = $_POST["view_field_label$counter"];
+			$label = $this->input->post("view_field_label$counter");
 			if( !empty($label) )
 			{
 				$name_required = 'required|';
@@ -113,7 +113,7 @@ class Developer extends Admin_Controller {
 			
 			// make sure that the length field is required if the DB Field type requires a length
 			$db_len_required = '';
-			$field_type = $_POST["db_field_type$counter"];
+			$field_type = $this->input->post("db_field_type$counter");
 			if( !empty($label) && !($field_type == 'TEXT' 
 				OR $field_type == 'DATE' OR $field_type == 'TIME' OR $field_type == 'DATETIME'
 				OR $field_type == 'TIMESTAMP' OR $field_type == 'YEAR'
