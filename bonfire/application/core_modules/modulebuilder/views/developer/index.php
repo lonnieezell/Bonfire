@@ -22,9 +22,11 @@
 <?php if ($this->session->flashdata('error')): ?>
 <div class="top_error"><?php echo $this->session->flashdata('error')?></div>
 <?php endif; ?>
+<?php if (validation_errors()) : ?>
 <div class="notification error">
 <?php echo validation_errors();  ?>
 </div>
+<?php endif; ?>
 <?php if ($form_error): ?>
 <div class="important">
 <h4>Please correct the errors below.</h4>
