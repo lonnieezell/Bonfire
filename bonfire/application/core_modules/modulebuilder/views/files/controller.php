@@ -77,7 +77,6 @@ for($counter=1; $field_total >= $counter; $counter++)
 }
 		
 $controller .= '
-		Template::set("toolbar_title", "Manage '.$module_name.'");
 	}
 	
 	';
@@ -97,6 +96,7 @@ $controller .= '
 
 		Template::set_view("'.$controller_name.'/index");
 		Template::set("data", $data);
+		Template::set("toolbar_title", "Manage '.$module_name.'");
 		Template::render();
 	}
 	
@@ -126,6 +126,7 @@ $controller .= '
 	
 		Template::set(\'toolbar_title\', lang("'.$module_name_lower.'_create_new_button"));
 		Template::set_view(\''.$controller_name.'/create\');
+		Template::set("toolbar_title", "Create '.$module_name.'");
 		Template::render();
 	}
 	//--------------------------------------------------------------------
@@ -162,6 +163,7 @@ $controller .= '
 	
 		Template::set(\'toolbar_title\', lang("'.$module_name_lower.'_edit_heading"));
 		Template::set_view(\''.$controller_name.'/edit\');
+		Template::set("toolbar_title", "Edit '.$module_name.'");
 		Template::render();		
 	}
 	
