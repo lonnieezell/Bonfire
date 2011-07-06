@@ -67,6 +67,13 @@ class Assets {
 									);
 
 	/*
+		Var: $asset_cache_folder
+		
+		The name of the cache folders for the various generated assets.
+	*/
+	private static $asset_cache_folder 	= 'cache';
+
+	/*
 		Var: $inline_scripts
 		
 		An array of inline scripts to be placed at the 
@@ -83,12 +90,28 @@ class Assets {
 	protected static $external_scripts 	= array();
 	
 	/*
+		Var: $module_scripts
+		
+		An array of module js code used to combined into one js file
+		to be called at the end of the page.
+	*/
+	protected static $module_scripts 	= array();
+	
+	/*
 		Var: $styles
 		
 		An array of css files to be placed at the
 		beginning of the file.
 	*/
 	private static $styles				= array();	
+
+	/*
+		Var: $module_styles
+		
+		An array of module css files to be placed at the
+		beginning of the file.
+	*/
+	private static $module_styles				= array();	
 
 	//--------------------------------------------------------------------
 
@@ -230,11 +253,55 @@ class Assets {
 			$return .= '<link'. self::attributes($attr) ." />\n";
 		}
 		
+		// add the combined css
+		$return .= self::module_css($media);
+		
 		return $return;
 	}
 	
 	//--------------------------------------------------------------------
+
+	/*
+		Method: module_css()
+		
+		Does the actual work of generating the combined css code. All code is 
+		wrapped by open and close tags specified in the config file, so that 
+		you can modify it to use your favorite js library.
+		
+		It is called by the js() method.
+		
+		Return: 
+			void
+	 */
+	public static function module_css($media='screen') 
+	{
+		// Are there any scripts to include? 
+		if (count(self::$module_styles) == 0)
+		{
+			return;
+		}
 	
+		$output = '';
+		
+		$file_name = implode('~', str_replace("/", "-", self::$module_styles[$media]));
+
+		// Create our style link
+		$attr = array(
+			'rel'	=> 'stylesheet',
+			'type'	=> 'text/css',
+			'href'	=> site_url(self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.".css"),
+			'media'	=> $media
+		);
+
+		if (self::generate_file($file_name, 'css')) {
+			$output .= '<link'. self::attributes($attr) ." />\n";
+		}
+		return $output;
+	}
+	
+	//--------------------------------------------------------------------
+	
+
 	/*
 		Method: add_css()
 	
@@ -268,6 +335,39 @@ class Assets {
 					'file'	=> $s,
 					'media'	=> $media
 				);
+			}
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: add_module_css()
+	
+		Adds a module css file to the CSS queue to be rendered out.
+		
+		Parameters:
+			$file_path	- Module path to the css file
+			$media		- The type of media the stylesheet styles.
+		
+		Return:	
+			void
+	*/
+	public static function add_module_css($file_path, $media='screen') 
+	{
+		if (empty($file_path)) return;
+		
+		// Add a string
+		if (is_string($file_path))
+		{
+			self::$module_styles[$media][] = $file_path;
+		} 
+		// Add an array
+		else if (is_array($file_path) && count($file_path))
+		{
+			foreach ($file_path as $s)
+			{
+				self::$module_styles[$media][] = $s;
 			}
 		}
 	}
@@ -439,6 +539,8 @@ class Assets {
 		
 		// Try to find them
 		$scripts = self::find_files($scripts, 'js');
+
+		$scripts[] = self::module_js();
 	
 		foreach ($scripts as $script)
 		{
@@ -509,6 +611,40 @@ class Assets {
 		// Close the shell.
 		$output .= "\n" . self::$ci->config->item('assets.js_closer') . "\n";
 		$output .= '</script>' . "\n";
+		
+		return $output;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: module_js()
+		
+		Does the actual work of generating the combined js code. All code is 
+		wrapped by open and close tags specified in the config file, so that 
+		you can modify it to use your favorite js library.
+		
+		It is called by the js() method.
+		
+		Return: 
+			void
+	 */
+	public static function module_js() 
+	{
+		// Are there any scripts to include? 
+		if (count(self::$module_scripts) == 0)
+		{
+			return;
+		}
+	
+		$file_name = implode('~', str_replace("/", "-", self::$module_scripts));
+		
+		$output = '';
+
+		// Create our shell opening
+		if (self::generate_file($file_name, 'js')) {
+			$output .= site_url(self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.".js");
+		}
 		
 		return $output;
 	}
@@ -589,6 +725,155 @@ class Assets {
 
 		return $final;
 	}
+	
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: generate_file()
+		
+		Locates file by looping through the active and default themes, and
+		then the assets folder (as specified in the config file). 
+		
+		Files are searched for in this order...
+			1 - active_theme/
+			2 - active_theme/type/
+			3 - default_theme/
+			4 - default_theme/type/
+			5 - asset_base/type
+			
+		Where 'type' is either 'css' or 'js'.
+		
+		If the file is not found, it is removed from the array. If the file
+		is found, a full url is created, using base_path(), unless the path
+		already includes 'http' at the beginning of the filename, in which case
+		it is simply included in the return files.
+		
+		For CSS files, if a script of the same name is found in both the 
+		default_theme and the active_theme folders (or their type sub-folder),
+		they are both returned, with the default_theme linked to first, so that
+		active_theme styles can override those in the default_theme without
+		having to recreate the entire stylesheet.
+		
+		Access: 
+			private
+			
+		Parameters:
+			$type	- Either 'css' or 'js'.
+		
+		Return:
+			array			The complete list of files with url paths.
+	 */
+	private function generate_file($file_name, $type='css')
+	{
+
+		$cache_path = $_SERVER['DOCUMENT_ROOT'] . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
+		$file_path = $cache_path.$file_name.".".$type;
+
+		if ($type == 'css')
+		{
+			$files_array = self::$module_styles['screen'];
+		}
+		else
+		{
+			$files_array = self::$module_scripts;
+		}
+		
+		$modified_time = 0;
+		
+		$actual_file_time = 0;
+		if (is_file($file_path))
+		{
+			$actual_file_time = filemtime($file_path);
+		}
+
+		foreach ($files_array as $key => $file)
+		{
+			//replace chars for folder separation, replace ~ with /
+			$file = str_replace("-", "/", $file);
+
+			// if the actual asset file is not specified then assume the file is named as - TYPE.php
+			if (count(explode('/', $file)) == 2)
+			{
+				$file .= '/'.$type;
+			}
+
+			$mod_file = Modules::find($file, '', 'views/');
+			
+			if (count($mod_file))
+			{
+				$modified_time = max(filemtime($mod_file[0].$mod_file[1].'.php'), $modified_time);
+			}
+			else
+			{
+				// no file found - remove from the array
+				unset($files_array[$key]);
+			}
+		}
+
+		$asset_output = '';
+		if ($actual_file_time < $modified_time)
+		{
+			// write to the file
+
+			foreach ($files_array as $key => $file)
+			{
+				//replace chars for folder separation, replace ~ with /
+				$file = str_replace("-", "/", $file);
+
+				// if the actual asset file is not specified then assume the file is named as - TYPE.php
+				if (count(explode('/', $file)) == 2)
+				{
+					$file .= '/'.$type;
+				}
+
+				$file_output = self::$ci->load->view($file, null, TRUE);
+
+				if (!empty($file_output))
+				{
+					$asset_output .= $file_output."\n";
+				}
+			}
+			switch ($type)
+			{
+				case 'js':
+					if (config_item('assets.js_minify'))
+					{
+						$asset_output = JSMin::minify($asset_output);
+					}
+					break;
+				case 'css':
+					if (config_item('assets.css_minify'))
+					{
+						$asset_output = CSSMin::minify($asset_output);
+					}
+					break;
+				default:
+					throw new LoaderException("Unknown file type.");
+					break;
+			}
+
+			self::$ci->load->helper('file');
+			
+			if ( !is_dir($cache_path))
+			{
+				@mkdir($cache_path);
+			}
+
+			if ( ! write_file($file_path, $asset_output))
+			{
+				return FALSE;
+			}
+		}
+		elseif ($actual_file_time == 0)
+		{
+			return FALSE;
+		}
+		
+		return TRUE;
+
+	}
+
 	
 	//--------------------------------------------------------------------
 	
@@ -756,7 +1041,7 @@ class Assets {
 						$file_path = base_url() . self::$asset_base .'/'. $type .'/'. $file .".{$type}";
 						$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
 
-						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
+						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . self::$asset_base .'/'. $type .'/'. $file .".{$type}" ."</b><br/>";
 					} 
 					
 					/*
@@ -770,7 +1055,7 @@ class Assets {
 						$file_path = base_url() . self::$asset_base .'/'. $file .".{$type}";
 						$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
 
-						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file .".{$type}" ."</b><br/>";
+						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . self::$asset_base .'/'. $file .".{$type}" ."</b><br/>";
 					} 
 				}
 			}			
