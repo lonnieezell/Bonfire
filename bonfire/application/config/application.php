@@ -254,3 +254,17 @@ $config['assets.asset_folders'] = array(
 */
 $config['assets.js_opener'] = 'head.ready(function(){'. "\n";
 $config['assets.js_closer'] = '});'. "\n";
+
+
+/*
+	The 'assets.js_minify' and 'assets.css_minify' settings are used to 
+	tell the ui loader to minify the combined assets or not
+*/
+$config['assets.js_minify'] = FALSE;
+$config['assets.css_minify'] = FALSE;
+
+/*
+	The 'assets.encode' setting is used to specify whether the assets should
+	be encoded based on the HTTP_ACCEPT_ENCODING value.
+*/
+$config['assets.encode'] = FALSE;
