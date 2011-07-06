@@ -20,21 +20,22 @@
 
 <p>If you are new to Bonfire, you should start by reading the <?php echo anchor('/docs', 'docs') ?>.</p>
 
-<?php  // acessing our userdata cookie
-		$cookie = unserialize($this->input->cookie($this->config->item('sess_cookie_name')));
-		$logged_in = isset ($cookie['logged_in']);
-		unset ($cookie);
+<?php  
+	// acessing our userdata cookie
+	$cookie = unserialize($this->input->cookie($this->config->item('sess_cookie_name')));
+	$logged_in = isset ($cookie['logged_in']);
+	unset ($cookie);
 		
-		if ($logged_in) : ?>
+	if ($logged_in) : ?>
 
-<p style="text-align: center">
-	<?php echo anchor('/admin', 'Dive into bonfire\'s Springboard'); ?>
-</p>
+	<div class="notification attention" style="text-align: center">
+		<?php echo anchor('/admin', 'Dive into bonfire\'s Springboard'); ?>
+	</div>
 
 <?php else :?>
 
-<p style="text-align: center">
-	<?php echo anchor('/login', 'Login'); ?>
-</p>
+	<p style="text-align: center">
+		<?php echo anchor('/login', 'Login'); ?>
+	</p>
 
 <?php endif;?>
