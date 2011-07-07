@@ -353,7 +353,7 @@ class Assets {
 		Return:	
 			void
 	*/
-	public static function add_module_css($file_path, $media='screen') 
+	public static function add_module_css($file_path=null, $media='screen') 
 	{
 		if (empty($file_path)) return;
 		
@@ -556,7 +556,7 @@ class Assets {
 					$script :
 					
 					// Otherwise, build the full url
-					self::$asset_url . self::$asset_base . self::$asset_folders['js'] .'/'. $script,
+					base_url() . self::$asset_base . self::$asset_folders['js'] .'/'. $script,
 						'type'=>'text/javascript'
 			);
 			
@@ -797,7 +797,7 @@ class Assets {
 			{
 				$file .= '/'.$type;
 			}
-
+die($file);
 			$mod_file = Modules::find($file, '', 'views/');
 			
 			if (count($mod_file))
