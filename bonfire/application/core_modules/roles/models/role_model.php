@@ -133,7 +133,19 @@ class Role_model extends BF_Model {
 		return parent::update($id, $data);
 	}
 	
-	function delete($id=0, $purge=false) 
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: delete()
+		
+		Deletes a role.
+		
+		Parameters:
+			$role_id	- The ID of the role to delete
+			$purge		- If TRUE, will delete the record.
+						  If FALSE, will simply set the 'deleted' flag to 1.
+	*/
+	public function delete($role_id=0, $purge=false) 
 	{
 		if ($purge === true)
 		{
@@ -141,13 +153,20 @@ class Role_model extends BF_Model {
 			$this->soft_deletes = false;
 		}
 		
-		// delete the ercord
-		$deleted = parent::delete($id);
+		// Verify the role can actually be deleted.
+		if ($this->can_delete_role($role_id) === false)
+		{
+			$this->error = 'This role can not be deleted.';
+			return false;
+		}
 		
-		if( TRUE === $deleted )
+		// delete the record
+		$deleted = parent::delete($role_id);
+		
+		if ($deleted === true)
 		{
 			// now delete the role_permissions for this permission
-			$this->role_permission_model->delete_for_role($id);
+			$this->role_permission_model->delete_for_role($role_id);
 		}
 		
 		return $deleted;
@@ -174,6 +193,31 @@ class Role_model extends BF_Model {
 		}	
 		
 		return false;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: can_delete_role()
+		
+		Verifies that a role can be deleted.
+		
+		Parameters:
+			$role_id	- The ID of the role to check.
+		
+		Returns:
+			True/False
+	*/	public function can_delete_role($role_id=0) 
+	{
+		$this->db->select('role_id, can_delete');
+		$delete_role = parent::find($role_id);
+		
+		if ($delete_role->can_delete == 1)
+		{
+			return TRUE;
+		}
+		
+		return FALSE;
 	}
 	
 	//--------------------------------------------------------------------

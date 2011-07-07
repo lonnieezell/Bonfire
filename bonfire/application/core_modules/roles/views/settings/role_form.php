@@ -29,6 +29,12 @@
 		<p class="small" style="display: inline"><?php echo lang('role_default_note'); ?></p>
 	</div>
 	
+	<div>
+		<label><?php echo lang('role_can_delete_role'); ?></label>
+		<input type="radio" name="can_delete" value="1" <?php echo isset($role) && $role->can_delete == 1 ? 'checked="checked"' : '' ?> />Yes 
+		<input type="radio" name="can_delete" value="1" <?php echo isset($role) && $role->can_delete == 0 ? 'checked="checked"' : '' ?> />No
+	</div>
+	
 	<!-- Permissions -->
 	<fieldset>
 		<legend><?php echo lang('role_permissions'); ?></legend>
@@ -46,7 +52,7 @@
 
 	<br/>
 
-	<?php if (isset($role)) : ?>
+	<?php if (isset($role) && $role->can_delete) : ?>
 	<div class="box delete rounded">
 		<a class="button" id="delete-me" href="<?php echo site_url('admin/settings/roles/delete/'. $role->role_id); ?>" onclick="return confirm('Are you sure you want to delete this role?')"><?php echo lang('role_delete_role'); ?></a>
 		
