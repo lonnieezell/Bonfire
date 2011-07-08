@@ -21,6 +21,15 @@ class Migration_Add_role_delete_permissions extends Migration {
 			// Add the permission to the admin role.
 			$ci->role_permission_model->create(1, $pid);
 		}
+		
+		// Add the deleted field to the roles table
+		$this->dbforge->add_column('roles', array(
+			'deleted'	=> array(
+				'type'			=> 'INT',
+				'constraint'	=> 1,
+				'default'		=> 0
+			)
+		));
 	}
 	
 	//--------------------------------------------------------------------
@@ -39,6 +48,8 @@ class Migration_Add_role_delete_permissions extends Migration {
 			$ci->permission_model->delete($perm->permission_id);
 		}
 		
+		// Remove the deleted column from roles
+		$this->dbforge->drop_column('roles', 'deleted');
 	}
 	
 	//--------------------------------------------------------------------
