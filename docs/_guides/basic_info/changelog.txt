@@ -24,6 +24,7 @@ Enhancements:
 - Modules can have a settings array that allows for drop-down menus, custom names, and more. Added module_config() method to application helper.
 - Initial translation to Portuguese. 
 - Bonfire core database migrations moved to migrations/core/ to remove conflicts between your app and Bonfire.
+- Roles can now be set as deletable or not in the UI. New Permission: Bonfire.Roles.Delete to use to check if the role is allowed to delete other roles.
 
 Bugs: 
 - Upgraded to the latest version of head.js to fix a bug where AJAX page loads were not working in FF3 and IE.
