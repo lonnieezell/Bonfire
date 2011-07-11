@@ -90,6 +90,7 @@ class Settings extends Admin_Controller {
 			'auth.use_extended_profile' => isset($_POST['use_ext_profile']) ? 1 : 0,
 			
 			'updates.bleeding_edge'	=> isset($_POST['update_check']) ? 1 : 0,
+			'site.show_profiler'	=> isset($_POST['show_profiler']) ? 1 : 0,
 		);
 		
 		return write_config('application', $data);
