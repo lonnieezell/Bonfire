@@ -8,7 +8,8 @@ class Migration_Add_role_delete_permissions extends Migration {
 		
 		// Add the new permission
 		$ci =& get_instance();
-		//$ci->load->model('permissions/permission_model');
+		$ci->load->model('permissions/permission_model');
+		$ci->load->model('roles/role_permission_model');
 		
 		$pid = $ci->permission_model->insert(array(
 			'name'			=> 'Bonfire.Roles.Delete',
@@ -37,9 +38,10 @@ class Migration_Add_role_delete_permissions extends Migration {
 	public function down() 
 	{
 		$prefix = $this->db->dbprefix;
-
+		
 		// Delete the permissions assigned to roles
 		$ci =& get_instance();
+		$ci->load->model('permissions/permission_model');
 		
 		$perm = $ci->permission_model->find_by('name', 'Bonfire.Roles.Delete');
 		
