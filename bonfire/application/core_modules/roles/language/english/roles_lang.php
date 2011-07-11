@@ -36,8 +36,8 @@ $lang['role_permissions_check_note']	= 'Check all permissions that apply to this
 $lang['role_save_role']				= 'Save Role';
 $lang['role_delete_role']			= 'Delete this Role';
 $lang['role_delete_note']			= 'Deleting this role will convert all users that are currently assigned it to the site&rsquo;s default role.';
-$lang['role_can_delete_role']		= 'Removable';
-$lang['role_can_delete_note']		= 'Can this role be deleted?';
+$lang['role_can_delete_role']    = 'Removable';	
+$lang['role_can_delete_note']    = 'Can this role be deleted?';
 
 $lang['role_roles']					= 'Roles';
 $lang['role_new_role']				= 'New Role';

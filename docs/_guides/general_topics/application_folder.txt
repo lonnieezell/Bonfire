@@ -1,0 +1,13 @@
+Title: Moving the Application Folder
+
+For some sites, you may want to move the _application_folder_ to a different location. This might be to improve security or just to support your application's needs, or your personal preferences. This is simple to do, but there is one step that can be easily overlooked. 
+
+1. First, you need to update the main site's **index.php** so that it knows the proper location of your _application_folder_. 
+
+2. Edit the **application/config.php** to update the location of your _core_modules_ folder. 
+
+> /* define the module locations and offset */
+> $config['modules_locations'] = array(
+> 	FCPATH .'bonfire/modules/' => '../../modules/',
+> 	FCPATH .'bonfire/application/core_modules/' => '../core_modules/'
+> );
