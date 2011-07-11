@@ -1,5 +1,5 @@
 <style type="text/css">
-	#debug { clear: both; position: absolute;  bottom: 0; left: 0; right: 0; z-index: 1000; opacity: 0.85; }
+	#debug { clear: both; position: fixed;  bottom: 0; left: 0; right: 0; z-index: 1000; opacity: 0.85; }
 	#codeigniter-profiler { position: relative; clear: both; background: #101010; padding: 0 5px; font-family: Helvetica, sans-serif; font-size: 10px !important; line-height: 12px; }
 	#debug:hover { opacity: 1.0; }	
 	
