@@ -14,6 +14,7 @@ Additions:
 - A logit() function was added to the application helper to provide a simple interface to log to both the Console and the log file.
 - Added new Activities module to allow other modules a core utility for tracking user activity. Was incorporated into the Users module.
 - Added a new Module Builder module that helps create skeleton code for new modules.
+- Now has a proper AJAX loading display.
 
 Enhancements:
 - Forgot Password feature was revised for better security.
