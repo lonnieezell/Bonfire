@@ -30,9 +30,10 @@
 	</div>
 	
 	<div>
-		<label><?php echo lang('role_can_delete_role'); ?></label>
-		<input type="radio" name="can_delete" value="1" <?php echo isset($role) && $role->can_delete == 1 ? 'checked="checked"' : '' ?> />Yes 
-		<input type="radio" name="can_delete" value="1" <?php echo isset($role) && $role->can_delete == 0 ? 'checked="checked"' : '' ?> />No
+		<label><?php echo lang('role_can_delete_role'); ?>?</label>
+		<input type="radio" name="can_delete" value="1" <?php echo isset($role) && $role->can_delete == 1 ? 'checked="checked"' : '' ?> />Yes
+		<input type="radio" name="can_delete" value="0" <?php echo isset($role) && $role->can_delete == 0 ? 'checked="checked"' : '' ?> />No	
+		<p class="small" style="display: inline"><?php echo lang('role_can_delete_note'); ?></p>
 	</div>
 	
 	<!-- Permissions -->
@@ -52,7 +53,11 @@
 
 	<br/>
 
+<<<<<<< HEAD
 	<?php if (isset($role) && $role->can_delete) : ?>
+=======
+	<?php if (isset($role) && $role->can_delete && has_permission('Bonfire.Roles.Delete')) : ?>
+>>>>>>> develop
 	<div class="box delete rounded">
 		<a class="button" id="delete-me" href="<?php echo site_url('admin/settings/roles/delete/'. $role->role_id); ?>" onclick="return confirm('Are you sure you want to delete this role?')"><?php echo lang('role_delete_role'); ?></a>
 		
