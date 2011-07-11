@@ -21,6 +21,11 @@
 	THE SOFTWARE.
 */
 
+/*
+	Class: Users
+	
+	Provides front-end functions for users, like login and logout.
+*/
 class Users extends Front_Controller {
 
 	//--------------------------------------------------------------------

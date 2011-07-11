@@ -136,16 +136,33 @@ class Role_model extends BF_Model {
 	//--------------------------------------------------------------------
 	
 	/*
-		Method: delete()
+		Method: can_delete_role()
 		
-		Deletes a role.
+		Verifies that a role can be deleted.
 		
 		Parameters:
-			$role_id	- The ID of the role to delete
-			$purge		- If TRUE, will delete the record.
-						  If FALSE, will simply set the 'deleted' flag to 1.
+			$role_id	- The role to verify.
+			
+		Returns:
+			true/false
 	*/
-	public function delete($role_id=0, $purge=false) 
+	public function can_delete_role($role_id=0) 
+	{
+		$this->db->select('role_id, can_delete');
+		$delete_role = parent::find($role_id);
+		
+		if ($delete_role->can_delete == 1)
+		{
+			return TRUE;
+		}
+		
+		return FALSE;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
+	function delete($id=0, $purge=false) 
 	{
 		if ($purge === true)
 		{
@@ -153,20 +170,20 @@ class Role_model extends BF_Model {
 			$this->soft_deletes = false;
 		}
 		
-		// Verify the role can actually be deleted.
-		if ($this->can_delete_role($role_id) === false)
+		// We might not be allowed to delete this role.
+		if ($this->can_delete_role($id) == false)
 		{
 			$this->error = 'This role can not be deleted.';
 			return false;
 		}
 		
-		// delete the record
-		$deleted = parent::delete($role_id);
+		// delete the ercord
+		$deleted = parent::delete($id);
 		
-		if ($deleted === true)
+		if( TRUE === $deleted )
 		{
 			// now delete the role_permissions for this permission
-			$this->role_permission_model->delete_for_role($role_id);
+			$this->role_permission_model->delete_for_role($id);
 		}
 		
 		return $deleted;
@@ -193,31 +210,6 @@ class Role_model extends BF_Model {
 		}	
 		
 		return false;
-	}
-	
-	//--------------------------------------------------------------------
-	
-	/*
-		Method: can_delete_role()
-		
-		Verifies that a role can be deleted.
-		
-		Parameters:
-			$role_id	- The ID of the role to check.
-		
-		Returns:
-			True/False
-	*/	public function can_delete_role($role_id=0) 
-	{
-		$this->db->select('role_id, can_delete');
-		$delete_role = parent::find($role_id);
-		
-		if ($delete_role->can_delete == 1)
-		{
-			return TRUE;
-		}
-		
-		return FALSE;
 	}
 	
 	//--------------------------------------------------------------------

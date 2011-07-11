@@ -71,6 +71,12 @@
 	
 	<?php Template::block('nav_bottom', ''); ?>
 	
+	<div id="loader">
+		<div class="box">
+			<img src="<?php echo Template::theme_url()?>images/ajax_loader.gif" />
+		</div>
+	</div>
+	
 	<div id="debug"><!-- Stores the Profiler Results --></div>
 	
 	<script>
