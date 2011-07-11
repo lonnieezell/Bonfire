@@ -95,6 +95,19 @@ head.ready(function(){
 		Table Stripes
 	*/
 	$('table tr').filter(':odd').addClass('odd');
+	
+	/*
+		AJAX Setup
+	*/
+	$.ajaxSetup({cache: false});
+
+	$('#loader').ajaxStart(function(){
+		$('#loader').show();
+	});
+
+	$('#loader').ajaxStop(function(){
+		$('#loader').hide();
+	});
 });
 
 
