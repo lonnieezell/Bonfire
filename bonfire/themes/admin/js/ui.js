@@ -166,7 +166,8 @@ $('.fade-me').delay(3000).fadeOut(500);
 $('.ajaxify').ajaxify({
 	target		: '#content',
 	onStart		: function() { $('#loader').show(); },
-	onComplete	: function() { $('#loader').hide(); }
+	onComplete	: function() { $('#loader').hide(); },
+	loading_img		: '',
 });
 
 /*
