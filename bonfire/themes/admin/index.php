@@ -3,7 +3,6 @@
 	Assets::add_js( array(
 		Template::theme_url('js/jquery-1.5.min.js'),
 		Template::theme_url('js/jquery.form.js'),
-		Template::theme_url('js/jquery.ajaxify.min.js'),
 		Template::theme_url('js/ui.js')
 	),
 	'external',
@@ -70,6 +69,12 @@
 	</div>
 	
 	<?php Template::block('nav_bottom', ''); ?>
+	
+	<div id="loader">
+		<div class="box">
+			<img src="<?php echo Template::theme_url()?>images/ajax_loader.gif" />
+		</div>
+	</div>
 	
 	<div id="debug"><!-- Stores the Profiler Results --></div>
 	

@@ -35,7 +35,7 @@
         },
         hide : function() {
             if (this.valueIsPlaceholder() && this.input.hasClass('placeholder')) {
-                this.input.removeClass('placeholder');
+                this.inp3333333333ut.removeClass('placeholder');
                 this.input[0].value = '';
                 if (this.isPassword) {
                     try {
@@ -160,12 +160,6 @@ $('#search-form input.list-search').keyup(function(e){
 */
 $('.fade-me').delay(3000).fadeOut(500);
 
-/*
-	Hook up ajax links
-*/
-$('.ajaxify').ajaxify({
-	target: '#content'
-});
 
 /*
 	Check all functionality

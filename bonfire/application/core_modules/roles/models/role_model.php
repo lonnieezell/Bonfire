@@ -133,12 +133,48 @@ class Role_model extends BF_Model {
 		return parent::update($id, $data);
 	}
 	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: can_delete_role()
+		
+		Verifies that a role can be deleted.
+		
+		Parameters:
+			$role_id	- The role to verify.
+			
+		Returns:
+			true/false
+	*/
+	public function can_delete_role($role_id=0) 
+	{
+		$this->db->select('role_id, can_delete');
+		$delete_role = parent::find($role_id);
+		
+		if ($delete_role->can_delete == 1)
+		{
+			return TRUE;
+		}
+		
+		return FALSE;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
 	function delete($id=0, $purge=false) 
 	{
 		if ($purge === true)
 		{
 			// temporarily set the soft_deletes to true.
 			$this->soft_deletes = false;
+		}
+		
+		// We might not be allowed to delete this role.
+		if ($this->can_delete_role($id) == false)
+		{
+			$this->error = 'This role can not be deleted.';
+			return false;
 		}
 		
 		// delete the ercord
