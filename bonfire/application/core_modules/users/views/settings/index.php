@@ -23,7 +23,7 @@
 					<?php echo gravatar_link($user->email, 32,'',$user->first_name.'&nbsp;'.$user->last_name); ?>
 				
 					<p>
-						<b><?php echo config_item('auth.login_type') == 'username' ? $user->username : $user->email; ?></b><br/>
+						<b><?php echo config_item('auth.use_usernames') ? $user->username : $user->email; ?></b><br/>
 						<span><?php echo $user->role_name ?></span>
 					</p>
 				</div>

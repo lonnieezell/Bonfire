@@ -50,7 +50,7 @@ $route['reset_password/(:any)/(:any)']	= "users/reset_password/$1/$2";
 
 // Contexts
 $route['admin/([a-z_]+)/(:any)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$4/$5";
-$route['admin/([a-z_]+)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$5";
+$route['admin/([a-z_]+)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$4";
 $route['admin/([a-z_]+)/(:any)/(:any)'] 		= "$2/$1/$3";
 $route['admin/([a-z_]+)/(:any)']				= "$2/$1/index";
 

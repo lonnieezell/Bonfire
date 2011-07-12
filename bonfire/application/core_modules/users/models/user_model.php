@@ -101,6 +101,12 @@ class User_model extends BF_Model {
 		// What's the default role?
 		if (!isset($data['role_id']))
 		{
+			// We better have a guardian here
+			if (!class_exists('Role_model'))
+			{
+				$this->load->model('roles/Role_model','role_model');
+			}
+
 			$data['role_id'] = $this->role_model->default_role_id();
 		}
 		
@@ -213,7 +219,7 @@ class User_model extends BF_Model {
 	{
 		if ($show_deleted === false)
 		{
-			$this->db->where('deleted', 0);
+			$this->db->where('users.deleted', 0);
 		}
 		
 		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
@@ -302,11 +308,11 @@ class User_model extends BF_Model {
 		if ($get_deleted)
 		{
 			// Get only the deleted users
-			$this->db->where('deleted !=', 0);
+			$this->db->where('users.deleted !=', 0);
 		}
 		else 
 		{
-			$this->db->where('deleted', 0);
+			$this->db->where('users.deleted', 0);
 		}
 		
 		return $this->db->count_all_results('users');
