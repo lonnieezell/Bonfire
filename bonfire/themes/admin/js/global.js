@@ -100,13 +100,24 @@ head.ready(function(){
 		AJAX Setup
 	*/
 	$.ajaxSetup({cache: false});
-
+	
 	$('#loader').ajaxStart(function(){
 		$('#loader').show();
 	});
-
+	
 	$('#loader').ajaxStop(function(){
 		$('#loader').hide();
+	});
+	
+	/*
+		Hook up ajax links
+	*/
+	$('.ajaxify').live('click', function(e) {
+		e.preventDefault();
+		
+		var url = $(this).attr('href');
+		
+		$('#ajax-content').load(url);
 	});
 });
 
