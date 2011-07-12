@@ -13,5 +13,17 @@
 	$('form.ajax-form').ajaxForm({
 		target: '#content',
 	});
+	
+	/*
+		AJAX Setup
+	*/
+	$.ajaxSetup({cache: false});
 
+	$('#loader').ajaxStart(function(){
+		$('#loader').show();
+	});
+
+	$('#loader').ajaxStop(function(){
+		$('#loader').hide();
+	});
 </script>

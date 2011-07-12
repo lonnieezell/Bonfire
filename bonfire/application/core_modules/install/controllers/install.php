@@ -21,6 +21,19 @@
 	THE SOFTWARE.
 */
 
+/*
+	Class: Install
+	
+	Helps the developer with the initial install of the application for developement
+	purposes by...
+	
+	1. Creating necessary config files so they won't be overwritten during upgrades.
+	2. Sets up the database.
+	3. Creates the initial database schema.
+	4. Creates the initial admin user.
+	
+	Module:	Installer
+*/
 class Install extends MX_Controller {
 
 	protected $errors = '';

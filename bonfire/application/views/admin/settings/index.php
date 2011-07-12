@@ -83,6 +83,12 @@
 	<fieldset>
 		<legend>Developer</legend>
 		
+		
+		<div>
+			<label><?php echo lang('bf_show_profiler') ?></label>
+			<input type="checkbox" name="show_profiler" value="1" <?php echo config_item('site.show_profiler') == 1 ? 'checked="checked"' : set_checkbox('auth.use_extended_profile', 1); ?> />
+		</div>
+		
 		<div>
 			<label><?php echo lang('bf_update_show_edge') ?></label>
 			<input type="checkbox" name="update_check" value="1" <?php echo config_item('updates.bleeding_edge') == 1 ? 'checked="checked"' : set_checkbox('updates.bleeding_edge', 1); ?> />
