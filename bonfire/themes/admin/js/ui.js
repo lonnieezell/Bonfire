@@ -160,15 +160,6 @@ $('#search-form input.list-search').keyup(function(e){
 */
 $('.fade-me').delay(3000).fadeOut(500);
 
-/*
-	Hook up ajax links
-*/
-$('.ajaxify').ajaxify({
-	target		: '#content',
-	onStart		: function() { $('#loader').show(); },
-	onComplete	: function() { $('#loader').hide(); },
-	loading_img		: '',
-});
 
 /*
 	Check all functionality
