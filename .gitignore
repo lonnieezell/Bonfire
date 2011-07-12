@@ -7,6 +7,9 @@ bonfire/application/cache/*
 # NetBeans project files
 nbproject/
 
+#Aptana Studio files
+.settings/
+
 # Ignore Custom config files
 bonfire/application/config/database.php
 bonfire/application/config/config.php
