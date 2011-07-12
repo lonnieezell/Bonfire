@@ -56,7 +56,7 @@ class Base_Controller extends MX_Controller {
 		{
 			$this->load->library('Console');
 			
-			if (!$this->input->is_cli_request())
+			if (!$this->input->is_cli_request() && config_item('site.show_profiler'))
 			{
 				$this->output->enable_profiler(true);
 			}

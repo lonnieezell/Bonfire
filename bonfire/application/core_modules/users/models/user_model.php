@@ -219,7 +219,7 @@ class User_model extends BF_Model {
 	{
 		if ($show_deleted === false)
 		{
-			$this->db->where('deleted', 0);
+			$this->db->where('users.deleted', 0);
 		}
 		
 		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
@@ -308,11 +308,11 @@ class User_model extends BF_Model {
 		if ($get_deleted)
 		{
 			// Get only the deleted users
-			$this->db->where('deleted !=', 0);
+			$this->db->where('users.deleted !=', 0);
 		}
 		else 
 		{
-			$this->db->where('deleted', 0);
+			$this->db->where('users.deleted', 0);
 		}
 		
 		return $this->db->count_all_results('users');
