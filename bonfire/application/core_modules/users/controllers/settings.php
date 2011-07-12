@@ -94,6 +94,7 @@ class Settings extends Admin_Controller {
 	{
 		$this->auth->restrict('Bonfire.Users.Add');
 	
+		$this->load->config('address');
 		$this->load->helper('address');
 	
 		if ($this->input->post('submit'))
@@ -125,6 +126,7 @@ class Settings extends Admin_Controller {
 	{
 		$this->auth->restrict('Bonfire.Users.Manage');
 		
+		$this->load->config('address');
 		$this->load->helper('address');
 		
 		$user_id = $this->uri->segment(5);

@@ -47,7 +47,7 @@ TODO			- Map users.state_id to the correct state_code and update each user
 			
 			if (!empty($user_rec['state_id']))
 			{
-				$this->db->query("UPDATE INTO {$prefix}users SET `state_code` = '{$old_states_array[$user_rec['state_id']]}' WHERE `ìd` = '{$user_rec['id']}';");
+				$this->db->query("UPDATE {$prefix}users SET `state_code` = '{$old_states_array[$user_rec['state_id']]}' WHERE `id` = '{$user_rec['id']}';");
 			}
 		}
 
@@ -449,7 +449,7 @@ TODO			- Map the state_code values to the state_id and update each user
 			
 			if (!empty($user_rec['state_code']))
 			{
-				$this->db->query("UPDATE INTO {$prefix}users SET `state_id` = '{$old_states_array[$user_rec['state_code']]}' WHERE `ìd` = '{$user_rec['id']}';");
+				$this->db->query("UPDATE {$prefix}users SET `state_id` = '{$old_states_array[$user_rec['state_code']]}' WHERE `id` = '{$user_rec['id']}';");
 			}
 		}
 
