@@ -358,7 +358,8 @@ noscript {
 }
 .nav-sub li { position: relative; display: block; width: auto; float: left; }
 .nav-sub a:link,
-.nav-sub a:visited {
+.nav-sub a:visited,
+.nav-sub li > span {
 	display: block;
 	width: auto;
 	float: left;
@@ -369,7 +370,8 @@ noscript {
 	color: #abb;
 	cursor: pointer !important;
 }
-.nav-sub a.current {
+.nav-sub a.current,
+.nav-sub li > span.current {
 	color: #f7f7f7;
 }
 .nav-sub li ul {
@@ -479,4 +481,33 @@ noscript {
 	width: 700px;
 	max-width: 680px;
 	margin: 0 0 25px 0;
+}
+
+/*
+	AJAX Loader
+*/
+#loader {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0,0,0,0.6);
+	z-index: 9999;
+	display: none;
+}
+#loader .box {
+	position: relative;
+	margin: 20px auto;
+	text-align: center;
+	padding: 20px 15px;
+	background: #fff;
+	border: 5px solid #3a527c;
+	border-left: 0;
+	border-right: 0;
+}
+#loader .box img {
+	display: block;
+	padding: 10px;
+	margin: 0 auto;
 }
