@@ -8,10 +8,7 @@ $.subscribe('list-view/list-item/click', function(user_id) {
 	$('#content').load('<?php echo site_url('admin/settings/users/edit/') ?>/'+ user_id, function(response, status, xhr){
 		if (status != 'error')
 		{
-			// Reload our ajaxify for the new pages
-			$('.ajaxify').ajaxify({
-				target: '#content'
-			});
+			
 		}
 	});
 	

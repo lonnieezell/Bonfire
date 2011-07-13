@@ -167,7 +167,7 @@ class Auth  {
 				$this->clear_login_attempts($login);
 				
 				// We've successfully validated the login, so setup the session
-				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', ucwords($user->first_name.' '.$user->last_name));
+				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', abbrev_name($user->first_name.' '.$user->last_name));
 				
 				// Save the login info
 				$data = array(
@@ -250,7 +250,7 @@ class Auth  {
 		}
 		
 		// Is there any session data we can use? 
-		if ($this->ci->session->userdata('email') && $this->ci->session->userdata('user_id'))
+		if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
 		{
 			// Grab the user account
 			$user = $this->ci->user_model->select('id, username, email, first_name, last_name, salt, password_hash')->find($this->ci->session->userdata('user_id'));
@@ -289,13 +289,14 @@ class Auth  {
 		
 		Parameters:
 			$permission	- (Optional) A string representing the permission to check for.
+			$uri		- (Optional) A string representing an URI to redirect, if false
 			
 		Return:
 			true		- if the user has the appropriate access permissions.
 			redirect	- to the previous page if the user doesn't have permissions.
 			redirect	- '/login' page if the user is not logged in.
 	 */
-	public function restrict($permission=null) 
+	public function restrict($permission=null, $uri=null) 
 	{	
 		// If user isn't logged in, don't need to check permissions
 		if ($this->is_logged_in() === false)
@@ -306,9 +307,13 @@ class Auth  {
 		
 		// Check to see if the user has the proper permissions
 		if (!empty($permission) && !$this->has_permission($permission))
-		{ 
-			Template::set_message( $this->ci->lang->line('us_no_permission'), 'attention');
-			Template::redirect($this->ci->session->userdata('previous_page'));
+		{
+			if ($uri) 
+				Template::redirect($uri);
+			else
+				Template::redirect($this->ci->session->userdata('previous_page'));
+
+			Template::set_message( lang('us_no_permission'), 'attention');
 		} 
 		
 		return true;
@@ -345,9 +350,32 @@ class Auth  {
 		Return:
 			The user's username.
 	*/
-	public function username() 
+	public function username()
 	{
-		return $this->ci->session->userdata('username');
+		// if we're using "both" as login type, is session identity a username?
+		if 	(config_item('auth.login_type') == 'username' OR 
+			(config_item('auth.login_type') !== 'email' && (config_item('auth.user_usernames'))))
+		{	
+			return $this->ci->session->userdata('identity');
+		}
+		else // email logintype with username has a username session var
+			if (config_item('auth.use_usernames') == 1) 
+			{
+				return $this->ci->session->userdata('auth_custom');
+			}
+			
+		// TODO: consider optional bool to force using custom session var
+		// don't know if we should give a db call option here
+		logit('[Auth.username()] - Why are we going through DB?' , 'warn');
+		
+		// We have to grab the user from the db and return his username. 
+		$user = $this->ci->user_model->select('username')
+				->find($this->ci->session->userdata('user_id'));
+		
+		return $user->username;
+		
+		
+		
 	}
 	
 	//--------------------------------------------------------------------
@@ -362,7 +390,28 @@ class Auth  {
 	*/
 	public function email() 
 	{
-		return $this->ci->session->userdata('email');
+		//TODO: Is it worth to define a class valid_email() instead of loading CI helper?
+		$this->ci->load->helper('email');
+		
+		// let's make sure we don't have an email at session userdata
+		
+		if ( valid_email($this->ci->session->userdata('identity')))
+		{
+			return	$this->ci->session->userdata('identity');
+		}	
+		else if	( valid_email($this->ci->session->userdata('auth_custom')))
+			{
+				return	$this->ci->session->userdata('auth_custom');
+			}
+			else
+			{
+				// We may have to grab the user from the db and return his email
+				logit('[Auth.email()] - Why are we going through DB?');
+			}	
+	
+		// Should I take this out and return false, leaving it to model?
+		return $this->ci->user_model->get_field($this->ci->session->userdata('user_id'),'email');
+			
 	}
 	
 	//--------------------------------------------------------------------
@@ -370,18 +419,51 @@ class Auth  {
 	/*
 		Method: user_name()
 		
-		Retrieves the user's name from the current session.
+		Retrieves the logged user's name.
 		Built from the user's first_name and last_name fields.
 		
 		Return:
-			The user's first and last name.
+			The logged user's first and last name.
 	*/
 	public function user_name() 
 	{
-		// daK - temporarly disabled, returning username
-		return $this->ci->session->userdata('username');
+		/* 
+		  TODO: Should we user an optional parameter to make it read from session?
+			// if true parameter
+			// Did we set a custom var for this?
+		*/
+		if (config_item('auth.use_usernames') == 2)
+		{
+			return $this->ci->session->userdata('auth_custom');
+		}
+		
+		logit('[Auth.user_name()] - Why are we going through DB?' , 'warn');
+		
+		// We have to grab the user from the db and return his name. 
+		$user = $this->ci->user_model->select('id, first_name, last_name')
+				->find($this->ci->session->userdata('user_id'));
+		
+		return ($user->first_name.' '.$user->last_name);
+
+
+	}	
+	//--------------------------------------------------------------------
+
+	/*
+		Method: identity()
+		
+		Retrieves the logged identity from the current session.
+		Built from the user's submited login.
+		
+		Return:
+			string	- The identity used to login.
+	*/
+	public function identity() 
+	{
+
+		return $this->ci->session->userdata('identity');
 	}
-	
+
 	//--------------------------------------------------------------------	
 	
 	/*		
@@ -651,7 +733,7 @@ class Auth  {
 				
 				if (!$user) { return; }
 				
-				$this->setup_session($user->id, $user->password_hash, $user->email, $user->role_id, true, $test_token, ucwords($user->first_name.' '.$user->last_name));
+				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, true, $test_token, abbrev_name($user->first_name.' '.$user->last_name));
 			}
 		}
 		
@@ -780,10 +862,21 @@ class Auth  {
 		
 		Parameters:
 			$user_id		- An int with the user's id 
+			$username		- The user's username
 			$password_hash	- The user's password hash. Used to create a new, unique user_token.
-			$email			- The user's email address.
+			$email			- The user's email address			
 			$role_id		- The user's role_id
 			$remember		- A boolean (true/false). Whether to keep the user logged in.
+			$old_token		- User's db token to test against
+			$user_name		- User's made name for displaying options
+
+		Session Userdata:
+			$user_id		- From parameter $user_id
+			$auth_custom	- A contentor for user auth custom data. Defaults to username
+			$password_hash	- Unique user_token.
+			$identity		- The user's login identity used: email or username
+			$role_id		- From parameter $role_id
+			$logged_in		- A boolean (true/false) login state for performance usage
 			
 		Return: 
 			true/false on success/failure.
@@ -791,12 +884,31 @@ class Auth  {
 		Access:
 			Private
 	*/
+
 	private function setup_session($user_id=0, $username='', $password_hash=null, $email='', $role_id=0, $remember=false, $old_token=null,$user_name='') 
 	{
-		if (empty($user_id) || empty($email))
+
+		if (empty($user_id) || (empty($email) && empty($username)))
 		{
 			return false;
 		}
+		
+		// What are we using as login identity?
+		//Should I use _identity_login() and move bellow code?
+		
+		// If "both", defaults to email, unless we display usernames globally
+		if ((config_item('auth.login_type') ==  'both'))
+			$login = config_item('auth.use_usernames') ? $username : $email;
+		else 
+			$login = config_item('auth.login_type') == 'username' ? $username : $email;
+
+		// TODO: consider taking this out of setup_session()
+		if (config_item('auth.use_usernames') == 0  && config_item('auth.login_type') ==  'username')
+			// if we've a username at identity, and don't want made user name, let's have an email nearby.
+			$us_custom = $email;
+		else
+			// For backward compatibility, defaults to username
+			$us_custom = config_item('auth.use_usernames') == 2 ? $user_name : $username;
 		
 		// Save the user's session info
 		if (!class_exists('CI_Session'))
@@ -810,9 +922,9 @@ class Auth  {
 		
 		$data = array(
 			'user_id'		=> $user_id,
-			'username'		=> $username,
+			'auth_custom'	=> $us_custom,
 			'user_token'	=> do_hash($user_id . $password_hash),
-			'email'			=> $email,
+			'identity'		=> $login,
 			'role_id'		=> $role_id,
 			'logged_in'		=> true,
 		);
@@ -828,6 +940,26 @@ class Auth  {
 		return true;
 	}
 	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: _identity_login()
+		
+		Returns the identity to be used upon user registration.
+		
+		Return:
+			
+			
+		Access:
+			Private
+	*/	
+
+	private function _identity_login ()
+	{
+		//Should I move indentity conditional code from setup_session() here?
+		//Or should conditional code be moved to auth->identity(), 
+		//  and if Optional true is passed, it would then determine wich identity to store in userdata?
+	}
 	//--------------------------------------------------------------------
 	
 }
@@ -891,4 +1023,40 @@ function has_permission($permission=null, $override = FALSE)
 	}
 	
 	return false;
+}
+
+//--------------------------------------------------------------------	
+
+/*		
+	Function: abbrev_name()
+	
+	Retrieves first and last name from given string.
+	
+	Return:
+		string	- The First and Last name from given parameter.
+*/	
+function abbrev_name( $name = '') 
+{		
+	if (is_string($name))
+	{
+		list( $fname, $lname ) = explode( ' ', $name, 2 );
+		if ( is_null($lname) ) // Meaning only one name was entered...
+		{
+			$lastname = ' ';
+		}
+		else
+		{
+			$lname = explode( ' ', $lname );
+			$size = sizeof($lname);
+			$lastname = $lname[$size-1]; //
+		}
+	return trim($fname.' '.$lastname) ;
+		
+	}
+	/* 
+		TODO: Consider an optional parameter for picking custom var session.
+			Making it auth private, and using auth custom var
+	*/
+	
+return $name;
 }

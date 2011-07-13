@@ -21,8 +21,12 @@
 	THE SOFTWARE.
 */
 
-// Emailer Settings Class
-
+/*
+	Class: Emailer Settings Context
+	
+	Allows the management of the Emailer. Assists in setting up the proper email
+	settings, as well as editing the template and viewing emails that are in the queue.
+*/
 class Settings extends Admin_Controller {
 
 	public function __construct() 
