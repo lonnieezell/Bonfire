@@ -54,21 +54,24 @@ if (!function_exists('state_select'))
 		
 		if (!is_array($all_states) OR empty($all_states[$country_code]))
 		{
-			return;
+			$output = lang('us_no_states');
 		}
-			
-		// Get the states for the selected country
-		$states = $all_states[$country_code];
-
-		$output = '<select name="'. $select_name .'">';
-		foreach ($states as $abbrev => $name)
+		else
 		{
-			$output .= "<option value='{$abbrev}'";
-			$output .= ($abbrev == $selected_code) ? ' selected="selected"' : '';
-			$output .= empty($selected_code) && ($default_abbr == $abbrev) ? ' selected="selected"' : '';
-			$output .= ">{$name}</option>\n";
+			
+			// Get the states for the selected country
+			$states = $all_states[$country_code];
+
+			$output = '<select name="'. $select_name .'">';
+			foreach ($states as $abbrev => $name)
+			{
+				$output .= "<option value='{$abbrev}'";
+				$output .= ($abbrev == $selected_code) ? ' selected="selected"' : '';
+				$output .= empty($selected_code) && ($default_abbr == $abbrev) ? ' selected="selected"' : '';
+				$output .= ">{$name}</option>\n";
+			}
+			$output .= "</select>\n";
 		}
-		$output .= "</select>\n";
 		
 		return $output;
 	}
