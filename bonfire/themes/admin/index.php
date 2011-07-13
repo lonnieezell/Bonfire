@@ -3,7 +3,6 @@
 	Assets::add_js( array(
 		Template::theme_url('js/jquery-1.5.min.js'),
 		Template::theme_url('js/jquery.form.js'),
-		Template::theme_url('js/jquery.ajaxify.min.js'),
 		Template::theme_url('js/ui.js')
 	),
 	'external',
@@ -43,7 +42,7 @@
 		<!-- Nav Bar -->
 		<div id="toolbar">
 			<div id="toolbar-right">
-				<a href="<?php echo site_url('admin/settings/users/edit/'. $this->auth->user_id()) ?>" id="tb_email" title="<?php echo lang('bf_user_settings') ?>"><?php echo config_item('auth.login_type') == 'username' ? $this->auth->username() : $this->auth->email() ?></a>
+				<a href="<?php echo site_url('admin/settings/users/edit/'. $this->auth->user_id()) ?>" id="tb_email" title="<?php echo lang('bf_user_settings') ?>"><?php echo config_item('auth.use_usernames') ? (config_item('auth.use_usernames') == 2 ? $this->auth->user_name() : $this->auth->username()) : $this->auth->email() ?></a>
 				<a href="<?php echo site_url('logout') ?>" id="tb_logout" title="Logout">Logout</a>
 			</div>
 		
@@ -70,6 +69,12 @@
 	</div>
 	
 	<?php Template::block('nav_bottom', ''); ?>
+	
+	<div id="loader">
+		<div class="box">
+			<img src="<?php echo Template::theme_url()?>images/ajax_loader.gif" />
+		</div>
+	</div>
 	
 	<div id="debug"><!-- Stores the Profiler Results --></div>
 	
