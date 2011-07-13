@@ -293,7 +293,7 @@ class Assets {
 			'media'	=> $media
 		);
 
-		if (self::generate_file($file_name, 'css')) {
+		if (self::generate_file($file_name, 'css', 'module')) {
 			$output .= '<link'. self::attributes($attr) ." />\n";
 		}
 		return $output;
@@ -538,10 +538,16 @@ class Assets {
 
 		
 		// Try to find them
-		$scripts = self::find_files($scripts, 'js');
+		$scripts = array();//self::find_files($scripts, 'js');
+		
+		$scripts[] = self::combine_js();
 
-		$scripts[] = self::module_js();
-	
+		$module_file = self::combine_js('module');
+		if ($module_file)
+		{
+			$scripts[] = $module_file;
+		}
+
 		foreach ($scripts as $script)
 		{
 			if (substr($script, -3) != '.js') 
@@ -556,7 +562,7 @@ class Assets {
 					$script :
 					
 					// Otherwise, build the full url
-					self::$asset_url . self::$asset_base . self::$asset_folders['js'] .'/'. $script,
+					self::$asset_base . self::$asset_folders['js'] .'/'. $script,
 						'type'=>'text/javascript'
 			);
 			
@@ -618,7 +624,7 @@ class Assets {
 	//--------------------------------------------------------------------
 	
 	/*
-		Method: module_js()
+		Method: combine_js()
 		
 		Does the actual work of generating the combined js code. All code is 
 		wrapped by open and close tags specified in the config file, so that 
@@ -629,20 +635,29 @@ class Assets {
 		Return: 
 			void
 	 */
-	public static function module_js() 
+	public static function combine_js($type = '') 
 	{
 		// Are there any scripts to include? 
-		if (count(self::$module_scripts) == 0)
+
+		if ($type == 'module' AND count(self::$module_scripts) == 0)
+		{
+			return;
+		}
+		elseif (count(self::$external_scripts) == 0)
 		{
 			return;
 		}
 	
-		$file_name = implode('~', str_replace("/", "-", self::$module_scripts));
+		$file_name = 'combined';
+		if ($type == 'module')
+		{
+			$file_name = implode('~', str_replace("/", "-", self::$module_scripts));
+		}
 		
 		$output = '';
 
 		// Create our shell opening
-		if (self::generate_file($file_name, 'js')) {
+		if (self::generate_file($file_name, 'js', $type)) {
 			$output .= site_url(self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.".js");
 		}
 		
@@ -764,20 +779,43 @@ class Assets {
 		Return:
 			array			The complete list of files with url paths.
 	 */
-	private function generate_file($file_name, $type='css')
+	private function generate_file($file_name, $file_type='css', $type='')
 	{
 
 		$cache_path = $_SERVER['DOCUMENT_ROOT'] . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
-		$file_path = $cache_path.$file_name.".".$type;
 
-		if ($type == 'css')
+		// full file path - without the extension
+		$file_path = $cache_path.$file_name;
+
+		if ($file_type == 'css')
 		{
-			$files_array = self::$module_styles['screen'];
+			$files_array = self::$styles;
+			if ($type == 'module')
+			{
+				$files_array = self::$module_styles['screen'];
+			}
+			if (config_item('assets.css_minify'))
+			{
+				$file_path .= ".min";
+			}
 		}
 		else
 		{
-			$files_array = self::$module_scripts;
+			$files_array = self::$external_scripts;
+			$files_array[] = 'global';
+			if ($type == 'module')
+			{
+				$files_array = self::$module_scripts;
+			}
+
+			if (config_item('assets.js_minify'))
+			{
+				$file_path .= ".min";
+			}
 		}
+		
+		$file_path .= ".".$file_type;
+		
 		
 		$modified_time = 0;
 		
@@ -789,25 +827,51 @@ class Assets {
 
 		foreach ($files_array as $key => $file)
 		{
-			//replace chars for folder separation, replace ~ with /
-			$file = str_replace("-", "/", $file);
-
-			// if the actual asset file is not specified then assume the file is named as - TYPE.php
-			if (count(explode('/', $file)) == 2)
+			if ($type == 'module')
 			{
-				$file .= '/'.$type;
-			}
+				//replace chars for folder separation, replace ~ with /
+				$file = str_replace("-", "/", $file);
 
-			$mod_file = Modules::find($file, '', 'views/');
-			
-			if (count($mod_file))
-			{
-				$modified_time = max(filemtime($mod_file[0].$mod_file[1].'.php'), $modified_time);
+				// if the actual asset file is not specified then assume the file is named as - TYPE.php
+				if (count(explode('/', $file)) == 2)
+				{
+					$file .= '/'.$file_type;
+				}
+
+				$mod_file = Modules::find($file, '', 'views/');
+
+				if (count($mod_file))
+				{
+					$modified_time = max(filemtime($mod_file[0].$mod_file[1].'.php'), $modified_time);
+				}
+				else
+				{
+					// no file found - remove from the array
+					unset($files_array[$key]);
+				}
 			}
 			else
 			{
-				// no file found - remove from the array
-				unset($files_array[$key]);
+			
+				$scripts = self::find_files(array($file), 'js');
+				$app_file = $_SERVER['DOCUMENT_ROOT'] . '/'.str_replace(base_url(), '', $scripts[0]);
+				$files_array[$key] = $app_file.'.js';
+
+				if ($file == 'global')
+				{
+					$files_array[$key] = $app_file;
+				}
+
+				if (is_file($files_array[$key]))
+				{
+					
+					$modified_time = max(filemtime($files_array[$key]), $modified_time);
+				}
+				else
+				{
+					// no file found - remove from the array
+					unset($files_array[$key]);
+				}
 			}
 		}
 
@@ -818,23 +882,31 @@ class Assets {
 
 			foreach ($files_array as $key => $file)
 			{
-				//replace chars for folder separation, replace ~ with /
-				$file = str_replace("-", "/", $file);
-
-				// if the actual asset file is not specified then assume the file is named as - TYPE.php
-				if (count(explode('/', $file)) == 2)
+				if ($type == 'module')
 				{
-					$file .= '/'.$type;
-				}
+					//replace chars for folder separation, replace ~ with /
+					$file = str_replace("-", "/", $file);
 
-				$file_output = self::$ci->load->view($file, null, TRUE);
+					// if the actual asset file is not specified then assume the file is named as - TYPE.php
+					if (count(explode('/', $file)) == 2)
+					{
+						$file .= '/'.$file_type;
+					}
+
+					$file_output = self::$ci->load->view($file, null, TRUE);
+				}
+				else
+				{
+					$file_output = file_get_contents($file);
+				}
 
 				if (!empty($file_output))
 				{
 					$asset_output .= $file_output."\n";
 				}
 			}
-			switch ($type)
+
+			switch ($file_type)
 			{
 				case 'js':
 					if (config_item('assets.js_minify'))
@@ -849,7 +921,7 @@ class Assets {
 					}
 					break;
 				default:
-					throw new LoaderException("Unknown file type.");
+					throw new LoaderException("Unknown file type - $file_type.");
 					break;
 			}
 
