@@ -2,5 +2,8 @@
 
 $config['module_config'] = array(
 	'description'	=> 'Helps maintain database versioning.',
-	'author'		=> 'Bonfire Team'
+	'author'		=> 'Bonfire Team',
+	'menu_topic'	=> array(
+		'developer'		=> 'Database Tools'
+	)
 );
