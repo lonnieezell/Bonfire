@@ -36,9 +36,9 @@ class Settings extends Admin_Controller {
 		
 		$this->lang->load('roles');
 		
-//		Assets::add_js($this->load->view('settings/roles_js', null, true), 'inline');
-		Assets::add_js('roles/settings', 'module');
-		Assets::add_module_css('roles/settings');
+		Assets::add_js($this->load->view('settings/roles_js', null, true), 'inline');
+		//Assets::add_js('roles/settings', 'module');
+		//Assets::add_module_css('roles/settings');
 	}
 		
 	//--------------------------------------------------------------------
