@@ -252,17 +252,20 @@ class Assets {
 			
 			$return .= '<link'. self::attributes($attr) ." />\n";
 		}
-		
+		$return = '';
+
 		// add the combined css
-		$return .= self::module_css($media);
+		$return .= self::combine_css($media);
 		
+		$return .= self::combine_css($media, 'module');
+
 		return $return;
 	}
 	
 	//--------------------------------------------------------------------
 
 	/*
-		Method: module_css()
+		Method: combine_css()
 		
 		Does the actual work of generating the combined css code. All code is 
 		wrapped by open and close tags specified in the config file, so that 
@@ -270,30 +273,48 @@ class Assets {
 		
 		It is called by the js() method.
 		
+		Parameters:
+			$media	- The media to assign to the style(s) being passed in.
+			$type	- either a string 'module' or empty - defines which scripts are being combined
+
 		Return: 
 			void
 	 */
-	public static function module_css($media='screen') 
+	public static function combine_css($media='screen', $type = '') 
 	{
 		// Are there any scripts to include? 
-		if (count(self::$module_styles) == 0)
+		if ($type == 'module' AND count(self::$module_styles) == 0)
 		{
 			return;
 		}
-	
+		elseif (count(self::$styles) == 0)
+		{
+			return;
+		}
+
 		$output = '';
 		
-		$file_name = implode('~', str_replace("/", "-", self::$module_styles[$media]));
+		$file_name = 'combined';
+		if ($type == 'module')
+		{
+			$file_name = implode('~', str_replace("/", "-", self::$module_styles[$media]));
+		}
+		
+		$min = '';
+		if (config_item('assets.css_minify'))
+		{
+			$min .= ".min";
+		}
 
 		// Create our style link
 		$attr = array(
 			'rel'	=> 'stylesheet',
 			'type'	=> 'text/css',
-			'href'	=> site_url(self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.".css"),
+			'href'	=> site_url(self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.$min.".css"),
 			'media'	=> $media
 		);
 
-		if (self::generate_file($file_name, 'css', 'module')) {
+		if (self::generate_file($file_name, 'css', $type)) {
 			$output .= '<link'. self::attributes($attr) ." />\n";
 		}
 		return $output;
@@ -317,7 +338,7 @@ class Assets {
 	public static function add_css($style=null, $media='screen') 
 	{
 		if (empty($style)) return;
-		
+
 		// Add a string
 		if (is_string($style))
 		{
@@ -632,6 +653,9 @@ class Assets {
 		
 		It is called by the js() method.
 		
+		Parameters:
+			$type		- either a string 'module' or empty - defines which scripts are being combined
+
 		Return: 
 			void
 	 */
@@ -789,7 +813,13 @@ class Assets {
 
 		if ($file_type == 'css')
 		{
-			$files_array = self::$styles;
+			$files_array = array();
+			$files_array[] = array(
+				'file'	=> 'screen',
+				'media'	=> 'screen'
+			);
+			$files_array = array_merge($files_array, self::$styles);
+			
 			if ($type == 'module')
 			{
 				$files_array = self::$module_styles['screen'];
@@ -853,9 +883,18 @@ class Assets {
 			else
 			{
 			
-				$scripts = self::find_files(array($file), 'js');
-				$app_file = $_SERVER['DOCUMENT_ROOT'] . '/'.str_replace(base_url(), '', $scripts[0]);
-				$files_array[$key] = $app_file.'.js';
+				$scripts = self::find_files(array($file), $file_type, true);
+
+				if ($file_type == 'js')
+				{
+					$app_file = $_SERVER['DOCUMENT_ROOT'] . '/'.str_replace(base_url(), '', $scripts[0]);
+					$files_array[$key] = $app_file.'.'.$file_type;
+				}
+				else
+				{
+					$app_file = $_SERVER['DOCUMENT_ROOT'] . '/'.str_replace(base_url(), '', $scripts[0]['file']);
+					$files_array[$key] = $app_file;
+				}
 
 				if ($file == 'global')
 				{
