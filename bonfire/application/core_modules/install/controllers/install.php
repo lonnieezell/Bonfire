@@ -38,11 +38,11 @@ class Install extends MX_Controller {
 
 	protected $errors = '';
     
-    /*
-        var: curl_error
-        Boolean check if cURL is enabled in PHP
-    */
-    private $curl_error = 1;
+	/*
+		var: curl_error
+		Boolean check if cURL is enabled in PHP
+	*/
+	private $curl_error = 1;
 	
 	/*
 		Var: $writable_folders
