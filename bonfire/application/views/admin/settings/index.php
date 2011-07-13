@@ -90,8 +90,14 @@
 		</div>
 		
 		<div>
+			<label><?php echo lang('bf_do_check') ?></label>
+			<input type="checkbox" name="do_check" value="1" <?php echo config_item('updates.do_check') == 1 ? 'checked="checked"' : set_checkbox('updates.do_check', 1); ?> />
+			<p class="small" style="display: inline"><?php echo lang('bf_do_check_edge') ?></p>
+		</div>
+		
+		<div>
 			<label><?php echo lang('bf_update_show_edge') ?></label>
-			<input type="checkbox" name="update_check" value="1" <?php echo config_item('updates.bleeding_edge') == 1 ? 'checked="checked"' : set_checkbox('updates.bleeding_edge', 1); ?> />
+			<input type="checkbox" name="bleeding_edge" value="1" <?php echo config_item('updates.bleeding_edge') == 1 ? 'checked="checked"' : set_checkbox('updates.bleeding_edge', 1); ?> />
 			<p class="small" style="display: inline"><?php echo lang('bf_update_info_edge') ?></p>
 		</div>		
 		<div>

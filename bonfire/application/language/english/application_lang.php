@@ -71,6 +71,9 @@ $lang['bf_action_show']			= 'Show';
 $lang['bf_action_login']		= 'Login';
 $lang['bf_actions']				= 'Actions';
 
+$lang['bf_do_check']			= 'Check for updates?';
+$lang['bf_do_check_edge']		= 'Must be enabled to see bleeding edge updates as well.';
+
 $lang['bf_update_show_edge']	= 'View bleeding edge updates?';
 $lang['bf_update_info_edge']	= 'Leave unchecked to only check for new tagged updates. Check to see any new commits to the official repository.';
 
