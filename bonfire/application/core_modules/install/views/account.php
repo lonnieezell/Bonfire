@@ -10,11 +10,11 @@
 
 <?php else : ?>
 
-    <?php if (isset($curl_error) && !empty($curl_error)) :?>
-
-    <?php echo lang('in_curl_disabled'); ?>
-
-    <?php endif; ?>
+	<?php if (isset($curl_error) && !empty($curl_error)) :?>
+	
+	<?php echo lang('in_curl_disabled'); ?>
+	
+	<?php endif; ?>
     
 
 	<?php echo lang('in_account_heading'); ?>
