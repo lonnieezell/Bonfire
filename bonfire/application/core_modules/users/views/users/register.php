@@ -11,7 +11,7 @@
 	<label for="email"><?php echo lang('bf_email'); ?></label>
 	<input type="text" name="email" id="email"  value="<?php echo set_value('email'); ?>"  placeholder="email" />
 	
-	<?php if ( config_item('auth.login_type') !== 'email' OR config_item('auth.use_usernames') == 1:) ?>
+	<?php if ( config_item('auth.login_type') !== 'email' OR config_item('auth.use_usernames') == 1): ?>
 		<label for="username"><?php echo lang('bf_username'); ?></label>
 		<input type="text" name="username" id="username" value="<?php echo set_value('username') ?>" placeholder="username" />
 	<?php endif; ?>
