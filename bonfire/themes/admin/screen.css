@@ -358,7 +358,8 @@ noscript {
 }
 .nav-sub li { position: relative; display: block; width: auto; float: left; }
 .nav-sub a:link,
-.nav-sub a:visited {
+.nav-sub a:visited,
+.nav-sub li > span {
 	display: block;
 	width: auto;
 	float: left;
@@ -369,7 +370,8 @@ noscript {
 	color: #abb;
 	cursor: pointer !important;
 }
-.nav-sub a.current {
+.nav-sub a.current,
+.nav-sub li > span.current {
 	color: #f7f7f7;
 }
 .nav-sub li ul {
