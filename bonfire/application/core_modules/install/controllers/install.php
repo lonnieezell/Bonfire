@@ -275,8 +275,8 @@ class Install extends MX_Controller {
 		$config = array(
 			'site.title'	=> $this->input->post('site_title'),
 			'site.system_email'	=> $this->input->post('email'),
-            'updates.do_check' => $this->curl_update,
-            'updates.bleeding_edge' => $this->curl_update
+			'updates.do_check' => $this->curl_update,
+			'updates.bleeding_edge' => $this->curl_update
 		);
 		
 		if (write_config('application', $config) === false)
