@@ -43,7 +43,7 @@ class Update extends Admin_Controller {
 	*/
 	public function update_check() 
 	{ 	
-		if (!$this->config->item('updates.do_check'))
+		if (!$this->config->item('updates.do_check') || !function_exists('curl_version'))
 		{
 			return;
 		}
