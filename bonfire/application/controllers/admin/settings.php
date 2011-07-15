@@ -89,9 +89,13 @@ class Settings extends Admin_Controller {
 			'auth.remember_length'	=> (int)$this->input->post('remember_length'),
 			'auth.use_extended_profile' => isset($_POST['use_ext_profile']) ? 1 : 0,
 			
-			'updates.bleeding_edge'	=> isset($_POST['update_check']) ? 1 : 0,
+			'updates.do_check'		=> isset($_POST['do_check']) ? 1 : 0,
+			'updates.bleeding_edge'	=> isset($_POST['bleeding_edge']) ? 1 : 0,
 			'site.show_profiler'	=> isset($_POST['show_profiler']) ? 1 : 0,
 		);
+		
+		//destroy the saved update message in case they changed update preferences.
+		$this->cache->delete('update_message');
 		
 		return write_config('application', $data);
 	}
