@@ -21,7 +21,7 @@
 	THE SOFTWARE.
 */
 
-$lang['in_intro'] 					= '<h2>Welcome</h2><p>Welcome to the Bonfire installation process! Just fill in the fields below, and before you know it you will be creating CodeIgniter 2.0 based web apps faster than ever.</p>';
+$lang['in_intro']					= '<h2>Welcome</h2><p>Welcome to the Bonfire installation process! Just fill in the fields below, and before you know it you will be creating CodeIgniter 2.0 based web apps faster than ever.</p>';
 $lang['in_not_writeable_heading']	= 'Files/Folders Not Writeable';
 
 $lang['in_db_settings']				= 'Database Settings';
@@ -38,3 +38,5 @@ $lang['in_password_again']			= 'Password (again)';
 $lang['in_email']					= 'Your Email';
 $lang['in_email_note']				= 'Please double-check your email before continuing.';
 $lang['in_install_button']			= 'Install Bonfire';
+
+$lang['in_curl_disabled']			= '<p class="error">cURL <strong>is not</strong> presently enabled as a PHP extension. Bonfire will not be able to check for updates until it is enabled.</p>';

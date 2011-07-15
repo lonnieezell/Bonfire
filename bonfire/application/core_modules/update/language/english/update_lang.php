@@ -24,6 +24,7 @@
 $lang['up_toolbar_title']			= 'Update Manager';
 
 $lang['up_update_off_message']		= 'Update Checks are turned off in the config/application.php file.';
+$lang['up_curl_disabled_message']	= 'cURL <strong>is not</strong> presently enabled as a PHP extension. Bonfire will not be able to check for updates until it is enabled.';
 $lang['up_edge_commits']			= 'New Bleeding Edge Commits';
 $lang['up_branch']					= 'Branch: <b>develop</b>';
 
