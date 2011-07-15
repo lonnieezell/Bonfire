@@ -39,10 +39,17 @@ class Install extends MX_Controller {
 	protected $errors = '';
     
 	/*
-		var: curl_error
+		Var: $curl_error
 		Boolean check if cURL is enabled in PHP
 	*/
 	private $curl_error = 0;
+	
+	/*
+		Var: $curl_update
+		Boolean that says whether we should check
+		for updates.
+	*/
+	private $curl_update = 0;
 	
 	/*
 		Var: $writable_folders
