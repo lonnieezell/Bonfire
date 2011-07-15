@@ -42,7 +42,7 @@ class Install extends MX_Controller {
 		var: curl_error
 		Boolean check if cURL is enabled in PHP
 	*/
-	private $curl_error = 1;
+	private $curl_error = 0;
 	
 	/*
 		Var: $writable_folders
@@ -182,7 +182,7 @@ class Install extends MX_Controller {
 			}
 		}
         
-        // if $this->curl_error = 0, show warning on "account" page of setup
+        // if $this->curl_error = 1, show warning on "account" page of setup
         Template::set('curl_error', $this->curl_error);
         
 		Template::render();
@@ -336,7 +336,7 @@ class Install extends MX_Controller {
 	{
         if (!function_exists('curl_version'))
         {
-          $this->curl_update = 0;
+          $this->curl_error = 1;
         }   
     }
 	
