@@ -37,6 +37,12 @@
 class Install extends MX_Controller {
 
 	protected $errors = '';
+    
+	/*
+		var: curl_error
+		Boolean check if cURL is enabled in PHP
+	*/
+	private $curl_error = 0;
 	
 	/*
 		Var: $writable_folders
@@ -73,6 +79,8 @@ class Install extends MX_Controller {
 		
 		$this->lang->load('application');
 		$this->lang->load('install');
+        
+		$this->cURL_check();
 	}
 	
 	//--------------------------------------------------------------------
@@ -173,7 +181,10 @@ class Install extends MX_Controller {
 				}
 			}
 		}
-		
+        
+        // if $this->curl_error = 1, show warning on "account" page of setup
+        Template::set('curl_error', $this->curl_error);
+        
 		Template::render();
 	}
 	
@@ -263,7 +274,9 @@ class Install extends MX_Controller {
 		
 		$config = array(
 			'site.title'	=> $this->input->post('site_title'),
-			'site.system_email'	=> $this->input->post('email')
+			'site.system_email'	=> $this->input->post('email'),
+			'updates.do_check' => $this->curl_update,
+			'updates.bleeding_edge' => $this->curl_update
 		);
 		
 		if (write_config('application', $config) === false)
@@ -312,5 +325,20 @@ class Install extends MX_Controller {
 	}
 	
 	//--------------------------------------------------------------------
+    
+    /*
+		Method: cURL_check()
+		
+		Verifies that cURL is enabled as a PHP extension. Sets 
+	   'curl_update' to 0 if not.
+	*/
+	private function cURL_check() 
+	{
+        if (!function_exists('curl_version'))
+        {
+          $this->curl_error = 1;
+        }   
+    }
 	
+	//--------------------------------------------------------------------
 }
