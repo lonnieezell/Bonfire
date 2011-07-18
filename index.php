@@ -212,7 +212,7 @@ if (!file_exists(APPPATH .'config/config.php'))
 	copy(APPPATH .'config/config.example.php', APPPATH .'config/config.php');
 }
 // application.php
-if (!file_exists(APPPATH .'config/applicaiton.php'))
+if (!file_exists(APPPATH .'config/application.php'))
 {
 	copy(APPPATH .'config/application.example.php', APPPATH .'config/application.php');
 }
