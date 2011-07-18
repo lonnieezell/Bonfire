@@ -10,10 +10,13 @@ nbproject/
 # Ignore Custom config files
 bonfire/application/config/database.php
 bonfire/application/config/config.php
+bonfire/application/config/application.php
 bonfire/application/config/email.php
 bonfire/application/config/development/*
 bonfire/application/config/testing/*
 bonfire/application/config/production/*
+bonfire/application/core/MY_Controller.php
+bonfire/controllers/home.php
 
 # but leave the config folders there
 !bonfire/application/config/development/index.html

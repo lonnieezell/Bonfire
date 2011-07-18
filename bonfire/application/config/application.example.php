@@ -21,15 +21,15 @@
 	THE SOFTWARE.
 */
 
-$config['site.title'] = "Bonfire Testsite";
-$config['site.system_email'] = "lonnieje@gmail.com";
+$config['site.title'] = "";
+$config['site.system_email'] = "";
 $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
 
 //--------------------------------------------------------------------
 // !Console/Profiler
 //--------------------------------------------------------------------
-$config['site.show_profiler'] = 0;
+$config['site.show_profiler'] = 1;
 
 //--------------------------------------------------------------------
 // !For Update messages

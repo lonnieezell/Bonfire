@@ -266,6 +266,21 @@ class Install extends MX_Controller {
 			
 			// Email
 			copy(APPPATH .'config/email_format.php', APPPATH .'config/email.php');
+			
+			// Home Controller
+			copy(APPPATH .'core_modules/install/files/home.php', APPPATH .'controllers/home.php');
+		}
+		
+		if (!file_exists(APPPATH .'controllers/home.php'))
+		{
+			// MY Controller
+			copy(APPPATH .'core_modules/install/files/home.php', APPPATH .'controllers/home.php');
+		}
+		
+		if (!file_exists(APPPATH .'core/MY_Controller.php'))
+		{
+			// MY Controller
+			copy(APPPATH .'core_modules/install/files/MY_Controller.php', APPPATH .'core/MY_Controller.php');
 		}
 	}
 	
