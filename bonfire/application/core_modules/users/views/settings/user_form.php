@@ -87,7 +87,7 @@
 		</div>
 		<div>
 			<label><?php echo lang('us_state'); ?></label>
-			<?php echo state_select(isset($user) ? $user->state_id : 0, 'MO'); ?>
+			<?php echo state_select(isset($user) ? $user->state_code : '', 'MO', isset($user) && !empty($user->country_iso) ? $user->country_iso : 'US'); ?>
 		</div>
 		<div>
 			<label><?php echo lang('us_zipcode'); ?></label>
