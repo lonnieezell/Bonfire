@@ -414,8 +414,7 @@ TODO			- Map the state_code values to the state_id and update each user
 				'country_id'	=> array(
 					'type'			=> 'INT',
 					'constraint'	=> 11,
-					'null'			=> TRUE,
-					'default'		=> NULL
+					'null'			=> TRUE
 				)
 			)
 		);
@@ -425,8 +424,7 @@ TODO			- Map the state_code values to the state_id and update each user
 				'state_id'	=> array(
 					'type'			=> 'INT',
 					'constraint'	=> 11,
-					'null'			=> TRUE,
-					'default'		=> NULL
+					'null'			=> TRUE
 				)
 			)
 		);
