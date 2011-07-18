@@ -59,6 +59,7 @@ $lang['us_street_1']				= 'Street 1';
 $lang['us_street_2']				= 'Street 2';
 $lang['us_city']					= 'City';
 $lang['us_state']					= 'State';
+$lang['us_no_states']				= 'There are no states/provences/counties/regions for this country. Create them in the address config file';
 $lang['us_country']					= 'Country';
 $lang['us_zipcode']					= 'Zipcode';
 $lang['us_delete_account']			= 'Delete this Account';
