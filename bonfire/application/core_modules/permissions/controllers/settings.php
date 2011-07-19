@@ -42,7 +42,7 @@ class Settings extends Admin_Controller {
 			if ($this->save_permissions())
 			{
 				Template::set_message(lang("permissions_create_success"), 'success');
-				Template::redirect('/admin/settings/permissions');
+				Template::redirect(SITE_AREA .'/settings/permissions');
 			}
 			else 
 			{
@@ -62,7 +62,7 @@ class Settings extends Admin_Controller {
 		if (empty($id))
 		{
 			Template::set_message(lang("permissions_invalid_id"), 'error');
-			redirect('/admin/settings/permissions');
+			redirect(SITE_AREA .'/settings/permissions');
 		}
 	
 		if ($this->input->post('submit'))
@@ -100,7 +100,7 @@ class Settings extends Admin_Controller {
 			}
 		}
 		
-		redirect('/admin/settings/permissions');
+		redirect(SITE_AREA .'/settings/permissions');
 	}
 		
 	public function save_permissions($type='insert', $id=0) 

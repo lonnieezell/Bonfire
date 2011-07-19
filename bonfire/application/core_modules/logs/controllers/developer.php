@@ -88,7 +88,7 @@ class Developer extends Admin_Controller {
 			}
 		}
 	
-		redirect('admin/developer/logs');
+		redirect(SITE_AREA .'/developer/logs');
 	}
 	
 	//--------------------------------------------------------------------
@@ -111,7 +111,7 @@ class Developer extends Admin_Controller {
 		if (empty($file))
 		{
 			Template::set_message('No log file provided.', 'error');
-			Template::redirect('admin/developer/logs');
+			Template::redirect(SITE_AREA .'/developer/logs');
 		}
 				
 		Template::set('log_file', $file);
@@ -134,7 +134,7 @@ class Developer extends Admin_Controller {
 		
 		delete_files($this->config->item('log_path'));
 	
-		redirect('admin/developer/logs');
+		redirect(SITE_AREA .'/developer/logs');
 	}
 	
 	//--------------------------------------------------------------------

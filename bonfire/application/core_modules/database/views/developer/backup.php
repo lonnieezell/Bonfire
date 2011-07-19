@@ -3,7 +3,7 @@ form div label { width: 37%; }
 form div input[type=text] { width: 45%; }
 </style>
 
-	<?php echo form_open('/admin/developer/database/backup', 'class="constrained"'); ?>
+	<?php echo form_open(SITE_AREA .'/developer/database/backup', 'class="constrained"'); ?>
 	
 		<?php if (isset($tables) && is_array($tables) && count($tables) > 0) : ?>
 			<?php foreach ($tables as $table) : ?>

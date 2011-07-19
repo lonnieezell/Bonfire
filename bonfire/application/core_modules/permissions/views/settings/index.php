@@ -22,7 +22,7 @@
 	<?php else: ?>
 	
 	<div class="notification attention">
-		<p><?php echo lang('permissions_no_records'); ?> <?php echo anchor('admin/settings/permissions/create', lang('permissions_create_new'), array("class" => "ajaxify")) ?></p>
+		<p><?php echo lang('permissions_no_records'); ?> <?php echo anchor(SITE_AREA .'/settings/permissions/create', lang('permissions_create_new'), array("class" => "ajaxify")) ?></p>
 	</div>
 	
 	<?php endif; ?>
@@ -32,7 +32,7 @@
 		<div class="scrollable" id="ajax-content">
 				
 			<div class="box create rounded">
-				<a class="button good ajaxify" href="<?php echo site_url('/admin/settings/permissions/create'); ?>"><?php echo lang('permissions_create_new_button');?></a>
+				<a class="button good ajaxify" href="<?php echo site_url(SITE_AREA .'/settings/permissions/create'); ?>"><?php echo lang('permissions_create_new_button');?></a>
 
 				<h3><?php echo lang('permissions_create_new');?></h3>
 
@@ -64,7 +64,7 @@ foreach ($records as $record) : ?>
 		}
 	}
 ?>
-				<td><?php echo anchor('admin/settings/permissions/edit/'. $record['permission_id'], 'Edit', 'class="ajaxify"') ?></td>
+				<td><?php echo anchor(SITE_AREA .'/settings/permissions/edit/'. $record['permission_id'], 'Edit', 'class="ajaxify"') ?></td>
 			</tr>
 <?php endforeach; ?>
 		</tbody>

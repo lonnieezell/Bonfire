@@ -45,7 +45,7 @@ class Settings extends Admin_Controller {
 			if ($this->save_settings())
 			{
 				Template::set_message('Your settings were successfully saved.', 'success');
-				redirect('admin/settings');
+				redirect(SITE_AREA .'/settings');
 			} else 
 			{
 				Template::set_message('There was an error saving your settings.', 'error');

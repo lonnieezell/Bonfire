@@ -48,14 +48,14 @@
 	
 	<div class="text-right">
 		<br/>
-		<input type="submit" name="submit" value="<?php echo lang('role_save_role'); ?>" /> or <?php echo anchor('admin/settings/roles', lang('bf_action_cancel')); ?>
+		<input type="submit" name="submit" value="<?php echo lang('role_save_role'); ?>" /> or <?php echo anchor(SITE_AREA .'/settings/roles', lang('bf_action_cancel')); ?>
 	</div>
 
 	<br/>
 
 	<?php if (isset($role) && $role->can_delete && has_permission('Bonfire.Roles.Delete')) : ?>
 	<div class="box delete rounded">
-		<a class="button" id="delete-me" href="<?php echo site_url('admin/settings/roles/delete/'. $role->role_id); ?>" onclick="return confirm('Are you sure you want to delete this role?')"><?php echo lang('role_delete_role'); ?></a>
+		<a class="button" id="delete-me" href="<?php echo site_url(SITE_AREA .'/settings/roles/delete/'. $role->role_id); ?>" onclick="return confirm('Are you sure you want to delete this role?')"><?php echo lang('role_delete_role'); ?></a>
 		
 		<h3><?php echo lang('role_delete_role'); ?></h3>
 		
