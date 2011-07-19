@@ -104,7 +104,7 @@
 		<?php 
 		$field_num_count = count($field_numbers);
 		for($ndx=0; $ndx < $field_num_count; $ndx++): ?>
-		<a href="/<?php echo $cur_url."/index/{$field_numbers[$ndx]}"; ?>/" <?php if ($field_numbers[$ndx] == $field_total) { echo 'class="current"'; } ?>><?php echo $field_numbers[$ndx]; ?></a><?php echo $ndx < $field_num_count - 1 ? ' | ' : '';?>
+		<a href="<?php echo site_url($cur_url."/index/{$field_numbers[$ndx]}"); ?>" <?php if ($field_numbers[$ndx] == $field_total) { echo 'class="current"'; } ?>><?php echo $field_numbers[$ndx]; ?></a><?php echo $ndx < $field_num_count - 1 ? ' | ' : '';?>
 		<?php endfor; ?>
 
 		</div>
