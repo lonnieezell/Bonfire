@@ -78,6 +78,7 @@ class Modulebuilder
 						$content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
 					}
 				}
+				$content['views'][$context_name]['index_alt'] = $this->build_view($field_total, $module_name, $context_name, 'index_alt', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
 				$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
 			}
 
@@ -277,15 +278,25 @@ class Modulebuilder
 		}
 		$data['id_val'] = $id_val;
 		
-		$view_name = 'default';
-		if( $action_name == 'list' OR $action_name == 'index') {
-			$view_name = 'index';
-		}
-		elseif( $action_name == 'delete' ) {
-			$view_name = 'delete';
-		}
-		elseif( $action_name == 'js' ) {
-			$view_name = 'js';
+		
+		switch ($action_name)
+		{
+			case 'list':
+			case 'index':
+				$view_name = 'index';
+				break;
+			case 'index_alt':
+				$view_name = 'index_alt';
+				break;
+			case 'delete':
+				$view_name = 'delete';
+				break;
+			case 'js':
+				$view_name = 'js';
+				break;
+			default:
+				$view_name = 'default';
+				break;
 		}
 	
 		$view = $this->CI->load->view('files/view_'.$view_name, $data, TRUE);
