@@ -1,0 +1,249 @@
+#
+# TABLE STRUCTURE FOR: bf_activities
+#
+
+CREATE TABLE `bf_activities` (
+  `activity_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL DEFAULT '0',
+  `activity` varchar(255) NOT NULL,
+  `module` varchar(255) NOT NULL,
+  `created_on` datetime NOT NULL,
+  PRIMARY KEY (`activity_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_activities (`activity_id`, `user_id`, `activity`, `module`, `created_on`) VALUES (1, 1, 'logged in from: 127.0.0.1', 'users', '2011-07-19 04:47:05');
+
+
+#
+# TABLE STRUCTURE FOR: bf_email_queue
+#
+
+CREATE TABLE `bf_email_queue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `to_email` varchar(128) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `alt_message` text,
+  `max_attempts` int(11) NOT NULL DEFAULT '3',
+  `attempts` int(11) NOT NULL DEFAULT '0',
+  `success` tinyint(1) NOT NULL DEFAULT '0',
+  `date_published` datetime DEFAULT NULL,
+  `last_attempt` datetime DEFAULT NULL,
+  `date_sent` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: bf_login_attempts
+#
+
+CREATE TABLE `bf_login_attempts` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ip_address` varchar(40) NOT NULL,
+  `login` varchar(50) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: bf_permissions
+#
+
+CREATE TABLE `bf_permissions` (
+  `permission_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `status` enum('active','inactive','deleted') DEFAULT 'active',
+  PRIMARY KEY (`permission_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (1, 'Site.Signin.Allow', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (2, 'Site.Content.View', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (3, 'Site.Reports.View', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (4, 'Site.Settings.View', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (5, 'Site.Developer.View', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (6, 'Bonfire.Roles.Manage', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (7, 'Bonfire.Users.Manage', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (8, 'Bonfire.Users.View', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (9, 'Bonfire.Users.Add', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (10, 'Bonfire.Database.Manage', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (11, 'Bonfire.Emailer.Manage', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (12, 'Bonfire.Logs.View', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (13, 'Bonfire.Logs.Manage', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (14, 'Bonfire.Emailer.View', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (15, 'Site.Signin.Offline', '', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (16, 'Permissions.Settings.View', 'Allow access to view the Permissions menu unders Settings Context', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (17, 'Permissions.Settings.Manage', 'Allow access to manage the Permissions in the system', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (18, 'Bonfire.Roles.Delete', '', 'active');
+
+
+#
+# TABLE STRUCTURE FOR: bf_permissions_old
+#
+
+CREATE TABLE `bf_permissions_old` (
+  `permission_id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_id` int(11) NOT NULL,
+  `Site.Signin.Allow` tinyint(1) NOT NULL DEFAULT '0',
+  `Site.Content.View` tinyint(1) NOT NULL DEFAULT '0',
+  `Site.Reports.View` tinyint(1) NOT NULL DEFAULT '0',
+  `Site.Settings.View` tinyint(1) NOT NULL DEFAULT '0',
+  `Site.Developer.View` tinyint(1) NOT NULL DEFAULT '0',
+  `Bonfire.Roles.Manage` tinyint(1) NOT NULL DEFAULT '0',
+  `Bonfire.Users.Manage` tinyint(1) NOT NULL DEFAULT '0',
+  `Bonfire.Users.View` tinyint(1) NOT NULL DEFAULT '0',
+  `Bonfire.Users.Add` tinyint(1) NOT NULL DEFAULT '0',
+  `Bonfire.Database.Manage` tinyint(1) NOT NULL DEFAULT '0',
+  `Bonfire.Emailer.Manage` tinyint(1) NOT NULL DEFAULT '0',
+  `Bonfire.Logs.View` tinyint(1) NOT NULL DEFAULT '0',
+  `Bonfire.Logs.Manage` tinyint(1) NOT NULL DEFAULT '0',
+  `Bonfire.Emailer.View` tinyint(1) NOT NULL DEFAULT '0',
+  `Site.Signin.Offline` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`permission_id`),
+  KEY `role_id` (`role_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_permissions_old (`permission_id`, `role_id`, `Site.Signin.Allow`, `Site.Content.View`, `Site.Reports.View`, `Site.Settings.View`, `Site.Developer.View`, `Bonfire.Roles.Manage`, `Bonfire.Users.Manage`, `Bonfire.Users.View`, `Bonfire.Users.Add`, `Bonfire.Database.Manage`, `Bonfire.Emailer.Manage`, `Bonfire.Logs.View`, `Bonfire.Logs.Manage`, `Bonfire.Emailer.View`, `Site.Signin.Offline`) VALUES (1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+INSERT INTO bf_permissions_old (`permission_id`, `role_id`, `Site.Signin.Allow`, `Site.Content.View`, `Site.Reports.View`, `Site.Settings.View`, `Site.Developer.View`, `Bonfire.Roles.Manage`, `Bonfire.Users.Manage`, `Bonfire.Users.View`, `Bonfire.Users.Add`, `Bonfire.Database.Manage`, `Bonfire.Emailer.Manage`, `Bonfire.Logs.View`, `Bonfire.Logs.Manage`, `Bonfire.Emailer.View`, `Site.Signin.Offline`) VALUES (2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO bf_permissions_old (`permission_id`, `role_id`, `Site.Signin.Allow`, `Site.Content.View`, `Site.Reports.View`, `Site.Settings.View`, `Site.Developer.View`, `Bonfire.Roles.Manage`, `Bonfire.Users.Manage`, `Bonfire.Users.View`, `Bonfire.Users.Add`, `Bonfire.Database.Manage`, `Bonfire.Emailer.Manage`, `Bonfire.Logs.View`, `Bonfire.Logs.Manage`, `Bonfire.Emailer.View`, `Site.Signin.Offline`) VALUES (3, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0);
+INSERT INTO bf_permissions_old (`permission_id`, `role_id`, `Site.Signin.Allow`, `Site.Content.View`, `Site.Reports.View`, `Site.Settings.View`, `Site.Developer.View`, `Bonfire.Roles.Manage`, `Bonfire.Users.Manage`, `Bonfire.Users.View`, `Bonfire.Users.Add`, `Bonfire.Database.Manage`, `Bonfire.Emailer.Manage`, `Bonfire.Logs.View`, `Bonfire.Logs.Manage`, `Bonfire.Emailer.View`, `Site.Signin.Offline`) VALUES (4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO bf_permissions_old (`permission_id`, `role_id`, `Site.Signin.Allow`, `Site.Content.View`, `Site.Reports.View`, `Site.Settings.View`, `Site.Developer.View`, `Bonfire.Roles.Manage`, `Bonfire.Users.Manage`, `Bonfire.Users.View`, `Bonfire.Users.Add`, `Bonfire.Database.Manage`, `Bonfire.Emailer.Manage`, `Bonfire.Logs.View`, `Bonfire.Logs.Manage`, `Bonfire.Emailer.View`, `Site.Signin.Offline`) VALUES (5, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+
+#
+# TABLE STRUCTURE FOR: bf_role_permissions
+#
+
+CREATE TABLE `bf_role_permissions` (
+  `role_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  PRIMARY KEY (`role_id`,`permission_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 1);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 2);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 3);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 4);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 5);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 6);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 7);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 8);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 9);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 10);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 11);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 12);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 13);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 14);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 15);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 16);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 17);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 18);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (2, 1);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (2, 2);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (2, 3);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (4, 1);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 1);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 2);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 3);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 4);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 5);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 6);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 7);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 8);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 9);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 10);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 11);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 12);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 13);
+
+
+#
+# TABLE STRUCTURE FOR: bf_roles
+#
+
+CREATE TABLE `bf_roles` (
+  `role_id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(60) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `default` tinyint(1) NOT NULL DEFAULT '0',
+  `can_delete` tinyint(1) NOT NULL DEFAULT '1',
+  `login_destination` varchar(255) NOT NULL DEFAULT '/',
+  `deleted` int(1) DEFAULT '0',
+  PRIMARY KEY (`role_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_roles (`role_id`, `role_name`, `description`, `default`, `can_delete`, `login_destination`, `deleted`) VALUES (1, 'Administrator', 'Has full control over every aspect of the site.', 0, 0, '/', 0);
+INSERT INTO bf_roles (`role_id`, `role_name`, `description`, `default`, `can_delete`, `login_destination`, `deleted`) VALUES (2, 'Editor', 'Can handle day-to-day management, but does not have full power.', 0, 1, '/', 0);
+INSERT INTO bf_roles (`role_id`, `role_name`, `description`, `default`, `can_delete`, `login_destination`, `deleted`) VALUES (3, 'Banned', 'Banned users are not allowed to sign into your site.', 0, 0, '/', 0);
+INSERT INTO bf_roles (`role_id`, `role_name`, `description`, `default`, `can_delete`, `login_destination`, `deleted`) VALUES (4, 'User', 'This is the default user with access to login.', 1, 0, '/', 0);
+INSERT INTO bf_roles (`role_id`, `role_name`, `description`, `default`, `can_delete`, `login_destination`, `deleted`) VALUES (6, 'Developer', 'Developers typically are the only ones that can access the developer tools. Otherwise identical to Administrators, at least until the site is handed off.', 0, 1, '/', 0);
+
+
+#
+# TABLE STRUCTURE FOR: bf_schema_version
+#
+
+CREATE TABLE `bf_schema_version` (
+  `version` int(4) DEFAULT '0',
+  `app_version` int(4) DEFAULT '0'
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_schema_version (`version`, `app_version`) VALUES (6, 0);
+
+
+#
+# TABLE STRUCTURE FOR: bf_sessions
+#
+
+CREATE TABLE `bf_sessions` (
+  `session_id` varchar(40) NOT NULL DEFAULT '0',
+  `ip_address` varchar(16) NOT NULL DEFAULT '0',
+  `user_agent` varchar(50) NOT NULL,
+  `last_activity` int(10) unsigned NOT NULL DEFAULT '0',
+  `user_data` text,
+  PRIMARY KEY (`session_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: bf_user_cookies
+#
+
+CREATE TABLE `bf_user_cookies` (
+  `user_id` bigint(20) NOT NULL,
+  `token` varchar(128) NOT NULL,
+  `created_on` datetime NOT NULL,
+  KEY `token` (`token`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: bf_users
+#
+
+CREATE TABLE `bf_users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `role_id` int(11) NOT NULL DEFAULT '4',
+  `first_name` varchar(20) DEFAULT NULL,
+  `last_name` varchar(20) DEFAULT NULL,
+  `email` varchar(120) NOT NULL,
+  `username` varchar(30) NOT NULL DEFAULT '',
+  `password_hash` varchar(40) NOT NULL,
+  `reset_hash` varchar(40) DEFAULT NULL,
+  `salt` varchar(7) NOT NULL,
+  `last_login` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_ip` varchar(40) NOT NULL DEFAULT '',
+  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `street_1` varchar(255) DEFAULT NULL,
+  `street_2` varchar(255) DEFAULT NULL,
+  `city` varchar(40) DEFAULT NULL,
+  `zipcode` varchar(20) DEFAULT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `reset_by` int(10) DEFAULT NULL,
+  `country_iso` char(2) DEFAULT 'US',
+  `state_code` char(4) DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_users (`id`, `role_id`, `first_name`, `last_name`, `email`, `username`, `password_hash`, `reset_hash`, `salt`, `last_login`, `last_ip`, `created_on`, `street_1`, `street_2`, `city`, `zipcode`, `deleted`, `reset_by`, `country_iso`, `state_code`) VALUES (1, 1, NULL, NULL, 'lonnieje@gmail.com', 'kilishan', 'c14a219de5041ac7a30766e56a759755ed6571bf', NULL, 'FOSKwH9', '2011-07-19 04:47:05', '127.0.0.1', '2011-07-19 04:47:03', NULL, NULL, NULL, NULL, 0, NULL, 'US', '');
+
+

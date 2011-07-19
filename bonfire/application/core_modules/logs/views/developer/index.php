@@ -42,7 +42,7 @@
 				<?php endif; ?>
 			
 			
-				<?php echo form_open(site_url('admin/developer/logs/enable'), 'class="constrained"'); ?>
+				<?php echo form_open(site_url(SITE_AREA .'/developer/logs/enable'), 'class="constrained"'); ?>
 
 				<div>
 					<br/>
@@ -76,7 +76,7 @@
 			
 			<!-- Purge? -->
 			<div class="box delete rounded">
-				<a class="button" id="delete-me" href="<?php echo site_url('admin/developer/logs/purge/'); ?>" onclick="return confirm('Are you sure you want to delete all log files?')"><?php echo lang('log_delete_button'); ?></a>
+				<a class="button" id="delete-me" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'); ?>" onclick="return confirm('Are you sure you want to delete all log files?')"><?php echo lang('log_delete_button'); ?></a>
 				
 				<?php echo lang('log_delete_note'); ?>
 			</div>

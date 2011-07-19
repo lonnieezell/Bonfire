@@ -64,7 +64,7 @@ class Settings extends Admin_Controller {
 			if ($this->save_role())
 			{
 				Template::set_message('Role successfully created.', 'success');
-				Template::redirect('/admin/settings/roles');
+				Template::redirect(SITE_AREA .'/settings/roles');
 			}
 			else 
 			{
@@ -86,7 +86,7 @@ class Settings extends Admin_Controller {
 		if (empty($id))
 		{
 			Template::set_message('Invalid Role ID.', 'error');
-			redirect('/admin/settings/roles');
+			redirect(SITE_AREA .'/settings/roles');
 		}
 	
 		$this->auth->restrict('Bonfire.Roles.Manage');
@@ -96,7 +96,6 @@ class Settings extends Admin_Controller {
 			if ($this->save_role('update', $id))
 			{
 				Template::set_message('Role successfully saved.', 'success');
-				//redirect('admin/settings/roles');
 			}
 			else 
 			{
@@ -130,7 +129,7 @@ class Settings extends Admin_Controller {
 			}
 		}
 		
-		redirect('/admin/settings/roles');
+		redirect(SITE_AREA .'/settings/roles');
 	}
 	
 	//--------------------------------------------------------------------

@@ -22,7 +22,7 @@ HideAllBut([4, 5, 3, 2], 15);// --></script></div><!--Menu-->
 <div class="CGeneric"><div class=CTopic><h3 class=CTitle><a name="Admin_Forms"></a>Admin Forms</h3><div class=CBody><p>When you want to submit a form via AJAX, it&rsquo;s as simple as adding the <u>ajax-form</u> class to your form.</p><blockquote><pre>&lt;?php echo form_open(current_url(), 'class=&quot;ajax-form&quot;'); ?&gt;</pre></blockquote><p>When this form is submitted, it will submit the form to the current url and display the results in the current page via AJAX.&nbsp; No work needed.&nbsp; This works especially well with <u>master/detail</u> pages, like those used by the <u>users</u> and <u>roles</u> modules.</p></div></div></div>
 
 <div class="CGeneric"><div class=CTopic><h3 class=CTitle><a name="Links"></a>Links</h3><div class=CBody><p>Whenever you have a link that you want to AJAX-ify, simply add the <u>ajaxify</u> class to the link.&nbsp; Here is an example from the <u>Roles</u> index page.</p><blockquote><pre>&lt;div class=&quot;box create rounded&quot;&gt;
-  &lt;a class=&quot;button good ajaxify&quot; href=&quot;&lt;?php echo site_url('admin/settings/roles/create'); ?&gt;&quot;&gt;&lt;?php echo lang('role_create_button'); ?&gt;&lt;/a&gt;
+  &lt;a class=&quot;button good ajaxify&quot; href=&quot;&lt;?php echo site_url(SITE_AREA .'/settings/roles/create'); ?&gt;&quot;&gt;&lt;?php echo lang('role_create_button'); ?&gt;&lt;/a&gt;
 
   &lt;h3&gt;&lt;?php echo ucwords(lang('role_create_button')); ?&gt;&lt;/h3&gt;
 

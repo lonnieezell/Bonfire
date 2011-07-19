@@ -4,7 +4,7 @@
 </div>
 <?php endif; ?>
 
-<?php echo form_open('admin/settings/emailer', 'class="constrained"'); ?>
+<?php echo form_open(SITE_AREA .'/settings/emailer', 'class="constrained"'); ?>
 	
 	<br/>
 	
@@ -74,7 +74,7 @@
 
 <p><?php echo lang('em_test_intro'); ?></p>
 
-<?php echo form_open('admin/settings/emailer/test', array('class' => 'ajax-form', 'id'=>'test-form')); ?>
+<?php echo form_open(SITE_AREA .'/settings/emailer/test', array('class' => 'ajax-form', 'id'=>'test-form')); ?>
 	
 	<div>
 		<label><?php echo lang('bf_email'); ?></label>
