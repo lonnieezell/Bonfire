@@ -20,7 +20,7 @@ About: Links
 Whenever you have a link that you want to AJAX-ify, simply add the _ajaxify_ class to the link. Here is an example from the _Roles_ index page.
 
 > <div class="box create rounded">
-> 	<a class="button good ajaxify" href="<?php echo site_url('admin/settings/roles/create'); ?>"><?php echo lang('role_create_button'); ?></a>
+> 	<a class="button good ajaxify" href="<?php echo site_url(SITE_AREA .'/settings/roles/create'); ?>"><?php echo lang('role_create_button'); ?></a>
 > 
 > 	<h3><?php echo ucwords(lang('role_create_button')); ?></h3>
 > 	

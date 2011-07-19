@@ -43,7 +43,7 @@ tr:hover { background: #f6f6f6; border-top: 1px solid #e7e7e7; border-bottom: 1p
 				</p>
 			
 				<div class="submits">
-					<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor('admin/developer/migrations', lang('bf_action_cancel')); ?>
+					<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
 				</div>
 				<?php else: ?>
 					<p><?php echo lang('mig_no_migrations') ?></p>
@@ -68,7 +68,7 @@ tr:hover { background: #f6f6f6; border-top: 1px solid #e7e7e7; border-bottom: 1p
 					</thead>
 					<tbody>
 						<?php foreach ($mod_migrations as $module => $migrations) : ?>
-							<?php echo form_open(site_url('admin/developer/migrations/migrate_module/'. $module)); ?>
+							<?php echo form_open(site_url(SITE_AREA .'/developer/migrations/migrate_module/'. $module)); ?>
 								<input type="hidden" name="is_module" value="1" />
 						<tr>
 							<td><?php echo ucfirst($module) ?></td>
@@ -123,7 +123,7 @@ tr:hover { background: #f6f6f6; border-top: 1px solid #e7e7e7; border-bottom: 1p
 				</p>
 			
 				<div class="submits">
-					<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor('admin/developer/migrations', lang('bf_action_cancel')); ?>
+					<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
 				</div>
 				<?php else: ?>
 					<p><?php echo lang('mig_no_migrations') ?></p>

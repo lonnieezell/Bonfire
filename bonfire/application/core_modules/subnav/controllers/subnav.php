@@ -199,7 +199,7 @@ class Subnav extends Base_Controller {
 		// Is this the current module? 	
 		$class = $module == $this->uri->segment(3) ? 'class="current"' : '';
 		
-		$item  = '<li><a href="'. site_url('admin/'. $context .'/'. $module) .'" '. $class;
+		$item  = '<li><a href="'. site_url(SITE_AREA .'/'. $context .'/'. $module) .'" '. $class;
 		$item .= ' title="'. $title .'">'. ucwords(str_replace('_', '', $display_name)) ."</a>\n";
 		
 		// Sub Menus?

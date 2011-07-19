@@ -98,12 +98,12 @@
 	<?php endif; ?>
 	
 	<div class="submits">
-		<input type="submit" name="submit" value="<?php echo lang('bf_action_save') ?> " /> <?php echo lang('bf_or') ?> <?php echo anchor('admin/settings/users', lang('bf_action_cancel')); ?>
+		<input type="submit" name="submit" value="<?php echo lang('bf_action_save') ?> " /> <?php echo lang('bf_or') ?> <?php echo anchor(SITE_AREA .'/settings/users', lang('bf_action_cancel')); ?>
 	</div>
 
 	<?php if (isset($user)) : ?>
 	<div class="box delete rounded">
-		<a class="button" id="delete-me" href="<?php echo site_url('admin/settings/users/delete/'. $user->id); ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')"><?php echo lang('us_delete_account'); ?></a>
+		<a class="button" id="delete-me" href="<?php echo site_url(SITE_AREA .'/settings/users/delete/'. $user->id); ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')"><?php echo lang('us_delete_account'); ?></a>
 		
 		<?php echo lang('us_delete_account_note'); ?>
 	</div>
