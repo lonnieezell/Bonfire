@@ -1,11 +1,20 @@
+# Ignore OS Related/Generic
+Thumbs.db
+Desktop.ini
+._*
+Icon?
 .DS_Store
+*.bak
+
+# IDEs project files/settings
+nbproject/
+nbactions.xml
+.settings/
+
+# Ignore Bonfire Application Specifics
 bonfire/application/logs/*
 !bonfire/application/logs/index.html
 bonfire/application/cache/*
-*.bak
-
-# NetBeans project files
-nbproject/
 
 # Ignore Custom config files
 bonfire/application/config/database.php
