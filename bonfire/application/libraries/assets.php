@@ -887,13 +887,19 @@ class Assets {
 
 				if ($file_type == 'js')
 				{
-					$app_file = $_SERVER['DOCUMENT_ROOT'] . '/'.str_replace(base_url(), '', $scripts[0]);
-					$files_array[$key] = $app_file.'.'.$file_type;
+					if (count($scripts))
+					{
+						$app_file = $_SERVER['DOCUMENT_ROOT'] . '/'.str_replace(base_url(), '', $scripts[0]);
+						$files_array[$key] = $app_file.'.'.$file_type;
+					}
 				}
 				else
 				{
-					$app_file = $_SERVER['DOCUMENT_ROOT'] . '/'.str_replace(base_url(), '', $scripts[0]['file']);
-					$files_array[$key] = $app_file;
+					if (count($scripts))
+					{
+						$app_file = $_SERVER['DOCUMENT_ROOT'] . '/'.str_replace(base_url(), '', $scripts[0]['file']);
+						$files_array[$key] = $app_file;
+					}
 				}
 
 				if ($file == 'global')
