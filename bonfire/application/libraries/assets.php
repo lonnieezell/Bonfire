@@ -296,7 +296,10 @@ class Assets {
 		
 		// Add the theme name to the filename 
 		// to account for different frontend/backend themes.
-		$file_name = Template::get('active_theme') .'_combined';
+		$theme = Template::get('active_theme');
+		$theme = empty($theme) ? Template::get('default_theme') : $theme;
+		
+		$file_name = $theme .'_combined';
 		
 		if ($type == 'module')
 		{
@@ -675,7 +678,10 @@ class Assets {
 			return;
 		}
 	
-		$file_name = Template::get('active_theme') .'_combined';
+		$theme = Template::get('active_theme');
+		$theme = empty($theme) ? Template::get('default_theme') : $theme;
+		$file_name = $theme .'_combined';
+		
 		if ($type == 'module')
 		{
 			$file_name = implode('~', str_replace("/", "-", self::$module_scripts));
