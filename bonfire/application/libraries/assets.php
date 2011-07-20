@@ -222,7 +222,10 @@ class Assets {
 		}
 		
 		// Add a style named for the controller so it will be looked for.
-		$styles[] = self::$ci->router->class;
+		$styles[] = array(
+			'file'	=> self::$ci->router->class,
+			'media' => $media
+		);
 
 		$styles = self::find_files($styles, 'css', $bypass_inheritance);
 
@@ -252,7 +255,6 @@ class Assets {
 			
 			$return .= '<link'. self::attributes($attr) ." />\n";
 		}
-		$return = '';
 
 		// add the combined css
 		$return .= self::combine_css($media);
@@ -1056,7 +1058,7 @@ class Assets {
 			echo 'Site Path = '. $site_path .'<br/>';
 			echo 'File(s) to find: '; print_r($files);
 		}
-		
+
 		foreach ($files as $file)
 		{
 			// If it's an array, we're dealing with css and it has both 
@@ -1105,8 +1107,9 @@ class Assets {
 						First, check the default theme. Add it to the array. We check here first so that it
 						will get overwritten by anything in the active theme.
 					*/
+					
 					if (is_file($site_path . $path .'/'. $default_theme . $file .".{$type}"))
-					{
+					{ 
 						$file_path = base_url() . $path .'/'. $default_theme . $file .".{$type}";
 						$new_files[] = isset($media) ? array('file'=>$file_path, 'media'=>$media) : $file_path;
 						$found = true;
@@ -1186,7 +1189,7 @@ class Assets {
 				}
 			}			
 		}
-		
+
 		return $new_files;
 	}
 	
