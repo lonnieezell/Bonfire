@@ -35,7 +35,7 @@
         },
         hide : function() {
             if (this.valueIsPlaceholder() && this.input.hasClass('placeholder')) {
-                this.inp3333333333ut.removeClass('placeholder');
+                this.input.removeClass('placeholder');
                 this.input[0].value = '';
                 if (this.isPassword) {
                     try {
