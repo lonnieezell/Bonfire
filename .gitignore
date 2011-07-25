@@ -2,6 +2,8 @@
 bonfire/application/logs/*
 !bonfire/application/logs/index.html
 bonfire/application/cache/*
+assets/cache/*.css
+assets/cache/*.js
 *.bak
 
 # NetBeans project files
