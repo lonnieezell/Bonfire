@@ -324,7 +324,7 @@ noscript {
 	color: #fff;
 	opacity: 1.0;
 }
-#tb_logout { background: url(images/logout.png) 10px 7px no-repeat; }
+#tb_logout { background: url(/bonfire/themes/admin/images/logout.png) 10px 7px no-repeat; }
 
 #toolbar a#tb_email { 
 	text-indent: 0; 
@@ -352,7 +352,7 @@ noscript {
 	height: 28px;
 	margin: 0;
 	list-style: none;
-	background: #222 url(images/bg_fabric_dark.jpg) top left repeat;
+	background: #222 url(/bonfire/themes/admin/images/bg_fabric_dark.jpg) top left repeat;
 	border-bottom: 1px solid #999;
 	z-index: 3;
 }
