@@ -81,6 +81,7 @@
 	<script>
 		head.js(<?php echo Assets::external_js(null, true) ?>);
 	</script>
+	<?php echo Assets::module_js(); ?>
 	<?php echo Assets::inline_js(); ?>
 
 </body>
