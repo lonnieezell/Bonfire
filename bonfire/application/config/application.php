@@ -260,6 +260,21 @@ $config['assets.asset_folders'] = array(
 $config['assets.js_opener'] = 'head.ready(function(){'. "\n";
 $config['assets.js_closer'] = '});'. "\n";
 
+/*
+	The 'assets.combine' setting tells the Asset library whether
+	files should be combined or not.
+*/
+$config['assets.combine'] = FALSE;
+
+/*
+	The 'assets.encrypt' setting will mask the app structure
+	by encrypting the filename of the combined files.
+	
+	If false the filename would be in the format... 
+		theme_module_controller_method
+	If true, it would be an md5 hash of the above filename.
+*/
+$config['assets.encrypt_name'] = FALSE;
 
 /*
 	The 'assets.js_minify' and 'assets.css_minify' settings are used to 
