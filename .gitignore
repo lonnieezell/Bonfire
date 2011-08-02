@@ -5,16 +5,22 @@ Desktop.ini
 Icon?
 .DS_Store
 *.bak
+*.tmproj
+*.tmproject
 
 # IDEs project files/settings
 nbproject/
 nbactions.xml
 .settings/
+.project
+.metadata
+.properties
 
 # Ignore Bonfire Application Specifics
 bonfire/application/logs/*
 !bonfire/application/logs/index.html
 bonfire/application/cache/*
+!bonfire/application/cache/index.html
 
 # Ignore Custom config files
 bonfire/application/config/database.php
@@ -30,6 +36,10 @@ bonfire/application/config/production/*
 !bonfire/application/config/testing/index.html
 !bonfire/application/config/production/index.html
 
+# Helping GUIs omiting subtree repos
+bonfire/modules/**/.git/*
+bonfire/modules/**/.hg/*
+
 # Ignore all custom modules.
 bonfire/modules/*
-/*.project
+# Except the following modules:
