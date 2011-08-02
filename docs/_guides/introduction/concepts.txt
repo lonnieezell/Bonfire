@@ -7,13 +7,15 @@ About: Contexts
 
 A *Context* is an area of similar responsibility, like _Settings_, _Reports_ or _Developer Tools_. The Contexts form the main navigation through Bonfire's admin area. There are three contexts that are required (as well as a Public Context), and you can create as many additional Contexts as you desire. 
 
+Learn more about working with <Contexts>.
+
 
 
 About: Modules
 
 Modules are collections of MVC triads that contain functionality limited to one specific area, like Pages or Database Tools. They are the heart of Bonfire and you will spend most of your time developing new modules. Modules can contain their Models, Controllers, Views, Helpers, Libraries, config files, language files and even styles and scripts.
 
-Modules are covered in more detail in <Creating Modules> topic.
+Modules are covered in more detail in <Modules Overview>.
 
 
 About: HMVC

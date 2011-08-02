@@ -1,0 +1,7 @@
+Title: Migrations
+
+The Migrations Module expands on the Migrations library provided by CodeIgniter to allow two types of migrations (dbforge or raw SQL), and separate migrations for Bonfire core, your application, and each module. This provides you, the developer, with the utmost flexibility in versioning your database.
+
+
+
+About: 
