@@ -1,0 +1,61 @@
+Title: Activities
+
+The Activities module provides a simple way to log user's activities as they use the system. 
+
+Many web applications will track when a user logs in, or changes their profile settings, or sends an email, etc. They will then show that information in various places throughout the UI. A very complex example of this might be Facebook's Wall, which is simply a stream of recent activity that allows users to comment on the activities. 
+
+That's what the Activities module helps you integrate into your application. 
+
+
+
+About: Loading the Module
+
+The activities module primarily consists of a single model that allows you to get and save user activity. It is loaded like any other model in CodeIgniter.
+
+> $this->load->model('activities/activity_model');
+
+Once loaded, the Activity object is available through: *$this->activity_model*.
+
+
+
+About: Logging User Activity
+
+You record new user activity through the *log_activity()* method.
+
+> $this->activity_model->log_activity($user_id, $activity, $module);
+
+The method takes three parameters…
+
+*$user_id* is and INT that matches the user_id of the user that performed the activity.
+
+*$activity* is a string that will tells what activity the user did. This string should be written so that it would fit in a sentence immediately following their username. For example, if you wanted to record a login, the activity might be 'logged in via IP 127.0.0.0'. 
+
+*$module* is a string that matches the name of the module recording the activity. This allows any module to pull only the activities related to that module.
+
+
+
+About: Displaying User Activity
+
+To display user activities in the most flexible way, you would use the *find_by_module()* method to retrieve an array of all activity for a single module.
+
+> $activities = $this->activity_model->find_by_module($module);
+
+Where *$module* is a string representing the name of the module to retrieve activity for.
+
+Once you have the data you can either loop through the data in your view, or create a new view that renders the items for you.
+
+><?php if (isset($activities) && is_array($activities) && count($activities)) : ?>
+><ul>
+>	<?php foreach ($activities as $activity) :?>
+>		<?php 
+>			$identity = config_item('auth.login_type') == 'email' ? $activity->email : $activity->username;
+>		?>
+>		
+>		<li>
+>			<span class="small"><?php echo relative_time(strtotime($activity->created_on)) ?></span>
+>			<br/>
+>			<b><?php echo $identity ?></b> <?php echo $activity->activity ?>
+>		</li>
+>	<?php endforeach; ?>
+></ul>
+><?php endif; ?>
