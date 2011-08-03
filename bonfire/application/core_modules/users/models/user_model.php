@@ -159,8 +159,6 @@ class User_model extends BF_Model {
 			$data['password_hash'] = $password;
 			$data['salt'] = $salt;
 		}
-		
-		$data['zipcode'] = !empty($data['zipcode']) ? $data['zipcode'] : null;
 
 		// Handle the country
 		if (isset($data['iso']))
