@@ -192,8 +192,9 @@ class Auth  {
 			}
 			// Bad username
 			$this->increase_login_attempts($login);
-			$this->errors[] = $this->ci->lang->line('us_bad_email_pass');
-		}
+		}	
+
+		$this->errors[] = $this->ci->lang->line('us_bad_email_pass');
 		
 		return false;
 	}
