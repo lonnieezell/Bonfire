@@ -1,5 +1,5 @@
 <div class="notification attention">
-	<p><?php echo isset($update_message) ? $update_message : lang('up_update_off_message') ?></p>
+	<p><?php echo isset($update_message) ? $update_message : lang((isset($curl_disabled) ? 'up_curl_disabled_message' : 'up_update_off_message')) ?></p>
 </div>
 
 <?php if (isset($commits) && is_array($commits) && count($commits)) : ?>

@@ -1,6 +1,6 @@
 <h2><?php echo lang('bf_action_delete'); ?> <?php echo lang('db_database'); ?> <?php echo lang('db_tables'); ?></h2>
 
-<?php echo form_open('admin/developer/database/drop'); ?>
+<?php echo form_open(SITE_AREA .'/developer/database/drop'); ?>
 	
 	<?php if (isset($tables) && is_array($tables) && count($tables) > 0) : ?>
 		<?php foreach ($tables as $table) : ?>

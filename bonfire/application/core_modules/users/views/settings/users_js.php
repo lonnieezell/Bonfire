@@ -5,7 +5,7 @@
 	through the UI.js functions.
 */
 $.subscribe('list-view/list-item/click', function(user_id) {
-	$('#content').load('<?php echo site_url('admin/settings/users/edit/') ?>/'+ user_id, function(response, status, xhr){
+	$('#content').load('<?php echo site_url(SITE_AREA .'/settings/users/edit/') ?>/'+ user_id, function(response, status, xhr){
 		if (status != 'error')
 		{
 			

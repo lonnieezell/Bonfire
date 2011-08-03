@@ -57,7 +57,7 @@ class Settings extends Admin_Controller {
 	
 		$total_users = $this->user_model->count_all();
 	
-		$this->pager['base_url'] = site_url('admin/settings/users/index');
+		$this->pager['base_url'] = site_url(SITE_AREA .'/settings/users/index');
 		$this->pager['total_rows'] = $total_users;
 		$this->pager['per_page'] = $this->limit;
 		$this->pager['uri_segment']	= 4;
@@ -94,6 +94,7 @@ class Settings extends Admin_Controller {
 	{
 		$this->auth->restrict('Bonfire.Users.Add');
 	
+		$this->load->config('address');
 		$this->load->helper('address');
 	
 		if ($this->input->post('submit'))
@@ -104,7 +105,7 @@ class Settings extends Admin_Controller {
 				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_create').' '. $user->role_name . ': '.(config_item('auth.use_usernames') ? $user->username : $user->email), 'users');
 				
 				Template::set_message('User successfully created.', 'success');
-				Template::redirect('admin/settings/users');
+				Template::redirect(SITE_AREA .'/settings/users');
 			}
 			else 
 			{
@@ -125,6 +126,7 @@ class Settings extends Admin_Controller {
 	{
 		$this->auth->restrict('Bonfire.Users.Manage');
 		
+		$this->load->config('address');
 		$this->load->helper('address');
 		
 		$user_id = $this->uri->segment(5);
@@ -138,7 +140,6 @@ class Settings extends Admin_Controller {
 				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_edit') .': '.(config_item('auth.use_usernames') ? $user->username : $user->email), 'users');
 			
 				Template::set_message('User successfully updated.', 'success');
-				//redirect('admin/settings/users');
 			}
 			else 
 			{
@@ -175,7 +176,7 @@ class Settings extends Admin_Controller {
 			}
 		}
 		
-		redirect('/admin/settings/users');
+		redirect(SITE_AREA .'/settings/users');
 	}
 	
 	//--------------------------------------------------------------------
@@ -217,7 +218,7 @@ class Settings extends Admin_Controller {
 		
 		Template::set_message('Users Purged.', 'success');
 		
-		redirect('admin/settings/users');
+		redirect(SITE_AREA .'/settings/users');
 	}
 	
 	//--------------------------------------------------------------------
@@ -235,7 +236,7 @@ class Settings extends Admin_Controller {
 			Template::set_message('Unable to restore user: '. $this->user_model->error, 'error');
 		}
 		
-		redirect('/admin/settings/users');
+		redirect(SITE_AREA .'/settings/users');
 	}
 	
 	//--------------------------------------------------------------------

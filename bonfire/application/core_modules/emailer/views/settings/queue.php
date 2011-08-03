@@ -36,7 +36,7 @@
 				<td class="text-center"><?php echo $email->attempts ?></td>
 				<td class="text-center"><?php echo $email->success ? lang('bf_yes') : lang('bf_no') ?></td>
 				<td class="text-center">
-					<?php echo anchor('/admin/settings/emailer/preview/'. $email->id, lang('bf_action_preview'), array('target'=>'_blank')); ?>
+					<?php echo anchor(SITE_AREA .'/settings/emailer/preview/'. $email->id, lang('bf_action_preview'), array('target'=>'_blank')); ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>

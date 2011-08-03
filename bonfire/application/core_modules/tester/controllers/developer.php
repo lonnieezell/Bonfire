@@ -50,7 +50,7 @@ class Developer extends Admin_Controller {
 		if ($this->input->post('submit') && !$this->input->post('tests'))
 		{
 			Template::set_message('Please select one or more modules to run tests on.', 'attention');
-			redirect('admin/developer/tester');
+			redirect(SITE_AREA .'/developer/tester');
 		}
 		
 		$this->load->library('unit_test');

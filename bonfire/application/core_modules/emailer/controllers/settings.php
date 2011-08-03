@@ -77,7 +77,7 @@ class Settings extends Admin_Controller {
 				{
 					// Success, so reload the page, so they can see their settings
 					Template::set_message('Email settings successfully saved.', 'success');
-					redirect('/admin/settings/emailer');
+					redirect(SITE_AREA .'/settings/emailer');
 				}
 				else 
 				{
@@ -110,7 +110,7 @@ class Settings extends Admin_Controller {
 			
 			Template::set_message('Template successfully saved.', 'success');
 			
-			redirect('admin/settings/emailer/template');
+			redirect(SITE_AREA .'/settings/emailer/template');
 		}
 	
 		Template::set('toolbar_title', 'Email Template');
@@ -166,7 +166,7 @@ class Settings extends Admin_Controller {
 	
 		$total_emails = $this->emailer_model->count_all();
 	
-		$this->pager['base_url'] = site_url('admin/settings/emailer/queue');
+		$this->pager['base_url'] = site_url(SITE_AREA .'/settings/emailer/queue');
 		$this->pager['total_rows'] = $total_emails;
 		$this->pager['per_page'] = $this->limit;
 		$this->pager['uri_segment']	= 5;
