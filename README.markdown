@@ -42,3 +42,12 @@ If you're interested in helping out, fork the project and start coding! I'd love
 
 Let's make this the best kick-start to any CodeIgniter project. 
 
+## The Team
+
+The Bonfire Team is made up from developers around the world interested in making Bonfire a better kickstart for your [CodeIgniter](http://codeigniter.com) projects.
+
+- [Lonnie Ezell](http://lonnieezell.com) - Lead Developer
+- [Sean Downey](https://github.com/seandowney)
+- [Nuno Costa](https://github.com/daK76)
+- [Ben Evans](https://github.com/bencevans)
+
