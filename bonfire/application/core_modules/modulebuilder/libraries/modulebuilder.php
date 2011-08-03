@@ -64,7 +64,7 @@ class Modulebuilder
 		// Build the files
 		if( $field_total ) {
 
-			$module_file_name = strtolower($module_name);
+			$module_file_name = str_replace(" ", "_", strtolower($module_name));
 			foreach( $contexts as $key => $context_name) {
 				// controller
 				if($context_name == 'public') {
@@ -83,7 +83,7 @@ class Modulebuilder
 			}
 
 			// build the lang file
-			$content['lang'] = $this->build_lang($module_name);
+			$content['lang'] = $this->build_lang($module_name, $module_file_name);
 
 			// build the model file
 			$content['model'] = $this->build_model($field_total, $module_file_name, $action_names, $primary_key_field);
@@ -264,7 +264,7 @@ class Modulebuilder
 		  
 		$data['field_total'] = $field_total;
 		$data['module_name'] = $module_name;
-		$data['module_name_lower'] = strtolower($module_name);
+		$data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
 		$data['controller_name'] = $controller_name;
 		$data['action_name'] = $action_name;
 		$data['primary_key_field'] = $primary_key_field;
@@ -326,7 +326,7 @@ class Modulebuilder
 		  
 		$data['field_total'] = $field_total;
 		$data['module_name'] = $module_name;
-		$data['module_name_lower'] = strtolower($module_name);
+		$data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
 		$data['controller_name'] = $controller_name;
 		$data['action_names'] = $action_names;
 		$data['primary_key_field'] = $primary_key_field;
@@ -348,7 +348,7 @@ class Modulebuilder
     * @return string
     */
 
-	private function build_model($field_total, $module_name, $action_names, $primary_key_field)
+	private function build_model($field_total, $module_file_name, $action_names, $primary_key_field)
 	{
 		if ($field_total == NULL)
 		{
@@ -356,7 +356,7 @@ class Modulebuilder
 		}
 
 		$data['field_total']		= $field_total;
-		$data['controller_name']	= $module_name;
+		$data['controller_name']	= $module_file_name;
 		$data['action_names']		= $action_names;
 		$data['primary_key_field']	= $primary_key_field;
 		
@@ -377,10 +377,10 @@ class Modulebuilder
     * @return string
     */
 
-	private function build_lang($module_name)
+	private function build_lang($module_name, $module_name_lower)
 	{
 		$data['module_name'] = $module_name;
-		$data['module_name_lower'] = strtolower($module_name);
+		$data['module_name_lower'] = $module_name_lower;
 		$lang = $this->CI->load->view('files/lang', $data, TRUE);
 
 		return $lang;
@@ -406,8 +406,8 @@ class Modulebuilder
 		}
 		
 		$data['field_total'] = $field_total;
-		$data['module_name'] = $module_name;
-		$data['module_name_lower'] = strtolower($module_name);
+		$data['module_name'] = str_replace(" ", "_", $module_name);
+		$data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
 		$data['primary_key_field'] = $primary_key_field;
 		$data['contexts'] = $contexts;
 		$data['action_names'] = $action_names;

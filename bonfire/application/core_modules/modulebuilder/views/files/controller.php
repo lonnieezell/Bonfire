@@ -19,7 +19,7 @@ $controller .= ' {
 		}
 		else {
 		$controller .= '
-		$this->auth->restrict(\''.ucfirst($module_name).'.'.ucfirst($controller_name).'.View\');';
+		$this->auth->restrict(\''.str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.View\');';
 		}
 $controller .= '
 		$this->load->model(\''.$module_name_lower.'_model\');
@@ -109,7 +109,7 @@ $controller .= '
 		$controller .= '
 	public function create() 
 	{
-		$this->auth->restrict(\''.ucfirst($module_name).'.'.ucfirst($controller_name).'.Create\');
+		$this->auth->restrict(\''.str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Create\');
 
 		if ($this->input->post(\'submit\'))
 		{
@@ -174,7 +174,7 @@ $controller .= '
 		$controller .= '
 	public function delete() 
 	{	
-		$this->auth->restrict(\''.ucfirst($module_name).'.'.ucfirst($controller_name).'.Delete\');
+		$this->auth->restrict(\''.str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete\');
 
 		$id = $this->uri->segment(5);
 	
