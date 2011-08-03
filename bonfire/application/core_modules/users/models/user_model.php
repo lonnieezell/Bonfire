@@ -243,6 +243,8 @@ class User_model extends BF_Model {
 	*/
 	public function find_by($field=null, $value=null) 
 	{
+		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
+		
 		if ($field == 'both')
 		{
 			$field = array(
@@ -252,8 +254,6 @@ class User_model extends BF_Model {
 			
 			return parent::find_by($field, null, 'or');
 		}
-		
-		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
 		
 		return parent::find_by($field, $value);
 	}
