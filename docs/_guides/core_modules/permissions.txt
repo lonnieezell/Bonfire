@@ -1,0 +1,56 @@
+Title: Permissions
+
+The Permissions module allows you to easily manage the permissions used throughout your application. It works hand in hand with the <Roles> module to provide a powerful, flexible Role Based Access Class (RBAC).
+
+
+
+About: Permissions Overview
+
+Permissions in Bonfire are named based on a simple, yet flexible, scheme that allows you to always know exactly the permission you are using and what module it belongs to.
+
+Permissions are then used through the <Auth> functions _has_permission()_ and _restrict()_ to protect access to restricted features.
+
+
+About: Naming Permissions
+
+Permissions are named based on three parts
+
+> context.module.action
+
+- *Context* can be one of several things depending on your needs. By default, Bonfire's permissions typically use _Bonfire_ or _Site_ as the context. This helps to separate permissions away from your app's/module's custom permissions. Other suggested naming schemes are to use your _AppName_ or the _ModuleName_ for the context. 
+- *Module* is typically the name of your module, or a portion of it. For example, the Bonfire context provides permissions for Roles, Users, Database, Emailer and Logs. The Site context provides a 'module' for each context to restrict who can actually view the Context in the admin UI.
+- *Action* is a single action that can be checked. Common actions are View, Add, and Manage, but can be whatever you need.
+
+
+
+About: Creating Permissions
+
+New permissions can easily be created through the Admin UI by navigating to Settings / Permissions. This screen will provide a list of all existing permissions as well as the option to create new ones.
+
+Each permission has the following three properties...
+
+- *Name* is the permission itself, following the naming scheme outlined above.
+- *Description* is a short string describing the permission and it's use. This is only used for display in the Permissions overview page.
+- *Status* allows permissions to still be available in the system, but not to actually be used. This can be used as a placeholder for in-development features.
+
+
+
+About: Deleting Permissions
+
+Permissions can be deleted by editing the permission and clicking 'Delete This Permission' on the resulting page.
+
+
+
+About: Using Permissions
+
+*Restricting Access to a Module*
+
+To restrict access to an entire module, or even just a specific module's method, you would use the <Auth> function _restrict()_. The first parameter is the permission name to verify. If no permission name is passed, it will simply check that the current user is logged in. The second parameter is a URL to redirect to if they are not allowed access.
+
+> $this->auth->restrict('Site.Content.View');
+
+*Checking Access In A Module*
+
+Anywhere in your controllers or views you can check if the user has permission to perform an action using the _has_permission()_ method. This method takes 3 parameters. The first parameter is the permission to check. The second parameter is an optional Role ID. If no Role ID is passed, it will check for the current user.
+
+> if (has_permission('Bonfire.Users.Manage') == true) { . . . }
