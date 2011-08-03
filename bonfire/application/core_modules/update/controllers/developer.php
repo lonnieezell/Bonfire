@@ -32,13 +32,18 @@ class Developer extends Admin_Controller {
 		$this->lang->load('update');
 		
 		Template::set('toolbar_title', lang('up_toolbar_title'));
+		
+		if (!function_exists('curl_version'))
+		{
+			Template::set('curl_disabled', 1);
+		}
 	}
 	
 	//--------------------------------------------------------------------
 
 	public function index() 
 	{
-		if ($this->config->item('updates.do_check'))
+		if ($this->config->item('updates.do_check') && function_exists('curl_version'))
 		{
 			$this->load->library('GitHub_lib');
 			$this->load->helper('date');

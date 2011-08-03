@@ -148,7 +148,7 @@ class Developer extends Admin_Controller {
 				Template::set_message('There was a problem saving the backup file.', 'error');
 			}
 			
-			redirect('/admin/developer/database');
+			redirect(SITE_AREA .'/developer/database');
 		}
 		
 		return false;
@@ -168,11 +168,11 @@ class Developer extends Admin_Controller {
 			$data = file_get_contents($this->backup_folder . $filename);
 			force_download($filename, $data);
 			
-			redirect('admin/database/backups');
+			redirect(SITE_AREA .'/database/backups');
 		} else 	// File doesn't exist
 		{
 			Template::set_message($filename . ' could not be found.', 'error');
-			redirect('/admin/developer/database/backups');
+			redirect(SITE_AREA .'/developer/database/backups');
 		}
 	}
 	
@@ -230,7 +230,7 @@ class Developer extends Admin_Controller {
 			{
 				// Couldn't read from file.
 				Template::set_message('Could not read the file: /application/db/backups/' . $filename . '.', 'error');
-				redirect('/admin/developer/database/backups');
+				redirect(SITE_AREA .'/developer/database/backups');
 			}
 		}
 		
@@ -273,7 +273,7 @@ class Developer extends Admin_Controller {
 			
 			// Tell them it was good.
 			Template::set_message($count . ' backup files were deleted.', 'success');
-			redirect('/admin/developer/database/backups');
+			redirect(SITE_AREA .'/developer/database/backups');
 		}
 	}
 	
@@ -303,7 +303,7 @@ class Developer extends Admin_Controller {
 			$quality = $failed == 0 ? 'success' : 'alert';
 			
 			Template::set_message(($count - $failed) .' of '. $count .' tables were successfully repaired.', $quality);
-			redirect('/admin/developer/database');
+			redirect(SITE_AREA .'/developer/database');
 		} 
 		
 		return;
@@ -328,7 +328,7 @@ class Developer extends Admin_Controller {
 			$this->session->set_flashdata('message', 'success::The database was successfully optimized.');
 		}
 		
-		redirect('/admin/developer/database', 'location');
+		redirect(SITE_AREA .'/developer/database', 'location');
 	}
 	
 	//---------------------------------------------------------------
@@ -357,7 +357,7 @@ class Developer extends Admin_Controller {
 			
 			$grammar = count($_POST['tables'] == 1) ? ' table' : ' tables';
 			Template::set_message(count($_POST['tables']) .$grammar.' successfully dropped.', 'success');
-			redirect('/admin/developer/database');
+			redirect(SITE_AREA .'/developer/database');
 		}
 	}
 	
@@ -391,7 +391,7 @@ class Developer extends Admin_Controller {
 			Template::set_message('Unable to update database schema: '. $this->migrations->error, 'error');
 		}
 		
-		redirect('admin/database/migrations');
+		redirect(SITE_AREA .'/database/migrations');
 	}
 	
 	//--------------------------------------------------------------------

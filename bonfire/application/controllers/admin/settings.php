@@ -45,7 +45,7 @@ class Settings extends Admin_Controller {
 			if ($this->save_settings())
 			{
 				Template::set_message('Your settings were successfully saved.', 'success');
-				redirect('admin/settings');
+				redirect(SITE_AREA .'/settings');
 			} else 
 			{
 				Template::set_message('There was an error saving your settings.', 'error');
@@ -89,9 +89,13 @@ class Settings extends Admin_Controller {
 			'auth.remember_length'	=> (int)$this->input->post('remember_length'),
 			'auth.use_extended_profile' => isset($_POST['use_ext_profile']) ? 1 : 0,
 			
-			'updates.bleeding_edge'	=> isset($_POST['update_check']) ? 1 : 0,
+			'updates.do_check'		=> isset($_POST['do_check']) ? 1 : 0,
+			'updates.bleeding_edge'	=> isset($_POST['bleeding_edge']) ? 1 : 0,
 			'site.show_profiler'	=> isset($_POST['show_profiler']) ? 1 : 0,
 		);
+		
+		//destroy the saved update message in case they changed update preferences.
+		$this->cache->delete('update_message');
 		
 		return write_config('application', $data);
 	}

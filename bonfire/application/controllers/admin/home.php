@@ -34,7 +34,7 @@ class Home extends Admin_Controller {
 	
 	public function index() 
 	{
-		redirect('admin/content');
+		redirect(SITE_AREA .'/content');
 	}
 	
 	//--------------------------------------------------------------------

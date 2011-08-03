@@ -221,7 +221,7 @@ $view .= '
 
 	<div class="text-right">
 		<br/>
-		<input type="submit" name="submit" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(\'admin/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\')); ?>
+		<input type="submit" name="submit" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\')); ?>
 	</div>
 	<?php echo form_close(); ?>
 ';
@@ -255,7 +255,7 @@ if ($xinha_names != '')
 if($action_name != 'create') {
 $view .= '
 	<div class="box delete rounded">
-		<a class="button" id="delete-me" href="<?php echo site_url(\'admin/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id); ?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')"><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></a>
+		<a class="button" id="delete-me" href="<?php echo site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id); ?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')"><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></a>
 		
 		<h3><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></h3>
 		

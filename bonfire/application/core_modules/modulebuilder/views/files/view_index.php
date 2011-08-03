@@ -24,7 +24,7 @@ $view = '
 	<?php else: ?>
 	
 	<div class="notification attention">
-		<p><?php echo lang(\''.$module_name_lower.'_no_records\'); ?> <?php echo anchor(\'admin/'.$controller_name.'/'.$module_name_lower.'/create\', lang(\''.$module_name_lower.'_create_new\'), array("class" => "ajaxify")) ?></p>
+		<p><?php echo lang(\''.$module_name_lower.'_no_records\'); ?> <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/create\', lang(\''.$module_name_lower.'_create_new\'), array("class" => "ajaxify")) ?></p>
 	</div>
 	
 	<?php endif; ?>
@@ -34,7 +34,7 @@ $view = '
 		<div class="scrollable" id="ajax-content">
 				
 			<div class="box create rounded">
-				<a class="button good ajaxify" href="<?php echo site_url(\'/admin/'.$controller_name.'/'.$module_name_lower.'/create\')?>"><?php echo lang(\''.$module_name_lower.'_create_new_button\');?></a>
+				<a class="button good ajaxify" href="<?php echo site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/create\')?>"><?php echo lang(\''.$module_name_lower.'_create_new_button\');?></a>
 
 				<h3><?php echo lang(\''.$module_name_lower.'_create_new\');?></h3>
 
@@ -79,7 +79,7 @@ foreach ($records as $record) : ?>
 		}
 	}
 ?>
-				<td><?php echo anchor(\'admin/'.$controller_name.'/'.$module_name_lower.'/edit/\'. $record[\''.$primary_key_field.'\'], \'Edit\', \'class="ajaxify"\') ?></td>
+				<td><?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/edit/\'. $record[\''.$primary_key_field.'\'], \'Edit\', \'class="ajaxify"\') ?></td>
 			</tr>
 <?php endforeach; ?>
 		</tbody>

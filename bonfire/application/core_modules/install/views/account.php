@@ -9,8 +9,16 @@
 	<p style="text-align: right; margin-top: 3em;"><?php echo anchor('installer.php', 'Reload Page'); ?></p>
 
 <?php else : ?>
-	<?php echo lang('in_account_heading'); ?>
+
+	<?php if (isset($curl_error) && !empty($curl_error)) :?>
 	
+	<?php echo lang('in_curl_disabled'); ?>
+	
+	<?php endif; ?>
+    
+
+	<?php echo lang('in_account_heading'); ?>
+	  
 	
 	<?php if (validation_errors()) : ?>
 	<div class="notification information">

@@ -42,7 +42,7 @@
 		<!-- Nav Bar -->
 		<div id="toolbar">
 			<div id="toolbar-right">
-				<a href="<?php echo site_url('admin/settings/users/edit/'. $this->auth->user_id()) ?>" id="tb_email" title="<?php echo lang('bf_user_settings') ?>"><?php echo config_item('auth.use_usernames') ? (config_item('auth.use_usernames') == 2 ? $this->auth->user_name() : $this->auth->username()) : $this->auth->email() ?></a>
+				<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $this->auth->user_id()) ?>" id="tb_email" title="<?php echo lang('bf_user_settings') ?>"><?php echo config_item('auth.use_usernames') ? (config_item('auth.use_usernames') == 2 ? $this->auth->user_name() : $this->auth->username()) : $this->auth->email() ?></a>
 				<a href="<?php echo site_url('logout') ?>" id="tb_logout" title="Logout">Logout</a>
 			</div>
 		

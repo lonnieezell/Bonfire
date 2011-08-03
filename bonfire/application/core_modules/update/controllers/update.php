@@ -43,7 +43,7 @@ class Update extends Admin_Controller {
 	*/
 	public function update_check() 
 	{ 	
-		if (!$this->config->item('updates.do_check'))
+		if (!$this->config->item('updates.do_check') || !function_exists('curl_version'))
 		{
 			return;
 		}
@@ -103,7 +103,7 @@ class Update extends Admin_Controller {
 		if (!empty($message))
 		{
 			echo '<div class="notification attention">';
-			echo $message .' <a href="'. site_url('admin/developer/update') .'">View Updates</a>.';
+			echo $message .' <a href="'. site_url(SITE_AREA .'/developer/update') .'">View Updates</a>.';
 			echo '</div>';
 		}
 	}
