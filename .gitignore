@@ -1,11 +1,28 @@
+# Ignore OS Related/Generic
+Thumbs.db
+Desktop.ini
+._*
+Icon?
 .DS_Store
+*.bak
+*.tmproj
+*.tmproject
+
+# IDEs project files/settings
+nbproject/
+nbactions.xml
+.settings/
+.project
+.metadata
+.properties
+
+# Ignore Bonfire Application Specifics
 bonfire/application/logs/*
 !bonfire/application/logs/index.html
 bonfire/application/cache/*
-*.bak
-
-# NetBeans project files
-nbproject/
+!bonfire/application/cache/index.html
+assets/cache/*
+!assets/cache/index.html
 
 # Ignore Custom config files
 bonfire/application/config/database.php
@@ -15,14 +32,16 @@ bonfire/application/config/email.php
 bonfire/application/config/development/*
 bonfire/application/config/testing/*
 bonfire/application/config/production/*
-bonfire/application/core/MY_Controller.php
-bonfire/controllers/home.php
 
 # but leave the config folders there
 !bonfire/application/config/development/index.html
 !bonfire/application/config/testing/index.html
 !bonfire/application/config/production/index.html
 
+# Helping GUIs omiting subtree repos
+bonfire/modules/**/.git/*
+bonfire/modules/**/.hg/*
+
 # Ignore all custom modules.
 bonfire/modules/*
-/*.project
+# Except the following modules:
