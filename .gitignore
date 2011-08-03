@@ -21,6 +21,8 @@ bonfire/application/logs/*
 !bonfire/application/logs/index.html
 bonfire/application/cache/*
 !bonfire/application/cache/index.html
+assets/cache/*
+!assets/cache/index.html
 
 # Ignore Custom config files
 bonfire/application/config/database.php
