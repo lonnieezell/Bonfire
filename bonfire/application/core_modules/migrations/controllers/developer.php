@@ -45,7 +45,7 @@ class Developer extends Admin_Controller {
 			
 			if ($version = $this->input->post('migration'))
 			{
-				redirect('/admin/developer/migrations/migrate_to/'. $version .'/'. $core);
+				redirect(SITE_AREA .'/developer/migrations/migrate_to/'. $version .'/'. $core);
 			}
 		}
 		
@@ -82,12 +82,12 @@ class Developer extends Admin_Controller {
 			if ($result === 0)
 			{
 				Template::set_message('Successfully uninstalled module\'s migrations.', 'success');
-				redirect('admin/developer/migrations');
+				redirect(SITE_AREA .'/developer/migrations');
 			}
 			else 
 			{
 				Template::set_message('Successfully migrated database to version '. $result, 'success');
-				redirect('admin/developer/migrations');
+				redirect(SITE_AREA .'/developer/migrations');
 			}
 		} else 
 		{
@@ -95,7 +95,7 @@ class Developer extends Admin_Controller {
 		}
 
 		Template::set_message('No version to migrate to.', 'error');
-		redirect('admin/developer/migrations');
+		redirect(SITE_AREA .'/developer/migrations');
 	}
 	
 	//--------------------------------------------------------------------

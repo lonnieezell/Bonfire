@@ -453,7 +453,7 @@ function context_nav($mode='icon')
 	{	
 		if (has_permission('Site.'. ucfirst($context) .'.View'))
 		{	
-			$url = site_url('admin/'.$context);
+			$url = site_url(SITE_AREA .'/'.$context);
 			$class = check_class($context);
 			$id = 'tb_'. $context;
 			$title = lang('bf_context_'. $context);

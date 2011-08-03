@@ -116,7 +116,7 @@ $controller .= '
 			if ($this->save_'.$module_name_lower.'())
 			{
 				Template::set_message(lang("'.$module_name_lower.'_create_success"), \'success\');
-				Template::redirect(\'/admin/'.$controller_name.'/'.$module_name_lower.'\');
+				Template::redirect(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\');
 			}
 			else 
 			{
@@ -144,7 +144,7 @@ $controller .= '
 		if (empty($id))
 		{
 			Template::set_message(lang("'.$module_name_lower.'_invalid_id"), \'error\');
-			redirect(\'/admin/'.$controller_name.'/'.$module_name_lower.'\');
+			redirect(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\');
 		}
 	
 		if ($this->input->post(\'submit\'))
@@ -189,7 +189,7 @@ $controller .= '
 			}
 		}
 		
-		redirect(\'/admin/'.$controller_name.'/'.$module_name_lower.'\');
+		redirect(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\');
 	}
 		';
 	}

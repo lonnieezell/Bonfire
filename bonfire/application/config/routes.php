@@ -49,12 +49,13 @@ $route['forgot_password']		= 'users/forgot_password';
 $route['reset_password/(:any)/(:any)']	= "users/reset_password/$1/$2";
 
 // Contexts
-$route['admin/([a-z_]+)/(:any)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$4/$5";
-$route['admin/([a-z_]+)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$4";
-$route['admin/([a-z_]+)/(:any)/(:any)'] 		= "$2/$1/$3";
-$route['admin/([a-z_]+)/(:any)']				= "$2/$1/index";
+$route[SITE_AREA .'/([a-z_]+)/(:any)/(:any)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$4/$5/$6";
+$route[SITE_AREA .'/([a-z_]+)/(:any)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$4/$5";
+$route[SITE_AREA .'/([a-z_]+)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$4";
+$route[SITE_AREA .'/([a-z_]+)/(:any)/(:any)'] 		= "$2/$1/$3";
+$route[SITE_AREA .'/([a-z_]+)/(:any)']				= "$2/$1/index";
 
-$route['admin']	= 'admin/home';
+$route[SITE_AREA]	= SITE_AREA .'/home';
 
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

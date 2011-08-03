@@ -39,5 +39,12 @@ define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
 define('BONFIRE_VERSION', '0.11');
 
+/*
+	The 'App Area' allows you to specify the base folder used for all of 
+	the contexts in the app. By default, this is set to '/admin', but this
+	does not make sense for all applications. 
+*/
+define('SITE_AREA', 'admin');
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */

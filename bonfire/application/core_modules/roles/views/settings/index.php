@@ -22,7 +22,7 @@
 	<?php else: ?>
 	
 	<div class="notification attention">
-		<p><?php echo lang('role_no_roles'); ?> <?php echo anchor('admin/settings/roles/create', lang('role_create_button')) ?></p>
+		<p><?php echo lang('role_no_roles'); ?> <?php echo anchor(SITE_AREA .'/settings/roles/create', lang('role_create_button')) ?></p>
 	</div>
 	
 	<?php endif; ?>
@@ -33,7 +33,7 @@
 		<div class="scrollable" id="ajax-content">
 				
 				<div class="box create rounded">
-					<a class="button good ajaxify" href="<?php echo site_url('admin/settings/roles/create'); ?>"><?php echo lang('role_create_button'); ?></a>
+					<a class="button good ajaxify" href="<?php echo site_url(SITE_AREA .'/settings/roles/create'); ?>"><?php echo lang('role_create_button'); ?></a>
 				
 					<h3><?php echo ucwords(lang('role_create_button')); ?></h3>
 					
@@ -58,7 +58,7 @@
 						<tbody>
 						<?php foreach ($roles as $role) : ?>
 							<tr>
-								<td><?php echo anchor('admin/settings/roles/edit/'. $role->role_id, $role->role_name, 'class="ajaxify"') ?></td>
+								<td><?php echo anchor(SITE_AREA .'/settings/roles/edit/'. $role->role_id, $role->role_name, 'class="ajaxify"') ?></td>
 								<td class="text-center"><?php
 										$count = 0; 
 										foreach ($role_counts as $r)

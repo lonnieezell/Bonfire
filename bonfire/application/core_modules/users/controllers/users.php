@@ -98,7 +98,7 @@ class Users extends Front_Controller {
 		}
 		else
 		{
-			redirect('admin/content');
+			redirect(SITE_AREA .'/content');
 		}
 	}
 	

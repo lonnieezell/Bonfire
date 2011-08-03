@@ -55,13 +55,13 @@
 					<div class="column size1of2 last-column">
 						<img src="<?php echo Template::theme_url('images/user.png') ?>" style="vertical-align: bottom; position: relative; top: -5px; margin-right: 1em;" />	
 						
-						<span class="big-text"><b><?php echo $deleted_users ?></b></span> &nbsp; <?php echo anchor('admin/settings/users/deleted', 'deleted users', 'class="ajaxify"') ?>
+						<span class="big-text"><b><?php echo $deleted_users ?></b></span> &nbsp; <?php echo anchor(SITE_AREA .'/settings/users/deleted', 'deleted users', 'class="ajaxify"') ?>
 					</div>
 				</div>
 			
 			
 				<div class="box create rounded">
-					<a class="button good ajaxify" href="<?php echo site_url('admin/settings/users/create'); ?>"><?php echo lang('us_create_user'); ?></a>
+					<a class="button good ajaxify" href="<?php echo site_url(SITE_AREA .'/settings/users/create'); ?>"><?php echo lang('us_create_user'); ?></a>
 				
 					<?php echo lang('us_create_user_note'); ?>
 				</div>	

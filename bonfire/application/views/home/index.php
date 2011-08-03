@@ -29,7 +29,7 @@
 	if ($logged_in) : ?>
 
 	<div class="notification attention" style="text-align: center">
-		<?php echo anchor('/admin', 'Dive into bonfire\'s Springboard'); ?>
+		<?php echo anchor(SITE_AREA, 'Dive into bonfire\'s Springboard'); ?>
 	</div>
 
 <?php else :?>

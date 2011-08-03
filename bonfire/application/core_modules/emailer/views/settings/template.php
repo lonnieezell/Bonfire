@@ -1,6 +1,6 @@
 <p><?php echo lang('em_template_note'); ?></p>
 
-<?php echo form_open('admin/settings/emailer/template'); ?>
+<?php echo form_open(SITE_AREA .'/settings/emailer/template'); ?>
 
 	<div class="fancy-text">
 		<label><?php echo lang('em_header'); ?></label>
@@ -13,7 +13,7 @@
 	</div>
 
 	<div class="submits">
-		<input type="submit" name="submit" id="submit" value="Save Template" /> or <?php echo anchor('admin/settings/emailer', 'Cancel'); ?>
+		<input type="submit" name="submit" id="submit" value="Save Template" /> or <?php echo anchor(SITE_AREA .'/settings/emailer', 'Cancel'); ?>
 	</div>
 
 <?php echo form_close(); ?>

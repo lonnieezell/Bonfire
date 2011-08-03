@@ -3,7 +3,7 @@
 
 <?php if (isset($test_map) && is_array($test_map) && count($test_map)) : ?>
 
-	<?php echo form_open('admin/developer/tester/run'); ?>
+	<?php echo form_open(SITE_AREA .'/developer/tester/run'); ?>
 	
 		<div class="fancy-text">
 			<label>Available Modules</label>

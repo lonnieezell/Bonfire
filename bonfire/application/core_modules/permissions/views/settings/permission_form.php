@@ -37,12 +37,12 @@
 
 	<div class="text-right">
 		<br/>
-		<input type="submit" name="submit" value="<?php echo lang('permissions_save');?>" /> or <?php echo anchor('admin/settings/permissions', lang('permissions_cancel')); ?>
+		<input type="submit" name="submit" value="<?php echo lang('permissions_save');?>" /> or <?php echo anchor(SITE_AREA .'/settings/permissions', lang('permissions_cancel')); ?>
 	</div>
 
 	<?php if (isset($permissions)) : ?>
 	<div class="box delete rounded">
-		<a class="button" id="delete-me" href="<?php echo site_url('admin/settings/permissions/delete/'. $id); ?>" onclick="return confirm('<?php echo lang('permissions_delete_confirm'); ?>')"><?php echo lang('permissions_delete_record'); ?></a>
+		<a class="button" id="delete-me" href="<?php echo site_url(SITE_AREA .'/settings/permissions/delete/'. $id); ?>" onclick="return confirm('<?php echo lang('permissions_delete_confirm'); ?>')"><?php echo lang('permissions_delete_record'); ?></a>
 		
 		<h3><?php echo lang('permissions_delete_record'); ?></h3>
 		

@@ -21,15 +21,15 @@
 	THE SOFTWARE.
 */
 
-$config['site.title'] = "Bonfire Testsite";
-$config['site.system_email'] = "lonnieje@gmail.com";
+$config['site.title'] = "";
+$config['site.system_email'] = "";
 $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
 
 //--------------------------------------------------------------------
 // !Console/Profiler
 //--------------------------------------------------------------------
-$config['site.show_profiler'] = 0;
+$config['site.show_profiler'] = 1;
 
 //--------------------------------------------------------------------
 // !For Update messages
@@ -69,14 +69,14 @@ $config['auth.allow_remember'] = 1;
 $config['auth.remember_length'] = 1209600;
 
 // Should we do a custom login redirect, or just go to '/'?
-$config['auth.do_login_redirect'] = 0;
+$config['auth.do_login_redirect'] = 1;
 
 // Does User accounts have extended profile? Enabling will allow meta user data (wip)
 // 	also omits some default springboard user fields (eg: omits address fields) to allow customization.
 $config['auth.use_extended_profile'] = 0;
 
 //--------------------------------------------------------------------
-// CONTEXTS
+// !CONTEXTS
 //--------------------------------------------------------------------
 
 /*
