@@ -95,7 +95,10 @@ class Settings extends Admin_Controller {
 		);
 		
 		//destroy the saved update message in case they changed update preferences.
-		$this->cache->delete('update_message');
+		if ($this->cache->get('update_message'))
+		{
+			$this->cache->delete('update_message');
+		}
 		
 		return write_config('application', $data);
 	}
