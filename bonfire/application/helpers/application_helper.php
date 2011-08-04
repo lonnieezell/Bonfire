@@ -69,9 +69,13 @@ function gravatar_link($email=null, $size=48, $alt='', $title='', $class='', $id
 	
 	// If email null, means we don't want gravatar.com HTTP request
 	if ( $email ) {
-	
+		
+		// Check if HTTP or HTTPS Request should be used
+		
+		if(isset($_SERVER['HTTPS'])){ $http_protocol = "https://secure.";} else { $http_protocol = "http://www.";}
+		
 		// URL for Gravatar
-		$gravatarURL = "http://www.gravatar.com/avatar.php?gravatar_id=%s&default=%s&size=%s&border=%s&rating=%s";
+		$gravatarURL =  $http_protocol . "gravatar.com/avatar.php?gravatar_id=%s&default=%s&size=%s&border=%s&rating=%s";
 		
 		$avatarURL = sprintf
 		(
