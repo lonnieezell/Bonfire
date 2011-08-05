@@ -43,7 +43,14 @@ class User_model extends BF_Model {
 	/*
 		Method: insert()
 		
-		Creates a new user in the database.
+		Creates a new user in the database. 
+		
+		Required parameters sent in the $data array:
+			- password
+			- A unique email address
+			
+		If no _role_id_ is passed in the $data array, it
+		will assign the default role from <Roles> model.
 		
 		Parameters:
 			$data	- An array of user information.
@@ -143,7 +150,7 @@ class User_model extends BF_Model {
 	
 		if (empty($data['username'])) 
 		{
-		  unset($data['username']);
+			unset($data['username']);
 		}
 		
 		if (empty($data['pass_confirm']) && isset($data['password'])) 
