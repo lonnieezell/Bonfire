@@ -47,9 +47,9 @@ class Install extends MX_Controller {
 	/*
 		Var: $curl_update
 		Boolean that says whether we should check
-		for updates.
+		for updates. Writes to config file.
 	*/
-	private $curl_update = 0;
+	private $curl_update = 1;
 	
 	/*
 		Var: $writable_folders
@@ -337,13 +337,15 @@ class Install extends MX_Controller {
 		Method: cURL_check()
 		
 		Verifies that cURL is enabled as a PHP extension. Sets 
-	   'curl_update' to 0 if not.
+	   'curl_update' to 0 if not so updates are not attempted. Also sets
+	   'curl_error' to 1 for view to display the missing cURL extension.
 	*/
 	private function cURL_check() 
 	{
         if (!function_exists('curl_version'))
         {
           $this->curl_error = 1;
+          $this->curl_update = 0;
         }   
     }
 	
