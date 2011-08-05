@@ -49,7 +49,7 @@ class Install extends MX_Controller {
 		Boolean that says whether we should check
 		for updates.
 	*/
-	private $curl_update = 0;
+	private $curl_update = 1;
 	
 	/*
 		Var: $writable_folders
@@ -344,6 +344,7 @@ class Install extends MX_Controller {
         if (!function_exists('curl_version'))
         {
           $this->curl_error = 1;
+          $this->curl_update = 0;
         }   
     }
 	
