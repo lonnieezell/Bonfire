@@ -87,7 +87,7 @@ class Modulebuilder
 			$content['lang'] = $this->build_lang($module_name, $module_file_name);
 
 			// build the model file
-			$content['model'] = $this->build_model($field_total, $module_file_name, $action_names, $primary_key_field);
+			$content['model'] = $this->build_model($field_total, $module_file_name, $action_names, $primary_key_field, $meta_required);
 			
 			// db based files - migrations
 			if( $db_required ) {
@@ -358,7 +358,7 @@ class Modulebuilder
     * @return string
     */
 
-	private function build_model($field_total, $module_file_name, $action_names, $primary_key_field)
+	private function build_model($field_total, $module_file_name, $action_names, $primary_key_field, $meta_required)
 	{
 		if ($field_total == NULL)
 		{
@@ -369,6 +369,7 @@ class Modulebuilder
 		$data['controller_name']	= $module_file_name;
 		$data['action_names']		= $action_names;
 		$data['primary_key_field']	= $primary_key_field;
+		$data['meta_required']		= $meta_required;
 		
 		$model = $this->CI->load->view('files/model', $data, TRUE);
 
