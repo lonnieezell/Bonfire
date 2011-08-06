@@ -10,13 +10,15 @@
 ?>
 
 <div class="notification information">
-	<p><b>Fill out the fields you would like in your module (an "id" field is created automatically).  If you want to create the SQL for a DB table check "DB Required".</b></p>
+	<p><b>Fill out the fields you would like in your module (an "id" field is created automatically).  If you want to create the SQL for a DB table check the "Generate Migration" box.</b></p>
 	
-	<p>This form will generate a full CodeIgniter module (model, controller and views) and if you choose DB Migrations files.</p>
+	<p>This form will generate a full CodeIgniter module (model, controller and views) and, if you choose, database Migrations file.</p>
 	
 	<p>If DB field type is "enum" or "set", please enter the values using this format: 'a','b','c'...
 	<br />If you ever need to put a backslash ("\") or a single quote ("'") amongst those values, precede it with a backslash (for example '\\xyz' or 'a\'b').
 	</p>
+	
+	<p>You can also generate a generic meta table based on this table's name. It will consist of 4 fields : id, link_id, property, value</p>
 </div>
 
 <?php if ($this->session->flashdata('error')): ?>
@@ -95,6 +97,11 @@
 		<div>
 			<label for="db_required">Generate Migration</label>
 			<input name="db_required" id="db_required" type="checkbox" value="1" <?php echo set_checkbox("db_required", "1", true); ?> class="checkbox" />
+		</div>
+
+		<div>
+			<label for="meta_required">Create meta table also?</label>
+			<input name="meta_required" id="meta_required" type="checkbox" value="1" <?php echo set_checkbox("meta_required", "1", true); ?> class="checkbox" />
 		</div>
 
 	</fieldset>
