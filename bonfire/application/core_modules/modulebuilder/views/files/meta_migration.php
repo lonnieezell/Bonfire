@@ -1,6 +1,6 @@
 <?php
 
-$migrations = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allowed\');
+$meta_migrations = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allowed\');
 
 class Migration_Install_'.$module_name_lower.'_meta_table extends Migration {
 	
@@ -29,5 +29,5 @@ class Migration_Install_'.$module_name_lower.'_meta_table extends Migration {
 	
 }';
 
-echo $migrations;
+echo $meta_migrations;
 ?>

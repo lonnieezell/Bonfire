@@ -46,7 +46,8 @@
 		<thead>
 		<th>Name</th>
 		<th>Description</th>
-		<th>Status</th><th><?php echo lang('permissions_actions'); ?></th>
+		<th>Status</th>
+		<th><?php echo lang('permissions_actions'); ?></th>
 		</thead>
 		<tbody>
 <?php

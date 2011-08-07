@@ -44,7 +44,7 @@ class Modulebuilder
 	
 	//--------------------------------------------------------------------
 	
-	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $meta_required) {
+	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $meta_required) {
 		
 		$this->CI->load->helper('inflector');
 		
@@ -55,12 +55,13 @@ class Modulebuilder
 							);
 
 		$content = array();
-		$content['views'] = FALSE;
+		$content['config'] = FALSE;
 		$content['controllers'] = FALSE;
-		$content['model'] = FALSE;
-		$content['migration'] = FALSE;
-		$content['meta_migration'] = FALSE;
 		$content['lang'] = FALSE;
+		$content['meta_migration'] = FALSE;
+		$content['migration'] = FALSE;
+		$content['model'] = FALSE;
+		$content['views'] = FALSE;
 
 		// Build the files
 		if( $field_total ) {
@@ -83,6 +84,9 @@ class Modulebuilder
 				$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
 			}
 
+			// build the config file
+			$content['config'] = $this->build_config($module_name, $module_description);
+
 			// build the lang file
 			$content['lang'] = $this->build_lang($module_name, $module_file_name);
 
@@ -98,7 +102,7 @@ class Modulebuilder
 			}
 		}
 
-		if ($content['views'] == FALSE || $content['controllers'] == FALSE || ($db_required && ($content['model'] == FALSE || $content['migration'] == FALSE) ) || ($meta_required && $content['meta_migration'] == FALSE) ) // not correct syntax
+		if ($content['views'] == FALSE || $content['controllers'] == FALSE || $content['config'] == FALSE || ($db_required && ($content['model'] == FALSE || $content['migration'] == FALSE) ) || ($meta_required && $content['meta_migration'] == FALSE) ) // not correct syntax
 		{
 			// something went wrong when trying to build the form
 			log_message('error', "The form was not built. There was an error with one of the build_() functions. Probably caused by total fields variable not being set");
@@ -122,13 +126,14 @@ class Modulebuilder
 		}
 
 
-		// make the variables available to the view file		
-		$data['views'] = $content['views'];
+		// make the variables available to the view file
+		$data['build_config'] = $content['config'];		
 		$data['controllers'] = $content['controllers'];
-		$data['model'] = $content['model'];
-		$data['migration'] = $content['migration'];
-		$data['meta_migration'] = $content['meta_migration'];
 		$data['lang'] = $content['lang'];
+		$data['meta_migration'] = $content['meta_migration'];
+		$data['migration'] = $content['migration'];
+		$data['model'] = $content['model'];
+		$data['views'] = $content['views'];
 
 		return $data;
 	}
@@ -154,6 +159,7 @@ class Modulebuilder
 		{
 			// loop to save all the files to disk - considered using a db but this makes things more portable 
 			// and easier for a user to install
+			@mkdir($this->options['output_path']."{$module_name}/config/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/controllers/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/models/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/views/",0777);
@@ -226,6 +232,10 @@ class Modulebuilder
 							case 'meta_migration':
 								$file_name = "002_Install_".$file_name."_meta_table";
 								$path = $this->options['output_path']."{$module_name}/migrations";
+								break;
+							case 'config':
+								$file_name = "config";
+								$path = $this->options['output_path']."{$module_name}/config";
 								break;
 
 							default:
@@ -393,6 +403,28 @@ class Modulebuilder
 		$data['module_name'] = $module_name;
 		$data['module_name_lower'] = $module_name_lower;
 		$lang = $this->CI->load->view('files/lang', $data, TRUE);
+
+		return $lang;
+	}
+	
+	//--------------------------------------------------------------------
+
+	
+   /** 
+    * function build_config()
+    *
+    * write config file
+    * @access private
+    * @param string $module_name		Module Name to use in the config file
+    * @param string $module_description	Module Description to use in the config file
+    * @return string
+    */
+
+	private function build_config($module_name, $module_description)
+	{
+		$data['module_name'] = $module_name;
+		$data['module_description'] = $module_description;
+		$lang = $this->CI->load->view('files/config', $data, TRUE);
 
 		return $lang;
 	}
