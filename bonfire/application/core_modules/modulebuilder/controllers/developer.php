@@ -65,6 +65,8 @@ class Developer extends Admin_Controller {
 	
 	public function create()
 	{
+		$this->auth->restrict('Bonfire.Modules.Add');
+		
 		$hide_form = false;
 		$this->field_total = 6;
 		$last_seg = $this->uri->segment( $this->uri->total_segments() );
@@ -120,9 +122,6 @@ class Developer extends Admin_Controller {
 			// drop the main table			
 			$this->dbforge->drop_table($module_name);
 			
-			// drop the meta table
-			$this->dbforge->drop_table($module_name.'_meta');
-			
 			// get any permission ids
 			$query = $this->db->query('SELECT permission_id FROM '.$prefix.'permissions WHERE name LIKE "'.$module_name.'.%.%"');
 
@@ -167,7 +166,6 @@ class Developer extends Admin_Controller {
 		$this->form_validation->set_rules("contexts",'Contexts',"required|xss_clean|is_array");
 		$this->form_validation->set_rules("form_action",'Controller Actions',"required|xss_clean|is_array");
 		$this->form_validation->set_rules("db_required",'Generate Migration',"trim|xss_clean|is_numeric");
-		$this->form_validation->set_rules("meta_required",'Meta Table',"trim|xss_clean|is_numeric");
 		$this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean");
 		$this->form_validation->set_rules("form_input_delimiters",'Form Input Delimiters',"required|trim|xss_clean");
 		$this->form_validation->set_rules("form_error_delimiters",'Form Error Delimiters',"required|trim|xss_clean");
@@ -223,8 +221,6 @@ class Developer extends Admin_Controller {
 		
 		$db_required = isset($_POST['db_required']) ? TRUE : FALSE;
 		
-		$meta_required = isset($_POST['meta_required']) ? TRUE : FALSE;
-		
 		$primary_key_field = $this->input->post('primary_key_field');
 		if( $primary_key_field == '') {
 			$primary_key_field = $this->options['primary_key_field'];
@@ -241,7 +237,7 @@ class Developer extends Admin_Controller {
 			$form_error_delimiters = $this->options['$form_error_delimiters'];
 		}
 		
-		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $meta_required);
+		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description);
 
 		// make the variables available to the view file
 		$data['module_name']		= $module_name;

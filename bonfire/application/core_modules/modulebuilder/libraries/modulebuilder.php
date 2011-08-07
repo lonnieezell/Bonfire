@@ -44,7 +44,7 @@ class Modulebuilder
 	
 	//--------------------------------------------------------------------
 	
-	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $meta_required) {
+	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description) {
 		
 		$this->CI->load->helper('inflector');
 		
@@ -58,7 +58,6 @@ class Modulebuilder
 		$content['config'] = FALSE;
 		$content['controllers'] = FALSE;
 		$content['lang'] = FALSE;
-		$content['meta_migration'] = FALSE;
 		$content['migration'] = FALSE;
 		$content['model'] = FALSE;
 		$content['views'] = FALSE;
@@ -72,7 +71,7 @@ class Modulebuilder
 				if($context_name == 'public') {
 					$context_name = $module_file_name;
 				}
-				$content['controllers'][$context_name] = $this->build_controller($field_total, $module_name, $context_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $meta_required);
+				$content['controllers'][$context_name] = $this->build_controller($field_total, $module_name, $context_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters);
 
 				// view files
 				foreach($action_names as $key => $action_name) {
@@ -91,18 +90,15 @@ class Modulebuilder
 			$content['lang'] = $this->build_lang($module_name, $module_file_name);
 
 			// build the model file
-			$content['model'] = $this->build_model($field_total, $module_file_name, $action_names, $primary_key_field, $meta_required);
+			$content['model'] = $this->build_model($field_total, $module_file_name, $action_names, $primary_key_field);
 			
 			// db based files - migrations
 			if( $db_required ) {
 				$content['migration'] =  $this->build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names);
-				if ( $meta_required ) {
-					$content['meta_migration'] =  $this->build_meta_sql($module_name);
-				}
 			}
 		}
 
-		if ($content['views'] == FALSE || $content['controllers'] == FALSE || $content['config'] == FALSE || ($db_required && ($content['model'] == FALSE || $content['migration'] == FALSE) ) || ($meta_required && $content['meta_migration'] == FALSE) ) // not correct syntax
+		if ($content['views'] == FALSE || $content['controllers'] == FALSE || $content['config'] == FALSE || ($db_required && ($content['model'] == FALSE || $content['migration'] == FALSE) ) ) // not correct syntax
 		{
 			// something went wrong when trying to build the form
 			log_message('error', "The form was not built. There was an error with one of the build_() functions. Probably caused by total fields variable not being set");
@@ -130,7 +126,6 @@ class Modulebuilder
 		$data['build_config'] = $content['config'];		
 		$data['controllers'] = $content['controllers'];
 		$data['lang'] = $content['lang'];
-		$data['meta_migration'] = $content['meta_migration'];
 		$data['migration'] = $content['migration'];
 		$data['model'] = $content['model'];
 		$data['views'] = $content['views'];
@@ -228,10 +223,6 @@ class Modulebuilder
 							case 'lang':
 								$file_name .= "_lang";
 								$path = $this->options['output_path']."{$module_name}/language/english";
-								break;
-							case 'meta_migration':
-								$file_name = "002_Install_".$file_name."_meta_table";
-								$path = $this->options['output_path']."{$module_name}/migrations";
 								break;
 							case 'config':
 								$file_name = "config";
@@ -336,7 +327,7 @@ class Modulebuilder
     * @return string
  	*
 	*/
-	private function build_controller($field_total, $module_name, $controller_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $meta_required)
+	private function build_controller($field_total, $module_name, $controller_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters)
 	{
 		if ($field_total == NULL)
 		{
@@ -350,7 +341,6 @@ class Modulebuilder
 		$data['action_names'] = $action_names;
 		$data['primary_key_field'] = $primary_key_field;
 		$data['db_required'] = $db_required;
-		$data['meta_required'] = $meta_required;
 		$data['form_error_delimiters'] = $form_error_delimiters;
 		$data['textarea_editor'] = $this->CI->input->post('textarea_editor');
 		$controller = $this->CI->load->view('files/controller', $data, TRUE);
@@ -368,7 +358,7 @@ class Modulebuilder
     * @return string
     */
 
-	private function build_model($field_total, $module_file_name, $action_names, $primary_key_field, $meta_required)
+	private function build_model($field_total, $module_file_name, $action_names, $primary_key_field)
 	{
 		if ($field_total == NULL)
 		{
@@ -379,7 +369,6 @@ class Modulebuilder
 		$data['controller_name']	= $module_file_name;
 		$data['action_names']		= $action_names;
 		$data['primary_key_field']	= $primary_key_field;
-		$data['meta_required']		= $meta_required;
 		
 		$model = $this->CI->load->view('files/model', $data, TRUE);
 
@@ -509,27 +498,6 @@ class Modulebuilder
 		return is_dir($pathname) || @mkdir($pathname, $mode);
    	}
 
-	
-	//--------------------------------------------------------------------
-
-	
-   /** 
-    * function build_meta_sql()
-    *
-    * write meta table migration file
-    * @access private
-    * @param string $module_name
-    * @return string
-    */
-
-	private function build_meta_sql($module_name)
-	{
-		
-		$data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
-		$migration = $this->CI->load->view('files/meta_migration', $data, TRUE);
-		
-		return $migration;
-	}
 	
 	//--------------------------------------------------------------------
 }

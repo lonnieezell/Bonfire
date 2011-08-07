@@ -97,13 +97,8 @@
 			<label for="db_required"><?php echo lang('mb_form_generate'); ?></label>
 			<input name="db_required" id="db_required" type="checkbox" value="1" <?php echo set_checkbox("db_required", "1", true); ?> class="checkbox" />
 		</div>
-
-		<div>
-			<label for="meta_required"><?php echo lang('mb_form_gen_meta'); ?></label>
-			<input name="meta_required" id="meta_required" type="checkbox" value="1" <?php echo set_checkbox("meta_required", "1", true); ?> class="checkbox" />
-		</div>
-
 	</fieldset>
+	
 		<div>
 
 		<?php echo lang('mb_form_fieldnum'); ?> 

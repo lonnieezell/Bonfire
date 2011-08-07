@@ -63,8 +63,5 @@ controllers/<?php echo $controller_name;?>.php<br />
 <?php if($migration): ?>
 <h4>Migration file</h4>
 <p>migrations/001_Install_<?php echo $module_name_lower;?>.php
-<?php if($meta_migration): ?>
-<br />migrations/002_Install_<?php echo $module_name_lower;?>_meta_table.php
-<?php endif; ?>
 </p>
 <?php endif; ?>

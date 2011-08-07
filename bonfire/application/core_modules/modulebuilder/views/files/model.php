@@ -9,7 +9,6 @@ class '.ucfirst($controller_name).'_model extends BF_Model {
 	protected $date_format	= "datetime";
 	protected $set_created	= false;
 	protected $set_modified = false;
-	var $has_meta_table     = '.$meta_required.';
 
 }
 ';

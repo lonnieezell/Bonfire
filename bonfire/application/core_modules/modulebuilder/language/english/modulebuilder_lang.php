@@ -48,15 +48,13 @@ $lang['mb_form_note'] = '<p><b>Fill out the fields you would like in your module
 	
 	<p>If DB field type is "enum" or "set", please enter the values using this format: \'a\',\'b\',\'c\'...
 	<br />If you ever need to put a backslash ("\") or a single quote ("\'") amongst those values, precede it with a backslash (for example \'\\xyz\' or \'a\\\'b\').
-	</p>
-	
-	<p>You can also generate a generic meta table based on this table\'s name. It will consist of 4 fields : id, link_id, property, value</p>';
+	</p>';
 	
 $lang['mb_form_errors']			= 'Please correct the errors below.';
 $lang['mb_form_mod_details']	= 'Module Details.';
 $lang['mb_form_mod_name']		= 'Module Name';
 $lang['mb_form_mod_name_ph']	= 'Forums, Blog, ToDo';
-$lang['mb_form_mod_desc']		= 'Module Name';
+$lang['mb_form_mod_desc']		= 'Module Description';
 $lang['mb_form_mod_desc_ph']	= 'A list of todo items';
 $lang['mb_form_contexts']		= 'Contexts Required';
 $lang['mb_form_public']			= 'Public';
@@ -66,7 +64,6 @@ $lang['mb_form_delims']			= 'Form Input Delimiters';
 $lang['mb_form_err_delims']		= 'Form Error Delimiters';
 $lang['mb_form_text_ed']		= 'Textarea Editor';
 $lang['mb_form_generate']		= 'Generate Migration';
-$lang['mb_form_gen_meta']		= 'Create meta table also?';
 $lang['mb_form_fieldnum']		= 'Number of fields';
 $lang['mb_form_field_details']	= 'Field details';
 $lang['mb_form_label']			= 'Label';
