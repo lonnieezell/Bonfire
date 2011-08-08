@@ -44,7 +44,7 @@ class Modulebuilder
 	
 	//--------------------------------------------------------------------
 	
-	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters) {
+	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id) {
 		
 		$this->CI->load->helper('inflector');
 		
@@ -55,11 +55,12 @@ class Modulebuilder
 							);
 
 		$content = array();
-		$content['views'] = FALSE;
+		$content['config'] = FALSE;
 		$content['controllers'] = FALSE;
-		$content['model'] = FALSE;
-		$content['migration'] = FALSE;
 		$content['lang'] = FALSE;
+		$content['migration'] = FALSE;
+		$content['model'] = FALSE;
+		$content['views'] = FALSE;
 
 		// Build the files
 		if( $field_total ) {
@@ -82,6 +83,9 @@ class Modulebuilder
 				$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
 			}
 
+			// build the config file
+			$content['config'] = $this->build_config($module_name, $module_description);
+
 			// build the lang file
 			$content['lang'] = $this->build_lang($module_name, $module_file_name);
 
@@ -90,11 +94,11 @@ class Modulebuilder
 			
 			// db based files - migrations
 			if( $db_required ) {
-				$content['migration'] =  $this->build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names);
+				$content['migration'] =  $this->build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names, $role_id);
 			}
 		}
 
-		if ($content['views'] == FALSE || $content['controllers'] == FALSE || ($db_required && ($content['model'] == FALSE || $content['migration'] == FALSE) ) ) // not correct syntax
+		if ($content['views'] == FALSE || $content['controllers'] == FALSE || $content['config'] == FALSE || ($db_required && ($content['model'] == FALSE || $content['migration'] == FALSE) ) ) // not correct syntax
 		{
 			// something went wrong when trying to build the form
 			log_message('error', "The form was not built. There was an error with one of the build_() functions. Probably caused by total fields variable not being set");
@@ -117,13 +121,13 @@ class Modulebuilder
 			$data['error_msg'] = $write_status['error'];
 		}
 
-
-		// make the variables available to the view file		
-		$data['views'] = $content['views'];
+		// make the variables available to the view file
+		$data['build_config'] = $content['config'];		
 		$data['controllers'] = $content['controllers'];
-		$data['model'] = $content['model'];
-		$data['migration'] = $content['migration'];
 		$data['lang'] = $content['lang'];
+		$data['migration'] = $content['migration'];
+		$data['model'] = $content['model'];
+		$data['views'] = $content['views'];
 
 		return $data;
 	}
@@ -149,6 +153,7 @@ class Modulebuilder
 		{
 			// loop to save all the files to disk - considered using a db but this makes things more portable 
 			// and easier for a user to install
+			@mkdir($this->options['output_path']."{$module_name}/config/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/controllers/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/models/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/views/",0777);
@@ -217,6 +222,10 @@ class Modulebuilder
 							case 'lang':
 								$file_name .= "_lang";
 								$path = $this->options['output_path']."{$module_name}/language/english";
+								break;
+							case 'config':
+								$file_name = "config";
+								$path = $this->options['output_path']."{$module_name}/config";
 								break;
 
 							default:
@@ -390,6 +399,28 @@ class Modulebuilder
 
 	
    /** 
+    * function build_config()
+    *
+    * write config file
+    * @access private
+    * @param string $module_name		Module Name to use in the config file
+    * @param string $module_description	Module Description to use in the config file
+    * @return string
+    */
+
+	private function build_config($module_name, $module_description)
+	{
+		$data['module_name'] = $module_name;
+		$data['module_description'] = $module_description;
+		$lang = $this->CI->load->view('files/config', $data, TRUE);
+
+		return $lang;
+	}
+	
+	//--------------------------------------------------------------------
+
+	
+   /** 
     * function build_sql()
     *
     * write view file
@@ -398,7 +429,7 @@ class Modulebuilder
     * @return string
     */
 
-	private function build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names)
+	private function build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names, $role_id)
 	{
 		if ($field_total == NULL)
 		{
@@ -411,6 +442,7 @@ class Modulebuilder
 		$data['primary_key_field'] = $primary_key_field;
 		$data['contexts'] = $contexts;
 		$data['action_names'] = $action_names;
+		$data['role_id'] = $role_id;
 		$migration = $this->CI->load->view('files/migrations', $data, TRUE);
 		
 		return $migration;

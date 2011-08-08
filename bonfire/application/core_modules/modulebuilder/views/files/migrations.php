@@ -48,7 +48,8 @@ class Migration_Install_'.$module_name_lower.' extends Migration {
 					}
 					$action_permission = $permission . $action_name;
 					$migrations .= '
-					$this->db->query("INSERT INTO {$prefix}permissions VALUES (0,\''.$action_permission.'\',\'\',\'active\');");';
+					$this->db->query("INSERT INTO {$prefix}permissions VALUES (0,\''.$action_permission.'\',\'\',\'active\');");
+					$this->db->query("INSERT INTO {$prefix}role_permissions VALUES ('.$role_id.',".$this->db->insert_id().");");';
 				}
 			}
 		}
