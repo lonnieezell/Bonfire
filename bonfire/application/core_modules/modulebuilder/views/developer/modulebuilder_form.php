@@ -97,6 +97,15 @@
 			<label for="db_required"><?php echo lang('mb_form_generate'); ?></label>
 			<input name="db_required" id="db_required" type="checkbox" value="1" <?php echo set_checkbox("db_required", "1", true); ?> class="checkbox" />
 		</div>
+
+		<div>
+			<label for="role_id"><?php echo lang('mb_form_role_id'); ?></label>
+			<select name="role_id">
+				<?php foreach ($roles as $role) : ?>
+				<option value="<?php echo $role['role_id']; ?>"><?php echo $role['role_name']; ?></option>
+				<?php endforeach; ?>
+		 	</select>
+		</div>
 	</fieldset>
 	
 		<div>

@@ -44,7 +44,7 @@ class Modulebuilder
 	
 	//--------------------------------------------------------------------
 	
-	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description) {
+	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id) {
 		
 		$this->CI->load->helper('inflector');
 		
@@ -94,7 +94,7 @@ class Modulebuilder
 			
 			// db based files - migrations
 			if( $db_required ) {
-				$content['migration'] =  $this->build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names);
+				$content['migration'] =  $this->build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names, $role_id);
 			}
 		}
 
@@ -120,7 +120,6 @@ class Modulebuilder
 			$data['error'] = TRUE;
 			$data['error_msg'] = $write_status['error'];
 		}
-
 
 		// make the variables available to the view file
 		$data['build_config'] = $content['config'];		
@@ -430,7 +429,7 @@ class Modulebuilder
     * @return string
     */
 
-	private function build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names)
+	private function build_sql($field_total, $module_name, $primary_key_field, $contexts, $action_names, $role_id)
 	{
 		if ($field_total == NULL)
 		{
@@ -443,6 +442,7 @@ class Modulebuilder
 		$data['primary_key_field'] = $primary_key_field;
 		$data['contexts'] = $contexts;
 		$data['action_names'] = $action_names;
+		$data['role_id'] = $role_id;
 		$migration = $this->CI->load->view('files/migrations', $data, TRUE);
 		
 		return $migration;

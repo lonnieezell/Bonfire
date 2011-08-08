@@ -13,55 +13,55 @@
 	<p><b><?php echo lang('mb_out_success_note'); ?></b></p>
 </div>
 
-<?php if($migration): ?>
-<div class="notification information">
-	The database tables are <strong>NOT</strong> automatically installed for you. You still need to go to the <?php echo anchor(SITE_AREA .'/developer/migrations#mod-tab', 'Migrations') ?> section and migrate your database table(s) before you can work with them.
-</div>
-<?php endif; ?>
-
 <div class="notification attention">
-	<p><b>You <em>MUST</em> go to the <?php echo anchor(SITE_AREA .'/settings/roles', 'Roles') ?> area and assign permissions for your new module to the roles before you can access any of the pages.</b></p>
+	<?php printf(lang('mb_out_roles'), anchor(SITE_AREA .'/settings/roles', 'Roles')) ;?>
 </div>
 
 <p class="important">
-<?php if (!isset($error)): ?>
-<?php echo $error?>
-<?php endif; ?> 
+<?php
+	if (!isset($error)) {
+		echo $error;
+	};
+?> 
 </p>
 
 <?php if($build_config): ?>
-<h4>Config file</h4>
-<p>config/config.php</p>
+<h4><?php echo lang('mb_out_config'); ?></h4>
+<p><?php echo lang('mb_out_config_path'); ?></p>
 <?php endif; ?>
 
-<h4>Controller files</h4>
+<h4><?php echo lang('mb_out_controller'); ?></h4>
 <p>
-<?php  foreach($controllers as $controller_name => $val): ?>
-controllers/<?php echo $controller_name;?>.php<br />
-<?php endforeach; ?>
+<?php
+foreach($controllers as $controller_name => $val) {
+	echo sprintf(lang('mb_out_controller_path'),$controller_name).'<br />';
+}
+?>
 </p>
 
 <?php if($model): ?>
-<h4>Model file</h4>
-<p><?php echo $module_name_lower;?>_model.php</p>
+<h4><?php echo lang('mb_out_model'); ?></h4>
+<p><?php echo sprintf(lang('mb_out_model_path'),$module_name_lower); ?></p>
 <?php endif; ?>
 
 <?php if($lang): ?>
-<h4>Language file</h4>
-<p><?php echo $module_name_lower;?>_lang.php</p>
+<h4><?php echo lang('mb_out_lang'); ?></h4>
+<p><?php echo sprintf(lang('mb_out_lang_path'),$module_name_lower); ?></p>
 <?php endif; ?>
 
-<h4>View files</h4>
+<h4><?php echo lang('mb_out_view'); ?></h4>
 <p>
-<?php foreach($views as $context_name => $context_views): ?>
-	<?php  foreach($context_views as $view_name => $val): ?>
-	views/<?php echo $context_name == $module_name_lower ? $view_name : $context_name."/".$view_name;?>.php<br />
-	<?php endforeach; ?>
-<?php endforeach; ?>
+<?php
+foreach($views as $context_name => $context_views){
+	foreach($context_views as $view_name => $val){
+		echo sprintf(lang('mb_out_view_path'),( $context_name == $module_name_lower ? $view_name : $context_name."/".$view_name)).'<br />';
+	}
+}
+?>
 </p>
 
 <?php if($migration): ?>
-<h4>Migration file</h4>
-<p>migrations/001_Install_<?php echo $module_name_lower;?>.php
+<h4><?php echo lang('mb_out_migration'); ?></h4>
+<p><?php echo sprintf(lang('mb_out_migration_path'),$module_name_lower); ?></p>
 </p>
 <?php endif; ?>

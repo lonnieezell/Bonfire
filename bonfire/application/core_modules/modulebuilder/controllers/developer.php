@@ -87,7 +87,8 @@ class Developer extends Admin_Controller {
 			{
 				Template::set('form_error', FALSE);
 			}
-			
+			$query = $this->db->select('role_id,role_name')->order_by('role_name')->get('roles');
+			Template::set('roles', $query->result_array());
 			Template::set('form_action_options', $this->options['form_action_options']);
 			Template::set('field_numbers', range(1,15));
 			Template::set_view('developer/modulebuilder_form');
@@ -166,6 +167,7 @@ class Developer extends Admin_Controller {
 		$this->form_validation->set_rules("contexts",'Contexts',"required|xss_clean|is_array");
 		$this->form_validation->set_rules("form_action",'Controller Actions',"required|xss_clean|is_array");
 		$this->form_validation->set_rules("db_required",'Generate Migration',"trim|xss_clean|is_numeric");
+		$this->form_validation->set_rules("role_id",'Give Role Full Access',"trim|xss_clean|is_numeric");
 		$this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean");
 		$this->form_validation->set_rules("form_input_delimiters",'Form Input Delimiters',"required|trim|xss_clean");
 		$this->form_validation->set_rules("form_error_delimiters",'Form Error Delimiters',"required|trim|xss_clean");
@@ -214,10 +216,11 @@ class Developer extends Admin_Controller {
 	
 	private function build_module($field_total=0) 
 	{
-		$module_name = $this->input->post('module_name');
-		$contexts = $this->input->post('contexts');
-		$action_names = $this->input->post('form_action');
+		$module_name 		= $this->input->post('module_name');
+		$contexts 			= $this->input->post('contexts');
+		$action_names 		= $this->input->post('form_action');
 		$module_description = $this->input->post('module_description');
+		$role_id			= $this->input->post('role_id');
 		
 		$db_required = isset($_POST['db_required']) ? TRUE : FALSE;
 		
@@ -237,7 +240,7 @@ class Developer extends Admin_Controller {
 			$form_error_delimiters = $this->options['$form_error_delimiters'];
 		}
 		
-		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description);
+		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id);
 
 		// make the variables available to the view file
 		$data['module_name']		= $module_name;

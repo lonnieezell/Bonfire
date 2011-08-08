@@ -40,15 +40,22 @@ $lang['mb_table_description']	= 'Description';
 // OUTPUT page
 $lang['mb_out_success']	= 'The module creation was successful! Below you will find the list of Controller, Model, Language, Migration and View files that were created during this process. Model and SQL files will be included if you selected the "Generate Migration" option and a Javascript file if it was required during creation.';
 $lang['mb_out_success_note']	= 'NOTE: Please add extra user input validation as you require.  This code is to be used as a starting point only.';
+$lang['mb_out_tables'] 			= 'The database tables are <strong>NOT</strong> automatically installed for you. You still need to go to the %s section and migrate your database table(s) before you can work with them.';
+$lang['mb_out_config'] 			= 'Config file';
+$lang['mb_out_config_path'] 	= 'config/config.php';
+$lang['mb_out_controller']		= 'Controllers';
+$lang['mb_out_controller_path']	= 'controllers/%s.php';
+$lang['mb_out_model'] 			= 'Models';
+$lang['mb_out_model_path']		= '%s_model.php';
+$lang['mb_out_view']			= 'Views';
+$lang['mb_out_view_path']		= 'views/%s.php';
+$lang['mb_out_lang']			= 'Language File';
+$lang['mb_out_lang_path']		= '%s_lang.php';
+$lang['mb_out_migration']		= 'Migration File';
+$lang['mb_out_migration_path']	= 'migrations/001_Install_%s.php';
 
 // FORM page
-$lang['mb_form_note'] = '<p><b>Fill out the fields you would like in your module (an "id" field is created automatically).  If you want to create the SQL for a DB table check the "Generate Migration" box.</b></p>
-	
-	<p>This form will generate a full CodeIgniter module (model, controller and views) and, if you choose, database Migrations file.</p>
-	
-	<p>If DB field type is "enum" or "set", please enter the values using this format: \'a\',\'b\',\'c\'...
-	<br />If you ever need to put a backslash ("\") or a single quote ("\'") amongst those values, precede it with a backslash (for example \'\\xyz\' or \'a\\\'b\').
-	</p>';
+$lang['mb_form_note'] = '<p><b>Fill out the fields you would like in your module (an "id" field is created automatically).  If you want to create the SQL for a DB table check the "Generate Migration" box.</b></p><p>This form will generate a full CodeIgniter module (model, controller and views) and, if you choose, database Migrations file.</p><p>If DB field type is "enum" or "set", please enter the values using this format: \'a\',\'b\',\'c\'...<br />If you ever need to put a backslash ("\") or a single quote ("\'") amongst those values, precede it with a backslash (for example \'\\xyz\' or \'a\\\'b\').</p>';
 	
 $lang['mb_form_errors']			= 'Please correct the errors below.';
 $lang['mb_form_mod_details']	= 'Module Details.';
@@ -64,6 +71,7 @@ $lang['mb_form_delims']			= 'Form Input Delimiters';
 $lang['mb_form_err_delims']		= 'Form Error Delimiters';
 $lang['mb_form_text_ed']		= 'Textarea Editor';
 $lang['mb_form_generate']		= 'Generate Migration';
+$lang['mb_form_role_id']		= 'Give Role Full Access';
 $lang['mb_form_fieldnum']		= 'Number of fields';
 $lang['mb_form_field_details']	= 'Field details';
 $lang['mb_form_label']			= 'Label';
