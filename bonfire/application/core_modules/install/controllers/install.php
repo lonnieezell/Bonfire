@@ -256,14 +256,14 @@ class Install extends MX_Controller {
 			as simplifying what will need to be modified when some
 			sweeping changes are made. 
 		*/
-		if (!file_exists(APPPATH .'config/database.php'))
+		if (!file_exists(APPPATH .'config/database.php') && is_writeable(APPPATH .'config/'))
 		{
 			// Database
 			copy(APPPATH .'config/database_format.php', APPPATH .'config/development/database.php');
 			copy(APPPATH .'config/database_format.php', APPPATH .'config/production/database.php');
 			copy(APPPATH .'config/database_format.php', APPPATH .'config/testing/database.php');
 			copy(APPPATH .'config/database_format.php', APPPATH .'config/database.php');
-			
+
 			// Email
 			copy(APPPATH .'config/email_format.php', APPPATH .'config/email.php');
 		}
