@@ -86,10 +86,11 @@ class Users extends Front_Controller {
 					{
 						Template::redirect($this->auth->login_destination);
 					} else
-					{
+					{	
 						Template::redirect('/');
 					}
 				}
+
 			}
 
 			Template::set_view('users/users/login');
