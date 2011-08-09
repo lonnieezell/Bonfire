@@ -52,6 +52,8 @@ $lang['us_failed_login_attempts']	= 'Failed Login Attempts';
 $lang['us_failed_logins_note']		= '<p>Congratulations!</p><p>All of your users have good memories!</p>';
 
 $lang['us_banned_admin_note']		= 'This user has been banned from the site.';
+$lang['us_banned_msg']				= 'This account does not have permission to enter the site.';
+
 $lang['us_first_name']				= 'First Name';
 $lang['us_last_name']				= 'Last Name';
 $lang['us_address']					= 'Address';
