@@ -143,8 +143,14 @@ class Base_Tester {
 		
 		$test_name = $this->format_test_name($method);
 		
+		// Start the Benchmark
+		$this->ci->benchmark->mark($method .'_start');
+		
 		// Pass it to the CI Unit Tester
 		$this->ci->unit->run($this->asserts, true, $test_name, $this->message);
+		
+		// End the Benchmark
+		$this->ci->benchmark->mark($method .'_end');
 	}
 	
 	//--------------------------------------------------------------------
