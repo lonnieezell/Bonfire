@@ -139,7 +139,7 @@ class Auth  {
 		}
 	
 		// Grab the user from the db
-		$selects = 'id, email, username, first_name, last_name, users.role_id, salt, password_hash';
+		$selects = 'id, email, username, first_name, last_name, users.role_id, salt, password_hash, users.role_id';
 		
 		if (config_item('auth.do_login_redirect'))
 		{
@@ -163,7 +163,15 @@ class Auth  {
 
 			// Try password
 			if ( do_hash($user->salt . $password) == $user->password_hash)
-			{ 
+			{ 	
+				// Do they even have permission to log in? 
+				if (!$this->has_permission('Site.Signin.Allow', $user->role_id))
+				{
+					$this->increase_login_attempts($login);
+					$this->errors[] = $this->ci->lang->line('us_banned_msg');
+					return false;
+				}
+			
 				$this->clear_login_attempts($login);
 				
 				// We've successfully validated the login, so setup the session
@@ -511,11 +519,11 @@ class Auth  {
 		}
 
 		if (empty($this->perms)) {
-			$this->load_permissions();
+			$this->load_permissions($role_id);
 		}
 
 		$perms = (object)$this->perms;
-		
+
 		// Did we pass?
 		if ((isset($perms->$permission) && $perms->$permission == 1) || (!in_array($permission, $this->perm_desc) && $override))
 		{
@@ -532,9 +540,17 @@ class Auth  {
 
 		Load the permission details from the database into class properties
 		
+		Parameters:
+			$role_id	- An INT with the role id to grab permissions for.
 	*/
-	public function load_permissions() 
+	public function load_permissions($role_id=null) 
 	{
+		if (!class_exists('Permissions_model'))
+		{
+			$this->ci->load->model('permissions/permission_model');
+			$this->ci->load->model('roles/role_permission_model');
+		}
+	
 		$perms_all = $this->ci->permission_model->find_all_by('status','active');
 		$perms = array();
 		foreach($perms_all as $key => $perm_details)
@@ -544,7 +560,9 @@ class Auth  {
 		
 		$this->perm_desc = $perms;
 		
-		$role_perms = $this->ci->role_permission_model->find_for_role($this->role_id());
+		$role_id = !is_null($role_id) ? $role_id : $this->role_id();
+		
+		$role_perms = $this->ci->role_permission_model->find_for_role($role_id);
 		
 		if (is_array($role_perms))
 		{
