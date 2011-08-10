@@ -3,13 +3,17 @@
 class User_model_test extends Unit_Tester {
 
 	private $user_id = 0;
-	private $user;
+	private $user_rec;
 
 	public function __construct() 
 	{
 		parent::__construct();
 		
 		$this->ci->load->model('users/User_model', 'user_model', true);
+		
+		// Make sure Darth Vader doesn't exist. :)
+		$this->ci->db->where('email', 'darth@starwars.com');
+		$this->ci->db->delete('users');
 	}
 	
 	//--------------------------------------------------------------------
@@ -88,29 +92,29 @@ class User_model_test extends Unit_Tester {
 	
 	public function test_user_has_role() 
 	{
-		$this->user = $this->ci->user_model->find($this->user_id);
-		$this->assert_not_empty($this->user->role_id);
+		$this->user_rec = $this->ci->user_model->find($this->user_id);
+		$this->assert_not_empty($this->user_rec->role_id);
 	}
 	
 	//--------------------------------------------------------------------
 	
 	public function test_user_assigned_default_role() 
 	{
-		$this->assert_equals($this->user->role_id, $this->ci->role_model->default_role_id());
+		$this->assert_equals($this->user_rec->role_id, $this->ci->role_model->default_role_id());
 	}
 	
 	//--------------------------------------------------------------------
 	
 	public function test_insert_stores_salt() 
 	{
-		$this->assert_not_empty($this->user->salt);
+		$this->assert_not_empty($this->user_rec->salt);
 	}
 	
 	//--------------------------------------------------------------------
 	
 	public function test_insert_password_does_not_match_original() 
 	{
-		$this->assert_not_equals($this->user->password_hash, 'dierebelscum');
+		$this->assert_not_equals($this->user_rec->password_hash, 'dierebelscum');
 	}
 	
 	//--------------------------------------------------------------------
@@ -122,15 +126,15 @@ class User_model_test extends Unit_Tester {
 			$this->ci->load->helper('security');
 		}
 	
-		$hash = do_hash($this->user->salt . 'dierebelscum');
-		$this->assert_equals($hash, $this->user->password_hash);
+		$hash = do_hash($this->user_rec->salt . 'dierebelscum');
+		$this->assert_equals($hash, $this->user_rec->password_hash);
 	}
 	
 	//--------------------------------------------------------------------
 	
 	public function test_insert_creates_default_country() 
 	{
-		$this->assert_equals($this->user->country_iso, 'US');
+		$this->assert_equals($this->user_rec->country_iso, 'US');
 	}
 	
 	//--------------------------------------------------------------------
@@ -141,14 +145,14 @@ class User_model_test extends Unit_Tester {
 	
 	public function test_find_returns_object() 
 	{
-		$this->assert_is_type($this->user, 'Object');
+		$this->assert_is_type($this->user_rec, 'Object');
 	}
 	
 	//--------------------------------------------------------------------
 	
 	public function test_find_returns_role_name() 
 	{
-		$this->assert_not_null($this->user->role_name);
+		$this->assert_not_null($this->user_rec->role_name);
 	}
 	
 	//--------------------------------------------------------------------
@@ -176,7 +180,7 @@ class User_model_test extends Unit_Tester {
 	
 	public function test_delete_user_with_soft_delete() 
 	{
-		$this->ci->user_model->set_soft_deletes(true);
+		//$this->ci->user_model->set_soft_deletes(true);
 		$this->assert_true($this->ci->user_model->delete($this->user_id));
 	}
 	
@@ -186,6 +190,22 @@ class User_model_test extends Unit_Tester {
 	{
 		$user = $this->ci->user_model->find($this->user_id);
 		$this->assert_is_type($user, 'Object');
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function test_user_has_deleted_flag_after_soft_delete() 
+	{
+		$user = $this->ci->user_model->select('users.deleted')->find($this->user_id);
+		$this->assert_equals($user->deleted, 1);
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function test_find_returns_user_deleted_not_role_deleted() 
+	{
+		$user = $this->ci->user_model->find($this->user_id);
+		$this->assert_equals($user->deleted, 1);
 	}
 	
 	//--------------------------------------------------------------------
@@ -212,10 +232,10 @@ class User_model_test extends Unit_Tester {
 	{
 		$users = $this->ci->user_model->find_all(true);
 		$found = false;
-		
+//	echo '<pre>'; die(print_r($users));	
 		foreach ($users as $user)
 		{
-			if ($user->deleted == 1)
+			if ($user->deleted === 1)
 			{
 				$found = true;
 			}
@@ -223,7 +243,7 @@ class User_model_test extends Unit_Tester {
 		
 		$this->assert_true($found);
 	}
-	
+
 	//--------------------------------------------------------------------
 	
 	public function test_delete_with_hard_deletes() 
@@ -241,5 +261,4 @@ class User_model_test extends Unit_Tester {
 	}
 	
 	//--------------------------------------------------------------------
-	
 }
