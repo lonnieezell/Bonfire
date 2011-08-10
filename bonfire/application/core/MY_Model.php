@@ -380,7 +380,8 @@ class BF_Model extends CI_Model {
 		if ($this->soft_deletes === TRUE)
 		{
 			$this->db->where($this->key, $id);
-			$this->db->update($this->table, array('deleted' => 1));
+			$this->db->set('deleted', 1);
+			$this->db->update($this->table);
 		} 
 		else 
 		{
