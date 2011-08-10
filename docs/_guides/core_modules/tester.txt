@@ -1,0 +1,68 @@
+Title: Tester
+
+Bonfire comes with a Unit Test module and UI that allows for simple tests to be run over all of your libraries, helpers and models, on a per-module basis.
+
+
+
+About: Unit Testing
+
+Unit Testing is allows you to write small tests against the code that you write to make sure that everything is functioning as expected. Bonfire currently provides the first part of the puzzle by providing a clean UI that makes it simple to run your tests, and a method for performing Unit Tests on your code. 
+
+It does not require any third-party applications to run. However, the tests it can handle are not as complex or thorough as full Unit Test suites like <PHPUnit at https://github.com/sebastianbergmann/phpunit/> or <SimpleTest at http://simpletest.org> provide. 
+
+Currently, it does not support either Mocks or Fixtures, though those are planned for the future.
+
+
+
+About: Creating a Test
+
+Tests are stored with each module, under a 'tests' folder. If you are creating a _blog_ module, your structure would look like
+
+> modules/
+>	blog/
+>		config/
+>		controllers/
+>		libraries/
+>		models/
+>		tests/
+>		views/
+
+Test files can be any name that you desire, but a good practice is to name it based on the class that you are testing and appended with '_tests'. So a test file for a post_model might be _Post_model_test.php_.
+
+Each test file consists of a single class that must extend the _Unit_Tester_ class. This provides your test all of the available test functions. The class must match the filename.
+
+> class Post_model_test extends Unit_Tester {
+> 	. . .
+> }
+
+Each test method must begin with the text 'test_'. As a good practice, each test should only test a single, small aspect of the entire set of tests. You should strive to test both expected uses of the method you're testing (passing proper data returns the right stuff) and try to break your method with unexpected/dangerous data to make sure that it stays safe and performs well. Another crucial time to create a test is whenever a bug is encountered.
+
+> test_create_new_post() 
+> {
+> 	. . . 
+> }
+
+The Unit_Tester class provides two utility methods that can be used to ensure a good setup: _pre()_ and _post()_. These methods are ran just before and just after every test in this class is ran.
+
+Inside each test, you can use any of the included _asserts()_ to actually perform the test. The list of asserts is . . .
+
+- *assert_true($x)* 	Fails if $x is false.
+- *assert_false($x)*	Fails if $x is true.
+- *assert_equals($x, $y)*	Fails if $x == $y is false.
+- *assert_not_equals($x, $y)* Failse if $x == $y is true.
+- *assert_empty($x)* 	Fails if $x is not empty.
+- *assert_not_empty($x)*	Fails if $x is empty.
+- *assert_null($x)*			Fails if $x is not null.
+- *assert_not_null($x)*		Fails if $x is null.
+- *assert_identical($x, $y)*	Fails if $x == $y is false or different types.
+- *assert_not_identical($x, $y)*	Fails if $x == $y is true and same types.
+- *assert_is_type($x, $t)*	Fails if $x is not the class or type $t.
+- *assert_not_is_type($x, $t)*	Fails if $x is the class or type $t.
+
+
+
+About: Running Tests
+
+Tests are ran through the Admin UI by navigating to Developer / Tester. This screen shows the available modules that have unit tests. Selecting one or more module and clicking 'Run Tests' will run the tests and present the results. You can rerun the tests after you have made changes to your code by clicking 'Rerun Tests' at the top right of the screen.
+
+NOTE: The Tester module itself carries the test for parts of Bonfire that are not within another module.

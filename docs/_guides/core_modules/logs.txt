@@ -1,0 +1,20 @@
+Title: Logs
+
+The Logs Module provides a simple way to view your log files and set how much information is logged. 
+
+
+About: Viewing Logs
+
+To view the logs currently on your system, navigate to Developer / Logs. A page will be displayed that shows your available logs on the left, and allows you to change your current log settings in the main page area.
+
+To view an individual log, click on the date you would like to inspect on the left. A new page will open that display the contents of that log file, with rows that are color-coded according to the message severity. *Error Entries* are colored a light red, while all other entries are colored *Yellow*. This helps to quickly determine message severity while scrolling through the many entries.
+
+If you would like to view just the entries that caused errors, you can filter the results for that log file by selecting 'Errors Only' from the dropdown. The current display will be filtered to show only the error messages.
+
+
+
+About: Change the Log Depth
+
+By default, Bonfire has the logging turned off in the _application/config/config.php_ file. At the primary screen, you are presented with a dropdown that changes the amount of information logged. Change the dropdown to your preferred setting and click _Save Log Settings_. 
+
+Note: These settings are defined in the <CodeIgniter User Manual at http://codeigniter.com/user_guide/general/errors.html>.
