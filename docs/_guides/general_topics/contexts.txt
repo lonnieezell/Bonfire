@@ -9,7 +9,7 @@ A *Context* is an area of similar responsibility within the code and/or UI. An a
 
 (see contexts.png)
 
-The icons in the picture above represent each individual Context. The names of each module has any functionality declared for that content will show up in the sub-navigation below. In this case, _Database_ and _Emailer_ are both modules with Settings contexts.
+The icons in the picture above represent each individual Context. Each module that has any functionality declared for that context will show up in the sub-navigation below. In this case, _Database_ and _Emailer_ are both modules with Settings contexts.
 
 
 
@@ -31,7 +31,7 @@ The views for each context must come from a subfolder with the context's name. S
 
 About: The Public Context
 
-Every module can create a _Public Context_ by simply creating a controller whose name is the same as the module. 
+Every module can create a _Public Context_ by simply creating a controller whose name is the same as the module. A Public Context is simply any functionality designed for the front-end, publicly-accessible portion of your web application.
 
 This file would then be available via the URL 
 
@@ -48,7 +48,7 @@ About: Required Contexts
 
 Bonfire requires only two contexts to exist, and will create them if they don't. They are...
 
-	Settings	- Any settings related to your module. These are typically items to are infrequently changed, like the number of events to show on per page, etc.
+	Settings	- Any settings related to your module. These are typically items that are infrequently changed, like the number of events to show on each page, etc.
 	Developer	- This context is meant for tools designed to make the application developer's life easier and may include database tools, code generation, deploy helpers, etc.
 
 
@@ -56,7 +56,7 @@ Bonfire requires only two contexts to exist, and will create them if they don't.
 
 About: Custom Contexts
 
-You can create any number of contexts to fit your application's specific needs. Doing so is a very simple thing that only consists of 3 steps. 
+You can create any number of contexts to fit your application's specific needs. Doing so is a very simple task that only consists of 3 steps. 
 
 *1. Update the Application Config Array*
 

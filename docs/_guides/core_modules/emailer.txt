@@ -1,4 +1,4 @@
-Title: Queueing Emails
+Title: Emailer
 
 When you are running a web app under a shared server, or just want to control server usage, you often have restrictions set on how many emails you can send per hour or per day. Bonfire comes with a simple email queue that can help by only sending a set amount of emails per CRON job. 
 

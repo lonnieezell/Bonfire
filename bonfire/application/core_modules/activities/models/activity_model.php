@@ -89,9 +89,9 @@ class Activity_model extends BF_Model {
 		Returns:
 			An int with the ID of the new object, or false on failure.
 	*/
-	public function log_activity($user_id=null, $activity='', $module='') 
+	public function log_activity($user_id=null, $activity='', $module='any') 
 	{
-		if (!is_numeric($user_id) || empty($activity) || empty($module))
+		if (!is_numeric($user_id) || empty($activity))
 		{
 			logit('Not enough information provided to insert activity.');
 		}

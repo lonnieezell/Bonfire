@@ -1,0 +1,28 @@
+Title: UI
+
+The UI module holds small helper functions for creating common interface elements. The module is a small one, currently, but expected to grow as Bonfire does.
+
+
+
+About: Loading the UI module
+
+The UI module is simply a helper file that provides additional functions. It can be loaded like any standard library.
+
+> $this->load->helper('ui/ui_helper');
+
+
+
+About: Search Box
+
+> render_search_box()
+
+This function creates a Search block for the left-hand column list in a Master-Detail view. It is designed to sit in a _panel-header_ and provides a simple link that, when clicked, will show a search box. It uses the _ui.js_ to automatically filter the results in the list based on the <p> tag in each list item.
+
+><!-- Users List -->
+><div class="view">
+>	<div class="panel-header list-search">
+>		<select id="role-filter">. . .</select>
+>		
+>		<?php render_search_box(); ?>
+>	</div>
+></div>

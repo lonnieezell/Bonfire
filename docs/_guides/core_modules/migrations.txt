@@ -1,0 +1,104 @@
+Title: Migrations
+
+The Migrations Module expands on the Migrations library provided by CodeIgniter to allow two types of migrations (dbforge or raw SQL), and separate migrations for Bonfire core, your application, and each module. This provides you, the developer, with the utmost flexibility in versioning your database.
+
+The migration UI can be found by navigating to Developer / Database Tools / Migrations.
+
+
+About: Enabling Migrations
+
+A clean install has migrations enabled by default. However, it is recommended when you move to production to disable migrations for security.
+
+To disable migrations, edit the following line in _bonfire/application/core_modules/migrations/config/migrations.php_ to be false.
+
+> $config['migrations_enabled'] = true;
+
+
+
+About: Migration Spheres
+
+Bonfire supports three separate spheres of migrations: Core, Application, and Module.
+
+- *Core* migrations are migrations used for Bonfire itself. This keeps the core migration numbers seperate from your application. Core Migration files are located under _bonfire/application/db/migrations/core_. You should not place any of your applications here.
+- *Application* migrations are any migration files that are specific to your application. They follow their own unique numbering scheme that keeps them split from the core. Application Migration files should be placed under _bonfire/application/db/migrations/_.
+- *Module* migrations are module-specific. These are intended to help you keep your modules completely self-contained and able to drop into another project. They follow their own unique numbering sequence. Module Migrations should be kept in the module's folder, like _bonfire/modules/my_module/migrations_.
+
+
+About: Migration Types
+
+Unlike the migrations that CodeIgniter provides, Bonfire's migrations support two different types of migration files, allowing you to work the way that works best for you.
+
+- *dbForge* migrations are the standard CodeIgniter migrations. They are completely self-contained and all code that is to be run for the migration to happen is contained within the up() and down() methods.
+- *SQL* migrations are a unique addition to Bonfire. They allow you to use raw SQL commands instead of dbforge/dbutil commands that are sometimes unweildy. SQL migrations are best used when you know that you will only be using MySQL databases and can customize your SQL commands to that database.
+
+
+
+About: Creating a Migration File
+
+*File Name*
+
+Migration files MUST be numbered sequentially. The rest of the file name is up to you, but it is recommended that the name describe what actually happens in the file. Like "Install_initial_tables", "Permissions_upgrade", etc. It must end with the _.php_ extension.
+
+Some examples:
+
+> 001_Install_initial_tables.php
+> 002_Version_02_upgrades.php
+> 003_Permissions_upgrade.php
+
+*File Structure*
+
+The file is a standard PHP class, that must follow three simple rules
+
+- The class must be named the same as the file, except the number is replaced by _Migration_. For a file named _001_Install_initial_tables.php_, the class would be named _Migration_Install_initial_tables_. The name is case-sensitive.
+- The class MUST extend the _Migration_ class
+- The class MUST include two methods: up() and down(). As the names imply, the *up()* method is ran whenever you are migrating up to that version. The *down()* method is ran whenever uninstalling that migration.
+
+A Skeleton migration: 
+
+> <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+> 
+> class Migration_Install_initial_tables extends Migration {
+>
+> 	function up() {
+>		...
+>	}
+>
+>	//--------------------------------------------------------------------
+>
+>	function down() {
+>		...
+>	}
+>
+>	//--------------------------------------------------------------------
+> }
+
+*SQL Migrations*
+
+When creating a SQL migration, there are two changes that you must make to the above skeleton. 
+
+- You must provide a class variable named _$migration_type_ that is equal to _sql_.
+- In both the up() and down() methods, you must return your SQL commands as a single string. This SQL may contain multiple commands, as long as they are separated by a colon.
+
+> <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+> 
+> class Migration_Install_initial_tables extends Migration {
+>
+>	public $migration_type = 'sql';
+>
+> 	function up() {
+>		$sql = "...";
+>
+>		return $sql;
+>	}
+>
+>	//--------------------------------------------------------------------
+>
+>	function down() {
+>		$sql = "...";
+>
+>		return $sql;
+>	}
+>
+>	//--------------------------------------------------------------------
+> }
+

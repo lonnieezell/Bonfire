@@ -1,0 +1,21 @@
+Title: Site Area
+
+By default, all of Bonfire's <Contexts> are available by visiting _http://example.com/admin/_. In this case the *Site Area* is _admin_. It is the URL that all of your contexts are made available under. 
+
+Since the original intent of Bonfire was to create an admin area for your web applications, the _admin_ site area made perfect sense. As other developers started using Bonfire, though, new ways of structuring apps became apparent. Site Areas were implemented to make these new types of app organization make more sense.
+
+
+
+About: Changing Your App's Site Area
+
+Changing the site area for you app is as easy as changing a single constant. 
+
+1. Open the _bonfire/application/config/constants.php_ file.
+2. Edit the *SITE_AREA* constant to match your needs.
+
+> /*
+>	The 'App Area' allows you to specify the base folder used for all of 
+>	the contexts in the app. By default, this is set to '/admin', but this
+>	does not make sense for all applications. 
+>*/
+>define('SITE_AREA', 'admin');
