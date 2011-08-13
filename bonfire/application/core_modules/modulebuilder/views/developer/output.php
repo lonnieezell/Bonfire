@@ -7,43 +7,65 @@
 		$cur_url = str_replace('/'.$last_seg, '', $cur_url);
 	}
 ?>
-	<p>Below you will find the code for the Controller and View files. Model and SQL files will be included if you selected the DB Required option and a Javascript file if you so required.</p>
+<div class="notification success">
+	<p><?php echo lang('mb_out_success'); ?></p>
+	<br />
+	<p><b><?php echo lang('mb_out_success_note'); ?></b></p>
+</div>
 
-	<p><b>NOTE: Please add extra user input validation as you require.  This code is to be used as a starting point only.</b></p>
+<div class="notification attention">
+	<?php printf(lang('mb_out_tables'), anchor(SITE_AREA .'/developer/migrations#mod-tab', 'Migrations')) ;?>
+</div>
 
 <p class="important">
-<?php if (!isset($error)): ?>
-<?php echo $error?>
-<?php endif; ?> 
+<?php
+	if (!isset($error)) {
+		echo $error;
+	};
+?> 
 </p>
 
-	<h4>Controller files</h4>
-	<p>
-	<?php  foreach($controllers as $controller_name => $val): ?>
-	controllers/<?php echo $controller_name;?>.php<br />
-	<?php endforeach; ?>
-	</p>
-
-<?php if($model): ?>
-	<h4>Model file</h4>
-	<p><?php echo $module_name_lower;?>_model.php</p>
+<?php if($acl_migration): ?>
+<h4><?php echo lang('mb_out_acl'); ?></h4>
+<p><?php echo sprintf(lang('mb_out_acl_path'),$module_name_lower); ?>
 <?php endif; ?>
+
+<?php if($build_config): ?>
+<h4><?php echo lang('mb_out_config'); ?></h4>
+<p><?php echo lang('mb_out_config_path'); ?></p>
+<?php endif; ?>
+
+<h4><?php echo lang('mb_out_controller'); ?></h4>
+<p>
+<?php
+foreach($controllers as $controller_name => $val) {
+	echo sprintf(lang('mb_out_controller_path'),$controller_name).'<br />';
+}
+?>
+</p>
 
 <?php if($lang): ?>
-	<h4>Language file</h4>
-	<p><?php echo $module_name_lower;?>_lang.php</p>
+<h4><?php echo lang('mb_out_lang'); ?></h4>
+<p><?php echo sprintf(lang('mb_out_lang_path'),$module_name_lower); ?></p>
 <?php endif; ?>
 
-	<h4>View files</h4>
-	<p>
-	<?php foreach($views as $context_name => $context_views): ?>
-		<?php  foreach($context_views as $view_name => $val): ?>
-		views/<?php echo $context_name == $module_name_lower ? $view_name : $context_name."/".$view_name;?>.php<br />
-		<?php endforeach; ?>
-	<?php endforeach; ?>
-	</p>
-
-<?php if($migration): ?>
-	<h4>Migration file</h4>
-	<p>migrations/001_Install_<?php echo $module_name_lower;?>.php</p>
+<?php if($db_migration): ?>
+<h4><?php echo lang('mb_out_migration'); ?></h4>
+<p><?php echo sprintf(lang('mb_out_migration_path'),$module_name_lower); ?></p>
 <?php endif; ?>
+
+<?php if($model): ?>
+<h4><?php echo lang('mb_out_model'); ?></h4>
+<p><?php echo sprintf(lang('mb_out_model_path'),$module_name_lower); ?></p>
+<?php endif; ?>
+
+<h4><?php echo lang('mb_out_view'); ?></h4>
+<p>
+<?php
+foreach($views as $context_name => $context_views){
+	foreach($context_views as $view_name => $val){
+		echo sprintf(lang('mb_out_view_path'),( $context_name == $module_name_lower ? $view_name : $context_name."/".$view_name)).'<br />';
+	}
+}
+?>
+</p>

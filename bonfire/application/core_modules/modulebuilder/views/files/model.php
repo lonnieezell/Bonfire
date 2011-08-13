@@ -3,7 +3,7 @@ $model = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allow
 
 class '.ucfirst($controller_name).'_model extends BF_Model {
 
-	protected $table		= "'.$controller_name.'";
+	protected $table		= "'.$table_name.'";
 	protected $key			= "'.$primary_key_field.'";
 	protected $soft_deletes	= false;
 	protected $date_format	= "datetime";
