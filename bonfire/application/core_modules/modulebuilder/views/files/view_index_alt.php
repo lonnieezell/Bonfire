@@ -41,7 +41,7 @@ foreach ($records as $record) : ?>
 	{
 		if($field != "'.$primary_key_field.'") {
 ?>
-				<td><?php echo $value;?></td>
+				<td><?php echo ($field == \'deleted\') ? (($value > 0) ? \'True\' : \'False\') : $value; ?></td>
 
 <?php
 		}
