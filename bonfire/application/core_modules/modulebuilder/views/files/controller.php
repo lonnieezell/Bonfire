@@ -5,7 +5,9 @@ $controller = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access 
 class '.ucfirst($controller_name).' extends ';
 $controller .= $controller_name == $module_name_lower ? "Front_controller" : "Admin_Controller";
 $controller .= ' {
-               
+	
+	//--------------------------------------------------------------------
+	
 	function __construct()
 	{
  		parent::__construct();
@@ -13,8 +15,7 @@ $controller .= ' {
 		if($controller_name == $module_name_lower)
 		{
 		$controller .= '
-		$this->load->library(\'form_validation\');
-		$this->load->database();';
+		$this->load->library(\'form_validation\');';
 			
 		}
 		else {
@@ -22,7 +23,7 @@ $controller .= ' {
 		$this->auth->restrict(\''.str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.View\');';
 		}
 $controller .= '
-		$this->load->model(\''.$module_name_lower.'_model\');
+		$this->load->model(\''.$module_name_lower.'_model\', null, true);
 		$this->lang->load(\''.$module_name_lower.'\');
 		
 		Assets::add_js($this->load->view(\''.$controller_name.'/js\', null, true), \'inline\');
@@ -84,11 +85,11 @@ $controller .= '
 	if(in_array('index', $action_names) ) {
 
 $controller .= '
-	/** 
-	 * function index
-	 *
-	 * list form data
-	 */
+	/*
+		Method: index()
+		
+		Displays a list of form data.
+	*/ 
 	public function index()
 	{
 		$data = array();
@@ -107,6 +108,11 @@ $controller .= '
 
 	if(in_array('create', $action_names) ) {
 		$controller .= '
+	/*
+		Method: create()
+		
+		Creates a '. $module_name .' object.
+	*/
 	public function create() 
 	{
 		$this->auth->restrict(\''.str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Create\');
@@ -129,12 +135,18 @@ $controller .= '
 		Template::set("toolbar_title", "Create '.$module_name.'");
 		Template::render();
 	}
+	
 	//--------------------------------------------------------------------
 	
 	';
 	}
 	if( in_array('edit', $action_names) ) {
 		$controller .= '
+	/*
+		Method: edit()
+		
+		Allows editing of '. $module_name .' data.
+	*/
 	public function edit() 
 	{
 		$this->auth->restrict(\''.ucfirst($module_name).'.'.ucfirst($controller_name).'.Edit\');
@@ -167,11 +179,18 @@ $controller .= '
 		Template::render();		
 	}
 	
+	//--------------------------------------------------------------------
+	
 			';
 	}
 	
 	if(in_array('delete', $action_names) ) {
 		$controller .= '
+	/*
+		Method: delete()
+		
+		Allows deleting of '. $module_name .' data.
+	*/
 	public function delete() 
 	{	
 		$this->auth->restrict(\''.str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete\');
@@ -191,11 +210,31 @@ $controller .= '
 		
 		redirect(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\');
 	}
+	
+	//--------------------------------------------------------------------
+	
 		';
 	}
 	
 	$controller .= '
-	public function save_'.$module_name_lower.'($type=\'insert\', $id=0) 
+	//--------------------------------------------------------------------
+	// !PRIVATE METHODS
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: save_'. $module_name_lower .'()
+		
+		Does the actual validation and saving of form data.
+		
+		Parameters:
+			$type	- Either "insert" or "update"
+			$id		- The ID of the record to update. Not needed for inserts.
+		
+		Returns:
+			An INT id for successful inserts. If updating, returns TRUE on success.
+			Otherwise, returns FALSE.
+	*/
+	private function save_'.$module_name_lower.'($type=\'insert\', $id=0) 
 	{	
 ';
 		$last_field = 0;
@@ -280,6 +319,7 @@ $controller .= '
 		return $return;
 	}
 
+	//--------------------------------------------------------------------
 }
 ';
 	

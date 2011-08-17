@@ -153,6 +153,9 @@ class Modulebuilder
 		{
 			// loop to save all the files to disk - considered using a db but this makes things more portable 
 			// and easier for a user to install
+			@mkdir($this->options['output_path']."{$module_name}/assets/",0777);
+			@mkdir($this->options['output_path']."{$module_name}/assets/css/",0777);
+			@mkdir($this->options['output_path']."{$module_name}/assets/js/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/config/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/controllers/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/models/",0777);
