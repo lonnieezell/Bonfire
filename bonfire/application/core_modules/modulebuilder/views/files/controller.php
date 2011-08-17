@@ -202,8 +202,8 @@ $controller .= '
 		for($counter=1; $field_total >= $counter; $counter++)
 		{
 			// only build on fields that have data entered. 
-	
-			//Due to the requiredif rule if the first field is set the the others must be
+				
+			// Due to the required if rule if the first field is set the the others must be
 	
 			if (set_value("view_field_label$counter") == NULL)
 			{
@@ -232,7 +232,12 @@ $controller .= '
 						$controller .= '|';
 					}
 				
-					$controller .= $value;
+					if ($value == 'unique')	{		
+						$prefix = $this->db->dbprefix;
+						$controller .= $value.'['.$prefix.$table_name.'.'.set_value("view_field_name$counter").']';
+					} else {
+						$controller .= $value;	
+					}
 					$rule_counter++;
 				}
             }
