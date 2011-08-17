@@ -13,8 +13,8 @@ $view = '
 					<?php $record = (array)$record;?>
 					<div class="list-item" data-id="<?php echo $record[\''.$primary_key_field.'\']; ?>">
 						<p>
-							<b><?php echo $record[\''.$primary_key_field.'\']; ?></b><br/>
-							<span class="small"><?php echo lang(\''.$module_name_lower.'_edit_text\'); ?></span>
+							<b><?php echo (empty($record[\'name\']) ? $record[\''.$primary_key_field.'\'] : $record[\'name\']); ?></b><br/>
+							<span class="small"><?php echo (empty($record[\'description\']) ? lang(\''.$module_name_lower.'_edit_text\') : $record[\'description\']);  ?></span>
 						</p>
 					</div>
 				<?php endforeach; ?>
@@ -73,7 +73,7 @@ foreach ($records as $record) : ?>
 	{
 		if($field != "'.$primary_key_field.'") {
 ?>
-				<td><?php echo $value;?></td>
+				<td><?php echo ($field == \'deleted\') ? (($value > 0) ? \'True\' : \'False\') : $value; ?></td>
 
 <?php
 		}
