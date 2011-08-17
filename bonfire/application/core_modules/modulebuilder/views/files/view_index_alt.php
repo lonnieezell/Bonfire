@@ -1,59 +1,70 @@
-<?php
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-$view = '
-			<div class="box create rounded">
-				<a class="button good" href="<?php echo site_url(\'/admin/'.$controller_name.'/'.$module_name_lower.'/create\')?>"><?php echo lang(\''.$module_name_lower.'_create_new_button\');?></a>
+$view =<<<END
+<div class="box create rounded">
 
-				<h3><?php echo lang(\''.$module_name_lower.'_create_new\');?></h3>
+	<a class="button good" href="<?php echo site_url(SITE_AREA . {$controller_name} .'/'. {$module_name_lower} .'/create'); ?>">
+		<?php echo lang('{$module_name_lower}_create_new_button'); ?>
+	</a>
 
-				<p><?php echo lang(\''.$module_name_lower.'_edit_text\'); ?></p>
-			</div>
-			<br />
-				<?php if (isset($records) && is_array($records) && count($records)) : ?>
+	<h3><?php echo lang('{$module_name_lower}_create_new'); ?></h3>
+
+	<p><?php echo lang('{$module_name_lower}_edit_text'); ?></p>
+
+</div>
+
+<br />
+
+<?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
 				
-					<h2>'.$module_name.'</h2>
+	<h2>{$module_name}</h2>
 	<table>
-		<thead>';
+		<thead>
+		
+			{table_header}
+		
+			<th><?php echo lang('{$module_name_lower}_actions'); ?></th>
+		</thead>
+		<tbody>
+		
+		<?php foreach (\$records as \$record) : ?>
+			<?php \$record = (array)\$record;?>
+			<tr>
+			<?php foreach(\$record as \$field => \$value) : ?>
+				
+				<?php if (\$field != '{$primary_key_field}') : ?>
+					<td><?php echo (\$field == 'deleted') ? ((\$value > 0) ? 'True' : 'False') : \$value; ?></td>
+				<?php endif; ?>
+				
+			<?php endforeach; ?>
 
+				<td>
+					<?php echo anchor(SITE_AREA .'/{$controller_name}/{$module_name_lower}/edit/'. \$record[\$primary_key_field], 'Edit', '') ?>
+				</td>
+			</tr>
+		<?php endforeach; ?>
+		</tbody>
+	</table>
+<?php endif; ?>
+END;
+
+$headers = '';
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	// only build on fields that have data entered. 
 
-	//Due to the requiredif rule if the first field is set the the others must be
+	//Due to the required if rule if the first field is set the the others must be
 
 	if (set_value("view_field_label$counter") == NULL)
 	{
 		continue; 	// move onto next iteration of the loop
 	}
-	$view .= '
+	$headers .= '
 		<th>'. set_value("view_field_label$counter").'</th>';
 }
 
-$view .= '<th><?php echo lang(\''.$module_name_lower.'_actions\'); ?></th>
-		</thead>
-		<tbody>
-<?php
-foreach ($records as $record) : ?>
-<?php $record = (array)$record;?>
-			<tr>
-<?php
-	foreach($record as $field => $value)
-	{
-		if($field != "'.$primary_key_field.'") {
-?>
-				<td><?php echo ($field == \'deleted\') ? (($value > 0) ? \'True\' : \'False\') : $value; ?></td>
+$view = str_replace('{table_header}', $headers, $view);
 
-<?php
-		}
-	}
-?>
-				<td><?php echo anchor(\'admin/'.$controller_name.'/'.$module_name_lower.'/edit/\'. $record[\''.$primary_key_field.'\'], \'Edit\', \'\') ?></td>
-			</tr>
-<?php endforeach; ?>
-		</tbody>
-	</table>
-				<?php endif; ?>
-';
+echo $view;
 
-	echo $view;
-?>
+unset($view, $headers);
