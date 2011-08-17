@@ -27,7 +27,7 @@
 	The Assets class works with the Template class to provide powerful theme/
 	template functionality.
 	
-	Version: 3.0a
+	Version: 3.0
  */
 class Assets {
 
@@ -270,9 +270,10 @@ class Assets {
 		else
 		{  
 			$return .= self::combine_css($styles, $media);
-		
-			$return .= self::combine_css($mod_styles, $media, 'module');
 		}
+		
+		// Make sure we include module styles
+		$return .= self::combine_css($mod_styles, $media, 'module');
 
 		return $return;
 	}
@@ -297,7 +298,7 @@ class Assets {
 	public static function combine_css($files=array(), $media='screen', $type = '') 
 	{  
 		// Are there any scripts to include? 
-		if ($type == 'module' AND count(self::$module_styles) == 0)
+		if ($type == 'module' AND count($files) == 0)
 		{ 
 			return;
 		}
@@ -1146,13 +1147,24 @@ class Assets {
 				$new_files[] = $file;
 				continue;
 			}
-			
+
 			$found = false;
 			
 			// Is it a module file?
 			if (!empty($module))
 			{ 
-				$path = module_file_path($module, 'assets', $file);
+				$path = module_file_path($module, 'assets', $file . $type);
+				
+				if (empty($path))
+				{
+					// Try assets/type folder
+					$path = module_file_path($module, 'assets', $clean_type .'/'. $file . $type);
+				}
+				
+				if (self::$debug)
+				{
+					echo '[Assets] Lookin for MODULE asset at: '. $path ."<br/>";
+				}
 
 				if (!empty($path))
 				{
@@ -1264,7 +1276,7 @@ class Assets {
 					{
 						// Assets/type folder
 						if (is_file($site_path . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}"))
-						{
+						{ 
 							$file_path 		= base_url() . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}";
 							$server_path	= $site_path . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}";
 							$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
