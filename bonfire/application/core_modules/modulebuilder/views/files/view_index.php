@@ -3,7 +3,7 @@
 $view = '
 <div class="view split-view">
 	
-	<!-- Role List -->
+	<!-- '. $module_name .' List -->
 	<div class="view">
 	
 	<?php if (isset($records) && is_array($records) && count($records)) : ?>
@@ -29,7 +29,7 @@ $view = '
 	
 	<?php endif; ?>
 	</div>
-	<!-- Role Editor -->
+	<!-- '. $module_name .' Editor -->
 	<div id="content" class="view">
 		<div class="scrollable" id="ajax-content">
 				
