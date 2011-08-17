@@ -37,9 +37,12 @@ class Developer extends Admin_Controller {
 
 	//---------------------------------------------------------------
 
-	/**
-	 * Displays a list of tables in the database.
-	 */
+	/*
+		Method: index()
+		
+		Displays a list of installed modules with the option to create
+		a new one.
+	*/
 	public function index()
 	{
 		
@@ -65,20 +68,30 @@ class Developer extends Admin_Controller {
     
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: create()
+		
+		Displays the create a module form.
+	*/
 	public function create()
 	{
 		$this->auth->restrict('Bonfire.Modules.Add');
 		
 		$hide_form = false;
+		
 		$this->field_total = $this->input->post('field_total');
 		$this->field_total = 0;
+		
 		$last_seg = $this->uri->segment( $this->uri->total_segments() );
-		if (is_numeric($last_seg)) {
+		
+		if (is_numeric($last_seg)) 
+		{
 			$this->field_total = $last_seg;
 		}
 		
 		// validation hasn't been passed
-		if ($this->validate_form($this->field_total) == FALSE){
+		if ($this->validate_form($this->field_total) == FALSE)
+		{
 			Template::set('field_total', $this->field_total);
 			
 			if (!empty($_POST))
@@ -97,7 +110,8 @@ class Developer extends Admin_Controller {
 			Template::set('field_numbers', range(0,20));
 			Template::set_view('developer/modulebuilder_form');
 						
-		} else {
+		} else 
+		{
 			// passed validation proceed to second page
 			$this->build_module($this->field_total);
 			
@@ -113,11 +127,17 @@ class Developer extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: delete()
+		
+		Deletes and module and all of it's files.
+	*/
 	public function delete() 
 	{	
 		$module_name = $this->uri->segment(5);
 
-		if (!empty($module_name)) {	
+		if (!empty($module_name)) 
+		{	
 			$this->auth->restrict('Bonfire.Modules.Delete');
 			
 			$prefix = $this->db->dbprefix;
@@ -143,7 +163,10 @@ class Developer extends Admin_Controller {
 	        }
 	        
 	        // drop the schema #
-	        $this->dbforge->drop_column('schema_version',strtolower($module_name).'_version');
+	        if ($this->db->field_exists(strtolower($module_name).'_version', 'schema_version'))
+	        {
+	        	$this->dbforge->drop_column('schema_version',strtolower($module_name).'_version');
+	        }
 	        
 	        if ($this->db->trans_status() === FALSE) {
 				$this->db->trans_rollback();
@@ -167,6 +190,15 @@ class Developer extends Admin_Controller {
 
 	//--------------------------------------------------------------------
 	
+	//--------------------------------------------------------------------
+	// !PRIVATE METHODS
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: validate_form()
+		
+		Handles the validation of the modulebuilder form.
+	*/
 	private function validate_form($field_total=0) 
 	{
 		$this->form_validation->set_rules("contexts_content",'Contexts :: Content',"trim|xss_clean|is_numeric");
@@ -232,6 +264,11 @@ class Developer extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
+	/*
+		Method: build_module()
+		
+		Handles the heavy-lifting of building a module from ther user's specs.
+	*/
 	private function build_module($field_total=0) 
 	{
 		$module_name 		= $this->input->post('module_name');
@@ -307,5 +344,5 @@ class Developer extends Admin_Controller {
 		return TRUE;
 	}
 
-
+	//--------------------------------------------------------------------
 }
