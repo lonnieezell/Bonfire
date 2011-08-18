@@ -156,10 +156,10 @@ h2.panel-title {
 	font-size: 12px;
 	float: right;
 	position: relative;
-	top: 4px;
+	/* top: 4px; */
 	*position: absolute;
 	*right: 10px;
-	*top: 7px;
+	/* *top: 7px; */
 }
 .panel-header #search-form {
 	border-top: 1px solid #d6d6d6;

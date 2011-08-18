@@ -39,6 +39,15 @@ class Settings extends Admin_Controller {
 		Assets::add_js($this->load->view('settings/roles_js', null, true), 'inline');
 		Assets::add_module_js('roles', 'js/settings.js');
 		Assets::add_module_css('roles', 'css/settings.css');
+		
+		// for the permission matrix
+		$this->load->helper('inflector');
+		Assets::add_js('jquery.tablehover.pack.js');
+		Assets::add_css('css/role_settings.css');		
+		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
+		
+		// for the render_search_box()
+		$this->load->helper('ui/ui');
 	}
 		
 	//--------------------------------------------------------------------
@@ -53,7 +62,7 @@ class Settings extends Admin_Controller {
 	
 		Template::set('roles', $this->role_model->find_all());
 	
-		Template::set('toolbar_title', 'Manage User Roles');
+		Template::set('toolbar_title', lang("role_manage"));
 		Template::render();
 	}
 	
@@ -146,62 +155,69 @@ class Settings extends Admin_Controller {
 	{
 		$id = (int)$this->uri->segment(5);
 		$role = $this->role_model->find($id);
-
-		$permissions_full = $role->permissions;
 		
-		$role_permissions = $role->role_permissions;
-
-		$template = array();
-		foreach ($permissions_full as $key => $perm)
-		{
-			$template[$perm->name]['perm_id'] = $perm->permission_id;
-			$template[$perm->name]['value'] = 0;
-			if(isset($role_permissions[$perm->permission_id]) )
-			{
-				$template[$perm->name]['value'] = 1;
-			}
-		}
-
-		// Extract our pieces from each permission
-		$domains = array();
-		
-		foreach ($template as $key => $value)
-		{
-			list($domain, $name, $action) = explode('.', $key);
+		// Verify role has permission to modify this role's access control
+		if ($this->auth->has_permission('Permissions.'.$role->role_name.'.Manage')) {
+			$permissions_full = $role->permissions;
 			
-			// Add it to our domains if it's not already there.
-			if (!empty($domain) && !array_key_exists($domain, $domains))
+			$role_permissions = $role->role_permissions;
+	
+			$template = array();
+			foreach ($permissions_full as $key => $perm)
 			{
-				$domains[$domain] = array();
+				$template[$perm->name]['perm_id'] = $perm->permission_id;
+				$template[$perm->name]['value'] = 0;
+				if(isset($role_permissions[$perm->permission_id]) )
+				{
+					$template[$perm->name]['value'] = 1;
+				}
 			}
+	
+			// Extract our pieces from each permission
+			$domains = array();
 			
-			// Add the preference to the domain array
-			if (!isset($domains[$domain][$name]))
+			foreach ($template as $key => $value)
 			{
-				$domains[$domain][$name] = array(
-					$action => $value
-				);
+				list($domain, $name, $action) = explode('.', $key);
+				
+				// Add it to our domains if it's not already there.
+				if (!empty($domain) && !array_key_exists($domain, $domains))
+				{
+					$domains[$domain] = array();
+				}
+				
+				// Add the preference to the domain array
+				if (!isset($domains[$domain][$name]))
+				{
+					$domains[$domain][$name] = array(
+						$action => $value
+					);
+				}
+				else 
+				{
+					$domains[$domain][$name][$action] = $value;
+				}
+				
+				// Store the actions separately for building the table header
+				if (!isset($domains[$domain]['actions']))
+				{
+					$domains[$domain]['actions'] = array();
+				}
+				
+				if (!in_array($action, $domains[$domain]['actions']))
+				{
+					$domains[$domain]['actions'][] = $action;
+				}
 			}
-			else 
-			{
-				$domains[$domain][$name][$action] = $value;
-			}
-			
-			// Store the actions separately for building the table header
-			if (!isset($domains[$domain]['actions']))
-			{
-				$domains[$domain]['actions'] = array();
-			}
-			
-			if (!in_array($action, $domains[$domain]['actions']))
-			{
-				$domains[$domain]['actions'][] = $action;
-			}
+			$auth_failed = '';
+		} else {
+			$auth_failed = lang('matrix_auth_fail');
+			$domains = '';
 		}
 
 		// Build the table(s) in the view to make things a little clearer,
 		// and return it!
-		return $this->load->view('settings/matrix', array('domains' => $domains), true);
+		return $this->load->view('settings/matrix', array('domains' => $domains, 'authentication_failed' => $auth_failed), true);
 	}
 	
 	//--------------------------------------------------------------------
@@ -288,6 +304,80 @@ class Settings extends Admin_Controller {
 			$this->form_validation->set_message('unique_role', 'The %s role is already in use. Please choose another.');
 			return false;
 		}
+	}
+	
+	
+	// --------------------------------------------------------------------
+	
+	/*
+		Method: permission_matrix()
+		
+		Creates a real-time modifiable summary table of all roles and permissions
+		
+		Parameter:
+			none
+										
+		Return:
+			rendered view of all permissions
+	*/
+	public function permission_matrix()
+	{
+		Template::set('roles', $this->role_model->find_all());
+		Template::set('matrix_permissions', $this->permission_model->select('permission_id, name')->find_all());
+		Template::set('matrix_roles', $this->role_permission_model->select('role_id, role_name')->find_all_roles());
+		$role_permissions = $this->role_permission_model->find_all_role_permissions();
+		foreach($role_permissions as $rp) {
+			$current_permissions[] = $rp->role_id.','.$rp->permission_id;
+		}
+		Template::set('matrix_role_permissions', $current_permissions);
+		
+		if (!Template::get("toolbar_title"))
+		{
+			Template::set("toolbar_title", lang("role_manage"));
+		}
+		Template::set_view('settings/permission_matrix');
+		Template::render();
+	}
+	
+	
+	// --------------------------------------------------------------------
+	
+	/*
+		Method: matrix_update()
+		
+		Updates the role_permissions table
+		
+		Parameter:
+			$role_perm	- A CSV string of the role and the permission to modify	
+			$action		- boolean ()True = Insert, False = Delete)
+													
+		Return:
+			string result
+	*/
+	
+	public function matrix_update()
+	{
+		$pieces = explode(',',$this->input->post('role_perm', true));
+		
+		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find($pieces[0])->role_name.'.Manage')) {
+			echo lang("matrix_auth_fail");
+			return false;
+		}
+		
+		if ($this->input->post('action', true) == 'true') { 
+			if(is_numeric($this->role_permission_model->create_role_permissions($pieces[0],$pieces[1]))) {
+				echo lang("matrix_insert_success");
+			} else {
+				echo lang("matrix_insert_fail") . $this->role_permission_model->error;		
+			}
+		} else {
+			if($this->role_permission_model->delete_role_permissions($pieces[0],$pieces[1])) {
+				echo lang("matrix_delete_success");
+			} else {
+				echo lang("matrix_delete_fail"). $this->role_permission_model->error;
+			}
+		}
+		
 	}
 	
 	//--------------------------------------------------------------------
