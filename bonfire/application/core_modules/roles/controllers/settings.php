@@ -282,18 +282,20 @@ class Settings extends Admin_Controller {
 		}
 		
 		// Add a new management permission for the role.
-		$add_perm = array(
-			'name'=>'Permissions.'.ucwords($this->input->post('role_name')).'.Manage',
-			'description'=>'To manage the access control permissions for the '.ucwords($this->input->post('role_name')).' role.',
-			'status'=>'active'
-		);
-		if ( $this->permission_model->insert($add_perm) ) {
-			$prefix = $this->db->dbprefix;
-			// give current_role, or admin fallback, access to manage new role ACL
-			$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
-			$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(".$assign_role.",".$this->db->insert_id().")");
-		} else {
-			$this->error = 'There was an error creating the ACL permission.';
+		if ($type ==  'insert')	{
+			$add_perm = array(
+				'name'=>'Permissions.'.ucwords($this->input->post('role_name')).'.Manage',
+				'description'=>'To manage the access control permissions for the '.ucwords($this->input->post('role_name')).' role.',
+				'status'=>'active'
+			);
+			if ( $this->permission_model->insert($add_perm) ) {
+				$prefix = $this->db->dbprefix;
+				// give current_role, or admin fallback, access to manage new role ACL
+				$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
+				$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(".$assign_role.",".$this->db->insert_id().")");
+			} else {
+				$this->error = 'There was an error creating the ACL permission.';
+			}
 		}
 		
 		// Save the permissions.

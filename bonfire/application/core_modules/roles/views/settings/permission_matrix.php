@@ -33,6 +33,7 @@
 	
 	<?php endif; ?>
 	</div>
+	
 	<!-- Role Editor -->
 	<div id="content" class="view">
 		<div class="scrollable" id="ajax-content">
@@ -47,8 +48,10 @@
 				<tr>
 					<th><?php echo lang('matrix_permission');?></th>
 					<?php foreach($matrix_roles as $matrix_role ) : ?>
-						<?php $matrix_role = (array)$matrix_role;?>
-						<th><?php echo $matrix_role['role_name']; ?></th>
+						<?php $matrix_role = (array)$matrix_role; ?>
+						<?php if (has_permission('Permissions.'.$matrix_role['role_name'].'.Manage')) : ?>
+							<th><?php echo $matrix_role['role_name']; ?></th>
+						<?php endif; ?>
 						<?php $cols[] = array('role_id' => $matrix_role['role_id'], 'role_name' => $matrix_role['role_name']); ?>
 						<?php endforeach; ?>
 				</tr>
@@ -60,11 +63,13 @@
 				<tr title="<?php echo $matrix_perm['name']; ?>">
 					<td><?php echo $matrix_perm['name']; ?></td>
 					<?php
-					for($i=0;$i<count($cols);$i++) : 
-						$checkbox_value = $cols[$i]['role_id'].','.$matrix_perm['permission_id'];
-						$checked = in_array($checkbox_value, $matrix_role_permissions) ? ' checked="checked"' : '';
+					for($i=0;$i<count($cols);$i++) :
+						if (has_permission('Permissions.'.$cols[$i]['role_name'].'.Manage')) : 
+							$checkbox_value = $cols[$i]['role_id'].','.$matrix_perm['permission_id'];
+							$checked = in_array($checkbox_value, $matrix_role_permissions) ? ' checked="checked"' : '';
 					 ?>
 						<td title="<?php echo $cols[$i]['role_name']; ?>"><input type="checkbox" value="<?php echo $checkbox_value; ?>"<?php echo $checked; ?> title="<?php echo lang('matrix_role');?>: <?php echo $cols[$i]['role_name']; ?>, <?php echo lang('matrix_permission');?>: <?php echo $matrix_perm['name']; ?>" /></td>
+						<?php endif; ?>
 					<?php endfor; ?>			
 				</tr>
 			<?php endforeach; ?>
