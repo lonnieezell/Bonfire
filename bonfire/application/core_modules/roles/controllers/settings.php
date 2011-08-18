@@ -37,8 +37,8 @@ class Settings extends Admin_Controller {
 		$this->lang->load('roles');
 		
 		Assets::add_js($this->load->view('settings/roles_js', null, true), 'inline');
-		Assets::add_module_js('roles', 'js/settings.js');
-		Assets::add_module_css('roles', 'css/settings.css');
+		//Assets::add_module_js('roles', 'js/settings.js');
+		//Assets::add_module_css('roles', 'css/settings.css');
 		
 		// for the permission matrix
 		$this->load->helper('inflector');
@@ -157,7 +157,7 @@ class Settings extends Admin_Controller {
 		$role = $this->role_model->find($id);
 		
 		// Verify role has permission to modify this role's access control
-		if ($this->auth->has_permission('Permissions.'.$role->role_name.'.Manage')) {
+		if ($this->auth->has_permission('Permissions.'.ucwords($role->role_name).'.Manage')) {
 			$permissions_full = $role->permissions;
 			
 			$role_permissions = $role->role_permissions;
@@ -279,6 +279,21 @@ class Settings extends Admin_Controller {
 		else if ($type == 'update')
 		{
 			$return = $this->role_model->update($id, $_POST);
+		}
+		
+		// Add a new management permission for the role.
+		$add_perm = array(
+			'name'=>'Permissions.'.ucwords($this->input->post('role_name')).'.Manage',
+			'description'=>'To manage the access control permissions for the '.ucwords($this->input->post('role_name')).' role.',
+			'status'=>'active'
+		);
+		if ( $this->permission_model->insert($add_perm) ) {
+			$prefix = $this->db->dbprefix;
+			// give current_role, or admin fallback, access to manage new role ACL
+			$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
+			$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(".$assign_role.",".$this->db->insert_id().")");
+		} else {
+			$this->error = 'There was an error creating the ACL permission.';
 		}
 		
 		// Save the permissions.
