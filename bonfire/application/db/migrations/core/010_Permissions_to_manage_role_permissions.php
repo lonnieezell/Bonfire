@@ -15,8 +15,9 @@ class Migration_Permissions_to_manage_role_permissions extends Migration {
 			foreach ($roles as $role) {
 				// add the permission
 				$this->db->query("INSERT INTO {$prefix}permissions(name, description) VALUES('Permissions.".$role->role_name.".Manage','To manage the access control permissions for the ".$role->role_name." role.')");
-				// give administrators full right to manage permissions
-				$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(1,".$this->db->insert_id().")");
+				// give current role (or administrators if fresh install) full right to manage permissions
+				$assign_role = ($this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
+				$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(".$assign_role.",".$this->db->insert_id().")");
 			}
 		}		
 	}
