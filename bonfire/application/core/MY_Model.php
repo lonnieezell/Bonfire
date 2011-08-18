@@ -378,17 +378,14 @@ class BF_Model extends CI_Model {
 		}
 	
 		if ($this->soft_deletes === TRUE)
-		{
+		{	
 			$this->db->where($this->key, $id);
-			$this->db->set('deleted', 1);
-			$this->db->update($this->table);
+			$result = $this->db->update($this->table, array('deleted' => 1));
 		} 
 		else 
 		{
-			$this->db->delete($this->table, array($this->key => $id));
+			$result = $this->db->delete($this->table, array($this->key => $id));
 		}
-
-		$result = $this->db->affected_rows();
 
 		if ($result)
 		{
@@ -837,5 +834,3 @@ class MY_Model extends BF_Model { }
 
 /* End of file MY_Model.php */
 /* Location: ./application/core/MY_Model.php */
-
-
