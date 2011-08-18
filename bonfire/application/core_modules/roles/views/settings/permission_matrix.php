@@ -59,7 +59,8 @@
 			
 			<tbody>
 			<?php foreach($matrix_permissions as $matrix_perm ) : ?>
-				<?php $matrix_perm = (array)$matrix_perm;?>
+				<?php $matrix_perm = (array)$matrix_perm; ?>
+				<?php if (has_permission($matrix_perm['name'])) : ?>
 				<tr title="<?php echo $matrix_perm['name']; ?>">
 					<td><?php echo $matrix_perm['name']; ?></td>
 					<?php
@@ -72,6 +73,7 @@
 						<?php endif; ?>
 					<?php endfor; ?>			
 				</tr>
+				<?php endif; ?>
 			<?php endforeach; ?>
 			</tbody>
 		</table>
