@@ -1,0 +1,7 @@
+/* for the permissions matrix */
+#permission_table { width: auto; margin-left:20px; }
+#permission_table th {  }
+#permission_table td { text-align: center;} 
+#permission_table td:first-child { text-align: left;} 
+#permission_table_result { font-weight: bold; }
+.hover { background-color: #cad2e9; }
