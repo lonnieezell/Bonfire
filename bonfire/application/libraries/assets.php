@@ -564,8 +564,7 @@ class Assets {
 		// any that are already set
 		if (!empty($script))
 		{
-			self::external_js((string)$script);
-			return;
+			return self::external_js((string)$script);
 		}
 		// If an array was passed, loop through them, adding each as we go.
 		else if (is_array($script))
@@ -690,7 +689,7 @@ class Assets {
 			A string with the link(s) to the script files.
 	*/
 	public function module_js() 
-	{
+	{		
 		if (!is_array(self::$module_scripts) || !count(self::$module_scripts))
 		{
 			return '';
@@ -701,7 +700,7 @@ class Assets {
 		// Prep our scripts array with only files 
 		// that actually can be found.
 		$scripts = self::find_files(self::$module_scripts, 'js');
-		
+	
 		// Mod Scripts are always combined. This allows us to have the 
 		// working files out of the web root, but still provide a link
 		// to the assets.
@@ -1228,7 +1227,7 @@ class Assets {
 						*/
 						else if (is_file($site_path . $path .'/'. $default_theme . $clean_type .'/'. $file ."{$type}"))
 						{
-							$file_path 		= base_url() . $path .'/'. $default_theme . $clean_type .'/'. $file .".$type";
+							$file_path 		= base_url() . $path .'/'. $default_theme . $clean_type .'/'. $file ."$type";
 							$server_path	= $site_path . $path .'/'. $default_theme . $clean_type .'/'. $file ."{$type}";
 							$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
 							$found = true;
