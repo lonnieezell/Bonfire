@@ -29,11 +29,13 @@ END;
 $mb_constructor =<<<END
 	public function __construct() 
 	{
+		parent::__construct();
+
 		{restrict}
 		\$this->load->model('{$module_name_lower}_model', null, true);
-		\$this->land->load('{$module_name_lower}');
+		\$this->lang->load('{$module_name_lower}');
 		
-		Assets::add_js(\$this->load->view('{$controller_name}_js', null, true), 'inline');
+		Assets::add_js(\$this->load->view('{$controller_name}/js', null, true), 'inline');
 		
 		{constructor_extras}
 	}
