@@ -37,6 +37,7 @@
 	</div>
 	
 	<!-- Permissions -->
+	<?php if (has_permission('Permissions.Settings.Manage')) : ?>
 	<fieldset>
 		<legend><?php echo lang('role_permissions'); ?></legend>
 		
@@ -45,6 +46,7 @@
 		<?php echo modules::run('roles/settings/matrix'); ?>
 	
 	</fieldset>
+	<?php endif; ?>
 	
 	<div class="text-right">
 		<br/>

@@ -246,7 +246,78 @@ class Role_permission_model extends BF_Model {
 		return parent::find_all_by('role_id', $role_id);
 	}
 	
+	// --------------------------------------------------------------------
 	
+	/*
+		Method: find_all_role_permissions()
+
+		Finds all the role permissions (role_id and permission_id)
+		
+		Parameters:
+			none
+										
+		Return:
+			object
+	*/	
+	function find_all_role_permissions()
+	{		
+		return $this->role_permission_model->find_all();
+	}
+	
+	// --------------------------------------------------------------------
+	
+	/*
+		Method: find_all_roles()
+
+		Finds all the roles
+		
+		Parameters:
+			none
+							
+		Return:
+			object
+	*/
+	function find_all_roles()
+	{		
+		return $this->role_model->find_all();
+	}
+	
+	// --------------------------------------------------------------------
+	
+	/*
+		Method: create_role_permissions()
+		
+		Creates a new role permission entry
+		
+		Parameter:
+			$role_id			- ID of the role
+			$permission_id		- ID of the permission
+										
+		Return:
+			true / false
+	*/	
+	function create_role_permissions($role_id, $permission_id)
+	{		
+		return $this->role_permission_model->create($role_id, $permission_id);
+	}
+	
+	// --------------------------------------------------------------------
+	
+	/*
+		Method: delete_role_permissions()
+		
+		Parameters:
+			$role_id			- ID of the role
+			$permission_id		- ID of the permission
+				
+		Returns:
+			true/false
+	*/	
+	function delete_role_permissions($role_id, $permission_id)
+	{		
+		return $this->role_permission_model->delete($role_id, $permission_id);
+	}
+
 	//--------------------------------------------------------------------
 	
 }
