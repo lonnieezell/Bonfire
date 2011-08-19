@@ -14,6 +14,7 @@ class Settings extends Admin_Controller {
 		$this->load->helper('url');
 		$this->load->model('permission_model');
 		$this->lang->load('permissions');
+		$this->load->helper('inflector');
 			
 		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
 	}

@@ -40,6 +40,10 @@
 		</tbody>
 	</table>
 	<?php endforeach; ?>
+	
+	<?php else: ?>
+
+	<div class="notification attention"><?php echo $authentication_failed; ?></div>
 
 <?php endif; ?>
 

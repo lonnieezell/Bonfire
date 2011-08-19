@@ -1,7 +1,13 @@
+
 <div class="view split-view">
 	
 	<!-- Role List -->
 	<div class="view">
+		
+		<div class="panel-header list-search">
+			<a href="<?php echo site_url(SITE_AREA .'/settings/roles/permission_matrix'); ?>"><?php echo lang('matrix_header');?></a>
+			<?php render_search_box(); ?>
+		</div>
 	
 	<?php if (isset($roles) && is_array($roles) && count($roles)) : ?>
 		<div class="scrollable">
@@ -22,7 +28,7 @@
 	<?php else: ?>
 	
 	<div class="notification attention">
-		<p><?php echo lang('role_no_roles'); ?> <?php echo anchor(SITE_AREA .'/settings/roles/create', lang('role_create_button')) ?></p>
+		<p><?php echo lang('role_no_roles'); ?> <?php echo anchor(SITE_AREA .'/settings/roles/create', lang('role_create_button'), array("class" => "ajaxify")) ?></p>
 	</div>
 	
 	<?php endif; ?>
