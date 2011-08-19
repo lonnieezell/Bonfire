@@ -33,7 +33,7 @@
 	switch (ENVIRONMENT)
 	{
 		case 'development':
-			error_reporting(E_ALL | E_STRICT);
+			error_reporting(E_ALL);
 			if (!ini_get('display_errors'))
 			{
 				ini_set('display_errors', 1);
