@@ -21,6 +21,7 @@
 	THE SOFTWARE.
 */
 
+$lang['role_manage']				= 'Gerenciar Papeis de Usuário';
 $lang['role_no_roles']				= 'Não estão definidos Papeis';
 $lang['role_create_button']			= 'Criar um novo Papel';
 $lang['role_create_note']			= 'Todos os utilizadores devem ter um Papel (utilizador, editor, administrador,etc)';
@@ -39,3 +40,16 @@ $lang['role_delete_note']			= 'Ao apagar este papel, todos os utilizadores serã
 
 $lang['role_roles']					= 'Papeis';
 $lang['role_new_role']				= 'Novo Papel';
+
+$lang['role_login_destination']		= 'Destino de login';
+$lang['role_destination_note']		= 'A URL do site para redirecionar para a login bem-sucedido.';
+
+$lang['matrix_header']				= 'Permissão Matriz';
+$lang['matrix_permission']			= 'Permissão';
+$lang['matrix_role']				= 'Papel';
+$lang['matrix_note']				= 'Edição permissão instantâneas. Alternar uma checkbox para adicionar ou remover essa permissão para esse papel.';
+$lang['matrix_insert_success']		= 'Permissão adicional para o papel.';
+$lang['matrix_insert_fail']			= 'Houve um problema adicionando a permissão para o papel:';
+$lang['matrix_delete_success']		= 'Permissão removido da papel.';
+$lang['matrix_delete_fail']			= 'Houve um problema ao excluir a permissão para o papel: ';
+$lang['matrix_auth_fail']			= 'Autenticação: Você não tem a capacidade de gerenciar o controle de acesso para o papel.';
