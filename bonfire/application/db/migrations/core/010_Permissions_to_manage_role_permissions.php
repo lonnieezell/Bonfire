@@ -4,13 +4,15 @@ class Migration_Permissions_to_manage_role_permissions extends Migration {
 	
 	public function up() 
 	{
+		$this->load->library('session');
+	
 		$prefix = $this->db->dbprefix;
 		
 		// name field in permissions table is too short bump it up to 50
 		$sql = "ALTER TABLE `{$prefix}permissions` CHANGE `name` `name` VARCHAR(50) NULL";
-		$this->db->query($sql);	
+		$this->db->query($sql);
 		
-		$roles = $this->role_model->find_all();
+		$roles = $this->db->select('role_name')->get($prefix.'roles')->result();
 		if (isset($roles) && is_array($roles) && count($roles)) {
 			foreach ($roles as $role) {
 				// add the permission
