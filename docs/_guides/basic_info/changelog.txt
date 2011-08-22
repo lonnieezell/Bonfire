@@ -1,6 +1,12 @@
 Topic: Changelog
 
-Version 0.2
+Version 0.2-RC2 (Unreleased)
+
+Additions:
+- Major revamp to the ModuleBuilder
+- Added new date_difference function to MY_date_helper.
+
+Version 0.2-RC1
 
 Released: Currently under development
 
