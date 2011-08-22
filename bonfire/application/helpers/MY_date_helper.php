@@ -88,3 +88,52 @@ if (!function_exists('relative_time'))
 }
 
 //---------------------------------------------------------------
+
+/*
+	Function: date_difference
+	
+	Returns the difference between two dates. 
+	
+	Parameters:
+		$start		- The start date in either unix timestamp or a format 
+					  that can be used within strtotime().
+		$end		- The ending date in either unix timestamp or a format 
+					  that can be used within strtotime().
+		$interval	- A string with the interval to use. Choices 'week', 'day', 'hour', 'minute'
+		$reformat	- If TRUE, will reformat the time using strtotime()
+		
+	Returns:
+		A number representing the difference between the two dates in the interval desired.
+*/
+if (!function_exists('date_difference'))
+{
+	function date_difference($start=null, $end=null, $interval='day', $reformat=false)
+	{
+		if (is_null($start))
+		{
+			return false;
+		}
+		
+		if (is_null($end))
+		{
+			$end = date('Y-m-d H:i:s');
+		}
+		
+		$times = array(
+			'week'		=> 604800,
+			'day'		=> 86400,
+			'hour'		=> 3600,
+			'minute'	=> 60
+		);
+		
+		if ($reformat === true)
+		{
+			$start 	= strtotime($start);
+			$end	= strtotime($end);
+		}
+		
+		$diff = $end - $start;
+		
+		return round($diff / $times[$interval]);
+	}
+}
