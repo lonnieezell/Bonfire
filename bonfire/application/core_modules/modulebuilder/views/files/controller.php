@@ -388,7 +388,7 @@ $this->form_validation->set_rules(\''.set_value("view_field_name$counter").'\',\
 		
 			if ($value == 'unique')	{		
 				$prefix = $this->db->dbprefix;
-				$rules .= $value.'['.$prefix.$table_name.'.'.set_value("view_field_name$counter").']';
+				$rules .= $value.'['.$prefix.$table_name.'.'.set_value("view_field_name$counter").'.'.set_value("primary_key_field").'.\'.$id.\']';
 			} else {
 				$rules .= $value;	
 			}
