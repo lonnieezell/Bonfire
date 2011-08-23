@@ -16,10 +16,10 @@ class MY_Form_validation extends CI_Form_validation {
 	/**
 	 * MY_Form_validation::unique()
 	 * 
-	 * i.e. '...|required|unique[bf_users.name]|trim...'
+	 * i.e. '...|required|unique[bf_users.name.id.4]|trim...'
 	 * 
      * @abstract Rule to force value to be unique in table
-     * @usage "unique[tablename.fieldname]"
+     * @usage "unique[tablename.fieldname.(primaryKey-used-for-updates).(uniqueID-used-for-updates)]"
 	 * @param mixed $value the value to be checked
 	 * @param mixed $params the table and field to check against
 	 * @return bool
@@ -27,10 +27,10 @@ class MY_Form_validation extends CI_Form_validation {
 	function unique($value, $params) {
 		$this->CI->form_validation->set_message('unique', 'The value in &quot;%s&quot; is already being used.');
 
-		list($table, $field) = explode(".", $params, 2);
+		list($table, $field, $key, $id) = explode(".", $params, 4);
 
 		$query = $this->CI->db->select($field)->from($table)
-			->where($field, $value)->limit(1)->get();
+			->where($field, $value)->where($key.' != '.$id)->limit(1)->get();
 
 		if ($query->row()) {
 			return false;
