@@ -399,6 +399,74 @@ class BF_Model extends CI_Model {
 	
 	//---------------------------------------------------------------
 	
+	/*
+		Method: delete_where()
+		
+		Performs a delete using any field/value pair(s) as the 'where'
+		portion of your delete statement. If $this->soft_deletes is 
+		TRUE, it will attempt to set a field 'deleted' on the current
+		record to '1', to allow the data to remain in the database.
+		
+		Parameters:
+			$data	- key/value pairs accepts an associative 
+					  array or a string
+					
+				ie.  1) array( 'key' => 'value', 'key2' => 'value2' ) 
+				     2) ' (`key` = "value" AND `key2` = "value2") '
+			
+		Return:
+			true/false
+	*/
+	public function delete_where($data=null) 
+	{
+		if ($this->_function_check(FALSE, $data) === FALSE)
+		{
+			return FALSE;
+		}
+		
+		if (empty($data))
+		{
+			$this->error = $this->lang->line('bf_model_no_data');
+			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
+			return false;
+		}
+		
+		if (is_array($data))
+		{
+			foreach($data as $field => $value) 
+			{
+				$this->db->where($field,$value);
+			}			
+		}
+		else
+		{
+			$this->db->where($data);	
+		}
+	
+		if ($this->soft_deletes === TRUE)
+		{
+			$this->db->set('deleted', 1);
+			$this->db->update($this->table);
+		} 
+		else 
+		{
+			$this->db->delete($this->table);
+		}
+
+		$result = $this->db->affected_rows();
+
+		if ($result)
+		{
+			return true;
+		} 
+		
+		$this->error = 'DB Error: ' . mysql_error();
+	
+		return false;
+	}
+	
+	//---------------------------------------------------------------
+	
 	//---------------------------------------------------------------
 	// HELPER FUNCTIONS
 	//---------------------------------------------------------------
