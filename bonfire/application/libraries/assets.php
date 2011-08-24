@@ -647,7 +647,7 @@ class Assets {
 		else 
 		{
 			
-			//
+			//Check for HTTPS or HTTP connection
 			
 			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https";} else { $http_protocol = "http";}
 		
@@ -1145,6 +1145,7 @@ class Assets {
 			// Strip out the file type for consistency
 			$file = str_replace($type, '', $file);
 			
+			//Check for HTTPS or HTTP connection
 			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https";} else { $http_protocol = "http";}
 			
 			// If it contains an external URL, we're all done here.
