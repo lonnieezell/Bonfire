@@ -193,7 +193,6 @@ class Role_model extends BF_Model {
 			$perm = $this->permission_model->find_by('name','Permissions.'.ucwords($role->role_name).'.Manage');
 			$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Permissions.".ucwords($role->role_name).".Manage')");
 			$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='".$perm->permission_id."';");
-			logit($this->db->last_query(),'error');
 		}
 		
 		return $deleted;
