@@ -185,12 +185,52 @@ class Admin_Controller extends Authenticated_Controller {
 		
 		$this->limit = $this->config->item('site.list_limit');
 		
+		// check if the protected role option is set.
+		$protected_id = $this->config->item('site.protected_role');
+		if (!empty($protected_id))
+		{
+			$this->protected_role($protected_id);
+		}
+		
 		// Basic setup
 		Template::set_theme('admin');
 		Assets::add_css(array('ui.css', 'notifications.css', 'buttons.css'));
 	}
 	
 	//--------------------------------------------------------------------
+		
+	/*
+		Method: protected_role()
+		
+		Verifies that the protected role has every permission. An entry
+		is logged as INFO as well whenever the update is made.
+		
+		Parameter:
+			none
+													
+		Return:
+			none
+	*/
+	private function protected_role($protected_id=false)
+	{
+		$prefix = $this->db->dbprefix;
+		
+		if (empty($protected_id))
+		{
+			$protected_id = $this->config->item('site.protected_role');
+		}
+		
+		$permission_count = $this->permission_model->count_all();
+		$protected_count = $this->role_permission_model->count_by('role_id',$protected_id);
+		
+		if ($permission_count <> $protected_count) {
+			$permissions = $this->permission_model->find_all();
+			foreach ($permissions as $perm) {
+				$this->db->query('INSERT IGNORE INTO '.$prefix.'role_permissions VALUES('.$protected_id.', '.$perm->permission_id.')');
+			}
+			logit('Updated permissions for protected role. Permission count was '.$permission_count.' but protected role count was '. $protected_count.'.', 'Info');			
+		}
+	}
 	
 }
 

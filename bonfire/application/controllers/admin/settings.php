@@ -54,6 +54,9 @@ class Settings extends Admin_Controller {
 		
 		// Read our current settings
 		Template::set('settings', read_config('application'));
+		
+		// Get all the roles
+		Template::set('all_roles',$this->role_model->find_all());
 
 		Template::set_view('admin/settings/index');
 		Template::render();
@@ -70,6 +73,7 @@ class Settings extends Admin_Controller {
 		$this->form_validation->set_rules('title', lang('bf_site_name'), 'required|trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('system_email', lang('bf_site_email'), 'required|trim|strip_tags|valid_email|xss_clean');
 		$this->form_validation->set_rules('list_limit','Items <em>p.p.</em>', 'required|trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('protected_role','Protected Role', 'required|trim|numeric|xss_clean');
 		
 		if ($this->form_validation->run() === false)
 		{
@@ -92,6 +96,7 @@ class Settings extends Admin_Controller {
 			'updates.do_check'		=> isset($_POST['do_check']) ? 1 : 0,
 			'updates.bleeding_edge'	=> isset($_POST['bleeding_edge']) ? 1 : 0,
 			'site.show_profiler'	=> isset($_POST['show_profiler']) ? 1 : 0,
+			'site.protected_role'	=> $this->input->post('protected_role')
 		);
 		
 		//destroy the saved update message in case they changed update preferences.
