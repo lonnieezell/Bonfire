@@ -87,7 +87,14 @@ class Users extends Front_Controller {
 						Template::redirect($this->auth->login_destination);
 					} else
 					{	
-						Template::redirect('/');
+						if (!empty($this->requested_page))
+						{
+							Template::redirect($this->requested_page);
+						} 
+						else
+						{
+							Template::redirect('/');
+						}
 					}
 				}
 
