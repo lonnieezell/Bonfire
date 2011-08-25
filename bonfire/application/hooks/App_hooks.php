@@ -25,6 +25,8 @@ class App_hooks {
 
 	private $ci;
 	
+	private $ignore_pages = array('login', 'logout');
+	
 	//--------------------------------------------------------------------
 	
 	public function __construct() 
@@ -50,10 +52,29 @@ class App_hooks {
 			$this->ci->load->library('session');
 		}
 	
-		$this->ci->session->set_userdata('previous_page', $this->ci->uri->uri_string()); 
+		if (!in_array($this->ci->uri->uri_string(), $this->ignore_pages))
+		{
+			$this->ci->session->set_userdata('previous_page', current_url()); 
+		}
 	}
 	
 	//--------------------------------------------------------------------
+
+	public function save_requested() 
+	{
+		if (!class_exists('CI_Session'))
+		{
+			$this->ci->load->library('session');
+		}
+
+		if (!in_array($this->ci->uri->uri_string(), $this->ignore_pages))
+		{
+			$this->ci->session->set_userdata('requested_page', current_url()); 
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	public function check_site_status() 
 	{

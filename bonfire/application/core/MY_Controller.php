@@ -41,7 +41,21 @@
 */
 class Base_Controller extends MX_Controller {
 	
+	/*
+		Var: $previous_page
+		
+		Stores the previously viewed page's complete URL.
+	*/
 	protected $previous_page;
+	
+	/*
+		Var: $requested_page
+		
+		Stores the page requested. This will sometimes be
+		different than the previous page if a redirect happened
+		in the controller.
+	*/
+	protected $requested_page;
 	
 	//--------------------------------------------------------------------
 	
@@ -67,6 +81,7 @@ class Base_Controller extends MX_Controller {
 		$this->load->driver('cache', array('adapter' => 'file'));
 		
 		$this->previous_page = $this->session->userdata('previous_page');
+		$this->requested_page = $this->session->userdata('requested_page');
 		
 		// Pre-Controller Event
 		Events::trigger('after_controller_constructor', get_class($this));

@@ -10,6 +10,15 @@
 |
 */
 
+// Stores the requested URL, which will sometimes be different than previous url 
+$hook['pre_controller'][] = array(
+								'class'		=> 'App_hooks',
+								'function'	=> 'save_requested',
+								'filename'	=> 'App_hooks.php',
+								'filepath'	=> 'hooks',
+								'params'	=> ''
+							);
+
 // Allows us to perform good redirects to previous pages.
 $hook['post_controller'][] = array(
 								'class'		=> 'App_hooks',
