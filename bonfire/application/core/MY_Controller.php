@@ -66,6 +66,8 @@ class Base_Controller extends MX_Controller {
 
 		$this->load->driver('cache', array('adapter' => 'file'));
 		
+		$this->previous_page = $this->session->userdata('previous_page');
+		
 		// Pre-Controller Event
 		Events::trigger('after_controller_constructor', get_class($this));
 	}
