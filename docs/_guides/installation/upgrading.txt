@@ -4,11 +4,13 @@ To upgrade Bonfire, you simply overwrite the files/folders of the latest version
 
 The following files are specifically recommended to backup...
 
+- bonfire/application/config/application.php
 - bonfire/application/config/config.php
 - bonfire/application/config/database.php
 - bonfire/application/config/email.php
 - bonfire/application/config/development/*.php
 - bonfire/application/config/testing/*.php
 - bonfire/application/config/production/*.php
+- bonfire/application/core/MY_Controller.php
 
 Additionally, if you have made custom themes, modules, or other files, you should back these up.
