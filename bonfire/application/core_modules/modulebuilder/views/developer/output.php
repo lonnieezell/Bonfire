@@ -14,7 +14,7 @@
 </div>
 
 <div class="notification attention">
-	<?php printf(lang('mb_out_tables'), anchor(SITE_AREA .'/developer/migrations#mod-tab', 'Migrations')) ;?>
+	<?php printf(lang($mb_migration_result), anchor(SITE_AREA .'/developer/migrations#mod-tab', 'Migrations')) ;?>
 </div>
 
 <p class="important">
