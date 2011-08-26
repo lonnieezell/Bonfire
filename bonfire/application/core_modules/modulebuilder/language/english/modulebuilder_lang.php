@@ -39,7 +39,8 @@ $lang['mb_table_description']	= 'Description';
 // OUTPUT page
 $lang['mb_out_success']	= 'The module creation was successful! Below you will find the list of Controller, Model, Language, Migration and View files that were created during this process. Model and SQL files will be included if you selected the "Generate Migration" option and a Javascript file if it was required during creation.';
 $lang['mb_out_success_note']	= 'NOTE: Please add extra user input validation as you require.  This code is to be used as a starting point only.';
-$lang['mb_out_tables'] 			= 'The database tables are <strong>NOT</strong> automatically installed for you. You still need to go to the %s section and migrate your database table(s) before you can work with them.';
+$lang['mb_out_tables_success']	= 'The database tables were automatically installed for you. You can verify or uninstall, if you wish, from the %s section.';
+$lang['mb_out_tables_error']	= 'The database tables were <strong>NOT</strong> automatically installed for you. You still need to go to the %s section and migrate your database table(s) before you can work with them.';
 $lang['mb_out_acl'] 			= 'Access Control File';
 $lang['mb_out_acl_path']        = 'migrations/001_Install_%s_permissions.php';
 $lang['mb_out_config'] 			= 'Config file';
