@@ -308,10 +308,6 @@ class Developer extends Admin_Controller {
 		$data['table_name']			= empty($table_name) ? $module_name : $table_name;
 		$data = $data + $file_data;
 		
-		$version = ($db_required == TRUE) ?  002 : 001;		
-		$this->load->library('migrations/Migrations');
-		$this->migrations->version($version, $module_name."_");
-		
 		Template::set($data);
 	}
 	
