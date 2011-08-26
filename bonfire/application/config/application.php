@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
 	Copyright (c) 2011 Lonnie Ezell
-
+ 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
 	in the Software without restriction, including without limitation the rights
@@ -20,25 +20,25 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 */
-
+ 
 $config['site.title'] = "";
 $config['site.system_email'] = "";
 $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
-
+ 
 //--------------------------------------------------------------------
 // !Console/Profiler
 //--------------------------------------------------------------------
 $config['site.show_profiler'] = 1;
-
+ 
 //--------------------------------------------------------------------
 // !For Update messages
 //--------------------------------------------------------------------
-
+ 
 $config['updates.do_check'] = 1;		// Whether to check for updates or not.
 $config['updates.bleeding_edge'] = 1;	// Show update message when new commits exist? 
 $config['updates.last_commit']	= '';	// Stores the last installed commit ref
-
+ 
 //--------------------------------------------------------------------
 // !BACKUPS
 //--------------------------------------------------------------------
@@ -48,37 +48,37 @@ $config['updates.last_commit']	= '';	// Stores the last installed commit ref
 // new files.
 //
 $config['site.backup_folder']	= 'archives/';
-
+ 
 //--------------------------------------------------------------------
 // !AUTHENTICATION
 //--------------------------------------------------------------------
-
+ 
 // Can new accounts be registered? 
 $config['auth.allow_register'] = 1;
-
+ 
 // Type of login allowed ('email', 'username', 'both')
 $config['auth.login_type'] = "email";
-
+ 
 // Whether usernames are used in the system (0:no, 1:yes, 2:yes+ownname)
 $config['auth.use_usernames'] = 1;
-
+ 
 // Should users be able to use a 'remember me' functionality?
 $config['auth.allow_remember'] = 1;
-
+ 
 // How long should a user be remembered in the system? In seconds.
 $config['auth.remember_length'] = 1209600;
-
+ 
 // Should we do a custom login redirect, or just go to '/'?
 $config['auth.do_login_redirect'] = 1;
-
+ 
 // Does User accounts have extended profile? Enabling will allow meta user data (wip)
 // 	also omits some default springboard user fields (eg: omits address fields) to allow customization.
 $config['auth.use_extended_profile'] = 0;
-
+ 
 //--------------------------------------------------------------------
 // !CONTEXTS
 //--------------------------------------------------------------------
-
+ 
 /*
 	Contexts provide the main sections of the admin area. Only two are
 	required: 'settings' and 'developer'. 
@@ -91,12 +91,12 @@ $config['auth.use_extended_profile'] = 0;
 	theme/images/context_context_name.png files.
 */
 $config['contexts'] = array( 'content', 'reports', 'settings', 'developer' );
-
-
+ 
+ 
 //--------------------------------------------------------------------
 // !MODULES
 //--------------------------------------------------------------------
-
+ 
 /*
 	These module settings determine what permissions are needed to view
 	modules in the left-hand sidebar.
@@ -121,11 +121,11 @@ $config['module_permissions'] = array(
 		'database'	=> 'Bonfire.Database.Manage',		
 	)
 );
-
+ 
 //--------------------------------------------------------------------
 // !TEMPLATE
 //--------------------------------------------------------------------
-
+ 
 /*
 |--------------------------------------------------------------------
 | SITE PATH
@@ -136,7 +136,7 @@ $config['module_permissions'] = array(
 |
 */
 $config['template.site_path']	= FCPATH;
-
+ 
 /*
 |---------------------------------------------------------------------
 | THEME PATHS
@@ -146,7 +146,7 @@ $config['template.site_path']	= FCPATH;
 | a theme isn't found. Paths are relative to the FCPATH.
 */
 $config['template.theme_paths'] = array('bonfire/themes');
-
+ 
 /*
 |--------------------------------------------------------------------
 | DEFAULT LAYOUT
@@ -158,7 +158,7 @@ $config['template.theme_paths'] = array('bonfire/themes');
 |
 */
 $config['template.default_layout'] = "index";
-
+ 
 /*
 |--------------------------------------------------------------------
 | DEFAULT AJAX LAYOUT
@@ -170,7 +170,7 @@ $config['template.default_layout'] = "index";
 |
 */
 $config['template.ajax_layout'] = 'ajax';
-
+ 
 /*
 |--------------------------------------------------------------------
 | USE THEMES?
@@ -186,8 +186,8 @@ $config['template.ajax_layout'] = 'ajax';
 |
 */
 $config['template.use_mobile_themes'] = FALSE;
-
-
+ 
+ 
 /*
 |--------------------------------------------------------------------
 | DEFAULT THEME
@@ -197,7 +197,7 @@ $config['template.use_mobile_themes'] = FALSE;
 |
 */
 $config['template.default_theme'] = 'default/';
-
+ 
 /*
 |--------------------------------------------------------------------
 | MESSAGE TEMPLATE
@@ -215,7 +215,7 @@ $config['template.message_template'] =<<<EOD
 		<div>{message}</div>
 	</div>
 EOD;
-
+ 
 /*
 |--------------------------------------------------------------------
 | BREADCRUMB Separator
@@ -224,8 +224,8 @@ EOD;
 |
 */
 $config['template.breadcrumb_symbol']	= ' : ';
-
-
+ 
+ 
 //--------------------------------------------------------------------
 // !ASSETS
 //--------------------------------------------------------------------
@@ -237,7 +237,7 @@ $config['template.breadcrumb_symbol']	= ' : ';
 	This should NOT include the trailing slash.
 */
 $config['assets.base_folder'] = 'assets';
-
+ 
 /*
 	The names of the folders for the various assets.
 	These default to 'js', 'css', and 'images'. These folders
@@ -251,7 +251,7 @@ $config['assets.asset_folders'] = array(
 	'js'	=> 'js',
 	'image'	=> 'images'
 );
-
+ 
 /*
 	The 'assets.js_opener' and 'assets.js_closer' strings are used
 	to wrap all of your inline scripts into. By default, it is
@@ -259,13 +259,13 @@ $config['assets.asset_folders'] = array(
 */
 $config['assets.js_opener'] = 'head.ready(function(){'. "\n";
 $config['assets.js_closer'] = '});'. "\n";
-
+ 
 /*
 	The 'assets.combine' setting tells the Asset library whether
 	files should be combined or not.
 */
 $config['assets.combine'] = FALSE;
-
+ 
 /*
 	The 'assets.encrypt' setting will mask the app structure
 	by encrypting the filename of the combined files.
@@ -275,14 +275,14 @@ $config['assets.combine'] = FALSE;
 	If true, it would be an md5 hash of the above filename.
 */
 $config['assets.encrypt_name'] = FALSE;
-
+ 
 /*
 	The 'assets.js_minify' and 'assets.css_minify' settings are used to 
 	tell the ui loader to minify the combined assets or not
 */
 $config['assets.js_minify'] = FALSE;
 $config['assets.css_minify'] = FALSE;
-
+ 
 /*
 	The 'assets.encode' setting is used to specify whether the assets should
 	be encoded based on the HTTP_ACCEPT_ENCODING value.
