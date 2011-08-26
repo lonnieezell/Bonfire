@@ -26,6 +26,7 @@ $lang['in_not_writeable_heading']	= 'Files/Folders Not Writeable';
 
 $lang['in_db_settings']				= 'Database Settings';
 $lang['in_db_settings_note']		= '<p>Please fill out the database information below.</p><p class="small">These settings will be saved to both the main <b>config/database.php</b> file and to the development environment (found at <b>config/development/database.php)</b>. </p>';
+$lang['in_environment']				= 'Environment';
 $lang['in_host']					= 'Host';
 $lang['in_database']				= 'Database';
 $lang['in_prefix']					= 'Prefix';
