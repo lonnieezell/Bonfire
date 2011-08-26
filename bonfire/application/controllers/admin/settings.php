@@ -33,6 +33,11 @@ class Settings extends Admin_Controller {
 		
 		Template::set('toolbar_title', 'Site Settings');
 		
+		if (!class_exists('Activity_model'))
+		{
+			$this->load->model('activities/Activity_model', 'activity_model', true);
+		}
+		
 		$this->load->helper('config_file');
 	}
 	
@@ -99,6 +104,9 @@ class Settings extends Admin_Controller {
 		{
 			$this->cache->delete('update_message');
 		}
+		
+		// Log the activity
+		$this->activity_model->log_activity($this->auth->user_id(), lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'core');
 		
 		return write_config('application', $data);
 	}
