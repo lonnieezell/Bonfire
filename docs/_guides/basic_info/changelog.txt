@@ -6,6 +6,9 @@ Additions:
 - Major revamp to the ModuleBuilder
 - Added new date_difference function to MY_date_helper.
 
+Bugs:
+- Fixed bug in MY_Form_Validation to allow the form validation library to work with Modular Extensions HMVC. See http://www.mahbubblog.com/php/form-validation-callbacks-in-hmvc-in-codeigniter/ for more details.
+
 Version 0.2-RC1
 
 Released: Currently under development
