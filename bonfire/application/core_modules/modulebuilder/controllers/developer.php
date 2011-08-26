@@ -130,7 +130,7 @@ class Developer extends Admin_Controller {
 	/*
 		Method: delete()
 		
-		Deletes and module and all of it's files.
+		Deletes a module and all of it's files.
 	*/
 	public function delete() 
 	{	
@@ -144,8 +144,10 @@ class Developer extends Admin_Controller {
 			
 			$this->db->trans_begin();
 			
-			// drop the main table			
-			$this->dbforge->drop_table($module_name);
+			// drop the main table
+			$model_name = $module_name."_model";
+			$this->load->model($module_name.'/'.$model_name,'mt');
+			$this->dbforge->drop_table($this->mt->get_table());
 			
 			// get any permission ids
 			$query = $this->db->query('SELECT permission_id FROM '.$prefix.'permissions WHERE name LIKE "'.$module_name.'.%.%"');
@@ -305,6 +307,10 @@ class Developer extends Admin_Controller {
 		$data['controller_name']	= $module_name;
 		$data['table_name']			= empty($table_name) ? $module_name : $table_name;
 		$data = $data + $file_data;
+		
+		$version = ($db_required == TRUE) ?  002 : 001;		
+		$this->load->library('migrations/Migrations');
+		$this->migrations->version($version, $module_name."_");
 		
 		Template::set($data);
 	}
