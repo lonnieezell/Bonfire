@@ -35,6 +35,7 @@ Enhancements:
 - Initial translation to Portuguese. 
 - Bonfire core database migrations moved to migrations/core/ to remove conflicts between your app and Bonfire.
 - Roles can now be set as deletable or not in the UI. New Permission: Bonfire.Roles.Delete to use to check if the role is allowed to delete other roles.
+- Improved the installer - user brought to the install page if the app hasn't been installed already, allows user to choose which environment is being installed, tries to set the file and folder permissions.
 
 Bugs: 
 - Upgraded to the latest version of head.js to fix a bug where AJAX page loads were not working in FF3 and IE.
