@@ -58,6 +58,9 @@ class Modulebuilder
 		$content['lang'] = FALSE;
 		$content['model'] = FALSE;
 		$content['views'] = FALSE;
+		
+		// if the db is required then there is at least one field, the primary ID, so make $field_total at least 1
+		$field_total = (empty($field_total) && $db_required) ? 1 : $field_total;
 
         // build the files
 		$module_file_name = str_replace(" ", "_", strtolower($module_name));

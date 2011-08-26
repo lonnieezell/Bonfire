@@ -165,9 +165,9 @@ class Developer extends Admin_Controller {
 	        }
 	        
 	        // drop the schema #
-	        if ($this->db->field_exists(strtolower($module_name).'_version', 'schema_version'))
+	        if ($this->db->field_exists($module_name.'_version', 'schema_version'))
 	        {
-	        	$this->dbforge->drop_column('schema_version',strtolower($module_name).'_version');
+	        	$this->dbforge->drop_column('schema_version',$module_name.'_version');
 	        }
 	        
 	        if ($this->db->trans_status() === FALSE) {
