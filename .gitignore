@@ -25,10 +25,6 @@ assets/cache/*
 !assets/cache/index.html
 
 # Ignore Custom config files
-bonfire/application/config/database.php
-bonfire/application/config/config.php
-bonfire/application/config/application.php
-bonfire/application/config/email.php
 bonfire/application/config/development/*
 bonfire/application/config/testing/*
 bonfire/application/config/production/*
