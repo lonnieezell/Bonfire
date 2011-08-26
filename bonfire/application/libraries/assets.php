@@ -315,7 +315,7 @@ class Assets {
 		$theme = trim(Template::get('active_theme'), '/');
 		$theme = empty($theme) ? trim(Template::get('default_theme'), '/') : $theme;
 		
-		$file_name = $theme .'_'. self::$ci->router->fetch_module() .'_'. self::$ci->router->fetch_class() .'_'. self::$ci->router->fetch_method();
+		$file_name = $theme .'_'. self::$ci->router->fetch_module() .'_'. self::$ci->router->fetch_class();
 		
 		if (self::$ci->config->item('assets.encrypt_name') == TRUE)
 		{
@@ -564,7 +564,8 @@ class Assets {
 		// any that are already set
 		if (!empty($script))
 		{
-			return self::external_js((string)$script);
+			self::external_js((string)$script);
+			return;
 		}
 		// If an array was passed, loop through them, adding each as we go.
 		else if (is_array($script))
@@ -646,11 +647,6 @@ class Assets {
 		// Or generate individual links
 		else 
 		{
-			
-			//Check for HTTPS or HTTP connection
-			
-			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https";} else { $http_protocol = "http";}
-		
 			foreach ($scripts as $script)
 			{
 				if (substr($script, -3) != '.js') 
@@ -659,7 +655,7 @@ class Assets {
 				}
 			
 				$attr = array(
-					'src'	=> strpos($script, $http_protocol . ':') !== false ?
+					'src'	=> strpos($script, 'http:') !== false ?
 						
 						// It has a full url built in, so leave it alone
 						$script :
@@ -792,7 +788,7 @@ class Assets {
 		$theme = Template::get('active_theme');
 		$theme = empty($theme) ? Template::get('default_theme') : $theme;
 		
-		$file_name = trim($theme,'/') .'_'. self::$ci->router->fetch_module() .'_'. self::$ci->router->fetch_class() .'_'. self::$ci->router->fetch_method();
+		$file_name = trim($theme,'/') .'_'. self::$ci->router->fetch_module() .'_'. self::$ci->router->fetch_class();
 		
 		if (self::$ci->config->item('assets.encrypt_name'))
 		{
@@ -1144,12 +1140,9 @@ class Assets {
 			
 			// Strip out the file type for consistency
 			$file = str_replace($type, '', $file);
-			
-			//Check for HTTPS or HTTP connection
-			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https";} else { $http_protocol = "http";}
-			
+
 			// If it contains an external URL, we're all done here.
-			if (strpos((string)$file, $http_protocol, 0) !== false)
+			if (strpos((string)$file, 'http', 0) !== false)
 			{
 				$new_files[] = $file;
 				continue;
