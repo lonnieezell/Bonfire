@@ -809,6 +809,24 @@ class BF_Model extends CI_Model {
 	}
 	
 	//--------------------------------------------------------------------
+	
+	/*
+		Method: get_table()
+		
+		Allows you to get the table name 
+		
+		Parameters:
+			none
+		
+		Returns:
+			string $this->table (current model table name)
+	*/
+	public function get_table() 
+	{
+		return $this->table;
+	}
+	
+	//--------------------------------------------------------------------
 
 	/*
 		Method: set_date_format()
