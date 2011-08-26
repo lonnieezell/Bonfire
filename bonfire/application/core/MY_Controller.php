@@ -83,6 +83,13 @@ class Base_Controller extends MX_Controller {
 		$this->previous_page = $this->session->userdata('previous_page');
 		$this->requested_page = $this->session->userdata('requested_page');
 		
+		// check if the app is installed
+		$site_title = config_item('site.title');
+		if (empty($site_title))
+		{
+			redirect('/install');
+		}
+		
 		// Pre-Controller Event
 		Events::trigger('after_controller_constructor', get_class($this));
 	}

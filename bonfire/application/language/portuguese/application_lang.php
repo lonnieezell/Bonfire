@@ -41,6 +41,7 @@ $lang['bf_login_type_username']	= 'Apenas Username';
 $lang['bf_allow_register']		= 'Permite que os utilizadores se registem';
 $lang['bf_login_type_both']		= 'Username ou Email';
 $lang['bf_use_usernames']		= 'Usernames - Nome de Utilizador';
+$lang['bf_use_own_name']		= 'Use Own Name';
 $lang['bf_allow_remember']		= 'Permite o  \'Lembrar login\'?';
 $lang['bf_remember_time']		= 'Lembrar Utilizadores de';
 $lang['bf_week']				= 'Semana';
@@ -98,11 +99,14 @@ $lang['bf_users']				= 'Utilizadores';
 $lang['bf_username']			= 'Nome de Utilizador';
 $lang['bf_description']			= 'Descrição';
 $lang['bf_email']				= 'Email';
+$lang['bf_user_settings']		= 'My Profile';
 
 $lang['bf_both']				= 'ambos';
 $lang['bf_go_back']				= 'Anterior';
 $lang['bf_new']					= 'Novo';
 $lang['bf_required_note']		= 'Campos obrigatórios a <strong>negrito</strong>.';
+
+$lang['bf_show_profiler']		= 'Show Profiler?';
 
 //--------------------------------------------------------------------
 // MY_Model
@@ -115,3 +119,8 @@ $lang['bf_model_count_error']	= 'Informação insucificente para count results.'
 $lang['bf_model_unique_error']	= 'Informação insucificente para check uniqueness.';
 $lang['bf_model_find_error']	= 'Informação insucificente para find by.';
 $lang['bf_model_bad_select']	= 'Selecção Inválida.';
+
+//--------------------------------------------------------------------
+// Activities
+//--------------------------------------------------------------------
+$lang['bf_act_settings_saved']	= 'App settings saved from';
