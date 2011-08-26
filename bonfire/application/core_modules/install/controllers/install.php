@@ -95,6 +95,15 @@ class Install extends MX_Controller {
 		
 		$this->lang->load('application');
 		$this->lang->load('install');
+		
+		// check if the app is installed
+		$this->load->config('application');
+		$site_title = config_item('site.title');
+		if (!empty($site_title))
+		{
+			redirect('/');
+		}
+
         
 		$this->cURL_check();
 	}
