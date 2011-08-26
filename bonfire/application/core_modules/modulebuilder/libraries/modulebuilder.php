@@ -108,7 +108,7 @@ class Modulebuilder
 		// we need something unique to build the file directory. unix timestamp seemed like a good choice
 		$id = '';
 		// write to files to disk
-		$write_status = $this->_write_files($module_file_name, $content);
+		$write_status = $this->_write_files($module_file_name, $content, $table_name);
 
 		$data['error'] = FALSE;
 		if( $write_status['status'] ) {
@@ -128,6 +128,7 @@ class Modulebuilder
 		$data['lang'] = $content['lang'];
 		$data['model'] = $content['model'];
 		$data['views'] = $content['views'];
+		$data['db_table'] = $table_name;
 
 		return $data;
 	}
@@ -138,7 +139,7 @@ class Modulebuilder
 	// PRIVATE METHODS
 	//--------------------------------------------------------------------
 
-	private function _write_files($module_name, $content) {
+	private function _write_files($module_name, $content, $table_name) {
 		
 		$ret_val = array('status' => TRUE);
 		$error_msg = 'Module Builder:';
@@ -221,7 +222,7 @@ class Modulebuilder
 								$path = $this->options['output_path']."{$module_name}/migrations";
 								break;
 							case 'db_migration':
-								$file_name = "002_Install_".$file_name;
+								$file_name = "002_Install_".$table_name;
 								$path = $this->options['output_path']."{$module_name}/migrations";
 								break;
 							case 'model':
