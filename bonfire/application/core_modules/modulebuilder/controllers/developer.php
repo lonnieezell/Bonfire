@@ -144,10 +144,14 @@ class Developer extends Admin_Controller {
 			
 			$this->db->trans_begin();
 			
-			// drop the main table
+			// check if there is a model to drop (non-table modules will have no model)
 			$model_name = $module_name."_model";
-			$this->load->model($module_name.'/'.$model_name,'mt');
-			$this->dbforge->drop_table($this->mt->get_table());
+			if (module_file_path($module_name,'models',$model_name.'.php'))
+			{
+				// drop the table
+				$this->load->model($module_name.'/'.$model_name,'mt');
+				$this->dbforge->drop_table($this->mt->get_table());
+			}			
 			
 			// get any permission ids
 			$query = $this->db->query('SELECT permission_id FROM '.$prefix.'permissions WHERE name LIKE "'.$module_name.'.%.%"');
@@ -165,9 +169,10 @@ class Developer extends Admin_Controller {
 	        }
 	        
 	        // drop the schema #
-	        if ($this->db->field_exists($module_name.'_version', 'schema_version'))
+	        $module_name_lower = strtolower($module_name);
+	        if ($this->db->field_exists( $module_name_lower . '_version', 'schema_version'))
 	        {
-	        	$this->dbforge->drop_column('schema_version',$module_name.'_version');
+	        	$this->dbforge->drop_column('schema_version', $module_name_lower . '_version');
 	        }
 	        
 	        if ($this->db->trans_status() === FALSE) {
@@ -307,6 +312,29 @@ class Developer extends Admin_Controller {
 		$data['controller_name']	= $module_name;
 		$data['table_name']			= empty($table_name) ? $module_name : $table_name;
 		$data = $data + $file_data;
+		
+		// update the schema first to prevent errors in duplicate column names due to Migrations.php caching db columns
+		$this->load->dbforge();
+		$this->dbforge->add_column('schema_version', array(
+				$data['module_name_lower'] . '_version'	=> array(
+				'type'			=> 'INT',
+				'constraint'	=> 4,
+				'null'			=> true, 
+				'default'		=> 0
+			)
+		));	
+		
+		// load the migrations library
+		$this->load->library('migrations/Migrations');
+		// run the migration install routine
+		if ($this->migrations->install($data['module_name_lower'] . '_'))
+		{
+			$data['mb_migration_result'] = 'mb_out_tables_success';
+		}
+		else 
+		{
+			$data['mb_migration_result'] = 'mb_out_tables_error';
+		}
 		
 		Template::set($data);
 	}
