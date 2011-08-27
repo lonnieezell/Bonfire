@@ -129,3 +129,8 @@ $lang['bf_context_content']		= 'Content';
 $lang['bf_context_reports']		= 'Reports';
 $lang['bf_context_settings']	= 'Settings';
 $lang['bf_context_developer']	= 'Developer';
+
+//--------------------------------------------------------------------
+// Activities
+//--------------------------------------------------------------------
+$lang['bf_act_settings_saved']	= 'App settings saved from';
