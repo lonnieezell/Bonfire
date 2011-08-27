@@ -98,6 +98,10 @@ class Auth  {
 		
 		$this->ip_address = $this->ci->input->ip_address();
 		
+		// We need the users language file for this to work
+		// from other modules.
+		$this->ci->lang->load('users/users');
+		
 		log_message('debug', 'Auth class initialized.');
 				
 		if (!class_exists('CI_Session'))
