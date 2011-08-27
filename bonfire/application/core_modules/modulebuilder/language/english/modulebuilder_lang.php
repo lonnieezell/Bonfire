@@ -112,3 +112,7 @@ $lang['mb_form_is_natural_no_zero']	= 'Natural, no zeroes';
 $lang['mb_form_valid_ip']		= 'Valid IP';
 $lang['mb_form_valid_base64']	= 'Valid Base64';
 $lang['mb_form_alpha_extra']	= 'AlphaNumerics, underscore, dash, periods and spaces.';
+
+// Activities
+$lang['mb_act_create']	= 'Created Module';
+$lang['mb_act_delete']	= 'Deleted Module';
