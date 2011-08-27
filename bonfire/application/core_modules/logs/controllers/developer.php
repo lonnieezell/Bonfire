@@ -81,6 +81,9 @@ class Developer extends Admin_Controller {
 			
 			if (write_config('config', array('log_threshold' => $_POST['log_threshold'])))
 			{
+				// Log the activity
+				$this->activity_model->log_activity($this->auth->user_id(), 'Log settings modified from: ' . $this->input->ip_address(), 'logs');
+
 				Template::set_message('Log settings successfully saved.', 'success');
 			} else
 			{
@@ -134,6 +137,9 @@ class Developer extends Admin_Controller {
 		
 		delete_files($this->config->item('log_path'));
 	
+		// Log the activity
+		$this->activity_model->log_activity($this->auth->user_id(), 'Log files purged from: ' . $this->input->ip_address(), 'logs');
+
 		redirect(SITE_AREA .'/developer/logs');
 	}
 	
