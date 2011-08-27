@@ -362,7 +362,11 @@ class Settings extends Admin_Controller {
 	/*
 		Method: matrix_update()
 		
-		Updates the role_permissions table
+		Updates the role_permissions table.
+		
+		Responses use "die()" instead of "echo()" in case the profiler is 
+		enabled. The profiler will add a lot of HTML to the end of the response
+		which causes errors.
 		
 		Parameter:
 			$role_perm	- A CSV string of the role and the permission to modify	
@@ -377,21 +381,21 @@ class Settings extends Admin_Controller {
 		$pieces = explode(',',$this->input->post('role_perm', true));
 		
 		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find($pieces[0])->role_name.'.Manage')) {
-			echo lang("matrix_auth_fail");
+			die(lang("matrix_auth_fail"));
 			return false;
 		}
 		
 		if ($this->input->post('action', true) == 'true') { 
 			if(is_numeric($this->role_permission_model->create_role_permissions($pieces[0],$pieces[1]))) {
-				echo lang("matrix_insert_success");
+				die(lang("matrix_insert_success"));
 			} else {
-				echo lang("matrix_insert_fail") . $this->role_permission_model->error;		
+				die(lang("matrix_insert_fail") . $this->role_permission_model->error);		
 			}
 		} else {
 			if($this->role_permission_model->delete_role_permissions($pieces[0],$pieces[1])) {
-				echo lang("matrix_delete_success");
+				die(lang("matrix_delete_success"));
 			} else {
-				echo lang("matrix_delete_fail"). $this->role_permission_model->error;
+				die(lang("matrix_delete_fail"). $this->role_permission_model->error);
 			}
 		}
 		
