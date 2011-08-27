@@ -59,6 +59,24 @@ class BF_Model extends CI_Model {
 	protected $key		= 'id';
 	
 	/*
+		Var: $created_field
+		Field name to use to the created time column in the DB table.
+		
+		Access:
+			Protected
+	*/
+	protected $created_field = 'created_on';
+	
+	/*
+		Var: $modified_field
+		Field name to use to the modified time column in the DB table.
+		
+		Access:
+			Protected
+	*/
+	protected $modified_field = 'modified_on';
+	
+	/*
 		Var: $set_created
 		Whether or not to auto-fill a 'created_on' field on inserts.
 		
@@ -270,9 +288,9 @@ class BF_Model extends CI_Model {
 		}
 	
 		// Add the created field
-		if ($this->set_created === TRUE && !array_key_exists('created_on', $data))
+		if ($this->set_created === TRUE && !array_key_exists($this->created_field, $data))
 		{
-			$data['created_on'] = $this->set_date();
+			$data[$this->created_field] = $this->set_date();
 		}
 		
 		// Insert it
@@ -312,9 +330,9 @@ class BF_Model extends CI_Model {
 		}
 		
 		// Add the modified field
-		if ($this->set_modified === TRUE && !array_key_exists('modified_on', $data))
+		if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
 		{
-			$data['modified_on'] = $this->set_date();
+			$data[$this->modified_field] = $this->set_date();
 		}
 	
 		$this->db->where($this->key, $id);
@@ -806,6 +824,24 @@ class BF_Model extends CI_Model {
 	public function set_table($table='') 
 	{
 		$this->table = $table;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: get_table()
+		
+		Allows you to get the table name 
+		
+		Parameters:
+			none
+		
+		Returns:
+			string $this->table (current model table name)
+	*/
+	public function get_table() 
+	{
+		return $this->table;
 	}
 	
 	//--------------------------------------------------------------------

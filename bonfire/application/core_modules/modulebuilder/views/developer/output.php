@@ -14,7 +14,7 @@
 </div>
 
 <div class="notification attention">
-	<?php printf(lang('mb_out_tables'), anchor(SITE_AREA .'/developer/migrations#mod-tab', 'Migrations')) ;?>
+	<?php printf(lang($mb_migration_result), anchor(SITE_AREA .'/developer/migrations#mod-tab', 'Migrations')) ;?>
 </div>
 
 <p class="important">
@@ -51,7 +51,7 @@ foreach($controllers as $controller_name => $val) {
 
 <?php if($db_migration): ?>
 <h4><?php echo lang('mb_out_migration'); ?></h4>
-<p><?php echo sprintf(lang('mb_out_migration_path'),$module_name_lower); ?></p>
+<p><?php echo sprintf(lang('mb_out_migration_path'),$db_table); ?></p>
 <?php endif; ?>
 
 <?php if($model): ?>
