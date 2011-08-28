@@ -116,7 +116,7 @@ class Developer extends Admin_Controller {
 			$this->build_module($this->field_total);
 			
 			// Log the activity
-			$this->activity_model->log_activity($this->auth->user_id(), lang('mb_act_create').': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'module_builder');
+			$this->activity_model->log_activity($this->auth->user_id(), lang('mb_act_create').': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
 			
 			Template::set_view('developer/output');
 		}
@@ -189,7 +189,7 @@ class Developer extends Admin_Controller {
 					@rmdir(module_path($module_name.'/'));
 
 					// Log the activity
-					$this->activity_model->log_activity($this->auth->user_id(), lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'module_builder');
+					$this->activity_model->log_activity($this->auth->user_id(), lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'modulebuilder');
 
 					Template::set_message('The module and associated database entries were successfully deleted.', 'success');
 					Template::redirect(SITE_AREA .'/developer/modulebuilder');
