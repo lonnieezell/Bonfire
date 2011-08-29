@@ -1,10 +1,10 @@
 $.subscribe('list-view/list-item/click', function(userid) {
-	$('#content').load('<?php echo site_url(SITE_AREA .'/developer/activities/user/') ?>/'+ userid);
+	$('#content').load('<?php echo site_url(SITE_AREA .'/reports/activities/user/') ?>/'+ userid);
 });
 
 $('#module-list .list-item').click( function() {
 	var module = $(this).attr('data-id');
-	$('#content').load('<?php echo site_url(SITE_AREA .'/developer/activities/module/') ?>/' + module);
+	$('#content').load('<?php echo site_url(SITE_AREA .'/reports/activities/module/') ?>/' + module);
 	alert(module);
 });
 
@@ -13,7 +13,7 @@ function verify_delete(whom, action) {
     var verify = confirm('Are you sure you wish to delete the activity logs for "'+whom+'"?')
     
     if (verify) {
-        var url = '<?php echo site_url(SITE_AREA .'/developer/activities/delete/') ?>/'+ action;
+        var url = '<?php echo site_url(SITE_AREA .'/reports/activities/delete/') ?>/'+ action;
         window.location.href = url
     }
     
