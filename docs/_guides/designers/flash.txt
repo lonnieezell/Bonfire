@@ -1,0 +1,19 @@
+Title: Flash Messages
+
+CodeIgniter's Flash messages (through the session class) have one major drawback: they only work if the page has been refreshed, either through a redirect or user interaction. Sometimes, though, we need instant feedback, and we don't need to hit the server with more HTTP requests. That's why Bonfire provides it's own 'flash messages'.
+
+While only a single message is supported at a time, that is typically all that is needed, as these messages are meant for simple status updates (like, "Yo! The hard drive crashed while saving your resume!").
+
+Setting a message is fairly straight-forward. In your controller...
+
+> Template::set_message('This is your message.', 'success');
+
+The first parameter is the actual message itself. The second parameter is simply a CSS class-name that will be attached to the markup 
+specified in the conﬁg file.
+
+Now, in your view file, wherever you want this message to show up, just use...
+
+> <?php echo Template::message(); ?>
+
+Just in case I wasn't clear earlier, Bonfire's messages work both with a page refresh AND without. When the page is refreshed (and the session library is loaded), Bonfire actually uses the session lib's own flashdata with a name of 'message' to store it across the 
+refresh.
