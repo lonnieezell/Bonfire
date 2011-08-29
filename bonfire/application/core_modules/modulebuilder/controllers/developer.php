@@ -115,6 +115,9 @@ class Developer extends Admin_Controller {
 			// passed validation proceed to second page
 			$this->build_module($this->field_total);
 			
+			// Log the activity
+			$this->activity_model->log_activity($this->auth->user_id(), lang('mb_act_create').': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
+			
 			Template::set_view('developer/output');
 		}
 				
@@ -184,6 +187,10 @@ class Developer extends Admin_Controller {
 				// database was successful in deleting everything. Now try to get rid of the files.
 				if (delete_files(module_path($module_name), true)) {
 					@rmdir(module_path($module_name.'/'));
+
+					// Log the activity
+					$this->activity_model->log_activity($this->auth->user_id(), lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'modulebuilder');
+
 					Template::set_message('The module and associated database entries were successfully deleted.', 'success');
 					Template::redirect(SITE_AREA .'/developer/modulebuilder');
 				} else {

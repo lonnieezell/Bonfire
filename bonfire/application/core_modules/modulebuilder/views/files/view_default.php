@@ -120,10 +120,10 @@ EOT;
                         
 		$view .= '
 		<?php // Change or Add the radio values/labels/css classes to suit your needs ?>
-		<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option1" <?php echo $this->CI->form_validation->set_radio(\''.$field_name.'\', \'option1\'); ?> />
+		<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option1" <?php echo set_radio(\''.$field_name.'\', \'option1\', TRUE); ?> />
 		'. form_label('Radio option 1', $field_name) .'
 
-		<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option2" <?php echo $this->CI->form_validation->set_radio(\''.$field_name.'\', \'option2\'); ?> />
+		<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option2" <?php echo set_radio(\''.$field_name.'\', \'option2\'); ?> />
 		'. form_label('Radio option 2', $field_name) .'
 '.$form_input_delimiters[1].'
 
