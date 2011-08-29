@@ -1,0 +1,105 @@
+Title: Views and Layouts
+
+A Layout defines the base look for your website. It is the foundation that your other views get rendered in. They make it easy to provide a consistent look throughout your application.
+
+What about Views? They are simply the standard views that you're used to working with in CodeIgniter. Nothing special there. 
+
+The special thing is how you get it to display.
+
+
+
+
+About: Rendering A View
+
+You can render a view from within any controller's method, by simply calling... 
+
+> Template::render();
+
+Bonfire will look for the view in _application/views/controller/method.php_. The controller and method names define where the view is found. If you are in the _Welcome_ controller, and running the _index_ method, then your view would be _application/views/welcome/index.php_.
+
+If you need to change the view it is using for any reason, a little bit of this will do you...
+
+> Template::set_view('welcome/again');
+
+When you set your own view, it is often necessary to list the folder(s) it is located in, relative to the views folder.
+
+
+
+About: Rendering Module Views
+
+Since most of your work is going to be in a module, Bonfire will look within the module's view file before looking in the application's view folder. So, if you're working in a _blog_ module, your _index_ method would look for it's view in the following order...
+
+- modules/blog/views/index.php
+- application/views/index.php
+
+
+
+About: View, Meet Layout
+
+When you call the _render()_ method, Bonfire first renders your layout file. Inside of the layout ﬁle, you must have one simple line...
+
+> <?php echo Template::yield(); ?>
+
+This is the line that lets all of the magic happen. Inside the _yield()_ method, your view is rendered and stuffed into that location, surrounded by whatever headers, footers, sidebars, blocks and what-have-you's that you see a need for.
+
+*Which Layout?*
+
+By default, Bonfire looks for a layout file within your active theme (or the default one, if you're not using more than one) called _index.php_. 
+
+However, if it finds a layout matching the name of the currently running controller (say, welcome.php), then it will use that layout instead. 
+
+If it doesn't find either of these layouts in the currently active theme, it will search through the default theme for those files, and render from there, if they are found.
+
+If you need to choose a different one, just pass the name along as the only parameter to the render() method...
+
+> Template::render('new_layout');
+
+
+
+
+About: Theme Views
+
+It's often a necessity to break out common elements, like the header, into a file that can be shared across multiple layouts. This makes it so there's only one spot to update all pages in your site. Kinda convenient, that. You might have heard of these being called view 
+fragments, or partials. We're going to keep things simple and call them theme views. Mostly because they can change with each theme, and they're, well, view files.
+
+To render out one of your view files takes just one line of text inside your layout where you want the view to show up...
+
+> <?php echo theme_view('welcome/index', $data); ?>
+
+Note that you can pass in additional data arrays, just like any CodeIgniter views, if you need to.
+
+Theme views will also cascade from the active theme to the default theme. So, if you're trying to render out the header view and it can't be found in the active theme, but it is found in the default theme, you're good to go.
+
+
+
+About: Choosing A Theme
+
+If you need to specify which theme to use, you can set the active_theme with the _set_theme()_ method.
+
+> Template::set_theme('my_theme');
+
+If you would like to set the default theme as well, you do that in one of two ways.
+
+> Template::set_default_theme('my_theme');
+
+or at the same time as you set the active theme...
+
+> Template::set_theme('active_theme', 'default_theme');
+
+
+
+About: Cascade Order
+
+Here's a quick reference for how theme layouts are searched for and found.
+
+Assuming that you're running a module called _blog_, Bonfire will search for the layout to use in the following order...
+
+- themes/_active_theme_/blog.php
+- themes/_default_theme_/blog.php
+- themes/_active_theme_/index.php
+- themes/_default_theme_/index.php
+
+This assumes that no layout name was passed into the _render()_ method. If a layout name is passed into the _render()_ method, the cascade order would instead be the following, assuming the layout name passed was _two-column_.
+
+- themes/_active_theme_/two_column.php
+- themes/_default_theme_/two_column.php
