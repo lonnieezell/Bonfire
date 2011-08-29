@@ -107,6 +107,8 @@ class Settings extends Admin_Controller {
 			if ($this->save_role('update', $id))
 			{
 				Template::set_message('Role successfully saved.', 'success');
+				// redirect to update the sidebar which will show old name otherwise.
+				Template::redirect(SITE_AREA .'/settings/roles');
 			}
 			else 
 			{
@@ -244,7 +246,7 @@ class Settings extends Admin_Controller {
 	
 	public function save_role($type='insert', $id=0) 
 	{	
-		if ($type ==  'insert')
+		if ($type == 'insert')
 		{
 			$this->form_validation->set_rules('role_name', 'Role Name', 'required|trim|strip_tags|callback_unique_role|max_length[60]|xss_clean');
 		}
@@ -263,6 +265,9 @@ class Settings extends Admin_Controller {
 		// We'll need it later.
 		$permissions = $this->input->post('role_permissions');
 		unset($_POST['role_permissions']);
+		
+		// grab the current role model name
+		$current_name = $this->role_model->find($id);
 
 		if ($type == 'insert')
 		{
@@ -296,6 +301,13 @@ class Settings extends Admin_Controller {
 			} else {
 				$this->error = 'There was an error creating the ACL permission.';
 			}
+		}
+		else
+		{
+			// update the permission name (did it this way for brevity on the update_where line)
+			$new_perm_name = 'Permissions.'.ucwords($this->input->post('role_name')).'.Manage';
+			$old_perm_name = 'Permissions.'.ucwords($current_name->role_name).'.Manage';
+			$this->permission_model->update_where('name',$old_perm_name,array('name'=>$new_perm_name));
 		}
 		
 		// Save the permissions.
