@@ -3,8 +3,5 @@
 $config['module_config'] = array(
 	'description'	=> 'Allows other modules to store user activity information.',
 	'author'		=> 'Bonfire Team',
-	'name'			=> 'Activities',
-	'menus'	=> array(
-		'developer'	=> 'activities/developer/menu'
-	)
+	'name'			=> 'Activities'
 );
