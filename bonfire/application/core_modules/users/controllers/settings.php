@@ -130,6 +130,11 @@ class Settings extends Admin_Controller {
 		$this->load->helper('address');
 		
 		$user_id = $this->uri->segment(5);
+		if (empty($user_id))
+		{
+			Template::set_message(lang('us_empty_id'), 'error');
+			redirect(SITE_AREA .'/settings/users');			
+		}
 		
 		if ($this->input->post('submit'))
 		{
@@ -147,11 +152,21 @@ class Settings extends Admin_Controller {
 			}
 		}
 		
-		Template::set('user', $this->user_model->find($user_id));
-		Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
+		$user = $this->user_model->find($user_id);
+		if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage'))
+		{
+			Template::set('user', $user);
+			Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
+			Template::set_view('settings/user_form');
+		}
+		else
+		{
+			Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');
+			redirect(SITE_AREA .'/settings/users');			
+		}
 		
 		Template::set('toolbar_title', lang('us_edit_user'));
-		Template::set_view('settings/user_form');
+						
 		Template::render();
 	}
 	
@@ -164,16 +179,29 @@ class Settings extends Admin_Controller {
 		if (!empty($id))
 		{	
 			$this->auth->restrict('Bonfire.Users.Manage');
-
-			if ($this->user_model->delete($id))
+		
+			$user = $this->user_model->find($id);
+			if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage'))
 			{
-				$user = $this->user_model->find($id);
-				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_delete') . ': '.(config_item('auth.use_usernames') ? $user->username : $user->email), 'users');
-				Template::set_message('The User was successfully deleted.', 'success');
-			} else
-			{
-				Template::set_message('We could not delete the user: '. $this->user_model->error, 'success');
+				if ($this->user_model->delete($id))
+				{
+					$user = $this->user_model->find($id);
+					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_delete') . ': '.(config_item('auth.use_usernames') ? $user->username : $user->email), 'users');
+					Template::set_message('The User was successfully deleted.', 'success');
+				}
+				else
+				{
+					Template::set_message('We could not delete the user: '. $this->user_model->error, 'success');
+				}							
 			}
+			else
+			{
+				Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');
+			}
+		}
+		else
+		{
+			Template::set_message(lang('us_empty_id'), 'error');
 		}
 		
 		redirect(SITE_AREA .'/settings/users');
