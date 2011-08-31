@@ -78,7 +78,7 @@
 										echo $count;
 									?>
 								</td>
-								<td class="text-center"><?php echo $count ? number_format(($count / $total_users) * 100, 2) .'%' : '--'; ?></td>
+								<td class="text-center"><?php echo $count && $total_users ? number_format(($count / $total_users) * 100, 2) .'%' : '--'; ?></td>
 							</tr>
 						<?php endforeach; ?>
 						</tbody>
