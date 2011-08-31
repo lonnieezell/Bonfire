@@ -85,3 +85,5 @@ $lang['us_register']				= 'Register';
 $lang['us_already_registered']		= 'Already registered?';
 
 $lang['us_action_save']				= 'Save User';
+$lang['us_unauthorized']			= 'Unauthorized. Sorry you do not have the appropriate permission to manage the "%s" role.';
+$lang['us_empty_id']				= 'No userid provided. You must provide a userid to perform this action.';
