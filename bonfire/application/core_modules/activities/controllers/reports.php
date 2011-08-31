@@ -40,7 +40,7 @@ class Reports extends Admin_Controller {
 		Template::set('toolbar_title', 'Site Activities');
 		
 		Assets::add_js($this->load->view('reports/activities_js', null, true), 'inline');
-		
+				
 		$this->lang->load('activities');
 	}
 	
@@ -135,7 +135,6 @@ class Reports extends Admin_Controller {
 	{
 		$action = $this->uri->segment(5);
 		$which  = $this->uri->segment(6);
-		$filter = $this->uri->segment(7);
 		
 		// check for permission to delete this
 		$permission = str_replace('activity_', '',$action);
