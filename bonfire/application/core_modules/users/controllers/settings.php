@@ -211,7 +211,7 @@ class Settings extends Admin_Controller {
 	
 	public function deleted() 
 	{
-		$this->db->where('deleted !=', 0);
+		$this->db->where('users.deleted !=', 0);
 		Template::set('users', $this->user_model->find_all(true));
 	
 		Template::render();
@@ -232,7 +232,7 @@ class Settings extends Admin_Controller {
 		else
 		{
 			// Find all deleted accounts
-			$users = $this->user_model->where('deleted', 1)
+			$users = $this->user_model->where('users.deleted', 1)
 									  ->find_all(true);
 		
 			if (is_array($users))
@@ -246,7 +246,7 @@ class Settings extends Admin_Controller {
 		
 		Template::set_message('Users Purged.', 'success');
 		
-		redirect(SITE_AREA .'/settings/users');
+		Template::redirect(SITE_AREA .'/settings/users');
 	}
 	
 	//--------------------------------------------------------------------
@@ -255,7 +255,7 @@ class Settings extends Admin_Controller {
 	{
 		$id = $this->uri->segment(5);
 		
-		if ($this->user_model->update($id, array('deleted'=>0)))
+		if ($this->user_model->update($id, array('users.deleted'=>0)))
 		{
 			Template::set_message('User successfully restored.', 'success');
 		}
@@ -264,7 +264,7 @@ class Settings extends Admin_Controller {
 			Template::set_message('Unable to restore user: '. $this->user_model->error, 'error');
 		}
 		
-		redirect(SITE_AREA .'/settings/users');
+		Template::redirect(SITE_AREA .'/settings/users');
 	}
 	
 	//--------------------------------------------------------------------
