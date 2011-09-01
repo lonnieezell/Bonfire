@@ -328,12 +328,13 @@ class Auth  {
 		// Check to see if the user has the proper permissions
 		if (!empty($permission) && !$this->has_permission($permission))
 		{
+			// set message telling them no permission THEN redirect
+			Template::set_message( lang('us_no_permission'), 'attention');
+						
 			if ($uri) 
 				Template::redirect($uri);
 			else
 				Template::redirect($this->ci->session->userdata('previous_page'));
-
-			Template::set_message( lang('us_no_permission'), 'attention');
 		} 
 		
 		return true;

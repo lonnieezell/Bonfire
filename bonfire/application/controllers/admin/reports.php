@@ -31,7 +31,7 @@ class Reports extends Admin_Controller {
 		
 		Template::set('toolbar_title', 'Reports');
 		
-		$this->auth->restrict('Site.Content.View');
+		$this->auth->restrict('Site.Reports.View');
 	}
 	
 	//--------------------------------------------------------------------	

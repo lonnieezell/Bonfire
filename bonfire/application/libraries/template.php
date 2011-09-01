@@ -745,7 +745,7 @@ class Template {
 	*/
 	public function redirect($url=null) 
 	{
-		$url = strpos($url, 'http') == false ? site_url($url) : $url;
+		$url = strpos($url, 'http') === false ? site_url($url) : $url;
 		
 		echo "<script>window.location='$url'</script>";
 		exit();
