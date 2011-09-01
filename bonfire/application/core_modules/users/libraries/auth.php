@@ -143,7 +143,7 @@ class Auth  {
 		}
 	
 		// Grab the user from the db
-		$selects = 'id, email, username, first_name, last_name, users.role_id, salt, password_hash, users.role_id';
+		$selects = 'id, email, username, first_name, last_name, users.role_id, salt, password_hash, users.role_id, users.deleted';
 		
 		if (config_item('auth.do_login_redirect'))
 		{
@@ -155,6 +155,13 @@ class Auth  {
 		if (is_array($user))
 		{
 			$user = $user[0];
+		}
+		
+		// check if the account has been soft deleted.
+		if ($user->deleted >= 1) // in case we go to a unix timestamp later, this will still work.
+		{
+			Template::set_message(sprintf(lang('us_account_deleted'),config_item("site.system_email")), 'error');
+			return false;
 		}
 		
 		if ($user)
