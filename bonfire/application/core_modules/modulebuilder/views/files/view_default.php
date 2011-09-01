@@ -88,12 +88,14 @@ EOT;
 			if ($textarea_editor == 'ckeditor') {
 				$view .= '
 			<script type="text/javascript">
+				head.ready(function(){
 					//<![CDATA[
 					if( !(\''.$field_name.'\' in CKEDITOR.instances)) {
 						CKEDITOR.replace( \''.$field_name.'\' );
 					}
 					//]]>
-					</script>';
+				});
+			</script>';
 				if (empty($on_click))
 				{
 					$on_click .= ' onclick="javascript:';
@@ -190,12 +192,12 @@ EOT;
 			if ($db_field_type == 'DATE')
 			{
 				$view .= '
-			<script>$(function() {$(\'#'.$field_name.'\').datepicker({ dateFormat: \'yy-mm-dd\'});})</script>';
+			<script>head.ready(function(){$(\'#'.$field_name.'\').datepicker({ dateFormat: \'yy-mm-dd\'});});</script>';
 			}
 			elseif ($db_field_type == 'DATETIME')
 			{
 				$view .= '
-			<script>$(function() {$(\'#'.$field_name.'\').datetimepicker({ dateFormat: \'yy-mm-dd\', timeFormat: \'hh:mm:ss\'});})</script>';
+			<script>head.ready(function(){$(\'#'.$field_name.'\').datetimepicker({ dateFormat: \'yy-mm-dd\', timeFormat: \'hh:mm:ss\'});});</script>';
 			}
 		}
 

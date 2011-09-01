@@ -1,0 +1,24 @@
+Title: Handling AJAX
+
+AJAX is handled pretty simply in Bonfire. There's actually only 2 things that we worry about, but they're both pretty helpful.
+
+
+
+
+About: The Layout
+
+While not always necessary, often in your code you will want a certain layout file to be used for AJAX calls. This is probably going to be a mostly empty view file, but might contain a common JS event that gets triggered when the page is loaded, etc. Or you might just not want to bother refactoring your code so you don't have to worry about _Template::render()_ getting in the way. No worries. 
+
+Simply create a new layout called *ajax.php* in your theme, and that layout will be used for any AJAX calls.
+
+
+
+About: The Redirect
+
+Part of the spec says that when you're in an AJAX call, you should be able to redirect to another location, and still be considered part of that call. Most of the times, this is great. 
+
+There are the occasional times, however, where the action was a success and you want to bust out of the AJAX call, and do a full-page refresh to a new location. We got you covered with our own version of CI's beloved _redirect()_ function.
+
+> Template::redirect('path/to/new/page');
+
+What this does is to throw some javascript back at the page that will do the actual redirect to the page you wanted to go to. Nothing crucial, but nice to have on your side when you need it.
