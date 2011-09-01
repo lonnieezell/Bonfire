@@ -7,7 +7,9 @@
 			<select id="role-filter" style="display: inline-block; max-width: 40%;">
 				<option value="0"><?php echo lang('bf_action_show') .' '. lang('us_role'); ?>...</option>
 			<?php foreach ($roles as $role) : ?>
+				<?php if (isset($role) && has_permission('Permissions.'.$role->role_name.'.Manage')) : ?>
 				<option><?php echo $role->role_name ?></option>
+				<?php endif; ?>
 			<?php endforeach; ?>
 			</select>
 			
@@ -19,6 +21,7 @@
 		<div class="scrollable">
 			<div class="list-view" id="user-list">
 			<?php foreach ($users as $user) : ?>
+				<?php if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage')) : ?>
 				<div class="list-item with-icon" data-id="<?php echo $user->id ?>" data-role="<?php echo $user->role_name ?>">
 					<?php echo gravatar_link($user->email, 32,'',$user->first_name.'&nbsp;'.$user->last_name); ?>
 				
@@ -27,6 +30,7 @@
 						<span><?php echo $user->role_name ?></span>
 					</p>
 				</div>
+				<?php endif; ?>
 			<?php endforeach; ?>
 			</div>	<!-- /list -->
 		</div>

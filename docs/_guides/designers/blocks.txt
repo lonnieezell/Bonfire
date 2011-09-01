@@ -1,0 +1,37 @@
+Title: Blocks
+
+Blocks can be thought of as small areas of a page that have been set aside for content, but that aren't required to actually put content there. Kinda of like a parking spot for HTML.
+
+
+
+About: Reserving Block Space
+
+In your layout file, you would reserve, say a sidebar, room by calling...
+
+> <?php Template::block('sidebar', 'partials/sidebar'); ?>
+
+The first parameter is just a name for the block, that you can reference it by later.
+
+The second parameter is the default view that is used, if nothing else has been specified. This can be left blank.
+
+An (optional) third parameter allows you to pass an array of key/value pairs to the view.
+
+Another (optional) fourth parameter can be set to true to tell Bonfire to look for this view inside of the theme, not in the standard view file locations.
+
+
+
+About: Setting Block Content
+
+At this point, your sidebar has his spot reserved, and default content that will show up on all of the pages. What happens on the Contact Us page when you need a different sidebar? No problemo. Observe (from within your controller)...
+
+> Template::set_block('sidebar', 'sidebar');
+
+The first parameter is the name of the block to put the content into. 
+
+The second parameter is the view to render. The _set_block()_ method follows the normal cascading rules and will search for the view file in the following order...
+
+- themes/_active_theme_/block.php
+- themes/_default_theme_/block.php
+- _current_module_/views/block.php
+- application/views/block.php
+
