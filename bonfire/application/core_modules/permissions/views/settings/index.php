@@ -1,6 +1,6 @@
 <style>
-.list-view h4 {cursor: pointer; border-bottom: 1px solid #bcbcbc; background: #f7f7f7; vertical-align: middle; }
-.list-view h4 img { height: 10px; width: 10px; float: right; margin: 14px 14px 0 0; }
+.list-view .permission_set {cursor: pointer; border-bottom: 1px solid #bcbcbc; background: #f7f7f7; vertical-align: middle; }
+.list-view .permission_set img { height: 10px; width: 10px; float: right; margin: 14px 14px 0 0; }
 </style>
 
 
