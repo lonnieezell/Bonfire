@@ -27,6 +27,10 @@ $('.button').click( function() {
 });
 
 $("#flex_table").dataTable({
-		"bJQueryUI": true,
-		"sPaginationType": "full_numbers"
+		"sDom": 'rt<"top"fpi>',
+		"sPaginationType": "full_numbers",
+		"bProcessing": true,
+		"bLengthChange": false,
+		"iDisplayLength": 20,
+		"aaSorting": [[3,'desc']]
 });
