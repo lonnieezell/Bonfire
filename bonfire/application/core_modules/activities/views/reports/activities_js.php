@@ -25,3 +25,8 @@ $('.button').click( function() {
 	event.preventDefault();
 	verify_delete(whom,action);
 });
+
+$("#flex_table").dataTable({
+		"bJQueryUI": true,
+		"sPaginationType": "full_numbers"
+});

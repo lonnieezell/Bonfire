@@ -214,6 +214,10 @@ class Reports extends Admin_Controller {
 	*/
 	public function _get_activity($which='activity_user',$find_value=FALSE)
 	{	
+		
+		Assets::add_js('jquery.dataTables.min.js');
+		Assets::add_css('css/demo_table_jui.css');	
+		
 		// set a couple default variables
 		$options = array(0 => 'All');
 		$name = 'All';
