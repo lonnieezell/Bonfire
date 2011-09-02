@@ -1,3 +1,8 @@
+<style>
+.list-view h4 {cursor: pointer; border-bottom: 1px solid #bcbcbc; background: #f7f7f7; vertical-align: middle; }
+.list-view h4 img { height: 10px; width: 10px; float: right; margin: 14px 14px 0 0; }
+</style>
+
 
 <div class="view split-view">
 	
@@ -9,7 +14,16 @@
 		<div class="scrollable">
 			<div class="list-view" id="role-list">
 				<?php foreach ($records as $record) : ?>
-					<?php $record = (array)$record;?>
+					<?php $record = (array)$record; ?>
+					<?php $permission_pieces = explode('.',$record['name']);
+					if ($permission_pieces[0] != $permission_header) : ?>
+					<h4 class="permission_set pointer">
+						<img src="<?php echo Template::theme_url('images/plus.png') ?>" />	
+						<?php echo $permission_pieces[0];?>				
+					</h4>
+					<?php $permission_header = $permission_pieces[0]; ?>
+					<?php endif; ?>
+					
 					<div class="list-item" data-id="<?php echo $record['permission_id']; ?>">
 						<p>
 							<b><?php echo $record['name']; ?></b><br/>
