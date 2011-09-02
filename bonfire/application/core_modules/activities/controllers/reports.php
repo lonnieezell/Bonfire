@@ -216,7 +216,7 @@ class Reports extends Admin_Controller {
 	{	
 		
 		Assets::add_js('jquery.dataTables.min.js');
-		Assets::add_css('css/demo_table_jui.css');	
+		Assets::add_css('css/demo_table.css');	
 		
 		// set a couple default variables
 		$options = array(0 => 'All');
@@ -300,6 +300,7 @@ class Reports extends Admin_Controller {
 		
 		// get the activities
 		$this->db->join('users', 'activities.user_id = users.id', 'left');
+		$this->db->order_by('activity_id','desc'); // most recent stuff on top
 		$this->db->select('activity, module, activities.created_on AS created, username');
 		Template::set('activity_content', $this->activity_model->find_all());
 		
