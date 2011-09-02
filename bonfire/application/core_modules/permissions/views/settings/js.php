@@ -8,7 +8,7 @@ $(".permission_set").click( function() {
 	} else {
 		$(this).children('img').attr("src","<?php echo Template::theme_url('images/minus.png') ?>" );
 	}
-	$(this).nextUntil('h4').slideToggle();
+	$(this).nextUntil('.permission_set').slideToggle();
 });
 
 $('.permission_set').parent().children('div').hide();
