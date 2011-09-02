@@ -91,9 +91,15 @@ class Activity_model extends BF_Model {
 	*/
 	public function log_activity($user_id=null, $activity='', $module='any') 
 	{
-		if (!is_numeric($user_id) || empty($activity))
+		if (empty($user_id) || !is_numeric($user_id))
 		{
-			logit('Not enough information provided to insert activity.');
+			Template::set_message('You must provide a numeric user id to log activity.','error');
+			return false;
+		}
+		else if (empty($activity))
+		{
+			Template::set_message('Not enough information provided to insert activity.','error');
+			return false;
 		}
 		
 		$data = array(
