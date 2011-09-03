@@ -1,3 +1,8 @@
+<style>
+#flex_table { margin: 0 0 0 15px; }
+#flex_table th.sorting_desc, #flex_table th.sorting_asc { background-color: #F5F5F5;}
+</style>
+
 <div class="scrollable" id="ajax-content">
 	<?php  if (count($select_options) > 2): // one for all, one for the only choice = 2 ?>
 	<div class="box select rounded">
