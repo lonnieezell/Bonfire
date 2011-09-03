@@ -241,12 +241,12 @@ class Developer extends Admin_Controller {
 			{
 				if ($counter != 1) // better to do it this way round as this statement will be fullfilled more than the one below
 				{
-					$this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|xss_clean|alpha_dash');
+					$this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|xss_clean|alpha_extra');
 				}
 				else
 				{
 					// the first field always needs to be required i.e. we need to have at least one field in our form
-					$this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|required|xss_clean|alpha_dash');
+					$this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|required|xss_clean|alpha_extra');
 				}
 				
 				$name_required = '';
