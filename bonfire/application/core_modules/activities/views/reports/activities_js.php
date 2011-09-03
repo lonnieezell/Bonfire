@@ -25,12 +25,3 @@ $('.button').click( function() {
 	event.preventDefault();
 	verify_delete(whom,action);
 });
-
-$("#flex_table").dataTable({
-		"sDom": 'rt<"top"fpi>',
-		"sPaginationType": "full_numbers",
-		"bProcessing": true,
-		"bLengthChange": false,
-		"iDisplayLength": 20,
-		"aaSorting": [[3,'desc']]
-});

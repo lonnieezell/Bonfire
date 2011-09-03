@@ -39,6 +39,9 @@ class Reports extends Admin_Controller {
 		
 		Template::set('toolbar_title', 'Site Activities');
 		
+		Assets::add_js('jquery.dataTables.min.js');
+		Assets::add_css('css/datatable.css');	
+		
 		Assets::add_js($this->load->view('reports/activities_js', null, true), 'inline');
 				
 		$this->lang->load('activities');
@@ -215,8 +218,7 @@ class Reports extends Admin_Controller {
 	public function _get_activity($which='activity_user',$find_value=FALSE)
 	{	
 		
-		Assets::add_js('jquery.dataTables.min.js');
-		Assets::add_css('css/demo_table.css');	
+		Assets::add_js($this->load->view('reports/datatable_js', null, true), 'inline');
 		
 		// set a couple default variables
 		$options = array(0 => 'All');
