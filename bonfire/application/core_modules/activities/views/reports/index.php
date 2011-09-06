@@ -48,8 +48,42 @@
 		
 	<!-- Activities -->
 	<div id="content" class="view">
-		<div class="scrollable" id="ajax-content">
-			<h2><?php echo lang('activity_actions'); ?></h2>
+		<div class="scrollable" id="ajax-content">			
+			<div class="padded">
+				<div class="row">
+					<!-- Active Modules -->
+					<div class="column size1of2">
+						<h3><?php echo lang('activity_top_modules'); ?></h3>
+						<?php if (isset($top_modules) && is_array($top_modules) && count($top_modules)) : ?>
+						
+							<ol>
+							<?php foreach ($top_modules as $top_module) : ?>
+								<li><strong><?php echo $top_module->module; ?></strong> : <em><?php echo $top_module->activity_count; ?></em> <?php echo lang('activity_logged'); ?></li>
+							<?php endforeach; ?>
+							</ol>
+						
+						<?php else : ?>
+							<?php echo lang('activity_no_top_modules'); ?>
+						<?php endif; ?>
+					</div>
+					
+					<!-- Active Users -->
+					<div class="column size2of2 last-column">
+						<h3><?php echo lang('activity_top_users'); ?></h3>
+						<?php if (isset($top_users) && is_array($top_users) && count($top_users)) : ?>
+						
+							<ol>
+							<?php foreach ($top_users as $top_user) : ?>
+								<li><strong><?php echo ($top_user->username == '' ? 'Not found':$top_user->username); ?></strong> : <em><?php echo $top_user->activity_count; ?></em>  <?php echo lang('activity_logged'); ?></li>
+							<?php endforeach; ?>
+							</ol>
+						
+						<?php else : ?>
+							<?php echo lang('activity_no_top_users'); ?>
+						<?php endif; ?>
+					</div>
+				</div>				
+			</div>
 			
 			<?php if (has_permission('Activities.Own.Delete')): ?>	
 			<div class="box delete rounded">

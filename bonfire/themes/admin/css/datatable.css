@@ -31,6 +31,9 @@
  */
 
 .dataTables_wrapper {
+	margin: 0 auto;
+	margin-left: 20px;
+	margin-right: 20px;
 	position: relative;
 	min-height: 302px;
 	clear: both;
@@ -243,7 +246,7 @@ tr.even {
 
 .top, .bottom {
 	padding: 15px;
-	margin: 0 0 0 15px;
+	margin: 0;
 	background-color: #F5F5F5;
 	border: 1px solid #CCCCCC;
 }
