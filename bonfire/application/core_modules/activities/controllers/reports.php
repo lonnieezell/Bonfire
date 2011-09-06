@@ -37,14 +37,14 @@ class Reports extends Admin_Controller {
 		$this->auth->restrict('Site.Reports.View');
 		$this->auth->restrict('Bonfire.Activities.Manage');
 		
-		Template::set('toolbar_title', 'Site Activities');
+		$this->lang->load('activities');
+		
+		Template::set('toolbar_title', lang('activity_title'));
 		
 		Assets::add_js('jquery.dataTables.min.js');
 		Assets::add_css('css/datatable.css');	
 		
 		Assets::add_js($this->load->view('reports/activities_js', null, true), 'inline');
-				
-		$this->lang->load('activities');
 	}
 	
 	//--------------------------------------------------------------------
@@ -55,8 +55,16 @@ class Reports extends Admin_Controller {
 		Lists all log files and allows you to change the log_threshold.
 	*/
 	public function index() 
-	{	
-	
+	{
+		// get top 5 modules
+		$query = $this->db->select('module, COUNT(module) AS activity_count')->group_by('module')->order_by('activity_count','DESC')->limit(5)->get($this->activity_model->get_table());
+		Template::set('top_modules', $query->result());
+		
+		// get top 5 users and usernames
+		$this->db->join('users', 'activities.user_id = users.id', 'left');
+		$query = $this->db->select('username, user_id, COUNT(user_id) AS activity_count')->group_by('user_id')->order_by('activity_count','DESC')->limit(5)->get($this->activity_model->get_table());
+		Template::set('top_users', $query->result());
+		
 		Template::set('users', $this->user_model->find_all());
 		Template::set('modules', module_list());
 		Template::set('activities', $this->activity_model->find_all());

@@ -1,5 +1,6 @@
 <style>
-#flex_table { margin: 0 0 0 15px; }
+#flex_table { margin: 0; }
+#flex_table th { font-weight: bold; }
 #flex_table th.sorting_desc, #flex_table th.sorting_asc { background-color: #F5F5F5;}
 </style>
 
