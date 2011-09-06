@@ -21,7 +21,7 @@
 	THE SOFTWARE.
 */
 
-$lang['activity_actions']				= 'Activity Actions';
+$lang['activity_title']					= 'Site Activities';
 $lang['activity_own']					= 'Your';
 $lang['activity_user']					= 'User';
 $lang['activity_users']					= 'Users';
@@ -61,3 +61,8 @@ $lang['activity_delete_warning']		= "This will delete all the activity logs reco
 $lang['activity_restricted']			= "Authorization required. Sorry, you do not have adequate permission to perform this task.";
 $lang['activity_nothing']				= "0 records found. Nothing to delete.";
 $lang['activity_deleted']				= "%d records deleted.";
+$lang['activity_top_modules']			= "Top 5 Active Modules";
+$lang['activity_top_users']				= "Top 5 Active Users";
+$lang['activity_no_top_modules']		= "No module activity records found.";
+$lang['activity_no_top_users']			= "No user activity records found.";
+$lang['activity_logged']				= "activities logged.";

@@ -87,7 +87,11 @@ $("#flex_table").dataTable({
 		"bLengthChange": false,
 		"iDisplayLength": 15,
 		"aaSorting": [[3,'desc']],
-		"bAutoWidth": false
+		"bAutoWidth": false,
+		"aoColumns": [
+			{ "sWidth": "10%" },
+			null,
+			{ "sWidth": "10%" },
+			{ "sWidth": "10%" }
+		]
 });
-
-$('#flex_table').tableHover({colClass: 'hover', ignoreCols: [1]}); 
