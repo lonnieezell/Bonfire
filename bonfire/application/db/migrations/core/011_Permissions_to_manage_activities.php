@@ -4,10 +4,12 @@ class Migration_Permissions_to_manage_activities extends Migration {
 	
 	public function up() 
 	{
+		$this->load->library('session');
+		
 		$prefix = $this->db->dbprefix;
 		
-		// add the soft deletes column
-		$sql = "ALTER TABLE `{$prefix}activities` ADD COLUMN `deleted` TINYINT(1) DEFAULT '0' NOT NULL AFTER `created_on`";
+		// add the soft deletes column, made it (12) to accomodate time stamp change coming
+		$sql = "ALTER TABLE `{$prefix}activities` ADD COLUMN `deleted` TINYINT(12) DEFAULT '0' NOT NULL AFTER `created_on`";
 		$this->db->query($sql);
 		
 		$data = array(
@@ -50,6 +52,16 @@ class Migration_Permissions_to_manage_activities extends Migration {
 		);
 		
 		$this->db->insert_batch("{$prefix}permissions", $data);
+		
+		// give current role (or administrators if fresh install) full right to manage permissions
+		$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
+		
+		$permissions = $this->db->select('permission_id')->where("(name = 'Bonfire.Activities.Manage') OR (name LIKE 'Activities.%.View') OR (name LIKE 'Activities.%.Delete')")->get($prefix.'permissions')->result();
+		if (isset($permissions) && is_array($permissions) && count($permissions)) {
+			foreach ($permissions as $perm) {
+				$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(".$assign_role.",".$perm->permission_id.")");
+			}
+		}
 	}
 	
 	//--------------------------------------------------------------------
@@ -73,7 +85,7 @@ class Migration_Permissions_to_manage_activities extends Migration {
 			}
 		}
 		
-		// restore the shorter table field size back to 30
+		// drop the added deleted column
 		$sql = "ALTER TABLE `{$prefix}activities` DROP COLUMN `deleted`";
 		$this->db->query($sql);	
 	}
