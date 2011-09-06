@@ -647,6 +647,10 @@ class Assets {
 		// Or generate individual links
 		else 
 		{
+			//Check for HTTPS or HTTP connection
+			
+			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https";} else { $http_protocol = "http";}
+			
 			foreach ($scripts as $script)
 			{
 				if (substr($script, -3) != '.js') 
@@ -655,7 +659,7 @@ class Assets {
 				}
 			
 				$attr = array(
-					'src'	=> strpos($script, 'http:') !== false ?
+					'src'	=> strpos($script, $http_protocol . ':') !== false ?
 						
 						// It has a full url built in, so leave it alone
 						$script :
@@ -1140,9 +1144,12 @@ class Assets {
 			
 			// Strip out the file type for consistency
 			$file = str_replace($type, '', $file);
-
+			
+			//Check for HTTPS or HTTP connection
+			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https";} else { $http_protocol = "http";}
+			
 			// If it contains an external URL, we're all done here.
-			if (strpos((string)$file, 'http', 0) !== false)
+			if (strpos((string)$file, $http_protocol, 0) !== false)
 			{
 				$new_files[] = $file;
 				continue;
