@@ -4,6 +4,10 @@ $lang = '<?php if ( ! defined(\'BASEPATH\')) exit(\'No direct script access allo
 
 $lang .= '
 $lang[\''.$module_name_lower.'_manage\']			= \'Manage '.$module_name.'\';
+$lang[\''.$module_name_lower.'_edit\']				= \'Edit\';
+$lang[\''.$module_name_lower.'_true\']				= \'True\';
+$lang[\''.$module_name_lower.'_false\']				= \'False\';
+$lang[\''.$module_name_lower.'_create\']			= \'Create\';
 $lang[\''.$module_name_lower.'_edit_text\']			= \'Edit this to suit your needs\';
 $lang[\''.$module_name_lower.'_no_records\']			= \'There aren\\\'t any '.$module_name_lower.' in the system.\';
 $lang[\''.$module_name_lower.'_create_new\']			= \'Create a new '.$module_name.'.\';
