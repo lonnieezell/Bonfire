@@ -59,7 +59,7 @@ $mb_index =<<<END
 		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
 
 		Template::set('data', \$data);
-		Template::set('toolbar_title', "Manage '{$module_name}");
+		Template::set('toolbar_title', "Manage {$module_name}");
 		Template::render();
 	}
 	
@@ -97,7 +97,7 @@ $mb_create =<<<END
 		}
 	
 		Template::set('toolbar_title', lang('{$module_name_lower}_create_new_button'));
-		Template::set('toolbar_title', 'Create {$module_name}');
+		Template::set('toolbar_title', lang('{$module_name_lower}_create') . ' {$module_name}');
 		Template::render();
 	}
 	
@@ -144,7 +144,7 @@ $mb_edit =<<<END
 		Template::set('{$module_name_lower}', \$this->{$module_name_lower}_model->find(\$id));
 	
 		Template::set('toolbar_title', lang('{$module_name_lower}_edit_heading'));
-		Template::set('toolbar_title', 'Edit {$module_name}');
+		Template::set('toolbar_title', lang('{$module_name_lower}_edit') . ' {$module_name}');
 		Template::render();		
 	}
 	
