@@ -13,8 +13,8 @@ $view = '
 					<?php $record = (array)$record;?>
 					<div class="list-item" data-id="<?php echo $record[\''.$primary_key_field.'\']; ?>">
 						<p>
-							<b><?php echo (empty($record[\'name\']) ? $record[\''.$primary_key_field.'\'] : $record[\'name\']); ?></b><br/>
-							<span class="small"><?php echo (empty($record[\'description\']) ? lang(\''.$module_name_lower.'_edit_text\') : $record[\'description\']);  ?></span>
+							<b><?php echo (empty($record[\''.$module_name_lower.'_name\']) ? $record[\''.$primary_key_field.'\'] : $record[\''.$module_name_lower.'_name\']); ?></b><br/>
+							<span class="small"><?php echo (empty($record[\''.$module_name_lower.'_description\']) ? lang(\''.$module_name_lower.'_edit_text\') : $record[\''.$module_name_lower.'_description\']);  ?></span>
 						</p>
 					</div>
 				<?php endforeach; ?>
