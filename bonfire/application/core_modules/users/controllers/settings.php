@@ -181,7 +181,7 @@ class Settings extends Admin_Controller {
 			$this->auth->restrict('Bonfire.Users.Manage');
 		
 			$user = $this->user_model->find($id);
-			if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage') && $user->id != $id)
+			if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage') && $user->id != $this->auth->user_id())
 			{
 				if ($this->user_model->delete($id))
 				{
@@ -196,7 +196,7 @@ class Settings extends Admin_Controller {
 			}
 			else
 			{
-				if ($user->id == $id)
+				if ($user->id == $this->auth->user_id())
 				{
 					Template::set_message(lang('us_self_delete'), 'error');
 				}
