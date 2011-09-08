@@ -453,7 +453,7 @@ class Auth  {
 			// if true parameter
 			// Did we set a custom var for this?
 		*/
-		if (config_item('auth.use_usernames') == 2)
+		if (config_item('auth.use_own_names'))
 		{
 			return $this->ci->session->userdata('auth_custom');
 		}
@@ -939,7 +939,7 @@ class Auth  {
 			$us_custom = $email;
 		else
 			// For backward compatibility, defaults to username
-			$us_custom = config_item('auth.use_usernames') == 2 ? $user_name : $username;
+			$us_custom = config_item('auth.use_own_names') ? $user_name : $username;
 		
 		// Save the user's session info
 		if (!class_exists('CI_Session'))

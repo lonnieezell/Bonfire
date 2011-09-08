@@ -16,7 +16,7 @@
 		<input type="text" name="username" id="username" value="<?php echo set_value('username') ?>" placeholder="username" />
 	<?php endif; ?>
 	<br/>
-	<?php if (config_item('auth.use_usernames') == 2) : ?>
+	<?php if (config_item('auth.use_own_names')) : ?>
 	<div>
 		<label><?php echo lang('us_first_name'); ?></label>
 		<input type="text" id="first_name" name="first_name" value="<?php echo set_value('first_name') ?>" />

@@ -285,6 +285,13 @@ class Users extends Front_Controller {
 			{
 				$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|callback_unique_username|xsx_clean');
 			}
+		
+			if (config_item('auth.use_own_names'))
+			{
+				$this->form_validation->set_rules('first_name', lang('us_first_name'), 'required|trim|strip_tags|max_length[20]|xss_clean');
+				$this->form_validation->set_rules('last_name', lang('us_last_name'), 'required|trim|strip_tags|max_length[20]|xss_clean');
+			}
+									
 			$this->form_validation->set_rules('password', 'Password', 'required|trim|strip_tags|min_length[8]|max_length[120]|xsx_clean');
 			$this->form_validation->set_rules('pass_confirm', 'Password (again)', 'required|trim|strip_tags|matches[password]');
 			

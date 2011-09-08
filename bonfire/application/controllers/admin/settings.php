@@ -90,6 +90,7 @@ class Settings extends Admin_Controller {
 			'auth.allow_register'	=> isset($_POST['allow_register']) ? 1 : 0,
 			'auth.login_type'		=> $this->input->post('login_type'),
 			'auth.use_usernames'	=> isset($_POST['use_usernames']) ? $this->input->post('use_usernames') : 0,
+			'auth.use_own_names'	=> isset($_POST['use_own_names']) ? $this->input->post('use_own_names') : 0,
 			'auth.allow_remember'	=> isset($_POST['allow_remember']) ? 1 : 0,
 			'auth.remember_length'	=> (int)$this->input->post('remember_length'),
 			'auth.use_extended_profile' => isset($_POST['use_ext_profile']) ? 1 : 0,
