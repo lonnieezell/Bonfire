@@ -72,6 +72,14 @@ class Settings extends Admin_Controller {
 			$this->db->where('role_id', $role_id);
 			Template::set('filter', $role_id);
 		}
+		
+		if (config_item('auth.use_usernames'))
+		{ 
+			$this->db->order_by('username', 'asc');
+		} else
+		{
+			$this->db->order_by('email', 'asc');
+		}
 	
 		Template::set('users', $this->user_model->limit($this->limit, $offset)->find_all());
 		Template::set('total_users', $total_users);
