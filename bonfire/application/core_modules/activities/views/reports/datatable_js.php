@@ -85,7 +85,7 @@ $("#flex_table").dataTable({
 		"sPaginationType": "listbox",
 		"bProcessing": true,
 		"bLengthChange": false,
-		"iDisplayLength": 15,
+		"iDisplayLength": <?php echo config_item('site.list_limit'); ?>,
 		"aaSorting": [[3,'desc']],
 		"bAutoWidth": false,
 		"aoColumns": [
