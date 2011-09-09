@@ -390,6 +390,11 @@ class Auth  {
 		logit('[Auth.username()] - Why are we going through DB?' , 'warn');
 		
 		// We have to grab the user from the db and return his username. 
+		if (!class_exists('User_model')) 
+		{
+			$this->ci->load->model('users/User_model', 'user_model', true);
+		}
+		
 		$user = $this->ci->user_model->select('username')
 				->find($this->ci->session->userdata('user_id'));
 		
@@ -461,6 +466,10 @@ class Auth  {
 		logit('[Auth.user_name()] - Why are we going through DB?' , 'warn');
 		
 		// We have to grab the user from the db and return his name. 
+		if (!class_exists('User_model')) 
+		{
+			$this->ci->load->model('users/User_model', 'user_model', true);
+		}
 		$user = $this->ci->user_model->select('id, first_name, last_name')
 				->find($this->ci->session->userdata('user_id'));
 		
