@@ -151,7 +151,7 @@ class Developer extends Admin_Controller {
 			@copy(APPPATH.'/index.html',$this->config->item('log_path').'/index.html');
 		}
 		
-		Template::set_message("Successfully purged " . lcfirst($activity_text),'success');
+		Template::set_message("Successfully purged " . ucfirst($activity_text),'success');
 			
 		// Log the activity
 		$this->activity_model->log_activity($this->auth->user_id(), $activity_text . ' purged from: ' . $this->input->ip_address(), 'logs');
