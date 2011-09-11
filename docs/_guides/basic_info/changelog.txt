@@ -39,6 +39,7 @@ Enhancements:
 - Improved the installer - user brought to the install page if the app hasn't been installed already, allows user to choose which environment is being installed, tries to set the file and folder permissions.
 - Adding created_on and modified_on into protected variable of the BF_Model
 - Adding activity log when saving the App settings
+- Moved site, update and email based config settings into the new settings database table - this removed the need for the config/email.php
 
 Bugs: 
 - Upgraded to the latest version of head.js to fix a bug where AJAX page loads were not working in FF3 and IE.
