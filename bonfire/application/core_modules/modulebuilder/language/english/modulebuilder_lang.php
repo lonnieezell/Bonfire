@@ -77,6 +77,11 @@ $lang['mb_form_primarykey']		= 'Primary Key';
 $lang['mb_form_delims']			= 'Form Input Delimiters';
 $lang['mb_form_err_delims']		= 'Form Error Delimiters';
 $lang['mb_form_text_ed']		= 'Textarea Editor';
+$lang['mb_form_soft_deletes']	= 'Use "Soft" Deletes?';
+$lang['mb_form_use_created']	= 'Use "Created" field?';
+$lang['mb_form_use_modified']	= 'Use "Modified" field?';
+$lang['mb_form_created_field']	= '"Created" field name?';
+$lang['mb_form_modified_field']	= '"Modified" field name?';
 $lang['mb_form_generate']		= 'Create Module Table';
 $lang['mb_form_role_id']		= 'Give Role Full Access';
 $lang['mb_form_fieldnum']		= 'Additional table fields';
@@ -112,3 +117,7 @@ $lang['mb_form_is_natural_no_zero']	= 'Natural, no zeroes';
 $lang['mb_form_valid_ip']		= 'Valid IP';
 $lang['mb_form_valid_base64']	= 'Valid Base64';
 $lang['mb_form_alpha_extra']	= 'AlphaNumerics, underscore, dash, periods and spaces.';
+
+// Activities
+$lang['mb_act_create']	= 'Created Module';
+$lang['mb_act_delete']	= 'Deleted Module';

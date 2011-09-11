@@ -30,7 +30,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 	}
 
 	$field_label = set_value("view_field_label$counter");
-	$field_name = set_value("view_field_name$counter");
+	$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
 	$field_type = set_value("view_field_type$counter");
 
 	if ($field_type != 'checkbox') // checkbox appears to the left of the checkbox so I can't add now for a checkbox
@@ -88,12 +88,14 @@ EOT;
 			if ($textarea_editor == 'ckeditor') {
 				$view .= '
 			<script type="text/javascript">
+				head.ready(function(){
 					//<![CDATA[
 					if( !(\''.$field_name.'\' in CKEDITOR.instances)) {
 						CKEDITOR.replace( \''.$field_name.'\' );
 					}
 					//]]>
-					</script>';
+				});
+			</script>';
 				if (empty($on_click))
 				{
 					$on_click .= ' onclick="javascript:';
@@ -120,10 +122,10 @@ EOT;
                         
 		$view .= '
 		<?php // Change or Add the radio values/labels/css classes to suit your needs ?>
-		<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option1" <?php echo $this->CI->form_validation->set_radio(\''.$field_name.'\', \'option1\'); ?> />
+		<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option1" <?php echo set_radio(\''.$field_name.'\', \'option1\', TRUE); ?> />
 		'. form_label('Radio option 1', $field_name) .'
 
-		<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option2" <?php echo $this->CI->form_validation->set_radio(\''.$field_name.'\', \'option2\'); ?> />
+		<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option2" <?php echo set_radio(\''.$field_name.'\', \'option2\'); ?> />
 		'. form_label('Radio option 2', $field_name) .'
 '.$form_input_delimiters[1].'
 
@@ -190,12 +192,12 @@ EOT;
 			if ($db_field_type == 'DATE')
 			{
 				$view .= '
-			<script>$(function() {$(\'#'.$field_name.'\').datepicker({ dateFormat: \'yy-mm-dd\'});})</script>';
+			<script>head.ready(function(){$(\'#'.$field_name.'\').datepicker({ dateFormat: \'yy-mm-dd\'});});</script>';
 			}
 			elseif ($db_field_type == 'DATETIME')
 			{
 				$view .= '
-			<script>$(function() {$(\'#'.$field_name.'\').datetimepicker({ dateFormat: \'yy-mm-dd\', timeFormat: \'hh:mm:ss\'});})</script>';
+			<script>head.ready(function(){$(\'#'.$field_name.'\').datetimepicker({ dateFormat: \'yy-mm-dd\', timeFormat: \'hh:mm:ss\'});});</script>';
 			}
 		}
 

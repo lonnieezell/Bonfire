@@ -71,7 +71,7 @@
 				<p><?php echo lang('log_big_file_note'); ?></p>
 			</div>
 			
-			<?php if (isset($logs) && is_array($logs) && count($logs)) : ?>
+			<?php if (isset($logs) && is_array($logs) && (count($logs) > 1)) : //index.html is 1 ?>
 			<br/>
 			
 			<!-- Purge? -->

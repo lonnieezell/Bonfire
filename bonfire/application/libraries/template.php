@@ -420,11 +420,12 @@ class Template {
 		
 		Parameters:
 			$theme	- The name of the active theme.
+			$default_theme	- (Optional) The name of the desired default theme.
 
 		Return: 
 			void
 	 */
-	public static function set_theme($theme=null) 
+	public static function set_theme($theme=null, $default_theme=null) 
 	{
 		if (empty($theme) || !is_string($theme))
 		{
@@ -438,9 +439,46 @@ class Template {
 		}
 
 		self::$active_theme = $theme;
+		
+		// Default theme? 
+		if (!empty($default_theme) && is_string($default_theme))
+		{
+			self::set_default_theme($default_theme);
+		}
 	}
 	
 	//--------------------------------------------------------------------
+	
+	/*
+		Method: set_default_theme()
+		
+		Stores the name of the default theme to use. This theme should be
+		relative to one of the template.theme_paths folders.
+		
+		Parameters:
+			$theme	- The name of the desired default theme to use.
+			
+		Returns:
+			void
+	*/
+	public static function set_default_theme($theme=null) 
+	{
+		if (empty($theme) || !is_string($theme))
+		{
+			return;
+		}
+		
+		// Make sure a trailing slash is there
+		if (substr($theme, -1) !== '/')
+		{
+			$theme .= '/';
+		}
+
+		self::$default_theme = $theme;
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	/*
 		Method: theme()
@@ -707,7 +745,7 @@ class Template {
 	*/
 	public function redirect($url=null) 
 	{
-		$url = strpos($url, 'http') == false ? site_url($url) : $url;
+		$url = strpos($url, 'http') === false ? site_url($url) : $url;
 		
 		echo "<script>window.location='$url'</script>";
 		exit();

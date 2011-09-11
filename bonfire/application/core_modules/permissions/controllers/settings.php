@@ -27,7 +27,8 @@ class Settings extends Admin_Controller {
 	 */
 	function index()
 	{
-		Template::set('records', $this->permission_model->find_all());
+		Template::set('records', $this->permission_model->order_by('name')->find_all());
+		Template::set('permission_header', '');
 		if (!Template::get("toolbar_title"))
 		{
 			Template::set("toolbar_title", lang("permissions_manage"));

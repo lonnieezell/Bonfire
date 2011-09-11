@@ -115,6 +115,9 @@ class Developer extends Admin_Controller {
 			// passed validation proceed to second page
 			$this->build_module($this->field_total);
 			
+			// Log the activity
+			$this->activity_model->log_activity($this->auth->user_id(), lang('mb_act_create').': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
+			
 			Template::set_view('developer/output');
 		}
 				
@@ -184,6 +187,10 @@ class Developer extends Admin_Controller {
 				// database was successful in deleting everything. Now try to get rid of the files.
 				if (delete_files(module_path($module_name), true)) {
 					@rmdir(module_path($module_name.'/'));
+
+					// Log the activity
+					$this->activity_model->log_activity($this->auth->user_id(), lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'modulebuilder');
+
 					Template::set_message('The module and associated database entries were successfully deleted.', 'success');
 					Template::redirect(SITE_AREA .'/developer/modulebuilder');
 				} else {
@@ -229,17 +236,22 @@ class Developer extends Admin_Controller {
 			$this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");
 			$this->form_validation->set_rules("table_name",'Table Name',"trim|required|xss_clean|alpha_dash");
 			$this->form_validation->set_rules("textarea_editor",'Textarea Editor',"trim|xss_clean|alpha_dash");
+			$this->form_validation->set_rules("use_soft_deletes",'Soft Deletes',"trim|xss_clean|alpha");
+			$this->form_validation->set_rules("use_created",'Use Created Field',"trim|xss_clean|alpha");
+			$this->form_validation->set_rules("created_field",'Created Field Name',"trim|xss_clean|alpha_dash");
+			$this->form_validation->set_rules("use_modified",'Use Modified Field',"trim|xss_clean|alpha");
+			$this->form_validation->set_rules("modified_field",'Modified Field Name',"trim|xss_clean|alpha_dash");
 		
 			for($counter=1; $field_total >= $counter; $counter++)
 			{
 				if ($counter != 1) // better to do it this way round as this statement will be fullfilled more than the one below
 				{
-					$this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|xss_clean|alpha_dash');
+					$this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|xss_clean|alpha_extra');
 				}
 				else
 				{
 					// the first field always needs to be required i.e. we need to have at least one field in our form
-					$this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|required|xss_clean|alpha_dash');
+					$this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|required|xss_clean|alpha_extra');
 				}
 				
 				$name_required = '';

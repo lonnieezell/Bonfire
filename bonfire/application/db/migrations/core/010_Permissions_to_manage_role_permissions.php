@@ -9,7 +9,7 @@ class Migration_Permissions_to_manage_role_permissions extends Migration {
 		$prefix = $this->db->dbprefix;
 		
 		// name field in permissions table is too short bump it up to 50
-		$sql = "ALTER TABLE `{$prefix}permissions` CHANGE `name` `name` VARCHAR(50) NULL";
+		$sql = "ALTER TABLE `{$prefix}permissions` CHANGE `name` `name` VARCHAR(255) NULL";
 		$this->db->query($sql);
 		
 		$roles = $this->db->select('role_name')->get($prefix.'roles')->result();

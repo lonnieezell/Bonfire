@@ -128,6 +128,34 @@
 				?>
 				<?php echo form_dropdown("textarea_editor", $textarea_editors, set_value("textarea_editor"),'id="textarea_editor"'); ?>
 			</div>
+			
+			<div class="mb_advanced">
+				<label for="use_soft_deletes" class="block"><?php echo lang('mb_form_soft_deletes'); ?></label>
+				<?php 
+					$truefalse = array('false' => 'False', 'true' => 'True');
+				?>
+				<?php echo form_dropdown("use_soft_deletes", $truefalse, set_value("use_soft_deletes"),'id="use_soft_deletes"'); ?>
+			</div>
+			
+			<div class="mb_advanced">
+				<label for="use_created" class="block"><?php echo lang('mb_form_use_created'); ?></label>
+				<?php echo form_dropdown("use_created", $truefalse, set_value("use_created"),'id="use_created"'); ?>
+			</div>
+			
+			<div class="mb_advanced">
+				<label for="created_field" class="block"><?php echo lang('mb_form_created_field'); ?></label>
+				<input name="created_field" id="created_field" type="text" value="<?php echo set_value("created_field", "created_on"); ?>" />
+			</div>
+			
+			<div class="mb_advanced">
+				<label for="use_modified" class="block"><?php echo lang('mb_form_use_modified'); ?></label>
+				<?php echo form_dropdown("use_modified", $truefalse, set_value("use_modified"),'id="use_modified"'); ?>
+			</div>
+			
+			<div class="mb_advanced">
+				<label for="modified_field" class="block"><?php echo lang('mb_form_modified_field'); ?></label>
+				<input name="modified_field" id="modified_field" type="text" value="<?php echo set_value("modified_field", "modified_on"); ?>" />
+			</div>
 				
 			<div class="notification attention">
 				<?php echo lang('mb_table_note'); ?>
