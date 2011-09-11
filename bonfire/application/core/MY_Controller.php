@@ -70,7 +70,7 @@ class Base_Controller extends MX_Controller {
 		{
 			$this->load->library('Console');
 			
-			if (!$this->input->is_cli_request() && config_item('site.show_profiler'))
+			if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_profiler'))
 			{
 				$this->output->enable_profiler(true);
 			}
@@ -78,7 +78,7 @@ class Base_Controller extends MX_Controller {
 		
 		$this->lang->load('application');
 
-		$this->load->model('settings_model');
+		$this->load->database();
 
 		$this->load->driver('cache', array('adapter' => 'file'));
 		
@@ -140,7 +140,6 @@ class Authenticated_Controller extends Base_Controller {
 	{
 		parent::__construct();
 		
-		$this->load->database();
 		$this->load->library('session');
 		
 		$this->load->model('activities/Activity_model', 'activity_model', true);
@@ -202,7 +201,7 @@ class Admin_Controller extends Authenticated_Controller {
 		$this->pager['next_link'] 		= 'Next &raquo;';
 		$this->pager['prev_link'] 		= '&laquo; Previous';
 		
-		$this->limit = $this->config->item('site.list_limit');
+		$this->limit = $this->settings_lib->item('site.list_limit');
 		
 		// Basic setup
 		Template::set_theme('admin');
