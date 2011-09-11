@@ -1,0 +1,21 @@
+Title: Dynamic Data
+
+Dynamic Data refers the *$data* variable you would typically send along in your _$this->load->view()_ call that becomes magically available to your views.
+
+Bonfire handles this with the _set()_ and _get()_ methods. 
+
+Data vars can be made available by an array or a individual key/value pair to the _set()_ method.
+
+To make a variable available to your view, you use the set() method... 
+
+> Template::set('var_name', $data);
+
+If _var_name_ happens to be a string, and _$data_ actually has a value, then that _$data_ will be available to your views as _$var_name_. Nothing tricky here. 
+
+If _var_name_ is an array of key/value pairs, then all of those values will be made available within your views under names matching the key.
+
+If, however, the _var_name_ that you use matches one of the Template class' own classvars, you will be setting that class-var. This means you can change default/active themes, turn debug mode on/off, and other (hopefully non-evil) uses.
+
+> $var = Template::get('var_name');
+
+does pretty much what you'd expect: the opposite of Template::set(). 

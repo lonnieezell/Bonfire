@@ -72,6 +72,14 @@ class Settings extends Admin_Controller {
 			$this->db->where('role_id', $role_id);
 			Template::set('filter', $role_id);
 		}
+		
+		if (config_item('auth.use_usernames'))
+		{ 
+			$this->db->order_by('username', 'asc');
+		} else
+		{
+			$this->db->order_by('email', 'asc');
+		}
 	
 		Template::set('users', $this->user_model->limit($this->limit, $offset)->find_all());
 		Template::set('total_users', $total_users);
@@ -130,6 +138,11 @@ class Settings extends Admin_Controller {
 		$this->load->helper('address');
 		
 		$user_id = $this->uri->segment(5);
+		if (empty($user_id))
+		{
+			Template::set_message(lang('us_empty_id'), 'error');
+			redirect(SITE_AREA .'/settings/users');			
+		}
 		
 		if ($this->input->post('submit'))
 		{
@@ -147,11 +160,21 @@ class Settings extends Admin_Controller {
 			}
 		}
 		
-		Template::set('user', $this->user_model->find($user_id));
-		Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
+		$user = $this->user_model->find($user_id);
+		if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage'))
+		{
+			Template::set('user', $user);
+			Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
+			Template::set_view('settings/user_form');
+		}
+		else
+		{
+			Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');
+			redirect(SITE_AREA .'/settings/users');			
+		}
 		
 		Template::set('toolbar_title', lang('us_edit_user'));
-		Template::set_view('settings/user_form');
+						
 		Template::render();
 	}
 	
@@ -164,16 +187,36 @@ class Settings extends Admin_Controller {
 		if (!empty($id))
 		{	
 			$this->auth->restrict('Bonfire.Users.Manage');
-
-			if ($this->user_model->delete($id))
+		
+			$user = $this->user_model->find($id);
+			if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage') && $user->id != $this->auth->user_id())
 			{
-				$user = $this->user_model->find($id);
-				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_delete') . ': '.($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email), 'users');
-				Template::set_message('The User was successfully deleted.', 'success');
-			} else
-			{
-				Template::set_message('We could not delete the user: '. $this->user_model->error, 'success');
+				if ($this->user_model->delete($id))
+				{
+					$user = $this->user_model->find($id);
+					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_delete') . ': '.(config_item('auth.use_usernames') ? $user->username : $user->email), 'users');
+					Template::set_message('The User was successfully deleted.', 'success');
+				}
+				else
+				{
+					Template::set_message('We could not delete the user: '. $this->user_model->error, 'success');
+				}							
 			}
+			else
+			{
+				if ($user->id == $this->auth->user_id())
+				{
+					Template::set_message(lang('us_self_delete'), 'error');
+				}
+				else
+				{
+					Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');	
+				}				
+			}
+		}
+		else
+		{
+			Template::set_message(lang('us_empty_id'), 'error');
 		}
 		
 		redirect(SITE_AREA .'/settings/users');
@@ -183,7 +226,7 @@ class Settings extends Admin_Controller {
 	
 	public function deleted() 
 	{
-		$this->db->where('deleted !=', 0);
+		$this->db->where('users.deleted !=', 0);
 		Template::set('users', $this->user_model->find_all(true));
 	
 		Template::render();
@@ -204,7 +247,7 @@ class Settings extends Admin_Controller {
 		else
 		{
 			// Find all deleted accounts
-			$users = $this->user_model->where('deleted', 1)
+			$users = $this->user_model->where('users.deleted', 1)
 									  ->find_all(true);
 		
 			if (is_array($users))
@@ -218,7 +261,7 @@ class Settings extends Admin_Controller {
 		
 		Template::set_message('Users Purged.', 'success');
 		
-		redirect(SITE_AREA .'/settings/users');
+		Template::redirect(SITE_AREA .'/settings/users');
 	}
 	
 	//--------------------------------------------------------------------
@@ -227,7 +270,7 @@ class Settings extends Admin_Controller {
 	{
 		$id = $this->uri->segment(5);
 		
-		if ($this->user_model->update($id, array('deleted'=>0)))
+		if ($this->user_model->update($id, array('users.deleted'=>0)))
 		{
 			Template::set_message('User successfully restored.', 'success');
 		}
@@ -236,7 +279,7 @@ class Settings extends Admin_Controller {
 			Template::set_message('Unable to restore user: '. $this->user_model->error, 'error');
 		}
 		
-		redirect(SITE_AREA .'/settings/users');
+		Template::redirect(SITE_AREA .'/settings/users');
 	}
 	
 	//--------------------------------------------------------------------

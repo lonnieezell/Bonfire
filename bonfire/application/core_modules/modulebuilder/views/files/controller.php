@@ -59,7 +59,7 @@ $mb_index =<<<END
 		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
 
 		Template::set('data', \$data);
-		Template::set('toolbar_title', "Manage '{$module_name}");
+		Template::set('toolbar_title', "Manage {$module_name}");
 		Template::render();
 	}
 	
@@ -97,7 +97,7 @@ $mb_create =<<<END
 		}
 	
 		Template::set('toolbar_title', lang('{$module_name_lower}_create_new_button'));
-		Template::set('toolbar_title', 'Create {$module_name}');
+		Template::set('toolbar_title', lang('{$module_name_lower}_create') . ' {$module_name}');
 		Template::render();
 	}
 	
@@ -144,7 +144,7 @@ $mb_edit =<<<END
 		Template::set('{$module_name_lower}', \$this->{$module_name_lower}_model->find(\$id));
 	
 		Template::set('toolbar_title', lang('{$module_name_lower}_edit_heading'));
-		Template::set('toolbar_title', 'Edit {$module_name}');
+		Template::set('toolbar_title', lang('{$module_name_lower}_edit') . ' {$module_name}');
 		Template::render();		
 	}
 	
@@ -265,7 +265,7 @@ $textarea_included = FALSE;
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$db_field_type = set_value("db_field_type$counter");
-	$field_name = set_value("view_field_name$counter");
+	$field_name = $module_name_lower.'_'.set_value("view_field_name$counter");
 	$view_datepicker = '';
 	if ($db_field_type != NULL)
 	{
@@ -377,7 +377,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 	$last_field = $counter;
 	
 	$rules .= '			
-$this->form_validation->set_rules(\''.set_value("view_field_name$counter").'\',\''.set_value("view_field_label$counter").'\',\'';
+$this->form_validation->set_rules(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\',\''.set_value("view_field_label$counter").'\',\'';
 	
 	// set a friendly variable name
     $validation_rules = $this->input->post('validation_rules'.$counter);
@@ -397,7 +397,7 @@ $this->form_validation->set_rules(\''.set_value("view_field_name$counter").'\',\
 		
 			if ($value == 'unique')	{		
 				$prefix = $this->db->dbprefix;
-				$rules .= $value.'['.$prefix.$table_name.'.'.set_value("view_field_name$counter").'.'.set_value("primary_key_field").'.\'.$id.\']';
+				$rules .= $value.'['.$prefix.$table_name.'.'.$module_name_lower.'_'.set_value("view_field_name$counter").'.'.set_value("primary_key_field").'.\'.$id.\']';
 			} else {
 				$rules .= $value;	
 			}

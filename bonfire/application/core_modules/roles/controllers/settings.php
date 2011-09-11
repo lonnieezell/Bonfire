@@ -37,8 +37,8 @@ class Settings extends Admin_Controller {
 		$this->lang->load('roles');
 		
 		Assets::add_js($this->load->view('settings/roles_js', null, true), 'inline');
-		//Assets::add_module_js('roles', 'js/settings.js');
-		//Assets::add_module_css('roles', 'css/settings.css');
+		Assets::add_module_js('roles', 'js/settings.js');
+		Assets::add_module_css('roles', 'css/settings.css');
 		
 		// for the permission matrix
 		$this->load->helper('inflector');
@@ -107,6 +107,8 @@ class Settings extends Admin_Controller {
 			if ($this->save_role('update', $id))
 			{
 				Template::set_message('Role successfully saved.', 'success');
+				// redirect to update the sidebar which will show old name otherwise.
+				Template::redirect(SITE_AREA .'/settings/roles');
 			}
 			else 
 			{
@@ -244,7 +246,7 @@ class Settings extends Admin_Controller {
 	
 	public function save_role($type='insert', $id=0) 
 	{	
-		if ($type ==  'insert')
+		if ($type == 'insert')
 		{
 			$this->form_validation->set_rules('role_name', 'Role Name', 'required|trim|strip_tags|callback_unique_role|max_length[60]|xss_clean');
 		}
@@ -263,6 +265,9 @@ class Settings extends Admin_Controller {
 		// We'll need it later.
 		$permissions = $this->input->post('role_permissions');
 		unset($_POST['role_permissions']);
+		
+		// grab the current role model name
+		$current_name = $this->role_model->find($id);
 
 		if ($type == 'insert')
 		{
@@ -296,6 +301,13 @@ class Settings extends Admin_Controller {
 			} else {
 				$this->error = 'There was an error creating the ACL permission.';
 			}
+		}
+		else
+		{
+			// update the permission name (did it this way for brevity on the update_where line)
+			$new_perm_name = 'Permissions.'.ucwords($this->input->post('role_name')).'.Manage';
+			$old_perm_name = 'Permissions.'.ucwords($current_name->role_name).'.Manage';
+			$this->permission_model->update_where('name',$old_perm_name,array('name'=>$new_perm_name));
 		}
 		
 		// Save the permissions.
@@ -342,6 +354,7 @@ class Settings extends Admin_Controller {
 		Template::set('roles', $this->role_model->find_all());
 		Template::set('matrix_permissions', $this->permission_model->select('permission_id, name')->find_all());
 		Template::set('matrix_roles', $this->role_permission_model->select('role_id, role_name')->find_all_roles());
+		
 		$role_permissions = $this->role_permission_model->find_all_role_permissions();
 		foreach($role_permissions as $rp) {
 			$current_permissions[] = $rp->role_id.','.$rp->permission_id;
@@ -352,6 +365,7 @@ class Settings extends Admin_Controller {
 		{
 			Template::set("toolbar_title", lang("role_manage"));
 		}
+		
 		Template::set_view('settings/permission_matrix');
 		Template::render();
 	}

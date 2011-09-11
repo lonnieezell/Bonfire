@@ -13,8 +13,8 @@ $view = '
 					<?php $record = (array)$record;?>
 					<div class="list-item" data-id="<?php echo $record[\''.$primary_key_field.'\']; ?>">
 						<p>
-							<b><?php echo (empty($record[\'name\']) ? $record[\''.$primary_key_field.'\'] : $record[\'name\']); ?></b><br/>
-							<span class="small"><?php echo (empty($record[\'description\']) ? lang(\''.$module_name_lower.'_edit_text\') : $record[\'description\']);  ?></span>
+							<b><?php echo (empty($record[\''.$module_name_lower.'_name\']) ? $record[\''.$primary_key_field.'\'] : $record[\''.$module_name_lower.'_name\']); ?></b><br/>
+							<span class="small"><?php echo (empty($record[\''.$module_name_lower.'_description\']) ? lang(\''.$module_name_lower.'_edit_text\') : $record[\''.$module_name_lower.'_description\']);  ?></span>
 						</p>
 					</div>
 				<?php endforeach; ?>
@@ -73,13 +73,13 @@ foreach ($records as $record) : ?>
 	{
 		if($field != "'.$primary_key_field.'") {
 ?>
-				<td><?php echo ($field == \'deleted\') ? (($value > 0) ? \'True\' : \'False\') : $value; ?></td>
+				<td><?php echo ($field == \'deleted\') ? (($value > 0) ? lang(\''.$module_name_lower.'_true\') : lang(\''.$module_name_lower.'_false\')) : $value; ?></td>
 
 <?php
 		}
 	}
 ?>
-				<td><?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/edit/\'. $record[\''.$primary_key_field.'\'], \'Edit\', \'class="ajaxify"\') ?></td>
+				<td><?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/edit/\'. $record[\''.$primary_key_field.'\'], lang(\''.$module_name_lower.'_edit\'), \'class="ajaxify"\'); ?></td>
 			</tr>
 <?php endforeach; ?>
 		</tbody>

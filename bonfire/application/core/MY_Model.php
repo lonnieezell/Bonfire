@@ -652,17 +652,26 @@ class BF_Model extends CI_Model {
 		Sets the where portion of the query in a chainable format.
 		
 		Parameters:
-			$field	- The field to search the db on.
-			$value	- The value to match the field against.
+			$field	- The field to search the db on. Can be either a string with the field
+					  name to search, or an associative array of key/value pairs. 
+			$value	- The value to match the field against. If $field is an array,
+					  this value is ignored.
 			
 		Return:
 			An instance of this class.
 	*/
 	public function where($field=null, $value=null) 
 	{
-		if (!empty($field) && !empty($value))
+		if (!empty($field))
 		{
-			$this->db->where($field, $value);
+			if (is_string($field))
+			{
+				$this->db->where($field, $value);
+			} 
+			else if (is_array($field))
+			{
+				$this->db->where($field);
+			}
 		}
 		
 		return $this;

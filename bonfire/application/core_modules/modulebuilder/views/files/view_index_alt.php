@@ -33,13 +33,13 @@ $view =<<<END
 			<?php foreach(\$record as \$field => \$value) : ?>
 				
 				<?php if (\$field != '{$primary_key_field}') : ?>
-					<td><?php echo (\$field == 'deleted') ? ((\$value > 0) ? 'True' : 'False') : \$value; ?></td>
+					<td><?php echo (\$field == 'deleted') ? ((\$value > 0) ? lang('{$module_name_lower}_true') : lang('{$module_name_lower}_false')) : \$value; ?></td>
 				<?php endif; ?>
 				
 			<?php endforeach; ?>
 
 				<td>
-					<?php echo anchor(SITE_AREA .'/{$controller_name}/{$module_name_lower}/edit/'. \$record[\$primary_key_field], 'Edit', '') ?>
+					<?php echo anchor(SITE_AREA .'/{$controller_name}/{$module_name_lower}/edit/'. \$record[\$primary_key_field], lang('{$module_name_lower}_edit'), '') ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>
