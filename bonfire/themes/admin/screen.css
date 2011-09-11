@@ -184,6 +184,9 @@ label {
 	text-align: right;
 	line-height: 1.5;
 }
+label.required { 
+	font-weight: bold;
+}
 input[type=text],
 input[type=email],
 input[type=password],
