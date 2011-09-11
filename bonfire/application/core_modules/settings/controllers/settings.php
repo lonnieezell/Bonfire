@@ -56,11 +56,11 @@ class Settings extends Admin_Controller {
 				Template::set_message('There was an error saving your settings.', 'error');
 			}
 		}
-		
 		// Read our current settings
-		Template::set('settings', read_config('application'));
+		$settings = $this->settings_lib->find_all();
+		Template::set('settings', $settings);
 
-		Template::set_view('admin/settings/index');
+		Template::set_view('settings/settings/index');
 		Template::render();
 	}
 	
@@ -82,21 +82,21 @@ class Settings extends Admin_Controller {
 		}
 		
 		$data = array(
-			'site.title' 		=> $this->input->post('title'),
-			'site.system_email'	=> $this->input->post('system_email'),
-			'site.status'		=> $this->input->post('status'),
-			'site.list_limit'	=> $this->input->post('list_limit'),
+			array('name' => 'site.title', 'value' => $this->input->post('title')),
+			array('name' => 'site.system_email', 'value' => $this->input->post('system_email')),
+			array('name' => 'site.status', 'value' => $this->input->post('status')),
+			array('name' => 'site.list_limit', 'value' => $this->input->post('list_limit')),
 			
-			'auth.allow_register'	=> isset($_POST['allow_register']) ? 1 : 0,
-			'auth.login_type'		=> $this->input->post('login_type'),
-			'auth.use_usernames'	=> isset($_POST['use_usernames']) ? $this->input->post('use_usernames') : 0,
-			'auth.allow_remember'	=> isset($_POST['allow_remember']) ? 1 : 0,
-			'auth.remember_length'	=> (int)$this->input->post('remember_length'),
-			'auth.use_extended_profile' => isset($_POST['use_ext_profile']) ? 1 : 0,
+			array('name' => 'auth.allow_register', 'value' => isset($_POST['allow_register']) ? 1 : 0),
+			array('name' => 'auth.login_type', 'value' => $this->input->post('login_type')),
+			array('name' => 'auth.use_usernames', 'value' => isset($_POST['use_usernames']) ? $this->input->post('use_usernames') : 0),
+			array('name' => 'auth.allow_remember', 'value' => isset($_POST['allow_remember']) ? 1 : 0),
+			array('name' => 'auth.remember_length', 'value' => (int)$this->input->post('remember_length')),
+			array('name' => 'auth.use_extended_profile', 'value' => isset($_POST['use_ext_profile']) ? 1 : 0),
 			
-			'updates.do_check'		=> isset($_POST['do_check']) ? 1 : 0,
-			'updates.bleeding_edge'	=> isset($_POST['bleeding_edge']) ? 1 : 0,
-			'site.show_profiler'	=> isset($_POST['show_profiler']) ? 1 : 0,
+			array('name' => 'updates.do_check', 'value' => isset($_POST['do_check']) ? 1 : 0),
+			array('name' => 'updates.bleeding_edge', 'value' => isset($_POST['bleeding_edge']) ? 1 : 0),
+			array('name' => 'site.show_profiler', 'value' => isset($_POST['show_profiler']) ? 1 : 0),
 		);
 		
 		//destroy the saved update message in case they changed update preferences.
@@ -107,12 +107,12 @@ class Settings extends Admin_Controller {
 		
 		// Log the activity
 		$this->activity_model->log_activity($this->auth->user_id(), lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'core');
+
+		// save the settings to the DB
+		$updated = $this->settings_model->update_batch($data, 'name');
 		
-		return write_config('application', $data);
+		return $updated;
 	}
 	
 	//--------------------------------------------------------------------
-	
-	
-
 }

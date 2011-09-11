@@ -94,9 +94,11 @@ class Install extends MX_Controller {
 	
 	public function index() 
 	{ 
+	echo "HERE";
+	exit;
 		$this->load->library('form_validation');
 		$this->form_validation->CI =& $this;
-	
+
 		$this->startup_check();
 		
 		if (isset($_POST['hostname']) && isset($_POST['username']) && isset($_POST['database']) )
@@ -263,9 +265,6 @@ class Install extends MX_Controller {
 			copy(APPPATH .'config/database_format.php', APPPATH .'config/production/database.php');
 			copy(APPPATH .'config/database_format.php', APPPATH .'config/testing/database.php');
 			copy(APPPATH .'config/database_format.php', APPPATH .'config/database.php');
-
-			// Email
-			copy(APPPATH .'config/email_format.php', APPPATH .'config/email.php');
 		}
 	}
 	
@@ -279,20 +278,6 @@ class Install extends MX_Controller {
 		//
 		$this->load->helper('config_file');
 		
-		$config = array(
-			'site.title'	=> $this->input->post('site_title'),
-			'site.system_email'	=> $this->input->post('email'),
-			'updates.do_check' => $this->curl_update,
-			'updates.bleeding_edge' => $this->curl_update
-		);
-		
-		if (write_config('application', $config) === false)
-		{
-			$this->errors = 'Unable to write to config/application.php. Make sure that it is writable and try again.';
-			return false;
-		}
-		
-		
 		//
 		// Now install the database tables.
 		//
@@ -303,6 +288,29 @@ class Install extends MX_Controller {
 			$this->errors = 'There was an error setting up the database. Please check your settings and try again.';
 			return false;
 		}
+		
+		$this->load->library('database');
+		$this->load->model('settings_model', 'settings_model', true);
+
+		$config = array(
+			'site.title'	=> $this->input->post('site_title'),
+			'site.system_email'	=> $this->input->post('email'),
+			'updates.do_check' => $this->curl_update,
+			'updates.bleeding_edge' => $this->curl_update
+		);
+		
+		$updated = FALSE;
+		foreach ($data as $name => $value)
+		{
+			$updated = $this->settings_model->update_where('name', $name, array('value' => $value));
+		}
+
+		if ($updated === FALSE)
+		{
+			$this->errors = 'Unable to write settings to the database.';
+			return false;
+		}
+		
 		
 		//
 		// Install the user in the users table so they can actually login.

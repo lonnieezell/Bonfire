@@ -36,43 +36,43 @@
 		
 		<div>
 			<label><?php echo lang('bf_allow_register') ?></label>
-			<input type="checkbox" name="allow_register" id="allow_register" value="1" <?php echo config_item('auth.allow_register') == 1 ? 'checked="checked"' : set_checkbox('auth.allow_register', 1); ?> />
+			<input type="checkbox" name="allow_register" id="allow_register" value="1" <?php echo $settings['auth.allow_register'] == 1 ? 'checked="checked"' : set_checkbox('auth.allow_register', 1); ?> />
 		</div>
 		
 		<div>
 			<label><?php echo lang('bf_login_type') ?></label>
 			<select name="login_type">
-				<option value="email" <?php echo config_item('auth.login_type') == 'email' ? 'selected="selected"' : ''; ?>><?php echo lang('bf_login_type_email') ?></option>
-				<option value="username" <?php echo config_item('auth.login_type') == 'username' ? 'selected="selected"' : ''; ?>><?php echo lang('bf_login_type_username') ?></option>
-				<option value="both" <?php echo config_item('auth.login_type') == 'both' ? 'selected="selected"' : ''; ?>><?php echo lang('bf_login_type_both') ?></option>
+				<option value="email" <?php echo $settings['auth.login_type'] == 'email' ? 'selected="selected"' : ''; ?>><?php echo lang('bf_login_type_email') ?></option>
+				<option value="username" <?php echo $settings['auth.login_type'] == 'username' ? 'selected="selected"' : ''; ?>><?php echo lang('bf_login_type_username') ?></option>
+				<option value="both" <?php echo $settings['auth.login_type'] == 'both' ? 'selected="selected"' : ''; ?>><?php echo lang('bf_login_type_both') ?></option>
 			</select>
 		</div>
 		
 		<div>
 			<label><?php echo lang('bf_use_usernames') ?></label>
 			<label style="display: inline" class="text-left"><?php echo lang('bf_username') ?>
-				<input type="radio" name="use_usernames" id="use_usernames" value="1" <?php echo config_item('auth.use_usernames') == 1 ? 'checked="checked"' : set_radio('auth.use_usernames', 1); ?> />
+				<input type="radio" name="use_usernames" id="use_usernames" value="1" <?php echo $settings['auth.use_usernames'] == 1 ? 'checked="checked"' : set_radio('auth.use_usernames', 1); ?> />
 			</label>
 			<label style="display: inline" class="text-left"><?php echo lang('bf_use_own_name') ?>
-				<input type="radio" name="use_usernames" id="use_usernames" value="2" <?php echo config_item('auth.use_usernames') == 2 ? 'checked="checked"' : set_radio('auth.use_usernames', 2); ?> />
+				<input type="radio" name="use_usernames" id="use_usernames" value="2" <?php echo $settings['auth.use_usernames'] == 2 ? 'checked="checked"' : set_radio('auth.use_usernames', 2); ?> />
 			</label>
 			<label style="display: inline" class="text-left"><?php echo lang('bf_email') ?>
-				<input type="radio" name="use_usernames" id="use_usernames" value="0" <?php echo config_item('auth.use_usernames') == 0 ? 'checked="checked"' : set_radio('auth.use_usernames', 0); ?> />
+				<input type="radio" name="use_usernames" id="use_usernames" value="0" <?php echo $settings['auth.use_usernames'] == 0 ? 'checked="checked"' : set_radio('auth.use_usernames', 0); ?> />
 			</label>
 		</div>
 		
 		<div>
 			<label><?php echo lang('bf_allow_remember') ?></label>
-			<input type="checkbox" name="allow_remember" id="allow_remember" value="1" <?php echo config_item('auth.allow_remember') == 1 ? 'checked="checked"' : set_checkbox('auth.allow_remember', 1); ?> />
+			<input type="checkbox" name="allow_remember" id="allow_remember" value="1" <?php echo $settings['auth.allow_remember'] == 1 ? 'checked="checked"' : set_checkbox('auth.allow_remember', 1); ?> />
 		</div>
 		
 		<div>
 			<label><?php echo lang('bf_remember_time') ?></label>
 			<select name="remember_length" id="remember_length">
-				<option value="604800"  <?php echo config_item('auth.remember_length') == '604800' ?  'selected="selected"' : '' ?>>1 <?php echo lang('bf_week') ?></option>
-				<option value="1209600" <?php echo config_item('auth.remember_length') == '1209600' ? 'selected="selected"' : '' ?>>2 <?php echo lang('bf_weeks') ?></option>
-				<option value="1814400" <?php echo config_item('auth.remember_length') == '1814400' ? 'selected="selected"' : '' ?>>3 <?php echo lang('bf_weeks') ?></option>
-				<option value="2592000" <?php echo config_item('auth.remember_length') == '2592000' ? 'selected="selected"' : '' ?>>30 <?php echo lang('bf_days') ?></option>
+				<option value="604800"  <?php echo $settings['auth.remember_length'] == '604800' ?  'selected="selected"' : '' ?>>1 <?php echo lang('bf_week') ?></option>
+				<option value="1209600" <?php echo $settings['auth.remember_length'] == '1209600' ? 'selected="selected"' : '' ?>>2 <?php echo lang('bf_weeks') ?></option>
+				<option value="1814400" <?php echo $settings['auth.remember_length'] == '1814400' ? 'selected="selected"' : '' ?>>3 <?php echo lang('bf_weeks') ?></option>
+				<option value="2592000" <?php echo $settings['auth.remember_length'] == '2592000' ? 'selected="selected"' : '' ?>>30 <?php echo lang('bf_days') ?></option>
 			</select>
 		</div>
 	
@@ -86,23 +86,23 @@
 		
 		<div>
 			<label><?php echo lang('bf_show_profiler') ?></label>
-			<input type="checkbox" name="show_profiler" value="1" <?php echo config_item('site.show_profiler') == 1 ? 'checked="checked"' : set_checkbox('auth.use_extended_profile', 1); ?> />
+			<input type="checkbox" name="show_profiler" value="1" <?php echo $settings['site.show_profiler'] == 1 ? 'checked="checked"' : set_checkbox('auth.use_extended_profile', 1); ?> />
 		</div>
 		
 		<div>
 			<label><?php echo lang('bf_do_check') ?></label>
-			<input type="checkbox" name="do_check" value="1" <?php echo config_item('updates.do_check') == 1 ? 'checked="checked"' : set_checkbox('updates.do_check', 1); ?> />
+			<input type="checkbox" name="do_check" value="1" <?php echo $settings['updates.do_check'] == 1 ? 'checked="checked"' : set_checkbox('updates.do_check', 1); ?> />
 			<p class="small" style="display: inline"><?php echo lang('bf_do_check_edge') ?></p>
 		</div>
 		
 		<div>
 			<label><?php echo lang('bf_update_show_edge') ?></label>
-			<input type="checkbox" name="bleeding_edge" value="1" <?php echo config_item('updates.bleeding_edge') == 1 ? 'checked="checked"' : set_checkbox('updates.bleeding_edge', 1); ?> />
+			<input type="checkbox" name="bleeding_edge" value="1" <?php echo $settings['updates.bleeding_edge'] == 1 ? 'checked="checked"' : set_checkbox('updates.bleeding_edge', 1); ?> />
 			<p class="small" style="display: inline"><?php echo lang('bf_update_info_edge') ?></p>
 		</div>		
 		<div>
 			<label><?php echo lang('bf_ext_profile_show') ?></label>
-			<input type="checkbox" name="use_ext_profile" value="1" <?php echo config_item('auth.use_extended_profile') == 1 ? 'checked="checked"' : set_checkbox('auth.use_extended_profile', 1); ?> />
+			<input type="checkbox" name="use_ext_profile" value="1" <?php echo $settings['auth.use_extended_profile'] == 1 ? 'checked="checked"' : set_checkbox('auth.use_extended_profile', 1); ?> />
 			<p class="small" style="display: inline"><?php echo lang('bf_ext_profile_info') ?></p>
 		</div>
 	</fieldset>

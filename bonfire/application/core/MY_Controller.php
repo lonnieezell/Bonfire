@@ -78,6 +78,8 @@ class Base_Controller extends MX_Controller {
 		
 		$this->lang->load('application');
 
+		$this->load->model('settings_model');
+
 		$this->load->driver('cache', array('adapter' => 'file'));
 		
 		$this->previous_page = $this->session->userdata('previous_page');
