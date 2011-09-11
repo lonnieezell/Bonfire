@@ -293,17 +293,15 @@ class Install extends MX_Controller {
 		$this->load->model('settings_model', 'settings_model', true);
 
 		$config = array(
-			'site.title'	=> $this->input->post('site_title'),
-			'site.system_email'	=> $this->input->post('email'),
-			'updates.do_check' => $this->curl_update,
-			'updates.bleeding_edge' => $this->curl_update
+			array('name' => 'site.title', 'value' => $this->input->post('site_title')),
+			array('name' => 'site.system_email', 'value' => $this->input->post('email')),
+			array('name' => 'updates.do_check', 'value' => $this->curl_update),
+			array('name' => 'updates.bleeding_edge', 'value' => $this->curl_update),
+			array('name' => 'sender_email', 'value' => $this->input->post('email')),
 		);
 		
 		$updated = FALSE;
-		foreach ($data as $name => $value)
-		{
-			$updated = $this->settings_model->update_where('name', $name, array('value' => $value));
-		}
+		$updated = $this->settings_model->update_batch($config, 'name');
 
 		if ($updated === FALSE)
 		{

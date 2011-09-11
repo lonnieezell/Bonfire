@@ -16,7 +16,7 @@
 		</thead>
 		<tbody>
 		<?php foreach ($commits as $commit) : ?>
-			<?php if ($commit->id > config_item('updates.last_commit')) :?>
+			<?php if ($commit->id > $this->settings_lib->item('updates.last_commit')) :?>
 			<tr>
 				<td><?php echo anchor('http://github.com/'. $commit->author->name, $commit->author->name, array('target' => '_blank')) ?></td>
 				<td><?php echo relative_time(strtotime($commit->committed_date)) ?></td>

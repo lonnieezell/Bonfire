@@ -29,7 +29,7 @@
 		<input type="text" name="email" class="medium" value="<?php echo isset($user) ? $user->email : set_value('email') ?>" />
 	</div>
 	
-	<?php if ( config_item('auth.login_type') !== 'email' OR config_item('auth.use_usernames')) : ?>
+	<?php if ( $this->settings_lib->item('auth.login_type') !== 'email' OR $this->settings_lib->item('auth.use_usernames')) : ?>
 	<div>
 		<label for="username"><?php echo lang('bf_username'); ?></label>
 		<input type="text" name="username" id="username" class="medium" value="<?php echo isset($user) ? $user->username : set_value('username') ?>" />
@@ -67,7 +67,7 @@
 	</fieldset>
 	<?php endif; ?>
 
-	<?php  if ( ! config_item('auth.use_extended_profile')) :?>
+	<?php  if ( ! $this->settings_lib->item('auth.use_extended_profile')) :?>
 	<fieldset>
 		<legend><?php echo lang('us_address'); ?></legend>
 		

@@ -30,7 +30,7 @@
 	
 		<div>
 			<label><?php echo lang('in_site_title'); ?></label>
-			<input type="text" name="site_title" id="site_title" placeholder="My Great Bonfire App" value="<?php echo set_value('site_title', config_item('site.title')) ?>" />
+			<input type="text" name="site_title" id="site_title" placeholder="My Great Bonfire App" value="<?php echo set_value('site_title', '') ?>" />
 		</div>
 		
 		<div>

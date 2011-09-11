@@ -82,7 +82,7 @@ class Users extends Front_Controller {
 						cases where we are presenting different information to different
 						roles that might cause the base destination to be not available.
 					*/
-					if (config_item('auth.do_login_redirect'))
+					if ($this->settings_lib->item('auth.do_login_redirect'))
 					{
 						Template::redirect($this->auth->login_destination);
 					} else
@@ -268,7 +268,7 @@ class Users extends Front_Controller {
 	public function register() 
 	{
 		// Are users even allowed to register? 
-		if (!$this->config->item('auth.allow_register'))
+		if (!$this->settings_lib->item('auth.allow_register'))
 		{
 			Template::set_message('New account registrations are not allowed.', 'attention');
 			redirect('/');
@@ -281,7 +281,7 @@ class Users extends Front_Controller {
 		{
 			// Validate input
 			$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|max_length[120]|callback_unique_email|xsx_clean');
-			if (config_item('auth.use_usernames'))
+			if ($this->settings_lib->item('auth.use_usernames'))
 			{
 				$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|callback_unique_username|xsx_clean');
 			}
