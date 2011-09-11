@@ -38,8 +38,6 @@ class Settings extends Admin_Controller {
 		
 		Template::set_block('sub_nav', 'settings/_sub_nav');
 		
-		$this->load->helper('config_file');
-		
 		$this->lang->load('emailer');
 	}
 	
@@ -62,23 +60,20 @@ class Settings extends Admin_Controller {
 			if ($this->form_validation->run() !== FALSE)
 			{
 				$data = array(
-					'sender_email'	=> $this->input->post('sender_email'),
-					'mailtype'		=> $this->input->post('mailtype'),
-					'protocol'		=> strtolower($_POST['protocol']),
-					'mailpath'		=> $_POST['mailpath'],
-					'smtp_host'		=> isset($_POST['smtp_host']) ? $_POST['smtp_host'] : '',
-					'smtp_user'		=> isset($_POST['smtp_user']) ? $_POST['smtp_user'] : '',
-					'smtp_pass'		=> isset($_POST['smtp_pass']) ? $_POST['smtp_pass'] : '',
-					'smtp_port'		=> isset($_POST['smtp_port']) ? $_POST['smtp_port'] : '',
-					'smtp_timeout'	=> isset($_POST['smtp_timeout']) ? $_POST['smtp_timeout'] : '5'
+					array('name' => 'sender_email', 'value' => $this->input->post('sender_email')),
+					array('name' => 'mailtype', 'value' => $this->input->post('mailtype')),
+					array('name' => 'protocol', 'value' => strtolower($_POST['protocol'])),
+					array('name' => 'mailpath', 'value' => $_POST['mailpath']),
+					array('name' => 'smtp_host', 'value' => isset($_POST['smtp_host']) ? $_POST['smtp_host'] : ''),
+					array('name' => 'smtp_user', 'value' => isset($_POST['smtp_user']) ? $_POST['smtp_user'] : ''),
+					array('name' => 'smtp_pass', 'value' => isset($_POST['smtp_pass']) ? $_POST['smtp_pass'] : ''),
+					array('name' => 'smtp_port', 'value' => isset($_POST['smtp_port']) ? $_POST['smtp_port'] : ''),
+					array('name' => 'smtp_timeout', 'value' => isset($_POST['smtp_timeout']) ? $_POST['smtp_timeout'] : '5')
 				);	
 				
 				$updated = FALSE;
 				// save the settings to the db
-				foreach ($data as $name => $value)
-				{
-					$updated = $this->settings_model->update_where('name', $name, array('value' => $value));
-				}
+				$updated = $this->settings_model->update_batch($data, 'name');
 
 				if ($updated)
 				{
@@ -88,7 +83,7 @@ class Settings extends Admin_Controller {
 				}
 				else 
 				{
-					Template::set_message('There was an error saving the file: config/email.', 'error');
+					Template::set_message('There was an error saving your settings.', 'error');
 				}
 			}
 		}
