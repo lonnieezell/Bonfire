@@ -21,6 +21,8 @@
 	THE SOFTWARE.
 */
 
+$lang['us_account_deleted']			= 'Unfortunately your account has been deleted. It has not yet been purged and <strong>may still</strong> be restored. Contact the administrator at %s.';
+
 $lang['us_bad_email_pass']			= 'Incorrect email or password.';
 $lang['us_must_login']				= 'You must be logged in to view that page.';
 $lang['us_no_permission']			= 'You do not have permission to access that page.';
@@ -85,3 +87,6 @@ $lang['us_register']				= 'Register';
 $lang['us_already_registered']		= 'Already registered?';
 
 $lang['us_action_save']				= 'Save User';
+$lang['us_unauthorized']			= 'Unauthorized. Sorry you do not have the appropriate permission to manage the "%s" role.';
+$lang['us_empty_id']				= 'No userid provided. You must provide a userid to perform this action.';
+$lang['us_self_delete']				= 'Unauthorized. Sorry, you can not delete yourself.';

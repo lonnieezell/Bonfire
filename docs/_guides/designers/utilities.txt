@@ -1,0 +1,43 @@
+Title: Template Utility Functions
+
+The template class also provides a handful of small convenience methods that help out with little page display-related issues.
+
+
+
+About: check_class()
+
+The _check_class()_ function is meant to be used within your primary navigation, and performs a very simple check to see if the first parameter matches the name of the controller that is currently running. If it does, it spits out _class="current"_.
+
+In your views...
+
+>	<ul id="nav-main">
+> 		<li><a href="#" <?php echo current_class('welcome') ?> >Home</a></li>
+> 		<li><a href="#" <?php echo current_class('about') ?> >About</a></li>
+> 	</ul>
+
+
+
+About: check_method()
+
+The _check_method()_ function is identical to the _check_class()_ function, above, except that it is meant for sub-navigation based on the method currently being executed (according to the router).
+
+
+
+About: breadcrumb()
+
+When you need to display some basic breadcrumbs in your layouts, you've got a quick little function to help you out...
+
+> <?php echo breadcrumb(); ?>
+
+This creates a basic breadcrumb that is a series of links separated by a symbol of your choosing, that would look something like...
+
+> Home : Pages : This Page
+
+The breadcrumb is built from the URI segments of the current page. If the default uri 
+segments will not work for a page in your application, you can pass an array of key/value 
+pairs that represent the crumbs. The key of each pair is the value that will be shown, while 
+the value of each pair represents the url segment to pass into it.
+
+You can change the symbol used to separate the links in your breadcrumb in the _config/application.php_ file.
+
+> $config['template.breadcrumb_symbol']	= ' : ';

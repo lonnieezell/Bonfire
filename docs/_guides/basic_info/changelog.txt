@@ -24,6 +24,7 @@ Additions:
 - Added new Activities module to allow other modules a core utility for tracking user activity. Was incorporated into the Users module.
 - Added a new Module Builder module that helps create skeleton code for new modules.
 - Now has a proper AJAX loading display.
+- Adding Activity records to the Module Builder
 
 Enhancements:
 - Forgot Password feature was revised for better security.

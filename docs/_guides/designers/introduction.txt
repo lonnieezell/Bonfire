@@ -1,0 +1,83 @@
+Title: Designer Introduction
+
+Bonfire provides a very flexible Template and Assets library that can be used to build powerful themes for your web application with a minimum fuss. There are few, if any, limitations to your design abilities. You can even use parent/child themes for subtle (or drastic) differences between different parts of your application with a minimum of extra coding. 
+
+Talk is cheap, though, so let's dive in and see what tools Bonfire really gives you to work with: 
+
+
+
+About: Themes
+
+Themes control the look and feel of your website, providing a wrapper around your module's views, as well as encouraging organized views that make it a snap to come back to a project 6 months down the road and still know where everything is. 
+
+About: You've Got The Look
+
+Every web page has a common set of elements that will, typically, wrap the page content. This might include a header, footer and a sidebar. It is these common elements, combined with the CSS and Javascript that make up a theme. 
+
+While you could simply call CodeIgniter's $this->load->view() method to load in your theme's files, that quickly becomes a maintenance nightmare. Not to mention a time-sink for a developer.
+
+That's where Bonfire's Template library comes in. It provides a simple way to almost automatically wrap your page content (or your views) within this common markup.
+
+Most web applications will have a minimum of two completely different looks. One for the public facing pages, and another for the admin pages. In Ocular, these would be two different themes, each with their own HTML, CSS, and Javascript. That way everything is nice and isolated from each other, and you don't have to worry about breaking the public facing pages while tweaking the look of your backend. 
+
+You might also use themes to provide a different look for all of your authentication pages, like login, signup, etc. It might be necessary to create a different theme for forums, or some other part of your site. 
+
+
+
+
+About: Just Like That. Only Different
+
+A common scenario on web sites is to have a common theme used across all of the public-facing pages, with variations for the home page, blog pages, and maybe even any store pages. 
+
+This is all still the same theme. After all, the overall look of the site doesn't change, just the placement of a few items, or a smaller header, etc. 
+
+We call these Layouts, and you can have as many as you want. 
+
+You might have your main layout built to handle the vast majority of your site. This file would be the _index_ layout. Then, you need to customize the home page enough that it deserves its own layout, so you create the home layout. You could do the same for the blog pages in--you guessed it!--the blog layout.
+
+All of these layouts are stored together under the theme folder so nothing gets misplaced.
+
+And you can specify which layout to use whenever you want. No questions asked. 
+
+
+
+
+About: Fiddly Bits
+
+Now you have three different layouts, but you're repeating code left and right and it's becoming a nightmare. No problem. 
+
+Using *blocks*, you can rip that common code for the header and put it into its own file in the theme. Then you can call theme_view('header') in each of your layouts and--bingo!--you're keeping yourself DRY (Don't Repeat Yourself, in case you haven't heard of that one.
+
+
+
+
+About: Every Asset In Its Place
+
+As your application grows, so does the amount of CSS and Javascript that needs to be used on each page. You can take a page from how I've heard Facebook does things and separate your code into only what is needed for that page. You place any common code that is used throughout the site in a file called _screen.css_, or _global.js_, and Bonfire will automatically load it for you.
+
+Then you realize that certain CSS is only used to style pages from one particular controller. You don't really want to load that for every other page, do you? Of course not! That's just wasted bandwidth that you (or your client) has to pay for. Create a CSS or Javascript file that matches the name of the controller, and Bonfire will automatically load that, too.
+
+Got custom libraries that you use? Or CSS common to two or more controllers, but not used enough to be called global? Then create your own CSS or Javascript file and, in your controller, tell Bonfire to load it by using the _Assets::add_css()_ and _Assets::add_js()_ 
+methods.
+
+
+
+About: A River Flows Through
+
+Wouldn't it be nice to have a base theme that you use for all of your public-facing websites that you can simply add another CSS file to and have a whole new style. Or maybe your app needs to provide multiple themes that the users can choose, and you want a parent theme to provide all of the structure, and child themes that require very little work to get up and running. 
+
+Yeah. You can do that. That's what Bonfire's Template engine excels at, actually. 
+
+Any theme can be used as the parent theme (as long as Bonfire thinks it is the default theme). To change the look, you simply create a new folder to hold your theme, drop in the necessary files (but only the ones that changed!) and tell Bonfire to use this new child theme by calling Template::set_theme('new_theme').
+
+At it's simplest, you could just provide a new _screen.css_ file to whip the new theme into shape, and call it a day. Don't worry, you'll still get all of the styles from your parent theme loaded also.
+
+However, you can get as crazy as you want to. You can create a _header.php_ ﬁle in your child theme that will override your parent theme's header.php file, while still using everything else. Or override the parent theme's looks for a single controller (the blog?) in your child theme. The possibilities are endless.
+
+
+
+About: A Quick Word About Performance
+
+While I've tried to keep things moving along as quickly as possible, any time you have this much flexibility (and this much searching through the ﬁle system), you have to give up a bit of performance. There's very fews ways to get around this, but we are brainstorming some ideas to improve the performance where possible. 
+
+The best way around this is to make careful use of CodeIgniter Reactor's built-in <Cache library at http://codeigniter.com/user_guide/libraries/caching.html>. When caching, especially to the file system, you should always take care to make sure the caching isn't slowing things down.
