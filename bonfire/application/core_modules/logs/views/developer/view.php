@@ -1,4 +1,4 @@
-<h2><span style="font-weight: normal">Viewing:</span> <?php echo str_replace(EXT, '', $log_file) ?></h2>
+<h2><span style="font-weight: normal">Viewing:</span> <?php echo $log_file_pretty; ?></h2>
 
 <?php if (!isset($log_content) || empty($log_content)) : ?>
 <div class="notification attention">
@@ -32,6 +32,17 @@
 		</div>
 		<?php endforeach; ?>
 	</div>
+
+	<?php if (has_permission('Bonfire.Logs.Manage')) : ?>
+		<br/>
+	
+		<!-- Purge? -->
+		<div class="box delete rounded">
+			<a class="button" id="delete-me" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'.$log_file); ?>" onclick="return confirm('Are you sure you want to delete this log file?')"><?php echo lang('log_delete1_button'); ?></a>
+			
+			<?php echo sprintf(lang('log_delete1_note'),$log_file_pretty); ?>
+		</div>
+	<?php endif; ?>
 
 <?php endif; ?>
 

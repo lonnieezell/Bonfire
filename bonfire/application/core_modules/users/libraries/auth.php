@@ -98,6 +98,10 @@ class Auth  {
 		
 		$this->ip_address = $this->ci->input->ip_address();
 		
+		// We need the users language file for this to work
+		// from other modules.
+		$this->ci->lang->load('users/users');
+		
 		log_message('debug', 'Auth class initialized.');
 				
 		if (!class_exists('CI_Session'))
@@ -139,7 +143,7 @@ class Auth  {
 		}
 	
 		// Grab the user from the db
-		$selects = 'id, email, username, first_name, last_name, users.role_id, salt, password_hash, users.role_id';
+		$selects = 'id, email, username, first_name, last_name, users.role_id, salt, password_hash, users.role_id, users.deleted';
 		
 		if (config_item('auth.do_login_redirect'))
 		{
@@ -151,6 +155,13 @@ class Auth  {
 		if (is_array($user))
 		{
 			$user = $user[0];
+		}
+		
+		// check if the account has been soft deleted.
+		if ($user->deleted >= 1) // in case we go to a unix timestamp later, this will still work.
+		{
+			Template::set_message(sprintf(lang('us_account_deleted'),config_item("site.system_email")), 'error');
+			return false;
 		}
 		
 		if ($user)
@@ -317,12 +328,13 @@ class Auth  {
 		// Check to see if the user has the proper permissions
 		if (!empty($permission) && !$this->has_permission($permission))
 		{
+			// set message telling them no permission THEN redirect
+			Template::set_message( lang('us_no_permission'), 'attention');
+						
 			if ($uri) 
 				Template::redirect($uri);
 			else
 				Template::redirect($this->ci->session->userdata('previous_page'));
-
-			Template::set_message( lang('us_no_permission'), 'attention');
 		} 
 		
 		return true;
@@ -378,6 +390,11 @@ class Auth  {
 		logit('[Auth.username()] - Why are we going through DB?' , 'warn');
 		
 		// We have to grab the user from the db and return his username. 
+		if (!class_exists('User_model')) 
+		{
+			$this->ci->load->model('users/User_model', 'user_model', true);
+		}
+		
 		$user = $this->ci->user_model->select('username')
 				->find($this->ci->session->userdata('user_id'));
 		
@@ -449,6 +466,10 @@ class Auth  {
 		logit('[Auth.user_name()] - Why are we going through DB?' , 'warn');
 		
 		// We have to grab the user from the db and return his name. 
+		if (!class_exists('User_model')) 
+		{
+			$this->ci->load->model('users/User_model', 'user_model', true);
+		}
 		$user = $this->ci->user_model->select('id, first_name, last_name')
 				->find($this->ci->session->userdata('user_id'));
 		

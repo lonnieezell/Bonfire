@@ -81,6 +81,9 @@ class Developer extends Admin_Controller {
 			
 			if (write_config('config', array('log_threshold' => $_POST['log_threshold'])))
 			{
+				// Log the activity
+				$this->activity_model->log_activity($this->auth->user_id(), 'Log settings modified from: ' . $this->input->ip_address(), 'logs');
+
 				Template::set_message('Log settings successfully saved.', 'success');
 			} else
 			{
@@ -115,6 +118,7 @@ class Developer extends Admin_Controller {
 		}
 				
 		Template::set('log_file', $file);
+		Template::set('log_file_pretty', date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file)))));
 		Template::set('log_content', file($this->config->item('log_path') . $file));
 		Template::render();
 	}
@@ -132,8 +136,27 @@ class Developer extends Admin_Controller {
 	
 		$this->load->helper('file');
 		
-		delete_files($this->config->item('log_path'));
-	
+		$file = $this->uri->segment(5);
+		
+		if ($file)
+		{
+			@unlink($this->config->item('log_path') . $file);
+			$activity_text = 'Log file '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));	
+		}
+		else 
+		{
+			delete_files($this->config->item('log_path'));
+			$activity_text = "All log files";
+			// restore the index.html file
+			@copy(APPPATH.'/index.html',$this->config->item('log_path').'/index.html');
+		}
+		
+		// since the $activity_text is being repurposed here, lowercase the first letter of the sentence to fit this sentence
+		Template::set_message("Successfully purged " . lcfirst($activity_text),'success');
+			
+		// Log the activity
+		$this->activity_model->log_activity($this->auth->user_id(), $activity_text . ' purged from: ' . $this->input->ip_address(), 'logs');
+
 		redirect(SITE_AREA .'/developer/logs');
 	}
 	

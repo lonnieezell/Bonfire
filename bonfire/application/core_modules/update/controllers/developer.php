@@ -52,18 +52,32 @@ class Developer extends Admin_Controller {
 			Template::set('commits', $this->github_lib->user_timeline('ci-bonfire', 'Bonfire', 'develop'));
 			
 			$tags = $this->github_lib->repo_refs('ci-bonfire', 'Bonfire');
-	
+
 			$version = 0.0;
 	
-			foreach ($tags as $tag => $ref)
+			if (is_object($tags) && count($tags))
 			{
-				if ($tag > $version)
+				foreach ($tags as $tag => $ref)
 				{
-					$version = $tag;
+					if ($tag > $version)
+					{
+						$version = $tag;
+					}
+				}
+
+				if (BONFIRE_VERSION === $version)
+				{
+					Template::set('update_message', 'You are running Bonfire version <b>'. BONFIRE_VERSION .'</b>. This is the latest available version of Bonfire.');
+				}
+				else
+				{
+					Template::set('update_message', 'You are running Bonfire version <b>'. BONFIRE_VERSION .'</b>. The latest available version is <b>'. $version .'</b>.');
 				}
 			}
-			
-			Template::set('update_message', 'You are running Bonfire version <b>'. BONFIRE_VERSION .'</b>. The latest available version is <b>'. $version .'</b>.');
+			else
+			{
+				Template::set('update_message', 'You are running Bonfire version <b>'. BONFIRE_VERSION .'</b>. <b>Unable to retrieve the latest version at this time.</b>');
+			}
 		}
 	
 		Template::render();
