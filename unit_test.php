@@ -26,32 +26,32 @@ $test_suite = new TestSuite();
 $test_suite->_label = 'CodeIgniter Test Suite';
 
 class CodeIgniterUnitTestCase extends UnitTestCase {
-	protected $_ci;
+	protected $ci;
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->_ci =& get_instance();
+		$this->ci =& get_instance();
 	}
 
 	public function __get($var)
     {
-		return $this->_ci->$var;
+		return $this->ci->$var;
     }
 }
 
 class CodeIgniterWebTestCase extends WebTestCase {
-	protected $_ci;
+	protected $ci;
 
 	public function __construct()
 	{
 		parent::WebTestCase();
-		$this->_ci =& get_instance();
+		$this->ci =& get_instance();
 	}
 
 	public function __get($var)
     {
-		return $this->_ci->$var;
+		return $this->ci->$var;
     }
 }
 
