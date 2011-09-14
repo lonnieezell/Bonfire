@@ -37,8 +37,8 @@ class Settings extends Admin_Controller {
 		$this->lang->load('roles');
 		
 		Assets::add_js($this->load->view('settings/roles_js', null, true), 'inline');
-		//Assets::add_module_js('roles', 'js/settings.js');
-		//Assets::add_module_css('roles', 'css/settings.css');
+		Assets::add_module_js('roles', 'js/settings.js');
+		Assets::add_module_css('roles', 'css/settings.css');
 		
 		// for the permission matrix
 		$this->load->helper('inflector');
@@ -354,6 +354,7 @@ class Settings extends Admin_Controller {
 		Template::set('roles', $this->role_model->find_all());
 		Template::set('matrix_permissions', $this->permission_model->select('permission_id, name')->find_all());
 		Template::set('matrix_roles', $this->role_permission_model->select('role_id, role_name')->find_all_roles());
+		
 		$role_permissions = $this->role_permission_model->find_all_role_permissions();
 		foreach($role_permissions as $rp) {
 			$current_permissions[] = $rp->role_id.','.$rp->permission_id;
@@ -364,6 +365,7 @@ class Settings extends Admin_Controller {
 		{
 			Template::set("toolbar_title", lang("role_manage"));
 		}
+		
 		Template::set_view('settings/permission_matrix');
 		Template::render();
 	}

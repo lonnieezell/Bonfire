@@ -23,7 +23,16 @@
 	<?php echo form_open(site_url('install'), array('id' => 'db-form') ) ?>
 	
 		<div>
-			<label><?php echo lang('in_lang'); ?></label>
+			<label><?php echo lang('in_environment'); ?></label>
+			<select name="environment">
+				<option value="development" <?php echo set_select('environment', 'development', TRUE); ?>>Development</option>
+				<option value="testing" <?php echo set_select('environment', 'testing'); ?>>Testing</option>
+				<option value="production" <?php echo set_select('environment', 'production'); ?>>Production</option>
+			</select>
+		</div>
+		
+		<div>
+			<label><?php echo lang('in_host'); ?></label>
 			<input type="text" name="hostname" value="<?php echo set_value('hostname', 'localhost') ?>" />
 		</div>
 		
