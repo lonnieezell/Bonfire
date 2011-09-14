@@ -2,6 +2,10 @@
 
 class test_console_lib extends CodeIgniterUnitTestCase {
 	
+	private $first_log_count;
+	
+	//--------------------------------------------------------------------
+	
 	public function __construct() 
 	{
 		parent::__construct();
@@ -10,6 +14,10 @@ class test_console_lib extends CodeIgniterUnitTestCase {
 		{
 			$this->ci->load->library('Console');
 		}
+		
+		$r = Console::get_logs();
+		$this->first_log_count = $r['log_count'];
+		unset($r);
 	}
 	
 	//--------------------------------------------------------------------
@@ -33,7 +41,7 @@ class test_console_lib extends CodeIgniterUnitTestCase {
 	{
 		Console::log('abcdef');
 		$r = Console::get_logs();
-		$this->assertEqual($r['log_count'], 1);
+		$this->assertEqual($r['log_count'], $this->first_log_count +1);
 	}
 	
 	//--------------------------------------------------------------------
