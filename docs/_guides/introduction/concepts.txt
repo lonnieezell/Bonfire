@@ -7,7 +7,7 @@ About: Contexts
 
 A *Context* is an area of similar responsibility, like _Settings_, _Reports_ or _Developer Tools_. The Contexts form the main navigation through Bonfire's admin area. There are three contexts that are required (as well as a Public Context), and you can create as many additional Contexts as you desire. 
 
-Learn more about working with <Contexts>.
+Learn more about working with <Contexts Overview>.
 
 
 
