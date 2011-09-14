@@ -65,7 +65,7 @@ class Activity_model extends BF_Model {
 		
 		foreach ($modules as $module)
 		{
-			$this->db->where('module', $module);
+			$this->db->or_where('module', $module);
 		}
 		
 		$this->db->select('activity_id, activities.user_id, activity, module, activities.created_on, first_name, last_name, username, email, last_login');
@@ -91,7 +91,7 @@ class Activity_model extends BF_Model {
 	*/
 	public function log_activity($user_id=null, $activity='', $module='any') 
 	{
-		if (empty($user_id) || !is_numeric($user_id))
+		if (empty($user_id) || !is_integer($user_id))
 		{
 			Template::set_message('You must provide a numeric user id to log activity.','error');
 			return false;
