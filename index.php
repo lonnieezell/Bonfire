@@ -204,24 +204,6 @@
 	}
 
 /*
- * -------------------------------------------------------------------
- *  Do a quick check to make sure the config files exist. If not,
- * copy it over. This is primarily for the installer, but should not
- * create a performance hit, since PHP caches results from file_exists().
- * -------------------------------------------------------------------
- */
-// config.php
-if (!file_exists(APPPATH .'config/config.php'))
-{
-	copy(APPPATH .'config/config.example.php', APPPATH .'config/config.php');
-}
-// application.php
-if (!file_exists(APPPATH .'config/application.php'))
-{
-	copy(APPPATH .'config/application.example.php', APPPATH .'config/application.php');
-}
-
-/*
  * --------------------------------------------------------------------
  * LOAD THE BOOTSTRAP FILE
  * --------------------------------------------------------------------

@@ -66,6 +66,15 @@ class Install extends MX_Controller {
 	);
 	
 	/*
+		Var: $reverse_writable_folders
+		An array of folders the installer can make unwriteable after 
+		installation.
+	*/
+	private $reverse_writeable_folders = array(
+		'config',
+	);
+	
+	/*
 		Var: $writeable_files
 		An array of files the installer checks to make
 		sure they can be written to.
@@ -86,6 +95,15 @@ class Install extends MX_Controller {
 		
 		$this->lang->load('application');
 		$this->lang->load('install');
+		
+		// check if the app is installed
+		$this->load->config('application');
+		$site_title = config_item('site.title');
+		if (!empty($site_title))
+		{
+			redirect('/');
+		}
+
         
 		$this->cURL_check();
 	}
@@ -96,15 +114,23 @@ class Install extends MX_Controller {
 	{ 
 		$this->load->library('form_validation');
 		$this->form_validation->CI =& $this;
-	
+		$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('database', lang('in_database'), 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim|strip_tags|xss_clean');
+
 		$this->startup_check();
 		
-		if (isset($_POST['hostname']) && isset($_POST['username']) && isset($_POST['database']) )
+		if ($this->form_validation->run() !== false)
 		{ 
 			// Write the database config files
 			$this->load->helper('config_file');
 			
 			$dbname = strip_tags($this->input->post('database'));
+			
+			// get the chosen environment
+			$environment = strip_tags($this->input->post('environment'));
 			
 			$data = array(
 				'main'	=> array(
@@ -114,7 +140,7 @@ class Install extends MX_Controller {
 					'database'	=> $dbname,
 					'dbprefix'	=> strip_tags($this->input->post('db_prefix'))
 				),
-				'development' => array(
+				$environment => array(
 					'hostname'	=> strip_tags($this->input->post('hostname')),
 					'username'	=> strip_tags($this->input->post('username')),
 					'password'	=> strip_tags($this->input->post('password')),
@@ -132,28 +158,31 @@ class Install extends MX_Controller {
 				// past this, we'll deal only with MySQL for now and create things
 				// the old fashioned way. Eventually, we'll make this more generic.
 				//
-				$db = mysql_connect(strip_tags($this->input->post('hostname')), strip_tags($this->input->post('username')), strip_tags($this->input->post('password')));
+				$db = @mysql_connect(strip_tags($this->input->post('hostname')), strip_tags($this->input->post('username')), strip_tags($this->input->post('password')));
 				
 				if (!$db)
 				{
-					die('Unable to connect to database: '. mysql_error());
+					Template::set_message('Unable to connect to database: '. mysql_error(), 'error');	
 				}
-				
-				$db_selected = mysql_select_db($dbname, $db);
-				if (!$db_selected)
+				else
 				{
-					// Table doesn't exist, so create it.
-					if (!mysql_query("CREATE DATABASE $dbname", $db))
+					$db_selected = mysql_select_db($dbname, $db);
+					if (!$db_selected)
 					{
-						die('Unable to create database: '. mysql_error());
+						// Table doesn't exist, so create it.
+						if (!mysql_query("CREATE DATABASE $dbname", $db))
+						{
+							die('Unable to create database: '. mysql_error());
+						}
+						mysql_close($db);
 					}
-					mysql_close($db);
+
+					redirect('install/account');
 				}
-				 
-				redirect('install/account');
-			} else
+			}
+			else
 			{
-				Template::set_message('There was an error saving the settings. Please verify that your database and development/database config files are writeable.', 'attention');	
+				Template::set_message('There was an error saving the settings. Please verify that your database and '.$environment.'/database config files are writeable.', 'attention');	
 			}
 		}
 	
@@ -217,6 +246,7 @@ class Install extends MX_Controller {
 		// Check Folders
 		foreach ($this->writeable_folders as $folder)
 		{
+			@chmod(APPPATH .$folder, 0777);
 			if (!is_writeable(APPPATH .$folder))
 			{
 				$folder_errors .= "<li>$folder</li>";
@@ -231,6 +261,7 @@ class Install extends MX_Controller {
 		// Check files
 		foreach ($this->writeable_files as $file)
 		{
+			@chmod(APPPATH .$file, 0666);
 			if (!is_writeable(APPPATH .$file))
 			{
 				$file_errors .= "<li>$file</li>";
@@ -256,16 +287,12 @@ class Install extends MX_Controller {
 			as simplifying what will need to be modified when some
 			sweeping changes are made. 
 		*/
-		if (!file_exists(APPPATH .'config/database.php') && is_writeable(APPPATH .'config/'))
+		if (!file_exists(APPPATH .'config/development/database.php') && is_writeable(APPPATH .'config/'))
 		{
 			// Database
-			copy(APPPATH .'config/database_format.php', APPPATH .'config/development/database.php');
-			copy(APPPATH .'config/database_format.php', APPPATH .'config/production/database.php');
-			copy(APPPATH .'config/database_format.php', APPPATH .'config/testing/database.php');
-			copy(APPPATH .'config/database_format.php', APPPATH .'config/database.php');
-
-			// Email
-			copy(APPPATH .'config/email_format.php', APPPATH .'config/email.php');
+			copy(APPPATH .'config/database.php', APPPATH .'config/development/database.php');
+			copy(APPPATH .'config/database.php', APPPATH .'config/production/database.php');
+			copy(APPPATH .'config/database.php', APPPATH .'config/testing/database.php');
 		}
 	}
 	
@@ -326,7 +353,13 @@ class Install extends MX_Controller {
 		$key = random_string('unique', 40);
 		
 		write_config('config', array('encryption_key' => $key));
-		
+
+		// Reverse Folders
+		foreach ($this->reverse_writeable_folders as $folder)
+		{
+			@chmod(APPPATH .$folder, 0774);
+		}
+
 		// We made it to the end, so we're good to go!
 		return true;
 	}

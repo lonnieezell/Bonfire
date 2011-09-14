@@ -315,7 +315,7 @@ function write_db_config($settings=null)
 		if (empty($contents) OR ! is_array($contents))
 		{
 			//logit('[Config_File_Helper] Error getting db file contents. Loading default database_format.php');
-			$contents = file_get_contents(APPPATH.'config/database_format'.EXT);
+			$contents = file_get_contents(APPPATH.'config/database'.EXT);
 		}
 
 		if ($env != 'submit')
