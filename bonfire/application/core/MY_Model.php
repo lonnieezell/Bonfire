@@ -437,11 +437,6 @@ class BF_Model extends CI_Model {
 	*/
 	public function delete_where($data=null) 
 	{
-		if ($this->_function_check(FALSE, $data) === FALSE)
-		{
-			return FALSE;
-		}
-		
 		if (empty($data))
 		{
 			$this->error = $this->lang->line('bf_model_no_data');
@@ -474,7 +469,7 @@ class BF_Model extends CI_Model {
 
 		if ($result)
 		{
-			return true;
+			return $result;
 		} 
 		
 		$this->error = 'DB Error: ' . mysql_error();
