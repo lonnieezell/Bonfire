@@ -32,7 +32,7 @@ class Activity_model extends BF_Model {
 
 	protected $table		= 'activities';
 	protected $key			= 'activity_id';
-	protected $soft_deletes	= false;
+	protected $soft_deletes	= true;
 	protected $date_format	= 'datetime';
 	protected $set_created	= true;
 	protected $set_modified = false;

@@ -1,5 +1,5 @@
 <style>
-.list-view .permission_set {cursor: pointer; border-bottom: 1px solid #ccc; background: #f5f5f5; vertical-align: middle; }
+.list-view .permission_set {cursor: pointer; border-bottom: 1px solid #CCCCCC; background: #F5F5F5; vertical-align: middle; }
 .list-view .permission_set img { height: 10px; width: 10px; float: right; margin: 14px 14px 0 0; }
 </style>
 
