@@ -91,7 +91,7 @@ $("#flex_table").dataTable({
 		"aoColumns": [
 			{ "sWidth": "10%" },
 			null,
-			{ "sWidth": "10%" },
-			{ "sWidth": "10%" }
+			{ "sWidth": "8em" },
+			{ "sWidth": "12em" }
 		]
 });
