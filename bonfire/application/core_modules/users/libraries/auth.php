@@ -358,7 +358,7 @@ class Auth  {
 	*/
 	public function user_id() 
 	{
-		return $this->ci->session->userdata('user_id');
+		return (int) $this->ci->session->userdata('user_id');
 	}
 	
 	//--------------------------------------------------------------------
