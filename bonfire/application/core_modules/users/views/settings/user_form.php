@@ -12,7 +12,7 @@
 </div>
 <?php endif; ?>
 
-<?php echo form_open($this->uri->uri_string(), 'class="constrained ajax-form"'); ?>
+<?php echo form_open($this->uri->uri_string(), array('class'=>'constrained ajax-form validate')); ?>
 
 	<div>
 		<label><?php echo lang('us_first_name'); ?></label>
@@ -26,13 +26,13 @@
 	
 	<div>
 		<label class="required"><?php echo lang('bf_email'); ?></label>
-		<input type="text" name="email" class="medium" value="<?php echo isset($user) ? $user->email : set_value('email') ?>" />
+		<input type="text" name="email" class="medium required email" value="<?php echo isset($user) ? $user->email : set_value('email') ?>" />
 	</div>
 	
 	<?php if ( config_item('auth.login_type') !== 'email' OR config_item('auth.use_usernames')) : ?>
 	<div>
 		<label for="username"><?php echo lang('bf_username'); ?></label>
-		<input type="text" name="username" id="username" class="medium" value="<?php echo isset($user) ? $user->username : set_value('username') ?>" />
+		<input type="text" name="username" id="username" class="medium required" value="<?php echo isset($user) ? $user->username : set_value('username') ?>" />
 	</div>
 	<?php endif; ?>
 

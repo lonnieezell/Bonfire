@@ -16,9 +16,21 @@
 	/*
 		Ajax form submittal
 	*/
-	$('form.ajax-form').ajaxForm({
-		target: '#content',
+   	$('form.ajax-form').ajaxForm({
+    		target: '#content',
+            beforeSubmit:function(arr, $form, options)
+            {
+                console.log($form);
+                if ($form.hasClass('validate'))
+                {
+                    if (!$form.valid())
+                        {
+                            return false;
+                        }
+                }
+            }
 	});
+    
 	
 	/*
 		AJAX Setup

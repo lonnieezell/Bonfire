@@ -4,13 +4,13 @@
 </div>
 <?php endif; ?>
 
-<?php echo form_open(SITE_AREA .'/settings/emailer', 'class="constrained"'); ?>
+<?php echo form_open(SITE_AREA .'/settings/emailer', array('class'=>"constrained validate")); ?>
 	
 	<br/>
 	
 	<div>
 		<label><?php echo lang('em_system_email'); ?></label>
-		<input type="email" name="sender_email" class="medium" value="<?php echo isset($sender_email) ? $sender_email : set_value('sender_email') ?>" />
+		<input type="email" name="sender_email" class="medium required email" value="<?php echo isset($sender_email) ? $sender_email : set_value('sender_email') ?>" />
 		<p class="small indent"><?php echo lang('em_system_email_note'); ?></p>
 	</div>
 	
@@ -91,7 +91,8 @@ head.ready(function(){
 	$('#server_type').change(function(){
 		// First, hide everything
 		$('#mail, #sendmail, #smtp').css('display', 'none');
-		
+        $('#smtp').children('input').removeClass('required');
+        $('#sendmail').children('input').addClass('required');
 		switch ($(this).val())
 		{
 			case 'mail':
@@ -99,9 +100,11 @@ head.ready(function(){
 				break;
 			case 'sendmail':
 				$('#sendmail').css('display', 'block');
+                $('#sendmail').children('input').addClass('required');
 				break;
 			case 'SMTP':
 				$('#smtp').css('display', 'block');
+                $('#smtp').children('input').addClass('required');
 				break;
 		}
 	});

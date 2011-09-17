@@ -12,11 +12,11 @@
 	$id = isset($permissions['permission_id']) ? "/".$permissions['permission_id'] : '';
 ?>
 
-<?php echo form_open($this->uri->uri_string(), 'class="constrained ajax-form"'); ?>
+<?php echo form_open($this->uri->uri_string(), array('class'=>'constrained ajax-form validate')); ?>
 
 <div>
         <?php echo form_label(lang('permissions_name').'<span class="required">*</span>', 'name'); ?>
-        <input id="name" type="text" name="name" maxlength="30" value="<?php echo set_value('name', isset($permissions['name']) ? $permissions['name'] : ''); ?>"  />
+        <input id="name" class="required" type="text" name="name" maxlength="30" value="<?php echo set_value('name', isset($permissions['name']) ? $permissions['name'] : ''); ?>"  />
 </div>
 
 <div>

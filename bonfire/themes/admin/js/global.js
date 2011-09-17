@@ -109,10 +109,23 @@ head.ready(function(){
 		$('#loader').hide();
 	});
 	
-	/*
+    /* 
+        Validator 
+    */
+    if ($('form.validate').length!=0)
+    {
+        $('form.validate').submit(function(){
+            $(this).validate();
+            if (!$(this).valid())
+               {
+                    return false;
+               }
+        });
+    }
+    /*
 		Hook up ajax links
 	*/
-	$('.ajaxify').live('click', function(e) {
+    $('.ajaxify').live('click', function(e) {
 		e.preventDefault();
 		
 		var url = $(this).attr('href');
