@@ -4,11 +4,11 @@
 </div>
 <?php endif; ?>
 
-<?php echo form_open($this->uri->uri_string(), 'class="constrained ajax-form"'); ?>
+<?php echo form_open($this->uri->uri_string(), array('class'=>'constrained ajax-form validate')); ?>
 
 	<div>
 		<label><?php echo lang('role_name'); ?></label>
-		<input type="text" name="role_name" class="medium" value="<?php echo isset($role) ? $role->role_name : '' ?>" />
+		<input type="text" name="role_name" class="medium required" value="<?php echo isset($role) ? $role->role_name : '' ?>" />
 	</div>
 	
 	<div style="vertical-align: top">

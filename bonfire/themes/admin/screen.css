@@ -487,27 +487,48 @@ noscript {
 	AJAX Loader
 */
 #loader {
-	position: absolute;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	background: rgba(0,0,0,0.6);
-	z-index: 9999;
-	display: none;
+    position: relative;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    display: none;
 }
-#loader .box {
-	position: relative;
-	margin: 20px auto;
-	text-align: center;
-	padding: 20px 15px;
-	background: #fff;
-	border: 5px solid #3a527c;
-	border-left: 0;
-	border-right: 0;
+#loader .overlay {
+    background-color: #384F78;
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
 }
-#loader .box img {
-	display: block;
-	padding: 10px;
-	margin: 0 auto;
+#loader .message {
+position: absolute;
+top: 45%;
+left: 50%;
+margin-left: -150px;
+margin-top: -50px;
+border: 2px solid #244360;
+background: url(images/ajax-loader.gif) 50% 50% no-repeat #384F78;
+height: 100px;
+width: 300px;
+z-index: 101;
+color: white;
+}
+
+/* 
+    jQuery Validation advice 
+*/
+label.error{
+display: block;
+color: #D40707 !important;
+font-weight: bold;
+padding-left: 15px;
+background: url(images/validation-arrow.gif) no-repeat;
+font-size: 11px;
+font-family: arial;
+margin-left: 20em;
+text-align: left;
+width: 60%;
+max-width: 35em;
 }
