@@ -38,6 +38,12 @@ bonfire/application/config/production/*
 bonfire/modules/**/.git/*
 bonfire/modules/**/.hg/*
 
+#Ignore configuration files
+bonfire/application/config/application.php
+bonfire/application/config/config.php
+bonfire/application/config/database.php
+bonfire/application/config/email.php
+
 # Ignore all custom modules.
 bonfire/modules/*
 # Except the following modules:
