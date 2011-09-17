@@ -2,8 +2,8 @@
 
 $config['mailtype'] = "text";
  
-$config['sender_email'] = "mariusvoian@yahoo.com";
-$config['protocol'] = "sendmail";
+$config['sender_email'] = "";
+$config['protocol'] = "mail";
 $config['mailpath'] = "/usr/sbin/sendmail";
 $config['smtp_host'] = "";
 $config['smtp_user'] = "";

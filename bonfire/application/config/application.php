@@ -21,8 +21,8 @@
 	THE SOFTWARE.
 */
  
-$config['site.title'] = "Test";
-$config['site.system_email'] = "mariusvoian@yahoo.com";
+$config['site.title'] = "";
+$config['site.system_email'] = "";
 $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
  
