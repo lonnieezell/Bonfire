@@ -28,6 +28,10 @@ assets/cache/*
 bonfire/application/config/development/*
 bonfire/application/config/testing/*
 bonfire/application/config/production/*
+bonfire/application/config/application.php
+bonfire/application/config/email.php
+bonfire/application/config/config.php
+bonfire/application/config/database.php
 
 # but leave the config folders there
 !bonfire/application/config/development/index.html
