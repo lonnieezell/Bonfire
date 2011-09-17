@@ -1,20 +1,20 @@
 <h2><em>&lsquo;<?php echo $server_type ?>&rsquo;</em>  -  <?php echo lang('db_database_settings'); ?> </h2>
 
-<?php echo form_open($this->uri->uri_string(), 'class="constrained ajax-form"') ?>
+<?php echo form_open($this->uri->uri_string(), array('class'=>'constrained ajax-form validate')) ?>
 			
 	<input type="hidden" name="server_type" value="<?php echo $server_type ?>" />
 	
 	<div>
 		<label for="hostname"><?php echo lang('db_hostname'); ?></label>
-		<input type="text" name="hostname" id="hostname" value="<?php echo isset($db_settings['default']['hostname']) ? $db_settings['default']['hostname'] : ''; ?>" />
+		<input type="text" name="hostname" id="hostname" value="<?php echo isset($db_settings['default']['hostname']) ? $db_settings['default']['hostname'] : ''; ?>" class="required"/>
 	</div>
 	<div>
 		<label for="database"><?php echo lang('db_dbname'); ?></label>
-		<input type="text" name="database" id="database" value="<?php echo isset($db_settings['default']['database']) ? $db_settings['default']['database'] : ''; ?>" />
+		<input type="text" name="database" id="database" value="<?php echo isset($db_settings['default']['database']) ? $db_settings['default']['database'] : ''; ?>" class="required"/>
 	</div>
 	<div>
 		<label for="username"><?php echo lang('bf_username'); ?></label>
-		<input type="text" name="username" id="username" value="<?php echo isset($db_settings['default']['username']) ? $db_settings['default']['username'] : ''; ?>" />
+		<input type="text" name="username" id="username" value="<?php echo isset($db_settings['default']['username']) ? $db_settings['default']['username'] : ''; ?>" class="required"/>
 	</div>
 	<div>
 		<label for="password"><?php echo lang('bf_password'); ?></label>
@@ -61,7 +61,7 @@
 		
 
 	<div class="submits">
-		<input type="submit" name="submit" value="<?php echo lang('bf_action_save') ?>" />
+		<input type="submit" name="submit" id="submit-button" value="<?php echo lang('bf_action_save') ?>" />
 	</div>
 
 <?php echo form_close(); ?>

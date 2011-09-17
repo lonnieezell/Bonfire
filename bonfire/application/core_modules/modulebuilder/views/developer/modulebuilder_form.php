@@ -39,7 +39,7 @@
 	</div>
 	<?php endif; ?>
 	
-	<?php echo form_open($cur_url."/index/".$field_total."/", array('id'=>"module_form",'class'=>"constrained ajax-form")); ?>
+	<?php echo form_open($cur_url."/index/".$field_total."/", array('id'=>"module_form",'class'=>"constrained ajax-form validate")); ?>
 	<div>  
 		<!-- Module Details -->
 		<fieldset style="margin-top: 0" id="module_details">
@@ -54,7 +54,7 @@
 			
 			<div>
 				<label for="module_name" class="block"><?php echo lang('mb_form_mod_name'); ?></label>
-				<input name="module_name" id="module_name" type="text" value="<?php echo set_value("module_name"); ?>" placeholder="<?php echo lang('mb_form_mod_name_ph'); ?>" />
+				<input name="module_name" id="module_name" class="required" type="text" value="<?php echo set_value("module_name"); ?>" placeholder="<?php echo lang('mb_form_mod_name_ph'); ?>" />
 			</div>
 			
 			<div class="mb_advanced">

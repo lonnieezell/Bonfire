@@ -4,16 +4,16 @@
 </div>
 <?php endif; ?>
 
-<?php echo form_open($this->uri->uri_string(), 'class="constrained"'); ?>
+<?php echo form_open($this->uri->uri_string(), array('class'=>"constrained validate")); ?>
 
 	<div>
 		<label><?php echo lang('bf_site_name') ?></label>
-		<input type="text" name="title" value="<?php echo isset($settings['site.title']) ? $settings['site.title'] : set_value('site.title') ?>" />
+		<input type="text" name="title" value="<?php echo isset($settings['site.title']) ? $settings['site.title'] : set_value('site.title') ?>" class="required" />
 	</div>
 	
 	<div>
 		<label><?php echo lang('bf_site_email') ?></label>
-		<input type="text" name="system_email" value="<?php echo isset($settings['site.system_email']) ? $settings['site.system_email'] : set_value('site.system_email') ?>" />
+		<input type="text" name="system_email" value="<?php echo isset($settings['site.system_email']) ? $settings['site.system_email'] : set_value('site.system_email') ?>"  class="required email"/>
 		<p class="small indent"><?php echo lang('bf_site_email_help') ?></p>
 	</div>
 	
@@ -109,7 +109,7 @@
 	<?php endif; ?>
 	
 	<div class="submits">
-		<input type="submit" name="submit" value="<?php echo lang('bf_action_save') .' '. lang('bf_context_settings') ?>" />
+		<input type="submit" name="submit" id="submit-button" value="<?php echo lang('bf_action_save') .' '. lang('bf_context_settings') ?>" />
 	</div>
 
 <?php echo form_close(); ?>
