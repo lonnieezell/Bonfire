@@ -15,22 +15,23 @@ code, pre {
 	padding: 12px 10px 12px 10px;
 }
 #header {
-	background: #eee;
-	border-bottom: 1px solid #ddd;
+	background: #1a1a1a;
+	border-bottom: 1px solid #0f0f0f;
 	padding: 10px;
 }
 #header h2 {
-	color: #900;
+	color: #eee;
 	margin: 0;
+	display: inline;
 }
 #nav {
 	margin: 10px 20px;
+	display: inline;
 }
 
 
 #report {
-	padding: 50px 0 0 0;
-	margin: 0 20px 20px;
+	padding: 50px 20px 0 20px;
 	position: relative;
 }
 .test {
@@ -67,6 +68,8 @@ code, pre {
 	margin: 10px 0;
 	position: absolute;
 	top: 0;
+	left: 0;
+	right: 0;
 }
 .test div.time {
 	background-color: #f9f9f9;

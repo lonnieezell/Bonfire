@@ -23,7 +23,7 @@ require_once SIMPLETEST . 'web_tester.php';
 require_once SIMPLETEST . 'extensions/my_reporter.php';
 
 $test_suite = new TestSuite();
-$test_suite->_label = 'CodeIgniter Test Suite';
+$test_suite->_label = 'Bonfire Test Suite';
 
 class CodeIgniterUnitTestCase extends UnitTestCase {
 	protected $ci;
