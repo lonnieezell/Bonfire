@@ -237,7 +237,7 @@ class test_user_model extends CodeIgniterUnitTestCase
 
 		foreach ($users as $user)
 		{
-			if ($user->deleted === 1)
+			if ($user->deleted == 1)
 			{
 				$found = true;
 			}
