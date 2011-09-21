@@ -37,13 +37,11 @@ class Settings extends Admin_Controller {
 		$this->lang->load('roles');
 		
 		Assets::add_js($this->load->view('settings/roles_js', null, true), 'inline');
-		Assets::add_module_js('roles', 'js/settings.js');
 		Assets::add_module_css('roles', 'css/settings.css');
 		
 		// for the permission matrix
 		$this->load->helper('inflector');
-		Assets::add_js('jquery.tablehover.pack.js');
-		Assets::add_css('css/role_settings.css');		
+		Assets::add_js('js/jquery.tablehover.pack.js');		
 		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
 		
 		// for the render_search_box()
