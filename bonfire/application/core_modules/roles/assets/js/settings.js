@@ -1,3 +1,3 @@
 head.ready(function(){
-	$(body).css('color', 'blue');
+	$('body').css('color', 'blue');
 });
