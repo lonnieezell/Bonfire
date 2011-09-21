@@ -861,7 +861,7 @@ class Assets {
 	{
 		self::$ci->load->helper('file');
 		
-		$cache_path = $_SERVER['DOCUMENT_ROOT'] . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
+		$cache_path = FCPATH . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
 		
 		delete_files($cache_path);
 	}
@@ -956,7 +956,7 @@ class Assets {
 		}
 
 		// Where to save the combined file to.
-		$cache_path = $_SERVER['DOCUMENT_ROOT'] . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
+		$cache_path = FCPATH . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
 
 		// full file path - without the extension
 		$file_path = $cache_path.$file_name;
@@ -990,7 +990,7 @@ class Assets {
 				}
 				else 
 				{
-					$app_file = $_SERVER['DOCUMENT_ROOT'] . '/'.str_replace(base_url(), '', $file);
+					$app_file = FCPATH . '/'.str_replace(base_url(), '', $file);
 				}
 				$app_file = strpos($app_file, '.js') ? $app_file : $app_file .'.js';
 				$files_array[$key] = $app_file;
