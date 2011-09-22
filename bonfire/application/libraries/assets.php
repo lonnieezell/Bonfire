@@ -693,7 +693,7 @@ class Assets {
 		Return:
 			A string with the link(s) to the script files.
 	*/
-	public function module_js() 
+	public function module_js($list=false) 
 	{		
 		if (!is_array(self::$module_scripts) || !count(self::$module_scripts))
 		{
@@ -715,8 +715,15 @@ class Assets {
 			'src'	=> $src,
 			'type'	=> 'text/javascript'
 		);
-			
-		$return = '<script'. self::attributes($attr) ." ></script>\n";
+
+		if ($list)
+		{	
+			$return .= '"'. $attr['src'] .'", ';
+		}
+		else 
+		{
+			$return .= '<script'. self::attributes($attr) ." ></script>\n";
+		}
 			
 		return trim($return, ', ');
 	}
