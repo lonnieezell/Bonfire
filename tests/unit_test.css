@@ -33,6 +33,11 @@ code, pre {
 	margin: 10px 20px;
 	display: inline;
 }
+#footer {
+	margin-top: 30px;
+	border-top: 1px solid #999;
+	padding: 20px;
+}
 
 
 #report {

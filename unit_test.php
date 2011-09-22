@@ -75,6 +75,7 @@ $CI->session->sess_destroy();
 
 $CI->load->helper('directory');
 
+$test_start = microtime();
 
 // Get all main tests
 if ($run_all OR ( ! empty($_POST) && ! isset($_POST['test'])))
@@ -169,6 +170,14 @@ function map_tests($location = '')
 	return $return;
 }
 
+function memory_usage()
+{
+	$size = memory_get_usage(true);
+
+	$unit=array('B','KB','MB','GB','TB','PB');
+    return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+}
+
 //variables for report
 $controllers = map_tests(TESTS_DIR . 'controllers');
 $models = map_tests(TESTS_DIR . 'models');
@@ -177,6 +186,14 @@ $libraries = map_tests(TESTS_DIR . 'libraries');
 $bugs = map_tests(TESTS_DIR . 'bugs');
 $helpers = map_tests(TESTS_DIR . 'helpers');
 $form_url =  'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
+$test_end = microtime();
+
+/* Benchmark */
+list($sm, $ss) = explode(' ', $test_start);
+list($em, $es) = explode(' ', $test_end);
+
+$elapse_time =  number_format(($em + $es) - ($sm + $ss), 4);
 
 //display the form
 if ($cli_mode) {

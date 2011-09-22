@@ -93,6 +93,10 @@
 	<div id="report">
 		<?php $test_suite->run(new MyReporter()); ?>
 	</div>
+	
+	<div id="footer">
+		Tests ran in <?php echo $elapse_time ?> seconds, using <?php echo memory_usage(); ?>
+	</div>
 		
 </body>
 </html>
