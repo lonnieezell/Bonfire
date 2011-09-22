@@ -105,8 +105,8 @@ class Settings extends Admin_Controller {
 			
 			$this->load->helper('file');
 			
-			write_file(APPPATH .'modules/emailer/views/email/_header.php', $header, 'w+');
-			write_file(APPPATH .'modules/emailer/views/email/_footer.php', $footer, 'w+');
+			write_file(APPPATH .'core_modules/emailer/views/email/_header.php', $header, 'w+');
+			write_file(APPPATH .'core_modules/emailer/views/email/_footer.php', $footer, 'w+');
 			
 			Template::set_message('Template successfully saved.', 'success');
 			
