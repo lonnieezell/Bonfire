@@ -2,7 +2,7 @@ body {
 	font: 0.75em "Helvetica Neue", Arial, Helvetica, sans-serif;
 	color: #000;
 	margin: 0;
-	padding: 0;
+	padding: 50px 0 0 0;
 }
 code, pre {
 	background-color: #f9f9f9;
@@ -18,6 +18,11 @@ code, pre {
 	background: #1a1a1a;
 	border-bottom: 1px solid #0f0f0f;
 	padding: 10px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 999;
 }
 #header h2 {
 	color: #eee;
