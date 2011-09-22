@@ -21,8 +21,8 @@
 	THE SOFTWARE.
 */
  
-$config['site.title'] = "";
-$config['site.system_email'] = "";
+$config['site.title'] = "Zodiac";
+$config['site.system_email'] = "icehawg@gmail.com";
 $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
  
@@ -35,8 +35,8 @@ $config['site.show_profiler'] = 1;
 // !For Update messages
 //--------------------------------------------------------------------
  
-$config['updates.do_check'] = 1;		// Whether to check for updates or not.
-$config['updates.bleeding_edge'] = 1;	// Show update message when new commits exist? 
+$config['updates.do_check'] = 0;		// Whether to check for updates or not.
+$config['updates.bleeding_edge'] = 0;	// Show update message when new commits exist? 
 $config['updates.last_commit']	= '';	// Stores the last installed commit ref
  
 //--------------------------------------------------------------------
