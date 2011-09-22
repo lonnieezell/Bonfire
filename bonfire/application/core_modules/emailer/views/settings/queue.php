@@ -9,6 +9,11 @@
 	</div>
 </div>
 
+<div class="padded text-right">
+	<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/force_process'); ?>" class="button">Process Now</a> 
+	<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/insert_test'); ?>" class="button">Insert Test Email</a>
+</div>
+
 <?php if (isset($emails) && is_array($emails) && count($emails)) : ?>
 
 	<table>
@@ -48,5 +53,19 @@
 	<div class="notification information">
 		<p><?php echo lang('em_stat_no_queue'); ?></p>
 	</div>
+
+<?php endif; ?>
+
+<?php if (isset($email_debug)) :?>
+
+<h3>Email Debugger</h3>
+
+<div class="notification attention">
+	<p>There was an error sending emails from the queue. The results appear below.</p>
+</div>
+
+<div class="box">
+<?php echo $email_debug; ?>
+</div>
 
 <?php endif; ?>

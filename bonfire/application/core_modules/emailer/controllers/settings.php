@@ -172,12 +172,52 @@ class Settings extends Admin_Controller {
 		$this->pager['uri_segment']	= 5;
 		
 		$this->pagination->initialize($this->pager);
+		
+		if ($debug_msg = $this->session->userdata('email_debug'))
+		{	
+			Template::set('email_debug', $debug_msg);
+			$this->session->unset_userdata('email_debug');
+			unset($debug_msg);
+		}
 	
 		Template::set('toolbar_title', 'Emailer Queue');
 		Template::render();
 	}
 	
 	//--------------------------------------------------------------------
+	
+	public function insert_test() 
+	{
+		$this->output->enable_profiler(false);
+
+		$this->load->library('emailer');
+		
+		$data = array(
+			'to'		=> config_item('site.system_email'),
+			'subject'	=> lang('em_test_mail_subject'),
+			'message'	=> lang('em_test_mail_body')
+		);
+		
+		$this->emailer->send($data, true);
+		
+		redirect(SITE_AREA .'/settings/emailer/queue');
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function force_process() 
+	{
+		$this->load->library('emailer');
+		
+		ob_start();
+		$this->emailer->process_queue();
+		ob_end_clean();
+		
+		redirect(SITE_AREA .'/settings/emailer/queue');
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	/*
 		Method: preview()
@@ -190,6 +230,8 @@ class Settings extends Admin_Controller {
 	public function preview($id=0) 
 	{
 		$this->output->enable_profiler(false);
+		
+		$this->load->model('emailer/emailer_model');
 		
 		if (!empty($id) && is_numeric($id))
 		{

@@ -134,7 +134,7 @@ class Emailer {
 		$subject = isset($data['subject']) ? $data['subject'] : false;
 		$message = isset($data['message']) ? $data['message'] : false;
 		$alt_message = isset($data['alt_message']) ? $data['alt_message'] : false;
-		
+	
 		// If we don't have everything, return false.
 		if ($to == false || $subject == false || $message == false)
 		{
@@ -225,7 +225,7 @@ class Emailer {
 		$this->ci->email->initialize($this->config);
 		
 		$this->ci->email->to($to);
-		$this->ci->email->from($from);
+		$this->ci->email->from($from, $this->ci->config->item('site.title'));
 		$this->ci->email->subject($subject);
 		$this->ci->email->message($message);
 		if ($alt_message)
@@ -264,8 +264,8 @@ class Emailer {
 		//$limit = 33; // 33 emails every 5 minutes = 400 emails/hour.
 		$this->ci->load->library('email');
 		
-		$this->ci->config->load('email');
-				
+		$this->ci->email->initialize($this->config);
+	
 		// Grab records where success = 0
 		$this->ci->db->limit($limit);
 		$this->ci->db->where('success', 0);
@@ -284,8 +284,8 @@ class Emailer {
 			echo '.'; 
 			
 			$this->ci->email->clear();
-			
-			$this->ci->email->from($this->ci->config->item('sender_email'));
+
+			$this->ci->email->from($this->config['sender_email'], $this->ci->config->item('site.title'));
 			$this->ci->email->to($email->to_email);
 
 			$this->ci->email->subject($email->subject);
@@ -295,22 +295,30 @@ class Emailer {
 			{
 				$this->ci->email->set_alt_message($email->alt_message);
 			}
+	
+			$prefix = $this->ci->db->dbprefix;
 			
-			if ($this->ci->email->send())
-			{
+			if ($this->ci->email->send() === TRUE)
+			{ 
 				// Email was successfully sent
-				$sql = "UPDATE email_queue
+				$sql = "UPDATE {$prefix}email_queue
 						SET success=1, attempts=attempts+1, last_attempt = NOW(), date_sent = NOW()
 						WHERE id = " .$email->id;
 				
 				$this->ci->db->query($sql);
 			} else 
-			{
+			{ 
 				// Error sending email
-				$sql = "UPDATE email_queue
+				$sql = "UPDATE {$prefix}email_queue
 						SET attempts = attempts+1, last_attempt=NOW()
 						WHERE id=". $email->id;
 				$this->ci->db->query($sql);
+				
+				if (class_exists('CI_Session'))
+				{ 
+					$result = $this->ci->email->print_debugger();
+					$this->ci->session->set_userdata('email_debug', $result);
+				}
 			}
 		}
 		
