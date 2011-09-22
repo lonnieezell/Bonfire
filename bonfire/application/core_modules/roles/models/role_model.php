@@ -37,7 +37,7 @@ class Role_model extends BF_Model {
 
 	protected $table		= 'roles';
 	protected $key			= 'role_id';
-	protected $soft_deletes	= false;
+	protected $soft_deletes	= true;
 	protected $date_format	= 'datetime';
 	protected $set_modified = false;
 	protected $set_created	= false;
@@ -56,7 +56,7 @@ class Role_model extends BF_Model {
 		
 		if (!class_exists('Permission_model'))
 		{
-			$this->load->model('permission_model');
+			$this->load->model('permissions/permission_model');
 		}
 	}
 	
@@ -76,36 +76,52 @@ class Role_model extends BF_Model {
 	*/
 	public function find($id=null) 
 	{
+		if (empty($id) || !is_integer($id))
+		{
+			return false;
+		}
+	
 		$role = parent::find($id);
 		
-		// Grab our permissions for the role.
-		$permissions = $this->permission_model->find_all_by('status','active');
-		$permission_array = array();
-		foreach($permissions as $key => $permission)
+		if ($role == false) 
 		{
-			$permission_array[$permission->name] = $permission;
+			return false;
 		}
-		$role->permissions = $permission_array;
-
-		if (!$id) { return $role; }
 		
-		
-		$role_permissions = $this->role_permission_model->find_for_role($id);
-		$permission_array = array();
-		if( is_array($role_permissions) && count($role_permissions))
-		{
-			foreach($role_permissions as $key => $permission)
-			{
-				$permission_array[$permission->permission_id] = 1;
-			}
-		}
-		$role->role_permissions = $permission_array;
-		
+		$this->get_role_permissions($role);
 		
 		return $role;
 	}
 	
 	//--------------------------------------------------------------------
+	
+	/*
+		Method: find_by_name()
+		
+		Locates a role based on the role name. Case doesn't matter.
+		
+		Parameters:
+			$name	- A string with the name of the role.
+			
+		Returns:
+			An object with the role and it's permissions.
+	*/
+	public function find_by_name($name=null) 
+	{
+		if (empty($name))
+		{
+			return false;
+		}
+		
+		$role = $this->find_by('role_name', $name);
+		
+		$this->get_role_permissions($role);
+		
+		return $role;
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	/*
 		Method: update()
@@ -161,7 +177,21 @@ class Role_model extends BF_Model {
 	
 	//--------------------------------------------------------------------
 	
-	
+	/*
+		Method: delete()
+		
+		Deletes a role. By default, it will perform a soft_delete and 
+		leave the permissions untouched. However, if $purge == TRUE, then
+		all permissions related to this role are also deleted. 
+		
+		Parameters:
+			$id		- An integer with the role_id to delete.
+			$purge	- If false, will perform a soft_delete. 
+					  If true, will remove the role and related permissions from db.
+					  
+		Returns:
+			true/false
+	*/
 	function delete($id=0, $purge=false) 
 	{
 		if ($purge === true)
@@ -183,16 +213,26 @@ class Role_model extends BF_Model {
 		// delete the record
 		$deleted = parent::delete($id);
 		
-		if( TRUE === $deleted )
+		if ($deleted === TRUE && $purge === TRUE)
 		{
 			// now delete the role_permissions for this permission
 			$this->role_permission_model->delete_for_role($id);
 			
 			// now delete the manage permission for this role
 			$prefix = $this->db->dbprefix;
+			
+			if (!class_exists('Permission_model'))
+			{
+				$this->load->model('permissions/permission_model');
+			}
+			
 			$perm = $this->permission_model->find_by('name','Permissions.'.ucwords($role->role_name).'.Manage');
-			$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Permissions.".ucwords($role->role_name).".Manage')");
-			$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='".$perm->permission_id."';");
+			
+			if ($perm)
+			{
+				$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Permissions.".ucwords($role->role_name).".Manage')");
+				$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='".$perm->permission_id."';");
+			}
 		}
 		
 		return $deleted;
@@ -215,10 +255,71 @@ class Role_model extends BF_Model {
 		
 		if ($query->num_rows() == 1)
 		{
-			return $query->row()->role_id;
+			return (int)$query->row()->role_id;
 		}	
 		
 		return false;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	//--------------------------------------------------------------------
+	// !PRIVATE METHODS
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: get_role_permissions()
+		
+		Finds the permissions and role_permissions array for a single role.
+		
+		Parameters:
+			$role	- A reference to an existing role object. This object
+					  is modified directly.
+			
+		Returns: 
+			void
+			
+		Access:
+			Private
+	*/
+	public function get_role_permissions(&$role) 
+	{
+		if (!is_object($role))
+		{
+			return;
+		}
+		
+		$permission_array = array();
+		
+		// Grab our permissions for the role.
+		$permissions = $this->permission_model->find_all_by('status','active');
+		
+		// Permissions
+		foreach($permissions as $key => $permission)
+		{
+			$permission_array[$permission->name] = $permission;
+		}
+		$role->permissions = $permission_array;
+		
+		if (!class_exists('Role_permission_model'))
+		{
+			$this->load->model('roles/role_permission_model');
+		}
+		
+		// Role Permissions
+		$permission_array = array();
+		$role_permissions = $this->role_permission_model->find_for_role($role->role_id);
+		
+		if (is_array($role_permissions) && count($role_permissions))
+		{
+			foreach($role_permissions as $key => $permission)
+			{
+				$permission_array[$permission->permission_id] = 1;
+			}
+		}
+		
+		$role->role_permissions = $permission_array;
+		unset($permission_array);
 	}
 	
 	//--------------------------------------------------------------------
