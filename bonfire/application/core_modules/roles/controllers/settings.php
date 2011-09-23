@@ -351,7 +351,7 @@ class Settings extends Admin_Controller {
 	{
 		Template::set('roles', $this->role_model->find_all());
 		Template::set('matrix_permissions', $this->permission_model->select('permission_id, name')->find_all());
-		Template::set('matrix_roles', $this->role_permission_model->select('role_id, role_name')->find_all_roles());
+		Template::set('matrix_roles', $this->role_model->select('role_id, role_name')->find_all());
 		
 		$role_permissions = $this->role_permission_model->find_all_role_permissions();
 		foreach($role_permissions as $rp) {
@@ -392,7 +392,7 @@ class Settings extends Admin_Controller {
 	{
 		$pieces = explode(',',$this->input->post('role_perm', true));
 		
-		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find($pieces[0])->role_name.'.Manage')) {
+		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find( (int) $pieces[0])->role_name.'.Manage')) {
 			die(lang("matrix_auth_fail"));
 			return false;
 		}
