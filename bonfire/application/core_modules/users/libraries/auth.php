@@ -152,6 +152,13 @@ class Auth  {
 		
 		$user = $this->ci->user_model->select($selects)->find_by(config_item('auth.login_type'), $login);
 		
+		// check to see if a value of false came back, meaning that the username or email or password doesn't exist.
+		if($user == false) 
+		{
+			$this->errors[] = $this->ci->lang->line('us_bad_email_pass');
+			return false;
+		}
+		
 		if (is_array($user))
 		{
 			$user = $user[0];
