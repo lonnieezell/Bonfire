@@ -23,7 +23,7 @@
 	<?php echo form_open(site_url('install'), array('id' => 'db-form') ) ?>
 	
 		<div>
-			<label><?php echo lang('in_environment'); ?></label>
+			<label for="environment"><?php echo lang('in_environment'); ?></label>
 			<select name="environment">
 				<option value="development" <?php echo set_select('environment', 'development', TRUE); ?>>Development</option>
 				<option value="testing" <?php echo set_select('environment', 'testing'); ?>>Testing</option>
@@ -32,27 +32,27 @@
 		</div>
 		
 		<div>
-			<label><?php echo lang('in_host'); ?></label>
+			<label for="hostname"><?php echo lang('in_host'); ?></label>
 			<input type="text" name="hostname" value="<?php echo set_value('hostname', 'localhost') ?>" />
 		</div>
 		
 		<div>
-			<label><?php echo lang('bf_username'); ?></label>
+			<label for="username"><?php echo lang('bf_username'); ?></label>
 			<input type="text" name="username" value="<?php echo set_value('username') ?>" />
 		</div>
 		
 		<div>
-			<label><?php echo lang('bf_password'); ?></label>
+			<label for="password"><?php echo lang('bf_password'); ?></label>
 			<input type="password" name="password" id="password" value="" />
 		</div>
 		
 		<div>
-			<label><?php echo lang('in_database'); ?></label>
+			<label for="database"><?php echo lang('in_database'); ?></label>
 			<input type="text" name="database" id="database" value="<?php echo set_value('database', 'bonfire_dev') ?>" />
 		</div>
 		
 		<div>
-			<label><?php echo lang('in_prefix'); ?></label>
+			<label for="db_prefix"><?php echo lang('in_prefix'); ?></label>
 			<input type="text" name="db_prefix" value="<?php echo set_value('db_prefix', 'bf_'); ?>" />
 		</div>
 		

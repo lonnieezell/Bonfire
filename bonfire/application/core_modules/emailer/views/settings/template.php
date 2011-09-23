@@ -3,12 +3,12 @@
 <?php echo form_open(SITE_AREA .'/settings/emailer/template'); ?>
 
 	<div class="fancy-text">
-		<label><?php echo lang('em_header'); ?></label>
+		<label for="header"><?php echo lang('em_header'); ?></label>
 		<textarea name="header" rows="15"><?php echo htmlspecialchars_decode($this->load->view('email/_header', null, true)) ;?></textarea>
 	</div>
 	
 	<div class="fancy-text">
-		<label><?php echo lang('em_footer'); ?></label>
+		<label for="footer"><?php echo lang('em_footer'); ?></label>
 		<textarea name="footer" rows="15"><?php echo htmlspecialchars_decode($this->load->view('email/_footer', null, true)) ;?></textarea>
 	</div>
 

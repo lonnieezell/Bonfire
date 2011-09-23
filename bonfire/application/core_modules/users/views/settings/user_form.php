@@ -15,17 +15,17 @@
 <?php echo form_open($this->uri->uri_string(), 'class="constrained ajax-form"'); ?>
 
 	<div>
-		<label><?php echo lang('us_first_name'); ?></label>
+		<label for="first_name"><?php echo lang('us_first_name'); ?></label>
 		<input type="text" name="first_name" value="<?php echo isset($user) ? $user->first_name : set_value('first_name') ?>" />
 	</div>
 
 	<div>
-		<label><?php echo lang('us_last_name'); ?></label>
+		<label for="last_name"><?php echo lang('us_last_name'); ?></label>
 		<input type="text" name="last_name" value="<?php echo isset($user) ? $user->last_name : set_value('last_name') ?>" />
 	</div>
 	
 	<div>
-		<label class="required"><?php echo lang('bf_email'); ?></label>
+		<label class="required" for="email"><?php echo lang('bf_email'); ?></label>
 		<input type="text" name="email" class="medium" value="<?php echo isset($user) ? $user->email : set_value('email') ?>" />
 	</div>
 	
@@ -38,11 +38,11 @@
 
 	<br />	
 	<div>
-		<label class="required"><?php echo lang('bf_password'); ?></label>
+		<label class="required" for="password"><?php echo lang('bf_password'); ?></label>
 		<input type="password" id="password" name="password" value="" />
 	</div>
 	<div>
-		<label class="required"><?php echo lang('bf_password_confirm'); ?></label>
+		<label class="required" for="pass_confirm"><?php echo lang('bf_password_confirm'); ?></label>
 		<input type="password" id="pass_confirm" name="pass_confirm" value="" />
 	</div>
 	
@@ -51,7 +51,7 @@
 		<legend><?php echo lang('us_role'); ?></legend>
 		
 		<div>
-			<label><?php echo lang('us_role'); ?></label>
+			<label for="role_id"><?php echo lang('us_role'); ?></label>
 			<select name="role_id">
 			<?php if (isset($roles) && is_array($roles) && count($roles)) : ?>
 				<?php foreach ($roles as $role) : ?>
@@ -72,27 +72,27 @@
 		<legend><?php echo lang('us_address'); ?></legend>
 		
 		<div>
-			<label><?php echo lang('us_street_1'); ?></label>
+			<label for="street_1"><?php echo lang('us_street_1'); ?></label>
 			<input type="text" name="street_1" class="medium" value="<?php echo isset($user) ? $user->street_1 : set_value('street_1') ?>" />
 		</div>
 		<div>
-			<label><?php echo lang('us_street_2'); ?></label>
+			<label for="street_2"><?php echo lang('us_street_2'); ?></label>
 			<input type="text" name="street_2" class="medium" value="<?php echo isset($user) ? $user->street_2 : set_value('street_2') ?>" />
 		</div>
 		<div>
-			<label><?php echo lang('us_city'); ?></label>
+			<label for="city"><?php echo lang('us_city'); ?></label>
 			<input type="text" name="city" value="<?php echo isset($user) ? $user->city : set_value('city') ?>" />
 		</div>
 		<div>
-			<label><?php echo lang('us_country') ?></label>
+			<label for="iso"><?php echo lang('us_country') ?></label>
 			<?php echo country_select(isset($user) && !empty($user->country_iso) ? $user->country_iso : 'US', 'US'); ?>
 		</div>
 		<div>
-			<label><?php echo lang('us_state'); ?></label>
+			<label for="state_code"><?php echo lang('us_state'); ?></label>
 			<?php echo state_select(isset($user) ? $user->state_code : '', 'MO', isset($user) && !empty($user->country_iso) ? $user->country_iso : 'US'); ?>
 		</div>
 		<div>
-			<label><?php echo lang('us_zipcode'); ?></label>
+			<label for="zipcode"><?php echo lang('us_zipcode'); ?></label>
 			<input type="text" name="zipcode" size="7" maxlength="7" style="width: 6em; display: inline;" value="<?php echo isset($user) ? $user->zipcode : set_value('zipcode', ' ') ?>"  /> 
 		</div>
 
