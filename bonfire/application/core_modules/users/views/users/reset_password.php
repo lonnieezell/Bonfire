@@ -11,11 +11,11 @@
 <?php echo form_open(current_url()) ?>
 	<input type="hidden" name="user_id" value="<?php echo $user->id ?>" />
 
-	<label><?php echo lang('bf_password'); ?></label>
+	<label for="password"><?php echo lang('bf_password'); ?></label>
 	<input type="text" name="password" placeholder="Password..." />
 	<p class="small"><?php echo lang('us_password_mins'); ?></p>
 	
-	<label><?php echo lang('bf_password_confirm'); ?></label>
+	<label for="pass_confirm"><?php echo lang('bf_password_confirm'); ?></label>
 	<input type="text" name="pass_confirm" placeholder="Again..." />
 	
 	<div class="submits">

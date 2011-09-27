@@ -46,7 +46,7 @@
 
 				<div>
 					<br/>
-					<label><?php echo lang('log_the_following'); ?></label>
+					<label for="log_threshold"><?php echo lang('log_the_following'); ?></label>
 					<select name="log_threshold">
 						<option value="0" <?php echo ($log_threshold == 0) ? 'selected="selected"' : ''; ?>><?php echo lang('log_what_0'); ?></option>
 						<option value="1" <?php echo ($log_threshold == 1) ? 'selected="selected"' : ''; ?>><?php echo lang('log_what_1'); ?></option>
