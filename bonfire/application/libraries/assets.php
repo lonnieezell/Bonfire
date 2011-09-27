@@ -339,7 +339,7 @@ class Assets {
 		$attr = array(
 			'rel'	=> 'stylesheet',
 			'type'	=> 'text/css',
-			'href'	=> site_url(self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.$min.".css"),
+			'href'	=> base_url() .self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.$min.".css",
 			'media'	=> $media
 		);
 
@@ -803,7 +803,7 @@ class Assets {
 
 		// Create our shell opening
 		if (self::generate_file($files, $file_name, 'js')) {
-			$output .= site_url(self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.".js");
+			$output .= base_url() .self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.".js";
 		}
 		
 		return $output;
