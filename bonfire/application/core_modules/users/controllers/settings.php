@@ -110,7 +110,8 @@ class Settings extends Admin_Controller {
 			if ($id = $this->save_user())
 			{
 				$user = $this->user_model->find($id);
-				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_create').' '. $user->role_name . ': '.(config_item('auth.use_usernames') ? $user->username : $user->email), 'users');
+				$log_name == config_item('auth.use_own_names') ? $this->auth->user_name() : (config_item('auth.use_usernames') ? $user->username : $user->email);
+				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
 				
 				Template::set_message('User successfully created.', 'success');
 				Template::redirect(SITE_AREA .'/settings/users');
@@ -149,8 +150,8 @@ class Settings extends Admin_Controller {
 			if ($this->save_user('update', $user_id))
 			{
 				$user = $this->user_model->find($user_id);
-
-				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_edit') .': '.(config_item('auth.use_usernames') ? $user->username : $user->email), 'users');
+				$log_name == config_item('auth.use_own_names') ? $this->auth->user_name() : (config_item('auth.use_usernames') ? $user->username : $user->email);
+				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_edit') .': '.$log_name, 'users');
 			
 				Template::set_message('User successfully updated.', 'success');
 			}
@@ -194,7 +195,8 @@ class Settings extends Admin_Controller {
 				if ($this->user_model->delete($id))
 				{
 					$user = $this->user_model->find($id);
-					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_delete') . ': '.(config_item('auth.use_usernames') ? $user->username : $user->email), 'users');
+					$log_name == config_item('auth.use_own_names') ? $this->auth->user_name() : (config_item('auth.use_usernames') ? $user->username : $user->email);
+					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_delete') . ': '.$log_name, 'users');
 					Template::set_message('The User was successfully deleted.', 'success');
 				}
 				else
@@ -321,8 +323,6 @@ class Settings extends Admin_Controller {
 	
 	private function save_user($type='insert', $id=0) 
 	{
-		$this->form_validation->set_rules('first_name', lang('us_first_name'), 'trim|strip_tags|max_length[20]|xss_clean');
-		$this->form_validation->set_rules('last_name', lang('us_last_name'), 'trim|strip_tags|max_length[20]|xss_clean');
 		if ($type == 'insert')
 		{
 			$this->form_validation->set_rules('email', 'Email', 'required|trim|callback_unique_email|valid_email|max_length[120]|xss_clean');
@@ -334,10 +334,20 @@ class Settings extends Admin_Controller {
 			$this->form_validation->set_rules('password', 'Password', 'trim|strip_tags|max_length[40]|xss_clean');
 			$this->form_validation->set_rules('pass_confirm', 'Password (again)', 'trim|strip_tags|matches[password]|xss_clean');
 		}
+		
 		if (config_item('auth.use_usernames'))
 		{
 			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|callback_unique_username|xsx_clean');
 		}
+		
+		$required = false;
+		if (config_item('auth.use_own_names'))
+		{
+			$required = 'required|';
+		} 
+		$this->form_validation->set_rules('first_name', lang('us_first_name'), $required.'trim|strip_tags|max_length[20]|xss_clean');
+		$this->form_validation->set_rules('last_name', lang('us_last_name'), $required.'trim|strip_tags|max_length[20]|xss_clean');
+		
 		if  ( ! config_item('auth.use_extended_profile'))
 		{
 			$this->form_validation->set_rules('street1', 'Street 1', 'trim|strip_tags|xss_clean');

@@ -53,11 +53,11 @@
 			<label style="display: inline" class="text-left"><?php echo lang('bf_username') ?>
 				<input type="radio" name="use_usernames" id="use_usernames" value="1" <?php echo config_item('auth.use_usernames') == 1 ? 'checked="checked"' : set_radio('auth.use_usernames', 1); ?> />
 			</label>
-			<label style="display: inline" class="text-left"><?php echo lang('bf_use_own_name') ?>
-				<input type="radio" name="use_usernames" id="use_usernames" value="2" <?php echo config_item('auth.use_usernames') == 2 ? 'checked="checked"' : set_radio('auth.use_usernames', 2); ?> />
-			</label>
 			<label style="display: inline" class="text-left"><?php echo lang('bf_email') ?>
 				<input type="radio" name="use_usernames" id="use_usernames" value="0" <?php echo config_item('auth.use_usernames') == 0 ? 'checked="checked"' : set_radio('auth.use_usernames', 0); ?> />
+			</label>
+			<label style="display: inline" class="text-left"><?php echo lang('bf_use_own_name') ?>
+				<input type="checkbox" name="use_own_names" id="use_own_names" value="1" <?php echo config_item('auth.use_own_names') == 1 ? 'checked="checked"' : set_checkbox('auth.use_own_names', 2); ?> />
 			</label>
 		</div>
 		
