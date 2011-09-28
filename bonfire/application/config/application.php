@@ -1,4 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+$config['auth.use_extended_profile'] = 0;
 /*
 	Copyright (c) 2011 Lonnie Ezell
  
@@ -72,10 +74,7 @@ $config['auth.use_own_names'] = 0;
  
 // Should we do a custom login redirect, or just go to '/'?
 $config['auth.do_login_redirect'] = 1;
- 
-// Does User accounts have extended profile? Enabling will allow meta user data (wip)
-// 	also omits some default springboard user fields (eg: omits address fields) to allow customization.
-$config['auth.use_extended_profile'] = 0;
+
  
 //--------------------------------------------------------------------
 // !CONTEXTS
