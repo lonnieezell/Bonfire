@@ -147,11 +147,6 @@ class User_model extends BF_Model {
 			$trigger_data = array('user_id'=>$id, 'data'=>$data);
 			Events::trigger('before_user_update', $trigger_data);
 		}
-	
-		if (empty($data['username'])) 
-		{
-			unset($data['username']);
-		}
 		
 		if (empty($data['pass_confirm']) && isset($data['password'])) 
 		{
