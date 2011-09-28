@@ -5,13 +5,50 @@ Version 0.2-RC2 (Unreleased)
 Additions:
 - Major revamp to the ModuleBuilder
 - Added new date_difference function to MY_date_helper.
+- Removed the Tester module and replaced with integrated SimpleTest suite.
+- You can now view and delete system-wide activities in the Reports context.
+
+Enhancements:
+- Emailer has better tools for testing the Queue.
+- Activities logged for more activities throughout Bonfire.
+- Added soft_deletes, created and modified fields to ModuleBuilder.
+- ModuleBuilder creates better localized files.
+- ModuleBuilder now automatcially runs the migration files for a new module.
+- Permission names are now allowed to be 255 chars long (up from 50).
+- where() method in MY_Model now accepts arrays or custom strings as parameter.
+- Better permissions in place to prevent users of other roles from modifying roles you don't want them to.
+- Added set_default_theme() method and parameter to Template lib.
+- Installer improvements to make it more usable and stable (we hope)
+- Creating and deleting roles adds/removes proper permissions to the system.
 
 Bugs:
 - Fixed bug in MY_Form_Validation to allow the form validation library to work with Modular Extensions HMVC. See http://www.mahbubblog.com/php/form-validation-callbacks-in-hmvc-in-codeigniter/ for more details.
+- User module plays better with various display/login options
+- User module allows for saving empty usernames.
+- Permission matrix now no longer throws PHP error in certain cases.
+- If no user existed with provided email/username, the system was throwing PHP errors instead of displaying the proper error to the user.
+- Assets lib no longer using site_url() to build file names and causing errors.
+- Fixed broken path for asset caching.
+- Assets lib now properly finds module assets for both core and user modules.
+- Assets lib now works under SSL conditions.
+- Email Template now saves to correct location.
+- Emailer now correctly sends HTML emails from the queue instead of text-only.
+- User_model now returns correct 'deleted' flag (instead of the role's deleted flag).
+- Auth library now loads the User model if it's not already loaded.
+- Users can no longer delete themselves.
+- Modulebuilder no longer spits out html char codes for single quotes in generated migration SQL.
+- Modulebuilder now creates safer code when using cdeditor.
+- Reports context now checks for proper permisisons (instead of checking for content context permissions).
+- Deleted users can no longer log into the system.
+- When changing the name of a role, the corresponding Permission.[ROLENAME].Manage now updated to reflect the new name.
+- Base_Controller now actually populates the previous_page url.
+- Profile no longer causing errors in IE7.
+- Removed E_STRICT from default error_reporting as it was reporting errors from CodeIgniter and HMVC that we had no control over.
+
 
 Version 0.2-RC1
 
-Released: Currently under development
+Released: August 11, 2011
 
 Additions:
 - The Emailer class has a new setting, html or text email format.
@@ -54,3 +91,8 @@ Bugs:
 - Config helper now allows apostrophes in config items.
 - HMVC modules locations array moved to application/config.php so it won't be overwritten in the future.
 - write_config() function now writes backups to application/archives like it should have been.
+
+
+
+Version 0.1 - Initial Release
+Released: March 30, 2011
