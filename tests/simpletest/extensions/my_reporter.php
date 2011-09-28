@@ -29,9 +29,8 @@ class MyReporter extends SimpleReporter {
      */
     public function paintGroupStart($test_name, $size)
     {
+        echo '<div class="test-group">';
         parent::paintGroupStart($test_name, $size);
-    	//echo '<h3>Test Suite: "' . $test_name . '" started.</h3>';
-    	//flush();
     }
 
     /**
@@ -43,6 +42,7 @@ class MyReporter extends SimpleReporter {
      */
     public function paintGroupEnd($test_name)
     {
+    	echo '</div>';
     	parent::paintGroupEnd($test_name);
         //echo '</h3>Test Suite: "' . $test_name . '" finished.</h3><br />';
     	//flush();
@@ -60,7 +60,7 @@ class MyReporter extends SimpleReporter {
     {
         parent::paintCaseStart($test_name);
 		echo '<h2>' . $test_name . '</h2>';
-		//echo '<div class="test">';
+		echo '<div class="test-reports">';
         
     	flush();
     }
@@ -75,7 +75,7 @@ class MyReporter extends SimpleReporter {
     {
         parent::paintCaseEnd($test_name);
         //echo '<strong>Test Case: "' . $test_name . '" finished.</strong><br />';
-		//echo '</div>';
+		echo '</div>';
     	flush();
     }
 

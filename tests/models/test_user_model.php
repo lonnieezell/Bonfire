@@ -66,7 +66,8 @@ class test_user_model extends CodeIgniterUnitTestCase
 	{
 		$user = array(
 			'email'	=> 'darth@starwars.com',
-			'password'	=> 'dierebelscum'
+			'password'	=> 'dierebelscum',
+			'username'	=> 'Darth Vader'
 		);
 		$this->user_id = $this->ci->user_model->insert($user);
 		$this->assertIsA($this->user_id, 'Integer');
@@ -141,6 +142,26 @@ class test_user_model extends CodeIgniterUnitTestCase
 	}
 	
 	//--------------------------------------------------------------------
+	
+	//--------------------------------------------------------------------
+	// Updates
+	//--------------------------------------------------------------------
+	
+	public function test_update_allows_empty_usernames() 
+	{
+		$this->assertTrue($this->ci->user_model->update($this->user_id, array('username'=>'') ));
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function test_update_empty_username_sticks() 
+	{
+		$user = $this->ci->user_model->find($this->user_id);
+		$this->assertEqual($user->username, '');
+	}
+	
+	//--------------------------------------------------------------------
+	
 	
 	//--------------------------------------------------------------------
 	// Finds
