@@ -150,7 +150,7 @@ class Settings extends Admin_Controller {
 			if ($this->save_user('update', $user_id))
 			{
 				$user = $this->user_model->find($user_id);
-				$log_name == config_item('auth.use_own_names') ? $this->auth->user_name() : (config_item('auth.use_usernames') ? $user->username : $user->email);
+				$log_name = config_item('auth.use_own_names') ? $this->auth->user_name() : (config_item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_edit') .': '.$log_name, 'users');
 			
 				Template::set_message('User successfully updated.', 'success');

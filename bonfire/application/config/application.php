@@ -67,6 +67,8 @@ $config['auth.allow_remember'] = 1;
  
 // How long should a user be remembered in the system? In seconds.
 $config['auth.remember_length'] = 1209600;
+
+$config['auth.use_own_names'] = 0;
  
 // Should we do a custom login redirect, or just go to '/'?
 $config['auth.do_login_redirect'] = 1;

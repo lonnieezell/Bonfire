@@ -465,10 +465,12 @@ class Auth  {
 			// if true parameter
 			// Did we set a custom var for this?
 		*/
+		/*
 		if (config_item('auth.use_own_names'))
 		{
 			return $this->ci->session->userdata('auth_custom');
 		}
+		*/
 		
 		logit('[Auth.user_name()] - Why are we going through DB?' , 'warn');
 		
