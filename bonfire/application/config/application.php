@@ -23,8 +23,8 @@ $config['auth.use_extended_profile'] = 0;
 	THE SOFTWARE.
 */
  
-$config['site.title'] = "Bonfire Testsite";
-$config['site.system_email'] = "lonnieje@gmail.com";
+$config['site.title'] = "";
+$config['site.system_email'] = "";
 $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
  
