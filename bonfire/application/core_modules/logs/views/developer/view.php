@@ -1,4 +1,11 @@
 <h2><span style="font-weight: normal">Viewing:</span> <?php echo $log_file_pretty; ?></h2>
+<p>
+    <?php if($log_est_lines < 1000) : ?>
+        Estimated number of entries : <?php echo $log_est_lines; ?>
+    <?php else : ?>
+        Showing <strong>latest</strong> 1000 entries of an estimated <?php echo $log_est_lines; ?>
+    <?php endif; ?>    
+</p>
 
 <?php if (!isset($log_content) || empty($log_content)) : ?>
 <div class="notification attention">
