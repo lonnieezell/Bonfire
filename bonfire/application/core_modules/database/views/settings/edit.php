@@ -1,3 +1,8 @@
+<?php if (validation_errors()) : ?>
+<div class="notification error">
+	<?php echo validation_errors(); ?>
+</div>
+<?php endif; ?>
 <h2><em>&lsquo;<?php echo $server_type ?>&rsquo;</em>  -  <?php echo lang('db_database_settings'); ?> </h2>
 
 <?php echo form_open($this->uri->uri_string(), 'class="constrained ajax-form"') ?>

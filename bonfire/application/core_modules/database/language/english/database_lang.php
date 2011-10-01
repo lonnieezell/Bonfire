@@ -63,6 +63,7 @@ $lang['db_restore_file']		= 'Restore database from file';
 $lang['db_restore_attention']	= '<p>Restoring a database from a backup file will result in some or all of your database being erased before restoring.</p><p><strong>This may result in a loss of data</strong>.</p>';
 
 $lang['db_database_settings']	= 'Database Settings';
+$lang['db_server_type']			= 'Server Type';
 $lang['db_hostname']			= 'Hostname';
 $lang['db_dbname']				= 'Database Name';
 $lang['db_advanced_options']	= 'Advanced Options';
