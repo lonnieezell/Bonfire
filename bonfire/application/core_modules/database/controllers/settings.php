@@ -71,10 +71,13 @@ class Settings extends Admin_Controller {
 
 				if (write_db_config(array($server_type => $_POST)) == TRUE)
 				{
-					Template::set_message('Your settings were successfully saved.', 'success');
-				} else 
+					Template::set_message(lang('db_successful_save'), 'success');
+					$this->activity_model->log_activity($this->auth->user_id(), $server_type . ' : ' . lang('db_successful_save_act'), 'database');
+				}
+				else 
 				{
-					Template::set_message('There was an error saving the settings.', 'error');
+					Template::set_message(lang('db_erroneous_save'), 'error');
+					$this->activity_model->log_activity($this->auth->user_id(), $server_type . ' : ' . lang('db_erroneous_save_act'), 'database');
 				}
 			}
 		}
@@ -82,8 +85,9 @@ class Settings extends Admin_Controller {
 		$settings = read_db_config($server_type);
 		
 		if (! empty ($settings))
-
+		{
 			Template::set('db_settings', $settings[$server_type]);
+		}
 	
 		Template::set('server_type', $server_type);
 		Template::render();
