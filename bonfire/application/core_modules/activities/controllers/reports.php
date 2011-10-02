@@ -44,7 +44,6 @@ class Reports extends Admin_Controller {
 		Assets::add_module_js('activities', 'jquery.dataTables.min.js');
 		Assets::add_module_css('activities', 'datatable.css');	
 		
-		Assets::add_js($this->load->view('reports/activities_js', null, true), 'inline');
 	}
 	
 	//--------------------------------------------------------------------
@@ -56,6 +55,8 @@ class Reports extends Admin_Controller {
 	*/
 	public function index() 
 	{
+		Assets::add_js($this->load->view('reports/activities_js', null, true), 'inline');
+
 		// get top 5 modules
 		$query = $this->db->select('module, COUNT(module) AS activity_count')->group_by('module')->order_by('activity_count','DESC')->limit(5)->get($this->activity_model->get_table());
 		Template::set('top_modules', $query->result());
