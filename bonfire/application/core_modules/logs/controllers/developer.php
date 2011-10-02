@@ -42,8 +42,6 @@ class Developer extends Admin_Controller {
 		// Logging enabled?
 		Template::set('log_threshold', $this->config->item('log_threshold'));
 		
-		Assets::add_js($this->load->view('developer/logs_js', null, true), 'inline');
-		
 		$this->lang->load('logs');
 	}
 	
@@ -57,6 +55,8 @@ class Developer extends Admin_Controller {
 	public function index() 
 	{
 		$this->load->helper('file');
+		
+		Assets::add_js($this->load->view('developer/logs_js', null, true), 'inline');
 		
 		// Log Files
 		Template::set('logs', get_filenames($this->config->item('log_path')));

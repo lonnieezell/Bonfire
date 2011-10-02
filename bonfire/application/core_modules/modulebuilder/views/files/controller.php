@@ -35,8 +35,6 @@ $mb_constructor =<<<END
 		\$this->load->model('{$module_name_lower}_model', null, true);
 		\$this->lang->load('{$module_name_lower}');
 		
-		Assets::add_js(\$this->load->view('{$controller_name}/js', null, true), 'inline');
-		
 		{constructor_extras}
 	}
 	
@@ -58,6 +56,8 @@ $mb_index =<<<END
 		\$data = array();
 		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
 
+		Assets::add_js(\$this->load->view('{$controller_name}/js', null, true), 'inline');
+		
 		Template::set('data', \$data);
 		Template::set('toolbar_title', "Manage {$module_name}");
 		Template::render();

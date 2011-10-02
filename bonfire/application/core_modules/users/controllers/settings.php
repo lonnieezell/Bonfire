@@ -34,8 +34,6 @@ class Settings extends Admin_Controller {
 		
 		$this->load->model('roles/role_model');
 		
-		Assets::add_js($this->load->view('settings/users_js', null, true), 'inline');
-		
 		$this->lang->load('users');
 	}
 	
@@ -55,6 +53,8 @@ class Settings extends Admin_Controller {
 	{
 		$offset = $this->uri->segment(4);
 	
+		Assets::add_js($this->load->view('settings/users_js', null, true), 'inline');
+		
 		$total_users = $this->user_model->count_all();
 	
 		$this->pager['base_url'] = site_url(SITE_AREA .'/settings/users/index');

@@ -36,7 +36,6 @@ class Settings extends Admin_Controller {
 		
 		Template::set('toolbar_title', 'Database Settings');
 		
-		Assets::add_js($this->load->view('settings/database_js', null, true), 'inline');
 	}
 	
 	//--------------------------------------------------------------------
@@ -44,6 +43,8 @@ class Settings extends Admin_Controller {
 
 	public function index() 
 	{		
+		Assets::add_js($this->load->view('settings/database_js', null, true), 'inline');
+
 		Template::set('settings', read_db_config());
 	
 		Template::render();
