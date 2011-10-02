@@ -106,7 +106,7 @@ $config['module_permissions'] = array(
 	'content'		=> array(
 		'views'		=> 'Site.Content.View'
 	),
-	'stats'			=> array(
+	'reports'		=> array(
 		'emailer'	=> 'Bonfire.Emailer.View'
 	),
 	'appearance'	=> array(
