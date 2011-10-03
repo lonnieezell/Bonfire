@@ -659,7 +659,9 @@ class Assets {
 				}
 			
 				$attr = array(
-					'src'	=> strpos($script, $http_protocol . ':') !== false ?
+					'src'	=> (strpos($script, $http_protocol . ':') !== false || 
+                                        strpos($script, 'http:') !== false || 
+                                        strpos($script, 'https:') !== false ) ?
 						
 						// It has a full url built in, so leave it alone
 						$script :
