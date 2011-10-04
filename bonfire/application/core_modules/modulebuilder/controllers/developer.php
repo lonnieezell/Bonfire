@@ -76,6 +76,8 @@ class Developer extends Admin_Controller {
 	*/
 	public function create()
 	{
+		Assets::add_js($this->load->view('developer/modulebuilder_js', null, true), 'inline');
+		
 		$this->auth->restrict('Bonfire.Modules.Add');
 		
 		$hide_form = false;

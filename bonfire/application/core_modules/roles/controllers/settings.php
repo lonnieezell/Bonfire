@@ -38,12 +38,10 @@ class Settings extends Admin_Controller {
 		
 		Assets::add_module_css('roles', 'css/settings.css');
 		
-		// for the permission matrix
-		$this->load->helper('inflector');
-		Assets::add_js('js/jquery.tablehover.pack.js');		
-		
 		// for the render_search_box()
 		$this->load->helper('ui/ui');
+		
+		Assets::add_js('js/jquery.tablehover.pack.js');
 	}
 		
 	//--------------------------------------------------------------------
@@ -52,6 +50,7 @@ class Settings extends Admin_Controller {
 	{
 		// Get User Counts
 		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
+		
 		Template::set('role_counts', $this->user_model->count_by_roles());
 		Template::set('total_users', $this->user_model->count_all());
 		
@@ -348,6 +347,10 @@ class Settings extends Admin_Controller {
 	*/
 	public function permission_matrix()
 	{
+		// for the permission matrix
+		$this->load->helper('inflector');
+		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
+		
 		Template::set('roles', $this->role_model->find_all());
 		Template::set('matrix_permissions', $this->permission_model->select('permission_id, name')->find_all());
 		Template::set('matrix_roles', $this->role_model->select('role_id, role_name')->find_all());
