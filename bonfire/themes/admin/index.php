@@ -15,6 +15,8 @@
 	
 	<title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo config_item('site.title') ?></title>
 	
+	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+	
 	<?php echo Assets::css(null, 'screen', true); ?>
 	
 	<!-- Fix the mobile Safari auto-zoom bug -->
