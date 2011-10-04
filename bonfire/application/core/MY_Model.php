@@ -724,7 +724,7 @@ class BF_Model extends CI_Model {
 			{
 				$this->db->order_by($field, $order);
 			}
-			else if (is_array($order_by))
+			else if (is_array($field))
 			{
 				foreach ($field as $f => $o)
 				{
