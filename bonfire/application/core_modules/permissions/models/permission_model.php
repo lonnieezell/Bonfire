@@ -93,5 +93,32 @@ class Permission_model extends BF_Model {
 		
 		return $deleted;
 	}
+	
+	// --------------------------------------------------------------------
+	
+	/*
+		Method: update()
 
+		Update a particular permission from the database
+		Remove it from role_permissions if set to inactive
+		
+		Parameters:
+			$id		- The primary_key value of the row to update.
+			$data	- An array of key/value pairs to update.
+							
+		Return:
+			true/false
+	*/
+	function update($id, $data)
+	{
+		if ($data['status'] == 'inactive')
+		{
+			// now delete the role_permissions for this permission since it is no longer active
+			$this->role_permission_model->delete_for_permission($id);
+		}
+		return parent::update($id, $data);
+	}
+
+	// --------------------------------------------------------------------
+	
 }
