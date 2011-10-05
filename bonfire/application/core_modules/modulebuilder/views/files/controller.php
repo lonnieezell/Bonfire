@@ -309,7 +309,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 }
 
 $body = str_replace('{constructor_extras}', $extras, $body);
-unset($extra);
+unset($extras);
 
 //--------------------------------------------------------------------
 
@@ -321,105 +321,108 @@ if (in_array('index', $action_names))
 }
 
 //--------------------------------------------------------------------
-
-// Create
-
-if (in_array('create', $action_names))
+if ($controller_name != $module_name_lower)
 {
-	$body .= $mb_create;
-	
-	$body = str_replace('{create_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Create', $body);
-}
 
-//--------------------------------------------------------------------
+	// Create
 
-// Edit
-
-if (in_array('edit', $action_names))
-{
-	$body .= $mb_edit;
-	
-	$body = str_replace('{edit_permission}', ucfirst($module_name).'.'.ucfirst($controller_name).'.Edit', $body);
-}
-
-//--------------------------------------------------------------------
-
-// Delete
-
-if (in_array('delete', $action_names))
-{
-	$body .= $mb_delete;
-	
-	$body = str_replace('{delete_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $body);
-}
-
-//--------------------------------------------------------------------
-
-// Save
-
-$body .= $mb_save;
-
-$rules = '';
-
-$last_field = 0;
-for($counter=1; $field_total >= $counter; $counter++)
-{
-	// only build on fields that have data entered. 
-		
-	// Due to the required if rule if the first field is set the the others must be
-
-	if (set_value("view_field_label$counter") == NULL)
+	if (in_array('create', $action_names))
 	{
-		continue; 	// move onto next iteration of the loop
+		$body .= $mb_create;
+
+		$body = str_replace('{create_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Create', $body);
 	}
-	
-	// we set this variable as it will be used to place the comma after the last item to build the insert db array
-	$last_field = $counter;
-	
-	$rules .= '			
-$this->form_validation->set_rules(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\',\''.set_value("view_field_label$counter").'\',\'';
-	
-	// set a friendly variable name
-    $validation_rules = $this->input->post('validation_rules'.$counter);
 
-	// rules have been selected for this fieldset
-    $rule_counter = 0;
+	//--------------------------------------------------------------------
 
-    if (is_array($validation_rules))
-    {       
-		// add rules such as trim|required|xss_clean
-		foreach($validation_rules as $key => $value)
+	// Edit
+
+	if (in_array('edit', $action_names))
+	{
+		$body .= $mb_edit;
+
+		$body = str_replace('{edit_permission}', ucfirst($module_name).'.'.ucfirst($controller_name).'.Edit', $body);
+	}
+
+	//--------------------------------------------------------------------
+
+	// Delete
+
+	if (in_array('delete', $action_names))
+	{
+		$body .= $mb_delete;
+
+		$body = str_replace('{delete_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $body);
+	}
+
+	//--------------------------------------------------------------------
+
+	// Save
+
+	$body .= $mb_save;
+
+	$rules = '';
+
+	$last_field = 0;
+	for($counter=1; $field_total >= $counter; $counter++)
+	{
+		// only build on fields that have data entered. 
+
+		// Due to the required if rule if the first field is set the the others must be
+
+		if (set_value("view_field_label$counter") == NULL)
+		{
+			continue; 	// move onto next iteration of the loop
+		}
+
+		// we set this variable as it will be used to place the comma after the last item to build the insert db array
+		$last_field = $counter;
+
+		$rules .= '			
+	$this->form_validation->set_rules(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\',\''.set_value("view_field_label$counter").'\',\'';
+
+		// set a friendly variable name
+		$validation_rules = $this->input->post('validation_rules'.$counter);
+
+		// rules have been selected for this fieldset
+		$rule_counter = 0;
+
+		if (is_array($validation_rules))
+		{       
+			// add rules such as trim|required|xss_clean
+			foreach($validation_rules as $key => $value)
+			{
+				if ($rule_counter > 0)
+				{
+					$rules .= '|';
+				}
+
+				if ($value == 'unique')	{		
+					$prefix = $this->db->dbprefix;
+					$rules .= $value.'['.$prefix.$table_name.'.'.$module_name_lower.'_'.set_value("view_field_name$counter").'.'.set_value("primary_key_field").'.\'.$id.\']';
+				} else {
+					$rules .= $value;	
+				}
+				$rule_counter++;
+			}
+		}
+
+		if (set_value("db_field_type$counter") != 'ENUM' && set_value("db_field_length_value$counter") != NULL)
 		{
 			if ($rule_counter > 0)
 			{
 				$rules .= '|';
 			}
-		
-			if ($value == 'unique')	{		
-				$prefix = $this->db->dbprefix;
-				$rules .= $value.'['.$prefix.$table_name.'.'.$module_name_lower.'_'.set_value("view_field_name$counter").'.'.set_value("primary_key_field").'.\'.$id.\']';
-			} else {
-				$rules .= $value;	
-			}
-			$rule_counter++;
-		}
-    }
-	
-	if (set_value("db_field_type$counter") != 'ENUM' && set_value("db_field_length_value$counter") != NULL)
-	{
-		if ($rule_counter > 0)
-		{
-			$rules .= '|';
+
+			$rules .= 'max_length['.set_value("db_field_length_value$counter").']';
 		}
 
-		$rules .= 'max_length['.set_value("db_field_length_value$counter").']';
+		$rules .= "');";
 	}
-	
-	$rules .= "');";
-}
 
-$body = str_replace('{validation_rules}', $rules, $body);
-unset($rules);
+	$body = str_replace('{validation_rules}', $rules, $body);
+	unset($rules);
+}
 
 //--------------------------------------------------------------------
 

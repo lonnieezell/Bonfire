@@ -3,13 +3,7 @@
 $view =<<<END
 <div class="box create rounded">
 
-	<a class="button good" href="<?php echo site_url(SITE_AREA . {$controller_name} .'/'. {$module_name_lower} .'/create'); ?>">
-		<?php echo lang('{$module_name_lower}_create_new_button'); ?>
-	</a>
-
-	<h3><?php echo lang('{$module_name_lower}_create_new'); ?></h3>
-
-	<p><?php echo lang('{$module_name_lower}_edit_text'); ?></p>
+	<h3>{$module_name}</h3>
 
 </div>
 
@@ -17,13 +11,11 @@ $view =<<<END
 
 <?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
 				
-	<h2>{$module_name}</h2>
 	<table>
 		<thead>
 		
 			{table_header}
 		
-			<th><?php echo lang('{$module_name_lower}_actions'); ?></th>
 		</thead>
 		<tbody>
 		
@@ -38,9 +30,6 @@ $view =<<<END
 				
 			<?php endforeach; ?>
 
-				<td>
-					<?php echo anchor(SITE_AREA .'/{$controller_name}/{$module_name_lower}/edit/'. \$record[\$primary_key_field], lang('{$module_name_lower}_edit'), '') ?>
-				</td>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>
@@ -62,6 +51,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 	$headers .= '
 		<th>'. set_value("view_field_label$counter").'</th>';
 }
+
 if ($use_soft_deletes == 'true')
 {
 	$headers .= '

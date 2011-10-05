@@ -60,6 +60,21 @@ for($counter=1; $field_total >= $counter; $counter++)
 	$view .= '
 		<th>'. set_value("view_field_label$counter").'</th>';
 }
+if ($use_soft_deletes == 'true')
+{
+	$view .= '
+		<th>Deleted</th>';
+}
+if ($use_created == 'true')
+{
+	$view .= '
+		<th>Created</th>';
+}
+if ($use_modified == 'true')
+{
+	$view .= '
+		<th>Modified</th>';
+}
 
 $view .= '<th><?php echo lang(\''.$module_name_lower.'_actions\'); ?></th>
 		</thead>

@@ -66,19 +66,30 @@ class Modulebuilder
 		$module_file_name = str_replace(" ", "_", strtolower($module_name));
 		foreach( $contexts as $key => $context_name) {
 			// controller
+			$public_context = FALSE;
 			if($context_name == 'public') {
 				$context_name = $module_file_name;
+				$public_context = TRUE;
 			}
 			$content['controllers'][$context_name] = $this->build_controller($field_total, $module_name, $context_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name);
 
 			// view files
-			foreach($action_names as $key => $action_name) {
-				if ($action_name != 'delete' ) {
-					$content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
-				}
+			if ($public_context === TRUE)
+			{
+				// only build this view in the Public context
+				$content['views'][$context_name]['index'] = $this->build_view($field_total, $module_name, $context_name, 'index_front', 'Index', $primary_key_field, $form_input_delimiters);
+				$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', 'js', $primary_key_field, $form_input_delimiters);
 			}
-			$content['views'][$context_name]['index_alt'] = $this->build_view($field_total, $module_name, $context_name, 'index_alt', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
-			$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
+			else {
+				// only build these views for the Admin contexts
+				foreach($action_names as $key => $action_name) {
+					if ($action_name != 'delete' ) {
+						$content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
+					}
+				}
+				$content['views'][$context_name]['index_alt'] = $this->build_view($field_total, $module_name, $context_name, 'index_alt', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
+				$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
+			}
 		}
 
 		// build the config file
@@ -292,6 +303,9 @@ class Modulebuilder
 		$data['action_label'] = $action_label;
 		$data['form_input_delimiters'] = $form_input_delimiters;
 		$data['textarea_editor'] = $this->CI->input->post('textarea_editor');
+		$data['use_soft_deletes'] = $this->CI->input->post('use_soft_deletes');
+		$data['use_created'] = $this->CI->input->post('use_created');
+		$data['use_modified'] = $this->CI->input->post('use_modified');
 
 		$id_val = '';
 		if($action_name != 'insert' && $action_name != 'add') {
@@ -308,6 +322,9 @@ class Modulebuilder
 				break;
 			case 'index_alt':
 				$view_name = 'index_alt';
+				break;
+			case 'index_front':
+				$view_name = 'index_front';
 				break;
 			case 'delete':
 				$view_name = 'delete';
