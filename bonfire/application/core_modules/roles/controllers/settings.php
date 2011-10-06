@@ -352,7 +352,7 @@ class Settings extends Admin_Controller {
 		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
 		
 		Template::set('roles', $this->role_model->find_all());
-		Template::set('matrix_permissions', $this->permission_model->select('permission_id, name')->find_all());
+		Template::set('matrix_permissions', $this->permission_model->select('permission_id, name')->order_by('name')->find_all());
 		Template::set('matrix_roles', $this->role_model->select('role_id, role_name')->find_all());
 		
 		$role_permissions = $this->role_permission_model->find_all_role_permissions();
