@@ -2,11 +2,9 @@
 
 class test_permission_model extends CodeIgniterUnitTestCase {
 
-	private $role_id = null;
-	private $permission_id = null;
 	private $tmp_tables = array("permissions","role_permissions","roles");
-	private	$pf = null;
-	private	$mpf = null;
+	private $pf = null; // database prefix
+	private $mpf = null; // database + mock prefix
 
 	//--------------------------------------------------------------------
 
@@ -14,15 +12,17 @@ class test_permission_model extends CodeIgniterUnitTestCase {
 	{
 		parent::__construct();
 		
-		//load 
+		//load the models 
 		$this->ci->load->model('permissions/permission_model', 'permission_model', true);
 		$this->ci->load->model('roles/role_model', 'role_model', true);
 		$this->ci->load->model('roles/role_permission_model', 'role_permission_model', true);
-		// use the temp tables
+		
+		// use the temp tables, not production tables
 		$this->ci->role_model->set_table('mock_roles');
 		$this->ci->permission_model->set_table('mock_permissions');
 		$this->ci->role_permission_model->set_table('mock_role_permissions');
 		
+		// set the database prefix and the mock prefix
 		$this->pf = $this->ci->db->dbprefix;
 		$this->mpf = $this->pf . 'mock_';
 	}
@@ -32,7 +32,7 @@ class test_permission_model extends CodeIgniterUnitTestCase {
 	public function test_create_tmp_tables() 
 	{	
 		foreach($this->tmp_tables as $table) {
-			$this->assertTrue($this->ci->db->query("CREATE TABLE IF NOT EXISTS ".$this->mpf.$table." SELECT * FROM ".$this->pf.$table), "Temporary Table ".$this->mpf.$table." created");
+			$this->assertTrue($this->ci->db->query("CREATE TEMPORARY TABLE IF NOT EXISTS ".$this->mpf.$table." SELECT * FROM ".$this->pf.$table), "Temporary Table ".$this->mpf.$table." created");
 		}
 	}
 	
