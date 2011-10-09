@@ -60,6 +60,9 @@ class Developer extends Admin_Controller {
 			}
 		}
 		
+		// check that the modules folder is writeable
+		Template::set('writeable', $this->_check_writeable());
+		
 		ksort($configs);
 		Template::set('modules', $configs);
 		Template::set('toolbar_title', 'Manage Modules');
@@ -124,6 +127,9 @@ class Developer extends Admin_Controller {
 			Template::set_view('developer/output');
 		}
 				
+		// check that the modules folder is writeable
+		Template::set('writeable', $this->_check_writeable());
+
 		Template::set('error', array());
 
 		Template::set('toolbar_title', 'Module Builder');
@@ -390,4 +396,16 @@ class Developer extends Admin_Controller {
 	}
 
 	//--------------------------------------------------------------------
+	
+	
+	/** Check that the Modules folder is writeable
+	 *
+	 * @access	private
+	 * @return	bool
+	 */
+	function _check_writeable()
+	{
+		return is_writeable($this->options['output_path']);
+		
+	}//end _check_writeable()
 }

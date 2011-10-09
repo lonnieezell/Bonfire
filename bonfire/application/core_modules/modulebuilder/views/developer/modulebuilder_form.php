@@ -27,6 +27,12 @@
 	<div class="notification information">
 		<?php echo lang('mb_form_note'); ?>
 	</div>
+
+	<?php if (!$writeable): ?>
+	<div class="notification error">
+		<p><?php echo lang('mb_not_writeable_note'); ?></p>
+	</div>
+	<?php endif;?>
 	
 	<?php if ($this->session->flashdata('error')): ?>
 	<div class="top_error"><?php echo $this->session->flashdata('error')?></div>
@@ -299,7 +305,9 @@
 	</div>
 	<div class="submits">
 		<br />
+	<?php if ($writeable): ?>
 		<?php echo form_submit('submit', 'Build the Module'); ?>
+	<?php endif;?>
 	</div>
 	<?php echo form_close()?>
 </div>	<!-- /constrained -->
