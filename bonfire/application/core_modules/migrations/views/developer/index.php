@@ -78,9 +78,11 @@ tr:hover { background: #f6f6f6; border-top: 1px solid #e7e7e7; border-bottom: 1p
 								<select name="version">
 									<option value="uninstall">Uninstall</option>
 								<?php foreach ($migrations as $migration) : ?>
-									<?php foreach ($migration as $filename) :?>
-										<option><?php echo $filename; ?></option>
-									<?php endforeach; ?>
+									<?php if(is_array($migration)): ?>
+										<?php foreach ($migration as $filename) :?>
+											<option><?php echo $filename; ?></option>
+										<?php endforeach; ?>
+									<?php endif;?>
 								<?php endforeach; ?>
 								</select>
 							</td>
