@@ -78,7 +78,6 @@ class Modulebuilder
 			{
 				// only build this view in the Public context
 				$content['views'][$context_name]['index'] = $this->build_view($field_total, $module_name, $context_name, 'index_front', 'Index', $primary_key_field, $form_input_delimiters);
-				$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', 'js', $primary_key_field, $form_input_delimiters);
 			}
 			else {
 				// only build these views for the Admin contexts

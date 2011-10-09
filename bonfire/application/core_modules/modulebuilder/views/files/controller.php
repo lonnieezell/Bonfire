@@ -70,6 +70,28 @@ END;
 
 //--------------------------------------------------------------------
 
+$mb_index_front =<<<END
+	/*
+		Method: index()
+		
+		Displays a list of form data.
+	*/
+	public function index() 
+	{
+		\$data = array();
+		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
+
+		Template::set('data', \$data);
+		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+
+
+END;
+
+//--------------------------------------------------------------------
+
 $mb_create =<<<END
 	/*
 		Method: create()
@@ -317,10 +339,18 @@ unset($extras);
 
 if (in_array('index', $action_names))
 {
-	$body .= $mb_index;
+	// check if this is the front controller
+	if ($controller_name == $module_name_lower)
+	{
+		$body .= $mb_index_front;
+	}
+	else {
+		$body .= $mb_index;
+	}
 }
 
 //--------------------------------------------------------------------
+// check if this is the front controller
 if ($controller_name != $module_name_lower)
 {
 
