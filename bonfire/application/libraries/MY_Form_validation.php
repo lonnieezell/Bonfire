@@ -31,20 +31,46 @@ class MY_Form_validation extends CI_Form_validation {
      * @abstract Rule to force value to be unique in table
      * @usage "unique[tablename.fieldname.(primaryKey-used-for-updates).(uniqueID-used-for-updates)]"
 	 * @param mixed $value the value to be checked
-	 * @param mixed $params the table and field to check against
+	 * @param mixed $params the table and field to check against, if a second field is passed in this is used as "AND NOT EQUAL"
 	 * @return bool
 	 */
 	function unique($value, $params) {
 		$this->CI->form_validation->set_message('unique', 'The value in &quot;%s&quot; is already being used.');
+		
+		// allow for more than 1 parameter
+		$fields = explode(",", $params);
+		
+		// extract the first parameter
+		list($table, $field) = explode(".", $fields[0], 2);
+		
+		// setup the db request
+		$this->CI->db->select($field)->from($table)
+			->where($field, $value)->limit(1);
 
-		list($table, $field, $key, $id) = explode(".", $params, 4);
+		// check if there is a second field passed in
+		if (isset($fields[1]))
+		{
+			// this field is used to check that it is not the current record
+			// eg select * from users where username='test' AND id != 4
+			
+			list($where_table, $where_field) = explode(".", $fields[1], 2);
+			
+			$where_value = $this->CI->input->post($where_field);
+			if (isset($where_value)) {
+				// add the extra where condition
+				$this->CI->db->where($where_field.' !=', $this->CI->input->post($where_field));
+			}
+		}
 
-		$query = $this->CI->db->select($field)->from($table)
-			->where($field, $value)->where($key.' != '.$id)->limit(1)->get();
-
-		if ($query->row()) {
+		// make the db request
+		$query = $this->CI->db->get();
+		
+		if ($query->row())
+		{
 			return false;
-		} else {
+		}
+		else
+		{
 			return true;
 		}
 
