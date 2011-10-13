@@ -36,6 +36,7 @@ $lang['us_log_delete']				= 'deleted user';
 $lang['us_log_logged']				= 'logged in from';
 $lang['us_log_reset']				= 'reset their password.';
 $lang['us_log_register']			= 'registered a new account.';
+$lang['us_log_edit_profile']		= 'updated their profile';
 
 
 $lang['us_deleted_users']			= 'Deleted Users';
@@ -72,6 +73,9 @@ $lang['us_delete_account_confirm']	= 'Are you sure you want to delete this user 
 
 $lang['us_user_management']			= 'User Management';
 $lang['us_email_in_use']			= 'The %s address is already in use. Please choose another.';
+
+$lang['us_edit_profile']			= 'Edit Profile';
+$lang['us_edit_note']				= 'Enter your details below and click Save.';
 
 $lang['us_reset_password']			= 'Reset Password';
 $lang['us_reset_note']				= 'Enter your email and we will send a temporary password to you.';

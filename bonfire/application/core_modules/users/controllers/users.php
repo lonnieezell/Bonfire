@@ -192,6 +192,50 @@ class Users extends Front_Controller {
 	//--------------------------------------------------------------------
 	
 	/*
+		Method: profile
+		
+		Allows a user to edit their own profileinformation. 
+	*/
+	public function profile() 
+	{
+		if ($this->auth->is_logged_in() === FALSE)
+		{
+			$this->auth->logout();
+			redirect('login');
+		}
+		
+		if ($this->input->post('submit'))
+		{
+
+			$user_id = $this->auth->user_id();
+			if ($this->save_user($user_id))
+			{
+				$user = $this->user_model->find($user_id);
+				$log_name = config_item('auth.use_own_names') ? $this->auth->user_name() : (config_item('auth.use_usernames') ? $user->username : $user->email);
+				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_edit_profile') .': '.$log_name, 'users');
+			
+				Template::set_message('Profile successfully updated.', 'success');
+			}
+			else 
+			{
+				Template::set_message('There was a problem updating your profile', 'error');
+			}//end if
+		}//end if
+
+		$this->load->config('address');
+		$this->load->helper('address');
+
+		// get the current user information
+		$user = $this->user_model->find_by('id', $this->auth->user_id());
+		Template::set('user', $user);
+	
+		Template::set_view('users/users/profile');
+		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
 		Method: reset_password()
 		
 		Allows the user to create a new password for their account. At the moment, 
@@ -337,7 +381,7 @@ class Users extends Front_Controller {
 	
 	public function unique_username($username) 
 	{
-		if ($this->user_model->is_unique('username', $username) === true)
+		if ($this->user_model->is_unique('username', $username.',bf_users.id') === true)
 		{
 			return true;
 		}
@@ -350,7 +394,45 @@ class Users extends Front_Controller {
 	
 	//--------------------------------------------------------------------
 	
+
+	private function save_user($id=0) 
+	{
+		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|max_length[120]|unique[bf_users.email,bf_users.id]|xss_clean');
+		$this->form_validation->set_rules('password', 'Password', 'trim|strip_tags|max_length[40]|xss_clean');
+		$this->form_validation->set_rules('pass_confirm', 'Password (again)', 'trim|strip_tags|matches[password]|xss_clean');
+		
+		if (config_item('auth.use_usernames'))
+		{
+			$_POST['id'] = $this->auth->user_id();
+			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username,bf_users.id]|xsx_clean');
+		}
+		
+		$required = false;
+		if (config_item('auth.use_own_names'))
+		{
+			$required = 'required|';
+		} 
+		$this->form_validation->set_rules('first_name', lang('us_first_name'), $required.'trim|strip_tags|max_length[20]|xss_clean');
+		$this->form_validation->set_rules('last_name', lang('us_last_name'), $required.'trim|strip_tags|max_length[20]|xss_clean');
+		
+		if  ( ! config_item('auth.use_extended_profile'))
+		{
+			$this->form_validation->set_rules('street1', 'Street 1', 'trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('street2', 'Street 2', 'trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('city', 'City', 'trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('zipcode', 'Zipcode', 'trim|strip_tags|max_length[20]|xss_clean');
+		}
+		
+		if ($this->form_validation->run() === false)
+		{
+			return false;
+		}
+		
+		return $this->user_model->update($id, $_POST);
+	}
 	
+	//--------------------------------------------------------------------
+
 }
 
 // End Authorize class

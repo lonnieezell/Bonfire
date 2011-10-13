@@ -1,6 +1,12 @@
 Topic: Changelog
 
-Version 0.2-RC2 (Unreleased)
+Version 0.3-RC1 (Unreleased)
+
+Additions:
+- Edit Profile for the front end user - issue #197
+
+
+Version 0.2
 
 Additions:
 - Major revamp to the ModuleBuilder
