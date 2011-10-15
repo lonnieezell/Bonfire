@@ -8,3 +8,6 @@ $config['smtp_user'] = '';
 $config['smtp_pass'] = '';
 $config['smtp_port'] = '';
 $config['smtp_timeout'] = '';
+$config['charset']    = 'utf-8';
+$config['newline']    = "\r\n";
+$config['validate']    = FALSE;
