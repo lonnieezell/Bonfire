@@ -352,7 +352,12 @@ class Install extends MX_Controller {
 		$this->load->helper('string');
 		$key = random_string('unique', 40);
 		
-		write_config('config', array('encryption_key' => $key));
+		$config_array = array('encryption_key' => $key);
+		
+		// check the mod_rewrite setting
+		$config_array['base_url'] = $this->rewrite_check() ? '' : 'index.php';
+		
+		write_config('config', $config_array);
 
 		// Reverse Folders
 		foreach ($this->reverse_writeable_folders as $folder)
@@ -380,6 +385,27 @@ class Install extends MX_Controller {
           $this->curl_update = 0;
         }   
     }
+	
+	
+	//--------------------------------------------------------------------
+    
+    /*
+		Method: rewrite_check()
+		
+		Verifies that mod_rewrite is enabled as a PHP extension.
+	*/
+	private function rewrite_check()
+	{
+        if (!function_exists('rewrite_check'))
+        {
+			ob_start();
+			phpinfo(INFO_MODULES);
+			$contents = ob_get_clean();
+			return strpos($contents, 'mod_rewrite') !== false;
+        }
+		
+    }//end rewrite_check()
+	
 	
 	//--------------------------------------------------------------------
 }
