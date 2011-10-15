@@ -4,6 +4,7 @@ Version 0.3-RC1 (Unreleased)
 
 Additions:
 - Edit Profile for the front end user - issue #197
+- Mode_rewrite check in the installer to set the base_url - issue #52
 
 
 Version 0.2
