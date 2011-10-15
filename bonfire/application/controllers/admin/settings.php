@@ -98,6 +98,7 @@ class Settings extends Admin_Controller {
 			'updates.do_check'		=> isset($_POST['do_check']) ? 1 : 0,
 			'updates.bleeding_edge'	=> isset($_POST['bleeding_edge']) ? 1 : 0,
 			'site.show_profiler'	=> isset($_POST['show_profiler']) ? 1 : 0,
+			'site.show_front_profiler'	=> isset($_POST['show_front_profiler']) ? 1 : 0,
 		);
 		
 		//destroy the saved update message in case they changed update preferences.

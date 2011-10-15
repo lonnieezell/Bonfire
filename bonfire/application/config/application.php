@@ -32,6 +32,7 @@ $config['site.list_limit'] = 25;
 // !Console/Profiler
 //--------------------------------------------------------------------
 $config['site.show_profiler'] = 1;
+$config['site.show_front_profiler'] = 1;
  
 //--------------------------------------------------------------------
 // !For Update messages
