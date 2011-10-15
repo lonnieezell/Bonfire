@@ -355,7 +355,7 @@ class Install extends MX_Controller {
 		$config_array = array('encryption_key' => $key);
 		
 		// check the mod_rewrite setting
-		$config_array['base_url'] = $this->rewrite_check() ? '' : 'index.php';
+		$config_array['index_page'] = $this->rewrite_check() ? '' : 'index.php';
 		
 		write_config('config', $config_array);
 
