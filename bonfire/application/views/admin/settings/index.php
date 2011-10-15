@@ -86,7 +86,7 @@
 		
 		<div>
 			<label for="show_profiler"><?php echo lang('bf_show_profiler') ?></label>
-			<input type="checkbox" name="show_profiler" value="1" <?php echo config_item('site.show_profiler') == 1 ? 'checked="checked"' : set_checkbox('auth.use_extended_profile', 1); ?> />
+			<input type="checkbox" name="show_profiler" value="1" <?php echo config_item('site.show_profiler') == 1 ? 'checked="checked"' : set_checkbox('auth.show_profiler', 1); ?> />
 		</div>
 		
 		<div>
