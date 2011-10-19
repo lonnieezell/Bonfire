@@ -28,8 +28,8 @@ class MY_Form_validation extends CI_Form_validation {
 	 * 
 	 * i.e. '…|required|unique[bf_users.name.id.4]|trim…'
 	 * 
-     * @abstract Rule to force value to be unique in table
-     * @usage "unique[tablename.fieldname.(primaryKey-used-for-updates).(uniqueID-used-for-updates)]"
+	 * @abstract Rule to force value to be unique in table
+	 * @usage "unique[tablename.fieldname.(primaryKey-used-for-updates).(uniqueID-used-for-updates)]"
 	 * @param mixed $value the value to be checked
 	 * @param mixed $params the table and field to check against, if a second field is passed in this is used as "AND NOT EQUAL"
 	 * @return bool
@@ -80,9 +80,9 @@ class MY_Form_validation extends CI_Form_validation {
 
 	/**
 	 * MY_Form_validation::alpha_extra()
-     * 
+	 * 
 	 * @abstract Alpha-numeric with periods, underscores, spaces and dashes
-     * @param string $str
+	 * @param string $str
 	 * @return	bool
 	 */
 	function alpha_extra($str)
