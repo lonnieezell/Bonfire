@@ -8,10 +8,23 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	
+	<!-- Remove these comments to prefetch google's cdn, 
+			 I personally like to pull my jQuery from Google with a local fallback so I prefetch google.
+			 This is also good if you use any of Google's Fonts -->
+
+		
+	<!-- <link rel="dns-prefetch" href="//ajax.googleapis.com">  -->
+
 	<title><?php echo config_item('site.title'); ?></title>
 	
+	<link rel="auther" href="/humans.txt">
+	
+	<!-- Mobile viewport optimized: j.mp/bplateviewport -->
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+
+
 
 	<?php echo Assets::css(); ?>
 	
