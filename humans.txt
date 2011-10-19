@@ -1,0 +1,22 @@
+/* TEAM */
+      
+Your title: Your name.
+Site: email, link to a contact form, etc.
+Twitter: your Twitter username.                            
+Location: City, Country.
+
+                         
+            
+                          
+/* THANKS */
+              
+Name: CI-Bonfire Team : Lonnie Ezell, Sean Downey, IceHawg, Nuno Costa, Ben Evans, Shawn Crigger
+Site: http://www.cibonfire.com
+
+                                        
+/* SITE */
+                            
+Last update: 2011/10/19
+Standards: HTML5, CSS3,..                            
+Components: CodeIgniter, CI-Bonfire, jQuery, head.js, etc.                            
+Software: Software used for the development
