@@ -284,6 +284,50 @@ class BF_Model extends CI_Model {
 		return false;
 	}
 	
+		//---------------------------------------------------------------
+	
+	/*
+		Method: find_limit()
+		
+		Returns records in the table set with the limit and offset
+
+		Parameter:
+			$limit		- Number of records to pull from table
+			$offset   - Offset of Query to Pull From
+
+		
+		By default, there is no 'where' clause, but you can filter
+		the results that are returned by using either CodeIgniter's
+		Active Record functions before calling this function, or 
+		through method chaining with the where() method of this class.
+		
+		Return:
+			An array of objects representing the results, or FALSE on failure or empty set.
+	*/
+	public function find_limit ( $limit=0, $offset=0) 
+	{
+		if ($this->_function_check() === FALSE)
+		{
+			return false;
+		}
+		
+		$this->set_selects();
+		$this->db->limit( $limit , $offset );
+		 
+		$this->db->from($this->table);
+		
+		$query = $this->db->get();
+		
+		if (!empty($query) && $query->num_rows() > 0)
+		{
+			return $query->result();
+		}
+		
+		$this->error = $this->lang->line('bf_model_bad_select');
+		$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_bad_select'));
+		return false;
+	}
+
 	//---------------------------------------------------------------
 	
 	/*
