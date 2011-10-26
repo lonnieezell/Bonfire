@@ -1,7 +1,7 @@
 <?php
 	// Setup our default assets to load.
 	Assets::add_js( array(
-		base_url() .'assets/js/jquery-1.5.min.js',
+		base_url() .'assets/js/jquery-1.6.4.min.js',
 	));
 ?>
 <!doctype html>
