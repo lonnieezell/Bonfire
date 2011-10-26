@@ -65,17 +65,6 @@ class Base_Controller extends MX_Controller {
 	
 		parent::__construct();
 		
-		// Dev Bar?
-		if (ENVIRONMENT == 'development')
-		{
-			$this->load->library('Console');
-			
-			if (!$this->input->is_cli_request() && config_item('site.show_profiler'))
-			{
-				$this->output->enable_profiler(true);
-			}
-		}
-		
 		$this->lang->load('application');
 
 		$this->load->driver('cache', array('adapter' => 'file'));
@@ -118,6 +107,18 @@ class Front_Controller extends Base_Controller {
 	public function __construct() 
 	{
 		parent::__construct();
+
+		// Profiler Bar?
+		if (ENVIRONMENT == 'development')
+		{
+			$this->load->library('Console');
+			
+			if (!$this->input->is_cli_request() && config_item('site.show_front_profiler'))
+			{
+				$this->output->enable_profiler(true);
+			}
+		}
+		
 	}
 	
 	//--------------------------------------------------------------------
@@ -208,6 +209,18 @@ class Admin_Controller extends Authenticated_Controller {
 		$this->pager['prev_link'] 		= '&laquo; Previous';
 		
 		$this->limit = $this->config->item('site.list_limit');
+
+		// Profiler Bar?
+		if (ENVIRONMENT == 'development')
+		{
+			$this->load->library('Console');
+			
+			if (!$this->input->is_cli_request() && config_item('site.show_profiler'))
+			{
+				$this->output->enable_profiler(true);
+			}
+		}
+		
 		
 		// Basic setup
 		Template::set_theme('admin');
