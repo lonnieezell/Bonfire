@@ -53,11 +53,13 @@
 function read_config($file, $fail_gracefully=TRUE, $config_path = '' ) 
 {
 	$file = ($file == '') ? 'config' : str_replace(EXT, '', $file);
-	
+
+	$cfPath = APPPATH.'config/';
+
 	$cfPath = ( $config_path == '' ) ? $cfPath : $config_path;
 
 	unset ( $config_path );
-	
+
 	if ( ! file_exists($cfPath.'config/'.$file.EXT))
 	{
 		if ($fail_gracefully === TRUE)
@@ -103,6 +105,8 @@ function write_config($file='', $settings=null, $config_path = '' )
 	{
 		return false;
 	}
+
+	$cfPath = APPPATH.'config/';
 
 	$cfPath = ( $config_path == '' ) ? $cfPath : $config_path;
 	
