@@ -1160,7 +1160,7 @@ class Assets {
 			// If it contains an external URL, we're all done here.
 			if (strpos((string)$file, $http_protocol, 0) !== false)
 			{
-				$new_files[] = $file;
+				$new_files[] = !empty($media) ? array('file'=>$file, 'media'=>$media) : $file;
 				continue;
 			}
 
