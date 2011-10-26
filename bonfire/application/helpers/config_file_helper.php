@@ -27,7 +27,7 @@
 	Functions to aid in reading and saving config items to and from
 	configuration files. 
 	
-	The config files are expected to be found in the APPPATH .'/config' folder.
+	The config files are expected to be found in the $cfPath .'/config' folder.
 	It does not currently work within modules.
 	
 	Author:
@@ -45,15 +45,22 @@
 	Parameters:
 		$file				- The config file to read.
 		$fail_gracefully	- true/false. Whether to show errors or simply return false.
+		$config_path  - Optional value to the config file, used for writing to module config files.
 		
 	Return:
 		An array of settings, or false on failure (when $fail_gracefully = true).
  */
-function read_config($file, $fail_gracefully=TRUE) 
+function read_config($file, $fail_gracefully=TRUE, $config_path = '' ) 
 {
 	$file = ($file == '') ? 'config' : str_replace(EXT, '', $file);
-	
-	if ( ! file_exists(APPPATH.'config/'.$file.EXT))
+
+	$cfPath = APPPATH.'config/';
+
+	$cfPath = ( $config_path == '' ) ? $cfPath : $config_path;
+
+	unset ( $config_path );
+
+	if ( ! file_exists($cfPath.'config/'.$file.EXT))
 	{
 		if ($fail_gracefully === TRUE)
 		{
@@ -62,7 +69,7 @@ function read_config($file, $fail_gracefully=TRUE)
 		show_error('The configuration file '.$file.EXT.' does not exist.');
 	}
 	
-	include(APPPATH.'config/'.$file.EXT);
+	include($cfPath.'config/'.$file.EXT);
 
 	if ( ! isset($config) OR ! is_array($config))
 	{
@@ -87,21 +94,28 @@ function read_config($file, $fail_gracefully=TRUE)
 	Parameters:
 		$file		- The config file to write to.
 		$settigns	- An array of key/value pairs to be written to the file.
-		
+		$config_path  - Optional value to the config file, used for writing to module config files.
+
 	Return: 
 		true/false
  */
-function write_config($file='', $settings=null) 
+function write_config($file='', $settings=null, $config_path = '' ) 
 {
 	if (empty($file) || !is_array($settings	))
 	{
 		return false;
 	}
-			
+
+	$cfPath = APPPATH.'config/';
+
+	$cfPath = ( $config_path == '' ) ? $cfPath : $config_path;
+	
+	unset ( $config_path );
+
 	// Load the file so we can loop through the lines
-	if (is_file(APPPATH .'config/'. $file . EXT))
+	if (is_file($cfPath .'config/'. $file . EXT))
 	{
-		$contents = file_get_contents(APPPATH.'config/'.$file.EXT);
+		$contents = file_get_contents($cfPath.'config/'.$file.EXT);
 		$empty = false;
 	} else 
 	{
@@ -150,8 +164,8 @@ function write_config($file='', $settings=null)
 	}
 	
 	// Backup the file for safety
-	$source = APPPATH . 'config/'.$file.EXT;
-	$dest = APPPATH . 'archives/config/'.$file.EXT.'.bak';
+	$source = $cfPath . 'config/'.$file.EXT;
+	$dest = $cfPath . 'archives/config/'.$file.EXT.'.bak';
 	if ($empty === false) copy($source, $dest);
 	
 	// Make sure the file still has the php opening header in it...
@@ -167,7 +181,7 @@ function write_config($file='', $settings=null)
 		$CI->load->helper('file');
 	}
 
-	$result = write_file(APPPATH.'config/'.$file.EXT, $contents);
+	$result = write_file($cfPath.'config/'.$file.EXT, $contents);
 	
 	if ($result === FALSE)
 	{
@@ -214,9 +228,9 @@ function read_db_config($environment=null, $new_db = NULL, $fail_gracefully = TR
 	// Grab our required settings
 	foreach ($files as $env => $file)
 	{	
-		if ( file_exists(APPPATH.'config/'.$file.EXT))
+		if ( file_exists($cfPath.'config/'.$file.EXT))
 		{
-			include(APPPATH.'config/'.$file.EXT);
+			include($cfPath.'config/'.$file.EXT);
 		}
 		else if ($fail_gracefully === FALSE)
 			{
@@ -310,12 +324,12 @@ function write_db_config($settings=null)
 		}
 
 		// Load the file so we can loop through the lines
-		$contents = file_get_contents(APPPATH.'config/'. $env .'database'.EXT);
+		$contents = file_get_contents($cfPath.'config/'. $env .'database'.EXT);
 
 		if (empty($contents) OR ! is_array($contents))
 		{
 			//logit('[Config_File_Helper] Error getting db file contents. Loading default database_format.php');
-			$contents = file_get_contents(APPPATH.'config/database'.EXT);
+			$contents = file_get_contents($cfPath.'config/database'.EXT);
 		}
 
 		if ($env != 'submit')
@@ -342,8 +356,8 @@ function write_db_config($settings=null)
 			}
 
 			// Backup the file for safety
-			$source = APPPATH .'config/'. $env .'database'.EXT;
-			$dest_folder = APPPATH . config_item('site.backup_folder') .'config/'. $env;
+			$source = $cfPath .'config/'. $env .'database'.EXT;
+			$dest_folder = $cfPath . config_item('site.backup_folder') .'config/'. $env;
 			$dest = $dest_folder .'database'.EXT.'.bak';
 			
 			// Make sure our directory exists
@@ -364,7 +378,7 @@ function write_db_config($settings=null)
 			$CI->load->helper('file');;
 			
 			// Write the changes out...
-			$result = write_file(APPPATH.'config/'.$env .'database'.EXT, $contents);
+			$result = write_file($cfPath.'config/'.$env .'database'.EXT, $contents);
 		}
 	}
 	
