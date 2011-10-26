@@ -45,15 +45,28 @@
 	Parameters:
 		$file				- The config file to read.
 		$fail_gracefully	- true/false. Whether to show errors or simply return false.
+		$module				- Name of the module where the config file exists
 		
 	Return:
 		An array of settings, or false on failure (when $fail_gracefully = true).
  */
-function read_config($file, $fail_gracefully=TRUE) 
+function read_config($file, $fail_gracefully = TRUE, $module = '') 
 {
 	$file = ($file == '') ? 'config' : str_replace(EXT, '', $file);
+	$file = 'config/'.$file;
+
+	$file_details = Modules::find($file, $module, '');
 	
-	if ( ! file_exists(APPPATH.'config/'.$file.EXT))
+	if (is_array($file_details) && !empty($file_details[0]))
+	{
+		$file = implode("", $file_details);
+	}
+	else
+	{
+		$file = APPPATH.$file;
+	}
+	
+	if ( ! file_exists($file.EXT))
 	{
 		if ($fail_gracefully === TRUE)
 		{
@@ -62,8 +75,8 @@ function read_config($file, $fail_gracefully=TRUE)
 		show_error('The configuration file '.$file.EXT.' does not exist.');
 	}
 	
-	include(APPPATH.'config/'.$file.EXT);
-
+	include($file.EXT);
+	
 	if ( ! isset($config) OR ! is_array($config))
 	{
 		if ($fail_gracefully === TRUE)
@@ -87,23 +100,38 @@ function read_config($file, $fail_gracefully=TRUE)
 	Parameters:
 		$file		- The config file to write to.
 		$settigns	- An array of key/value pairs to be written to the file.
+		$module				- Name of the module where the config file exists
 		
 	Return: 
 		true/false
  */
-function write_config($file='', $settings=null) 
+function write_config($file='', $settings=null, $module='')
 {
 	if (empty($file) || !is_array($settings	))
 	{
 		return false;
 	}
 			
-	// Load the file so we can loop through the lines
-	if (is_file(APPPATH .'config/'. $file . EXT))
+	$config_file = 'config/'.$file;
+
+	$file_details = Modules::find($config_file, $module, '');
+	
+	if (is_array($file_details) && !empty($file_details[0]))
 	{
-		$contents = file_get_contents(APPPATH.'config/'.$file.EXT);
+		$config_file = implode("", $file_details);
+	}
+	else
+	{
+		$config_file = APPPATH.$config_file;
+	}
+
+	// Load the file so we can loop through the lines
+	if (is_file($config_file . EXT))
+	{
+		$contents = file_get_contents($config_file.EXT);
 		$empty = false;
-	} else 
+	}
+	else 
 	{
 		$contents = '';
 		$empty = true;
@@ -124,21 +152,18 @@ function write_config($file='', $settings=null)
 		
 		if (is_array($val))
 		{
-			$tval  = 'array(\'';
-			$tval .= implode("','", $val);
-			$tval .= '\')';
-		
-			$val = $tval;
-			unset($tval);
-		} else 
-		if (is_numeric($val))
+			// get the array output
+			$val = config_array_output($val);
+		}
+		elseif (is_numeric($val))
 		{
 			$val = $val;
-		} else
+		}
+		else
 		{
 			$val ="\"$val\"";
 		}
-		
+
 		if (!$empty)
 		{
 			$contents = str_replace($search, '$config[\''.$name.'\'] = '. $val .';', $contents);
@@ -150,8 +175,9 @@ function write_config($file='', $settings=null)
 	}
 	
 	// Backup the file for safety
-	$source = APPPATH . 'config/'.$file.EXT;
-	$dest = APPPATH . 'archives/config/'.$file.EXT.'.bak';
+	$source = $config_file.EXT;	
+	$dest = $module == '' ? APPPATH . 'archives/config/'.$file.EXT.'.bak' : $config_file.EXT.'.bak';
+
 	if ($empty === false) copy($source, $dest);
 	
 	// Make sure the file still has the php opening header in it...
@@ -167,7 +193,7 @@ function write_config($file='', $settings=null)
 		$CI->load->helper('file');
 	}
 
-	$result = write_file(APPPATH.'config/'.$file.EXT, $contents);
+	$result = write_file($config_file.EXT, $contents);
 	
 	if ($result === FALSE)
 	{
@@ -176,6 +202,68 @@ function write_config($file='', $settings=null)
 		return true;
 	}
 }
+
+
+//---------------------------------------------------------------
+
+/*
+	Function: config_array_output()
+
+	Outputs the array string which is then used in the config file.
+	
+	Parameters:
+		$array			- Array of values to store in the config
+		$num_tabs		- (Optional) The number of tabs to use in front of the array elements - makes it all nice !
+		
+	Return:
+		A string of text which will make up the array values in the config file
+ */  
+function config_array_output($array, $num_tabs=1)
+{
+	if (!is_array($array))
+	{
+		return false;
+	}
+	
+	$tval  = 'array(';
+
+	// allow for two-dimensional arrays
+	$array_keys = array_keys($array);
+	// check if they are basic numeric keys
+	if (is_numeric($array_keys[0]) && $array_keys[0] == 0)
+	{
+		$tval .= "'".implode("','", $array)."'";
+	}
+	else
+	{
+		$tabs = "";
+		for ($num=0;$num<$num_tabs;$num++)
+		{
+			$tabs .= "\t";
+		}
+		
+		// non-numeric keys
+		foreach ($array as $key => $value)
+		{
+			if(is_array($value))
+			{
+				$num_tabs++;
+				$tval .= "\n".$tabs."'".$key."' => ". config_array_output($value, $num_tabs). ",";
+			}
+			else
+			{
+				$tval .= "\n".$tabs."'".$key."' => '". $value. "',";
+			}
+		}//end foreach
+		
+		$tval .= "\n".$tabs;
+	}//end if
+	
+	$tval .= ')';
+		
+	return $tval;
+}//end config_array_output()
+
 
 //---------------------------------------------------------------
 
