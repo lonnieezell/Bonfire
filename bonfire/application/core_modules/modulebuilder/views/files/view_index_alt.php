@@ -3,7 +3,7 @@
 $view =<<<END
 <div class="box create rounded">
 
-	<a class="button good" href="<?php echo site_url(SITE_AREA . {$controller_name} .'/'. {$module_name_lower} .'/create'); ?>">
+	<a class="button good" href="<?php echo site_url(SITE_AREA .'/{$controller_name}/{$module_name_lower}/create'); ?>">
 		<?php echo lang('{$module_name_lower}_create_new_button'); ?>
 	</a>
 
