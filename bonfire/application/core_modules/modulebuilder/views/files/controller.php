@@ -240,9 +240,12 @@ $mb_save =<<<END
 			return FALSE;
 		}
 		
+		// make sure we only pass in the fields we want
+		{save_data_array}
+		
 		if (\$type == 'insert')
 		{
-			\$id = \$this->{$module_name_lower}_model->insert(\$_POST);
+			\$id = \$this->{$module_name_lower}_model->insert(\$data);
 			
 			if (is_numeric(\$id))
 			{
@@ -254,7 +257,7 @@ $mb_save =<<<END
 		}
 		else if (\$type == 'update')
 		{
-			\$return = \$this->{$module_name_lower}_model->update(\$id, \$_POST);
+			\$return = \$this->{$module_name_lower}_model->update(\$id, \$data);
 		}
 		
 		return \$return;
@@ -392,6 +395,8 @@ if ($controller_name != $module_name_lower)
 	$body .= $mb_save;
 
 	$rules = '';
+	$save_data_array = '
+		$data = array();';
 
 	$last_field = 0;
 	for($counter=1; $field_total >= $counter; $counter++)
@@ -409,7 +414,10 @@ if ($controller_name != $module_name_lower)
 		$last_field = $counter;
 
 		$rules .= '			
-	$this->form_validation->set_rules(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\',\''.set_value("view_field_label$counter").'\',\'';
+		$this->form_validation->set_rules(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\',\''.set_value("view_field_label$counter").'\',\'';
+		
+		$save_data_array .= '
+		$data[\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\']        = $this->input->post(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\');';
 
 		// set a friendly variable name
 		$validation_rules = $this->input->post('validation_rules'.$counter);
@@ -451,6 +459,8 @@ if ($controller_name != $module_name_lower)
 	}
 
 	$body = str_replace('{validation_rules}', $rules, $body);
+	$body = str_replace('{save_data_array}', $save_data_array, $body);
+	
 	unset($rules);
 }
 
