@@ -64,7 +64,7 @@ if (!function_exists('state_select'))
 			$states = $all_states[$country_code];
 			$class  = ( !empty($class) && $class != '' ) ? ' class="' . $class . '" ' : '';
 
-			$output = '<select name="'. $select_name .' id="' . $select_name . ' ." ' . $class . ' >';
+			$output = '<select name="'. $select_name .' id="' . $select_name . '" ' . $class . ' >';
 			foreach ($states as $abbrev => $name)
 			{
 				$output .= "<option value='{$abbrev}'";
