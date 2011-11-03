@@ -437,7 +437,7 @@ if ($controller_name != $module_name_lower)
 
 				if ($value == 'unique')	{		
 					$prefix = $this->db->dbprefix;
-					$rules .= $value.'['.$prefix.$table_name.'.'.$module_name_lower.'_'.set_value("view_field_name$counter").'.'.set_value("primary_key_field").'.\'.$id.\']';
+					$rules .= $value.'['.$prefix.$table_name.'.'.$module_name_lower.'_'.set_value("view_field_name$counter").','.$prefix.$table_name.'.'.set_value("primary_key_field").']';
 				} else {
 					$rules .= $value;	
 				}
