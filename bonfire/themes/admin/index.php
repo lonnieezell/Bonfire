@@ -3,10 +3,13 @@
 	Assets::add_js( array(
 		Template::theme_url('js/jquery-1.6.4.min.js'),
 		Template::theme_url('js/jquery.form.js'),
-		Template::theme_url('js/ui.js')
+		Template::theme_url('js/ui.js'),
+		Template::theme_url('js/jwerty.js'),
 	),
 	'external',
 	true);
+
+	Assets::add_js($this->load->view('ui/shortcut_keys', $shortcut_data, true), 'inline');
 ?>
 <!doctype html>
 <html lang="en">

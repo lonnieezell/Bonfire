@@ -201,6 +201,17 @@ class Admin_Controller extends Authenticated_Controller {
 		
 		$this->load->library('pagination');
 		
+		// load the keyboard shortcut keys
+		$this->load->config('ui/keys');
+		
+		$shortcut_data = array(
+			'shortcuts' => config_item('ui.current_shortcuts'),
+			'shortcut_keys' => config_item('ui.shortcut_keys'),
+		);
+		Template::set('shortcut_data', $shortcut_data);
+
+
+		
 		// Pagination config
 		$this->pager = array();
 		$this->pager['full_tag_open']	= '<div class="pagination">';
