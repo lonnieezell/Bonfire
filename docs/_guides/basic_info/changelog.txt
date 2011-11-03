@@ -9,6 +9,9 @@ Additions:
 - Config setting for front end controller which is checked inside the MY_Controller/Front_Controller
 - Adding "matches_pattern" method to Form Validation to ensures a string matches a basic pattern
 
+Bugs:
+- #236 - Email Settings - fixing the password validation
+
 
 Version 0.2
 

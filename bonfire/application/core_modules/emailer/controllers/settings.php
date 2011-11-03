@@ -55,7 +55,7 @@ class Settings extends Admin_Controller {
 			$this->form_validation->set_rules('mailpath', 'Sendmail Path', 'trim|xss_clean');
 			$this->form_validation->set_rules('smtp_host', 'SMTP Server Address', 'trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('smtp_user', 'SMTP Username', 'trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('smtp_pass', 'SMTP Password', 'trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('smtp_pass', 'SMTP Password', 'trim|strip_tags|matches_pattern[[A-Za-z!@#\%$^&+=]{2,20}]');
 			$this->form_validation->set_rules('smtp_port', 'SMTP Port', 'trim|strip_tags|numeric|xss_clean');
 			$this->form_validation->set_rules('smtp_timeout', 'SMTP timeout', 'trim|strip_tags|numeric|xss_clean');
 			
