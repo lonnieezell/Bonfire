@@ -7,6 +7,7 @@ Additions:
 - Mode_rewrite check in the installer to set the base_url - issue #52
 - Adding extra functionality to the config_file_helper to allow reading and writing of module config files
 - Config setting for front end controller which is checked inside the MY_Controller/Front_Controller
+- Adding "matches_pattern" method to Form Validation to ensures a string matches a basic pattern
 
 
 Version 0.2

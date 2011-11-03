@@ -92,6 +92,25 @@ class MY_Form_validation extends CI_Form_validation {
 	}
 
 	// --------------------------------------------------------------------
+	
+	/*
+		Method: matches_pattern()
+		
+		Ensures a string matches a basic pattern
+		
+		Return: 
+			bool
+	*/
+	function matches_pattern($str, $pattern)
+	{
+		if (preg_match('/^' . $pattern . '$/', $str)) return TRUE;
+	
+		$this->CI->form_validation->set_message('matches_pattern', 'The %s field does not match the required pattern.');
+		return FALSE;
+		
+	}
+
+	// --------------------------------------------------------------------
 }
 
 /* Author :  http://net.tutsplus.com/tutorials/php/6-codeigniter-hacks-for-the-masters/ */
