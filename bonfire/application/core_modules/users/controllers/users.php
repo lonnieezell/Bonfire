@@ -82,10 +82,11 @@ class Users extends Front_Controller {
 						cases where we are presenting different information to different
 						roles that might cause the base destination to be not available.
 					*/
-					if (config_item('auth.do_login_redirect'))
+					if (config_item('auth.do_login_redirect') && !empty ($this->auth->login_destination))
 					{
 						Template::redirect($this->auth->login_destination);
-					} else
+					}
+					else
 					{	
 						if (!empty($this->requested_page))
 						{

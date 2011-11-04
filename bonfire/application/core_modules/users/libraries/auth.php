@@ -206,7 +206,7 @@ class Auth  {
 				Events::trigger('after_login', $trigger_data );
 				
 				// Save our redirect location
-				$this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '/';
+				$this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '';
 				
 				return true;
 			}
