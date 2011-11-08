@@ -212,7 +212,7 @@ class Users extends Front_Controller {
 			if ($this->save_user($user_id))
 			{
 				$user = $this->user_model->find($user_id);
-				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->auth->user_name() : (c$this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->auth->user_name() : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_edit_profile') .': '.$log_name, 'users');
 			
 				Template::set_message('Profile successfully updated.', 'success');
