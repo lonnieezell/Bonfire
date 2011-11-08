@@ -40,14 +40,15 @@
 		$default_abbr	- The value of the item that should be selected if no other matches are found.
 		$country_code	- The code of the country for which the states/priviences/counties are returned. Defaults to 'US'.
 		$select_name	- The name assigned to the select. Defaults to 'state_code'.
-		
+		$class        - Optional value for class name
+				
 	Return:
 		A string with the full html for the select input. 
 */
 if (!function_exists('state_select'))
 {
 
-	function state_select($selected_code='', $default_abbr='', $country_code='US', $select_name='state_code')
+	function state_select($selected_code='', $default_abbr='', $country_code='US', $select_name='state_code', $class='')
 	{
 		// First, grab the states from the config
 		$all_states = config_item('address.states');
@@ -61,8 +62,9 @@ if (!function_exists('state_select'))
 			
 			// Get the states for the selected country
 			$states = $all_states[$country_code];
+			$class  = ( !empty($class) && $class != '' ) ? ' class="' . $class . '" ' : '';
 
-			$output = '<select name="'. $select_name .'">';
+			$output = '<select name="'. $select_name . '" id="' . $select_name . '" ' . $class . ' >';
 			foreach ($states as $abbrev => $name)
 			{
 				$output .= "<option value='{$abbrev}'";
@@ -90,13 +92,14 @@ if (!function_exists('state_select'))
 		$selected_iso	- The value of the item that should be selected when the dropdown is drawn.
 		$default_iso	- The value of the item that should be selected if no other matches are found.
 		$select_name	- The name assigned to the select. Defaults to 'iso'.
-		
+		$class        - Optional value for class name
+
 	Returns:
 		A string with the full html for the select input.
 */
 if (!function_exists('country_select'))
 {
-	function country_select($selected_iso='', $default_iso='US', $select_name='iso')
+	function country_select($selected_iso='', $default_iso='US', $select_name='iso', $class='' )
 	{
 		// First, grab the states from the config
 		$countries = config_item('address.countries');
@@ -106,7 +109,10 @@ if (!function_exists('country_select'))
 			return;
 		}
 		
-		$output = '<select name="'. $select_name .'">';
+		$class  = ( !empty($class) && $class[1] != '' ) ? ' class="' . $class . '" ' : '';		
+		
+		$output = '<select name="'. $select_name .'" id="' . $select_name . '" ' . $class . ' >';
+
 		foreach ($countries as $country_iso => $country)
 		{
 			$output .= "<option value='{$country_iso}'";

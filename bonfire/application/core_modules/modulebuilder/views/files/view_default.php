@@ -163,8 +163,8 @@ EOT;
 	$view .= <<<EOT
 
         <?php // Change the values/css classes to suit your needs ?>
-        <br /><input type="checkbox" id="{$field_name}" name="{$field_name}" value="1" class="" <?php echo set_checkbox('{$field_name}', '1'); ?>> 
-    <?php echo form_label('{$field_label}', '{$field_name}'); ?>               
+	    <?php echo form_label('{$field_label}', '{$field_name}'); ?>               
+        <input type="checkbox" id="{$field_name}" name="{$field_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$field_name}', 1); ?>> 
 	
 {$form_input_delimiters[1]} 
 EOT;

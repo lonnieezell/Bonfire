@@ -1015,7 +1015,7 @@ function breadcrumb($my_segments=null)
 	$count = 0;
 	
 	// URI BASED BREADCRUMB
-	if (is_null($my_segments))
+	if (empty($my_segments) || !is_array($my_segments))
 	{
 		foreach ($segments as $segment)
 		{

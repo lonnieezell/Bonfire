@@ -24,7 +24,7 @@ About: The Data
 
 We will create a migration that will let us easily import our data.
 
-Create a new file under _bonfire/application/db/migrations/_ called *003_Create_todo_table.php*. This will hold the <Migrations> needed to create our new table to hold the todo items. 
+Create a new file under _bonfire/application/db/migrations/_ called *001_Create_todo_table.php*. This will hold the <Migrations> needed to create our new table to hold the todo items. 
 
 Create your migration. The file should look like: 
 

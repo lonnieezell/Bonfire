@@ -63,6 +63,7 @@ $lang['db_restore_file']		= 'Restore database a partir de ficheiro';
 $lang['db_restore_attention']	= '<p>Restore a partir de ficheiro implica que a BD seja eliminada antes de ser restaurada.</p><p><strong>Serão perdiso os dados</strong>.</p>';
 
 $lang['db_database_settings']	= 'Definições da BD';
+$lang['db_server_type']			= 'Server Type';
 $lang['db_hostname']			= 'Hostname';
 $lang['db_dbname']				= 'Database';
 $lang['db_advanced_options']	= 'Opções Avançadas';
@@ -79,3 +80,8 @@ $lang['db_debug_on']			= 'Debug On';
 $lang['db_strict_mode']			= 'Strict Mode';
 $lang['db_running_on_1']		= '*';
 $lang['db_running_on_2']		= '*';
+
+$lang['db_successful_save']		= 'Your settings were successfully saved.';
+$lang['db_erroneous_save']		= 'There was an error saving the settings.';
+$lang['db_successful_save_act']	= 'Database settings were successfully saved';
+$lang['db_erroneous_save_act']	= 'Database settings did not save correctly';

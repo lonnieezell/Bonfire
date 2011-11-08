@@ -35,8 +35,6 @@ $mb_constructor =<<<END
 		\$this->load->model('{$module_name_lower}_model', null, true);
 		\$this->lang->load('{$module_name_lower}');
 		
-		Assets::add_js(\$this->load->view('{$controller_name}/js', null, true), 'inline');
-		
 		{constructor_extras}
 	}
 	
@@ -58,8 +56,32 @@ $mb_index =<<<END
 		\$data = array();
 		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
 
+		Assets::add_js(\$this->load->view('{$controller_name}/js', null, true), 'inline');
+		
 		Template::set('data', \$data);
 		Template::set('toolbar_title', "Manage {$module_name}");
+		Template::render();
+	}
+	
+	//--------------------------------------------------------------------
+
+
+END;
+
+//--------------------------------------------------------------------
+
+$mb_index_front =<<<END
+	/*
+		Method: index()
+		
+		Displays a list of form data.
+	*/
+	public function index() 
+	{
+		\$data = array();
+		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
+
+		Template::set('data', \$data);
 		Template::render();
 	}
 	
@@ -218,9 +240,12 @@ $mb_save =<<<END
 			return FALSE;
 		}
 		
+		// make sure we only pass in the fields we want
+		{save_data_array}
+		
 		if (\$type == 'insert')
 		{
-			\$id = \$this->{$module_name_lower}_model->insert(\$_POST);
+			\$id = \$this->{$module_name_lower}_model->insert(\$data);
 			
 			if (is_numeric(\$id))
 			{
@@ -232,7 +257,7 @@ $mb_save =<<<END
 		}
 		else if (\$type == 'update')
 		{
-			\$return = \$this->{$module_name_lower}_model->update(\$id, \$_POST);
+			\$return = \$this->{$module_name_lower}_model->update(\$id, \$data);
 		}
 		
 		return \$return;
@@ -309,7 +334,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 }
 
 $body = str_replace('{constructor_extras}', $extras, $body);
-unset($extra);
+unset($extras);
 
 //--------------------------------------------------------------------
 
@@ -317,109 +342,127 @@ unset($extra);
 
 if (in_array('index', $action_names))
 {
-	$body .= $mb_index;
-}
-
-//--------------------------------------------------------------------
-
-// Create
-
-if (in_array('create', $action_names))
-{
-	$body .= $mb_create;
-	
-	$body = str_replace('{create_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Create', $body);
-}
-
-//--------------------------------------------------------------------
-
-// Edit
-
-if (in_array('edit', $action_names))
-{
-	$body .= $mb_edit;
-	
-	$body = str_replace('{edit_permission}', ucfirst($module_name).'.'.ucfirst($controller_name).'.Edit', $body);
-}
-
-//--------------------------------------------------------------------
-
-// Delete
-
-if (in_array('delete', $action_names))
-{
-	$body .= $mb_delete;
-	
-	$body = str_replace('{delete_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $body);
-}
-
-//--------------------------------------------------------------------
-
-// Save
-
-$body .= $mb_save;
-
-$rules = '';
-
-$last_field = 0;
-for($counter=1; $field_total >= $counter; $counter++)
-{
-	// only build on fields that have data entered. 
-		
-	// Due to the required if rule if the first field is set the the others must be
-
-	if (set_value("view_field_label$counter") == NULL)
+	// check if this is the front controller
+	if ($controller_name == $module_name_lower)
 	{
-		continue; 	// move onto next iteration of the loop
+		$body .= $mb_index_front;
 	}
-	
-	// we set this variable as it will be used to place the comma after the last item to build the insert db array
-	$last_field = $counter;
-	
-	$rules .= '			
-$this->form_validation->set_rules(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\',\''.set_value("view_field_label$counter").'\',\'';
-	
-	// set a friendly variable name
-    $validation_rules = $this->input->post('validation_rules'.$counter);
+	else {
+		$body .= $mb_index;
+	}
+}
 
-	// rules have been selected for this fieldset
-    $rule_counter = 0;
+//--------------------------------------------------------------------
+// check if this is the front controller
+if ($controller_name != $module_name_lower)
+{
 
-    if (is_array($validation_rules))
-    {       
-		// add rules such as trim|required|xss_clean
-		foreach($validation_rules as $key => $value)
+	// Create
+
+	if (in_array('create', $action_names))
+	{
+		$body .= $mb_create;
+
+		$body = str_replace('{create_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Create', $body);
+	}
+
+	//--------------------------------------------------------------------
+
+	// Edit
+
+	if (in_array('edit', $action_names))
+	{
+		$body .= $mb_edit;
+
+		$body = str_replace('{edit_permission}', ucfirst($module_name).'.'.ucfirst($controller_name).'.Edit', $body);
+	}
+
+	//--------------------------------------------------------------------
+
+	// Delete
+
+	if (in_array('delete', $action_names))
+	{
+		$body .= $mb_delete;
+
+		$body = str_replace('{delete_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $body);
+	}
+
+	//--------------------------------------------------------------------
+
+	// Save
+
+	$body .= $mb_save;
+
+	$rules = '';
+	$save_data_array = '
+		$data = array();';
+
+	$last_field = 0;
+	for($counter=1; $field_total >= $counter; $counter++)
+	{
+		// only build on fields that have data entered. 
+
+		// Due to the required if rule if the first field is set the the others must be
+
+		if (set_value("view_field_label$counter") == NULL)
+		{
+			continue; 	// move onto next iteration of the loop
+		}
+
+		// we set this variable as it will be used to place the comma after the last item to build the insert db array
+		$last_field = $counter;
+
+		$rules .= '			
+		$this->form_validation->set_rules(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\',\''.set_value("view_field_label$counter").'\',\'';
+		
+		$save_data_array .= '
+		$data[\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\']        = $this->input->post(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\');';
+
+		// set a friendly variable name
+		$validation_rules = $this->input->post('validation_rules'.$counter);
+
+		// rules have been selected for this fieldset
+		$rule_counter = 0;
+
+		if (is_array($validation_rules))
+		{       
+			// add rules such as trim|required|xss_clean
+			foreach($validation_rules as $key => $value)
+			{
+				if ($rule_counter > 0)
+				{
+					$rules .= '|';
+				}
+
+				if ($value == 'unique')	{		
+					$prefix = $this->db->dbprefix;
+					$rules .= $value.'['.$prefix.$table_name.'.'.$module_name_lower.'_'.set_value("view_field_name$counter").','.$prefix.$table_name.'.'.set_value("primary_key_field").']';
+				} else {
+					$rules .= $value;	
+				}
+				$rule_counter++;
+			}
+		}
+
+		if (set_value("db_field_type$counter") != 'ENUM' && set_value("db_field_length_value$counter") != NULL)
 		{
 			if ($rule_counter > 0)
 			{
 				$rules .= '|';
 			}
-		
-			if ($value == 'unique')	{		
-				$prefix = $this->db->dbprefix;
-				$rules .= $value.'['.$prefix.$table_name.'.'.$module_name_lower.'_'.set_value("view_field_name$counter").'.'.set_value("primary_key_field").'.\'.$id.\']';
-			} else {
-				$rules .= $value;	
-			}
-			$rule_counter++;
-		}
-    }
-	
-	if (set_value("db_field_type$counter") != 'ENUM' && set_value("db_field_length_value$counter") != NULL)
-	{
-		if ($rule_counter > 0)
-		{
-			$rules .= '|';
+
+			$rules .= 'max_length['.set_value("db_field_length_value$counter").']';
 		}
 
-		$rules .= 'max_length['.set_value("db_field_length_value$counter").']';
+		$rules .= "');";
 	}
-	
-	$rules .= "');";
-}
 
-$body = str_replace('{validation_rules}', $rules, $body);
-unset($rules);
+	$body = str_replace('{validation_rules}', $rules, $body);
+	$body = str_replace('{save_data_array}', $save_data_array, $body);
+	
+	unset($rules);
+}
 
 //--------------------------------------------------------------------
 

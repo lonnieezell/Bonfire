@@ -36,7 +36,6 @@ class Settings extends Admin_Controller {
 		
 		Template::set('toolbar_title', 'Database Settings');
 		
-		Assets::add_js($this->load->view('settings/database_js', null, true), 'inline');
 	}
 	
 	//--------------------------------------------------------------------
@@ -44,6 +43,8 @@ class Settings extends Admin_Controller {
 
 	public function index() 
 	{		
+		Assets::add_js($this->load->view('settings/database_js', null, true), 'inline');
+
 		Template::set('settings', read_db_config());
 	
 		Template::render();
@@ -53,28 +54,41 @@ class Settings extends Admin_Controller {
 	
 	public function edit() 
 	{
-		$server_type = $this->uri->segment(5);
+		$this->load->library('form_validation');
 	
+		$server_type = $this->uri->segment(5);
+		
 		if ($this->input->post('submit'))
 		{
-			//echo '<pre>'; print_r($_POST); die();
+			$this->form_validation->set_rules('server_type', lang('db_server_type'), 'required|trim|max_length[20]|xss_clean');
+			$this->form_validation->set_rules('hostname', lang('db_hostname'), 'required|trim|max_length[120]|xss_clean');
+			$this->form_validation->set_rules('database', lang('db_dbname'), 'required|trim|max_length[120]|xss_clean');
+			$this->form_validation->set_rules('username', lang('bf_username'), 'trim|xss_clean');
+			$this->form_validation->set_rules('password', lang('bf_password'), 'trim|xss_clean');
 		
-			unset($_POST['server_type'], $_POST['submit']);
-		
-			if (write_db_config(array($server_type => $_POST)) == TRUE)
+			if ($this->form_validation->run() !== FALSE)
 			{
-				Template::set_message('Your settings were successfully saved.', 'success');
-			} else 
-			{
-				Template::set_message('There was an error saving the settings.', 'error');
+				unset($_POST['server_type'], $_POST['submit']);
+
+				if (write_db_config(array($server_type => $_POST)) == TRUE)
+				{
+					Template::set_message(lang('db_successful_save'), 'success');
+					$this->activity_model->log_activity($this->auth->user_id(), $server_type . ' : ' . lang('db_successful_save_act'), 'database');
+				}
+				else 
+				{
+					Template::set_message(lang('db_erroneous_save'), 'error');
+					$this->activity_model->log_activity($this->auth->user_id(), $server_type . ' : ' . lang('db_erroneous_save_act'), 'database');
+				}
 			}
 		}
 		
 		$settings = read_db_config($server_type);
 		
 		if (! empty ($settings))
-
+		{
 			Template::set('db_settings', $settings[$server_type]);
+		}
 	
 		Template::set('server_type', $server_type);
 		Template::render();

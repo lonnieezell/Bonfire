@@ -32,13 +32,20 @@
 		<div class="scrollable" id="ajax-content">
 				
 				<div class="box create rounded">
+					<?php if ($writeable): ?>
 					<a class="button good" href="<?php echo site_url(SITE_AREA .'/developer/modulebuilder/create'); ?>"><?php echo lang('mb_create_button'); ?></a>
-				
+					<?php endif;?>
+					
 					<h3><?php echo ucwords(lang('mb_create_button')); ?></h3>
 					
 					<p><?php echo lang('mb_create_note'); ?></p>
 				</div>	
 				
+					<?php if (!$writeable): ?>
+					<div class="notification error">
+						<p><?php echo lang('mb_not_writeable_note'); ?></p>
+					</div>
+					<?php endif;?>
 				
 				<br/>
 

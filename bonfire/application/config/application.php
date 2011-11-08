@@ -1,4 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+$config['auth.use_extended_profile'] = 0;
 /*
 	Copyright (c) 2011 Lonnie Ezell
  
@@ -30,6 +32,7 @@ $config['site.list_limit'] = 25;
 // !Console/Profiler
 //--------------------------------------------------------------------
 $config['site.show_profiler'] = 1;
+$config['site.show_front_profiler'] = 1;
  
 //--------------------------------------------------------------------
 // !For Update messages
@@ -67,13 +70,12 @@ $config['auth.allow_remember'] = 1;
  
 // How long should a user be remembered in the system? In seconds.
 $config['auth.remember_length'] = 1209600;
+
+$config['auth.use_own_names'] = 0;
  
 // Should we do a custom login redirect, or just go to '/'?
 $config['auth.do_login_redirect'] = 1;
- 
-// Does User accounts have extended profile? Enabling will allow meta user data (wip)
-// 	also omits some default springboard user fields (eg: omits address fields) to allow customization.
-$config['auth.use_extended_profile'] = 0;
+
  
 //--------------------------------------------------------------------
 // !CONTEXTS
@@ -105,7 +107,7 @@ $config['module_permissions'] = array(
 	'content'		=> array(
 		'views'		=> 'Site.Content.View'
 	),
-	'stats'			=> array(
+	'reports'		=> array(
 		'emailer'	=> 'Bonfire.Emailer.View'
 	),
 	'appearance'	=> array(

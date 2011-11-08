@@ -339,7 +339,7 @@ class Assets {
 		$attr = array(
 			'rel'	=> 'stylesheet',
 			'type'	=> 'text/css',
-			'href'	=> site_url(self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.$min.".css"),
+			'href'	=> base_url() .self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.$min.".css",
 			'media'	=> $media
 		);
 
@@ -659,7 +659,9 @@ class Assets {
 				}
 			
 				$attr = array(
-					'src'	=> strpos($script, $http_protocol . ':') !== false ?
+					'src'	=> (strpos($script, $http_protocol . ':') !== false || 
+                                        strpos($script, 'http:') !== false || 
+                                        strpos($script, 'https:') !== false ) ?
 						
 						// It has a full url built in, so leave it alone
 						$script :
@@ -693,7 +695,7 @@ class Assets {
 		Return:
 			A string with the link(s) to the script files.
 	*/
-	public function module_js() 
+	public function module_js($list=false) 
 	{		
 		if (!is_array(self::$module_scripts) || !count(self::$module_scripts))
 		{
@@ -715,8 +717,15 @@ class Assets {
 			'src'	=> $src,
 			'type'	=> 'text/javascript'
 		);
-			
-		$return = '<script'. self::attributes($attr) ." ></script>\n";
+
+		if ($list)
+		{	
+			$return .= '"'. $attr['src'] .'", ';
+		}
+		else 
+		{
+			$return .= '<script'. self::attributes($attr) ." ></script>\n";
+		}
 			
 		return trim($return, ', ');
 	}
@@ -803,7 +812,7 @@ class Assets {
 
 		// Create our shell opening
 		if (self::generate_file($files, $file_name, 'js')) {
-			$output .= site_url(self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.".js");
+			$output .= base_url() .self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.".js";
 		}
 		
 		return $output;
@@ -861,7 +870,7 @@ class Assets {
 	{
 		self::$ci->load->helper('file');
 		
-		$cache_path = $_SERVER['DOCUMENT_ROOT'] . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
+		$cache_path = FCPATH . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
 		
 		delete_files($cache_path);
 	}
@@ -956,7 +965,7 @@ class Assets {
 		}
 
 		// Where to save the combined file to.
-		$cache_path = $_SERVER['DOCUMENT_ROOT'] . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
+		$cache_path = FCPATH . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
 
 		// full file path - without the extension
 		$file_path = $cache_path.$file_name;
@@ -990,7 +999,7 @@ class Assets {
 				}
 				else 
 				{
-					$app_file = $_SERVER['DOCUMENT_ROOT'] . '/'.str_replace(base_url(), '', $file);
+					$app_file = FCPATH . '/'.str_replace(base_url(), '', $file);
 				}
 				$app_file = strpos($app_file, '.js') ? $app_file : $app_file .'.js';
 				$files_array[$key] = $app_file;
@@ -1151,7 +1160,7 @@ class Assets {
 			// If it contains an external URL, we're all done here.
 			if (strpos((string)$file, $http_protocol, 0) !== false)
 			{
-				$new_files[] = $file;
+				$new_files[] = !empty($media) ? array('file'=>$file, 'media'=>$media) : $file;
 				continue;
 			}
 

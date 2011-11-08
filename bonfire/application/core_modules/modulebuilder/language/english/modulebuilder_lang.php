@@ -25,6 +25,7 @@
 $lang['mb_actions']				= 'Actions';
 $lang['mb_create_button']		= 'Create Module';
 $lang['mb_create_note']			= 'Use our wizbang module building wizard to create your next module. We do all the heavy lifting by generating all the controllers, models, views and language files you need.';
+$lang['mb_not_writeable_note']	= 'Error: The bonfire/modules folder is not writeable so modules cannot be written to the server.  Please make the folder writeable and refresh this page.';
 $lang['mb_delete']				= 'Delete';
 $lang['mb_generic_description']	= 'Your Description here.';
 $lang['mb_installed_head']		= 'Installed Application Modules';

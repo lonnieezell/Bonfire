@@ -42,8 +42,6 @@ class Developer extends Admin_Controller {
 		// Logging enabled?
 		Template::set('log_threshold', $this->config->item('log_threshold'));
 		
-		Assets::add_js($this->load->view('developer/logs_js', null, true), 'inline');
-		
 		$this->lang->load('logs');
 	}
 	
@@ -57,6 +55,8 @@ class Developer extends Admin_Controller {
 	public function index() 
 	{
 		$this->load->helper('file');
+		
+		Assets::add_js($this->load->view('developer/logs_js', null, true), 'inline');
 		
 		// Log Files
 		Template::set('logs', get_filenames($this->config->item('log_path')));
@@ -141,21 +141,21 @@ class Developer extends Admin_Controller {
 		if ($file)
 		{
 			@unlink($this->config->item('log_path') . $file);
-			$activity_text = 'Log file '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));	
+			$activity_text = 'log file '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));	
 		}
 		else 
 		{
 			delete_files($this->config->item('log_path'));
-			$activity_text = "All log files";
+			$activity_text = "all log files";
 			// restore the index.html file
 			@copy(APPPATH.'/index.html',$this->config->item('log_path').'/index.html');
 		}
 		
 		// since the $activity_text is being repurposed here, lowercase the first letter of the sentence to fit this sentence
-		Template::set_message("Successfully purged " . lcfirst($activity_text),'success');
+		Template::set_message("Successfully purged " . $activity_text,'success');
 			
 		// Log the activity
-		$this->activity_model->log_activity($this->auth->user_id(), $activity_text . ' purged from: ' . $this->input->ip_address(), 'logs');
+		$this->activity_model->log_activity($this->auth->user_id(), ucfirst($activity_text) . ' purged from: ' . $this->input->ip_address(), 'logs');
 
 		redirect(SITE_AREA .'/developer/logs');
 	}

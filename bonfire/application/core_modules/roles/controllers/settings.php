@@ -36,18 +36,12 @@ class Settings extends Admin_Controller {
 		
 		$this->lang->load('roles');
 		
-		Assets::add_js($this->load->view('settings/roles_js', null, true), 'inline');
-		Assets::add_module_js('roles', 'js/settings.js');
 		Assets::add_module_css('roles', 'css/settings.css');
-		
-		// for the permission matrix
-		$this->load->helper('inflector');
-		Assets::add_js('jquery.tablehover.pack.js');
-		Assets::add_css('css/role_settings.css');		
-		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
 		
 		// for the render_search_box()
 		$this->load->helper('ui/ui');
+		
+		Assets::add_js('js/jquery.tablehover.pack.js');
 	}
 		
 	//--------------------------------------------------------------------
@@ -55,6 +49,8 @@ class Settings extends Admin_Controller {
 	public function index() 
 	{
 		// Get User Counts
+		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
+		
 		Template::set('role_counts', $this->user_model->count_by_roles());
 		Template::set('total_users', $this->user_model->count_all());
 		
@@ -351,9 +347,13 @@ class Settings extends Admin_Controller {
 	*/
 	public function permission_matrix()
 	{
+		// for the permission matrix
+		$this->load->helper('inflector');
+		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
+		
 		Template::set('roles', $this->role_model->find_all());
-		Template::set('matrix_permissions', $this->permission_model->select('permission_id, name')->find_all());
-		Template::set('matrix_roles', $this->role_permission_model->select('role_id, role_name')->find_all_roles());
+		Template::set('matrix_permissions', $this->permission_model->select('permission_id, name')->order_by('name')->find_all());
+		Template::set('matrix_roles', $this->role_model->select('role_id, role_name')->find_all());
 		
 		$role_permissions = $this->role_permission_model->find_all_role_permissions();
 		foreach($role_permissions as $rp) {
@@ -394,7 +394,7 @@ class Settings extends Admin_Controller {
 	{
 		$pieces = explode(',',$this->input->post('role_perm', true));
 		
-		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find($pieces[0])->role_name.'.Manage')) {
+		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find( (int) $pieces[0])->role_name.'.Manage')) {
 			die(lang("matrix_auth_fail"));
 			return false;
 		}

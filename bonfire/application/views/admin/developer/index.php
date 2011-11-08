@@ -4,6 +4,8 @@
 	<p class="text-center">The tools available in the Developer's section are advanced tools, designed to make a developer's life a little easier.<br/>If used without the proper knowledge, they can be very dangerous. Use with care.</p>
 </div>
 
+<h2><a href="<?php echo site_url('unit_test.php') ?>" target="_blank">Unit Tests</a></h2>
+
 <h2>System Information</h2>
 
 	<table cellspacing="0">

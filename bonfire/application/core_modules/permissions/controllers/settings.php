@@ -16,7 +16,6 @@ class Settings extends Admin_Controller {
 		$this->lang->load('permissions');
 		$this->load->helper('inflector');
 			
-		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
 	}
 	
 	
@@ -27,6 +26,7 @@ class Settings extends Admin_Controller {
 	 */
 	function index()
 	{
+		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
 		Template::set('records', $this->permission_model->order_by('name')->find_all());
 		Template::set('permission_header', '');
 		if (!Template::get("toolbar_title"))

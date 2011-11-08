@@ -147,11 +147,6 @@ class User_model extends BF_Model {
 			$trigger_data = array('user_id'=>$id, 'data'=>$data);
 			Events::trigger('before_user_update', $trigger_data);
 		}
-	
-		if (empty($data['username'])) 
-		{
-			unset($data['username']);
-		}
 		
 		if (empty($data['pass_confirm']) && isset($data['password'])) 
 		{
@@ -201,6 +196,11 @@ class User_model extends BF_Model {
 	*/
 	public function find($id=null) 
 	{
+		if (empty($this->selects))
+		{
+			$this->select($this->table .'.*, role_name');
+		}
+	
 		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
 	
 		return parent::find($id);
@@ -222,6 +222,11 @@ class User_model extends BF_Model {
 	*/
 	public function find_all($show_deleted=false) 
 	{
+		if (empty($this->selects))
+		{
+			$this->select($this->table .'.*, role_name');
+		}
+	
 		if ($show_deleted === false)
 		{
 			$this->db->where('users.deleted', 0);
@@ -251,6 +256,11 @@ class User_model extends BF_Model {
 	public function find_by($field=null, $value=null) 
 	{
 		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
+		
+		if (empty($this->selects))
+		{
+			$this->select($this->table .'.*, role_name');
+		}
 		
 		if ($field == 'both')
 		{

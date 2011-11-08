@@ -3,7 +3,7 @@
 $view =<<<END
 <div class="box create rounded">
 
-	<a class="button good" href="<?php echo site_url(SITE_AREA . {$controller_name} .'/'. {$module_name_lower} .'/create'); ?>">
+	<a class="button good" href="<?php echo site_url(SITE_AREA .'/{$controller_name}/{$module_name_lower}/create'); ?>">
 		<?php echo lang('{$module_name_lower}_create_new_button'); ?>
 	</a>
 
@@ -61,6 +61,21 @@ for($counter=1; $field_total >= $counter; $counter++)
 	}
 	$headers .= '
 		<th>'. set_value("view_field_label$counter").'</th>';
+}
+if ($use_soft_deletes == 'true')
+{
+	$headers .= '
+		<th>Deleted</th>';
+}
+if ($use_created == 'true')
+{
+	$headers .= '
+		<th>Created</th>';
+}
+if ($use_modified == 'true')
+{
+	$headers .= '
+		<th>Modified</th>';
 }
 
 $view = str_replace('{table_header}', $headers, $view);

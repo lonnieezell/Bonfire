@@ -152,6 +152,13 @@ class Auth  {
 		
 		$user = $this->ci->user_model->select($selects)->find_by($this->ci->settings_lib->item('auth.login_type'), $login);
 		
+		// check to see if a value of false came back, meaning that the username or email or password doesn't exist.
+		if($user == false) 
+		{
+			$this->errors[] = $this->ci->lang->line('us_bad_email_pass');
+			return false;
+		}
+		
 		if (is_array($user))
 		{
 			$user = $user[0];
@@ -199,7 +206,7 @@ class Auth  {
 				Events::trigger('after_login', $trigger_data );
 				
 				// Save our redirect location
-				$this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '/';
+				$this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '';
 				
 				return true;
 			}
@@ -358,7 +365,7 @@ class Auth  {
 	*/
 	public function user_id() 
 	{
-		return $this->ci->session->userdata('user_id');
+		return (int) $this->ci->session->userdata('user_id');
 	}
 	
 	//--------------------------------------------------------------------
@@ -458,10 +465,12 @@ class Auth  {
 			// if true parameter
 			// Did we set a custom var for this?
 		*/
+		/*
 		if ($this->ci->settings_lib->item('auth.use_usernames') == 2)
 		{
 			return $this->ci->session->userdata('auth_custom');
 		}
+		*/
 		
 		logit('[Auth.user_name()] - Why are we going through DB?' , 'warn');
 		
@@ -944,17 +953,22 @@ class Auth  {
 
 		// TODO: consider taking this out of setup_session()
 		if ($this->ci->settings_lib->item('auth.use_usernames') == 0  && $this->ci->settings_lib->item('auth.login_type') ==  'username')
+		{
 			// if we've a username at identity, and don't want made user name, let's have an email nearby.
 			$us_custom = $email;
+		}
 		else
+		{
 			// For backward compatibility, defaults to username
 			$us_custom = $this->ci->settings_lib->item('auth.use_usernames') == 2 ? $user_name : $username;
+		}
 		
 		// Save the user's session info
 		if (!class_exists('CI_Session'))
 		{
 			$this->ci->load->library('session');
 		}
+		
 		if (!function_exists('do_hash'))
 		{
 			$this->ci->load->helper('security');

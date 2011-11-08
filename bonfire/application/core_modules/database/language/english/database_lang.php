@@ -63,6 +63,7 @@ $lang['db_restore_file']		= 'Restore database from file';
 $lang['db_restore_attention']	= '<p>Restoring a database from a backup file will result in some or all of your database being erased before restoring.</p><p><strong>This may result in a loss of data</strong>.</p>';
 
 $lang['db_database_settings']	= 'Database Settings';
+$lang['db_server_type']			= 'Server Type';
 $lang['db_hostname']			= 'Hostname';
 $lang['db_dbname']				= 'Database Name';
 $lang['db_advanced_options']	= 'Advanced Options';
@@ -79,3 +80,8 @@ $lang['db_debug_on']			= 'Debug On';
 $lang['db_strict_mode']			= 'Strict Mode';
 $lang['db_running_on_1']		= 'You are currently running on the';
 $lang['db_running_on_2']		= 'server.';
+
+$lang['db_successful_save']		= 'Your settings were successfully saved.';
+$lang['db_erroneous_save']		= 'There was an error saving the settings.';
+$lang['db_successful_save_act']	= 'Database settings were successfully saved';
+$lang['db_erroneous_save_act']	= 'Database settings did not save correctly';

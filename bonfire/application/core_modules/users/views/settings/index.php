@@ -26,7 +26,34 @@
 					<?php echo gravatar_link($user->email, 32,'',$user->first_name.'&nbsp;'.$user->last_name); ?>
 				
 					<p>
-						<b><?php echo ($this->settings_lib->item('auth.use_usernames') && ($user->username)) ? $user->username : $user->email; ?></b><br/>
+						<?php 
+							if ($this->settings_lib->item('auth.use_own_names'))
+							{
+								$name = trim($this->auth->user_name());
+								
+								if (empty($name))
+								{
+									if (!empty($user->username))
+									{
+										$name = $user->username;
+									}
+									else
+									{
+										$name = $user->email;
+									}
+								}
+							} 
+							else if ($this->settings_lib->item('auth.use_usernames') && ($user->username))
+							{
+								$name = $user->username;
+							}
+							else 
+							{
+								$name = $user->email;
+							}
+						?>
+						
+						<b><?php echo $name; ?></b><br/>
 						<span><?php echo $user->role_name ?></span>
 					</p>
 				</div>

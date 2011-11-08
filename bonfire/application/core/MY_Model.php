@@ -114,6 +114,15 @@ class BF_Model extends CI_Model {
 	*/
 	protected $soft_deletes = FALSE;
 	
+	/*
+		Var: $selects
+		Stores any selects here for use by the find* functions.
+		
+		Access:
+			Protected
+	*/
+	protected $selects = '';
+	
 	//---------------------------------------------------------------
 	
 	public function __construct()
@@ -140,6 +149,8 @@ class BF_Model extends CI_Model {
 		{
 			return false;
 		}
+		
+		$this->set_selects();
 		
 		$query = $this->db->get_where($this->table, array($this->table.'.'. $this->key => $id));
 
@@ -173,6 +184,8 @@ class BF_Model extends CI_Model {
 			return false;
 		}
 		
+		$this->set_selects();
+		
 		$this->db->from($this->table);
 		
 		$query = $this->db->get();
@@ -205,6 +218,8 @@ class BF_Model extends CI_Model {
 	public function find_all_by($field=null, $value=null) 
 	{		
 		if (empty($field)) return false;
+
+		$this->set_selects();
 
 		// Setup our field/value check
 		$this->db->where($field, $value);
@@ -256,6 +271,8 @@ class BF_Model extends CI_Model {
 		{
 			$this->db->where($field, $value);
 		}
+		
+		$this->set_selects();
 		
 		$query = $this->db->get($this->table);
 		
@@ -479,11 +496,6 @@ class BF_Model extends CI_Model {
 	*/
 	public function delete_where($data=null) 
 	{
-		if ($this->_function_check(FALSE, $data) === FALSE)
-		{
-			return FALSE;
-		}
-		
 		if (empty($data))
 		{
 			$this->error = $this->lang->line('bf_model_no_data');
@@ -516,7 +528,7 @@ class BF_Model extends CI_Model {
 
 		if ($result)
 		{
-			return true;
+			return $result;
 		} 
 		
 		$this->error = 'DB Error: ' . mysql_error();
@@ -600,6 +612,8 @@ class BF_Model extends CI_Model {
 			return false;
 		}
 		
+		$this->set_selects();
+		
 		$this->db->where($field, $value);
 		
 		return (int)$this->db->count_all_results($this->table);
@@ -682,7 +696,9 @@ class BF_Model extends CI_Model {
 	/*
 		Method: select()
 		
-		Sets the select portion of the query in a chainable format.
+		Sets the select portion of the query in a chainable format. The value
+		is stored for use in the find* methods so that child classes can
+		have more flexibility in joins and what is selected.
 		
 		Parameters:
 			$selects	- A string representing the selection.
@@ -694,7 +710,7 @@ class BF_Model extends CI_Model {
 	{
 		if (!empty($selects))
 		{		
-			$this->db->select($selects);
+			$this->selects = $selects;
 		}
 		
 		return $this;
@@ -750,7 +766,7 @@ class BF_Model extends CI_Model {
 			{
 				$this->db->order_by($field, $order);
 			}
-			else if (is_array($order_by))
+			else if (is_array($field))
 			{
 				foreach ($field as $f => $o)
 				{
@@ -939,6 +955,29 @@ class BF_Model extends CI_Model {
 	public function set_soft_deletes($soft=true) 
 	{
 		$this->soft_deletes = $soft;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: set_selects()
+		
+		Takes the string in $this->selects, if not empty, and sets it
+		with the ActiveRecord db class. Clears the string afterword
+		to make sure it's clean for the next call.
+		
+		Access:
+			Private
+	*/
+	private function set_selects() 
+	{
+		if (!empty($this->selects))
+		{
+			$this->db->select($this->selects);
+		
+			// Clear it out for the next process.
+			$this->selects = null;
+		}
 	}
 	
 	//--------------------------------------------------------------------

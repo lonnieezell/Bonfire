@@ -7,6 +7,12 @@
 </div>
 
 <script>
+	head.js(<?php echo Assets::external_js(null, true) ?>);
+	head.js(<?php echo Assets::module_js(true) ?>);
+</script>
+<?php echo Assets::inline_js(); ?>
+
+<script>
 	/*
 		Ajax form submittal
 	*/

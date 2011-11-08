@@ -107,7 +107,8 @@ $lang['bf_go_back']				= 'Go Back';
 $lang['bf_new']					= 'New';
 $lang['bf_required_note']		= 'Required fields are in <b>bold</b>.';
 
-$lang['bf_show_profiler']		= 'Show Profiler?';
+$lang['bf_show_profiler']		= 'Show Admin Profiler?';
+$lang['bf_show_front_profiler']	= 'Show Front End Profiler?';
 
 //--------------------------------------------------------------------
 // MY_Model
