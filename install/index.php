@@ -1,11 +1,5 @@
 <?php
 
-// Check if the install folder exists - if so then show the installer app
-if (is_dir('./install'))
-{
-	header('Location: /install');
-	exit;
-}
 
 /*
  *---------------------------------------------------------------
@@ -79,7 +73,7 @@ if (is_dir('./install'))
  * as this file.
  *
  */
-	$system_path = "bonfire/codeigniter";
+	$system_path = "../bonfire/codeigniter";
 
 /*
  *---------------------------------------------------------------
@@ -95,7 +89,7 @@ if (is_dir('./install'))
  * NO TRAILING SLASH!
  *
  */
-	$application_folder = "bonfire/application";
+	$application_folder = ".";
 
 /*
  * --------------------------------------------------------------------
