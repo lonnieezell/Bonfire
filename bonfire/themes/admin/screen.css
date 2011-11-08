@@ -183,6 +183,14 @@ label {
 	margin-right: 1.5em;
 	text-align: right;
 	line-height: 1.5;
+	vertical-align: top;
+	padding-top: 5px
+}
+span.required {
+	display: inline-block;
+	vertical-align: top;
+	line-height: 1.5;
+	padding-top: 5px
 }
 input[type=text],
 input[type=email],
