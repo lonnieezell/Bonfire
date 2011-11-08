@@ -209,7 +209,7 @@ class Emailer {
 		$this->ci->email->initialize($this->ci->settings_model->select('name,value')->find_all_by('module', 'email'));
 		
 		$this->ci->email->to($to);
-		$this->ci->email->from($from, $this->ci->config->item('site.title'));
+		$this->ci->email->from($from, $this->ci->settings_lib->item('site.title'));
 		$this->ci->email->subject($subject);
 		$this->ci->email->message($message);
 		if ($alt_message)
