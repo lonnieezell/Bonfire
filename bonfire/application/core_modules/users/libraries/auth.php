@@ -1040,7 +1040,7 @@ if (!function_exists('auth_errors'))
 			{
 				$str .= "<li>$e</li>";
 			}
-			$str .= "</li>";
+			$str .= "</ul>";
 			
 			return $str;
 		}
