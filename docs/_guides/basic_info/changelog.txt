@@ -8,6 +8,7 @@ Additions:
 - Adding extra functionality to the config_file_helper to allow reading and writing of module config files
 - Config setting for front end controller which is checked inside the MY_Controller/Front_Controller
 - Adding "matches_pattern" method to Form Validation to ensures a string matches a basic pattern
+- Upgrading the Migrations DB schema (issue #180) so that we use records instead of DB table columns for the modules
 
 Bugs:
 - #236 - Email Settings - fixing the password validation

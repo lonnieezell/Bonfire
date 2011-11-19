@@ -180,11 +180,17 @@ class Developer extends Admin_Controller {
             	}		
 	        }
 	        
-	        // drop the schema #
+	        // drop the schema - old Migration schema method
 	        $module_name_lower = strtolower($module_name);
 	        if ($this->db->field_exists( $module_name_lower . '_version', 'schema_version'))
 	        {
 	        	$this->dbforge->drop_column('schema_version', $module_name_lower . '_version');
+	        }
+	        // drop the Migration record - new Migration schema method
+	        $module_name_lower = strtolower($module_name);
+	        if ($this->db->field_exists('version_num', 'schema_version'))
+	        {
+	        	$this->db->delete('schema_version', array('type' => $module_name_lower.'_'));
 	        }
 	        
 	        if ($this->db->trans_status() === FALSE) {
@@ -334,16 +340,19 @@ class Developer extends Admin_Controller {
 		$data['table_name']			= empty($table_name) ? $module_name : $table_name;
 		$data = $data + $file_data;
 		
-		// update the schema first to prevent errors in duplicate column names due to Migrations.php caching db columns
-		$this->load->dbforge();
-		$this->dbforge->add_column('schema_version', array(
-				$data['module_name_lower'] . '_version'	=> array(
-				'type'			=> 'INT',
-				'constraint'	=> 4,
-				'null'			=> true, 
-				'default'		=> 0
-			)
-		));	
+		// Allow for the Old method - update the schema first to prevent errors in duplicate column names due to Migrations.php caching db columns
+		if (!$this->db->field_exists('version_num', 'schema_version'))
+		{
+			$this->load->dbforge();
+			$this->dbforge->add_column('schema_version', array(
+					$data['module_name_lower'] . '_version'	=> array(
+					'type'			=> 'INT',
+					'constraint'	=> 4,
+					'null'			=> true, 
+					'default'		=> 0
+				)
+			));	
+		}
 		
 		// load the migrations library
 		$this->load->library('migrations/Migrations');

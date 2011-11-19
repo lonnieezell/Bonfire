@@ -1,66 +1,47 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Permissions_to_manage_activities extends Migration {
+class Migration_Migration_schema_change extends Migration {
 	
 	public function up() 
 	{
-		$this->load->library('session');
-		
 		$prefix = $this->db->dbprefix;
 		
-		// add the soft deletes column, made it (12) to accomodate time stamp change coming
-		$sql = "ALTER TABLE `{$prefix}activities` ADD COLUMN `deleted` TINYINT(12) DEFAULT '0' NOT NULL AFTER `created_on`";
-		$this->db->query($sql);
+		// get the current schema versions
+		$sql = "SELECT * FROM {$prefix}schema_version";
+		$schema_version_query = $this->db->query($sql);
+		$version_array = $schema_version_query->row_array();
+
+		// backup the schema_version table
+		$this->dbforge->rename_table($prefix.'schema_version', $prefix.'schema_version_old');
+
+		// modify the schema_version table
+		$fields = array(
+						'type' => array(
+							'type' => 'VARCHAR',
+							'constraint' => 20, 
+							'null' => FALSE,
+						),
+						'version_num' => array(
+							'type' => 'INT',
+							'constraint' => '4',
+							'default'    => 0,
+						),
+				);
+		$this->dbforge->add_field($fields);
+		$this->dbforge->add_key('type', TRUE);
+		$this->dbforge->create_table('schema_version');
 		
-		$data = array(
-		   array(
-		      'name' 		=> 'Bonfire.Activities.Manage' ,
-		      'description' => 'Allow users to access the Activities Reports' 
-		   ),
-		   array(
-		      'name' 		=> 'Activities.Own.View' ,
-		      'description' => 'To view the users own activity logs' 
-		   ),
-		   array(
-		      'name' 		=> 'Activities.Own.Delete' ,
-		      'description' => 'To delete the users own activity logs' 
-		   ),
-		   array(
-		      'name' 		=> 'Activities.User.View' ,
-		      'description' => 'To view the user activity logs' 
-		   ),
-		   array(
-		      'name' 		=> 'Activities.User.Delete' ,
-		      'description' => 'To delete the user activity logs, except own' 
-		   ),
-		   array(
-		      'name' 		=> 'Activities.Module.View' ,
-		      'description' => 'To view the module activity logs' 
-		   ),
-		   array(
-		      'name' 		=> 'Activities.Module.Delete' ,
-		      'description' => 'To delete the module activity logs' 
-		   ),
-		   array(
-		      'name' 		=> 'Activities.Date.View' ,
-		      'description' => 'To view the users own activity logs' 
-		   ),
-		   array(
-		      'name' 		=> 'Activities.Date.Delete' ,
-		      'description' => 'To delete the dated activity logs' 
-		   )
-		);
-		
-		$this->db->insert_batch("{$prefix}permissions", $data);
-		
-		// give current role (or administrators if fresh install) full right to manage permissions
-		$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
-		
-		$permissions = $this->db->select('permission_id')->where("(name = 'Bonfire.Activities.Manage') OR (name LIKE 'Activities.%.View') OR (name LIKE 'Activities.%.Delete')")->get($prefix.'permissions')->result();
-		if (isset($permissions) && is_array($permissions) && count($permissions)) {
-			foreach ($permissions as $perm) {
-				$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(".$assign_role.",".$perm->permission_id.")");
+		// add records for each of the old permissions
+		foreach ($version_array as $type => $version_num)
+		{
+			$type_field = $type == 'version' ? 'core' : str_replace('version', '', $type);
+			
+			if ($type_field == 'core')
+			{
+				$version_num++;
 			}
+			
+			$this->db->query("INSERT INTO {$prefix}schema_version VALUES ('{$type_field}', ".$version_num.");");
 		}
 	}
 	
@@ -70,24 +51,11 @@ class Migration_Permissions_to_manage_activities extends Migration {
 	{
 		$prefix = $this->db->dbprefix;
 		
-		$roles = $this->role_model->find_all();
-		if (isset($roles) && is_array($roles) && count($roles)) {
-			foreach ($roles as $role) {
-				// delete any but that has any of these permissions from the role_permissions table
-				$query = $this->db->query("SELECT `permission_id` FROM `{$prefix}permissions` WHERE `name` LIKE 'Activities.%.View' or `name` LIKE 'Activities.%.Delete' or `name` = 'Bonfire.Activities.Manage'");
-				foreach ($query->result_array() as $row)
-				{
-					$permission_id = $row['permission_id'];
-					$this->db->query("DELETE FROM `{$prefix}role_permissions` WHERE `permission_id` = '$permission_id';");
-				}
-				//delete the role
-				$this->db->query("DELETE FROM `{$prefix}permissions` WHERE `name` LIKE 'Activities.%.View' or `name` LIKE 'Activities.%.Delete' or `name` = 'Bonfire.Activities.Manage'");
-			}
-		}
+		// Reverse the schema_version table changes
+		$this->dbforge->drop_table('schema_version');
 		
-		// drop the added deleted column
-		$sql = "ALTER TABLE `{$prefix}activities` DROP COLUMN `deleted`";
-		$this->db->query($sql);	
+		$this->dbforge->rename_table($prefix.'schema_version_old', $prefix.'schema_version');
+
 	}
 	
 	//--------------------------------------------------------------------

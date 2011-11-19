@@ -145,13 +145,13 @@ class Migrations {
 		if ( ! $this->_ci->db->table_exists('schema_version'))
 		{
 			$this->_ci->dbforge->add_field(array(
-				'version' => array('type' => 'INT', 'constraint' => 4, 'default' => 0),
-				'app_version' => array('type' => 'INT', 'constraint' => 4, 'default' => 0),
+				'type' => array('type' => 'VARCHAR', 'constraint' => 20, 'null' => FALSE),
+				'version_num' => array('type' => 'INT', 'constraint' => 4, 'default' => 0),
 			));
-			
+			$this->dbforge->add_key('type', TRUE);
 			$this->_ci->dbforge->create_table('schema_version', TRUE);
 			
-			$this->_ci->db->insert('schema_version', array('version' => 0));
+			$this->_ci->db->insert('schema_version', array('type' => 'core', 'version_num' => 0));
 		}
 		
 		// Make sure out application helper is loaded.
@@ -431,11 +431,22 @@ class Migrations {
 	 */
 	public function get_schema_version($type='') 
 	{
-		$row = $this->_ci->db->get('schema_version')->row();
+		if ($this->_check_migrations_column('type'))
+		{
+			// new schema table layout
+			$type = empty($type) ? 'core' : $type;
+			$row = $this->_ci->db->get_where('schema_version', array('type' => $type))->row();
+			return isset($row->version_num) ? $row->version_num: 0;
+		}
+		else
+		{
+			$row = $this->_ci->db->get('schema_version')->row();
 
-		$schema = $type .'version';
-		
-		return isset($row->$schema) ? $row->$schema : 0;
+			$schema = $type .'version';
+
+			return isset($row->$schema) ? $row->$schema : 0;
+		}
+
 	}
 
 	// --------------------------------------------------------------------
@@ -571,27 +582,77 @@ class Migrations {
 	 */
 	private function _update_schema_version($schema_version, $type='') 
 	{	
-		logit('[Migrations] Schema updated to: '. $schema_version);
+		logit('[Migrations] Schema '. $type.' updated to: '. $schema_version);
 	
-		// If the row doesn't exist, create it...
-		if (!$this->_ci->db->field_exists($type .'version', 'schema_version'))
-		{ 
-			$this->_ci->load->dbforge();
-			
-			$this->_ci->dbforge->add_column('schema_version', array(
-				$type .'version'	=> array(
-					'type'			=> 'INT',
-					'constraint'	=> 4,
-					'null'			=> true, 
-					'default'		=> 0
-				)
+		if ($this->_check_migrations_column('type'))
+		{
+			// new schema table layout
+			$type = empty($type) ? 'core' : $type;
+			// If the row doesn't exist, create it...
+			$query = $this->_ci->db->get_where('schema_version', array('type' => $type));
+
+			if (!$query->num_rows())
+			{ 
+				$this->_ci->db->insert('schema_version', array(
+					'type'        => $type,
+					'version_num' => $schema_version,
+				));
+
+			}
+
+			return $this->_ci->db->update('schema_version', array('version_num' => $schema_version), array('type' => $type));
+		}
+		else
+		{
+			// If the row doesn't exist, create it...
+			if (!$this->_check_migrations_column($type .'version'))
+			{ 
+				$this->_ci->load->dbforge();
+
+				$this->_ci->dbforge->add_column('schema_version', array(
+					$type .'version'	=> array(
+						'type'			=> 'INT',
+						'constraint'	=> 4,
+						'null'			=> true, 
+						'default'		=> 0
+					)
+				));
+
+			}
+
+			return $this->_ci->db->update('schema_version', array(
+				$type.'version' => $schema_version
 			));
 
 		}
+	}
 	
-		return $this->_ci->db->update('schema_version', array(
-			$type.'version' => $schema_version
-		));
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: _check_migrations_column()
+		
+		Method to check if the DB table schema_version is in the new format or old
+		
+		Access:
+			private
+			
+		Parameters:
+			$column_name	- Name of the column to check the existance of
+		
+		Return:
+			boolean
+	*/
+	private function _check_migrations_column($column_name)
+	{
+		$row = $this->_ci->db->get('schema_version')->row();
+		
+		if (isset($row->$column_name))
+		{
+			return TRUE;
+		}
+		
+		return FALSE;
 	}
 	
 	//--------------------------------------------------------------------
