@@ -45,7 +45,8 @@ $view = '
 				
 					<h2>'.$module_name.'</h2>
 	<table>
-		<thead>';
+		<thead>
+			<tr>';
 
 for($counter=1; $field_total >= $counter; $counter++)
 {
@@ -76,7 +77,9 @@ if ($use_modified == 'true')
 		<th>Modified</th>';
 }
 
-$view .= '<th><?php echo lang(\''.$module_name_lower.'_actions\'); ?></th>
+$view .= '
+		<th><?php echo lang(\''.$module_name_lower.'_actions\'); ?></th>
+		</tr>
 		</thead>
 		<tbody>
 <?php

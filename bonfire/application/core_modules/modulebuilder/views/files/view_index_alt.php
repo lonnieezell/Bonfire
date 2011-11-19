@@ -20,10 +20,11 @@ $view =<<<END
 	<h2>{$module_name}</h2>
 	<table>
 		<thead>
-		
+			<tr>
 			{table_header}
 		
 			<th><?php echo lang('{$module_name_lower}_actions'); ?></th>
+			</tr>
 		</thead>
 		<tbody>
 		
