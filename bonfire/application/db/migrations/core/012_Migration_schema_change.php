@@ -16,7 +16,7 @@ class Migration_Migration_schema_change extends Migration {
 		$version_array = $schema_version_query->row_array();
 
 		// check if the table is in the old format
-		if (!isset($version_array->type))
+		if (!isset($version_array['type']))
 		{
 			// the table is in the old format
 
