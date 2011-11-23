@@ -148,7 +148,7 @@ class Migrations {
 				'type' => array('type' => 'VARCHAR', 'constraint' => 20, 'null' => FALSE),
 				'version_num' => array('type' => 'INT', 'constraint' => 4, 'default' => 0),
 			));
-			$this->dbforge->add_key('type', TRUE);
+			$this->_ci->dbforge->add_key('type', TRUE);
 			$this->_ci->dbforge->create_table('schema_version', TRUE);
 			
 			$this->_ci->db->insert('schema_version', array('type' => 'core', 'version_num' => 0));
