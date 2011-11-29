@@ -153,12 +153,6 @@ class Migrations {
 			
 			$this->_ci->db->insert('schema_version', array('version' => 0));
 		}
-		
-		// Make sure out application helper is loaded.
-		if (!function_exists('logit'))
-		{
-//			$this->_ci->load->helper('application');
-		}
 	}
 	
 	//--------------------------------------------------------------------
@@ -276,7 +270,7 @@ class Migrations {
 		for($i=$start; $i != $stop; $i += $step) 
 		{
 			$f = glob(sprintf($migrations_path . '%03d_*'.EXT, $i));
-//			logit($f);
+
 			// Only one migration per step is permitted
 			if (count($f) > 1)
 			{ 

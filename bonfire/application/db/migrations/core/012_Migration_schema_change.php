@@ -30,7 +30,7 @@ class Migration_Migration_schema_change extends Migration {
 								'constraint' => 20, 
 								'null' => FALSE,
 							),
-							'version_num' => array(
+							'version' => array(
 								'type' => 'INT',
 								'constraint' => '4',
 								'default'    => 0,

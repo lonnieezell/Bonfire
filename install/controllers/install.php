@@ -322,7 +322,7 @@ class Install extends CI_Controller {
 	
 		if (!$this->migrations->install())
 		{
-			$this->errors = 'There was an error setting up the database. Please check your settings and try again.';
+			$this->errors = $this->migrations->error;
 			return false;
 		}
 
