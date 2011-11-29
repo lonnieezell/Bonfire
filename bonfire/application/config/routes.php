@@ -54,6 +54,10 @@ $route[SITE_AREA .'/([a-z_]+)/(:any)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$4/$5";
 $route[SITE_AREA .'/([a-z_]+)/(:any)/(:any)/(:any)']		= "$2/$1/$3/$4";
 $route[SITE_AREA .'/([a-z_]+)/(:any)/(:any)'] 		= "$2/$1/$3";
 $route[SITE_AREA .'/([a-z_]+)/(:any)']				= "$2/$1/index";
+$route[SITE_AREA .'/content']				= "admin/content/index";
+$route[SITE_AREA .'/reports']				= "admin/reports/index";
+$route[SITE_AREA .'/developer']				= "admin/developer/index";
+$route[SITE_AREA .'/settings']				= "settings/index";
 
 $route[SITE_AREA]	= SITE_AREA .'/home';
 

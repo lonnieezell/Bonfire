@@ -82,7 +82,7 @@ class Users extends Front_Controller {
 						cases where we are presenting different information to different
 						roles that might cause the base destination to be not available.
 					*/
-					if (config_item('auth.do_login_redirect') && !empty ($this->auth->login_destination))
+					if ($this->settings_lib->item('auth.do_login_redirect') && !empty ($this->auth->login_destination))
 					{
 						Template::redirect($this->auth->login_destination);
 					}
@@ -212,7 +212,7 @@ class Users extends Front_Controller {
 			if ($this->save_user($user_id))
 			{
 				$user = $this->user_model->find($user_id);
-				$log_name = config_item('auth.use_own_names') ? $this->auth->user_name() : (config_item('auth.use_usernames') ? $user->username : $user->email);
+				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->auth->user_name() : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_edit_profile') .': '.$log_name, 'users');
 			
 				Template::set_message('Profile successfully updated.', 'success');
@@ -313,7 +313,7 @@ class Users extends Front_Controller {
 	public function register() 
 	{
 		// Are users even allowed to register? 
-		if (!$this->config->item('auth.allow_register'))
+		if (!$this->settings_lib->item('auth.allow_register'))
 		{
 			Template::set_message('New account registrations are not allowed.', 'attention');
 			redirect('/');
@@ -326,12 +326,12 @@ class Users extends Front_Controller {
 		{
 			// Validate input
 			$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|max_length[120]|callback_unique_email|xsx_clean');
-			if (config_item('auth.use_usernames'))
+			if ($this->settings_lib->item('auth.use_usernames'))
 			{
 				$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|callback_unique_username|xsx_clean');
 			}
 		
-			if (config_item('auth.use_own_names'))
+			if ($this->settings_lib->item('auth.use_own_names'))
 			{
 				$this->form_validation->set_rules('first_name', lang('us_first_name'), 'required|trim|strip_tags|max_length[20]|xss_clean');
 				$this->form_validation->set_rules('last_name', lang('us_last_name'), 'required|trim|strip_tags|max_length[20]|xss_clean');
@@ -402,21 +402,21 @@ class Users extends Front_Controller {
 		$this->form_validation->set_rules('password', 'Password', 'trim|strip_tags|max_length[40]|xss_clean');
 		$this->form_validation->set_rules('pass_confirm', 'Password (again)', 'trim|strip_tags|matches[password]|xss_clean');
 		
-		if (config_item('auth.use_usernames'))
+		if ($this->settings_lib->item('auth.use_usernames'))
 		{
 			$_POST['id'] = $this->auth->user_id();
 			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username,bf_users.id]|xsx_clean');
 		}
 		
 		$required = false;
-		if (config_item('auth.use_own_names'))
+		if ($this->settings_lib->item('auth.use_own_names'))
 		{
 			$required = 'required|';
 		} 
 		$this->form_validation->set_rules('first_name', lang('us_first_name'), $required.'trim|strip_tags|max_length[20]|xss_clean');
 		$this->form_validation->set_rules('last_name', lang('us_last_name'), $required.'trim|strip_tags|max_length[20]|xss_clean');
 		
-		if  ( ! config_item('auth.use_extended_profile'))
+		if  ( ! $this->settings_lib->item('auth.use_extended_profile'))
 		{
 			$this->form_validation->set_rules('street1', 'Street 1', 'trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('street2', 'Street 2', 'trim|strip_tags|xss_clean');

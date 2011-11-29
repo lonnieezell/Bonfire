@@ -6,7 +6,7 @@
 	
 	<?php echo $startup_errors; ?>
 	
-	<p style="text-align: right; margin-top: 3em;"><?php echo anchor('installer.php', 'Reload Page'); ?></p>
+	<p style="text-align: right; margin-top: 3em;"><?php echo anchor('install', 'Reload Page'); ?></p>
 
 <?php else : ?>
 

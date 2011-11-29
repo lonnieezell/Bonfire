@@ -1,5 +1,11 @@
 <?php
 
+// Check if the install folder exists - if so then show the installer app
+if (is_dir('./install'))
+{
+	header('Location: /install');
+	exit;
+}
 
 /*
  *---------------------------------------------------------------

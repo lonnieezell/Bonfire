@@ -27,7 +27,7 @@
 				
 					<p>
 						<?php 
-							if (config_item('auth.use_own_names'))
+							if ($this->settings_lib->item('auth.use_own_names'))
 							{
 								$name = trim($this->auth->user_name());
 								
@@ -43,7 +43,7 @@
 									}
 								}
 							} 
-							else if (config_item('auth.use_usernames') && ($user->username))
+							else if ($this->settings_lib->item('auth.use_usernames') && ($user->username))
 							{
 								$name = $user->username;
 							}

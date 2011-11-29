@@ -16,7 +16,7 @@ Available Settings:
 	Email Type				- Whether to send HTML or plain text emails.
 	Email Server			- This is the protocol used to send the email. Choose from PHP's _mail_ command, the _sendmail_ method, or configure an _SMTP_ host. 
 	
-All settings are stored in application/config/email.php and should be accessed automatically whenever you load the Emailer library. In some server setups, I have run into issues where the settings were not automatically applied. To combat this, the settings file is loaded and passed to the Email library's _initialize()_ method.
+All settings are stored in the database and should be accessed automatically whenever you load the Emailer library. In some server setups, I have run into issues where the settings were not automatically applied. To combat this, the settings file is loaded and passed to the Email library's _initialize()_ method.
 
 
 About: Testing Your Email Server
@@ -59,7 +59,7 @@ To send an email from your module's controller is a two-step process. The first 
 >	'alt_message'	=> ''		// optional (text alt to html email)
 > );
 
-The from address is specified in the config/email.php file, and can be set through at Settings / Emailer.
+The from address is specified in the sender_email record in the "settings" database table, and can be set through at Settings / Emailer.
 
 Next, you call the _send()_ method, passing the data array to the method.
 

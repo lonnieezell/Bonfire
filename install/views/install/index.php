@@ -20,7 +20,7 @@
 	</div>
 	<?php endif; ?>
 	
-	<?php echo form_open(site_url('install'), array('id' => 'db-form') ) ?>
+	<?php echo form_open(uri_string(), array('id' => 'db-form') ) ?>
 	
 		<div>
 			<label for="environment"><?php echo lang('in_environment'); ?></label>

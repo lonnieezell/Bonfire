@@ -34,7 +34,7 @@
 	
 	Module:	Installer
 */
-class Install extends MX_Controller {
+class Install extends CI_Controller {
 
 	protected $errors = '';
     
@@ -51,6 +51,14 @@ class Install extends MX_Controller {
 	*/
 	private $curl_update = 1;
 	
+	
+	/*
+		Var: $app_path
+		Boolean that says whether we should check
+		for updates.
+	*/
+	private $app_path = '../bonfire/application/';
+
 	/*
 		Var: $writable_folders
 		An array of folders the installer checks to make 
@@ -98,12 +106,6 @@ class Install extends MX_Controller {
 		
 		// check if the app is installed
 		$this->load->config('application');
-		$site_title = config_item('site.title');
-		if (!empty($site_title))
-		{
-			redirect('/');
-		}
-
         
 		$this->cURL_check();
 	}
@@ -140,16 +142,10 @@ class Install extends MX_Controller {
 					'database'	=> $dbname,
 					'dbprefix'	=> strip_tags($this->input->post('db_prefix'))
 				),
-				$environment => array(
-					'hostname'	=> strip_tags($this->input->post('hostname')),
-					'username'	=> strip_tags($this->input->post('username')),
-					'password'	=> strip_tags($this->input->post('password')),
-					'database'	=> $dbname,
-					'dbprefix'	=> strip_tags($this->input->post('db_prefix'))
-				)
 			);
 			
-			if (write_db_config($data))
+			$this->session->set_userdata('db_data', $data);
+			if ($this->session->userdata('db_data'))
 			{
 				//
 				// Make sure the database exists, otherwise create it.
@@ -177,7 +173,7 @@ class Install extends MX_Controller {
 						mysql_close($db);
 					}
 
-					redirect('install/account');
+					redirect('account');
 				}
 			}
 			else
@@ -209,7 +205,8 @@ class Install extends MX_Controller {
 				if ($this->setup())
 				{
 					Template::set_message('You are good to go! Happy coding!', 'success');
-					redirect('/login');
+//					redirect('/login');
+					Template::set_view('install/success');
 				}
 				else 
 				{
@@ -243,11 +240,12 @@ class Install extends MX_Controller {
 		$folder_errors = '';
 		$file_errors = '';
 		
+		
 		// Check Folders
 		foreach ($this->writeable_folders as $folder)
 		{
-			@chmod(APPPATH .$folder, 0777);
-			if (!is_writeable(APPPATH .$folder))
+			@chmod(FCPATH . $this->app_path . $folder, 0777);
+			if (!is_writeable(FCPATH . $this->app_path . $folder))
 			{
 				$folder_errors .= "<li>$folder</li>";
 			}
@@ -261,8 +259,8 @@ class Install extends MX_Controller {
 		// Check files
 		foreach ($this->writeable_files as $file)
 		{
-			@chmod(APPPATH .$file, 0666);
-			if (!is_writeable(APPPATH .$file))
+			@chmod(FCPATH . $this->app_path .$file, 0666);
+			if (!is_writeable(FCPATH . $this->app_path . $file))
 			{
 				$file_errors .= "<li>$file</li>";
 			}
@@ -287,64 +285,87 @@ class Install extends MX_Controller {
 			as simplifying what will need to be modified when some
 			sweeping changes are made. 
 		*/
-		if (!file_exists(APPPATH .'config/development/database.php') && is_writeable(APPPATH .'config/'))
-		{
-			// Database
-			copy(APPPATH .'config/database.php', APPPATH .'config/development/database.php');
-			copy(APPPATH .'config/database.php', APPPATH .'config/production/database.php');
-			copy(APPPATH .'config/database.php', APPPATH .'config/testing/database.php');
-		}
 	}
 	
 	//--------------------------------------------------------------------
 	
 	
 	private function setup() 
-	{ 
-		//
-		// First, save the information to the config/application.php file.
-		//
-		$this->load->helper('config_file');
+	{
 		
-		$config = array(
-			'site.title'	=> $this->input->post('site_title'),
-			'site.system_email'	=> $this->input->post('email'),
-			'updates.do_check' => $this->curl_update,
-			'updates.bleeding_edge' => $this->curl_update
-		);
-		
-		if (write_config('application', $config) === false)
+		// Save the DB details
+		$data = $this->session->userdata("db_data");
+
+		write_db_config($data);
+	
+		if (!file_exists(FCPATH . $this->app_path . 'config/development/database.php') && is_writeable(FCPATH . $this->app_path . 'config/'))
 		{
-			$this->errors = 'Unable to write to config/application.php. Make sure that it is writable and try again.';
-			return false;
+			// Database
+			copy(FCPATH . $this->app_path . 'config/database.php', FCPATH . $this->app_path . 'config/development/database.php');
+			copy(FCPATH . $this->app_path . 'config/database.php', FCPATH . $this->app_path . 'config/production/database.php');
+			copy(FCPATH . $this->app_path . 'config/database.php', FCPATH . $this->app_path . 'config/testing/database.php');
 		}
+
+		$server   = $data['main']['hostname'];
+		$username = $data['main']['username'];
+		$password = $data['main']['password'];
 		
+		if( !$this->db = mysql_connect($server, $username, $password) )
+		{
+			return array('status' => FALSE,'message' => 'The installer could not connect to the MySQL server or the database, be sure to enter the correct information.');
+		}
 		
 		//
 		// Now install the database tables.
 		//
-		$this->load->library('migrations/Migrations');
+		$this->load->library('Migrations');
 	
 		if (!$this->migrations->install())
 		{
 			$this->errors = 'There was an error setting up the database. Please check your settings and try again.';
 			return false;
 		}
+
 		
+		//
+		// Save the information to the settings table
+		//
+		
+		$settings = array(
+			'site.title'	=> $this->input->post('site_title'),
+			'site.system_email'	=> $this->input->post('email'),
+			'updates.do_check' => $this->curl_update,
+			'updates.bleeding_edge' => $this->curl_update
+		);
+		
+		foreach	($settings as $key => $value)
+		{
+			$setting_rec = array('name' => $key, 'module' => 'core', 'value' => $value);
+			
+			$this->db->where('name', $key);
+			if ($this->db->update('settings', $setting_rec) == false)
+			{
+				$this->errors = 'There was an error inserting settings into the database';
+				return false;
+			}
+		}
+
 		//
 		// Install the user in the users table so they can actually login.
 		//
-		$this->load->model('users/User_model', 'user_model', true);
 		$data = array(
 			'role_id'	=> 1,
 			'email'		=> $this->input->post('email'),
 			'username'	=> $this->input->post('username'),
-			'password'	=> $this->input->post('password')
 		);
+		list($password, $salt) = $this->hash_password($this->input->post('password'));
 		
-		if ($this->user_model->insert($data) == false)
+		$data['password_hash'] = $password;
+		$data['salt'] = $salt;
+		
+		if ($this->db->insert('users', $data) == false)
 		{
-			$this->errors = 'There was an error creating your account in the database: '. $this->user_model->error;
+			$this->errors = 'There was an error creating your account in the database';
 			return false;
 		}
 		
@@ -362,7 +383,7 @@ class Install extends MX_Controller {
 		// Reverse Folders
 		foreach ($this->reverse_writeable_folders as $folder)
 		{
-			@chmod(APPPATH .$folder, 0774);
+			@chmod(FCPATH . $this->app_path . $folder, 0774);
 		}
 
 		// We made it to the end, so we're good to go!
@@ -406,6 +427,43 @@ class Install extends MX_Controller {
 		
     }//end rewrite_check()
 	
+	/*
+		Method: hash_password()
+		
+		Generates a new salt and password hash for the given password.
+		
+		Parameters:
+			$old	- The password to hash.
+			
+		Returns:
+			An array with the hashed password and new salt.
+	*/
+	public function hash_password($old='') 
+	{
+		if (!function_exists('do_hash'))
+		{
+			$this->load->helper('security');
+		}
+	
+		$salt = $this->generate_salt();
+		$pass = do_hash($salt . $old);
+		
+		return array($pass, $salt);
+	}
+	
+	//--------------------------------------------------------------------
+	
+	private function generate_salt() 
+	{
+		if (!function_exists('random_string'))
+		{
+			$this->load->helper('string');
+		}
+		
+		return random_string('alnum', 7);
+	}
+	
+	//--------------------------------------------------------------------
 	
 	//--------------------------------------------------------------------
 }

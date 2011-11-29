@@ -8,13 +8,13 @@
 
 <?php echo form_open('login'); ?>
 
-	<label for="login_value"><?php echo config_item('auth.login_type') == 'both' ? 'Username/Email' : ucwords(config_item('auth.login_type')) ?></label>
-	<input type="text" name="login" id="login_value" value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo config_item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords(config_item('auth.login_type')) ?>" />
+	<label for="login_value"><?php echo $this->settings_lib->item('auth.login_type') == 'both' ? 'Username/Email' : ucwords($this->settings_lib->item('auth.login_type')) ?></label>
+	<input type="text" name="login" id="login_value" value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords($this->settings_lib->item('auth.login_type')) ?>" />
 
 	<label for="password"><?php echo lang('bf_password'); ?></label>
 	<input type="password" name="password" id="password" value="" tabindex="2" placeholder="<?php echo lang('bf_password'); ?>" />
 	
-	<?php if (config_item('auth.allow_remember')) : ?>
+	<?php if ($this->settings_lib->item('auth.allow_remember')) : ?>
 	<div class="small indent">
 		<input type="checkbox" name="remember_me" id="remember_me" value="1" tabindex="3" /> 		
 		<label for="remember_me" class="remember"><?php echo lang('us_remember_note'); ?></label>
@@ -28,7 +28,7 @@
 <?php echo form_close(); ?>
 		
 <p style="text-align: center">
-	<?php if (config_item('auth.allow_register')) : ?>
+	<?php if ($this->settings_lib->item('auth.allow_register')) : ?>
 		<?php echo lang('us_no_account'); ?> <?php echo anchor('/register', lang('us_sign_up')); ?> &nbsp;&nbsp; &#8226; &nbsp;&nbsp;
 	<?php endif; ?>
 

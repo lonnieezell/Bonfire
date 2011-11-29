@@ -389,6 +389,48 @@ class BF_Model extends CI_Model {
 		return $this->db->update($this->table, $data, array($field => $value));
 	}
 	
+	//---------------------------------------------------------------
+	
+	/*
+		Method: update_batch()
+		
+		Updates a batch of existing rows in the database.
+		
+		Parameters:
+			$data	- An array of key/value pairs to update.
+			$index	- A string value of the db column to use as the where key
+			
+		Return:
+			true/false
+	*/
+	public function update_batch($data = NULL, $index = NULL)
+	{
+		if (is_null($index))
+		{
+			return FALSE;
+		}
+
+		if (!is_null($data))
+		{
+			// Add the modified field
+			if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
+			{
+				foreach ($data as $key => $record)
+				{
+					$data[$key][$this->modified_field] = $this->set_date();
+				}
+			}
+			
+			$result = $this->db->update_batch($this->table, $data, $index);
+			if (empty($result))
+			{
+				return TRUE;
+			}
+		}
+
+		return FALSE;
+	}
+	
 	//--------------------------------------------------------------------
 	
 	

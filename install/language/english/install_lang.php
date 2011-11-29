@@ -41,3 +41,6 @@ $lang['in_email_note']				= 'Please double-check your email before continuing.';
 $lang['in_install_button']			= 'Install Bonfire';
 
 $lang['in_curl_disabled']			= '<p class="error">cURL <strong>is not</strong> presently enabled as a PHP extension. Bonfire will not be able to check for updates until it is enabled.</p>';
+
+
+$lang['in_success_msg']				= 'Please remove the install folder and return to ';

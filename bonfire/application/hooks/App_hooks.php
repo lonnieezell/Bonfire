@@ -78,7 +78,8 @@ class App_hooks {
 	
 	public function check_site_status() 
 	{
-		if ($this->ci->config->item('site.status') == 0)
+//		if ($this->ci->config->item('site.status') == 0)
+		if ($this->ci->settings_lib->item('site.status') == 0)
 		{
 			if (!class_exists('Auth'))
 			{

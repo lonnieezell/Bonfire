@@ -192,6 +192,9 @@ span.required {
 	line-height: 1.5;
 	padding-top: 5px
 }
+label.required { 
+	font-weight: bold;
+}
 input[type=text],
 input[type=email],
 input[type=password],

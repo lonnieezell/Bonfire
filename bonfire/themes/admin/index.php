@@ -13,7 +13,7 @@
 <head>
 	<meta charset="UTF-8">
 	
-	<title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo config_item('site.title') ?></title>
+	<title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo $this->settings_lib->item('site.title') ?></title>
 	
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 	
@@ -44,11 +44,11 @@
 		<!-- Nav Bar -->
 		<div id="toolbar">
 			<div id="toolbar-right">
-				<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $this->auth->user_id()) ?>" id="tb_email" title="<?php echo lang('bf_user_settings') ?>"><?php echo config_item('auth.use_usernames') ? (config_item('auth.use_own_names') ? $this->auth->user_name() : $this->auth->username()) : $this->auth->email() ?></a>
+				<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $this->auth->user_id()) ?>" id="tb_email" title="<?php echo lang('bf_user_settings') ?>"><?php echo $this->settings_lib->item('auth.use_usernames') ? ($this->settings_lib->item('auth.use_own_names') ? $this->auth->user_name() : $this->auth->username()) : $this->auth->email() ?></a>
 				<a href="<?php echo site_url('logout') ?>" id="tb_logout" title="Logout">Logout</a>
 			</div>
 		
-			<h1><a href="<?php echo site_url(); ?>" target="_blank"><?php echo config_item('site.title') ?></a></h1>
+			<h1><a href="<?php echo site_url(); ?>" target="_blank"><?php echo $this->settings_lib->item('site.title') ?></a></h1>
 			
 			<div id="toolbar-left">
 				<?php echo context_nav() ?>
