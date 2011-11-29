@@ -57,7 +57,7 @@
 				<input type="radio" name="use_usernames" id="use_usernames" value="0" <?php echo $settings['auth.use_usernames'] == 0 ? 'checked="checked"' : set_radio('auth.use_usernames', 0); ?> />
 			</label>
 			<label style="display: inline" class="text-left"><?php echo lang('bf_use_own_name') ?>
-				<input type="checkbox" name="use_own_names" id="use_own_names" value="1" <?php echo $settings('auth.use_own_names') == 1 ? 'checked="checked"' : set_checkbox('auth.use_own_names', 2); ?> />
+				<input type="checkbox" name="use_own_names" id="use_own_names" value="1" <?php echo $settings['auth.use_own_names'] == 1 ? 'checked="checked"' : set_checkbox('auth.use_own_names', 2); ?> />
 			</label>
 		</div>
 		
@@ -90,7 +90,7 @@
 		</div>
 		<div>
 			<label for="show_front_profiler"><?php echo lang('bf_show_front_profiler') ?></label>
-			<input type="checkbox" name="show_front_profiler" value="1" <?php echo $settings('site.show_front_profiler') == 1 ? 'checked="checked"' : set_checkbox('site.show_front_profiler', 1); ?> />
+			<input type="checkbox" name="show_front_profiler" value="1" <?php echo $settings['site.show_front_profiler'] == 1 ? 'checked="checked"' : set_checkbox('site.show_front_profiler', 1); ?> />
 		</div>
 		
 		<div>
