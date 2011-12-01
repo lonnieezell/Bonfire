@@ -28,8 +28,8 @@
 					<p>
 						<?php 
 							if ($this->settings_lib->item('auth.use_own_names'))
-							{
-								$name = trim($this->auth->user_name());
+							{ 
+								$name = abbrev_name($user->first_name.' '.$user->last_name);
 								
 								if (empty($name))
 								{
