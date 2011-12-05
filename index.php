@@ -1,9 +1,9 @@
 <?php
 
 // Check if the install folder exists - if so then show the installer app
-if (is_dir('./install'))
+if (!is_dir('./install'))
 {
-	header('Location: /install');
+	header('Location: install');
 	exit;
 }
 
@@ -96,6 +96,22 @@ if (is_dir('./install'))
  *
  */
 	$application_folder = "bonfire/application";
+	
+/*
+ *---------------------------------------------------------------
+ * VIEW FOLDER NAME
+ *---------------------------------------------------------------
+ * 
+ * If you want to move the view folder out of the application 
+ * folder set the path to the folder here. The folder can be renamed
+ * and relocated anywhere on your server. If blank, it will default 
+ * to the standard location inside your application folder.  If you 
+ * do move this, use the full server path to this folder 
+ *
+ * NO TRAILING SLASH!
+ *
+ */
+	$view_folder = '';	
 
 /*
  * --------------------------------------------------------------------
@@ -159,6 +175,13 @@ if (is_dir('./install'))
  *  Resolve the system path for increased reliability
  * ---------------------------------------------------------------
  */
+
+	// Set the current directory correctly for CLI requests
+	if (defined('STDIN'))
+	{
+		chdir(dirname(__FILE__));
+	}
+
 	if (realpath($system_path) !== FALSE)
 	{
 		$system_path = realpath($system_path).'/';
@@ -182,6 +205,7 @@ if (is_dir('./install'))
 	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
 	// The PHP file extension
+	// this global constant is deprecated.
 	define('EXT', '.php');
 
 	// Path to the system folder
@@ -208,6 +232,22 @@ if (is_dir('./install'))
 
 		define('APPPATH', BASEPATH.$application_folder.'/');
 	}
+	
+	// The path to the "views" folder
+	if (is_dir($view_folder)) 
+	{
+		define ('VIEWPATH', $view_folder .'/');
+	}
+	else 
+	{
+		if ( ! is_dir(APPPATH.'views/'))
+		{
+			exit("Your view folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
+		}
+				
+		define ('VIEWPATH', APPPATH.'views/' );	
+	}
+
 
 /*
  * --------------------------------------------------------------------
@@ -217,7 +257,7 @@ if (is_dir('./install'))
  * And away we go...
  *
  */
-require_once BASEPATH.'core/CodeIgniter'.EXT;
+require_once BASEPATH.'core/CodeIgniter.php';
 
 /* End of file index.php */
 /* Location: ./index.php */
