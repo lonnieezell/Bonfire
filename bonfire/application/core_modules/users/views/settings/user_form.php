@@ -55,9 +55,9 @@
 			<select name="role_id">
 			<?php if (isset($roles) && is_array($roles) && count($roles)) : ?>
 				<?php foreach ($roles as $role) : ?>
-					<?php if (has_permission('Permissions.'.$role->role_name.'.Manage')) : ?>
+					<?php if (has_permission('Permissions.'. ucfirst($role->role_name) .'.Manage')) : ?>
 				<option value="<?php echo $role->role_id ?>" <?php echo isset($user) && $user->role_id == $role->role_id ? 'selected="selected"' : '' ?> <?php echo !isset($user) && $role->default == 1 ? 'selected="selected"' : ''; ?>>
-					<?php echo $role->role_name ?>
+					<?php echo ucfirst($role->role_name) ?>
 				</option>
 					<?php endif; ?>
 				<?php endforeach; ?>
