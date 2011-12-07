@@ -540,6 +540,11 @@ class Auth  {
 		{
 			return false;
 		}
+		// move permission to lowercase for easier checking.
+		else
+		{
+			$permission = strtolower($permission);
+		}
 	
 		// If no role is being provided, assume it's for the current
 		// logged in user.
@@ -598,7 +603,7 @@ class Auth  {
 		{
 			foreach($role_perms as $key => $permission)
 			{
-				$this->perms[$perms[$permission->permission_id]] = 1;
+				$this->perms[strtolower($perms[$permission->permission_id])] = 1;
 			}
 		}
 	}
