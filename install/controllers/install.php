@@ -53,11 +53,11 @@ class Install extends CI_Controller {
 	
 	
 	/*
-		Var: $app_path
+		Var: $bonfire_app_path
 		Boolean that says whether we should check
 		for updates.
 	*/
-	private $app_path = '../bonfire/application/';
+	private $bonfire_app_path = '../bonfire/application/';
 
 	/*
 		Var: $writable_folders
@@ -244,8 +244,8 @@ class Install extends CI_Controller {
 		// Check Folders
 		foreach ($this->writeable_folders as $folder)
 		{
-			@chmod(FCPATH . $this->app_path . $folder, 0777);
-			if (!is_writeable(FCPATH . $this->app_path . $folder))
+			@chmod(FCPATH . $this->bonfire_app_path . $folder, 0777);
+			if (!is_writeable(FCPATH . $this->bonfire_app_path . $folder))
 			{
 				$folder_errors .= "<li>$folder</li>";
 			}
@@ -259,8 +259,8 @@ class Install extends CI_Controller {
 		// Check files
 		foreach ($this->writeable_files as $file)
 		{
-			@chmod(FCPATH . $this->app_path .$file, 0666);
-			if (!is_writeable(FCPATH . $this->app_path . $file))
+			@chmod(FCPATH . $this->bonfire_app_path .$file, 0666);
+			if (!is_writeable(FCPATH . $this->bonfire_app_path . $file))
 			{
 				$file_errors .= "<li>$file</li>";
 			}
@@ -298,12 +298,12 @@ class Install extends CI_Controller {
 
 		write_db_config($data);
 	
-		if (!file_exists(FCPATH . $this->app_path . 'config/development/database.php') && is_writeable(FCPATH . $this->app_path . 'config/'))
+		if (is_writeable(FCPATH . $this->bonfire_app_path . 'config/'))
 		{
 			// Database
-			copy(FCPATH . $this->app_path . 'config/database.php', FCPATH . $this->app_path . 'config/development/database.php');
-			copy(FCPATH . $this->app_path . 'config/database.php', FCPATH . $this->app_path . 'config/production/database.php');
-			copy(FCPATH . $this->app_path . 'config/database.php', FCPATH . $this->app_path . 'config/testing/database.php');
+			copy(APPPATH . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/development/database.php');
+			copy(APPPATH . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/production/database.php');
+			copy(APPPATH . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/testing/database.php');
 		}
 
 		$server   = $data['main']['hostname'];
@@ -383,7 +383,7 @@ class Install extends CI_Controller {
 		// Reverse Folders
 		foreach ($this->reverse_writeable_folders as $folder)
 		{
-			@chmod(FCPATH . $this->app_path . $folder, 0774);
+			@chmod(FCPATH . $this->bonfire_app_path . $folder, 0774);
 		}
 
 		// We made it to the end, so we're good to go!

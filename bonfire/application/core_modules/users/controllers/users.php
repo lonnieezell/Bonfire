@@ -199,6 +199,8 @@ class Users extends Front_Controller {
 	*/
 	public function profile() 
 	{
+		$this->load->helper('application');
+
 		if ($this->auth->is_logged_in() === FALSE)
 		{
 			$this->auth->logout();
@@ -382,7 +384,9 @@ class Users extends Front_Controller {
 	
 	public function unique_username($username) 
 	{
-		if ($this->user_model->is_unique('username', $username.',bf_users.id') === true)
+		$db_prefix = $this->db->dbprefix;
+		
+		if ($this->user_model->is_unique('username', $username.','.$db_prefix.'users.id') === true)
 		{
 			return true;
 		}
@@ -398,14 +402,16 @@ class Users extends Front_Controller {
 
 	private function save_user($id=0) 
 	{
-		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|max_length[120]|unique[bf_users.email,bf_users.id]|xss_clean');
+		$db_prefix = $this->db->dbprefix;
+		
+		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|max_length[120]|unique['.$db_prefix.'users.email,'.$db_prefix.'users.id]|xss_clean');
 		$this->form_validation->set_rules('password', 'Password', 'trim|strip_tags|max_length[40]|xss_clean');
 		$this->form_validation->set_rules('pass_confirm', 'Password (again)', 'trim|strip_tags|matches[password]|xss_clean');
 		
 		if ($this->settings_lib->item('auth.use_usernames'))
 		{
 			$_POST['id'] = $this->auth->user_id();
-			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username,bf_users.id]|xsx_clean');
+			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|unique['.$db_prefix.'users.username,'.$db_prefix.'users.id]|xsx_clean');
 		}
 		
 		$required = false;
