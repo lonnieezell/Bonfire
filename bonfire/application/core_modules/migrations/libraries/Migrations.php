@@ -591,16 +591,23 @@ class Migrations {
 			// If the row doesn't exist, create it...
 			$query = $this->_ci->db->get_where('schema_version', array('type' => $type));
 
-			if (!$query->num_rows())
-			{ 
-				$this->_ci->db->insert('schema_version', array(
-					'type'        => $type,
-					'version' => $schema_version,
-				));
+			if ($schema_version != 0)
+			{
+				if (!$query->num_rows())
+				{ 
+					$this->_ci->db->insert('schema_version', array(
+						'type'        => $type,
+						'version' => $schema_version,
+					));
 
+				}
+
+				return $this->_ci->db->update('schema_version', array('version' => $schema_version), array('type' => $type));
 			}
-
-			return $this->_ci->db->update('schema_version', array('version' => $schema_version), array('type' => $type));
+			elseif ($query->num_rows())
+			{
+				return $this->_ci->db->delete('schema_version', array('type' => $type));
+			}
 		}
 		else
 		{
