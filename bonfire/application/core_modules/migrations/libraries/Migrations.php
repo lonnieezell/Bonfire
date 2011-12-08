@@ -146,12 +146,12 @@ class Migrations {
 		{
 			$this->_ci->dbforge->add_field(array(
 				'type' => array('type' => 'VARCHAR', 'constraint' => 20, 'null' => FALSE),
-				'version_num' => array('type' => 'INT', 'constraint' => 4, 'default' => 0),
+				'version' => array('type' => 'INT', 'constraint' => 4, 'default' => 0),
 			));
 			$this->_ci->dbforge->add_key('type', TRUE);
 			$this->_ci->dbforge->create_table('schema_version', TRUE);
 			
-			$this->_ci->db->insert('schema_version', array('type' => 'core', 'version_num' => 0));
+			$this->_ci->db->insert('schema_version', array('type' => 'core', 'version' => 0));
 		}
 		
 		// Make sure out application helper is loaded.
@@ -436,7 +436,7 @@ class Migrations {
 			// new schema table layout
 			$type = empty($type) ? 'core' : $type;
 			$row = $this->_ci->db->get_where('schema_version', array('type' => $type))->row();
-			return isset($row->version_num) ? $row->version_num: 0;
+			return isset($row->version) ? $row->version: 0;
 		}
 		else
 		{
@@ -595,12 +595,12 @@ class Migrations {
 			{ 
 				$this->_ci->db->insert('schema_version', array(
 					'type'        => $type,
-					'version_num' => $schema_version,
+					'version' => $schema_version,
 				));
 
 			}
 
-			return $this->_ci->db->update('schema_version', array('version_num' => $schema_version), array('type' => $type));
+			return $this->_ci->db->update('schema_version', array('version' => $schema_version), array('type' => $type));
 		}
 		else
 		{
