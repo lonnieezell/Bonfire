@@ -426,7 +426,7 @@ function write_db_config($settings=null)
 			$CI->load->helper('file');;
 			
 			// Write the changes out...
-			$result = write_file(APPPATH.'config/'.$env .'database'.EXT, $contents);
+			$result = write_file(APPPATH.'../bonfire/application/config/'.$env .'database'.EXT, $contents);
 		}
 	}
 	

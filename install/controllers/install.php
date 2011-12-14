@@ -301,19 +301,25 @@ class Install extends CI_Controller {
 		if (is_writeable(FCPATH . $this->bonfire_app_path . 'config/'))
 		{
 			// Database
-			copy(APPPATH . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/development/database.php');
-			copy(APPPATH . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/production/database.php');
-			copy(APPPATH . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/testing/database.php');
+			copy(FCPATH . $this->bonfire_app_path . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/development/database.php');
+			copy(FCPATH . $this->bonfire_app_path . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/production/database.php');
+			copy(FCPATH . $this->bonfire_app_path . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/testing/database.php');
 		}
 
 		$server   = $data['main']['hostname'];
 		$username = $data['main']['username'];
 		$password = $data['main']['password'];
+		$database = $data['main']['database'];
+		$dbprefix = $data['main']['dbprefix'];
 		
 		if( !$this->db = mysql_connect($server, $username, $password) )
 		{
 			return array('status' => FALSE,'message' => 'The installer could not connect to the MySQL server or the database, be sure to enter the correct information.');
 		}
+		
+		// use the entered Database settings to connect before calling the Migrations
+		$dsn = 'mysql://'.$username.':'.$password.'@'.$server.'/'.$database.'?dbprefix='.$dbprefix;
+		$this->load->database($dsn);
 		
 		//
 		// Now install the database tables.
