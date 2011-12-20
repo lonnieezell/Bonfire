@@ -96,6 +96,8 @@ class Emailer {
 		array. It looks like: 
 		
 		$data = array(
+			'from'			=> '',		// optional string
+			'from_name'		=> '',		// optional string
 		    'to'			=> '',		// either string or array
 		    'subject'		=> '',		// string
 		    'message'		=> '',		// string
@@ -113,7 +115,10 @@ class Emailer {
 	{
 		// Make sure we have the information we need. 
 		$to = isset($data['to']) ? $data['to'] : false;
-		$from = $this->ci->settings_lib->item('sender_email');
+		// custom from
+		$from = isset($data['from']) ? $data['from'] : $this->ci->settings_lib->item('sender_email');
+		$from_name = isset($data['from_name']) ? $data['from_name'] : $this->ci->settings_lib->item('site.title');
+		
 		$subject = isset($data['subject']) ? $data['subject'] : false;
 		$message = isset($data['message']) ? $data['message'] : false;
 		$alt_message = isset($data['alt_message']) ? $data['alt_message'] : false;
@@ -133,12 +138,12 @@ class Emailer {
 		// Should we put it in the queue?
 		if ($queue_override == true || $this->queue_emails == true)
 		{
-			return $this->queue_email($to, $from, $subject, $templated, $alt_message);
+			return $this->queue_email($to, $from, $from_name, $subject, $templated, $alt_message);
 		}
 		// Otherwise, we're sending it right now.
 		else 
 		{
-			return $this->send_email($to, $from, $subject, $templated, $alt_message);
+			return $this->send_email($to, $from, $from_name, $subject, $templated, $alt_message);
 		}
 	}
 	
@@ -162,8 +167,17 @@ class Emailer {
 		Access: 
 			Private
 	*/
-	private function queue_email(&$to=null, &$from, &$subject=null, &$message=null, &$alt_message=false) 
+	private function queue_email(&$to=null, &$from, &$from_name, &$subject=null, &$message=null, &$alt_message=false) 
 	{
+		// Using Custom From Email ?
+		if ($from != $this->ci->settings_lib->item('sender_email')) {
+			$this->ci->db->set('from_email', $from); // Custom from email
+		}
+		// Using Custom From Name ?
+		if ($from != $this->ci->settings_lib->item('site.title')) {
+			$this->ci->db->set('from_name', $from_name); // Custom from name
+		}
+		
 		$this->ci->db->set('to_email', $to);
 		$this->ci->db->set('subject', $subject);
 		$this->ci->db->set('message', $message);
@@ -202,14 +216,14 @@ class Emailer {
 		Access: 
 			Private
 	*/
-	private function send_email(&$to=null, &$from=null, &$subject=null, &$message=null, &$alt_message=false) 
+	private function send_email(&$to=null, &$from=null, &$from_name, &$subject=null, &$message=null, &$alt_message=false) 
 	{	
 		$this->ci->load->library('email');
 		$this->ci->load->model('settings/settings_model', 'settings_model');
 		$this->ci->email->initialize($this->ci->settings_model->select('name,value')->find_all_by('module', 'email'));
 		
 		$this->ci->email->to($to);
-		$this->ci->email->from($from, $this->ci->settings_lib->item('site.title'));
+		$this->ci->email->from($from, $from_name); // Custom from
 		$this->ci->email->subject($subject);
 		$this->ci->email->message($message);
 		if ($alt_message)
@@ -269,9 +283,13 @@ class Emailer {
 			
 			$this->ci->email->clear();
 			
-			$this->ci->email->from($this->ci->settings_lib->item('sender_email'), $this->ci->settings_lib->item('site.title'));
+			//$this->ci->email->from($this->ci->settings_lib->item('sender_email'), $this->ci->settings_lib->item('site.title'));
+			// Custom From
+			$from = empty($email->from_email) ? $this->ci->settings_lib->item('sender_email') : $email->from_email;
+			$from_name = empty($email->from_name) ? $this->ci->settings_lib->item('site.title') : $email->from_name;
+			$this->ci->email->from($from, $from_name);
+			
 			$this->ci->email->to($email->to_email);
-
 			$this->ci->email->subject($email->subject);
 			$this->ci->email->message($email->message);
 			
