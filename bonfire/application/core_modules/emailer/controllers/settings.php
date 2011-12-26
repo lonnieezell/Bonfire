@@ -36,6 +36,8 @@ class Settings extends Admin_Controller {
 		$this->auth->restrict('Site.Settings.View');
 		$this->auth->restrict('Bonfire.Emailer.Manage');
 		
+		$this->load->model('Emailer_profiles_model', 'emailer_profiles_model', true);
+		
 		Template::set_block('sub_nav', 'settings/_sub_nav');
 		
 		$this->lang->load('emailer');
@@ -45,7 +47,10 @@ class Settings extends Admin_Controller {
 	
 	public function index() 
 	{
+		
+		/*
 		$this->load->library('form_validation');
+		
 	
 		if ($this->input->post('submit'))
 		{
@@ -95,10 +100,133 @@ class Settings extends Admin_Controller {
 		Template::set('toolbar_title', 'Email Settings');
 	
 		Template::render();
+		*/
+		$data = array();
+		$data['records'] = $this->emailer_profiles_model->find_all();
+
+		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
+		
+		Template::set('data', $data);
+		Template::set('toolbar_title', "Email Settings");
+		
+		$this->queue();
+		
+		Template::render();
+
 	}
 	
 	//--------------------------------------------------------------------
+
+	public function create() {
+		if ($this->input->post('submit'))
+		{
+			if ($insert_id = $this->save_profile())
+			{
+				// Log the activity
+				$this->activity_model->log_activity($this->auth->user_id(), "Create Profile ID".': ' . $insert_id . ' : ' . $this->input->ip_address(), 'email');
+					
+				Template::set_message("Success", 'success');
+				Template::redirect(SITE_AREA .'/settings/emailer');
+			}
+			else 
+			{
+				Template::set_message("Failure" . $this->emailer_profiles_model->error, 'error');
+			}
+		}
+
+		Template::set('toolbar_title', '');
+		Template::render();
+
+	}
+
+	//--------------------------------------------------------------------
 	
+	public function edit($id=null) {
+		//$id = (int)$this->uri->segment(5);
+		if (empty($id))
+		{
+			Template::set_message('Invalid Profile ID', 'error');
+			redirect(SITE_AREA .'/settings/emailer');
+		}
+		
+		if ($this->input->post('submit'))
+		{
+			if ($this->save_profile('update', $id))
+			{
+				// Log the activity
+				$this->activity_model->log_activity($this->auth->user_id(), "Edit Profile ID".': ' . $id . ' : ' . $this->input->ip_address(), 'email');
+					
+				Template::set_message("Success", 'success');
+			}
+			else 
+			{
+				Template::set_message("Failure" . $this->emailer_profiles_model->error, 'error');
+			}
+		}
+		
+		
+		Template::set('profile', $this->emailer_profiles_model->find($id));
+		
+		Template::set('toolbar_title', '');
+		Template::render();		
+
+
+
+	}
+	
+	//--------------------------------------------------------------------
+
+	private function save_profile($type='insert', $id=0) {
+					
+		$this->form_validation->set_rules('profile_name','Profile Name','required|max_length[255]');			
+		$this->form_validation->set_rules('sender_email','Sender Email','required|trim|valid_email|max_length[255]|xss_clean');
+
+		if ($this->form_validation->run() === FALSE)
+		{
+			return FALSE;
+		}
+		
+		// make sure we only pass in the fields we want
+		
+		$data = array(
+			'sender_email' => $this->input->post('sender_email'),
+			'sender_name' => isset($_POST["sender_name"]) ? $_POST["sender_name"] : "",
+			'mailtype' => $this->input->post('mailtype'),
+			'protocol' => strtolower($_POST['protocol']),
+			'mailpath' => $_POST['mailpath'],
+			'smtp_host' => isset($_POST['smtp_host']) ? $_POST['smtp_host'] : '',
+			'smtp_user'=> isset($_POST['smtp_user']) ? $_POST['smtp_user'] : '',
+			'smtp_pass'=> isset($_POST['smtp_pass']) ? $_POST['smtp_pass'] : '',
+			'smtp_port'=> isset($_POST['smtp_port']) ? $_POST['smtp_port'] : '',
+			'smtp_timeout' => isset($_POST['smtp_timeout']) ? $_POST['smtp_timeout'] : '5',
+			'profile_name' => $this->input->post('profile_name'),
+			'template_header' => isset($_POST['template_header']) ? $_POST["template_header"] : "",
+			'template_footer' => isset($_POST['template_footer']) ? $_POST["template_footer"] : "",
+		);	
+		
+		if ($type == 'insert')
+		{
+			$id = $this->emailer_profiles_model->insert($data);
+			
+			if (is_numeric($id))
+			{
+				$return = $id;
+			} else
+			{
+				$return = FALSE;
+			}
+		}
+		else if ($type == 'update')
+		{
+			$return = $this->emailer_profiles_model->update($id, $data);
+		}
+		
+		return $return;
+
+	}
+
+	//--------------------------------------------------------------------
+		
 	public function template() 
 	{
 		if ($this->input->post('submit'))
@@ -141,7 +269,8 @@ class Settings extends Admin_Controller {
 		$data = array(
 			'to'		=> $this->input->post('email'),
 			'subject'	=> lang('em_test_mail_subject'),
-			'message'	=> lang('em_test_mail_body')
+			'message'	=> lang('em_test_mail_body'),
+			'profile'	=> $this->input->post('profile_id')
 		);
 		
 		$results = $this->emailer->send($data, false);
@@ -159,6 +288,7 @@ class Settings extends Admin_Controller {
 	*/
 	public function queue() 
 	{
+		
 		$offset = $this->uri->segment(5);
 
 		$this->load->model('Emailer_model', 'emailer_model', true);
@@ -169,7 +299,7 @@ class Settings extends Admin_Controller {
 	
 		$total_emails = $this->emailer_model->count_all();
 	
-		$this->pager['base_url'] = site_url(SITE_AREA .'/settings/emailer/queue');
+		$this->pager['base_url'] = site_url(SITE_AREA .'/settings/emailer');
 		$this->pager['total_rows'] = $total_emails;
 		$this->pager['per_page'] = $this->limit;
 		$this->pager['uri_segment']	= 5;
@@ -183,8 +313,8 @@ class Settings extends Admin_Controller {
 			unset($debug_msg);
 		}
 	
-		Template::set('toolbar_title', 'Emailer Queue');
-		Template::render();
+		//Template::set('toolbar_title', 'Emailer Queue');
+		//Template::render();
 	}
 	
 	//--------------------------------------------------------------------
@@ -203,7 +333,7 @@ class Settings extends Admin_Controller {
 		
 		$this->emailer->send($data, true);
 		
-		redirect(SITE_AREA .'/settings/emailer/queue');
+		redirect(SITE_AREA .'/settings/emailer');
 	}
 	
 	//--------------------------------------------------------------------
@@ -216,7 +346,7 @@ class Settings extends Admin_Controller {
 		$this->emailer->process_queue();
 		ob_end_clean();
 		
-		redirect(SITE_AREA .'/settings/emailer/queue');
+		redirect(SITE_AREA .'/settings/emailer');
 	}
 	
 	//--------------------------------------------------------------------

@@ -81,6 +81,7 @@ class Emailer {
 	public function __construct() 
 	{
 		$this->ci =& get_instance();
+		$this->ci->load->model('emailer/emailer_profiles_model', 'emailer_profiles_model');
 		
 	}
 	
@@ -100,6 +101,7 @@ class Emailer {
 		    'subject'		=> '',		// string
 		    'message'		=> '',		// string
 		    'alt_message'	=> ''		// optional (text alt to html email)
+			'profile'		=> ''		// integer (profile id; or default profile is used)
 		);
 		
 		Parameters:
@@ -113,10 +115,12 @@ class Emailer {
 	{
 		// Make sure we have the information we need. 
 		$to = isset($data['to']) ? $data['to'] : false;
-		$from = $this->ci->settings_lib->item('sender_email');
+		
 		$subject = isset($data['subject']) ? $data['subject'] : false;
 		$message = isset($data['message']) ? $data['message'] : false;
 		$alt_message = isset($data['alt_message']) ? $data['alt_message'] : false;
+		// Emailer Profile
+		$profile_id = isset($data["profile"]) ? $data["profile"] : false;
 	
 		// If we don't have everything, return false.
 		if ($to == false || $subject == false || $message == false)
@@ -124,21 +128,38 @@ class Emailer {
 			$this->errors[] = lang('em_missing_data');
 			return false;
 		}
+		// If we don't have profile set, use default profile
+		if ($profile_id == false) {
+			$profile = $this->ci->emailer_profiles_model->find_by("default", 1);
+		} else {
+			$profile = $this->ci->emailer_profiles_model->find($profile_id);
+		}
+
+		if (!$profile) {
+			$this->errors[] = "Default profile not found";
+			return false;
+		}
+
+		// custom from
+		//$from = isset($data['from']) ? $data['from'] : $profile->sender_email;
+		//$from_name = isset($data['from_name']) ? $data['from_name'] : $profile->sender_name;
 		
 		// Wrap the $message in the email template.
-		$templated  = $this->ci->load->view('emailer/email/_header', null, true);
+		//$templated  = $this->ci->load->view('emailer/email/_header', null, true);
+		$templated  = $profile->template_header;
 		$templated .= $message;
-		$templated .= $this->ci->load->view('emailer/email/_footer', null, true);
+		$templated .= $profile->template_footer;
+		//$templated .= $this->ci->load->view('emailer/email/_footer', null, true);
 		
 		// Should we put it in the queue?
 		if ($queue_override == true || $this->queue_emails == true)
 		{
-			return $this->queue_email($to, $from, $subject, $templated, $alt_message);
+			return $this->queue_email($to, $subject, $templated, $alt_message, $profile->profile_id);
 		}
 		// Otherwise, we're sending it right now.
 		else 
 		{
-			return $this->send_email($to, $from, $subject, $templated, $alt_message);
+			return $this->send_email($to, $subject, $templated, $alt_message, $profile);
 		}
 	}
 	
@@ -154,6 +175,7 @@ class Emailer {
 			$from			- The from email (Ignored in this method, but kept for consistency with the send_email method.
 			$subject		- The subject line of the email
 			$message		- The text to be inserted into the template for HTML emails.
+			$profile_id		- Required
 			$alt_message	- An optional, text-only version of the message to be sent with HTML emails.
 			
 		Return:
@@ -162,11 +184,23 @@ class Emailer {
 		Access: 
 			Private
 	*/
-	private function queue_email(&$to=null, &$from, &$subject=null, &$message=null, &$alt_message=false) 
+	private function queue_email(&$to=null, &$subject=null, &$message=null, &$alt_message=false, $profile_id=false) 
 	{
+		/*
+		// Using Custom From Email ?
+		if ($from != $this->ci->settings_lib->item('sender_email')) {
+			$this->ci->db->set('from_email', $from); // Custom from email
+		}
+		// Using Custom From Name ?
+		if ($from != $this->ci->settings_lib->item('site.title')) {
+			$this->ci->db->set('from_name', $from_name); // Custom from name
+		}
+		*/
+		
 		$this->ci->db->set('to_email', $to);
 		$this->ci->db->set('subject', $subject);
 		$this->ci->db->set('message', $message);
+		$this->ci->db->set('profile_id', $profile_id);
 		if ($alt_message)
 		{
 			$this->ci->db->set('alt_message', $alt_message);
@@ -202,14 +236,16 @@ class Emailer {
 		Access: 
 			Private
 	*/
-	private function send_email(&$to=null, &$from=null, &$subject=null, &$message=null, &$alt_message=false) 
+	private function send_email(&$to=null, &$subject=null, &$message=null, &$alt_message=false, &$profile=false) 
 	{	
 		$this->ci->load->library('email');
 		$this->ci->load->model('settings/settings_model', 'settings_model');
-		$this->ci->email->initialize($this->ci->settings_model->select('name,value')->find_all_by('module', 'email'));
-		
+		//$profile = (array)$profile;
+		//$this->ci->email->initialize($this->ci->settings_model->select('name,value')->find_all_by('module', 'email'));
+		$sender_name = empty($profile->sender_name) ? $this->ci->settings_lib->item('site.title') : $profile->sender_name;
+		$this->ci->email->initialize($profile);
 		$this->ci->email->to($to);
-		$this->ci->email->from($from, $this->ci->settings_lib->item('site.title'));
+		$this->ci->email->from($profile->sender_email, $sender_name);
 		$this->ci->email->subject($subject);
 		$this->ci->email->message($message);
 		if ($alt_message)
@@ -248,7 +284,7 @@ class Emailer {
 		//$limit = 33; // 33 emails every 5 minutes = 400 emails/hour.
 		$this->ci->load->library('email');
 		
-		$this->ci->email->initialize($this->config);
+		
 	
 		// Grab records where success = 0
 		$this->ci->db->limit($limit);
@@ -266,43 +302,54 @@ class Emailer {
 		foreach($emails as $email)
 		{
 			echo '.'; 
-			
-			$this->ci->email->clear();
-			
-			$this->ci->email->from($this->ci->settings_lib->item('sender_email'), $this->ci->settings_lib->item('site.title'));
-			$this->ci->email->to($email->to_email);
-
-			$this->ci->email->subject($email->subject);
-			$this->ci->email->message($email->message);
-			
-			if ($email->alt_message)
-			{
-				$this->ci->email->set_alt_message($email->alt_message);
-			}
-	
-			$prefix = $this->ci->db->dbprefix;
-			
-			if ($this->ci->email->send() === TRUE)
-			{ 
-				// Email was successfully sent
-				$sql = "UPDATE {$prefix}email_queue
-						SET success=1, attempts=attempts+1, last_attempt = NOW(), date_sent = NOW()
-						WHERE id = " .$email->id;
+			// load profile
+			$profile = $this->ci->db->where("profile_id", $email->profile_id)->get('email_profiles')->row();
+			if(is_object($profile)) {
 				
-				$this->ci->db->query($sql);
-			} else 
-			{ 
-				// Error sending email
-				$sql = "UPDATE {$prefix}email_queue
-						SET attempts = attempts+1, last_attempt=NOW()
-						WHERE id=". $email->id;
-				$this->ci->db->query($sql);
+				$this->ci->email->initialize($profile);
+				$this->ci->email->clear();
 				
-				if (class_exists('CI_Session'))
-				{ 
-					$result = $this->ci->email->print_debugger();
-					$this->ci->session->set_userdata('email_debug', $result);
+				//$this->ci->email->from($this->ci->settings_lib->item('sender_email'), $this->ci->settings_lib->item('site.title'));
+				// Custom From
+				//$from = empty($email->from_email) ? $this->ci->settings_lib->item('sender_email') : $email->from_email;
+				//$from_name = empty($email->from_name) ? $this->ci->settings_lib->item('site.title') : $email->from_name;
+				
+				$sender_name = empty($profile->sender_name) ? $this->ci->settings_lib->item('site.title') : $profile->sender_name;
+				$this->ci->email->from($profile->sender_email, $sender_name);
+				$this->ci->email->to($email->to_email);
+				$this->ci->email->subject($email->subject);
+				$this->ci->email->message($email->message);
+				
+				if ($email->alt_message)
+				{
+					$this->ci->email->set_alt_message($email->alt_message);
 				}
+		
+				$prefix = $this->ci->db->dbprefix;
+				
+				if ($this->ci->email->send() === TRUE)
+				{ 
+					// Email was successfully sent
+					$sql = "UPDATE {$prefix}email_queue
+							SET success=1, attempts=attempts+1, last_attempt = NOW(), date_sent = NOW()
+							WHERE id = " .$email->id;
+					
+					$this->ci->db->query($sql);
+				} else 
+				{ 
+					// Error sending email
+					$sql = "UPDATE {$prefix}email_queue
+							SET attempts = attempts+1, last_attempt=NOW()
+							WHERE id=". $email->id;
+					$this->ci->db->query($sql);
+					
+					if (class_exists('CI_Session'))
+					{ 
+						$result = $this->ci->email->print_debugger();
+						$this->ci->session->set_userdata('email_debug', $result);
+					}
+				}
+
 			}
 		}
 		
