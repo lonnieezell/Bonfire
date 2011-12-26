@@ -1,128 +1,121 @@
-<?php if (validation_errors()) : ?>
-<div class="notification error">
-	<?php echo validation_errors(); ?>
+<div class="view split-view">
+	
+	<!-- Profiles List -->
+	<div class="view">
+	
+	<?php if (isset($records) && is_array($records) && count($records)) : ?>
+		<div class="scrollable">
+			<div class="list-view" id="role-list">
+				<?php foreach ($records as $record) : ?>
+					<?php $record = (array)$record;?>
+					<div class="list-item" data-id="<?php echo $record['profile_id']; ?>">
+						<p>
+							<b><?php echo (empty($record['profile_name']) ? $record['profile_id'] : $record['profile_name']); ?></b><br/>
+							<span class="small"><?php if($record["default"]) echo "Default" ?></span>
+						</p>
+					</div>
+				<?php endforeach; ?>
+			</div>	<!-- /list-view -->
+		</div>
+	
+	<?php else: ?>
+	
+	<div class="notification attention">
+		<p><?php echo lang('package_no_records'); ?> <?php echo anchor(SITE_AREA .'/settings/package/create', lang('package_create_new'), array("class" => "ajaxify")) ?></p>
+	</div>
+	
+	<?php endif; ?>
+	</div>
+
+	
+	<div id="content" class="view">
+		<div class="scrollable" id="ajax-content">
+			<div class="box create rounded">
+            
+				<a class="button good ajaxify" href="<?php echo site_url(SITE_AREA .'/settings/emailer/create')?>"><?php echo "Create New Profile";?></a>
+
+				<h3><?php echo "Create a New Profile" ?></h3>
+
+				<p><?php echo "Create new emailer profile"; ?></p>
+			</div>
+			<br />
+
+<!-- Start Queue -->
+<br/>
+<div class="row">
+	<div class="column size1of2">
+		<p><b><?php echo lang('em_total_in_queue'); ?></b> <?php echo $total_in_queue ? $total_in_queue : '0' ?></p>
+	</div>
+	
+	<div class="column size1of2">
+		<p><b><?php echo lang('em_total_sent'); ?></b> <?php echo $total_sent ? $total_sent : '0' ?></p>
+	</div>
 </div>
+
+<div class="padded text-right">
+	<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/force_process'); ?>" class="button">Process Now</a> 
+	<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/insert_test'); ?>" class="button">Insert Test Email</a>
+</div>
+
+<?php if (isset($emails) && is_array($emails) && count($emails)) : ?>
+
+	<table>
+		<thead>
+			<tr>
+				<th style="width: 2em"><?php echo lang('em_id'); ?></th>
+				<th style="width: 10em"><?php echo lang('em_to'); ?></th>
+				<th><?php echo lang('em_subject'); ?></th>
+				<th style="width: 6em"># <?php echo lang('em_attempts'); ?></th>
+				<th style="width: 3em"><?php echo lang('em_sent'); ?>?</th>
+				<th style="width: 6em"></th>
+			</tr>
+		</thead>
+		<tfoot>
+			<tr>
+				<td colspan="6" class="text-left"><?php echo $this->pagination->create_links() ?></td>
+			</tr>
+		</tfoot>
+		<tbody>
+		<?php foreach ($emails as $email) :?>
+			<tr>
+				<td><?php echo $email->id; ?></td>
+				<td><?php echo $email->to_email ?></td>
+				<td><?php echo $email->subject ?></td>
+				<td class="text-center"><?php echo $email->attempts ?></td>
+				<td class="text-center"><?php echo $email->success ? lang('bf_yes') : lang('bf_no') ?></td>
+				<td class="text-center">
+					<?php echo anchor(SITE_AREA .'/settings/emailer/preview/'. $email->id, lang('bf_action_preview'), array('target'=>'_blank')); ?>
+				</td>
+			</tr>
+		<?php endforeach; ?>
+		</tbody>
+	</table>
+	
+<?php else : ?>
+
+	<div class="notification information">
+		<p><?php echo lang('em_stat_no_queue'); ?></p>
+	</div>
+
 <?php endif; ?>
 
-<?php echo form_open(SITE_AREA .'/settings/emailer', 'class="constrained"'); ?>
-	
-	<br/>
-	
-	<div>
-		<label for="sender_email"><?php echo lang('em_system_email'); ?></label>
-		<input type="email" name="sender_email" class="medium" value="<?php echo isset($sender_email) ? $sender_email : set_value('sender_email') ?>" />
-		<p class="small indent"><?php echo lang('em_system_email_note'); ?></p>
-	</div>
-	
-	<div>
-		<label for="mailtype"><?php echo lang('em_email_type'); ?></label>
-		<select name="mailtype">
-			<option value="text" <?php echo isset($mailtype) && $mailtype == 'text' ? 'selected="selected"' : ''; ?>>Text</option>
-			<option value="html" <?php echo isset($mailtype) && $mailtype == 'html' ? 'selected="selected"' : ''; ?>>HTML</option>
-		</select>
-	</div>
-	
-	<div>
-		<label for="protocol"><?php echo lang('em_email_server'); ?></label>
-		<select name="protocol" id="server_type">
-			<option <?php echo isset($protocol) && $protocol == 'mail' ? 'selected="selected"' : ''; ?>>mail</option>
-			<option <?php echo isset($protocol) && $protocol == 'sendmail' ? 'selected="selected"' : ''; ?>>sendmail</option>
-			<option <?php echo isset($protocol) && $protocol == 'smtp' ? 'selected="selected"' : ''; ?>>SMTP</option>
-		</select>
-	</div>
-	
-<fieldset>
-	<legend><?php echo lang('em_settings'); ?></legend>
-	<!-- PHP Mail -->
-	<div id="mail">
-		<p class="text-center"><?php echo lang('em_settings_note'); ?></p>
-	</div>
+<?php if (isset($email_debug)) :?>
 
-	<!-- Sendmail -->
-	<div id="sendmail">
-		<label for="mailpath">Sendmail <?php echo lang('em_location'); ?></label>
-		<input type="text" name="mailpath" class="medium" value="<?php echo isset($mailpath) ? $mailpath : '/usr/sbin/sendmail' ?>" />
-	</div>
-	
-	<!-- SMTP -->
-	<div id="smtp">
-		<label for="smtp_host">SMTP <?php echo lang('em_server_address'); ?></label>
-		<input type="text" name="smtp_host" class="medium" value="<?php echo isset($smtp_host) ? $smtp_host : set_value('smtp_host') ?>" />
-		<br/>
-		<label for="smtp_user">SMTP <?php echo lang('bf_username'); ?></label>
-		<input type="text" name="smtp_user" class="medium" value="<?php echo isset($smtp_user) ? $smtp_user : set_value('smtp_user') ?>" />
-		<br/>
-		<label for="smtp_pass">SMTP <?php echo lang('bf_password'); ?></label>
-		<input type="text" name="smtp_pass" class="medium" value="<?php echo isset($smtp_pass) ? $smtp_pass : set_value('smtp_pass') ?>" />
-		<br/>
-		<label for="smtp_port">SMTP <?php echo lang('em_port'); ?></label>
-		<input type="text" name="smtp_port" class="medium" value="<?php echo isset($smtp_port) ? $smtp_port : set_value('smtp_port') ?>" />
-		<br/>
-		<label for="smptp_timeout">SMTP <?php echo lang('em_timeout_secs'); ?></label>
-		<input type="text" name="smtp_timeout" class="medium" value="<?php echo isset($smtp_timeout) ? $smtp_timeout : set_value('smtp_timeout') ?>" />
-	</div>
-</fieldset>
+<h3>Email Debugger</h3>
 
-<div class="submits">
-	<input type="submit" name="submit" value="Save Settings" />
+<div class="notification attention">
+	<p>There was an error sending emails from the queue. The results appear below.</p>
 </div>
 
-<?php echo form_close(); ?>
+<div class="box">
+<?php echo $email_debug; ?>
+</div>
 
-<!-- Test Settings -->
-<h3><?php echo lang('em_test_header'); ?></h3>
+<?php endif; ?>
 
-<p><?php echo lang('em_test_intro'); ?></p>
+<!-- End Queue -->
 
-<?php echo form_open(SITE_AREA .'/settings/emailer/test', array('class' => 'ajax-form', 'id'=>'test-form')); ?>
-	
-	<div>
-		<label for="email"><?php echo lang('bf_email'); ?></label>
-		<input type="email" name="test_email" id="test-email" value="<?php echo $this->settings_lib->item('site.system_email') ?>" /> 
-		<input type="submit" name="submit" value="<?php echo lang('em_test_button'); ?>" />
-	</div>
-	
-	<div id="test-ajax"></div>
 
-<?php echo form_close(); ?>
-<script>
-head.ready(function(){
-	// Server Settings
-	$('#server_type').change(function(){
-		// First, hide everything
-		$('#mail, #sendmail, #smtp').css('display', 'none');
-		
-		switch ($(this).val())
-		{
-			case 'mail':
-				$('#mail').css('display', 'block');
-				break;
-			case 'sendmail':
-				$('#sendmail').css('display', 'block');
-				break;
-			case 'SMTP':
-				$('#smtp').css('display', 'block');
-				break;
-		}
-	});
-	
-	// since js is active, hide the server settings
-	$('#server_type').trigger('change');
-
-	// Email Test
-	$('#test-form').submit(function(e){
-		e.preventDefault();
-		
-		var email	= $('#test-email').val();
-		var url		= $(this).attr('action');
-		
-		$('#test-ajax').load(
-			url,
-			{
-				email: email,
-				url: url
-			}
-		);
-	});
-});
-</script>
+		</div>	<!-- /ajax-content -->
+	</div>	<!-- /content -->
+</div>
