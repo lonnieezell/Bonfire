@@ -77,17 +77,17 @@ class Modulebuilder
 			if ($public_context === TRUE)
 			{
 				// only build this view in the Public context
-				$content['views'][$context_name]['index'] = $this->build_view($field_total, $module_name, $context_name, 'index_front', 'Index', $primary_key_field, $form_input_delimiters);
+				$content['views'][$context_name]['index'] = $this->build_view($field_total, $module_name, $context_name, 'index_front', 'Index', $primary_key_field, $form_input_delimiters, $db_required);
 			}
 			else {
 				// only build these views for the Admin contexts
 				foreach($action_names as $key => $action_name) {
 					if ($action_name != 'delete' ) {
-						$content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
+						$content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters, $db_required);
 					}
 				}
-				$content['views'][$context_name]['index_alt'] = $this->build_view($field_total, $module_name, $context_name, 'index_alt', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
-				$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
+				$content['views'][$context_name]['index_alt'] = $this->build_view($field_total, $module_name, $context_name, 'index_alt', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters, $db_required);
+				$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters, $db_required);
 			}
 		}
 
@@ -286,7 +286,7 @@ class Modulebuilder
     * @return string
     *
     */
-	private function build_view($field_total, $module_name, $controller_name, $action_name, $action_label, $primary_key_field, $form_input_delimiters)
+	private function build_view($field_total, $module_name, $controller_name, $action_name, $action_label, $primary_key_field, $form_input_delimiters, $db_required)
 	{
 		if ($field_total == NULL)
 		{
@@ -299,6 +299,7 @@ class Modulebuilder
 		$data['controller_name'] = $controller_name;
 		$data['action_name'] = $action_name;
 		$data['primary_key_field'] = $primary_key_field;
+		$data['db_required'] = $db_required;
 		$data['action_label'] = $action_label;
 		$data['form_input_delimiters'] = $form_input_delimiters;
 		$data['textarea_editor'] = $this->CI->input->post('textarea_editor');

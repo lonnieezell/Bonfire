@@ -290,7 +290,7 @@ $textarea_included = FALSE;
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$db_field_type = set_value("db_field_type$counter");
-	$field_name = $module_name_lower.'_'.set_value("view_field_name$counter");
+	$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");;
 	$view_datepicker = '';
 	if ($db_field_type != NULL)
 	{
@@ -412,12 +412,13 @@ if ($controller_name != $module_name_lower)
 
 		// we set this variable as it will be used to place the comma after the last item to build the insert db array
 		$last_field = $counter;
+		$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
 
 		$rules .= '			
-		$this->form_validation->set_rules(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\',\''.set_value("view_field_label$counter").'\',\'';
+		$this->form_validation->set_rules(\''.$field_name.'\',\''.set_value("view_field_label$counter").'\',\'';
 		
 		$save_data_array .= '
-		$data[\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\']        = $this->input->post(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\');';
+		$data[\''.$field_name.'\']        = $this->input->post(\''.$field_name.'\');';
 
 		// set a friendly variable name
 		$validation_rules = $this->input->post('validation_rules'.$counter);

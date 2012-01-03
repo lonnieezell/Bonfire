@@ -116,7 +116,33 @@ class Developer extends Admin_Controller {
 			Template::set('field_numbers', range(0,20));
 			Template::set_view('developer/modulebuilder_form');
 						
-		} else 
+		}
+		elseif($this->input->post('module_db') == 'existing' && $this->field_total == 0)
+		{
+			// read the fields from the specified db table and pass them back into the form
+			$table_fields = $this->table_info($this->input->post('table_name'));
+			
+			Template::set('field_total', count($table_fields) - 1); // discount the first field as it is the primary key
+			
+			if (!empty($_POST))
+			{
+				Template::set('form_error', TRUE);
+			}
+			else
+			{
+				Template::set('form_error', FALSE);
+			}
+			$query = $this->db->select('role_id,role_name')->order_by('role_name')->get('roles');
+			Template::set('roles', $query->result_array());
+			Template::set('existing_table_fields', $table_fields);
+			Template::set('form_action_options', $this->options['form_action_options']);
+			Template::set('validation_rules', $this->options['validation_rules']);
+			Template::set('validation_limits', $this->options['validation_limits']);
+			Template::set('field_numbers', range(0,20));
+			Template::set_view('developer/modulebuilder_form');
+
+		}
+		else 
 		{
 			// passed validation proceed to second page
 			$this->build_module($this->field_total);
@@ -235,7 +261,7 @@ class Developer extends Admin_Controller {
 		$this->form_validation->set_rules("contexts_public",'Contexts :: Public',"trim|xss_clean|is_numeric");
 		$this->form_validation->set_rules("contexts_reports",'Contexts :: Reports',"trim|xss_clean|is_numeric");
 		$this->form_validation->set_rules("contexts_settings",'Contexts :: Settings',"trim|xss_clean|is_numeric");
-		$this->form_validation->set_rules("db_required",'Generate Migration',"trim|xss_clean|is_numeric");
+		$this->form_validation->set_rules("module_db",'Create Module Table',"trim|xss_clean|alpha");
 		$this->form_validation->set_rules("form_action_create",'Form Actions :: View',"trim|xss_clean|is_numeric");
 		$this->form_validation->set_rules("form_action_delete",'Form Actions :: View',"trim|xss_clean|is_numeric");
 		$this->form_validation->set_rules("form_action_edit",'Form Actions :: View',"trim|xss_clean|is_numeric");
@@ -247,15 +273,19 @@ class Developer extends Admin_Controller {
 		$this->form_validation->set_rules("role_id",'Give Role Full Access',"trim|xss_clean|is_numeric");
 		
 		// no point doing all this checking if we don't want a table
-		if ($this->input->post('db_required')) {
-			$this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");
+		if ($this->input->post('module_db')) {
 			$this->form_validation->set_rules("table_name",'Table Name',"trim|required|xss_clean|alpha_dash");
-			$this->form_validation->set_rules("textarea_editor",'Textarea Editor',"trim|xss_clean|alpha_dash");
-			$this->form_validation->set_rules("use_soft_deletes",'Soft Deletes',"trim|xss_clean|alpha");
-			$this->form_validation->set_rules("use_created",'Use Created Field',"trim|xss_clean|alpha");
-			$this->form_validation->set_rules("created_field",'Created Field Name',"trim|xss_clean|alpha_dash");
-			$this->form_validation->set_rules("use_modified",'Use Modified Field',"trim|xss_clean|alpha");
-			$this->form_validation->set_rules("modified_field",'Modified Field Name',"trim|xss_clean|alpha_dash");
+			
+			if ($this->input->post('module_db') == 'new')
+			{
+				$this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");
+				$this->form_validation->set_rules("textarea_editor",'Textarea Editor',"trim|xss_clean|alpha_dash");
+				$this->form_validation->set_rules("use_soft_deletes",'Soft Deletes',"trim|xss_clean|alpha");
+				$this->form_validation->set_rules("use_created",'Use Created Field',"trim|xss_clean|alpha");
+				$this->form_validation->set_rules("created_field",'Created Field Name',"trim|xss_clean|alpha_dash");
+				$this->form_validation->set_rules("use_modified",'Use Modified Field',"trim|xss_clean|alpha");
+				$this->form_validation->set_rules("modified_field",'Modified Field Name',"trim|xss_clean|alpha_dash");
+			}
 		
 			for($counter=1; $field_total >= $counter; $counter++)
 			{
@@ -299,6 +329,73 @@ class Developer extends Admin_Controller {
 	//--------------------------------------------------------------------
 	
 	/*
+		Method: table_info()
+		
+		Returns an array with the structure and details for the fields in the specified
+		DB table.
+	*/
+	private function table_info($table_name) 
+	{
+		$fields = array();
+		
+		// check that the table exists in this database
+		if ($this->db->table_exists($table_name))
+		{
+
+			$query_string = "SHOW COLUMNS FROM ".$this->db->dbprefix.$table_name;
+			if($query = $this->db->query($query_string)) {
+
+				// We have a title - Edit it
+				foreach($query->result_array() as $field) {
+					$field_array = array();
+
+					$field_array['name'] = $field['Field'];
+
+					$type = '';
+					if(strpos($field['Type'], "(")) {
+						list($type, $max_length) = explode("--", str_replace("(", "--", str_replace(")", "", $field['Type'])));
+					}
+					else {
+						$type = $field['Type'];
+					}
+					$field_array['type'] = strtoupper($type);
+
+					$values = '';
+					if(is_numeric($max_length)) {
+						$max_length = $max_length;
+					}
+					else {
+						$values = $max_length;
+						$max_length = 1;
+					}
+					$field_array['max_length'] = $max_length;
+					$field_array['values'] = $values;
+
+					$primary_key = 0;
+					if($field['Key'] == "PRI") {
+						$primary_key = 1;
+					}
+					$field_array['primary_key'] = $primary_key;
+
+					$field_array['default'] = $field['Default'];
+
+					$fields[] = $field_array;
+				} // end foreach
+
+				return $fields;
+				
+			}//end if
+		}//end if
+
+		return FALSE;
+		
+		
+	}//end table_info()
+	
+	
+	//--------------------------------------------------------------------
+	
+	/*
 		Method: build_module()
 		
 		Handles the heavy-lifting of building a module from ther user's specs.
@@ -312,7 +409,7 @@ class Developer extends Admin_Controller {
 		$module_description = $this->input->post('module_description');
 		$role_id			= $this->input->post('role_id');
 		
-		$db_required = isset($_POST['db_required']) ? TRUE : FALSE;
+		$db_required = $_POST['module_db'] == 'new' ? TRUE : FALSE;
 		
 		$primary_key_field = $this->input->post('primary_key_field');
 		if( $primary_key_field == '') {
