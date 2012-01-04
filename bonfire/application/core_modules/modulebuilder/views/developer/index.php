@@ -6,7 +6,7 @@
 		<div class="scrollable">
 			<div class="list-view" id="module-list">
 				<?php foreach ($modules as $module => $config) : ?>
-					<div class="list-item with-icon" data-id="<?php echo $config['name'] ?>">
+					<div class="list-item with-icon" data-id="<?php echo preg_replace("/[ -]/", "_", $config['name']) ?>">
 						<img src="<?php echo Template::theme_url('images/database.png') ?>" />
 					
 						<p>
@@ -70,7 +70,7 @@
 								<td><?php echo isset($config['version']) ? $config['version'] : '---'; ?></td>
 								<td><?php echo isset($config['description']) ? $config['description'] : '---'; ?></td>
 								<td><?php echo isset($config['author']) ? $config['author'] : '---'; ?></td>
-								<td><?php echo anchor(SITE_AREA .'/developer/modulebuilder/delete/'. $config['name'], lang('mb_delete'),'class="confirm_delete" title="'.$config['name'].'"') ?></td>
+								<td><?php echo anchor(SITE_AREA .'/developer/modulebuilder/delete/'. preg_replace("/[ -]/", "_", $config['name']), lang('mb_delete'),'class="confirm_delete" title="'.preg_replace("/[ -]/", "_", $config['name']).'"') ?></td>
 							</tr>
 						<?php endforeach; ?>
 						</tbody>

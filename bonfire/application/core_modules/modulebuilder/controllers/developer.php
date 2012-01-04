@@ -172,7 +172,7 @@ class Developer extends Admin_Controller {
 	*/
 	public function delete() 
 	{	
-		$module_name = $this->uri->segment(5);
+		$module_name = preg_replace("/[ -]/", "_", $this->uri->segment(5));
 
 		if (!empty($module_name)) 
 		{	
@@ -207,13 +207,13 @@ class Developer extends Admin_Controller {
 	        }
 	        
 	        // drop the schema - old Migration schema method
-	        $module_name_lower = strtolower($module_name);
+	        $module_name_lower = preg_replace("/[ -]/", "_", strtolower($module_name));
 	        if ($this->db->field_exists( $module_name_lower . '_version', 'schema_version'))
 	        {
 	        	$this->dbforge->drop_column('schema_version', $module_name_lower . '_version');
 	        }
 	        // drop the Migration record - new Migration schema method
-	        $module_name_lower = strtolower($module_name);
+	        $module_name_lower = preg_replace("/[ -]/", "_", strtolower($module_name));
 	        if ($this->db->field_exists('version', 'schema_version'))
 	        {
 	        	$this->db->delete('schema_version', array('type' => $module_name_lower.'_'));
@@ -269,7 +269,7 @@ class Developer extends Admin_Controller {
 		$this->form_validation->set_rules("form_error_delimiters",'Form Error Delimiters',"required|trim|xss_clean");
 		$this->form_validation->set_rules("form_input_delimiters",'Form Input Delimiters',"required|trim|xss_clean");
 		$this->form_validation->set_rules("module_description",'Module Description',"trim|required|xss_clean");
-		$this->form_validation->set_rules("module_name",'Module Name',"trim|required|xss_clean|alpha_dash");
+		$this->form_validation->set_rules("module_name",'Module Name',"trim|required|xss_clean|callback_modulename_check");
 		$this->form_validation->set_rules("role_id",'Give Role Full Access',"trim|xss_clean|is_numeric");
 		
 		// no point doing all this checking if we don't want a table
@@ -403,7 +403,7 @@ class Developer extends Admin_Controller {
 	private function build_module($field_total=0) 
 	{
 		$module_name 		= $this->input->post('module_name');
-		$table_name 		= str_replace(' ','_',strtolower($this->input->post('table_name')));
+		$table_name 		= strtolower(preg_replace("/[ -]/", "_", $this->input->post('table_name')));
 		$contexts 			= $this->input->post('contexts');
 		$action_names 		= $this->input->post('form_action');
 		$module_description = $this->input->post('module_description');
@@ -432,9 +432,9 @@ class Developer extends Admin_Controller {
 
 		// make the variables available to the view file
 		$data['module_name']		= $module_name;
-		$data['module_name_lower']	= strtolower($module_name);
-		$data['controller_name']	= $module_name;
-		$data['table_name']			= empty($table_name) ? $module_name : $table_name;
+		$data['module_name_lower']	= strtolower(preg_replace("/[ -]/", "_", $module_name));
+		$data['controller_name']	= preg_replace("/[ -]/", "_", $module_name);
+		$data['table_name']			= empty($table_name) ? strtolower(preg_replace("/[ -]/", "_", $module_name)) : $table_name;
 		$data = $data + $file_data;
 		
 		// Allow for the Old method - update the schema first to prevent errors in duplicate column names due to Migrations.php caching db columns
@@ -514,4 +514,24 @@ class Developer extends Admin_Controller {
 		return is_writeable($this->options['output_path']);
 		
 	}//end _check_writeable()
+	
+	
+	/** 
+	 * Check the module name is valid
+	 *
+	 * @access	private
+	 * @return	bool
+	 */
+	public function modulename_check($str)
+	{
+		if (!preg_match("/^([A-Za-z \-]+)$/", $str))
+		{
+			$this->form_validation->set_message('modulename_check', 'The %s field is not valid');
+			return FALSE;
+		}
+		else
+		{
+			return TRUE;
+		}
+	}
 }
