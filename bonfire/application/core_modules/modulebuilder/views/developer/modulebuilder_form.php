@@ -103,8 +103,8 @@
 	
 			<div>
 				<label for="db_required"><?php echo lang('mb_form_generate'); ?></label>
-				<input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", TRUE); ?> class="radio" /> None
-				<input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox("module_db", "new"); ?> class="radio" /> Create New Table
+				<input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", $field_total == 0 ? TRUE : FALSE); ?> class="radio" /> None
+				<input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox("module_db", "new", $field_total != 0 ? TRUE : FALSE); ?> class="radio" /> Create New Table
 				<input name="module_db" id="db_exists" type="radio" value="existing" <?php echo set_checkbox("module_db", "existing"); ?> class="radio" /> Build from Existing Table
 			</div>
 		</fieldset>

@@ -90,7 +90,7 @@ class Developer extends Admin_Controller {
 		
 		$last_seg = $this->uri->segment( $this->uri->total_segments() );
 		
-		if (is_numeric($last_seg)) 
+		if (is_numeric($last_seg) && $this->input->post('module_db') != 'existing') 
 		{
 			$this->field_total = $last_seg;
 		}
@@ -114,6 +114,7 @@ class Developer extends Admin_Controller {
 			Template::set('validation_rules', $this->options['validation_rules']);
 			Template::set('validation_limits', $this->options['validation_limits']);
 			Template::set('field_numbers', range(0,20));
+			Template::set('field_total', $this->field_total);
 			Template::set_view('developer/modulebuilder_form');
 						
 		}

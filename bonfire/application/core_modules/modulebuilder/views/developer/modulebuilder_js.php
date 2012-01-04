@@ -37,7 +37,7 @@ function show_table_props() {
 		tbl_name = tbl_name.replace(/[^A-Za-z0-9\\s]/g, "_").toLowerCase();
 		$('#table_name').val( tbl_name );
 		
-		if ($('#view_field_label1').val() != undefined)
+		if ($('#view_field_label1').val() != undefined && $('#view_field_label1').val() != '')
 		{
 			$('.mb_new_table').show(0);
 			$('#db_details .notification').hide(0);
@@ -47,6 +47,7 @@ function show_table_props() {
 		else
 		{
 			$('#primary_key_field').val('');
+			$('#all_fields').empty();
 		}
 	} else {
 		$('#db_details').hide(0);
