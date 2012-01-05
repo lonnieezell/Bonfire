@@ -1,4 +1,10 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+
+/* get module locations from config settings or use the default module location and offset */
+Install::$locations = array(
+	APPPATH.'../bonfire/modules/' => '../modules/',
+);
+
 /*
 	Copyright (c) 2011 Lonnie Ezell
 
@@ -35,6 +41,8 @@
 	Module:	Installer
 */
 class Install extends CI_Controller {
+	
+	public static $locations;
 
 	protected $errors = '';
     
@@ -58,7 +66,7 @@ class Install extends CI_Controller {
 		for updates.
 	*/
 	private $bonfire_app_path = '../bonfire/application/';
-
+	
 	/*
 		Var: $writable_folders
 		An array of folders the installer checks to make 
@@ -106,7 +114,9 @@ class Install extends CI_Controller {
 		
 		// check if the app is installed
 		$this->load->config('application');
-        
+
+		$this->load->helper('install');
+
 		$this->cURL_check();
 	}
 	
@@ -332,6 +342,21 @@ class Install extends CI_Controller {
 			return false;
 		}
 
+		// get the list of custom modules in the main application
+		$module_list = $this->get_module_versions();
+		
+		if (is_array($module_list) && count($module_list))
+		{
+			foreach($module_list as $module_name => $module_detail)
+			{
+				// install the migrations for the custom modules
+				if (!$this->migrations->install($module_name.'_'))
+				{
+					$this->errors = $this->migrations->error;
+					return false;
+				}			
+			}
+		}
 		
 		//
 		// Save the information to the settings table
@@ -470,6 +495,32 @@ class Install extends CI_Controller {
 	}
 	
 	//--------------------------------------------------------------------
+	
+	private function get_module_versions()
+	{
+		$mod_versions = array();
+
+
+	
+		$modules = module_files(null, 'migrations');
+		
+		if ($modules === false)
+		{
+			return false;
+		}
+
+		foreach ($modules as $module => $migrations)
+		{
+			$mod_versions[$module] = array(
+				'installed_version'	=> $this->migrations->get_schema_version($module .'_'),
+				'latest_version'	=> $this->migrations->get_latest_version($module .'_'),
+				'migrations'		=> $migrations['migrations']
+			);
+		}
+		
+		return $mod_versions;
+	}
+
 	
 	//--------------------------------------------------------------------
 }
