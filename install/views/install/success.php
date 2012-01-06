@@ -1,1 +1,1 @@
-<?php echo lang('in_success_msg'); ?> <?php echo anchor('../', 'Bonfire'); ?>
+<?php echo lang('in_success_msg'); ?> <?php echo anchor('../../', 'Bonfire'); ?>
