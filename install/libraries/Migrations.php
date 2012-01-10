@@ -182,7 +182,18 @@ class Migrations {
 	*/
 	public function install($type='') 
 	{ 
-		$migrations_path = $type == 'app_' ? $this->migrations_path : $this->migrations_path .'core/';
+		switch ($type)
+		{
+			case '':
+				$migrations_path = $this->migrations_path .'core/';
+				break;
+			case 'app_':
+				$migrations_path = $this->migrations_path;
+				break;
+			default:
+				$migrations_path = realpath(APPPATH . module_path(substr($type, 0, -1), 'migrations')) .'/';
+				break;
+		}
 
 		// Load all *_*.php files in the migrations path
 		$files = glob($migrations_path.'*_*'.EXT);
@@ -243,7 +254,7 @@ class Migrations {
 				$migrations_path = $this->migrations_path;
 				break;
 			default:
-				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
+				$migrations_path = realpath(APPPATH . module_path(substr($type, 0, -1), 'migrations')) .'/';
 				break;
 		}
 
@@ -260,7 +271,7 @@ class Migrations {
 			// Moving Down
 			$step = -1;
 		}
-
+		
 		$method = $step == 1 ? 'up' : 'down';
 		$migrations = array();
 
@@ -270,7 +281,7 @@ class Migrations {
 		for($i=$start; $i != $stop; $i += $step) 
 		{
 			$f = glob(sprintf($migrations_path . '%03d_*'.EXT, $i));
-
+			
 			// Only one migration per step is permitted
 			if (count($f) > 1)
 			{ 
@@ -326,7 +337,7 @@ class Migrations {
 			
 			else
 			{ 
-				$this->error = sprintf($this->_ci->lang->line("invalid_migration_filename"),$file);
+				$this->error = sprintf($this->_ci->lang->line("invalid_migration_filename"),$file, $migrations_path);
 				return 0;
 			}
 		}

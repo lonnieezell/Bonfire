@@ -44,3 +44,10 @@ $lang['in_curl_disabled']			= '<p class="error">cURL <strong>is not</strong> pre
 
 
 $lang['in_success_msg']				= 'Please remove the install folder and return to ';
+
+$lang['no_migrations_found']			= 'No migration files were found';
+$lang['multiple_migrations_version']	= 'Multiple migrations version: %d';
+$lang['multiple_migrations_name']		= 'Multiple migrations name: %s';
+$lang['migration_class_doesnt_exist']	= 'Migration class does not exist: %s';
+$lang['wrong_migration_interface']		= 'Wrong migration interface: %s';
+$lang['invalid_migration_filename']		= 'Wrong migration filename: %s - %s';
