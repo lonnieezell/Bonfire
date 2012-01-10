@@ -152,6 +152,7 @@ class Install extends CI_Controller {
 					'database'	=> $dbname,
 					'dbprefix'	=> strip_tags($this->input->post('db_prefix'))
 				),
+				'environment' => $environment,
 			);
 			
 			$this->session->set_userdata('db_data', $data);
@@ -305,15 +306,15 @@ class Install extends CI_Controller {
 		
 		// Save the DB details
 		$data = $this->session->userdata("db_data");
+		$environment = $data['environment'];
+		unset($data['environment']);
 
 		write_db_config($data);
 	
 		if (is_writeable(FCPATH . $this->bonfire_app_path . 'config/'))
 		{
 			// Database
-			copy(FCPATH . $this->bonfire_app_path . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/development/database.php');
-			copy(FCPATH . $this->bonfire_app_path . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/production/database.php');
-			copy(FCPATH . $this->bonfire_app_path . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/testing/database.php');
+			copy(FCPATH . $this->bonfire_app_path . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/'.$environment.'/database.php');
 		}
 
 		$server   = $data['main']['hostname'];
