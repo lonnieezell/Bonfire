@@ -6,7 +6,7 @@
 	
 	<?php echo $startup_errors; ?>
 	
-	<p style="text-align: right; margin-top: 3em;"><?php echo anchor('/install', 'Reload Page'); ?></p>
+	<p style="text-align: right; margin-top: 3em;"><?php echo anchor('/', 'Reload Page'); ?></p>
 
 <?php else : ?>
 	<h2><?php echo lang('in_db_settings'); ?></h2>
