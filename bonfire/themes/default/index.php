@@ -9,7 +9,7 @@
 <head>
 	<meta charset="UTF-8" />
 	
-	<title><?php echo $this->settings_lib->item('site.title'); ?></title>
+	<title><?php echo config_item('site.title'); ?></title>
 	
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
@@ -24,7 +24,7 @@
 		<!-- Header -->
 		<div class="head text-right">
 
-			<h1><?php echo $this->settings_lib->item('site.title'); ?> - Testing Platform</h1>
+			<h1>Bonfire</h1>
 		</div>
 
 		<div class="main">
