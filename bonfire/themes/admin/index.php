@@ -22,7 +22,7 @@
 	<!-- Fix the mobile Safari auto-zoom bug -->
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	
-	<script src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
+	<script type="text/javascript" src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
 	<script>
 	head.feature("placeholder", function() {
 		var inputElem = document.createElement('input');

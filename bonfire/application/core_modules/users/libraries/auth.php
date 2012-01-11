@@ -215,6 +215,7 @@ class Auth  {
 			else
 			{
 				$this->increase_login_attempts($login);
+				$this->errors[] = $this->ci->lang->line('us_bad_email_pass');
 			}
 		} 
 		else 
@@ -337,6 +338,10 @@ class Auth  {
 		{
 			// set message telling them no permission THEN redirect
 			Template::set_message( lang('us_no_permission'), 'attention');
+			
+			// log permission attempt in activity
+			$this->ci->load->model('activities/activity_model', 'activity_model', true);
+			$this->ci->activity_model->log_activity($this->ci->auth->user_id(), sprintf(lang('bf_unauthorized_attempt'),$permission) . $this->ci->input->ip_address());
 						
 			if ($uri) 
 				Template::redirect($uri);
@@ -1050,7 +1055,7 @@ if (!function_exists('auth_errors'))
 			{
 				$str .= "<li>$e</li>";
 			}
-			$str .= "</li>";
+			$str .= "</ul>";
 			
 			return $str;
 		}

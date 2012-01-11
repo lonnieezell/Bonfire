@@ -67,7 +67,9 @@ class Reports extends Admin_Controller {
 		Template::set('top_users', $query->result());
 		
 		Template::set('users', $this->user_model->find_all());
-		Template::set('modules', module_list());
+		$modlist = module_list();
+		natsort($modlist);
+		Template::set('modules',$modlist);
 		Template::set('activities', $this->activity_model->find_all());
 		Template::render();
 	}
@@ -315,6 +317,7 @@ class Reports extends Admin_Controller {
 		$this->db->select('activity, module, activities.created_on AS created, username');
 		Template::set('activity_content', $this->activity_model->find_all());
 		
+		natsort($options);
 		Template::set('select_options', $options);
 		
 		Template::set_view('reports/view');
