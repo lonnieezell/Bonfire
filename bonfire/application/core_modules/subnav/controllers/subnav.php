@@ -59,6 +59,7 @@ class Subnav extends Base_Controller {
 				$this->actions[] = $module;
 			}
 		}
+		sort($this->actions, SORT_STRING);
 		
 		// Do we have any actions? 
 		if (!count($this->actions))

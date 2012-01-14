@@ -314,6 +314,11 @@ class Users extends Front_Controller {
 	
 	public function register() 
 	{
+		if ($this->auth->is_logged_in() === TRUE)
+		{
+			redirect('/');
+		}
+		
 		// Are users even allowed to register? 
 		if (!$this->settings_lib->item('auth.allow_register'))
 		{

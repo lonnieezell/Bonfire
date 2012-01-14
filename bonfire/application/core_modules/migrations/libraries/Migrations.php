@@ -332,7 +332,7 @@ class Migrations {
 			
 			else
 			{ 
-				$this->error = sprintf($this->_ci->lang->line("invalid_migration_filename"),$file);
+				$this->error = sprintf($this->_ci->lang->line("invalid_migration_filename"),$file, $migrations_path);
 				return 0;
 			}
 		}
