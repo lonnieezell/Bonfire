@@ -90,16 +90,16 @@ class Developer extends Admin_Controller {
 		
 		$last_seg = $this->uri->segment( $this->uri->total_segments() );
 		
-		if (is_numeric($last_seg) && $this->input->post('module_db') != 'existing') 
+		if (is_numeric($last_seg)) 
 		{
 			$this->field_total = $last_seg;
 		}
-		
+
 		// validation hasn't been passed
 		if ($this->validate_form($this->field_total) == FALSE)
 		{
 			Template::set('field_total', $this->field_total);
-			
+
 			if (!empty($_POST))
 			{
 				Template::set('form_error', TRUE);

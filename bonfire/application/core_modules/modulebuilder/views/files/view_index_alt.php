@@ -97,7 +97,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 	}
 	$field_name = $db_required ? $module_name_lower . '_' . strtolower(set_value("view_field_name$counter")) : strtolower(set_value("view_field_name$counter"));
 
-	$table_records .= '
+	$view .= '
 				<td><?php echo $record->'.$field_name.'?></td>';
 }
 if ($use_soft_deletes == 'true')
