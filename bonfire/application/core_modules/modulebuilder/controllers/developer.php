@@ -120,19 +120,35 @@ class Developer extends Admin_Controller {
 		}
 		elseif($this->input->post('module_db') == 'existing' && $this->field_total == 0)
 		{
+			// if the user has specified the table including the prefix then remove the prefix
+			$_POST['table_name'] = preg_replace("/^".$this->db->dbprefix."/", "", $this->input->post('table_name'));
+		
+
 			// read the fields from the specified db table and pass them back into the form
 			$table_fields = $this->table_info($this->input->post('table_name'));
+
+			$num_fields = 0;
 			
-			Template::set('field_total', count($table_fields) - 1); // discount the first field as it is the primary key
+			if (is_array($table_fields)) {
+				$num_fields = count($table_fields);
+			}
 			
-			if (!empty($_POST))
+			Template::set('field_total', $this->field_total);
+			if ($num_fields != 0) {
+				Template::set('field_total', $num_fields - 1); // discount the first field as it is the primary key
+			}
+			
+			if (!empty($_POST) && $num_fields == 0)
 			{
 				Template::set('form_error', TRUE);
+				log_message('error', "ModuleBuilder: The specified table name does not exist");
+				Template::set('error_message', 'The specified table name does not exist');
 			}
 			else
 			{
 				Template::set('form_error', FALSE);
 			}
+			
 			$query = $this->db->select('role_id,role_name')->order_by('role_name')->get('roles');
 			Template::set('roles', $query->result_array());
 			Template::set('existing_table_fields', $table_fields);

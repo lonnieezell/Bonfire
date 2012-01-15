@@ -23,6 +23,9 @@
 		<?php echo validation_errors(); ?>
 	</div>
 	<?php endif; ?>
+	<?php if (validation_errors() || isset($error_message)) : ?>
+	<div class="notification error"><?php echo $error_message?></div>
+	<?php endif; ?>
 	
 	<div class="notification information">
 		<?php echo lang('mb_form_note'); ?>
