@@ -81,7 +81,7 @@ $lang['us_reset_password']			= 'Reset Password';
 $lang['us_reset_note']				= 'Enter your email and we will send a temporary password to you.';
 
 $lang['us_login']					= 'My Name Is...';
-$lang['us_remember_note']			= 'Remember me for two weeks';
+$lang['us_remember_note']			= 'Remember me';
 $lang['us_no_account']				= 'Don&rsquo;t have an account?';
 $lang['us_sign_up']					= 'Sign up today';
 $lang['us_forgot_your_password']	= 'Forgot Your Password?';
