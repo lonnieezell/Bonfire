@@ -21,7 +21,7 @@
 	THE SOFTWARE.
 */
 
-$lang['ui_keyboard_shortcuts']	= 'Enter your keyboard shortcuts below. The currently available shortcuts are:';
+$lang['ui_keyboard_shortcuts']	= 'Keyboard shortcuts are setup in the application config. The currently available shortcuts are:';
 $lang['ui_add_shortcut']		= 'Add Shortcut';
 $lang['ui_remove_shortcut']		= 'Remove';
 

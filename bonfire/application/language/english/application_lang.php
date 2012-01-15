@@ -136,3 +136,6 @@ $lang['bf_context_developer']	= 'Developer';
 //--------------------------------------------------------------------
 $lang['bf_act_settings_saved']	= 'App settings saved from';
 $lang['bf_unauthorized_attempt']= 'unsuccessfully attempted to access a page which required the following permission "%s" from ';
+
+
+$lang['bf_keyboard_shortcuts']		= 'Available keyboard shortcuts:';

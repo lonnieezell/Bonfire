@@ -17,7 +17,7 @@
 		<input type="button" name="add_shortcut" id="add_shortcut" value="<?php echo lang('ui_add_shortcut') ?>" class="button"/>
 		<ul id="shortcut_keys" class="clean">
 		<?php $count = 1; ?>
-		<?php foreach ($settings['ui.shortcut_keys'] as $action => $shortcut): ?>
+		<?php foreach ($settings as $action => $shortcut): ?>
 			<li id="shortcut<?php echo $count;?>">
 				<?php echo lang('ui_action') ?> <input type="text" name="actions[]" class="medium" value="<?php echo isset($action) ? $action : set_value('actions[0]') ?>" />
 				<?php echo lang('ui_shortcut') ?> <input type="text" name="shortcuts[]" class="medium" value="<?php echo isset($shortcut) ? $shortcut : set_value('shortcuts[0]') ?>" />

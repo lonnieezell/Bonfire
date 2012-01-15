@@ -24,7 +24,7 @@
 class Settings_model extends BF_Model {
 
 	protected $table		= 'settings';
-	protected $key			= 'id';
+	protected $key			= 'name';
 	protected $soft_deletes	= false;
 	protected $date_format	= 'datetime';
 	protected $set_created	= false;

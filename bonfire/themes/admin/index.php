@@ -3,6 +3,7 @@
 	Assets::add_js( array(
 		Template::theme_url('js/jquery-1.6.4.min.js'),
 		Template::theme_url('js/jquery.form.js'),
+		Template::theme_url('js/jquery-ui-1.8.13.min.js'),
 		Template::theme_url('js/ui.js'),
 		Template::theme_url('js/jwerty.js'),
 	),
@@ -47,6 +48,7 @@
 		<!-- Nav Bar -->
 		<div id="toolbar">
 			<div id="toolbar-right">
+				<?php if(is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?><img src="/bonfire/themes/admin/images/keyboard-icon.png" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts"/><?php endif;?>
 				<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $this->auth->user_id()) ?>" id="tb_email" title="<?php echo lang('bf_user_settings') ?>"><?php echo $this->settings_lib->item('auth.use_usernames') ? ($this->settings_lib->item('auth.use_own_names') ? $this->auth->user_name() : $this->auth->username()) : $this->auth->email() ?></a>
 				<a href="<?php echo site_url('logout') ?>" id="tb_logout" title="Logout">Logout</a>
 			</div>
@@ -81,6 +83,17 @@
 		</div>
 	</div>
 	
+	<div id="shortkeys_dialog" title="Shortcut Keys" style="display: none">
+		<p>
+			<?php echo lang('bf_keyboard_shortcuts') ?>
+			<ul>
+			<?php foreach($shortcut_data['shortcut_keys'] as $key => $data): ?>
+				<li><span><?php echo $data?></span> : <?php echo $shortcut_data['shortcuts'][$key]['description']; ?></li>
+			<?php endforeach; ?>
+			</ul
+		</p>
+	</div>
+
 	<div id="debug"><!-- Stores the Profiler Results --></div>
 	
 	<script>

@@ -107,7 +107,9 @@ class Settings_lib
 	 */
 	public static function set($name, $value)
 	{
-		$setting = $this->ci->settings_model->update($name, array('value' => $value));
+		$ci =& get_instance();
+
+		$setting = $ci->settings_model->where('name', $name)->update(FALSE, array('value' => $value));
 
 		self::$cache[$name] = $value;
 

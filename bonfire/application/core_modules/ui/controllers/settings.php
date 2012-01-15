@@ -39,8 +39,6 @@ class Settings extends Admin_Controller {
 			$this->load->model('activities/Activity_model', 'activity_model', true);
 		}
 		
-		$this->load->helper('config_file');
-
 		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
 	}
 	
@@ -61,9 +59,11 @@ class Settings extends Admin_Controller {
 			}
 		}
 		
-		// Read our current settings
+		// Read our current settings from the application config
 		Template::set('current', config_item('ui.current_shortcuts'));
-		Template::set('settings', read_config('keys', FALSE, 'ui'));
+		
+		$settings = $this->settings_lib->item('ui.shortcut_keys');
+		Template::set('settings', unserialize($settings));
 
 		Template::render();
 	}
@@ -87,13 +87,15 @@ class Settings extends Admin_Controller {
 		$actions   = $this->input->post('actions');
 		$shortcuts = $this->input->post('shortcuts');
 		
+		$setting_array = array();
+		$data = array();
 		if (count($actions) == count($shortcuts))
 		{
 			foreach ($actions as $key => $name)
 			{
 				if (!empty($shortcuts[$key]))
 				{
-					$data['ui.shortcut_keys'][$name] = $shortcuts[$key];
+					$setting_array[$name] = $shortcuts[$key];
 				}
 			}
 		}
@@ -104,10 +106,13 @@ class Settings extends Admin_Controller {
 			$this->cache->delete('update_message');
 		}
 		
+		// save the settings to the DB
+		$updated = $this->settings_lib->set('ui.shortcut_keys', serialize($setting_array));
+
 		// Log the activity
 		$this->activity_model->log_activity($this->auth->user_id(), lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'ui');
-		
-		return write_config('keys', $data, 'ui');
+
+		return $updated;
 	}
 	
 	//--------------------------------------------------------------------
