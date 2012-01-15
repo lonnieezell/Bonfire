@@ -43,7 +43,7 @@ class Developer extends Admin_Controller {
 
 	public function index() 
 	{
-		if ($this->config->item('updates.do_check') && function_exists('curl_version'))
+		if ($this->settings_lib->item('updates.do_check') && function_exists('curl_version'))
 		{
 			$this->load->library('GitHub_lib');
 			$this->load->helper('date');

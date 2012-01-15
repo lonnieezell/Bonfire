@@ -6,7 +6,7 @@
 	<?php foreach ($activities as $activity) : ?>
 		
 		<?php 
-			$identity = config_item('auth.login_type') == 'email' ? $activity->email : $activity->username;
+			$identity = $this->settings_lib->item('auth.login_type') == 'email' ? $activity->email : $activity->username;
 		?>
 		
 		<li>

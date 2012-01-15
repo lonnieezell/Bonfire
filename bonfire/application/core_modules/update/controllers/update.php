@@ -43,7 +43,7 @@ class Update extends Admin_Controller {
 	*/
 	public function update_check() 
 	{ 	
-		if (!$this->config->item('updates.do_check') || !function_exists('curl_version'))
+		if (!$this->settings_lib->item('updates.do_check') || !function_exists('curl_version'))
 		{
 			return;
 		}
@@ -57,7 +57,7 @@ class Update extends Admin_Controller {
 		*/
 		if (empty($message))
 		{
-			if ($this->config->item('updates.bleeding_edge'))
+			if ($this->settings_lib->item('updates.bleeding_edge'))
 			{ 
 				$commits = $this->github_lib->user_timeline('ci-bonfire', 'Bonfire');
 				
@@ -65,7 +65,7 @@ class Update extends Admin_Controller {
 				{
 					$last_commit = $commits[0]->id;
 				
-					if ($last_commit !== $this->config->item('updates.last_commit'))
+					if ($last_commit !== $this->settings_lib->item('updates.last_commit'))
 					{
 						$message .= 'A <b>bleeding edge</b> update to Bonfire is available.';
 					}

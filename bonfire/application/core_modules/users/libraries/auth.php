@@ -132,7 +132,7 @@ class Auth  {
 	{
 		if (empty($login) || empty($password))
 		{
-			$error = config_item('auth.login_type') == lang('bf_both') ? lang('bf_username') .'/'. lang('bf_email') : ucfirst(config_item('auth.login_type'));
+			$error = $this->ci->settings_lib->item('auth.login_type') == lang('bf_both') ? lang('bf_username') .'/'. lang('bf_email') : ucfirst($this->ci->settings_lib->item('auth.login_type'));
 			$this->errors[] = $error .' and Password fields must be filled out.';
 			return false;
 		}
@@ -145,12 +145,12 @@ class Auth  {
 		// Grab the user from the db
 		$selects = 'id, email, username, first_name, last_name, users.role_id, salt, password_hash, users.role_id, users.deleted';
 		
-		if (config_item('auth.do_login_redirect'))
+		if ($this->ci->settings_lib->item('auth.do_login_redirect'))
 		{
 			$selects .= ', login_destination';
 		}
 		
-		$user = $this->ci->user_model->select($selects)->find_by(config_item('auth.login_type'), $login);
+		$user = $this->ci->user_model->select($selects)->find_by($this->ci->settings_lib->item('auth.login_type'), $login);
 		
 		// check to see if a value of false came back, meaning that the username or email or password doesn't exist.
 		if($user == false) 
@@ -206,7 +206,7 @@ class Auth  {
 				Events::trigger('after_login', $trigger_data );
 				
 				// Save our redirect location
-				$this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '/';
+				$this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '';
 				
 				return true;
 			}
@@ -215,6 +215,7 @@ class Auth  {
 			else
 			{
 				$this->increase_login_attempts($login);
+				$this->errors[] = $this->ci->lang->line('us_bad_email_pass');
 			}
 		} 
 		else 
@@ -337,6 +338,10 @@ class Auth  {
 		{
 			// set message telling them no permission THEN redirect
 			Template::set_message( lang('us_no_permission'), 'attention');
+			
+			// log permission attempt in activity
+			$this->ci->load->model('activities/activity_model', 'activity_model', true);
+			$this->ci->activity_model->log_activity($this->ci->auth->user_id(), sprintf(lang('bf_unauthorized_attempt'),$permission) . $this->ci->input->ip_address());
 						
 			if ($uri) 
 				Template::redirect($uri);
@@ -381,13 +386,13 @@ class Auth  {
 	public function username()
 	{
 		// if we're using "both" as login type, is session identity a username?
-		if 	(config_item('auth.login_type') == 'username' OR 
-			(config_item('auth.login_type') !== 'email' && (config_item('auth.user_usernames'))))
+		if 	($this->ci->settings_lib->item('auth.login_type') == 'username' OR 
+			($this->ci->settings_lib->item('auth.login_type') !== 'email' && ($this->ci->settings_lib->item('auth.user_usernames'))))
 		{	
 			return $this->ci->session->userdata('identity');
 		}
 		else // email logintype with username has a username session var
-			if (config_item('auth.use_usernames') == 1) 
+			if ($this->ci->settings_lib->item('auth.use_usernames') == 1) 
 			{
 				return $this->ci->session->userdata('auth_custom');
 			}
@@ -466,7 +471,7 @@ class Auth  {
 			// Did we set a custom var for this?
 		*/
 		/*
-		if (config_item('auth.use_own_names'))
+		if ($this->ci->settings_lib->item('auth.use_usernames') == 2)
 		{
 			return $this->ci->session->userdata('auth_custom');
 		}
@@ -540,6 +545,11 @@ class Auth  {
 		{
 			return false;
 		}
+		// move permission to lowercase for easier checking.
+		else
+		{
+			$permission = strtolower($permission);
+		}
 	
 		// If no role is being provided, assume it's for the current
 		// logged in user.
@@ -598,7 +608,7 @@ class Auth  {
 		{
 			foreach($role_perms as $key => $permission)
 			{
-				$this->perms[$perms[$permission->permission_id]] = 1;
+				$this->perms[strtolower($perms[$permission->permission_id])] = 1;
 			}
 		}
 	}
@@ -749,7 +759,7 @@ class Auth  {
 	 */
 	private function autologin() 
 	{
-		if ($this->ci->config->item('auth.allow_remember') == false) 
+		if ($this->ci->settings_lib->item('auth.allow_remember') == false) 
 		{ 
 			return; 
 		}
@@ -811,7 +821,7 @@ class Auth  {
 	 */
 	private function create_autologin($user_id=0, $old_token=null) 
 	{
-		if (empty($user_id) || $this->ci->config->item('auth.allow_remember') == false)
+		if (empty($user_id) || $this->ci->settings_lib->item('auth.allow_remember') == false)
 		{
 			return false;
 		}
@@ -846,7 +856,7 @@ class Auth  {
 		if ($this->ci->db->affected_rows())
 		{
 			// Create the autologin cookie
-			$this->ci->input->set_cookie('autologin', $user_id .'~'. $token, $this->ci->config->item('auth.remember_length'));	
+			$this->ci->input->set_cookie('autologin', $user_id .'~'. $token, $this->ci->settings_lib->item('auth.remember_length'));	
 		
 			return true;
 		} else
@@ -870,7 +880,7 @@ class Auth  {
 	*/
 	private function delete_autologin() 
 	{
-		if ($this->ci->config->item('auth.allow_remember') == false)
+		if ($this->ci->settings_lib->item('auth.allow_remember') == false)
 		{
 			return;
 		}
@@ -946,24 +956,29 @@ class Auth  {
 		//Should I use _identity_login() and move bellow code?
 		
 		// If "both", defaults to email, unless we display usernames globally
-		if ((config_item('auth.login_type') ==  'both'))
-			$login = config_item('auth.use_usernames') ? $username : $email;
+		if (($this->ci->settings_lib->item('auth.login_type') ==  'both'))
+			$login = $this->ci->settings_lib->item('auth.use_usernames') ? $username : $email;
 		else 
-			$login = config_item('auth.login_type') == 'username' ? $username : $email;
+			$login = $this->ci->settings_lib->item('auth.login_type') == 'username' ? $username : $email;
 
 		// TODO: consider taking this out of setup_session()
-		if (config_item('auth.use_usernames') == 0  && config_item('auth.login_type') ==  'username')
+		if ($this->ci->settings_lib->item('auth.use_usernames') == 0  && $this->ci->settings_lib->item('auth.login_type') ==  'username')
+		{
 			// if we've a username at identity, and don't want made user name, let's have an email nearby.
 			$us_custom = $email;
+		}
 		else
+		{
 			// For backward compatibility, defaults to username
-			$us_custom = config_item('auth.use_own_names') ? $user_name : $username;
+			$us_custom = $this->ci->settings_lib->item('auth.use_usernames') == 2 ? $user_name : $username;
+		}
 		
 		// Save the user's session info
 		if (!class_exists('CI_Session'))
 		{
 			$this->ci->load->library('session');
 		}
+		
 		if (!function_exists('do_hash'))
 		{
 			$this->ci->load->helper('security');
@@ -1040,7 +1055,7 @@ if (!function_exists('auth_errors'))
 			{
 				$str .= "<li>$e</li>";
 			}
-			$str .= "</li>";
+			$str .= "</ul>";
 			
 			return $str;
 		}

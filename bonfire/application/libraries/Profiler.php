@@ -202,8 +202,8 @@ class CI_Profiler {
 					$time = number_format($db->query_times[$key], 4);
 					$query = $duplicate ? '<span class="ci-profiler-duplicate">'. $val .'</span>' : $val;
 					
-					// Explain the query
-					$explain = strpos($val, 'SELECT') !== false ? $this->CI->db->query('EXPLAIN '. $val) : null;
+					// Explain the query, but make sure it isn't a subquery (breaks profiler)
+					$explain = (strpos($val, 'SELECT') !== false && strpos($val, '=(SELECT') === false) ? $this->CI->db->query('EXPLAIN '. $val) : null;
 					if (!is_null($explain))
 					{
 						$query .= $this->build_sql_explain($explain->row(), $time);

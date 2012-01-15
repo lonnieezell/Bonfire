@@ -23,6 +23,7 @@
 	
 		<!-- Header -->
 		<div class="head text-right">
+
 			<h1>Bonfire</h1>
 		</div>
 

@@ -12,10 +12,11 @@ All wrapped up in an elegant interface that will make you proud when you hand th
 
 - Very flexible template/theme system, capable of Wordpress-like parent/child themes.
 - Fully modular and built around HMVC
-- 5 ‘contexts’ ready for your code: Content, Appearance, Statistics, Settings and Developer Tools
+- 4 ‘contexts’ ready for your code: Content, Reports, Settings and Developer Tools
 - Database backup and maintenance interface
 - Role-based access control
 - Built-in users/auth system
+- Module Builder with CRUD generation
 - Simple email queue system
 - 2-step installer
 - Ready for Reactor’s multiple-environment config files. (database settings already use it.)
@@ -25,7 +26,7 @@ All wrapped up in an elegant interface that will make you proud when you hand th
 ## Features 'coming soon':
 
 - Auto-updater for core
-- Basic CRUD generation UI
+- Custom User Fields
 - CRON task management
 
 and possibly even more...

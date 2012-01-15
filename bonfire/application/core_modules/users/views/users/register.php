@@ -11,12 +11,12 @@
 	<label for="email"><?php echo lang('bf_email'); ?></label>
 	<input type="text" name="email" id="email"  value="<?php echo set_value('email'); ?>"  placeholder="email" />
 	
-	<?php if ( config_item('auth.login_type') !== 'email' OR config_item('auth.use_usernames') == 1): ?>
+	<?php if ( $this->settings_lib->item('auth.login_type') !== 'email' OR $this->settings_lib->item('auth.use_usernames') == 1): ?>
 		<label for="username"><?php echo lang('bf_username'); ?></label>
 		<input type="text" name="username" id="username" value="<?php echo set_value('username') ?>" placeholder="username" />
 	<?php endif; ?>
 	<br/>
-	<?php if (config_item('auth.use_own_names')) : ?>
+	<?php if ($this->settings_lib->item('auth.use_own_names')) : ?>
 	<div>
 		<label><?php echo lang('us_first_name'); ?></label>
 		<input type="text" id="first_name" name="first_name" value="<?php echo set_value('first_name') ?>" />

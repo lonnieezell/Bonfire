@@ -76,29 +76,12 @@ class Emailer {
 	*/
 	private $ci;
 	
-	/*
-		Var: $config
-		
-		Holds the config settings from config/email.php
-		
-		Access:
-			Private
-	*/
-	private $config	= array();
-
 	//--------------------------------------------------------------------
 	
 	public function __construct() 
 	{
 		$this->ci =& get_instance();
 		
-		// CI is refusing to read prefs from the config for some reason,
-		// So we'll do it manually...
-		if (!function_exists('read_config'))
-		{
-			$this->ci->load->helper('config_file');
-		}
-		$this->config = read_config('email');
 	}
 	
 	//--------------------------------------------------------------------
@@ -130,7 +113,7 @@ class Emailer {
 	{
 		// Make sure we have the information we need. 
 		$to = isset($data['to']) ? $data['to'] : false;
-		$from = $this->config['sender_email'];
+		$from = $this->ci->settings_lib->item('sender_email');
 		$subject = isset($data['subject']) ? $data['subject'] : false;
 		$message = isset($data['message']) ? $data['message'] : false;
 		$alt_message = isset($data['alt_message']) ? $data['alt_message'] : false;
@@ -222,10 +205,11 @@ class Emailer {
 	private function send_email(&$to=null, &$from=null, &$subject=null, &$message=null, &$alt_message=false) 
 	{	
 		$this->ci->load->library('email');
-		$this->ci->email->initialize($this->config);
+		$this->ci->load->model('settings/settings_model', 'settings_model');
+		$this->ci->email->initialize($this->ci->settings_model->select('name,value')->find_all_by('module', 'email'));
 		
 		$this->ci->email->to($to);
-		$this->ci->email->from($from, $this->ci->config->item('site.title'));
+		$this->ci->email->from($from, $this->ci->settings_lib->item('site.title'));
 		$this->ci->email->subject($subject);
 		$this->ci->email->message($message);
 		if ($alt_message)
@@ -284,8 +268,8 @@ class Emailer {
 			echo '.'; 
 			
 			$this->ci->email->clear();
-
-			$this->ci->email->from($this->config['sender_email'], $this->ci->config->item('site.title'));
+			
+			$this->ci->email->from($this->ci->settings_lib->item('sender_email'), $this->ci->settings_lib->item('site.title'));
 			$this->ci->email->to($email->to_email);
 
 			$this->ci->email->subject($email->subject);

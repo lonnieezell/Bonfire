@@ -16,7 +16,7 @@ function verify_delete(whom, action) {
     return false;
 }
 
-$('.button').click( function() {
+$('.button').click( function(event) {
 	var which = $(this).attr('id').replace('delete-', '');
 	var whom = $('#'+which+'_select option:selected').text();
 	var action = which + '/' + $('#'+which+'_select option:selected').val();

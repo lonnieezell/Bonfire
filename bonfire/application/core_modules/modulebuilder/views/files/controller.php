@@ -437,8 +437,9 @@ if ($controller_name != $module_name_lower)
 
 				if ($value == 'unique')	{		
 					$prefix = $this->db->dbprefix;
-					$rules .= $value.'['.$prefix.$table_name.'.'.$module_name_lower.'_'.set_value("view_field_name$counter").'.'.set_value("primary_key_field").'.\'.$id.\']';
-				} else {
+					$rules .= $value.'['.$prefix.$table_name.'.'.$module_name_lower.'_'.set_value("view_field_name$counter").','.$prefix.$table_name.'.'.set_value("primary_key_field").']';
+				}
+				else {
 					$rules .= $value;	
 				}
 				$rule_counter++;
@@ -452,7 +453,17 @@ if ($controller_name != $module_name_lower)
 				$rules .= '|';
 			}
 
-			$rules .= 'max_length['.set_value("db_field_length_value$counter").']';
+			if (set_value("db_field_type$counter") == 'DECIMAL')	{
+				list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
+				$max = $len;
+				if (isset($decimal) && $decimal != 0) {
+					$max = $len + 1;		// Add 1 to allow for the 
+				}
+				$rules .= 'max_length['.$max.']';
+			}
+			else {
+				$rules .= 'max_length['.set_value("db_field_length_value$counter").']';
+			}
 		}
 
 		$rules .= "');";
