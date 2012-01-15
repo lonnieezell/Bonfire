@@ -210,6 +210,7 @@ class Developer extends Admin_Controller {
 					Template::redirect(SITE_AREA .'/developer/modulebuilder');
 				} else {
 					Template::set_message('The module and associated database entries were successfully deleted, HOWEVER, the module folder and files were not removed. They must be removed manually.', 'info');
+					Template::redirect(SITE_AREA .'/developer/modulebuilder');
 				}
 			}
 		}
