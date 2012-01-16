@@ -321,6 +321,23 @@ class Settings extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
+	public function unique_username($username) 
+	{
+		$db_prefix = $this->db->dbprefix;
+		
+		if ($this->user_model->is_unique('username', $username, $db_prefix.'users.id') === true)
+		{
+			return true;
+		}
+		else 
+		{
+			$this->form_validation->set_message('unique_username', lang('us_username_in_use'));
+			return false;
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
 	private function save_user($type='insert', $id=0) 
 	{
 		if ($type == 'insert')
