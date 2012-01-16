@@ -354,10 +354,8 @@ class Users extends Front_Controller {
 					'email'		=> $_POST['email'],
 					'username'	=> isset($_POST['username']) ? $_POST['username'] : '',
 					'password'	=> $_POST['password'],
-						
-					'first_name' => $_POST['first_name'],
-					
-					'last_name' => $_POST['last_name']
+					'first_name' => isset($_POST['first_name']) ? $_POST['first_name'] : '',
+					'last_name' =>  isset($_POST['last_name']) ? $_POST['last_name'] : '',
 				);
 
 				if ($user_id = $this->user_model->insert($data))
