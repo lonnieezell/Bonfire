@@ -23,7 +23,7 @@
 		<?php echo validation_errors(); ?>
 	</div>
 	<?php endif; ?>
-	<?php if (validation_errors() || isset($error_message)) : ?>
+	<?php if ( isset($error_message) ) : ?>
 	<div class="notification error"><?php echo $error_message?></div>
 	<?php endif; ?>
 	
