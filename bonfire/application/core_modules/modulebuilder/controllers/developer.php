@@ -168,8 +168,10 @@ class Developer extends Admin_Controller {
 			// get any permission ids
 			$query = $this->db->query('SELECT permission_id FROM '.$prefix.'permissions WHERE name LIKE "'.$module_name.'.%.%"');
 
-			if ($query->num_rows() > 0) {
-            	foreach($query->result_array() as $row) {
+			if ($query->num_rows() > 0)
+			{
+            	foreach($query->result_array() as $row)
+				{
             		// undo any permissions that exist
 					$this->db->where('permission_id',$row['permission_id']);
             		$this->db->delete($prefix.'permissions');
@@ -193,29 +195,32 @@ class Developer extends Admin_Controller {
 	        	$this->db->delete('schema_version', array('type' => $module_name_lower.'_'));
 	        }
 	        
-	        if ($this->db->trans_status() === FALSE) {
+	        if ($this->db->trans_status() === FALSE)
+			{
 				$this->db->trans_rollback();
 				Template::set_message('We could not delete this module.', $this->db->error, 'error');
-			} else {
+			}
+			else
+			{
 				$this->db->trans_commit();
 				
 				// database was successful in deleting everything. Now try to get rid of the files.
-				if (delete_files(module_path($module_name), true)) {
+				if (delete_files(module_path($module_name), true))
+				{
 					@rmdir(module_path($module_name.'/'));
 
 					// Log the activity
 					$this->activity_model->log_activity($this->auth->user_id(), lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'modulebuilder');
 
 					Template::set_message('The module and associated database entries were successfully deleted.', 'success');
-					Template::redirect(SITE_AREA .'/developer/modulebuilder');
-				} else {
-					Template::set_message('The module and associated database entries were successfully deleted, HOWEVER, the module folder and files were not removed. They must be removed manually.', 'info');
-					Template::redirect(SITE_AREA .'/developer/modulebuilder');
 				}
-			}
-		}
+				else {
+					Template::set_message('The module and associated database entries were successfully deleted, HOWEVER, the module folder and files were not removed. They must be removed manually.', 'info');
+				}
+			}//end if
+		}//end if
 		
-		Template::render();
+		Template::redirect(SITE_AREA .'/developer/modulebuilder');
 	}
 
 	//--------------------------------------------------------------------
