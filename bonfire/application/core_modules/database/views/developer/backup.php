@@ -61,7 +61,7 @@ form div input[type=text] { width: 45%; }
 		
 		<div style="text-align: right">
 			<button type="submit" name="submit" class="button" ><?php echo lang('db_backup'); ?></button> <?php echo lang('bf_or'); ?> 
-			<a href="/admin/developer/database"><?php echo lang('bf_action_cancel'); ?></a>
+			<a href="<?php echo site_url(SITE_AREA .'/developer/database') ?>"><?php echo lang('bf_action_cancel'); ?></a>
 		</div>
 		
 	<?php echo form_close(); ?>

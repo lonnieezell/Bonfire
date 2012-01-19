@@ -28,8 +28,8 @@
 					<td>
 						<?php echo $file ?>
 						<div class="hover-item small">
-							<a href="/admin/developer/database/get_backup/<?php echo $file ?>" title="Download this file"><?php echo lang('bf_action_download'); ?></a> | 
-							<a href="/admin/developer/database/restore/<?php echo $file ?>" title="Restore this file"><?php echo lang('db_restore'); ?></a>
+							<a href="<?php echo site_url(SITE_AREA .'/developer/database/get_backup/' . $file) ?>" title="Download this file"><?php echo lang('bf_action_download'); ?></a> |
+							<a href="<?php echo site_url(SITE_AREA .'/developer/database/restore/' . $file) ?>" title="Restore this file"><?php echo lang('db_restore'); ?></a>
 						</div>
 					</td>
 					<td><?php echo round($atts['size'] / 1024 , 3) ?> KB</td>
