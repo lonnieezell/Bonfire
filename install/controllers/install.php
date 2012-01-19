@@ -1,9 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-/* get module locations from config settings or use the default module location and offset */
-Install::$locations = array(
-	APPPATH.'../bonfire/modules/' => '../modules/',
-);
 
 /*
 	Copyright (c) 2011 Lonnie Ezell
@@ -525,3 +521,8 @@ class Install extends CI_Controller {
 	
 	//--------------------------------------------------------------------
 }
+
+/* get module locations from config settings or use the default module location and offset */
+Install::$locations = array(
+	APPPATH.'../bonfire/modules/' => '../modules/',
+);

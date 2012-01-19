@@ -333,7 +333,7 @@ class Users extends Front_Controller {
 		{
 			// Validate input
 			$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|max_length[120]|callback_unique_email|xsx_clean');
-			if ($this->settings_lib->item('auth.use_usernames'))
+			if ($this->settings_lib->item('auth.login_type') !== 'email' OR $this->settings_lib->item('auth.use_usernames') == 1)
 			{
 				$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|callback_unique_username|xsx_clean');
 			}
@@ -353,7 +353,9 @@ class Users extends Front_Controller {
 				$data = array(
 					'email'		=> $_POST['email'],
 					'username'	=> isset($_POST['username']) ? $_POST['username'] : '',
-					'password'	=> $_POST['password']
+					'password'	=> $_POST['password'],
+					'first_name' => isset($_POST['first_name']) ? $_POST['first_name'] : '',
+					'last_name' =>  isset($_POST['last_name']) ? $_POST['last_name'] : '',
 				);
 
 				if ($user_id = $this->user_model->insert($data))
@@ -380,7 +382,7 @@ class Users extends Front_Controller {
 		}
 		else
 		{
-			$this->form_validation->set_message('unique_email', 'That email address is already in use.');
+			$this->form_validation->set_message('unique_email', lang('us_email_in_use'));
 			return false;
 		}
 	}
@@ -391,13 +393,13 @@ class Users extends Front_Controller {
 	{
 		$db_prefix = $this->db->dbprefix;
 		
-		if ($this->user_model->is_unique('username', $username.','.$db_prefix.'users.id') === true)
+		if ($this->user_model->is_unique('username', $username, $db_prefix.'users.id') === true)
 		{
 			return true;
 		}
 		else 
 		{
-			$this->form_validation->set_message('unique_username', 'That username is already in use.');
+			$this->form_validation->set_message('unique_username', lang('us_username_in_use'));
 			return false;
 		}
 	}

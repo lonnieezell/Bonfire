@@ -93,8 +93,16 @@ class Update extends Admin_Controller {
 			
 			unset($tags);
 		
-			// Cache the message for 1 hour
-			$this->cache->save('update_message', $message, 60*60*24);	
+			if (is_writeable(FCPATH.APPPATH.'cache/'))
+			{
+				// Cache the message for 1 hour
+				$this->cache->save('update_message', $message, 60*60*24);
+			}
+			else {
+				echo '<div class="notification error">';
+				echo lang('bf_cache_not_writable');
+				echo '</div>';
+			}
 		}
 		
 		/*
