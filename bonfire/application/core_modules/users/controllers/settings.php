@@ -321,25 +321,10 @@ class Settings extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
-	public function unique_username($username) 
+	private function save_user($type='insert', $id=0) 
 	{
 		$db_prefix = $this->db->dbprefix;
 		
-		if ($this->user_model->is_unique('username', $username, $db_prefix.'users.id') === true)
-		{
-			return true;
-		}
-		else 
-		{
-			$this->form_validation->set_message('unique_username', lang('us_username_in_use'));
-			return false;
-		}
-	}
-	
-	//--------------------------------------------------------------------
-	
-	private function save_user($type='insert', $id=0) 
-	{
 		if ($type == 'insert')
 		{
 			$this->form_validation->set_rules('email', 'Email', 'required|trim|callback_unique_email|valid_email|max_length[120]|xss_clean');
@@ -354,7 +339,8 @@ class Settings extends Admin_Controller {
 		
 		if ($this->settings_lib->item('auth.use_usernames'))
 		{
-			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|callback_unique_username|xsx_clean');
+			$_POST['id'] = $id;
+			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|unique['.$db_prefix.'users.username,'.$db_prefix.'users.id]|xsx_clean');
 		}
 		
 		$required = false;
