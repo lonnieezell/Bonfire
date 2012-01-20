@@ -274,7 +274,7 @@ if ($controller_name == $module_name_lower)
 	$body = str_replace('{restrict}', '$this->load->library(\'form_validation\');', $body);
 } else
 {
-	$body = str_replace('{restrict}', '$this->auth->restrict(\''.str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.View\');', $body);
+	$body = str_replace('{restrict}', '$this->auth->restrict(\''.preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.View\');', $body);
 }
 $extras = '';
 
@@ -284,7 +284,7 @@ $textarea_included = FALSE;
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$db_field_type = set_value("db_field_type$counter");
-	$field_name = $module_name_lower.'_'.set_value("view_field_name$counter");
+	$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");;
 	$view_datepicker = '';
 	if ($db_field_type != NULL)
 	{
@@ -355,7 +355,7 @@ if ($controller_name != $module_name_lower)
 	{
 		$body .= $mb_create;
 
-		$body = str_replace('{create_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Create', $body);
+		$body = str_replace('{create_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Create', $body);
 	}
 
 	//--------------------------------------------------------------------
@@ -366,7 +366,7 @@ if ($controller_name != $module_name_lower)
 	{
 		$body .= $mb_edit;
 
-		$body = str_replace('{edit_permission}', ucfirst($module_name).'.'.ucfirst($controller_name).'.Edit', $body);
+		$body = str_replace('{edit_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Edit', $body);
 	}
 
 	//--------------------------------------------------------------------
@@ -377,7 +377,7 @@ if ($controller_name != $module_name_lower)
 	{
 		$body .= $mb_delete;
 
-		$body = str_replace('{delete_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $body);
+		$body = str_replace('{delete_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $body);
 	}
 
 	//--------------------------------------------------------------------
@@ -404,12 +404,13 @@ if ($controller_name != $module_name_lower)
 
 		// we set this variable as it will be used to place the comma after the last item to build the insert db array
 		$last_field = $counter;
+		$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
 
 		$rules .= '			
-		$this->form_validation->set_rules(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\',\''.set_value("view_field_label$counter").'\',\'';
+		$this->form_validation->set_rules(\''.$field_name.'\',\''.set_value("view_field_label$counter").'\',\'';
 		
 		$save_data_array .= '
-		$data[\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\']        = $this->input->post(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\');';
+		$data[\''.$field_name.'\']        = $this->input->post(\''.$field_name.'\');';
 
 		// set a friendly variable name
 		$validation_rules = $this->input->post('validation_rules'.$counter);

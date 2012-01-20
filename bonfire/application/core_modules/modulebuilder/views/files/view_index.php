@@ -80,8 +80,10 @@ for($counter=1; $field_total >= $counter; $counter++)
 	{
 		continue; 	// move onto next iteration of the loop
 	}
+	$field_name = $db_required ? $module_name_lower . '_' . strtolower(set_value("view_field_name$counter")) : strtolower(set_value("view_field_name$counter"));
+
 	$table_records .= '
-				<td><?php echo $record->'.$module_name_lower.'_'.set_value("view_field_name$counter").'?></td>';
+				<td><?php echo $record->'.$field_name.'?></td>';
 }
 if ($use_soft_deletes == 'true')
 {

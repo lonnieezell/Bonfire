@@ -31,7 +31,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 	}
 
 	$field_label = set_value("view_field_label$counter");
-	$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
+	$field_name = $db_required ? $module_name_lower . '_' . strtolower(set_value("view_field_name$counter")) : strtolower(set_value("view_field_name$counter"));
 	$field_type = set_value("view_field_type$counter");
 
 	if ($field_type != 'checkbox') // checkbox appears to the left of the checkbox so I can't add now for a checkbox

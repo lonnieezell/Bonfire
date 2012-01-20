@@ -63,7 +63,7 @@ class Modulebuilder
 		$field_total = (empty($field_total) && $db_required) ? 1 : $field_total;
 
         // build the files
-		$module_file_name = str_replace(" ", "_", strtolower($module_name));
+		$module_file_name = preg_replace("/[ -]/", "_", strtolower($module_name));
 		foreach( $contexts as $key => $context_name) {
 			// controller
 			$public_context = FALSE;
@@ -77,17 +77,17 @@ class Modulebuilder
 			if ($public_context === TRUE)
 			{
 				// only build this view in the Public context
-				$content['views'][$context_name]['index'] = $this->build_view($field_total, $module_name, $context_name, 'index_front', 'Index', $primary_key_field, $form_input_delimiters);
+				$content['views'][$context_name]['index'] = $this->build_view($field_total, $module_name, $context_name, 'index_front', 'Index', $primary_key_field, $form_input_delimiters, $db_required);
 			}
 			else {
 				// only build these views for the Admin contexts
 				foreach($action_names as $key => $action_name) {
 					if ($action_name != 'delete' ) {
-						$content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
+						$content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters, $db_required);
 					}
 				}
-				$content['views'][$context_name]['index_alt'] = $this->build_view($field_total, $module_name, $context_name, 'index_alt', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
-				$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
+				$content['views'][$context_name]['index_alt'] = $this->build_view($field_total, $module_name, $context_name, 'index_alt', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters, $db_required);
+				$content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters, $db_required);
 			}
 		}
 
@@ -286,7 +286,7 @@ class Modulebuilder
     * @return string
     *
     */
-	private function build_view($field_total, $module_name, $controller_name, $action_name, $action_label, $primary_key_field, $form_input_delimiters)
+	private function build_view($field_total, $module_name, $controller_name, $action_name, $action_label, $primary_key_field, $form_input_delimiters, $db_required)
 	{
 		if ($field_total == NULL)
 		{
@@ -295,10 +295,11 @@ class Modulebuilder
 		  
 		$data['field_total'] = $field_total;
 		$data['module_name'] = $module_name;
-		$data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
+		$data['module_name_lower'] = preg_replace("/[ -]/", "_", strtolower($module_name));
 		$data['controller_name'] = $controller_name;
 		$data['action_name'] = $action_name;
 		$data['primary_key_field'] = $primary_key_field;
+		$data['db_required'] = $db_required;
 		$data['action_label'] = $action_label;
 		$data['form_input_delimiters'] = $form_input_delimiters;
 		$data['textarea_editor'] = $this->CI->input->post('textarea_editor');
@@ -364,7 +365,7 @@ class Modulebuilder
 		$data['field_total'] = $field_total;
 		$data['module_name'] = $module_name;
 		$data['table_name'] = $table_name;
-		$data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
+		$data['module_name_lower'] = preg_replace("/[ -]/", "_", strtolower($module_name));
 		$data['controller_name'] = $controller_name;
 		$data['action_names'] = $action_names;
 		$data['primary_key_field'] = $primary_key_field;
@@ -461,8 +462,8 @@ class Modulebuilder
 	private function build_acl_sql($field_total, $module_name, $contexts, $action_names, $role_id)
 	{
 		$data['field_total'] = $field_total;
-		$data['module_name'] = str_replace(" ", "_", $module_name);
-		$data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
+		$data['module_name'] = preg_replace("/[ -]/", "_", $module_name);
+		$data['module_name_lower'] = preg_replace("/[ -]/", "_", strtolower($module_name));
 		$data['contexts'] = $contexts;
 		$data['action_names'] = $action_names;
 		$data['role_id'] = $role_id;
@@ -492,8 +493,8 @@ class Modulebuilder
 		}
 		
 		$data['field_total'] = $field_total;
-		$data['module_name'] = str_replace(" ", "_", $module_name);
-		$data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
+		$data['module_name'] = preg_replace("/[ -]/", "_", $module_name);
+		$data['module_name_lower'] = preg_replace("/[ -]/", "_", strtolower($module_name));
 		$data['primary_key_field'] = $primary_key_field;
 		$data['table_name']			= $table_name;
 		

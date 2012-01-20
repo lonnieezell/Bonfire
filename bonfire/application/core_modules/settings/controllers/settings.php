@@ -104,7 +104,10 @@ class Settings extends Admin_Controller {
 		//destroy the saved update message in case they changed update preferences.
 		if ($this->cache->get('update_message'))
 		{
-			$this->cache->delete('update_message');
+			if (!is_writeable(FCPATH.APPPATH.'cache/'))
+			{
+				$this->cache->delete('update_message');
+			}
 		}
 		
 		// Log the activity

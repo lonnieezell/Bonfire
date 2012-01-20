@@ -18,12 +18,37 @@ copies down the name of the module as the lowercase name of
 the table with underscores replacing the spaces.
 ------------------------------------------------------------*/
 function show_table_props() {
-	if ($('#db_required').is(':checked')) {
+	if ($('#db_create').is(':checked')) {
 		$('#db_details').show(0);
+		$('#db_details .mb_advanced').hide();
+		$('.mb_new_table').show(0);
 		$('#all_fields').show(0);
+		$('#primary_key_field').val('' == $('#primary_key_field').val() ? 'id' : $('#primary_key_field').val());
 		var tbl_name = ( ( $('#table_name').val() == '' ) ? $('#module_name').val() : $('#table_name').val() );
 		tbl_name = tbl_name.replace(/[^A-Za-z0-9\\s]/g, "_").toLowerCase();
 		$('#table_name').val( tbl_name );
+	} else if ($('#db_exists').is(':checked')) {
+		$('#db_details').show(0);
+		$('#db_details .mb_advanced').show();
+		$('.mb_new_table').hide(0);
+		$('#field_numbers').hide(0);
+		$('#all_fields').hide(0);
+		var tbl_name = ( ( $('#table_name').val() == '' ) ? $('#module_name').val() : $('#table_name').val() );
+		tbl_name = tbl_name.replace(/[^A-Za-z0-9\\s]/g, "_").toLowerCase();
+		$('#table_name').val( tbl_name );
+		
+		if ($('#view_field_label1').val() != undefined && $('#view_field_label1').val() != '')
+		{
+			$('.mb_new_table').show(0);
+			$('#db_details .notification').hide(0);
+			$('#field_numbers').hide(0);
+			$('#all_fields').show(0);
+		}
+		else
+		{
+			$('#primary_key_field').val('');
+			$('#all_fields').empty();
+		}
 	} else {
 		$('#db_details').hide(0);
 		$('#all_fields').hide(0);
@@ -47,6 +72,10 @@ function store_form_data() {
 		if ( $(this).is(':checkbox') && $(this).is(':not(:checked)') ) {
 			fld_val = 'uncheck';
 		}
+
+//		if ( $(this).is(':radio') && $(this).is(':not(:checked)') ) {
+//			fld_val = 'uncheck';
+//		}
 
 		if (fld_id && fld_val) {
 			localStorage[fld_id] = fld_val;
@@ -75,6 +104,16 @@ function get_form_data() {
 			}
 		}
 		
+//		if ( $('#'+key).is(':radio') ) {
+//			if ( $('#'+key).val() == value ) {
+//				$('#'+key).attr('checked','checked');
+//			} else {
+//				$('#'+key).removeAttr('checked');
+//				//restore the proper value
+//				value = $('#'+key).val();
+//			}
+//		}
+
 		$('#'+key).val(value);
 	}
 	
@@ -129,7 +168,7 @@ show_table_props();
 /*-----------------------------------------------------------
 Toggle module table
 ------------------------------------------------------------*/
-$('#db_required').click( function() {
+$('input[name=module_db]').click( function() {
 	show_table_props();
 });
 

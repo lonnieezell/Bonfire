@@ -15,7 +15,7 @@ body {
 	font-family:  Geneva, 'Helvetica Neue', Helvetica, Arial sans-serif;
 	color: #444;
 	font-size: 0.625em;		/* Reset base font size to 10px */
-	overflow: visible;
+	overflow: hidden;
 }
 section { overflow: auto; height: 100%; }
 hr {

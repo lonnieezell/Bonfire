@@ -3,5 +3,6 @@
 $config['module_config'] = array(
 	'description'	=> 'Speeds up creating the core code for new modules.',
 	'author'		=> 'Bonfire Team (mostly Sean)',
-	'name'			=> 'Module Builder'
+	'name'			=> 'Module Builder',
+	'version'		=> '0.3.0',
 );

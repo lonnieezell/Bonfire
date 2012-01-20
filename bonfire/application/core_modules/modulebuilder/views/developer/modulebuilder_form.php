@@ -23,6 +23,9 @@
 		<?php echo validation_errors(); ?>
 	</div>
 	<?php endif; ?>
+	<?php if ( isset($error_message) ) : ?>
+	<div class="notification error"><?php echo $error_message?></div>
+	<?php endif; ?>
 	
 	<div class="notification information">
 		<?php echo lang('mb_form_note'); ?>
@@ -103,7 +106,9 @@
 	
 			<div>
 				<label for="db_required"><?php echo lang('mb_form_generate'); ?></label>
-				<input name="db_required" id="db_required" type="checkbox" value="1" <?php echo set_checkbox("db_required", "1"); ?> class="checkbox" />
+				<input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", $field_total == 0 ? TRUE : FALSE); ?> class="radio" /> None
+				<input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox("module_db", "new", $field_total != 0 ? TRUE : FALSE); ?> class="radio" /> Create New Table
+				<input name="module_db" id="db_exists" type="radio" value="existing" <?php echo set_checkbox("module_db", "existing"); ?> class="radio" /> Build from Existing Table
 			</div>
 		</fieldset>
 	
@@ -163,16 +168,16 @@
 				<input name="modified_field" id="modified_field" type="text" value="<?php echo set_value("modified_field", "modified_on"); ?>" />
 			</div>
 				
-			<div class="notification attention">
+			<div class="mb_new_table notification attention">
 				<?php echo lang('mb_table_note'); ?>
 			</div>
 			
-			<div>
+			<div class="mb_new_table">
 				<label for="primary_key_field" class="block"><?php echo lang('mb_form_primarykey'); ?></label>
-				<input name="primary_key_field" id="primary_key_field" type="text" value="<?php echo set_value("primary_key_field", 'id'); ?>" />
+				<input name="primary_key_field" id="primary_key_field" type="text" value="<?php echo set_value("primary_key_field", (isset($existing_table_fields[0]) && $existing_table_fields[0]['primary_key']) ? $existing_table_fields[0]['name'] : 'id'); ?>" />
 			</div>
 		
-			<div id="field_numbers">
+			<div id="field_numbers" class="mb_new_table">
 				<label class="block"><?php echo lang('mb_form_fieldnum'); ?></label> 
 				<?php 
 				$field_num_count = count($field_numbers);
@@ -208,12 +213,12 @@
 			
 					<label for="view_field_label<?php echo $count; ?>"><?php echo lang('mb_form_label'); ?></label>
 			
-					<input name="view_field_label<?php echo $count; ?>" id="view_field_label<?php echo $count; ?>" type="text" value="<?php echo set_value("view_field_label{$count}"); ?>" placeholder="<?php echo lang('mb_form_label_ph'); ?>" />
+					<input name="view_field_label<?php echo $count; ?>" id="view_field_label<?php echo $count; ?>" type="text" value="<?php echo set_value("view_field_label{$count}", isset($existing_table_fields[$count]) ? ucwords(str_replace("_", " ", $existing_table_fields[$count]['name'])) : ''); ?>" placeholder="<?php echo lang('mb_form_label_ph'); ?>" />
 					</div>
 			
 					<div>
 					<label for="view_field_name"><?php echo lang('mb_form_fieldname'); ?></label>
-					<input name="view_field_name<?php echo $count; ?>" id="view_field_name<?php echo $count; ?>" type="text" value="<?php echo set_value("view_field_name{$count}"); ?>" maxlength="30" placeholder="<?php echo lang('mb_form_fieldname_ph'); ?>" />
+					<input name="view_field_name<?php echo $count; ?>" id="view_field_name<?php echo $count; ?>" type="text" value="<?php echo set_value("view_field_name{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['name'] : ''); ?>" maxlength="30" placeholder="<?php echo lang('mb_form_fieldname_ph'); ?>" />
 					</div>
 			
 					<div>
@@ -229,7 +234,27 @@
 											'password' 	=> 'PASSWORD'
 											);
 					?>
-					<?php echo form_dropdown("view_field_type{$count}", $view_field_types, set_value("view_field_type{$count}"),'id="view_field_type'.$count.'"'); ?>
+					<?php
+						$default_field_type = 'INPUT';
+						if (isset($existing_table_fields[$count])) {
+							switch ($existing_table_fields[$count]['type']) {
+								case 'TEXT':
+									$default_field_type = 'textarea';
+									break;
+								case 'ENUM':
+									$default_field_type = 'select';
+									break;
+								case 'TINYINT':
+									$default_field_type = 'checkbox';
+									break;
+
+								default:
+									break;
+							}
+						}
+						
+					?>
+					<?php echo form_dropdown("view_field_type{$count}", $view_field_types, set_value("view_field_type{$count}", $default_field_type), 'id="view_field_type'.$count.'"'); ?>
 					</div>
 			
 					<?php echo form_error("db_field_type{$count}"); ?>
@@ -270,7 +295,7 @@
 											'VARBINARY' 	=> 'VARBINARY'
 											);
 					?>
-					<?php echo form_dropdown("db_field_type{$count}", $db_field_types, set_value("db_field_type{$count}"),'id="db_field_type'.$count.'"'); ?>
+					<?php echo form_dropdown("db_field_type{$count}", $db_field_types, set_value("db_field_type{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['type'] : ''),'id="db_field_type'.$count.'"'); ?>
 			
 					</div>
 			
@@ -278,7 +303,13 @@
 					
 					<div>
 					<label for="db_field_length_value<?php echo $count; ?>"><?php echo lang('mb_form_length'); ?></label>
-					<input name="db_field_length_value<?php echo $count; ?>" id="db_field_length_value<?php echo $count; ?>" type="text" value="<?php echo set_value("db_field_length_value{$count}"); ?>" placeholder="<?php echo lang('mb_form_length_ph'); ?>" />
+					<?php
+						$default_max_len = '';
+						if (isset($existing_table_fields[$count]) && $existing_table_fields[$count]['type'] != 'TEXT') {
+							$default_max_len = $existing_table_fields[$count]['type'] == 'ENUM' ? $existing_table_fields[$count]['values'] : $existing_table_fields[$count]['max_length'];
+						}
+					?>
+					<input name="db_field_length_value<?php echo $count; ?>" id="db_field_length_value<?php echo $count; ?>" type="text" value="<?php echo set_value("db_field_length_value{$count}", $default_max_len); ?>" placeholder="<?php echo lang('mb_form_length_ph'); ?>" />
 					</div>
 			
 					<div>
