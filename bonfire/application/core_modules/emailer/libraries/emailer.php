@@ -126,9 +126,14 @@ class Emailer {
 		}
 
 		// Wrap the $message in the email template.
-		$templated  = $this->ci->load->view('emailer/email/_header', null, true);
-		$templated .= $message;
-		$templated .= $this->ci->load->view('emailer/email/_footer', null, true);
+		$mailtype = $this->ci->settings_lib->item('mailtype');
+		$templated = $message;
+		if ($mailtype == 'html')
+		{
+			$templated  = $this->ci->load->view('emailer/email/_header', null, true);
+			$templated .= $message;
+			$templated .= $this->ci->load->view('emailer/email/_footer', array('year' => date("Y")), true);
+		}
 
 		// Should we put it in the queue?
 		if ($queue_override == true || $this->queue_emails == true)
