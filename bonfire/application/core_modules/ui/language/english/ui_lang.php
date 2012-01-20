@@ -21,49 +21,12 @@
 	THE SOFTWARE.
 */
 
-class Settings_model extends BF_Model {
+$lang['ui_keyboard_shortcuts']	= 'Keyboard shortcuts are setup in the application config. The currently available shortcuts are:';
+$lang['ui_add_shortcut']		= 'Add Shortcut';
+$lang['ui_remove_shortcut']		= 'Remove';
 
-	protected $table		= 'settings';
-	protected $key			= 'name';
-	protected $soft_deletes	= false;
-	protected $date_format	= 'datetime';
-	protected $set_created	= false;
-	protected $set_modified = false;
+$lang['ui_action']				= 'Action';
+$lang['ui_actions']				= 'Actions';
 
-
-	/*
-		Method: find_all_by()
-		
-		A convenience method that combines a where() and find_all()
-		call into a single call.
-		
-		Paremeters:
-			$field	- The table field to search in.
-			$value	- The value that field should be.
-			
-		Return:
-			An array of objects representing the results, or FALSE on failure or empty set.
-	*/
-	public function find_all_by($field=null, $value=null) 
-	{		
-		if (empty($field)) return false;
-
-		// Setup our field/value check
-		$this->db->where($field, $value);
-		
-		$results = $this->find_all();
-		
-		$return_array = array();
-		
-		if (is_array($results) && count($results))
-		{
-			foreach ($results as $record)
-			{
-				$return_array[$record->name] = $record->value;
-			}
-		}
-		
-		return $return_array;
-	}
-
-}
+$lang['ui_shortcut']			= 'Shortcut Key';
+$lang['ui_shortcuts']			= 'Shortcut Keys';

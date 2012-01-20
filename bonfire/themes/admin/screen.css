@@ -347,6 +347,20 @@ noscript {
 	padding: 7px 0 0 0;
 }
 
+#toolbar #shortkeys_show { 
+	float: left;
+	display: block;
+	text-indent: 0; 
+	width: auto; 
+	color: #ddd;
+	font-size: 14px;
+	line-height: 24px;
+	vertical-align: top;
+	padding: 7px 10px 0 0;
+}
+
+#toolbar #shortkeys_show:hover{cursor:pointer }
+
 #header {
 	overflow: hidden;
 }
@@ -522,3 +536,18 @@ noscript {
 	padding: 10px;
 	margin: 0 auto;
 }
+
+/*
+	Dialog
+*/
+div.ui-dialog {border: 2px solid #ccc}
+div.ui-dialog div.ui-dialog-titlebar {padding:.4em 1em; background: #ccc;}
+div.ui-dialog .ui-dialog-titlebar-close {float: right; margin: 0;padding: 1px;height: 18px;}
+div.ui-dialog a.ui-dialog-titlebar-close:hover {float: right; margin: 0;padding: 1px;height: 18px;}
+
+div.ui-dialog a.ui-dialog-titlebar-close:hover {float: right; margin: 0;padding: 1px;height: 18px;}
+
+div.ui-dialog div#shortkeys_dialog ul {list-style: none;}
+div.ui-dialog div#shortkeys_dialog ul li span {width: 80px;display:inline-block}
+
+.ui-widget-overlay {opacity: .50; position: absolute;top: 0;left: 0;background: #000}

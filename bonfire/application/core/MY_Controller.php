@@ -204,6 +204,13 @@ class Admin_Controller extends Authenticated_Controller {
 		
 		$this->limit = $this->settings_lib->item('site.list_limit');
 
+		// load the keyboard shortcut keys
+		$shortcut_data = array(
+			'shortcuts' => config_item('ui.current_shortcuts'),
+			'shortcut_keys' => unserialize($this->settings_lib->item('ui.shortcut_keys')),
+		);
+		Template::set('shortcut_data', $shortcut_data);
+
 		// Profiler Bar?
 		if (ENVIRONMENT == 'development')
 		{

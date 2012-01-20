@@ -53,12 +53,9 @@ $mb_index =<<<END
 	*/
 	public function index() 
 	{
-		\$data = array();
-		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
-
 		Assets::add_js(\$this->load->view('{$controller_name}/js', null, true), 'inline');
 		
-		Template::set('data', \$data);
+		Template::set('records', \$this->{$module_name_lower}_model->find_all());
 		Template::set('toolbar_title', "Manage {$module_name}");
 		Template::render();
 	}
@@ -78,10 +75,7 @@ $mb_index_front =<<<END
 	*/
 	public function index() 
 	{
-		\$data = array();
-		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
-
-		Template::set('data', \$data);
+		Template::set('records', \$this->{$module_name_lower}_model->find_all());
 		Template::render();
 	}
 	
@@ -297,8 +291,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 		if ($db_field_type == 'DATE' AND $date_included === FALSE)
 		{
 			$extras .= '
-			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
-			Assets::add_js(\'jquery-ui-1.8.8.min.js\');';
+			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');';
 			$date_included = TRUE;
 		}
 		elseif ($db_field_type == 'DATETIME' && $datetime_included === FALSE)
@@ -307,8 +300,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 			if ($date_included === FALSE)
 			{
 				$extras .= '
-				Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
-				Assets::add_js(\'jquery-ui-1.8.8.min.js\');';
+				Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');';
 			}
 			$extras .= '
 			Assets::add_css(\'jquery-ui-timepicker.css\');

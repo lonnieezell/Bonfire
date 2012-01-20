@@ -49,8 +49,6 @@ class Developer extends Admin_Controller {
 			}
 		}
 		
-		Assets::add_js('jquery-ui-1.8.8.min');
-	
 		Template::set('installed_version', $this->migrations->get_schema_version('app_'));
 		Template::set('latest_version', $this->migrations->get_latest_version('app_'));
 	
