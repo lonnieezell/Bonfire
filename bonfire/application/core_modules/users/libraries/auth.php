@@ -343,10 +343,10 @@ class Auth  {
 			$this->ci->load->model('activities/activity_model', 'activity_model', true);
 			$this->ci->activity_model->log_activity($this->ci->auth->user_id(), sprintf(lang('bf_unauthorized_attempt'),$permission) . $this->ci->input->ip_address());
 						
-			if ($uri) 
-				Template::redirect($uri);
-			else
-				Template::redirect($this->ci->session->userdata('previous_page'));
+			if (!$uri) 
+				$uri = ($this->ci->session->userdata('previous_page') == current_url()) ? '/': $this->ci->session->userdata('previous_page') ;
+                                // if user lose the permission at the moment and previous_page = current_url goto /
+                        Template::redirect($uri);
 		} 
 		
 		return true;
