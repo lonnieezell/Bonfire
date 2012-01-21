@@ -23,6 +23,9 @@
 
 $lang['em_template']			= 'قالب';
 
+$lang['em_queue']			= 'صف';
+$lang['em_view_queue']			= 'صف ايميل';
+
 $lang['em_system_email']		= 'آدرس ايميل سيستم';
 $lang['em_system_email_note']	= 'ايميلي که تمامي ايميل هاي توليد شده به وسيله آن ارسال مي شوند.';
 $lang['em_email_server']		= 'سرور ايميل';
@@ -62,3 +65,12 @@ $lang['em_subject']				= 'موضوع';
 
 $lang['em_missing_data']		= 'يک يا چند فيلد اجباري وارد نشده است.';
 $lang['em_no_debug']			= 'ايميل به صف اضافه شد. اطلاعاتي براي ديباگ موجود نيست.';
+
+$lang['em_save_settings']               = 'ذخیره تنظیمات';
+$lang['em_process_now']               = 'پردازش';
+$lang['em_insert_test_email']               = 'افزودن ایمیل آزمایشی';
+$lang['em_save_template']               = 'ذخیره';
+
+$lang['em_email_template']              = 'قالب ايميل';
+$lang['em_email_contents']              = 'محتواي ايميل';
+$lang['em_emailer_queue']               = 'صف ارسال کننده ی ایمیل';

@@ -64,7 +64,7 @@
 </fieldset>
 
 <div class="submits">
-	<input type="submit" name="submit" value="Save Settings" />
+	<input type="submit" name="submit" value="<?php echo lang('em_save_settings') ?>" />
 </div>
 
 <?php echo form_close(); ?>
