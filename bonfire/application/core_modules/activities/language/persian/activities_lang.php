@@ -21,7 +21,7 @@
 	THE SOFTWARE.
 */
 
-$lang['activity_title']					= 'فهاليت هاي سايت';
+$lang['activity_title']					= 'فعاليت هاي سايت';
 $lang['activity_own']					= 'شما';
 $lang['activity_user']					= 'کاربر';
 $lang['activity_users']					= 'کاربران';
@@ -37,19 +37,19 @@ $lang['activity_core']					= 'هسته برنامه';
 $lang['activity_all_dates']				= 'هر زماني';
 $lang['activity_submit']				= 'فيلتر';
 $lang['activity_filter_head']			= 'فيلتر فعاليت.';
-$lang['activity_filter_note']			= 'نمايش %s فعاليت از %s فعاليت اتاخاب شده.';
+$lang['activity_filter_note']			= 'نمايش فعاليت های انتخاب شده %s   %s ';
 $lang['activity_view']					= '<strong>نمايش %s</strong> : %s';
 $lang['activity_delete_own_confirm'] 	= "آيا شما از حذف فعاليت هاي ثبت شده خودتان اطمينان داريد؟";
 $lang['activity_delete_user_confirm'] 	= "آيا از حذف فعاليت هاي کاربر انتخاب شده اطمينان داريد؟";
 $lang['activity_delete_module_confirm'] = "آيا از حذف فعاليت هاي افزونه ي انتخاب شده اطمينان داريد؟";
 $lang['activity_delete_date_confirm'] 	= "آيا از حذف فعاليت هاي ثبت شده که قبل از تاريخ انتخاب شده مي باشند اطمينان داريد؟";
 $lang['activity_own_delete']			= "حذف فعاليت هاي ثبت شده شما";
-$lang['activity_user_delete']			= "حذف فعاليت هاي ثبت شده کاربر";
-$lang['activity_module_delete']			= "حذف فعاليت هاي ثبت شده افزونه";
+$lang['activity_user_delete']			= "حذف فعاليت هاي ثبت شده ی کاربر";
+$lang['activity_module_delete']			= "حذف فعاليت هاي ثبت شده ی افزونه";
 $lang['activity_date_delete']			= "حذف فعاليت هاي ثبت شده تاريخ خاص";
-$lang['activity_delete_own_note']		= "<h3>حذف فهاليت هاي شما</h3><p>حذف فعاليت هاي ثبت شده براي کاربر : ";
+$lang['activity_delete_own_note']		= "<h3>حذف فعاليت هاي شما</h3><p>حذف فعاليت هاي ثبت شده براي کاربر : ";
 $lang['activity_delete_user_note']		= "<h3>حذف فعاليت هاي کاربر</h3><p>حذف فعاليت هاي ثبت شده براي کاربر : ";
-$lang['activity_delete_module_note']	= "<h3>حذف فعاليت هاي ثبت شده ي افزونه</h3><p>حذف فعاليت هاي افزونه س : ";
+$lang['activity_delete_module_note']	= "<h3>حذف فعاليت هاي ثبت شده ي افزونه</h3><p>حذف فعاليت هاي افزونه ی : ";
 $lang['activity_delete_date_note']		= "<h3>حذف فعاليت هاي ثبت شده بر اساس تاريخ</h3><p>حذف فعاليت هاي ثبت شده قبل از : ";
 $lang['activity_own_description']		= "نمايش فعاليت هاي شما.";
 $lang['activity_users_description']		= "نمايش فعاليت هاي کاربر.";
@@ -66,3 +66,9 @@ $lang['activity_top_users']				= "پنج کاربر فعال";
 $lang['activity_no_top_modules']		= "فعاليت ثبت شده اي براي افزونه يافت نشد.";
 $lang['activity_no_top_users']			= "فعاليت ثبت شده اي براي کاربر يافت نشد.";
 $lang['activity_logged']				= "فعاليت هاي ثبت شده.";
+$lang['from_before']			= 'قبل از';
+$lang['only_for']			= 'فقط';
+$lang['before']			= ' قبل از';
+$lang['all']			= 'همه';
+$lang['datatable_page']			= ' صفحه';
+$lang['datatable_of']			= 'از';
