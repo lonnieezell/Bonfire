@@ -50,7 +50,7 @@
 	
 	<div class="text-right">
 		<br/>
-		<input type="submit" name="submit" value="<?php echo lang('role_save_role'); ?>" /> or <?php echo anchor(SITE_AREA .'/settings/roles', lang('bf_action_cancel')); ?>
+		<input type="submit" name="submit" value="<?php echo lang('role_save_role'); ?>" />  <?php echo lang('bf_or'),' ',anchor(SITE_AREA .'/settings/roles', lang('bf_action_cancel')); ?>
 	</div>
 
 	<br/>

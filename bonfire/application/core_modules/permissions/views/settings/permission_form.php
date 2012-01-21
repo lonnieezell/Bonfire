@@ -39,7 +39,7 @@
 
 	<div class="text-right">
 		<br/>
-		<input type="submit" name="submit" value="<?php echo lang('permissions_save');?>" /> or <?php echo anchor(SITE_AREA .'/settings/permissions', lang('permissions_cancel')); ?>
+		<input type="submit" name="submit" value="<?php echo lang('permissions_save');?>" />  <?php echo lang('bf_or'),' ',anchor(SITE_AREA .'/settings/permissions', lang('permissions_cancel')); ?>
 	</div>
 
 	<?php if (isset($permissions)) : ?>
