@@ -18,21 +18,21 @@
 	</div>
 	
 	<div>
-		<label for="login_destination"><?php echo lang('role_login_destination'); ?>?</label>
+		<label for="login_destination"><?php echo lang('role_login_destination'),lang('bf_question_mark'); ?></label>
 		<input type="text" name="login_destination" class="medium" value="<?php echo isset($role) ? $role->login_destination : '' ?>"  />
 		<p class="small indent"><?php echo lang('role_destination_note'); ?></p>
 	</div>
 	
 	<div>
-		<label for="default"><?php echo lang('role_default_role'); ?>?</label>
+		<label for="default"><?php echo lang('role_default_role'),lang('bf_question_mark'); ?></label>
 		<input type="checkbox" name="default" value="1" <?php echo isset($role) && $role->default == 1 ? 'checked="checked"' : '' ?> />
 		<p class="small" style="display: inline"><?php echo lang('role_default_note'); ?></p>
 	</div>
 	
 	<div>
-		<label for="can_delete"><?php echo lang('role_can_delete_role'); ?>?</label>
-		<input type="radio" name="can_delete" value="1" <?php echo isset($role) && $role->can_delete == 1 ? 'checked="checked"' : '' ?> />Yes
-		<input type="radio" name="can_delete" value="0" <?php echo isset($role) && $role->can_delete == 0 ? 'checked="checked"' : '' ?> />No	
+		<label for="can_delete"><?php echo lang('role_can_delete_role'),lang('bf_question_mark'); ?></label>
+		<input type="radio" name="can_delete" value="1" <?php echo isset($role) && $role->can_delete == 1 ? 'checked="checked"' : '' ?> /><?php echo lang('bf_yes') ?>
+		<input type="radio" name="can_delete" value="0" <?php echo isset($role) && $role->can_delete == 0 ? 'checked="checked"' : '' ?> /><?php echo lang('bf_no') ?>	
 		<p class="small" style="display: inline"><?php echo lang('role_can_delete_note'); ?></p>
 	</div>
 	
