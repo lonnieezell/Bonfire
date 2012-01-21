@@ -85,7 +85,7 @@ class Developer extends Admin_Controller {
 		
 		if (!Template::get('toolbar_title'))
 		{
-			Template::set('toolbar_title', 'Database Maintenance');
+			Template::set('toolbar_title', lang('db_database_maintenance'));
 		}
 		Template::render();
 
@@ -99,7 +99,7 @@ class Developer extends Admin_Controller {
 		$this->load->helper('file');
 		Template::set('backups', get_dir_file_info($this->backup_folder));
 	
-		Template::set('toolbar_title', 'Database Backups');
+		Template::set('toolbar_title', lang('db_database_backups'));
 		Template::render();
 	}
 	
