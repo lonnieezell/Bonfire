@@ -1,0 +1,234 @@
+/*--------------------------------------------------------------------
+// !BASE CLASSES
+//-------------------------------------------------------------------*/
+
+.view {
+	height: 100%;
+	display: block;
+	padding: 0;
+	position: relative;
+	overflow: hidden;
+	background: red;
+}
+
+.scrollable {
+	height: 100%;
+	overflow: auto;
+	position: relative;
+}
+.scrollable .scrollable{overflow: visible;}
+.bar {
+	position: absolute;
+	top: 0;
+	left: 0; 
+	right: 0;
+	width: 100%;
+	height: 44px;
+	background: #202020;
+	border-bottom: 1px solid #000;
+	font-size: 20px;
+	line-height: 44px;
+	text-align: center;
+	color: #fff;
+}
+.bottom-bar {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	border-bottom: 0;
+	border-top: 1px solid #ddd;
+	-webkit-box-shadow: 0px 0px 5px #eee;
+}
+.with-bottom-bar { bottom: 25px; }
+
+.bar a {
+	color: #fff;
+}
+.bar a:hover { text-decoration: none; }
+
+/* TYPE */
+h2.panel-title {
+	font-size: 16px;
+	line-height: 2.0;
+	border-bottom: 1px solid #ddd;
+	color: #999;
+	margin-bottom: 5px;
+}
+
+/* !SPLIT VIEW */
+.split-view { 
+	background: #fff; 
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+}
+.lt-ie9 .split-view { overflow: auto; }
+.lt-ie8 .split-view { overflow: hidden; }
+.split-view > div {
+	display: block;
+	right: 251px;
+	background: #fff;
+	*right: 0;
+	*bottom: 0;
+	*top: 0;
+	*width: 249px;
+	*border-left: 1px solid #999;
+	*float: right;
+	*height: 100%;
+	*min-height: 100%;
+}
+.split-view > div:first-child {
+	width: 250px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	height: 100%;
+	border-left: 1px solid #777;
+}
+.split-view > div:last-child {
+	display: block;
+	position: absolute;
+	top: 0;
+	right: 251px;
+	bottom: 0;
+}
+
+/* !TAB BAR */
+.tab-bar a { 
+	float: left;
+	display: inline-block; 
+	height: 100%;
+	font-size: 10px;
+	font-weight: lighter;
+	color: #aaa;
+}
+.tab-bar a.current {
+	background: #2c2c2c;
+}
+
+/* !LIST VIEWS */
+.list-item {
+	border-bottom: 1px solid #ddd;
+	padding: 8px 0;
+	cursor: pointer;
+}
+.list-item img {
+	margin: 0 10px;
+	float: right;
+}
+.list-item p span {
+	color: #999;
+}
+.list-item p {
+	margin-bottom: 0;
+	font-size: 12px;
+}
+.list-item.with-icon p {
+	display: inline-block;
+	padding: 0;
+	width: 180px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.list-item.current {
+	background: #dbe3f0;
+	border-top: 1px solid #aaaabb;
+	border-bottom: 1px solid #aaaabb;
+}
+
+/* Panel Header */
+.panel-header {
+	overflow: hidden;
+	border-bottom: 1px solid #ddd;
+	-webkit-box-shadow: 0 1px 5px #eee;
+	-moz-box-shadow: 0 1px 5px #eee;
+	box-shadow: 0 1px 5px #eee;
+	position: relative;
+	padding: 5px 9px;
+}
+
+/* Search - in list views */
+
+.panel-header a.list-search {
+	font-size: 12px;
+	float: left;
+	position: relative;
+	/* top: 4px; */
+	*position: absolute;
+	*left: 10px;
+	/* *top: 7px; */
+}
+.panel-header #search-form {
+	border-top: 1px solid #d6d6d6;
+	margin-top: 5px;
+}
+.panel-header input.list-search {
+	width: 100%;
+	margin: 8px 0 5px 0;
+}
+
+/*
+	JQUERY UI STYLES
+*/
+
+/* Layout helpers
+----------------------------------*/
+.ui-helper-hidden { display: none; }
+.ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px 1px 1px 1px); clip: rect(1px,1px,1px,1px); }
+.ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
+.ui-helper-clearfix:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+.ui-helper-clearfix { display: inline-block; }
+/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix { height:1%; }
+.ui-helper-clearfix { display:block; }
+/* end clearfix */
+.ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-disabled { cursor: default !important; }
+
+/* Component containers
+----------------------------------*/
+.ui-widget { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; font-size: 1.1em; }
+.ui-widget .ui-widget { font-size: 1em; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {  }
+.ui-widget-content { background: #fcfcfc; }
+.ui-widget-content a {  }
+.ui-widget-header { border-bottom: 1px solid #d7d7d7; }
+.ui-widget-header a {  }
+
+/* Interaction states
+----------------------------------*/
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { border: 1px solid #cccccc; background: #f6f6f6; font-weight: bold; }
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { color: #444; text-decoration: none; font-weight: normal; }
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { border: 1px solid #a2b4ee; background: #dbe3f0; font-weight: bold; color: #c77405; }
+.ui-state-hover a, .ui-state-hover a:hover { text-decoration: underline; }
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #d7d7d7; background: #ffffff; font-weight: bold; }
+.ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { text-decoration: none; }
+.ui-widget :active { outline: none; }
+
+/* Interaction Cues
+----------------------------------*/
+.ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight  {border: 1px solid #a2b4ee; background: #dbe3f0; }
+.ui-state-highlight a, .ui-widget-content .ui-state-highlight a,.ui-widget-header .ui-state-highlight a { color: #363636; }
+.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {border: 1px solid #cd0a0a; background: #dbe3f0; }
+.ui-state-error a, .ui-widget-content .ui-state-error a, .ui-widget-header .ui-state-error a {  }
+.ui-state-error-text, .ui-widget-content .ui-state-error-text, .ui-widget-header .ui-state-error-text {  }
+.ui-priority-primary, .ui-widget-content .ui-priority-primary, .ui-widget-header .ui-priority-primary { font-weight: bold; }
+.ui-priority-secondary, .ui-widget-content .ui-priority-secondary,  .ui-widget-header .ui-priority-secondary { opacity: .7; filter:Alpha(Opacity=70); font-weight: normal; }
+.ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none; }
+
+/* UI Tabs */
+.ui-tabs { position: relative; padding: .2em; zoom: 1; } /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+.ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; }
+.ui-tabs .ui-tabs-nav li { list-style: none; float: right; position: relative; top: 1px; margin: 0 .2em 1px 0; border-bottom: 0 !important; padding: 0; white-space: nowrap; }
+.ui-tabs .ui-tabs-nav li a { float: right; padding: .5em 1em; text-decoration: none; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; padding-bottom: 1px; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
+.ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
+.ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
+.ui-tabs .ui-tabs-hide { display: none !important; }
