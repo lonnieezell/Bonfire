@@ -57,7 +57,7 @@
 			<br />
 			<?php if (isset($records) && is_array($records) && count($records)) : ?>
 				
-			<h2><?php echo ucwords(plural(lang('permissions_permission')));?></h2>
+			<h2><?php echo ucwords(lang('permissions_permissions'));?></h2>
 			<table>
 				<thead>
 				<th><?php echo lang('permissions_name');?></th>
@@ -70,11 +70,11 @@
 					<?php 	$record = (array)$record; ?>
 					<tr><?php foreach($record as $field => $value): ?>
 							<?php if ($field != "permission_id") : ?>
-								<td><?php echo $value;?></td>
+								<td><?php echo ($field == 'status') ? lang('permissions_' . $value):$value;?></td>
 							<?php endif; ?>
 						<?php endforeach; ?>
 							
-						<td><?php echo anchor(SITE_AREA .'/settings/permissions/edit/'. $record['permission_id'], 'Edit', 'class="ajaxify"') ?></td>
+						<td><?php echo anchor(SITE_AREA .'/settings/permissions/edit/'. $record['permission_id'], lang('permissions_edit'), 'class="ajaxify"') ?></td>
 					</tr>
 					<?php endforeach; ?>
 				</tbody>
