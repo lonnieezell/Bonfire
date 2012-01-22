@@ -17,6 +17,6 @@
 	</p>
 
 	<div class="submits">
-		<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
+		<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" />  <?php echo lanf('bf_or'),' ',anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
 	</div>
 <?php echo form_close(); ?>

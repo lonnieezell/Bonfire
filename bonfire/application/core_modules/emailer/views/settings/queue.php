@@ -10,8 +10,8 @@
 </div>
 
 <div class="padded text-right">
-	<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/force_process'); ?>" class="button">Process Now</a> 
-	<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/insert_test'); ?>" class="button">Insert Test Email</a>
+	<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/force_process'); ?>" class="button"><?php echo lang('em_process_now') ?></a>
+	<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/insert_test'); ?>" class="button"><?php echo lang('em_insert_test_email') ?></a>
 </div>
 
 <?php if (isset($emails) && is_array($emails) && count($emails)) : ?>

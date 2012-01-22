@@ -22,7 +22,9 @@
 */
 
 $lang['db_maintenance']			= 'Maintenance';
+$lang['db_database_maintenance']			= 'Database Maintenance';
 $lang['db_backups']				= 'Backups';
+$lang['db_database_backups']				= 'Database Backups';
 
 $lang['db_backup_warning']		= 'Note: Due to the limited execution time and memory available to PHP, backing up very large databases may not be possible. If your database is very large you might need to backup directly from your SQL server via the command line, or have your server admin do it for you if you do not have root privileges.';
 $lang['db_filename']			= 'File Name';
@@ -42,6 +44,7 @@ $lang['db_database']			= 'Database';
 $lang['db_drop']				= 'Drop';
 $lang['db_repair']				= 'Repair';
 $lang['db_optimize']			= 'Optimize';
+$lang['db_apply']			= 'Apply';
 
 $lang['db_delete_note']			= 'Delete selected backup files: ';
 $lang['db_no_backups']			= 'No previous backups were found.';
