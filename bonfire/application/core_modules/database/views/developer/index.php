@@ -28,7 +28,7 @@
 						<option><?php echo lang('db_drop'); ?></option>
 					</select> 
 					&nbsp;&nbsp;
-					<input type="submit" namve="submit" value="Apply" />
+					<input type="submit" namve="submit" value="<?php echo lang('db_apply')?>" />
 				</td>
 			</tr>
 		</tfoot>

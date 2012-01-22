@@ -22,7 +22,9 @@
 */
 
 $lang['db_maintenance']			= 'Manutenção';
+$lang['db_database_maintenance']			= 'Manutenção de banco de dados';
 $lang['db_backups']				= 'Backups';
+$lang['db_database_backups']				= 'Backups de banco de dados';
 
 $lang['db_backup_warning']		= 'Cuidado com a duração do Script PHP.';
 $lang['db_filename']			= 'Node do Ficheiro';
@@ -42,6 +44,7 @@ $lang['db_database']			= 'Base de Dados';
 $lang['db_drop']				= 'Drop';
 $lang['db_repair']				= 'Repair';
 $lang['db_optimize']			= 'Optimize';
+$lang['db_apply']			= 'aplicar';
 
 $lang['db_delete_note']			= 'Apagar os seguintes Backups: ';
 $lang['db_no_backups']			= 'Não foram encontrados Backups prévios.';

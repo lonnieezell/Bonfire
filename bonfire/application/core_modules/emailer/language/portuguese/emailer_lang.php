@@ -23,6 +23,9 @@
 
 $lang['em_template']			= 'Template';
 
+$lang['em_queue']			= 'fila'; #new
+$lang['em_view_queue']			= 'View Queue';#new
+
 $lang['em_system_email']		= 'System Email Address';
 $lang['em_system_email_note']	= 'The email that all system-generated emails are sent from.';
 $lang['em_email_server']		= 'Email Server';
@@ -62,3 +65,12 @@ $lang['em_subject']				= 'Subject';
 
 $lang['em_missing_data']		= 'One or more required fields are missing.';
 $lang['em_no_debug']			= 'Email was queued. No debug data is available.';
+
+$lang['em_save_settings']               = 'Save Settings'; #new
+$lang['em_process_now']               = 'Process Now';#new
+$lang['em_insert_test_email']               = 'Insert Test Email';#new
+$lang['em_save_template']               = 'Save Template';#new
+
+$lang['em_email_template']              = 'Email Template';#new
+$lang['em_email_contents']              = 'Email Contents';#new
+$lang['em_emailer_queue']               = 'Emailer Queue';#new

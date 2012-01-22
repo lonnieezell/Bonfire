@@ -13,7 +13,7 @@
 	</div>
 
 	<div class="submits">
-		<input type="submit" name="submit" id="submit" value="Save Template" /> or <?php echo anchor(SITE_AREA .'/settings/emailer', 'Cancel'); ?>
+		<input type="submit" name="submit" id="submit" value="<?php echo lang('em_save_template') ?>" />  <?php echo lang('bf_or'),' ',anchor(SITE_AREA .'/settings/emailer', lang('bf_action_cancel')); ?>
 	</div>
 
 <?php echo form_close(); ?>

@@ -22,7 +22,9 @@
 */
 
 $lang['db_maintenance']			= 'نگهداري';
+$lang['db_database_maintenance']			= 'نگهداری پایگاه داده';
 $lang['db_backups']				= 'پشتيبان ها';
+$lang['db_database_backups']				= 'پشتیبانی پایگاه داده';
 
 $lang['db_backup_warning']		= 'هشدار : به دليل محدوديت هاي مربوط به حافظه در php امکان پشتيان گيري از پايگاه هاي داده هاي بسيار حجيم وجود ندارد. جهت انجام اين کار بايد مستقيما عمل نماييد.';
 $lang['db_filename']			= 'نام فايل';
@@ -42,6 +44,7 @@ $lang['db_database']			= 'پايگاه داده';
 $lang['db_drop']				= 'حذف';
 $lang['db_repair']				= 'باز سازي';
 $lang['db_optimize']			= 'بهينه سازي';
+$lang['db_apply']			= 'اعمال';
 
 $lang['db_delete_note']			= 'حذف فايلهاي پشتيبان انتخاب شده: ';
 $lang['db_no_backups']			= 'هيچ فايل پشتيباني يافت نشد.';

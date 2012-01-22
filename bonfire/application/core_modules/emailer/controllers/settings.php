@@ -92,7 +92,7 @@ class Settings extends Admin_Controller {
 		$settings = $this->settings_model->select('name,value')->find_all_by('module', 'email');
 		Template::set($settings);
 		
-		Template::set('toolbar_title', 'Email Settings');
+		Template::set('toolbar_title', lang('em_settings'));
 	
 		Template::render();
 	}
@@ -116,16 +116,16 @@ class Settings extends Admin_Controller {
 			redirect(SITE_AREA .'/settings/emailer/template');
 		}
 	
-		Template::set('toolbar_title', 'Email Template');
-	
+		Template::set('toolbar_title', lang('em_email_template'));
+
 		Template::render();
 	}
-	
+
 	//--------------------------------------------------------------------
-	
-	public function emails() 
+
+	public function emails()
 	{
-		Template::set('toolbar_title', 'Email Contents');
+		Template::set('toolbar_title', lang('em_email_contents'));
 		Template::render();
 	}
 	
@@ -183,7 +183,7 @@ class Settings extends Admin_Controller {
 			unset($debug_msg);
 		}
 	
-		Template::set('toolbar_title', 'Emailer Queue');
+		Template::set('toolbar_title', lang('em_emailer_queue'));
 		Template::render();
 	}
 	

@@ -43,7 +43,7 @@ tr:hover { background: #f6f6f6; border-top: 1px solid #e7e7e7; border-bottom: 1p
 				</p>
 			
 				<div class="submits">
-					<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
+					<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" />  <?php echo lang('bf_or'),' ',anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
 				</div>
 				<?php else: ?>
 					<p><?php echo lang('mig_no_migrations') ?></p>
@@ -125,7 +125,7 @@ tr:hover { background: #f6f6f6; border-top: 1px solid #e7e7e7; border-bottom: 1p
 				</p>
 			
 				<div class="submits">
-					<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
+					<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" />  <?php echo lang('bf_or'),' ',anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
 				</div>
 				<?php else: ?>
 					<p><?php echo lang('mig_no_migrations') ?></p>

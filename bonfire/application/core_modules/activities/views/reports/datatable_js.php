@@ -17,7 +17,7 @@ $.fn.dataTableExt.oPagination.listbox = {
 			nPaging.setAttribute('id', oSettings.sTableId + '_paginate');
 		}
 		nInput.style.display = "inline";
-		nPage.innerHTML = "Page ";
+		nPage.innerHTML ="<?php echo lang('datatable_page')?>";
 		nPaging.appendChild(nPage);
 		nPaging.appendChild(nInput);
 		nPaging.appendChild(nOf);
@@ -73,7 +73,7 @@ $.fn.dataTableExt.oPagination.listbox = {
 						elSel.add(oOption); // IE only
 					}
 				}
-				spans[1].innerHTML = "&nbsp;&nbsp;of&nbsp;&nbsp;" + iPages;
+				spans[1].innerHTML = "&nbsp;&nbsp;<?php echo lang('datatable_of') ?>&nbsp;&nbsp;" + iPages;
 			}
 		  elSel.value = iCurrentPage;
 		}
@@ -93,5 +93,22 @@ $("#flex_table").dataTable({
 			null,
 			{ "sWidth": "8em" },
 			{ "sWidth": "12em" }
-		]
+		],
+                "oLanguage": {
+                    "sProcessing":   "<?php echo lang('sProcessing') ?>",
+                    "sLengthMenu":   "<?php echo lang('sLengthMenu') ?>",
+                    "sZeroRecords":  "<?php echo lang('sZeroRecords') ?>",
+                    "sInfo":         "<?php echo lang('sInfo') ?>",
+                    "sInfoEmpty":    "<?php echo lang('sInfoEmpty') ?>",
+                    "sInfoFiltered": "<?php echo lang('sInfoFiltered') ?>",
+                    "sInfoPostFix":  "<?php echo lang('sInfoPostFix') ?>",
+                    "sSearch":       "<?php echo lang('sSearch') ?>",
+                    "sUrl":          "<?php echo lang('sUrl') ?>",
+                    "oPaginate": {
+                        "sFirst":    "<?php echo lang('sFirst') ?>",
+                        "sPrevious": "<?php echo lang('sPrevious') ?>",
+                        "sNext":     "<?php echo lang('sNext') ?>",
+                        "sLast":     "<?php echo lang('sLast') ?>"
+                    }
+                }             
 });

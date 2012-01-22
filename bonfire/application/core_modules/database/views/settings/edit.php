@@ -30,7 +30,7 @@
 		<legend><?php echo lang('db_advanced_options'); ?></legend>
 		
 		<div>
-			<label for="pconnect"><?php echo lang('db_persistant_connect'); ?>?</label>
+			<label for="pconnect"><?php echo lang('db_persistant_connect'),lang('bf_question_mark'); ?></label>
 			<select name="pconnect">
 				<option value="TRUE" <?php echo isset($db_settings['default']['pconnect']) && $db_settings['default']['pconnect'] == TRUE ? 'selected="selected"' : ''; ?>><?php echo lang('bf_yes'); ?></option>
 				<option value="FALSE" <?php echo isset($db_settings['default']['pconnect']) && $db_settings['default']['pconnect'] == FALSE ? 'selected="selected"' : ''; ?>><?php echo lang('bf_no'); ?></option>
@@ -38,7 +38,7 @@
 		</div>
 		
 		<div>
-			<label for="db_debug"><?php echo lang('db_display_errors'); ?>?</label>
+			<label for="db_debug"><?php echo lang('db_display_errors'),lang('bf_question_mark'); ?></label>
 			<select name="db_debug">
 				<option value="TRUE" <?php echo isset($db_settings['default']['db_debug']) && $db_settings['default']['db_debug'] == TRUE ? 'selected="selected"' : ''; ?>><?php echo lang('bf_yes'); ?></option>
 				<option value="FALSE" <?php echo isset($db_settings['default']['db_debug']) && $db_settings['default']['db_debug'] == FALSE ? 'selected="selected"' : ''; ?>><?php echo lang('bf_no'); ?></option>
@@ -46,7 +46,7 @@
 		</div>
 		
 		<div>
-			<label for="cache_on"><?php echo lang('db_enable_caching'); ?>?</label>
+			<label for="cache_on"><?php echo lang('db_enable_caching'),lang('bf_question_mark'); ?></label>
 			<select name="cache_on">
 				<option value="TRUE" <?php echo isset($db_settings['default']['cache_on']) && $db_settings['default']['cache_on'] == TRUE ? 'selected="selected"' : ''; ?>><?php echo lang('bf_yes'); ?></option>
 				<option value="FALSE" <?php echo isset($db_settings['default']['cache_on']) && $db_settings['default']['cache_on'] == FALSE ? 'selected="selected"' : ''; ?>><?php echo lang('bf_no'); ?></option>
