@@ -271,7 +271,9 @@ $body = $mb_constructor;
 
 if ($controller_name == $module_name_lower)
 {
-	$body = str_replace('{restrict}', '$this->load->library(\'form_validation\');', $body);
+	$form_validation_code = '$this->load->library(\'form_validation\');
+		$this->form_validation->CI =& $this;';
+	$body = str_replace('{restrict}', $form_validation_code, $body);
 } else
 {
 	$body = str_replace('{restrict}', '$this->auth->restrict(\''.preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.View\');', $body);
@@ -291,7 +293,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 		if ($db_field_type == 'DATE' AND $date_included === FALSE)
 		{
 			$extras .= '
-			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');';
+		Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');';
 			$date_included = TRUE;
 		}
 		elseif ($db_field_type == 'DATETIME' && $datetime_included === FALSE)
@@ -300,11 +302,11 @@ for($counter=1; $field_total >= $counter; $counter++)
 			if ($date_included === FALSE)
 			{
 				$extras .= '
-				Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');';
+		Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');';
 			}
 			$extras .= '
-			Assets::add_css(\'jquery-ui-timepicker.css\');
-			Assets::add_js(\'jquery-ui-timepicker-addon.js\');';
+		Assets::add_css(\'jquery-ui-timepicker.css\');
+		Assets::add_js(\'jquery-ui-timepicker-addon.js\');';
 			$date_included = TRUE;
 			$datetime_included = TRUE;
 		}
@@ -313,12 +315,12 @@ for($counter=1; $field_total >= $counter; $counter++)
 			// if a date field hasn't been included already then add in the jquery ui files
 			if ($textarea_editor == 'ckeditor') {
 				$extras .= '
-				Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
+		Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
 			}
 			elseif ($textarea_editor == 'xinha') {
 				$extras .= '
-				Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
-				Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
+		Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
+		Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
 			}
 			$textarea_included = TRUE;
 		}
