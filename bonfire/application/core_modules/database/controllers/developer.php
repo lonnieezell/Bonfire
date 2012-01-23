@@ -62,16 +62,16 @@ class Developer extends Admin_Controller {
 		
 			switch(strtolower($_POST['action']))
 			{
-				case 'backup':
+				case strtolower(lang('db_backups')):
 					$hide_form = $this->backup($_POST['checked']);
 					break;
-				case 'repair':
+				case strtolower(lang('db_repair')):
 					$this->repair($_POST['checked']);
 					break;
-				case 'optimize':
+				case strtolower(lang('db_optimize')):
 					$this->optimize();
 					break;
-				case 'drop':
+				case strtolower(lang('db_drop')):
 					$hide_form = $this->drop($_POST['checked']);
 					break;
 			}
