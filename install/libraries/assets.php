@@ -175,28 +175,28 @@ class Assets {
 	/*
 		Method: css()
 
-		Renders links to stylesheets, with the $asset_url prepended. 
+		Renders links to stylesheets, with the $asset_url prepended.
 		If a single filename is passed, it will only create a single link
 		for that file, otherwise, it will include any styles that have
 		been added with add_css below. If no style is passed it will default
 		to the theme's style.css file.
-		
+
 		When passing a filename, the filepath should be relative to the site
 		root (where index.php resides).
-		
-		Parameters:		
+
+		Parameters:
 			$style	- The style(s) to have links rendered for.
 			$media	- The media to assign to the style(s) being passed in.
 			$bypass_inheritance	- If true, will skip the check for parent theme styles.
 
-		Return: 
+		Return:
 		   A string containing all necessary links.
 	*/
-	public static function css($style=null, $media='screen', $bypass_inheritance=false) 
+	public static function css($style=null, $media='screen', $bypass_inheritance=false)
 	{
 		$styles = array();
 		$return = '';
-	
+
 		// If no style(s) has been passed in, use all that have been added.
 		if (empty($style))
 		{
@@ -205,16 +205,16 @@ class Assets {
 				'file'	=> $media,
 				'media'	=> $media
 			);
-						
+
 			$styles = array_merge($styles, self::$styles);
-		} 
+		}
 		// If an array has been passed, merge it with any added styles.
 		else if (is_array($style))
-		{	
+		{
 			$styles = array_merge($style, self::$styles);
 		}
 		// If a single style has been passed in, render it only.
-		else 
+		else
 		{
 			$styles[] = array(
 				'file'	=> $style,
@@ -240,25 +240,25 @@ class Assets {
 			{
 				if (is_array($s))
 				{
-					if (substr($s['file'], -4) != '.css') 
-					{ 
-						$s['file'] .= '.css'; 
+					if (substr($s['file'], -4) != '.css')
+					{
+						$s['file'] .= '.css';
 					}
 				} else
 				{
-					if (substr($s, -4) != '.css') 
-					{ 
-						$s .= '.css'; 
+					if (substr($s, -4) != '.css')
+					{
+						$s .= '.css';
 					}
 				}
-			
+
 				$attr = array(
 					'rel'	=> 'stylesheet',
 					'type'	=> 'text/css',
 					'href'	=> is_array($s) ? $s['file'] : $s,
 					'media'	=> !empty($s['media']) ? $s['media'] : $media
 				);
-				
+
 				if (!$combine)
 				{
 					$return .= '<link'. self::attributes($attr) ." />\n";
@@ -1122,7 +1122,6 @@ class Assets {
 		$site_path = Template::get('site_path');
 		$active_theme = Template::get('active_theme');
 		$default_theme = Template::get('default_theme');
-		
 		$new_files = array();
 		
 		$clean_type = $type;
@@ -1153,6 +1152,7 @@ class Assets {
 			
 			// Strip out the file type for consistency
 			$file = str_replace($type, '', $file);
+			$file_rtl = $file . '-rtl';
 			
 			//Check for HTTPS or HTTP connection
 			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https";} else { $http_protocol = "http";}
@@ -1170,11 +1170,23 @@ class Assets {
 			if (!empty($module))
 			{ 
 				$path = module_file_path($module, 'assets', $file . $type);
-				
+				if(!empty($path) && lang('bf_language_direction') == 'rtl')
+                                {
+                                    // looking for RTL Files 
+                                    $path_rtl = module_file_path($module, 'assets', $file_rtl . $type);
+                                    if(!empty($path_rtl))
+                                        $path = $path_rtl;
+                                }
 				if (empty($path))
 				{
 					// Try assets/type folder
 					$path = module_file_path($module, 'assets', $clean_type .'/'. $file . $type);
+                                        if(!empty($path) && lang('bf_language_direction') == 'rtl')
+                                        {
+                                            $path_rtl = module_file_path($module, 'assets', $clean_type .'/'. $file_rtl . $type);
+                                            if(!empty($path_rtl))
+                                                $path = $path_rtl;
+                                        }                                        
 				}
 				
 				if (self::$debug)
@@ -1234,6 +1246,15 @@ class Assets {
 						{ 
 							$file_path		= base_url() . $path .'/'. $default_theme . $file ."{$type}";
 							$server_path	= $site_path . $path .'/'. $default_theme . $file ."{$type}";
+                                                        if(lang('bf_language_direction') == 'rtl')
+                                                        {
+                                                            //looking for RTL file
+                                                            if(is_file($site_path . $path .'/'. $default_theme . $file_rtl ."{$type}"))
+                                                            {
+                                                                $file_path = base_url() . $path .'/'. $default_theme . $file_rtl ."{$type}";
+                                                                $server_path	= $site_path . $path .'/'. $default_theme . $file_rtl ."{$type}";
+                                                            }
+                                                        }
 							$new_files[]	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
 							$found = true;
 							
@@ -1246,6 +1267,15 @@ class Assets {
 						{
 							$file_path 		= base_url() . $path .'/'. $default_theme . $clean_type .'/'. $file ."$type";
 							$server_path	= $site_path . $path .'/'. $default_theme . $clean_type .'/'. $file ."{$type}";
+                                                        if(lang('bf_language_direction') == 'rtl')
+                                                        {
+                                                            //looking for RTL file
+                                                            if(is_file($site_path . $path .'/'. $default_theme . $clean_type .'/'. $file_rtl ."{$type}"))
+                                                            {
+                                                                $file_path 		= base_url() . $path .'/'. $default_theme . $clean_type .'/'. $file_rtl ."$type";
+                                                                $server_path	= $site_path . $path .'/'. $default_theme . $clean_type .'/'. $file_rtl ."{$type}";
+                                                            }
+                                                        }
 							$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
 							$found = true;
 							
@@ -1264,6 +1294,15 @@ class Assets {
 					{
 						$file_path 		= base_url() . $path .'/'. $active_theme . $file ."{$type}";
 						$server_path	= $site_path . $path .'/'. $active_theme . $file ."{$type}";
+                                                if(lang('bf_language_direction') == 'rtl')
+                                                {
+                                                    //looking for RTL file
+                                                    if(is_file($site_path . $path .'/'. $active_theme . $file_rtl ."{$type}"))
+                                                    {
+                                                        $file_path 		= base_url() . $path .'/'. $active_theme . $file_rtl ."{$type}";
+                                                        $server_path	= $site_path . $path .'/'. $active_theme . $file_rtl ."{$type}";
+                                                    }
+                                                }
 						$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
 						$found = true;
 						
@@ -1276,6 +1315,15 @@ class Assets {
 					{
 						$file_path 		= base_url() . $path .'/'. $active_theme . $clean_type .'/'. $file ."$type";
 						$server_path	= $site_path . $path .'/'. $active_theme . $clean_type .'/'. $file ."{$type}";
+                                                if(lang('bf_language_direction') == 'rtl')
+                                                {
+                                                    //looking for RTL file
+                                                    if(is_file($site_path . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl ."{$type}"))
+                                                    {
+                                                        $file_path 		= base_url() . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl ."$type";
+                                                        $server_path	= $site_path . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl ."{$type}";
+                                                    }
+                                                }
 						$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
 						$found = true;
 						
@@ -1295,6 +1343,15 @@ class Assets {
 						{ 
 							$file_path 		= base_url() . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}";
 							$server_path	= $site_path . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}";
+                                                        if(lang('bf_language_direction') == 'rtl')
+                                                        {
+                                                            //looking for RTL file
+                                                            if(is_file($site_path . self::$asset_base .'/'. $clean_type .'/'. $file_rtl ."{$type}"))
+                                                            {
+                                                                $file_path 		= base_url() . self::$asset_base .'/'. $clean_type .'/'. $file_rtl ."{$type}";
+                                                                $server_path	= $site_path . self::$asset_base .'/'. $clean_type .'/'. $file_rtl ."{$type}";
+                                                            }
+                                                        }
 							$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
 	
 							if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . self::$asset_base .'/'. $type .'/'. $file ."{$type}" ."</b><br/>";
@@ -1310,6 +1367,15 @@ class Assets {
 						{
 							$file_path 		= base_url() . self::$asset_base .'/'. $file ."{$type}";
 							$server_path	= $site_path . self::$asset_base .'/'. $file ."{$type}";
+                                                        if(lang('bf_language_direction') == 'rtl')
+                                                        {
+                                                            //looking for RTL file
+                                                            if(is_file($site_path . self::$asset_base .'/'. $file_rtl ."{$type}"))
+                                                            {
+                                                                $file_path 		= base_url() . self::$asset_base .'/'. $file_rtl ."{$type}";
+                                                                $server_path	= $site_path . self::$asset_base .'/'. $file_rtl ."{$type}";
+                                                            }
+                                                        }
 							$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
 	
 							if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . self::$asset_base .'/'. $file ."{$type}" ."</b><br/>";
