@@ -135,3 +135,9 @@ $lang['bf_context_developer']	= 'Developer';
 // Activities
 //--------------------------------------------------------------------
 $lang['bf_act_settings_saved']	= 'App settings saved from';
+
+//--------------------------------------------------------------------
+// Common
+//--------------------------------------------------------------------
+$lang['bf_question_mark']	= '?';
+$lang['bf_language_direction']	= 'ltr';
