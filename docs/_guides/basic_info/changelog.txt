@@ -1,6 +1,6 @@
 Topic: Changelog
 
-Version 0.3-RC1 (Unreleased)
+Version 0.5-RC1 (Unreleased)
 
 Additions:
 - Edit Profile for the front end user - issue #197
@@ -9,9 +9,43 @@ Additions:
 - Config setting for front end controller which is checked inside the MY_Controller/Front_Controller
 - Adding "matches_pattern" method to Form Validation to ensures a string matches a basic pattern
 - Upgrading the Migrations DB schema (issue #180) so that we use records instead of DB table columns for the modules
+- Moved the Settings into the DB
+- Frontend User Profile editing
+- New Installer
+- Module Builder - various improvements, including Creating a module from an existing DB table
+- Updated jquery.forms to 2.94
+- Emailer improvements
+- Localization improvements, including Persian language files (thanks to Github user "sajjad-ser")
+
 
 Bugs:
 - #236 - Email Settings - fixing the password validation
+- #252 - MY_Form_Validation unique() not working
+- #260 - <ul> tag was closed with </li>
+- #262 - Front End User Profile update adds table prefix
+- #265 - Installer config_file_helper Setup Bug
+- #266 - Module Builder: Creating Module
+- #276 - Module creation with field with uppercase name
+- #282 - Using 'unique' rule on form validation
+- #254 - Module Builder - Validation of Decimal fields
+- #286 - Backend, Module: create new: wait animation doesn't disappear
+- #284 - Delete Module fails
+- #288 - Changed "Remember me for two weeks" to "Remember me"
+- #290 - First name and last name were previously not being added to the database
+- #301 - Fix Line 27 $error_message undefined variable modulebuilder
+- #294 - Modulebuilder: Can not delete module
+- #239 - Developer Context Fails to Delete Update Cache File
+- #292 - Installer locations
+- #303 - Emailer queue error
+= #304 - Assets::add_module_js() causes fatal error unknown function module_file_path()
+- #306 - Fixed redirect on auth->restrict & Fixed database module anchors
+- #302 - Horizontal scroll bar appearing in FF
+- #307 - Emailer: SMTP Password format error
+- #293 - Saving email settings
+- #295 - Modulebuilder: form validation callback functions do not work
+- #309 - Convert Some text to language file & some fix & RTL layout
+- #310 - Fixed Database Module
+- #300 - Installer : Assets cache should be writeable
 
 
 Version 0.2
