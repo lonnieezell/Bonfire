@@ -69,12 +69,13 @@ class Install extends CI_Controller {
 		sure they can be written to.
 	*/
 	private $writeable_folders = array(
-		'cache',
-		'logs',
-		'config',
-        'archives',
-		'db/backups',
-		'db/migrations'
+		'/bonfire/application/cache',
+		'/bonfire/application/logs',
+		'/bonfire/application/config',
+        '/bonfire/application/archives',
+		'/bonfire/application/db/backups',
+		'/bonfire/application/db/migrations',
+		'/assets/cache'
 	);
 	
 	/*
@@ -83,7 +84,7 @@ class Install extends CI_Controller {
 		installation.
 	*/
 	private $reverse_writeable_folders = array(
-		'config',
+		'/bonfire/application/config',
 	);
 	
 	/*
@@ -92,7 +93,7 @@ class Install extends CI_Controller {
 		sure they can be written to.
 	*/
 	private $writeable_files = array(
-		'config/application.php'
+		'/bonfire/application/config/application.php'
 	);
 
 	//--------------------------------------------------------------------
@@ -120,6 +121,8 @@ class Install extends CI_Controller {
 	
 	public function index() 
 	{ 
+		$view_data = array();
+		
 		$this->load->library('form_validation');
 		$this->form_validation->CI =& $this;
 		$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim|strip_tags|xss_clean');
@@ -128,7 +131,7 @@ class Install extends CI_Controller {
 		$this->form_validation->set_rules('database', lang('in_database'), 'required|trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim|strip_tags|xss_clean');
 
-		$this->startup_check();
+		$view_data['startup_errors'] = $this->startup_check();
 		
 		if ($this->form_validation->run() !== false)
 		{ 
@@ -165,7 +168,7 @@ class Install extends CI_Controller {
 				
 				if (!$db)
 				{
-					Template::set_message('Unable to connect to database: '. mysql_error(), 'error');	
+					$view_data['message'] = message(lang('in_db_no_connect').': '. mysql_error(), 'error');
 				}
 				else
 				{
@@ -185,47 +188,57 @@ class Install extends CI_Controller {
 			}
 			else
 			{
-				Template::set_message('There was an error saving the settings. Please verify that your database and '.$environment.'/database config files are writeable.', 'attention');	
+				$view_data['message'] = message(sprintf(lang('in_settings_save_error'), $environment), 'attention');
 			}
 		}
+		
+		$view_data['content'] = $this->load->view('install/index', $view_data, TRUE);
 	
-		Template::render();
+		$this->load->view('index', $view_data);
 	}
 	
 	//--------------------------------------------------------------------
 	
 	public function account() 
 	{
+		$view_data = array();
+		
 		if ($this->input->post('submit'))
 		{
 			$this->load->library('form_validation');
 			$this->form_validation->CI =& $this;
 		
-			$this->form_validation->set_rules('site_title', 'Site Title', 'required|trim|strip_tags|min_length[1]|xss_clean');
-			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('password', 'Password', 'required|trim|strip_tags|alpha_dash|min_length[8]|xss_clean');
-			$this->form_validation->set_rules('pass_confirm', 'Password (again)', 'required|trim|matches[password]');
-			$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|xss_clean');
+			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|strip_tags|min_length[1]|xss_clean');
+			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('password', lang('in_password'), 'required|trim|strip_tags|alpha_dash|min_length[8]|xss_clean');
+			$this->form_validation->set_rules('pass_confirm', lang('in_password_again'), 'required|trim|matches[password]');
+			$this->form_validation->set_rules('email', lang('in_email'), 'required|trim|strip_tags|valid_email|xss_clean');
 			
 			if ($this->form_validation->run() !== false)
 			{
 				if ($this->setup())
 				{
-					Template::set_message('You are good to go! Happy coding!', 'success');
-//					redirect('/login');
-					Template::set_view('install/success');
+					$view_data['message'] = message(lang('in_success_notification'), 'success');
+					$view_data['content'] = $this->load->view('install/success', array(), TRUE);
 				}
 				else 
 				{
-					Template::set_message('There was an error setting up your database: '. $this->errors, 'error');
+					$view_data['message'] = message(lang('in_db_setup_error').': '. $this->errors, 'error');
 				}
 			}
 		}
+		
+		if (!isset($view_data['content']))
+		{
+			$account_data = array();
+			// if $this->curl_error = 1, show warning on "account" page of setup
+			$account_data['curl_error'] = $this->curl_error;
+			
+			$view_data['content'] = $this->load->view('install/account', $account_data, TRUE);
+		}
         
-        // if $this->curl_error = 1, show warning on "account" page of setup
-        Template::set('curl_error', $this->curl_error);
         
-		Template::render();
+		$this->load->view('index', $view_data);
 	}
 	
 	//--------------------------------------------------------------------
@@ -247,12 +260,13 @@ class Install extends CI_Controller {
 		$folder_errors = '';
 		$file_errors = '';
 		
-		
 		// Check Folders
 		foreach ($this->writeable_folders as $folder)
 		{
-			@chmod(FCPATH . $this->bonfire_app_path . $folder, 0777);
-			if (!is_writeable(FCPATH . $this->bonfire_app_path . $folder))
+			$full_folder = FCPATH . '..' . $folder;
+
+			@chmod($folder, 0777);
+			if (!is_dir($full_folder) || !is_writeable($full_folder))
 			{
 				$folder_errors .= "<li>$folder</li>";
 			}
@@ -260,14 +274,14 @@ class Install extends CI_Controller {
 		
 		if (!empty($folder_errors))
 		{
-			$errors = '<p>Please ensure that the following directories are writeable, and try again:</p><ul>' . $folder_errors .'</ul>';
+			$errors = '<p>'.lang('in_writeable_directories_message').':</p><ul>' . $folder_errors .'</ul>';
 		}
 		
 		// Check files
 		foreach ($this->writeable_files as $file)
 		{
-			@chmod(FCPATH . $this->bonfire_app_path .$file, 0666);
-			if (!is_writeable(FCPATH . $this->bonfire_app_path . $file))
+			@chmod(FCPATH . '..' . $file, 0666);
+			if (!is_writeable(FCPATH . '..' . $file))
 			{
 				$file_errors .= "<li>$file</li>";
 			}
@@ -275,23 +289,13 @@ class Install extends CI_Controller {
 		
 		if (!empty($file_errors))
 		{
-			$errors .= '<p>Please ensure that the following files are writeable, and try again:</p><ul>' . $file_errors .'</ul>';
+			$errors .= '<p>'.lang('in_writeable_files_message').':</p><ul>' . $file_errors .'</ul>';
 		}
 		
-		// Make it available to the template lib if there are errors
-		if (!empty($errors))
-		{
-			Template::set('startup_errors', $errors);
-		}
+		unset($folder_errors, $file_errors);
 		
-		unset($errors, $folder_errors, $file_errors);
+		return $errors;
 		
-		/*
-			Copies generic file versions to their appropriate spots. 
-			This provides a safe way to perform upgrades, as well
-			as simplifying what will need to be modified when some
-			sweeping changes are made. 
-		*/
 	}
 	
 	//--------------------------------------------------------------------
@@ -305,6 +309,8 @@ class Install extends CI_Controller {
 		$environment = $data['environment'];
 		unset($data['environment']);
 
+		$this->load->helper('config_file');
+			
 		write_db_config($data);
 	
 		if (is_writeable(FCPATH . $this->bonfire_app_path . 'config/'))
@@ -321,11 +327,11 @@ class Install extends CI_Controller {
 		
 		if( !$this->db = mysql_connect($server, $username, $password) )
 		{
-			return array('status' => FALSE,'message' => 'The installer could not connect to the MySQL server or the database, be sure to enter the correct information.');
+			return array('status' => FALSE, 'message' => lang('in_db_no_connect'));
 		}
 		
 		// use the entered Database settings to connect before calling the Migrations
-		$dsn = 'mysql://'.$username.':'.$password.'@'.$server.'/'.$database.'?dbprefix='.$dbprefix;
+		$dsn = 'mysql://'.$username.':'.$password.'@'.$server.'/'.$database.'?dbprefix='.$dbprefix.'&db_debug=TRUE';
 		$this->load->database($dsn);
 		
 		//
@@ -373,7 +379,7 @@ class Install extends CI_Controller {
 			$this->db->where('name', $key);
 			if ($this->db->update('settings', $setting_rec) == false)
 			{
-				$this->errors = 'There was an error inserting settings into the database';
+				$this->errors = lang('in_db_settings_error');
 				return false;
 			}
 		}
@@ -393,7 +399,7 @@ class Install extends CI_Controller {
 		
 		if ($this->db->insert('users', $data) == false)
 		{
-			$this->errors = 'There was an error creating your account in the database';
+			$this->errors = lang('in_db_account_error');
 			return false;
 		}
 		
@@ -411,7 +417,7 @@ class Install extends CI_Controller {
 		// Reverse Folders
 		foreach ($this->reverse_writeable_folders as $folder)
 		{
-			@chmod(FCPATH . $this->bonfire_app_path . $folder, 0774);
+			@chmod(FCPATH . '..' . $folder, 0775);
 		}
 
 		// We made it to the end, so we're good to go!
@@ -430,8 +436,8 @@ class Install extends CI_Controller {
 	{
         if (!function_exists('curl_version'))
         {
-          $this->curl_error = 1;
-          $this->curl_update = 0;
+			$this->curl_error = 1;
+			$this->curl_update = 0;
         }   
     }
 	

@@ -24,8 +24,17 @@
 $lang['in_intro']					= '<h2>Welcome</h2><p>Welcome to the Bonfire installation process! Just fill in the fields below, and before you know it you will be creating CodeIgniter 2.0 based web apps faster than ever.</p>';
 $lang['in_not_writeable_heading']	= 'Files/Folders Not Writeable';
 
+$lang['in_writeable_directories_message'] = 'Please ensure that the following directories are writeable, and try again';
+$lang['in_writeable_files_message']       = 'Please ensure that the following files are writeable, and try again';
+
 $lang['in_db_settings']				= 'Database Settings';
 $lang['in_db_settings_note']		= '<p>Please fill out the database information below.</p><p class="small">These settings will be saved to both the main <b>config/database.php</b> file and to the development environment (found at <b>config/development/database.php)</b>. </p>';
+$lang['in_db_no_connect']           = 'The installer could not connect to the MySQL server or the database, be sure to enter the correct information.';
+$lang['in_db_setup_error']          = 'There was an error setting up your database';
+$lang['in_db_settings_error']       = 'There was an error inserting settings into the database';
+$lang['in_db_account_error']        = 'There was an error creating your account in the database';
+$lang['in_settings_save_error']     = 'There was an error saving the settings. Please verify that your database and %s/database config files are writeable.';
+
 $lang['in_environment']				= 'Environment';
 $lang['in_host']					= 'Host';
 $lang['in_database']				= 'Database';
@@ -34,6 +43,8 @@ $lang['in_test_db']					= 'Test Database';
 
 $lang['in_account_heading']			= '<h2>Information Needed</h2><p>Please provide the following information.</p>';
 $lang['in_site_title']				= 'Site Title';
+$lang['in_username']			    = 'Username';
+$lang['in_password']			    = 'Password';
 $lang['in_password_note']			= 'Minimum length: 8 characters.';
 $lang['in_password_again']			= 'Password (again)';
 $lang['in_email']					= 'Your Email';
@@ -42,7 +53,7 @@ $lang['in_install_button']			= 'Install Bonfire';
 
 $lang['in_curl_disabled']			= '<p class="error">cURL <strong>is not</strong> presently enabled as a PHP extension. Bonfire will not be able to check for updates until it is enabled.</p>';
 
-
+$lang['in_success_notification']    = 'You are good to go! Happy coding!';
 $lang['in_success_msg']				= 'Please remove the install folder and return to ';
 
 $lang['no_migrations_found']			= 'No migration files were found';
