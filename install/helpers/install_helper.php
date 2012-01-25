@@ -31,6 +31,66 @@
 //--------------------------------------------------------------------
 
 
+/*
+	Method: message()
+
+	Displays a status message (small success/error messages).
+	If data exists in 'message' session flashdata, that will 
+	override any other messages. The renders the message based
+	on the template provided in the config file ('OCU_message_template').
+
+	Parameters:
+		$message	- a string to be the message. (Optional) If included, will override
+						any other messages in the system.
+		$type		- the class to attached to the div. (i.e. 'information', 'attention', 'error', 'success')
+
+	Return:
+		A string with the results of inserting the message into the message template.
+ */
+function message($message='', $type='information') 
+{	
+	$ci =& get_instance();
+	
+	// Does session data exist? 
+	if (empty($message) && class_exists('CI_Session'))
+	{
+		$message = $ci->session->flashdata('message');
+
+		if (!empty($message))
+		{
+			// Split out our message parts
+			$temp_message = explode('::', $message);
+			$type = $temp_message[0];
+			$message = $temp_message[1];
+
+			unset($temp_message);
+		} 
+	}
+
+	// If message is empty, we need to check our own storage.
+	if (empty($message))
+	{
+		return '';
+	}
+
+	// Grab out message template and replace the placeholders
+	$template = str_replace('{type}', $type, $ci->config->item('template.message_template'));
+	$template = str_replace('{message}', $message, $template);
+
+	// Clear our session data so we don't get extra messages. 
+	// (This was a very rare occurence, but clearing should resolve the problem.
+	if (class_exists('CI_Session'))
+	{
+		$ci->session->set_flashdata('message', '');
+	}
+
+	return $template;
+}
+
+//---------------------------------------------------------------
+	
+
+
 //--------------------------------------------------------------------
 // !MODULE HELPERS
 //--------------------------------------------------------------------

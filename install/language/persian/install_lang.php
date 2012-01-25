@@ -24,8 +24,17 @@
 $lang['in_intro']					= '<h2>خوش آمديد</h2><p>به پروسه نصب بن فاير خوش آمديد! فيلد هاي زير را پر کرده و سپس مي توانيد به ايجاد برنامه هاي تحت وب توسط CodeIgniter 2.0 بپردازيد.</p>';
 $lang['in_not_writeable_heading']	= 'فايل ها/پوشه ها قابل نوشتن نمي باشند';
 
+$lang['in_writeable_directories_message'] = 'Please ensure that the following directories are writeable, and try again';
+$lang['in_writeable_files_message']       = 'Please ensure that the following files are writeable, and try again';
+
 $lang['in_db_settings']				= 'تنظيمات پايگاه داده';
 $lang['in_db_settings_note']		= '<p>لطفا اطلاعات پايگاه داده را وارد نماييد.</p><p class="small">اين اطلاعات در فايل کانفيگ اصلي و <b>config/database.php</b> و <b>config/development/database.php</b> ذخيره خواهند شد. </p>';
+$lang['in_db_no_connect']           = 'The installer could not connect to the MySQL server or the database, be sure to enter the correct information.';
+$lang['in_db_setup_error']          = 'There was an error setting up your database';
+$lang['in_db_settings_error']       = 'There was an error inserting settings into the database';
+$lang['in_db_account_error']        = 'There was an error creating your account in the database';
+$lang['in_settings_save_error']     = 'There was an error saving the settings. Please verify that your database and %s/database config files are writeable.';
+
 $lang['in_environment']				= 'محيط';
 $lang['in_host']					= 'ميزبان';
 $lang['in_database']				= 'پايگاه داده';
@@ -34,6 +43,8 @@ $lang['in_test_db']					= 'آزمايش پايگاه داده';
 
 $lang['in_account_heading']			= '<h2>اطلاعات مورد نياز</h2><p>لطفا اطلاعات مورد نياز زير را وارد نماييد.</p>';
 $lang['in_site_title']				= 'عنوان سايت';
+$lang['in_username']			    = 'Username';
+$lang['in_password']			    = 'Password';
 $lang['in_password_note']			= 'حد اقل 8 کاراکتر.';
 $lang['in_password_again']			= 'تکرار کلمه ي عبور';
 $lang['in_email']					= 'ايميل شما';
@@ -43,6 +54,7 @@ $lang['in_install_button']			= 'نصب بنفاير';
 $lang['in_curl_disabled']			= '<p class="error">cURL <strong>يافت نشد</strong>.بنفاير تا قبل از اين که اين افزونه فعال شود قادر به بررسي به روز رساني ها نخواهد بود.</p>';
 
 
+$lang['in_success_notification']    = 'You are good to go! Happy coding!';
 $lang['in_success_msg']				= 'لطفا پوشه ي نصب را حذف کرده و بازگرديد به ';
 
 $lang['no_migrations_found']			= 'هيچ فايل ارتقايي يافت نشد';

@@ -191,7 +191,7 @@ $config['log_threshold'] = 4;
 | application/logs/ folder. Use a full server path with trailing slash.
 |
 */
-$config['log_path'] = 'C:/CODEBASE/codeigniter_sites/bonfire_test/installer/logs/';
+$config['log_path'] = '';
  
 /*
 |--------------------------------------------------------------------------
