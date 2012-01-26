@@ -1118,196 +1118,245 @@ class Assets {
 	 */
 	private function find_files($files=array(), $type='css', $bypass_inheritance=false)
 	{
-  // Grab the theme paths from the template library.
-  $paths = Template::get('theme_paths');
-  $site_path = Template::get('site_path');
-  $active_theme = Template::get('active_theme');
-  $default_theme = Template::get('default_theme');
+		// Grab the theme paths from the template library.
+		$paths = Template::get('theme_paths');
+		$site_path = Template::get('site_path');
+		$active_theme = Template::get('active_theme');
+		$default_theme = Template::get('default_theme');
 
-  $new_files = array();
+		$new_files = array();
 
-  $clean_type = $type;
-  $type = '.'. $type;
+		$clean_type = $type;
+		$type = '.'. $type;
 
-  if (self::$debug)
-  {
-    echo "Active Theme = $active_theme<br/>";
-    echo "Default Theme = $default_theme<br/>";
-    echo 'Site Path = '. $site_path .'<br/>';
-    echo 'File(s) to find: '; print_r($files);
-  }
+		if (self::$debug)
+		{
+			echo "Active Theme = $active_theme<br/>";
+			echo "Default Theme = $default_theme<br/>";
+			echo 'Site Path = '. $site_path .'<br/>';
+			echo 'File(s) to find: '; print_r($files);
+		}
 
-  foreach ($files as $file)
-  {
-    // If it's an array, we're dealing with css and it has both
-    // a file and media keys. Store them for later use.
-    if ($type == '.css' && is_array($file))
-    {
-      $media = $file['media'];
-      $module	= isset($file['module']) ? $file['module'] : '';
-      $file = $file['file'];
-    } else if ($type == '.js' && is_array($file))
-    {
-      $module	= isset($file['module']) ? $file['module'] : '';
-      $file = $file['file'];
-    }
+		foreach ($files as $file)
+		{
+			// If it's an array, we're dealing with css and it has both
+			// a file and media keys. Store them for later use.
+			if ($type == '.css' && is_array($file))
+			{
+				$media = $file['media'];
+				$module	= isset($file['module']) ? $file['module'] : '';
+				$file = $file['file'];
+			} else if ($type == '.js' && is_array($file))
+			{
+				$module	= isset($file['module']) ? $file['module'] : '';
+				$file = $file['file'];
+			}
 
-    // Strip out the file type for consistency
-    $file = str_replace($type, '', $file);
+			// Strip out the file type for consistency
+			$file = str_replace($type, '', $file);
+			$file_rtl = $file . '-rtl';
 
-    //Check for HTTPS or HTTP connection
-    if(isset($_SERVER['HTTPS'])){ $http_protocol = "https";} else { $http_protocol = "http";}
+			//Check for HTTPS or HTTP connection
+			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https";} else { $http_protocol = "http";}
 
-    // If it contains an external URL, we're all done here.
-    if (strpos((string)$file, $http_protocol, 0) !== false)
-    {
-      $new_files[] = !empty($media) ? array('file'=>$file, 'media'=>$media) : $file;
-      continue;
-    }
+			// If it contains an external URL, we're all done here.
+			if (strpos((string)$file, $http_protocol, 0) !== false)
+			{
+				$new_files[] = !empty($media) ? array('file'=>$file, 'media'=>$media) : $file;
+				continue;
+			}
 
-    $found = false;
+			$found = false;
 
-    // Is it a module file?
-    if (!empty($module))
-    {
-      $path = module_file_path($module, 'assets', $file . $type);
+			// Is it a module file?
+			if (!empty($module))
+			{
+				$path = module_file_path($module, 'assets', $file . $type);
+				if(!empty($path) && lang('bf_language_direction') == 'rtl')
+                                {
+                                    // looking for RTL Files
+                                    $path_rtl = module_file_path($module, 'assets', $file_rtl . $type);
+                                    if(!empty($path_rtl))
+                                        $path = $path_rtl;
+                                }
+				if (empty($path))
+				{
+					// Try assets/type folder
+					$path = module_file_path($module, 'assets', $clean_type .'/'. $file . $type);
+                                        if(!empty($path) && lang('bf_language_direction') == 'rtl')
+                                        {
+                                            $path_rtl = module_file_path($module, 'assets', $clean_type .'/'. $file_rtl . $type);
+                                            if(!empty($path_rtl))
+                                                $path = $path_rtl;
+                                        }
+				}
 
-      if (empty($path))
-      {
-        // Try assets/type folder
-        $path = module_file_path($module, 'assets', $clean_type .'/'. $file . $type);
-      }
+				if (self::$debug)
+				{
+					echo '[Assets] Lookin for MODULE asset at: '. $path ."<br/>";
+				}
 
-      if (self::$debug)
-      {
-        echo '[Assets] Lookin for MODULE asset at: '. $path ."<br/>";
-      }
+				if (!empty($path))
+				{
+					$file_path = '';
 
-      if (!empty($path))
-      {
-        $file_path = '';
+					$file = array(
+						'file'			=> $file_path,
+						'server_path'	=> $path
+					);
+					if (isset($media))
+					{
+						$file['media'] = $media;
+					}
 
-        $file = array(
-                      'file'			=> $file_path,
-                      'server_path'	=> $path
-                     );
+					$new_files[] = $file;
+				}
 
-        if (isset($media))
-        {
-         $file['media'] = $media;
-        }
+				continue;
+			}
+			// Non-module files
+			else
+			{
+				// We need to check all of the possible theme_paths
+				foreach ($paths as $path)
+				{
+					if (self::$debug) {
+						echo '[Assets] Looking in: <ul><li>'. $site_path . $path .'/'. $default_theme . $file ."{$type}</li>";
+						echo '<li>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file . $type ."</li>";
 
-        $new_files[] = $file;
-      }
+						if (!empty($active_theme))
+						{
+							echo '<li>'. $site_path . $path .'/'. $active_theme . $file ."{$type}</li>";
+							echo '<li>'. $site_path . $path .'/'. $active_theme . $type .'/'. $file ."{$type}</li>";
+						}
 
-      continue;
-    } else {
-      // Non-module files
+						echo '<li>'. $site_path . self::$asset_base .'/'. $type .'/'. $file ."{$type}</li>";
 
-      // We need to check all of the possible theme_paths
-      foreach ($paths as $path)
-      {
-        if (self::$debug)
-        {
-          echo '[Assets] Looking in: <ul><li>'. $site_path . $path .'/'. $default_theme . $file ."{$type}</li>";
-          echo "<li>{$site_path}{$path}/{$default_theme}{$type}/{$file}{$type}</li>";
+						echo '</ul>';
+					}
 
-          if (!empty($active_theme))
-          {
-            echo "<li>{$site_path}{$path}/{$active_theme}{$file}{$type}</li>";
-            echo "<li>{$site_path}{$path}/{$active_theme}{$type}/{$file}{$type}</li>";
-          }
+					if (!$bypass_inheritance)
+					{
+						/*
+							DEFAULT THEME
 
-          echo '<li>'. $site_path . self::$asset_base ."/{$type}/{$file}{$type}</li>";
+							First, check the default theme. Add it to the array. We check here first so that it
+							will get overwritten by anything in the active theme.
+						*/
 
-          echo '</ul>';
-        }
+						if (is_file($site_path . $path .'/'. $default_theme . $file ."{$type}"))
+						{
+							$file_path		= base_url() . $path .'/'. $default_theme . $file ."{$type}";
+							$server_path	= $site_path . $path .'/'. $default_theme . $file ."{$type}";
+                                                        if(lang('bf_language_direction') == 'rtl')
+                                                        {
+                                                            //looking for RTL file
+                                                            if(is_file($site_path . $path .'/'. $default_theme . $file_rtl ."{$type}"))
+                                                            {
+                                                                $file_path = base_url() . $path .'/'. $default_theme . $file_rtl ."{$type}";
+                                                                $server_path	= $site_path . $path .'/'. $default_theme . $file_rtl ."{$type}";
+                                                            }
+                                                        }
+							$new_files[]	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
+							$found = true;
 
-        if (!$bypass_inheritance)
-        {
-          /*
-           DEFAULT THEME
+							if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $file ."{$type}" ."</b><br/>";
+						}
+						/*
+							If it wasn't found in the default theme root folder, look in default_theme/$type/
+						*/
+						else if (is_file($site_path . $path .'/'. $default_theme . $clean_type .'/'. $file ."{$type}"))
+						{
+							$file_path 		= base_url() . $path .'/'. $default_theme . $clean_type .'/'. $file ."$type";
+							$server_path	= $site_path . $path .'/'. $default_theme . $clean_type .'/'. $file ."{$type}";
+                                                        if(lang('bf_language_direction') == 'rtl')
+                                                        {
+                                                            //looking for RTL file
+                                                            if(is_file($site_path . $path .'/'. $default_theme . $clean_type .'/'. $file_rtl ."{$type}"))
+                                                            {
+                                                                $file_path 		= base_url() . $path .'/'. $default_theme . $clean_type .'/'. $file_rtl ."$type";
+                                                                $server_path	= $site_path . $path .'/'. $default_theme . $clean_type .'/'. $file_rtl ."{$type}";
+                                                            }
+                                                        }
+							$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
+							$found = true;
 
-           First, check the default theme. Add it to the array. We check here first so that it
-           will get overwritten by anything in the active theme.
-          */
+							if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file ."{$type}" ."</b><br/>";
+						}
+					}
 
-          if (is_file($site_path . $path .'/'. $default_theme . $file ."{$type}"))
-          {
-            $file_path		= base_url() . $path .'/'. $default_theme . $file ."{$type}";
-            $server_path	= $site_path . $path .'/'. $default_theme . $file ."{$type}";
-            $new_files[]	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
-            $found = true;
+					/*
+						ACTIVE THEME
 
-            if (self::$debug)
-              echo "[Assets] Found file at: <b>{$site_path}{$path}/{$default_theme}{$file}{$type}</b><br/>";
+						By grabbing a copy from both the default theme and the active theme, we can
+						handle simple CSS-only overrides for a theme, completely changing it's appearance
+						through a simple child css file.
+					*/
+					if (!empty($active_theme) && is_file($site_path . $path .'/'. $active_theme . $file ."{$type}"))
+					{
+						$file_path 		= base_url() . $path .'/'. $active_theme . $file ."{$type}";
+						$server_path	= $site_path . $path .'/'. $active_theme . $file ."{$type}";
+                                                if(lang('bf_language_direction') == 'rtl')
+                                                {
+                                                    //looking for RTL file
+                                                    if(is_file($site_path . $path .'/'. $active_theme . $file_rtl ."{$type}"))
+                                                    {
+                                                        $file_path 		= base_url() . $path .'/'. $active_theme . $file_rtl ."{$type}";
+                                                        $server_path	= $site_path . $path .'/'. $active_theme . $file_rtl ."{$type}";
+                                                    }
+                                                }
+						$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
+						$found = true;
 
-          }
+						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $active_theme . $file ."{$type}" ."</b><br/>";
+					}
+					/*
+						If it wasn't found in the active theme root folder, look in active_theme/$type/
+					*/
+					else if (is_file($site_path . $path .'/'. $active_theme . $clean_type .'/'. $file ."{$type}"))
+					{
+						$file_path 		= base_url() . $path .'/'. $active_theme . $clean_type .'/'. $file ."$type";
+						$server_path	= $site_path . $path .'/'. $active_theme . $clean_type .'/'. $file ."{$type}";
+                                                if(lang('bf_language_direction') == 'rtl')
+                                                {
+                                                    //looking for RTL file
+                                                    if(is_file($site_path . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl ."{$type}"))
+                                                    {
+                                                        $file_path 		= base_url() . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl ."$type";
+                                                        $server_path	= $site_path . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl ."{$type}";
+                                                    }
+                                                }
+						$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
+						$found = true;
 
-          /*
-           If it wasn't found in the default theme root folder, look in default_theme/$type/
-          */
-          else if (is_file($site_path . $path .'/'. $default_theme . $clean_type .'/'. $file ."{$type}"))
-          {
-            $file_path 		= base_url() . $path .'/'. $default_theme . $clean_type .'/'. $file ."$type";
-            $server_path	= $site_path . $path .'/'. $default_theme . $clean_type .'/'. $file ."{$type}";
-            $new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
-            $found = true;
+						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $active_theme . $type .'/'. $file ."{$type}" ."</b><br/>";
+					}
 
-            if (self::$debug)
-              echo "[Assets] Found file at: <b>{$site_path}{$path}/{$default_theme}{$type}/{$file}{$type}</b><br/>";
+					/*
+						ASSET BASE
 
-          }
-        }
+						If the file hasn't been found, yet, we have one more place to look for it:
+						in the folder specified by 'assets.base_folder', and under the $type sub-folder.
+					*/
+					if (!$found)
+					{
+						// Assets/type folder
+						if (is_file($site_path . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}"))
+						{
+							$file_path 		= base_url() . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}";
+							$server_path	= $site_path . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}";
+                                                        if(lang('bf_language_direction') == 'rtl')
+                                                        {
+                                                            //looking for RTL file
+                                                            if(is_file($site_path . self::$asset_base .'/'. $clean_type .'/'. $file_rtl ."{$type}"))
+                                                            {
+                                                                $file_path 		= base_url() . self::$asset_base .'/'. $clean_type .'/'. $file_rtl ."{$type}";
+                                                                $server_path	= $site_path . self::$asset_base .'/'. $clean_type .'/'. $file_rtl ."{$type}";
+                                                            }
+                                                        }
+							$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
 
-        /*
-         ACTIVE THEME
-
-         By grabbing a copy from both the default theme and the active theme, we can
-         handle simple CSS-only overrides for a theme, completely changing it's appearance
-         through a simple child css file.
-        */
-        if (!empty($active_theme) && is_file($site_path . $path .'/'. $active_theme . $file ."{$type}"))
-        {
-          $file_path 		= base_url() . $path .'/'. $active_theme . $file ."{$type}";
-          $server_path	= $site_path . $path .'/'. $active_theme . $file ."{$type}";
-          $new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
-          $found = true;
-
-          if (self::$debug)
-            echo "[Assets] Found file at: <b>{$site_path}{$path}/{$active_theme}{$file}{$type}</b><br/>";
-        }
-        /*
-         If it wasn't found in the active theme root folder, look in active_theme/$type/
-        */
-        else if (is_file($site_path . $path .'/'. $active_theme . $clean_type .'/'. $file ."{$type}"))
-        {
-          $file_path 		= base_url() . $path .'/'. $active_theme . $clean_type .'/'. $file ."$type";
-          $server_path	= $site_path . $path .'/'. $active_theme . $clean_type .'/'. $file ."{$type}";
-          $new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
-          $found = true;
-
-          if (self::$debug)
-            echo "[Assets] Found file at: <b>{$site_path}{$path}/{$active_theme}{$type}/{$file}{$type}</b><br/>";
-        }
-
-        /*
-         ASSET BASE
-
-         If the file hasn't been found, yet, we have one more place to look for it:
-         in the folder specified by 'assets.base_folder', and under the $type sub-folder.
-        */
-        if (!$found)
-        {
-          // Assets/type folder
-          if (is_file($site_path . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}"))
-          {
-            $file_path 		= base_url() . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}";
-            $server_path	= $site_path . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}";
-            $new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
-
-            if (self::$debug)
-              echo "[Assets] Found file at: <b>{$site_path}" . self::$asset_base . "/{$type}/{$file}{$type}</b><br/>";
+							if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . self::$asset_base .'/'. $type .'/'. $file ."{$type}" ."</b><br/>";
 						}
 
 						/*
@@ -1318,20 +1367,27 @@ class Assets {
 						*/
 						else if (is_file($site_path . self::$asset_base .'/'. $file ."{$type}"))
 						{
-        $file_path 		= base_url() . self::$asset_base .'/'. $file ."{$type}";
-        $server_path	= $site_path . self::$asset_base .'/'. $file ."{$type}";
-        $new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
+							$file_path 		= base_url() . self::$asset_base .'/'. $file ."{$type}";
+							$server_path	= $site_path . self::$asset_base .'/'. $file ."{$type}";
+                                                        if(lang('bf_language_direction') == 'rtl')
+                                                        {
+                                                            //looking for RTL file
+                                                            if(is_file($site_path . self::$asset_base .'/'. $file_rtl ."{$type}"))
+                                                            {
+                                                                $file_path 		= base_url() . self::$asset_base .'/'. $file_rtl ."{$type}";
+                                                                $server_path	= $site_path . self::$asset_base .'/'. $file_rtl ."{$type}";
+                                                            }
+                                                        }
+							$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
 
-        if (self::$debug)
-          echo "[Assets] Found file at: <b>{$site_path}" . self::$asset_base ."/{$file}{$type}</b><br/>";
-
+							if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . self::$asset_base .'/'. $file ."{$type}" ."</b><br/>";
 						}
 					}	// if (!$found)
 				}	// foreach ($paths as $path)
 			}	// else
 		}
 
-  return $new_files;
+		return $new_files;
 	}
 
 	//--------------------------------------------------------------------
