@@ -79,8 +79,34 @@ class Subnav extends Base_Controller {
 				// Grab our module config array, if any.
 				$mod_config = module_config($module);
 				
-				$display_name = isset($mod_config['name']) ? $mod_config['name'] : $module;
-				$title = isset($mod_config['description']) ? $mod_config['description'] : $module;
+				$display_name = $module;
+                                if(isset($mod_config['name']))
+                                {
+                                    if(is_array($mod_config['name']))
+                                    {
+                                        if(isset($mod_config['name'][$this->config->item('language')]))
+                                            $display_name = $mod_config['name'][$this->config->item('language')];
+                                        else if(isset($mod_config['name'][$this->config->item('english')]))
+                                                 $display_name = $mod_config['name'][$this->config->item('english')];
+                                    }
+                                    else
+                                    {
+                                        $display_name = $mod_config['name'];
+                                    }
+                                }
+				$title = $module;
+                                //isset($mod_config['description']) ? $mod_config['description']
+                                if(isset($mod_config['description']))
+                                {
+                                    if(is_array($mod_config['description']))
+                                    {
+                                        if(isset ($mod_config['description'][$this->config->item('language')]))
+                                            $title = $mod_config['description'][$this->config->item('language')];
+                                        else if(isset ($mod_config['description'][$this->config->item('english')]))
+                                            $title = $mod_config['description'][$this->config->item('english')];
+                                        
+                                    }
+                                }
 				
 				$menu_topic = isset($mod_config['menu_topic'][$context]) ? $mod_config['menu_topic'][$context] : $display_name;
 				
