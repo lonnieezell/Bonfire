@@ -103,7 +103,7 @@
 			<tr>
 				<td><?php echo $config['name'] ?></td>
 				<td><?php echo isset($config['version']) ? $config['version'] : '---'; ?></td>
-				<td><?php echo isset($config['description']) ? $config['description'] : '---'; ?></td>
+				<td><?php echo $config['description']; ?></td>
 				<td><?php echo isset($config['author']) ? $config['author'] : '---'; ?></td>
 			</tr>
 		<?php endforeach; ?>
