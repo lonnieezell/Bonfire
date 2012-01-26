@@ -351,8 +351,8 @@ class BF_Model extends CI_Model {
 		{
 			$data[$this->modified_field] = $this->set_date();
 		}
-	
-		$this->db->where($this->key, $id);
+		if($id)
+			$this->db->where($this->key, $id);
 		if ($this->db->update($this->table, $data))
 		{
 			return true;
@@ -456,7 +456,8 @@ class BF_Model extends CI_Model {
 	
 		if ($this->soft_deletes === TRUE)
 		{	
-			$this->db->where($this->key, $id);
+			if($id)
+				$this->db->where($this->key, $id);
 			$result = $this->db->update($this->table, array('deleted' => 1));
 		} 
 		else 
@@ -643,7 +644,8 @@ class BF_Model extends CI_Model {
 		}
 		
 		$this->db->select($field);
-		$this->db->where($this->key, $id);
+		if($id)
+			$this->db->where($this->key, $id);
 		$query = $this->db->get($this->table);
 		
 		if ($query && $query->num_rows() > 0)
