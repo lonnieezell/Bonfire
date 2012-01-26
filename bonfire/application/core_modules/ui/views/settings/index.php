@@ -8,11 +8,15 @@
 	
 	<div>
 		<p><?php echo lang('ui_keyboard_shortcuts') ?></p>
+		<?php if (isset($current) && is_array($current)): ?>
 		<ul>
-		<?php foreach ($current as $name => $detail): ?>
+			<?php foreach ($current as $name => $detail): ?>
 			<li><?php echo $name;?>: <?php echo $detail['description'];?></li>
-		<?php endforeach?>
+			<?php endforeach?>
 		</ul>
+		<?php else: ?>
+			<?php echo lang('ui_no_shortcuts');?>
+		<?php endif;?>
 		<br/>
 		<input type="button" name="add_shortcut" id="add_shortcut" value="<?php echo lang('ui_add_shortcut') ?>" class="button"/>
 		<ul id="shortcut_keys" class="clean">
