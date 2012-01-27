@@ -79,19 +79,23 @@ class Subnav extends Base_Controller {
 				// Grab our module config array, if any.
 				$mod_config = module_config($module);
 				
-				$display_name = $module;
+				$display_name = $display_name_eng = $module;
+				
 				if(isset($mod_config['name']))
 				{
 					if(is_array($mod_config['name']))
 					{
 						if(isset($mod_config['name'][$this->config->item('language')]))
+						{
 							$display_name = $mod_config['name'][$this->config->item('language')];
+							$display_name_eng = $mod_config['name']['english'];
+						}
 						else if(isset($mod_config['name'][$this->config->item('english')]))
-							$display_name = $mod_config['name'][$this->config->item('english')];
+							$display_name_eng = $display_name = $mod_config['name']['english'];
 					}
 					else
 					{
-						$display_name = $mod_config['name'];
+						$display_name_eng = $display_name = $mod_config['name'];
 					}
 				}
 				$title = $module;
@@ -106,18 +110,24 @@ class Subnav extends Base_Controller {
 					}
 				}
 				
-				$menu_topic = isset($mod_config['menu_topic'][$context]) ? $mod_config['menu_topic'][$context] : $display_name;
-				
+				$menu_topic_eng = $menu_topic = isset($mod_config['menu_topic'][$context]) ? $mod_config['menu_topic'][$context] : $display_name_eng;
+				if(isset($mod_config['menu_topic'][$context . '-' .$this->config->item('language')]))
+				{
+					$menu_topic = $mod_config['menu_topic'][$context . '-' .$this->config->item('language')];
+					$menu_topic_eng = $mod_config['menu_topic'][$context];
+				}
 				// Drop-down menus?
 				if (isset($mod_config['menus']) && isset($mod_config['menus'][$context]))
 				{ 
 					$menu_view = $mod_config['menus'][$context];
+					if(isset($mod_config['menus'][$context. '-' .$this->config->item('language')]))
+						$menu_view = $mod_config['menus'][$context. '-' .$this->config->item('language')];
 				} else
 				{
 					$menu_view = '';
 				}
 				
-				$this->menu[$menu_topic][$module] = array(
+				$this->menu[$menu_topic_eng][$module] = array(
 						'title'			=> $title,
 						'display_name'	=> $display_name,
 						'menu_view'		=> $menu_view,
@@ -156,14 +166,18 @@ class Subnav extends Base_Controller {
 			if (count($topic) > 1)
 			{
 				$class = '';
-			
-				$list .= '<li><span{class}>'. ucwords($topic_name) .'</span>';
+				$topic_label = $topic_name;
+				$list .= '<li><span{class}>{topic}</span>';
 				$list .= '<ul>';
 				
 				foreach ($topic as $module => $vals)
-				{ 	
+				{
+					if($vals['menu_topic'] != $topic_name)
+					{
+						$topic_label = $vals['menu_topic'];
+					}
 					$class = $module == $this->uri->segment(3) ? ' class="current"' : '';
-				
+					
 					// If it has a sub-menu, echo out that menu only...
 					if (isset($vals['menu_view']) && !empty($vals['menu_view']))
 					{ 
@@ -183,7 +197,7 @@ class Subnav extends Base_Controller {
 						$list .= $this->build_item($module, $vals['title'], $vals['display_name'], $context, $vals['menu_view']);
 					}
 				}
-					
+				$list = str_replace('{topic}', $topic_label, $list);	
 				$list .= '</ul></li>';
 			}
 			else
