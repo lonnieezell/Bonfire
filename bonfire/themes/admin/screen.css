@@ -198,7 +198,7 @@ label.required {
 input[type=text],
 input[type=email],
 input[type=password],
-textarea {
+textarea, select {
 	width: 60%;
 	max-width: 35em;
 	padding: 3px 8px;
@@ -220,7 +220,7 @@ select.multiple-select {
 	margin-top: -3px;
 }
 
-input.medium { width: 45%; }
+input.medium, select.medium { width: 45%; }
 input.tiny { width: 3em !important; }
 fieldset {
 	margin-top: 40px;

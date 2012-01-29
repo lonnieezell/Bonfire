@@ -46,9 +46,21 @@ class Settings extends Admin_Controller {
 
 	public function index() 
 	{
-		if ($this->input->post('submit'))
+		if ($this->input->post('add_shortcut'))
 		{
-			if ($this->save_settings())
+			if ($this->add())
+			{
+				Template::set_message('Your settings were successfully saved.', 'success');
+				redirect(uri_string());
+			}
+			else 
+			{
+				Template::set_message('There was an error saving your settings.', 'error');
+			}
+		}
+		elseif ($this->input->post('remove_action'))
+		{
+			if ($this->remove())
 			{
 				Template::set_message('Your settings were successfully saved.', 'success');
 				redirect(uri_string());
@@ -70,53 +82,104 @@ class Settings extends Admin_Controller {
 	
 	//--------------------------------------------------------------------
 	
+	// --------------------------------------------------------------------
+	
+	/*
+		Method: add()
+				
+		Parameter:
+			$role_perm	- A CSV string of the role and the permission to modify	
+			$action		- boolean ()True = Insert, False = Delete)
+													
+		Return:
+			string result
+	*/
+	
+	public function add()
+	{
+
+		$this->form_validation->set_rules('action1', lang('ui_actions'), 'required|xss_clean');
+		$this->form_validation->set_rules('shortcut1', lang('ui_shortcuts'), 'required|callback_validate_shortcuts|xss_clean');
+		
+		if ($this->form_validation->run() === false)
+		{
+			return false;
+		}
+
+		$action   = $this->input->post('action1');
+		$shortcut = $this->input->post('shortcut1');
+	
+		// Read our current settings from the application config
+		$available_actions = config_item('ui.current_shortcuts');
+		$current_settings = unserialize($this->settings_lib->item('ui.shortcut_keys'));
+
+		if (array_key_exists($action, $available_actions))
+		{
+			if (!array_key_exists($action, $current_settings)) {
+				$current_settings[$action] = $shortcut;
+
+				return $this->save_settings($current_settings);
+			}
+		}
+		return false;
+	}
+	
+	//--------------------------------------------------------------------
+
+	
 	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 	
-	private function save_settings() 
+	public function remove() 
 	{
-		$this->form_validation->set_rules('actions', lang('ui_actions'), 'required|is_arrsy');
-		$this->form_validation->set_rules('shortcuts', lang('ui_shortcuts'), 'required|is_arrsy');
+		$this->form_validation->set_rules('remove_action', lang('ui_actions'), 'required|xss_clean');
 		
 		if ($this->form_validation->run() === false)
 		{
 			return false;
 		}
 		
-		$actions   = $this->input->post('actions');
-		$shortcuts = $this->input->post('shortcuts');
-		
-		$setting_array = array();
-		$data = array();
-		if (count($actions) == count($shortcuts))
-		{
-			foreach ($actions as $key => $name)
-			{
-				if (!empty($shortcuts[$key]))
-				{
-					$setting_array[$name] = $shortcuts[$key];
-				}
-			}
-		}
+		$action   = $this->input->post('remove_action');
 
-		//destroy the saved update message in case they changed update preferences.
-		if ($this->cache->get('update_message'))
-		{
-			$this->cache->delete('update_message');
+		// Read our current settings from the application config
+		$current_settings = unserialize($this->settings_lib->item('ui.shortcut_keys'));
+
+		if (array_key_exists($action, $current_settings)) {
+			unset($current_settings[$action]);
+
+			return $this->save_settings($current_settings);
 		}
-		
-		// save the settings to the DB
-		$updated = $this->settings_lib->set('ui.shortcut_keys', serialize($setting_array));
+		return false;
+	}
+
+	//--------------------------------------------------------------------
+	
+	private function save_settings($settings)
+	{
+		$updated = $this->settings_lib->set('ui.shortcut_keys', serialize($settings));
 
 		// Log the activity
 		$this->activity_model->log_activity($this->auth->user_id(), lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'ui');
 
 		return $updated;
 	}
-	
+
 	//--------------------------------------------------------------------
 	
-	
+	public function validate_shortcuts()
+	{
+		// Make sure that the shortcuts don't have spaces
+		
+		$shortcut = $this->input->post('shortcut1');
+		if (stristr($shortcut, " ") !== FALSE)
+		{
+			$this->form_validation->set_message('validate_shortcuts', lang('ui_shortcut_error'));
+			return FALSE;
+		}
+
+		return TRUE;
+
+	}
 
 }

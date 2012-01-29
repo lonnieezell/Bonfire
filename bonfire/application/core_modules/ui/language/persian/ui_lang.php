@@ -31,3 +31,8 @@ $lang['ui_actions']				= 'عمليات';
 
 $lang['ui_shortcut']			= 'کليد ميانبر';
 $lang['ui_shortcuts']			= 'کليد هاي ميانبر';
+
+$lang['ui_shortcut_error']		= 'Spaces are not allowed in the shortcut keys';
+$lang['ui_shortcut_error_exists']		= 'Shortcut already exists';
+$lang['ui_shortcut_error_unavailable']	= 'Action is unavailable';
+$lang['ui_shortcut_error']				= 'Spaces are not allowed in the shortcut keys';
