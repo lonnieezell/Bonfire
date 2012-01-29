@@ -52,4 +52,4 @@ The Bonfire Team is made up from developers around the world interested in makin
 - [Nuno Costa](https://github.com/daK76)
 - [Ben Evans](https://github.com/bencevans)
 - [Icehawg](https://github.com/icehawg)
-
+- [Shawn Crigger](https://github.com/svizion)
