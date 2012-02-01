@@ -1,6 +1,6 @@
 Topic: Changelog
 
-Version 0.5-RC1 (Unreleased)
+Version 0.5
 
 Additions:
 - Edit Profile for the front end user - issue #197
