@@ -164,7 +164,7 @@ class Template {
 		self::$parse_views		= self::$ci->config->item('template.parse_views');
 		
 		// Store our orig view path, so we can reset it
-		self::$orig_view_path = self::$ci->load->_ci_view_path;
+		//self::$orig_view_path = self::$ci->load->_ci_view_path;
 		
 		log_message('debug', 'Template library loaded');
 	}
@@ -216,7 +216,7 @@ class Template {
 		// Time to render the layout
 		//
 		self::load_view($layout, self::$data, $controller, true, $output);
-		
+
 		if (empty($output)) { show_error('Unable to find theme layout: '. $layout); }
 		
 		Events::trigger('after_layout_render', $output);
@@ -225,7 +225,7 @@ class Template {
 		$OUT->set_output($output); 
 		
 		// Reset the original view path
-		self::$ci->load->_ci_view_path = self::$orig_view_path;
+		//self::$ci->load->_ci_view_path = self::$orig_view_path;
 	}
 	
 	//--------------------------------------------------------------------
@@ -794,7 +794,7 @@ class Template {
 			// if $output is empty, no view was overriden, so go for the default
 			if (empty($output))
 			{	
-				self::$ci->load->_ci_view_path = self::$orig_view_path;
+				//self::$ci->load->_ci_view_path = self::$orig_view_path;
 		
 				if (self::$parse_views === true)
 				{
@@ -808,7 +808,7 @@ class Template {
 		}
 		
 		// Put our ci view path back to normal
-		self::$ci->load->_ci_view_path = self::$orig_view_path;
+		//self::$ci->load->_ci_view_path = self::$orig_view_path;
 		unset($theme, $orig_view_path);
 	}
 	
@@ -841,6 +841,11 @@ class Template {
 		$output = '';		// Stores the final output
 		$view_path = '';	// Used to store the location of the file.
 		
+		if (!empty($data))
+		{
+			$data = (array)$data;
+		}
+		
 		// If there are multiple theme locations, we need to search through all of them.
 		foreach (self::$theme_paths as $path)
 		{
@@ -852,7 +857,7 @@ class Template {
 			if (!empty(self::$active_theme) && is_file(self::$site_path . $path .'/'. self::$active_theme . $view .'.php'))
 			{
 				if (self::$debug) { echo 'Found <b>'. $view .'</b> in Active Theme.<br/>'; }
-				$view_path = self::$site_path . $path .'/'. self::$active_theme .'/';
+				$view_path = self::$site_path . $path .'/'. self::$active_theme;
 			}
 			
 			/*
@@ -870,9 +875,11 @@ class Template {
 		// If the view was found, it's path is stored in the $view_path var. So parse or render it
 		// based on user settings.
 		if (!empty($view_path))
-		{
+		{	
+			$view_path = str_replace('//', '/', $view_path);
+		
 			// Set CI's view path to point to the right location.
-			self::$ci->load->_ci_view_path = $view_path;
+			//self::$ci->load->_ci_view_path = $view_path;
 			
 			if (self::$debug) { echo '[Find File] Rendering file at: '. $view_path . $view .'.php<br/><br/>'; }
 			
@@ -881,12 +888,12 @@ class Template {
 			{
 				$output = self::$ci->parser->parse($view, $data, true);
 			} else 
-			{
-				$output = self::$ci->load->_ci_load(array('_ci_view' => $view, '_ci_vars' => self::$ci->load->_ci_object_to_array($data), '_ci_return' => true));
+			{ 
+				$output = self::$ci->load->_ci_load(array('_ci_path' => $view_path . $view .'.php', '_ci_vars' => $data, '_ci_return' => true));
 			}
 			
 			// Put CI's view path back to the original
-			self::$ci->load->_ci_view_path = self::$orig_view_path;
+			//self::$ci->load->_ci_view_path = self::$orig_view_path;
 		}
 		
 		return $output;
@@ -906,18 +913,41 @@ class Template {
 	A shorthand method that allows views (from the current/default themes)
 	to be included in any other view.
 	
+	This function also allows for a very simple form of mobile templates. If being
+	viewed from a mobile site, it will attempt to load a file whose name is prefixed
+	with 'mobile_'. If that file is not found it will load the regular view.
+	
+	Examples:
+		Rendering a view named 'index', the mobile version would be 'mobile_index'.
+	
 	Parameters:
 		$view	- the name of the view to render.
 		$data	- an array of data to pass to the view.
+		$ignore_mobile	- If TRUE, will not change the view name based on mobile viewing.
+						  If FALSE, will attempt to load a file prefixed with 'mobile_'
 */
-function theme_view($view=null, $data=null)
+function theme_view($view=null, $data=null, $ignore_mobile=false)
 {
 	if (empty($view)) return '';
 	
 	$ci =& get_instance();
 	
 	$output ='';
-	Template::load_view($view, $data, null, true, $output);
+	
+	// If we're allowed, try to load the mobile version 
+	// of the file.
+	if (!$ignore_mobile && $ci->agent->is_mobile())
+	{
+		Template::load_view('mobile_'. $view, $data, null, true, $output);
+	}
+	
+	// If output is empty, then either no mobile file was found
+	// or we weren't looking for one to begin with.
+	if (empty($output))
+	{
+		Template::load_view($view, $data, null, true, $output);
+	}
+	
 	return $output;
 }
 
@@ -931,17 +961,18 @@ function theme_view($view=null, $data=null)
 	
 	Parameter:
 		$item	- The name of the class to check against.
+		$class_only	- If TRUE, will only return 'active'. If false, will return 'class="active"'.
 		
 	Return:
 		Either <b>class="current"</b> or an empty string.
 */
-function check_class($item='')
+function check_class($item='', $class_only=false)
 {
 	$ci =& get_instance();
 
 	if (strtolower($ci->router->fetch_class()) == strtolower($item))
 	{
-		return 'class="current"';
+		return $class_only ? 'active' : 'class="active"';
 	}
 	
 	return '';
@@ -977,7 +1008,7 @@ function check_method($item)
 
 	if (in_array($ci->router->fetch_method(), $items))
 	{
-		return 'class="current"';
+		return 'class="active"';
 	}
 
 	return '';
