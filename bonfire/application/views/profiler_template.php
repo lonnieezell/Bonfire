@@ -1,7 +1,9 @@
 <style type="text/css">
-	#debug { clear: both; position: fixed;  bottom: 0; left: 0; right: 0; z-index: 1000; opacity: 0.85; }
+	#debug { clear: both; position: fixed;  bottom: 0; left: 0; right: 0; z-index: 1000; opacity: 0.85; max-height: 75%; }
 	#codeigniter-profiler { position: relative; clear: both; background: #101010; padding: 0 5px; font-family: Helvetica, sans-serif; font-size: 10px !important; line-height: 12px; }
-	#debug:hover { opacity: 1.0; }	
+	#codeigniter-profiler table { font-size: 11px; }
+	#debug:hover { opacity: 1.0; }
+	#debug pre { background: transparent; margin: 0; padding: 0; }
 	
 	.ci-profiler-box { padding: 10px; margin: 0 0 10px 0; max-height: 400px; overflow: auto; color: #fff; font-family: Monaco, 'Lucida Console', 'Courier New', monospace; font-size: 11px !important; }
 	.ci-profiler-box h2 { font-family: Helvetica, sans-serif; font-weight: normal; }
@@ -99,8 +101,8 @@ var ci_profiler_bar = {
 };
 
 // Replace any existing profile data
-if (this['head']) { // IE 7 check
-	head.ready(function(){
+if (jQuery) { 
+	$(document).ready(function(){
 		var html = $('#codeigniter-profiler').clone();
 		$('#codeigniter-profiler').remove();
 		$('#debug').hide().empty().append(html).fadeIn('fast');

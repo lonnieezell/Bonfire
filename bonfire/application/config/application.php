@@ -22,9 +22,9 @@ $config['auth.use_extended_profile'] = 0;
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 */
- 
-$config['site.title'] = "Bonfire";
-$config['site.system_email'] = "";
+
+$config['site.title'] = "Bonfire - Jumpstart Your CodeIgniter Applications";
+$config['site.system_email'] = "lonnieje@gmail.com";
 $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
  
@@ -75,6 +75,18 @@ $config['auth.use_own_names'] = 0;
  
 // Should we do a custom login redirect, or just go to '/'?
 $config['auth.do_login_redirect'] = 1;
+
+// Minimum password length
+$config['auth.password_min_length'] = 8;
+
+// Should password force numbers?
+$config['auth.password_force_numbers'] = true;
+
+// Should password force symbols?
+$config['auth.password_force_symbols'] = true;
+
+// Should password force mixed case?
+$config['auth.password_force_mixed_case'] = true;
 
  
 //--------------------------------------------------------------------
@@ -213,7 +225,8 @@ $config['template.default_theme'] = 'default/';
 |
 */
 $config['template.message_template'] =<<<EOD
-	<div class="notification {type} fade-me">
+	<div class="alert alert-{type}">
+		<a class="close" href="#">x</a>
 		<div>{message}</div>
 	</div>
 EOD;
@@ -290,14 +303,3 @@ $config['assets.css_minify'] = FALSE;
 	be encoded based on the HTTP_ACCEPT_ENCODING value.
 */
 $config['assets.encode'] = FALSE;
-
-/*
-	Array containing the currently available shortcuts - these are output in the /ui/views/shortcut_keys file
-*/
-$config['ui.current_shortcuts'] = array(
-	'form_save'      => array('description' => 'Save any form in the admin area.', 'action' => '$("input[name=submit]").click();'), 
-	'goto_content'   => array('description' => 'Jump to the Content context.', 'action' => "document.location='/" . SITE_AREA . "/content';"), 
-	'goto_reports'   => array('description' => 'Jump to the Reports context.', 'action' => "document.location='/" . SITE_AREA . "/reports';"),
-	'goto_settings'  => array('description' => 'Jump to the Settings context.', 'action' => "document.location='/" . SITE_AREA . "/settings';"), 
-	'goto_developer' => array('description' => 'Jump to the Developer context.', 'action' => "document.location='/" . SITE_AREA . "/developer';"),
-);

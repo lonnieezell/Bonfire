@@ -8,7 +8,7 @@
 
 <h2>System Information</h2>
 
-	<table cellspacing="0">
+	<table class="table table-striped">
 		<tbody>
 			<tr>
 				<td>CodeIgniter Version</td>
@@ -89,7 +89,7 @@
 <h2>Installed Modules</h2>
 
 <?php if (isset($modules) && is_array($modules) && count($modules)) : ?>
-	<table>
+	<table class="table table-striped">
 		<thead>
 			<tr>
 				<th>Name</th>
@@ -103,7 +103,7 @@
 			<tr>
 				<td><?php echo $config['name'] ?></td>
 				<td><?php echo isset($config['version']) ? $config['version'] : '---'; ?></td>
-				<td><?php echo $config['description']; ?></td>
+				<td><?php echo isset($config['description']) ? $config['description'] : '---'; ?></td>
 				<td><?php echo isset($config['author']) ? $config['author'] : '---'; ?></td>
 			</tr>
 		<?php endforeach; ?>

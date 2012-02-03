@@ -33,6 +33,8 @@ $lang['bf_online']				= 'Online';
 $lang['bf_offline']				= 'Offline';
 $lang['bf_top_number']			= 'Items <em>per</em> page:';
 $lang['bf_top_number_help']		= 'When viewing reports, how many items should be listed at a time?';
+$lang['bf_home']				= 'Home';
+$lang['bf_site_information']	= 'Site Information';
 
 $lang['bf_security']			= 'Security';
 $lang['bf_login_type']			= 'Login Type';
@@ -50,6 +52,7 @@ $lang['bf_days']				= 'Days';
 $lang['bf_username']			= 'Username';
 $lang['bf_password']			= 'Password';
 $lang['bf_password_confirm']	= 'Password (again)';
+$lang['bf_display_name']		= 'Display Name';
 
 $lang['bf_home_page']			= 'Home Page';
 $lang['bf_pages']				= 'Pages';
@@ -70,6 +73,10 @@ $lang['bf_action_restore']		= 'Restore';
 $lang['bf_action_show']			= 'Show';
 $lang['bf_action_login']		= 'Login';
 $lang['bf_actions']				= 'Actions';
+$lang['bf_clear']				= 'Clear';
+$lang['bf_action_list']			= 'List';
+$lang['bf_action_create']		= 'Create';
+$lang['bf_action_ban']			= 'Ban';
 
 $lang['bf_do_check']			= 'Check for updates?';
 $lang['bf_do_check_edge']		= 'Must be enabled to see bleeding edge updates as well.';
@@ -83,6 +90,7 @@ $lang['bf_ext_profile_info']	= 'Check "Extended Profiles" to have extra profile 
 $lang['bf_yes']					= 'Yes';
 $lang['bf_no']					= 'No';
 $lang['bf_none']				= 'None';
+$lang['bf_id']					= 'ID';
 
 $lang['bf_or']					= 'or';
 $lang['bf_size']				= 'Size';
@@ -110,8 +118,6 @@ $lang['bf_required_note']		= 'Required fields are in <b>bold</b>.';
 $lang['bf_show_profiler']		= 'Show Admin Profiler?';
 $lang['bf_show_front_profiler']	= 'Show Front End Profiler?';
 
-$lang['bf_cache_not_writable']  = 'The application cache folder is not writable';
-
 //--------------------------------------------------------------------
 // MY_Model
 //--------------------------------------------------------------------
@@ -137,12 +143,3 @@ $lang['bf_context_developer']	= 'Developer';
 // Activities
 //--------------------------------------------------------------------
 $lang['bf_act_settings_saved']	= 'App settings saved from';
-$lang['bf_unauthorized_attempt']= 'unsuccessfully attempted to access a page which required the following permission "%s" from ';
-
-$lang['bf_keyboard_shortcuts']		= 'Available keyboard shortcuts:';
-
-//--------------------------------------------------------------------
-// Common
-//--------------------------------------------------------------------
-$lang['bf_question_mark']	= '?';
-$lang['bf_language_direction']	= 'ltr';

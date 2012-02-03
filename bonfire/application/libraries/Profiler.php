@@ -56,7 +56,6 @@ class CI_Profiler {
 	{
 		$this->CI =& get_instance();
 		$this->CI->load->language('profiler');
-
 		// default all sections to display
 		foreach ($this->_available_sections as $section)
 		{
@@ -202,8 +201,8 @@ class CI_Profiler {
 					$time = number_format($db->query_times[$key], 4);
 					$query = $duplicate ? '<span class="ci-profiler-duplicate">'. $val .'</span>' : $val;
 					
-					// Explain the query, but make sure it isn't a subquery (breaks profiler)
-					$explain = (strpos($val, 'SELECT') !== false && strpos($val, '=(SELECT') === false) ? $this->CI->db->query('EXPLAIN '. $val) : null;
+					// Explain the query
+					$explain = strpos($val, 'SELECT') !== false ? $this->CI->db->query('EXPLAIN '. $val) : null;
 					if (!is_null($explain))
 					{
 						$query .= $this->build_sql_explain($explain->row(), $time);
@@ -537,17 +536,17 @@ class CI_Profiler {
 		else
 		{
 			// Load the view from system/views
-			$orig_view_path = $this->CI->load->_ci_view_path;
-			$this->CI->load->_ci_view_path = BASEPATH .'views/';
+			//$orig_view_path = $this->CI->load->_ci_view_path;
+			//$this->CI->load->_ci_view_path = BASEPATH .'views/';
 			//echo $this->CI->load->_ci_view_path;
 
 			$output = $this->CI->load->_ci_load(array(
-					'_ci_view' 		=> 'profiler_template', 
+					'_ci_view' 		=> BASEPATH .'views/profiler_template', 
 					'_ci_vars' 		=> array('sections' => $this->_sections), 
 					'_ci_return'	=> true,
 			));
 		
-			$this->CI->load->_ci_view_path = $orig_view_path;
+			//$this->CI->load->_ci_view_path = $orig_view_path;
 		}
 		
 		return $output;

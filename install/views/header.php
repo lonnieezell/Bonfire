@@ -7,7 +7,7 @@
 	
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url('views/screen.css'); ?>" />
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url() .'views/screen.css'; ?>" />
 </head>
 <body>
 	

@@ -195,7 +195,7 @@ function module_list($exclude_core=false)
 		true/false
  */
 function module_controller_exists($controller=null, $module=null)
-{
+{	
 	if (empty($controller) || empty($module))
 	{
 		return false;
@@ -238,7 +238,7 @@ function module_file_path($module=null, $folder=null, $file=null)
 	foreach (module_folders() as $module_folder)
 	{
 		$test_file = $module_folder . $module .'/'. $folder .'/'. $file;
-	
+
 		if (is_file($test_file))
 		{
 			return $test_file;
@@ -410,83 +410,6 @@ function module_config($module_name=null, $return_full=false)
 //--------------------------------------------------------------------
 
 
-//--------------------------------------------------------------------
-// !CONTEXT HELPERS
-//--------------------------------------------------------------------
-
-/*
-	Function: context_nav()
-	
-	Builds the navigation used in the admin theme for the main contexts
-	list. 
-	
-	Parameters:
-		$mode	- The type of toolbar buttons to create. 
-					Valid options are 'icon', 'text', 'both'
-	
-	Returns:
-		A string with the toolbar items required for the context nav.
-*/
-function context_nav($mode='icon')
-{ 
-	$contexts = config_item('contexts');
-	
-	if (empty($contexts) || !is_array($contexts) || !count($contexts))
-	{
-		die(lang('bf_no_contexts'));
-	}
-	
-	// Ensure settings context exists
-	if (!in_array('settings', $contexts))
-	{
-		array_push($contexts, 'settings');
-	}
-	
-	// Ensure developer context exists
-	if (!in_array('developer', $contexts))
-	{
-		array_push($contexts, 'developer');
-	}
-
-	$nav = '';
-	
-	/*
-		Build out our navigation.
-	*/
-	foreach ($contexts as $context)
-	{	
-		if (has_permission('Site.'. ucfirst($context) .'.View'))
-		{	
-			$url = site_url(SITE_AREA .'/'.$context);
-			$class = check_class($context);
-			$id = 'tb_'. $context;
-			$title = lang('bf_context_'. $context);
-			
-			
-			
-			$nav .= "<a href='{$url}' {$class} id='{$id}' title='{$title}'>";
-			
-			// Image
-			if ($mode=='icon' || $mode=='both')
-			{
-				$nav .= "<img src='". Template::theme_url('images/context_'. $context .'.png') ."' alt='{$title}' />"; 
-			}
-			
-			// Display String
-			if ($mode=='text' || $mode=='both')
-			{
-				$nav .= $title;
-			}
-			
-			$nav .= "</a>";
-		}
-	}
-	
-	return $nav;
-}
-
-//--------------------------------------------------------------------
-
 /*
 	Function: dump()
 	
@@ -525,3 +448,88 @@ function dump()
 }
 
 //--------------------------------------------------------------------
+
+/*
+	Function: e()
+
+	A convenience function to make sure your output is safe to display. 
+	Helps to defeat XSS attacks by running the text through htmlentities().
+	
+	Should be used anywhere you are displaying user-submitted text.
+*/
+function e($str)
+{
+	echo htmlentities($str);
+}
+
+//--------------------------------------------------------------------
+
+/*
+	Function: array_implode()
+	
+	Implode an array with the key and value pair giving a glue, 
+	a separator between pairs and the array to implode.
+	
+	Example: 
+		// Encode Query Strings
+		$query = url_encode( array_implode( '=', '&', $array ) );
+		
+	Parameters:
+		$glue		- The glue between key and value.
+		$separator	- Separator between pairs.
+		$array		- The array to implode.
+		
+	Returns:
+		A string with the combined elements.
+*/
+function array_implode($glue, $separator, $array)
+{
+	if ( ! is_array( $array ) ) 
+	{
+		return $array;
+	}
+	
+	$string = array();
+	
+	foreach ( $array as $key => $val ) 
+	{
+	    if ( is_array( $val ) )
+	    {
+	        $val = implode( ',', $val );
+	    }
+	    
+	    $string[] = "{$key}{$glue}{$val}";
+	}
+	
+	return implode( $separator, $string );
+}
+
+//--------------------------------------------------------------------
+
+function obj_value($obj, $key, $type='text', $value=0)
+{
+	if (isset($obj->$key))
+	{
+		switch ($type)
+		{
+			case 'checkbox':
+			case 'radio':
+				if ($obj->$key == $value)
+				{
+					return 'checked="checked"';
+				}
+				break;
+			case 'select':
+				if ($obj->$key == $value)
+				{
+					return 'selected="selected"';
+				}
+				break;
+			case 'text':
+			default:
+				return $obj->$key;
+		}
+	}
+	
+	return null;
+}

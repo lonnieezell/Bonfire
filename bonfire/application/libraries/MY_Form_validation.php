@@ -2,6 +2,10 @@
 
 class MY_Form_validation extends CI_Form_validation {
     
+    public $CI;
+    
+    //--------------------------------------------------------------------
+    
     /**
      * MY_Form_validation::__construct()
      * 
@@ -111,7 +115,91 @@ class MY_Form_validation extends CI_Form_validation {
 	}
 
 	// --------------------------------------------------------------------
+	
+	public function has_error($field=null) 
+	{
+		if (empty($field))
+		{
+			return false;
+		}
+		
+		return !empty($this->_field_data[$field]['error']) ? true : false;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	public function valid_password($str) 
+	{
+		$min_length	= config_item('auth.password_min_length');
+		$use_nums	= config_item('auth.password_force_numbers');
+		$use_syms	= config_item('auth.password_force_symbols');
+		$use_mixed	= config_item('auth.password_force_mixed_case');
+
+		// Check length
+		if (strlen($str) < $min_length)
+		{
+			$this->CI->form_validation->set_message('valid_password', 'The %s field must be at least '. $min_length .' characters long');
+			return false;
+		}
+		
+		// Check numbers
+		if ($use_nums)
+		{
+			if (0 === preg_match('/[0-9]/', $str))
+			{
+				$this->CI->form_validation->set_message('valid_password', '%s must contain at least 1 number.');
+				return false;
+			}
+		}
+		
+		// Check Symbols
+		if ($use_syms)
+		{
+			if (0 === preg_match('/[!@#$%^&*()._]/', $str))
+			{
+				$this->CI->form_validation->set_message('valid_password', '%s must contain at least 1 punctuation mark.');
+				return false;
+			}
+		}
+		
+		// Mixed Case?
+		if ($use_mixed)
+		{
+			if (0 === preg_match('/[A-Z]/', $str))
+			{
+				$this->CI->form_validation->set_message('valid_password', '%s must contain at least 1 uppercase characters.');
+				return false;
+			}
+			if (0 === preg_match('/[a-z]/', $str))
+			{
+				$this->CI->form_validation->set_message('valid_password', '%s must contain at least 1 lowercase characters.');
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	//--------------------------------------------------------------------
+	
 }
+
+//--------------------------------------------------------------------
+
+function form_has_error($field=null) 
+{
+	
+	if (FALSE === ($OBJ =& _get_validation_object()))
+	{
+		return false;
+	}
+	
+	$return = $OBJ->has_error($field);
+	
+	return $return;
+}
+
+//--------------------------------------------------------------------
 
 /* Author :  http://net.tutsplus.com/tutorials/php/6-codeigniter-hacks-for-the-masters/ */
 /* End of file : ./libraries/MY_Form_validation.php */
