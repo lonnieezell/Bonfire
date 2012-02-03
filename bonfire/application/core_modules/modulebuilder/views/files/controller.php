@@ -53,9 +53,12 @@ $mb_index =<<<END
 	*/
 	public function index() 
 	{
+		\$data = array();
+		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
+
 		Assets::add_js(\$this->load->view('{$controller_name}/js', null, true), 'inline');
 		
-		Template::set('records', \$this->{$module_name_lower}_model->find_all());
+		Template::set('data', \$data);
 		Template::set('toolbar_title', "Manage {$module_name}");
 		Template::render();
 	}
@@ -75,7 +78,10 @@ $mb_index_front =<<<END
 	*/
 	public function index() 
 	{
-		Template::set('records', \$this->{$module_name_lower}_model->find_all());
+		\$data = array();
+		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
+
+		Template::set('data', \$data);
 		Template::render();
 	}
 	
@@ -271,12 +277,10 @@ $body = $mb_constructor;
 
 if ($controller_name == $module_name_lower)
 {
-	$form_validation_code = '$this->load->library(\'form_validation\');
-		$this->form_validation->CI =& $this;';
-	$body = str_replace('{restrict}', $form_validation_code, $body);
+	$body = str_replace('{restrict}', '$this->load->library(\'form_validation\');', $body);
 } else
 {
-	$body = str_replace('{restrict}', '$this->auth->restrict(\''.preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.View\');', $body);
+	$body = str_replace('{restrict}', '$this->auth->restrict(\''.str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.View\');', $body);
 }
 $extras = '';
 
@@ -286,14 +290,15 @@ $textarea_included = FALSE;
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$db_field_type = set_value("db_field_type$counter");
-	$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");;
+	$field_name = $module_name_lower.'_'.set_value("view_field_name$counter");
 	$view_datepicker = '';
 	if ($db_field_type != NULL)
 	{
 		if ($db_field_type == 'DATE' AND $date_included === FALSE)
 		{
 			$extras .= '
-		Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');';
+			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
+			Assets::add_js(\'jquery-ui-1.8.8.min.js\');';
 			$date_included = TRUE;
 		}
 		elseif ($db_field_type == 'DATETIME' && $datetime_included === FALSE)
@@ -302,11 +307,12 @@ for($counter=1; $field_total >= $counter; $counter++)
 			if ($date_included === FALSE)
 			{
 				$extras .= '
-		Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');';
+				Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
+				Assets::add_js(\'jquery-ui-1.8.8.min.js\');';
 			}
 			$extras .= '
-		Assets::add_css(\'jquery-ui-timepicker.css\');
-		Assets::add_js(\'jquery-ui-timepicker-addon.js\');';
+			Assets::add_css(\'jquery-ui-timepicker.css\');
+			Assets::add_js(\'jquery-ui-timepicker-addon.js\');';
 			$date_included = TRUE;
 			$datetime_included = TRUE;
 		}
@@ -315,12 +321,12 @@ for($counter=1; $field_total >= $counter; $counter++)
 			// if a date field hasn't been included already then add in the jquery ui files
 			if ($textarea_editor == 'ckeditor') {
 				$extras .= '
-		Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
+				Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
 			}
 			elseif ($textarea_editor == 'xinha') {
 				$extras .= '
-		Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
-		Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
+				Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
+				Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
 			}
 			$textarea_included = TRUE;
 		}
@@ -357,7 +363,7 @@ if ($controller_name != $module_name_lower)
 	{
 		$body .= $mb_create;
 
-		$body = str_replace('{create_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Create', $body);
+		$body = str_replace('{create_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Create', $body);
 	}
 
 	//--------------------------------------------------------------------
@@ -368,7 +374,7 @@ if ($controller_name != $module_name_lower)
 	{
 		$body .= $mb_edit;
 
-		$body = str_replace('{edit_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Edit', $body);
+		$body = str_replace('{edit_permission}', ucfirst($module_name).'.'.ucfirst($controller_name).'.Edit', $body);
 	}
 
 	//--------------------------------------------------------------------
@@ -379,7 +385,7 @@ if ($controller_name != $module_name_lower)
 	{
 		$body .= $mb_delete;
 
-		$body = str_replace('{delete_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $body);
+		$body = str_replace('{delete_permission}', str_replace(" ", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $body);
 	}
 
 	//--------------------------------------------------------------------
@@ -406,13 +412,12 @@ if ($controller_name != $module_name_lower)
 
 		// we set this variable as it will be used to place the comma after the last item to build the insert db array
 		$last_field = $counter;
-		$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
 
 		$rules .= '			
-		$this->form_validation->set_rules(\''.$field_name.'\',\''.set_value("view_field_label$counter").'\',\'';
+		$this->form_validation->set_rules(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\',\''.set_value("view_field_label$counter").'\',\'';
 		
 		$save_data_array .= '
-		$data[\''.$field_name.'\']        = $this->input->post(\''.$field_name.'\');';
+		$data[\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\']        = $this->input->post(\''.$module_name_lower.'_'.set_value("view_field_name$counter").'\');';
 
 		// set a friendly variable name
 		$validation_rules = $this->input->post('validation_rules'.$counter);
@@ -433,8 +438,7 @@ if ($controller_name != $module_name_lower)
 				if ($value == 'unique')	{		
 					$prefix = $this->db->dbprefix;
 					$rules .= $value.'['.$prefix.$table_name.'.'.$module_name_lower.'_'.set_value("view_field_name$counter").','.$prefix.$table_name.'.'.set_value("primary_key_field").']';
-				}
-				else {
+				} else {
 					$rules .= $value;	
 				}
 				$rule_counter++;
@@ -448,17 +452,7 @@ if ($controller_name != $module_name_lower)
 				$rules .= '|';
 			}
 
-			if (set_value("db_field_type$counter") == 'DECIMAL')	{
-				list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
-				$max = $len;
-				if (isset($decimal) && $decimal != 0) {
-					$max = $len + 1;		// Add 1 to allow for the 
-				}
-				$rules .= 'max_length['.$max.']';
-			}
-			else {
-				$rules .= 'max_length['.set_value("db_field_length_value$counter").']';
-			}
+			$rules .= 'max_length['.set_value("db_field_length_value$counter").']';
 		}
 
 		$rules .= "');";

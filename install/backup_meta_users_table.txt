@@ -1,0 +1,33 @@
+#
+# TABLE STRUCTURE FOR: bf_users
+#
+
+DROP TABLE IF EXISTS bf_users;
+
+CREATE TABLE `bf_users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `role_id` int(11) NOT NULL DEFAULT '4',
+  `first_name` varchar(20) DEFAULT NULL,
+  `last_name` varchar(20) DEFAULT NULL,
+  `email` varchar(120) NOT NULL,
+  `username` varchar(30) NOT NULL DEFAULT '',
+  `password_hash` varchar(40) NOT NULL,
+  `reset_hash` varchar(40) DEFAULT NULL,
+  `salt` varchar(7) NOT NULL,
+  `last_login` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_ip` varchar(40) NOT NULL DEFAULT '',
+  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `street_1` varchar(255) DEFAULT NULL,
+  `street_2` varchar(255) DEFAULT NULL,
+  `city` varchar(40) DEFAULT NULL,
+  `zipcode` varchar(20) DEFAULT NULL,
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `banned` tinyint(1) NOT NULL DEFAULT '0',
+  `ban_message` varchar(255) DEFAULT NULL,
+  `reset_by` int(10) DEFAULT NULL,
+  `country_iso` char(2) NOT NULL DEFAULT 'US',
+  `state_code` char(4) DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

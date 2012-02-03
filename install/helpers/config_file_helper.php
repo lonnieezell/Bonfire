@@ -167,6 +167,12 @@ function write_config($file='', $settings=null, $module='')
 		}
 	}
 	
+	// Backup the file for safety
+	$source = $config_file.EXT;	
+	$dest = $module == '' ? APPPATH . '../bonfire/application/archives/config/'.$file.EXT.'.bak' : $config_file.EXT.'.bak';
+
+	if ($empty === false) copy($source, $dest);
+	
 	// Make sure the file still has the php opening header in it...
 	if (strpos($contents, '<?php') === FALSE)
 	{
@@ -416,6 +422,19 @@ function write_db_config($settings=null)
 				$contents = str_replace($search, '$db[\'default\'][\''. $name .'\'] = '. $value .';', $contents);
 			}
 
+			// Backup the file for safety
+			$source = APPPATH . 'config/'. $env .'database'.EXT;
+			$dest_folder = APPPATH . config_item('site.backup_folder') .'config/'. $env;
+			$dest = $dest_folder .'database'.EXT.'.bak';
+			
+			// Make sure our directory exists
+			if (!is_dir($dest_folder))
+			{
+				mkdir($dest_folder, 0755, true);
+			}
+			
+			copy($source, $dest);
+			
 			// Make sure the file still has the php opening header in it...
 			if (!strpos($contents, '<?php') === FALSE)
 			{
@@ -426,7 +445,7 @@ function write_db_config($settings=null)
 			$CI->load->helper('file');;
 			
 			// Write the changes out...
-			$result = write_file(APPPATH.'../bonfire/application/config/'.$env .'database'.EXT, $contents);
+			$result = write_file(APPPATH.'config/'.$env .'database'.EXT, $contents);
 		}
 	}
 	

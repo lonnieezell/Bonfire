@@ -1,6 +1,4 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-
-
 /*
 	Copyright (c) 2011 Lonnie Ezell
 
@@ -37,8 +35,6 @@
 	Module:	Installer
 */
 class Install extends CI_Controller {
-	
-	public static $locations;
 
 	protected $errors = '';
     
@@ -57,25 +53,24 @@ class Install extends CI_Controller {
 	
 	
 	/*
-		Var: $bonfire_app_path
+		Var: $app_path
 		Boolean that says whether we should check
 		for updates.
 	*/
-	private $bonfire_app_path = '../bonfire/application/';
-	
+	private $app_path = '../bonfire/application/';
+
 	/*
 		Var: $writable_folders
 		An array of folders the installer checks to make 
 		sure they can be written to.
 	*/
 	private $writeable_folders = array(
-		'/bonfire/application/cache',
-		'/bonfire/application/logs',
-		'/bonfire/application/config',
-        '/bonfire/application/archives',
-		'/bonfire/application/db/backups',
-		'/bonfire/application/db/migrations',
-		'/assets/cache'
+		'cache',
+		'logs',
+		'config',
+        'archives',
+		'db/backups',
+		'db/migrations'
 	);
 	
 	/*
@@ -84,7 +79,7 @@ class Install extends CI_Controller {
 		installation.
 	*/
 	private $reverse_writeable_folders = array(
-		'/bonfire/application/config',
+		'config',
 	);
 	
 	/*
@@ -93,8 +88,10 @@ class Install extends CI_Controller {
 		sure they can be written to.
 	*/
 	private $writeable_files = array(
-		'/bonfire/application/config/application.php'
+		'config/application.php'
 	);
+	
+	private $vdata = array();
 
 	//--------------------------------------------------------------------
 
@@ -111,9 +108,7 @@ class Install extends CI_Controller {
 		
 		// check if the app is installed
 		$this->load->config('application');
-
-		$this->load->helper('install');
-
+        
 		$this->cURL_check();
 	}
 	
@@ -121,17 +116,15 @@ class Install extends CI_Controller {
 	
 	public function index() 
 	{ 
-		$view_data = array();
-		
 		$this->load->library('form_validation');
-		$this->form_validation->CI =& $this;
+		//$this->form_validation->CI =& $this;
 		$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('database', lang('in_database'), 'required|trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim|strip_tags|xss_clean');
 
-		$view_data['startup_errors'] = $this->startup_check();
+		$this->startup_check();
 		
 		if ($this->form_validation->run() !== false)
 		{ 
@@ -151,7 +144,6 @@ class Install extends CI_Controller {
 					'database'	=> $dbname,
 					'dbprefix'	=> strip_tags($this->input->post('db_prefix'))
 				),
-				'environment' => $environment,
 			);
 			
 			$this->session->set_userdata('db_data', $data);
@@ -168,7 +160,7 @@ class Install extends CI_Controller {
 				
 				if (!$db)
 				{
-					$view_data['message'] = message(lang('in_db_no_connect').': '. mysql_error(), 'error');
+					$this->vdata['error'] = 'Unable to connect to database: '. mysql_error();	
 				}
 				else
 				{
@@ -188,57 +180,49 @@ class Install extends CI_Controller {
 			}
 			else
 			{
-				$view_data['message'] = message(sprintf(lang('in_settings_save_error'), $environment), 'attention');
+				$this->vdata['attention'] = 'There was an error saving the settings. Please verify that your database and '.$environment.'/database config files are writeable.';	
 			}
 		}
-		
-		$view_data['content'] = $this->load->view('install/index', $view_data, TRUE);
 	
-		$this->load->view('index', $view_data);
+		$this->load->view('install/index', $this->vdata);
 	}
 	
 	//--------------------------------------------------------------------
 	
 	public function account() 
 	{
-		$view_data = array();
-		
+		$view = 'install/account';
+	
 		if ($this->input->post('submit'))
 		{
 			$this->load->library('form_validation');
-			$this->form_validation->CI =& $this;
+			//$this->form_validation->CI =& $this;
 		
-			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|strip_tags|min_length[1]|xss_clean');
-			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('password', lang('in_password'), 'required|trim|strip_tags|alpha_dash|min_length[8]|xss_clean');
-			$this->form_validation->set_rules('pass_confirm', lang('in_password_again'), 'required|trim|matches[password]');
-			$this->form_validation->set_rules('email', lang('in_email'), 'required|trim|strip_tags|valid_email|xss_clean');
+			$this->form_validation->set_rules('site_title', 'Site Title', 'required|trim|strip_tags|min_length[1]|xss_clean');
+			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('password', 'Password', 'required|trim|strip_tags|alpha_dash|min_length[8]|xss_clean');
+			$this->form_validation->set_rules('pass_confirm', 'Password (again)', 'required|trim|matches[password]');
+			$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|xss_clean');
 			
 			if ($this->form_validation->run() !== false)
 			{
 				if ($this->setup())
 				{
-					$view_data['message'] = message(lang('in_success_notification'), 'success');
-					$view_data['content'] = $this->load->view('install/success', array(), TRUE);
+					$this->vdata['success'] = 'You are good to go! Happy coding!';
+
+					$view = 'install/success';
 				}
 				else 
 				{
-					$view_data['message'] = message(lang('in_db_setup_error').': '. $this->errors, 'error');
+					$this->vdata['error']= 'There was an error setting up your database: '. $this->errors;
 				}
 			}
 		}
-		
-		if (!isset($view_data['content']))
-		{
-			$account_data = array();
-			// if $this->curl_error = 1, show warning on "account" page of setup
-			$account_data['curl_error'] = $this->curl_error;
-			
-			$view_data['content'] = $this->load->view('install/account', $account_data, TRUE);
-		}
         
+        // if $this->curl_error = 1, show warning on "account" page of setup
+        $vdata['curl_error'] = $this->curl_error;
         
-		$this->load->view('index', $view_data);
+		$this->load->view($view, $this->vdata);
 	}
 	
 	//--------------------------------------------------------------------
@@ -260,13 +244,12 @@ class Install extends CI_Controller {
 		$folder_errors = '';
 		$file_errors = '';
 		
+		
 		// Check Folders
 		foreach ($this->writeable_folders as $folder)
 		{
-			$full_folder = FCPATH . '..' . $folder;
-
-			@chmod($folder, 0777);
-			if (!is_dir($full_folder) || !is_writeable($full_folder))
+			@chmod(FCPATH . $this->app_path . $folder, 0777);
+			if (!is_writeable(FCPATH . $this->app_path . $folder))
 			{
 				$folder_errors .= "<li>$folder</li>";
 			}
@@ -274,14 +257,14 @@ class Install extends CI_Controller {
 		
 		if (!empty($folder_errors))
 		{
-			$errors = '<p>'.lang('in_writeable_directories_message').':</p><ul>' . $folder_errors .'</ul>';
+			$errors = '<p>Please ensure that the following directories are writeable, and try again:</p><ul>' . $folder_errors .'</ul>';
 		}
 		
 		// Check files
 		foreach ($this->writeable_files as $file)
 		{
-			@chmod(FCPATH . '..' . $file, 0666);
-			if (!is_writeable(FCPATH . '..' . $file))
+			@chmod(FCPATH . $this->app_path .$file, 0666);
+			if (!is_writeable(FCPATH . $this->app_path . $file))
 			{
 				$file_errors .= "<li>$file</li>";
 			}
@@ -289,13 +272,23 @@ class Install extends CI_Controller {
 		
 		if (!empty($file_errors))
 		{
-			$errors .= '<p>'.lang('in_writeable_files_message').':</p><ul>' . $file_errors .'</ul>';
+			$errors .= '<p>Please ensure that the following files are writeable, and try again:</p><ul>' . $file_errors .'</ul>';
 		}
 		
-		unset($folder_errors, $file_errors);
+		// Make it available to the template lib if there are errors
+		if (!empty($errors))
+		{
+			$this->vdata['startup_errors'] = $errors;
+		}
 		
-		return $errors;
+		unset($errors, $folder_errors, $file_errors);
 		
+		/*
+			Copies generic file versions to their appropriate spots. 
+			This provides a safe way to perform upgrades, as well
+			as simplifying what will need to be modified when some
+			sweeping changes are made. 
+		*/
 	}
 	
 	//--------------------------------------------------------------------
@@ -306,33 +299,25 @@ class Install extends CI_Controller {
 		
 		// Save the DB details
 		$data = $this->session->userdata("db_data");
-		$environment = $data['environment'];
-		unset($data['environment']);
 
-		$this->load->helper('config_file');
-			
 		write_db_config($data);
 	
-		if (is_writeable(FCPATH . $this->bonfire_app_path . 'config/'))
+		if (!file_exists(FCPATH . $this->app_path . 'config/development/database.php') && is_writeable(FCPATH . $this->app_path . 'config/'))
 		{
 			// Database
-			copy(FCPATH . $this->bonfire_app_path . 'config/database.php', FCPATH . $this->bonfire_app_path . 'config/'.$environment.'/database.php');
+			copy(FCPATH . $this->app_path . 'config/database.php', FCPATH . $this->app_path . 'config/development/database.php');
+			copy(FCPATH . $this->app_path . 'config/database.php', FCPATH . $this->app_path . 'config/production/database.php');
+			copy(FCPATH . $this->app_path . 'config/database.php', FCPATH . $this->app_path . 'config/testing/database.php');
 		}
 
 		$server   = $data['main']['hostname'];
 		$username = $data['main']['username'];
 		$password = $data['main']['password'];
-		$database = $data['main']['database'];
-		$dbprefix = $data['main']['dbprefix'];
 		
 		if( !$this->db = mysql_connect($server, $username, $password) )
 		{
-			return array('status' => FALSE, 'message' => lang('in_db_no_connect'));
+			return array('status' => FALSE,'message' => 'The installer could not connect to the MySQL server or the database, be sure to enter the correct information.');
 		}
-		
-		// use the entered Database settings to connect before calling the Migrations
-		$dsn = 'mysql://'.$username.':'.$password.'@'.$server.'/'.$database.'?dbprefix='.$dbprefix.'&db_debug=TRUE';
-		$this->load->database($dsn);
 		
 		//
 		// Now install the database tables.
@@ -345,21 +330,6 @@ class Install extends CI_Controller {
 			return false;
 		}
 
-		// get the list of custom modules in the main application
-		$module_list = $this->get_module_versions();
-		
-		if (is_array($module_list) && count($module_list))
-		{
-			foreach($module_list as $module_name => $module_detail)
-			{
-				// install the migrations for the custom modules
-				if (!$this->migrations->install($module_name.'_'))
-				{
-					$this->errors = $this->migrations->error;
-					return false;
-				}			
-			}
-		}
 		
 		//
 		// Save the information to the settings table
@@ -379,7 +349,7 @@ class Install extends CI_Controller {
 			$this->db->where('name', $key);
 			if ($this->db->update('settings', $setting_rec) == false)
 			{
-				$this->errors = lang('in_db_settings_error');
+				$this->errors = 'There was an error inserting settings into the database';
 				return false;
 			}
 		}
@@ -399,7 +369,7 @@ class Install extends CI_Controller {
 		
 		if ($this->db->insert('users', $data) == false)
 		{
-			$this->errors = lang('in_db_account_error');
+			$this->errors = 'There was an error creating your account in the database';
 			return false;
 		}
 		
@@ -417,7 +387,7 @@ class Install extends CI_Controller {
 		// Reverse Folders
 		foreach ($this->reverse_writeable_folders as $folder)
 		{
-			@chmod(FCPATH . '..' . $folder, 0775);
+			@chmod(FCPATH . $this->app_path . $folder, 0774);
 		}
 
 		// We made it to the end, so we're good to go!
@@ -436,8 +406,8 @@ class Install extends CI_Controller {
 	{
         if (!function_exists('curl_version'))
         {
-			$this->curl_error = 1;
-			$this->curl_update = 0;
+          $this->curl_error = 1;
+          $this->curl_update = 0;
         }   
     }
 	
@@ -499,36 +469,5 @@ class Install extends CI_Controller {
 	
 	//--------------------------------------------------------------------
 	
-	private function get_module_versions()
-	{
-		$mod_versions = array();
-
-
-	
-		$modules = module_files(null, 'migrations');
-		
-		if ($modules === false)
-		{
-			return false;
-		}
-
-		foreach ($modules as $module => $migrations)
-		{
-			$mod_versions[$module] = array(
-				'installed_version'	=> $this->migrations->get_schema_version($module .'_'),
-				'latest_version'	=> $this->migrations->get_latest_version($module .'_'),
-				'migrations'		=> $migrations['migrations']
-			);
-		}
-		
-		return $mod_versions;
-	}
-
-	
 	//--------------------------------------------------------------------
 }
-
-/* get module locations from config settings or use the default module location and offset */
-Install::$locations = array(
-	APPPATH.'../bonfire/modules/' => '../modules/',
-);

@@ -143,7 +143,7 @@ class Auth  {
 		}
 	
 		// Grab the user from the db
-		$selects = 'id, email, username, first_name, last_name, users.role_id, salt, password_hash, users.role_id, users.deleted';
+		$selects = 'id, email, username, users.role_id, salt, password_hash, users.role_id, users.deleted';
 		
 		if ($this->ci->settings_lib->item('auth.do_login_redirect'))
 		{
@@ -193,7 +193,7 @@ class Auth  {
 				$this->clear_login_attempts($login);
 				
 				// We've successfully validated the login, so setup the session
-				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', abbrev_name($user->first_name.' '.$user->last_name));
+				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', $user->username);
 				
 				// Save the login info
 				$data = array(
@@ -215,7 +215,6 @@ class Auth  {
 			else
 			{
 				$this->increase_login_attempts($login);
-				$this->errors[] = $this->ci->lang->line('us_bad_email_pass');
 			}
 		} 
 		else 
@@ -281,7 +280,7 @@ class Auth  {
 		if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
 		{
 			// Grab the user account
-			$user = $this->ci->user_model->select('id, username, email, first_name, last_name, salt, password_hash')->find($this->ci->session->userdata('user_id'));
+			$user = $this->ci->user_model->select('id, username, email, salt, password_hash')->find($this->ci->session->userdata('user_id'));
 			
 			if ($user !== false)
 			{
@@ -338,15 +337,11 @@ class Auth  {
 		{
 			// set message telling them no permission THEN redirect
 			Template::set_message( lang('us_no_permission'), 'attention');
-			
-			// log permission attempt in activity
-			$this->ci->load->model('activities/activity_model', 'activity_model', true);
-			$this->ci->activity_model->log_activity($this->ci->auth->user_id(), sprintf(lang('bf_unauthorized_attempt'),$permission) . $this->ci->input->ip_address());
 						
-			if (!$uri) 
-				$uri = ($this->ci->session->userdata('previous_page') == current_url()) ? '/': $this->ci->session->userdata('previous_page') ;
-                                // if user lose the permission at the moment and previous_page = current_url goto /
-                        Template::redirect($uri);
+			if ($uri) 
+				Template::redirect($uri);
+			else
+				Template::redirect($this->ci->session->userdata('previous_page'));
 		} 
 		
 		return true;
@@ -458,7 +453,6 @@ class Auth  {
 		Method: user_name()
 		
 		Retrieves the logged user's name.
-		Built from the user's first_name and last_name fields.
 		
 		Return:
 			The logged user's first and last name.
@@ -484,12 +478,11 @@ class Auth  {
 		{
 			$this->ci->load->model('users/User_model', 'user_model', true);
 		}
-		$user = $this->ci->user_model->select('id, first_name, last_name')
+		$user = $this->ci->user_model->select('id, username')
 				->find($this->ci->session->userdata('user_id'));
 		
-		return ($user->first_name.' '.$user->last_name);
-
-
+		//return ($user->first_name.' '.$user->last_name);
+		return $user->username;
 	}	
 	//--------------------------------------------------------------------
 
@@ -788,11 +781,11 @@ class Auth  {
 			{
 				// Grab the current user info for the session
 				$this->ci->load->model('users/User_model', 'user_model', true);
-				$user = $this->ci->user_model->select('id, username, email, first_name ,last_name, password_hash, users.role_id')->find($user_id);
+				$user = $this->ci->user_model->select('id, username, email, password_hash, users.role_id')->find($user_id);
 				
 				if (!$user) { return; }
 				
-				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, true, $test_token, abbrev_name($user->first_name.' '.$user->last_name));
+				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, true, $test_token, $user->username);
 			}
 		}
 		
@@ -1055,7 +1048,7 @@ if (!function_exists('auth_errors'))
 			{
 				$str .= "<li>$e</li>";
 			}
-			$str .= "</ul>";
+			$str .= "</li>";
 			
 			return $str;
 		}

@@ -124,9 +124,3 @@ $lang['bf_model_bad_select']	= 'Selecção Inválida.';
 // Activities
 //--------------------------------------------------------------------
 $lang['bf_act_settings_saved']	= 'App settings saved from';
-
-//--------------------------------------------------------------------
-// Common
-//--------------------------------------------------------------------
-$lang['bf_question_mark']	= '?';
-$lang['bf_language_direction']	= 'ltr';

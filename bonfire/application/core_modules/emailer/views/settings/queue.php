@@ -1,22 +1,25 @@
 <br/>
 <div class="row">
-	<div class="column size1of2">
+	<div class="column size1of3">
 		<p><b><?php echo lang('em_total_in_queue'); ?></b> <?php echo $total_in_queue ? $total_in_queue : '0' ?></p>
 	</div>
-	
-	<div class="column size1of2">
+
+	<div class="column size1of3">
 		<p><b><?php echo lang('em_total_sent'); ?></b> <?php echo $total_sent ? $total_sent : '0' ?></p>
+	</div>
+	<div class="column size1of3 last-column text-right">
+		<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/force_process'); ?>" class="btn">Process Now</a>
+		<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/insert_test'); ?>" class="btn">Insert Test Email</a>
 	</div>
 </div>
 
-<div class="padded text-right">
-	<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/force_process'); ?>" class="button"><?php echo lang('em_process_now') ?></a>
-	<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/insert_test'); ?>" class="button"><?php echo lang('em_insert_test_email') ?></a>
-</div>
-
+<br/>
+<div class="admin-box">
+	<h3><?php echo $toolbar_title ?></h3>
+	
 <?php if (isset($emails) && is_array($emails) && count($emails)) : ?>
 
-	<table>
+	<table class="table table-striped">
 		<thead>
 			<tr>
 				<th style="width: 2em"><?php echo lang('em_id'); ?></th>
@@ -47,7 +50,7 @@
 		<?php endforeach; ?>
 		</tbody>
 	</table>
-	
+
 <?php else : ?>
 
 	<div class="notification information">
@@ -55,6 +58,8 @@
 	</div>
 
 <?php endif; ?>
+
+</div>
 
 <?php if (isset($email_debug)) :?>
 

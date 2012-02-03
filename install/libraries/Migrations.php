@@ -182,18 +182,7 @@ class Migrations {
 	*/
 	public function install($type='') 
 	{ 
-		switch ($type)
-		{
-			case '':
-				$migrations_path = $this->migrations_path .'core/';
-				break;
-			case 'app_':
-				$migrations_path = $this->migrations_path;
-				break;
-			default:
-				$migrations_path = realpath(APPPATH . module_path(substr($type, 0, -1), 'migrations')) .'/';
-				break;
-		}
+		$migrations_path = $type == 'app_' ? $this->migrations_path : $this->migrations_path .'core/';
 
 		// Load all *_*.php files in the migrations path
 		$files = glob($migrations_path.'*_*'.EXT);
@@ -254,7 +243,7 @@ class Migrations {
 				$migrations_path = $this->migrations_path;
 				break;
 			default:
-				$migrations_path = realpath(APPPATH . module_path(substr($type, 0, -1), 'migrations')) .'/';
+				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
 				break;
 		}
 
@@ -271,7 +260,7 @@ class Migrations {
 			// Moving Down
 			$step = -1;
 		}
-		
+
 		$method = $step == 1 ? 'up' : 'down';
 		$migrations = array();
 
@@ -281,7 +270,7 @@ class Migrations {
 		for($i=$start; $i != $stop; $i += $step) 
 		{
 			$f = glob(sprintf($migrations_path . '%03d_*'.EXT, $i));
-			
+
 			// Only one migration per step is permitted
 			if (count($f) > 1)
 			{ 
@@ -310,7 +299,7 @@ class Migrations {
 			if (preg_match('/^\d{3}_(\w+)$/', $name, $match))
 			{
 				$match[1] = strtolower($match[1]);
-				
+
 				// Cannot repeat a migration at different steps
 				if (in_array($match[1], $migrations))
 				{
@@ -337,7 +326,7 @@ class Migrations {
 			
 			else
 			{ 
-				$this->error = sprintf($this->_ci->lang->line("invalid_migration_filename"),$file, $migrations_path);
+				$this->error = sprintf($this->_ci->lang->line("invalid_migration_filename"),$file);
 				return 0;
 			}
 		}
@@ -375,7 +364,7 @@ class Migrations {
 			$class = 'Migration_'.ucfirst($m);
 			
 			$c = new $class;
-			
+	
 			if ($c->migration_type == 'forge')
 			{ 
 				call_user_func(array($c, $method));
@@ -436,22 +425,11 @@ class Migrations {
 	 */
 	public function get_schema_version($type='') 
 	{
-		if ($this->_check_migrations_column('type'))
-		{
-			// new schema table layout
-			$type = empty($type) ? 'core' : $type;
-			$row = $this->_ci->db->get_where('schema_version', array('type' => $type))->row();
-			return isset($row->version) ? $row->version: 0;
-		}
-		else
-		{
-			$row = $this->_ci->db->get('schema_version')->row();
+		$row = $this->_ci->db->get('schema_version')->row();
 
-			$schema = $type .'version';
-
-			return isset($row->$schema) ? $row->$schema : 0;
-		}
-
+		$schema = $type .'version';
+		
+		return isset($row->$schema) ? $row->$schema : 0;
 	}
 
 	// --------------------------------------------------------------------
@@ -589,82 +567,25 @@ class Migrations {
 	{	
 //		logit('[Migrations] Schema updated to: '. $schema_version);
 	
-		if ($this->_check_migrations_column('type'))
-		{
-			// new schema table layout
-			$type = empty($type) ? 'core' : $type;
 		// If the row doesn't exist, create it...
-			$query = $this->_ci->db->get_where('schema_version', array('type' => $type));
-
-			if ($schema_version != 0)
-			{ 
-				if (!$query->num_rows())
-				{ 
-					$this->_ci->db->insert('schema_version', array(
-						'type'        => $type,
-						'version' => $schema_version,
-					));
-
-				}
-
-				return $this->_ci->db->update('schema_version', array('version' => $schema_version), array('type' => $type));
-			}
-			elseif ($query->num_rows())
-			{
-				return $this->_ci->db->delete('schema_version', array('type' => $type));
-			}
-		}
-		else
-		{
-			// If the row doesn't exist, create it...
-			if (!$this->_check_migrations_column($type .'version'))
-			{ 
-				$this->_ci->load->dbforge();
-
-				$this->_ci->dbforge->add_column('schema_version', array(
-					$type .'version'	=> array(
-						'type'			=> 'INT',
-						'constraint'	=> 4,
-						'null'			=> true, 
-						'default'		=> 0
-					)
-				));
-
-			}
-
-			return $this->_ci->db->update('schema_version', array(
-				$type.'version' => $schema_version
+		if (!$this->_ci->db->field_exists($type .'version', 'schema_version'))
+		{ 
+			$this->_ci->load->dbforge();
+			
+			$this->_ci->dbforge->add_column('schema_version', array(
+				$type .'version'	=> array(
+					'type'			=> 'INT',
+					'constraint'	=> 4,
+					'null'			=> true, 
+					'default'		=> 0
+				)
 			));
 
 		}
-	}
 	
-	//--------------------------------------------------------------------
-	
-	/*
-		Method: _check_migrations_column()
-		
-		Method to check if the DB table schema_version is in the new format or old
-		
-		Access:
-			private
-			
-		Parameters:
-			$column_name	- Name of the column to check the existance of
-		
-		Return:
-			boolean
-	*/
-	private function _check_migrations_column($column_name)
-	{
-		$row = $this->_ci->db->get('schema_version')->row();
-		
-		if (isset($row->$column_name))
-		{
-			return TRUE;
-		}
-		
-		return FALSE;
+		return $this->_ci->db->update('schema_version', array(
+			$type.'version' => $schema_version
+		));
 	}
 	
 	//--------------------------------------------------------------------

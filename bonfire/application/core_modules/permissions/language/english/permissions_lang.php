@@ -1,4 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 $lang['permissions_manage']				= 'Manage Permissions';
 $lang['permissions_edit_text']			= 'Edit this to suit your needs';
 $lang['permissions_no_records']			= 'There aren\'t any Permission in the system.';
@@ -9,7 +10,6 @@ $lang['permissions_create_failure']		= 'There was a problem creating the Permiss
 $lang['permissions_create_new_button']	= 'Create New Permission';
 $lang['permissions_invalid_id']			= 'Invalid permissions ID';
 $lang['permissions_edit_success']		= 'Permissions successfully saved';
-$lang['permissions_edit']		= 'Edit';
 $lang['permissions_edit_failure']		= 'There was a problem saving the Permissions: ';
 $lang['permissions_delete_success']		= 'The Permission was successfully deleted';
 $lang['permissions_delete_failure']		= 'We could not delete the Permission: ';
@@ -27,4 +27,8 @@ $lang['permissions_active']				= 'active';
 $lang['permissions_inactive']			= 'inactive';
 $lang['permissions_deleted']			= 'deleted';
 $lang['permissions_permission']			= 'Permission';
-$lang['permissions_permissions']			= 'Permissions';
+$lang['permissions_deleted']			= 'Permissions deleted';
+$lang['permissions_del_error']			= 'Unable to delete Permissions: ';
+$lang['permissions_intro']				= 'Permissions provide fine-grained control over what each role is allowed to do.';
+$lang['permissions_matrix']				= 'Permissions Matrix';
+$lang['permissions_details']			= 'Permission Details';
