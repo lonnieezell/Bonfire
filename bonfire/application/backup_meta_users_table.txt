@@ -25,6 +25,6 @@ CREATE TABLE `bf_users` (
   KEY `email` (`email`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-INSERT INTO bf_users (`id`, `role_id`, `email`, `username`, `password_hash`, `reset_hash`, `salt`, `last_login`, `last_ip`, `created_on`, `deleted`, `banned`, `ban_message`, `reset_by`, `display_name`, `display_name_changed`) VALUES (1, 1, 'lonnieje@gmail.com', 'lonnieje@gmail.com', '4a887e87b26d90658858cd02fab47f391e4bba30', NULL, 'gYpWiCg', '2012-02-03 08:22:21', '127.0.0.1', '0000-00-00 00:00:00', 0, 0, NULL, NULL, '', NULL);
+INSERT INTO bf_users (`id`, `role_id`, `email`, `username`, `password_hash`, `reset_hash`, `salt`, `last_login`, `last_ip`, `created_on`, `deleted`, `banned`, `ban_message`, `reset_by`, `display_name`, `display_name_changed`) VALUES (1, 1, 'lonnieje@gmail.com', 'lonnieje@gmail.com', '4a887e87b26d90658858cd02fab47f391e4bba30', NULL, 'gYpWiCg', '2012-02-05 20:00:37', '127.0.0.1', '0000-00-00 00:00:00', 0, 0, NULL, NULL, '', NULL);
 
 
