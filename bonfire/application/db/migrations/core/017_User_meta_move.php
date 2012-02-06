@@ -187,12 +187,7 @@ class Migration_User_meta_move extends Migration {
 			true/false
 	*/
 	public function setup_module_meta() 
-	{
-		if (empty($module))
-		{
-			return false;
-		}
-		
+	{	
 		$this->load->dbforge();
 		
 		// Meta table
@@ -205,7 +200,7 @@ class Migration_User_meta_move extends Migration {
 					'unsigned'		=> true,
 					'auto_increment'	=> true
 				),
-				$module .'_id'	=> array(
+				'user_id'	=> array(
 					'type'			=> 'INT',
 					'constraint'	=> 20,
 					'unsigned'		=> true,
