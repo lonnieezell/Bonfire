@@ -65,7 +65,7 @@ class Role_permission_model extends BF_Model {
 			$role_id			- ID of the role
 			$permission_id		- ID of the permission
 	*/
-	public function create($role_id, $permission_id)
+	public function create($role_id, $permission_id=null)
 	{
 		if (empty($role_id))
 		{
@@ -138,7 +138,7 @@ class Role_permission_model extends BF_Model {
 		Returns:
 			true/false
 	*/
-	public function delete_for_role($role_id)
+	public function delete_for_role($role_id=null)
 	{
 		if (empty($role_id))
 		{

@@ -114,7 +114,7 @@ class Role_model extends BF_Model {
 		}
 
 		$role = $this->find_by('role_name', $name);
-
+echo $this->db->last_query();
 		$this->get_role_permissions($role);
 
 		return $role;
