@@ -116,7 +116,7 @@ class Settings extends Admin_Controller {
 		}
 
 		// Log the activity
-		$this->activity_model->log_activity($this->auth->user_id(), lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'core');
+		$this->activity_model->log_activity($this->current_user->id, lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'core');
 
 		// save the settings to the DB
 		$updated = $this->settings_model->update_batch($data, 'name');

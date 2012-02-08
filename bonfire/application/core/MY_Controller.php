@@ -139,6 +139,8 @@ class Front_Controller extends Base_Controller {
 */
 class Authenticated_Controller extends Base_Controller {
 
+	protected $current_user = null;
+
 	//--------------------------------------------------------------------
 
 	public function __construct()
@@ -158,6 +160,12 @@ class Authenticated_Controller extends Base_Controller {
 
 		// Make sure we're logged in.
 		$this->auth->restrict();
+		
+		// Load our current logged in user so we can access it anywhere.
+		$this->current_user = $this->user_model->find($this->auth->user_id());
+		
+		// Make the current user available in the views
+		$this->load->vars( array('current_user' => $this->current_user) );
 
 		// Load additional libraries
 		$this->load->helper('form');

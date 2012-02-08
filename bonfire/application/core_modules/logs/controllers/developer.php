@@ -70,7 +70,7 @@ class Developer extends Admin_Controller {
 					{
 						@unlink($this->config->item('log_path') . $file);
 						$activity_text = 'log file '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));
-						$this->activity_model->log_activity($this->auth->user_id(), ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
+						$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
 					}
 
 					Template::set_message(count($checked) .' '. lang('log_deleted'), 'success');
@@ -127,7 +127,7 @@ class Developer extends Admin_Controller {
 			if (write_config('config', array('log_threshold' => $_POST['log_threshold'])))
 			{
 				// Log the activity
-				$this->activity_model->log_activity($this->auth->user_id(), 'Log settings modified from: ' . $this->input->ip_address(), 'logs');
+				$this->activity_model->log_activity($this->current_user->id(), 'Log settings modified from: ' . $this->input->ip_address(), 'logs');
 
 				Template::set_message('Log settings successfully saved.', 'success');
 			} else
@@ -202,7 +202,7 @@ class Developer extends Admin_Controller {
 		Template::set_message("Successfully purged " . $activity_text,'success');
 
 		// Log the activity
-		$this->activity_model->log_activity($this->auth->user_id(), ucfirst($activity_text) . ' purged from: ' . $this->input->ip_address(), 'logs');
+		$this->activity_model->log_activity($this->current_user->id(), ucfirst($activity_text) . ' purged from: ' . $this->input->ip_address(), 'logs');
 
 		redirect(SITE_AREA .'/developer/logs');
 	}

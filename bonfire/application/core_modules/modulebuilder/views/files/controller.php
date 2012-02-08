@@ -107,7 +107,7 @@ $mb_create =<<<END
 			if (\$insert_id = \$this->save_{$module_name_lower}())
 			{
 				// Log the activity
-				\$this->activity_model->log_activity(\$this->auth->user_id(), lang('{$module_name_lower}_act_create_record').': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				\$this->activity_model->log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_create_record').': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
 					
 				Template::set_message(lang("{$module_name_lower}_create_success"), 'success');
 				Template::redirect(SITE_AREA .'/{$controller_name}/{$module_name_lower}');
@@ -153,7 +153,7 @@ $mb_edit =<<<END
 			if (\$this->save_{$module_name_lower}('update', \$id))
 			{
 				// Log the activity
-				\$this->activity_model->log_activity(\$this->auth->user_id(), lang('{$module_name_lower}_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				\$this->activity_model->log_activity(\$this->current_user->id(), lang('{$module_name_lower}_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
 					
 				Template::set_message(lang('{$module_name_lower}_edit_success'), 'success');
 			}
@@ -194,7 +194,7 @@ $mb_delete =<<<END
 			if (\$this->{$module_name_lower}_model->delete(\$id))
 			{
 				// Log the activity
-				\$this->activity_model->log_activity(\$this->auth->user_id(), lang('{$module_name_lower}_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				\$this->activity_model->log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
 					
 				Template::set_message(lang('{$module_name_lower}_delete_success'), 'success');
 			} else

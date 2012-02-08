@@ -369,122 +369,6 @@ class Auth  {
 	}
 	
 	//--------------------------------------------------------------------
-	
-	/*
-		Method: username()
-		
-		Retrieves the username from the current session.
-		
-		Return:
-			The user's username.
-	*/
-	public function username()
-	{
-		// if we're using "both" as login type, is session identity a username?
-		if 	($this->ci->settings_lib->item('auth.login_type') == 'username' OR 
-			($this->ci->settings_lib->item('auth.login_type') !== 'email' && ($this->ci->settings_lib->item('auth.user_usernames'))))
-		{	
-			return $this->ci->session->userdata('identity');
-		}
-		else // email logintype with username has a username session var
-			if ($this->ci->settings_lib->item('auth.use_usernames') == 1) 
-			{
-				return $this->ci->session->userdata('auth_custom');
-			}
-			
-		// TODO: consider optional bool to force using custom session var
-		// don't know if we should give a db call option here
-		logit('[Auth.username()] - Why are we going through DB?' , 'warn');
-		
-		// We have to grab the user from the db and return his username. 
-		if (!class_exists('User_model')) 
-		{
-			$this->ci->load->model('users/User_model', 'user_model', true);
-		}
-		
-		$user = $this->ci->user_model->select('username')
-				->find($this->ci->session->userdata('user_id'));
-		
-		return $user->username;
-		
-		
-		
-	}
-	
-	//--------------------------------------------------------------------
-	
-	/*
-		Method: email()
-		
-		Retrieves the email address from the current session.
-		
-		Return:
-			The user's email.
-	*/
-	public function email() 
-	{
-		//TODO: Is it worth to define a class valid_email() instead of loading CI helper?
-		$this->ci->load->helper('email');
-		
-		// let's make sure we don't have an email at session userdata
-		
-		if ( valid_email($this->ci->session->userdata('identity')))
-		{
-			return	$this->ci->session->userdata('identity');
-		}	
-		else if	( valid_email($this->ci->session->userdata('auth_custom')))
-			{
-				return	$this->ci->session->userdata('auth_custom');
-			}
-			else
-			{
-				// We may have to grab the user from the db and return his email
-				logit('[Auth.email()] - Why are we going through DB?');
-			}	
-	
-		// Should I take this out and return false, leaving it to model?
-		return $this->ci->user_model->get_field($this->ci->session->userdata('user_id'),'email');
-			
-	}
-	
-	//--------------------------------------------------------------------
-	
-	/*
-		Method: user_name()
-		
-		Retrieves the logged user's name.
-		
-		Return:
-			The logged user's first and last name.
-	*/
-	public function user_name() 
-	{
-		/* 
-		  TODO: Should we user an optional parameter to make it read from session?
-			// if true parameter
-			// Did we set a custom var for this?
-		*/
-		/*
-		if ($this->ci->settings_lib->item('auth.use_usernames') == 2)
-		{
-			return $this->ci->session->userdata('auth_custom');
-		}
-		*/
-		
-		logit('[Auth.user_name()] - Why are we going through DB?' , 'warn');
-		
-		// We have to grab the user from the db and return his name. 
-		if (!class_exists('User_model')) 
-		{
-			$this->ci->load->model('users/User_model', 'user_model', true);
-		}
-		$user = $this->ci->user_model->select('id, username')
-				->find($this->ci->session->userdata('user_id'));
-		
-		//return ($user->first_name.' '.$user->last_name);
-		return $user->username;
-	}	
-	//--------------------------------------------------------------------
 
 	/*
 		Method: identity()
@@ -497,7 +381,6 @@ class Auth  {
 	*/
 	public function identity() 
 	{
-
 		return $this->ci->session->userdata('identity');
 	}
 

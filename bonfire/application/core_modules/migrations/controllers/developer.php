@@ -86,7 +86,7 @@ class Developer extends Admin_Controller {
 				Template::set_message('Successfully uninstalled module\'s migrations.', 'success');
 
 				// Log the activity
-				$this->activity_model->log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' Uninstalled Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+				$this->activity_model->log_activity($this->current_user->id, 'Migrate Type: '. $type .' Uninstalled Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 
 				redirect(SITE_AREA .'/developer/migrations');
 			}
@@ -95,7 +95,7 @@ class Developer extends Admin_Controller {
 				Template::set_message('Successfully migrated database to version '. $result, 'success');
 
 				// Log the activity
-				$this->activity_model->log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' to Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+				$this->activity_model->log_activity($this->current_user->id, 'Migrate Type: '. $type .' to Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 
 				redirect(SITE_AREA .'/developer/migrations');
 			}
@@ -126,7 +126,7 @@ class Developer extends Admin_Controller {
 		$this->migrate_to($version, $module .'_');
 
 		// Log the activity
-		$this->activity_model->log_activity($this->auth->user_id(), 'Migrate module: ' . $module . ' Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+		$this->activity_model->log_activity($this->current_user->id, 'Migrate module: ' . $module . ' Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 
 	}
 

@@ -152,8 +152,8 @@ class Settings extends Admin_Controller {
 			if ($id = $this->save_user())
 			{
 				$user = $this->user_model->find($id);
-				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->auth->user_name() : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
+				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+				$this->activity_model->log_activity($this->current_user->id, lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
 
 				Template::set_message('User successfully created.', 'success');
 				Template::redirect(SITE_AREA .'/settings/users');
@@ -190,8 +190,8 @@ class Settings extends Admin_Controller {
 			if ($this->save_user('update', $user_id))
 			{
 				$user = $this->user_model->find($user_id);
-				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->auth->user_name() : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_edit') .': '.$log_name, 'users');
+				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
 
 				Template::set_message('User successfully updated.', 'success');
 			}
@@ -255,13 +255,13 @@ class Settings extends Admin_Controller {
 			{
 				$user = $this->user_model->find($id);
 
-				if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage') && $user->id != $this->auth->user_id())
+				if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage') && $user->id != $this->current_user->id)
 				{
 					if ($this->user_model->delete($id))
 					{
 						$user = $this->user_model->find($id);
-						$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->auth->user_name() : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-						$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_delete') . ': '.$log_name, 'users');
+						$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+						$this->activity_model->log_activity($this->current_user->id, lang('us_log_delete') . ': '.$log_name, 'users');
 						Template::set_message('The User was successfully deleted.', 'success');
 					}
 					else
@@ -271,7 +271,7 @@ class Settings extends Admin_Controller {
 				}
 				else
 				{
-					if ($user->id == $this->auth->user_id())
+					if ($user->id == $this->current_user->id)
 					{
 						Template::set_message(lang('us_self_delete'), 'error');
 					}

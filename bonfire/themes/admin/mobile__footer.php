@@ -2,7 +2,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="column size1of2">
-					<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $this->auth->user_id()) ?>">My Account</a>
+					<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $this->current_user->id) ?>">My Account</a>
 				</div>
 				
 				<div class="column size1of2 last-column">
