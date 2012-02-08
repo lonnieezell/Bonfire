@@ -136,7 +136,36 @@ footer.footer {
 }
 
 /*
-	Grides
+	Toolbar Profile
+*/
+.toolbar-profile {
+	padding: 12px;
+	padding-bottom: 0;
+	max-width: 500px !important;
+}
+.toolbar-profile .inner {
+	width: 300px;
+}
+.toolbar-profile-info p {
+	line-height: 1.3 !important;
+}
+.toolbar-profile-img {
+	width: 100px;
+	float: left;
+	display: inline-block;
+	margin-bottom: 8px;
+}
+.toolbar-profile-info {
+	width: 190px;
+	display: inline-block;
+	padding-left: 10px;
+}
+.toolbar-profile-footer {
+	border-top: 1px solid #e6e6e6;
+}
+
+/*
+	Grids
 */
 .row,.last-column{overflow:hidden; *overflow:visible;*zoom:1;}
 .row{margin-left: 0; }

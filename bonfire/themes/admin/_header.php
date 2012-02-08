@@ -40,10 +40,22 @@
 							<?php echo config_item('auth.use_usernames') ? (config_item('auth.use_own_names') ? $current_user->username : $current_user->username) : $current_user->email ?>
 						</a>
 						<a class="btn dropdown-toggle dark" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li>
-								<a href="<?php echo site_url('logout'); ?>">Logout</a>
-							</li>
+						<ul class="dropdown-menu toolbar-profile">
+							<div class="inner">
+								<div class="toolbar-profile-img">
+									<?php echo gravatar_link($current_user->email, 96) ?>
+								</div>
+								
+								<div class="toolbar-profile-info">
+									<p><b><?php echo $current_user->display_name ?></b><br/>
+										<?php e($current_user->email) ?>
+									</p>
+									
+									<br/>
+									<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $current_user->id) ?>">Profile</a>
+									<a href="<?php echo site_url('logout'); ?>">Logout</a>
+								</div>
+							</div>
 						</ul>
 					</div>
 				</div>
