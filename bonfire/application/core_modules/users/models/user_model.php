@@ -88,6 +88,19 @@ class User_model extends BF_Model {
 		{
 		  unset($data['username']);
 		}
+		
+		// Display Name
+		if (!isset($data['display_name']) || (isset($data['display_name']) && empty($data['display_name'])))
+		{
+			if ($this->settings_lib->item('auth.use_usernames') == 1 && !empty($data['username']))
+			{
+				$data['display_name'] = $data['username'];
+			}
+			else
+			{
+				$data['display_name'] = $data['email'];
+			}
+		}
 
 		list($password, $salt) = $this->hash_password($data['password']);
 		
