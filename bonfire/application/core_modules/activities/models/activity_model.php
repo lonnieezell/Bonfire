@@ -68,7 +68,7 @@ class Activity_model extends BF_Model {
 			$this->db->or_where('module', $module);
 		}
 
-		$this->db->select('activity_id, activities.user_id, activity, module, activities.created_on, first_name, last_name, username, email, last_login');
+		$this->db->select('activity_id, activities.user_id, activity, module, activities.created_on, display_name, username, email, last_login');
 		$this->db->join('users', 'activities.user_id = users.id', 'left');
 
 		return $this->find_all();
