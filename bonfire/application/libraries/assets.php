@@ -801,7 +801,22 @@ class Assets {
 		$theme = Template::get('active_theme');
 		$theme = empty($theme) ? Template::get('default_theme') : $theme;
 
-		$file_name = trim($theme,'/') .'_'. self::$ci->router->fetch_module() .'_'. self::$ci->router->fetch_class();
+		// get the module name
+		$module_name = self::$ci->router->fetch_module();
+		
+		// get the uri segments
+		$uri_segments = self::$ci->uri->segment_array();
+		
+		// get the module name from the uri segment
+		$context_key = array_search(self::$ci->router->fetch_class(), $uri_segments);
+		if (FALSE !== $context_key) {
+			$module_key = $context_key + 1;
+			if (isset($uri_segments[$module_key])) {
+				$module_name = $uri_segments[$module_key];
+			}
+		}
+
+		$file_name = trim($theme,'/') .'_'. $module_name .'_'. self::$ci->router->fetch_class();
 
 		if (self::$ci->config->item('assets.encrypt_name'))
 		{
