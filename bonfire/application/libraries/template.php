@@ -659,7 +659,7 @@ class Template {
 	{
 		if (!empty($message))
 		{
-			if (class_exists('CI_Session'))
+			if (isset(self::$ci->session))
 			{
 				self::$ci->session->set_flashdata('message', $type.'::'.$message);
 			}
