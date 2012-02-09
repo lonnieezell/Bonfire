@@ -323,9 +323,6 @@ class Dataset {
 		{
 			$output .= '</form>';
 		}
-		
-		// Pagination
-		echo "PerPage = {$this->per_page}, TotalRows={$this->total_rows}";
 
 		return $output;
 	}
