@@ -47,11 +47,6 @@ class Users extends Front_Controller {
 
 		$this->load->library('users/auth');
 
-		if (!class_exists('Activity_model'))
-		{
-			$this->load->model('activities/Activity_model', 'activity_model', true);
-		}
-
 		$this->lang->load('users');
 	}
 
@@ -74,6 +69,8 @@ class Users extends Front_Controller {
 				// Try to login
 				if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === true)
 				{
+					$this->load->model('activities/Activity_model', 'activity_model');
+				
 					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged').': ' . $this->input->ip_address(), 'users');
 
 					/*
@@ -211,6 +208,8 @@ class Users extends Front_Controller {
 			$user_id = $this->auth->user_id();
 			if ($this->save_user($user_id))
 			{
+				$this->load->model('activities/Activity_model', 'activity_model');
+			
 				$user = $this->user_model->find($user_id);
 				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->auth->user_name() : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_edit_profile') .': '.$log_name, 'users');
@@ -274,6 +273,8 @@ class Users extends Front_Controller {
 
 				if ($this->user_model->update($this->input->post('user_id'), $data))
 				{
+					$this->load->model('activities/Activity_model', 'activity_model');
+				
 					$this->activity_model->log_activity($this->input->post('user_id'), lang('us_log_reset') , 'users');
 					Template::set_message('Please login using your new password.', 'success');
 					redirect('/login');
@@ -351,6 +352,8 @@ class Users extends Front_Controller {
 
 				if ($user_id = $this->user_model->insert($data))
 				{
+					$this->load->model('activities/Activity_model', 'activity_model');
+				
 					$this->activity_model->log_activity($user_id, lang('us_log_register') , 'users');
 					Template::set_message('Your account has been created. Please log in.', 'success');
 					redirect('login');

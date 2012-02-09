@@ -34,6 +34,9 @@ class Activities extends Admin_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		
+		// Make sure the model is loaded...
+		$this->load->model('activities/Activity_model', 'activity_model');
 	}
 
 	//--------------------------------------------------------------------

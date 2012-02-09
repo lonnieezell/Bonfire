@@ -120,6 +120,8 @@ class Settings extends Admin_Controller {
 		Template::set('users', $this->user_model->find_all());
 
 		// Pagination
+		$this->load->library('pagination');
+		
 		$this->user_model->where($where);
 		$total_users = $this->user_model->count_all();
 
@@ -151,6 +153,8 @@ class Settings extends Admin_Controller {
 		{
 			if ($id = $this->save_user())
 			{
+				$this->load->model('activities/Activity_model', 'activity_model');
+			
 				$user = $this->user_model->find($id);
 				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
@@ -189,6 +193,8 @@ class Settings extends Admin_Controller {
 		{
 			if ($this->save_user('update', $user_id))
 			{
+				$this->load->model('activities/Activity_model', 'activity_model');
+			
 				$user = $this->user_model->find($user_id);
 				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
@@ -259,6 +265,8 @@ class Settings extends Admin_Controller {
 				{
 					if ($this->user_model->delete($id))
 					{
+						$this->load->model('activities/Activity_model', 'activity_model');
+					
 						$user = $this->user_model->find($id);
 						$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 						$this->activity_model->log_activity($this->current_user->id, lang('us_log_delete') . ': '.$log_name, 'users');

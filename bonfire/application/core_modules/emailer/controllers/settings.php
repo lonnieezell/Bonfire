@@ -161,6 +161,8 @@ class Settings extends Admin_Controller {
 	*/
 	public function queue()
 	{
+		$this->load->library('pagination');
+	
 		$offset = $this->uri->segment(5);
 
 		$this->load->model('Emailer_model', 'emailer_model', true);

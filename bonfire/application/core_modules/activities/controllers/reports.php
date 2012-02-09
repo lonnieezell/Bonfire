@@ -38,6 +38,7 @@ class Reports extends Admin_Controller {
 		$this->auth->restrict('Bonfire.Activities.Manage');
 
 		$this->lang->load('activities');
+		$this->load->model('activities/Activity_model', 'activity_model');
 
 		Template::set('toolbar_title', lang('activity_title'));
 
@@ -325,6 +326,8 @@ class Reports extends Admin_Controller {
 		$this->db->where('activities.deleted', 0);
 
 		// Pagination
+		$this->load->library('pagination');
+		
 		$offset = $this->input->get('per_page');
 		
 		$limit = $this->settings_lib->item('site.list_limit');

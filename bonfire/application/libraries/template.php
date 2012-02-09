@@ -936,9 +936,14 @@ function theme_view($view=null, $data=null, $ignore_mobile=false)
 	
 	// If we're allowed, try to load the mobile version 
 	// of the file.
-	if (!$ignore_mobile && $ci->agent->is_mobile())
+	if (!$ignore_mobile)
 	{
-		Template::load_view('mobile_'. $view, $data, null, true, $output);
+		$ci->load->library('user_agent');
+		
+		if ($ci->agent->is_mobile())
+		{
+			Template::load_view('mobile_'. $view, $data, null, true, $output);
+		}
 	}
 	
 	// If output is empty, then either no mobile file was found

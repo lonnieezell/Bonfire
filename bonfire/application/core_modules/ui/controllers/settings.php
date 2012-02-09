@@ -34,11 +34,6 @@ class Settings extends Admin_Controller {
 		
 		Template::set('toolbar_title', 'UI Settings');
 		
-		if (!class_exists('Activity_model'))
-		{
-			$this->load->model('activities/Activity_model', 'activity_model', true);
-		}
-		
 		Assets::add_module_js('ui', 'ui.js');
 	}
 	
@@ -160,6 +155,8 @@ class Settings extends Admin_Controller {
 		$updated = $this->settings_lib->set('ui.shortcut_keys', serialize($settings));
 
 		// Log the activity
+		$this->load->model('activities/Activity_model', 'activity_model');
+		
 		$this->activity_model->log_activity($this->current_user->id, lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'ui');
 
 		return $updated;

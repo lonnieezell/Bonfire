@@ -128,6 +128,13 @@ class BF_Model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
+		
+		// If we're loading the model, then we probably need the
+		// database, so make sure it's loaded.
+		if (!isset($this->db))
+		{
+			$this->load->database();
+		}
 	}
 	
 	//---------------------------------------------------------------
