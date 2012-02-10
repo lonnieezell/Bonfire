@@ -225,8 +225,8 @@ $config['template.default_theme'] = 'default/';
 |
 */
 $config['template.message_template'] =<<<EOD
-	<div class="alert alert-{type}">
-		<a class="close" href="#">x</a>
+	<div class="alert alert-{type} fade in">
+		<a data-dismiss="alert" class="close" href="#">&times;</a>
 		<div>{message}</div>
 	</div>
 EOD;
