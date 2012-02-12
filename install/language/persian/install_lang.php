@@ -24,13 +24,13 @@
 $lang['in_intro']					= '<h2>خوش آمديد</h2><p>به پروسه نصب بن فاير خوش آمديد! فيلد هاي زير را پر کرده و سپس مي توانيد به ايجاد برنامه هاي تحت وب توسط CodeIgniter 2.0 بپردازيد.</p>';
 $lang['in_not_writeable_heading']	= 'فايل ها/پوشه ها قابل نوشتن نمي باشند';
 
-$lang['in_writeable_directories_message'] = 'Please ensure that the following directories are writeable, and try again';
-$lang['in_writeable_files_message']       = 'Please ensure that the following files are writeable, and try again';
+$lang['in_writeable_directories_message'] = 'لطفا اطمینان حاصل کنید که پوشه های زیر قابل نوشتن می باشند و دوباره تلاش کنید';
+$lang['in_writeable_files_message']       = 'لطفا اطمینان حاصل کنید که فایل های زیر قابل نوشتن می باشند و دوباره تلاش کنید';
 
 $lang['in_db_settings']				= 'تنظيمات پايگاه داده';
 $lang['in_db_settings_note']		= '<p>لطفا اطلاعات پايگاه داده را وارد نماييد.</p><p class="small">اين اطلاعات در فايل کانفيگ اصلي و <b>config/database.php</b> و <b>config/development/database.php</b> ذخيره خواهند شد. </p>';
-$lang['in_db_no_connect']           = 'The installer could not connect to the MySQL server or the database, be sure to enter the correct information.';
-$lang['in_db_setup_error']          = 'There was an error setting up your database';
+$lang['in_db_no_connect']           = 'عدم توانایی در وصل شدن به سرور بانک اطلاعاتی ، لطفا دقت کنید که اطلاعات را بدرستی وارد کرده باشید';
+$lang['in_db_setup_error']          = 'خطا در راه اندازی بانک اطلاعاتی ';
 $lang['in_db_settings_error']       = 'There was an error inserting settings into the database';
 $lang['in_db_account_error']        = 'There was an error creating your account in the database';
 $lang['in_settings_save_error']     = 'There was an error saving the settings. Please verify that your database and %s/database config files are writeable.';
@@ -43,8 +43,8 @@ $lang['in_test_db']					= 'آزمايش پايگاه داده';
 
 $lang['in_account_heading']			= '<h2>اطلاعات مورد نياز</h2><p>لطفا اطلاعات مورد نياز زير را وارد نماييد.</p>';
 $lang['in_site_title']				= 'عنوان سايت';
-$lang['in_username']			    = 'Username';
-$lang['in_password']			    = 'Password';
+$lang['in_username']			    = 'نام کاربری';
+$lang['in_password']			    = 'رمز عبور';
 $lang['in_password_note']			= 'حد اقل 8 کاراکتر.';
 $lang['in_password_again']			= 'تکرار کلمه ي عبور';
 $lang['in_email']					= 'ايميل شما';
