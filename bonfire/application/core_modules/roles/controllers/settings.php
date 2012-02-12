@@ -56,7 +56,7 @@ class Settings extends Admin_Controller {
 		
 		Template::set('deleted_users', $this->user_model->count_all(true));
 	
-		Template::set('roles', $this->role_model->find_all());
+		Template::set('roles', $this->role_model->find_all_by('deleted', 0));
 	
 		Template::set('toolbar_title', lang("role_manage"));
 		Template::render();
