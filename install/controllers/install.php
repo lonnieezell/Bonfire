@@ -219,7 +219,17 @@ class Install extends CI_Controller {
 				if ($this->setup())
 				{
 					$view_data['message'] = message(lang('in_success_notification'), 'success');
-					$view_data['content'] = $this->load->view('install/success', array(), TRUE);
+					
+					$success_data = array();
+					// check if we are running in a sub directory
+					$url_path = parse_url(base_url(), PHP_URL_PATH);
+					$base_path = preg_replace('#/install/#', '', $url_path);
+					if (!empty($base_path))
+					{
+						$success_data['rebase'] = $base_path.'/';
+					}
+					
+					$view_data['content'] = $this->load->view('install/success', $success_data, TRUE);
 				}
 				else 
 				{

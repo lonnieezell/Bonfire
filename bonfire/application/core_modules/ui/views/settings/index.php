@@ -5,31 +5,45 @@
 <?php endif; ?>
 
 <?php echo form_open($this->uri->uri_string(), 'class="constrained"'); ?>
-	
+	<input type="hidden" name="remove_action" id="remove_action" />
 	<div>
 		<p><?php echo lang('ui_keyboard_shortcuts') ?></p>
+		<?php if (isset($current) && is_array($current)): ?>
 		<ul>
-		<?php foreach ($current as $name => $detail): ?>
+			<?php foreach ($current as $name => $detail): ?>
 			<li><?php echo $name;?>: <?php echo $detail['description'];?></li>
-		<?php endforeach?>
+			<?php endforeach?>
 		</ul>
+		<?php else: ?>
+			<?php echo lang('ui_no_shortcuts');?>
+		<?php endif;?>
 		<br/>
-		<input type="button" name="add_shortcut" id="add_shortcut" value="<?php echo lang('ui_add_shortcut') ?>" class="button"/>
-		<ul id="shortcut_keys" class="clean">
 		<?php $count = 1; ?>
-		<?php foreach ($settings as $action => $shortcut): ?>
-			<li id="shortcut<?php echo $count;?>">
-				<?php echo lang('ui_action') ?> <input type="text" name="actions[]" class="medium" value="<?php echo isset($action) ? $action : set_value('actions[0]') ?>" />
-				<?php echo lang('ui_shortcut') ?> <input type="text" name="shortcuts[]" class="medium" value="<?php echo isset($shortcut) ? $shortcut : set_value('shortcuts[0]') ?>" />
-				<input type="button" name="remove_shortcut" value="<?php echo lang('ui_remove_shortcut') ?>" class="button" onClick="$('#shortcut<?php echo $count;?>').remove(); return false;" />
+		<ul id="shortcut_keys" class="clean">
+			<li id="heading">
+				<span class="required medium"><?php echo lang('ui_action') ?></span>
+				<span class="required medium"><?php echo lang('ui_shortcut') ?></span>
 			</li>
+			<li id="shortcut<?php echo $count;?>">
+				<select id="action<?php echo $count;?>" name="action<?php echo $count;?>" class="medium">
+			<?php foreach ($current as $name => $detail): ?>
+			<?php if (!array_key_exists($name, $settings)):?>
+			<option value="<?php echo $name;?>"><?php echo $detail['description'];?></option>
+			<?php endif;?>
+			<?php endforeach?>
+				</select> 
+				<input type="text" id="shortcut<?php echo $count;?>" name="shortcut<?php echo $count;?>" class="medium" value="<?php echo isset($shortcut) ? $shortcut : set_value('shortcuts['.$count.']') ?>" />
+				<input type="submit" name="add_shortcut" id="add_shortcut<?php echo $count;?>" value="<?php echo lang('ui_add_shortcut') ?>" class="button" />
+			</li>
+		<?php foreach ($settings as $action => $shortcut): ?>
 			<?php $count++; ?>
+			<li id="shortcut<?php echo $count;?>">
+				<input type="text" id="action<?php echo $count;?>" name="action<?php echo $count;?>" class="medium" value="<?php echo isset($action) ? $action : set_value('actions['.$count.']') ?>" />
+				<input type="text" id="shortcut<?php echo $count;?>" name="shortcut<?php echo $count;?>" class="medium" value="<?php echo isset($shortcut) ? $shortcut : set_value('shortcuts['.$count.']') ?>" />
+				<input type="button" name="remove_shortcut" id="remove_shortcut<?php echo $count;?>" value="<?php echo lang('ui_remove_shortcut') ?>" class="button" />
+			</li>
 		<?php endforeach; ?>
 		</ul>
-	</div>
-
-	<div class="submits">
-		<input type="submit" name="submit" value="<?php echo lang('bf_action_save') .' '. lang('bf_context_settings') ?>" />
 	</div>
 
 <?php echo form_close(); ?>

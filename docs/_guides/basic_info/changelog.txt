@@ -1,6 +1,6 @@
 Topic: Changelog
 
-Version 0.5-RC1 (Unreleased)
+Version 0.5
 
 Additions:
 - Edit Profile for the front end user - issue #197
@@ -46,6 +46,7 @@ Bugs:
 - #309 - Convert Some text to language file & some fix & RTL layout
 - #310 - Fixed Database Module
 - #300 - Installer : Assets cache should be writeable
+- #314 - Disallow spaces in the keyboard shortcuts
 
 
 Version 0.2

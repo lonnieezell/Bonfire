@@ -54,6 +54,7 @@ $lang['in_install_button']			= 'Install Bonfire';
 $lang['in_curl_disabled']			= '<p class="error">cURL <strong>is not</strong> presently enabled as a PHP extension. Bonfire will not be able to check for updates until it is enabled.</p>';
 
 $lang['in_success_notification']    = 'You are good to go! Happy coding!';
+$lang['in_success_rebase_msg']		= 'Please set the .htaccess RewriteBase setting to: RewriteBase ';
 $lang['in_success_msg']				= 'Please remove the install folder and return to ';
 
 $lang['no_migrations_found']			= 'No migration files were found';

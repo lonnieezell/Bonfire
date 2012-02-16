@@ -309,6 +309,9 @@ class Developer extends Admin_Controller {
 				$this->form_validation->set_rules("use_modified",'Use Modified Field',"trim|xss_clean|alpha");
 				$this->form_validation->set_rules("modified_field",'Modified Field Name',"trim|xss_clean|alpha_dash");
 			}
+			elseif ($this->input->post('module_db') == 'existing' && $field_total > 0) {
+				$this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");				
+			}
 		
 			for($counter=1; $field_total >= $counter; $counter++)
 			{

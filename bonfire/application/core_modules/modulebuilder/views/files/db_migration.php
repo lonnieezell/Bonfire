@@ -21,11 +21,11 @@ class Migration_Install_'.$table_name.' extends Migration {
 			}
 
 			$db_migration .= '
-			$this->dbforge->add_field("`'.$module_name_lower.'_'.strtolower(set_value("view_field_name$counter")).'` '.addcslashes(set_value("db_field_type$counter"),'"');
+			$this->dbforge->add_field("`'.$module_name_lower.'_'.set_value("view_field_name$counter").'` '.addcslashes(set_value("db_field_type$counter"),'"');
 		
 			if (!in_array(set_value("db_field_type$counter"), $no_length))
 			{
-				$db_migration .= '('.addcslashes(set_value("db_field_length_value$counter"),'"').')';
+				$db_migration .= '('.addcslashes($this->input->post("db_field_length_value$counter"),'"').')';
 			}
 		
 

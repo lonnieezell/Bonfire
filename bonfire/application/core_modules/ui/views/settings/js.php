@@ -1,6 +1,7 @@
-$('input#add_shortcut').click(function(id) {
-	var current = $('ul#shortcut_keys').children().length;
-	current++;
- 	$('ul#shortcut_keys').append('<li id="shortcut' + current + '"><?php echo lang('ui_action') ?> <input type="text" name="actions[]" class="medium" value="" /> <?php echo lang('ui_shortcut') ?> <input type="text" name="shortcuts[]" class="medium" value="" /> <input type="button" name="remove_shortcut" value="<?php echo lang('ui_remove_shortcut') ?>" class="button" onClick=\'$("#shortcut' + current + '").remove(); return false;\'/></li>');
+$('input[name=remove_shortcut]').click(function(id) {
+	var id = $(this).attr('id').replace($(this).attr('name'), '');
+	var action = $('input#action' + id).val();
+	
+	$('form input#remove_action').val(action);
+	$('form').submit();
 });
-

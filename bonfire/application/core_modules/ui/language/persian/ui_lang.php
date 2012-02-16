@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+﻿<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /*
 	Copyright (c) 2011 Lonnie Ezell
 
@@ -21,18 +21,18 @@
 	THE SOFTWARE.
 */
 
-$lang['ui_keyboard_shortcuts']	= 'Keyboard shortcuts are setup in the application config. The currently available shortcuts are:';
-$lang['ui_add_shortcut']		= 'Add Shortcut';
-$lang['ui_remove_shortcut']		= 'Remove';
-$lang['ui_no_shortcuts']		= 'There are no shortcut options setup in the application config.';
+$lang['ui_keyboard_shortcuts']	= 'کليد هاي ميانبر در فايل تنظيمات برنامه تعريف مي شوند. کليد هاي ميانبر موجود عبرارت اند از:';
+$lang['ui_add_shortcut']		= 'کليد ميانبر جديد';
+$lang['ui_remove_shortcut']		= 'حذف';
+$lang['ui_no_shortcuts']		= 'هيچ کليد ميانبري تعريف نشده است.';
 
-$lang['ui_action']				= 'Action';
-$lang['ui_actions']				= 'Actions';
+$lang['ui_action']				= 'عمل';
+$lang['ui_actions']				= 'عمليات';
 
-$lang['ui_shortcut']			= 'Shortcut Key';
-$lang['ui_shortcuts']			= 'Shortcut Keys';
+$lang['ui_shortcut']			= 'کليد ميانبر';
+$lang['ui_shortcuts']			= 'کليد هاي ميانبر';
 
-$lang['ui_shortcut_success']			= 'Shortcut inserted';
+$lang['ui_shortcut_error']		= 'Spaces are not allowed in the shortcut keys';
 $lang['ui_shortcut_error_exists']		= 'Shortcut already exists';
 $lang['ui_shortcut_error_unavailable']	= 'Action is unavailable';
 $lang['ui_shortcut_error']				= 'Spaces are not allowed in the shortcut keys';
