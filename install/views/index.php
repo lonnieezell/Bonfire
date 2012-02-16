@@ -6,9 +6,7 @@
 	
 	<title>Bonfire Installer</title>
 	
-	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-
-	<link rel="stylesheet" type="text/css" href="/install/assets/css/screen.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>assets/css/screen.css" media="screen" />
 	
 </head>
 <body>
