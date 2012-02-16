@@ -25,7 +25,7 @@ class Migration_Install_'.$table_name.' extends Migration {
 		
 			if (!in_array(set_value("db_field_type$counter"), $no_length))
 			{
-				$db_migration .= '('.addcslashes(set_value("db_field_length_value$counter"),'"').')';
+				$db_migration .= '('.addcslashes($this->input->post("db_field_length_value$counter"),'"').')';
 			}
 		
 
