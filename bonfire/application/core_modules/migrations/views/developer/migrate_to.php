@@ -8,7 +8,7 @@
 <?php echo form_open($this->uri->uri_string(), 'class="constrained"'); ?>
 
 	<p>
-		<?php echo lang('mig_choose_migration'); ?> 
+		<?php echo lang('mig_choose_migration'); ?>
 		<select name="migration">
 		<?php foreach ($migrations as $migration) :?>
 			<option value="<?php echo (int)substr($migration, 0, 3) ?>" <?php echo ((int)substr($migration, 0, 3) == $this->uri->segment(5)) ? 'selected="selected"' : '' ?>><?php echo $migration ?></option>
@@ -17,6 +17,6 @@
 	</p>
 
 	<div class="submits">
-		<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" />  <?php echo lanf('bf_or'),' ',anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
+		<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
 	</div>
 <?php echo form_close(); ?>

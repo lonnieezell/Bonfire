@@ -88,6 +88,19 @@ class User_model extends BF_Model {
 		{
 		  unset($data['username']);
 		}
+		
+		// Display Name
+		if (!isset($data['display_name']) || (isset($data['display_name']) && empty($data['display_name'])))
+		{
+			if ($this->settings_lib->item('auth.use_usernames') == 1 && !empty($data['username']))
+			{
+				$data['display_name'] = $data['username'];
+			}
+			else
+			{
+				$data['display_name'] = $data['email'];
+			}
+		}
 
 		list($password, $salt) = $this->hash_password($data['password']);
 		
@@ -95,15 +108,6 @@ class User_model extends BF_Model {
 		
 		$data['password_hash'] = $password;
 		$data['salt'] = $salt;
-		
-		$data['zipcode'] = !empty($data['zipcode']) ? $data['zipcode'] : null;
-
-		// Handle the country
-		if (isset($data['iso']))
-		{
-			$data['country_iso'] = $data['iso'];
-			unset($data['iso']);
-		}
 		
 		// What's the default role?
 		if (!isset($data['role_id']))
@@ -141,7 +145,7 @@ class User_model extends BF_Model {
 			true/false
 	*/
 	public function update($id=null, $data=array()) 
-	{
+	{	
 		if ($id)
 		{
 			$trigger_data = array('user_id'=>$id, 'data'=>$data);
@@ -432,6 +436,131 @@ class User_model extends BF_Model {
 		}
 		
 		return false;
+	}
+	
+	//--------------------------------------------------------------------
+	
+	//--------------------------------------------------------------------
+	// !META METHODS
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: save_meta_for()
+		
+		Saves one or more key/value pairs of additional meta information
+		for a user.
+		
+		Examples:
+			$data = array(
+				'location'	=> 'That City, Katmandu',
+				'interests'	=> 'My interests'
+			);
+			$this->user_model->save_meta_for($user_id, $data);
+		
+		Parameters:
+			$user_id	- The ID of the user to save the meta for.
+			$data		- An array of key/value pairs to save.
+	*/
+	public function save_meta_for($user_id=null, $data=array()) 
+	{
+		if (!is_numeric($user_id))
+		{
+			$this->error = 'Invalid User ID';
+		}
+		
+		$this->table	= 'user_meta';
+		$this->key		= 'meta_id';
+		
+		foreach ($data as $key => $value)
+		{ 
+			$this->db->where('user_id', $user_id);
+			$this->db->where('meta_key', $key);
+			$query = $this->db->get('user_meta');
+				
+			$obj = array(
+				'user_id'		=> $user_id,
+				'meta_key'		=> $key,
+				'meta_value'	=> $value
+			);
+			
+			if ($query->num_rows() == 0)
+			{ 
+				// Insert
+				$this->db->insert('user_meta', $obj);
+			}
+			// Update
+			else if ($query->num_rows() > 0)
+			{
+				$row = $query->row();
+				$meta_id = $row->meta_id;
+				
+				$this->db->where('user_id', $user_id);
+				$this->db->where('meta_key', $key);
+				$this->db->set('meta_value', $value);
+				$this->db->update('user_meta', $obj);
+			}
+			
+		}
+		
+		// Reset our table info
+		$this->table	= 'users';
+		$this->key		= 'id';
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/*
+		Method: find_meta_for()
+		
+		Retrieves all meta values defined for a user.
+		
+		Parameters:
+			$user_id	- An INT with the user's ID to find the meta for.
+			$fields		- An array of meta_key names to retrieve.
+			
+		Returns:
+			A stdObject with the key/value pairs, or NULL.
+	*/
+	public function find_meta_for($user_id=null, $fields=null) 
+	{
+		if (!is_numeric($user_id))
+		{
+			$this->error = 'Invalid User ID';
+		}
+		
+		$this->table	= 'user_meta';
+		$this->key		= 'meta_id';
+		
+		// Limiting to certain fields? 
+		if (is_array($fields))
+		{
+			$this->db->where_in('meta_key', $fields);
+		}
+		
+		$this->db->where('user_id', $user_id);
+		$query = $this->db->get('user_meta');
+	
+		if ($query->num_rows())
+		{
+			$rows = $query->result();
+			
+			$result = null;
+			foreach ($rows as $row)
+			{
+				$key = $row->meta_key;
+				$result->$key = $row->meta_value;
+			}
+		}
+		else
+		{
+			$result = null;
+		}
+	
+		// Reset our table info
+		$this->table	= 'users';
+		$this->key		= 'id';
+		
+		return $result;
 	}
 	
 	//--------------------------------------------------------------------

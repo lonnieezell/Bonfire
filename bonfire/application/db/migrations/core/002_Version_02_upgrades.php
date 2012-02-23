@@ -19,7 +19,8 @@ class Migration_Version_02_upgrades extends Migration {
 			'temp_password_hash' => array(
 				'name'	=> 'reset_hash',
 				'type'	=> 'VARCHAR',
-				'constraint'	=> 40
+				'constraint'	=> 40,
+				'null'			=> true
 			)
 		));
 

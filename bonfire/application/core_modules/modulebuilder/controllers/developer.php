@@ -4,14 +4,14 @@
  * ModuleBuilder
  *
  * An easy module generator for the Bonfire project on the CodeIgniter framework
- * 
+ *
  * @package   ModuleBuilder
  * @version   0.5.0
  * @author    Sean Downey, <sean[at]considerweb.com>
  * @copyright Copyright (c) 2011, Sean Downey
  * @license   http://www.opensource.org/licenses/mit-license.php
  * @link      http://github.com/seandowney/bonfire_modulebuilder
- * 
+ *
  * This code is originally based on Ollie Rattue's http://formigniter.org/ project
  */
 
@@ -22,75 +22,73 @@ class Developer extends Admin_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		
+
 		$this->auth->restrict('Site.Developer.View');
 		$this->load->library('modulebuilder');
 		$this->load->config('modulebuilder');
 		$this->lang->load('modulebuilder');
 		$this->load->helper('file');
 		$this->load->dbforge();
-		
+
 		$this->options = $this->config->item('modulebuilder');
-		
+
+		Template::set_block('sub_nav', 'developer/_sub_nav');
 	}
 
 	//---------------------------------------------------------------
 
 	/*
 		Method: index()
-		
+
 		Displays a list of installed modules with the option to create
 		a new one.
 	*/
 	public function index()
 	{
-		
-		Assets::add_js($this->load->view('developer/modulebuilder_js', null, true), 'inline');
-
 		$modules = module_list(true);
 		$configs = array();
-	
+
 		foreach ($modules as $module)
 		{
 			$configs[$module] = module_config($module);
-			
+
 			if (!isset($configs[$module]['name']))
 			{
 				$configs[$module]['name'] = ucwords($module);
 			}
 		}
-		
+
 		// check that the modules folder is writeable
 		Template::set('writeable', $this->_check_writeable());
-		
+
 		ksort($configs);
 		Template::set('modules', $configs);
 		Template::set('toolbar_title', 'Manage Modules');
 		Template::render();
-		
+
 	}
-    
+
 	//--------------------------------------------------------------------
-	
+
 	/*
 		Method: create()
-		
+
 		Displays the create a module form.
 	*/
 	public function create()
 	{
-		Assets::add_js($this->load->view('developer/modulebuilder_js', null, true), 'inline');
-		
+		Assets::add_module_js('modulebuilder', 'modulebuilder.js');
+
 		$this->auth->restrict('Bonfire.Modules.Add');
-		
+
 		$hide_form = false;
-		
+
 		$this->field_total = $this->input->post('field_total');
 		$this->field_total = 0;
-		
+
 		$last_seg = $this->uri->segment( $this->uri->total_segments() );
-		
-		if (is_numeric($last_seg)) 
+
+		if (is_numeric($last_seg))
 		{
 			$this->field_total = $last_seg;
 		}
@@ -116,28 +114,28 @@ class Developer extends Admin_Controller {
 			Template::set('field_numbers', range(0,20));
 			Template::set('field_total', $this->field_total);
 			Template::set_view('developer/modulebuilder_form');
-						
+
 		}
 		elseif($this->input->post('module_db') == 'existing' && $this->field_total == 0)
 		{
 			// if the user has specified the table including the prefix then remove the prefix
 			$_POST['table_name'] = preg_replace("/^".$this->db->dbprefix."/", "", $this->input->post('table_name'));
-		
+
 
 			// read the fields from the specified db table and pass them back into the form
 			$table_fields = $this->table_info($this->input->post('table_name'));
 
 			$num_fields = 0;
-			
+
 			if (is_array($table_fields)) {
 				$num_fields = count($table_fields);
 			}
-			
+
 			Template::set('field_total', $this->field_total);
 			if ($num_fields != 0) {
 				Template::set('field_total', $num_fields - 1); // discount the first field as it is the primary key
 			}
-			
+
 			if (!empty($_POST) && $num_fields == 0)
 			{
 				Template::set('form_error', TRUE);
@@ -148,7 +146,7 @@ class Developer extends Admin_Controller {
 			{
 				Template::set('form_error', FALSE);
 			}
-			
+
 			$query = $this->db->select('role_id,role_name')->order_by('role_name')->get('roles');
 			Template::set('roles', $query->result_array());
 			Template::set('existing_table_fields', $table_fields);
@@ -159,46 +157,48 @@ class Developer extends Admin_Controller {
 			Template::set_view('developer/modulebuilder_form');
 
 		}
-		else 
+		else
 		{
 			// passed validation proceed to second page
 			$this->build_module($this->field_total);
-			
+
 			// Log the activity
-			$this->activity_model->log_activity($this->auth->user_id(), lang('mb_act_create').': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
-			
+			$this->load->model('activities/Activity_model', 'activity_model');
+
+			$this->activity_model->log_activity($this->current_user->id, lang('mb_act_create').': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
+
 			Template::set_view('developer/output');
 		}
-				
+
 		// check that the modules folder is writeable
 		Template::set('writeable', $this->_check_writeable());
 
 		Template::set('error', array());
 
 		Template::set('toolbar_title', 'Module Builder');
-		
+
 		Template::render();
 	}
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/*
 		Method: delete()
-		
+
 		Deletes a module and all of it's files.
 	*/
-	public function delete() 
-	{	
+	public function delete()
+	{
 		$module_name = preg_replace("/[ -]/", "_", $this->uri->segment(5));
 
-		if (!empty($module_name)) 
-		{	
+		if (!empty($module_name))
+		{
 			$this->auth->restrict('Bonfire.Modules.Delete');
-			
+
 			$prefix = $this->db->dbprefix;
-			
+
 			$this->db->trans_begin();
-			
+
 			// check if there is a model to drop (non-table modules will have no model)
 			$model_name = $module_name."_model";
 			if (module_file_path($module_name,'models',$model_name.'.php'))
@@ -206,8 +206,8 @@ class Developer extends Admin_Controller {
 				// drop the table
 				$this->load->model($module_name.'/'.$model_name,'mt');
 				$this->dbforge->drop_table($this->mt->get_table());
-			}			
-			
+			}
+
 			// get any permission ids
 			$query = $this->db->query('SELECT permission_id FROM '.$prefix.'permissions WHERE name LIKE "'.$module_name.'.%.%"');
 
@@ -218,13 +218,13 @@ class Developer extends Admin_Controller {
             		// undo any permissions that exist
 					$this->db->where('permission_id',$row['permission_id']);
             		$this->db->delete($prefix.'permissions');
-					
+
 					// and fron the roles as well.
 					$this->db->where('permission_id',$row['permission_id']);
-					$this->db->delete($prefix.'role_permissions');            		
-            	}		
+					$this->db->delete($prefix.'role_permissions');
+            	}
 	        }
-	        
+
 	        // drop the schema - old Migration schema method
 	        $module_name_lower = preg_replace("/[ -]/", "_", strtolower($module_name));
 	        if ($this->db->field_exists( $module_name_lower . '_version', 'schema_version'))
@@ -237,7 +237,7 @@ class Developer extends Admin_Controller {
 	        {
 	        	$this->db->delete('schema_version', array('type' => $module_name_lower.'_'));
 	        }
-	        
+
 	        if ($this->db->trans_status() === FALSE)
 			{
 				$this->db->trans_rollback();
@@ -246,38 +246,41 @@ class Developer extends Admin_Controller {
 			else
 			{
 				$this->db->trans_commit();
-				
+
 				// database was successful in deleting everything. Now try to get rid of the files.
 				if (delete_files(module_path($module_name), true))
 				{
 					@rmdir(module_path($module_name.'/'));
 
 					// Log the activity
-					$this->activity_model->log_activity($this->auth->user_id(), lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'modulebuilder');
+					$this->load->model('activities/Activity_model', 'activity_model');
+
+					$this->activity_model->log_activity($this->current_user->id, lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'modulebuilder');
 
 					Template::set_message('The module and associated database entries were successfully deleted.', 'success');
+					Template::redirect(SITE_AREA .'/developer/modulebuilder');
 				}
 				else {
 					Template::set_message('The module and associated database entries were successfully deleted, HOWEVER, the module folder and files were not removed. They must be removed manually.', 'info');
 				}
 			}//end if
 		}//end if
-		
-		Template::redirect(SITE_AREA .'/developer/modulebuilder');
+
+		Template::render();
 	}
 
 	//--------------------------------------------------------------------
-	
+
 	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
-	
+
 	/*
 		Method: validate_form()
-		
+
 		Handles the validation of the modulebuilder form.
 	*/
-	private function validate_form($field_total=0) 
+	private function validate_form($field_total=0)
 	{
 		$this->form_validation->set_rules("contexts_content",'Contexts :: Content',"trim|xss_clean|is_numeric");
 		$this->form_validation->set_rules("contexts_developer",'Contexts :: Developer',"trim|xss_clean|is_numeric");
@@ -294,11 +297,11 @@ class Developer extends Admin_Controller {
 		$this->form_validation->set_rules("module_description",'Module Description',"trim|required|xss_clean");
 		$this->form_validation->set_rules("module_name",'Module Name',"trim|required|xss_clean|callback_modulename_check");
 		$this->form_validation->set_rules("role_id",'Give Role Full Access',"trim|xss_clean|is_numeric");
-		
+
 		// no point doing all this checking if we don't want a table
 		if ($this->input->post('module_db')) {
 			$this->form_validation->set_rules("table_name",'Table Name',"trim|required|xss_clean|alpha_dash");
-			
+
 			if ($this->input->post('module_db') == 'new')
 			{
 				$this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");
@@ -310,9 +313,9 @@ class Developer extends Admin_Controller {
 				$this->form_validation->set_rules("modified_field",'Modified Field Name',"trim|xss_clean|alpha_dash");
 			}
 			elseif ($this->input->post('module_db') == 'existing' && $field_total > 0) {
-				$this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");				
+				$this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");
 			}
-		
+
 			for($counter=1; $field_total >= $counter; $counter++)
 			{
 				if ($counter != 1) // better to do it this way round as this statement will be fullfilled more than the one below
@@ -324,7 +327,7 @@ class Developer extends Admin_Controller {
 					// the first field always needs to be required i.e. we need to have at least one field in our form
 					$this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|required|xss_clean|alpha_extra');
 				}
-				
+
 				$name_required = '';
 				$label = $this->input->post("view_field_label$counter");
 				if( !empty($label) )
@@ -334,7 +337,7 @@ class Developer extends Admin_Controller {
 				$this->form_validation->set_rules("view_field_name$counter","Name $counter","trim|".$name_required."callback_no_match[$counter]|xss_clean");
 				$this->form_validation->set_rules("view_field_type$counter","Field Type $counter","trim|required|xss_clean|alpha");
 				$this->form_validation->set_rules("db_field_type$counter","DB Field Type $counter","trim|xss_clean|alpha");
-				
+
 				// make sure that the length field is required if the DB Field type requires a length
 				$db_len_required = '';
 				$field_type = $this->input->post("db_field_type$counter");
@@ -351,19 +354,19 @@ class Developer extends Admin_Controller {
 		}
 		return $this->form_validation->run();
 	}
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/*
 		Method: table_info()
-		
+
 		Returns an array with the structure and details for the fields in the specified
 		DB table.
 	*/
-	private function table_info($table_name) 
+	private function table_info($table_name)
 	{
 		$fields = array();
-		
+
 		// check that the table exists in this database
 		if ($this->db->table_exists($table_name))
 		{
@@ -409,24 +412,24 @@ class Developer extends Admin_Controller {
 				} // end foreach
 
 				return $fields;
-				
+
 			}//end if
 		}//end if
 
 		return FALSE;
-		
-		
+
+
 	}//end table_info()
-	
-	
+
+
 	//--------------------------------------------------------------------
-	
+
 	/*
 		Method: build_module()
-		
+
 		Handles the heavy-lifting of building a module from ther user's specs.
 	*/
-	private function build_module($field_total=0) 
+	private function build_module($field_total=0)
 	{
 		$module_name 		= $this->input->post('module_name');
 		$table_name 		= strtolower(preg_replace("/[ -]/", "_", $this->input->post('table_name')));
@@ -434,17 +437,17 @@ class Developer extends Admin_Controller {
 		$action_names 		= $this->input->post('form_action');
 		$module_description = $this->input->post('module_description');
 		$role_id			= $this->input->post('role_id');
-		
+
 		$db_required = $_POST['module_db'] == 'new' ? TRUE : FALSE;
-		
+
 		$primary_key_field = $this->input->post('primary_key_field');
 		if( $primary_key_field == '') {
 			$primary_key_field = $this->options['primary_key_field'];
 		}
 		$primary_key_field = strtolower($primary_key_field);
-		
+
 		$form_input_delimiters = explode(',', $this->input->post('form_input_delimiters'));
-		
+
 		if( !is_array($form_input_delimiters) OR count($form_input_delimiters) != 2) {
 			$form_input_delimiters = $this->options['form_input_delimiters'];
 		}
@@ -453,7 +456,7 @@ class Developer extends Admin_Controller {
 		if( !is_array($form_error_delimiters) OR count($form_error_delimiters) != 2) {
 			$form_error_delimiters = $this->options['$form_error_delimiters'];
 		}
-		
+
 		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name);
 
 		// make the variables available to the view file
@@ -462,7 +465,7 @@ class Developer extends Admin_Controller {
 		$data['controller_name']	= preg_replace("/[ -]/", "_", $module_name);
 		$data['table_name']			= empty($table_name) ? strtolower(preg_replace("/[ -]/", "_", $module_name)) : $table_name;
 		$data = $data + $file_data;
-		
+
 		// Allow for the Old method - update the schema first to prevent errors in duplicate column names due to Migrations.php caching db columns
 		if (!$this->db->field_exists('version', 'schema_version'))
 		{
@@ -471,12 +474,12 @@ class Developer extends Admin_Controller {
 					$data['module_name_lower'] . '_version'	=> array(
 					'type'			=> 'INT',
 					'constraint'	=> 4,
-					'null'			=> true, 
+					'null'			=> true,
 					'default'		=> 0
 				)
-			));	
+			));
 		}
-		
+
 		// load the migrations library
 		$this->load->library('migrations/Migrations');
 		// run the migration install routine
@@ -484,17 +487,17 @@ class Developer extends Admin_Controller {
 		{
 			$data['mb_migration_result'] = 'mb_out_tables_success';
 		}
-		else 
+		else
 		{
 			$data['mb_migration_result'] = 'mb_out_tables_error';
 		}
-		
+
 		Template::set($data);
 	}
-	
+
 	//--------------------------------------------------------------------
-	
-	
+
+
 	/** Custom Form Validation Callback Rule
 	 *
 	 * Checks that one field doesn't match all the others.
@@ -507,14 +510,14 @@ class Developer extends Admin_Controller {
 	 */
 
 	function no_match($str, $fieldno)
-	{		
+	{
 		for($counter=1; $this->field_total >= $counter; $counter++)
 		{
 			// nothing has been entered into this field so we don't need to check
 			// or the field being checked is the same as the field we are checking from
-			if ($_POST["view_field_name$counter"] == '' || $fieldno == $counter) 			
+			if ($_POST["view_field_name$counter"] == '' || $fieldno == $counter)
 			{
-				continue;				
+				continue;
 			}
 
 			if ($str == $_POST["view_field_name{$counter}"])
@@ -528,8 +531,8 @@ class Developer extends Admin_Controller {
 	}
 
 	//--------------------------------------------------------------------
-	
-	
+
+
 	/** Check that the Modules folder is writeable
 	 *
 	 * @access	private
@@ -538,11 +541,11 @@ class Developer extends Admin_Controller {
 	function _check_writeable()
 	{
 		return is_writeable($this->options['output_path']);
-		
+
 	}//end _check_writeable()
-	
-	
-	/** 
+
+
+	/**
 	 * Check the module name is valid
 	 *
 	 * @access	private

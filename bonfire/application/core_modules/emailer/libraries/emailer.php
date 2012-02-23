@@ -126,14 +126,9 @@ class Emailer {
 		}
 
 		// Wrap the $message in the email template.
-		$mailtype = $this->ci->settings_lib->item('mailtype');
-		$templated = $message;
-		if ($mailtype == 'html')
-		{
-			$templated  = $this->ci->load->view('emailer/email/_header', null, true);
-			$templated .= $message;
-			$templated .= $this->ci->load->view('emailer/email/_footer', array('year' => date("Y")), true);
-		}
+		$templated  = $this->ci->load->view('emailer/email/_header', null, true);
+		$templated .= $message;
+		$templated .= $this->ci->load->view('emailer/email/_footer', null, true);
 
 		// Should we put it in the queue?
 		if ($queue_override == true || $this->queue_emails == true)
@@ -253,10 +248,7 @@ class Emailer {
 		//$limit = 33; // 33 emails every 5 minutes = 400 emails/hour.
 		$this->ci->load->library('email');
 
-		$this->ci->load->model('settings/settings_model', 'settings_model');
-		$this->ci->email->initialize($this->ci->settings_model->select('name,value')->find_all_by('module', 'email'));
-
-//		$this->ci->email->initialize($this->config);
+		$this->ci->email->initialize($this->config);
 
 		// Grab records where success = 0
 		$this->ci->db->limit($limit);

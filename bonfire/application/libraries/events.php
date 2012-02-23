@@ -114,11 +114,16 @@ class Events {
 		}		
 		
 		$subscribers = self::$events[$event_name];
-		
+	
 		foreach ($subscribers as $subscriber)
-		{
+		{	
+			if (strpos($subscriber['filename'], '.php') == false)
+			{
+				$subscriber['filename'] .= '.php';
+			}
+					
 			$file_path = module_file_path($subscriber['module'], $subscriber['filepath'], $subscriber['filename']);
-			
+		
 			if (!file_exists($file_path))
 			{
 				continue;

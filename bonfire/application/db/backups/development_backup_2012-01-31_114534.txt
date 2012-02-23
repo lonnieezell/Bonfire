@@ -1,0 +1,332 @@
+#
+# TABLE STRUCTURE FOR: bf_activities
+#
+
+CREATE TABLE `bf_activities` (
+  `activity_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) NOT NULL DEFAULT '0',
+  `activity` varchar(255) NOT NULL,
+  `module` varchar(255) NOT NULL,
+  `created_on` datetime NOT NULL,
+  `deleted` tinyint(12) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`activity_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_activities (`activity_id`, `user_id`, `activity`, `module`, `created_on`, `deleted`) VALUES (1, 1, 'logged in from: 127.0.0.1', 'users', '2012-01-27 09:31:42', 0);
+INSERT INTO bf_activities (`activity_id`, `user_id`, `activity`, `module`, `created_on`, `deleted`) VALUES (2, 1, 'logged in from: 127.0.0.1', 'users', '2012-01-27 10:29:06', 0);
+
+
+#
+# TABLE STRUCTURE FOR: bf_email_queue
+#
+
+CREATE TABLE `bf_email_queue` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `to_email` varchar(128) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `alt_message` text,
+  `max_attempts` int(11) NOT NULL DEFAULT '3',
+  `attempts` int(11) NOT NULL DEFAULT '0',
+  `success` tinyint(1) NOT NULL DEFAULT '0',
+  `date_published` datetime DEFAULT NULL,
+  `last_attempt` datetime DEFAULT NULL,
+  `date_sent` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_email_queue (`id`, `to_email`, `subject`, `message`, `alt_message`, `max_attempts`, `attempts`, `success`, `date_published`, `last_attempt`, `date_sent`) VALUES (1, 'lonnieje@gmail.com', 'Congratulations! Your Bonfire Emailer is working!', '<html>\r\n<body leftmargin=\"0\" marginwidth=\"0\" topmargin=\"0\" marginheight=\"0\" offset=\"0\" bgcolor=\'#ececec\' >\r\n\r\n\r\n<STYLE>\r\n .headerTop { background-color:#FFCC66; border-top:0px solid #000000; border-bottom:1px solid #FFFFFF; text-align:center; }\r\n .adminText { font-size:10px; color:#996600; line-height:200%; font-family:verdana; text-decoration:none; }\r\n .headerBar { background-color:#FFFFFF; border-top:0px solid #333333; border-bottom:10px solid #FFFFFF; }\r\n .title { font-size:20px; font-weight:bold; color:#CC6600; font-family:arial; line-height:110%; }\r\n .subTitle { font-size:11px; font-weight:normal; color:#666666; font-style:italic; font-family:arial; }\r\n .defaultText { font-size:12px; color:#000000; line-height:150%; font-family:trebuchet ms; }\r\n .footerRow { background-color:#FFFFCC; border-top:10px solid #FFFFFF; }\r\n .footerText { font-size:10px; color:#996600; line-height:100%; font-family:verdana; }\r\n a { color:#FF6600; color:#FF6600; color:#FF6600; }\r\n</STYLE>\r\n\r\n\r\n\r\n<table width=\"100%\" cellpadding=\"10\" cellspacing=\"0\" class=\"backgroundTable\" >\r\n<tr>\r\n<td valign=\"top\" align=\"center\">\r\n\r\n\r\n<table width=\"550\" cellpadding=\"0\" cellspacing=\"0\" bgcolor=\"#fff\" style=\"border: 1px solid #999\">\r\n\r\n<tr>\r\n<td style=\"background-color:#333;color: #fff;text-align:center;\" align=\"center\"><span style=\"font-size:10px;line-height:200%;font-family:verdana;text-decoration:none;\">Email not displaying correctly? <a href=\"*|ARCHIVE|*\" style=\"font-size:10px;line-height:200%;font-family:verdana;text-decoration:none;\">View it in your browser.</a></span></td>\r\n</tr>\r\n\r\n<tr>\r\n</table>\r\n\r\n\r\n<table width=\"550\" cellpadding=\"20\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">\r\n<tr>\r\n<td bgcolor=\"#FFFFFF\" valign=\"top\" style=\"font-size:12px;color:#000000;line-height:150%;font-family:trebuchet ms;\">\r\nIf you are seeing this email, then it appears your Bonfire Emailer is working!						</td>\r\n					</tr>\r\n\r\n					<tr>\r\n						<td style=\"background-color:#fff;border-top:1px solid #ccc;\" valign=\"top\">\r\n							Copyright (C) 2007  All rights reserved.\r\n						</td>\r\n					</tr>\r\n\r\n				</table>\r\n\r\n			</td>\r\n		</tr>\r\n	</table>\r\n</body>\r\n</html>\r\n', NULL, 3, 1, 1, NULL, '2012-01-31 11:25:14', '2012-01-31 11:25:14');
+INSERT INTO bf_email_queue (`id`, `to_email`, `subject`, `message`, `alt_message`, `max_attempts`, `attempts`, `success`, `date_published`, `last_attempt`, `date_sent`) VALUES (2, 'lonnieje@gmail.com', 'Congratulations! Your Bonfire Emailer is working!', '<html>\r\n<body leftmargin=\"0\" marginwidth=\"0\" topmargin=\"0\" marginheight=\"0\" offset=\"0\" bgcolor=\'#ececec\' >\r\n\r\n\r\n<STYLE>\r\n .headerTop { background-color:#FFCC66; border-top:0px solid #000000; border-bottom:1px solid #FFFFFF; text-align:center; }\r\n .adminText { font-size:10px; color:#996600; line-height:200%; font-family:verdana; text-decoration:none; }\r\n .headerBar { background-color:#FFFFFF; border-top:0px solid #333333; border-bottom:10px solid #FFFFFF; }\r\n .title { font-size:20px; font-weight:bold; color:#CC6600; font-family:arial; line-height:110%; }\r\n .subTitle { font-size:11px; font-weight:normal; color:#666666; font-style:italic; font-family:arial; }\r\n .defaultText { font-size:12px; color:#000000; line-height:150%; font-family:trebuchet ms; }\r\n .footerRow { background-color:#FFFFCC; border-top:10px solid #FFFFFF; }\r\n .footerText { font-size:10px; color:#996600; line-height:100%; font-family:verdana; }\r\n a { color:#FF6600; color:#FF6600; color:#FF6600; }\r\n</STYLE>\r\n\r\n\r\n\r\n<table width=\"100%\" cellpadding=\"10\" cellspacing=\"0\" class=\"backgroundTable\" >\r\n<tr>\r\n<td valign=\"top\" align=\"center\">\r\n\r\n\r\n<table width=\"550\" cellpadding=\"0\" cellspacing=\"0\" bgcolor=\"#fff\" style=\"border: 1px solid #999\">\r\n\r\n<tr>\r\n<td style=\"background-color:#333;color: #fff;text-align:center;\" align=\"center\"><span style=\"font-size:10px;line-height:200%;font-family:verdana;text-decoration:none;\">Email not displaying correctly? <a href=\"*|ARCHIVE|*\" style=\"font-size:10px;line-height:200%;font-family:verdana;text-decoration:none;\">View it in your browser.</a></span></td>\r\n</tr>\r\n\r\n<tr>\r\n</table>\r\n\r\n\r\n<table width=\"550\" cellpadding=\"20\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">\r\n<tr>\r\n<td bgcolor=\"#FFFFFF\" valign=\"top\" style=\"font-size:12px;color:#000000;line-height:150%;font-family:trebuchet ms;\">\r\nIf you are seeing this email, then it appears your Bonfire Emailer is working!						</td>\r\n					</tr>\r\n\r\n					<tr>\r\n						<td style=\"background-color:#fff;border-top:1px solid #ccc;\" valign=\"top\">\r\n							Copyright (C) 2007  All rights reserved.\r\n						</td>\r\n					</tr>\r\n\r\n				</table>\r\n\r\n			</td>\r\n		</tr>\r\n	</table>\r\n</body>\r\n</html>\r\n', NULL, 3, 0, 0, NULL, NULL, NULL);
+INSERT INTO bf_email_queue (`id`, `to_email`, `subject`, `message`, `alt_message`, `max_attempts`, `attempts`, `success`, `date_published`, `last_attempt`, `date_sent`) VALUES (3, 'lonnieje@gmail.com', 'Congratulations! Your Bonfire Emailer is working!', '<html>\r\n<body leftmargin=\"0\" marginwidth=\"0\" topmargin=\"0\" marginheight=\"0\" offset=\"0\" bgcolor=\'#ececec\' >\r\n\r\n\r\n<STYLE>\r\n .headerTop { background-color:#FFCC66; border-top:0px solid #000000; border-bottom:1px solid #FFFFFF; text-align:center; }\r\n .adminText { font-size:10px; color:#996600; line-height:200%; font-family:verdana; text-decoration:none; }\r\n .headerBar { background-color:#FFFFFF; border-top:0px solid #333333; border-bottom:10px solid #FFFFFF; }\r\n .title { font-size:20px; font-weight:bold; color:#CC6600; font-family:arial; line-height:110%; }\r\n .subTitle { font-size:11px; font-weight:normal; color:#666666; font-style:italic; font-family:arial; }\r\n .defaultText { font-size:12px; color:#000000; line-height:150%; font-family:trebuchet ms; }\r\n .footerRow { background-color:#FFFFCC; border-top:10px solid #FFFFFF; }\r\n .footerText { font-size:10px; color:#996600; line-height:100%; font-family:verdana; }\r\n a { color:#FF6600; color:#FF6600; color:#FF6600; }\r\n</STYLE>\r\n\r\n\r\n\r\n<table width=\"100%\" cellpadding=\"10\" cellspacing=\"0\" class=\"backgroundTable\" >\r\n<tr>\r\n<td valign=\"top\" align=\"center\">\r\n\r\n\r\n<table width=\"550\" cellpadding=\"0\" cellspacing=\"0\" bgcolor=\"#fff\" style=\"border: 1px solid #999\">\r\n\r\n<tr>\r\n<td style=\"background-color:#333;color: #fff;text-align:center;\" align=\"center\"><span style=\"font-size:10px;line-height:200%;font-family:verdana;text-decoration:none;\">Email not displaying correctly? <a href=\"*|ARCHIVE|*\" style=\"font-size:10px;line-height:200%;font-family:verdana;text-decoration:none;\">View it in your browser.</a></span></td>\r\n</tr>\r\n\r\n<tr>\r\n</table>\r\n\r\n\r\n<table width=\"550\" cellpadding=\"20\" cellspacing=\"0\" bgcolor=\"#FFFFFF\">\r\n<tr>\r\n<td bgcolor=\"#FFFFFF\" valign=\"top\" style=\"font-size:12px;color:#000000;line-height:150%;font-family:trebuchet ms;\">\r\nIf you are seeing this email, then it appears your Bonfire Emailer is working!						</td>\r\n					</tr>\r\n\r\n					<tr>\r\n						<td style=\"background-color:#fff;border-top:1px solid #ccc;\" valign=\"top\">\r\n							Copyright (C) 2007  All rights reserved.\r\n						</td>\r\n					</tr>\r\n\r\n				</table>\r\n\r\n			</td>\r\n		</tr>\r\n	</table>\r\n</body>\r\n</html>\r\n', NULL, 3, 0, 0, NULL, NULL, NULL);
+
+
+#
+# TABLE STRUCTURE FOR: bf_login_attempts
+#
+
+CREATE TABLE `bf_login_attempts` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ip_address` varchar(40) NOT NULL,
+  `login` varchar(50) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: bf_permissions
+#
+
+CREATE TABLE `bf_permissions` (
+  `permission_id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `description` varchar(100) NOT NULL,
+  `status` enum('active','inactive','deleted') DEFAULT 'active',
+  PRIMARY KEY (`permission_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (1, 'Site.Signin.Allow', 'Allow users to login to the site', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (2, 'Site.Content.View', 'Allow users to view the Content Context', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (3, 'Site.Reports.View', 'Allow users to view the Reports Context', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (4, 'Site.Settings.View', 'Allow users to view the Settings Context', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (5, 'Site.Developer.View', 'Allow users to view the Developer Context', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (6, 'Bonfire.Roles.Manage', 'Allow users to manage the user Roles', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (7, 'Bonfire.Users.Manage', 'Allow users to manage the site Users', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (8, 'Bonfire.Users.View', 'Allow users access to the User Settings', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (9, 'Bonfire.Users.Add', 'Allow users to add new Users', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (10, 'Bonfire.Database.Manage', 'Allow users to manage the Database settings', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (11, 'Bonfire.Emailer.Manage', 'Allow users to manage the Emailer settings', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (12, 'Bonfire.Logs.View', 'Allow users access to the Log details', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (13, 'Bonfire.Logs.Manage', 'Allow users to manage the Log files', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (14, 'Bonfire.Emailer.View', 'Allow users access to the Emailer settings', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (15, 'Site.Signin.Offline', 'Allow users to login to the site when the site is offline', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (16, 'Permissions.Settings.View', 'Allow access to view the Permissions menu unders Settings Context', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (17, 'Permissions.Settings.Manage', 'Allow access to manage the Permissions in the system', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (18, 'Bonfire.Roles.Delete', 'Allow users to delete user Roles', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (19, 'Bonfire.Modules.Add', 'Allow creation of modules with the builder.', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (20, 'Bonfire.Modules.Delete', 'Allow deletion of modules.', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (21, 'Permissions.Administrator.Manage', 'To manage the access control permissions for the Administrator role.', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (22, 'Permissions.Editor.Manage', 'To manage the access control permissions for the Editor role.', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (23, 'Permissions.Banned.Manage', 'To manage the access control permissions for the Banned role.', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (24, 'Permissions.User.Manage', 'To manage the access control permissions for the User role.', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (25, 'Permissions.Developer.Manage', 'To manage the access control permissions for the Developer role.', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (26, 'Bonfire.Activities.Manage', 'Allow users to access the Activities Reports', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (27, 'Activities.Own.View', 'To view the users own activity logs', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (28, 'Activities.Own.Delete', 'To delete the users own activity logs', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (29, 'Activities.User.View', 'To view the user activity logs', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (30, 'Activities.User.Delete', 'To delete the user activity logs, except own', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (31, 'Activities.Module.View', 'To view the module activity logs', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (32, 'Activities.Module.Delete', 'To delete the module activity logs', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (33, 'Activities.Date.View', 'To view the users own activity logs', 'active');
+INSERT INTO bf_permissions (`permission_id`, `name`, `description`, `status`) VALUES (34, 'Activities.Date.Delete', 'To delete the dated activity logs', 'active');
+
+
+#
+# TABLE STRUCTURE FOR: bf_role_permissions
+#
+
+CREATE TABLE `bf_role_permissions` (
+  `role_id` int(11) NOT NULL,
+  `permission_id` int(11) NOT NULL,
+  PRIMARY KEY (`role_id`,`permission_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 1);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 2);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 3);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 4);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 5);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 6);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 7);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 8);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 9);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 10);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 11);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 12);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 13);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 14);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 15);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 16);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 17);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 18);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 19);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 20);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 21);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 22);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 23);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 24);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 25);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 26);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 27);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 28);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 29);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 30);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 31);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 32);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 33);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (1, 34);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (2, 1);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (2, 2);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (2, 3);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (4, 1);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 1);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 2);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 3);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 4);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 5);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 6);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 7);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 8);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 9);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 10);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 11);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 12);
+INSERT INTO bf_role_permissions (`role_id`, `permission_id`) VALUES (6, 13);
+
+
+#
+# TABLE STRUCTURE FOR: bf_roles
+#
+
+CREATE TABLE `bf_roles` (
+  `role_id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_name` varchar(60) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `default` tinyint(1) NOT NULL DEFAULT '0',
+  `can_delete` tinyint(1) NOT NULL DEFAULT '1',
+  `login_destination` varchar(255) NOT NULL DEFAULT '/',
+  `deleted` int(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`role_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_roles (`role_id`, `role_name`, `description`, `default`, `can_delete`, `login_destination`, `deleted`) VALUES (1, 'Administrator', 'Has full control over every aspect of the site.', 0, 0, '', 0);
+INSERT INTO bf_roles (`role_id`, `role_name`, `description`, `default`, `can_delete`, `login_destination`, `deleted`) VALUES (2, 'Editor', 'Can handle day-to-day management, but does not have full power.', 0, 1, '', 0);
+INSERT INTO bf_roles (`role_id`, `role_name`, `description`, `default`, `can_delete`, `login_destination`, `deleted`) VALUES (4, 'User', 'This is the default user with access to login.', 1, 0, '', 0);
+INSERT INTO bf_roles (`role_id`, `role_name`, `description`, `default`, `can_delete`, `login_destination`, `deleted`) VALUES (6, 'Developer', 'Developers typically are the only ones that can access the developer tools. Otherwise identical to Administrators, at least until the site is handed off.', 0, 1, '', 0);
+
+
+#
+# TABLE STRUCTURE FOR: bf_schema_version
+#
+
+CREATE TABLE `bf_schema_version` (
+  `type` varchar(20) NOT NULL,
+  `version` int(4) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_schema_version (`type`, `version`) VALUES ('app_', 16);
+INSERT INTO bf_schema_version (`type`, `version`) VALUES ('core', 16);
+
+
+#
+# TABLE STRUCTURE FOR: bf_schema_version_old
+#
+
+CREATE TABLE `bf_schema_version_old` (
+  `version` int(4) NOT NULL DEFAULT '0',
+  `app_version` int(4) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_schema_version_old (`version`, `app_version`) VALUES (12, 0);
+
+
+#
+# TABLE STRUCTURE FOR: bf_sessions
+#
+
+CREATE TABLE `bf_sessions` (
+  `session_id` varchar(40) NOT NULL DEFAULT '0',
+  `ip_address` varchar(16) NOT NULL DEFAULT '0',
+  `user_agent` varchar(50) NOT NULL,
+  `last_activity` int(10) unsigned NOT NULL DEFAULT '0',
+  `user_data` text,
+  PRIMARY KEY (`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+#
+# TABLE STRUCTURE FOR: bf_settings
+#
+
+CREATE TABLE `bf_settings` (
+  `name` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `module` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `value` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`name`),
+  UNIQUE KEY `unique - name` (`name`),
+  KEY `index - name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('auth.allow_register', 'core', '1');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('auth.allow_remember', 'core', '1');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('auth.do_login_redirect', 'core', '1');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('auth.login_type', 'core', 'email');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('auth.remember_length', 'core', '1209600');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('auth.use_extended_profile', 'core', '0');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('auth.use_own_names', 'core', '1');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('auth.use_usernames', 'core', '1');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('mailpath', 'email', '/usr/sbin/sendmail');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('protocol', 'email', 'smtp');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('sender_email', 'email', 'lonnieje@gmail.com');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('site.list_limit', 'core', '25');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('site.show_front_profiler', 'core', '1');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('site.show_profiler', 'core', '1');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('site.status', 'core', '1');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('site.system_email', 'core', 'lonnieje@gmail.com');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('site.title', 'core', 'Bonfire - Jumpstart Your CodeIgniter Applications');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('smtp_host', 'email', '');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('smtp_pass', 'email', '');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('smtp_port', 'email', '');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('smtp_timeout', 'email', '');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('smtp_user', 'email', '');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('updates.bleeding_edge', 'core', '1');
+INSERT INTO bf_settings (`name`, `module`, `value`) VALUES ('updates.do_check', 'core', '1');
+
+
+#
+# TABLE STRUCTURE FOR: bf_user_cookies
+#
+
+CREATE TABLE `bf_user_cookies` (
+  `user_id` bigint(20) NOT NULL,
+  `token` varchar(128) NOT NULL,
+  `created_on` datetime NOT NULL,
+  KEY `token` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_user_cookies (`user_id`, `token`, `created_on`) VALUES (1, 'd4BqPIBpFWUKjpTHdQNmaiNd7tTCP2LnUeTR9oHelJchP1VZpCkOBk2kfTReCylCI8j61QlwDaosggOeuGW9Ua4cp2FbndUIo0ucd25SxtNUz3JJaB5gJeFW8AMihzIm', '2012-01-31 07:32:35');
+
+
+#
+# TABLE STRUCTURE FOR: bf_user_meta
+#
+
+CREATE TABLE `bf_user_meta` (
+  `meta_id` int(20) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) unsigned NOT NULL DEFAULT '0',
+  `meta_key` varchar(255) NOT NULL DEFAULT '',
+  `meta_value` text,
+  PRIMARY KEY (`meta_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (43, 1, 'timezone', 'UM6');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (44, 1, 'gender', '1');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (45, 1, 'allow_profile_comments', '1');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (46, 1, 'allow_profile_comment_moderation', '0');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (47, 1, 'show_profile_visitors', '1');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (48, 1, 'show_profile_friends', '1');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (49, 1, 'location', 'My Locaiton');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (50, 1, 'web_url', 'lonnieezell.com');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (51, 1, 'facebook', 'lonnieezell');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (52, 1, 'twitter', 'lonnieezell');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (53, 1, 'birthday', '1971-3-2');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (54, 1, 'display_name', 'kilishan');
+INSERT INTO bf_user_meta (`meta_id`, `user_id`, `meta_key`, `meta_value`) VALUES (55, 1, 'display_name_updated_on', '2012-01-30');
+
+
+#
+# TABLE STRUCTURE FOR: bf_users
+#
+
+CREATE TABLE `bf_users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `role_id` int(11) NOT NULL DEFAULT '4',
+  `email` varchar(120) NOT NULL,
+  `username` varchar(30) NOT NULL DEFAULT '',
+  `password_hash` varchar(40) NOT NULL,
+  `reset_hash` varchar(40) DEFAULT NULL,
+  `salt` varchar(7) NOT NULL,
+  `last_login` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_ip` varchar(40) NOT NULL DEFAULT '',
+  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `banned` tinyint(1) NOT NULL DEFAULT '0',
+  `ban_message` varchar(255) DEFAULT NULL,
+  `reset_by` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_users (`id`, `role_id`, `email`, `username`, `password_hash`, `reset_hash`, `salt`, `last_login`, `last_ip`, `created_on`, `deleted`, `banned`, `ban_message`, `reset_by`) VALUES (1, 1, 'lonnieje@gmail.com', 'kilishan', '6c37d39ebd4905998e28ae7f85ee840b7c9cae70', NULL, 'lO1udTh', '2012-01-27 10:29:06', '127.0.0.1', '0000-00-00 00:00:00', 0, 0, NULL, NULL);
+
+
