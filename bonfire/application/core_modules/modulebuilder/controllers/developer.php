@@ -165,7 +165,7 @@ class Developer extends Admin_Controller {
 			// Log the activity
 			$this->load->model('activities/Activity_model', 'activity_model');
 
-			$this->activity_model->log_activity($this->current_user->id, lang('mb_act_create').': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
+			$this->activity_model->log_activity((integer) $this->current_user->id, lang('mb_act_create').': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
 
 			Template::set_view('developer/output');
 		}
@@ -255,10 +255,9 @@ class Developer extends Admin_Controller {
 					// Log the activity
 					$this->load->model('activities/Activity_model', 'activity_model');
 
-					$this->activity_model->log_activity($this->current_user->id, lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'modulebuilder');
+					$this->activity_model->log_activity((integer) $this->current_user->id, lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'modulebuilder');
 
 					Template::set_message('The module and associated database entries were successfully deleted.', 'success');
-					Template::redirect(SITE_AREA .'/developer/modulebuilder');
 				}
 				else {
 					Template::set_message('The module and associated database entries were successfully deleted, HOWEVER, the module folder and files were not removed. They must be removed manually.', 'info');
@@ -266,7 +265,7 @@ class Developer extends Admin_Controller {
 			}//end if
 		}//end if
 
-		Template::render();
+		Template::redirect(SITE_AREA .'/developer/modulebuilder');
 	}
 
 	//--------------------------------------------------------------------
