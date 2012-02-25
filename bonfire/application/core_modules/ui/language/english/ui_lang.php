@@ -31,6 +31,7 @@ $lang['ui_actions']				= 'Actions';
 
 $lang['ui_shortcut']			= 'Shortcut Key';
 $lang['ui_shortcuts']			= 'Shortcut Keys';
+$lang['ui_current_shortcuts']	= 'Current Shortcuts';
 
 $lang['ui_shortcut_success']			= 'Shortcut inserted';
 $lang['ui_shortcut_error_exists']		= 'Shortcut already exists';

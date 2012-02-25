@@ -21,26 +21,23 @@
  * @category	Database
  * @author		ExpressionEngine Dev Team
  * @link		http://codeigniter.com/user_guide/database/
+ * @param 	string
+ * @param 	bool	Determines if active record should be used or not
  */
 function &DB($params = '', $active_record_override = NULL)
 {
 	// Load the DB config file if a DSN string wasn't passed
 	if (is_string($params) AND strpos($params, '://') === FALSE)
 	{
-		
-		$file_path = APPPATH.'config/'.ENVIRONMENT.'/database'.EXT;
-		
-		if ( ! file_exists($file_path))
+		// Is the config file in the environment folder?
+		if ( ! defined('ENVIRONMENT') OR ! file_exists($file_path = APPPATH.'config/'.ENVIRONMENT.'/database.php'))
 		{
-			log_message('debug', 'Database config for '.ENVIRONMENT.' environment is not found. Trying global config.');
-			$file_path = APPPATH.'config/database'.EXT;
-			
-			if ( ! file_exists($file_path))
+			if ( ! file_exists($file_path = APPPATH.'config/database.php'))
 			{
-				continue;
+				show_error('The configuration file database.php does not exist.');
 			}
 		}
-		
+
 		include($file_path);
 
 		if ( ! isset($db) OR count($db) == 0)
@@ -121,11 +118,11 @@ function &DB($params = '', $active_record_override = NULL)
 		$active_record = $active_record_override;
 	}
 
-	require_once(BASEPATH.'database/DB_driver'.EXT);
+	require_once(BASEPATH.'database/DB_driver.php');
 
 	if ( ! isset($active_record) OR $active_record == TRUE)
 	{
-		require_once(BASEPATH.'database/DB_active_rec'.EXT);
+		require_once(BASEPATH.'database/DB_active_rec.php');
 
 		if ( ! class_exists('CI_DB'))
 		{
@@ -140,7 +137,7 @@ function &DB($params = '', $active_record_override = NULL)
 		}
 	}
 
-	require_once(BASEPATH.'database/drivers/'.$params['dbdriver'].'/'.$params['dbdriver'].'_driver'.EXT);
+	require_once(BASEPATH.'database/drivers/'.$params['dbdriver'].'/'.$params['dbdriver'].'_driver.php');
 
 	// Instantiate the DB adapter
 	$driver = 'CI_DB_'.$params['dbdriver'].'_driver';

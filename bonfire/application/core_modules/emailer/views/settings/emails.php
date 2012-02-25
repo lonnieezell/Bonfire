@@ -8,6 +8,6 @@
 <?php echo form_open($this->uri->uri_string()); ?>
 
 	<!-- Forgot Password -->
-	
+
 
 <?php echo form_close(); ?>

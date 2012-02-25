@@ -1336,7 +1336,7 @@ class CI_Form_validation {
 	 */
 	function xss_clean($str)
 	{
-		if ( ! isset($this->CI->security))
+		if ( ! class_exists('CI_Security'))
 		{
 			$this->CI->load->library('security');
 		}

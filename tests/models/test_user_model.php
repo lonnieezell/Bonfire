@@ -135,13 +135,6 @@ class test_user_model extends CodeIgniterUnitTestCase
 	}
 	
 	//--------------------------------------------------------------------
-
-	public function test_insert_creates_default_country() 
-	{
-		$this->assertEqual($this->user_rec->country_iso, 'US');
-	}
-	
-	//--------------------------------------------------------------------
 	
 	//--------------------------------------------------------------------
 	// Updates
@@ -240,7 +233,7 @@ class test_user_model extends CodeIgniterUnitTestCase
 		
 		foreach ($users as $user)
 		{
-			if ($user->deleted == 1)
+			if ((int)$user->deleted === 1)
 			{
 				$found = true;
 			}

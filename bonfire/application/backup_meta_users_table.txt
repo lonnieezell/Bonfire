@@ -1,0 +1,30 @@
+#
+# TABLE STRUCTURE FOR: bf_users
+#
+
+DROP TABLE IF EXISTS bf_users;
+
+CREATE TABLE `bf_users` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `role_id` int(11) NOT NULL DEFAULT '4',
+  `email` varchar(120) NOT NULL,
+  `username` varchar(30) NOT NULL DEFAULT '',
+  `password_hash` varchar(40) NOT NULL,
+  `reset_hash` varchar(40) DEFAULT NULL,
+  `salt` varchar(7) NOT NULL,
+  `last_login` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `last_ip` varchar(40) NOT NULL DEFAULT '',
+  `created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `deleted` tinyint(1) NOT NULL DEFAULT '0',
+  `banned` tinyint(1) NOT NULL DEFAULT '0',
+  `ban_message` varchar(255) DEFAULT NULL,
+  `reset_by` int(10) DEFAULT NULL,
+  `display_name` varchar(255) DEFAULT '',
+  `display_name_changed` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+INSERT INTO bf_users (`id`, `role_id`, `email`, `username`, `password_hash`, `reset_hash`, `salt`, `last_login`, `last_ip`, `created_on`, `deleted`, `banned`, `ban_message`, `reset_by`, `display_name`, `display_name_changed`) VALUES (1, 1, 'lonnieje@gmail.com', 'lonnieje@gmail.com', '4a887e87b26d90658858cd02fab47f391e4bba30', NULL, 'gYpWiCg', '2012-02-05 20:00:37', '127.0.0.1', '0000-00-00 00:00:00', 0, 0, NULL, NULL, '', NULL);
+
+

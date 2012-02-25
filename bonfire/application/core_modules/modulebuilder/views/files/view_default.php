@@ -14,8 +14,7 @@ $id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? "/".$'.$modul
 ';
 $view .= '?>';
 $view .= '
-<?php echo form_open($this->uri->uri_string(), \'class="constrained ajax-form"\'); ?>
-<?php if(isset($'.$module_name_lower.'[\''.$primary_key_field.'\'])): ?><input id="'.$primary_key_field.'" type="hidden" name="'.$primary_key_field.'" value="<?php echo $'.$module_name_lower.'[\''.$primary_key_field.'\'];?>"  /><?php endif;?>';
+<?php echo form_open($this->uri->uri_string(), \'class="constrained ajax-form"\'); ?>';
 $on_click = '';
 $xinha_names = '';
 for($counter=1; $field_total >= $counter; $counter++)
@@ -31,7 +30,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 	}
 
 	$field_label = set_value("view_field_label$counter");
-	$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
+	$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
 	$field_type = set_value("view_field_type$counter");
 
 	if ($field_type != 'checkbox') // checkbox appears to the left of the checkbox so I can't add now for a checkbox
@@ -186,14 +185,6 @@ EOT;
 		if (set_value("db_field_length_value$counter") != NULL)
 		{
 			$maxlength = 'maxlength="'.set_value("db_field_length_value$counter").'"';
-			if (set_value("db_field_type$counter") == 'DECIMAL')	{
-				list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
-				$max = $len;
-				if (isset($decimal) && $decimal != 0) {
-					$max = $len + 1;		// Add 1 to allow for the 
-				}
-				$maxlength = 'maxlength="'.$max.'"';
-			}
 		}
 		$db_field_type = set_value("db_field_type$counter");
 		if ($db_field_type != NULL)

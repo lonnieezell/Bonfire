@@ -8,10 +8,10 @@
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in
 	all copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,7 +37,7 @@ class Settings_lib
 	 */
 	public function __construct()
 	{
-		
+
 		$this->ci =& get_instance();
 		$this->ci->load->model('settings/settings_model');
 
@@ -84,7 +84,7 @@ class Settings_lib
 		{
 			return self::$cache[$name];
 		}
-		
+
 		$setting = $ci->settings_model->find_by('name', $name);
 
 		// Setting doesn't exist, maybe it's a config option
@@ -100,7 +100,7 @@ class Settings_lib
 	 * Set
 	 *
 	 * Sets a config item
-	 * 
+	 *
 	 * @param	string	$name
 	 * @param	string	$value
 	 * @return	bool

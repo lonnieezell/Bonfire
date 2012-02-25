@@ -1,15 +1,15 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 class Migration_Migration_schema_change extends Migration {
-	
+
 	/**
 	 * This Migration file should not be used in an install situation
 	 * because the migration table schema will already be setup correctly
 	 */
-	public function up() 
+	public function up()
 	{
 		$prefix = $this->db->dbprefix;
-		
+
 		// get the current schema versions
 		$sql = "SELECT * FROM {$prefix}schema_version";
 		$schema_version_query = $this->db->query($sql);
@@ -21,13 +21,13 @@ class Migration_Migration_schema_change extends Migration {
 			// the table is in the old format
 
 			// backup the schema_version table
-			$this->dbforge->rename_table($prefix.'schema_version', $prefix.'schema_version_old');
+			$this->dbforge->rename_table('schema_version', $prefix.'schema_version_old');
 
 			// modify the schema_version table
 			$fields = array(
 							'type' => array(
 								'type' => 'VARCHAR',
-								'constraint' => 20, 
+								'constraint' => 20,
 								'null' => FALSE,
 							),
 							'version' => array(
@@ -54,28 +54,28 @@ class Migration_Migration_schema_change extends Migration {
 			}
 		}
 	}
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * This Migration file should not be used in an install situation
 	 * because the migration table schema will already be setup correctly
 	 * and the old table won't exist
 	 */
-	public function down() 
+	public function down()
 	{
 		$prefix = $this->db->dbprefix;
-		
+
 		// check if the old schema exists
 		if ($this->db->table_exists('schema_version_old')) {
 			// Reverse the schema_version table changes
 			$this->dbforge->drop_table('schema_version');
 
-			$this->dbforge->rename_table($prefix.'schema_version_old', $prefix.'schema_version');
+			$this->dbforge->rename_table('schema_version_old', $prefix.'schema_version');
 		}
 
 	}
-	
+
 	//--------------------------------------------------------------------
-	
+
 }
