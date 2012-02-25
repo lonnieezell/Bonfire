@@ -38,7 +38,8 @@
 			<div class="fluid-container">
 				<h1 class="branding"><?php e($this->settings_lib->item('site.title')); ?></h1>
 
-					<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>				<div class="nav pull-right">
+				<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>
+				<div class="nav pull-right">
 					<div class="btn-group">
 						<a class="dropdown-toggle dark btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png') ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts"/></a>
 						<ul class="dropdown-menu toolbar-keys">
@@ -57,8 +58,8 @@
 							</div>
 						</ul>
 					</div>
-					<?php endif;?>
 				</div>
+				<?php endif;?>
 				<div class="nav pull-right">
 					<div class="btn-group">
 						<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $current_user->id) ?>" id="tb_email" class="btn dark" title="<?php echo lang('bf_user_settings') ?>">
