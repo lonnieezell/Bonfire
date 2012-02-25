@@ -1,16 +1,41 @@
 /*-----------------------------------------------------------
 This toggles the visibility of the advanced table properties
-when the Create Module Table checkbox is checked. It also 
-copies down the name of the module as the lowercase name of 
+when the Create Module Table checkbox is checked. It also
+copies down the name of the module as the lowercase name of
 the table with underscores replacing the spaces.
 ------------------------------------------------------------*/
 function show_table_props() {
-	if ($('#db_required').is(':checked')) {
+	if ($('#db_create').is(':checked')) {
 		$('#db_details').show(0);
+		$('#db_details .mb_advanced').hide();
+		$('.mb_new_table').show(0);
 		$('#all_fields').show(0);
+		$('#primary_key_field').val('' == $('#primary_key_field').val() ? 'id' : $('#primary_key_field').val());
 		var tbl_name = ( ( $('#table_name').val() == '' ) ? $('#module_name').val() : $('#table_name').val() );
 		tbl_name = tbl_name.replace(/[^A-Za-z0-9\\s]/g, "_").toLowerCase();
 		$('#table_name').val( tbl_name );
+	} else if ($('#db_exists').is(':checked')) {
+		$('#db_details').show(0);
+		$('#db_details .mb_advanced').show();
+		$('.mb_new_table').hide(0);
+		$('#field_numbers').hide(0);
+		$('#all_fields').hide(0);
+		var tbl_name = ( ( $('#table_name').val() == '' ) ? $('#module_name').val() : $('#table_name').val() );
+		tbl_name = tbl_name.replace(/[^A-Za-z0-9\\s]/g, "_").toLowerCase();
+		$('#table_name').val( tbl_name );
+
+		if ($('#view_field_label1').val() != undefined && $('#view_field_label1').val() != '')
+		{
+			$('.mb_new_table').show(0);
+			$('#db_details .notification').hide(0);
+			$('#field_numbers').hide(0);
+			$('#all_fields').show(0);
+		}
+		else
+		{
+			$('#primary_key_field').val('');
+			$('#all_fields').empty();
+		}
 	} else {
 		$('#db_details').hide(0);
 		$('#all_fields').hide(0);
@@ -30,7 +55,7 @@ function store_form_data() {
 	$('#module_form :input').each( function() {
 		var fld_id = $(this).attr('id');
 		var fld_val = $(this).val();
-		
+
 		if ( $(this).is(':checkbox') && $(this).is(':not(:checked)') ) {
 			fld_val = 'uncheck';
 		}
@@ -51,7 +76,7 @@ function get_form_data() {
 	for (var i = 0; i < localStorage.length; i++){
 		var key = localStorage.key(i);
     	var value = localStorage[key];
-		
+
 		if ( $('#'+key).is(':checkbox') ) {
 			if ( $('#'+key).val() == value ) {
 				$('#'+key).attr('checked','checked');
@@ -61,10 +86,10 @@ function get_form_data() {
 				value = $('#'+key).val();
 			}
 		}
-		
+
 		$('#'+key).val(value);
 	}
-	
+
 	//now that it is loaded, remove localStorage
 	localStorage.clear();
 }
@@ -98,7 +123,7 @@ show_table_props();
 /*-----------------------------------------------------------
 Toggle module table
 ------------------------------------------------------------*/
-$('#db_required').click( function() {
+$('input[name=module_db]').click( function() {
 	show_table_props();
 });
 
@@ -107,7 +132,7 @@ Toggle advanced options
 ------------------------------------------------------------*/
 $('.mb_show_advanced').click( function(e) {
 	e.preventDefault();
-	
+
 	var parent = $(this).closest('fieldset').attr('id');
 	$('#'+parent+' .mb_advanced').toggle();
 });
@@ -119,7 +144,7 @@ $('.mb_show_advanced_rules').click( function() {
 });
 
 /*-----------------------------------------------------------
-Toggle module/table advanced options by clicking on the 
+Toggle module/table advanced options by clicking on the
 fieldset legend. Uses the div:not to not affect the visibility
 options of the "more validation rules"
 ------------------------------------------------------------*/

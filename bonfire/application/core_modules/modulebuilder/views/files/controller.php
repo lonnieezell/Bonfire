@@ -8,6 +8,8 @@
 	This should make modifying the way the class is built much easier.
 */
 
+$controller_name_lower = strtolower($controller_name);
+
 //--------------------------------------------------------------------
 // !CLASS PARTS
 //--------------------------------------------------------------------
@@ -36,6 +38,8 @@ $mb_constructor =<<<END
 		\$this->lang->load('{$module_name_lower}');
 
 		{constructor_extras}
+
+		Template::set_block('sub_nav', '{$controller_name_lower}/_sub_nav');
 	}
 
 	//--------------------------------------------------------------------
@@ -53,12 +57,9 @@ $mb_index =<<<END
 	*/
 	public function index()
 	{
-		\$data = array();
-		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
+		\$records = \$this->{$module_name_lower}_model->find_all();
 
-		Assets::add_js(\$this->load->view('{$controller_name}/js', null, true), 'inline');
-
-		Template::set('data', \$data);
+		Template::set('records', \$records);
 		Template::set('toolbar_title', "Manage {$module_name}");
 		Template::render();
 	}
@@ -78,10 +79,9 @@ $mb_index_front =<<<END
 	*/
 	public function index()
 	{
-		\$data = array();
-		\$data['records'] = \$this->{$module_name_lower}_model->find_all();
+		\$records = \$this->{$module_name_lower}_model->find_all();
 
-		Template::set('data', \$data);
+		Template::set('records', \$records);
 		Template::render();
 	}
 
@@ -107,7 +107,7 @@ $mb_create =<<<END
 			if (\$insert_id = \$this->save_{$module_name_lower}())
 			{
 				// Log the activity
-				$this->load->model('activities/Activity_model', 'activity_model');
+				\$this->load->model('activities/Activity_model', 'activity_model');
 
 				\$this->activity_model->log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_create_record').': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
 
@@ -119,6 +119,8 @@ $mb_create =<<<END
 				Template::set_message(lang('{$module_name_lower}_create_failure') . \$this->{$module_name_lower}_model->error, 'error');
 			}
 		}
+
+		Assets::add_module_js('{$module_name_lower}', '{$module_name_lower}.js');
 
 		Template::set('toolbar_title', lang('{$module_name_lower}_create_new_button'));
 		Template::set('toolbar_title', lang('{$module_name_lower}_create') . ' {$module_name}');
@@ -155,7 +157,7 @@ $mb_edit =<<<END
 			if (\$this->save_{$module_name_lower}('update', \$id))
 			{
 				// Log the activity
-				$this->load->model('activities/Activity_model', 'activity_model');
+				\$this->load->model('activities/Activity_model', 'activity_model');
 
 				\$this->activity_model->log_activity(\$this->current_user->id(), lang('{$module_name_lower}_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
 
@@ -166,6 +168,8 @@ $mb_edit =<<<END
 				Template::set_message(lang('{$module_name_lower}_edit_failure') . \$this->{$module_name_lower}_model->error, 'error');
 			}
 		}
+
+		Assets::add_module_js('{$module_name_lower}', '{$module_name_lower}.js');
 
 		Template::set('{$module_name_lower}', \$this->{$module_name_lower}_model->find(\$id));
 
@@ -198,7 +202,7 @@ $mb_delete =<<<END
 			if (\$this->{$module_name_lower}_model->delete(\$id))
 			{
 				// Log the activity
-				$this->load->model('activities/Activity_model', 'activity_model');
+				\$this->load->model('activities/Activity_model', 'activity_model');
 
 				\$this->activity_model->log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
 
@@ -304,7 +308,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 		{
 			$extras .= '
 			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
-			Assets::add_js(\'jquery-ui-1.8.8.min.js\');';
+			Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
 			$date_included = TRUE;
 		}
 		elseif ($db_field_type == 'DATETIME' && $datetime_included === FALSE)
@@ -314,7 +318,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 			{
 				$extras .= '
 				Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
-				Assets::add_js(\'jquery-ui-1.8.8.min.js\');';
+				Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
 			}
 			$extras .= '
 			Assets::add_css(\'jquery-ui-timepicker.css\');
