@@ -67,7 +67,7 @@ class Developer extends Admin_Controller {
 				if (is_array($checked) && count($checked))
 				{
 					$this->load->model('activities/Activity_model', 'activity_model');
-				
+
 					foreach ($checked as $file)
 					{
 						@unlink($this->config->item('log_path') . $file);
@@ -85,7 +85,7 @@ class Developer extends Admin_Controller {
 
 		// Pagination
 		$this->load->library('pagination');
-		
+
 		$offset = $this->uri->segment(5) ? $this->uri->segment(5) : 0;
 		//$limit = $this->limit;
 		$limit = 10;
@@ -131,9 +131,9 @@ class Developer extends Admin_Controller {
 			if (write_config('config', array('log_threshold' => $_POST['log_threshold'])))
 			{
 				$this->load->model('activities/Activity_model', 'activity_model');
-			
+
 				// Log the activity
-				$this->activity_model->log_activity($this->current_user->id(), 'Log settings modified from: ' . $this->input->ip_address(), 'logs');
+				$this->activity_model->log_activity( intval ( $this->current_user->id ), 'Log settings modified from: ' . $this->input->ip_address(), 'logs');
 
 				Template::set_message('Log settings successfully saved.', 'success');
 			} else
@@ -209,8 +209,9 @@ class Developer extends Admin_Controller {
 
 		// Log the activity
 		$this->load->model('activities/Activity_model', 'activity_model');
-		
-		$this->activity_model->log_activity($this->current_user->id(), ucfirst($activity_text) . ' purged from: ' . $this->input->ip_address(), 'logs');
+
+
+		$this->activity_model->log_activity( intval ($this->current_user->id ), ucfirst($activity_text) . ' purged from: ' . $this->input->ip_address(), 'logs');
 
 		redirect(SITE_AREA .'/developer/logs');
 	}
