@@ -1,4 +1,6 @@
-<h2>Welcome to Bonfire.</h2>
+<div class="page-header">
+  <h1>Welcome to Bonfire.</h1>
+</div>
 
 <p>Ready to pour some kerosene on the logs and start a Bonfire?</p>
 
@@ -6,6 +8,7 @@
 
 <br/>
 
+<div class="well">
 <p>If you would like to edit this page you'll find it located at:</p>
 
 <div class="notification information">
@@ -18,14 +21,16 @@
 	<p><code>bonfire/application/controllers/home.php</code></p>
 </div>
 
-<p>If you are new to Bonfire, you should start by reading the <?php echo anchor('/docs', 'docs') ?>.</p>
+</div>
 
-<?php  
+<p>If you are new to Bonfire, you should start by reading the <?php echo anchor('/docs', '<i class="icon-info-sign icon-white"></i>docs', ' class="btn btn-info btn-small" ') ?>.</p>
+
+<?php
 	// acessing our userdata cookie
 	$cookie = unserialize($this->input->cookie($this->config->item('sess_cookie_name')));
 	$logged_in = isset ($cookie['logged_in']);
 	unset ($cookie);
-		
+
 	if ($logged_in) : ?>
 
 	<div class="notification attention" style="text-align: center">
@@ -35,7 +40,7 @@
 <?php else :?>
 
 	<p style="text-align: center">
-		<?php echo anchor('/login', 'Login'); ?>
+		<?php echo anchor('/login', '<i class="icon-lock icon-white"></i>Login', ' class="btn btn-primary btn-large" '); ?>
 	</p>
 
 <?php endif;?>
