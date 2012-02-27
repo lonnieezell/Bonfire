@@ -19,11 +19,13 @@
 <p class="intro"><?php e(lang('mb_create_note')) ?></p>
 
 <div class="alert alert-info">
+  <a class="close" data-dismiss="alert">&times;</a>
 	<?php echo lang('mb_form_note'); ?>
 </div>
 
 <?php if (!$writeable): ?>
-<div class="alert alert-error">
+  <div class="alert alert-error">
+  <a class="close" data-dismiss="alert">&times;</a>
 	<p><?php echo lang('mb_not_writeable_note'); ?></p>
 </div>
 <?php endif;?>
@@ -208,7 +210,8 @@
 				</div>
 			</div>
 
-			<div class="notification attention">
+			<div class="alert alert-info" style="width:90%; margin:5px auto;">
+        <a class="close" data-dismiss="alert">&times;</a>
 				<?php echo lang('mb_table_note'); ?>
 			</div>
 
@@ -244,7 +247,8 @@
 
 					<?php if ($count == 1) : ?>
 
-					<div class="alert alert-info">
+					<div class="alert alert-info" style="width:80%; margin: 0 auto;">
+
 						<?php echo lang('mb_field_note'); ?>
 					</div>
 
