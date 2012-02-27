@@ -83,12 +83,10 @@
 
 			<div class="control-group mb_advanced">
 			<?php echo form_error("form_action"); ?>
-				<label for="form_action"><?php echo lang('mb_form_actions'); ?></label>
-
-				<div class="controls">
-					<div class="controls-list">
+				<label class="control-label" for="form_action"><?php echo lang('mb_form_actions'); ?></label>
+          <div class="controls">
 						<?php foreach($form_action_options as $action => $label): ?>
-						<label>
+						<label class="checkbox" for="form_action_<?php echo $action; ?>">
 						<?php
 						$data = array(
 							'name'        => 'form_action[]',
@@ -101,7 +99,6 @@
 						</label>
 						<?php endforeach;?>
 					</div>
-				</div>
 			</div>
 
 			<div class="control-group mb_advanced">
