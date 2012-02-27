@@ -140,7 +140,7 @@ $('.mb_show_advanced').click( function(e) {
 Toggle "more validation rules"
 ------------------------------------------------------------*/
 $('.mb_show_advanced_rules').click( function() {
-	$(this).parent().next('.mb_advanced').toggle();
+	$(this).parent().parent().next('.mb_advanced').toggle();
 });
 
 /*-----------------------------------------------------------
