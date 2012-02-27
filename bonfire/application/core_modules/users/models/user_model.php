@@ -435,49 +435,6 @@ class User_model extends BF_Model {
 	}
 	
 	//--------------------------------------------------------------------
-
-	//--------------------------------------------------------------------
-
-	/*
-		Method: find_user_and_meta ( $user_id=null)
-
-		Locates a single user and joins there meta information based on a the user id match.
-
-		Parameters:
-			$user_id - Integer of User ID to fetch
-
-		Returns:
-			An object with the user's info and meta information, or false on failure.
-	*/
-	public function find_user_and_meta ( $user_id=null)
-	{
-		if (!is_numeric($user_id))
-		{
-			$this->error = 'Invalid User ID';
-		}
-
-		$result = $this->find( $user_id );
-
-		$this->db->where('user_id', $user_id);
-		$query = $this->db->get('user_meta');
-
-		if ($query->num_rows())
-		{
-			$rows = $query->result();
-
-			foreach ($rows as $row)
-			{
-				$key = $row->meta_key;
-				$result->$key = $row->meta_value;
-			}
-		}
-
-		$query->free_result();
-		return $result;
-
-	}
-
-	//--------------------------------------------------------------------
 	
 }
 
