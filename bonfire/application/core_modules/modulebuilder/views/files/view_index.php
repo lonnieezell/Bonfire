@@ -32,7 +32,7 @@ $view =<<<END
 		<?php endforeach; ?>
 		<?php else: ?>
 			<tr>
-				<td colspan="{cols_total}">No users found that match your selection.</td>
+				<td colspan="{cols_total}">No records found that match your selection.</td>
 			</tr>
 		<?php endif; ?>
 		</tbody>
