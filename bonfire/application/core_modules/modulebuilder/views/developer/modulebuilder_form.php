@@ -147,7 +147,7 @@
 			<div class="control-group mb_advanced <?php echo form_has_error('form_input_delimiters') ? 'error' : ''; ?>">
 				<label for="form_input_delimiters" class="block"><?php echo lang('mb_form_delims'); ?></label>
 				<div class="controls">
-					<input name="form_input_delimiters" id="form_input_delimiters" type="text" value="<?php echo set_value("form_input_delimiters", '<div>,</div>'); ?>" />
+					<input name="form_input_delimiters" id="form_input_delimiters" type="text" value="<?php echo set_value("form_input_delimiters", "<div class='controls'>,</div>"); ?>" />
 					<span class="help-inline"><?php echo form_error('form_input_delimiters'); ?></span>
 				</div>
 			</div>
