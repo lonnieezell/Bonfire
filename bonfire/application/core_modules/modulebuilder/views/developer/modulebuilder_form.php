@@ -334,7 +334,7 @@
 													'BLOB' 			=> 'BLOB',
 													'MEDIUMBLOB' 	=> 'MEDIUMBLOB',
 													'MEDIUMTEXT' 	=> 'MEDIUMTEXT',
-													'LONGBLOB' 		=> 'LONGBLOB',ma
+													'LONGBLOB' 		=> 'LONGBLOB',
 													'LONGTEXT' 		=> 'LONGTEXT',
 													'ENUM' 			=> 'ENUM',
 													'SET' 			=> 'SET',
