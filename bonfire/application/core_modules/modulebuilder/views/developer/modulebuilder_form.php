@@ -360,7 +360,7 @@
 					</div>
 
 					<div class="control-group">
-						<label><?php echo lang('mb_form_rules'); ?></label>
+						<label class="control-label" ><?php echo lang('mb_form_rules'); ?></label>
 						<div class="controls">
 							<?php echo form_error('cont_validation_rules'.$count.'[]'); ?>
 
@@ -378,7 +378,6 @@
 
 
 					<div class="control-group mb_advanced">
-						<label>
             <label class="control-label" ><?php echo lang('mb_form_rules_limits'); ?></label>
             <div class="controls">
 							<?php echo lang('mb_form_rules_limit_note'); ?>
