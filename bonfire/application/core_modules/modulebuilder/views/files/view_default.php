@@ -2,7 +2,8 @@
 
 $view = '
 <?php if (validation_errors()) : ?>
-<div class="notification error">
+<div class="alert alert-block notification error">
+  <a class="close" data-dismiss="alert">&times;</a>
 	<?php echo validation_errors(); ?>
 </div>
 <?php endif; ?>
@@ -16,7 +17,7 @@ $view .= '?>';
 $view .= '
 <div class="admin-box">
 	<h3>UPDATE TEXT</h3>
-<?php echo form_open($this->uri->uri_string(), \'class="constrained ajax-form"\'); ?>
+<?php echo form_open($this->uri->uri_string(), \'class="constrained ajax-form form-horizontal"\'); ?>
 	<fieldset>
 ';
 $on_click = '';
