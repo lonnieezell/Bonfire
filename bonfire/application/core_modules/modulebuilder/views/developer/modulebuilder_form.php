@@ -65,11 +65,14 @@
 			<div class="control-group mb_advanced">
 				<label class="block"><?php echo lang('mb_form_contexts'); ?></label>
 				<div class="controls">
-					<input name="contexts[]" id="contexts_public" type="checkbox" value="public" checked="checked" /> <?php echo lang('mb_form_public'); ?>
+          <label class="checkbox" for="contexts_public">
+					<input name="contexts[]" id="contexts_public" type="checkbox" value="public" checked="checked" />
+            <?php echo lang('mb_form_public'); ?>
+          </label>
 
-					<div class="controlss-list">
+					<div class="controls-list">
 						<?php foreach (config_item('contexts') as $context) : ?>
-							<label>
+							<label class="checkbox" for="contexts_<?php echo $context; ?>">
 								<input name="contexts[]" id="contexts_<?php echo $context; ?>" type="checkbox" value="<?php echo $context ?>" checked="checked" />
 								<?php echo ucwords($context) ?>
 							</label>
@@ -83,7 +86,7 @@
 				<label for="form_action"><?php echo lang('mb_form_actions'); ?></label>
 
 				<div class="controls">
-					<div class="controlss-list">
+					<div class="controls-list">
 						<?php foreach($form_action_options as $action => $label): ?>
 						<label>
 						<?php
@@ -110,16 +113,20 @@
 				 </div>
 			</div>
 
-			<div class="control-group">
-				<div class="controls">
-						<label for="db_required">
-				<input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", $field_total == 0 ? TRUE : FALSE); ?> class="radio" /> None
-				<input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox("module_db", "new", $field_total != 0 ? TRUE : FALSE); ?> class="radio" /> Create New Table
-				<input name="module_db" id="db_exists" type="radio" value="existing" <?php echo set_checkbox("module_db", "existing"); ?> class="radio" /> Build from Existing Table
-						</label>
-				</div>
-			</div>
-		</fieldset>
+      <div class="control-group">
+        <label class="control-label" for="db_required"></label>
+        <div class="controls">
+          <label class="inline radio">
+            <input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", $field_total == 0 ? TRUE : FALSE); ?> class="radio" /> None
+          </label>
+          <label class="inline radio">
+            <input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox("module_db", "new", $field_total != 0 ? TRUE : FALSE); ?> class="radio" /> Create New Table
+          </label>
+          <label class="inline radio">
+            <input name="module_db" id="db_exists" type="radio" value="existing" <?php echo set_checkbox("module_db", "existing"); ?> class="radio" /> Build from Existing Table
+          </label>
+        </div>
+      </div>
 
 		<fieldset style="margin-top: 0" id="db_details">
 			<legend><?php echo lang('mb_form_table_details'); ?></legend>
@@ -361,12 +368,36 @@
 							<?php echo form_error('cont_validation_rules'.$count.'[]'); ?>
 
 							<?php foreach ($validation_rules as $validation_rule) : ?>
-								<span class="faded"> <input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_rule; ?><?php echo $count; ?>" type="checkbox" value="<?php echo $validation_rule; ?>" <?php echo set_checkbox('validation_rules'.$count.'[]', $validation_rule); ?> /> <?php echo lang('mb_form_'.$validation_rule); ?></span>
+								<span class="faded">
+                <label class="inline checkbox">
+                  <input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_rule . $count; ?>" type="checkbox" value="<?php echo $validation_rule; ?>" <?php echo set_checkbox('validation_rules'.$count.'[]', $validation_rule); ?> />
+                  <?php echo lang('mb_form_'.$validation_rule); ?>
+                </label>
+                </span>
 							<?php endforeach; ?>
 								<em class="mb_show_advanced_rules small"><?php echo lang('mb_form_show_more'); ?></em>
 						</div>
 					</div>
 
+
+					<div class="control-group mb_advanced">
+						<label>
+            <label class="control-label" ><?php echo lang('mb_form_rules_limits'); ?></label>
+            <div class="controls">
+							<?php echo lang('mb_form_rules_limit_note'); ?>
+							<?php foreach ($validation_limits as $validation_limit) : ?>
+                <span class="faded">
+                <label class="inline radio" for="validation_rules_<?php echo $validation_limit . $count; ?>">
+                  <input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_limit . $count; ?>" type="radio" value="<?php echo $validation_limit; ?>" <?php echo set_radio('validation_rules'.$count.'[]', $validation_limit); ?> />
+                  <?php echo lang('mb_form_'.$validation_limit); ?>
+                </label>
+                </span>
+							<?php endforeach; ?>
+            </div>
+          </div>
+
+<?php
+/*
 					<div class="control-group mb_advanced">
 						<label><?php echo lang('mb_form_rules_limits'); ?></label>
 						<div class="controls">
@@ -376,6 +407,8 @@
 							<?php endforeach; ?>
 						</div>
 					</div>
+*/
+?>
 				</fieldset>
 			</div><!-- end container -->
 		<?php endfor; ?>
