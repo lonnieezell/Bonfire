@@ -755,7 +755,7 @@ class Assets {
 
 		// Create our shell opening
 		$output .= '<script type="text/javascript">' . "\n";
-//		$output .= self::$ci->config->item('assets.js_opener') ."\n\n";
+		$output .= self::$ci->config->item('assets.js_opener') ."\n\n";
 
 		// Loop through all available scripts
 		// inserting them inside the shell.
@@ -765,7 +765,7 @@ class Assets {
 		}
 
 		// Close the shell.
-//		$output .= "\n" . self::$ci->config->item('assets.js_closer') . "\n";
+		$output .= "\n" . self::$ci->config->item('assets.js_closer') . "\n";
 		$output .= '</script>' . "\n";
 
 		return $output;
