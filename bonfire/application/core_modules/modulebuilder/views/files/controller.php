@@ -159,7 +159,7 @@ $mb_edit =<<<END
 				// Log the activity
 				\$this->load->model('activities/Activity_model', 'activity_model');
 
-				\$this->activity_model->log_activity(\$this->current_user->id(), lang('{$module_name_lower}_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				\$this->activity_model->log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
 
 				Template::set_message(lang('{$module_name_lower}_edit_success'), 'success');
 			}
