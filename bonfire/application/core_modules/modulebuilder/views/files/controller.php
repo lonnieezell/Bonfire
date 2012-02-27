@@ -342,11 +342,15 @@ for($counter=1; $field_total >= $counter; $counter++)
         $extras .= '
         Assets::add_css(Template::theme_url(\'js/editors/markitup/skins/markitup/style.css\'));
         Assets::add_css(Template::theme_url(\'js/editors/markitup/sets/default/style.css\'));
-        
+
         Assets::add_js(Template::theme_url(\'js/editors/markitup/jquery.markitup.js\'));
         Assets::add_js(Template::theme_url(\'js/editors/markitup/sets/default/set.js\'));';
       }
-
+      elseif ($textarea_editor == 'tinymce') {
+        $extras .= '
+                    Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce.js\));
+                    Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce_init.js\));';
+      }
 			$textarea_included = TRUE;
 		}
 	}

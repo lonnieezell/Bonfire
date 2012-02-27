@@ -164,7 +164,7 @@
 				<label for="textarea_editor" class="block"><?php echo lang('mb_form_text_ed'); ?></label>
 				<div class="controls">
 					<?php
-						$textarea_editors = array('' => 'None', 'ckeditor' => 'CKEditor', 'xinha' => 'Xinha', 'markitup' => 'MarkitUp!');
+						$textarea_editors = array('' => 'None', 'ckeditor' => 'CKEditor', 'xinha' => 'Xinha', 'tinymce' => 'TinyMCE', 'markitup' => 'MarkitUp!');
 					?>
 					<?php echo form_dropdown("textarea_editor", $textarea_editors, set_value("textarea_editor"),'id="textarea_editor"'); ?>
 				</div>
@@ -334,7 +334,7 @@
 													'BLOB' 			=> 'BLOB',
 													'MEDIUMBLOB' 	=> 'MEDIUMBLOB',
 													'MEDIUMTEXT' 	=> 'MEDIUMTEXT',
-													'LONGBLOB' 		=> 'LONGBLOB',
+													'LONGBLOB' 		=> 'LONGBLOB',ma
 													'LONGTEXT' 		=> 'LONGTEXT',
 													'ENUM' 			=> 'ENUM',
 													'SET' 			=> 'SET',
