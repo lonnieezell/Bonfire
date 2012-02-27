@@ -8,7 +8,6 @@ $view =<<<END
 			<tr>
 				<th class="column-check"><input class="check-all" type="checkbox" /></th>
 				{table_header}
-				<th><?php echo lang('{$module_name_lower}_actions'); ?></th>
 			</tr>
 		</thead>
 		<?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
@@ -27,7 +26,6 @@ $view =<<<END
 			<tr>
 				<td><input type="checkbox" name="checked[]" value="<?php echo \$record->{$primary_key_field} ?>" /></td>
 				{table_records}
-				<td><?php echo anchor(SITE_AREA .'/{$controller_name}/{$module_name_lower}/edit/'. \$record->{$primary_key_field}, lang('{$module_name_lower}_edit'), '') ?></td>
 			</tr>
 		<?php endforeach; ?>
 		<?php else: ?>
@@ -81,8 +79,15 @@ for($counter=1; $field_total >= $counter; $counter++)
 	{
 		continue; 	// move onto next iteration of the loop
 	}
-	$table_records .= '
+	if ($counter == 1) {
+		$table_records .= "
+				<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", \$record->".$module_name_lower."_".set_value("view_field_name$counter").") ?></td>
+			";
+	}
+	else {
+		$table_records .= '
 				<td><?php echo $record->'.$module_name_lower.'_'.set_value("view_field_name$counter").'?></td>';
+	}
 }
 if ($use_soft_deletes == 'true')
 {
