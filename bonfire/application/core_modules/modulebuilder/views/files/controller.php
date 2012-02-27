@@ -340,8 +340,8 @@ for($counter=1; $field_total >= $counter; $counter++)
 			}
       elseif ($textarea_editor == 'markitup') {
         $extras .= '
-        Assets::add_js(Template::theme_url(\'js/editors/markitup/jquery.markitup.js\'));
-        Assets::add_js(Template::theme_url(\'js/editors/markitup/sets/default/set.js\'));
+        Assets::add_css(Template::theme_url(\'js/editors/markitup/skins/markitup/style.css\'));
+        Assets::add_css(Template::theme_url(\'js/editors/markitup/sets/default/style.css\'));
         
         Assets::add_js(Template::theme_url(\'js/editors/markitup/jquery.markitup.js\'));
         Assets::add_js(Template::theme_url(\'js/editors/markitup/sets/default/set.js\'));';
