@@ -248,7 +248,7 @@
 					<?php if ($count == 1) : ?>
 
 					<div class="alert alert-info" style="width:80%; margin: 0 auto;">
-
+            <a class="close" data-dismiss="alert">&times;</a>
 						<?php echo lang('mb_field_note'); ?>
 					</div>
 
