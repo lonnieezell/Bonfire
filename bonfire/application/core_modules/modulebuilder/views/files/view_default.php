@@ -236,7 +236,7 @@ $view .= '
 
 	<div class="form-actions">
 		<br/>
-		<input type="submit" name="submit" class="btn primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\')); ?>
+		<input type="submit" name="submit" class="btn primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn danger"\'); ?>
 	</div>
 	</fieldset>
 	<?php echo form_close(); ?>
