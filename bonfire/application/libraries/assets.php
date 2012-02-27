@@ -538,11 +538,10 @@ class Assets {
 	/*
 		Method: js()
 
-		Renders links to stylesheets, with the $asset_url prepended.
+		Renders links to all javascript files including External, Module and Inline
 		If a single filename is passed, it will only create a single link
-		for that file, otherwise, it will include any styles that have
-		been added with add_css below. If no style is passed it will default
-		to the theme's style.css file.
+		for that file, otherwise, it will include any javascript files that have
+		been added with add_js below.
 
 		When passing a filename, the filepath should be relative to the site
 		root (where index.php resides).
@@ -553,7 +552,7 @@ class Assets {
 					  Acceptable values: 'external' or 'inline'
 
 		Return:
-			void
+			Returns all Scripts located in External JS, Module JS and Inline JS in that order.
 	*/
 	public static function js($script=null, $type='external')
 	{
