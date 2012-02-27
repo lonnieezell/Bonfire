@@ -338,6 +338,11 @@ for($counter=1; $field_total >= $counter; $counter++)
 				Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
 				Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
 			}
+      elseif ($textarea_editor == 'markitup') {
+        $extras .= ' Assets::add_js(Template::theme_url(\'js/editors/markitup/jquery.markitup.js\'));
+                     Assets::add_js(Template::theme_url(\'js/editors/markitup/sets/default/set.js\'));';
+      }
+
 			$textarea_included = TRUE;
 		}
 	}

@@ -162,7 +162,7 @@
 				<label for="textarea_editor" class="block"><?php echo lang('mb_form_text_ed'); ?></label>
 				<div class="controls">
 					<?php
-						$textarea_editors = array('' => 'None', 'ckeditor' => 'CKEditor', 'xinha' => 'Xinha');
+						$textarea_editors = array('' => 'None', 'ckeditor' => 'CKEditor', 'xinha' => 'Xinha', 'markitup' => 'MarkitUp!');
 					?>
 					<?php echo form_dropdown("textarea_editor", $textarea_editors, set_value("textarea_editor"),'id="textarea_editor"'); ?>
 				</div>

@@ -115,6 +115,14 @@ EOT;
 				$xinha_names .= '\''.$field_name.'\'';
 
 			}
+      elseif ($textarea_editor == 'markitup') {
+				$view .= '
+                  <script type="text/javascript">
+                    head.ready(function(){
+                      $("textarea").markItUp(mySettings);
+                    });
+                  </script>';
+      }
 		}
 		$view .= "
 	<?php echo form_textarea( array( 'name' => '$field_name', 'id' => '$field_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>";
