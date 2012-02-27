@@ -53,6 +53,12 @@ for($counter=1; $field_total >= $counter; $counter++)
 				$xinha_names .= '\''.$field_name.'\'';
 
 			}
+			elseif ($textarea_editor == 'markitup') {
+				//
+				$view .= '
+				$("textarea").markItUp(mySettings);';
+
+			}
 		}
 		break;
 
