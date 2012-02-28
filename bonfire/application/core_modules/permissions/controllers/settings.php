@@ -57,18 +57,26 @@ class Settings extends Admin_Controller {
 			{
 				$checked = $this->input->post('checked');
 
-				foreach ($checked as $pid)
+				if (is_array($checked) && count($checked))
 				{
-					$result = $this->permission_model->delete($pid);
-				}
+					$result = FALSE;
+					foreach ($checked as $pid)
+					{
+						$result = $this->permission_model->delete($pid);
+					}
 
-				if ($result)
-				{
-					Template::set_message(count($checked) .' '. lang('permissions_deleted') .'.', 'success');
+					if ($result)
+					{
+						Template::set_message(count($checked) .' '. lang('permissions_deleted') .'.', 'success');
+					}
+					else
+					{
+						Template::set_message(lang('permissions_del_failure') . $this->permission_model->error, 'error');
+					}
 				}
 				else
 				{
-					Template::set_message(lang('permissions_del_error') . $this->permission_model->error, 'success');
+					Template::set_message(lang('permissions_del_error') . $this->permission_model->error, 'error');
 				}
 			}
 		}
@@ -159,7 +167,8 @@ class Settings extends Admin_Controller {
 			if ($this->permission_model->delete($id))
 			{
 				Template::set_message(lang("permissions_delete_success"), 'success');
-			} else
+			}
+			else
 			{
 				Template::set_message(lang("permissions_delete_failure") . $this->permission_model->error, 'error');
 			}
