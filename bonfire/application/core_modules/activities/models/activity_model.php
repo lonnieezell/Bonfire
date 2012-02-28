@@ -91,7 +91,9 @@ class Activity_model extends BF_Model {
 	*/
 	public function log_activity($user_id=null, $activity='', $module='any')
 	{
-		if (empty($user_id) || !is_integer($user_id))
+		$user_id = intval ( $user_id );
+
+		if (empty($user_id) || !is_integer($user_id) || $user_id == 0 )
 		{
 			Template::set_message('You must provide a numeric user id to log activity.','error');
 			return false;
