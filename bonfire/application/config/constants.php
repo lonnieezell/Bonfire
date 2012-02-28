@@ -46,5 +46,15 @@ define('BONFIRE_VERSION', 'v0.5');
 */
 define('SITE_AREA', 'admin');
 
+/*
+	The 'IS_AJAX' constant allows for a quick simple check to verify that the
+	request is infact a XHR Request, it can be used to help secure your AJAX
+	methods by just verifying that 'IS_AJAX' == TRUE.
+*/
+
+$ajax_request = ( !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') ? TRUE : FALSE;
+define('IS_AJAX' , $ajax_request );
+unset ( $ajax_request );
+
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
