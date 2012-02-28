@@ -57,6 +57,38 @@ $mb_index =<<<END
 	*/
 	public function index()
 	{
+
+		// Deleting anything?
+		if (\$action = \$this->input->post('submit'))
+		{
+			if (\$action == 'Delete')
+			{
+				\$checked = \$this->input->post('checked');
+
+				if (is_array(\$checked) && count(\$checked))
+				{
+					\$result = FALSE;
+					foreach (\$checked as \$pid)
+					{
+						\$result = \$this->{$module_name_lower}_model->delete(\$pid);
+					}
+
+					if (\$result)
+					{
+						Template::set_message(count(\$checked) .' '. lang('{$module_name_lower}_delete_success') .'.', 'success');
+					}
+					else
+					{
+						Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'error');
+					}
+				}
+				else
+				{
+					Template::set_message(lang('{$module_name_lower}_delete_error') . \$this->{$module_name_lower}_model->error, 'error');
+				}
+			}
+		}
+
 		\$records = \$this->{$module_name_lower}_model->find_all();
 
 		Template::set('records', \$records);

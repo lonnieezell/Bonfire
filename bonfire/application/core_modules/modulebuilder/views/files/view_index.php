@@ -3,38 +3,40 @@
 $view =<<<END
 <div class="admin-box">
 	<h3>{$module_name}</h3>
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th class="column-check"><input class="check-all" type="checkbox" /></th>
-				{table_header}
-			</tr>
-		</thead>
-		<?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
-		<tfoot>
-			<tr>
-				<td colspan="{cols_total}">
-					<?php echo lang('bf_with_selected') ?>
-					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_delete') ?>">
-				</td>
-			</tr>
-		</tfoot>
-		<?php endif; ?>
-		<tbody>
-		<?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
-		<?php foreach (\$records as \$record) : ?>
-			<tr>
-				<td><input type="checkbox" name="checked[]" value="<?php echo \$record->{$primary_key_field} ?>" /></td>
-				{table_records}
-			</tr>
-		<?php endforeach; ?>
-		<?php else: ?>
-			<tr>
-				<td colspan="{cols_total}">No records found that match your selection.</td>
-			</tr>
-		<?php endif; ?>
-		</tbody>
-	</table>
+	<?php echo form_open(\$this->uri->uri_string()); ?>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th class="column-check"><input class="check-all" type="checkbox" /></th>
+					{table_header}
+				</tr>
+			</thead>
+			<?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
+			<tfoot>
+				<tr>
+					<td colspan="{cols_total}">
+						<?php echo lang('bf_with_selected') ?>
+						<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_delete') ?>">
+					</td>
+				</tr>
+			</tfoot>
+			<?php endif; ?>
+			<tbody>
+			<?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
+			<?php foreach (\$records as \$record) : ?>
+				<tr>
+					<td><input type="checkbox" name="checked[]" value="<?php echo \$record->{$primary_key_field} ?>" /></td>
+					{table_records}
+				</tr>
+			<?php endforeach; ?>
+			<?php else: ?>
+				<tr>
+					<td colspan="{cols_total}">No records found that match your selection.</td>
+				</tr>
+			<?php endif; ?>
+			</tbody>
+		</table>
+	<?php echo form_close(); ?>
 </div>
 END;
 
