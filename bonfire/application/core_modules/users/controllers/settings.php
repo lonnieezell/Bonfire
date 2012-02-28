@@ -52,7 +52,7 @@ class Settings extends Admin_Controller {
 	//--------------------------------------------------------------------
 
 	public function index()
-	{	
+	{
 		$roles = $this->role_model->select('role_id, role_name')->where('deleted', 0)->find_all();
 		Template::set('roles', $roles);
 
@@ -73,7 +73,7 @@ class Settings extends Admin_Controller {
 					break;
 			}
 		}
-		
+
 		$where = array();
 
 		// Filters
@@ -111,7 +111,7 @@ class Settings extends Admin_Controller {
 		{
 			$where['SUBSTRING( LOWER(username), 1, 1)='] = $first_letter;
 		}
-		
+
 		$this->load->helper('ui/ui');
 
 		$this->user_model->limit($this->limit, $offset)->where($where);
@@ -121,7 +121,7 @@ class Settings extends Admin_Controller {
 
 		// Pagination
 		$this->load->library('pagination');
-		
+
 		$this->user_model->where($where);
 		$total_users = $this->user_model->count_all();
 
@@ -154,7 +154,7 @@ class Settings extends Admin_Controller {
 			if ($id = $this->save_user())
 			{
 				$this->load->model('activities/Activity_model', 'activity_model');
-			
+
 				$user = $this->user_model->find($id);
 				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
@@ -194,7 +194,7 @@ class Settings extends Admin_Controller {
 			if ($this->save_user('update', $user_id))
 			{
 				$this->load->model('activities/Activity_model', 'activity_model');
-			
+
 				$user = $this->user_model->find($user_id);
 				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
@@ -246,11 +246,16 @@ class Settings extends Admin_Controller {
 
 	//--------------------------------------------------------------------
 
-	public function delete($users=null)
+	public function delete($users)
 	{
 		if (empty($users))
 		{
-			$users = array($this->uri->segment(5));
+			$user_id = $this->uri->segment(5);
+
+			if(!empty($user_id))
+			{
+				$users = array($user_id);
+			}
 		}
 
 		if (!empty($users))
@@ -266,7 +271,7 @@ class Settings extends Admin_Controller {
 					if ($this->user_model->delete($id))
 					{
 						$this->load->model('activities/Activity_model', 'activity_model');
-					
+
 						$user = $this->user_model->find($id);
 						$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 						$this->activity_model->log_activity($this->current_user->id, lang('us_log_delete') . ': '.$log_name, 'users');
@@ -414,13 +419,13 @@ class Settings extends Admin_Controller {
 		{
 			return false;
 		}
-		
+
 		// Compile our core user elements to save.
 		$data = array(
 			'email'		=> $this->input->post('email'),
 			'username'	=> $this->input->post('username')
 		);
-		
+
 		if ($this->input->post('password'))	$data['password'] = $this->input->post('password');
 		if ($this->input->post('pass_confirm'))	$data['pass_confirm'] = $this->input->post('pass_confirm');
 		if ($this->input->post('restore')) $data['deleted'] = 0;
@@ -435,10 +440,10 @@ class Settings extends Admin_Controller {
 		{
 			$return = $this->user_model->update($id, $data);
 		}
-		
-		// Any modules needing to save data? 
+
+		// Any modules needing to save data?
 		Events::trigger('save_user', $this->input->post());
-		
+
 		return $return;
 	}
 
