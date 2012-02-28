@@ -75,7 +75,7 @@ $mb_index =<<<END
 
 					if (\$result)
 					{
-						Template::set_message(count(\$checked) .' '. lang('{$module_name_lower}_delete_success') .'.', 'success');
+						Template::set_message(count(\$checked) .' '. lang('{$module_name_lower}_delete_success'), 'success');
 					}
 					else
 					{

@@ -16,7 +16,7 @@ $view =<<<END
 				<tr>
 					<td colspan="{cols_total}">
 						<?php echo lang('bf_with_selected') ?>
-						<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_delete') ?>">
+						<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
 					</td>
 				</tr>
 			</tfoot>
