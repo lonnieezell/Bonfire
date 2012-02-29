@@ -4,7 +4,8 @@ $view = '
 <?php if (validation_errors()) : ?>
 <div class="alert alert-block alert-error fade in notification error">
   <a class="close" data-dismiss="alert">&times;</a>
-	<?php echo validation_errors(); ?>
+  <h4 class="alert-heading">Please fix the following errors :</h4>
+ <?php echo validation_errors(); ?>
 </div>
 <?php endif; ?>
 <?php // Change the css classes to suit your needs
