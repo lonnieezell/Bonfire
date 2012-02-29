@@ -9,6 +9,7 @@
 */
 
 $controller_name_lower = strtolower($controller_name);
+$primary_key_field = set_value("primary_key_field");
 
 //--------------------------------------------------------------------
 // !CLASS PARTS
@@ -275,6 +276,10 @@ $mb_save =<<<END
 	*/
 	private function save_{$module_name_lower}(\$type='insert', \$id=0)
 	{
+		if (\$type == 'update') {
+			\$_POST['{$primary_key_field}'] = \$id;
+		}
+
 		{validation_rules}
 
 		if (\$this->form_validation->run() === FALSE)
@@ -493,7 +498,7 @@ if ($controller_name != $module_name_lower)
 
 				if ($value == 'unique')	{
 					$prefix = $this->db->dbprefix;
-					$rules .= $value.'['.$prefix.$table_name.'.'.$field_name.','.$prefix.$table_name.'.'.set_value("primary_key_field").']';
+					$rules .= $value.'['.$prefix.$table_name.'.'.$field_name.','.$prefix.$table_name.'.'.$primary_key_field.']';
 				}
 				else {
 					$rules .= $value;
