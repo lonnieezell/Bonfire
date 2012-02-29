@@ -12,11 +12,11 @@
 	<input type="hidden" name="user_id" value="<?php echo $user->id ?>" />
 
 	<label for="password"><?php echo lang('bf_password'); ?></label>
-	<input type="text" name="password" placeholder="Password..." />
+	<input type="password" name="password" placeholder="Password..." />
 	<p class="small"><?php echo lang('us_password_mins'); ?></p>
 	
 	<label for="pass_confirm"><?php echo lang('bf_password_confirm'); ?></label>
-	<input type="text" name="pass_confirm" placeholder="Again..." />
+	<input type="password" name="pass_confirm" placeholder="Again..." />
 	
 	<div class="submits">
 		<input type="submit" name="submit" value="Save New Password" />
