@@ -54,7 +54,6 @@ for($counter=1; $field_total >= $counter; $counter++)
 
 			}
 			elseif ($textarea_editor == 'markitup') {
-				//
 				$view .= '$("#' . $field_name . '").markItUp(mySettings);' . PHP_EOL;
 			}
 		}
@@ -69,13 +68,11 @@ for($counter=1; $field_total >= $counter; $counter++)
 		{
 			if ($db_field_type == 'DATE')
 			{
-				$view .= '
-			$(\'#'.$field_name.'\').datepicker({ dateFormat: \'yy-mm-dd\'});';
+				$view .= '$(\'#'.$field_name.'\').datepicker({ dateFormat: \'yy-mm-dd\'});' . PHP_EOL;
 			}
 			elseif ($db_field_type == 'DATETIME')
 			{
-				$view .= '
-			$(\'#'.$field_name.'\').datetimepicker({ dateFormat: \'yy-mm-dd\', timeFormat: \'hh:mm:ss\'});';
+				$view .= '$(\'#'.$field_name.'\').datetimepicker({ dateFormat: \'yy-mm-dd\', timeFormat: \'hh:mm:ss\'});' . PHP_EOL;
 			}
 		}
 		break;
