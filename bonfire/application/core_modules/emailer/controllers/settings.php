@@ -84,8 +84,6 @@ class Settings extends Admin_Controller {
 				else
 				{
 					Template::set_message('There was an error saving your settings.', 'error');
-					echo "HERE";
-					exit;
 				}
 			}
 		}
