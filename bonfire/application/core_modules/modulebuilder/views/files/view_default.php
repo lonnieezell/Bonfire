@@ -91,7 +91,7 @@ EOT;
 				$view .= '
 				<script type="text/javascript">
 					head.ready(function(){
-						$("textarea").markItUp(mySettings);
+						$("#' . $field_name . '").markItUp(mySettings);
 					});
 				</script>';
 			}

@@ -55,9 +55,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 			}
 			elseif ($textarea_editor == 'markitup') {
 				//
-				$view .= '
-				$("textarea").markItUp(mySettings);';
-
+				$view .= '$("#' . $field_name . '").markItUp(mySettings);' . PHP_EOL;
 			}
 		}
 		break;
