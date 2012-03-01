@@ -43,16 +43,12 @@
 		<fieldset id="module_details">
 			<legend><?php echo lang('mb_form_mod_details'); ?></legend>
 
-			<div class="control-group">
-				<div class="controls">
-					<p><a href="#" class="mb_show_advanced small"><?php echo lang('mb_form_show_advanced'); ?></a></p>
-				</div>
-			</div>
 			<div class="control-group <?php echo form_has_error('module_name') ? 'error' : ''; ?>">
 				<label for="module_name" class="block"><?php echo lang('mb_form_mod_name'); ?></label>
 				<div class="controls">
 					<input name="module_name" id="module_name" type="text" value="<?php echo set_value("module_name"); ?>" placeholder="<?php echo lang('mb_form_mod_name_ph'); ?>" />
 					<span class="help-inline"><?php echo form_error('module_name'); ?></span>
+					<div><a href="#" class="mb_show_advanced small"><?php echo lang('mb_form_show_advanced'); ?></a></div>
 				</div>
 			</div>
 
@@ -210,12 +206,12 @@
 				</div>
 			</div>
 
-			<div class="alert alert-info" style="width:90%; margin:5px auto;">
+			<div class="alert alert-info mb_new_table" style="width:90%; margin:5px auto;">
         <a class="close" data-dismiss="alert">&times;</a>
 				<?php echo lang('mb_table_note'); ?>
 			</div>
 
-			<div class="control-group <?php echo form_has_error('primary_key_field') ? 'error' : ''; ?>">
+			<div class="control-group mb_new_table <?php echo form_has_error('primary_key_field') ? 'error' : ''; ?>">
 				<label for="primary_key_field" class="block"><?php echo lang('mb_form_primarykey'); ?></label>
 				<div class="controls">
 					<input name="primary_key_field" id="primary_key_field" type="text" value="<?php echo set_value("primary_key_field", (isset($existing_table_fields[0]) && $existing_table_fields[0]['primary_key']) ? $existing_table_fields[0]['name'] : 'id'); ?>" />
@@ -248,7 +244,7 @@
 					<?php if ($count == 1) : ?>
 
 					<div class="alert alert-info" style="width:80%; margin: 0 auto;">
-            <a class="close" data-dismiss="alert">&times;</a>
+						<a class="close" data-dismiss="alert">&times;</a>
 						<?php echo lang('mb_field_note'); ?>
 					</div>
 
@@ -358,7 +354,7 @@
 						}
 					?>
 						<div class="controls">
-							<input name="db_field_length_value<?php echo $count; ?>" id="db_field_length_value<?php echo $count; ?>" type="text" value="<?php echo set_value("db_field_length_value{$count}"); ?>" placeholder="<?php echo lang('mb_form_length_ph'); ?>" />
+							<input name="db_field_length_value<?php echo $count; ?>" id="db_field_length_value<?php echo $count; ?>" type="text" value="<?php echo set_value("db_field_length_value{$count}", $default_max_len); ?>" placeholder="<?php echo lang('mb_form_length_ph'); ?>" />
 							<span class="help-inline"><?php echo form_error("db_field_length_value{$count}"); ?></span>
 						</div>
 					</div>
@@ -369,32 +365,32 @@
 							<?php echo form_error('cont_validation_rules'.$count.'[]'); ?>
 
 							<?php foreach ($validation_rules as $validation_rule) : ?>
-								<span class="faded">
-                <label class="inline checkbox">
-                  <input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_rule . $count; ?>" type="checkbox" value="<?php echo $validation_rule; ?>" <?php echo set_checkbox('validation_rules'.$count.'[]', $validation_rule); ?> />
-                  <?php echo lang('mb_form_'.$validation_rule); ?>
-                </label>
-                </span>
+							<span class="faded">
+								<label class="inline checkbox">
+									<input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_rule . $count; ?>" type="checkbox" value="<?php echo $validation_rule; ?>" <?php echo set_checkbox('validation_rules'.$count.'[]', $validation_rule); ?> />
+									<?php echo lang('mb_form_'.$validation_rule); ?>
+								</label>
+							</span>
 							<?php endforeach; ?>
-								<em class="mb_show_advanced_rules small"><?php echo lang('mb_form_show_more'); ?></em>
+							<em class="mb_show_advanced_rules small"><?php echo lang('mb_form_show_more'); ?></em>
 						</div>
 					</div>
 
 
 					<div class="control-group mb_advanced">
-            <label class="control-label" ><?php echo lang('mb_form_rules_limits'); ?></label>
-            <div class="controls">
+						<label class="control-label" ><?php echo lang('mb_form_rules_limits'); ?></label>
+						<div class="controls">
 							<?php echo lang('mb_form_rules_limit_note'); ?>
 							<?php foreach ($validation_limits as $validation_limit) : ?>
-                <span class="faded">
-                <label class="inline radio" for="validation_rules_<?php echo $validation_limit . $count; ?>">
-                  <input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_limit . $count; ?>" type="radio" value="<?php echo $validation_limit; ?>" <?php echo set_radio('validation_rules'.$count.'[]', $validation_limit); ?> />
-                  <?php echo lang('mb_form_'.$validation_limit); ?>
-                </label>
-                </span>
+							<span class="faded">
+								<label class="inline radio" for="validation_rules_<?php echo $validation_limit . $count; ?>">
+									<input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_limit . $count; ?>" type="radio" value="<?php echo $validation_limit; ?>" <?php echo set_radio('validation_rules'.$count.'[]', $validation_limit); ?> />
+									<?php echo lang('mb_form_'.$validation_limit); ?>
+								</label>
+							</span>
 							<?php endforeach; ?>
-            </div>
-          </div>
+						</div>
+					</div>
 
 <?php
 /*
