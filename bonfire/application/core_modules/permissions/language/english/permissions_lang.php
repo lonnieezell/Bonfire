@@ -20,6 +20,7 @@ $lang['permissions_save']				= 'Save Permission';
 $lang['permissions_delete_record']		= 'Delete this Permission';
 $lang['permissions_delete_confirm']		= 'Are you sure you want to delete this Permission?';
 $lang['permissions_delete_warning']		= 'Deleting this permission will also remove the access to this permission from the roles.';
+$lang['permissions_id']					= 'ID';
 $lang['permissions_name']				= 'Name';
 $lang['permissions_description']		= 'Description';
 $lang['permissions_status']				= 'Status';
