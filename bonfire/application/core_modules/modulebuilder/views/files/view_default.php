@@ -88,14 +88,7 @@ EOT;
 				$xinha_names .= '\''.$field_name.'\'';
 
 			}
-			elseif ($textarea_editor == 'markitup') {
-				$view .= '
-				<script type="text/javascript">
-					head.ready(function(){
-						$("#' . $field_name . '").markItUp(mySettings);
-					});
-				</script>';
-			}
+
 		}
 		$view .= "
 			<?php echo form_textarea( array( 'name' => '$field_name', 'id' => '$field_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>";
@@ -151,7 +144,6 @@ EOT;
 
 	$view .= <<<EOT
 
-        <?php // Change the values/css classes to suit your needs ?>
 			<input type="checkbox" id="{$field_name}" name="{$field_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$field_name}', 1); ?>>
 			<span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
 
@@ -190,7 +182,8 @@ EOT;
 	} // end switch
 
 	$view .= '
-		</div>';
+
+		</div>' . PHP_EOL;
 } // end for loop
 
 if (!empty($on_click))
@@ -198,18 +191,19 @@ if (!empty($on_click))
 	$on_click .= '"';
 }//end if
 
-$view .= '
+$view .= PHP_EOL . '
 
-	<div class="form-actions">
-		<br/>
-		<input type="submit" name="submit" class="btn primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn danger"\'); ?>
-	</div>
+		<div class="form-actions">
+			<br/>
+			<input type="submit" name="submit" class="btn primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn danger"\'); ?>
+		</div>
 	</fieldset>
 	<?php echo form_close(); ?>
-';
+' . PHP_EOL;
+
 if ($xinha_names != '')
 {
-	$view .= '
+	$view .= PHP_EOL . '
 				<script type="text/javascript">
 
 				var xinha_plugins =
@@ -232,22 +226,20 @@ if ($xinha_names != '')
 				  Xinha.startEditors(xinha_editors);
 				}
 				xinha_init();
-				</script>';
+				</script>' . PHP_EOL;
 }
 if($action_name != 'create') {
-$view .= '
+$view .= PHP_EOL . '
 	<div class="box delete rounded">
 		<h3><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></h3>
 
 		<p><?php echo lang(\''.$module_name_lower.'_edit_text\'); ?></p>
 
-		<a class="btn danger" id="delete-me" href="<?php echo site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id); ?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')"><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></a>
+		<a class="btn danger" id="delete-me" href="<?php echo site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id); ?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')"><i class="icon trash icon-white">&nbsp;</i><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></a>
 	</div>
-';
+' . PHP_EOL;
 }
 
-$view .= '
-</div>';
-
+$view .= PHP_EOL . '</div>' . PHP_EOL;
 echo $view;
 ?>
