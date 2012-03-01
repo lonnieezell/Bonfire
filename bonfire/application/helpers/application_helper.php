@@ -75,8 +75,7 @@ function gravatar_link($email=null, $size=48, $alt='', $title='', $class='', $id
 		if(isset($_SERVER['HTTPS'])){ $http_protocol = "https://secure.";} else { $http_protocol = "http://www.";}
 
 		// URL for Gravatar
-		$gravatarURL =  $http_protocol . "gravatar.com/avatar.php?gravatar_id=%s&default=%s&size=%s&border=%s&rating=%s";
-
+		$gravatarURL =  $http_protocol . "gravatar.com/avatar.php?gravatar_id=%s&amp;default=%s&amp;size=%s&amp;border=%s&amp;rating=%s";
 		$avatarURL = sprintf
 		(
 			$gravatarURL,
@@ -532,4 +531,20 @@ function obj_value($obj, $key, $type='text', $value=0)
 	}
 
 	return null;
+}
+
+//--------------------------------------------------------------------
+
+/**
+* If then Else Statement wrapped in one function, If $expression = true then $returntrue else $returnfalse
+*
+* @param mixed $expression    IF Statement to be checked
+* @param mixed $returntrue    What to Return on True
+* @param mixed $returnfalse   What to Return on False
+*
+* @return mixed    Returns $returntrue or $returnfalse depending on Expression
+*/
+function iif($expression, $returntrue, $returnfalse = '')
+{
+	return ( $expression == 0 ) ? $returnfalse : $returntrue;
 }
