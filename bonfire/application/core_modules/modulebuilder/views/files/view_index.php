@@ -71,7 +71,7 @@ if ($use_modified == 'true')
 }
 
 $table_records = '';
-$pencil_icon   = '<i class="icon pencil">&nbsp;</i>';
+$pencil_icon   = "'<i class=\"icon pencil\">&nbsp;</i>' . ";
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	// only build on fields that have data entered.
