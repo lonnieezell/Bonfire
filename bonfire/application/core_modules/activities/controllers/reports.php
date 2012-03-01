@@ -311,6 +311,9 @@ class Reports extends Admin_Controller {
 
 			$this->db->where('activities.deleted', 0);
 			$total = $this->activity_model->count_by($where, $find_value);
+
+			// set this again for use in the main query
+			$this->db->where($where,$find_value);
 		}
 		else
 		{
