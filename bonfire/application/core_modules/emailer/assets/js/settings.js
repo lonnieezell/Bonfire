@@ -12,7 +12,7 @@ $(document).ready(function(){
 			case 'sendmail':
 				$('#sendmail').css('display', 'block');
 				break;
-			case 'SMTP':
+			case 'smtp':
 				$('#smtp').css('display', 'block');
 				break;
 		}

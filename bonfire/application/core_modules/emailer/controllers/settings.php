@@ -50,12 +50,18 @@ class Settings extends Admin_Controller {
 		if ($this->input->post('submit'))
 		{
 			$this->form_validation->set_rules('sender_email', 'System Email', 'required|trim|valid_email|max_length[120]|xss_clean');
-			$this->form_validation->set_rules('mailpath', 'Sendmail Path', 'trim|xss_clean');
-			$this->form_validation->set_rules('smtp_host', 'SMTP Server Address', 'trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('smtp_user', 'SMTP Username', 'trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('smtp_pass', 'SMTP Password', 'trim|strip_tags|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,20}]');
-			$this->form_validation->set_rules('smtp_port', 'SMTP Port', 'trim|strip_tags|numeric|xss_clean');
-			$this->form_validation->set_rules('smtp_timeout', 'SMTP timeout', 'trim|strip_tags|numeric|xss_clean');
+			$this->form_validation->set_rules('protocol', 'Email Server', 'trim|xss_clean');
+
+			if ($this->input->post('protocol') == 'sendmail') {
+				$this->form_validation->set_rules('mailpath', 'Sendmail Path', 'required|trim|xss_clean');
+			}
+			elseif ($this->input->post('protocol') == 'smtp') {
+				$this->form_validation->set_rules('smtp_host', 'SMTP Server Address', 'required|trim|strip_tags|xss_clean');
+				$this->form_validation->set_rules('smtp_user', 'SMTP Username', 'trim|strip_tags|xss_clean');
+				$this->form_validation->set_rules('smtp_pass', 'SMTP Password', 'trim|strip_tags|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,20}]');
+				$this->form_validation->set_rules('smtp_port', 'SMTP Port', 'trim|strip_tags|numeric|xss_clean');
+				$this->form_validation->set_rules('smtp_timeout', 'SMTP timeout', 'trim|strip_tags|numeric|xss_clean');
+			}
 
 			if ($this->form_validation->run() !== FALSE)
 			{
@@ -85,6 +91,10 @@ class Settings extends Admin_Controller {
 				{
 					Template::set_message('There was an error saving your settings.', 'error');
 				}
+			}
+			else
+			{
+				Template::set_message('There was an error saving your settings.', 'error');
 			}
 		}
 
