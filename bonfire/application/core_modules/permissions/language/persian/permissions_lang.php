@@ -20,6 +20,7 @@ $lang['permissions_save']				= 'ذخيره مجوز';
 $lang['permissions_delete_record']		= 'حذف اين مجوز';
 $lang['permissions_delete_confirm']		= 'آيا از حذف اين مجوز دسترسي اطمينان داريد؟';
 $lang['permissions_delete_warning']		= 'حذف اين مجوز سبب حذف دسترسي نقش ها به اين مجوز خواهد شد.';
+$lang['permissions_id']					= 'ID';
 $lang['permissions_name']				= 'نام';
 $lang['permissions_description']		= 'توضيحات';
 $lang['permissions_status']				= 'وضعيت';

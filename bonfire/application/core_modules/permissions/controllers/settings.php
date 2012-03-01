@@ -81,31 +81,23 @@ class Settings extends Admin_Controller {
 			}
 		}
 
-		$this->load->library('ui/dataset');
-		$this->dataset->set_source('permission_model', 'find_all');
+		$total = $this->permission_model->count_all();
 
-		$columns = array(
-			array(
-				'field'		=> 'id',
-				'title'		=> 'ID',
-				'width'		=> '3em'
-			),
-			array(
-				'field'		=> 'name',
-			),
-			array(
-				'field'		=> 'description',
-			),
-			array(
-				'field'		=> 'active',
-			)
-		);
+		// Pagination
+		$this->load->library('pagination');
 
-		$this->dataset->columns($columns);
+		$offset = $this->input->get('per_page');
 
-		$this->dataset->actions(array('delete'));
+		$limit = $this->settings_lib->item('site.list_limit');
+		
+		$this->pager['base_url'] 			= current_url() .'?';
+		$this->pager['total_rows'] 			= $total;
+		$this->pager['per_page'] 			= $limit;
+		$this->pager['page_query_string']	= true;
 
-		$this->dataset->initialize();
+		$this->pagination->initialize($this->pager);
+		
+		Template::set('results', $this->permission_model->limit($limit, $offset)->find_all());
 
 		Template::set("toolbar_title", lang("permissions_manage"));
 		Template::render();
