@@ -46,13 +46,18 @@
     </div><!--/.fluid-container-->
 
 	<div id="debug"></div>
+	<script type="text/javascript">
+			if (typeof jQuery == 'undefined') {
+					document.write(unescape("%3Cscript src='<?php echo base_url(); ?>assets/js/jquery-1.7.1.min.js' type='text/javascript'%3E%3C/script%3E"));
+			}
+	</script>
 
 	<script>
 		head.js(<?php echo Assets::external_js(null, true) ?>);
 		head.js(<?php echo Assets::module_js(true) ?>);
 	</script>
 	<?php echo Assets::inline_js(); ?>
-	<?php echo Modules::run('analytics/analytics/show_gcode'); ?>
+	<?php /* echo Modules::run('analytics/analytics/show_gcode'); */ ?>
 
 </body>
 </html>
