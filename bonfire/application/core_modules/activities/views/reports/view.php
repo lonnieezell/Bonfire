@@ -20,7 +20,7 @@
 	<?php else : ?>
 
 	<div id="user_activities">
-		<table class="table table-striped" id="flex_table">
+		<table class="table table-striped table-bordered" id="flex_table">
 			<thead>
 				<tr>
 					<th><?php echo lang('activity_user'); ?></th>
