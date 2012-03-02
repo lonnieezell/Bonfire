@@ -43,8 +43,15 @@ class Reports extends Admin_Controller {
 		Template::set('toolbar_title', lang('activity_title'));
 
 		Assets::add_js($this->load->view('reports/activities_js', null, true), 'inline');
-		Assets::add_js('jquery.dataTables.min.js');
-		Assets::add_css('datatable.css');
+		Assets::add_js( array ( 
+								base_url() . 'assets/js/jquery.dataTables.min.js', 
+								'DT_bootstrap.js'
+							  ));
+		Assets::add_css( array ( 
+								'datatable.css',
+								'DT_bootstrap.css'
+							 	));
+
 		$this->lang->load('datatable');
 
 		Template::set_block('sub_nav', 'reports/_sub_nav');

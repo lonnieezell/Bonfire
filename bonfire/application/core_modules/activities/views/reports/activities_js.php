@@ -23,6 +23,23 @@ $('.btn').click( function() {
 });
 
 $("#flex_table").dataTable({
+        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+        "sPaginationType": "bootstrap",
+        "iDisplayLength": <?php echo config_item('site.list_limit') ? config_item('site.list_limit') : 15; ?>,
+        "bAutoWidth": false,
+        "aoColumns": [
+            { "sWidth": "10%" },
+            null,
+            { "sWidth": "8em" },
+            { "sWidth": "12em" }
+        ],
+        "oLanguage": {
+            "sLengthMenu": "_MENU_ records per page"
+        }
+});
+
+<?php /*
+$("#flex_table").dataTable({
 		"sDom": 'rt<"top"fpi>',
 		"sPaginationType": "listbox",
 		"bProcessing": true,
@@ -54,3 +71,6 @@ $("#flex_table").dataTable({
                     }
                 }
 });
+
+*/
+?>
