@@ -2,22 +2,44 @@
 
 class MY_Form_validation extends CI_Form_validation {
 
-    public $CI;
+  public $CI;
 
-    //--------------------------------------------------------------------
+  //--------------------------------------------------------------------
 
-  /**
-   * MY_Form_validation::__construct( )
-   *
-   *
-   * @return
-   */
-  function __construct( $config = array() )
-  {
-    parent::__construct($config);
-  }
+		/**
+			* MY_Form_validation::__construct()
+			*
+			* @return
+			*/
+		function __construct( $config = array() ) {
+				parent::__construct( $config );
+		}
 
 	// --------------------------------------------------------------------
+
+ /*
+				Returns Form Validation Errors in a Un-ordered list format
+
+				return string
+ */
+ public function validation_errors_list()
+ {
+		if ( is_array ( $this->CI->form_validation->_error_array ) )
+		{
+				$errors = (array) $this->CI->form_validation->_error_array;
+				$error  = '<ul>';
+
+				foreach ( $errors as $error )
+				{
+						$error .= "	<li>{$error}</li>" . PHP_EOL;
+				}
+
+				$error .= '</ul>';
+				return $error;
+		}
+
+		return false;
+ }
 
 	public function run($module='', $group='')
 	{
@@ -202,6 +224,7 @@ function form_has_error($field=null)
 }
 
 //--------------------------------------------------------------------
+
 
 /* Author :  http://net.tutsplus.com/tutorials/php/6-codeigniter-hacks-for-the-masters/ */
 /* End of file : ./libraries/MY_Form_validation.php */

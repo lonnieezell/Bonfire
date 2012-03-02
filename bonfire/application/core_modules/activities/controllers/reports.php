@@ -48,7 +48,6 @@ class Reports extends Admin_Controller {
 								'DT_bootstrap.js'
 							  ));
 		Assets::add_css( array ( 
-								'datatable.css',
 								'DT_bootstrap.css'
 							 	));
 
