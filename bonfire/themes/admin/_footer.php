@@ -1,4 +1,4 @@
-	<footer class="fluid-container footer">
+	<footer class="container-fluid footer">
 		<p class="pull-right">
 			Executed in {elapsed_time} seconds, using {memory_usage}.
 			<br/>Powered by Bonfire <?php echo BONFIRE_VERSION ?>
