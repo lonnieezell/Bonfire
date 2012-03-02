@@ -1,6 +1,6 @@
 <?php if ($log_threshold == 0) : ?>
 	<div class="alert alert-warning fade in">
-		<a class="close" data-dismiss="alert">&times;</a>		
+		<a class="close" data-dismiss="alert">&times;</a>
 		<?php e(lang('log_not_enabled')); ?>
 	</div>
 <?php endif; ?>
@@ -55,22 +55,22 @@
 	<!-- Purge? -->
 	<div class="admin-box">
 		<h3><?php echo lang('log_delete_button'); ?></h3>
-	
+
 		<br/>
-		
+
 		<div class="alert alert-warning fade in">
-			<a class="close" data-dismiss="alert">&times;</a>		
+			<a class="close" data-dismiss="alert">&times;</a>
 			<?php echo lang('log_delete_note'); ?>
 		</div>
 
 		<div class="form-actions">
-			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'); ?>" onclick="return confirm('Are you sure you want to delete all log files?')"><i class"icon-white icon-trash">&&nbsp;</i>&&nbsp;<?php echo lang('log_delete_button'); ?></a>
+			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'); ?>" onclick="return confirm('Are you sure you want to delete all log files?')"><i class="icon-white icon-trash">&nbsp;</i>&nbsp;<?php echo lang('log_delete_button'); ?></a>
 		</div>
 	</div>
 <?php else : ?>
 
 	<div class="alert alert-info fade in notification ">
-		<a class="close" data-dismiss="alert">&times;</a>		
+		<a class="close" data-dismiss="alert">&times;</a>
 		<p><?php echo lang('log_no_logs'); ?></p>
 	</div>
 <?php endif; ?>
