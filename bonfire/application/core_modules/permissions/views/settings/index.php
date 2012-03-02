@@ -4,9 +4,6 @@
 	<h3><?php echo $toolbar_title ?></h3>
 	<form action="<?php echo $this->uri->uri_string(); ?>" method="post">
 
-<!--	<form action="http://fresh.bonfire.com/admin/settings/permissions" method="post"> -->
-<!--    Not sure why this was posting to fresh.bonfire.com??? -->
-
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -31,7 +28,7 @@
 
 			<tbody>
 	<?php if (isset($results) && is_array($results) && count($results)) : ?>
-	
+
 			<?php foreach ($results as $record) : ?>
 			<?php 	$record = (array)$record; ?>
 				<tr>
@@ -48,18 +45,18 @@
 					<td><?php e(ucfirst($record['status'])) ?></td>
 				</tr>
 			<?php endforeach; ?>
-	
+
 	<?php else: ?>
-	
+
 				<tr>
 					<td colspan="6">No permissions found.</td>
 				</tr>
-	
+
 	<?php endif; ?>
 			</tbody>
 		</table>
 	</form>
-	
+
 	<?php echo $this->pagination->create_links(); ?>
 
 </div>
