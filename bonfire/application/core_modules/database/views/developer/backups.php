@@ -17,7 +17,7 @@
 				<tr>
 					<td colspan="3">
 						<?php echo lang('db_delete_note'); ?>
-						<button type="submit" name="submit" class="btn danger"><?php echo lang('bf_action_delete'); ?></button>
+						<button type="submit" name="submit" class="btn btn-danger"><?php echo lang('bf_action_delete'); ?></button>
 					</td>
 				</tr>
 			</tfoot>

@@ -35,7 +35,7 @@
 	</div>
 
 	<div class="form-actions">
-		<input type="submit" name="submit" class="btn primary" value="<?php echo lang('log_save_button'); ?>" />
+		<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('log_save_button'); ?>" />
 	</div>
 
 <?php echo form_close(); ?>

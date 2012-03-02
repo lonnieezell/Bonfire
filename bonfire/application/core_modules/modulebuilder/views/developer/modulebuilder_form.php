@@ -411,7 +411,7 @@
 	</div>
 	<div class="form-actions">
 		<?php if ($writeable): ?>
-			<?php echo form_submit('submit', 'Build the Module', 'class="btn primary"'); ?>
+			<?php echo form_submit('submit', 'Build the Module', 'class="btn btn-primary"'); ?>
 		<?php endif;?>
 	</div>
 	<?php echo form_close()?>

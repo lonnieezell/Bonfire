@@ -66,7 +66,7 @@
 		</div>
 
 		<div class="form-actions">
-			<button type="submit" name="submit" class="btn primary" ><?php echo lang('db_backup'); ?></button> <?php echo lang('bf_or'); ?>
+			<button type="submit" name="submit" class="btn btn-primary" ><?php echo lang('db_backup'); ?></button> <?php echo lang('bf_or'); ?>
 			<a href="/admin/developer/database"><?php echo lang('bf_action_cancel'); ?></a>
 		</div>
 

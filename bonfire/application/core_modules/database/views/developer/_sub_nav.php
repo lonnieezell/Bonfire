@@ -1,4 +1,4 @@
-<ul class="nav pills">
+<ul class="nav nav-pills">
 	<li <?php echo $this->uri->segment(4) == '' && $this->uri->segment(3) != 'migrations' ? 'class="active"' : '' ?>>
 		<a href="<?php echo site_url(SITE_AREA .'/developer/database') ?>"><?php echo lang('db_maintenance'); ?></a>
 	</li>

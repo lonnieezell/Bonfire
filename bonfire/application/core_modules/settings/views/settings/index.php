@@ -164,7 +164,7 @@
 		<?php endif; ?>
 	
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_context_settings') ?>" />
+			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_context_settings') ?>" />
 		</div>
 	
 	<?php echo form_close(); ?>

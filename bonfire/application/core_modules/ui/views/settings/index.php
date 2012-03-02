@@ -75,7 +75,7 @@
 							<input type="text" id="shortcut<?php echo $count;?>" name="shortcut<?php echo $count;?>"  value="<?php echo isset($shortcut) ? $shortcut : set_value('shortcuts['.$count.']') ?>" />
 						</td>
 						<td>
-							<input type="button" name="remove_shortcut" id="remove_shortcut<?php echo $count;?>" value="<?php echo lang('ui_remove_shortcut') ?>" class="btn danger" />
+							<input type="button" name="remove_shortcut" id="remove_shortcut<?php echo $count;?>" value="<?php echo lang('ui_remove_shortcut') ?>" class="btn btn-danger" />
 						</td>
 					</tr>
 				<?php endforeach; ?>

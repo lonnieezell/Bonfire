@@ -17,7 +17,7 @@
 	<?php endif; ?>
 
 	<div class="form-actions">
-		<input type="submit" name="submit" class="btn danger" value="<?php echo lang('bf_action_delete'); ?> <?php echo lang('bf_files'); ?>" />
+		<input type="submit" name="submit" class="btn btn-danger" value="<?php echo lang('bf_action_delete'); ?> <?php echo lang('bf_files'); ?>" />
 		<?php echo lang('bf_or'); ?>	<a href="<?php echo site_url(SITE_AREA .'/developer/database/backups') ?>"><?php echo lang('bf_action_cancel'); ?></a></p>
 	</div>
 

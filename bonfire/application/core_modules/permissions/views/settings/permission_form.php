@@ -42,7 +42,7 @@
 		</div>
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn primary" value="<?php echo lang('permissions_save');?>" /> or <?php echo anchor(SITE_AREA .'/settings/permissions', lang('permissions_cancel')); ?>
+			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('permissions_save');?>" /> or <?php echo anchor(SITE_AREA .'/settings/permissions', lang('permissions_cancel')); ?>
 		</div>
 
 	</fieldset>
@@ -53,7 +53,7 @@
 	
 			<p><?php echo lang('permissions_delete_warning'); ?></p>
 	
-			<a class="btn danger" href="<?php echo site_url(SITE_AREA .'/settings/permissions/delete/'. $id); ?>" onclick="return confirm('<?php echo lang('permissions_delete_confirm'); ?>')"><?php echo lang('permissions_delete_record'); ?></a>
+			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/settings/permissions/delete/'. $id); ?>" onclick="return confirm('<?php echo lang('permissions_delete_confirm'); ?>')"><?php echo lang('permissions_delete_record'); ?></a>
 		</div>
 		<?php endif; ?>
 	<?php echo form_close(); ?>

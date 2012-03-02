@@ -30,7 +30,7 @@
 		</div>
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn primary" value="<?php echo lang('db_restore'); ?>" /> <?php echo lang('bf_or'); ?>
+			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('db_restore'); ?>" /> <?php echo lang('bf_or'); ?>
 			<a href="<?php echo site_url(SITE_AREA .'/developer/database/backups') ?>"><?php echo lang('bf_action_cancel'); ?></a>
 		</div>
 

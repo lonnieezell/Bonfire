@@ -11,7 +11,7 @@
 	<div class="admin-box">
 		<h3><?php echo $toolbar_title ?></h3>
 	
-		<ul class="nav tabs" data-tabs="tabs">
+		<ul class="nav nav-tabs" data-tabs="tabs">
 			<li class="active"><a href="#app-tab">Application</a></li>
 			<li><a href="#mod-tab">Modules</a></li>
 			<li><a href="#core-tab">Bonfire</a></li>
@@ -137,7 +137,7 @@
 						</div>
 		
 						<div class="form-actions">
-							<input type="submit" name="submit" class="btn primary" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
+							<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
 						</div>
 						<?php else: ?>
 							<p><?php echo lang('mig_no_migrations') ?></p>

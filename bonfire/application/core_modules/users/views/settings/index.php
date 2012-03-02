@@ -5,7 +5,7 @@
 <div class="admin-box">
 	<h3><?php echo lang('bf_users') ?></h3>
 
-	<ul class="nav tabs" >
+	<ul class="nav nav-tabs" >
 		<li <?php echo $filter=='' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url; ?>">All Users</a></li>
 		<li <?php echo $filter=='banned' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=banned'; ?>">Banned</a></li>
 		<li <?php echo $filter=='deleted' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=deleted'; ?>">Deleted</a></li>

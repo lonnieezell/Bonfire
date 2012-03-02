@@ -62,7 +62,7 @@
 		</div>
 
 		<div class="form-actions">
-			<a class="btn danger" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'); ?>" onclick="return confirm('Are you sure you want to delete all log files?')"><?php echo lang('log_delete_button'); ?></a>
+			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'); ?>" onclick="return confirm('Are you sure you want to delete all log files?')"><?php echo lang('log_delete_button'); ?></a>
 		</div>
 	</div>
 <?php else : ?>

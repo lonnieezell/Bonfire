@@ -26,7 +26,7 @@
 		</fieldset>
 	
 		<div class="form-actions">
-			<input type="submit" name="submit" id="submit" class="btn primary" value="Save Template" /> or <?php echo anchor(SITE_AREA .'/settings/emailer', 'Cancel'); ?>
+			<input type="submit" name="submit" id="submit" class="btn btn-primary" value="Save Template" /> or <?php echo anchor(SITE_AREA .'/settings/emailer', 'Cancel'); ?>
 		</div>
 	
 	<?php echo form_close(); ?>
