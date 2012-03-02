@@ -2,7 +2,8 @@
 
 <?php if ($this->config->item('migrations_enabled') === false) :?>
 
-	<div class="alert alert-warning">
+	<div class="alert alert-warning fade in">
+		<a class="close" data-dismiss="alert">&times;</a>		
 		<p><?php echo lang('mig_not_enabled'); ?></p>
 	</div>
 
@@ -25,7 +26,8 @@
 	
 				<br/>
 				
-				<div class="alert alert-info">
+				<div class="alert alert-info fade in">
+					<a class="close" data-dismiss="alert">&times;</a>
 					<?php echo lang('mig_installed_version'); ?> <b><?php echo $installed_version; ?></b> /
 					<?php echo lang('mig_latest_version'); ?> <b><?php echo $latest_version ?></b>
 				</div>
@@ -44,10 +46,12 @@
 					</p>
 	
 					<div class="form-actions">
-						<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
+						<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
 					</div>
 					<?php else: ?>
-						<div class="alert alert-warning">
+						<div class="alert alert-warning fade in">
+	  						<a class="close" data-dismiss="alert">&times;</a>
+
 							<?php echo lang('mig_no_migrations') ?>
 						</div>
 					<?php endif; ?>
@@ -92,7 +96,7 @@
 									</select>
 								</td>
 								<td style="width: 10em">
-									<input type="submit" name="submit" class="btn" value="Migrate Module" />
+									<input type="submit" name="submit" class="btn btn-primary" value="Migrate Module" />
 								</td>
 							</tr>
 							</form>
@@ -102,7 +106,8 @@
 	
 				<?php else : ?>
 					<br/>
-					<div class="alert alert-info">
+					<div class="alert alert-info fade in ">
+  						<a class="close" data-dismiss="alert">&times;</a>
 						No modules have any migrations available.
 					</div>
 				<?php endif; ?>
@@ -116,7 +121,8 @@
 					<legend><?php echo lang('mig_core_migrations'); ?></legend>
 					
 					<br/>
-					<div class="alert alert-info">
+					<div class="alert alert-info fade in ">
+  						<a class="close" data-dismiss="alert">&times;</a>
 						<?php echo lang('mig_installed_version'); ?> <b><?php echo $core_installed_version; ?></b> /
 						<?php echo lang('mig_latest_version'); ?> <b><?php echo $core_latest_version ?></b>
 					</div>
@@ -137,7 +143,7 @@
 						</div>
 		
 						<div class="form-actions">
-							<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
+							<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
 						</div>
 						<?php else: ?>
 							<p><?php echo lang('mig_no_migrations') ?></p>

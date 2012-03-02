@@ -1,4 +1,5 @@
-<div class="notification attention">
+<div class="alert alert-info fade in">
+	<a class="close" data-dismiss="alert">&times;</a>		
 	<p><?php echo lang('mig_migrate_note'); ?></p>
 </div>
 
@@ -17,6 +18,6 @@
 	</p>
 
 	<div class="submits">
-		<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
+		<input class="btn btn-primary" type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
 	</div>
 <?php echo form_close(); ?>
