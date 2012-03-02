@@ -40,7 +40,7 @@ pre {
 /*
 	Page Structure
 */
-.fluid-container {
+.container-fluid, .fluid-container {
 	margin: 0 auto;
 	max-width: 1200px;
 }
