@@ -1,6 +1,6 @@
 <?php
 	Assets::add_css( array(
-		'bootstrap.min.css',
+		base_url() . 'assets/css/bootstrap_org.css',
 		'bootstrap-responsive.min.css',
 		'screen.css'
 	));
@@ -33,13 +33,17 @@
 		<p>Javascript is required to use Bonfire's admin.</p>
 	</noscript>
 
-	<div class="navbar navbar-fluid navbar-fixed" id="topbar" data-dropdown="dropdown">
-		<div class="navbar-inner">
-			<div class="fluid-container">
-				<h1 class="branding"><?php e($this->settings_lib->item('site.title')); ?></h1>
-
-				<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>
-				<div class="nav pull-right">
+		<div class="navbar navbar-fixed-top" id="topbar" >
+				<div class="navbar-inner">
+						<div class="container-fluid">
+								<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+										<span class="icon-bar"></span>
+										<span class="icon-bar"></span>
+										<span class="icon-bar"></span>
+								</a>
+								<h1><?php echo anchor( '/', $this->settings_lib->item('site.title'), 'class="brand"' ); ?></h1>
+					<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>
+					<div class="nav pull-right">
 					<div class="btn-group">
 						<a class="dropdown-toggle dark btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png') ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts"/></a>
 						<ul class="dropdown-menu toolbar-keys">
@@ -58,8 +62,8 @@
 							</div>
 						</ul>
 					</div>
+					<?php endif;?>
 				</div>
-				<?php endif;?>
 				<div class="nav pull-right">
 					<div class="btn-group">
 						<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $current_user->id) ?>" id="tb_email" class="btn dark" title="<?php echo lang('bf_user_settings') ?>">
@@ -92,8 +96,13 @@
 
 	</div><!-- /topbar -->
 
-	<div class="subnav navbar-fixed">
-		<div class="fluid-container">
+ <div class="navbar subnav navbar-fixed-top" >
+				<div class="container-fluid">
+						<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+						</a>
 
 			<div class="pull-right">
 				<?php Template::block('sub_nav', ''); ?>
@@ -102,5 +111,5 @@
 			<?php if (isset($toolbar_title)) : ?>
 				<h1><?php echo $toolbar_title ?></h1>
 			<?php endif; ?>
-		</div>
 	</div>
+</div>
