@@ -53,7 +53,7 @@
 	
 			<p><?php echo lang('permissions_delete_warning'); ?></p>
 	
-			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/settings/permissions/delete/'. $id); ?>" onclick="return confirm('<?php echo lang('permissions_delete_confirm'); ?>')"><i class="icon-trash icon-white">&&nbsp;</i>&&nbsp;<?php echo lang('permissions_delete_record'); ?></a>
+			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/settings/permissions/delete/'. $id); ?>" onclick="return confirm('<?php echo lang('permissions_delete_confirm'); ?>')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('permissions_delete_record'); ?></a>
 		</div>
 		<?php endif; ?>
 	<?php echo form_close(); ?>

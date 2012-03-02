@@ -4,7 +4,8 @@
 	window.g_url			= '<?php echo site_url(SITE_AREA .'/settings/roles/matrix_update') ?>';
 </script>
 
-<div id="permission_table_result" class="alert alert-info">
+<div id="permission_table_result" class="alert alert-info fade in">
+	<a class="close" data-dismiss="alert">&times;</a>		
 	<?php echo lang('matrix_note');?>
 </div>
 
