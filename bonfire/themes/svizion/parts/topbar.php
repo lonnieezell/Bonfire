@@ -22,10 +22,9 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <?php echo anchor( '/', config_item('site.title'), 'class="brand"' ); ?>
-<!--          <a class="brand" href="#"><?php echo config_item('site.title'); ?></a> -->
+          <?php echo anchor( '/', $this->settings_lib->item('site.title'), 'class="brand"' ); ?>
           <div class="nav-collapse">
-            <ul class="nav">
+            <ul class="nav nav-pills">
               <li class="divider-vertical"></li>
               <li><a href="<?php echo site_url('about');?>">About</a></li>
               <li class="divider-vertical"></li>
