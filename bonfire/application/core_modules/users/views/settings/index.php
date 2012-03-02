@@ -25,9 +25,9 @@
 			</ul>
 		</li>
 	</ul>
-	
+
 	<?php echo form_open(current_url()) ;?>
-	
+
 	<table class="table table-striped">
 		<thead>
 			<tr>
@@ -43,15 +43,15 @@
 		<tfoot>
 			<tr>
 				<td colspan="6">
-					<?php echo lang('bf_with_selected') ?> 
-					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_ban') ?>"> 
+					<?php echo lang('bf_with_selected') ?>
+					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_ban') ?>">
 					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_delete') ?>">
 				</td>
 			</tr>
 		</tfoot>
 		<?php endif; ?>
 		<tbody>
-	
+
 		<?php if (isset($users) && is_array($users) && count($users)) : ?>
 			<?php foreach ($users as $user) : ?>
 			<tr>
@@ -61,14 +61,14 @@
 				<td><?php echo $user->id ?></td>
 				<td>
 					<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $user->id); ?>"><?php echo $user->username; ?></a>
-					<?php if ($user->banned) echo '<span class="label warning">Banned</span>'; ?>
+					<?php if ($user->banned) echo '<span class="label label-warning">Banned</span>'; ?>
 				</td>
 				<td><?php echo $user->display_name ?></td>
 				<td>
 					<a href="mailto://<?php echo $user->email ?>"><?php echo $user->email ?></a>
 				</td>
 				<td>
-					<?php 
+					<?php
 						if ($user->last_login != '0000-00-00 00:00:00')
 						{
 							echo date('M j, y g:i A', strtotime($user->last_login));
