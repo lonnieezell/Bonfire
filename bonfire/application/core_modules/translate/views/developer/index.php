@@ -15,7 +15,7 @@
 		
 		<input type="text" name="new_lang" id="new_lang" style="display: none" value="" />
 	
-		<input type="submit" name="select_lang" class="btn small" value="<?php e(lang('tr_select_lang')); ?>" />
+		<input type="submit" name="select_lang" class="btn btn-small btn-primary" value="<?php e(lang('tr_select_lang')); ?>" />
 	</form>
 </div>
 
@@ -58,7 +58,8 @@
 	<?php else : ?>
 		<tr>
 			<td>
-				<div class="alert alert-info">
+				<div class="alert alert-info fade in">
+					<a class="close" data-dismiss="alert">&times;</a>		
 					<?php echo lang('tr_no_modules'); ?>
 				</div>
 			</td>

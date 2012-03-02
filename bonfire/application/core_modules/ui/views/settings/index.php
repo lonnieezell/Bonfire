@@ -1,5 +1,6 @@
 <?php if (validation_errors()) : ?>
-<div class="notification error">
+<div class="alert alert-error fade in">
+	<a class="close" data-dismiss="alert">&times;</a>		
 	<p><?php echo validation_errors(); ?></p>
 </div>
 <?php endif; ?>
@@ -10,7 +11,8 @@
 	<fieldset>
 		<legend><?php echo lang('ui_actions') ?></legend>
 		
-		<div class="alert alert-info">
+		<div class="alert alert-info fade in">
+			<a class="close" data-dismiss="alert">&times;</a>		
 			<?php echo lang('ui_keyboard_shortcuts'); ?>
 		</div>
 		
@@ -27,7 +29,9 @@
 		</table>
 		<?php else: ?>
 			
-			<div class="alert alert-warning">
+			<div class="alert alert-warning fade in">
+				<a class="close" data-dismiss="alert">&times;</a>		
+
 				<?php echo lang('ui_no_shortcuts');?>
 			</div>
 			
