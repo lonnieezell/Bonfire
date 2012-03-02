@@ -2,7 +2,7 @@
 
 <div class="admin-box">
 	<h3><?php echo $toolbar_title ?></h3>
-	<form action="<?php echo $this->uri->uri_string(); ?>" method="post">
+	<?php echo form_open($this->uri->uri_string()); ?>
 
 		<table class="table table-striped">
 			<thead>
