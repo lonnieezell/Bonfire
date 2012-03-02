@@ -16,7 +16,7 @@ $view =<<<END
 				<tr>
 					<td colspan="{cols_total}">
 						<?php echo lang('bf_with_selected') ?>
-						<input type="submit" name="submit" class="btn danger" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
+						<input type="submit" name="submit" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
 					</td>
 				</tr>
 			</tfoot>
@@ -71,7 +71,7 @@ if ($use_modified == 'true')
 }
 
 $table_records = '';
-$pencil_icon   = "'<i class=\"icon pencil\">&nbsp;</i>' . ";
+$pencil_icon   = "'<i class=\"icon-pencil\">&nbsp;</i>' . ";
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	// only build on fields that have data entered.
@@ -82,9 +82,9 @@ for($counter=1; $field_total >= $counter; $counter++)
 	{
 		continue; 	// move onto next iteration of the loop
 	}
-	
+
 	$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
-	
+
 	if ($counter == 1) {
 		$table_records .= "
 				<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name.") ?></td>
