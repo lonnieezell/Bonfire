@@ -3,7 +3,7 @@
 
 <?php if (!isset($log_content) || empty($log_content)) : ?>
 <div class="alert alert-warning fade in">
-	<a class="close" data-dismiss="alert">&times;</a>		
+	<a class="close" data-dismiss="alert">&times;</a>
 	<?php echo lang('log_not_found'); ?>
 </div>
 <?php else : ?>
@@ -42,16 +42,16 @@
 		<!-- Purge? -->
 		<div class="admin-box">
 			<h3><?php echo lang('log_delete1_button') ?></h3>
-			
+
 			<br/>
-	
+
 			<div class="alert alert-warning fade in">
-				<a class="close" data-dismiss="alert">&times;</a>		
+				<a class="close" data-dismiss="alert">&times;</a>
 				<?php echo sprintf(lang('log_delete1_note'),$log_file_pretty); ?>
 			</div>
 
 			<div class="form-actions">
-				<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'.$log_file); ?>" onclick="return confirm('Are you sure you want to delete this log file?')"><i class"icon-trash icon-white">&&nbsp;</i>&&nbsp;<?php echo lang('log_delete1_button'); ?></a>
+				<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'.$log_file); ?>" onclick="return confirm('Are you sure you want to delete this log file?')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('log_delete1_button'); ?></a>
 			</div>
 		</div>
 	<?php endif; ?>
