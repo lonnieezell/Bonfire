@@ -112,7 +112,9 @@ h1.branding {
 	border-left: 1px solid #f5f5f5;
 	border-radius: 0;
 }
-.subnav .navbar a:hover, .subnav .navbar .active a {
+.subnav .navbar a:hover, .subnav .navbar .active a,
+.subnav .nav a:hover, .subnav .nav .active a
+{
 	background: transparent;
 	color: #333;
 }
