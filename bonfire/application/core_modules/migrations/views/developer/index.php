@@ -4,7 +4,7 @@
 
 	<div class="alert alert-warning fade in">
 		<a class="close" data-dismiss="alert">&times;</a>		
-		<p><?php echo lang('mig_not_enabled'); ?></p>
+		><?php echo lang('mig_not_enabled'); ?></p>
 	</div>
 
 <?php else : ?>

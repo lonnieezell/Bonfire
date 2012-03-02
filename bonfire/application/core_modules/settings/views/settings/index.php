@@ -1,6 +1,7 @@
 <?php if (validation_errors()) : ?>
-<div class="alert alert-error">
-	<p><?php echo validation_errors(); ?></p>
+<div class="alert alert-block alert-error fade in">
+  <a class="close" data-dismiss="alert">&times;</a>
+	<?php echo validation_errors(); ?>
 </div>
 <?php endif; ?>
 
