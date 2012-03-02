@@ -2,8 +2,11 @@
 
 <div class="admin-box">
 	<h3><?php echo $toolbar_title ?></h3>
+	<form action="<?php echo $this->uri->uri_string(); ?>" method="post">
 
-	<form action="http://fresh.bonfire.com/admin/settings/permissions" method="post">
+<!--	<form action="http://fresh.bonfire.com/admin/settings/permissions" method="post"> -->
+<!--    Not sure why this was posting to fresh.bonfire.com??? -->
+
 		<table class="table table-striped">
 			<thead>
 				<tr>
