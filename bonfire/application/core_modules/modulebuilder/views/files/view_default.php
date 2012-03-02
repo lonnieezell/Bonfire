@@ -195,7 +195,7 @@ $view .= PHP_EOL . '
 
 		<div class="form-actions">
 			<br/>
-			<input type="submit" name="submit" class="btn primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn danger"\'); ?>
+			<input type="submit" name="submit" class="btn btn-primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-danger"\'); ?>
 		</div>
 	</fieldset>
 	<?php echo form_close(); ?>
@@ -235,7 +235,7 @@ $view .= PHP_EOL . '
 
 		<p><?php echo lang(\''.$module_name_lower.'_edit_text\'); ?></p>
 
-		<a class="btn danger" id="delete-me" href="<?php echo site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id); ?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')"><i class="icon trash icon-white">&nbsp;</i><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></a>
+		<a class="btn btn-danger" id="delete-me" href="<?php echo site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id); ?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')"><i class="icon-trash icon-white">&nbsp;</i><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></a>
 	</div>
 ' . PHP_EOL;
 }
