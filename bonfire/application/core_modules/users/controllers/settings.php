@@ -428,6 +428,7 @@ class Settings extends Admin_Controller {
 
 		if ($this->input->post('password'))	$data['password'] = $this->input->post('password');
 		if ($this->input->post('pass_confirm'))	$data['pass_confirm'] = $this->input->post('pass_confirm');
+		if ($this->input->post('role_id')) $data['role_id'] = $this->input->post('role_id');
 		if ($this->input->post('restore')) $data['deleted'] = 0;
 		if ($this->input->post('unban')) $data['banned'] = 0;
 		if ($this->input->post('display_name')) $data['display_name'] = $this->input->post('display_name');
