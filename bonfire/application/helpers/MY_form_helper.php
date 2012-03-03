@@ -152,6 +152,3 @@ if ( ! function_exists('form_date'))
 				return _form_common('date', $data, $value, $label, $extra);
 		}
 }
-
-
-
