@@ -78,7 +78,7 @@ class CI_DB_driver {
 	 *
 	 * @param array
 	 */
-	function CI_DB_driver($params)
+	function __construct($params)
 	{
 		if (is_array($params))
 		{
@@ -218,7 +218,7 @@ class CI_DB_driver {
 
 		// Some DBs have functions that return the version, and don't run special
 		// SQL queries per se. In these instances, just return the result.
-		$driver_version_exceptions = array('oci8', 'sqlite');
+		$driver_version_exceptions = array('oci8', 'sqlite', 'cubrid');
 
 		if (in_array($this->dbdriver, $driver_version_exceptions))
 		{
@@ -424,8 +424,8 @@ class CI_DB_driver {
 
 		if ( ! class_exists($driver))
 		{
-			include_once(BASEPATH.'database/DB_result'.EXT);
-			include_once(BASEPATH.'database/drivers/'.$this->dbdriver.'/'.$this->dbdriver.'_result'.EXT);
+			include_once(BASEPATH.'database/DB_result.php');
+			include_once(BASEPATH.'database/drivers/'.$this->dbdriver.'/'.$this->dbdriver.'_result.php');
 		}
 
 		return $driver;
@@ -1115,7 +1115,7 @@ class CI_DB_driver {
 
 		if ( ! class_exists('CI_DB_Cache'))
 		{
-			if ( ! @include(BASEPATH.'database/DB_cache'.EXT))
+			if ( ! @include(BASEPATH.'database/DB_cache.php'))
 			{
 				return $this->cache_off();
 			}

@@ -2,17 +2,17 @@
 
 /*
 	Copyright (c) 2011 Lonnie Ezell
- 
+
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
 	in the Software without restriction, including without limitation the rights
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in
 	all copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,16 +25,16 @@
 //--------------------------------------------------------------------
 // !TEMPLATE
 //--------------------------------------------------------------------
- 
+
 /*
 |--------------------------------------------------------------------
 | MESSAGE TEMPLATE
 |--------------------------------------------------------------------
 | This is the template that Ocular will use when displaying messages
-| through the message() function. 
+| through the message() function.
 |
 | To set the class for the type of message (error, success, etc),
-| the {type} placeholder will be replaced. The message will replace 
+| the {type} placeholder will be replaced. The message will replace
 | the {message} placeholder.
 |
 */
@@ -43,4 +43,4 @@ $config['template.message_template'] =<<<EOD
 		<div>{message}</div>
 	</div>
 EOD;
- 
+

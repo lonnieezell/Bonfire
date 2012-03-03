@@ -6,7 +6,7 @@ $build_config .= '$config[\'module_config\'] = array(
 	\'description\'	=> \''.$module_description.'\',
 	\'name\'		=> \''.$module_name.'\',
 	\'version\'		=> \'0.0.1\',
-	\'author\'		=> \''.$this->auth->username().'\'
+	\'author\'		=> \''.$username.'\'
 );
 ';
 

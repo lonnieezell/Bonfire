@@ -1,27 +1,30 @@
-<p><b><?php echo lang('em_test_result_header'); ?></b></p>
+<fieldset>
+	<legend><?php echo lang('em_test_result_header'); ?></legend>
+</fieldset>
+
 
 <?php if (isset($results)) : ?>
 
 	<?php if ($results['success'] !== false) :?>
-		<div class="notification information">
-			<p><?php echo lang('em_test_success'); ?></p>
+		<div class="alert alert-info">
+			<?php echo lang('em_test_success'); ?>
 		</div>
 	<?php else : ?>
-		<div class="notification attention">
-			<p><?php echo lang('em_test_error'); ?></p>
+		<div class="alert alert-warning">
+			<?php echo lang('em_test_error'); ?>
 		</div>
 	<?php endif; ?>
 
-	<div class="box">
-		<p><b><?php echo lang('em_test_debug_header'); ?></b></p>
-	
-		<?php echo $results['debug']; ?>
-	</div>
+	<fieldset>
+		<legend><?php echo lang('em_test_debug_header'); ?></legend>
+
+		<div style="padding: 10px"><?php echo $results['debug']; ?></div>
+	</fieldset>
 
 <?php else : ?>
 
-	<div class="notification attention">
-		<p><?php echo lang('em_test_no_results'); ?></p>
+	<div class="alert alert-error">
+		<?php echo lang('em_test_no_results'); ?>
 	</div>
 
 <?php endif; ?>

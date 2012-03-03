@@ -1,3 +1,5 @@
+<?php $this->load->view('header'); ?>
+
 <?php echo lang('in_intro'); ?>
 
 <?php if (isset($startup_errors) && !empty($startup_errors)) :?>
@@ -65,3 +67,5 @@
 	
 	<?php echo form_close(); ?>
 <?php endif; ?>
+
+<?php $this->load->view('footer'); ?>

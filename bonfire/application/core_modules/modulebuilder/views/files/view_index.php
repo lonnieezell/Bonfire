@@ -1,48 +1,49 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 $view =<<<END
-<div class="box create rounded">
-
-	<a class="button good" href="<?php echo site_url(SITE_AREA .'/{$controller_name}/{$module_name_lower}/create'); ?>">
-		<?php echo lang('{$module_name_lower}_create_new_button'); ?>
-	</a>
-
-	<h3><?php echo lang('{$module_name_lower}_create_new'); ?></h3>
-
-	<p><?php echo lang('{$module_name_lower}_edit_text'); ?></p>
-
-</div>
-
-<br />
-
-<?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
-				
-	<h2>{$module_name}</h2>
-	<table>
+<div class="admin-box">
+	<h3>{$module_name}</h3>
+	<table class="table table-striped">
 		<thead>
 			<tr>
-			{table_header}
-		
-			<th><?php echo lang('{$module_name_lower}_actions'); ?></th>
+				<th class="column-check"><input class="check-all" type="checkbox" /></th>
+				{table_header}
+				<th><?php echo lang('{$module_name_lower}_actions'); ?></th>
 			</tr>
 		</thead>
+		<?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
+		<tfoot>
+			<tr>
+				<td colspan="{cols_total}">
+					<?php echo lang('bf_with_selected') ?>
+					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_delete') ?>">
+				</td>
+			</tr>
+		</tfoot>
+		<?php endif; ?>
 		<tbody>
-		
+		<?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
 		<?php foreach (\$records as \$record) : ?>
 			<tr>
+				<td><input type="checkbox" name="checked[]" value="<?php echo \$record->{$primary_key_field} ?>" /></td>
 				{table_records}
 				<td><?php echo anchor(SITE_AREA .'/{$controller_name}/{$module_name_lower}/edit/'. \$record->{$primary_key_field}, lang('{$module_name_lower}_edit'), '') ?></td>
 			</tr>
 		<?php endforeach; ?>
+		<?php else: ?>
+			<tr>
+				<td colspan="{cols_total}">No users found that match your selection.</td>
+			</tr>
+		<?php endif; ?>
 		</tbody>
 	</table>
-<?php endif; ?>
+</div>
 END;
 
 $headers = '';
 for($counter=1; $field_total >= $counter; $counter++)
 {
-	// only build on fields that have data entered. 
+	// only build on fields that have data entered.
 
 	//Due to the required if rule if the first field is set the the others must be
 
@@ -72,7 +73,7 @@ if ($use_modified == 'true')
 $table_records = '';
 for($counter=1; $field_total >= $counter; $counter++)
 {
-	// only build on fields that have data entered. 
+	// only build on fields that have data entered.
 
 	//Due to the requiredif rule if the first field is set the the others must be
 
@@ -80,10 +81,8 @@ for($counter=1; $field_total >= $counter; $counter++)
 	{
 		continue; 	// move onto next iteration of the loop
 	}
-	$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
-
 	$table_records .= '
-				<td><?php echo $record->'.$field_name.'?></td>';
+				<td><?php echo $record->'.$module_name_lower.'_'.set_value("view_field_name$counter").'?></td>';
 }
 if ($use_soft_deletes == 'true')
 {
@@ -103,6 +102,7 @@ if ($use_modified == 'true')
 
 
 
+$view = str_replace('{cols_total}', $field_total + 2 , $view);
 $view = str_replace('{table_header}', $headers, $view);
 $view = str_replace('{table_records}', $table_records, $view);
 

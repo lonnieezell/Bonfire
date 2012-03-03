@@ -34,12 +34,7 @@ class Settings extends Admin_Controller {
 		
 		Template::set('toolbar_title', 'UI Settings');
 		
-		if (!class_exists('Activity_model'))
-		{
-			$this->load->model('activities/Activity_model', 'activity_model', true);
-		}
-		
-		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
+		Assets::add_module_js('ui', 'ui.js');
 	}
 	
 	//--------------------------------------------------------------------	
@@ -66,7 +61,7 @@ class Settings extends Admin_Controller {
 				redirect(uri_string());
 			}
 			else 
-			{
+			{ 
 				Template::set_message('There was an error saving your settings.', 'error');
 			}
 		}
@@ -134,12 +129,12 @@ class Settings extends Admin_Controller {
 	public function remove() 
 	{
 		$this->form_validation->set_rules('remove_action', lang('ui_actions'), 'required|xss_clean');
-		
+
 		if ($this->form_validation->run() === false)
 		{
 			return false;
 		}
-		
+		die('here');
 		$action   = $this->input->post('remove_action');
 
 		// Read our current settings from the application config
@@ -156,11 +151,13 @@ class Settings extends Admin_Controller {
 	//--------------------------------------------------------------------
 	
 	private function save_settings($settings)
-	{
+	{ 
 		$updated = $this->settings_lib->set('ui.shortcut_keys', serialize($settings));
 
 		// Log the activity
-		$this->activity_model->log_activity($this->auth->user_id(), lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'ui');
+		$this->load->model('activities/Activity_model', 'activity_model');
+		
+		$this->activity_model->log_activity($this->current_user->id, lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'ui');
 
 		return $updated;
 	}

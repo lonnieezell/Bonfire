@@ -26,7 +26,7 @@
 <tr>
 <td style="background-color:#333;color: #fff;text-align:center;" align="center"><span style="font-size:10px;line-height:200%;font-family:verdana;text-decoration:none;">Email not displaying correctly? <a href="*|ARCHIVE|*" style="font-size:10px;line-height:200%;font-family:verdana;text-decoration:none;">View it in your browser.</a></span></td>
 </tr>
- 
+
 <tr>
 </table>
 

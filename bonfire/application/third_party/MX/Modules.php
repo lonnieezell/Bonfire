@@ -1,5 +1,7 @@
 <?php (defined('BASEPATH')) OR exit('No direct script access allowed');
 
+(defined('EXT')) OR define('EXT', '.php');
+
 global $CFG;
 
 /* get module locations from config settings or use the default module location and offset */
@@ -76,34 +78,33 @@ class Modules
 	
 	/** Load a module controller **/
 	public static function load($module) {
-		
+
 		(is_array($module)) ? list($module, $params) = each($module) : $params = NULL;	
 		
 		/* get the requested controller class name */
-		$alias = strtolower(end(explode('/', $module)));
+		$alias = strtolower(basename($module));
 
-		/* return an existing controller from the registry */
-		if (isset(self::$registry[$alias])) return self::$registry[$alias];
+		/* create or return an existing controller from the registry */
+		if ( ! isset(self::$registry[$alias])) {
 			
-		/* get the module path */
-		$segments = explode('/', $module);
+			/* find the controller */
+			list($class) = CI::$APP->router->locate(explode('/', $module));
+	
+			/* controller cannot be located */
+			if (empty($class)) return;
+	
+			/* set the module directory */
+			$path = APPPATH.'controllers/'.CI::$APP->router->fetch_directory();
 			
-		/* find the controller */
-		list($class) = CI::$APP->router->locate($segments);
-
-		/* controller cannot be located */
-		if (empty($class)) return;
-
-		/* set the module directory */
-		$path = APPPATH.'controllers/'.CI::$APP->router->fetch_directory();
+			/* load the controller class */
+			$class = $class.CI::$APP->config->item('controller_suffix');
+			self::load_file($class, $path);
+			
+			/* create and register the new controller */
+			$controller = ucfirst($class);	
+			self::$registry[$alias] = new $controller($params);
+		}
 		
-		/* load the controller class */
-		$class = $class.CI::$APP->config->item('controller_suffix');
-		self::load_file($class, $path);
-		
-		/* create and register the new controller */
-		$controller = ucfirst($class);	
-		self::$registry[$alias] = new $controller($params);
 		return self::$registry[$alias];
 	}
 	
@@ -182,19 +183,20 @@ class Modules
 			foreach($modules as $module => $subpath) {			
 				$fullpath = $location.$module.'/'.$base.$subpath;
 				
-				if (is_file($fullpath.$file_ext)) return array($fullpath, $file);
-				
 				if ($base == 'libraries/' AND is_file($fullpath.ucfirst($file_ext))) 
 					return array($fullpath, ucfirst($file));
+					
+				if (is_file($fullpath.$file_ext)) return array($fullpath, $file);
 			}
 		}
 		
 		/* is the file in an application directory? */
 		if ($base == 'views/' OR $base == 'plugins/') {
 			if (is_file(APPPATH.$base.$path.$file_ext)) return array(APPPATH.$base.$path, $file);	
-			show_error("Unable to locate the file: {$path}{$file_ext}");
+			show_error("Unable to locate the {$base} file: {$path}{$file_ext}");
 		}
 
+		log_message('debug', "Unable to locate the {$base} file: {$path}{$file_ext}");
 		return array(FALSE, $file);	
 	}
 	
@@ -212,7 +214,7 @@ class Modules
 		/* parse module routes */
 		foreach (self::$routes[$module] as $key => $val) {						
 					
-			$key = str_replace(':any', '.+', str_replace(':num', '[0-9]+', $key));
+			$key = str_replace(array(':any', ':num'), array('.+', '[0-9]+'), $key);
 			
 			if (preg_match('#^'.$key.'$#', $uri)) {							
 				if (strpos($val, '$') !== FALSE AND strpos($key, '(') !== FALSE) {
