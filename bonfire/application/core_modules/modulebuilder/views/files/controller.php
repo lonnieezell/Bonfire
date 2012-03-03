@@ -60,7 +60,7 @@ $mb_index =<<<END
 	{
 
 		// Deleting anything?
-		if (\$action = \$this->input->post('submit'))
+		if (\$action = \$this->input->post('delete'))
 		{
 			if (\$action == 'Delete')
 			{

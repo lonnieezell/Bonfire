@@ -233,9 +233,11 @@ $view .= PHP_EOL . '
 	<div class="box delete rounded">
 		<h3><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></h3>
 
+		<?php echo form_open(site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id), \'class="constrained ajax-form form-horizontal"\'); ?>
 		<p><?php echo lang(\''.$module_name_lower.'_edit_text\'); ?></p>
 
-		<a class="btn btn-danger" id="delete-me" href="<?php echo site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id); ?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')"><i class="icon-trash icon-white">&nbsp;</i><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></a>
+		<input type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" value="<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>"/>
+		<?php echo form_close(); ?>
 	</div>
 ' . PHP_EOL;
 }
