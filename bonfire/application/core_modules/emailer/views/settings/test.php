@@ -6,11 +6,13 @@
 <?php if (isset($results)) : ?>
 
 	<?php if ($results['success'] !== false) :?>
-		<div class="alert alert-info">
+		<div class="alert alert-info fade in">
+				<a class="close" data-dismiss="alert">&times;</a>
 			<?php echo lang('em_test_success'); ?>
 		</div>
 	<?php else : ?>
-		<div class="alert alert-warning">
+		<div class="alert alert-warning fade in">
+		 <a class="close" data-dismiss="alert">&times;</a>
 			<?php echo lang('em_test_error'); ?>
 		</div>
 	<?php endif; ?>
@@ -23,7 +25,8 @@
 
 <?php else : ?>
 
-	<div class="alert alert-error">
+	<div class="alert alert-error fade in">
+		<a class="close" data-dismiss="alert">&times;</a>
 		<?php echo lang('em_test_no_results'); ?>
 	</div>
 

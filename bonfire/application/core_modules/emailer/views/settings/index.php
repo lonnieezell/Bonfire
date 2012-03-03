@@ -119,7 +119,7 @@
 				<label for="email"><?php echo lang('bf_email'); ?></label>
 				<div class="controls">
 					<input type="email" name="test_email" id="test-email" value="<?php echo config_item('site.system_email') ?>" />
-					<input type="submit" name="submit" class="btn" value="<?php echo lang('em_test_button'); ?>" />
+					<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('em_test_button'); ?>" />
 				</div>
 			</div>
 		</fieldset>
