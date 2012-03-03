@@ -217,6 +217,8 @@ class Emailer {
 		$this->ci->email->from($from, $this->ci->settings_lib->item('site.title'));
 		$this->ci->email->subject($subject);
 		$this->ci->email->message($message);
+		$this->ci->email->set_newline("\r\n");
+
 		if ($alt_message)
 		{
 			$this->ci->email->set_alt_message($alt_message);
@@ -279,7 +281,7 @@ class Emailer {
 
 			$this->ci->email->subject($email->subject);
 			$this->ci->email->message($email->message);
-
+			$this->ci->email->set_newline("\r\n");
 			if ($email->alt_message)
 			{
 				$this->ci->email->set_alt_message($email->alt_message);
