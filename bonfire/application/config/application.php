@@ -312,7 +312,10 @@ $config['assets.encode'] = FALSE;
 	Array containing the currently available shortcuts - these are output in the /ui/views/shortcut_keys file
 */
 $config['ui.current_shortcuts'] = array(
-	'form_save'      => array('description' => 'Save any form in the admin area.', 'action' => '$("input[name=submit]").click();'),
+	'form_save'      => array('description' => 'Save any form in the admin area.', 'action' => '$("input[name=submit]").click();return false;'),
+	'create_new'     => array('description' => 'Create a new record in the module.', 'action' => 'document.location=$("a#create_new").attr("href");'),
+	'select_all'     => array('description' => 'Select all records in an index page.', 'action' => '$("table input[type=checkbox]").click();return false;'),
+	'delete'         => array('description' => 'Delete the record(s).', 'action' => '$("#delete-me.btn-danger").click();'),
 	'goto_content'   => array('description' => 'Jump to the Content context.', 'action' => "document.location='/" . SITE_AREA . "/content';"),
 	'goto_reports'   => array('description' => 'Jump to the Reports context.', 'action' => "document.location='/" . SITE_AREA . "/reports';"),
 	'goto_settings'  => array('description' => 'Jump to the Settings context.', 'action' => "document.location='/" . SITE_AREA . "/settings';"),
