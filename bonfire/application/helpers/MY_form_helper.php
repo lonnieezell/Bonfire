@@ -29,6 +29,7 @@
 				  is passed to the $data param.
 		$label	- A string with the label of the element.
 		$extra	- A string with any additional items to include, like Javascript.
+		$tooltip - A string for inline help or a tooltip icon
 
 	Returns:
 		A string with the formatted input element, label tag and wrapping divs.
@@ -103,3 +104,54 @@ if (!function_exists('form_url'))
 }
 
 //--------------------------------------------------------------------
+
+if ( ! function_exists('form_telephone'))
+{
+		function form_telephone($data='', $value='', $label='', $extra='', $tooltip = '' )
+		{
+				return _form_common('tel', $data, $value, $label, $extra);
+		}
+}
+
+//--------------------------------------------------------------------
+
+if ( ! function_exists('form_number'))
+{
+		function form_number($data='', $value='', $label='', $extra='', $tooltip = '' )
+		{
+				return _form_common('number', $data, $value, $label, $extra);
+		}
+}
+
+//--------------------------------------------------------------------
+
+if ( ! function_exists('form_color'))
+{
+		function form_color($data='', $value='', $label='', $extra='', $tooltip = '' )
+		{
+				return _form_common('color', $data, $value, $label, $extra);
+		}
+}
+
+//--------------------------------------------------------------------
+
+if ( ! function_exists('form_search'))
+{
+		function form_search($data='', $value='', $label='', $extra='', $tooltip = '' )
+		{
+				return _form_common('search', $data, $value, $label, $extra);
+		}
+}
+
+//--------------------------------------------------------------------
+
+if ( ! function_exists('form_date'))
+{
+		function form_search($data='', $value='', $label='', $extra='', $tooltip = '' )
+		{
+				return _form_common('date', $data, $value, $label, $extra);
+		}
+}
+
+
+
