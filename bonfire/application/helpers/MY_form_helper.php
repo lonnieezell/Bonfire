@@ -147,7 +147,7 @@ if ( ! function_exists('form_search'))
 
 if ( ! function_exists('form_date'))
 {
-		function form_search($data='', $value='', $label='', $extra='', $tooltip = '' )
+		function form_date($data='', $value='', $label='', $extra='', $tooltip = '' )
 		{
 				return _form_common('date', $data, $value, $label, $extra);
 		}
