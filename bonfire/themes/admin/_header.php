@@ -1,6 +1,6 @@
 <?php
 	Assets::add_css( array(
-		base_url() . 'assets/css/bootstrap.css',
+		base_url() . 'assets/css/bootstrap_org.css',
 		base_url() . 'assets/css/bootstrap-responsive.min.css',
 		'screen.css'
 	));
@@ -43,6 +43,9 @@
 								</a>
 								<h1><?php echo anchor( '/', $this->settings_lib->item('site.title'), 'class="brand"' ); ?></h1>
 					<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>
+					
+				<div class="nav-collapse">
+
 					<div class="nav pull-right">
 					<div class="btn-group">
 						<a class="dropdown-toggle dark btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png') ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts"/></a>
@@ -89,6 +92,9 @@
 						</ul>
 					</div>
 				</div>
+
+			</div> <!-- END OF nav-collapse -->
+
 				<?php echo Contexts::render_menu('both'); ?>
 			</div><!-- /container -->
 			<div style="clearfix"></div>
