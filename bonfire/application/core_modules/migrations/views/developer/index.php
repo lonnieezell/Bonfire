@@ -12,10 +12,16 @@
 	<div class="admin-box">
 		<h3><?php echo $toolbar_title ?></h3>
 	
-		<ul class="nav nav-tabs" data-tabs="tabs">
-			<li class="active"><a href="#app-tab">Application</a></li>
-			<li><a href="#mod-tab">Modules</a></li>
-			<li><a href="#core-tab">Bonfire</a></li>
+		<ul class="nav nav-tabs">
+			<li class="active">
+				<a href="#app-tab" data-toggle="tab">Application</a>
+			</li>
+			<li>
+				<a href="#mod-tab" data-toggle="tab">Modules</a>
+			</li>
+			<li>
+				<a href="#core-tab" data-toggle="tab">Bonfire</a>
+			</li>
 		</ul>
 	
 		<div class="tab-content">
@@ -154,13 +160,3 @@
 		</div>
 
 <?php endif; ?>
-
-
-
-<script>
-head.ready(function(){
-
-	$( "#tabs" ).tabs();
-
-});
-</script>
