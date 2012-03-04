@@ -7,25 +7,31 @@ $view =<<<END
 		<table class="table table-striped">
 			<thead>
 				<tr>
+					<?php if (\$this->auth->has_permission('{delete_permission}')) : ?>
 					<th class="column-check"><input class="check-all" type="checkbox" /></th>
+					<?php endif;?>
 					{table_header}
 				</tr>
 			</thead>
 			<?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
 			<tfoot>
+				<?php if (\$this->auth->has_permission('{delete_permission}')) : ?>
 				<tr>
 					<td colspan="{cols_total}">
 						<?php echo lang('bf_with_selected') ?>
 						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
 					</td>
 				</tr>
+				<?php endif;?>
 			</tfoot>
 			<?php endif; ?>
 			<tbody>
 			<?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
 			<?php foreach (\$records as \$record) : ?>
 				<tr>
+					<?php if (\$this->auth->has_permission('{delete_permission}')) : ?>
 					<td><input type="checkbox" name="checked[]" value="<?php echo \$record->{$primary_key_field} ?>" /></td>
+					<?php endif;?>
 					{table_records}
 				</tr>
 			<?php endforeach; ?>
@@ -87,7 +93,11 @@ for($counter=1; $field_total >= $counter; $counter++)
 
 	if ($counter == 1) {
 		$table_records .= "
+				<?php if (\$this->auth->has_permission('{edit_permission}')) : ?>
 				<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name.") ?></td>
+				<?php else: ?>
+				<td><?php echo \$record->".$field_name." ?></td>
+				<?php endif; ?>		
 			";
 	}
 	else {
@@ -116,6 +126,8 @@ if ($use_modified == 'true')
 $view = str_replace('{cols_total}', $field_total + 2 , $view);
 $view = str_replace('{table_header}', $headers, $view);
 $view = str_replace('{table_records}', $table_records, $view);
+$view = str_replace('{delete_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $view);
+$view = str_replace('{edit_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Edit', $view);
 
 echo $view;
 

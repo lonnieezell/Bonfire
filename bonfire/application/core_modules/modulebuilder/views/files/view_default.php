@@ -229,7 +229,10 @@ if ($xinha_names != '')
 				</script>' . PHP_EOL;
 }
 if($action_name != 'create') {
+$delete_permission = preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete';
+
 $view .= PHP_EOL . '
+	<?php if ($this->auth->has_permission(\''.$delete_permission.'\')) : ?>
 	<div class="box delete rounded">
 		<h3><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></h3>
 
@@ -239,6 +242,7 @@ $view .= PHP_EOL . '
 		<input type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" value="<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>"/>
 		<?php echo form_close(); ?>
 	</div>
+	<?php endif; ?>
 ' . PHP_EOL;
 }
 
