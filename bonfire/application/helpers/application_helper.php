@@ -91,6 +91,8 @@ function gravatar_link($email=null, $size=48, $alt='', $title='', $class='', $id
 		$avatarURL = $default_image ;
 	}
 
+	$id = ( $id != '' ) ? ' id="' . $id . '" ' : '';
+
 	return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" class="'. $class .'" id="'. $id .'" />';
 }
 

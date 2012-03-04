@@ -121,7 +121,8 @@ class Contexts {
 			array_push($contexts, 'developer');
 		}
 
-		$nav = '<ul class="'. self::$outer_class .'" id="'. self::$outer_id .'">';
+		$nav_id = ( trim (self::$outer_id) != '' ) ? ' id="'. self::$outer_id . '"' : '';
+		$nav = '<ul class="'. self::$outer_class .'" ' . $nav_id . ' >';
 
 		/*
 			Build out our navigation.
