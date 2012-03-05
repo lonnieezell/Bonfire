@@ -55,19 +55,21 @@
 					<div class="btn-group">
 						<a class="dropdown-toggle dark btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png') ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts"/></a>
 						<ul class="dropdown-menu toolbar-keys">
-							<div class="inner keys">
-								<?php if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])): ?>
-								<h4><?php echo lang('bf_keyboard_shortcuts') ?></h4>
-								<ul>
-								<?php foreach($shortcut_data['shortcut_keys'] as $key => $data): ?>
-									<li><span><?php echo $data?></span> : <?php echo $shortcut_data['shortcuts'][$key]['description']; ?></li>
-								<?php endforeach; ?>
-								</ul>
-								<?php else:?>
-								<h4><?php echo lang('bf_keyboard_shortcuts_empty') ?></h4>
-								<?php endif;?>
-								<a href="<?php echo site_url(SITE_AREA.'/settings/ui');?>"><?php echo lang('bf_keyboard_shortcuts_edit');?></a>
-							</div>
+								<li>
+										<div class="inner keys">
+											<?php if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])): ?>
+											<h4><?php echo lang('bf_keyboard_shortcuts') ?></h4>
+											<ul>
+											<?php foreach($shortcut_data['shortcut_keys'] as $key => $data): ?>
+												<li><span><?php echo $data?></span> : <?php echo $shortcut_data['shortcuts'][$key]['description']; ?></li>
+											<?php endforeach; ?>
+											</ul>
+											<?php else:?>
+											<h4><?php echo lang('bf_keyboard_shortcuts_empty') ?></h4>
+											<?php endif;?>
+											<a href="<?php echo site_url(SITE_AREA.'/settings/ui');?>"><?php echo lang('bf_keyboard_shortcuts_edit');?></a>
+										</div>
+								</li>
 						</ul>
 					</div>
 					<?php endif;?>
@@ -79,21 +81,23 @@
 						</a>
 						<a class="btn dropdown-toggle dark" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 						<ul class="dropdown-menu toolbar-profile">
-							<div class="inner">
-								<div class="toolbar-profile-img">
-									<?php echo gravatar_link($current_user->email, 96) ?>
-								</div>
+								<li>
+										<div class="inner">
+											<div class="toolbar-profile-img">
+												<?php echo gravatar_link($current_user->email, 96) ?>
+											</div>
 
-								<div class="toolbar-profile-info">
-									<p><b><?php echo $current_user->display_name ?></b><br/>
-										<?php e($current_user->email) ?>
-									</p>
+											<div class="toolbar-profile-info">
+												<p><b><?php echo $current_user->display_name ?></b><br/>
+													<?php e($current_user->email) ?>
+												</p>
 
-									<br/>
-									<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $current_user->id) ?>">Profile</a>
-									<a href="<?php echo site_url('logout'); ?>">Logout</a>
-								</div>
-							</div>
+												<br/>
+												<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $current_user->id) ?>">Profile</a>
+												<a href="<?php echo site_url('logout'); ?>">Logout</a>
+											</div>
+										</div>
+								</li>
 						</ul>
 					</div>
 				</div>
