@@ -8,8 +8,8 @@
 	if ( $logged_in == true )
 	{
 
-		$username = $this->session->userdata('identity');
-    $user_img = '<i class="icon-user" />'; //
+				$username = $current_user->email;
+    $user_img = '<i class="icon-user" >&nbsp;</i>'; //
     $user_img = gravatar_link($username, 22, $username, "{$username} Profile", ' ', ' ' );
 
 	}

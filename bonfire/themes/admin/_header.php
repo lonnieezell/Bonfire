@@ -28,6 +28,11 @@
 	</script>
 </head>
 <body class="desktop">
+<!--[if lt IE 7]>
+		<p class=chromeframe>Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or
+		<a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p>
+<![endif]-->
+
 
 	<noscript>
 		<p>Javascript is required to use Bonfire's admin.</p>
@@ -43,7 +48,7 @@
 								</a>
 								<h1><?php echo anchor( '/', $this->settings_lib->item('site.title'), 'class="brand"' ); ?></h1>
 					<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>
-					
+
 				<div class="nav-collapse">
 
 					<div class="nav pull-right">

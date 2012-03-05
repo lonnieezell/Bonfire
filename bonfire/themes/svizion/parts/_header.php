@@ -14,11 +14,5 @@
 
 	Template::block('header', 'parts/head');
 
-	$uid = (int) $this->session->userdata('user_id');
-	if ( $uid > 0 )
-	{
-
-	}
-
 	Template::block('topbar', 'parts/topbar');
 ?>
