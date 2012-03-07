@@ -55,23 +55,9 @@
 <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
 	<div class="control-group">
-		<label class="control-label" for="login_value"><?php echo $this->settings_lib->item('auth.login_type') == 'both' ? 'Username/Email' : ucwords($this->settings_lib->item('auth.login_type')) ?></label>
+		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" name="login" id="login_value" value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords($this->settings_lib->item('auth.login_type')) ?>" />
-		</div>
-	</div>
-
-	<div class="control-group">
-		<label class="control-label" for="first_name"><?php echo lang('us_first_name'); ?></label>
-		<div class="controls">
-			<input class="span6" type="text" name="first_name" value="<?php echo isset($user) ? $user->first_name : set_value('first_name') ?>" />
-		</div>
-	</div>
-
-	<div class="control-group">
-		<label class="control-label" for="last_name"><?php echo lang('us_last_name'); ?></label>
-		<div class="controls">
-			<input class="span6" type="text" name="last_name" value="<?php echo isset($user) ? $user->last_name : set_value('last_name') ?>" />
+			<input class="span6" type="text" name="display_name" value="<?php echo isset($user) ? $user->display_name : set_value('display_name') ?>" />
 		</div>
 	</div>
 

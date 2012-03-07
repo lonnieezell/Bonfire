@@ -71,7 +71,7 @@ class Users extends Front_Controller {
 				{
 					$this->load->model('activities/Activity_model', 'activity_model');
 
-					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged').': ' . $this->input->ip_address(), 'users');
+					$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged').': ' . $this->input->ip_address(), 'users');
 
 					/*
 						In many cases, we will have set a destination for a
@@ -205,14 +205,14 @@ class Users extends Front_Controller {
 		if ($this->input->post('submit'))
 		{
 
-			$user_id = $this->auth->user_id();
+			$user_id = $this->current_user->id;
 			if ($this->save_user($user_id))
 			{
 				$this->load->model('activities/Activity_model', 'activity_model');
 
 				$user = $this->user_model->find($user_id);
-				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->auth->user_name() : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-				$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_edit_profile') .': '.$log_name, 'users');
+				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit_profile') .': '.$log_name, 'users');
 
 				Template::set_message('Profile successfully updated.', 'success');
 			}
@@ -227,7 +227,7 @@ class Users extends Front_Controller {
 
 		// get the current user information
 		//$user = $this->user_model->find_by('id', $this->auth->user_id());
-		$user = $this->user_model->find_user_and_meta ( $this->auth->user_id() );
+		$user = $this->user_model->find_user_and_meta ( $this->current_user->id );
 
 		Template::set('user', $user);
 
@@ -408,25 +408,11 @@ class Users extends Front_Controller {
 
 		if ($this->settings_lib->item('auth.use_usernames'))
 		{
-			$_POST['id'] = $this->auth->user_id();
+			$_POST['id'] = $this->current_user->id;
 			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username,bf_users.id]|xsx_clean');
 		}
 
-		$required = false;
-		if ($this->settings_lib->item('auth.use_own_names'))
-		{
-			$required = 'required|';
-		}
-		$this->form_validation->set_rules('first_name', lang('us_first_name'), $required.'trim|strip_tags|max_length[20]|xss_clean');
-		$this->form_validation->set_rules('last_name', lang('us_last_name'), $required.'trim|strip_tags|max_length[20]|xss_clean');
-
-		if  ( ! $this->settings_lib->item('auth.use_extended_profile'))
-		{
-			$this->form_validation->set_rules('street1', 'Street 1', 'trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('street2', 'Street 2', 'trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('city', 'City', 'trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('zipcode', 'Zipcode', 'trim|strip_tags|max_length[20]|xss_clean');
-		}
+		$this->form_validation->set_rules('display_name', lang('bf_display_name'), 'trim|strip_tags|max_length[255]|xss_clean');
 
 		if ($this->form_validation->run() === false)
 		{
