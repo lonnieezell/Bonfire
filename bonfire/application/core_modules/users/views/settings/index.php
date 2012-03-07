@@ -45,7 +45,7 @@
 				<td colspan="6">
 					<?php echo lang('bf_with_selected') ?>
 					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_ban') ?>">
-					<input type="submit" name="delete" class="btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>">
+					<input type="submit" name="delete" class="btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')">
 				</td>
 			</tr>
 		</tfoot>

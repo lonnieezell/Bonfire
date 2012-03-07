@@ -46,7 +46,7 @@ $lang['us_action_deleted']			= 'The User was successfully deleted.';
 $lang['us_action_not_deleted']		= 'We could not delete the user: ';
 $lang['us_delete_account']			= 'Delete Account';
 $lang['us_delete_account_note']		= '<h3>Delete this Account</h3><p>Deleting this account will revoke all of their privileges on the site.</p>';
-$lang['us_delete_account_confirm']	= 'Are you sure you want to delete this user account?';
+$lang['us_delete_account_confirm']	= 'Are you sure you want to delete the user account(s)?';
 
 $lang['us_restore_account']			= 'Restore Account';
 $lang['us_restore_account_note']	= '<h3>Restore this Account</h3><p>Un-delete this user\'s account.</p>';
