@@ -49,10 +49,14 @@ if ( ! function_exists('form_open'))
 			$attributes = 'method="post"';
 		}
 
+		// If an action is not a full URL then turn it into one
 		if ($action && strpos($action, '://') === FALSE)
 		{
 			$action = $CI->config->site_url($action);
 		}
+
+		// If no action is provided then set to the current url
+		$action OR $action = $CI->config->site_url($CI->uri->uri_string());
 
 		$form = '<form action="'.$action.'"';
 
@@ -60,15 +64,15 @@ if ( ! function_exists('form_open'))
 
 		$form .= '>';
 
-		// CSRF
-		if ($CI->config->item('csrf_protection') === TRUE)
+		// Add CSRF field if enabled, but leave it out for GET requests and requests to external websites	
+		if ($CI->config->item('csrf_protection') === TRUE AND ! (strpos($action, $CI->config->site_url()) === FALSE OR strpos($form, 'method="get"')))	
 		{
-			$hidden[$CI->security->csrf_token_name] = $CI->security->csrf_hash;
+			$hidden[$CI->security->get_csrf_token_name()] = $CI->security->get_csrf_hash();
 		}
 
 		if (is_array($hidden) AND count($hidden) > 0)
 		{
-			$form .= sprintf("\n<div class=\"hidden\">%s</div>", form_hidden($hidden));
+			$form .= sprintf("<div style=\"display:none\">%s</div>", form_hidden($hidden));
 		}
 
 		return $form;
@@ -90,7 +94,7 @@ if ( ! function_exists('form_open'))
  */
 if ( ! function_exists('form_open_multipart'))
 {
-	function form_open_multipart($action, $attributes = array(), $hidden = array())
+	function form_open_multipart($action = '', $attributes = array(), $hidden = array())
 	{
 		if (is_string($attributes))
 		{
@@ -245,7 +249,7 @@ if ( ! function_exists('form_textarea'))
 {
 	function form_textarea($data = '', $value = '', $extra = '')
 	{
-		$defaults = array('name' => (( ! is_array($data)) ? $data : ''), 'cols' => '90', 'rows' => '12');
+		$defaults = array('name' => (( ! is_array($data)) ? $data : ''), 'cols' => '40', 'rows' => '10');
 
 		if ( ! is_array($data) OR ! isset($data['value']))
 		{
@@ -1028,9 +1032,9 @@ if ( ! function_exists('_get_validation_object'))
 	{
 		$CI =& get_instance();
 
-		// We set this as a variable since we're returning by reference
+		// We set this as a variable since we're returning by reference.
 		$return = FALSE;
-
+		
 		if (FALSE !== ($object = $CI->load->is_loaded('form_validation')))
 		{
 			if ( ! isset($CI->$object) OR ! is_object($CI->$object))
@@ -1040,6 +1044,8 @@ if ( ! function_exists('_get_validation_object'))
 			
 			return $CI->$object;
 		}
+		
+		return $return;
 	}
 }
 
