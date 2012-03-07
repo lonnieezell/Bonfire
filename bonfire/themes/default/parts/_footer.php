@@ -9,6 +9,8 @@
 			<p>Powered Proudly by <a href="http://cibonfire.com" target="_blank">Bonfire <?php echo BONFIRE_VERSION ?></a></p>
 		</div>
 	</footer>
+	
+	<?php echo theme_view('parts/modal_login'); ?>
 
 	<div id="debug"></div>
 

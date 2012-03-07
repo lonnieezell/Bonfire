@@ -38,12 +38,12 @@
                 <li class="divider"></li>
                 <li><a href="<?php echo site_url('users/profile');?>">Edit Profile</a></li>
                 <li class="divider"></li>
-                <li><a href="<?php echo site_url('logout');?>">Logout</a></li>
+                <li><a href="<?php echo site_url('logout');?>">Sign Out</a></li>
 
               </ul>
             </li>
 <?php else :  ?>
-  <li><a href="<?php echo site_url('login');?>">Login</a></li>
+  <li><a href="<?php echo site_url('login');?>" class="login-btn">Sign In</a></li>
 <?php endif; ?>
 
             </ul>
