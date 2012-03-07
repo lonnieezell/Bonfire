@@ -305,7 +305,7 @@ window.onload = function() {
 			
 			<?php if (is_array($sections['queries'])) : ?>
 				
-				<table class="main" cellspacing="0">
+				<table class="main">
 				<?php foreach ($sections['queries'] as $key => $queries) : ?>
 					<?php foreach ($queries as $time => $query): ?>
 						<tr><td class="hilight"><?php echo $time ?></td><td><?php echo $query ?></td></tr>
