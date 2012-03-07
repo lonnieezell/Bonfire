@@ -56,6 +56,13 @@ class Base_Controller extends MX_Controller {
 		in the controller.
 	*/
 	protected $requested_page;
+	
+	/*
+		Var: $current_user
+		
+		Stores the current user's details, if they've logged in.
+	*/
+	protected $current_user = null;
 
 	//--------------------------------------------------------------------
 
@@ -121,6 +128,21 @@ class Front_Controller extends Base_Controller {
 
 		$this->load->library('template');
 		$this->load->library('assets');
+		
+		// Auth setup
+		$this->load->model('users/User_model', 'user_model');
+		$this->load->library('users/auth');
+
+		// Load our current logged in user so we can access it anywhere.
+		if ($this->auth->is_logged_in())
+		{
+			$this->current_user = $this->user_model->find($this->auth->user_id());
+		}
+
+		// Make the current user available in the views
+		$this->load->vars( array('current_user' => $this->current_user) );
+		
+		Template::set_theme('default');
 	}
 
 	//--------------------------------------------------------------------
@@ -141,8 +163,6 @@ class Front_Controller extends Base_Controller {
 		Base_Controller
 */
 class Authenticated_Controller extends Base_Controller {
-
-	protected $current_user = null;
 
 	//--------------------------------------------------------------------
 

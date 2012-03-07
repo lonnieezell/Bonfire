@@ -7,16 +7,13 @@
 
 	if ( $logged_in == true )
 	{
-
-				$username = $current_user->email;
-    $user_img = '<i class="icon-user" >&nbsp;</i>'; //
-    $user_img = gravatar_link($username, 22, $username, "{$username} Profile", ' ', ' ' );
-
+		$username = obj_value($current_user, 'email');
+    	$user_img = gravatar_link($username, 22, $username, "{$username} Profile", ' ', ' ' );
 	}
 ?>
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
-        <div class="container-fluid">
+        <div class="container">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>

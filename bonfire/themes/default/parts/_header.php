@@ -5,7 +5,7 @@
 		base_url() .'assets/js/bootstrap-dropdown.js'
 	));
 
-	Assets::add_css( array ( base_url() .'assets/css/bootstrap.css' ));
+	Assets::add_css( array('bootstrap.css', 'bootstrap-responsive'));
 
 	$inline = '$(".dropdown-toggle").dropdown();';
 	$inline .= '$(".tooltips").tooltip();';

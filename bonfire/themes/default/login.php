@@ -1,9 +1,9 @@
-<?php echo theme_view('header'); ?>
+<?php echo theme_view('parts/_header'); ?>
 
-	<div class="login-container body">
-	LOGIN
+	<div class="container body">
+
 		<?php echo Template::message(); ?>
 		<?php echo isset($content) ? $content : Template::yield(); ?>
 
 	</div>
-<?php echo theme_view('footer'); ?>
+<?php echo theme_view('parts/_footer'); ?>

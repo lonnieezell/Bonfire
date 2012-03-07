@@ -1,6 +1,11 @@
-<?php echo theme_view('header'); ?>
+<?php echo theme_view('parts/_header'); ?>
 
-	<?php echo Template::message(); ?>
-	<?php echo isset($content) ? $content : Template::yield(); ?>
+<div class="container body"> <!-- Start of Main Container -->
 
-<?php echo theme_view('footer'); ?>
+<?php
+
+	echo Template::message();
+	echo isset($content) ? $content : Template::yield();
+?>
+
+<?php echo theme_view('parts/_footer'); ?>

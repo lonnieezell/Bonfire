@@ -1,6 +1,6 @@
 <?php
 	Assets::add_css( array(
-		base_url() . 'assets/css/bootstrap_org.css',
+		base_url() . 'assets/css/bootstrap.css',
 		base_url() . 'assets/css/bootstrap-responsive.min.css',
 		'screen.css'
 	));
