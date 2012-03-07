@@ -23,8 +23,8 @@ footer.footer {
 .footer p {
 	font-size: 11px;
 }
-.container {
-	width: 800px;
+.narrow-body .container {
+	max-width: 800px;
 }
 
 .clearfix:before,
@@ -39,6 +39,8 @@ footer.footer {
 .clearfix {
     zoom:1;
 }
+
+.navbar-fixed-top { margin-bottom: 0; }
 
 /*
 	Modals

@@ -71,7 +71,8 @@ $lang['bf_action_search']		= 'Search';
 $lang['bf_action_purge']		= 'Purge';
 $lang['bf_action_restore']		= 'Restore';
 $lang['bf_action_show']			= 'Show';
-$lang['bf_action_login']		= 'Login';
+$lang['bf_action_login']		= 'Sign In';
+$lang['bf_action_logout']		= 'Sign Out';
 $lang['bf_actions']				= 'Actions';
 $lang['bf_clear']				= 'Clear';
 $lang['bf_action_list']			= 'List';
@@ -156,3 +157,10 @@ $lang['bf_keyboard_shortcuts_edit']	= 'Update the keyboard shortcuts';
 //--------------------------------------------------------------------
 $lang['bf_question_mark']	= '?';
 $lang['bf_language_direction']	= 'ltr';
+
+//--------------------------------------------------------------------
+// Login
+//--------------------------------------------------------------------
+$lang['bf_action_register']		= 'Sign Up';
+$lang['bf_forgot_password']		= 'Forgot your password?';
+$lang['bf_remember_me']			= 'Remember me';
