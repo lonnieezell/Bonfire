@@ -634,7 +634,7 @@ class Template {
 	 */
 	public function parse_views($parse) 
 	{
-		self::parse_views($parse);
+		self::$parse_views = $parse;
 	}
 	
 	//--------------------------------------------------------------------
