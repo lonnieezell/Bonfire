@@ -439,7 +439,8 @@ class Users extends Front_Controller {
 		}
 
 		// Any modules needing to save data?
-		Events::trigger('save_user', $this->input->post());
+		$payload = array ( 'user_id' => $id, 'data' => $this->input->post() );
+		Events::trigger('save_user', $payload );
 
 		return $this->user_model->update($id, $data);
 	}
