@@ -11,7 +11,7 @@
 	</div>
 	<div class="span8">
 		<div class="alert alert-error fade in">
-		  <a data-dismiss="alert" class="close">×</a>
+		  <a data-dismiss="alert" class="close">&times;</a>
 			<?php echo auth_errors() . validation_errors(); ?>
 		</div>
 	</div>
@@ -25,7 +25,7 @@
 	</div>
 	<div class="span8">
 		<div data-dismiss="alert" class="alert alert-error fade in">
-		  <a class="close">×</a>
+		  <a class="close">&times;</a>
 			<?php echo lang('us_banned_admin_note'); ?>
 		</div>
 	</div>
