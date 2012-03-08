@@ -408,8 +408,7 @@ class Users extends Front_Controller {
 
 		if ($this->settings_lib->item('auth.use_usernames'))
 		{
-			$_POST['id'] = $this->current_user->id;
-			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username,bf_users.id]|xsx_clean');
+				$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username,bf_users.id]|xsx_clean');
 		}
 
 		$this->form_validation->set_rules('display_name', lang('bf_display_name'), 'trim|strip_tags|max_length[255]|xss_clean');
@@ -419,7 +418,30 @@ class Users extends Front_Controller {
 			return false;
 		}
 
-		return $this->user_model->update($id, $_POST);
+		// Compile our core user elements to save.
+		$data = array( 'email'		=> $this->input->post('email') );
+
+		if ($this->input->post('password'))
+				$data['password'] = $this->input->post('password');
+
+		if ($this->input->post('display_name'))
+				$data['display_name'] = $this->input->post('display_name');
+
+		if ($this->settings_lib->item('auth.use_usernames'))
+		{
+				if ($this->input->post('username'))
+						$data['username'] = $this->input->post('username');
+		}
+
+		if ( $id == 0 )
+		{
+				$id = ( $this->input->post('id') > 0 ) ? $this->input->post('id') : $this->current_user->id;
+		}
+
+		// Any modules needing to save data?
+		Events::trigger('save_user', $this->input->post());
+
+		return $this->user_model->update($id, $data);
 	}
 
 	//--------------------------------------------------------------------
