@@ -40,14 +40,14 @@
 
 <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
-	<div class="control-group">
+	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
 		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>
 		<div class="controls">
 			<input class="span6" type="text" name="display_name" value="<?php echo isset($user) ? $user->display_name : set_value('display_name') ?>" />
 		</div>
 	</div>
 
-	<div class="control-group">
+	<div class="control-group <?php echo iif( form_error('email') , 'error') ;?>">
 		<label class="control-label required" for="email"><?php echo lang('bf_email'); ?></label>
 		<div class="controls">
 			<input class="span6" type="text" name="email" value="<?php echo isset($user) ? $user->email : set_value('email') ?>" />
@@ -55,7 +55,7 @@
 	</div>
 
 	<?php if ( config_item('auth.login_type') !== 'email' OR config_item('auth.use_usernames')) : ?>
-	<div class="control-group">
+	<div class="control-group <?php echo iif( form_error('username') , 'error') ;?>">
 		<label class="control-label" for="username"><?php echo lang('bf_username'); ?></label>
 		<div class="controls">
 			<input class="span6" type="text" name="username" value="<?php echo isset($user) ? $user->username : set_value('username') ?>" />
@@ -65,14 +65,14 @@
 
 	<br />
 
-	<div class="control-group">
+	<div class="control-group <?php echo iif( form_error('password') , 'error') ;?>">
 		<label class="control-label required" for="password"><?php echo lang('bf_password'); ?></label>
 		<div class="controls">
 			<input class="span6" type="password" id="password" name="password" value="" />
 		</div>
 	</div>
 
-	<div class="control-group">
+	<div class="control-group <?php echo iif( form_error('pass_confirm') , 'error') ;?>">
 		<label class="control-label required" for="pass_confirm"><?php echo lang('bf_password_confirm'); ?></label>
 		<div class="controls">
 			<input class="span6" type="password" id="pass_confirm" name="pass_confirm" value="" />
@@ -95,7 +95,7 @@
 
 	<?php if (isset($user) && has_permission('Site.User.Manage')) : ?>
 	<div class="box delete rounded">
-		<a class="button" id="delete-me" href="<?php echo site_url(SITE_AREA .'/settings/users/delete/'. $user->id); ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')"><?php echo lang('us_delete_account'); ?></a>
+		<a class="button" id="delete-me" href="<?php echo site_url(SITE_AREA .'/settings/users/delete/'. $user->id); ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')"><i class="icon-trash icon-white">&nbsp;</i><?php echo lang('us_delete_account'); ?></a>
 
 		<?php echo lang('us_delete_account_note'); ?>
 	</div>

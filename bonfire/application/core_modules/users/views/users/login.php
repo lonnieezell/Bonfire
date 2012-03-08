@@ -36,14 +36,14 @@
 
 <?php echo form_open('login', 'class="form-horizontal"'); ?>
 
-	<div class="control-group">
+	<div class="control-group <?php echo iif( form_error('login') , 'error') ;?>">
 		<label class="control-label" for="login_value"><?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_login_type_both') : ucwords($this->settings_lib->item('auth.login_type')) ?></label>
 		<div class="controls">
 			<input class="span6" type="text" name="login" id="login_value" value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords($this->settings_lib->item('auth.login_type')) ?>" />
 		</div>
 	</div>
 
-	<div class="control-group">
+	<div class="control-group <?php echo iif( form_error('password') , 'error') ;?>">
 		<label class="control-label" for="password"><?php echo lang('bf_password'); ?></label>
 		<div class="controls">
 			<input class="span6" type="password" name="password" id="password" value="" tabindex="2" placeholder="<?php echo lang('bf_password'); ?>" />
