@@ -69,7 +69,7 @@ if (!function_exists('form_input'))
 {
 	function form_input($data='', $value='', $label='', $extra='', $tooltip = '' )
 	{
-		return _form_common('text', $data, $value, $label, $extra);
+		return _form_common('text', $data, $value, $label, $extra, $tooltip);
 	}
 }
 
@@ -79,7 +79,7 @@ if (!function_exists('form_email'))
 {
 	function form_email($data='', $value='', $label='', $extra='', $tooltip = '' )
 	{
-		return _form_common('email', $data, $value, $label, $extra);
+		return _form_common('email', $data, $value, $label, $extra, $tooltip);
 	}
 }
 
@@ -89,7 +89,7 @@ if (!function_exists('form_password'))
 {
 	function form_password($data='', $value='', $label='', $extra='', $tooltip = '' )
 	{
-		return _form_common('password', $data, $value, $label, $extra);
+		return _form_common('password', $data, $value, $label, $extra, $tooltip);
 	}
 }
 
@@ -99,7 +99,7 @@ if (!function_exists('form_url'))
 {
 	function form_url($data='', $value='', $label='', $extra='', $tooltip = '' )
 	{
-		return _form_common('url', $data, $value, $label, $extra);
+		return _form_common('url', $data, $value, $label, $extra, $tooltip);
 	}
 }
 
@@ -109,7 +109,7 @@ if ( ! function_exists('form_telephone'))
 {
 		function form_telephone($data='', $value='', $label='', $extra='', $tooltip = '' )
 		{
-				return _form_common('tel', $data, $value, $label, $extra);
+				return _form_common('tel', $data, $value, $label, $extra, $tooltip);
 		}
 }
 
@@ -119,7 +119,7 @@ if ( ! function_exists('form_number'))
 {
 		function form_number($data='', $value='', $label='', $extra='', $tooltip = '' )
 		{
-				return _form_common('number', $data, $value, $label, $extra);
+				return _form_common('number', $data, $value, $label, $extra, $tooltip);
 		}
 }
 
@@ -129,7 +129,7 @@ if ( ! function_exists('form_color'))
 {
 		function form_color($data='', $value='', $label='', $extra='', $tooltip = '' )
 		{
-				return _form_common('color', $data, $value, $label, $extra);
+				return _form_common('color', $data, $value, $label, $extra, $tooltip);
 		}
 }
 
@@ -139,7 +139,7 @@ if ( ! function_exists('form_search'))
 {
 		function form_search($data='', $value='', $label='', $extra='', $tooltip = '' )
 		{
-				return _form_common('search', $data, $value, $label, $extra);
+				return _form_common('search', $data, $value, $label, $extra, $tooltip);
 		}
 }
 
@@ -149,6 +149,6 @@ if ( ! function_exists('form_date'))
 {
 		function form_date($data='', $value='', $label='', $extra='', $tooltip = '' )
 		{
-				return _form_common('date', $data, $value, $label, $extra);
+				return _form_common('date', $data, $value, $label, $extra, $tooltip);
 		}
 }
