@@ -1,4 +1,4 @@
-<section id="login">
+<section id="profile">
 
 	<div class="page-header">
 		<h1><?php echo lang('us_edit_profile'); ?></h1>
@@ -6,10 +6,7 @@
 
 <?php if (auth_errors() || validation_errors()) : ?>
 <div class="row-fluid">
-	<div class="span2">
-		&nbsp;
-	</div>
-	<div class="span8">
+	<div class="span8 offset2">
 		<div class="alert alert-error fade in">
 		  <a data-dismiss="alert" class="close">&times;</a>
 			<?php echo auth_errors() . validation_errors(); ?>
@@ -20,10 +17,7 @@
 
 <?php if (isset($user) && $user->role_name == 'Banned') : ?>
 <div class="row-fluid">
-	<div class="span2">
-		&nbsp;
-	</div>
-	<div class="span8">
+	<div class="span8 offset2">
 		<div data-dismiss="alert" class="alert alert-error fade in">
 		  <a class="close">&times;</a>
 			<?php echo lang('us_banned_admin_note'); ?>
@@ -33,24 +27,16 @@
 <?php endif; ?>
 
 <div class="row-fluid">
-	<div class="span2">
-		&nbsp;
-	</div>
-	<div class="span8">
+	<div class="span8 offset2">
 		<div class="alert alert-info fade in">
-		  <a data-dismiss="alert" class="close">×</a>
+		  <a data-dismiss="alert" class="close">&times;</a>
 			<?php echo lang('bf_required_note'); ?>
 		</div>
 	</div>
 </div>
 
-
-
 <div class="row-fluid">
-	<div class="span2">
-		&nbsp;
-	</div>
-	<div class="span8">
+	<div class="span8 offset2">
 
 <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
@@ -96,7 +82,7 @@
 
 		<?php
 			// Allow modules to render custom fields
-			Events::trigger('render_user_form');
+			Events::trigger('render_user_form', $user );
 		?>
 
 
