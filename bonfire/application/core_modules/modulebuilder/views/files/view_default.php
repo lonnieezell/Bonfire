@@ -57,7 +57,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 
 	$view .= <<<EOT
 		<div class="control-group <?php echo form_has_error('{$field_name}') ? 'error' : ''; ?>">
-			<?php echo form_label('{$field_label}'.'{$required}', '{$field_name}'); ?>
+			<?php echo form_label('{$field_label}'.'{$required}', '{$field_name}', 'class="control-label"' ); ?>
 			{$form_input_delimiters[0]}
 EOT;
 
@@ -144,8 +144,10 @@ EOT;
 
 	$view .= <<<EOT
 
+			<label class="checkbox" for="{$field_name}>
 			<input type="checkbox" id="{$field_name}" name="{$field_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$field_name}', 1); ?>>
 			<span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
+			</label>
 
 		{$form_input_delimiters[1]}
 EOT;
