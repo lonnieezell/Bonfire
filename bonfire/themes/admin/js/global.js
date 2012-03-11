@@ -21,3 +21,8 @@ $('.dropdown-toggle').dropdown();
 	Set focus on the first form field
 */
 $(":input:visible:first").focus();
+
+/*
+ Prevent elements classed with "no-link" from linking
+*/
+$(".no-link").click(function(e){ e.preventDefault();	});
