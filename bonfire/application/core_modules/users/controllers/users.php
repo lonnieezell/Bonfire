@@ -73,7 +73,7 @@ class Users extends Front_Controller {
 								{
 										$this->load->model('activities/Activity_model', 'activity_model');
 
-										$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged').': ' . $this->input->ip_address(), 'users');
+										$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged').': ' . $this->input->ip_address(), 'users');
 
 										/*
 											In many cases, we will have set a destination for a
