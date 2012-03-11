@@ -101,12 +101,13 @@ EOT;
 	case('radio'):
 
 		$view .= '
-		<?php // Change or Add the radio values/labels/css classes to suit your needs ?>
+		<label class="radio">
 			<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option1" <?php echo set_radio(\''.$field_name.'\', \'option1\', TRUE); ?> />
 			'. form_label('Radio option 1', $field_name) .'
 			<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option2" <?php echo set_radio(\''.$field_name.'\', \'option2\'); ?> />
 			'. form_label('Radio option 2', $field_name) .'
 			<span class="help-inline"><?php echo form_error(\''.$field_name.'\'); ?></span>
+			</label>
 		'.$form_input_delimiters[1].'
 
 ';
