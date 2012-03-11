@@ -342,7 +342,7 @@ class Contexts {
 			// out a menu based on the multiple items.
 			if (count($topic) > 1)
 			{
-				$list .= '<li><a href="#" class="no-link parent-menu">'. ucwords($topic_name) .'</a>';
+				$list .= '<li class="no-link parent-menu"><a href="#" class="no-link parent-menu">'. ucwords($topic_name) .'</a>';
 				$list .= '<ul>';
 
 				foreach ($topic as $module => $vals)
