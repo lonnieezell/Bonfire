@@ -409,7 +409,7 @@ class Contexts {
 	*/
 	private static function build_item($module, $title, $display_name, $context, $menu_view='')
 	{
-		$item  = '<li><a href="'. site_url(SITE_AREA .'/'. $context .'/'. $module) .'" class="{class}"';
+		$item  = '<li {listclass}><a href="'. site_url(SITE_AREA .'/'. $context .'/'. $module) .'" class="{class}"';
 		$item .= ' title="'. $title .'">'. ucwords(str_replace('_', '', $display_name)) ."</a>\n";
 
 		// Sub Menus?
@@ -421,15 +421,19 @@ class Contexts {
 			$item .= $view;
 		}
 
+  $listclass = '';
+
 		// Is this the current module?
 		$class = $module == self::$ci->uri->segment(3) ? 'active' : '';
 		if (!empty($menu_view))
 		{
 			$class .= ' parent-menu';
+   $listclass = 'class="parent-menu" ';
 		}
 
-		$item = str_replace('{class}', $class, $item);
 
+		$item = str_replace('{class}', $class, $item);
+		$item = str_replace('{listclass}', $listclass, $item);
 		$item .= "</li>\n";
 
 		return $item;
