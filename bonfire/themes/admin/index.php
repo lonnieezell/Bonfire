@@ -15,4 +15,4 @@
         <?php echo Template::yield(); ?>
 </div>
 
-<?php echo theme_view('partials/_footer.php'); ?>
+<?php echo theme_view('partials/_footer'); ?>
