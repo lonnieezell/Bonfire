@@ -25,4 +25,4 @@ $(":input:visible:first").focus();
 /*
  Prevent elements classed with "no-link" from linking
 */
-$(".no-link").click(function(e){ e.preventDefault();	});
+//$(".no-link").click(function(e){ e.preventDefault();	});
