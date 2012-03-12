@@ -25,6 +25,8 @@ footer.footer {
 }
 .narrow-body .container {
 	max-width: 800px;
+	min-height: 440px;
+	border-radius: 10px;
 }
 
 .clearfix:before,
