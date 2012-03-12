@@ -124,6 +124,7 @@ $lang['bf_cache_not_writable']  = 'The application cache folder is not writable'
 //--------------------------------------------------------------------
 // MY_Model
 //--------------------------------------------------------------------
+$lang['bf_model_db_error']		= 'DB Error: ';
 $lang['bf_model_no_data']		= 'No data available.';
 $lang['bf_model_invalid_id']	= 'Invalid ID passed to model.';
 $lang['bf_model_no_table']		= 'Model has unspecified database table.';
