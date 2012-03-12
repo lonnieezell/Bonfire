@@ -18,13 +18,13 @@
 
 <p class="intro"><?php e(lang('mb_create_note')) ?></p>
 
-<div class="alert alert-info">
+<div class="alert alert-info fade in">
   <a class="close" data-dismiss="alert">&times;</a>
 	<?php echo lang('mb_form_note'); ?>
 </div>
 
 <?php if (!$writeable): ?>
-  <div class="alert alert-error">
+  <div class="alert alert-error fade in">
   <a class="close" data-dismiss="alert">&times;</a>
 	<p><?php echo lang('mb_not_writeable_note'); ?></p>
 </div>
@@ -44,7 +44,7 @@
 			<legend><?php echo lang('mb_form_mod_details'); ?></legend>
 
 			<div class="control-group <?php echo form_has_error('module_name') ? 'error' : ''; ?>">
-				<label for="module_name" class="block"><?php echo lang('mb_form_mod_name'); ?></label>
+				<label for="module_name" class="control-label block"><?php echo lang('mb_form_mod_name'); ?></label>
 				<div class="controls">
 					<input name="module_name" id="module_name" type="text" value="<?php echo set_value("module_name"); ?>" placeholder="<?php echo lang('mb_form_mod_name_ph'); ?>" />
 					<span class="help-inline"><?php echo form_error('module_name'); ?></span>
@@ -53,7 +53,7 @@
 			</div>
 
 			<div class="control-group mb_advanced <?php echo form_has_error('module_description') ? 'error' : ''; ?>">
-				<label for="module_description" class="block"><?php echo lang('mb_form_mod_desc'); ?></label>
+				<label for="module_description" class="control-label block"><?php echo lang('mb_form_mod_desc'); ?></label>
 				<div class="controls">
 					<input name="module_description" id="module_description" type="text" value="<?php echo set_value("module_description",'Your module description'); ?>" placeholder="<?php echo lang('mb_form_mod_desc_ph'); ?>" />
 					<span class="help-inline"><?php echo form_error('module_description'); ?></span>
@@ -61,7 +61,7 @@
 			</div>
 
 			<div class="control-group mb_advanced">
-				<label class="block"><?php echo lang('mb_form_contexts'); ?></label>
+				<label class="control-label block"><?php echo lang('mb_form_contexts'); ?></label>
 				<div class="controls">
           <label class="checkbox" for="contexts_public">
 					<input name="contexts[]" id="contexts_public" type="checkbox" value="public" checked="checked" />
@@ -100,7 +100,7 @@
 			</div>
 
 			<div class="control-group mb_advanced">
-				<label for="role_id"><?php echo lang('mb_form_role_id'); ?></label>
+				<label class="control-label" for="role_id"><?php echo lang('mb_form_role_id'); ?></label>
 				<div class="controls">
 					<?php foreach ($roles as $role) { $all_roles[$role['role_id']] = $role['role_name']; }
 							echo form_dropdown("role_id", $all_roles, set_value("role_id"),'id="role_id"'); ?>
@@ -133,7 +133,7 @@
 			</div>
 
 			<div class="control-group mb_advanced <?php echo form_has_error('table_name') ? 'error' : ''; ?>">
-				<label for="table_name" class="block"><?php echo lang('mb_form_table_name'); ?></label>
+				<label for="table_name" class="control-label block"><?php echo lang('mb_form_table_name'); ?></label>
 				<div class="controls">
 					<input name="table_name" id="table_name" type="text" value="<?php echo set_value("table_name"); ?>" placeholder="<?php echo lang('mb_form_table_name_ph'); ?>" />
 					<span class="help-inline"><?php echo form_error('table_name'); ?></span>
@@ -141,7 +141,7 @@
 			</div>
 
 			<div class="control-group mb_advanced <?php echo form_has_error('form_input_delimiters') ? 'error' : ''; ?>">
-				<label for="form_input_delimiters" class="block"><?php echo lang('mb_form_delims'); ?></label>
+				<label for="form_input_delimiters" class="control-label block"><?php echo lang('mb_form_delims'); ?></label>
 				<div class="controls">
 					<input name="form_input_delimiters" id="form_input_delimiters" type="text" value="<?php echo set_value("form_input_delimiters", "<div class='controls'>,</div>"); ?>" />
 					<span class="help-inline"><?php echo form_error('form_input_delimiters'); ?></span>
@@ -149,7 +149,7 @@
 			</div>
 
 			<div class="control-group mb_advanced <?php echo form_has_error('form_error_delimiters') ? 'error' : ''; ?>">
-				<label for="form_error_delimiters" class="block"><?php echo lang('mb_form_err_delims'); ?></label>
+				<label for="form_error_delimiters" class="control-label block"><?php echo lang('mb_form_err_delims'); ?></label>
 				<div class="controls">
 					<input name="form_error_delimiters" id="form_error_delimiters" type="text" value="<?php echo set_value("form_error_delimiters", "<span class='error'>,</span>"); ?>" />
 					<span class="help-inline"><?php echo form_error('form_error_delimiters'); ?></span>
@@ -157,7 +157,7 @@
 			</div>
 
 			<div class="control-group mb_advanced">
-				<label for="textarea_editor" class="block"><?php echo lang('mb_form_text_ed'); ?></label>
+				<label for="textarea_editor" class="control-label block"><?php echo lang('mb_form_text_ed'); ?></label>
 				<div class="controls">
 					<?php
 						$textarea_editors = array('' => 'None', 'ckeditor' => 'CKEditor', 'xinha' => 'Xinha', 'tinymce' => 'TinyMCE', 'markitup' => 'MarkitUp!');
@@ -167,7 +167,7 @@
 			</div>
 
 			<div class="control-group mb_advanced">
-				<label for="use_soft_deletes" class="block"><?php echo lang('mb_form_soft_deletes'); ?></label>
+				<label for="use_soft_deletes" class="control-label block"><?php echo lang('mb_form_soft_deletes'); ?></label>
 				<div class="controls">
 					<?php
 						$truefalse = array('false' => 'False', 'true' => 'True');
@@ -177,14 +177,14 @@
 			</div>
 
 			<div class="control-group mb_advanced">
-				<label for="use_created" class="block"><?php echo lang('mb_form_use_created'); ?></label>
+				<label for="use_created" class="control-label block"><?php echo lang('mb_form_use_created'); ?></label>
 				<div class="controls">
 					<?php echo form_dropdown("use_created", $truefalse, set_value("use_created"),'id="use_created"'); ?>
 				</div>
 			</div>
 
 			<div class="control-group mb_advanced <?php echo form_has_error('created_field') ? 'error' : ''; ?>">
-				<label for="created_field" class="block"><?php echo lang('mb_form_created_field'); ?></label>
+				<label for="created_field" class="control-label block"><?php echo lang('mb_form_created_field'); ?></label>
 				<div class="controls">
 					<input name="created_field" id="created_field" type="text" value="<?php echo set_value("created_field", "created_on"); ?>" />
 					<span class="help-inline"><?php echo form_error('created_field'); ?></span>
@@ -192,27 +192,27 @@
 			</div>
 
 			<div class="control-group mb_advanced">
-				<label for="use_modified" class="block"><?php echo lang('mb_form_use_modified'); ?></label>
+				<label for="use_modified" class="control-label block"><?php echo lang('mb_form_use_modified'); ?></label>
 				<div class="controls">
 					<?php echo form_dropdown("use_modified", $truefalse, set_value("use_modified"),'id="use_modified"'); ?>
 				</div>
 			</div>
 
 			<div class="control-group mb_advanced <?php echo form_has_error('modified_field') ? 'error' : ''; ?>">
-				<label for="modified_field" class="block"><?php echo lang('mb_form_modified_field'); ?></label>
+				<label for="modified_field" class="control-label block"><?php echo lang('mb_form_modified_field'); ?></label>
 				<div class="controls">
 					<input name="modified_field" id="modified_field" type="text" value="<?php echo set_value("modified_field", "modified_on"); ?>" />
 					<span class="help-inline"><?php echo form_error('modified_field'); ?></span>
 				</div>
 			</div>
 
-			<div class="alert alert-info mb_new_table" style="width:90%; margin:5px auto;">
-        <a class="close" data-dismiss="alert">&times;</a>
+			<div class="alert alert-info fade in mb_new_table" style="width:90%; margin:5px auto;">
+            <a class="close" data-dismiss="alert">&times;</a>
 				<?php echo lang('mb_table_note'); ?>
 			</div>
 
 			<div class="control-group mb_new_table <?php echo form_has_error('primary_key_field') ? 'error' : ''; ?>">
-				<label for="primary_key_field" class="block"><?php echo lang('mb_form_primarykey'); ?></label>
+				<label for="primary_key_field" class="control-label block"><?php echo lang('mb_form_primarykey'); ?></label>
 				<div class="controls">
 					<input name="primary_key_field" id="primary_key_field" type="text" value="<?php echo set_value("primary_key_field", (isset($existing_table_fields[0]) && $existing_table_fields[0]['primary_key']) ? $existing_table_fields[0]['name'] : 'id'); ?>" />
 					<span class="help-inline"><?php echo form_error('primary_key_field'); ?></span>
@@ -220,7 +220,7 @@
 			</div>
 
 			<div id="field_numbers" class="control-group">
-				<label><?php echo lang('mb_form_fieldnum'); ?></label>
+				<label class="control-label"><?php echo lang('mb_form_fieldnum'); ?></label>
 				<div class="controls" style="padding-top: 5px;">
 					<?php
 					$field_num_count = count($field_numbers);
@@ -243,7 +243,7 @@
 
 					<?php if ($count == 1) : ?>
 
-					<div class="alert alert-info" style="width:80%; margin: 0 auto;">
+					<div class="alert alert-info fade in" style="width:80%; margin: 0 auto;">
 						<a class="close" data-dismiss="alert">&times;</a>
 						<?php echo lang('mb_field_note'); ?>
 					</div>
@@ -251,7 +251,7 @@
 					<?php endif; ?>
 
 					<div class="control-group <?php echo form_has_error("view_field_label{$count}") ? 'error' : ''; ?>">
-						<label for="view_field_label<?php echo $count; ?>"><?php echo lang('mb_form_label'); ?></label>
+						<label class="control-label" for="view_field_label<?php echo $count; ?>"><?php echo lang('mb_form_label'); ?></label>
 						<div class="controls">
 							<input name="view_field_label<?php echo $count; ?>" id="view_field_label<?php echo $count; ?>" type="text" value="<?php echo set_value("view_field_label{$count}", isset($existing_table_fields[$count]) ? ucwords(str_replace("_", " ", $existing_table_fields[$count]['name'])) : ''); ?>" placeholder="<?php echo lang('mb_form_label_ph'); ?>" />
 							<span class="help-inline"><?php echo form_error("view_field_label{$count}"); ?></span>
@@ -259,7 +259,7 @@
 					</div>
 
 					<div class="control-group <?php echo form_has_error("view_field_name{$count}") ? 'error' : ''; ?>">
-						<label for="view_field_name"><?php echo lang('mb_form_fieldname'); ?></label>
+						<label class="control-label" for="view_field_name"><?php echo lang('mb_form_fieldname'); ?></label>
 						<div class="controls">
 							<input name="view_field_name<?php echo $count; ?>" id="view_field_name<?php echo $count; ?>" type="text" value="<?php echo set_value("view_field_name{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['name'] : ''); ?>" maxlength="30" placeholder="<?php echo lang('mb_form_fieldname_ph'); ?>" />
 							<span class="help-inline"><?php echo form_error("view_field_name{$count}"); ?></span>
@@ -267,7 +267,7 @@
 					</div>
 
 					<div class="control-group <?php echo form_has_error("view_field_type{$count}") ? 'error' : ''; ?>">
-						<label for="view_field_type<?php echo $count; ?>"><?php echo lang('mb_form_type'); ?></label>
+						<label class="control-label" for="view_field_type<?php echo $count; ?>"><?php echo lang('mb_form_type'); ?></label>
 						<div class="controls">
 							<?php
 							$view_field_types = array(
@@ -305,7 +305,7 @@
 					</div>
 
 					<div class="control-group">
-						<label for="db_field_type<?php echo $count; ?>"><?php echo lang('mb_form_dbtype'); ?></label>
+						<label class="control-label" for="db_field_type<?php echo $count; ?>"><?php echo lang('mb_form_dbtype'); ?></label>
 						<div class="controls">
 							<?php
 							$db_field_types = array(
@@ -346,7 +346,7 @@
 					</div>
 
 					<div class="control-group <?php echo form_has_error("db_field_length_value{$count}") ? 'error' : ''; ?>">
-						<label for="db_field_length_value<?php echo $count; ?>"><?php echo lang('mb_form_length'); ?></label>
+						<label class="control-label" for="db_field_length_value<?php echo $count; ?>"><?php echo lang('mb_form_length'); ?></label>
 					<?php
 						$default_max_len = '';
 						if (isset($existing_table_fields[$count]) && $existing_table_fields[$count]['type'] != 'TEXT') {
