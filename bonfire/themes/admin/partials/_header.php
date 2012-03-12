@@ -111,7 +111,7 @@
 
 	</div><!-- /topbar -->
 
- <div class="navbar subnav navbar-fixed-top" >
+ <div class="subnav navbar-fixed-top" >
 				<div class="container-fluid">
 						<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 								<span class="icon-bar"></span>
