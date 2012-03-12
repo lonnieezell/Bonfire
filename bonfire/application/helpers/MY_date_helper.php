@@ -90,7 +90,7 @@ if (!function_exists('relative_time'))
 //---------------------------------------------------------------
 
 /*
-	Function: date_difference
+	Function: date_difference()
 	
 	Returns the difference between two dates. 
 	
@@ -135,5 +135,39 @@ if (!function_exists('date_difference'))
 		$diff = $end - $start;
 		
 		return round($diff / $times[$interval]);
+	}
+}
+
+//---------------------------------------------------------------
+
+
+/*
+	Function: unix_to_dtz()
+
+	Converts unix time to a human readable time in selected timezone.
+
+	Parameters:
+		$timestamp	- A UNIX timestamp.
+		$timezone	- The timezone we want to convert to.
+					  For supported timezones visit - http://php.net/manual/timezones.php
+		$format		- The format of the outputted date/time string
+					  For accepted formats visit - http://php.net/manual/function.date.php
+
+	Examples:
+		echo unix_to_dtz($timestamp, 'EET', 'l jS \of F Y h:i:s A');
+
+	Returns:
+		A string formatted according to the given format using the given timestamp
+		and given timezone or the current time if no timestamp is given.
+*/
+
+if ( ! function_exists('unix_to_dtz'))
+{
+	function unix_to_dtz($timestamp = NULL, $timezone = 'Europe/Monaco', $format = 'r')
+	{
+		$timestamp = ($timestamp) ? $timestamp : time();
+		$dtzone = new DateTimeZone($timezone);
+		$dtime = new DateTime();
+		return $dtime->setTimestamp($timestamp)->setTimeZone($dtzone)->format($format);
 	}
 }
