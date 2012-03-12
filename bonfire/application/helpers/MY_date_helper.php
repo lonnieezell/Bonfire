@@ -29,20 +29,15 @@
 */
 
 
-/*
-	Function: relative_time()
-	
-	Takes a UNIX timestamp and returns a string representing how long ago
-	that date was, like "moments ago", "2 weeks ago", etc.
-	
-	Parameters:
-		$timestamp	- A UNIX timestamp
-		
-	Returns: 
-		string	- a human-readable amount of time 'ago'
-*/
-if (!function_exists('relative_time'))
+if ( ! function_exists('relative_time'))
 {
+	/**
+	 * Takes a UNIX timestamp and returns a string representing how long ago that date was, like "moments ago", "2 weeks ago", etc.
+	 *
+	 * @param $timestamp int A UNIX timestamp
+	 *
+	 * @return string A human-readable amount of time 'ago'
+	 */
 	function relative_time($timestamp)
 	{
 		$difference = time() - $timestamp;
@@ -87,26 +82,18 @@ if (!function_exists('relative_time'))
 	}
 }
 
-//---------------------------------------------------------------
-
-/*
-	Function: date_difference
-	
-	Returns the difference between two dates. 
-	
-	Parameters:
-		$start		- The start date in either unix timestamp or a format 
-					  that can be used within strtotime().
-		$end		- The ending date in either unix timestamp or a format 
-					  that can be used within strtotime().
-		$interval	- A string with the interval to use. Choices 'week', 'day', 'hour', 'minute'
-		$reformat	- If TRUE, will reformat the time using strtotime()
-		
-	Returns:
-		A number representing the difference between the two dates in the interval desired.
-*/
-if (!function_exists('date_difference'))
+if ( ! function_exists('date_difference'))
 {
+	/**
+	 * Returns the difference between two dates.
+	 *
+	 * @param $start mixed The start date in either unix timestamp or a format that can be used within strtotime().
+	 * @param $end mixed The ending date in either unix timestamp or a format that can be used within strtotime().
+	 * @param $interval string A string with the interval to use. Choices 'week', 'day', 'hour', 'minute'.
+	 * @param $reformat boolean If TRUE, will reformat the time using strtotime().
+	 *
+	 * @return int A number representing the difference between the two dates in the interval desired.
+	 */
 	function date_difference($start=null, $end=null, $interval='day', $reformat=false)
 	{
 		if (is_null($start))
