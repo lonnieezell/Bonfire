@@ -424,13 +424,6 @@ input[type=radio] { margin-right: 9px; }
 
 .caret.light-caret { border-top: 4px solid #a6a6a6; }
 
-/*
- * Datatables
- */
-.dataTables_wrapper {margin:0}
-.dataTables_filter {width: 30%}
-
-.dataTables_filter input {display: inline}
 
 /*
  * Drop-down menu 3rd Level fix/hack?
