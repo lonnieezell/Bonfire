@@ -2,7 +2,7 @@
 
 $view = '
 <?php if (validation_errors()) : ?>
-<div class="alert alert-block alert-error fade in notification error">
+<div class="alert alert-block alert-error fade in ">
   <a class="close" data-dismiss="alert">&times;</a>
   <h4 class="alert-heading">Please fix the following errors :</h4>
  <?php echo validation_errors(); ?>
@@ -50,14 +50,15 @@ for($counter=1; $field_total >= $counter; $counter++)
 		{
 			if($value == 'required')
 			{
-				$required = ' <span class="required">*</span>';
+				$required = "lang('bf_form_label_required')"; //' <span class="required">*</span>';
 			}
+
 		}
 	}
 
 	$view .= <<<EOT
 		<div class="control-group <?php echo form_has_error('{$field_name}') ? 'error' : ''; ?>">
-			<?php echo form_label('{$field_label}'.'{$required}', '{$field_name}', 'class="control-label"' ); ?>
+			<?php echo form_label('{$field_label}'. {$required}, '{$field_name}', 'class="control-label"' ); ?>
 			{$form_input_delimiters[0]}
 EOT;
 
