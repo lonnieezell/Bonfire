@@ -403,7 +403,3 @@ window.onload = function() {
 <?php endif; ?>
 
 </div>	<!-- /codeigniter_profiler -->
-
-<pre>
-<?php //print_r($sections); ?>
-</pre>
