@@ -177,8 +177,9 @@ $lang['bf_keyboard_shortcuts_edit']	= 'Update the keyboard shortcuts';
 //--------------------------------------------------------------------
 // Common
 //--------------------------------------------------------------------
-$lang['bf_question_mark']	= '?';
+$lang['bf_question_mark']	      = '?';
 $lang['bf_language_direction']	= 'ltr';
+$lang['log_intro']              = 'These are your log messages';
 
 //--------------------------------------------------------------------
 // Login
