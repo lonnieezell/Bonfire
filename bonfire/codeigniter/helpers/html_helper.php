@@ -45,7 +45,7 @@ if ( ! function_exists('e'))
 {
 	function e($data = '',$flags = ENT_QUOTES, $encoding = 'UTF-8')
 	{
-		return htmlentities($data, $flags,$encoding);
+		echo htmlentities($data, $flags,$encoding);
 	}
 }
 
