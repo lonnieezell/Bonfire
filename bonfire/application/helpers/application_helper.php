@@ -487,7 +487,7 @@ if ( ! function_exists('e') )
 {
 	function e($str)
 	{
-		echo htmlentities($str);
+		echo htmlentities($str, ENT_QUOTES, 'UTF-8');
 	}
 }
 //--------------------------------------------------------------------
@@ -535,7 +535,7 @@ if ( ! function_exists('array_implode') )
 	}
 }
 //--------------------------------------------------------------------
-if ( ! function_exists('array_implode') )
+if ( ! function_exists('obj_value') )
 {
 	function obj_value($obj, $key, $type='text', $value=0)
 	{

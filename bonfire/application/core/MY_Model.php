@@ -461,24 +461,31 @@ class BF_Model extends CI_Model {
 			return FALSE;
 		}
 
-		if ($this->soft_deletes === TRUE)
+		if ($this->find($id) !== FALSE)
 		{
-			$this->db->where($this->key, $id);
-			$result = $this->db->update($this->table, array('deleted' => 1));
+			if ($this->soft_deletes === TRUE)
+			{
+				$this->db->where($this->key, $id);
+				$result = $this->db->update($this->table, array('deleted' => 1));
+			}
+			else
+			{
+				$result = $this->db->delete($this->table, array($this->key => $id));
+			}
+
+			if ($result)
+			{
+				return TRUE;
+			}
+
+			$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
 		}
 		else
 		{
-			$result = $this->db->delete($this->table, array($this->key => $id));
+			$this->error = $this->lang->line('bf_model_db_error') . $this->lang->line('bf_model_invalid_id');
 		}
 
-		if ($result)
-		{
-			return true;
-		}
-
-		$this->error = 'DB Error: ' . mysql_error();
-
-		return false;
+		return FALSE;
 	}
 
 	//---------------------------------------------------------------
@@ -538,7 +545,7 @@ class BF_Model extends CI_Model {
 			return $result;
 		}
 
-		$this->error = 'DB Error: ' . mysql_error();
+		$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
 
 		return false;
 	}
