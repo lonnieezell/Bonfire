@@ -56,7 +56,7 @@
 	Return:
 		The resulting image tag.
  */
-function gravatar_link($email=null, $size=48, $alt='', $title='', $class='', $id='')
+function gravatar_link($email=null, $size=48, $alt='', $title='', $class=' ', $id=' ')
 {
 	// Set our default image based on required size.
 	$default_image = Template::theme_url('images/user.png');
@@ -91,7 +91,7 @@ function gravatar_link($email=null, $size=48, $alt='', $title='', $class='', $id
 		$avatarURL = $default_image ;
 	}
 
-	$id = ( $id != '' ) ? ' id="' . $id . '" ' : '';
+	//$id = ( $id != '' ) ? ' id="' . $id . '" ' : '';
 
 	return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" class="'. $class .'" id="'. $id .'" />';
 }
