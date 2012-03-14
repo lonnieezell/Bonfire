@@ -56,46 +56,46 @@
 	Return:
 		The resulting image tag.
  */
-if ( ! function_exists('gravatar_link') )
+function gravatar_link($email=null, $size=48, $alt='', $title='', $class='', $id='')
 {
-	function gravatar_link($email=null, $size=48, $alt='', $title='', $class=NULL, $id=NULL)
-	{
-		// Set our default image based on required size.
-		$default_image = Template::theme_url('images/user.png');
+	// Set our default image based on required size.
+	$default_image = Template::theme_url('images/user.png');
 
-		// Set our minimum site rating to PG
-		$rating = 'PG';
+	// Set our minimum site rating to PG
+	$rating = 'PG';
 
-		// Border color
-		$border = 'd6d6d6';
+	// Border color
+	$border = 'd6d6d6';
 
-		// If email null, means we don't want gravatar.com HTTP request
-		if ( $email )
-		{
+	// If email null, means we don't want gravatar.com HTTP request
+	if ( $email ) {
 
-			// Check if HTTP or HTTPS Request should be used
-			$http_protocol = ( isset($_SERVER['HTTPS']) ) ? 'https://secure.' : 'https://www.';
+		// Check if HTTP or HTTPS Request should be used
 
-			// URL for Gravatar
-			$gravatarURL =  $http_protocol . "gravatar.com/avatar.php?gravatar_id=%s&amp;default=%s&amp;size=%s&amp;border=%s&amp;rating=%s";
-			$avatarURL = sprintf(
-								$gravatarURL,
-								md5($email),
-								$default_image,
-								$size,
-								$border,
-								$rating
-							);
-		} else {
-			$avatarURL = $default_image;
-		}
+		if(isset($_SERVER['HTTPS'])){ $http_protocol = "https://secure.";} else { $http_protocol = "http://www.";}
 
-		$id    = ( $id    === NULL ) ? '' : ' id="' . $id . '" ';
-		$class = ( $class === NULL ) ? '' : ' class="' . $class . '" ';
-
-		return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" '. $class . $id . ' />';
+		// URL for Gravatar
+		$gravatarURL =  $http_protocol . "gravatar.com/avatar.php?gravatar_id=%s&amp;default=%s&amp;size=%s&amp;border=%s&amp;rating=%s";
+		$avatarURL = sprintf
+		(
+			$gravatarURL,
+			md5($email),
+			$default_image,
+			$size,
+			$border,
+			$rating
+		);
 	}
+	else
+	{
+		$avatarURL = $default_image ;
+	}
+
+	$id = ( $id != '' ) ? ' id="' . $id . '" ' : '';
+
+	return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" class="'. $class .'" id="'. $id .'" />';
 }
+
 //---------------------------------------------------------------
 
 /*
@@ -107,22 +107,19 @@ if ( ! function_exists('gravatar_link') )
 		$message	- The string to write to the logs.
 		$level		- The log level, as per CI log_message method.
 */
-if ( ! function_exists('logit') )
+function logit($message='', $level='debug')
 {
-	function logit($message='', $level='debug')
+	if (empty($message))
 	{
-		if (empty($message))
-		{
-			return;
-		}
-
-		if (class_exists('Console'))
-		{
-			Console::log($message);
-		}
-
-		log_message($level, $message);
+		return;
 	}
+
+	if (class_exists('Console'))
+	{
+		Console::log($message);
+	}
+
+	log_message($level, $message);
 }
 
 //--------------------------------------------------------------------
@@ -135,12 +132,9 @@ if ( ! function_exists('logit') )
 	Returns an array of the folders that modules are allowed to be stored in.
 	These are set in *bonfire/application/third_party/MX/Modules.php*.
 */
-if ( ! function_exists('module_folders') )
+function module_folders()
 {
-	function module_folders()
-	{
-		return array_keys(modules::$locations);
-	}
+	return array_keys(modules::$locations);
 }
 
 //--------------------------------------------------------------------
@@ -150,44 +144,41 @@ if ( ! function_exists('module_folders') )
 
 	Returns a list of all modules in the system.
 */
-if ( ! function_exists('module_list') )
+function module_list($exclude_core=false)
 {
-		function module_list($exclude_core=false)
+	if (!function_exists('directory_map'))
+	{
+		$ci =& get_instance();
+		$ci->load->helper('directory');
+	}
+
+	$map = array();
+
+	foreach (module_folders() as $folder)
+	{
+		// If we're excluding core modules and this module
+		// is in the 'core_modules' folder... ignore it.
+		if ($exclude_core && strpos($folder, 'core_modules') !== false)
 		{
-				if (!function_exists('directory_map'))
-				{
-						$ci =& get_instance();
-						$ci->load->helper('directory');
-				}
-
-				$map = array();
-
-				foreach (module_folders() as $folder)
-				{
-						// If we're excluding core modules and this module
-						// is in the 'core_modules' folder... ignore it.
-						if ($exclude_core && strpos($folder, 'core_modules') !== false)
-						{
-								continue;
-						}
-
-						$map = array_merge($map, directory_map($folder, 1));
-				}
-
-				// Clean out any html or php files
-				if ($count = count($map))
-				{
-						for ($i=0; $i < $count; $i++)
-						{
-								if (strpos($map[$i], '.html') !== false || strpos($map[$i], '.php') !== false)
-								{
-										unset($map[$i]);
-								}
-						}
-				}
-
-				return $map;
+			continue;
 		}
+
+		$map = array_merge($map, directory_map($folder, 1));
+	}
+
+	// Clean out any html or php files
+	if ($count = count($map))
+	{
+		for ($i=0; $i < $count; $i++)
+		{
+			if (strpos($map[$i], '.html') !== false || strpos($map[$i], '.php') !== false)
+			{
+				unset($map[$i]);
+			}
+		}
+	}
+
+	return $map;
 }
 
 //--------------------------------------------------------------------
@@ -204,26 +195,23 @@ if ( ! function_exists('module_list') )
 	Return:
 		true/false
  */
-if ( ! function_exists('module_controller_exists') )
+function module_controller_exists($controller=null, $module=null)
 {
-	function module_controller_exists($controller=null, $module=null)
+	if (empty($controller) || empty($module))
 	{
-		if (empty($controller) || empty($module))
-		{
-			return false;
-		}
-
-		// Look in all module paths
-		foreach (module_folders() as $folder)
-		{
-			if (is_file($folder . $module .'/controllers/'. $controller .'.php'))
-			{
-				return true;
-			}
-		}
-
 		return false;
 	}
+
+	// Look in all module paths
+	foreach (module_folders() as $folder)
+	{
+		if (is_file($folder . $module .'/controllers/'. $controller .'.php'))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 //--------------------------------------------------------------------
@@ -241,26 +229,21 @@ if ( ! function_exists('module_controller_exists') )
 	Returns:
 		A string with the full path to the file.
 */
-if ( ! function_exists('module_file_path') )
+function module_file_path($module=null, $folder=null, $file=null)
 {
-	function module_file_path($module=null, $folder=null, $file=null)
+	if (empty($module) || empty($folder) || empty($file))
 	{
-		if (empty($module) || empty($folder) || empty($file))
+		return false;
+	}
+
+	foreach (module_folders() as $module_folder)
+	{
+		$test_file = $module_folder . $module .'/'. $folder .'/'. $file;
+
+		if (is_file($test_file))
 		{
-			return false;
+			return $test_file;
 		}
-
-		foreach (module_folders() as $module_folder)
-		{
-			$test_file = $module_folder . $module .'/'. $folder .'/'. $file;
-
-			if (is_file($test_file))
-			{
-				return $test_file;
-			}
-
-		}
-
 	}
 }
 
@@ -278,20 +261,19 @@ if ( ! function_exists('module_file_path') )
 	Returns:
 		A string with the path, relative to the front controller.
 */
-if ( ! function_exists('module_path') )
+function module_path($module=null, $folder=null)
 {
-	function module_path($module=null, $folder=null)
+	foreach (module_folders() as $module_folder)
 	{
-		foreach (module_folders() as $module_folder)
+		if (is_dir($module_folder . $module))
 		{
-			if (is_dir($module_folder . $module))
+			if (!empty($folder) && is_dir($module_folder . $module .'/'. $folder))
 			{
-				if (!empty($folder) && is_dir($module_folder . $module .'/'. $folder))
-				{
-					return $module_folder . $module .'/'. $folder;
-				} else {
-					return $module_folder . $module .'/';
-				}
+				return $module_folder . $module .'/'. $folder;
+			}
+			else
+			{
+				return $module_folder . $module .'/';
 			}
 		}
 	}
@@ -312,65 +294,62 @@ if ( ! function_exists('module_path') )
 	Return:
 		An associative array, like: array('module_name' => array('folder' => array('file1', 'file2')))
 */
-if ( ! function_exists('module_files') )
+function module_files($module_name=null, $module_folder=null, $exclude_core=false)
 {
-	function module_files($module_name=null, $module_folder=null, $exclude_core=false)
+	if (!function_exists('directory_map'))
 	{
-		if (!function_exists('directory_map'))
+		$ci =& get_instance();
+		$ci->load->helper('directory');
+	}
+
+	$files = array();
+
+	foreach (module_folders() as $path)
+	{
+		// If we're ignoring core modules and we find the core_module folder... skip it.
+		if ($exclude_core === true && strpos($path, 'core_modules') !== false)
 		{
-			$ci =& get_instance();
-			$ci->load->helper('directory');
+			continue;
 		}
 
-		$files = array();
-
-		foreach (module_folders() as $path)
+		if (!empty($module_name) && is_dir($path . $module_name))
 		{
-			// If we're ignoring core modules and we find the core_module folder... skip it.
-			if ($exclude_core === true && strpos($path, 'core_modules') !== false)
-			{
-				continue;
-			}
+			$path = $path . $module_name;
+			$modules[$module_name] = directory_map($path);
+		}
+		else
+		{
+			$modules = directory_map($path);
+		}
 
-			if (!empty($module_name) && is_dir($path . $module_name))
-			{
-				$path = $path . $module_name;
-				$modules[$module_name] = directory_map($path);
-			}
-			else
-			{
-				$modules = directory_map($path);
-			}
+		// If the element is not an array, we know that it's a file,
+		// so we ignore it, otherwise it is assumbed to be a module.
+		if (!is_array($modules) || !count($modules))
+		{
+			continue;
+		}
 
-			// If the element is not an array, we know that it's a file,
-			// so we ignore it, otherwise it is assumbed to be a module.
-			if (!is_array($modules) || !count($modules))
+		foreach ($modules as $mod_name => $values)
+		{
+			if (is_array($values))
 			{
-				continue;
-			}
-
-			foreach ($modules as $mod_name => $values)
-			{
-				if (is_array($values))
+				// Add just the specified folder for this module
+				if (!empty($module_folder) && isset($values[$module_folder]) && count($values[$module_folder]))
 				{
-					// Add just the specified folder for this module
-					if (!empty($module_folder) && isset($values[$module_folder]) && count($values[$module_folder]))
-					{
-						$files[$mod_name] = array(
-							$module_folder	=> $values[$module_folder]
-						);
-					}
-					// Add the entire module
-					else if (empty($module_folder))
-					{
-						$files[$mod_name] = $values;
-					}
+					$files[$mod_name] = array(
+						$module_folder	=> $values[$module_folder]
+					);
+				}
+				// Add the entire module
+				else if (empty($module_folder))
+				{
+					$files[$mod_name] = $values;
 				}
 			}
 		}
-
-		return count($files) ? $files : false;
 	}
+
+	return count($files) ? $files : false;
 }
 
 //--------------------------------------------------------------------
@@ -405,32 +384,30 @@ if ( ! function_exists('module_files') )
 	Returns:
 		An array of config settings, or an empty array if empty/not found.
 */
-if ( ! function_exists('module_config') )
+function module_config($module_name=null, $return_full=false)
 {
-	function module_config($module_name=null, $return_full=false)
+	$config_param = array();
+
+	$config_file = module_file_path($module_name, 'config', 'config.php');
+
+	if (file_exists($config_file))
 	{
-		$config_param = array();
+		include($config_file);
 
-		$config_file = module_file_path($module_name, 'config', 'config.php');
-
-		if (file_exists($config_file))
+		/* Check for the optional module_config and serialize if exists*/
+		if (isset($config['module_config']))
 		{
-			include($config_file);
-
-			/* Check for the optional module_config and serialize if exists*/
-			if (isset($config['module_config']))
-			{
-				$config_param =$config['module_config'];
-			}
-			else if ($return_full === true && isset($config) && is_array($config))
-			{
-				$config_param = $config;
-			}
+			$config_param =$config['module_config'];
 		}
-
-		return $config_param;
+		else if ($return_full === true && isset($config) && is_array($config))
+		{
+			$config_param = $config;
+		}
 	}
+
+	return $config_param;
 }
+
 //--------------------------------------------------------------------
 
 
@@ -443,36 +420,34 @@ if ( ! function_exists('module_config') )
 
 	To use, pass in any number of variables as arguments.
 */
-if ( ! function_exists('dump') )
+function dump()
 {
-	function dump()
-	{
-		list($callee) = debug_backtrace();
-		$arguments = func_get_args();
-		$total_arguments = count($arguments);
+	list($callee) = debug_backtrace();
+	$arguments = func_get_args();
+	$total_arguments = count($arguments);
 
-		echo '<fieldset style="background: #fefefe !important; border:2px red solid; padding:5px">';
-		echo '<legend style="background:lightgrey; padding:5px;">'.$callee['file'].' @ line: '.$callee['line'].'</legend><pre>';
+	echo '<fieldset style="background: #fefefe !important; border:2px red solid; padding:5px">';
+    echo '<legend style="background:lightgrey; padding:5px;">'.$callee['file'].' @ line: '.$callee['line'].'</legend><pre>';
 
-		$i = 0;
-		foreach ($arguments as $argument)
-		{
-			echo '<br/><strong>Debug #'.(++$i).' of '.$total_arguments.'</strong>: ';
+    $i = 0;
+    foreach ($arguments as $argument)
+    {
+        echo '<br/><strong>Debug #'.(++$i).' of '.$total_arguments.'</strong>: ';
 
-			if ( (is_array($argument) || is_object($argument)) && count($argument))
-			{
-				print_r($argument);
-			}
-			else
-			{
-				var_dump($argument);
-			}
-		}
+        if ( (is_array($argument) || is_object($argument)) && count($argument))
+        {
+        	print_r($argument);
+        }
+        else
+        {
+        	var_dump($argument);
+        }
+    }
 
-		echo "</pre>";
-		echo "</fieldset>";
-	}
+    echo "</pre>";
+    echo "</fieldset>";
 }
+
 //--------------------------------------------------------------------
 
 /*
@@ -483,13 +458,11 @@ if ( ! function_exists('dump') )
 
 	Should be used anywhere you are displaying user-submitted text.
 */
-if ( ! function_exists('e') )
+function e($str)
 {
-	function e($str)
-	{
-		echo htmlentities($str, ENT_QUOTES, 'UTF-8');
-	}
+	echo htmlentities($str);
 }
+
 //--------------------------------------------------------------------
 
 /*
@@ -510,86 +483,70 @@ if ( ! function_exists('e') )
 	Returns:
 		A string with the combined elements.
 */
-if ( ! function_exists('array_implode') )
+function array_implode($glue, $separator, $array)
 {
-	function array_implode($glue, $separator, $array)
+	if ( ! is_array( $array ) )
 	{
-		if ( ! is_array( $array ) )
-		{
-			return $array;
-		}
-
-		$string = array();
-
-		foreach ( $array as $key => $val )
-		{
-			if ( is_array( $val ) )
-			{
-				$val = implode( ',', $val );
-			}
-
-			$string[] = "{$key}{$glue}{$val}";
-		}
-
-		return implode( $separator, $string );
+		return $array;
 	}
-}
-//--------------------------------------------------------------------
-if ( ! function_exists('obj_value') )
-{
-	function obj_value($obj, $key, $type='text', $value=0)
+
+	$string = array();
+
+	foreach ( $array as $key => $val )
 	{
-		if (isset($obj->$key))
-		{
-			switch ($type)
-			{
-				case 'checkbox':
-				case 'radio':
-					if ($obj->$key == $value)
-					{
-						return 'checked="checked"';
-					}
-					break;
-				case 'select':
-					if ($obj->$key == $value)
-					{
-						return 'selected="selected"';
-					}
-					break;
-				case 'text':
-				default:
-					return $obj->$key;
-			}
-		}
+	    if ( is_array( $val ) )
+	    {
+	        $val = implode( ',', $val );
+	    }
 
-		return null;
+	    $string[] = "{$key}{$glue}{$val}";
 	}
+
+	return implode( $separator, $string );
 }
+
 //--------------------------------------------------------------------
 
-/*
-	Function: iif()
+function obj_value($obj, $key, $type='text', $value=0)
+{
+	if (isset($obj->$key))
+	{
+		switch ($type)
+		{
+			case 'checkbox':
+			case 'radio':
+				if ($obj->$key == $value)
+				{
+					return 'checked="checked"';
+				}
+				break;
+			case 'select':
+				if ($obj->$key == $value)
+				{
+					return 'selected="selected"';
+				}
+				break;
+			case 'text':
+			default:
+				return $obj->$key;
+		}
+	}
 
-	If / Else Statement wrapped in one function, If $expression = true then $returntrue else $returnfalse.
+	return null;
+}
 
+//--------------------------------------------------------------------
 
-	Example:
-		// Check if expression is ok then returns value.
-		echo iff ( form_error('formfield'), 'error' , 'success' );
-
-
-	Parameters:
-		$expression  - IF statement to check against.
-		$returntrue	 - What to return if expression is true.
-		$returnfalse - What to return if expression is false.
-
-	Returns:
-		Mixed return based on expression
+/**
+* If then Else Statement wrapped in one function, If $expression = true then $returntrue else $returnfalse
+*
+* @param mixed $expression    IF Statement to be checked
+* @param mixed $returntrue    What to Return on True
+* @param mixed $returnfalse   What to Return on False
+*
+* @return mixed    Returns $returntrue or $returnfalse depending on Expression
 */
-if ( ! function_exists('iif') )
+function iif($expression, $returntrue, $returnfalse = '')
 {
-	function iif($expression, $returntrue, $returnfalse = '')
-	{
-		return ( $expression == 0 ) ? $returnfalse : $returntrue;
-	}
+	return ( $expression == 0 ) ? $returnfalse : $returntrue;
 }
