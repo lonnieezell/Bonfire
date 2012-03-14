@@ -152,3 +152,77 @@ if ( ! function_exists('form_date'))
 				return _form_common('date', $data, $value, $label, $extra, $tooltip);
 		}
 }
+
+//--------------------------------------------------------------------
+
+if ( ! function_exists('form_dropdown'))
+{
+		function form_dropdown($data, $options='', $selected='', $label='', $extra='', $tooltip = '' )
+		{
+			$defaults = array('name' => (( ! is_array($data)) ? $data : ''));
+
+			// If name is empty at this point, try to grab it from the $data array
+			if (empty($defaults['name']) && is_array($data) && isset($data['name']))
+			{
+				$defaults['name'] = $data['name'];
+				unset($data['name']);
+			}
+			$output = _parse_form_attributes($data, $defaults);
+			
+			if ( ! is_array($selected))
+			{
+				$selected = array($selected);
+			}
+
+			// If no selected state was submitted we will attempt to set it automatically
+			if (count($selected) === 0)
+			{
+				// If the form name appears in the $_POST array we have a winner!
+				if (isset($_POST[$data['name']]))
+				{
+					$selected = array($_POST[$data['name']]);
+				}
+			}
+			
+			$options_vals = '';
+			foreach ($options as $key => $val)
+			{
+				$key = (string) $key;
+
+				if (is_array($val) && ! empty($val))
+				{
+					$options_vals .= '<optgroup label="'.$key.'">'."\n";
+
+					foreach ($val as $optgroup_key => $optgroup_val)
+					{
+						$sel = (in_array($optgroup_key, $selected)) ? ' selected="selected"' : '';
+
+						$options_vals .= '<option value="'.$optgroup_key.'"'.$sel.'>'.(string) $optgroup_val."</option>\n";
+					}
+
+					$options_vals .= '</optgroup>'."\n";
+				}
+				else
+				{
+					$sel = (in_array($key, $selected)) ? ' selected="selected"' : '';
+
+					$options_vals .= '<option value="'.$key.'"'.$sel.'>'.(string) $val."</option>\n";
+				}
+			}
+			$output = <<<EOL
+
+	<div class="control-group">
+		<label class="control-label" for="{$defaults['name']}">{$label}</label>
+		<div class="controls">
+			 <select {$output}>
+				{$options_vals}
+			</select>
+			{$tooltip}
+		</div>
+	</div>
+
+EOL;
+
+			return $output;
+		}
+}
