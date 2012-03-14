@@ -22,6 +22,10 @@ $('.btn').click( function() {
 	verify_delete(whom,action);
 });
 
+<?php
+/*
+ @TODO : FIX OR REMOVE THIS CODE
+ This is debugging code
 $("#flex_table").dataTable({
         "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
         "sPaginationType": "bootstrap",
@@ -37,8 +41,9 @@ $("#flex_table").dataTable({
             "sLengthMenu": "_MENU_ records per page"
         }
 });
+*/
+?>
 
-<?php /*
 $("#flex_table").dataTable({
 		"sDom": 'rt<"top"fpi>',
 		"sPaginationType": "listbox",
@@ -71,6 +76,3 @@ $("#flex_table").dataTable({
                     }
                 }
 });
-
-*/
-?>

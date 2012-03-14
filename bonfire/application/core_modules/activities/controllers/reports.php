@@ -38,20 +38,16 @@ class Reports extends Admin_Controller {
 		$this->auth->restrict('Bonfire.Activities.Manage');
 
 		$this->lang->load('activities');
+		$this->lang->load('datatable');
 		$this->load->model('activities/Activity_model', 'activity_model');
 
 		Template::set('toolbar_title', lang('activity_title'));
 
 		Assets::add_js($this->load->view('reports/activities_js', null, true), 'inline');
-		Assets::add_js( array ( 
-								base_url() . 'assets/js/jquery.dataTables.min.js', 
-								'DT_bootstrap.js'
-							  ));
-		Assets::add_css( array ( 
-								'DT_bootstrap.css'
-							 	));
+		Assets::add_js( array ( base_url() . 'assets/js/jquery.dataTables.min.js' ));
+		Assets::add_css( array ( Template::theme_url('css/datatable.css') ) ) ;
+		Assets::add_module_css ('activities', 'datatables.css');
 
-		$this->lang->load('datatable');
 
 		Template::set_block('sub_nav', 'reports/_sub_nav');
 	}
@@ -67,11 +63,7 @@ class Reports extends Admin_Controller {
 	{
 		// get top 5 modules
 		$this->db->group_by('module');
-		Template::set('top_modules', $this->activity_model->select('module, COUNT(module) AS activity_count')
-														  ->limit(5)
-														  ->order_by('activity_count', 'DESC')
-														  ->find_all()
-													);
+		Template::set('top_modules', $this->activity_model->select('module, COUNT(module) AS activity_count')->limit(5)->order_by('activity_count', 'DESC')->find_all() );
 
 		// get top 5 users and usernames
 		$this->db->join('users', 'activities.user_id = users.id', 'left');
