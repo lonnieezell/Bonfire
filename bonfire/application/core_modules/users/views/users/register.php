@@ -17,7 +17,7 @@
 <div class="row-fluid">
 	<div class="span12">
 
-<?php echo form_open('login', 'class="form-horizontal"'); ?>
+<?php echo form_open('register', 'class="form-horizontal"'); ?>
 
 
 	<div class="control-group <?php echo iif( form_error('email') , 'error') ;?>">
