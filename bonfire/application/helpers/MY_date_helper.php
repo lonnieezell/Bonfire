@@ -90,7 +90,7 @@ if (!function_exists('relative_time'))
 //---------------------------------------------------------------
 
 /*
-	Function: date_difference
+	Function: date_difference()
 	
 	Returns the difference between two dates. 
 	
@@ -135,5 +135,53 @@ if (!function_exists('date_difference'))
 		$diff = $end - $start;
 		
 		return round($diff / $times[$interval]);
+	}
+}
+
+//---------------------------------------------------------------
+
+/*
+	Function: user_time()
+
+	Converts unix time to a human readable time in user timezone
+	or in a given timezone.
+
+	Parameters:
+		$timestamp	- A UNIX timestamp. If non is given current time will be used.
+		$timezone	- The timezone we want to convert to.
+						  If none is given a current logged user timezone will be used.
+						  For supported timezones visit - http://php.net/manual/timezones.php
+		$format		- The format of the outputted date/time string
+						  For accepted formats visit - http://php.net/manual/function.date.php
+
+	Examples:
+		echo user_time();
+		echo user_time($timestamp, 'EET', 'l jS \of F Y h:i:s A');
+
+	Returns:
+		A string formatted according to the given format using the given timestamp
+		and given timezone or the current time if no timestamp is given.
+*/
+
+if ( ! function_exists('user_time'))
+{
+	function user_time($timestamp = NULL, $timezone = NULL, $format = 'r')
+	{
+		if ( ! $timezone)
+		{
+			$CI =& get_instance();
+			$CI->load->library('users/auth');
+			if ($CI->auth->is_logged_in())
+			{
+				$current_user = $CI->user_model->find($CI->auth->user_id());
+				$timezone = $current_user->timezone;
+			}
+		}
+
+		$timestamp = ($timestamp) ? $timestamp : time();
+
+		$dtzone = new DateTimeZone($timezone);
+		$dtime = new DateTime();
+		return $dtime->setTimestamp($timestamp)->setTimeZone($dtzone)->format($format);
 	}
 }
