@@ -165,6 +165,7 @@ class Assets {
 		*/
 		if (config_item('assets.base_folder') === false)
 		{
+			//@TODO: Does this cofig file even exist? I thought these settings were in application_config?
 			self::$ci->config->load('assets');
 		}
 
@@ -178,27 +179,27 @@ class Assets {
 	//--------------------------------------------------------------------
 
 
-		//--------------------------------------------------------------------
-		// !GLOBAL METHODS
-		//--------------------------------------------------------------------
-		/*
-							Method: set_globals()
+	//--------------------------------------------------------------------
+	// !GLOBAL METHODS
+	//--------------------------------------------------------------------
+	/*
+		Method: set_globals()
 
 
-							Set the value of the static $globals flag that determines if
-							global includes (like the default media type CSS and global.js files)
-							are automatically included in css() and js() output.
+		Set the value of the static $globals flag that determines if
+		global includes (like the default media type CSS and global.js files)
+		are automatically included in css() and js() output.
 
 
-							Parameters:
-											$include  - TRUE to include (default) or FALSE to exclude
-							Return:
-										<void>
-			*/
-		public static function set_globals($include = true)
-		{
-						self::$globals = $include;
-		}
+		Parameters:
+						$include  - TRUE to include (default) or FALSE to exclude
+		Return:
+					<void>
+	*/
+	public static function set_globals($include = true)
+	{
+		self::$globals = $include;
+	}
 
 	//--------------------------------------------------------------------
 	// !STYLESHEET METHODS
@@ -574,7 +575,7 @@ class Assets {
 		If a single filename is passed, it will only create a single link
 		for that file, otherwise, it will include any javascript files that have
 		been added with add_js below.
-
+		
 		When passing a filename, the filepath should be relative to the site
 		root (where index.php resides).
 
@@ -717,6 +718,38 @@ class Assets {
 		}
 
 		return trim($return, ', ');
+	}
+
+	//--------------------------------------------------------------------
+
+	/*
+		Method: assets_url()
+
+		Returns the full url to a folder in the assets directory.		
+
+		Parameters:
+			$type		- optional a string with the assets folder to locate
+			              leave blank to return the assets base folder.
+
+		Return:
+			The full url (including http://) to the resource.
+	 */
+	public static function assets_url($type=NULL)
+	{
+		// Add Assets Base Folder
+		$url = base_url() . self::$asset_base . '/';
+
+		// Add resource type folder if needed.
+		if ( $type !== NULL && ( array_key_exists( $type, self::$asset_folders ) ) )
+		{
+			$url .= self::$asset_folders[$type] . '/';
+		}
+
+		// Cleanup, just to be safe
+		$url = str_replace('//', '/', $url);
+		$url = str_replace(':/', '://', $url);
+
+		return $url;
 	}
 
 	//--------------------------------------------------------------------
@@ -1448,9 +1481,79 @@ class Assets {
 	//--------------------------------------------------------------------
 
 }
-
-
 // END Assets class
+
+
+/*
+	Helpers: Assets Helpers
+
+	The following helpers are related and dependent on the Assets class.
+
+ */
+
+
+
+/*
+   Function: js_path
+
+   Returns full site url to assets javascript folder.
+
+   Returns:
+
+      String - Returns full site url to assets javascript folder.
+
+*/
+function js_path ( )
+{	
+	return Assets::assets_url ('js');	
+}
+
+/*
+   Function: img_path
+
+   Returns full site url to assets images folder.
+
+   Returns:
+
+      String - Returns full site url to assets images folder.
+
+*/
+function img_path ( )
+{
+	return Assets::assets_url ('image');	
+}
+
+/*
+   Function: css_path
+
+   Returns full site url to assets css folder.
+
+   Returns:
+
+      String - Returns full site url to assets css folder.
+
+*/
+function css_path ( )
+{
+	return Assets::assets_url ('css');	
+}
+
+/*
+   Function: assets_path
+
+   Returns full site url to assets base folder.
+
+   Returns:
+
+      String - Returns full site url to assets base folder.
+
+*/
+function assets_path ( )
+{
+	return Assets::assets_url ();	
+}
+
 
 /* End of file assets.php */
 /* Location: ./application/libraries/assets.php */
+
