@@ -50,31 +50,26 @@ pre {
 	border: 1px solid #DDD;
 	border-top: none;
 
+
+	-webkit-box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+	box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+
+/**
+  Darker Box Shadow
 	-webkit-box-shadow: 10px 10px 5px #888;
 	-moz-box-shadow: 10px 10px 5px #888;
 	box-shadow: 10px 10px 5px #888;
+**/
+
 	padding: 100px 20px 20px 20px;
 	z-index: 1;
 	min-height: 300px;
 
-	-webkit-border-radius: 16px;
-	-moz-border-radius: 16px;
-	border-radius: 16px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
 }
-
-
-/*
-  Original Before This Commit
-
-.body {
-	background-color: #fff;
-	border: 1px solid #ddd;
-	border-top: none;
-	box-shadow: 0 1px 10px rgba(0,0,0,0.1);
-	padding: 100px 20px 20px 20px;
-	z-index: 1;
-}
-*/
 
 .navbar {
 	font-size: 13px;
@@ -148,6 +143,8 @@ h1.branding {
 	color: #777;
 	border-right: 1px solid #d5d5d5;
 	border-left: 1px solid #f5f5f5;
+ -webkit-border-radius: 0;
+	-moz-border-radius: 0;
 	border-radius: 0;
 }
 .subnav .nav > li > a:hover, .subnav .nav .active a,
@@ -163,6 +160,8 @@ h1.branding {
 	-webkit-box-shadow: inset 0 5px 5px rgba(0,0,0,0.1);
 	-moz-box-shadow: inset 0 5px 5px rgba(0,0,0,.1);
 	box-shadow: inset 0 5px 5px rgba(0,0,0,.1);
+ -webkit-border-radius: 0;
+	-moz-border-radius: 0;
 	border-radius: 0;
 }
 

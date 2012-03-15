@@ -14,16 +14,17 @@ body {
 	border: 1px solid #DDD;
 	border-top: none;
 
-	-webkit-box-shadow: 10px 10px 5px #888;
-	-moz-box-shadow: 10px 10px 5px #888;
-	box-shadow: 10px 10px 5px #888;
+	-webkit-box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+	-moz-box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+	box-shadow: 0 1px 10px rgba(0,0,0,0.1);
+
 	padding: 60px 20px 20px 20px;
 	z-index: 1;
 	min-height: 300px;
 
-	-webkit-border-radius: 16px;
-	-moz-border-radius: 16px;
-	border-radius: 16px;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
 }
 
 footer.footer {
