@@ -41,3 +41,7 @@ bonfire/modules/**/.hg/*
 # Ignore all custom modules.
 bonfire/modules/*
 # Except the following modules:
+
+# Remove PHPStorm Project folders
+bonfire/.ideas
+
