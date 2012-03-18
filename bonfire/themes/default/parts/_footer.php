@@ -14,12 +14,8 @@
 
 	<div id="debug"></div>
 
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-	<script type="text/javascript">
-			if (typeof jQuery == 'undefined') {
-					document.write(unescape("%3Cscript src='<?php echo base_url(); ?>assets/js/jquery-1.7.1.min.js' type='text/javascript'%3E%3C/script%3E"));
-			}
-	</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="<?php echo base_url(); ?>assets/js/jquery-1.7.1.min.js"><\/script>')</script>
 
 	<?php echo Assets::js(); ?>
 
