@@ -1026,26 +1026,57 @@ function check_method($item)
 
 	Will create a breadcrumb from either the uri->segments or
 	from a key/value paired array passed into it.
+
+	Parameter:
+		$my_segments	- (optional) Array of Key/Value to make Breadcrumbs from
+		$wrap         - (boolean)  Set to true to wrap in un-ordered list
+		$echo         - (boolean)  Set to true to echo the output, set to false to return it.
+
+
+	Return:
+		A Breadcrumb of your page structure.
+
 */
-function breadcrumb($my_segments=null)
+function breadcrumb( $my_segments=null , $wrap = false, $echo = true )
 {
 	$ci =& get_instance();
+
+	$output = '';
 
 	if (!class_exists('CI_URI'))
 	{
 		$ci->load->library('uri');
 	}
 
+
+	if ( $ci->config->item('template.breadcrumb_symbol') == '' )
+	{
+		$seperator = '/';
+	} else {
+		$seperator = $ci->config->item('template.breadcrumb_symbol');
+	}
+
+	if ( $wrap === true )
+	{
+		$seperator = '<span class="divider">' . $seperator . '</span>' . PHP_EOL;
+	}
+
+
 	if (empty($my_segments) || !is_array($my_segments))
 	{
 		$segments = $ci->uri->segment_array();
-		$total = $ci->uri->total_segments();
-	} else
-	{
-		$total = count($my_segments);
+		$total    = $ci->uri->total_segments();
+	} else {
+		$total    = count($my_segments);
 	}
 
-	echo '<a href="/">home</a> ' . $ci->config->item('template.breadcrumb_symbol');
+	if ( $wrap === true )
+	{
+		$output  = '<ul class="breadcrumb">' . PHP_EOL;
+		$output .= '<li><a href="/">home</a> ' . $seperator . '</li>' . PHP_EOL;
+	} else {
+		$output  = '<a href="/">home</a> ' . $seperator;
+	}
 
 	$url = '';
 	$count = 0;
@@ -1060,14 +1091,22 @@ function breadcrumb($my_segments=null)
 
 			if ($count == $total)
 			{
-				echo str_replace('_', ' ', $segment);
-			} else
-			{
-				echo '<a href="'. $url .'">'. str_replace('_', ' ', strtolower($segment)) .'</a>'. $ci->config->item('template.breadcrumb_symbol');
+				if ( $wrap === true )
+				{
+					$output .= '<li class="active">' . str_replace('_', ' ', $segment) . '</li>' . PHP_EOL;
+				} else {
+					$output .= str_replace('_', ' ', $segment) . PHP_EOL;
+				}
+			} else {
+				if ( $wrap === true )
+				{
+					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', strtolower($segment)) .'</a>' . $seperator . '</li>' . PHP_EOL;
+				} else {
+					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', strtolower($segment)) .'</a>' . $seperator . PHP_EOL;
+				}
 			}
 		}
-	} else
-	{
+	} else {
 		// USER-SUPPLIED BREADCRUMB
 		foreach ($my_segments as $title => $uri)
 		{
@@ -1076,13 +1115,40 @@ function breadcrumb($my_segments=null)
 
 			if ($count == $total)
 			{
-				echo str_replace('_', ' ', $title);
-			} else
-			{
-				echo '<a href="'. $url .'">'. str_replace('_', ' ', strtolower($title)) .'</a>'. $ci->config->item('template.breadcrumb_symbol');
+				if ( $wrap === true )
+				{
+					$output .= '<li class="active">' . str_replace('_', ' ', $title) . '</li>' . PHP_EOL;
+				} else {
+					$output .= str_replace('_', ' ', $title);
+				}
+
+			} else {
+
+				if ( $wrap === true )
+				{
+					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', strtolower($title)) .'</a>' . $seperator . '</li>' . PHP_EOL;
+				} else {
+					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', strtolower($title)) .'</a>' . $seperator . PHP_EOL;
+				}
+
 			}
 		}
 	}
+
+	if ( $wrap === true )
+	{
+		$output .= PHP_EOL . '</ul>' . PHP_EOL;
+	}
+
+	if ( $echo === true )
+	{
+		echo $output;
+		unset ( $output);
+	} else {
+		return $output;
+	}
+
+
 }
 
 //---------------------------------------------------------------
