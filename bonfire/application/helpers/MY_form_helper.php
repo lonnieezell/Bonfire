@@ -67,6 +67,23 @@ EOL;
 
 if (!function_exists('form_input'))
 {
+		/*
+		 Function: form_input()
+
+		 Returns a properly templated text input field.
+
+		 Parameters:
+			 $data	- Either a string with the element name, or an array of
+						 key/value pairs of all attributes.
+			 $value	- Either a string with the value, or blank if an array is
+						 is passed to the $data param.
+			 $label	- A string with the label of the element.
+			 $extra	- A string with any additional items to include, like Javascript.
+			 $tooltip - A string for inline help or a tooltip icon
+
+		 Returns:
+			 A string with the formatted input element, label tag and wrapping divs.
+	 */
 	function form_input($data='', $value='', $label='', $extra='', $tooltip = '' )
 	{
 		return _form_common('text', $data, $value, $label, $extra, $tooltip);
@@ -77,6 +94,23 @@ if (!function_exists('form_input'))
 
 if (!function_exists('form_email'))
 {
+	/*
+		 Function: form_email()
+
+		 Returns a properly templated email input field.
+
+		 Parameters:
+			 $data	- Either a string with the element name, or an array of
+						 key/value pairs of all attributes.
+			 $value	- Either a string with the value, or blank if an array is
+						 is passed to the $data param.
+			 $label	- A string with the label of the element.
+			 $extra	- A string with any additional items to include, like Javascript.
+			 $tooltip - A string for inline help or a tooltip icon
+
+		 Returns:
+			 A string with the formatted input element, label tag and wrapping divs.
+	 */
 	function form_email($data='', $value='', $label='', $extra='', $tooltip = '' )
 	{
 		return _form_common('email', $data, $value, $label, $extra, $tooltip);
@@ -87,6 +121,23 @@ if (!function_exists('form_email'))
 
 if (!function_exists('form_password'))
 {
+	/*
+		 Function: form_password()
+
+		 Returns a properly templated password input field.
+
+		 Parameters:
+			 $data	- Either a string with the element name, or an array of
+						 key/value pairs of all attributes.
+			 $value	- Either a string with the value, or blank if an array is
+						 is passed to the $data param.
+			 $label	- A string with the label of the element.
+			 $extra	- A string with any additional items to include, like Javascript.
+			 $tooltip - A string for inline help or a tooltip icon
+
+		 Returns:
+			 A string with the formatted input element, label tag and wrapping divs.
+	 */
 	function form_password($data='', $value='', $label='', $extra='', $tooltip = '' )
 	{
 		return _form_common('password', $data, $value, $label, $extra, $tooltip);
@@ -97,6 +148,23 @@ if (!function_exists('form_password'))
 
 if (!function_exists('form_url'))
 {
+	/*
+		 Function: form_url()
+
+		 Returns a properly templated URL input field.
+
+		 Parameters:
+			 $data	- Either a string with the element name, or an array of
+						 key/value pairs of all attributes.
+			 $value	- Either a string with the value, or blank if an array is
+						 is passed to the $data param.
+			 $label	- A string with the label of the element.
+			 $extra	- A string with any additional items to include, like Javascript.
+			 $tooltip - A string for inline help or a tooltip icon
+
+		 Returns:
+			 A string with the formatted input element, label tag and wrapping divs.
+	 */
 	function form_url($data='', $value='', $label='', $extra='', $tooltip = '' )
 	{
 		return _form_common('url', $data, $value, $label, $extra, $tooltip);
@@ -107,6 +175,23 @@ if (!function_exists('form_url'))
 
 if ( ! function_exists('form_telephone'))
 {
+	 /*
+		 Function: form_telephone()
+
+		 Returns a properly templated Telephone input field.
+
+		 Parameters:
+			 $data	- Either a string with the element name, or an array of
+						 key/value pairs of all attributes.
+			 $value	- Either a string with the value, or blank if an array is
+						 is passed to the $data param.
+			 $label	- A string with the label of the element.
+			 $extra	- A string with any additional items to include, like Javascript.
+			 $tooltip - A string for inline help or a tooltip icon
+
+		 Returns:
+			 A string with the formatted input element, label tag and wrapping divs.
+	  */
 		function form_telephone($data='', $value='', $label='', $extra='', $tooltip = '' )
 		{
 				return _form_common('tel', $data, $value, $label, $extra, $tooltip);
@@ -117,6 +202,23 @@ if ( ! function_exists('form_telephone'))
 
 if ( ! function_exists('form_number'))
 {
+	/*
+		 Function: form_number()
+
+		 Returns a properly templated number input field.
+
+		 Parameters:
+			 $data	- Either a string with the element name, or an array of
+						 key/value pairs of all attributes.
+			 $value	- Either a string with the value, or blank if an array is
+						 is passed to the $data param.
+			 $label	- A string with the label of the element.
+			 $extra	- A string with any additional items to include, like Javascript.
+			 $tooltip - A string for inline help or a tooltip icon
+
+		 Returns:
+			 A string with the formatted input element, label tag and wrapping divs.
+		*/
 		function form_number($data='', $value='', $label='', $extra='', $tooltip = '' )
 		{
 				return _form_common('number', $data, $value, $label, $extra, $tooltip);
@@ -127,36 +229,104 @@ if ( ! function_exists('form_number'))
 
 if ( ! function_exists('form_color'))
 {
-		function form_color($data='', $value='', $label='', $extra='', $tooltip = '' )
-		{
-				return _form_common('color', $data, $value, $label, $extra, $tooltip);
-		}
+	/*
+		 Function: form_color()
+
+		 Returns a properly templated color input field.
+
+		 Parameters:
+			 $data	- Either a string with the element name, or an array of
+						 key/value pairs of all attributes.
+			 $value	- Either a string with the value, or blank if an array is
+						 is passed to the $data param.
+			 $label	- A string with the label of the element.
+			 $extra	- A string with any additional items to include, like Javascript.
+			 $tooltip - A string for inline help or a tooltip icon
+
+		 Returns:
+			 A string with the formatted input element, label tag and wrapping divs.
+	*/
+	function form_color($data='', $value='', $label='', $extra='', $tooltip = '' )
+	{
+		return _form_common('color', $data, $value, $label, $extra, $tooltip);
+	}
 }
 
 //--------------------------------------------------------------------
 
 if ( ! function_exists('form_search'))
 {
-		function form_search($data='', $value='', $label='', $extra='', $tooltip = '' )
-		{
-				return _form_common('search', $data, $value, $label, $extra, $tooltip);
-		}
+	/*
+		 Function: form_search()
+
+		 Returns a properly templated search input field.
+
+		 Parameters:
+			 $data	- Either a string with the element name, or an array of
+						 key/value pairs of all attributes.
+			 $value	- Either a string with the value, or blank if an array is
+						 is passed to the $data param.
+			 $label	- A string with the label of the element.
+			 $extra	- A string with any additional items to include, like Javascript.
+			 $tooltip - A string for inline help or a tooltip icon
+
+		 Returns:
+			 A string with the formatted input element, label tag and wrapping divs.
+	*/
+	function form_search($data='', $value='', $label='', $extra='', $tooltip = '' )
+	{
+		return _form_common('search', $data, $value, $label, $extra, $tooltip);
+	}
 }
 
 //--------------------------------------------------------------------
 
 if ( ! function_exists('form_date'))
 {
-		function form_date($data='', $value='', $label='', $extra='', $tooltip = '' )
-		{
-				return _form_common('date', $data, $value, $label, $extra, $tooltip);
-		}
+	/*
+		 Function: form_date()
+
+		 Returns a properly templated date input field.
+
+		 Parameters:
+			 $data	- Either a string with the element name, or an array of
+						 key/value pairs of all attributes.
+			 $value	- Either a string with the value, or blank if an array is
+						 is passed to the $data param.
+			 $label	- A string with the label of the element.
+			 $extra	- A string with any additional items to include, like Javascript.
+			 $tooltip - A string for inline help or a tooltip icon
+
+		 Returns:
+			 A string with the formatted input element, label tag and wrapping divs.
+	*/
+	function form_date($data='', $value='', $label='', $extra='', $tooltip = '' )
+	{
+		return _form_common('date', $data, $value, $label, $extra, $tooltip);
+	}
 }
 
 //--------------------------------------------------------------------
 
 if ( ! function_exists('form_dropdown'))
 {
+		/*
+			 Function: form_dropdown()
+
+			 Returns a properly templated date input field.
+
+			 Parameters:
+				 $data	- Either a string with the element name, or an array of
+							 key/value pairs of all attributes.
+				 $value	- Either a string with the value, or blank if an array is
+							 is passed to the $data param.
+				 $label	- A string with the label of the element.
+				 $extra	- A string with any additional items to include, like Javascript.
+				 $tooltip - A string for inline help or a tooltip icon
+
+			 Returns:
+				 A string with the formatted input element, label tag and wrapping divs.
+		*/
 		function form_dropdown($data, $options='', $selected='', $label='', $extra='', $tooltip = '' )
 		{
 			$defaults = array('name' => (( ! is_array($data)) ? $data : ''));
