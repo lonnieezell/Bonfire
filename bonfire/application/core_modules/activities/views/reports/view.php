@@ -1,5 +1,5 @@
 	<?php  if (count($select_options) > 2): // one for all, one for the only choice = 2 ?>
-	<div class="box select adminbox">
+	<div class="box select admin-box">
 		<h3><?php echo lang('activity_filter_head'); ?></h3>
 		<?php
 
@@ -8,10 +8,15 @@
 			$form_data = array('name' => 'activity_select', 'id' => 'activity_select', 'class' => 'span3' );
 			echo form_dropdown($form_data, $select_options, $filter, lang('activity_filter_head') , '' , $form_help);
 			//echo form_dropdown("activity_select", $select_options, $filter,array('id' => 'activity_select', 'class' => 'span4' ) );
-			echo form_submit('submit', lang('activity_submit'), 'class="btn"');
-			echo form_close();
 			unset ( $form_data, $form_help);
 		?>
+		<div class="form-actions">
+			<?php
+			echo form_submit('submit', lang('activity_submit'), 'class="btn btn-primary"');
+			echo form_close();
+			?>
+		</div>
+
 	</div>
 
 	<br/>
