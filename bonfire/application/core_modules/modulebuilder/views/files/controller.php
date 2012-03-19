@@ -400,7 +400,7 @@ unset($extras);
 
 // Index Method
 
-if (in_array('index', $action_names))
+if ( is_array($action_names) AND in_array('index', $action_names))
 {
 	// check if this is the front controller
 	if ($controller_name == $module_name_lower)
