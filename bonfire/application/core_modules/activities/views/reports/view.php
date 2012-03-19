@@ -20,8 +20,9 @@
 	<h2><?php echo sprintf(lang('activity_view'),($vars['view_which'] == ucwords(lang('activity_date')) ? $vars['view_which'] . ' before' : $vars['view_which']),$vars['name']); ?></h2>
 
 	<?php if (!isset($activity_content) || empty($activity_content)) : ?>
-	<div class="notification attention">
-		<p><?php echo lang('activity_not_found'); ?></p>
+	<div class="alert alert-error fade in">
+		<a class="close" data-dismiss="alert">&times;</a>
+		<h4 class="alert-heading"><?php echo lang('activity_not_found'); ?></h4>
 	</div>
 	<?php else : ?>
 
