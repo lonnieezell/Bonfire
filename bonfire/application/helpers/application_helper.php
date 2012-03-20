@@ -460,7 +460,7 @@ function dump()
 */
 function e($str)
 {
-	echo htmlentities($str);
+	echo htmlentities($str, ENT_QUOTES, 'UTF-8');
 }
 
 //--------------------------------------------------------------------
