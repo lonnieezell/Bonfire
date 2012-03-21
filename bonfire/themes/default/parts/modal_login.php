@@ -34,19 +34,21 @@
 			</div>
 			<?php endif; ?>
 		
+		<div class="control-group">
+			<div class="controls">
+				<input type="submit" name="submit" id="log-me-in" value="<?php echo lang('bf_action_login') ?>" class="btn btn-primary">
+				<a class="btn" data-dismiss="modal"><?php echo lang('bf_action_cancel'); ?></a>
+			</div>
+		</div>
+	</div>
+	
+	<div class="modal-footer">
 			<?php if ($this->settings_lib->item('auth.allow_register')) : ?>
-				<hr>
-			
 				<p style="text-align: center">
 					No account? <a href="<?php echo site_url('register') ?>"><?php echo lang('bf_action_register'); ?>!</a> | 
 					<a href=""><?php echo lang('bf_forgot_password'); ?></a>
 				</p>
 			<?php endif; ?>
-	</div>
-	
-	<div class="modal-footer">
-		<input type="submit" name="submit" id="log-me-in" value="<?php echo lang('bf_action_login') ?>" class="btn btn-primary">
-		<a class="btn" data-dismiss="modal"><?php echo lang('bf_action_cancel'); ?></a>
 	</div>
 	
 	<?php echo form_close(); ?>
