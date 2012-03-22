@@ -140,6 +140,66 @@ class Settings_lib
 
 		return self::$cache;
 	}
+
+
+    /**
+     * Find By
+     *
+     * Gets setting for specific search criteria. For multiple matches, see
+	 * find_all_by.
+     *
+     * @param   $field  Setting column name
+     * @param   $value  Value ot match
+     *
+     * @return	array
+     */
+    public function find_by($field=null, $value=null)
+    {
+        if(self::$cache)
+        {
+            return self::$cache;
+        }
+
+        $settings = $this->ci->settings_model->find_by($field, $value);
+
+        foreach($settings as $setting)
+        {
+            self::$cache[$setting->name] = $setting->value;
+        }
+
+        return self::$cache;
+    }
+
+
+    /**
+     * Find All By
+     *
+     * Gets all the settings based on search criteria. For a single setting 
+	 * match, see find_by
+     *
+     * @see		find_by
+     *
+     * @param   $field  Setting column name
+     * @param   $value  Value ot match
+     *
+     * @return	array
+     */
+    public function find_all_by($field=null, $value=null)
+    {
+        if(self::$cache)
+        {
+            return self::$cache;
+        }
+
+        $settings = $this->ci->settings_model->find_all_by($field, $value);
+
+        foreach($settings as $setting)
+        {
+            self::$cache[$setting->name] = $setting->value;
+        }
+
+        return self::$cache;
+    }
 }
 
 /* End of file Settings.php */
