@@ -1,9 +1,10 @@
 <?php
 	Assets::add_css( array(
-		base_url() . 'assets/css/bootstrap.css',
-		base_url() . 'assets/css/bootstrap-responsive.min.css',
+		css_path() . 'bootstrap.min.css',
+		css_path() . 'bootstrap-responsive.min.css',
 		'screen.css'
 	));
+	
 	if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
 		Assets::add_js($this->load->view('ui/shortcut_keys', $shortcut_data, true), 'inline');
 	}
