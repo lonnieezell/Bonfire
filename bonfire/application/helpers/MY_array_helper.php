@@ -28,40 +28,30 @@
 	Provides additional functions for working with arrays.
 */
 
-/*
-	Function: array_index_by_key()
-	
-	When given an array of arrays (or objects) it will return the index of the 
-	sub-array where $key == $value.
-	
-	Given the following array
-	
-	> $array = array(
-	> 	[0] => array(
-	>		'value'	=> 1
-	>	),
-	>	[1] => array(
-	>		'value'	=> 2
-	>	)
-	> );
-	
-	you could find the index of the second array with the command
-	
-	> // Returns 1
-	> array_index_by_key('value', 2, $array);
-	
-	Parameters:
-		$key		- The key to search on
-		$value		- The value the key should be
-		$array		- The array to search through
-		$identical	- Whether to perform a strict type-checked comparison
-		
-	Returns:
-		An INT that is the index of the sub-array, or false.
-*/
-if (!function_exists('array_index_by_key'))
+if ( ! function_exists('array_index_by_key'))
 {
 
+	/**
+	 * When given an array of arrays (or objects) it will return the index of the
+	 * sub-array where $key == $value.
+	 *
+	 * <code>
+	 * $array = array(
+	 *	array('value' => 1),
+	 *	array('value' => 2),
+	 * );
+	 *
+	 * // Returns 1
+	 * array_index_by_key('value', 2, $array);
+	 * </code>
+	 * 
+	 * @param $key mixed The key to search on.
+	 * @param $value The value the key should be
+	 * @param $array array The array to search through
+	 * @param $identical boolean Whether to perform a strict type-checked comparison
+	 *
+	 * @return false|int An INT that is the index of the sub-array, or false.
+	 */
 	function array_index_by_key($key=null, $value=null, $array=null, $identical=false)
 	{	
 		if (empty($key) || empty($value) || !is_array($array))
@@ -91,7 +81,4 @@ if (!function_exists('array_index_by_key'))
 			}
 		}
 	}
-
 }
-
-//--------------------------------------------------------------------
