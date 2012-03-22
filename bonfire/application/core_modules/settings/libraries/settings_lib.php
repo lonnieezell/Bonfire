@@ -140,6 +140,8 @@ class Settings_lib
 
 		return self::$cache;
 	}
+
+
     /**
      * Find By
      *
@@ -148,6 +150,7 @@ class Settings_lib
      *
      * @param   $field  Setting column name
      * @param   $value  Value ot match
+     *
      * @return	array
      */
     public function find_by($field=null, $value=null)
@@ -166,16 +169,20 @@ class Settings_lib
 
         return self::$cache;
     }
+
+
     /**
      * Find All By
      *
      * Gets all the settings based on search criteria. For a single setting 
 	 * match, see find_by
      *
+     * @see		find_by
+     *
      * @param   $field  Setting column name
      * @param   $value  Value ot match
+     *
      * @return	array
-	 * @see		find_by
      */
     public function find_all_by($field=null, $value=null)
     {
