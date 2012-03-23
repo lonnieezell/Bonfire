@@ -670,6 +670,42 @@ class BF_Model extends CI_Model {
 
 	//---------------------------------------------------------------
 
+	/*
+		Method: format_dropdown()
+
+		A convenience method to return options for form dropdown menus.
+
+		Parameters:
+			Can pass either Key ID and Label Table names or Just Label Table name.
+
+		Return:
+			array The options for the dropdown.
+	*/
+	function format_dropdown()
+	{
+		$args = & func_get_args();
+
+		if (count($args) == 2)
+		{
+			list($key, $value) = $args;
+		}
+		else
+		{
+			$key = $this->key;
+			$value = $args[0];
+		}
+
+		$query = $this->db->select(array($key, $value))->get($this->table);
+
+		$options = array();
+		foreach ($query->result() as $row)
+		{
+			$options[$row->{$key}] = $row->{$value};
+		}
+
+		return $options;
+	}
+
 	//--------------------------------------------------------------------
 	// !CHAINABLE UTILITY METHODS
 	//--------------------------------------------------------------------
