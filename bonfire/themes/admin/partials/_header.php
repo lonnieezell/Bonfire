@@ -4,7 +4,7 @@
 		css_path() . 'bootstrap-responsive.min.css',
 		'screen.css'
 	));
-	
+
 	if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
 		Assets::add_js($this->load->view('ui/shortcut_keys', $shortcut_data, true), 'inline');
 	}
@@ -14,13 +14,13 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-    <title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo $this->settings_lib->item('site.title') ?></title>
+	<title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo $this->settings_lib->item('site.title') ?></title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <?php echo Assets::css(null, true); ?>
+	<?php echo Assets::css(null, true); ?>
 
-    <script src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
+	<script src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
 	<script>
 	head.feature("placeholder", function() {
 		var inputElem = document.createElement('input');
@@ -48,10 +48,10 @@
 										<span class="icon-bar"></span>
 								</a>
 								<h1><?php echo anchor( '/', $this->settings_lib->item('site.title'), 'class="brand"' ); ?></h1>
-					<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>
 
 				<div class="nav-collapse">
 
+				<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>
 					<div class="nav pull-right">
 					<div class="btn-group">
 						<a class="dropdown-toggle dark btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png') ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts"/></a>
@@ -73,8 +73,8 @@
 								</li>
 						</ul>
 					</div>
+					</div>
 					<?php endif;?>
-				</div>
 				<div class="nav pull-right">
 					<div class="btn-group">
 						<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $current_user->id) ?>" id="tb_email" class="btn dark" title="<?php echo lang('bf_user_settings') ?>">
