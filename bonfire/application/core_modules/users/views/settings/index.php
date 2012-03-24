@@ -26,7 +26,7 @@
 		</li>
 	</ul>
 
-	<?php echo form_open(current_url()) ;?>
+	<?php echo form_open($this->uri->uri_string()) ;?>
 
 	<table class="table table-striped">
 		<thead>

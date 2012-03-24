@@ -60,7 +60,12 @@ class Settings extends Admin_Controller {
 				$offset = $this->uri->segment(5);
 
 				// Do we have any actions?
-				if ($action = $this->input->post('submit'))
+				$action = $this->input->post('submit');
+				
+				// if the action is empty check the delete button
+				$action = !empty($action) ? $action : $this->input->post('delete');
+				
+				if (!empty($action))
 				{
 						$checked = $this->input->post('checked');
 

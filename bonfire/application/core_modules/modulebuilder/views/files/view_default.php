@@ -58,7 +58,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 
 	$view .= <<<EOT
 		<div class="control-group <?php echo form_has_error('{$field_name}') ? 'error' : ''; ?>">
-			<?php echo form_label('{$field_label}'. {$required}, '{$field_name}', 'class="control-label"' ); ?>
+			<?php echo form_label('{$field_label}'. {$required}, '{$field_name}', array('class' => "control-label") ); ?>
 			{$form_input_delimiters[0]}
 EOT;
 
@@ -240,11 +240,12 @@ $view .= PHP_EOL . '
 	<div class="box delete rounded">
 		<h3><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></h3>
 
-		<?php echo form_open(site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id), \'class="constrained ajax-form form-horizontal"\'); ?>
-		<p><?php echo lang(\''.$module_name_lower.'_edit_text\'); ?></p>
-
-		<input type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" value="<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>"/>
-		<?php echo form_close(); ?>
+		<div class="form-actions">
+			<?php echo form_open(site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id), \'class="constrained ajax-form form-horizontal"\'); ?>
+			<p><?php echo lang(\''.$module_name_lower.'_edit_text\'); ?></p>
+			<input type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" value="<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>"/>
+			<?php echo form_close(); ?>
+		</div>
 	</div>
 	<?php endif; ?>
 ' . PHP_EOL;
