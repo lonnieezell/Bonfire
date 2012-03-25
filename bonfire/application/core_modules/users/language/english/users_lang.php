@@ -156,3 +156,4 @@ $lang['us_err_no_activate_code'] 	= 'A required activation validation code was m
 $lang['us_err_no_matching_code'] 	= 'No matching activation code was found in the system.';
 $lang['us_err_no_matching_id'] 		= 'No matching user id was found in the system.';
 $lang['us_err_user_is_active'] 		= 'The user is already active.';
+$lang['us_err_user_is_inactive'] 	= 'The user is already inactive.';

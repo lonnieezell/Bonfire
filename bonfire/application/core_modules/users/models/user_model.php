@@ -756,7 +756,7 @@ class User_model extends BF_Model {
 	{
 		if ($user_id === false) 
 		{
-			$this->error = "A user ID is required for deactivation but none was recieved.";
+			$this->error = lang('us_err_no_id');
 	        return false;
 	    }
 		if ($this->deactivate($user_id, 'id', false))
@@ -765,7 +765,7 @@ class User_model extends BF_Model {
 		}
 		else
 		{
-			$this->error = "The user is already inactive.";
+			$this->error = lang('us_err_user_is_inactive');
 			return false;
 		}
 	}
