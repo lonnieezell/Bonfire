@@ -144,7 +144,15 @@ $lang['us_admin_approval_pending']  = 'Your account is pending admin approval. Y
 $lang['us_account_active'] 			= 'Congratulations. Your account is now active!.';
 $lang['us_account_active_login'] 	= 'Your account is active and you can now login.';
 $lang['us_account_reg_complete'] 	= 'Registration to [SITE_TITLE] completed!';
+$lang['us_active_status_changed'] 	= 'The user status was successfully changed.';
+$lang['us_active_email_sent'] 		= 'Activation email was sent.';
 // Activation Errors
+$lang['us_err_no_id'] 				= 'No User ID was received.';
+$lang['us_err_status_error'] 		= 'The users status was not changed: ';
 $lang['us_err_no_email'] 			= 'Unable to send an email: ';
 $lang['us_err_activate_fail'] 		= 'Your membership could not be activated at this time due to the following reason: ';
 $lang['us_err_activate_code'] 		= 'Please check your code and try again or contact the site administrator for help.';
+$lang['us_err_no_activate_code'] 	= 'A required activation validation code was missing.';
+$lang['us_err_no_matching_code'] 	= 'No matching activation code was found in the system.';
+$lang['us_err_no_matching_id'] 		= 'No matching user id was found in the system.';
+$lang['us_err_user_is_active'] 		= 'The user is already active.';

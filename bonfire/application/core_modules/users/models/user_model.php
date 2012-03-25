@@ -642,7 +642,7 @@ class User_model extends BF_Model {
 	    	
 		if ($code === false) 
 		{
-	        $this->error = "A required activation validation code was missing.";
+	        $this->error = lang('us_err_no_activate_code');
 	        return false;
 	    }
 	    $query = $this->db->select('id')
@@ -652,7 +652,7 @@ class User_model extends BF_Model {
                	      
 		if ($query->num_rows() !== 1) 
 		{
-		    $this->error = "No matching activation code was found in the system.";
+		    $this->error = lang('us_err_no_matching_code');
 	        return false;
 		}
 	    $result = $query->row();
@@ -714,7 +714,7 @@ class User_model extends BF_Model {
 		
 		if ($user_id === false) 
 		{
-			$this->error = "A user ID is required for activation but none was received.";
+			$this->error = lang('us_err_no_id');
 	        return false;
 	    }
 		$query = $this->db->select('id')
@@ -724,7 +724,7 @@ class User_model extends BF_Model {
                	      
 		if ($query->num_rows() !== 1)
 		{
-		    $this->error = "No matching user id was found in the system.";
+		    $this->error = lang('us_err_no_matching_id');
 	        return false;
 		}
 		$result = $query->row();
@@ -735,7 +735,7 @@ class User_model extends BF_Model {
 		} 
 		else 
 		{
-			$this->error = "User is already active.";
+			$this->error = lang('us_err_user_is_active');
 			return false;
 		}
 	}
