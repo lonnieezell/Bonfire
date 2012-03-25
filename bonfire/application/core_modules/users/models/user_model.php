@@ -31,7 +31,7 @@ class User_model extends BF_Model {
 	protected $table		= 'users';
 	protected $soft_deletes	= true;
 	protected $date_format	= 'datetime';
-	protected $set_modified = false;
+	protected $set_modified = FALSE;
 
 	public function __construct() 
 	{
@@ -60,28 +60,28 @@ class User_model extends BF_Model {
 	*/
 	public function insert($data=array()) 
 	{
-		if (!$this->_function_check(false, $data))
+		if (!$this->_function_check(FALSE, $data))
 		{
-			return false;
+			return FALSE;
 		}
 		
 		if (!isset($data['password']) || empty($data['password']))
 		{
 			$this->error = 'No Password present.';
-			return false;
+			return FALSE;
 		}
 		
 		if (!isset($data['email']) || empty($data['email']))
 		{
 			$this->error = 'No Email given.';
-			return false;
+			return FALSE;
 		}
 		
 		// Is this a unique email?
-		if ($this->is_unique('email', $data['email']) == false)
+		if ($this->is_unique('email', $data['email']) == FALSE)
 		{
 			$this->error = 'Email already exists.';
-			return false;
+			return FALSE;
 		}
 	
 		if (empty($data['username'])) 
@@ -142,7 +142,7 @@ class User_model extends BF_Model {
 			$data	- An array of key/value pairs to update for the user.
 			
 		Returns: 
-			true/false
+			true/FALSE
 	*/
 	public function update($id=null, $data=array()) 
 	{	
@@ -218,20 +218,20 @@ class User_model extends BF_Model {
 		Returns all user records, and their associated role information. 
 		
 		Parameters:
-			$show_deleted	- If false, will only return non-deleted users. If true, will
+			$show_deleted	- If FALSE, will only return non-deleted users. If true, will
 				return both deleted and non-deleted users.
 				
 		Returns:
 			An array of objects with each user's information.
 	*/
-	public function find_all($show_deleted=false) 
+	public function find_all($show_deleted=FALSE) 
 	{
 		if (empty($this->selects))
 		{
 			$this->select($this->table .'.*, role_name');
 		}
 	
-		if ($show_deleted === false)
+		if ($show_deleted === FALSE)
 		{
 			$this->db->where('users.deleted', 0);
 		}
@@ -255,7 +255,7 @@ class User_model extends BF_Model {
 			$value	- A string with the value to search for.
 			
 		Returns:
-			An object with the user's info, or false on failure.
+			An object with the user's info, or FALSE on failure.
 	*/
 	public function find_by($field=null, $value=null) 
 	{
@@ -305,7 +305,7 @@ class User_model extends BF_Model {
 			return $query->result();
 		}
 
-		return false;
+		return FALSE;
 	}
 	
 	//--------------------------------------------------------------------
@@ -316,13 +316,13 @@ class User_model extends BF_Model {
 		Counts all users in the system. 
 		
 		Parameters:
-			$get_deleted	- If false, will only return active users. If true, 
+			$get_deleted	- If FALSE, will only return active users. If true, 
 				will return both deleted and active users.
 				
 		Returns: 
 			An INT with the number of users found.
 	*/
-	public function count_all($get_deleted = false) 
+	public function count_all($get_deleted = FALSE) 
 	{	
 		if ($get_deleted)
 		{
@@ -346,18 +346,18 @@ class User_model extends BF_Model {
 		
 		Parameters:
 			$id		- An INT with the record ID to delete.
-			$purge	- If false, will perform a soft-delete. If true, will permenantly
+			$purge	- If FALSE, will perform a soft-delete. If true, will permenantly
 				delete the record.
 				
 		Returns:
-			true/false
+			true/FALSE
 	*/
-	public function delete($id=0, $purge=false) 
+	public function delete($id=0, $purge=FALSE) 
 	{
 		if ($purge === true)
 		{
 			// temporarily set the soft_deletes to true.
-			$this->soft_deletes = false;
+			$this->soft_deletes = FALSE;
 		}
 		
 		return parent::delete($id);
@@ -435,7 +435,7 @@ class User_model extends BF_Model {
 			return $query->result();
 		}
 		
-		return false;
+		return FALSE;
 	}
 	
 	//--------------------------------------------------------------------
@@ -574,7 +574,7 @@ class User_model extends BF_Model {
 			$user_id - Integer of User ID to fetch
 
 		Returns:
-			An object with the user's info and meta information, or false on failure.
+			An object with the user's info and meta information, or FALSE on failure.
 	*/
 	public function find_user_and_meta ( $user_id=null)
 	{
@@ -619,7 +619,7 @@ class User_model extends BF_Model {
 	public function count_inactive_users() 
 	{
         $this->db->where('active',-1);
-        return $this->count_all(false);
+        return $this->count_all(FALSE);
     }
     /*
 		Method: 
@@ -637,13 +637,13 @@ class User_model extends BF_Model {
 		Returns:
 			User Id on success, FALSE on error
 	*/
-	public function activate($code = false, $leave_inactive = false) 
+	public function activate($code = FALSE, $leave_inactive = FALSE) 
 	{
 	    	
-		if ($code === false) 
+		if ($code === FALSE) 
 		{
 	        $this->error = "A required activation validation code was missing.";
-	        return false;
+	        return FALSE;
 	    }
 	    $query = $this->db->select('id')
                	      ->where('activate_hash', $code)
@@ -653,12 +653,11 @@ class User_model extends BF_Model {
 		if ($query->num_rows() !== 1) 
 		{
 		    $this->error = "No matching activation code was found in the system.";
-	        return false;
+	        return FALSE;
 		}
 	    $result = $query->row();
-		$active = ($leave_inactive === false) ? 1 : 0;
-		$this->update($result->id, array('activate_hash' => '','active' => $active));
-		if ($this->db->affected_rows() > 0) 
+		$active = ($leave_inactive === FALSE) ? 1 : 0;
+		if ($this->update($result->id, array('activate_hash' => '','active' => $active)))
 		{
 			return $result->id;
 		}
@@ -678,11 +677,11 @@ class User_model extends BF_Model {
 			@return $activate_hash on success, FALSE on error
 		
 	*/
-	public function deactivate($user_id = false, $login_type = 'email', $make_hash = true) 
+	public function deactivate($user_id = FALSE, $login_type = 'email', $make_hash = true) 
 	{
-	    if ($user_id === false) 
+	    if ($user_id === FALSE) 
 		{
-	        return false;
+	        return FALSE;
 	    }
 		// create a temp activation code.
         $activate_hash = '';
@@ -693,7 +692,7 @@ class User_model extends BF_Model {
 		}
 		$this->db->update($this->table, array('active'=>0,'activate_hash' => $activate_hash), array($login_type => $user_id));
 		
-		return ($this->db->affected_rows() == 1) ? $activate_hash : false;
+		return ($this->db->affected_rows() == 1) ? $activate_hash : FALSE;
 	}
 	
 	/*
@@ -709,13 +708,13 @@ class User_model extends BF_Model {
 			@return TRUE on success, FALSE on error
 		
 	*/
-	public function admin_activation($user_id = false) 
+	public function admin_activation($user_id = FALSE) 
 	{
 		
-		if ($user_id === false) 
+		if ($user_id === FALSE) 
 		{
 			$this->error = "A user ID is required for activation but none was received.";
-	        return false;
+	        return FALSE;
 	    }
 		$query = $this->db->select('id')
                	      ->where('id', $user_id)
@@ -725,7 +724,7 @@ class User_model extends BF_Model {
 		if ($query->num_rows() !== 1)
 		{
 		    $this->error = "No matching user id was found in the system.";
-	        return false;
+	        return FALSE;
 		}
 		$result = $query->row();
 		$this->update($result->id, array('activate_hash' => '','active' => 1));
@@ -736,7 +735,7 @@ class User_model extends BF_Model {
 		else 
 		{
 			$this->error = "User is already active.";
-			return false;
+			return FALSE;
 		}
 	}
 	/*
@@ -752,21 +751,21 @@ class User_model extends BF_Model {
 			TRUE on success, FALSE on error
 	
 	*/
-	public function admin_deactivation($user_id = false) 
+	public function admin_deactivation($user_id = FALSE) 
 	{
-		if ($user_id === false) 
+		if ($user_id === FALSE) 
 		{
 			$this->error = "A user ID is required for deactivation but none was recieved.";
-	        return false;
+	        return FALSE;
 	    }
-		if ($this->deactivate($user_id, 'id', false))
+		if ($this->deactivate($user_id, 'id', FALSE))
 		{
 			return $user_id;
 		}
 		else
 		{
 			$this->error = "The user is already inactive.";
-			return false;
+			return FALSE;
 		}
 	}
 

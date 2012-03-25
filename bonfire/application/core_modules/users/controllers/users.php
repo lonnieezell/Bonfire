@@ -580,7 +580,7 @@ class Users extends Front_Controller {
 				}
 				else
 				{
-					Template::set_message('Your membership could not be activated at this time due to the following reason: '.$this->auth->error.'. Please check your code and try again or contact the site administrator for help', 'error');
+					Template::set_message('Your membership could not be activated at this time due to the following reason: '.$this->user_model->error.'. Please check your code and try again or contact the site administrator for help', 'error');
 				}
 			}
 			Template::set_view('users/users/activate');
