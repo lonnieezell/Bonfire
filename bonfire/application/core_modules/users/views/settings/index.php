@@ -44,7 +44,7 @@
 		<?php if (isset($users) && is_array($users) && count($users)) : ?>
 		<tfoot>
 			<tr>
-				<td colspan="6">
+				<td colspan="7">
 					<?php echo lang('bf_with_selected') ?>
 					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_activate') ?>">
 					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_deactivate') ?>">

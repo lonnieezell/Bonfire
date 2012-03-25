@@ -131,7 +131,7 @@ class Settings extends Admin_Controller {
 				$this->load->helper('ui/ui');
 
 				$this->user_model->limit($this->limit, $offset)->where($where);
-				$this->user_model->select('users.id, users.role_id, username, display_name, email, last_login, banned, users.deleted, role_name');
+				$this->user_model->select('users.id, users.role_id, username, display_name, email, last_login, banned, users.deleted, role_name, active');
 
 				Template::set('users', $this->user_model->find_all());
 
@@ -558,9 +558,14 @@ class Settings extends Admin_Controller {
 					$result = $this->user_model->admin_deactivation($user_id);
 					$type = lang('bf_action_deactivate');
 				}
+
 				$user = $this->user_model->find($user_id);
 				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-				if (!isset($this->activity_model)) { $this->load->model('activities/activity_model'); }
+				if (!isset($this->activity_model))
+				{
+					$this->load->model('activities/activity_model');
+				}
+
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_status_change') . ': '.$log_name . ' : '.$type."ed", 'users');
 				if ($result)
 				{
@@ -591,12 +596,12 @@ class Settings extends Admin_Controller {
 				}
 				else
 				{
-					Template::set_message('The users status was not changed. Error: '.$this->auth->error,'error');
+					Template::set_message('The users status was not changed. Error: '.$this->user_model->error, 'error');
 				} // END if
 			}
 			else
 			{
-				Template::set_message('No User ID was recieved.','error');
+				Template::set_message('No User ID was received.','error');
 			}
 			Template::redirect(SITE_AREA.'/settings/users');
 		}
