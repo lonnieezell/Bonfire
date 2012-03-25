@@ -133,3 +133,18 @@ $lang['us_account_activated_admin']	= 'Administrative account activation.';
 $lang['us_account_deactivated_admin']	= 'Administrative account deactivation.';
 $lang['us_active']					= 'Active.';
 $lang['us_inactive']				= 'Inactive.';
+//email subjects
+$lang['us_email_subj_activate']		= 'Activate Your membership';
+$lang['us_email_subj_pending']		= 'Registration Complete. Activation Pending.';
+$lang['us_email_thank_you']			= 'Thank you for registering! ';
+// Activation Statuses
+$lang['us_registration_fail'] 		= 'Registration did not complete successfully. ';
+$lang['us_check_activate_email'] 	= 'Please check your email for instructions to activate your account.';
+$lang['us_admin_approval_pending']  = 'Your account is pending admin approval. You will receive email notification if your account is activated.';
+$lang['us_account_active'] 			= 'Congratulations. Your account is now active!.';
+$lang['us_account_active_login'] 	= 'Your account is active and you can now login.';
+$lang['us_account_reg_complete'] 	= 'Registration to [SITE_TITLE] completed!';
+// Activation Errors
+$lang['us_err_no_email'] 			= 'Unable to send an email: ';
+$lang['us_err_activate_fail'] 		= 'Your membership could not be activated at this time due to the following reason: ';
+$lang['us_err_activate_code'] 		= 'Please check your code and try again or contact the site administrator for help.';

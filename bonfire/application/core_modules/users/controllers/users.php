@@ -363,7 +363,7 @@ class Users extends Front_Controller {
 										// Prepare user messaging vars
 										$subject = '';
 										$email_mess = '';
-										$message = 'Thank you for registering! ';
+										$message = lang('us_email_thank_you');
 										$type = 'success';
 										$site_title = $this->settings_lib->item('site.title');
 										$error = false;
@@ -372,9 +372,9 @@ class Users extends Front_Controller {
 										{
 												case 0:
 														// No activation required. Activate the user and send confirmation email
-														$subject 		=  'Registration to '.$this->settings_lib->item('site.title').' completed!';
+														$subject 		=  str_replace('[SITE_TITLE]',$this->settings_lib->item('site.title'),lang('us_account_reg_complete'));
 														$email_mess 	= $this->load->view('_emails/activated', array('title'=>$site_title,'link' => site_url()), true);
-														$message 		.= 'Your account is active and you can now login.';
+														$message 		.= lang('us_account_active_login');
 														break;
 												case 1:
 														// 	Email Activiation.
@@ -402,16 +402,16 @@ class Users extends Front_Controller {
 
 														$activation_code = $this->user_model->deactivate($id_val,$login_type);
 														$activate_link 	= site_url('activate/'. str_replace('@', ':', $_POST['email']) .'/'. $activation_code);
-														$subject 	 	=  'Activate Your membership';
+														$subject 	 	=  lang('us_email_subj_activate');
 														$email_mess 	= $this->load->view('_emails/activate', array('title'=>$site_title,'code'=>$activation_code,'link' => $activate_link), true);
-														$message 		.= 'Watch your email for the steps needed to activate your account.';
+														$message 		.= lang('us_check_activate_email');
 														break;
 												case 2:
 														// Admin Activation
 														// Clear hash but leave user inactive
-														$subject 		=  'Registration Complete. Activation Pending.';
+														$subject 		=  lang('us_email_subj_pending');
 														$email_mess 	= $this->load->view('_emails/pending', array('title'=>$site_title), true);
-														$message 		.= 'Your account is pending admin approval. Watch your email for an update on your approval status.';
+														$message 		.= lang('us_admin_approval_pending');
 														break;
 										} // END switch
 
@@ -425,7 +425,7 @@ class Users extends Front_Controller {
 										);
 										if (!$this->emailer->send($data))
 										{
-											$message .= 'Unable to send registration email: '. $this->emailer->errors;
+											$message .= lang('us_err_no_email'). $this->emailer->errors;
 											$error = true;
 										}
 										if ($error) { $type = 'error'; } else { $type = 'success'; }
@@ -438,7 +438,7 @@ class Users extends Front_Controller {
 								}
 								else
 								{
-										Template::set_message('Registration did not complete successfully..', 'error');
+										Template::set_message(lang('us_registration_fail'), 'error');
 										redirect('/register');
 								}
 						}
@@ -564,23 +564,23 @@ class Users extends Front_Controller {
 					$data = array
 					(
 						'to'		=> $this->user_model->find($activated)->email,
-						'subject'	=> 'Your Account is now active',
+						'subject'	=> lang('us_account_active'),
 						'message'	=> $this->load->view('_emails/activated', NULL, true)
 					);
 
 					if ($this->emailer->send($data))
 					{
-						Template::set_message('Congratulations. Your account is now active!.', 'success');
+						Template::set_message(lang('us_account_active'), 'success');
 					}
 					else
 					{
-						Template::set_message('Unable to send an email: '. $this->emailer->errors, 'error');
+						Template::set_message(lang('us_err_no_email'). $this->emailer->errors, 'error');
 					}
 					Template::redirect('/');
 				}
 				else
 				{
-					Template::set_message('Your membership could not be activated at this time due to the following reason: '.$this->auth->error.'. Please check your code and try again or contact the site administrator for help', 'error');
+					Template::set_message(lang('us_activate_error_msg').$this->auth->error.'. '. lang('us_err_activate_code'), 'error');
 				}
 			}
 			Template::set_view('users/users/activate');
@@ -638,7 +638,7 @@ class Users extends Front_Controller {
 						$this->emailer->enable_debug(true);
 						if ($this->emailer->send($data))
 						{
-							Template::set_message('Please check your email for instructions to activate your account.', 'success');
+							Template::set_message(lang('us_check_activate_email'), 'success');
 						}
 						else
 						{
@@ -656,7 +656,7 @@ class Users extends Front_Controller {
 								{
 									$errors = $this->emailer->errors;
 								}
-								Template::set_message('Unable to send an email: '.$errors.", ".$this->emailer->debug, 'error');
+								Template::set_message(lang('us_err_no_email').$errors.", ".$this->emailer->debug, 'error');
 							}
 						}
 					}
