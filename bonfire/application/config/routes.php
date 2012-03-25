@@ -61,5 +61,9 @@ $route[SITE_AREA .'/settings']				= "settings/index";
 
 $route[SITE_AREA]	= SITE_AREA .'/home';
 
+// Activation
+$route['activate']		        = 'users/activate';
+$route['resend_activation']		= 'users/resend_activation';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

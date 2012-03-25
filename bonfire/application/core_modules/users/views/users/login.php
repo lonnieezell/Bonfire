@@ -73,6 +73,23 @@
 	</div>
 </div>
 
+<?php if ($this->settings_lib->item('auth.user_activation_method') != 0) : ?>
+<!-- Activation Block -->
+<div class="row-fluid">
+	<div class="span12">
+
+		<p style="text-align: left" class="well">
+			<?php echo lang('bf_login_activate_title'); ?><br />
+			<?php
+			$activate_str = str_replace('[ACCOUNT_ACTIVATE_URL]',anchor('/activate', lang('bf_activate')),lang('bf_login_activate_email'));
+			$activate_str = str_replace('[ACTIVATE_RESEND_URL]',anchor('/resend_activation', lang('bf_activate_resend')),$activate_str);
+			echo $activate_str; ?>
+		</p>
+
+	</div>
+</div>
+<?php endif; ?>
+
 <div class="row-fluid">
 	<div class="span12">
 

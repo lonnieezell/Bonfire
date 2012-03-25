@@ -62,6 +62,17 @@
 			</div>
 
 			<div class="control-group">
+				<label class="control-label" for="user_activation_method"><?php echo lang('bf_activate_method') ?></label>
+				<div class="controls">
+					<select name="user_activation_method" id="user_activation_method">
+						<option value="0" <?php echo $settings['auth.user_activation_method'] == 0 ? 'selected="selected"' : ''; ?>><?php echo lang('bf_activate_none') ?></option>
+						<option value="1" <?php echo $settings['auth.user_activation_method'] == 1 ? 'selected="selected"' : ''; ?>><?php echo lang('bf_activate_email') ?></option>
+						<option value="2" <?php echo $settings['auth.user_activation_method'] == 2 ? 'selected="selected"' : ''; ?>><?php echo lang('bf_activate_admin') ?></option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
 				<label class="control-label" for="login_type"><?php echo lang('bf_login_type') ?></label>
 				<div class="controls">
 					<select name="login_type">
