@@ -71,6 +71,12 @@ class Settings extends Admin_Controller {
 
 						switch(strtolower($action))
 						{
+								case 'activate':
+										$this->activate($checked);
+										break;
+								case 'deactivate':
+										$this->deactivate($checked);
+										break;
 								case 'ban':
 										$this->ban($checked);
 										break;
@@ -86,6 +92,9 @@ class Settings extends Admin_Controller {
 				$filter = $this->input->get('filter');
 				switch($filter)
 				{
+						case 'inactive':
+							$where['users.active'] = 0;
+							break;
 						case 'banned':
 							$where['users.banned'] = 1;
 							break;
@@ -437,6 +446,15 @@ class Settings extends Admin_Controller {
 				if ($this->input->post('restore')) $data['deleted'] = 0;
 				if ($this->input->post('unban')) $data['banned'] = 0;
 				if ($this->input->post('display_name')) $data['display_name'] = $this->input->post('display_name');
+				// Activation
+				if ($this->input->post('activate'))
+				{
+					$data['active'] = 1;
+				}
+				else if ($this->input->post('deactivate'))
+				{
+					$data['active'] = 0;
+				}
 
 				if ($type == 'insert')
 				{
@@ -453,9 +471,137 @@ class Settings extends Admin_Controller {
 				return $return;
 		}
 
+
 		//--------------------------------------------------------------------
 
+		//--------------------------------------------------------------------
+		// ACTIVATION METHODS
+		//--------------------------------------------------------------------
+		/*
+			Method:
+				Activate()
 
+			Activates selected users accounts.
+
+			Parameters:
+				$users 		- Array of User ID ints
+		*/
+		public function activate($users=false)
+		{
+			if (!$users)
+			{
+				return;
+			}
+
+			$this->auth->restrict('Bonfire.Users.Manage');
+			foreach ($users as $user_id)
+			{
+				$this->user_status($user_id,1,0);
+			}
+		}
+
+		//--------------------------------------------------------------------
+
+		/*
+				Method:
+					deactivate()
+
+				Deactivates selected users accounts.
+
+				Parameters:
+					$users 		- Array of User ID ints
+			*/
+		public function deactivate($users=false)
+		{
+			if (!$users)
+			{
+				return;
+			}
+
+			$this->auth->restrict('Bonfire.Users.Manage');
+
+			foreach ($users as $user_id)
+			{
+				$this->user_status($user_id,0,0);
+			}
+		}
+
+		//--------------------------------------------------------------------
+
+		/*
+				Method:
+					User Status Update
+
+				Activates or deavtivates a user from the users dashboard.
+				Redirects to /settings/users on completion.
+
+				Parameters:
+					$user_id 		- User ID int
+					$status			- 1 = Activate, -1 = Deactivate
+					$supress_email	- 1 = Supress, All others = send email
+			*/
+		private function user_status($user_id = false, $status = 1, $supress_email = 0)
+		{
+			$supress_email = (isset($supress_email) && $supress_email == 1 ? true : false);
+
+			if ($user_id !== false && $user_id != -1)
+			{
+				$result = false;
+				$type = '';
+				if ($status == 1)
+				{
+					$result = $this->user_model->admin_activation($user_id);
+					$type = lang('bf_action_activate');
+				}
+				else
+				{
+					$result = $this->user_model->admin_deactivation($user_id);
+					$type = lang('bf_action_deactivate');
+				}
+				$user = $this->user_model->find($user_id);
+				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+				if (!isset($this->activity_model)) { $this->load->model('activities/activity_model'); }
+				$this->activity_model->log_activity($this->current_user->id, lang('us_log_status_change') . ': '.$log_name . ' : '.$type."ed", 'users');
+				if ($result)
+				{
+					$message = 'The user status was successfully changed.';
+					if (!$supress_email)
+					{
+						// Now send the email
+						$this->load->library('emailer/emailer');
+
+						$settings = $this->settings_lib->find_by('name','site.title');
+						$data = array
+						(
+							'to'		=> $this->user_model->find($user_id)->email,
+							'subject'	=> 'Your Account is now active',
+							'message'	=> $this->load->view('_emails/activated', array('link'=>site_url(),'title'=>$settings['site.title']), true)
+						);
+
+						if ($this->emailer->send($data))
+						{
+							$message='Activation email was sent.';
+						}
+						else
+						{
+							$message='<b>NOTE</b> Unable to send an email: '. $this->emailer->errors;
+						}
+					}
+					Template::set_message($message, 'success');
+				}
+				else
+				{
+					Template::set_message('The users status was not changed. Error: '.$this->auth->error,'error');
+				} // END if
+			}
+			else
+			{
+				Template::set_message('No User ID was recieved.','error');
+			}
+			Template::redirect(SITE_AREA.'/settings/users');
+		}
+
+		//--------------------------------------------------------------------
 }
 
 // End of Admin User Controller

@@ -86,9 +86,23 @@
 		?>
 
 
-		<?php if (isset($user) && has_permission('Permissions.'. ucfirst($user->role_name).'.Manage') && $user->id != $this->auth->user_id() && ($user->banned || $user->deleted)) : ?>
+		<?php if (isset($user) && has_permission('Permissions.'. ucfirst($user->role_name).'.Manage') && $user->id != $this->auth->user_id()) : ?>
 		<fieldset>
 			<legend><?php echo lang('us_account_status') ?></legend>
+
+			<?php
+			$field = 'activate';
+			if ($user->active) :
+					$field = 'de'.$field;
+			endif; ?>
+			<div class="control-group">
+					<div class="controls">
+							<label>
+									<input type="checkbox" name="<?php echo $field; ?>" value="1">
+									<?php echo lang('us_'.$field.'_note') ?>
+							</label>
+					</div>
+			</div>
 
 			<?php if ($user->deleted) : ?>
 			<div class="control-group">

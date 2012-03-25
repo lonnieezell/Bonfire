@@ -356,11 +356,90 @@ class Users extends Front_Controller {
 
 								if ($user_id = $this->user_model->insert($data))
 								{
-										$this->load->model('activities/Activity_model', 'activity_model');
+										/*
+											USER ACTIVATIONS ENHANCEMENT
+										*/
 
+										// Prepare user messaging vars
+										$subject = '';
+										$email_mess = '';
+										$message = 'Thank you for registering! ';
+										$type = 'success';
+										$site_title = $this->settings_lib->item('site.title');
+										$error = false;
+
+										switch ($this->settings_lib->item('auth.user_activation_method'))
+										{
+												case 0:
+														// No activation required. Activate the user and send confirmation email
+														$subject 		=  'Registration to '.$this->settings_lib->item('site.title').' completed!';
+														$email_mess 	= $this->load->view('_emails/activated', array('title'=>$site_title,'link' => site_url()), true);
+														$message 		.= 'Your account is active and you can now login.';
+														break;
+												case 1:
+														// 	Email Activiation.
+														//	Create the link to activate membership
+														// Run the account deactivate to assure everything is set correctly
+														// Switch on the login type to test the correct field
+														$login_type = $this->settings_lib->item('auth.login_type');
+														switch ($login_type)
+														{
+															case 'username':
+																if ($this->settings_lib->item('auth.use_usernames')) :
+																	$id_val = $_POST['username'];
+																else :
+																	$id_val = $_POST['email'];
+																	$login_type = 'email';
+																endif;
+																break;
+															case 'email':
+															case 'both':
+															default:
+																$id_val = $_POST['email'];
+																$login_type = 'email';
+																break;
+														} // END switch
+
+														$activation_code = $this->user_model->deactivate($id_val,$login_type);
+														$activate_link 	= site_url('activate/'. str_replace('@', ':', $_POST['email']) .'/'. $activation_code);
+														$subject 	 	=  'Activate Your membership';
+														$email_mess 	= $this->load->view('_emails/activate', array('title'=>$site_title,'code'=>$activation_code,'link' => $activate_link), true);
+														$message 		.= 'Watch your email for the steps needed to activate your account.';
+														break;
+												case 2:
+														// Admin Activation
+														// Clear hash but leave user inactive
+														$subject 		=  'Registration Complete. Activation Pending.';
+														$email_mess 	= $this->load->view('_emails/pending', array('title'=>$site_title), true);
+														$message 		.= 'Your account is pending admin approval. Watch your email for an update on your approval status.';
+														break;
+										} // END switch
+
+										// Now send the email
+										$this->load->library('emailer/emailer');
+										$data = array
+										(
+											'to'		=> $_POST['email'],
+											'subject'	=> $subject,
+											'message'	=> $email_mess
+										);
+										if (!$this->emailer->send($data))
+										{
+											$message .= 'Unable to send registration email: '. $this->emailer->errors;
+											$error = true;
+										}
+										if ($error) { $type = 'error'; } else { $type = 'success'; }
+
+										Template::set_message($message, $type);
+
+										$this->load->model('activities/Activity_model', 'activity_model');
 										$this->activity_model->log_activity($user_id, lang('us_log_register') , 'users');
-										Template::set_message('Your account has been created. Please log in.', 'success');
 										redirect('login');
+								}
+								else
+								{
+										Template::set_message('Registration did not complete successfully..', 'error');
+										redirect('/register');
 								}
 						}
 				}
@@ -452,6 +531,141 @@ class Users extends Front_Controller {
 
 		//--------------------------------------------------------------------
 
+		//--------------------------------------------------------------------
+		// ACTIVATION METHODS
+		//--------------------------------------------------------------------
+		/*
+			Activate user.
+
+			Checks a passed activation code and if verified, enables the user
+			account. If the code fails, an error is generated and returned.
+
+		*/
+		public function activate($code = false)
+		{
+
+			$code = '';
+			if ($this->input->post('submit')) {
+				$this->form_validation->set_rules('code', 'Verification Code', 'required|trim|xss_clean');
+				if ($this->form_validation->run() == TRUE) {
+					$code = $this->input->post('code');
+				}
+			} else {
+				if ($code === false) { $code = $this->uri->segment(2); }
+			}
+			if (!empty($code))
+			{
+				$activated = $this->user_model->activate($code);
+				if ($activated)
+				{
+					// Now send the email
+					$this->load->library('emailer/emailer');
+
+					$data = array
+					(
+						'to'		=> $this->user_model->find($activated)->email,
+						'subject'	=> 'Your Account is now active',
+						'message'	=> $this->load->view('_emails/activated', NULL, true)
+					);
+
+					if ($this->emailer->send($data))
+					{
+						Template::set_message('Congratulations. Your account is now active!.', 'success');
+					}
+					else
+					{
+						Template::set_message('Unable to send an email: '. $this->emailer->errors, 'error');
+					}
+					Template::redirect('/');
+				}
+				else
+				{
+					Template::set_message('Your membership could not be activated at this time due to the following reason: '.$this->auth->error.'. Please check your code and try again or contact the site administrator for help', 'error');
+				}
+			}
+			Template::set_view('users/users/activate');
+			Template::set('page_title', 'Account Activation');
+			Template::render();
+		}
+
+		//--------------------------------------------------------------------
+
+		/*
+			   Method: resend_activation
+
+			   Allows a user to request that their activation code be resent to their
+			   account's email address. If a matching email is found, the code is resent.
+		   */
+		public function resend_activation()
+		{
+			if (isset($_POST['submit']))
+			{
+				$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|xss_clean');
+
+				if ($this->form_validation->run() === FALSE)
+				{
+					Template::set_message('Cannot find that email in our records.', 'error');
+				}
+				else
+				{
+					// We validated. Does the user actually exist?
+					$user = $this->user_model->find_by('email', $_POST['email']);
+
+					if (count($user) == 1)
+					{
+						// User exists, so create a temp password.
+						$this->load->helpers(array('string', 'security'));
+
+						$pass_code = random_string('alnum', 40);
+
+						$hash = do_hash($pass_code . $user->salt . $_POST['email']);
+
+						// Save the hash to the db so we can confirm it later.
+						$this->user_model->update_where('email', $_POST['email'], array('activate_hash' => $hash ));
+
+						// Create the link to reset the password
+						$pactivate_link = site_url('activate/'. str_replace('@', ':', $_POST['email']) .'/'. $hash);
+
+						// Now send the email
+						$this->load->library('emailer/emailer');
+
+						$data = array
+						(
+							'to'		=> $_POST['email'],
+							'subject'	=> 'Activation Code',
+							'message'	=> $this->load->view('_emails/activate', array('link'=>site_url('activate/'. str_replace('@', ':', $_POST['email']) .'/'. $hash)),true)
+						);
+						$this->emailer->enable_debug(true);
+						if ($this->emailer->send($data))
+						{
+							Template::set_message('Please check your email for instructions to activate your account.', 'success');
+						}
+						else
+						{
+							if (isset($this->emailer->errors))
+							{
+								$errors = '';
+								if (is_array($this->emailer->errors))
+								{
+									foreach ($this->emailer->errors as $error)
+									{
+										$errors .= $error."<br />";
+									}
+								}
+								else
+								{
+									$errors = $this->emailer->errors;
+								}
+								Template::set_message('Unable to send an email: '.$errors.", ".$this->emailer->debug, 'error');
+							}
+						}
+					}
+				}
+			}
+			Template::set_view('users/users/resend_activation');
+			Template::set('page_title', 'Activate Account');
+			Template::render();
+		}
 }
 
 // End Authorize class

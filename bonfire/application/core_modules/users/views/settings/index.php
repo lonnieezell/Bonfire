@@ -7,6 +7,7 @@
 
 	<ul class="nav nav-tabs" >
 		<li <?php echo $filter=='' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url; ?>">All Users</a></li>
+		<li <?php echo $filter=='inactive' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=inactive'; ?>">Inactive</a></li>
 		<li <?php echo $filter=='banned' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=banned'; ?>">Banned</a></li>
 		<li <?php echo $filter=='deleted' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=deleted'; ?>">Deleted</a></li>
 		<li <?php echo $filter=='role' ? 'class="active"' : ''; ?> class="dropdown">
@@ -37,6 +38,7 @@
 				<th><?php echo lang('bf_display_name'); ?></th>
 				<th><?php echo lang('bf_email'); ?></th>
 				<th style="width: 11em"><?php echo lang('us_last_login'); ?></th>
+				<th style="width: 10em"><?php echo lang('us_status'); ?></th>
 			</tr>
 		</thead>
 		<?php if (isset($users) && is_array($users) && count($users)) : ?>
@@ -44,8 +46,10 @@
 			<tr>
 				<td colspan="6">
 					<?php echo lang('bf_with_selected') ?>
+					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_activate') ?>">
+					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_deactivate') ?>">
 					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_ban') ?>">
-					<input type="submit" name="delete" class="btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')">
+					<input type="submit" name="submit" class="btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')">
 				</td>
 			</tr>
 		</tfoot>
@@ -78,6 +82,33 @@
 							echo '---';
 						}
 					?>
+				</td>
+				<td><?php
+					$class = '';
+					switch ($user->active)
+					{
+						case 1:
+							$class = " label-success";
+							break;
+						case 0:
+						default:
+							$class = " label-warning";
+							break;
+
+					}
+					?>
+					<span class="label<?php echo($class); ?>">
+					<?php
+						if ($user->active == 1)
+						{
+							echo(lang('us_active'));
+						}
+						else
+						{
+							echo(lang('us_inactive'));
+						}
+						?>
+					</span>
 				</td>
 			</tr>
 			<?php endforeach; ?>

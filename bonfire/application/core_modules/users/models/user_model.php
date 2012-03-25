@@ -603,8 +603,172 @@ class User_model extends BF_Model {
 		return $result;
 
 	}
-
+		
 	//--------------------------------------------------------------------
+	
+	//--------------------------------------------------------------------
+	// !ACTIVATION
+	//--------------------------------------------------------------------
+	/*
+		Method: 
+			Count Inactive users.
+		
+		Parameters:
+			@return int Inactive user count.
+	*/
+	public function count_inactive_users() 
+	{
+        $this->db->where('active',-1);
+        return $this->count_all(false);
+    }
+    /*
+		Method: 
+			Activate
+			
+		Accepts an activation code and validates is against a matching entry int eh database.
+		
+		There are some instances where we want to remove the activation hash yet leave the user 
+		inactive (Admin Activation scenario), so leave_inactive handles this use case.
+		
+		Parameters:
+			$code - The activation code to be verified
+			$leaveInactive - Flag whether to remove the activate hash value, but leave active = 0
+		
+		Returns:
+			User Id on success, FALSE on error
+	*/
+	public function activate($code = false, $leave_inactive = false) 
+	{
+	    	
+		if ($code === false) 
+		{
+	        $this->error = "A required activation validation code was missing.";
+	        return false;
+	    }
+	    $query = $this->db->select('id')
+               	      ->where('activate_hash', $code)
+               	      ->limit(1)
+               	      ->get($this->table);
+               	      
+		if ($query->num_rows() !== 1) 
+		{
+		    $this->error = "No matching activation code was found in the system.";
+	        return false;
+		}
+	    $result = $query->row();
+		$active = ($leave_inactive === false) ? 1 : 0;
+		$this->update($result->id, array('activate_hash' => '','active' => $active));
+		if ($this->db->affected_rows() > 0) 
+		{
+			return $result->id;
+		}
+	}
+	/*
+		Method: 
+			Deactivate.
+		
+		This function is triggered during account set up to assure user is not active and, 
+		if not supressed, generate an activation hash code. This function can be used to 
+		deactivate accounts based on public view events.
+		
+		Parameters:
+			$user_id - The username or email to match to deactivate
+		
+		Returns:
+			@return $activate_hash on success, FALSE on error
+		
+	*/
+	public function deactivate($user_id = false, $login_type = 'email', $make_hash = true) 
+	{
+	    if ($user_id === false) 
+		{
+	        return false;
+	    }
+		// create a temp activation code.
+        $activate_hash = '';
+		if ($make_hash === true) 
+		{
+			$this->load->helpers(array('string', 'security'));
+			$activate_hash = do_hash(random_string('alnum', 40) . time());
+		}
+		$this->db->update($this->table, array('active'=>0,'activate_hash' => $activate_hash), array($login_type => $user_id));
+		
+		return ($this->db->affected_rows() == 1) ? $activate_hash : false;
+	}
+	
+	/*
+		Method: 
+			Admin Activation.
+		
+		Admin specific activation function for admin approvals or re-activation.
+		
+		Parameters:
+			@param  $userId	Int 	The user ID to activate
+		
+		Returns:
+			@return TRUE on success, FALSE on error
+		
+	*/
+	public function admin_activation($user_id = false) 
+	{
+		
+		if ($user_id === false) 
+		{
+			$this->error = "A user ID is required for activation but none was received.";
+	        return false;
+	    }
+		$query = $this->db->select('id')
+               	      ->where('id', $user_id)
+               	      ->limit(1)
+               	      ->get($this->table);
+               	      
+		if ($query->num_rows() !== 1)
+		{
+		    $this->error = "No matching user id was found in the system.";
+	        return false;
+		}
+		$result = $query->row();
+		$this->update($result->id, array('activate_hash' => '','active' => 1));
+		if ($this->db->affected_rows() > 0) 
+		{
+			return $result->id;
+		} 
+		else 
+		{
+			$this->error = "User is already active.";
+			return false;
+		}
+	}
+	/*
+		Method: 
+			Admin Deactivation
+		
+		Admin only deactivation function.
+		
+		Parameters:
+			$userId	Int 	The user ID to deactivate
+		
+		@Returns:
+			TRUE on success, FALSE on error
+	
+	*/
+	public function admin_deactivation($user_id = false) 
+	{
+		if ($user_id === false) 
+		{
+			$this->error = "A user ID is required for deactivation but none was recieved.";
+	        return false;
+	    }
+		if ($this->deactivate($user_id, 'id', false))
+		{
+			return $user_id;
+		}
+		else
+		{
+			$this->error = "The user is already inactive.";
+			return false;
+		}
+	}
 
 	//--------------------------------------------------------------------
 	
