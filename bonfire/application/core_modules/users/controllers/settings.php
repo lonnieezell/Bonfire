@@ -175,6 +175,10 @@ class Settings extends Admin_Controller {
 
 				Template::set('roles', $this->role_model->select('role_id, role_name, default')->where('deleted', 0)->find_all());
 
+				Assets::add_module_js('users','password_strength.js');
+				Assets::add_module_js('users','jquery.strength.js');
+				Assets::add_js($this->load->view('users_js', null, true), 'inline');
+
 				Template::set('toolbar_title', lang('us_create_user'));
 				Template::set_view('settings/user_form');
 				Template::render();
@@ -223,6 +227,10 @@ class Settings extends Admin_Controller {
 						Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');
 						redirect(SITE_AREA .'/settings/users');
 				}
+
+				Assets::add_module_js('users','password_strength.js');
+				Assets::add_module_js('users','jquery.strength.js');
+				Assets::add_js($this->load->view('users_js', null, true), 'inline');
 
 				Template::set('toolbar_title', lang('us_edit_user'));
 

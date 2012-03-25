@@ -69,6 +69,9 @@
 		<label class="control-label required" for="password"><?php echo lang('bf_password'); ?></label>
 		<div class="controls">
 			<input class="span6" type="password" id="password" name="password" value="" />
+			<span class="help-inline" id='strength' style="display:none;">
+				<span class="label span1"><i class="strength-icon icon-white"></i> <span class="txt"></span></span>
+			</span>
 		</div>
 	</div>
 
@@ -76,6 +79,9 @@
 		<label class="control-label required" for="pass_confirm"><?php echo lang('bf_password_confirm'); ?></label>
 		<div class="controls">
 			<input class="span6" type="password" id="pass_confirm" name="pass_confirm" value="" />
+			<span class="help-inline" id='match' style="display:none;margin-left:5px;">
+				<span class="label span1"><i class="match-icon icon-white"></i> <span class="txt"></span></span>
+			</span>
 		</div>
 	</div>
 

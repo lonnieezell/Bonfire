@@ -34,6 +34,9 @@
 			<label class="control-label" for="password"><?php echo lang('bf_password'); ?></label>
 			<div class="controls">
 				<input class="span6" type="password" name="password" id="password" value="" placeholder="Password...." />
+				<span class="help-inline" id='strength' style="display:none;">
+					<span class="label span1"><i class="strength-icon icon-white"></i> <span class="txt"></span></span>
+				</span>
 				<p class="help-block"><?php echo lang('us_password_mins'); ?></p>
 			</div>
 		</div>
@@ -42,6 +45,9 @@
 			<label class="control-label" for="pass_confirm"><?php echo lang('bf_password_confirm'); ?></label>
 			<div class="controls">
 				<input class="span6" type="password" name="pass_confirm" id="pass_confirm" value="" placeholder="<?php echo lang('bf_password_confirm'); ?>" />
+				<span class="help-inline" id='match' style="display:none;margin-left:5px;">
+					<span class="label span1"><i class="match-icon icon-white"></i> <span class="txt"></span></span>
+				</span>
 			</div>
 		</div>
 
