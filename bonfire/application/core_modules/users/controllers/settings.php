@@ -569,7 +569,7 @@ class Settings extends Admin_Controller {
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_status_change') . ': '.$log_name . ' : '.$type."ed", 'users');
 				if ($result)
 				{
-					$message = 'The user status was successfully changed.';
+					$message = lang('us_active_status_changed');
 					if (!$supress_email)
 					{
 						// Now send the email
@@ -579,29 +579,29 @@ class Settings extends Admin_Controller {
 						$data = array
 						(
 							'to'		=> $this->user_model->find($user_id)->email,
-							'subject'	=> 'Your Account is now active',
+							'subject'	=> lang('us_account_active'),
 							'message'	=> $this->load->view('_emails/activated', array('link'=>site_url(),'title'=>$settings['site.title']), true)
 						);
 
 						if ($this->emailer->send($data))
 						{
-							$message='Activation email was sent.';
+							$message = lang('us_active_email_sent');
 						}
 						else
 						{
-							$message='<b>NOTE</b> Unable to send an email: '. $this->emailer->errors;
+							$message=lang('us_err_no_email'). $this->emailer->errors;
 						}
 					}
 					Template::set_message($message, 'success');
 				}
 				else
 				{
-					Template::set_message('The users status was not changed. Error: '.$this->user_model->error, 'error');
+					Template::set_message(lang('us_err_status_error').$this->user_model->error,'error');
 				} // END if
 			}
 			else
 			{
-				Template::set_message('No User ID was received.','error');
+				Template::set_message(lang('us_err_no_id'),'error');
 			}
 			Template::redirect(SITE_AREA.'/settings/users');
 		}

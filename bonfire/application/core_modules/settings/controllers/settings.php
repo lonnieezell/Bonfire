@@ -86,6 +86,7 @@ class Settings extends Admin_Controller {
 			array('name' => 'site.list_limit', 'value' => $this->input->post('list_limit')),
 
 			array('name' => 'auth.allow_register', 'value' => isset($_POST['allow_register']) ? 1 : 0),
+			array('name' => 'auth.user_activation_method', 'value' => isset($_POST['user_activation_method']) ? $_POST['user_activation_method'] : 0),
 			array('name' => 'auth.login_type', 'value' => $this->input->post('login_type')),
 			array('name' => 'auth.use_usernames', 'value' => isset($_POST['use_usernames']) ? $this->input->post('use_usernames') : 0),
 			array('name' => 'auth.use_own_names', 'value' => isset($_POST['use_own_names']) ? $this->input->post('use_own_names') : 0),
