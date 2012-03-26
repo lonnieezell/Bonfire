@@ -106,3 +106,12 @@ $lang['us_self_delete']				= 'Unauthorized. Sorry, you can not delete yourself.'
 $lang['us_filter_first_letter']		= 'Username starts with: ';
 $lang['us_account_details']			= 'Account Details';
 $lang['us_last_login']				= 'Last Login';
+
+/* Password strength/match */
+$lang['us_pass_strength']			= 'Strength';
+$lang['us_pass_match']				= 'Comparison';
+$lang['us_passwords_no_match']		= 'No match!';
+$lang['us_passwords_match']			= 'Match!';
+$lang['us_pass_weak']				= 'Weak';
+$lang['us_pass_good']				= 'Good';
+$lang['us_pass_strong']				= 'Strong';

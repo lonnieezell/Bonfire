@@ -233,6 +233,10 @@ class Users extends Front_Controller {
 
 				Template::set('user', $user);
 
+				Assets::add_module_js('users','password_strength.js');
+				Assets::add_module_js('users','jquery.strength.js');
+				Assets::add_js($this->load->view('users_js', null, true), 'inline');
+
 				Template::set_view('users/users/profile');
 				Template::render();
 		}
@@ -310,6 +314,10 @@ class Users extends Front_Controller {
 				// If we're here, then it is a valid request....
 				Template::set('user', $user);
 
+				Assets::add_module_js('users','password_strength.js');
+				Assets::add_module_js('users','jquery.strength.js');
+				Assets::add_js($this->load->view('users_js', null, true), 'inline');
+
 				Template::set_view('users/users/reset_password');
 				Template::render();
 		}
@@ -364,6 +372,10 @@ class Users extends Front_Controller {
 								}
 						}
 				}
+
+				Assets::add_module_js('users','password_strength.js');
+				Assets::add_module_js('users','jquery.strength.js');
+				Assets::add_js($this->load->view('users_js', null, true), 'inline');
 
 				Template::set_view('users/users/register');
 				Template::set('page_title', 'Register');

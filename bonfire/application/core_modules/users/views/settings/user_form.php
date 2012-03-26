@@ -42,6 +42,9 @@
 			<div class="controls">
 				<input type="password" name="password" value="">
 				<?php if (form_error('password')) echo '<span class="help-inline">'. form_error('password') .'</span>'; ?>
+				<span class="help-inline" id='strength' style="display:none;">
+					<span class="label span1"><i class="strength-icon icon-white"></i> <span class="txt"></span></span>
+				</span>
 			</div>
 		</div>
 
@@ -49,6 +52,9 @@
 			<label class="control-label" for="username"><?php echo lang('bf_password_confirm') ?></label>
 			<div class="controls">
 				<input type="password" name="pass_confirm" value="">
+				<span class="help-inline" id='match' style="display:none;margin-left:5px;">
+					<span class="label span1"><i class="match-icon icon-white"></i> <span class="txt"></span></span>
+				</span>
 				<?php if (form_error('pass_confirm')) echo '<span class="help-inline">'. form_error('pass_confirm') .'</span>'; ?>
 			</div>
 		</div>
