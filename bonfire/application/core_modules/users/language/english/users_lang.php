@@ -141,6 +141,7 @@ $lang['us_email_thank_you']			= 'Thank you for registering! ';
 $lang['us_registration_fail'] 		= 'Registration did not complete successfully. ';
 $lang['us_check_activate_email'] 	= 'Please check your email for instructions to activate your account.';
 $lang['us_admin_approval_pending']  = 'Your account is pending admin approval. You will receive email notification if your account is activated.';
+$lang['us_account_not_active'] 		= 'Your account is not yet active please activate your account by entering the code.';
 $lang['us_account_active'] 			= 'Congratulations. Your account is now active!.';
 $lang['us_account_active_login'] 	= 'Your account is active and you can now login.';
 $lang['us_account_reg_complete'] 	= 'Registration to [SITE_TITLE] completed!';
