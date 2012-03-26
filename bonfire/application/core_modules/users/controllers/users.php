@@ -400,10 +400,16 @@ class Users extends Front_Controller {
 																break;
 														} // END switch
 
-														$activation_code = $this->user_model->deactivate($id_val,$login_type);
+														$activation_code = $this->user_model->deactivate($id_val, $login_type);
 														$activate_link 	= site_url('activate/'. str_replace('@', ':', $_POST['email']) .'/'. $activation_code);
 														$subject 	 	=  lang('us_email_subj_activate');
-														$email_mess 	= $this->load->view('_emails/activate', array('title'=>$site_title,'code'=>$activation_code,'link' => $activate_link), true);
+
+														$email_message_data = array(
+															'title' => $site_title,
+															'code'  => $activation_code,
+															'link'  => $activate_link
+														);
+														$email_mess 	= $this->load->view('_emails/activate', $email_message_data, true);
 														$message 		.= lang('us_check_activate_email');
 														break;
 												case 2:
@@ -541,31 +547,51 @@ class Users extends Front_Controller {
 			account. If the code fails, an error is generated and returned.
 
 		*/
-		public function activate($code = false)
+		public function activate($email = FALSE, $code = FALSE)
 		{
 
-			$code = '';
 			if ($this->input->post('submit')) {
 				$this->form_validation->set_rules('code', 'Verification Code', 'required|trim|xss_clean');
 				if ($this->form_validation->run() == TRUE) {
 					$code = $this->input->post('code');
 				}
 			} else {
-				if ($code === false) { $code = $this->uri->segment(2); }
+				if ($email === FALSE)
+				{
+					$email = $this->uri->segment(2);
+				}
+				if ($code === FALSE)
+				{
+					$code = $this->uri->segment(3);
+				}
 			}
+
+			// fix up the email
+			if (!empty($email))
+			{
+				$email = str_replace(":", "@", $email);
+			}
+
+
 			if (!empty($code))
 			{
-				$activated = $this->user_model->activate($code);
+				$activated = $this->user_model->activate($email, $code);
 				if ($activated)
 				{
 					// Now send the email
 					$this->load->library('emailer/emailer');
 
+					$site_title = $this->settings_lib->item('site.title');
+
+					$email_message_data = array(
+						'title' => $site_title,
+						'link'  => site_url('login')
+					);
 					$data = array
 					(
 						'to'		=> $this->user_model->find($activated)->email,
 						'subject'	=> lang('us_account_active'),
-						'message'	=> $this->load->view('_emails/activated', NULL, true)
+						'message'	=> $this->load->view('_emails/activated', $email_message_data, TRUE)
 					);
 
 					if ($this->emailer->send($data))
@@ -618,22 +644,30 @@ class Users extends Front_Controller {
 
 						$pass_code = random_string('alnum', 40);
 
-						$hash = do_hash($pass_code . $user->salt . $_POST['email']);
+						$activation_code = do_hash($pass_code . $user->salt . $_POST['email']);
+
+						$site_title = $this->settings_lib->item('site.title');
 
 						// Save the hash to the db so we can confirm it later.
-						$this->user_model->update_where('email', $_POST['email'], array('activate_hash' => $hash ));
+						$this->user_model->update_where('email', $_POST['email'], array('activate_hash' => $activation_code ));
 
 						// Create the link to reset the password
-						$pactivate_link = site_url('activate/'. str_replace('@', ':', $_POST['email']) .'/'. $hash);
+						$activate_link = site_url('activate/'. str_replace('@', ':', $_POST['email']) .'/'. $activation_code);
 
 						// Now send the email
 						$this->load->library('emailer/emailer');
+
+						$email_message_data = array(
+							'title' => $site_title,
+							'code'  => $activation_code,
+							'link'  => $activate_link
+						);
 
 						$data = array
 						(
 							'to'		=> $_POST['email'],
 							'subject'	=> 'Activation Code',
-							'message'	=> $this->load->view('_emails/activate', array('link'=>site_url('activate/'. str_replace('@', ':', $_POST['email']) .'/'. $hash)),true)
+							'message'	=> $this->load->view('_emails/activate', $email_message_data, TRUE)
 						);
 						$this->emailer->enable_debug(true);
 						if ($this->emailer->send($data))

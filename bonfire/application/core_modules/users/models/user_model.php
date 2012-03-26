@@ -631,20 +631,27 @@ class User_model extends BF_Model {
 		inactive (Admin Activation scenario), so leave_inactive handles this use case.
 		
 		Parameters:
+			$email - The email address to be verified
 			$code - The activation code to be verified
 			$leaveInactive - Flag whether to remove the activate hash value, but leave active = 0
 		
 		Returns:
 			User Id on success, FALSE on error
 	*/
-	public function activate($code = FALSE, $leave_inactive = FALSE) 
+	public function activate($email = FALSE, $code = FALSE, $leave_inactive = FALSE)
 	{
 	    	
-		if ($code === FALSE) 
+		if ($code === FALSE)
 		{
 	        $this->error = lang('us_err_no_activate_code');
 			return FALSE;
 	    }
+
+		if (!empty($email))
+		{
+			$this->db->where('email', $email);
+		}
+
 	    $query = $this->db->select('id')
                	      ->where('activate_hash', $code)
                	      ->limit(1)
