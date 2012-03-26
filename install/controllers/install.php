@@ -94,7 +94,8 @@ class Install extends CI_Controller {
 		sure they can be written to.
 	*/
 	private $writeable_files = array(
-		'/bonfire/application/config/application.php'
+		'/bonfire/application/config/application.php',
+		'/bonfire/application/config/database.php',
 	);
 
 	private $vdata = array();
