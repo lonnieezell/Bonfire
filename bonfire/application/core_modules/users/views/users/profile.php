@@ -19,7 +19,7 @@
 <div class="row-fluid">
 	<div class="span8 offset2">
 		<div data-dismiss="alert" class="alert alert-error fade in">
-		  <a class="close">&times;</a>
+		  <a data-dismiss="alert" class="close">&times;</a>
 			<?php echo lang('us_banned_admin_note'); ?>
 		</div>
 	</div>
