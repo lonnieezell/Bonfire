@@ -56,10 +56,12 @@ class Developer extends Admin_Controller {
 				$this->langs[] = $this->trans_lang;
 			}
 		}
-	
+
+		$all_lang_files = list_lang_files();
 		Template::set('languages', $this->langs);
-		Template::set('lang_files', list_lang_files());
-	
+		Template::set('lang_files', $all_lang_files['core']);
+		Template::set('modules', $all_lang_files['custom']);
+
 		Template::set('toolbar_title', lang('tr_translate_title'));
 		Template::render();
 	}

@@ -43,10 +43,11 @@ if (!function_exists('list_languages'))
 		// Module lang files
 		$modules = module_list();
 		$custom_modules = module_list(true);
-	
+
 		foreach ($modules as $module)
 		{
 			$module_langs = module_files($module, 'language');
+			$type = 'core';
 	
 			if (isset($module_langs[$module]['language'][$language]))
 			{
@@ -54,18 +55,20 @@ if (!function_exists('list_languages'))
 				
 				if (in_array($module, $custom_modules))
 				{
-					$files = find_lang_files(APPPATH .'../modules/'. $path .'/', $language);
+					$files = find_lang_files(realpath(APPPATH .'../modules/'. $path) .'/', $language);
+					$type = 'custom';
 				}
-				else
+				else {
 					$files = find_lang_files(APPPATH .'core_modules/'. $path .'/', $language);
+				}
 	
 				foreach ($files as $file)
 				{
-					$lang_files[] = $file;
+					$lang_files[$type][] = $file;
 				}
 			}
 		}
-		
+
 		return $lang_files;
 	}
 	
