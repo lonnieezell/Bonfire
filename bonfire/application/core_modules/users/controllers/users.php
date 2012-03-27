@@ -40,7 +40,7 @@ class Users extends Front_Controller {
 
 		if (!class_exists('User_model'))
 		{
-				$this->load->model('users/User_model', 'user_model');
+			$this->load->model('users/User_model', 'user_model');
 		}
 
 		$this->load->database();
@@ -138,7 +138,7 @@ class Users extends Front_Controller {
 
 		if (isset($_POST['submit']))
 		{
-			$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|xss_clean');
+			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|xss_clean');
 
 			if ($this->form_validation->run() === FALSE)
 			{
@@ -264,8 +264,8 @@ class Users extends Front_Controller {
 		// Handle the form
 		if ($this->input->post('submit'))
 		{
-			$this->form_validation->set_rules('password', 'Password', 'required|trim|strip_tags|min_length[8]|max_length[120]|xsx_clean');
-			$this->form_validation->set_rules('pass_confirm', 'Password (again)', 'required|trim|strip_tags|matches[password]');
+			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|xsx_clean');
+			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
 
 			if ($this->form_validation->run() !== false)
 			{
@@ -328,20 +328,21 @@ class Users extends Front_Controller {
 		if ($this->input->post('submit'))
 		{
 			// Validate input
-			$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|max_length[120]|callback_unique_email|xsx_clean');
+			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|max_length[120]|callback_unique_email|xsx_clean');
+
 			if ($this->settings_lib->item('auth.use_usernames'))
 			{
-				$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|callback_unique_username|xsx_clean');
+				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|callback_unique_username|xsx_clean');
 			}
 
 			if ($this->settings_lib->item('auth.use_own_names'))
 			{
-				$this->form_validation->set_rules('first_name', lang('us_first_name'), 'required|trim|strip_tags|max_length[20]|xss_clean');
-				$this->form_validation->set_rules('last_name', lang('us_last_name'), 'required|trim|strip_tags|max_length[20]|xss_clean');
+				$this->form_validation->set_rules('first_name', 'lang:us_first_name', 'required|trim|strip_tags|max_length[20]|xss_clean');
+				$this->form_validation->set_rules('last_name', 'lang:us_last_name', 'required|trim|strip_tags|max_length[20]|xss_clean');
 			}
 
-			$this->form_validation->set_rules('password', 'Password', 'required|trim|strip_tags|min_length[8]|max_length[120]|xsx_clean');
-			$this->form_validation->set_rules('pass_confirm', 'Password (again)', 'required|trim|strip_tags|matches[password]');
+			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|xsx_clean');
+			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
 
 			if ($this->form_validation->run() !== false)
 			{
@@ -407,16 +408,16 @@ class Users extends Front_Controller {
 		$payload = array ( 'user_id' => $id, 'data' => $this->input->post() );
 
 
-		$this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|max_length[120]|unique[bf_users.email,bf_users.id]|xss_clean');
-		$this->form_validation->set_rules('password', 'Password', 'trim|strip_tags|max_length[40]|xss_clean');
-		$this->form_validation->set_rules('pass_confirm', 'Password (again)', 'trim|strip_tags|matches[password]|xss_clean');
+		$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[bf_users.email,bf_users.id]|xss_clean');
+		$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|strip_tags|max_length[40]|xss_clean');
+		$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'trim|strip_tags|matches[password]|xss_clean');
 
 		if ($this->settings_lib->item('auth.use_usernames'))
 		{
-			$this->form_validation->set_rules('username', 'Username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username,bf_users.id]|xsx_clean');
+			$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username,bf_users.id]|xsx_clean');
 		}
 
-		$this->form_validation->set_rules('display_name', lang('bf_display_name'), 'trim|strip_tags|max_length[255]|xss_clean');
+		$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|strip_tags|max_length[255]|xss_clean');
 
 		// Added Event "before_user_validation" to run before the form validation
 		Events::trigger('before_user_validation', $payload );
