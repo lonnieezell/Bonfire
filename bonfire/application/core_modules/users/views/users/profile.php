@@ -40,7 +40,7 @@
 
 <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
-	<input type="hidden" id="id" name="id" value="<?php echo isset($user) ? $user->id : ''; ?>" />
+	
 
 	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
 		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>

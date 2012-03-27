@@ -226,11 +226,13 @@ class Users extends Front_Controller {
 			}//end if
 		}//end if
 
+	/*
+		@TODO : I do not think these are being used anymore so they are a waste of memory.
+
 		$this->load->config('address');
 		$this->load->helper('address');
-
+	*/
 		// get the current user information
-		//$user = $this->user_model->find_by('id', $this->auth->user_id());
 		$user = $this->user_model->find_user_and_meta ( $this->current_user->id );
 
 		Template::set('user', $user);
@@ -404,7 +406,16 @@ class Users extends Front_Controller {
 			$id = $this->current_user->id; /* ( $this->input->post('id') > 0 ) ? $this->input->post('id') :  */
 		}
 
-		// Any modules needing to save data?
+		$_POST['id'] = $id;
+
+		// Simple check to make the posted id is equal to the current user's id, minor security check
+		if ( $_POST['id'] != $this->current_user->id )
+		{
+			$this->form_validation->set_message('email', 'Invalid user id.');
+			return false;
+		}
+
+		// Setting the payload for Events system.
 		$payload = array ( 'user_id' => $id, 'data' => $this->input->post() );
 
 
