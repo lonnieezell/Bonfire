@@ -321,3 +321,12 @@ $config['ui.current_shortcuts'] = array(
 	'goto_settings'  => array('description' => 'Jump to the Settings context.', 'action' => "document.location='/" . SITE_AREA . "/settings';"),
 	'goto_developer' => array('description' => 'Jump to the Developer context.', 'action' => "document.location='/" . SITE_AREA . "/developer';"),
 );
+
+//--------------------------------------------------------------------
+// !Emailer
+//--------------------------------------------------------------------
+/*
+	Setting this option to true writes email content to a local file in the log path for debugging
+	using 'development' environments without sendmail such as Windows Desktop servers like WAMP.
+*/
+$config['emailer.write_to_file'] = false;

@@ -222,8 +222,17 @@ class Emailer {
 						$this->ci->email->set_alt_message($alt_message);
 				}
 
-				$result['success'] = $this->ci->email->send();
-
+				if ((defined('ENVIRONMENT') && ENVIRONMENT == 'development') && $this->ci->config->item('emailer.write_to_file') === true) {
+						if (!function_exists('write_file')) {
+							$this->ci->load->helper('file');
+						}
+						write_file($this->ci->config->item('log_path').str_replace(" ","_",strtolower($subject)).substr(md5($to.time()),0,8).".html",$message);
+						$result['success'] = true;
+				}
+				else
+				{
+						$result['success'] = $this->ci->email->send();
+				}
 				if ($this->debug)
 				{
 						$result['debug'] = $this->ci->email->print_debugger();
