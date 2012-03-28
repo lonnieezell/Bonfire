@@ -262,6 +262,7 @@ footer.footer {
 	border-top-right-radius: 5px;
 	margin-bottom: 18px;
 	overflow-x: scroll;
+    min-height: 250px;
 }
 .admin-box h3 {
 	background: #243957;
