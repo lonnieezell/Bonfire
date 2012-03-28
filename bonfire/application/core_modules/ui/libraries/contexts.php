@@ -146,8 +146,8 @@ class Contexts {
 			Build out our navigation.
 		*/
 		foreach ($contexts as $context)
-		{
-			if (has_permission('Site.'. ucfirst($context) .'.View') || permission_exists('Site.'. ucfirst($context) .'.View') === false)
+		{ 
+			if ( has_permission('Site.'. ucfirst($context) .'.View') == true || permission_exists('Site.'. ucfirst($context) .'.View') == false)
 			{
 				$url = site_url(SITE_AREA .'/'.$context);
 				$class = check_class($context, true);
