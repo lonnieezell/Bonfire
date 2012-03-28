@@ -5,7 +5,7 @@
 </div>
 <?php endif; ?>
 
-<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
+<?php echo form_open($this->uri->uri_string(), array('class' => "form-horizontal", 'id' => 'shortcut_form')); ?>
 	<input type="hidden" name="remove_action" id="remove_action" />
 
 	<fieldset>
@@ -21,7 +21,7 @@
 			<thead>
 				<tr>
 					<th><?php echo lang('ui_action') ?></th>
-					<th><?php echo lang('ui_shortcut') ?></th>
+					<th colspan="2"><?php echo lang('ui_shortcut') ?> <span class="help-inline"><?php echo lang('ui_shortcut_help') ?></span></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -46,26 +46,24 @@
 					<?php $count++; ?>
 					<tr id="shortcut<?php echo $count; ?>">
 						<td id="shortcut<?php echo $count; ?>">
-							<input type="hidden" id="action<?php echo $count;?>" name="action<?php echo $count;?>"  value="<?php echo isset($action) ? $action : set_value('actions['.$count.']') ?>" />
+							<input type="hidden" id="action<?php echo $count;?>" name="action[<?php echo $count;?>]"  value="<?php echo isset($action) ? $action : set_value('actions['.$count.']') ?>" />
 							<?php echo $current[$action]['description'] ?>
 						</td>
 						<td>
-							<input type="text" id="shortcut<?php echo $count;?>" name="shortcut<?php echo $count;?>"  value="<?php echo isset($shortcut) ? $shortcut : set_value('shortcuts['.$count.']') ?>" />
+							<input type="text" id="shortcut<?php echo $count;?>" name="shortcut[<?php echo $count;?>]"  value="<?php echo isset($shortcut) ? $shortcut : set_value('shortcuts['.$count.']') ?>" />
 						</td>
 						<td>
-							<input type="button" name="remove_shortcut" id="remove_shortcut<?php echo $count;?>" value="<?php echo lang('ui_remove_shortcut') ?>" class="btn btn-danger" />
+							<input type="submit" name="remove_shortcut" id="remove_shortcut<?php echo $count;?>" value="<?php echo lang('ui_remove_shortcut') ?>" class="btn btn-danger" />
 						</td>
 					</tr>
 				<?php endforeach; ?>
 				<tr>
 					<td>&nbsp;</td>
+					<td><input type="submit" name="submit" class="btn btn-primary" id="update" value="<?php echo lang('ui_update_shortcuts') ?>" /></td>
 					<td>&nbsp;</td>
-					<td>
-						<input type="submit" name="submit" class="btn btn-primary" id="update" value="<?php echo lang('ui_update_shortcuts') ?>" />
-					</td>
 				</tr>
 			</tbody>
 		</table>
-	</div>
+	</fieldset>
 
 <?php echo form_close(); ?>

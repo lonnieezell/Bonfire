@@ -31,6 +31,7 @@ $lang['ui_action']				= 'Action';
 $lang['ui_actions']				= 'Actions';
 
 $lang['ui_shortcut']			= 'Shortcut Key';
+$lang['ui_shortcut_help']       = 'Enter your preferred keys in the field below, e.g. alt+j - see more examples on the <a href="http://keithcirkel.co.uk/jwerty/" target="_blank">Jwerty project page</a>';
 $lang['ui_shortcuts']			= 'Shortcut Keys';
 $lang['ui_current_shortcuts']	= 'Current Shortcuts';
 
