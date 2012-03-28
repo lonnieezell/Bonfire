@@ -29,12 +29,6 @@ $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
 
 //--------------------------------------------------------------------
-// !Console/Profiler
-//--------------------------------------------------------------------
-$config['site.show_profiler'] = 1;
-$config['site.show_front_profiler'] = 1;
-
-//--------------------------------------------------------------------
 // !For Update messages
 //--------------------------------------------------------------------
 
@@ -55,26 +49,6 @@ $config['site.backup_folder']	= 'archives/';
 //--------------------------------------------------------------------
 // !AUTHENTICATION
 //--------------------------------------------------------------------
-
-// Can new accounts be registered?
-$config['auth.allow_register'] = 1;
-
-// Type of login allowed ('email', 'username', 'both')
-$config['auth.login_type'] = "email";
-
-// Whether usernames are used in the system (0:no, 1:yes, 2:yes+ownname)
-$config['auth.use_usernames'] = 1;
-
-// Should users be able to use a 'remember me' functionality?
-$config['auth.allow_remember'] = 1;
-
-// How long should a user be remembered in the system? In seconds.
-$config['auth.remember_length'] = 1209600;
-
-$config['auth.use_own_names'] = 0;
-
-// Should we do a custom login redirect, or just go to '/'?
-$config['auth.do_login_redirect'] = 1;
 
 // Minimum password length
 $config['auth.password_min_length'] = 8;
