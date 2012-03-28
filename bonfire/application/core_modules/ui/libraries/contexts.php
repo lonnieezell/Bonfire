@@ -183,7 +183,7 @@ class Contexts {
 					$nav .= self::context_nav($context);
 				}
 
-				$nav .= "</li>\n<li class=\"divider-vertical\"></li>";
+				$nav .= "</li>\n";
 			}
 
 		}

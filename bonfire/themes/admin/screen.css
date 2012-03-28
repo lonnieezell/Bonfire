@@ -421,6 +421,7 @@ input[type=radio] { margin-right: 9px; }
 
 .btn.small { line-height: 1.0; }
 
+.dropdown .caret { display: inline-block; margin-left: 6px; }
 .caret.light-caret { border-top: 4px solid #a6a6a6; }
 
 
