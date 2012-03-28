@@ -452,6 +452,39 @@ class Auth  {
 	//--------------------------------------------------------------------
 	
 	/*
+		Method: permission_exists()
+		
+		Checks to see whether a permission is in the system or not.
+		
+		Parameters:
+			$permission	- The name of the permission to check for. NOT case sensitive.
+			
+		Returns:
+			true/false
+	*/
+	public function permission_exists($permission=null) 
+	{
+		if (empty($permission))
+		{
+			return false;
+		}
+		// move permission to lowercase for easier checking.
+		else
+		{
+			$permission = strtolower($permission);
+		}
+		
+		if (empty($this->perms)) {
+			$this->load_permissions($role_id);
+		}
+
+		return array_key_exists($permission, $this->perms);
+	}
+	
+	//--------------------------------------------------------------------
+	
+	
+	/*
 		Method: load_permission()
 
 		Load the permission details from the database into class properties
@@ -966,6 +999,36 @@ function has_permission($permission=null, $override = FALSE)
 }
 
 //--------------------------------------------------------------------	
+
+/*
+	Method: permission_exists()
+	
+	Checks to see whether a permission is in the system or not.
+	
+	Parameters:
+		$permission	- The name of the permission to check for. NOT case sensitive.
+		
+	Returns:
+		true/false
+*/
+function permission_exists($permission=null)
+{
+	if (empty($permission))
+	{
+		return false;
+	}
+	
+	$ci =& get_instance();
+	
+	if (class_exists('Auth'))
+	{
+		return $ci->auth->permission_exists($permission);
+	}
+
+	return false;
+}
+
+//--------------------------------------------------------------------
 
 /*		
 	Function: abbrev_name()

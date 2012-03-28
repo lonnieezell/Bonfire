@@ -147,12 +147,20 @@ class Contexts {
 		*/
 		foreach ($contexts as $context)
 		{
-			if (has_permission('Site.'. ucfirst($context) .'.View'))
+			if (has_permission('Site.'. ucfirst($context) .'.View') || permission_exists('Site.'. ucfirst($context) .'.View') === false)
 			{
 				$url = site_url(SITE_AREA .'/'.$context);
 				$class = check_class($context, true);
 				$id = 'tb_'. $context;
-				$title = lang('bf_context_'. $context);
+				
+				if (lang('bf_context_'. $context))
+				{
+					$title = lang('bf_context_'. $context);
+				}
+				else
+				{
+					$title = ucfirst($context);
+				}
 
 				$nav .= "<li class='dropdown {$class}'><a href='{$url}' id='{$id}' class='dropdown-toggle' title='{$title}' data-toggle='dropdown' data-id='{$context}_menu'>";
 
