@@ -77,17 +77,8 @@
 		<?php endif; ?>
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('role_save_role'); ?>" /> or <?php echo anchor(SITE_AREA .'/settings/roles', lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
+			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('role_save_role'); ?>" /> or <?php echo anchor(SITE_AREA .'/settings/roles', lang('bf_action_cancel')); ?>
 		</div>
 
-		<?php if (isset($role) && $role->can_delete && has_permission('Bonfire.Roles.Delete')) : ?>
-		<div class="box delete rounded">
-			<h3><?php echo lang('role_delete_role'); ?></h3>
-
-			<p><?php echo lang('role_delete_note'); ?></p>
-
-			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/settings/roles/delete/'. $role->role_id); ?>" onclick="return confirm('Are you sure you want to delete this role?')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('role_delete_role'); ?></a>
-		</div>
-		<?php endif; ?>
 	<?php echo form_close(); ?>
 </div>
