@@ -93,12 +93,13 @@ class Contexts {
 
 		Parameters:
 			$mode	- What to display in the top menu. Either 'icon', 'text', or 'both'.
+			$order-by	- Determines the sort order of the elements. Valid options are 'normal', 'reverse', 'asc', 'desc'.
 			$top_level_only	- If TRUE, will only display the top-level links.
 
 		Returns:
 			A string with the built navigation.
 	*/
-	public static function render_menu($mode='icon', $top_level_only = false)
+	public static function render_menu($mode='icon', $order_by='normal', $top_level_only = false)
 	{
 		self::$ci->benchmark->mark('context_menu_start');
 
@@ -119,6 +120,23 @@ class Contexts {
 		if (!in_array('developer', $contexts))
 		{
 			array_push($contexts, 'developer');
+		}
+		
+		// Sorting
+		switch ($order_by)
+		{
+			case 'reverse':
+				$contexts = array_reverse($contexts);
+				break;
+			case 'asc':
+				natsort($contexts);
+				break;
+			case 'desc':
+				rsort($contexts);
+				break;
+			case 'normal':
+			case 'default':
+				break;
 		}
 
 		$nav_id = ( trim (self::$outer_id) != '' ) ? ' id="'. self::$outer_id . '"' : '';

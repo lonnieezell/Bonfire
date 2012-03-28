@@ -105,7 +105,7 @@
 
 			</div> <!-- END OF nav-collapse -->
 
-				<?php echo Contexts::render_menu('both'); ?>
+				<?php echo Contexts::render_menu('both', 'normal'); ?>
 			</div><!-- /container -->
 			<div style="clearfix"></div>
 		</div><!-- /topbar-inner -->
