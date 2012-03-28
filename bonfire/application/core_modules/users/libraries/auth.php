@@ -474,11 +474,24 @@ class Auth  {
 			$permission = strtolower($permission);
 		}
 		
-		if (empty($this->perms)) {
-			$this->load_permissions($role_id);
+		if (!isset($this->all_perms)) {
+			if (!class_exists('Permissions_model'))
+			{
+				$this->ci->load->model('permissions/permission_model');
+				$this->ci->load->model('roles/role_permission_model');
+			}
+			
+			$perms = $this->ci->permission_model->find_all();
+			
+			$this->all_perms = array();
+			
+			foreach ($perms as $perm)
+			{
+				$this->all_perms[] = strtolower($perm->name);
+			}
 		}
 
-		return array_key_exists($permission, $this->perms);
+		 return in_array($permission, $this->all_perms);
 	}
 	
 	//--------------------------------------------------------------------
