@@ -45,8 +45,10 @@
 					</li>
 					
 					<?php else :  ?>
-					
+
+						<li><a href="<?php echo site_url('register');?>"><?php echo lang('bf_action_register') ?></a></li>
 						<li><a href="<?php echo site_url('login');?>" class="login-btn"><?php echo lang('bf_action_login') ?></a></li>
+
 					<?php endif; ?>
 				</ul>
 
