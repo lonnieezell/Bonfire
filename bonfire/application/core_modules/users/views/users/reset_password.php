@@ -26,7 +26,7 @@
 <div class="row-fluid">
 	<div class="span12">
 
-<?php echo form_open('login', 'class="form-horizontal"'); ?>
+<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
 	<input type="hidden" name="user_id" value="<?php echo $user->id ?>" />
 

@@ -104,9 +104,10 @@ class Users extends Front_Controller {
 			Template::set_view('users/users/login');
 			Template::set('page_title', 'Login');
 			Template::render('login');
-		}	else {
+		}
+		else {
 
-			redirect(SITE_AREA .'/content');
+			Template::redirect('/');
 		}
 	}
 
@@ -136,57 +137,65 @@ class Users extends Front_Controller {
 	public function forgot_password()
 	{
 
-		if (isset($_POST['submit']))
+		// if the user is not logged in continue to show the login page
+		if ($this->auth->is_logged_in() === false)
 		{
-			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|xss_clean');
-
-			if ($this->form_validation->run() === FALSE)
+			if (isset($_POST['submit']))
 			{
-				Template::set_message('Cannot find that email in our records.', 'error');
-			} else {
-				// We validated. Does the user actually exist?
-				$user = $this->user_model->find_by('email', $_POST['email']);
+				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|xss_clean');
 
-				if (count($user) == 1)
+				if ($this->form_validation->run() === FALSE)
 				{
-					// User exists, so create a temp password.
-					$this->load->helpers(array('string', 'security'));
+					Template::set_message('Cannot find that email in our records.', 'error');
+				} else {
+					// We validated. Does the user actually exist?
+					$user = $this->user_model->find_by('email', $_POST['email']);
 
-					$pass_code = random_string('alnum', 40);
-
-					$hash = do_hash($pass_code . $user->salt . $_POST['email']);
-
-					// Save the hash to the db so we can confirm it later.
-					$this->user_model->update_where('email', $_POST['email'], array('reset_hash' => $hash, 'reset_by' => strtotime("+24 hours") ));
-
-					// Create the link to reset the password
-					$pass_link = site_url('reset_password/'. str_replace('@', ':', $_POST['email']) .'/'. $hash);
-
-					// Now send the email
-					$this->load->library('emailer/emailer');
-
-					$data = array(
-								'to'	=> $_POST['email'],
-								'subject'	=> 'Your Temporary Password',
-								'message'	=> $this->load->view('_emails/forgot_password', array('link' => $pass_link), true)
-						 );
-
-					if ($this->emailer->send($data))
+					if (count($user) == 1)
 					{
-						Template::set_message('Please check your email for instructions to reset your password.', 'success');
-					}
-					else
-					{
-						Template::set_message('Unable to send an email: '. $this->emailer->errors, 'error');
+						// User exists, so create a temp password.
+						$this->load->helpers(array('string', 'security'));
+
+						$pass_code = random_string('alnum', 40);
+
+						$hash = do_hash($pass_code . $user->salt . $_POST['email']);
+
+						// Save the hash to the db so we can confirm it later.
+						$this->user_model->update_where('email', $_POST['email'], array('reset_hash' => $hash, 'reset_by' => strtotime("+24 hours") ));
+
+						// Create the link to reset the password
+						$pass_link = site_url('reset_password/'. str_replace('@', ':', $_POST['email']) .'/'. $hash);
+
+						// Now send the email
+						$this->load->library('emailer/emailer');
+
+						$data = array(
+									'to'	=> $_POST['email'],
+									'subject'	=> 'Your Temporary Password',
+									'message'	=> $this->load->view('_emails/forgot_password', array('link' => $pass_link), true)
+							 );
+
+						if ($this->emailer->send($data))
+						{
+							Template::set_message('Please check your email for instructions to reset your password.', 'success');
+						}
+						else
+						{
+							Template::set_message('Unable to send an email: '. $this->emailer->errors, 'error');
+						}
 					}
 				}
+
 			}
 
+			Template::set_view('users/users/forgot_password');
+			Template::set('page_title', 'Password Reset');
+			Template::render();
 		}
+		else {
 
-		Template::set_view('users/users/forgot_password');
-		Template::set('page_title', 'Password Reset');
-		Template::render();
+			Template::redirect('/');
+		}
 	}
 
 	//--------------------------------------------------------------------
@@ -256,62 +265,70 @@ class Users extends Front_Controller {
 	*/
 	public function reset_password($email='', $code='')
 	{
-		// If there is no code, then it's not a valid request.
-		if (empty($code) || empty($email))
+		// if the user is not logged in continue to show the login page
+		if ($this->auth->is_logged_in() === false)
 		{
-			Template::set_message('That did not appear to be a valid password reset request.', 'attention');
-			redirect('/login');
-		}
-
-		// Handle the form
-		if ($this->input->post('submit'))
-		{
-			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|xsx_clean');
-			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
-
-			if ($this->form_validation->run() !== false)
+			// If there is no code, then it's not a valid request.
+			if (empty($code) || empty($email))
 			{
-				// The user model will create the password hash for us.
-				$data = array('password' => $this->input->post('password'),
-				              'pass_confirm'	=> $this->input->post('pass_confirm'),
-				              'reset_by'		=> 0,
-				              'reset_hash'	=> '');
+				Template::set_message('That did not appear to be a valid password reset request.', 'attention');
+				redirect('/login');
+			}
 
-				if ($this->user_model->update($this->input->post('user_id'), $data))
-				{
-					$this->load->model('activities/Activity_model', 'activity_model');
+			// Handle the form
+			if ($this->input->post('submit'))
+			{
+				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password|xsx_clean');
+				$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
 
-					$this->activity_model->log_activity($this->input->post('user_id'), lang('us_log_reset') , 'users');
-					Template::set_message('Please login using your new password.', 'success');
-					redirect('/login');
-				}
-				else
+				if ($this->form_validation->run() !== false)
 				{
-					Template::set_message('There was an error resetting your password: '. $this->user_model->error, 'error');
+					// The user model will create the password hash for us.
+					$data = array('password' => $this->input->post('password'),
+					              'pass_confirm'	=> $this->input->post('pass_confirm'),
+					              'reset_by'		=> 0,
+					              'reset_hash'	=> '');
+
+					if ($this->user_model->update($this->input->post('user_id'), $data))
+					{
+						$this->load->model('activities/Activity_model', 'activity_model');
+
+						$this->activity_model->log_activity($this->input->post('user_id'), lang('us_log_reset') , 'users');
+						Template::set_message('Please login using your new password.', 'success');
+						redirect('/login');
+					}
+					else
+					{
+						Template::set_message('There was an error resetting your password: '. $this->user_model->error, 'error');
+					}
 				}
 			}
+
+			// Check the code against the database
+			$email = str_replace(':', '@', $email);
+			$user = $this->user_model->find_by(array(
+			                                        'email' => $email,
+													'reset_hash' => $code,
+													'reset_by >=' => time()
+			                                   ));
+
+			// It will be an Object if a single result was returned.
+			if (!is_object($user))
+			{
+				Template::set_message('That did not appear to be a valid password reset request.', 'attention');
+				redirect('/login');
+			}
+
+			// If we're here, then it is a valid request....
+			Template::set('user', $user);
+
+			Template::set_view('users/users/reset_password');
+			Template::render();
 		}
+		else {
 
-		// Check the code against the database
-		$email = str_replace(':', '@', $email);
-		$user = $this->user_model->find_by(array(
-		                                        'email' => $email,
-												'reset_hash' => $code,
-												'reset_by >=' => time()
-		                                   ));
-
-		// It will be an Object if a single result was returned.
-		if (!is_object($user))
-		{
-			Template::set_message('That did not appear to be a valid password reset request.', 'attention');
-			redirect('/login');
+			Template::redirect('/');
 		}
-
-		// If we're here, then it is a valid request....
-		Template::set('user', $user);
-
-		Template::set_view('users/users/reset_password');
-		Template::render();
 	}
 
 	//--------------------------------------------------------------------
@@ -330,11 +347,11 @@ class Users extends Front_Controller {
 		if ($this->input->post('submit'))
 		{
 			// Validate input
-			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|max_length[120]|callback_unique_email|xsx_clean');
+			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|max_length[120]|unique[bf_users.email]|xsx_clean');
 
 			if ($this->settings_lib->item('auth.use_usernames'))
 			{
-				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|callback_unique_username|xsx_clean');
+				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username]|xsx_clean');
 			}
 
 			if ($this->settings_lib->item('auth.use_own_names'))
@@ -343,7 +360,7 @@ class Users extends Front_Controller {
 				$this->form_validation->set_rules('last_name', 'lang:us_last_name', 'required|trim|strip_tags|max_length[20]|xss_clean');
 			}
 
-			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|xsx_clean');
+			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password|xsx_clean');
 			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
 
 			if ($this->form_validation->run() !== false)
@@ -420,8 +437,12 @@ class Users extends Front_Controller {
 
 
 		$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[bf_users.email,bf_users.id]|xss_clean');
-		$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|strip_tags|max_length[40]|xss_clean');
-		$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'trim|strip_tags|matches[password]|xss_clean');
+		$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|strip_tags|min_length[8]|max_length[120]|valid_password|xss_clean');
+
+		// check if a value has been entered for the password - if so then the pass_confirm is required
+		// if you don't set it as "required" the pass_confirm field could be left blank and the form validation would still pass
+		$extra_rules = !empty($_POST['password']) ? 'required|' : '';
+		$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'trim|strip_tags|'.$extra_rules.'matches[password]|xss_clean');
 
 		if ($this->settings_lib->item('auth.use_usernames'))
 		{
