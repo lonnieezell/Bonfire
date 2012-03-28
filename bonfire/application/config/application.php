@@ -319,7 +319,6 @@ $config['ui.current_shortcuts'] = array(
 	'goto_content'   => array('description' => 'Jump to the Content context.', 'action' => "document.location='/" . SITE_AREA . "/content';"),
 	'goto_reports'   => array('description' => 'Jump to the Reports context.', 'action' => "document.location='/" . SITE_AREA . "/reports';"),
 	'goto_settings'  => array('description' => 'Jump to the Settings context.', 'action' => "document.location='/" . SITE_AREA . "/settings';"),
-	'goto_developer' => array('description' => 'Jump to the Developer context.', 'action' => "document.location='/" . SITE_AREA . "/developer';"),
 );
 
 //--------------------------------------------------------------------
