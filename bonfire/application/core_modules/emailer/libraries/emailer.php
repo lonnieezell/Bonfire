@@ -226,7 +226,7 @@ class Emailer {
 						if (!function_exists('write_file')) {
 							$this->ci->load->helper('file');
 						}
-						write_file($this->config->item('log_path').str_replace(" ","_",strtolower($subject)).substr(md5($to.time()),0,8).".html",$message);
+						write_file($this->ci->config->item('log_path').str_replace(" ","_",strtolower($subject)).substr(md5($to.time()),0,8).".html",$message);
 						$result['success'] = true;
 				}
 				else
