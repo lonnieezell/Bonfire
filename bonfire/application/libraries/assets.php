@@ -114,14 +114,14 @@ class Assets {
 	private static $module_styles		= array();
 
 
-		/*
-				Var: $globals
+	/*
+			Var: $globals
 
-				Flag to define is global includes should be rendered
-				on css() and js() output or supressed.
+			Flag to define is global includes should be rendered
+			on css() and js() output or supressed.
 
-		*/
-		private static $globals          = true;
+	*/
+	private static $globals          = true;
 
 
 	//--------------------------------------------------------------------
@@ -165,8 +165,7 @@ class Assets {
 		*/
 		if (config_item('assets.base_folder') === false)
 		{
-			//@TODO: Does this cofig file even exist? I thought these settings were in application_config?
-			self::$ci->config->load('assets');
+			self::$ci->config->load('application');
 		}
 
 		// Store our settings
@@ -541,7 +540,7 @@ class Assets {
 		Returns:
 			Void
 	*/
-	public function add_module_js($module='', $file='')
+	public static function add_module_js($module='', $file='')
 	{
 		if (empty($file)) return;
 
@@ -575,7 +574,7 @@ class Assets {
 		If a single filename is passed, it will only create a single link
 		for that file, otherwise, it will include any javascript files that have
 		been added with add_js below.
-		
+
 		When passing a filename, the filepath should be relative to the site
 		root (where index.php resides).
 
@@ -725,7 +724,7 @@ class Assets {
 	/*
 		Method: assets_url()
 
-		Returns the full url to a folder in the assets directory.		
+		Returns the full url to a folder in the assets directory.
 
 		Parameters:
 			$type		- optional a string with the assets folder to locate
@@ -1504,8 +1503,8 @@ class Assets {
 
 */
 function js_path ( )
-{	
-	return Assets::assets_url ('js');	
+{
+	return Assets::assets_url ('js');
 }
 
 /*
@@ -1520,7 +1519,7 @@ function js_path ( )
 */
 function img_path ( )
 {
-	return Assets::assets_url ('image');	
+	return Assets::assets_url ('image');
 }
 
 /*
@@ -1535,7 +1534,7 @@ function img_path ( )
 */
 function css_path ( )
 {
-	return Assets::assets_url ('css');	
+	return Assets::assets_url ('css');
 }
 
 /*
@@ -1550,10 +1549,9 @@ function css_path ( )
 */
 function assets_path ( )
 {
-	return Assets::assets_url ();	
+	return Assets::assets_url ();
 }
 
 
 /* End of file assets.php */
 /* Location: ./application/libraries/assets.php */
-
