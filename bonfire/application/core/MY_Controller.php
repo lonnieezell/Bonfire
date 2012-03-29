@@ -56,10 +56,10 @@ class Base_Controller extends MX_Controller {
 		in the controller.
 	*/
 	protected $requested_page;
-	
+
 	/*
 		Var: $current_user
-		
+
 		Stores the current user's details, if they've logged in.
 	*/
 	protected $current_user = null;
@@ -89,7 +89,7 @@ class Base_Controller extends MX_Controller {
 				$this->load->library('Console');
 				$this->output->enable_profiler(true);
 			}
-			
+
 			// Auto-migrate our core and/or app to latest version.
 			if ($this->config->item('migrate.auto_core') || $this->config->item('migrate.auto_app'))
 			{
@@ -135,7 +135,7 @@ class Front_Controller extends Base_Controller {
 
 		$this->load->library('template');
 		$this->load->library('assets');
-		
+
 		// Auth setup
 		$this->load->model('users/User_model', 'user_model');
 		$this->load->library('users/auth');
@@ -144,11 +144,12 @@ class Front_Controller extends Base_Controller {
 		if ($this->auth->is_logged_in())
 		{
 			$this->current_user = $this->user_model->find($this->auth->user_id());
+	    	$this->current_user->user_img = gravatar_link($this->current_user->email, 22, $this->current_user->email, "{$this->current_user->email} Profile", ' ', ' ' );
 		}
 
 		// Make the current user available in the views
 		$this->load->vars( array('current_user' => $this->current_user) );
-		
+
 		Template::set_theme('default');
 	}
 
