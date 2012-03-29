@@ -194,7 +194,7 @@ $config['template.default_theme']	= 'default/';
 | If FALSE, views will be considered PHP views only.
 |
 */
-$config['template.parse_views']		= TRUE;
+$config['template.parse_views']		= FALSE;
 
 /*
 |--------------------------------------------------------------------
