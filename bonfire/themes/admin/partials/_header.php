@@ -20,7 +20,7 @@
 
 	<?php echo Assets::css(null, true); ?>
 
-	<script src="<?php echo base_url() .'assets/js/modernizr-2.5.3.js' ?>"></script>
+	<script src="<?php echo js_path(); ?>modernizr-2.5.3.js"></script>
 </head>
 <body class="desktop">
 <!--[if lt IE 7]>
