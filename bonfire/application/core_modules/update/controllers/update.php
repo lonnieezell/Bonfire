@@ -67,7 +67,7 @@ class Update extends Admin_Controller {
 
 					if ($last_commit !== $this->settings_lib->item('updates.last_commit'))
 					{
-						$message .= 'A <b>bleeding edge</b> update to Bonfire is available.';
+						$message .= lang('up_update_message_bleeding');
 					}
 				}
 
@@ -85,7 +85,7 @@ class Update extends Admin_Controller {
 				{
 					if ($tag > BONFIRE_VERSION)
 					{
-						$message .= ' Version <b>'. $tag .'</b> of Bonfire is available. You are currently running '. BONFIRE_VERSION;
+						$message .= sprintf(lang('up_update_message_new'), '<b>'. $tag .'</b>') . BONFIRE_VERSION;
 						break;
 					}
 				}
