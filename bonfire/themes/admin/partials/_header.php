@@ -20,13 +20,7 @@
 
 	<?php echo Assets::css(null, true); ?>
 
-	<script src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
-	<script>
-	head.feature("placeholder", function() {
-		var inputElem = document.createElement('input');
-		return new Boolean('placeholder' in inputElem);
-	});
-	</script>
+	<script src="<?php echo base_url() .'assets/js/modernizr-2.5.3.js' ?>"></script>
 </head>
 <body class="desktop">
 <!--[if lt IE 7]>

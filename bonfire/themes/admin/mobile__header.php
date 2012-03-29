@@ -11,13 +11,7 @@
     
     <?php echo Assets::css(null, 'screen', true); ?>
     
-    <script src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
-	<script>
-	head.feature("placeholder", function() {
-		var inputElem = document.createElement('input');
-		return new Boolean('placeholder' in inputElem);
-	});
-	</script>
+    <script src="<?php echo base_url() .'assets/js/modernizr-2.5.3.js' ?>"></script>
 	<script type="text/javascript">
 	(function(doc) {
 		// Fix viewport scaling when changing device orientation.
