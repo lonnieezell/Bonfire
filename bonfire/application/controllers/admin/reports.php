@@ -8,10 +8,10 @@
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in
 	all copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,28 +21,68 @@
 	THE SOFTWARE.
 */
 
-class Reports extends Admin_Controller {
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	//--------------------------------------------------------------------
+// ------------------------------------------------------------------------
 
-	public function __construct() 
+/**
+ * Admin Reports controller
+ *
+ * The base controller which displays the homepage of the Admin Reports context in the Bonfire app.
+ *
+ * @package    Bonfire
+ * @subpackage Controllers
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Reports extends Admin_Controller
+{
+
+
+	/**
+	 * __construct
+	 * Controller constructor sets the Title and Permissions
+	 *
+	 * @return void
+	 */
+	public function __construct()
 	{
 		parent::__construct();
-		
-		Template::set('toolbar_title', 'Reports');
-		
-		$this->auth->restrict('Site.Reports.View');
-	}
-	
-	//--------------------------------------------------------------------	
 
-	public function index() 
-	{	
+		Template::set('toolbar_title', 'Reports');
+
+		$this->auth->restrict('Site.Reports.View');
+	}//end __construct()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * index
+	 * Displays the Reports context homeapge
+	 *
+	 * @return void
+	 */
+	public function index()
+	{
 		Template::set_view('admin/reports/index');
 		Template::render();
-	}
-	
-	//--------------------------------------------------------------------
-	
+	}//end index()
 
-}
+	//--------------------------------------------------------------------
+
+
+}//end class

@@ -21,110 +21,129 @@
 	THE SOFTWARE.
 */
 
-/*
-	Class: BF_Model
-
-	The Base model implements standard CRUD functions that can be
-	used and overriden by module models. This helps to maintain
-	a standard interface to program to, and makes module creation
-	faster.
-
-	Author:
-		Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
  */
-class BF_Model extends CI_Model {
 
-	/*
-		Var: $error
-		Stores custom errors that can be used in UI error reporting.
-	*/
+// ------------------------------------------------------------------------
+
+/**
+ * Bonfire Base Model
+ *
+ * The Base model implements standard CRUD functions that can be
+ * used and overriden by module models. This helps to maintain
+ * a standard interface to program to, and makes module creation
+ * faster.
+ *
+ * @package    Bonfire
+ * @subpackage MY_Model
+ * @category   Models
+ * @author     Lonnie Ezell
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class BF_Model extends CI_Model
+{
+
+	/**
+	 * Stores custom errors that can be used in UI error reporting.
+	 *
+	 * @var string
+	 */
 	public $error 		= '';
 
-	/*
-		Var: $table
-		The name of the db table this model primarily uses.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * The name of the db table this model primarily uses.
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $table 	= '';
 
-	/*
-		Var: $key
-		The primary key of the table. Used as the 'id' throughout.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * The primary key of the table. Used as the 'id' throughout.
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $key		= 'id';
 
-	/*
-		Var: $created_field
-		Field name to use to the created time column in the DB table.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Field name to use to the created time column in the DB table.
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $created_field = 'created_on';
 
-	/*
-		Var: $modified_field
-		Field name to use to the modified time column in the DB table.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Field name to use to the modified time column in the DB table.
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $modified_field = 'modified_on';
 
-	/*
-		Var: $set_created
-		Whether or not to auto-fill a 'created_on' field on inserts.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Whether or not to auto-fill a 'created_on' field on inserts.
+	 *
+	 * @var boolean
+	 * @access protected
+	 */
 	protected $set_created	= TRUE;
 
-	/*
-		Var: $set_modified
-		Whether or not to auto-fill a 'modified_on' field on updates.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Whether or not to auto-fill a 'modified_on' field on updates.
+	 *
+	 * @var boolean
+	 * @access protected
+	 */
 	protected $set_modified = TRUE;
 
-	/*
-		Var: $date_format
-		The type of date/time field used for created_on and modified_on fields.
-		Valid types are: 'int', 'datetime', 'date'
-
-		Access:
-			protected
-	*/
+	/**
+	 * The type of date/time field used for created_on and modified_on fields.
+	 * Valid types are: 'int', 'datetime', 'date'
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $date_format = 'int';
 
-	/*
-		Var: $soft_deletes
-		If false, the delete() method will perform a true delete of that row.
-		If true, a 'deleted' field will be set to 1.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * If false, the delete() method will perform a true delete of that row.
+	 * If true, a 'deleted' field will be set to 1.
+	 *
+	 * @var boolean
+	 * @access protected
+	 */
 	protected $soft_deletes = FALSE;
 
-	/*
-		Var: $selects
-		Stores any selects here for use by the find* functions.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Stores any selects here for use by the find* functions.
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $selects = '';
 
 	//---------------------------------------------------------------
 
+	/**
+	 * __construct
+	 * Setup the DB connection if it doesn't exist
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();

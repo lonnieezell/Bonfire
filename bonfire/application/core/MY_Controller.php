@@ -21,51 +21,76 @@
 	THE SOFTWARE.
 */
 
-/*
-	Class: Base_Controller
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	This controller provides a controller that your controllers can extend
-	from. This allows any tasks that need to be performed sitewide to be
-	done in one place.
+// ------------------------------------------------------------------------
 
-	Since it extends from MX_Controller, any controller in the system
-	can be used in the HMVC style, using modules::run(). See the docs
-	at: https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home
-	for more detail on the HMVC code used in Bonfire.
+/**
+ * Base Controller
+ *
+ * This controller provides a controller that your controllers can extend
+ * from. This allows any tasks that need to be performed sitewide to be
+ * done in one place.
+ *
+ * Since it extends from MX_Controller, any controller in the system
+ * can be used in the HMVC style, using modules::run(). See the docs
+ * at: https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home
+ * for more detail on the HMVC code used in Bonfire.
+ *
+ * @package    Bonfire
+ * @subpackage MY_Controller
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Base_Controller extends MX_Controller
+{
 
-	Extends:
-		MX_Controller
 
-	Package:
-		MY_Controller
-*/
-class Base_Controller extends MX_Controller {
-
-	/*
-		Var: $previous_page
-
-		Stores the previously viewed page's complete URL.
-	*/
+	/**
+	 * Stores the previously viewed page's complete URL.
+	 *
+	 * @var string
+	 */
 	protected $previous_page;
 
-	/*
-		Var: $requested_page
-
-		Stores the page requested. This will sometimes be
-		different than the previous page if a redirect happened
-		in the controller.
-	*/
+	/**
+	 * Stores the page requested. This will sometimes be
+	 * different than the previous page if a redirect happened
+	 * in the controller.
+	 *
+	 * @var string
+	 */
 	protected $requested_page;
-	
-	/*
-		Var: $current_user
-		
-		Stores the current user's details, if they've logged in.
-	*/
+
+	/**
+	 * Stores the current user's details, if they've logged in.
+	 *
+	 * @var object
+	 */
 	protected $current_user = null;
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * __construct
+	 * Class constructor
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		Events::trigger('before_controller', get_class($this));
@@ -99,36 +124,47 @@ class Base_Controller extends MX_Controller {
 
 		// Pre-Controller Event
 		Events::trigger('after_controller_constructor', get_class($this));
-	}
+	}//end __construct()
 
 	//--------------------------------------------------------------------
 
-}
+}//end class
 
 // End Base_Controller class
 
 //--------------------------------------------------------------------
 
-/*
-	Class: Front_Controller
-
-	This class provides a common place to handle any tasks that need to
-	be done for all public-facing controllers.
-
-	Extends:
-		Base_Controller
-*/
-class Front_Controller extends Base_Controller {
+/**
+ * Front Controller
+ *
+ * This class provides a common place to handle any tasks that need to
+ * be done for all public-facing controllers.
+ *
+ * @package    Bonfire
+ * @subpackage MY_Controller
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Front_Controller extends Base_Controller
+{
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * __construct
+	 * Class constructor
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
 
 		$this->load->library('template');
 		$this->load->library('assets');
-		
+
 		// Auth setup
 		$this->load->model('users/User_model', 'user_model');
 		$this->load->library('users/auth');
@@ -141,31 +177,42 @@ class Front_Controller extends Base_Controller {
 
 		// Make the current user available in the views
 		$this->load->vars( array('current_user' => $this->current_user) );
-		
+
 		Template::set_theme('default');
-	}
+	}//end __construct()
 
 	//--------------------------------------------------------------------
 
-}
+}//end class
 
 // End Front_Controller class
 
 //--------------------------------------------------------------------
 
-/*
-	Class: Authenticated_Controller
-
-	Provides a base class for all controllers that must check user login
-	status.
-
-	Extends:
-		Base_Controller
-*/
-class Authenticated_Controller extends Base_Controller {
+/**
+ * Authenticated Controller
+ *
+ * Provides a base class for all controllers that must check user login
+ * status.
+ *
+ * @package    Bonfire
+ * @subpackage MY_Controller
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Authenticated_Controller extends Base_Controller
+{
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * __construct
+	 * Class constructor setup login restriction and load various libraries
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -188,33 +235,44 @@ class Authenticated_Controller extends Base_Controller {
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('', '');
 		$this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
-	}
+	}//end construct()
 
 	//--------------------------------------------------------------------
 
 
-}
-
-//--------------------------------------------------------------------
+}//end class
 
 // End Authenticated Controller
 
-/*
-	Class: Admin_Controller
+//--------------------------------------------------------------------
 
-	This class provides a base class for all admin-facing controllers.
-	It automatically loads the form, form_validation and pagination
-	helpers/libraries, sets defaults for pagination and sets our
-	Admin Theme.
-
-	Extends:
-		Authenticated_controller
-*/
-
-class Admin_Controller extends Authenticated_Controller {
+/**
+ * Admin Controller
+ *
+ * This class provides a base class for all admin-facing controllers.
+ * It automatically loads the form, form_validation and pagination
+ * helpers/libraries, sets defaults for pagination and sets our
+ * Admin Theme.
+ *
+ * @package    Bonfire
+ * @subpackage MY_Controller
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Admin_Controller extends Authenticated_Controller
+{
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * __construct
+	 * Class constructor - setup paging and keyboard shortcuts as well as
+	 * load various libraries
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -261,11 +319,11 @@ class Admin_Controller extends Authenticated_Controller {
 
 		// Basic setup
 		Template::set_theme('admin', 'junk');
-	}
+	}//end construct()
 
 	//--------------------------------------------------------------------
 
-}
+}//end class
 
 // End Admin_Controller class
 
