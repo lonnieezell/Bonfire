@@ -33,7 +33,6 @@ class Migration_Move_settings_into_db extends Migration {
 			 ('auth.login_type', 'core', 'email'),
 			 ('auth.use_usernames', 'core', '1'),
 			 ('auth.allow_remember', 'core', '1'),
-			 ('auth.use_own_names', 'core', '1'),
 			 ('auth.remember_length', 'core', '1209600'),
 			 ('auth.do_login_redirect', 'core', '1'),
 			 ('auth.use_extended_profile', 'core', '0'),

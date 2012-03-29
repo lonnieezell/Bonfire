@@ -153,7 +153,7 @@ class Settings extends Admin_Controller
 	public function create()
 	{
 			$this->auth->restrict('Bonfire.Users.Add');
-
+Console::log($this->current_user);
 			$this->load->config('address');
 			$this->load->helper('address');
 
@@ -165,7 +165,7 @@ class Settings extends Admin_Controller
 							$this->load->model('activities/Activity_model', 'activity_model');
 
 							$user = $this->user_model->find($id);
-							$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+							$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 							$this->activity_model->log_activity($this->current_user->id, lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
 
 							Template::set_message('User successfully created.', 'success');
@@ -206,7 +206,7 @@ class Settings extends Admin_Controller
 							$this->load->model('activities/Activity_model', 'activity_model');
 
 							$user = $this->user_model->find($user_id);
-							$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+							$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 							$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
 
 							Template::set_message('User successfully updated.', 'success');
@@ -283,7 +283,7 @@ class Settings extends Admin_Controller
 											$this->load->model('activities/Activity_model', 'activity_model');
 
 											$user = $this->user_model->find($id);
-											$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+											$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 											$this->activity_model->log_activity($this->current_user->id, lang('us_log_delete') . ': '.$log_name, 'users');
 											Template::set_message('The User was successfully deleted.', 'success');
 									} else {
@@ -403,12 +403,12 @@ class Settings extends Admin_Controller
 		}
 		else {
 			$_POST['id'] = $id;
-			$this->form_validation->set_rules('email', lang('us_label_email'), 'required|trim|unique[bf_users.email,bf_users.id]|valid_email|max_length[120]|xss_clean');
+			$this->form_validation->set_rules('email', lang('us_label_email'), 'required|trim|valid_email|max_length[120]|xss_clean');
 			$this->form_validation->set_rules('password', lang('bf_password'), 'trim|strip_tags|min_length[8]|max_length[120]|valid_password|matches[pass_confirm]|xss_clean');
 			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), 'trim|strip_tags|xss_clean');
 		}
 
-		$use_usernames = $this->settings_lib->item('auth.use_own_names');
+		$use_usernames = $this->settings_lib->item('auth.usernames');
 
 		if ($use_usernames)
 		{

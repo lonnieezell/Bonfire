@@ -83,10 +83,6 @@
 						<input type="radio" name="use_usernames" id="use_usernames" value="0" <?php echo $settings['auth.use_usernames'] == 0 ? 'checked="checked"' : set_radio('auth.use_usernames', 0); ?> />
 						<span><?php echo lang('bf_email') ?></span>
 					</label>
-					<label class="checkbox">
-						<input type="checkbox" name="use_own_names" id="use_own_names" value="1" <?php echo $settings['auth.use_own_names'] == 1 ? 'checked="checked"' : set_checkbox('auth.use_own_names', 2); ?> />
-						<span><?php echo lang('bf_use_own_name') ?></span>
-					</label>
 				</div>
 			</div>
 

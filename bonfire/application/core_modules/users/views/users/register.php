@@ -38,23 +38,6 @@
 
 	<?php endif; ?>
 	<br/>
-	<?php if ($this->settings_lib->item('auth.use_own_names')) : ?>
-
-		<div class="control-group <?php echo iif( form_error('first_name') , 'error'); ?>">
-			<label class="control-label" for="first_name"><?php echo lang('us_first_name'); ?></label>
-			<div class="controls">
-				<input class="span6" type="text" id="first_name" name="first_name" value="<?php echo set_value('first_name') ?>" />
-			</div>
-		</div>
-
-		<div class="control-group <?php echo iif( form_error('last_name') , 'error'); ?>">
-			<label class="control-label" for="last_name"><?php echo lang('us_last_name'); ?></label>
-			<div class="controls">
-				<input class="span6" type="text" id="last_name" name="last_name" value="<?php echo set_value('last_name') ?>" />
-			</div>
-		</div>
-
-	<?php endif; ?>
 
 		<div class="control-group <?php echo iif( form_error('password') , 'error'); ?>">
 			<label class="control-label" for="password"><?php echo lang('bf_password'); ?></label>

@@ -224,7 +224,7 @@ class Users extends Front_Controller {
 				$this->load->model('activities/Activity_model', 'activity_model');
 
 				$user = $this->user_model->find($user_id);
-				$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit_profile') .': '.$log_name, 'users');
 
 				Template::set_message('Profile successfully updated.', 'success');
@@ -352,12 +352,6 @@ class Users extends Front_Controller {
 			if ($this->settings_lib->item('auth.use_usernames'))
 			{
 				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username]|xsx_clean');
-			}
-
-			if ($this->settings_lib->item('auth.use_own_names'))
-			{
-				$this->form_validation->set_rules('first_name', 'lang:us_first_name', 'required|trim|strip_tags|max_length[20]|xss_clean');
-				$this->form_validation->set_rules('last_name', 'lang:us_last_name', 'required|trim|strip_tags|max_length[20]|xss_clean');
 			}
 
 			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password|xsx_clean');
