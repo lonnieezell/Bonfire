@@ -89,6 +89,13 @@ class Base_Controller extends MX_Controller {
 				$this->load->library('Console');
 				$this->output->enable_profiler(true);
 			}
+			
+			// Auto-migrate our core and/or app to latest version.
+			if ($this->config->item('migrate.auto_core') || $this->config->item('migrate.auto_app'))
+			{
+				$this->load->library('migrations/migrations');
+				$this->migrations->auto_latest();
+			}
 		}
 
 		// Make sure that we have a cache enine ready to go...

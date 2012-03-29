@@ -313,3 +313,9 @@ $config['ui.current_shortcuts'] = array(
 	using 'development' environments without sendmail such as Windows Desktop servers like WAMP.
 */
 $config['emailer.write_to_file'] = false;
+
+//--------------------------------------------------------------------
+// !Migrations
+//--------------------------------------------------------------------
+$config['migrate.auto_core']	= TRUE;
+$config['migrate.auto_app']		= FALSE;
