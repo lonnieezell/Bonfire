@@ -1,18 +1,31 @@
 <?php
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package		ModuleBuilder
+ * @author		Bonfire Dev Team
+ * @copyright	Copyright (c) 2011 - 2012, EllisLab, Inc.
+ * @license		http://cibonfire.com/guides/license.html
+ * @link		http://cibonfire.com
+ * @since		Version 1.0
+ * @filesource
+ */
 
 /**
- * ModuleBuilder
+ * Module Builder library
  *
- * An easy module generator for the Bonfire project on the CodeIgniter framework
- *
- * @package   ModuleBuilder
- * @version   0.5.0
- * @author    Sean Downey, <sean[at]considerweb.com>
- * @copyright Copyright (c) 2011, Sean Downey
- * @license   http://www.opensource.org/licenses/mit-license.php
- * @link      http://github.com/seandowney/bonfire_modulebuilder
+ * This library performs the heavy-lifting while creating new modules for Bonfire.
  *
  * This code is originally based on Ollie Rattue's http://formigniter.org/ project
+ *
+ * @package		ModuleBuilder
+ * @subpackage	Libraries
+ * @category	Libraries
+ * @author		Bonfire Dev Team
+ * @link		http://cibonfire.com/guides/core_modules/modulebuilder.html
+ *
  */
 class Modulebuilder
 {

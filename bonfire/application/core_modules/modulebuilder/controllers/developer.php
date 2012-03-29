@@ -1,20 +1,35 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 /**
- * ModuleBuilder
+ * Bonfire
  *
- * An easy module generator for the Bonfire project on the CodeIgniter framework
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
  *
- * @package   ModuleBuilder
- * @version   0.5.0
- * @author    Sean Downey, <sean[at]considerweb.com>
- * @copyright Copyright (c) 2011, Sean Downey
- * @license   http://www.opensource.org/licenses/mit-license.php
- * @link      http://github.com/seandowney/bonfire_modulebuilder
- *
- * This code is originally based on Ollie Rattue's http://formigniter.org/ project
+ * @package		ModuleBuilder
+ * @author		Bonfire Dev Team
+ * @copyright	Copyright (c) 2011 - 2012, EllisLab, Inc.
+ * @license		http://cibonfire.com/guides/license.html
+ * @link		http://cibonfire.com
+ * @since		Version 1.0
+ * @filesource
  */
 
+// ------------------------------------------------------------------------
+
+/**
+ * Module Builder Developer Context Controller
+ *
+ * This controller displays the list of current modules in the bonfire/modules folder
+ * and also allows the users to create new modules.
+ *
+ * This code is originally based on Ollie Rattue's http://formigniter.org/ project
+ *
+ * @package		ModuleBuilder
+ * @subpackage	Controllers
+ * @category	Controllers
+ * @author		Bonfire Dev Team
+ * @link		http://cibonfire.com/guides/core_modules/modulebuilder.html
+ *
+ */
 class Developer extends Admin_Controller {
 
 	//---------------------------------------------------------------
