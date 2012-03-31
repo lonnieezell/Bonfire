@@ -410,143 +410,157 @@ function module_config($module_name=null, $return_full=false)
 
 //--------------------------------------------------------------------
 
-
-/*
-	Function: dump()
-
-	Outputs the given variables with formatting and loation.
-
-	Huge props out to Phil Sturgeon for this one (http://philsturgeon.co.uk/blog/2010/09/power-dump-php-applications)
-
-	To use, pass in any number of variables as arguments.
-*/
-function dump()
+if (!function_exists('dump'))
 {
-	list($callee) = debug_backtrace();
-	$arguments = func_get_args();
-	$total_arguments = count($arguments);
+	/*
+		Function: dump()
 
-	echo '<fieldset style="background: #fefefe !important; border:2px red solid; padding:5px">';
-    echo '<legend style="background:lightgrey; padding:5px;">'.$callee['file'].' @ line: '.$callee['line'].'</legend><pre>';
+		Outputs the given variables with formatting and loation.
 
-    $i = 0;
-    foreach ($arguments as $argument)
-    {
-        echo '<br/><strong>Debug #'.(++$i).' of '.$total_arguments.'</strong>: ';
+		Huge props out to Phil Sturgeon for this one (http://philsturgeon.co.uk/blog/2010/09/power-dump-php-applications)
 
-        if ( (is_array($argument) || is_object($argument)) && count($argument))
-        {
-        	print_r($argument);
-        }
-        else
-        {
-        	var_dump($argument);
-        }
-    }
-
-    echo "</pre>";
-    echo "</fieldset>";
-}
-
-//--------------------------------------------------------------------
-
-/*
-	Function: e()
-
-	A convenience function to make sure your output is safe to display.
-	Helps to defeat XSS attacks by running the text through htmlentities().
-
-	Should be used anywhere you are displaying user-submitted text.
-*/
-function e($str)
-{
-	echo htmlentities($str, ENT_QUOTES, 'UTF-8');
-}
-
-//--------------------------------------------------------------------
-
-/*
-	Function: array_implode()
-
-	Implode an array with the key and value pair giving a glue,
-	a separator between pairs and the array to implode.
-
-	Example:
-		// Encode Query Strings
-		$query = url_encode( array_implode( '=', '&', $array ) );
-
-	Parameters:
-		$glue		- The glue between key and value.
-		$separator	- Separator between pairs.
-		$array		- The array to implode.
-
-	Returns:
-		A string with the combined elements.
-*/
-function array_implode($glue, $separator, $array)
-{
-	if ( ! is_array( $array ) )
+		To use, pass in any number of variables as arguments.
+	*/
+	function dump()
 	{
-		return $array;
-	}
+		list($callee) = debug_backtrace();
+		$arguments = func_get_args();
+		$total_arguments = count($arguments);
 
-	$string = array();
+		echo '<fieldset style="background: #fefefe !important; border:2px red solid; padding:5px">' . PHP_EOL;
+		echo '<legend style="background:lightgrey; padding:5px;">'.$callee['file'].' @ line: '.$callee['line'].'</legend><pre>' . PHP_EOL;
 
-	foreach ( $array as $key => $val )
-	{
-	    if ( is_array( $val ) )
-	    {
-	        $val = implode( ',', $val );
-	    }
-
-	    $string[] = "{$key}{$glue}{$val}";
-	}
-
-	return implode( $separator, $string );
-}
-
-//--------------------------------------------------------------------
-
-function obj_value($obj, $key, $type='text', $value=0)
-{
-	if (isset($obj->$key))
-	{
-		switch ($type)
+		$i = 0;
+		foreach ($arguments as $argument)
 		{
-			case 'checkbox':
-			case 'radio':
-				if ($obj->$key == $value)
+				echo '<br/><strong>Debug #'.(++$i).' of '.$total_arguments.'</strong>: ' . PHP_EOL;
+
+				if ( (is_array($argument) || is_object($argument)) && count($argument))
 				{
-					return 'checked="checked"';
+					print_r($argument);
 				}
-				break;
-			case 'select':
-				if ($obj->$key == $value)
+				else
 				{
-					return 'selected="selected"';
+					var_dump($argument);
 				}
-				break;
-			case 'text':
-			default:
-				return $obj->$key;
 		}
+
+		echo '</pre>' . PHP_EOL;
+		echo '</fieldset>' . PHP_EOL;
 	}
-
-	return null;
 }
-
 //--------------------------------------------------------------------
 
-/**
-* If then Else Statement wrapped in one function, If $expression = true then $returntrue else $returnfalse
-*
-* @param mixed $expression    IF Statement to be checked
-* @param mixed $returntrue    What to Return on True
-* @param mixed $returnfalse   What to Return on False
-*
-* @return mixed    Returns $returntrue or $returnfalse depending on Expression
-*/
-function iif($expression, $returntrue, $returnfalse = '')
+if (!function_exists('e'))
 {
-	return ( $expression == 0 ) ? $returnfalse : $returntrue;
+	/*
+		Function: e()
+
+		A convenience function to make sure your output is safe to display.
+		Helps to defeat XSS attacks by running the text through htmlentities().
+
+		Should be used anywhere you are displaying user-submitted text.
+	*/
+	function e($str)
+	{
+		echo htmlentities($str, ENT_QUOTES, 'UTF-8');
+	}
+}
+//--------------------------------------------------------------------
+
+if (!function_exists('array_implode'))
+{
+	/*
+		Function: array_implode()
+
+		Implode an array with the key and value pair giving a glue,
+		a separator between pairs and the array to implode.
+
+		Example:
+			// Encode Query Strings
+			$query = url_encode( array_implode( '=', '&', $array ) );
+
+		Parameters:
+			$glue		- The glue between key and value.
+			$separator	- Separator between pairs.
+			$array		- The array to implode.
+
+		Returns:
+			A string with the combined elements.
+	*/
+	function array_implode($glue, $separator, $array)
+	{
+		if ( ! is_array( $array ) )
+		{
+			return $array;
+		}
+
+		$string = array();
+
+		foreach ( $array as $key => $val )
+		{
+				if ( is_array( $val ) )
+				{
+						$val = implode( ',', $val );
+				}
+
+				$string[] = "{$key}{$glue}{$val}";
+		}
+
+		return implode( $separator, $string );
+	}
+}
+//--------------------------------------------------------------------
+
+if ( !function_exists('obj_value') )
+{
+	function obj_value($obj, $key, $type='text', $value=0)
+	{
+		if (isset($obj->$key))
+		{
+			switch ($type)
+			{
+				case 'checkbox':
+				case 'radio':
+					if ($obj->$key == $value)
+					{
+						return 'checked="checked"';
+					}
+					break;
+				case 'select':
+					if ($obj->$key == $value)
+					{
+						return 'selected="selected"';
+					}
+					break;
+				case 'text':
+				default:
+					return $obj->$key;
+			}
+		}
+
+		return null;
+	}
+}
+//--------------------------------------------------------------------
+
+if ( !function_exists(iif) )
+{
+	/**
+	* If then Else Statement wrapped in one function, If $expression = true then $returntrue else $returnfalse
+	*
+	* @param mixed $expression    IF Statement to be checked
+	* @param mixed $returntrue    What to Return on True
+	* @param mixed $returnfalse   What to Return on False
+	* @param bool  $echo          Defaults to false, if set to true will echo instead of return
+	*
+	* @return mixed    If echo is set to true will echo the value of the expression, defaults to returning the value
+	*/
+	function iif($expression, $returntrue, $returnfalse = '', $echo = false )
+	{
+		if ( $echo === false )
+			return ( $expression == 0 ) ? $returnfalse : $returntrue;
+		else
+			echo ( $expression == 0 ) ? $returnfalse : $returntrue;
+	}
 }
