@@ -84,7 +84,7 @@ function render_filter_first_letter($caption=null)
 	// replace the caption with a clear button.
 	if (!empty($current))
 	{
-		$out .= '<a href="'. $url .'" class="btn small primary">'. lang('bf_clear') .'</a>';
+		$out .= '<a href="'. $url .'" class="btn btn-small btn-primary">'. lang('bf_clear') .'</a>';
 	} else
 	{
 		$out .= $caption;
