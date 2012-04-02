@@ -1,5 +1,38 @@
 Topic: Changelog
 
+Version 0.5.2
+
+Additions:
+- Fix for parse_views in the Template library
+- Change text to use lang file - issue #360
+- Fixing Database backups - issue #362
+- Cleanup of helpers - issue #366
+- Adding Persian language text - issue #324
+- Change to the version message in /admin/developer/update
+
+
+Version 0.5.1
+
+Additions:
+- Hotfix for issue in Module Builder
+
+
+Additions:
+- Edit Profile for the front end user - issue #197
+- Mode_rewrite check in the installer to set the base_url - issue #52
+- Adding extra functionality to the config_file_helper to allow reading and writing of module config files
+- Config setting for front end controller which is checked inside the MY_Controller/Front_Controller
+- Adding "matches_pattern" method to Form Validation to ensures a string matches a basic pattern
+- Upgrading the Migrations DB schema (issue #180) so that we use records instead of DB table columns for the modules
+- Moved the Settings into the DB
+- Frontend User Profile editing
+- New Installer
+- Module Builder - various improvements, including Creating a module from an existing DB table
+- Updated jquery.forms to 2.94
+- Emailer improvements
+- Localization improvements, including Persian language files (thanks to Github user "sajjad-ser")
+
+
 Version 0.5
 
 Additions:
