@@ -634,7 +634,7 @@ class Template {
 	 */
 	public function parse_views($parse) 
 	{
-		self::parse_views($parse);
+		self::$parse_views = $parse;
 	}
 	
 	//--------------------------------------------------------------------
@@ -1009,7 +1009,7 @@ function breadcrumb($my_segments=null)
 		$total = count($my_segments);
 	}
 	
-	echo '<a href="/">home</a> ' . $ci->config->item('template.breadcrumb_symbol');
+	echo '<a href="/">'.lang('bf_home_page').'</a> ' . $ci->config->item('template.breadcrumb_symbol');
 	
 	$url = '';
 	$count = 0;
@@ -1027,7 +1027,7 @@ function breadcrumb($my_segments=null)
 				echo str_replace('_', ' ', $segment);
 			} else 
 			{
-				echo '<a href="'. $url .'">'. str_replace('_', ' ', strtolower($segment)) .'</a>'. $ci->config->item('template.breadcrumb_symbol');
+				echo '<a href="'. $url .'">'. str_replace('_', ' ', mb_strtolower($segment)) .'</a>'. $ci->config->item('template.breadcrumb_symbol');
 			}
 		}
 	} else
@@ -1043,7 +1043,7 @@ function breadcrumb($my_segments=null)
 				echo str_replace('_', ' ', $title);
 			} else 
 			{
-				echo '<a href="'. $url .'">'. str_replace('_', ' ', strtolower($title)) .'</a>'. $ci->config->item('template.breadcrumb_symbol');
+				echo '<a href="'. $url .'">'. str_replace('_', ' ', mb_strtolower($title)) .'</a>'. $ci->config->item('template.breadcrumb_symbol');
 			}
 		}
 	}

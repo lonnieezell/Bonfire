@@ -71,7 +71,7 @@ class Developer extends Admin_Controller {
 				}
 				else
 				{
-					Template::set('update_message', 'You are running Bonfire version <b>'. BONFIRE_VERSION .'</b>. The latest available version is <b>'. $version .'</b>.');
+					Template::set('update_message', 'You are running Bonfire version <b>'. BONFIRE_VERSION .'</b>. The latest <b>stable</b> version available is <b>'. $version .'</b>.');
 				}
 			}
 			else

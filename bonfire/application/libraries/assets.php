@@ -113,6 +113,13 @@ class Assets {
 	*/
 	private static $module_styles		= array();
 
+    /*
+         Var: $globals
+
+         Flag to define is global includes should be rendered
+         on css() and js() output or supressed.
+     */
+    private static $globals					= true;
 
 	//--------------------------------------------------------------------
 
@@ -167,6 +174,24 @@ class Assets {
 
 	//--------------------------------------------------------------------
 
+    //--------------------------------------------------------------------
+    // !GLOBAL METHODS
+    //--------------------------------------------------------------------
+    /*
+         Method: set_globals()
+
+         Set the value of the static $globals flag that determines if
+         global includes (like the default media type CSS and global.js files)
+         are automatically included in css() and js() output.
+
+         Parameters:
+             $include	- TRUE to include (default) or FALSE to exclude
+         Return:
+            <void>
+     */
+    public static function set_globals($include = true) {
+        self::$globals = $include;
+    }
 
 	//--------------------------------------------------------------------
 	// !STYLESHEET METHODS
@@ -198,7 +223,7 @@ class Assets {
 		$return = '';
 
 		// If no style(s) has been passed in, use all that have been added.
-		if (empty($style))
+		if (empty($style) && self::$globals)
 		{
 			// Make sure to include a file based on media type.
 			$styles[] = array(
@@ -538,11 +563,10 @@ class Assets {
 	/*
 		Method: js()
 
-		Renders links to stylesheets, with the $asset_url prepended.
+		Renders links to all javascript files including External, Module and Inline
 		If a single filename is passed, it will only create a single link
-		for that file, otherwise, it will include any styles that have
-		been added with add_css below. If no style is passed it will default
-		to the theme's style.css file.
+		for that file, otherwise, it will include any javascript files that have
+		been added with add_js below. 
 
 		When passing a filename, the filepath should be relative to the site
 		root (where index.php resides).
@@ -553,7 +577,7 @@ class Assets {
 					  Acceptable values: 'external' or 'inline'
 
 		Return:
-			void
+			Returns all Scripts located in External JS, Module JS and Inline JS in that order.
 	*/
 	public static function js($script=null, $type='external')
 	{
@@ -630,7 +654,7 @@ class Assets {
 		}
 
 		// Make sure we check for a 'global.js' file.
-		$scripts[] = 'global';
+        if (self::$globals) { $scripts[] = 'global'; }
 
 		// Add a style named for the controller so it will be looked for.
 		$scripts[] = self::$ci->router->class;

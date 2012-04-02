@@ -229,7 +229,8 @@ class Users extends Front_Controller {
 		$this->load->helper('address');
 
 		// get the current user information
-		$user = $this->user_model->find_by('id', $this->auth->user_id());
+		$user = $this->user_model->find_by('id', $this->auth->user_id());		
+				
 		Template::set('user', $user);
 	
 		Template::set_view('users/users/profile');
