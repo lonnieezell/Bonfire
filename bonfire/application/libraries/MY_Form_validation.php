@@ -14,34 +14,39 @@ class MY_Form_validation extends CI_Form_validation
 	 */
 	function __construct($config = array())
 	{
+		// Merged super-global $_FILES to $_POST to allow for better file validation inside of Form_validation library
+		$_POST = ( isset($_FILES) && is_array( $_FILES ) && count($_FILES) > 0) ? array_merge($_POST,$_FILES) : $_POST;
+
 		parent::__construct($config);
 	}
 
-	// --------------------------------------------------------------------
+	//--------------------------------------------------------------------
 
-	/*
-					Returns Form Validation Errors in a Un-ordered list format
-
-					return string
-	*/
+	/**
+	 * Returns Form Validation Errors in a HTML Un-ordered list format.
+	 *
+	 * @return string    Returns Form Validation Errors in a HTML Un-ordered list format.
+	 */
 	public function validation_errors_list()
 	{
 		if ( is_array($this->CI->form_validation->_error_array))
 		{
 			$errors = (array) $this->CI->form_validation->_error_array;
-			$error  = '<ul>';
+			$error  = '<ul>' . PHP_EOL;
 
 			foreach ($errors as $error)
 			{
 				$error .= "	<li>{$error}</li>" . PHP_EOL;
 			}
 
-			$error .= '</ul>';
+			$error .= '</ul>' . PHP_EOL;
 			return $error;
 		}
 
 		return false;
 	}
+
+	//--------------------------------------------------------------------
 
 	public function run($module='', $group='')
 	{
@@ -155,11 +160,13 @@ class MY_Form_validation extends CI_Form_validation
 
 	//--------------------------------------------------------------------
 
+
 	public function valid_password($str)
 	{
+		// @TODO: Remove the call to config_item and replace with settings library
 		$min_length	= config_item('auth.password_min_length');
-		$use_nums	= config_item('auth.password_force_numbers');
-		$use_syms	= config_item('auth.password_force_symbols');
+		$use_nums	  = config_item('auth.password_force_numbers');
+		$use_syms	  = config_item('auth.password_force_symbols');
 		$use_mixed	= config_item('auth.password_force_mixed_case');
 
 		// Check length
@@ -210,8 +217,62 @@ class MY_Form_validation extends CI_Form_validation
 
 	//--------------------------------------------------------------------
 
+	/**
+	* Allows setting allowed file-types in your form_validation rules. Please seperate the allowed file types with a pipe or |.
+	*
+	*
+	* @author Shawn Crigger <support@s-vizion.com>
+	*
+	* @param  str   String field name to validate
+	* @param  types String allowed types
+	*
+	* @return bool   If files are in the allowed type array then true else false
+	*/
+	public function allowed_types($str, $types = NULL )
+	{
+		if (!$types)
+		{
+			log_message('debug', 'form_validation method allowed_types was called without any allowed types.');
+			return false;
+		}
+
+		$type = explode('|', $types);
+		$filetype = pathinfo($str['name'],PATHINFO_EXTENSION);
+
+		return (in_array($filetype, $type)) ? TRUE : FALSE;
+	}
+
+	//--------------------------------------------------------------------
+
+	/**
+	* Allows Setting maximum file upload size in your form validation rules.
+	*
+	* @author Shawn Crigger <support@s-vizion.com>
+	*
+	* @param  str String field name to validate
+	* @param  size Integer maximum upload size in bytes
+	*
+	* @return bool
+	*/
+	public function max_file_size($str, $size = 0 )
+	{
+		if ( $size = 0 )
+		{
+			log_message('error', 'Form_validation rule, max_file_size was called without setting a allowable file size.');
+			return false;
+		}
+
+		return (bool) ($str['size']<=$size);
+	}
+
+	//--------------------------------------------------------------------
+
+
+
 }
 
+//--------------------------------------------------------------------
+// Helper Functions for Form Validation LIbrary
 //--------------------------------------------------------------------
 
 function form_has_error($field=null)

@@ -423,9 +423,6 @@ if ( ! function_exists('dump'))
 		echo '</fieldset>' . PHP_EOL;
 	}
 }
-
-//--------------------------------------------------------------------
-
 if (!function_exists('e'))
 {
 	/*
@@ -475,18 +472,17 @@ if (!function_exists('array_implode'))
 
 		foreach ( $array as $key => $val )
 		{
-		    if ( is_array( $val ) )
-		    {
-		        $val = implode( ',', $val );
-		    }
+			if ( is_array( $val ) )
+			{
+				$val = implode( ',', $val );
+			}
 
-		    $string[] = "{$key}{$glue}{$val}";
+			$string[] = "{$key}{$glue}{$val}";
 		}
 
 		return implode( $separator, $string );
 	}
 }
-
 //--------------------------------------------------------------------
 
 if ( !function_exists('obj_value') )
@@ -519,7 +515,6 @@ if ( !function_exists('obj_value') )
 		return null;
 	}
 }
-
 //--------------------------------------------------------------------
 
 if ( !function_exists('iif') )
@@ -530,11 +525,19 @@ if ( !function_exists('iif') )
 	* @param mixed $expression    IF Statement to be checked
 	* @param mixed $returntrue    What to Return on True
 	* @param mixed $returnfalse   What to Return on False
+	* @param bool  $echo          Defaults to false, if set to true will echo instead of return
 	*
-	* @return mixed    Returns $returntrue or $returnfalse depending on Expression
+	* @return mixed    If echo is set to true will echo the value of the expression, defaults to returning the value
 	*/
-	function iif($expression, $returntrue, $returnfalse = '')
+	function iif($expression, $returntrue, $returnfalse = '', $echo = false )
 	{
-		return ( $expression == 0 ) ? $returnfalse : $returntrue;
+		if ( $echo === false )
+		{
+			return ( $expression == 0 ) ? $returnfalse : $returntrue;
+		}
+		else
+		{
+			echo ( $expression == 0 ) ? $returnfalse : $returntrue;
+		}
 	}
 }
