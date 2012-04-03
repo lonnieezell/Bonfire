@@ -8,10 +8,10 @@
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in
 	all copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -48,42 +48,43 @@ if ( ! function_exists('gravatar_link'))
 	 *
 	 * @return string The resulting image tag.
 	 */
-	function gravatar_link($email=null, $size=48, $alt='', $title='', $class='', $id='') 
+	function gravatar_link($email=null, $size=48, $alt='', $title='', $class=' ', $id=' ')
 	{
 		// Set our default image based on required size.
 		$default_image = Template::theme_url('images/user.png');
-		
+
 		// Set our minimum site rating to PG
 		$rating = 'PG';
-		
-		// Border color 
+
+		// Border color
 		$border = 'd6d6d6';
-		
+
 		// If email null, means we don't want gravatar.com HTTP request
 		if ( $email ) {
-			
+
 			// Check if HTTP or HTTPS Request should be used
-			
+
 			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https://secure.";} else { $http_protocol = "http://www.";}
-			
+
 			// URL for Gravatar
-			$gravatarURL =  $http_protocol . "gravatar.com/avatar.php?gravatar_id=%s&default=%s&size=%s&border=%s&rating=%s";
-			
+			$gravatarURL =  $http_protocol . "gravatar.com/avatar.php?gravatar_id=%s&amp;default=%s&amp;size=%s&amp;border=%s&amp;rating=%s";
 			$avatarURL = sprintf
 			(
-				$gravatarURL, 
-				md5($email), 
+				$gravatarURL,
+				md5($email),
 				$default_image,
 				$size,
 				$border,
 				$rating
 			);
-		}	
-		else 
+		}
+		else
 		{
 			$avatarURL = $default_image ;
 		}
-		
+
+		//$id = ( $id != '' ) ? ' id="' . $id . '" ' : '';
+
 		return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" class="'. $class .'" id="'. $id .'" />';
 	}
 }
@@ -114,7 +115,7 @@ if ( ! function_exists('logit'))
 	}
 }
 
-if ( ! function_exists('module_folders')) 
+if ( ! function_exists('module_folders'))
 {
 	/**
 	 * Returns an array of the folders that modules are allowed to be stored in.
@@ -142,9 +143,9 @@ if ( ! function_exists('module_list'))
 			$ci =& get_instance();
 			$ci->load->helper('directory');
 		}
-	
+
 		$map = array();
-	
+
 		foreach (module_folders() as $folder)
 		{
 			// If we're excluding core modules and this module
@@ -384,74 +385,6 @@ if ( ! function_exists('module_config'))
 	}	
 }
 
-if( ! function_exists('content_nav'))
-{
-	/**
-	 * Builds the navigation used in the admin theme for the main
-	 * contexts list.
-	 *
-	 * @param $mode string The type of toolbar buttons to create. Valid options are 'icon', 'text', 'both'.
-	 *
-	 * @return string A string with the toolbar items required for the context nav.
-	 */
-	function context_nav($mode='icon')
-	{ 
-		$contexts = config_item('contexts');
-		
-		if (empty($contexts) || !is_array($contexts) || !count($contexts))
-		{
-			die(lang('bf_no_contexts'));
-		}
-		
-		// Ensure settings context exists
-		if (!in_array('settings', $contexts))
-		{
-			array_push($contexts, 'settings');
-		}
-		
-		// Ensure developer context exists
-		if (!in_array('developer', $contexts))
-		{
-			array_push($contexts, 'developer');
-		}
-	
-		$nav = '';
-		
-		/*
-			Build out our navigation.
-		*/
-		foreach ($contexts as $context)
-		{	
-			if (has_permission('Site.'. ucfirst($context) .'.View'))
-			{	
-				$url = site_url(SITE_AREA .'/'.$context);
-				$class = check_class($context);
-				$id = 'tb_'. $context;
-				$title = lang('bf_context_'. $context);
-				
-				
-				
-				$nav .= "<a href='{$url}' {$class} id='{$id}' title='{$title}'>";
-				
-				// Image
-				if ($mode=='icon' || $mode=='both')
-				{
-					$nav .= "<img src='". Template::theme_url('images/context_'. $context .'.png') ."' alt='{$title}' />"; 
-				}
-				
-				// Display String
-				if ($mode=='text' || $mode=='both')
-				{
-					$nav .= $title;
-				}
-				
-				$nav .= "</a>";
-			}
-		}
-		
-		return $nav;
-	}
-}
 
 if ( ! function_exists('dump'))
 {
@@ -474,19 +407,134 @@ if ( ! function_exists('dump'))
 	    $i = 0;
 	    foreach ($arguments as $argument)
 	    {
-		echo '<br/><strong>Debug #'.(++$i).' of '.$total_arguments.'</strong>: ';
-		
-		if ( (is_array($argument) || is_object($argument)) && count($argument))
-		{
-			print_r($argument);
+			echo '<br/><strong>Debug #'.(++$i).' of '.$total_arguments.'</strong>: ';
+
+			if ( (is_array($argument) || is_object($argument)) && count($argument))
+			{
+				print_r($argument);
+			}
+			else
+			{
+				var_dump($argument);
+			}
 		}
-		else
+
+		echo '</pre>' . PHP_EOL;
+		echo '</fieldset>' . PHP_EOL;
+	}
+}
+
+//--------------------------------------------------------------------
+
+if (!function_exists('e'))
+{
+	/*
+		Function: e()
+
+		A convenience function to make sure your output is safe to display.
+		Helps to defeat XSS attacks by running the text through htmlentities().
+
+		Should be used anywhere you are displaying user-submitted text.
+	*/
+	function e($str)
+	{
+		echo htmlentities($str, ENT_QUOTES, 'UTF-8');
+	}
+}
+
+//--------------------------------------------------------------------
+
+if (!function_exists('array_implode'))
+{
+	/*
+		Function: array_implode()
+
+		Implode an array with the key and value pair giving a glue,
+		a separator between pairs and the array to implode.
+
+		Example:
+			// Encode Query Strings
+			$query = url_encode( array_implode( '=', '&', $array ) );
+
+		Parameters:
+			$glue		- The glue between key and value.
+			$separator	- Separator between pairs.
+			$array		- The array to implode.
+
+		Returns:
+			A string with the combined elements.
+	*/
+	function array_implode($glue, $separator, $array)
+	{
+		if ( ! is_array( $array ) )
 		{
-			var_dump($argument);
+			return $array;
 		}
-	    }
-	
-	    echo "</pre>";
-	    echo "</fieldset>";
+
+		$string = array();
+
+		foreach ( $array as $key => $val )
+		{
+		    if ( is_array( $val ) )
+		    {
+		        $val = implode( ',', $val );
+		    }
+
+		    $string[] = "{$key}{$glue}{$val}";
+		}
+
+		return implode( $separator, $string );
+	}
+}
+
+//--------------------------------------------------------------------
+
+if ( !function_exists('obj_value') )
+{
+	function obj_value($obj, $key, $type='text', $value=0)
+	{
+		if (isset($obj->$key))
+		{
+			switch ($type)
+			{
+				case 'checkbox':
+				case 'radio':
+					if ($obj->$key == $value)
+					{
+						return 'checked="checked"';
+					}
+					break;
+				case 'select':
+					if ($obj->$key == $value)
+					{
+						return 'selected="selected"';
+					}
+					break;
+				case 'text':
+				default:
+					return $obj->$key;
+			}
+		}
+
+		return null;
+	}
+}
+
+//--------------------------------------------------------------------
+
+if ( !function_exists('iif') )
+{
+	/**
+	* If then Else Statement wrapped in one function, If $expression = true then $returntrue else $returnfalse
+	*
+	* @param mixed $expression    IF Statement to be checked
+	* @param mixed $returntrue    What to Return on True
+	* @param mixed $returnfalse   What to Return on False
+	*
+	* @return mixed    Returns $returntrue or $returnfalse depending on Expression
+	*/
+	function iif($expression, $returntrue, $returnfalse = '')
+	{
+		return ( $expression == 0 ) ? $returnfalse : $returntrue;
 	}
 }

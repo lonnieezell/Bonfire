@@ -149,7 +149,6 @@ class CI_Profiler {
 	{
 		$dbs = array();
 		$output = array();
-		$output['duplicates'] = 0;
 
 		// Let's determine which databases are currently connected to
 		foreach (get_object_vars($this->CI) as $CI_object)
@@ -168,9 +167,6 @@ class CI_Profiler {
 		// Load the text helper so we can highlight the SQL
 		$this->CI->load->helper('text');
 
-		// Key words we want bolded
-		$highlight = array('SELECT', 'DISTINCT', 'FROM', 'WHERE', 'AND', 'LEFT&nbsp;JOIN', 'ORDER&nbsp;BY', 'GROUP&nbsp;BY', 'LIMIT', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'OR&nbsp;', 'HAVING', 'OFFSET', 'NOT&nbsp;IN', 'IN', 'LIKE', 'NOT&nbsp;LIKE', 'COUNT', 'MAX', 'MIN', 'ON', 'AS', 'AVG', 'SUM', '(', ')');
-
 		foreach ($dbs as $db)
 		{
 			if (count($db->queries) == 0)
@@ -179,60 +175,21 @@ class CI_Profiler {
 			}
 			else
 			{
-				$counts = array_count_values($db->queries);
-				
-				/*
-				echo '<pre>';
-				print_r($db->queries);
-				die(print_r($counts));
-				*/
+				$total = 0; // total query time
 				
 				foreach ($db->queries as $key => $val)
-				{	
-					// duplicates?
-					if ($counts[$val] > 1)
-					{	
-						$output['duplicates']++;
-						$duplicate = true;
-					} else
-					{
-						$duplicate = false;
-					}
-				
+				{
 					$time = number_format($db->query_times[$key], 4);
-					$query = $duplicate ? '<span class="ci-profiler-duplicate">'. $val .'</span>' : $val;
-					
-					// Explain the query, but make sure it isn't a subquery (breaks profiler)
-					$explain = (strpos($val, 'SELECT') !== false && strpos($val, '=(SELECT') === false) ? $this->CI->db->query('EXPLAIN '. $val) : null;
-					if (!is_null($explain))
-					{
-						$query .= $this->build_sql_explain($explain->row(), $time);
-					}
-					
-					$output[] = $query;
+					$total += $db->query_times[$key];
+					$output[][$time] = $val;
 				}
+				
+				$total = number_format($total, 4);
+				$output[][$total] = 'Total Query Execution Time';
 			}
 
 		}
 
-		return $output;
-	}
-	
-	//--------------------------------------------------------------------
-	
-	private function build_sql_explain($data, $time)
-	{	
-		$output = '<span class="ci-profiler-db-explain">';
-		
-		$output .= 'Speed: <em>'. $time .'</em>';
-		$output .= ' - Possible keys: <em>'. $data->possible_keys .'</em>';
-		$output .= ' - Key Used: <em>'. $data->key .'</em>';
-		$output .= ' - Type: <em>'. $data->type .'</em>';
-		$output .= ' - Rows: <em>'. $data->rows .'</em>';
-		$output .= ' - Extra: <em>'. $data->Extra .'</em>';
-		
-		$output .= '</span>';
-		
 		return $output;
 	}
 
@@ -524,6 +481,7 @@ class CI_Profiler {
 			if ($this->_compile_{$section} !== FALSE)
 			{
 				$func = "_compile_{$section}";
+				if ($section == 'http_headers') $section = 'headers';
 				$this->_sections[$section] = $this->{$func}();
 				$fields_displayed++;				
 			}

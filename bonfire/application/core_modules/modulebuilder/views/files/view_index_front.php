@@ -1,17 +1,15 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 $view =<<<END
-<div class="box create rounded">
-
-	<h3>{$module_name}</h3>
-
+<div>
+	<h1 class="page-header">{$module_name}</h1>
 </div>
 
 <br />
 
 <?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
 				
-	<table>
+	<table class="table table-striped table-bordered">
 		<thead>
 		
 			{table_header}

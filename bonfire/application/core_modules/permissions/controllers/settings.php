@@ -1,7 +1,29 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+/*
+	Copyright (c) 2011 Lonnie Ezell
+
+	Permission is hereby granted, free of charge, to any person obtaining a copy
+	of this software and associated documentation files (the "Software"), to deal
+	in the Software without restriction, including without limitation the rights
+	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+	copies of the Software, and to permit persons to whom the Software is
+	furnished to do so, subject to the following conditions:
+
+	The above copyright notice and this permission notice shall be included in
+	all copies or substantial portions of the Software.
+
+	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+	THE SOFTWARE.
+*/
+
 
 class Settings extends Admin_Controller {
-               
+
 	function __construct()
 	{
  		parent::__construct();
@@ -15,29 +37,75 @@ class Settings extends Admin_Controller {
 		$this->load->model('permission_model');
 		$this->lang->load('permissions');
 		$this->load->helper('inflector');
-			
+
+		Template::set_block('sub_nav', 'settings/_sub_nav');
 	}
-	
-	
-	/** 
+
+	//--------------------------------------------------------------------
+
+	/**
 	 * function index
 	 *
 	 * list form data
 	 */
 	function index()
 	{
-		Assets::add_js($this->load->view('settings/js', null, true), 'inline');
-		Template::set('records', $this->permission_model->order_by('name')->find_all());
-		Template::set('permission_header', '');
-		if (!Template::get("toolbar_title"))
+		// Deleting anything?
+		if ($action = $this->input->post('submit'))
 		{
-			Template::set("toolbar_title", lang("permissions_manage"));
+			if ($action == 'Delete')
+			{
+				$checked = $this->input->post('checked');
+
+				if (is_array($checked) && count($checked))
+				{
+					$result = FALSE;
+					foreach ($checked as $pid)
+					{
+						$result = $this->permission_model->delete($pid);
+					}
+
+					if ($result)
+					{
+						Template::set_message(count($checked) .' '. lang('permissions_deleted') .'.', 'success');
+					}
+					else
+					{
+						Template::set_message(lang('permissions_del_failure') . $this->permission_model->error, 'error');
+					}
+				}
+				else
+				{
+					Template::set_message(lang('permissions_del_error') . $this->permission_model->error, 'error');
+				}
+			}
 		}
+
+		$total = $this->permission_model->count_all();
+
+		// Pagination
+		$this->load->library('pagination');
+
+		$offset = $this->input->get('per_page');
+
+		$limit = $this->settings_lib->item('site.list_limit');
+		
+		$this->pager['base_url'] 			= current_url() .'?';
+		$this->pager['total_rows'] 			= $total;
+		$this->pager['per_page'] 			= $limit;
+		$this->pager['page_query_string']	= true;
+
+		$this->pagination->initialize($this->pager);
+		
+		Template::set('results', $this->permission_model->limit($limit, $offset)->find_all());
+
+		Template::set("toolbar_title", lang("permissions_manage"));
 		Template::render();
 	}
-	
-	
-	public function create() 
+
+	//--------------------------------------------------------------------
+
+	public function create()
 	{
 		if ($this->input->post('submit'))
 		{
@@ -46,80 +114,78 @@ class Settings extends Admin_Controller {
 				Template::set_message(lang("permissions_create_success"), 'success');
 				Template::redirect(SITE_AREA .'/settings/permissions');
 			}
-			else 
-			{
-				Template::set_message(lang("permissions_create_failure") . $this->permission_model->error, 'error');
-			}
 		}
-	
+
 		Template::set('toolbar_title', lang("permissions_create_new_button"));
 		Template::set_view('settings/permission_form');
 		Template::render();
 	}
-			
-	public function edit() 
+
+	//--------------------------------------------------------------------
+
+	public function edit()
 	{
 		$id = (int)$this->uri->segment(5);
-		
+
 		if (empty($id))
 		{
 			Template::set_message(lang("permissions_invalid_id"), 'error');
 			redirect(SITE_AREA .'/settings/permissions');
 		}
-	
+
 		if ($this->input->post('submit'))
 		{
 			if ($this->save_permissions('update', $id))
 			{
 				Template::set_message(lang("permissions_edit_success"), 'success');
 			}
-			else 
-			{
-				Template::set_message(lang("permissions_edit_failure") . $this->permission_model->error, 'error');
-			}
 		}
-		
+
 		Template::set('permissions', $this->permission_model->find($id));
-	
+
 		Template::set('toolbar_title', lang("permissions_edit_heading"));
 		Template::set_view('settings/permission_form');
-		Template::render();		
+		Template::render();
 	}
-	
-			
-	public function delete() 
-	{	
+
+	//--------------------------------------------------------------------
+
+	public function delete()
+	{
 		$id = $this->uri->segment(5);
-	
+
 		if (!empty($id))
-		{	
+		{
 			if ($this->permission_model->delete($id))
 			{
 				Template::set_message(lang("permissions_delete_success"), 'success');
-			} else
+			}
+			else
 			{
 				Template::set_message(lang("permissions_delete_failure") . $this->permission_model->error, 'error');
 			}
 		}
-		
+
 		redirect(SITE_AREA .'/settings/permissions');
 	}
-		
-	public function save_permissions($type='insert', $id=0) 
-	{	
-			
-		$this->form_validation->set_rules('name','Name','required|trim|xss_clean|max_length[30]');			
-		$this->form_validation->set_rules('description','Description','trim|xss_clean|max_length[100]');			
+
+	//--------------------------------------------------------------------
+
+	public function save_permissions($type='insert', $id=0)
+	{
+
+		$this->form_validation->set_rules('name','Name','required|trim|xss_clean|max_length[30]');
+		$this->form_validation->set_rules('description','Description','trim|xss_clean|max_length[100]');
 		$this->form_validation->set_rules('status','Status','required|trim|xss_clean');
 		if ($this->form_validation->run() === false)
 		{
 			return false;
 		}
-		
+
 		if ($type == 'insert')
 		{
 			$id = $this->permission_model->insert($_POST);
-			
+
 			if (is_numeric($id))
 			{
 				$return = true;
@@ -132,8 +198,9 @@ class Settings extends Admin_Controller {
 		{
 			$return = $this->permission_model->update($id, $_POST);
 		}
-		
+
 		return $return;
 	}
 
+	//--------------------------------------------------------------------
 }

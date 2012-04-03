@@ -87,7 +87,7 @@ class test_role_model extends CodeIgniterUnitTestCase {
 	
 	public function test_find_by_name_returns_object() 
 	{
-		$role = $this->ci->role_model->find_by_name('Banned');
+		$role = $this->ci->role_model->find_by_name('Developer');
 		$this->assertIsA($role, 'stdClass');
 	}
 	
@@ -95,7 +95,7 @@ class test_role_model extends CodeIgniterUnitTestCase {
 	
 	public function test_find_by_name_ignores_case() 
 	{
-		$role = $this->ci->role_model->find_by_name('banned');
+		$role = $this->ci->role_model->find_by_name('developer');
 		$this->role = $role;
 		$this->assertIsA($role, 'stdClass');
 	}

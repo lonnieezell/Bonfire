@@ -1,12 +1,15 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /*
-	Define the various parts of the class here as variables with 
+	Define the various parts of the class here as variables with
 	{placeholders} for variable data. Below, we'll replace the parts
-	as needed. 
-	
+	as needed.
+
 	This should make modifying the way the class is built much easier.
 */
+
+$controller_name_lower = strtolower($controller_name);
+$primary_key_field = set_value("primary_key_field");
 
 //--------------------------------------------------------------------
 // !CLASS PARTS
@@ -27,17 +30,19 @@ END;
 //--------------------------------------------------------------------
 
 $mb_constructor =<<<END
-	public function __construct() 
+	public function __construct()
 	{
 		parent::__construct();
 
 		{restrict}
 		\$this->load->model('{$module_name_lower}_model', null, true);
 		\$this->lang->load('{$module_name_lower}');
-		
+
 		{constructor_extras}
+
+		Template::set_block('sub_nav', '{$controller_name_lower}/_sub_nav');
 	}
-	
+
 	//--------------------------------------------------------------------
 
 
@@ -48,18 +53,50 @@ END;
 $mb_index =<<<END
 	/*
 		Method: index()
-		
+
 		Displays a list of form data.
 	*/
-	public function index() 
+	public function index()
 	{
-		Assets::add_js(\$this->load->view('{$controller_name}/js', null, true), 'inline');
-		
-		Template::set('records', \$this->{$module_name_lower}_model->find_all());
+
+		// Deleting anything?
+		if (\$action = \$this->input->post('delete'))
+		{
+			if (\$action == 'Delete')
+			{
+				\$checked = \$this->input->post('checked');
+
+				if (is_array(\$checked) && count(\$checked))
+				{
+					\$result = FALSE;
+					foreach (\$checked as \$pid)
+					{
+						\$result = \$this->{$module_name_lower}_model->delete(\$pid);
+					}
+
+					if (\$result)
+					{
+						Template::set_message(count(\$checked) .' '. lang('{$module_name_lower}_delete_success'), 'success');
+					}
+					else
+					{
+						Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'error');
+					}
+				}
+				else
+				{
+					Template::set_message(lang('{$module_name_lower}_delete_error') . \$this->{$module_name_lower}_model->error, 'error');
+				}
+			}
+		}
+
+		\$records = \$this->{$module_name_lower}_model->find_all();
+
+		Template::set('records', \$records);
 		Template::set('toolbar_title', "Manage {$module_name}");
 		Template::render();
 	}
-	
+
 	//--------------------------------------------------------------------
 
 
@@ -70,15 +107,17 @@ END;
 $mb_index_front =<<<END
 	/*
 		Method: index()
-		
+
 		Displays a list of form data.
 	*/
-	public function index() 
+	public function index()
 	{
-		Template::set('records', \$this->{$module_name_lower}_model->find_all());
+		\$records = \$this->{$module_name_lower}_model->find_all();
+
+		Template::set('records', \$records);
 		Template::render();
 	}
-	
+
 	//--------------------------------------------------------------------
 
 
@@ -89,10 +128,10 @@ END;
 $mb_create =<<<END
 	/*
 		Method: create()
-		
+
 		Creates a {$module_name} object.
 	*/
-	public function create() 
+	public function create()
 	{
 		\$this->auth->restrict('{create_permission}');
 
@@ -101,22 +140,26 @@ $mb_create =<<<END
 			if (\$insert_id = \$this->save_{$module_name_lower}())
 			{
 				// Log the activity
-				\$this->activity_model->log_activity(\$this->auth->user_id(), lang('{$module_name_lower}_act_create_record').': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
-					
+				\$this->load->model('activities/Activity_model', 'activity_model');
+
+				\$this->activity_model->log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_create_record').': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+
 				Template::set_message(lang("{$module_name_lower}_create_success"), 'success');
 				Template::redirect(SITE_AREA .'/{$controller_name}/{$module_name_lower}');
 			}
-			else 
+			else
 			{
 				Template::set_message(lang('{$module_name_lower}_create_failure') . \$this->{$module_name_lower}_model->error, 'error');
 			}
 		}
-	
+
+		Assets::add_module_js('{$module_name_lower}', '{$module_name_lower}.js');
+
 		Template::set('toolbar_title', lang('{$module_name_lower}_create_new_button'));
 		Template::set('toolbar_title', lang('{$module_name_lower}_create') . ' {$module_name}');
 		Template::render();
 	}
-	
+
 	//--------------------------------------------------------------------
 
 
@@ -127,43 +170,47 @@ END;
 $mb_edit =<<<END
 	/*
 		Method: edit()
-		
+
 		Allows editing of {$module_name} data.
 	*/
-	public function edit() 
+	public function edit()
 	{
 		\$this->auth->restrict('{edit_permission}');
 
 		\$id = (int)\$this->uri->segment(5);
-		
+
 		if (empty(\$id))
 		{
 			Template::set_message(lang('{$module_name_lower}_invalid_id'), 'error');
 			redirect(SITE_AREA .'/{$controller_name}/{$module_name_lower}');
 		}
-	
+
 		if (\$this->input->post('submit'))
 		{
 			if (\$this->save_{$module_name_lower}('update', \$id))
 			{
 				// Log the activity
-				\$this->activity_model->log_activity(\$this->auth->user_id(), lang('{$module_name_lower}_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
-					
+				\$this->load->model('activities/Activity_model', 'activity_model');
+
+				\$this->activity_model->log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+
 				Template::set_message(lang('{$module_name_lower}_edit_success'), 'success');
 			}
-			else 
+			else
 			{
 				Template::set_message(lang('{$module_name_lower}_edit_failure') . \$this->{$module_name_lower}_model->error, 'error');
 			}
 		}
-		
+
+		Assets::add_module_js('{$module_name_lower}', '{$module_name_lower}.js');
+
 		Template::set('{$module_name_lower}', \$this->{$module_name_lower}_model->find(\$id));
-	
+
 		Template::set('toolbar_title', lang('{$module_name_lower}_edit_heading'));
 		Template::set('toolbar_title', lang('{$module_name_lower}_edit') . ' {$module_name}');
-		Template::render();		
+		Template::render();
 	}
-	
+
 	//--------------------------------------------------------------------
 
 
@@ -174,32 +221,34 @@ END;
 $mb_delete =<<<END
 	/*
 		Method: delete()
-		
+
 		Allows deleting of {$module_name} data.
 	*/
-	public function delete() 
-	{	
+	public function delete()
+	{
 		\$this->auth->restrict('{delete_permission}');
 
 		\$id = \$this->uri->segment(5);
-	
+
 		if (!empty(\$id))
-		{	
+		{
 			if (\$this->{$module_name_lower}_model->delete(\$id))
 			{
 				// Log the activity
-				\$this->activity_model->log_activity(\$this->auth->user_id(), lang('{$module_name_lower}_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
-					
+				\$this->load->model('activities/Activity_model', 'activity_model');
+
+				\$this->activity_model->log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+
 				Template::set_message(lang('{$module_name_lower}_delete_success'), 'success');
 			} else
 			{
 				Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'error');
 			}
 		}
-		
+
 		redirect(SITE_AREA .'/{$controller_name}/{$module_name_lower}');
 	}
-	
+
 	//--------------------------------------------------------------------
 
 
@@ -211,36 +260,40 @@ $mb_save =<<<END
 	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
-	
+
 	/*
 		Method: save_{$module_name_lower}()
-		
+
 		Does the actual validation and saving of form data.
-		
+
 		Parameters:
 			\$type	- Either "insert" or "update"
 			\$id		- The ID of the record to update. Not needed for inserts.
-		
+
 		Returns:
 			An INT id for successful inserts. If updating, returns TRUE on success.
 			Otherwise, returns FALSE.
 	*/
-	private function save_{$module_name_lower}(\$type='insert', \$id=0) 
-	{	
+	private function save_{$module_name_lower}(\$type='insert', \$id=0)
+	{
+		if (\$type == 'update') {
+			\$_POST['{$primary_key_field}'] = \$id;
+		}
+
 		{validation_rules}
 
 		if (\$this->form_validation->run() === FALSE)
 		{
 			return FALSE;
 		}
-		
+
 		// make sure we only pass in the fields we want
 		{save_data_array}
-		
+
 		if (\$type == 'insert')
 		{
 			\$id = \$this->{$module_name_lower}_model->insert(\$data);
-			
+
 			if (is_numeric(\$id))
 			{
 				\$return = \$id;
@@ -253,7 +306,7 @@ $mb_save =<<<END
 		{
 			\$return = \$this->{$module_name_lower}_model->update(\$id, \$data);
 		}
-		
+
 		return \$return;
 	}
 
@@ -271,9 +324,7 @@ $body = $mb_constructor;
 
 if ($controller_name == $module_name_lower)
 {
-	$form_validation_code = '$this->load->library(\'form_validation\');
-		$this->form_validation->CI =& $this;';
-	$body = str_replace('{restrict}', $form_validation_code, $body);
+	$body = str_replace('{restrict}', '$this->load->library(\'form_validation\');', $body);
 } else
 {
 	$body = str_replace('{restrict}', '$this->auth->restrict(\''.preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.View\');', $body);
@@ -293,7 +344,8 @@ for($counter=1; $field_total >= $counter; $counter++)
 		if ($db_field_type == 'DATE' AND $date_included === FALSE)
 		{
 			$extras .= '
-		Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');';
+			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
+			Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
 			$date_included = TRUE;
 		}
 		elseif ($db_field_type == 'DATETIME' && $datetime_included === FALSE)
@@ -302,11 +354,12 @@ for($counter=1; $field_total >= $counter; $counter++)
 			if ($date_included === FALSE)
 			{
 				$extras .= '
-		Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');';
+				Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
+				Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
 			}
 			$extras .= '
-		Assets::add_css(\'jquery-ui-timepicker.css\');
-		Assets::add_js(\'jquery-ui-timepicker-addon.js\');';
+			Assets::add_css(\'jquery-ui-timepicker.css\');
+			Assets::add_js(\'jquery-ui-timepicker-addon.js\');';
 			$date_included = TRUE;
 			$datetime_included = TRUE;
 		}
@@ -315,13 +368,26 @@ for($counter=1; $field_total >= $counter; $counter++)
 			// if a date field hasn't been included already then add in the jquery ui files
 			if ($textarea_editor == 'ckeditor') {
 				$extras .= '
-		Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
+				Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
 			}
 			elseif ($textarea_editor == 'xinha') {
 				$extras .= '
-		Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
-		Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
+				Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
+				Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
 			}
+      elseif ($textarea_editor == 'markitup') {
+        $extras .= '
+        Assets::add_css(Template::theme_url(\'js/editors/markitup/skins/markitup/style.css\'));
+        Assets::add_css(Template::theme_url(\'js/editors/markitup/sets/default/style.css\'));
+
+        Assets::add_js(Template::theme_url(\'js/editors/markitup/jquery.markitup.js\'));
+        Assets::add_js(Template::theme_url(\'js/editors/markitup/sets/default/set.js\'));';
+      }
+      elseif ($textarea_editor == 'tinymce') {
+        $extras .= '
+                    Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce.js\));
+                    Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce_init.js\));';
+      }
 			$textarea_included = TRUE;
 		}
 	}
@@ -334,7 +400,7 @@ unset($extras);
 
 // Index Method
 
-if (in_array('index', $action_names))
+if ( is_array($action_names) AND in_array('index', $action_names))
 {
 	// check if this is the front controller
 	if ($controller_name == $module_name_lower)
@@ -395,7 +461,7 @@ if ($controller_name != $module_name_lower)
 	$last_field = 0;
 	for($counter=1; $field_total >= $counter; $counter++)
 	{
-		// only build on fields that have data entered. 
+		// only build on fields that have data entered.
 
 		// Due to the required if rule if the first field is set the the others must be
 
@@ -408,9 +474,9 @@ if ($controller_name != $module_name_lower)
 		$last_field = $counter;
 		$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
 
-		$rules .= '			
+		$rules .= '
 		$this->form_validation->set_rules(\''.$field_name.'\',\''.set_value("view_field_label$counter").'\',\'';
-		
+
 		$save_data_array .= '
 		$data[\''.$field_name.'\']        = $this->input->post(\''.$field_name.'\');';
 
@@ -421,7 +487,7 @@ if ($controller_name != $module_name_lower)
 		$rule_counter = 0;
 
 		if (is_array($validation_rules))
-		{       
+		{
 			// add rules such as trim|required|xss_clean
 			foreach($validation_rules as $key => $value)
 			{
@@ -430,12 +496,12 @@ if ($controller_name != $module_name_lower)
 					$rules .= '|';
 				}
 
-				if ($value == 'unique')	{		
+				if ($value == 'unique')	{
 					$prefix = $this->db->dbprefix;
-					$rules .= $value.'['.$prefix.$table_name.'.'.$field_name.','.$prefix.$table_name.'.'.set_value("primary_key_field").']';
+					$rules .= $value.'['.$prefix.$table_name.'.'.$field_name.','.$prefix.$table_name.'.'.$primary_key_field.']';
 				}
 				else {
-					$rules .= $value;	
+					$rules .= $value;
 				}
 				$rule_counter++;
 			}
@@ -452,7 +518,7 @@ if ($controller_name != $module_name_lower)
 				list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
 				$max = $len;
 				if (isset($decimal) && $decimal != 0) {
-					$max = $len + 1;		// Add 1 to allow for the 
+					$max = $len + 1;		// Add 1 to allow for the
 				}
 				$rules .= 'max_length['.$max.']';
 			}
@@ -466,7 +532,7 @@ if ($controller_name != $module_name_lower)
 
 	$body = str_replace('{validation_rules}', $rules, $body);
 	$body = str_replace('{save_data_array}', $save_data_array, $body);
-	
+
 	unset($rules);
 }
 
@@ -479,7 +545,7 @@ $controller = str_replace('{class_content}', $body, $mb_class_wrapper);
 if ($controller_name == $module_name_lower)
 {
 	$controller = str_replace('{extend_class}', 'Front_Controller', $controller);
-} else 
+} else
 {
 	$controller = str_replace('{extend_class}', 'Admin_Controller', $controller);
 }

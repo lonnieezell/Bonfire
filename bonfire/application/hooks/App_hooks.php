@@ -8,10 +8,10 @@
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in
 	all copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,43 +24,28 @@
 class App_hooks {
 
 	private $ci;
-	
-	private $ignore_pages = array('login', 'logout');
-	
+
+	private $ignore_pages = array('login', 'logout', 'register', 'forgot_password');
+
 	//--------------------------------------------------------------------
-	
-	public function __construct() 
+
+	public function __construct()
 	{
 		$this->ci =& get_instance();
 	}
-	
+
 	//--------------------------------------------------------------------
-	
-	
+
+
 	/**
 	 * Stores the name of the current uri in the session as 'previous_page'.
 	 * This allows redirects to take us back to the previous page without
 	 * relying on inconsistent browser support or spoofing.
-	 * 
+	 *
 	 * @access	public
 	 * @return	void
 	 */
-	public function prep_redirect() 
-	{
-		if (!class_exists('CI_Session'))
-		{
-			$this->ci->load->library('session');
-		}
-	
-		if (!in_array($this->ci->uri->uri_string(), $this->ignore_pages))
-		{
-			$this->ci->session->set_userdata('previous_page', current_url()); 
-		}
-	}
-	
-	//--------------------------------------------------------------------
-
-	public function save_requested() 
+	public function prep_redirect()
 	{
 		if (!class_exists('CI_Session'))
 		{
@@ -69,14 +54,29 @@ class App_hooks {
 
 		if (!in_array($this->ci->uri->uri_string(), $this->ignore_pages))
 		{
-			$this->ci->session->set_userdata('requested_page', current_url()); 
+			$this->ci->session->set_userdata('previous_page', current_url());
 		}
 	}
-	
+
 	//--------------------------------------------------------------------
-	
-	
-	public function check_site_status() 
+
+	public function save_requested()
+	{
+		if (!class_exists('CI_Session'))
+		{
+			$this->ci->load->library('session');
+		}
+
+		if (!in_array($this->ci->uri->uri_string(), $this->ignore_pages))
+		{
+			$this->ci->session->set_userdata('requested_page', current_url());
+		}
+	}
+
+	//--------------------------------------------------------------------
+
+
+	public function check_site_status()
 	{
 //		if ($this->ci->config->item('site.status') == 0)
 		if ($this->ci->settings_lib->item('site.status') == 0)
@@ -93,9 +93,9 @@ class App_hooks {
 			}
 		}
 	}
-	
+
 	//--------------------------------------------------------------------
-	
+
 }
 
 // End App_hooks class

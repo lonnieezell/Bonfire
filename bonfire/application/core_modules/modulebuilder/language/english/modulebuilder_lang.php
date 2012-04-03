@@ -24,6 +24,7 @@
 // INDEX page
 $lang['mb_actions']				= 'Actions';
 $lang['mb_create_button']		= 'Create Module';
+$lang['mb_create_link']			= 'Create a new module';
 $lang['mb_create_note']			= 'Use our wizbang module building wizard to create your next module. We do all the heavy lifting by generating all the controllers, models, views and language files you need.';
 $lang['mb_not_writeable_note']	= 'Error: The bonfire/modules folder is not writeable so modules cannot be written to the server.  Please make the folder writeable and refresh this page.';
 $lang['mb_delete']				= 'Delete';
@@ -56,6 +57,8 @@ $lang['mb_out_lang']			= 'Language File';
 $lang['mb_out_lang_path']		= '%s_lang.php';
 $lang['mb_out_migration']		= 'Migration File(s)';
 $lang['mb_out_migration_path']	= 'migrations/002_Install_%s.php';
+$lang['mb_new_module']			= 'New Module';
+$lang['mb_exist_modules']		= 'Existing Modules';
 
 // FORM page
 $lang['mb_form_note'] = '<p><b>Fill out the fields you would like in your module (an "id" field is created automatically).  If you want to create the SQL for a DB table check the "Create Module Table" box.</b></p><p>This form will generate a full CodeIgniter module (model, controller and views) and, if you choose, database Migration file(s).</p>';
@@ -109,7 +112,7 @@ $lang['mb_form_alpha']			= 'a-Z';
 $lang['mb_form_alpha_dash']		= 'a-Z, 0-9, and _-';
 $lang['mb_form_alpha_numeric']	= 'a-Z and 0-9';
 $lang['mb_form_add_fld_button'] = 'Add another field';
-$lang['mb_form_show_advanced']	= '(Toggle Advanced Options)';
+$lang['mb_form_show_advanced']	= 'Toggle Advanced Options';
 $lang['mb_form_show_more']		= '...toggle more rules...';
 $lang['mb_form_integer']		= 'Integers';
 $lang['mb_form_is_decimal']		= 'Decimal Numbers';
