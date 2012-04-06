@@ -249,7 +249,16 @@ class Contexts {
 		{
 			if (module_controller_exists($context, $module) === true)
 			{
-				self::$actions[] = $module;
+				$mod_config = module_config($module);
+			
+				self::$actions[$module] = array(
+					'weight'		=> isset($mod_config['weights'][$context]) ? $mod_config['weights'][$context] : 0,
+					'display_name'	=> isset($mod_config['name']) ? $mod_config['name'] : $module,
+					'title' 		=> isset($mod_config['description']) ? $mod_config['description'] : $module,
+					'menus'			=> isset($mod_config['menus']) ? $mod_config['menus'] : false,
+				);
+				
+				self::$actions[$module]['menu_topic'] = isset($mod_config['menu_topic']) ? $mod_config['menu_topic'] : self::$actions[$module]['display_name'];
 			}
 		}
 
@@ -261,35 +270,32 @@ class Contexts {
 			return '<ul class="'. $class .'"></ul>';
 		}
 
+		// Order our actions by their weight, then alphabetically
+		self::sort_actions();
+
 		// Grab our module permissions so we know who can see what on the sidebar
 		$permissions = self::$ci->config->item('module_permissions');
 
 		// Build up our menu array
-		foreach (self::$actions as $module)
+		foreach (self::$actions as $module => $config)
 		{
 			// Make sure the user has permission to view this page.
 			if ((isset($permissions[$context][$module]) && has_permission($permissions[$context][$module])) || (isset($permissions[$context]) && is_array($permissions[$context]) && !array_key_exists($module, $permissions[$context])))
 			{
-				// Grab our module config array, if any.
-				$mod_config = module_config($module);
-
-				$display_name = isset($mod_config['name']) ? $mod_config['name'] : $module;
-				$title = isset($mod_config['description']) ? $mod_config['description'] : $module;
-
-				$menu_topic = isset($mod_config['menu_topic'][$context]) ? $mod_config['menu_topic'][$context] : $display_name;
-
 				// Drop-down menus?
-				if (isset($mod_config['menus']) && isset($mod_config['menus'][$context]))
+				if ($config['menus'] && isset($config['menus'][$context]))
 				{
-					$menu_view = $mod_config['menus'][$context];
+					$menu_view = $config['menus'][$context];
 				} else
 				{
 					$menu_view = '';
 				}
 
+				$menu_topic = isset($config['menu_topic'][$context]) ? $config['menu_topic'][$context] : $config['display_name'];
+
 				self::$menu[$menu_topic][$module] = array(
-						'title'			=> $title,
-						'display_name'	=> $display_name,
+						'title'			=> $config['title'],
+						'display_name'	=> $config['display_name'],
 						'menu_view'		=> $menu_view,
 						'menu_topic'	=> $menu_topic
 				);
@@ -466,4 +472,22 @@ class Contexts {
 	}
 
 	//--------------------------------------------------------------------
+	
+	private function sort_actions() 
+	{
+		$weights 		= array();
+		$display_names	= array();
+	
+		foreach (self::$actions as $key => $action)
+		{
+			$weights[$key] 			= $action['weight'];
+			$display_names[$key]	= $action['display_name'];
+		}
+		
+		array_multisort($weights, SORT_DESC, $display_names, SORT_ASC, self::$actions);
+		//echo '<pre>'. print_r(self::$actions, true) .'</pre>';
+	}
+	
+	//--------------------------------------------------------------------
+	
 }
