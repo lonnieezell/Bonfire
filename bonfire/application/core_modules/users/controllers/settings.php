@@ -410,7 +410,7 @@ class Settings extends Admin_Controller
 			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), 'trim|strip_tags|xss_clean');
 		}
 
-		$use_usernames = $this->settings_lib->item('auth.usernames');
+		$use_usernames = $this->settings_lib->item('auth.use_usernames');
 
 		if ($use_usernames)
 		{
