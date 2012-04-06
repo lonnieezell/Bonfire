@@ -78,6 +78,8 @@ class Base_Controller extends MX_Controller {
 		if (ENVIRONMENT == 'production')
 		{
 		    $this->db->save_queries = false;
+		    
+		    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 		}
 
 		// Development niceties...
@@ -96,10 +98,9 @@ class Base_Controller extends MX_Controller {
 				$this->load->library('migrations/migrations');
 				$this->migrations->auto_latest();
 			}
+			
+			$this->load->driver('cache', array('adapter' => 'dummy'));
 		}
-
-		// Make sure that we have a cache enine ready to go...
-		$this->load->driver('cache', array('adapter' => 'file'));
 
 		$this->previous_page = $this->session->userdata('previous_page');
 		$this->requested_page = $this->session->userdata('requested_page');
