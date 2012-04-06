@@ -24,6 +24,30 @@
  * @author		ExpressionEngine Dev Team
  * @link		http://codeigniter.com/user_guide/helpers/html_helper.html
  */
+ 
+// ------------------------------------------------------------------------
+
+/**
+ * Echo HTML Entities
+ *
+ * Generates a encoded string.  
+ * First param is the data.
+ * Second param is the flags needed.
+ * Third param is the encoding type.
+ *
+ * @access	public
+ * @param	string
+ * @param	long
+ * @param	string
+ * @return	string
+ */
+if ( ! function_exists('e'))
+{
+	function e($data = '',$flags = ENT_QUOTES, $encoding = 'UTF-8')
+	{
+		echo htmlentities($data, $flags,$encoding);
+	}
+}
 
 // ------------------------------------------------------------------------
 

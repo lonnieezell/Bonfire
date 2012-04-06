@@ -100,15 +100,13 @@ class Modulebuilder
 		// build the permissions migration file
 		$content['acl_migration'] = $this->build_acl_sql($field_total, $module_name, $contexts, $action_names, $role_id, $table_name);
 
-		if ($field_total) {
-    	   // build the model file
+    	   	// build the model file
         	$content['model'] = $this->build_model($field_total, $module_file_name, $action_names, $primary_key_field, $table_name);
 
     		// db based files - migrations
     		if( $db_required ) {
     			$content['db_migration'] =  $this->build_db_sql($field_total, $module_name, $primary_key_field, $table_name);
     		}
-        }
 
 		if ($content['acl_migration'] == FALSE || $content['config'] == FALSE || $content['controllers'] == FALSE || $content['views'] == FALSE || ($db_required && (($content['model'] == FALSE || $content['db_migration'] == FALSE) ) ) )
 		{
