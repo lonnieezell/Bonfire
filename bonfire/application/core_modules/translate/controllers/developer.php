@@ -62,7 +62,7 @@ class Developer extends Admin_Controller {
 		Template::set('lang_files', $all_lang_files['core']);
 		Template::set('modules', $all_lang_files['custom']);
 
-		Template::set('toolbar_title', lang('tr_translate_title'));
+		Template::set('toolbar_title', lang('tr_translate_title') .' to '. ucfirst($this->trans_lang));
 		Template::render();
 	}
 	
@@ -102,7 +102,7 @@ class Developer extends Admin_Controller {
 			Template::set('lang_file', $lang_file);
 		}
 		
-		Template::set('toolbar_title', lang('tr_edit_title') . ': '. $lang_file);
+		Template::set('toolbar_title', lang('tr_edit_title') .' to '. ucfirst($this->trans_lang) . ': '. $lang_file);
 		
 		Template::render();
 	}

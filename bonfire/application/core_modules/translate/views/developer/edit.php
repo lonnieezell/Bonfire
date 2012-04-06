@@ -5,7 +5,7 @@ form .form-actions { padding-left: 43% !important; }
 </style>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
+	<h3><?php echo lang('tr_language') .': '. ucfirst($trans_lang) ?></h3>
 
 <?php if (isset($orig) && is_array($orig) && count($orig)) : ?>
 
@@ -13,7 +13,7 @@ form .form-actions { padding-left: 43% !important; }
 		<input type="hidden" name="trans_lang" value="<?php e($trans_lang) ?>" />
 		
 		<fieldset>
-			<legend><?php echo lang('tr_language') .': '. ucfirst($trans_lang) ?></legend>
+			<legend><?php echo lang('tr_translate_file') .": $lang_file"  ?></legend>
 	
 		<?php foreach ($orig as $key => $val) : ?>
 		<div class="control-group">
