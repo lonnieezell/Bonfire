@@ -93,6 +93,42 @@ class BF_Model extends CI_Model {
 			Protected
 	*/
 	protected $set_modified = TRUE;
+	
+	/*
+		Var: $log_user
+		If TRUE, will log user id for 'created_by', 'modified_by' and 'deleted_by'.
+		
+		Access:
+			Protected
+	*/
+	protected $log_user = FALSE;
+	
+	/*
+		Var: $created_by_field
+		Field name to use to the created by column in the DB table.
+
+		Access:
+			Protected
+	*/
+	protected $created_by_field = 'created_by';
+
+	/*
+		Var: $modified_by_field
+		Field name to use to the modified by column in the DB table.
+
+		Access:
+			Protected
+	*/
+	protected $modified_by_field = 'modified_by';
+	
+	/*
+		Var: $deleted_by_field
+		Field name to use for the deleted by column in the DB table.
+
+		Access:
+			Protected
+	*/
+	protected $deleted_by_field = 'deleted_by';
 
 	/*
 		Var: $date_format
@@ -326,6 +362,11 @@ class BF_Model extends CI_Model {
 		{
 			$data[$this->created_field] = $this->set_date();
 		}
+		
+		if ($this->set_created === TRUE && $this->log_user === TRUE && !array_key_exists($this->created_by_field, $data))
+		{
+			$data[$this->created_by_field] = $this->auth->user_id();
+		}
 
 		// Insert it
 		$status = $this->db->insert($this->table, $data);
@@ -367,6 +408,11 @@ class BF_Model extends CI_Model {
 		if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
 		{
 			$data[$this->modified_field] = $this->set_date();
+		}
+		
+		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
+		{
+			$data[$this->modified_by_field] = $this->auth->user_id();
 		}
 
 		$this->db->where($this->key, $id);
@@ -475,8 +521,17 @@ class BF_Model extends CI_Model {
 		{
 			if ($this->soft_deletes === TRUE)
 			{
+				$data = array(
+					'deleted'	=> 1
+				);
+				
+				if ($this->log_user === TRUE && !array_key_exists($this->deleted_by_field, $data))
+				{
+					$data[$this->deleted_by_field] = $this->auth->user_id();
+				}
+			
 				$this->db->where($this->key, $id);
-				$result = $this->db->update($this->table, array('deleted' => 1));
+				$result = $this->db->update($this->table, $data);
 			}
 			else
 			{
