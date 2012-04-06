@@ -56,7 +56,7 @@
 		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
 			<label class="control-label" for="timezone"><?php echo lang('bf_timezone') ?></label>
 			<div class="controls">
-				<?php echo timezone_menu($user->timezone); ?>
+				<?php echo timezone_menu(isset($user) ? $user->timezone : $current_user->timezone); ?>
 				<?php if (form_error('timezone')) echo '<span class="help-inline">'. form_error('timezone') .'</span>'; ?>
 			</div>
 		</div>
