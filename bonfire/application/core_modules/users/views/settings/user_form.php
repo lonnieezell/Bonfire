@@ -52,6 +52,14 @@
 				<?php if (form_error('pass_confirm')) echo '<span class="help-inline">'. form_error('pass_confirm') .'</span>'; ?>
 			</div>
 		</div>
+		
+		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
+			<label class="control-label" for="timezone"><?php echo lang('bf_timezone') ?></label>
+			<div class="controls">
+				<?php echo timezone_menu($current_user->timezone); ?>
+				<?php if (form_error('timezone')) echo '<span class="help-inline">'. form_error('timezone') .'</span>'; ?>
+			</div>
+		</div>
 
 		<?php if (has_permission('Bonfire.Roles.Manage')) :?>
 		<fieldset>

@@ -35,6 +35,7 @@ $lang['bf_top_number']			= 'Items <em>per</em> page:';
 $lang['bf_top_number_help']		= 'When viewing reports, how many items should be listed at a time?';
 $lang['bf_home']				= 'Home';
 $lang['bf_site_information']	= 'Site Information';
+$lang['bf_timezone']			= 'Timezone';
 
 //--------------------------------------------------------------------
 // ! AUTH SETTINGS

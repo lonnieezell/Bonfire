@@ -153,9 +153,10 @@ class Settings extends Admin_Controller
 	public function create()
 	{
 			$this->auth->restrict('Bonfire.Users.Add');
-Console::log($this->current_user);
+	
 			$this->load->config('address');
 			$this->load->helper('address');
+			$this->load->helper('date');
 
 			if ($this->input->post('submit'))
 			{
@@ -190,6 +191,7 @@ Console::log($this->current_user);
 			$this->load->config('address');
 			$this->load->helper('address');
 			$this->load->helper('form');
+			$this->load->helper('date');
 
 			$user_id = $this->uri->segment(5);
 			if (empty($user_id))
@@ -427,7 +429,8 @@ Console::log($this->current_user);
 		// Compile our core user elements to save.
 		$data = array(
 			'email'		=> $this->input->post('email'),
-			'username'	=> $this->input->post('username')
+			'username'	=> $this->input->post('username'),
+			'timezone'	=> $this->input->post('timezones'),
 		);
 
 		if ($this->input->post('password'))	$data['password'] = $this->input->post('password');
