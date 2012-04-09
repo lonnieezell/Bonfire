@@ -17,7 +17,7 @@ $id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? "/".$'.$modul
 $view .= '?>';
 $view .= '
 <div class="admin-box">
-	<h3>' . $module_name_lower . '</h3>
+	<h3>' . $module_name . '</h3>
 <?php echo form_open($this->uri->uri_string(), \'class="form-horizontal"\'); ?>
 	<fieldset>
 ';
@@ -36,7 +36,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 	}
 
 	$field_label = set_value("view_field_label$counter");
-	$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
+	$field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
 	$field_type = set_value("view_field_type$counter");
 
 	$validation_rules = $this->input->post('validation_rules'.$counter);
@@ -203,8 +203,7 @@ if($action_name != 'create') {
 	$delete = PHP_EOL . '
 	<?php if ($this->auth->has_permission(\''.$delete_permission.'\')) : ?>
 
-			or <a class="btn btn-danger" id="delete-me" href="
-			<?php echo SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/\'delete/\'. $id;?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" name="delete-me">
+			or <a class="btn btn-danger" id="delete-me" href="/<?php echo SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id;?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" name="delete-me">
 			<i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>
 			</a>
 

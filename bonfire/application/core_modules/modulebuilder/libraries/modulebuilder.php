@@ -60,7 +60,7 @@ class Modulebuilder
 		$content['views'] = FALSE;
 
 		// if the db is required then there is at least one field, the primary ID, so make $field_total at least 1
-		$field_total = (empty($field_total) && $db_required) ? 1 : $field_total;
+		$field_total = (empty($field_total) && $db_required != '') ? 1 : $field_total;
 
         // build the files
 		$module_file_name = str_replace(" ", "_", strtolower($module_name));
@@ -71,6 +71,7 @@ class Modulebuilder
 				$context_name = $module_file_name;
 				$public_context = TRUE;
 			}
+
 			$content['controllers'][$context_name] = $this->build_controller($field_total, $module_name, $context_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name);
 
 			// view files
@@ -100,17 +101,17 @@ class Modulebuilder
 		// build the permissions migration file
 		$content['acl_migration'] = $this->build_acl_sql($field_total, $module_name, $contexts, $action_names, $role_id, $table_name);
 
-		if ($field_total) {
+		if ($field_total && $db_required != '') {
     	   // build the model file
         	$content['model'] = $this->build_model($field_total, $module_file_name, $action_names, $primary_key_field, $table_name);
 
     		// db based files - migrations
-    		if( $db_required ) {
+    		if( $db_required == 'new') {
     			$content['db_migration'] =  $this->build_db_sql($field_total, $module_name, $primary_key_field, $table_name);
     		}
         }
 
-		if ($content['acl_migration'] == FALSE || $content['config'] == FALSE || $content['controllers'] == FALSE || $content['views'] == FALSE || ($db_required && (($content['model'] == FALSE || $content['db_migration'] == FALSE) ) ) )
+		if ($content['acl_migration'] == FALSE || $content['config'] == FALSE || $content['controllers'] == FALSE || $content['views'] == FALSE || ($db_required != '' && (($content['model'] == FALSE && $content['db_migration'] == FALSE) ) ) )
 		{
 			// something went wrong when trying to build the form
 			log_message('error', "The form was not built. There was an error with one of the build_() functions. Probably caused by total fields variable not being set");
@@ -121,7 +122,7 @@ class Modulebuilder
 		// we need something unique to build the file directory. unix timestamp seemed like a good choice
 		$id = '';
 		// write to files to disk
-		$write_status = $this->_write_files($module_file_name, $content, $table_name);
+		$write_status = $this->_write_files($module_file_name, $content, $table_name, $db_required);
 
 		$data['error'] = FALSE;
 		if( $write_status['status'] ) {
@@ -152,7 +153,8 @@ class Modulebuilder
 	// PRIVATE METHODS
 	//--------------------------------------------------------------------
 
-	private function _write_files($module_name, $content, $table_name) {
+	private function _write_files($module_name, $content, $table_name, $db_required)
+	{
 
 		$ret_val = array('status' => TRUE);
 		$error_msg = 'Module Builder:';
@@ -172,11 +174,16 @@ class Modulebuilder
 			@mkdir($this->options['output_path']."{$module_name}/assets/js/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/config/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/controllers/",0777);
-			@mkdir($this->options['output_path']."{$module_name}/models/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/views/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/language/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/language/english/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/migrations/",0777);
+
+			// create the models folder if the db is required
+			if ($db_required != '')
+			{
+				@mkdir($this->options['output_path']."{$module_name}/models/",0777);
+			}
 
 			foreach($content as $type => $value)
 			{
