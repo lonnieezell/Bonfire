@@ -7,7 +7,7 @@ $view =<<<END
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<?php if (\$this->auth->has_permission('{delete_permission}')) : ?>
+					<?php if (\$this->auth->has_permission('{delete_permission}') && isset(\$records) && is_array(\$records) && count(\$records)) : ?>
 					<th class="column-check"><input class="check-all" type="checkbox" /></th>
 					<?php endif;?>
 					{table_header}
@@ -89,7 +89,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 		continue; 	// move onto next iteration of the loop
 	}
 
-	$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
+	$field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
 
 	if ($counter == 1) {
 		$table_records .= "
