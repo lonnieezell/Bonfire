@@ -20,7 +20,7 @@
 				<?php if (form_error('email')) echo '<span class="help-inline">'. form_error('email') .'</span>'; ?>
 			</div>
 		</div>
-	
+
 		<div class="control-group <?php echo form_error('username') ? 'error' : '' ?>">
 			<label for="username" class="control-label"><?php echo lang('bf_username') ?></label>
 			<div class="controls">
@@ -52,12 +52,12 @@
 				<?php if (form_error('pass_confirm')) echo '<span class="help-inline">'. form_error('pass_confirm') .'</span>'; ?>
 			</div>
 		</div>
-		
+
 		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
-			<label class="control-label" for="timezone"><?php echo lang('bf_timezone') ?></label>
+			<label class="control-label" for="timezones"><?php echo lang('bf_timezone') ?></label>
 			<div class="controls">
-				<?php echo timezone_menu(isset($user) ? $user->timezone : $current_user->timezone); ?>
-				<?php if (form_error('timezone')) echo '<span class="help-inline">'. form_error('timezone') .'</span>'; ?>
+				<?php echo timezone_menu(set_value('timezones', isset($user) ? $user->timezone : $current_user->timezone)); ?>
+				<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
 			</div>
 		</div>
 
@@ -68,13 +68,20 @@
 			<div class="control-group">
 				<label for="role_id" class="control-label"><?php echo lang('us_role'); ?></label>
 				<div class="controls">
-					<select name="role_id" id="role_id" class="span8 chzn-select">
+					<select name="role_id" id="role_id" class="chzn-select">
 					<?php if (isset($roles) && is_array($roles) && count($roles)) : ?>
 						<?php foreach ($roles as $role) : ?>
 
 							<?php if (has_permission('Permissions.'. ucfirst($role->role_name) .'.Manage')) : ?>
-
-							<option value="<?php echo $role->role_id ?>" <?php echo isset($user) && $user->role_id == $role->role_id ? 'selected="selected"' : '' ?> <?php echo !isset($user) && $role->default == 1 ? 'selected="selected"' : ''; ?>>
+							<?php
+								// check if it should be the default
+								$default_role = FALSE;
+								if ((isset($user) && $user->role_id == $role->role_id) || (!isset($user) && $role->default == 1))
+								{
+									$default_role = TRUE;
+								}
+							?>
+							<option value="<?php echo $role->role_id ?>" <?php echo set_select('role_id', $role->role_id, $default_role) ?>>
 								<?php echo ucfirst($role->role_name) ?>
 							</option>
 

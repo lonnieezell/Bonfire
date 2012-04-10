@@ -153,7 +153,7 @@ class Settings extends Admin_Controller
 	public function create()
 	{
 			$this->auth->restrict('Bonfire.Users.Add');
-	
+
 			$this->load->config('address');
 			$this->load->helper('address');
 			$this->load->helper('date');
@@ -420,6 +420,9 @@ class Settings extends Admin_Controller
 		}
 
 		$this->form_validation->set_rules('display_name', lang('bf_display_name'), 'trim|strip_tags|max_length[255]|xss_clean');
+
+		$this->form_validation->set_rules('timezones', lang('bf_timezone'), 'required|trim|strip_tags|max_length[4]|xss_clean');
+		$this->form_validation->set_rules('role_id', lang('us_role'), 'required|trim|strip_tags|max_length[2]|is_numeric|xss_clean');
 
 		if ($this->form_validation->run() === false)
 		{
