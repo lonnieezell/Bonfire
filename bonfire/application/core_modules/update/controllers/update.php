@@ -28,7 +28,7 @@ class Update extends Admin_Controller {
 		parent::__construct();
 
 		$this->load->library('GitHub_lib');
-		$this->lang->load('update_lang');
+		$this->lang->load('update');
 	}
 
 	//--------------------------------------------------------------------
