@@ -61,10 +61,7 @@ class Settings extends Admin_Controller
 			$offset = $this->uri->segment(5);
 
 			// Do we have any actions?
-			$action = $this->input->post('submit');
-
-			// if the action is empty check the delete button
-			$action = !empty($action) ? $action : $this->input->post('delete');
+			$action = $this->input->post('submit').$this->input->post('delete').$this->input->post('purge');
 
 			if (!empty($action))
 			{
@@ -77,6 +74,9 @@ class Settings extends Admin_Controller
 									break;
 							case 'delete':
 									$this->delete($checked);
+									break;
+							case 'purge':
+									$this->purge($checked);
 									break;
 					}
 			}
@@ -289,7 +289,7 @@ class Settings extends Admin_Controller
 											$user = $this->user_model->find($id);
 											$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 											$this->activity_model->log_activity($this->current_user->id, lang('us_log_delete') . ': '.$log_name, 'users');
-											Template::set_message('The User was successfully deleted.', 'success');
+											Template::set_message(lang('us_action_deleted'), 'success');
 									} else {
 											Template::set_message(lang('us_action_not_deleted'). $this->user_model->error, 'error');
 									}
@@ -311,34 +311,33 @@ class Settings extends Admin_Controller
 
 	//--------------------------------------------------------------------
 
-	public function purge()
+	public function purge($users)
 	{
+		if (empty($users))
+		{
 			$user_id = $this->uri->segment(5);
 
-			// Handle a single-user purge
-			if (!empty($user_id) && is_numeric($user_id))
+			if(!empty($user_id))
 			{
-					$this->user_model->delete($user_id, true);
+					$users = array($user_id);
 			}
-			// Handle purging all deleted users...
-			else
+		}
+
+		if (!empty($users) && is_array($users))
+		{
+			$this->auth->restrict('Bonfire.Users.Manage');
+
+			foreach ($users as $id)
 			{
-					// Find all deleted accounts
-					$users = $this->user_model->where('users.deleted', 1)
-													->find_all(true);
-
-					if (is_array($users))
-					{
-							foreach ($users as $user)
-							{
-								$this->user_model->delete($user->id, true);
-							}
-					}
+				$this->user_model->delete($id, true);
 			}
+			Template::set_message(lang('us_action_purged'), 'success');
+		}
+		else {
+			Template::set_message(lang('us_empty_id'), 'error');
+		}
 
-			Template::set_message('Users Purged.', 'success');
-
-			Template::redirect(SITE_AREA .'/settings/users');
+		Template::redirect(SITE_AREA .'/settings/users');
 	}
 
 	//--------------------------------------------------------------------

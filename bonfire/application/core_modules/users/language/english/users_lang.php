@@ -8,10 +8,10 @@
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in
 	all copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -42,6 +42,8 @@ $lang['us_log_edit_profile']		= 'updated their profile';
 $lang['us_deleted_users']			= 'Deleted Users';
 $lang['us_purge_del_accounts']		= 'Purge Deleted Accounts';
 $lang['us_purge_del_note']			= '<p>Purging deleted accounts is a permanent action. There is no going back, so please make sure.</p>';
+$lang['us_purge_del_confirm']		= 'Are you sure you want to completely remove the user account(s) - there is no going back?';
+$lang['us_action_purged']			= 'Users purged.';
 $lang['us_action_deleted']			= 'The User was successfully deleted.';
 $lang['us_action_not_deleted']		= 'We could not delete the user: ';
 $lang['us_delete_account']			= 'Delete Account';
