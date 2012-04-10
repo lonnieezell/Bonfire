@@ -29,28 +29,39 @@ END;
 
 //--------------------------------------------------------------------
 
-$mb_constructor =<<<END
+$mb_constructor = "
 	public function __construct()
 	{
 		parent::__construct();
 
-		{restrict}
-		\$this->load->model('{$module_name_lower}_model', null, true);
-		\$this->lang->load('{$module_name_lower}');
+		{restrict}";
+if ($db_required != '') {
+	$mb_constructor .= "
+		\$this->load->model('".$module_name_lower."_model', null, true);";
+}
 
-		{constructor_extras}
+$mb_constructor .= "
+		\$this->lang->load('".$module_name_lower."');
+		{constructor_extras}";
 
-		Template::set_block('sub_nav', '{$controller_name_lower}/_sub_nav');
+// check that it is an admin area controller before adding the sub_nav
+if ($controller_name != $module_name_lower)
+{
+	$mb_constructor .= "
+		Template::set_block('sub_nav', '".$controller_name_lower."/_sub_nav');";
+}
+
+$mb_constructor .= "
 	}
 
 	//--------------------------------------------------------------------
 
 
-END;
+";
 
 //--------------------------------------------------------------------
 
-$mb_index =<<<END
+$mb_index = "
 	/*
 		Method: index()
 
@@ -58,7 +69,9 @@ $mb_index =<<<END
 	*/
 	public function index()
 	{
-
+";
+if ($db_required != '') {
+	$mb_index .= "
 		// Deleting anything?
 		if (\$action = \$this->input->post('delete'))
 		{
@@ -71,40 +84,43 @@ $mb_index =<<<END
 					\$result = FALSE;
 					foreach (\$checked as \$pid)
 					{
-						\$result = \$this->{$module_name_lower}_model->delete(\$pid);
+						\$result = \$this->".$module_name_lower."_model->delete(\$pid);
 					}
 
 					if (\$result)
 					{
-						Template::set_message(count(\$checked) .' '. lang('{$module_name_lower}_delete_success'), 'success');
+						Template::set_message(count(\$checked) .' '. lang('".$module_name_lower."_delete_success'), 'success');
 					}
 					else
 					{
-						Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'error');
+						Template::set_message(lang('".$module_name_lower."_delete_failure') . \$this->".$module_name_lower."_model->error, 'error');
 					}
 				}
 				else
 				{
-					Template::set_message(lang('{$module_name_lower}_delete_error') . \$this->{$module_name_lower}_model->error, 'error');
+					Template::set_message(lang('".$module_name_lower."_delete_error') . \$this->".$module_name_lower."_model->error, 'error');
 				}
 			}
 		}
 
-		\$records = \$this->{$module_name_lower}_model->find_all();
+		\$records = \$this->".$module_name_lower."_model->find_all();
 
-		Template::set('records', \$records);
-		Template::set('toolbar_title', "Manage {$module_name}");
+		Template::set('records', \$records);";
+}
+
+$mb_index .= "
+		Template::set('toolbar_title', 'Manage ".$module_name."');
 		Template::render();
 	}
 
 	//--------------------------------------------------------------------
 
 
-END;
+";
 
 //--------------------------------------------------------------------
 
-$mb_index_front =<<<END
+$mb_index_front = "
 	/*
 		Method: index()
 
@@ -112,66 +128,75 @@ $mb_index_front =<<<END
 	*/
 	public function index()
 	{
-		\$records = \$this->{$module_name_lower}_model->find_all();
+";
+if ($db_required != '') {
+	$mb_index_front .= "
+		\$records = \$this->".$module_name_lower."_model->find_all();
 
-		Template::set('records', \$records);
+		Template::set('records', \$records);";
+}
+
+$mb_index_front .= "
 		Template::render();
 	}
 
 	//--------------------------------------------------------------------
 
 
-END;
+";
 
 //--------------------------------------------------------------------
 
-$mb_create =<<<END
+$mb_create = "
 	/*
 		Method: create()
 
-		Creates a {$module_name} object.
+		Creates a ".$module_name." object.
 	*/
 	public function create()
 	{
 		\$this->auth->restrict('{create_permission}');
-
+";
+if ($db_required != '') {
+	$mb_create .= "
 		if (\$this->input->post('submit'))
 		{
-			if (\$insert_id = \$this->save_{$module_name_lower}())
+			if (\$insert_id = \$this->save_".$module_name_lower."())
 			{
 				// Log the activity
 				\$this->load->model('activities/Activity_model', 'activity_model');
 
-				\$this->activity_model->log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_create_record').': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_create_record').': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
 
-				Template::set_message(lang("{$module_name_lower}_create_success"), 'success');
-				Template::redirect(SITE_AREA .'/{$controller_name}/{$module_name_lower}');
+				Template::set_message(lang('".$module_name_lower."_create_success'), 'success');
+				Template::redirect(SITE_AREA .'/".$controller_name."/".$module_name_lower."');
 			}
 			else
 			{
-				Template::set_message(lang('{$module_name_lower}_create_failure') . \$this->{$module_name_lower}_model->error, 'error');
+				Template::set_message(lang('".$module_name_lower."_create_failure') . \$this->".$module_name_lower."_model->error, 'error');
 			}
-		}
+		}";
+}
 
-		Assets::add_module_js('{$module_name_lower}', '{$module_name_lower}.js');
+$mb_create .= "
+		Assets::add_module_js('".$module_name_lower."', '".$module_name_lower.".js');
 
-		Template::set('toolbar_title', lang('{$module_name_lower}_create_new_button'));
-		Template::set('toolbar_title', lang('{$module_name_lower}_create') . ' {$module_name}');
+		Template::set('toolbar_title', lang('".$module_name_lower."_create') . ' ".$module_name."');
 		Template::render();
 	}
 
 	//--------------------------------------------------------------------
 
 
-END;
+";
 
 //--------------------------------------------------------------------
 
-$mb_edit =<<<END
+$mb_edit = "
 	/*
 		Method: edit()
 
-		Allows editing of {$module_name} data.
+		Allows editing of ".$module_name." data.
 	*/
 	public function edit()
 	{
@@ -181,48 +206,51 @@ $mb_edit =<<<END
 
 		if (empty(\$id))
 		{
-			Template::set_message(lang('{$module_name_lower}_invalid_id'), 'error');
-			redirect(SITE_AREA .'/{$controller_name}/{$module_name_lower}');
+			Template::set_message(lang('".$module_name_lower."_invalid_id'), 'error');
+			redirect(SITE_AREA .'/".$controller_name."/".$module_name_lower."');
 		}
-
+";
+if ($db_required != '') {
+	$mb_edit .= "
 		if (\$this->input->post('submit'))
 		{
-			if (\$this->save_{$module_name_lower}('update', \$id))
+			if (\$this->save_".$module_name_lower."('update', \$id))
 			{
 				// Log the activity
 				\$this->load->model('activities/Activity_model', 'activity_model');
 
-				\$this->activity_model->log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
 
-				Template::set_message(lang('{$module_name_lower}_edit_success'), 'success');
+				Template::set_message(lang('".$module_name_lower."_edit_success'), 'success');
 			}
 			else
 			{
-				Template::set_message(lang('{$module_name_lower}_edit_failure') . \$this->{$module_name_lower}_model->error, 'error');
+				Template::set_message(lang('".$module_name_lower."_edit_failure') . \$this->".$module_name_lower."_model->error, 'error');
 			}
 		}
 
-		Assets::add_module_js('{$module_name_lower}', '{$module_name_lower}.js');
+		Template::set('".$module_name_lower."', \$this->".$module_name_lower."_model->find(\$id));";
+}
 
-		Template::set('{$module_name_lower}', \$this->{$module_name_lower}_model->find(\$id));
+$mb_edit .= "
+		Assets::add_module_js('".$module_name_lower."', '".$module_name_lower.".js');
 
-		Template::set('toolbar_title', lang('{$module_name_lower}_edit_heading'));
-		Template::set('toolbar_title', lang('{$module_name_lower}_edit') . ' {$module_name}');
+		Template::set('toolbar_title', lang('".$module_name_lower."_edit') . ' ".$module_name."');
 		Template::render();
 	}
 
 	//--------------------------------------------------------------------
 
 
-END;
+";
 
 //--------------------------------------------------------------------
 
-$mb_delete =<<<END
+$mb_delete = "
 	/*
 		Method: delete()
 
-		Allows deleting of {$module_name} data.
+		Allows deleting of ".$module_name." data.
 	*/
 	public function delete()
 	{
@@ -232,27 +260,33 @@ $mb_delete =<<<END
 
 		if (!empty(\$id))
 		{
-			if (\$this->{$module_name_lower}_model->delete(\$id))
+";
+if ($db_required != '') {
+	$mb_delete .= "
+			if (\$this->".$module_name_lower."_model->delete(\$id))
 			{
 				// Log the activity
 				\$this->load->model('activities/Activity_model', 'activity_model');
 
-				\$this->activity_model->log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
 
-				Template::set_message(lang('{$module_name_lower}_delete_success'), 'success');
+				Template::set_message(lang('".$module_name_lower."_delete_success'), 'success');
 			} else
 			{
-				Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'error');
-			}
+				Template::set_message(lang('".$module_name_lower."_delete_failure') . \$this->".$module_name_lower."_model->error, 'error');
+			}";
+}
+
+$mb_delete .= "
 		}
 
-		redirect(SITE_AREA .'/{$controller_name}/{$module_name_lower}');
+		redirect(SITE_AREA .'/".$controller_name."/".$module_name_lower."');
 	}
 
 	//--------------------------------------------------------------------
 
 
-END;
+";
 
 //--------------------------------------------------------------------
 
@@ -337,7 +371,7 @@ $textarea_included = FALSE;
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$db_field_type = set_value("db_field_type$counter");
-	$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");;
+	$field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");;
 	$view_datepicker = '';
 	if ($db_field_type != NULL)
 	{
@@ -451,8 +485,10 @@ if ($controller_name != $module_name_lower)
 	//--------------------------------------------------------------------
 
 	// Save
-
-	$body .= $mb_save;
+	if ($db_required != '')
+	{
+		$body .= $mb_save;
+	}
 
 	$rules = '';
 	$save_data_array = '
@@ -472,7 +508,7 @@ if ($controller_name != $module_name_lower)
 
 		// we set this variable as it will be used to place the comma after the last item to build the insert db array
 		$last_field = $counter;
-		$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
+		$field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
 
 		$rules .= '
 		$this->form_validation->set_rules(\''.$field_name.'\',\''.set_value("view_field_label$counter").'\',\'';

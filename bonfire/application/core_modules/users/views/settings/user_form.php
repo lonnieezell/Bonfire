@@ -16,15 +16,15 @@
 		<div class="control-group <?php echo form_error('email') ? 'error' : '' ?>">
 			<label for="email" class="control-label"><?php echo lang('bf_email') ?></label>
 			<div class="controls">
-				<input type="email" name="email" value="<?php echo isset($user) ? $user->email : set_value('email') ?>">
+				<input type="email" name="email" id="email" value="<?php echo isset($user) ? $user->email : set_value('email') ?>">
 				<?php if (form_error('email')) echo '<span class="help-inline">'. form_error('email') .'</span>'; ?>
 			</div>
 		</div>
-
+	
 		<div class="control-group <?php echo form_error('username') ? 'error' : '' ?>">
 			<label for="username" class="control-label"><?php echo lang('bf_username') ?></label>
 			<div class="controls">
-				<input type="text" name="username" value="<?php echo isset($user) ? $user->username : set_value('username') ?>">
+				<input type="text" name="username" id="username" value="<?php echo isset($user) ? $user->username : set_value('username') ?>">
 				<?php if (form_error('username')) echo '<span class="help-inline">'. form_error('username') .'</span>'; ?>
 			</div>
 		</div>
@@ -32,23 +32,23 @@
 		<div class="control-group <?php echo form_error('display_name') ? 'error' : '' ?>">
 			<label for="display_name" class="control-label"><?php echo lang('bf_display_name') ?></label>
 			<div class="controls">
-				<input type="text" name="display_name" value="<?php echo isset($user) ? $user->display_name : set_value('display_name') ?>">
+				<input type="text" name="display_name" id="display_name" value="<?php echo isset($user) ? $user->display_name : set_value('display_name') ?>">
 				<?php if (form_error('display_name')) echo '<span class="help-inline">'. form_error('display_name') .'</span>'; ?>
 			</div>
 		</div>
 
 		<div class="control-group <?php echo form_error('password') ? 'error' : '' ?>">
-			<label for="username" class="control-label"><?php echo lang('bf_password') ?></label>
+			<label for="password" class="control-label"><?php echo lang('bf_password') ?></label>
 			<div class="controls">
-				<input type="password" name="password" value="">
+				<input type="password" id="password" name="password" value="">
 				<?php if (form_error('password')) echo '<span class="help-inline">'. form_error('password') .'</span>'; ?>
 			</div>
 		</div>
 
 		<div class="control-group <?php echo form_error('pass_confirm') ? 'error' : '' ?>">
-			<label class="control-label" for="username"><?php echo lang('bf_password_confirm') ?></label>
+			<label class="control-label" for="pass_confirm"><?php echo lang('bf_password_confirm') ?></label>
 			<div class="controls">
-				<input type="password" name="pass_confirm" value="">
+				<input type="password" name="pass_confirm" id="pass_confirm" value="">
 				<?php if (form_error('pass_confirm')) echo '<span class="help-inline">'. form_error('pass_confirm') .'</span>'; ?>
 			</div>
 		</div>
@@ -68,7 +68,7 @@
 			<div class="control-group">
 				<label for="role_id" class="control-label"><?php echo lang('us_role'); ?></label>
 				<div class="controls">
-					<select name="role_id">
+					<select name="role_id" id="role_id" class="span8 chzn-select">
 					<?php if (isset($roles) && is_array($roles) && count($roles)) : ?>
 						<?php foreach ($roles as $role) : ?>
 
