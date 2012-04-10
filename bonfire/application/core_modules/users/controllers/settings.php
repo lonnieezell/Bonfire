@@ -82,35 +82,37 @@ class Settings extends Admin_Controller
 			}
 
 			$where = array();
+			$show_deleted = FALSE;
 
 			// Filters
 			$filter = $this->input->get('filter');
 			switch($filter)
 			{
-					case 'banned':
-						$where['users.banned'] = 1;
-						break;
-					case 'deleted':
-						$where['users.deleted'] = 1;
-						break;
-					case 'role':
-							$role_id = (int)$this->input->get('role_id');
-							$where['users.role_id'] = $role_id;
+				case 'banned':
+					$where['users.banned'] = 1;
+					break;
+				case 'deleted':
+					$where['users.deleted'] = 1;
+					$show_deleted = TRUE;
+					break;
+				case 'role':
+					$role_id = (int)$this->input->get('role_id');
+					$where['users.role_id'] = $role_id;
 
-							foreach ($roles as $role)
-							{
-									if ($role->role_id == $role_id)
-									{
-											Template::set('filter_role', $role->role_name);
-											break;
-									}
-							}
+					foreach ($roles as $role)
+					{
+						if ($role->role_id == $role_id)
+						{
+							Template::set('filter_role', $role->role_name);
 							break;
+						}
+					}
+					break;
 
-						default:
-							$where['users.deleted'] = 0;
-							$this->user_model->where('users.deleted', 0);
-							break;
+				default:
+					$where['users.deleted'] = 0;
+					$this->user_model->where('users.deleted', 0);
+					break;
 			}
 
 			// First Letter
@@ -125,7 +127,7 @@ class Settings extends Admin_Controller
 			$this->user_model->limit($this->limit, $offset)->where($where);
 			$this->user_model->select('users.id, users.role_id, username, display_name, email, last_login, banned, users.deleted, role_name');
 
-			Template::set('users', $this->user_model->find_all());
+			Template::set('users', $this->user_model->find_all($show_deleted));
 
 			// Pagination
 			$this->load->library('pagination');
