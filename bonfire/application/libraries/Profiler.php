@@ -188,16 +188,7 @@ class CI_Profiler {
 				
 				foreach ($db->queries as $key => $val)
 				{
-					// Duplicate?
-					if ($counts[$val] > 1)
-					{
-						$output['duplicates']++;
-						$duplicate = true;
-					}
-					else
-					{
-						$duplicate = false;
-					}
+					$duplicate = false;
 				
 					$time = number_format($db->query_times[$key], 4);
 					
