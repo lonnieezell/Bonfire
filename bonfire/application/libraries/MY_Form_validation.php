@@ -163,11 +163,10 @@ class MY_Form_validation extends CI_Form_validation
 
 	public function valid_password($str)
 	{
-		// @TODO: Remove the call to config_item and replace with settings library
-		$min_length	= config_item('auth.password_min_length');
-		$use_nums	  = config_item('auth.password_force_numbers');
-		$use_syms	  = config_item('auth.password_force_symbols');
-		$use_mixed	= config_item('auth.password_force_mixed_case');
+		$min_length	= $this->CI->settings_lib->item('auth.password_min_length');
+		$use_nums   = $this->CI->settings_lib->item('auth.password_force_numbers');
+		$use_syms   = $this->CI->settings_lib->item('auth.password_force_symbols');
+		$use_mixed  = $this->CI->settings_lib->item('auth.password_force_mixed_case');
 
 		// Check length
 		if (strlen($str) < $min_length)

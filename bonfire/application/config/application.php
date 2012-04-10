@@ -47,23 +47,6 @@ $config['updates.last_commit']	= '';	// Stores the last installed commit ref
 $config['site.backup_folder']	= 'archives/';
 
 //--------------------------------------------------------------------
-// !AUTHENTICATION
-//--------------------------------------------------------------------
-
-// Minimum password length
-$config['auth.password_min_length'] = 8;
-
-// Should password force numbers?
-$config['auth.password_force_numbers'] = true;
-
-// Should password force symbols?
-$config['auth.password_force_symbols'] = true;
-
-// Should password force mixed case?
-$config['auth.password_force_mixed_case'] = true;
-
-
-//--------------------------------------------------------------------
 // !CONTEXTS
 //--------------------------------------------------------------------
 

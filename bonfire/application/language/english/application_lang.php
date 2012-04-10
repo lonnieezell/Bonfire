@@ -122,6 +122,12 @@ $lang['bf_show_front_profiler']	= 'Show Front End Profiler?';
 
 $lang['bf_cache_not_writable']  = 'The application cache folder is not writable';
 
+$lang['bf_password_strength']			= 'Password Strength Settings';
+$lang['bf_password_length_help']		= 'Minimum password length e.g. 8';
+$lang['bf_password_force_numbers']		= 'Should password force numbers?';
+$lang['bf_password_force_symbols']		= 'Should password force symbols?';
+$lang['bf_password_force_mixed_case']	= 'Should password force mixed case?';
+
 //--------------------------------------------------------------------
 // ! USER/PROFILE
 //--------------------------------------------------------------------
