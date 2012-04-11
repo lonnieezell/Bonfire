@@ -78,7 +78,7 @@ class Base_Controller extends MX_Controller {
 		if (ENVIRONMENT == 'production')
 		{
 		    $this->db->save_queries = false;
-		    
+
 		    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 		}
 
@@ -98,7 +98,7 @@ class Base_Controller extends MX_Controller {
 				$this->load->library('migrations/migrations');
 				$this->migrations->auto_latest();
 			}
-			
+
 			$this->load->driver('cache', array('adapter' => 'dummy'));
 		}
 
@@ -254,7 +254,7 @@ class Admin_Controller extends Authenticated_Controller {
 		// load the keyboard shortcut keys
 		$shortcut_data = array(
 			'shortcuts' => config_item('ui.current_shortcuts'),
-			'shortcut_keys' => unserialize($this->settings_lib->item('ui.shortcut_keys')),
+			'shortcut_keys' => $this->settings_lib->find_all_by('module', 'core.ui'),
 		);
 		Template::set('shortcut_data', $shortcut_data);
 
