@@ -101,19 +101,65 @@ class Settings_lib
 	 *
 	 * Sets a config item
 	 *
-	 * @param	string	$name
-	 * @param	string	$value
-	 * @return	bool
+	 * @param string $name   Name of the setting
+	 * @param string $value  Value of the setting
+	 * @param string $module Name of the module
+	 *
+	 * @return bool
 	 */
-	public static function set($name, $value)
+	public static function set($name, $value, $module='core')
 	{
 		$ci =& get_instance();
 
-		$setting = $ci->settings_model->where('name', $name)->update(FALSE, array('value' => $value));
+		if (isset(self::$cache[$name]))
+		{
+			$setting = $ci->settings_model->update_where('name', $name, array('value' => $value));
+		}
+		else
+		{
+			// insert
+			$data = array(
+				'name'   => $name,
+				'value'  => $value,
+				'module' => $module,
+			);
+
+			$setting = $ci->settings_model->insert($data);
+		}
 
 		self::$cache[$name] = $value;
 
 		return TRUE;
+	}
+
+	/**
+	 * Delete config item
+	 *
+	 * @param string $name   Name of the setting
+	 * @param string $module Name of the module
+	 *
+	 * @return bool
+	 */
+	public static function delete($name, $module='core')
+	{
+		$ci =& get_instance();
+
+		if (isset(self::$cache[$name]))
+		{
+			$data = array(
+				'name'   => $name,
+				'module' => $module,
+			);
+
+			if ($ci->settings_model->delete_where($data))
+			{
+				unset(self::$cache[$name]);
+
+				return TRUE;
+			}
+		}
+
+		return FALSE;
 	}
 
 
@@ -142,64 +188,56 @@ class Settings_lib
 	}
 
 
-    /**
-     * Find By
-     *
-     * Gets setting for specific search criteria. For multiple matches, see
+	/**
+	 * Find By
+	 *
+	 * Gets setting for specific search criteria. For multiple matches, see
 	 * find_all_by.
-     *
-     * @param   $field  Setting column name
-     * @param   $value  Value ot match
-     *
-     * @return	array
-     */
-    public function find_by($field=null, $value=null)
-    {
-        if(self::$cache)
-        {
-            return self::$cache;
-        }
+	 *
+	 * @param   $field  Setting column name
+	 * @param   $value  Value ot match
+	 *
+	 * @return	array
+	 */
+	public function find_by($field=null, $value=null)
+	{
 
-        $settings = $this->ci->settings_model->find_by($field, $value);
+		$settings = $this->ci->settings_model->find_by($field, $value);
 
-        foreach($settings as $setting)
-        {
-            self::$cache[$setting->name] = $setting->value;
-        }
+		foreach($settings as $setting)
+		{
+			self::$cache[$setting['name']] = $setting['value'];
+		}
 
-        return self::$cache;
-    }
+		return $settings;
+	}
 
 
-    /**
-     * Find All By
-     *
-     * Gets all the settings based on search criteria. For a single setting 
+	/**
+	 * Find All By
+	 *
+	 * Gets all the settings based on search criteria. For a single setting
 	 * match, see find_by
-     *
-     * @see		find_by
-     *
-     * @param   $field  Setting column name
-     * @param   $value  Value ot match
-     *
-     * @return	array
-     */
-    public function find_all_by($field=null, $value=null)
-    {
-        if(self::$cache)
-        {
-            return self::$cache;
-        }
+	 *
+	 * @see		find_by
+	 *
+	 * @param   $field  Setting column name
+	 * @param   $value  Value ot match
+	 *
+	 * @return	array
+	 */
+	public function find_all_by($field=null, $value=null)
+	{
 
-        $settings = $this->ci->settings_model->find_all_by($field, $value);
+		$settings = $this->ci->settings_model->find_all_by($field, $value);
 
-        foreach($settings as $setting)
-        {
-            self::$cache[$setting->name] = $setting->value;
-        }
+		foreach($settings as $setting)
+		{
+			self::$cache[$setting['name']] = $setting['value'];
+		}
 
-        return self::$cache;
-    }
+		return $settings;
+	}
 }
 
 /* End of file Settings.php */
