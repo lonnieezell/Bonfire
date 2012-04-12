@@ -72,6 +72,30 @@ class Base_Controller extends MX_Controller {
 
 		parent::__construct();
 
+		// Auth setup
+		$this->load->model('users/User_model', 'user_model');
+		$this->load->library('users/auth');
+
+		// Load our current logged in user so we can access it anywhere.
+		if ($this->auth->is_logged_in())
+		{
+			$this->current_user = $this->user_model->find($this->auth->user_id());
+			$this->current_user->user_img = gravatar_link($this->current_user->email, 22, $this->current_user->email, "{$this->current_user->email} Profile", ' ', ' ' );
+
+			// if the user has a language setting then use it
+			if (isset($this->current_user->language))
+			{
+				$this->config->set_item('language', $this->current_user->language);
+			}
+
+		}
+
+		// Make the current user available in the views
+		$this->load->vars( array('current_user' => $this->current_user) );
+
+		// load the application lang file here so that the users language is known
+		$this->lang->load('application');
+
 		/*
 			Performance optimizations for production environments.
 		*/
@@ -137,20 +161,6 @@ class Front_Controller extends Base_Controller {
 		$this->load->library('template');
 		$this->load->library('assets');
 
-		// Auth setup
-		$this->load->model('users/User_model', 'user_model');
-		$this->load->library('users/auth');
-
-		// Load our current logged in user so we can access it anywhere.
-		if ($this->auth->is_logged_in())
-		{
-			$this->current_user = $this->user_model->find($this->auth->user_id());
-	    	$this->current_user->user_img = gravatar_link($this->current_user->email, 22, $this->current_user->email, "{$this->current_user->email} Profile", ' ', ' ' );
-		}
-
-		// Make the current user available in the views
-		$this->load->vars( array('current_user' => $this->current_user) );
-
 		Template::set_theme('default');
 	}
 
@@ -179,18 +189,8 @@ class Authenticated_Controller extends Base_Controller {
 	{
 		parent::__construct();
 
-		// Auth setup
-		$this->load->model('users/User_model', 'user_model');
-		$this->load->library('users/auth');
-
 		// Make sure we're logged in.
 		$this->auth->restrict();
-
-		// Load our current logged in user so we can access it anywhere.
-		$this->current_user = $this->user_model->find($this->auth->user_id());
-
-		// Make the current user available in the views
-		$this->load->vars( array('current_user' => $this->current_user) );
 
 		// Load additional libraries
 		$this->load->helper('form');
