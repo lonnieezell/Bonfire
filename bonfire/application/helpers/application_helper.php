@@ -1,32 +1,31 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
-/*
-	File: Application Helper
-
-	Pulls together various helper functions from across the core modules
-	to ease editing and minimize physical files that need loaded.
-*/
+/**
+ * Application Helpers
+ *
+ * Pulls together various helper functions from across the core modules
+ * to ease editing and minimize physical files that need loaded.
+ *
+ * @package    Bonfire
+ * @subpackage Helpers
+ * @category   Helpers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/application_helpers.html
+ *
+ */
 
 if ( ! function_exists('gravatar_link'))
 {
@@ -133,6 +132,8 @@ if ( ! function_exists('module_list'))
 {
 	/**
 	 * Returns a list of all modules in the system.
+	 *
+	 * @param bool $exclude_core Whether to exclude the Bonfire core modules or not
 	 *
 	 * @return array A list of all modules in the system.
 	 */
@@ -443,24 +444,20 @@ if (!function_exists('e'))
 
 if (!function_exists('array_implode'))
 {
-	/*
-		Function: array_implode()
-
-		Implode an array with the key and value pair giving a glue,
-		a separator between pairs and the array to implode.
-
-		Example:
-			// Encode Query Strings
-			$query = url_encode( array_implode( '=', '&', $array ) );
-
-		Parameters:
-			$glue		- The glue between key and value.
-			$separator	- Separator between pairs.
-			$array		- The array to implode.
-
-		Returns:
-			A string with the combined elements.
-	*/
+	/**
+	 * Implode an array with the key and value pair giving a glue,
+	 * a separator between pairs and the array to implode.
+	 *
+	 * Example:
+	 *  // Encode Query Strings
+	 *  $query = url_encode( array_implode( '=', '&', $array ) );
+	 *
+	 * @param string $glue      The glue between key and value.
+	 * @param string $separator Separator between pairs.
+	 * @param array  $array     The array to implode.
+	 *
+	 * @return string A string with the combined elements.
+	 */
 	function array_implode($glue, $separator, $array)
 	{
 		if ( ! is_array( $array ) )
@@ -481,12 +478,22 @@ if (!function_exists('array_implode'))
 		}
 
 		return implode( $separator, $string );
-	}
+
+	}//end array_implode()
 }
 //--------------------------------------------------------------------
 
 if ( !function_exists('obj_value') )
 {
+	/**
+	 *
+	 * @param object $obj   Object
+	 * @param string $key   Name of the object element
+	 * @param string $type  Input type
+	 * @param int    $value Value to check the key against
+	 *
+	 * @return null|string
+	 */
 	function obj_value($obj, $key, $type='text', $value=0)
 	{
 		if (isset($obj->$key))
@@ -513,7 +520,8 @@ if ( !function_exists('obj_value') )
 		}
 
 		return null;
-	}
+
+	}//end obj_value()
 }
 //--------------------------------------------------------------------
 
@@ -539,5 +547,5 @@ if ( !function_exists('iif') )
 		{
 			echo ( $expression == 0 ) ? $returnfalse : $returntrue;
 		}
-	}
+	}//end iif()
 }
