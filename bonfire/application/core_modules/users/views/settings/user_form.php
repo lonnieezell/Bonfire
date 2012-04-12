@@ -53,6 +53,23 @@
 			</div>
 		</div>
 
+		<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
+			<label class="control-label" for="language"><?php echo lang('bf_language') ?></label>
+			<div class="controls">
+				<select name="language" id="language" class="chzn-select">
+				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
+					<?php foreach ($languages as $language) : ?>
+						<option value="<?php echo $language ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
+							<?php echo ucfirst($language) ?>
+						</option>
+
+					<?php endforeach; ?>
+				<?php endif; ?>
+				</select>
+				<?php if (form_error('language')) echo '<span class="help-inline">'. form_error('language') .'</span>'; ?>
+			</div>
+		</div>
+
 		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
 			<label class="control-label" for="timezones"><?php echo lang('bf_timezone') ?></label>
 			<div class="controls">

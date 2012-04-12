@@ -214,6 +214,8 @@ class Users extends Front_Controller {
 			redirect('login');
 		}
 
+		$this->load->helper('date');
+
 		if ($this->input->post('submit'))
 		{
 
@@ -228,6 +230,10 @@ class Users extends Front_Controller {
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit_profile') .': '.$log_name, 'users');
 
 				Template::set_message('Profile successfully updated.', 'success');
+
+				// redirect to make sure any language changes are picked up
+				Template::redirect('/users/profile');
+				exit;
 			}
 			else
 			{
@@ -245,6 +251,7 @@ class Users extends Front_Controller {
 		$user = $this->user_model->find_user_and_meta ( $this->current_user->id );
 
 		Template::set('user', $user);
+		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
 		Template::set_view('users/users/profile');
 		Template::render();
@@ -343,6 +350,7 @@ class Users extends Front_Controller {
 		}
 
 		$this->load->model('roles/role_model');
+		$this->load->helper('date');
 
 		if ($this->input->post('submit'))
 		{
@@ -357,12 +365,20 @@ class Users extends Front_Controller {
 			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password|xsx_clean');
 			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
 
+			$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|strip_tags|max_length[4]|xss_clean');
+			$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|strip_tags|max_length[255]|xss_clean');
+
 			if ($this->form_validation->run() !== false)
 			{
 				// Time to save the user...
-				$data = array('email'		=> $_POST['email'],
-				              'username'	=> isset($_POST['username']) ? $_POST['username'] : '',
-				              'password'	=> $_POST['password']);
+				$data = array(
+						'email'		=> $_POST['email'],
+						'username'	=> isset($_POST['username']) ? $_POST['username'] : '',
+						'password'	=> $_POST['password'],
+						'language'	=> $this->input->post('language'),
+						'timezone'	=> $this->input->post('timezones'),
+					);
 
 				if ($user_id = $this->user_model->insert($data))
 				{
@@ -374,6 +390,8 @@ class Users extends Front_Controller {
 				}
 			}
 		}
+
+		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
 		Template::set_view('users/users/register');
 		Template::set('page_title', 'Register');
@@ -443,6 +461,8 @@ class Users extends Front_Controller {
 			$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username,bf_users.id]|xsx_clean');
 		}
 
+		$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|strip_tags|max_length[4]|xss_clean');
 		$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|strip_tags|max_length[255]|xss_clean');
 
 		// Added Event "before_user_validation" to run before the form validation
@@ -454,7 +474,11 @@ class Users extends Front_Controller {
 		}
 
 		// Compile our core user elements to save.
-		$data = array( 'email' => $this->input->post('email') );
+		$data = array(
+			'email'		=> $this->input->post('email'),
+			'language'	=> $this->input->post('language'),
+			'timezone'	=> $this->input->post('timezones'),
+		);
 
 		if ($this->input->post('password'))
 			$data['password'] = $this->input->post('password');

@@ -178,6 +178,7 @@ class Settings extends Admin_Controller
 			}
 
 			Template::set('roles', $this->role_model->select('role_id, role_name, default')->where('deleted', 0)->find_all());
+			Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
 			Template::set('toolbar_title', lang('us_create_user'));
 			Template::set_view('settings/user_form');
@@ -223,6 +224,7 @@ class Settings extends Admin_Controller
 			{
 					Template::set('user', $user);
 					Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
+					Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 					Template::set_view('settings/user_form');
 			} else {
 					Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');
@@ -422,6 +424,7 @@ class Settings extends Admin_Controller
 
 		$this->form_validation->set_rules('display_name', lang('bf_display_name'), 'trim|strip_tags|max_length[255]|xss_clean');
 
+		$this->form_validation->set_rules('language', lang('bf_language'), 'required|trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('timezones', lang('bf_timezone'), 'required|trim|strip_tags|max_length[4]|xss_clean');
 		$this->form_validation->set_rules('role_id', lang('us_role'), 'required|trim|strip_tags|max_length[2]|is_numeric|xss_clean');
 
@@ -434,6 +437,7 @@ class Settings extends Admin_Controller
 		$data = array(
 			'email'		=> $this->input->post('email'),
 			'username'	=> $this->input->post('username'),
+			'language'	=> $this->input->post('language'),
 			'timezone'	=> $this->input->post('timezones'),
 		);
 
