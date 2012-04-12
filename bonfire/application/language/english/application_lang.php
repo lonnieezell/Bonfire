@@ -36,6 +36,8 @@ $lang['bf_top_number_help']		= 'When viewing reports, how many items should be l
 $lang['bf_home']				= 'Home';
 $lang['bf_site_information']	= 'Site Information';
 $lang['bf_timezone']			= 'Timezone';
+$lang['bf_language']			= 'Language';
+$lang['bf_language_help']		= 'Choose the languages available to the user.';
 
 //--------------------------------------------------------------------
 // ! AUTH SETTINGS
