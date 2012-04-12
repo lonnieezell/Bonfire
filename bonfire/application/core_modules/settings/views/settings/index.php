@@ -45,6 +45,21 @@
 					<p class="help-inline"><?php echo lang('bf_top_number_help') ?></p>
 				</div>
 			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="status"><?php echo lang('bf_language') ?></label>
+				<div class="controls">
+					<select name="languages[]" multiple="mulitple">
+					<?php if (is_array($languages) && count($languages)):?>
+						<?php foreach($languages as $language):?>
+						<option value="<?php echo $language;?>" <?php echo set_select('languages', $language, in_array($language, $selected_languages) ? TRUE : FALSE) ?>><?php echo ucfirst($language) ?></option>
+						<?php endforeach;?>
+					<?php endif;?>
+					</select>
+					<p class="help-inline"><?php echo lang('bf_language_help') ?></p>
+				</div>
+			</div>
+
 		</fieldset>
 
 		<fieldset>

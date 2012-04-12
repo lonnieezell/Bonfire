@@ -56,6 +56,11 @@ class Settings extends Admin_Controller {
 		$settings = $this->settings_lib->find_all();
 		Template::set('settings', $settings);
 
+		// Get the possible languages
+		$this->load->helper('translate/languages');
+		Template::set('languages', list_languages());
+		Template::set('selected_languages', unserialize($settings['site.languages']));
+
 		Assets::add_module_js('settings', 'js/settings.js');
 
 		Template::set_view('settings/settings/index');
@@ -77,6 +82,7 @@ class Settings extends Admin_Controller {
 		$this->form_validation->set_rules('password_force_numbers', lang('bf_password_force_numbers'), 'trim|strip_tags|numeric|xss_clean');
 		$this->form_validation->set_rules('password_force_symbols', lang('bf_password_force_symbols'), 'trim|strip_tags|numeric|xss_clean');
 		$this->form_validation->set_rules('password_force_mixed_case', lang('bf_password_force_mixed_case'), 'trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('languages[]', lang('bf_language'), 'required|trim|strip_tags|is_array|xss_clean');
 
 		if ($this->form_validation->run() === false)
 		{
@@ -107,6 +113,7 @@ class Settings extends Admin_Controller {
 			array('name' => 'updates.bleeding_edge', 'value' => isset($_POST['bleeding_edge']) ? 1 : 0),
 			array('name' => 'site.show_profiler', 'value' => isset($_POST['show_profiler']) ? 1 : 0),
 			array('name' => 'site.show_front_profiler', 'value' => isset($_POST['show_front_profiler']) ? 1 : 0),
+			array('name' => 'site.languages', 'value' => $this->input->post('languages') != '' ? serialize($this->input->post('languages')) : ''),
 
 
 		);
