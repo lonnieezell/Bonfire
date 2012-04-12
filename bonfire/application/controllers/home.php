@@ -33,8 +33,6 @@ class Home extends Front_Controller
 
 
 	/**
-	 * index
-	 *
 	 * Displays the homepage of the Bonfire app
 	 *
 	 * @return void

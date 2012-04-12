@@ -46,8 +46,6 @@
 class Images extends Base_Controller {
 
 	/**
-	 * _remap
-	 *
 	 * Simply redirects all calls to the index() method.
 	 *
 	 * @param string $file The name of the image to return.
@@ -60,8 +58,6 @@ class Images extends Base_Controller {
 	//--------------------------------------------------------------------
 
 	/**
-	 * index
-	 *
 	 * Performs the image processing based on the parameters provided in the GET request
 	 *
 	 * @param string $file The name of the image to return.
@@ -133,5 +129,3 @@ class Images extends Base_Controller {
 	//--------------------------------------------------------------------
 
 }//end class
-
-//--------------------------------------------------------------------

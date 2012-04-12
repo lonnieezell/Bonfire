@@ -1,15 +1,15 @@
-<?php
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Bonfire
  *
  * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
  *
- * @package		ModuleBuilder
- * @author		Bonfire Dev Team
- * @copyright	Copyright (c) 2011 - 2012, EllisLab, Inc.
- * @license		http://cibonfire.com/guides/license.html
- * @link		http://cibonfire.com
- * @since		Version 1.0
+ * @package   ModuleBuilder
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
  * @filesource
  */
 
@@ -20,11 +20,11 @@
  *
  * This code is originally based on Ollie Rattue's http://formigniter.org/ project
  *
- * @package		ModuleBuilder
- * @subpackage	Libraries
- * @category	Libraries
- * @author		Bonfire Dev Team
- * @link		http://cibonfire.com/guides/core_modules/modulebuilder.html
+ * @package    ModuleBuilder
+ * @subpackage Libraries
+ * @category   Libraries
+ * @author     Bonfire Dev Team
+ * @link       http://cibonfire.com/guides/core_modules/modulebuilder.html
  *
  */
 class Modulebuilder
