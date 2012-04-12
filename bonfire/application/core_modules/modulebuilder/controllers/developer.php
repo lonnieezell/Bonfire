@@ -366,6 +366,7 @@ class Developer extends Admin_Controller {
 				$this->form_validation->set_rules('validation_rules'.$counter.'[]',"Validation Rules $counter",'trim|xss_clean');
 			}
 		}
+
 		return $this->form_validation->run();
 	}
 
@@ -452,7 +453,7 @@ class Developer extends Admin_Controller {
 		$module_description = $this->input->post('module_description');
 		$role_id			= $this->input->post('role_id');
 
-		$db_required = $_POST['module_db'] == 'new' ? TRUE : FALSE;
+		$db_required = $this->input->post('module_db');
 
 		$primary_key_field = $this->input->post('primary_key_field');
 		if( $primary_key_field == '') {

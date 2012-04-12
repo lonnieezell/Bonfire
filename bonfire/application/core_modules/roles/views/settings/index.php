@@ -16,7 +16,7 @@
 		<tbody>
 		<?php foreach ($roles as $role) : ?>
 			<tr>
-				<td><?php echo anchor(SITE_AREA .'/settings/roles/edit/'. $role->role_id, '<i class="icon-pencil">&nbsp;</i>' . $role->role_name, 'class="ajaxify"') ?></td>
+				<td><?php echo anchor(SITE_AREA .'/settings/roles/edit/'. $role->role_id, $role->role_name) ?></td>
 				<td class="text-center"><?php
 						$count = 0;
 						foreach ($role_counts as $r)
@@ -35,5 +35,5 @@
 		<?php endforeach; ?>
 		</tbody>
 	</table>
-
+</div>
 <?php endif; ?>

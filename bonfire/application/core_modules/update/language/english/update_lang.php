@@ -31,3 +31,9 @@ $lang['up_branch']					= 'Branch: <b>develop</b>';
 $lang['up_author']					= 'Author';
 $lang['up_committed']				= 'Committed';
 $lang['up_message']					= 'Message';
+
+$lang['up_update_message_bleeding'] = 'A <b>bleeding edge</b> update to Bonfire is available.';
+$lang['up_update_message_new']      = ' Version %s of Bonfire is available. You are currently running '; //requires the spaces at the start and end of the string
+$lang['up_update_message_latest']   = 'You are running Bonfire version %s. This is the latest available version of Bonfire.';
+$lang['up_update_message_old']      = 'You are running Bonfire version %s. The latest available <b>stable</b> version is %s.';
+$lang['up_update_message_unable']   = 'You are running Bonfire version %s. <b>Unable to retrieve the latest version at this time.</b>';

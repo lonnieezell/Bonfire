@@ -19,7 +19,7 @@
 <div class="row-fluid">
 	<div class="span8 offset2">
 		<div data-dismiss="alert" class="alert alert-error fade in">
-		  <a class="close">&times;</a>
+		  <a data-dismiss="alert" class="close">&times;</a>
 			<?php echo lang('us_banned_admin_note'); ?>
 		</div>
 	</div>
@@ -39,6 +39,8 @@
 	<div class="span8 offset2">
 
 <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
+
+
 
 	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
 		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>
@@ -79,6 +81,30 @@
 		</div>
 	</div>
 
+		<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
+			<label class="control-label" for="language"><?php echo lang('bf_language') ?></label>
+			<div class="controls">
+				<select name="language" id="language" class="chzn-select">
+				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
+					<?php foreach ($languages as $language) : ?>
+						<option value="<?php echo $language ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
+							<?php echo ucfirst($language) ?>
+						</option>
+
+					<?php endforeach; ?>
+				<?php endif; ?>
+				</select>
+				<?php if (form_error('language')) echo '<span class="help-inline">'. form_error('language') .'</span>'; ?>
+			</div>
+		</div>
+
+		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
+			<label class="control-label" for="timezones"><?php echo lang('bf_timezone') ?></label>
+			<div class="controls">
+				<?php echo timezone_menu(set_value('timezones', isset($user) ? $user->timezone : $current_user->timezone)); ?>
+				<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
+			</div>
+		</div>
 
 		<?php
 			// Allow modules to render custom fields

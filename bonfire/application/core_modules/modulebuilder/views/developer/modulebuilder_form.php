@@ -102,8 +102,10 @@
 			<div class="control-group mb_advanced">
 				<label class="control-label" for="role_id"><?php echo lang('mb_form_role_id'); ?></label>
 				<div class="controls">
-					<?php foreach ($roles as $role) { $all_roles[$role['role_id']] = $role['role_name']; }
-							echo form_dropdown("role_id", $all_roles, set_value("role_id"),'id="role_id"'); ?>
+					<select name="role_id" id="role_id">
+					<?php foreach ($roles as $role):?>
+						<option value="<?php echo $role['role_id']?>"><?php echo $role['role_name']?></option>
+					<?php endforeach;?>
 				 	</select>
 				 </div>
 			</div>
@@ -162,7 +164,11 @@
 					<?php
 						$textarea_editors = array('' => 'None', 'ckeditor' => 'CKEditor', 'xinha' => 'Xinha', 'tinymce' => 'TinyMCE', 'markitup' => 'MarkitUp!');
 					?>
-					<?php echo form_dropdown("textarea_editor", $textarea_editors, set_value("textarea_editor"),'id="textarea_editor"'); ?>
+					<select name="textarea_editor" id="textarea_editor">
+					<?php foreach($textarea_editors as $val => $label):?>
+						<option value="<?php echo $val?>"><?php echo $label?></option>
+					<?php endforeach;?>
+					</select>
 				</div>
 			</div>
 
@@ -172,14 +178,22 @@
 					<?php
 						$truefalse = array('false' => 'False', 'true' => 'True');
 					?>
-					<?php echo form_dropdown("use_soft_deletes", $truefalse, set_value("use_soft_deletes"),'id="use_soft_deletes"'); ?>
+					<select name="use_soft_deletes" id="use_soft_deletes">
+						<?php foreach($truefalse as $val => $label):?>
+						<option value="<?php echo $val?>"><?php echo $label?></option>
+						<?php endforeach;?>
+					</select>
 				</div>
 			</div>
 
 			<div class="control-group mb_advanced">
 				<label for="use_created" class="control-label block"><?php echo lang('mb_form_use_created'); ?></label>
 				<div class="controls">
-					<?php echo form_dropdown("use_created", $truefalse, set_value("use_created"),'id="use_created"'); ?>
+					<select name="use_created" id="use_created">
+						<?php foreach($truefalse as $val => $label):?>
+						<option value="<?php echo $val?>"><?php echo $label?></option>
+						<?php endforeach;?>
+					</select>
 				</div>
 			</div>
 
@@ -194,7 +208,11 @@
 			<div class="control-group mb_advanced">
 				<label for="use_modified" class="control-label block"><?php echo lang('mb_form_use_modified'); ?></label>
 				<div class="controls">
-					<?php echo form_dropdown("use_modified", $truefalse, set_value("use_modified"),'id="use_modified"'); ?>
+					<select name="use_modified" id="use_modified">
+						<?php foreach($truefalse as $val => $label):?>
+						<option value="<?php echo $val?>"><?php echo $label?></option>
+						<?php endforeach;?>
+					</select>
 				</div>
 			</div>
 
@@ -266,20 +284,16 @@
 						</div>
 					</div>
 
-					<div class="control-group <?php echo form_has_error("view_field_type{$count}") ? 'error' : ''; ?>">
-						<label class="control-label" for="view_field_type<?php echo $count; ?>"><?php echo lang('mb_form_type'); ?></label>
-						<div class="controls">
-							<?php
-							$view_field_types = array(
-													'input' 	=> 'INPUT',
-													'textarea' 	=> 'TEXTAREA',
-													'select' 	=> 'SELECT',
-													'radio' 	=> 'RADIO',
-													'checkbox' 	=> 'CHECKBOX',
-													'password' 	=> 'PASSWORD'
-													);
-							?>
 					<?php
+						$view_field_types = array(
+							'input' 	=> 'INPUT',
+							'textarea' 	=> 'TEXTAREA',
+							'select' 	=> 'SELECT',
+							'radio' 	=> 'RADIO',
+							'checkbox' 	=> 'CHECKBOX',
+							'password' 	=> 'PASSWORD'
+							);
+
 						$default_field_type = 'INPUT';
 						if (isset($existing_table_fields[$count])) {
 							switch ($existing_table_fields[$count]['type']) {
@@ -299,51 +313,42 @@
 						}
 
 					?>
-					<?php echo form_dropdown("view_field_type{$count}", $view_field_types, set_value("view_field_type{$count}", $default_field_type), 'id="view_field_type'.$count.'"'); ?>
-							<span class="help-inline"><?php echo form_error("view_field_type{$count}"); ?></span>
-						</div>
-					</div>
+					<?php echo form_dropdown("view_field_type{$count}", $view_field_types, set_value("view_field_type{$count}", $default_field_type), lang('mb_form_type'), 'id="view_field_type'.$count.'"', '<span class="help-inline">'. form_error("view_field_type{$count}").'</span>'); ?>
 
-					<div class="control-group">
-						<label class="control-label" for="db_field_type<?php echo $count; ?>"><?php echo lang('mb_form_dbtype'); ?></label>
-						<div class="controls">
-							<?php
-							$db_field_types = array(
-													'VARCHAR' 		=> 'VARCHAR',
-													'TINYINT' 		=> 'TINYINT',
-													'TEXT' 			=> 'TEXT',
-													'DATE' 			=> 'DATE',
-													'SMALLINT' 		=> 'SMALLINT',
-													'MEDIUMINT' 	=> 'MEDIUMINT',
-													'INT' 			=> 'INT',
-													'BIGINT' 		=> 'BIGINT',
-													'FLOAT' 		=> 'FLOAT',
-													'DOUBLE' 		=> 'DOUBLE',
-													'DECIMAL' 		=> 'DECIMAL',
-													'DATETIME' 		=> 'DATETIME',
-													'TIMESTAMP' 	=> 'TIMESTAMP',
-													'TIME' 			=> 'TIME',
-													'YEAR' 			=> 'YEAR',
-													'CHAR' 			=> 'CHAR',
-													'TINYBLOB' 		=> 'TINYBLOB',
-													'TINYTEXT' 		=> 'TINYTEXT',
-													'BLOB' 			=> 'BLOB',
-													'MEDIUMBLOB' 	=> 'MEDIUMBLOB',
-													'MEDIUMTEXT' 	=> 'MEDIUMTEXT',
-													'LONGBLOB' 		=> 'LONGBLOB',
-													'LONGTEXT' 		=> 'LONGTEXT',
-													'ENUM' 			=> 'ENUM',
-													'SET' 			=> 'SET',
-													'BIT' 			=> 'BIT',
-													'BOOL' 			=> 'BOOL',
-													'BINARY' 		=> 'BINARY',
-													'VARBINARY' 	=> 'VARBINARY'
-													);
-							?>
-							<?php echo form_dropdown("db_field_type{$count}", $db_field_types, set_value("db_field_type{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['type'] : ''),'id="db_field_type'.$count.'"'); ?>
-								<span class="help-inline"><?php echo form_error("db_field_type{$count}"); ?></span>
-							</div>
-					</div>
+					<?php
+						$db_field_types = array(
+							'VARCHAR' 		=> 'VARCHAR',
+							'TINYINT' 		=> 'TINYINT',
+							'TEXT' 			=> 'TEXT',
+							'DATE' 			=> 'DATE',
+							'SMALLINT' 		=> 'SMALLINT',
+							'MEDIUMINT' 	=> 'MEDIUMINT',
+							'INT' 			=> 'INT',
+							'BIGINT' 		=> 'BIGINT',
+							'FLOAT' 		=> 'FLOAT',
+							'DOUBLE' 		=> 'DOUBLE',
+							'DECIMAL' 		=> 'DECIMAL',
+							'DATETIME' 		=> 'DATETIME',
+							'TIMESTAMP' 	=> 'TIMESTAMP',
+							'TIME' 			=> 'TIME',
+							'YEAR' 			=> 'YEAR',
+							'CHAR' 			=> 'CHAR',
+							'TINYBLOB' 		=> 'TINYBLOB',
+							'TINYTEXT' 		=> 'TINYTEXT',
+							'BLOB' 			=> 'BLOB',
+							'MEDIUMBLOB' 	=> 'MEDIUMBLOB',
+							'MEDIUMTEXT' 	=> 'MEDIUMTEXT',
+							'LONGBLOB' 		=> 'LONGBLOB',
+							'LONGTEXT' 		=> 'LONGTEXT',
+							'ENUM' 			=> 'ENUM',
+							'SET' 			=> 'SET',
+							'BIT' 			=> 'BIT',
+							'BOOL' 			=> 'BOOL',
+							'BINARY' 		=> 'BINARY',
+							'VARBINARY' 	=> 'VARBINARY'
+							);
+					?>
+					<?php echo form_dropdown("db_field_type{$count}", $db_field_types, set_value("db_field_type{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['type'] : ''), lang('mb_form_dbtype'), 'id="db_field_type'.$count.'"', '<span class="help-inline">'. form_error("db_field_type{$count}").'</span>'); ?>
 
 					<div class="control-group <?php echo form_has_error("db_field_length_value{$count}") ? 'error' : ''; ?>">
 						<label class="control-label" for="db_field_length_value<?php echo $count; ?>"><?php echo lang('mb_form_length'); ?></label>

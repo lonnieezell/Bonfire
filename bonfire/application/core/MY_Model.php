@@ -1,26 +1,4 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
 /**
  * Bonfire
  *
@@ -109,6 +87,42 @@ class BF_Model extends CI_Model
 	 * @access protected
 	 */
 	protected $set_modified = TRUE;
+	
+	/*
+		Var: $log_user
+		If TRUE, will log user id for 'created_by', 'modified_by' and 'deleted_by'.
+		
+		Access:
+			Protected
+	*/
+	protected $log_user = FALSE;
+	
+	/*
+		Var: $created_by_field
+		Field name to use to the created by column in the DB table.
+
+		Access:
+			Protected
+	*/
+	protected $created_by_field = 'created_by';
+
+	/*
+		Var: $modified_by_field
+		Field name to use to the modified by column in the DB table.
+
+		Access:
+			Protected
+	*/
+	protected $modified_by_field = 'modified_by';
+	
+	/*
+		Var: $deleted_by_field
+		Field name to use for the deleted by column in the DB table.
+
+		Access:
+			Protected
+	*/
+	protected $deleted_by_field = 'deleted_by';
 
 	/**
 	 * The type of date/time field used for created_on and modified_on fields.
@@ -120,8 +134,8 @@ class BF_Model extends CI_Model
 	protected $date_format = 'int';
 
 	/**
-	 * If false, the delete() method will perform a true delete of that row.
-	 * If true, a 'deleted' field will be set to 1.
+	 * If FALSE, the delete() method will perform a TRUE delete of that row.
+	 * If TRUE, a 'deleted' field will be set to 1.
 	 *
 	 * @var boolean
 	 * @access protected
@@ -136,13 +150,21 @@ class BF_Model extends CI_Model
 	 */
 	protected $selects = '';
 
+	/*
+	Var: $escape
+	If FALSE, the select() method will not try to protect your field or table names with backticks.
+	This is useful if you need a compound select statement.
+
+	Access:
+		Protected
+	*/
+	protected $escape = TRUE;
+
 	//---------------------------------------------------------------
 
 	/**
-	 * __construct
 	 * Setup the DB connection if it doesn't exist
 	 *
-	 * @return void
 	 */
 	public function __construct()
 	{
@@ -167,13 +189,13 @@ class BF_Model extends CI_Model
 			$id		- The primary key of the record to search for.
 
 		Return:
-			An object representing the db row, or false.
+			An object representing the db row, or FALSE.
 	*/
 	public function find($id='')
 	{
 		if ($this->_function_check($id) === FALSE)
 		{
-			return false;
+			return FALSE;
 		}
 
 		$this->set_selects();
@@ -185,7 +207,7 @@ class BF_Model extends CI_Model
 			return $query->row();
 		}
 
-		return false;
+		return FALSE;
 	}
 
 	//---------------------------------------------------------------
@@ -207,7 +229,7 @@ class BF_Model extends CI_Model
 	{
 		if ($this->_function_check() === FALSE)
 		{
-			return false;
+			return FALSE;
 		}
 
 		$this->set_selects();
@@ -223,7 +245,7 @@ class BF_Model extends CI_Model
 
 		$this->error = $this->lang->line('bf_model_bad_select');
 		$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_bad_select'));
-		return false;
+		return FALSE;
 	}
 
 	//---------------------------------------------------------------
@@ -241,9 +263,9 @@ class BF_Model extends CI_Model
 		Return:
 			An array of objects representing the results, or FALSE on failure or empty set.
 	*/
-	public function find_all_by($field=null, $value=null)
+	public function find_all_by($field=NULL, $value=NULL)
 	{
-		if (empty($field)) return false;
+		if (empty($field)) return FALSE;
 
 		$this->set_selects();
 
@@ -276,7 +298,7 @@ class BF_Model extends CI_Model
 		{
 			$this->error = $this->lang->line('bf_model_find_error');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_find_error'));
-			return false;
+			return FALSE;
 		}
 
 		if (is_array($field))
@@ -307,7 +329,7 @@ class BF_Model extends CI_Model
 			return $query->row();
 		}
 
-		return false;
+		return FALSE;
 	}
 
 	//---------------------------------------------------------------
@@ -321,9 +343,9 @@ class BF_Model extends CI_Model
 			$data	- an array of key/value pairs to insert.
 
 		Return:
-			Either the $id of the row inserted, or false on failure.
+			Either the $id of the row inserted, or FALSE on failure.
 	*/
-	public function insert($data=null)
+	public function insert($data=NULL)
 	{
 		if ($this->_function_check(FALSE, $data) === FALSE)
 		{
@@ -335,6 +357,11 @@ class BF_Model extends CI_Model
 		{
 			$data[$this->created_field] = $this->set_date();
 		}
+		
+		if ($this->set_created === TRUE && $this->log_user === TRUE && !array_key_exists($this->created_by_field, $data))
+		{
+			$data[$this->created_by_field] = $this->auth->user_id();
+		}
 
 		// Insert it
 		$status = $this->db->insert($this->table, $data);
@@ -345,7 +372,7 @@ class BF_Model extends CI_Model
 		} else
 		{
 			$this->error = mysql_error();
-			return false;
+			return FALSE;
 		}
 
 	}
@@ -362,9 +389,9 @@ class BF_Model extends CI_Model
 			$data	- An array of key/value pairs to update.
 
 		Return:
-			true/false
+			TRUE/FALSE
 	*/
-	public function update($id=null, $data=null)
+	public function update($id=NULL, $data=NULL)
 	{
 
 		if ($this->_function_check($id, $data) === FALSE)
@@ -377,14 +404,19 @@ class BF_Model extends CI_Model
 		{
 			$data[$this->modified_field] = $this->set_date();
 		}
+		
+		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
+		{
+			$data[$this->modified_by_field] = $this->auth->user_id();
+		}
 
 		$this->db->where($this->key, $id);
 		if ($this->db->update($this->table, $data))
 		{
-			return true;
+			return TRUE;
 		}
 
-		return false;
+		return FALSE;
 	}
 
 	//---------------------------------------------------------------
@@ -401,15 +433,15 @@ class BF_Model extends CI_Model
 			$data	- An array of key/value pairs to update.
 
 		Return:
-			true/false
+			TRUE/FALSE
 	*/
-	public function update_where($field=null, $value=null, $data=null)
+	public function update_where($field=NULL, $value=NULL, $data=NULL)
 	{
 		if (empty($field) || empty($value) || !is_array($data))
 		{
 			$this->error = $this->lang->line('bf_model_no_data');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
-			return false;
+			return FALSE;
 		}
 
 		return $this->db->update($this->table, $data, array($field => $value));
@@ -427,7 +459,7 @@ class BF_Model extends CI_Model
 			$index	- A string value of the db column to use as the where key
 
 		Return:
-			true/false
+			TRUE/FALSE
 	*/
 	public function update_batch($data = NULL, $index = NULL)
 	{
@@ -471,9 +503,9 @@ class BF_Model extends CI_Model
 			$id		- The primary_key value to match against.
 
 		Return:
-			true/false
+			TRUE/FALSE
 	 */
-	public function delete($id=null)
+	public function delete($id=NULL)
 	{
 		if ($this->_function_check($id) === FALSE)
 		{
@@ -484,8 +516,17 @@ class BF_Model extends CI_Model
 		{
 			if ($this->soft_deletes === TRUE)
 			{
+				$data = array(
+					'deleted'	=> 1
+				);
+				
+				if ($this->log_user === TRUE && !array_key_exists($this->deleted_by_field, $data))
+				{
+					$data[$this->deleted_by_field] = $this->auth->user_id();
+				}
+			
 				$this->db->where($this->key, $id);
-				$result = $this->db->update($this->table, array('deleted' => 1));
+				$result = $this->db->update($this->table, $data);
 			}
 			else
 			{
@@ -525,15 +566,15 @@ class BF_Model extends CI_Model
 				     2) ' (`key` = "value" AND `key2` = "value2") '
 
 		Return:
-			true/false
+			TRUE/FALSE
 	*/
-	public function delete_where($data=null)
+	public function delete_where($data=NULL)
 	{
 		if (empty($data))
 		{
 			$this->error = $this->lang->line('bf_model_no_data');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
-			return false;
+			return FALSE;
 		}
 
 		if (is_array($data))
@@ -566,7 +607,7 @@ class BF_Model extends CI_Model
 
 		$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
 
-		return false;
+		return FALSE;
 	}
 
 	//---------------------------------------------------------------
@@ -585,7 +626,7 @@ class BF_Model extends CI_Model
 			$value	- The value to match $field against.
 
 		Return:
-			true/false
+			TRUE/FALSE
 	*/
 	public function is_unique($field='', $value='')
 	{
@@ -593,7 +634,7 @@ class BF_Model extends CI_Model
 		{
 			$this->error = $this->lang->line('bf_model_unique_error');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_unique_error'));
-			return false;
+			return FALSE;
 		}
 
 		$this->db->where($field, $value);
@@ -601,10 +642,10 @@ class BF_Model extends CI_Model
 
 		if ($query && $query->num_rows() == 0)
 		{
-			return true;
+			return TRUE;
 		}
 
-		return false;
+		return FALSE;
 	}
 
 	//---------------------------------------------------------------
@@ -642,7 +683,7 @@ class BF_Model extends CI_Model
 		{
 			$this->error = $this->lang->line('bf_model_count_error');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_count_error'));
-			return false;
+			return FALSE;
 		}
 
 		$this->set_selects();
@@ -666,13 +707,13 @@ class BF_Model extends CI_Model
 		Return:
 			The value of the field.
 	*/
-	public function get_field($id=null, $field='')
+	public function get_field($id=NULL, $field='')
 	{
 		if (!is_numeric($id) || $id === 0 || empty($field))
 		{
 			$this->error = $this->lang->line('bf_model_fetch_error');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_fetch_error'));
-			return false;
+			return FALSE;
 		}
 
 		$this->db->select($field);
@@ -684,10 +725,46 @@ class BF_Model extends CI_Model
 			return $query->row()->$field;
 		}
 
-		return false;
+		return FALSE;
 	}
 
 	//---------------------------------------------------------------
+
+	/*
+		Method: format_dropdown()
+
+		A convenience method to return options for form dropdown menus.
+
+		Parameters:
+			Can pass either Key ID and Label Table names or Just Label Table name.
+
+		Return:
+			array The options for the dropdown.
+	*/
+	function format_dropdown()
+	{
+		$args = & func_get_args();
+
+		if (count($args) == 2)
+		{
+			list($key, $value) = $args;
+		}
+		else
+		{
+			$key = $this->key;
+			$value = $args[0];
+		}
+
+		$query = $this->db->select(array($key, $value))->get($this->table);
+
+		$options = array();
+		foreach ($query->result() as $row)
+		{
+			$options[$row->{$key}] = $row->{$value};
+		}
+
+		return $options;
+	}
 
 	//--------------------------------------------------------------------
 	// !CHAINABLE UTILITY METHODS
@@ -707,7 +784,7 @@ class BF_Model extends CI_Model
 		Return:
 			An instance of this class.
 	*/
-	public function where($field=null, $value=null)
+	public function where($field=NULL, $value=NULL)
 	{
 		if (!empty($field))
 		{
@@ -739,11 +816,15 @@ class BF_Model extends CI_Model
 		Return:
 			An instance of this class.
 	*/
-	public function select($selects=null)
+	public function select($selects=NULL, $escape=NULL)
 	{
 		if (!empty($selects))
 		{
 			$this->selects = $selects;
+		}
+		if ($escape === FALSE)
+		{
+			$this->escape = $escape;
 		}
 
 		return $this;
@@ -813,7 +894,7 @@ class BF_Model extends CI_Model
 		 Return:
 		 	An instance of this class.
 	 */
-	public function order_by($field=null, $order='asc')
+	public function order_by($field=NULL, $order='asc')
 	{
 		if (!empty($field))
 		{
@@ -855,7 +936,7 @@ class BF_Model extends CI_Model
 		{
 			$this->error = $this->lang->line('bf_model_no_table');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_table'), 'error');
-			return false;
+			return FALSE;
 		}
 
 		// Check the ID, but only if it's a non-FALSE value
@@ -865,7 +946,7 @@ class BF_Model extends CI_Model
 			{
 				$this->error = $this->lang->line('bf_model_invalid_id');
 				$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_invalid_id'));
-				return false;
+				return FALSE;
 			}
 		}
 
@@ -876,7 +957,7 @@ class BF_Model extends CI_Model
 			{
 				$this->error = $this->lang->line('bf_model_no_data');
 				$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
-				return false;
+				return FALSE;
 			}
 		}
 
@@ -891,7 +972,7 @@ class BF_Model extends CI_Model
 			unset($data['func']);
 		}
 
-		return true;
+		return TRUE;
 	}
 
     //---------------------------------------------------------------
@@ -915,7 +996,7 @@ class BF_Model extends CI_Model
 		Return:
 			The current/user time converted to the proper format.
 	*/
-	protected function set_date($user_date=null)
+	protected function set_date($user_date=NULL)
 	{
 		$curr_date = !empty($user_date) ? $user_date : time();
 
@@ -990,9 +1071,9 @@ class BF_Model extends CI_Model
 		Sets whether to auto-create modified_on dates in the update method.
 
 		Parameters:
-			$modified	- true/false
+			$modified	- TRUE/FALSE
 	*/
-	public function set_modified($modified=true)
+	public function set_modified($modified=TRUE)
 	{
 		$this->set_modified = $modified;
 	}
@@ -1005,9 +1086,9 @@ class BF_Model extends CI_Model
 		Sets whether soft deletes are used by the delete method.
 
 		Parameters:
-			$soft	- true/false
+			$soft	- TRUE/FALSE
 	*/
-	public function set_soft_deletes($soft=true)
+	public function set_soft_deletes($soft=TRUE)
 	{
 		$this->soft_deletes = $soft;
 	}
@@ -1018,7 +1099,10 @@ class BF_Model extends CI_Model
 		Method: set_selects()
 
 		Takes the string in $this->selects, if not empty, and sets it
-		with the ActiveRecord db class. Clears the string afterword
+		with the ActiveRecord db class. If $this->escape is FALSE it
+		will not try to protect your field or table names with backticks.
+
+		Clears the string afterword
 		to make sure it's clean for the next call.
 
 		Access:
@@ -1026,12 +1110,20 @@ class BF_Model extends CI_Model
 	*/
 	protected function set_selects()
 	{
-		if (!empty($this->selects))
+		if (!empty($this->selects) && $this->escape === FALSE)
+		{
+			$this->db->select($this->selects, FALSE);
+
+			// Clear it out for the next process.
+			$this->selects = NULL;
+			$this->escape = NULL;
+		}
+		elseif (!empty($this->selects))
 		{
 			$this->db->select($this->selects);
 
 			// Clear it out for the next process.
-			$this->selects = null;
+			$this->selects = NULL;
 		}
 	}
 

@@ -402,6 +402,34 @@ class Migrations {
 	// --------------------------------------------------------------------
 
 	/*
+		Method: auto_latest()
+		
+		Handles auto-upgrading migrations of core and/or app on page load.
+	*/
+	public function auto_latest()
+	{ 
+		$auto_core = $this->_ci->config->item('migrate.auto_core');
+		$auto_app = $this->_ci->config->item('migrate.auto_app');
+
+		if ($auto_core)
+		{
+			$this->version($this->get_latest_version(''), '');
+		}
+		
+		if ($auto_app)
+		{
+			$this->version($this->get_latest_version('app_'), 'app_');
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	
+
+	//--------------------------------------------------------------------
+	// ! Utility Methods
+	//--------------------------------------------------------------------
+
+	/*
 		Method: latest()
 
 		Set's the schema to the latest migration

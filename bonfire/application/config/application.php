@@ -29,12 +29,6 @@ $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
 
 //--------------------------------------------------------------------
-// !Console/Profiler
-//--------------------------------------------------------------------
-$config['site.show_profiler'] = 1;
-$config['site.show_front_profiler'] = 1;
-
-//--------------------------------------------------------------------
 // !For Update messages
 //--------------------------------------------------------------------
 
@@ -51,43 +45,6 @@ $config['updates.last_commit']	= '';	// Stores the last installed commit ref
 // new files.
 //
 $config['site.backup_folder']	= 'archives/';
-
-//--------------------------------------------------------------------
-// !AUTHENTICATION
-//--------------------------------------------------------------------
-
-// Can new accounts be registered?
-$config['auth.allow_register'] = 1;
-
-// Type of login allowed ('email', 'username', 'both')
-$config['auth.login_type'] = "email";
-
-// Whether usernames are used in the system (0:no, 1:yes, 2:yes+ownname)
-$config['auth.use_usernames'] = 1;
-
-// Should users be able to use a 'remember me' functionality?
-$config['auth.allow_remember'] = 1;
-
-// How long should a user be remembered in the system? In seconds.
-$config['auth.remember_length'] = 1209600;
-
-$config['auth.use_own_names'] = 0;
-
-// Should we do a custom login redirect, or just go to '/'?
-$config['auth.do_login_redirect'] = 1;
-
-// Minimum password length
-$config['auth.password_min_length'] = 8;
-
-// Should password force numbers?
-$config['auth.password_force_numbers'] = true;
-
-// Should password force symbols?
-$config['auth.password_force_symbols'] = true;
-
-// Should password force mixed case?
-$config['auth.password_force_mixed_case'] = true;
-
 
 //--------------------------------------------------------------------
 // !CONTEXTS
@@ -210,7 +167,17 @@ $config['template.use_mobile_themes'] = FALSE;
 | when 'template.use_mobile_themes' is set to TRUE.
 |
 */
-$config['template.default_theme'] = 'default/';
+$config['template.default_theme']	= 'default/';
+
+/*
+|--------------------------------------------------------------------
+| PARSE VIEWS
+|--------------------------------------------------------------------
+| If set to TRUE, views will be parsed via CodeIgniter's parser.
+| If FALSE, views will be considered PHP views only.
+|
+*/
+$config['template.parse_views']		= FALSE;
 
 /*
 |--------------------------------------------------------------------
@@ -319,5 +286,19 @@ $config['ui.current_shortcuts'] = array(
 	'goto_content'   => array('description' => 'Jump to the Content context.', 'action' => "document.location='/" . SITE_AREA . "/content';"),
 	'goto_reports'   => array('description' => 'Jump to the Reports context.', 'action' => "document.location='/" . SITE_AREA . "/reports';"),
 	'goto_settings'  => array('description' => 'Jump to the Settings context.', 'action' => "document.location='/" . SITE_AREA . "/settings';"),
-	'goto_developer' => array('description' => 'Jump to the Developer context.', 'action' => "document.location='/" . SITE_AREA . "/developer';"),
 );
+
+//--------------------------------------------------------------------
+// !Emailer
+//--------------------------------------------------------------------
+/*
+	Setting this option to true writes email content to a local file in the log path for debugging
+	using 'development' environments without sendmail such as Windows Desktop servers like WAMP.
+*/
+$config['emailer.write_to_file'] = false;
+
+//--------------------------------------------------------------------
+// !Migrations
+//--------------------------------------------------------------------
+$config['migrate.auto_core']	= TRUE;
+$config['migrate.auto_app']		= FALSE;

@@ -1,40 +1,27 @@
-<?php
-	// acessing our userdata cookie
-	$cookie = unserialize($this->input->cookie($this->config->item('sess_cookie_name')));
-	$logged_in = isset ($cookie['logged_in']);
-
-  unset ($cookie);
-
-	if ( $logged_in == true )
-	{
-		$username = obj_value($current_user, 'email');
-    	$user_img = gravatar_link($username, 22, $username, "{$username} Profile", ' ', ' ' );
-	}
-?>
 <div class="navbar navbar-fixed-top">
 	<div class="navbar-inner">
 		<div class="container">
-			<!-- .btn-navbar is used as the toggle for collapsible content -->	
+			<!-- .btn-navbar is used as the toggle for collapsible content -->
 			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</a>
-					
+
 			<?php echo anchor( '/', $this->settings_lib->item('site.title'), 'class="brand"' ); ?>
-			
+
 			<!-- Everything you want hidden at 940px or less, place within here -->
 			<div class="nav-collapse">
-					
+
 				<ul class="nav pull-right">
 					<li class="divider-vertical"></li>
-					
-					<?php if ($logged_in) : ?>
+
+					<?php if (isset($current_user->email)) : ?>
 					<li class="dropdown" style="height:40px">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
-						<?php echo $user_img; ?>
+						<?php echo $current_user->user_img; ?>
 						<b class="caret"></b></a>
-					
+
 						<ul class="dropdown-menu">
 							<li><a href="<?php echo site_url(); ?>"><?php echo lang('bf_home') ?></a></li>
 							<li class="divider"></li>
@@ -43,10 +30,12 @@
 							<li><a href="<?php echo site_url('logout');?>"><?php echo lang('bf_action_logout') ?></a></li>
 						</ul>
 					</li>
-					
+
 					<?php else :  ?>
-					
+
+						<li><a href="<?php echo site_url('register');?>"><?php echo lang('bf_action_register') ?></a></li>
 						<li><a href="<?php echo site_url('login');?>" class="login-btn"><?php echo lang('bf_action_login') ?></a></li>
+
 					<?php endif; ?>
 				</ul>
 

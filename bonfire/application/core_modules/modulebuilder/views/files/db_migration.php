@@ -1,7 +1,7 @@
 <?php
 
  // There are no doubt more types where a value/length isn't possible - needs investigating
-$no_length = array('TEXT', 'BOOL', 'DATE', 'DATETIME', 'BLOB', 'TINYBLOB', 'TINYTEXT', 'MEDIUMBLOB', 'MEDIUMTEXT', 'LONGBLOB', 'LONGTEXT');
+$no_length = array('TEXT', 'BOOL', 'DATE', 'DATETIME', 'TIMESTAMP', 'BLOB', 'TINYBLOB', 'TINYTEXT', 'MEDIUMBLOB', 'MEDIUMTEXT', 'LONGBLOB', 'LONGTEXT');
 
 $db_migration = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allowed\');
 

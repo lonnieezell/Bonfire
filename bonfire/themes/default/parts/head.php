@@ -6,12 +6,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+				<script src="<?php echo js_path(); ?>modernizr-2.5.3.js"></script>
 
-<?php echo Assets::css(); ?>
+				<?php echo Assets::css(); ?>
 
     <!-- iPhone and Mobile favicon's and touch icons -->
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/images/favicon.ico">

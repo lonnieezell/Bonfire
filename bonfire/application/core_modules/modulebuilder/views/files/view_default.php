@@ -17,8 +17,8 @@ $id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? "/".$'.$modul
 $view .= '?>';
 $view .= '
 <div class="admin-box">
-	<h3>UPDATE TEXT</h3>
-<?php echo form_open($this->uri->uri_string(), \'class="constrained ajax-form form-horizontal"\'); ?>
+	<h3>' . $module_name . '</h3>
+<?php echo form_open($this->uri->uri_string(), \'class="form-horizontal"\'); ?>
 	<fieldset>
 ';
 $on_click = '';
@@ -36,7 +36,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 	}
 
 	$field_label = set_value("view_field_label$counter");
-	$field_name = $db_required ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
+	$field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
 	$field_type = set_value("view_field_type$counter");
 
 	$validation_rules = $this->input->post('validation_rules'.$counter);
@@ -50,15 +50,15 @@ for($counter=1; $field_total >= $counter; $counter++)
 		{
 			if($value == 'required')
 			{
-				$required = "lang('bf_form_label_required')"; //' <span class="required">*</span>';
+				$required = ". lang('bf_form_label_required')"; //' <span class="required">*</span>';
 			}
 
 		}
 	}
 
 	$view .= <<<EOT
-		<div class="control-group <?php echo form_has_error('{$field_name}') ? 'error' : ''; ?>">
-			<?php echo form_label('{$field_label}'. {$required}, '{$field_name}', 'class="control-label"' ); ?>
+		<div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
+			<?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
 			{$form_input_delimiters[0]}
 EOT;
 
@@ -66,42 +66,42 @@ EOT;
 	switch($field_type)
 	{
 
-	// Some consideration has gone into how these should be implemented
-	// I came to the conclusion that it should just setup a mere framework
-	// and leave helpful comments for the developer
-	// Modulebuilder is meant to have a minimium amount of features.
-	// It sets up the parts of the form that are repitive then gets the hell out
-	// of the way.
+		// Some consideration has gone into how these should be implemented
+		// I came to the conclusion that it should just setup a mere framework
+		// and leave helpful comments for the developer
+		// Modulebuilder is meant to have a minimium amount of features.
+		// It sets up the parts of the form that are repitive then gets the hell out
+		// of the way.
 
-	// This approach maintains these aims/goals
+		// This approach maintains these aims/goals
 
-	case('textarea'):
+		case('textarea'):
 
-		if (!empty($textarea_editor) )
-		{
-			// if a date field hasn't been included already then add in the jquery ui files
-			if ($textarea_editor == 'xinha') {
-				//
-				if ($xinha_names != '')
-				{
-					$xinha_names .= ', ';
+			if (!empty($textarea_editor) )
+			{
+				// if a date field hasn't been included already then add in the jquery ui files
+				if ($textarea_editor == 'xinha') {
+					//
+					if ($xinha_names != '')
+					{
+						$xinha_names .= ', ';
+					}
+					$xinha_names .= '\''.$field_name.'\'';
+
 				}
-				$xinha_names .= '\''.$field_name.'\'';
 
 			}
-
-		}
-		$view .= "
+			$view .= "
 			<?php echo form_textarea( array( 'name' => '$field_name', 'id' => '$field_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>";
-		$view .= '
+			$view .= '
 			<span class="help-inline"><?php echo form_error(\''.$field_name.'\'); ?></span>';
-		$view .= "
+			$view .= "
 		".$form_input_delimiters[1];
-		break;
+			break;
 
-	case('radio'):
+		case('radio'):
 
-		$view .= '
+			$view .= '
 		<label class="radio">
 			<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option1" <?php echo set_radio(\''.$field_name.'\', \'option1\', TRUE); ?> />
 			'. form_label('Radio option 1', $field_name) .'
@@ -112,68 +112,68 @@ EOT;
 		'.$form_input_delimiters[1].'
 
 ';
-		break;
+			break;
 
-	case('select'):
-	// decided to use ci form helper here as I think it makes selects/dropdowns a lot easier
-		$select_options = array();
-		if (set_value("db_field_length_value$counter") != NULL)
-		{
-			$select_options = explode(',', set_value("db_field_length_value$counter"));
-		}
-		$view .= '
+		case('select'):
+			// decided to use ci form helper here as I think it makes selects/dropdowns a lot easier
+			$select_options = array();
+			if (set_value("db_field_length_value$counter") != NULL)
+			{
+				$select_options = explode(',', set_value("db_field_length_value$counter"));
+			}
+			$view .= '
 
         <?php // Change the values in this array to populate your dropdown as required ?>
 
 ';
-	 $view .= '<?php $options = array(';
-		foreach( $select_options as $key => $option)
-		{
-			$view .= '
+			$view .= '<?php $options = array(';
+			foreach( $select_options as $key => $option)
+			{
+				$view .= '
 				'.strip_slashes($option).' => '.strip_slashes($option).',';
-		}
-	 $view .= '
+			}
+			$view .= '
 ); ?>
 
         <?php echo form_dropdown(\''.$field_name.'\', $options, set_value(\''.$field_name.'\', isset($'.$module_name_lower.'[\''.$field_name.'\']) ? $'.$module_name_lower.'[\''.$field_name.'\'] : \'\'))?>';
-		$view .= '
+			$view .= '
 			<span class="help-inline"><?php echo form_error(\''.$field_name.'\'); ?></span>
 		'.$form_input_delimiters[1].'
                         ';
-		break;
+			break;
 
-	case('checkbox'):
+		case('checkbox'):
 
-	$view .= <<<EOT
+			$view .= <<<EOT
 
-			<label class="checkbox" for="{$field_name}>
+			<label class="checkbox" for="{$field_name}">
 			<input type="checkbox" id="{$field_name}" name="{$field_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$field_name}', 1); ?>>
 			<span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
 			</label>
 
 		{$form_input_delimiters[1]}
 EOT;
-		break;
+			break;
 
-	case('input'):
-	case('password'):
-	default: // input.. added bit of error detection setting select as default
+		case('input'):
+		case('password'):
+		default: // input.. added bit of error detection setting select as default
 
-		if ($field_type == 'input')
-		{
-			$type = 'text';
-		}
-		else
-		{
-			$type = 'password';
-		}
-		if (set_value("db_field_length_value$counter") != NULL)
-		{
-			$maxlength = 'maxlength="'.set_value("db_field_length_value$counter").'"';
-		}
-		$db_field_type = set_value("db_field_type$counter");
+			if ($field_type == 'input')
+			{
+				$type = 'text';
+			}
+			else
+			{
+				$type = 'password';
+			}
+			if (set_value("db_field_length_value$counter") != NULL)
+			{
+				$maxlength = 'maxlength="'.set_value("db_field_length_value$counter").'"';
+			}
+			$db_field_type = set_value("db_field_type$counter");
 
-		$view .= <<<EOT
+			$view .= <<<EOT
 
         <input id="{$field_name}" type="{$type}" name="{$field_name}" {$maxlength} value="<?php echo set_value('{$field_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>"  />
 		<span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
@@ -195,15 +195,35 @@ if (!empty($on_click))
 	$on_click .= '"';
 }//end if
 
+$delete = '';
+
+if($action_name != 'create') {
+	$delete_permission = preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete';
+
+	$delete = PHP_EOL . '
+	<?php if ($this->auth->has_permission(\''.$delete_permission.'\')) : ?>
+
+			or <a class="btn btn-danger" id="delete-me" href="/<?php echo SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id;?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" name="delete-me">
+			<i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>
+			</a>
+
+	<?php endif; ?>
+' . PHP_EOL;
+}
+
 $view .= PHP_EOL . '
 
 		<div class="form-actions">
 			<br/>
-			<input type="submit" name="submit" class="btn btn-primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' /> or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-danger"\'); ?>
+			<input type="submit" name="submit" class="btn btn-primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' />
+			or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-warning"\'); ?>
+			' . $delete . '
 		</div>
 	</fieldset>
 	<?php echo form_close(); ?>
 ' . PHP_EOL;
+
+
 
 if ($xinha_names != '')
 {
@@ -231,23 +251,6 @@ if ($xinha_names != '')
 				}
 				xinha_init();
 				</script>' . PHP_EOL;
-}
-if($action_name != 'create') {
-$delete_permission = preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete';
-
-$view .= PHP_EOL . '
-	<?php if ($this->auth->has_permission(\''.$delete_permission.'\')) : ?>
-	<div class="box delete rounded">
-		<h3><?php echo lang(\''.$module_name_lower.'_delete_record\'); ?></h3>
-
-		<?php echo form_open(site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id), \'class="constrained ajax-form form-horizontal"\'); ?>
-		<p><?php echo lang(\''.$module_name_lower.'_edit_text\'); ?></p>
-
-		<input type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" value="<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>"/>
-		<?php echo form_close(); ?>
-	</div>
-	<?php endif; ?>
-' . PHP_EOL;
 }
 
 $view .= PHP_EOL . '</div>' . PHP_EOL;

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /*
-	Copyright (c) 2011 Lonnie Ezell
+	Copyright (c) 2011-2012 Lonnie Ezell
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
@@ -165,8 +165,7 @@ class Assets {
 		*/
 		if (config_item('assets.base_folder') === false)
 		{
-			//@TODO: Does this cofig file even exist? I thought these settings were in application_config?
-			self::$ci->config->load('assets');
+			self::$ci->config->load('application');
 		}
 
 		// Store our settings
@@ -192,9 +191,9 @@ class Assets {
 
 
 		Parameters:
-						$include  - TRUE to include (default) or FALSE to exclude
+			$include  - TRUE to include (default) or FALSE to exclude
 		Return:
-					<void>
+			<void>
 	*/
 	public static function set_globals($include = true)
 	{
@@ -229,6 +228,12 @@ class Assets {
 	{
 		$styles = array();
 		$return = '';
+
+		//Debugging issues with media being set to 1 on module_js
+		if ( $media == '1')
+		{
+			$media = 'screen';
+		}
 
 		// If no style(s) has been passed in, use all that have been added.
 		if (empty($style) && self::$globals)
@@ -365,7 +370,13 @@ class Assets {
 
 		if (self::$ci->config->item('assets.css_minify') == TRUE)
 		{
-			$file_name .= ".min";
+			$file_name .= '.min';
+		}
+
+		//Debugging issues with media being set to 1 on module_js
+		if ( $media == '1')
+		{
+			$media = 'screen';
 		}
 
 		// Create our link attributes
@@ -402,6 +413,12 @@ class Assets {
 	{
 		if (empty($style)) return;
 
+		//Debugging issues with media being set to 1 on module_js
+		if ( $media == '1' )
+		{
+			$media = 'screen';
+		}
+
 		// Add a string
 		if (is_string($style))
 		{
@@ -431,7 +448,8 @@ class Assets {
 		Adds a module css file to the CSS queue to be rendered out.
 
 		Parameters:
-			$file_path	- Module path to the css file
+			$module     - Module name
+			$file_path	- Module path to the css file, leave blank for default location of modules/assets/css
 			$media		- The type of media the stylesheet styles.
 
 		Return:
@@ -440,6 +458,9 @@ class Assets {
 	public static function add_module_css($module, $file_path=null, $media='screen')
 	{
 		if (empty($file_path)) return;
+
+		if ( $media == '1' )
+			$media = 'screen';
 
 		// Add a string
 		if (is_string($file_path))
@@ -541,7 +562,7 @@ class Assets {
 		Returns:
 			Void
 	*/
-	public function add_module_js($module='', $file='')
+	public static function add_module_js($module='', $file='')
 	{
 		if (empty($file)) return;
 
@@ -762,7 +783,7 @@ class Assets {
 		Return:
 			A string with the link(s) to the script files.
 	*/
-	public function module_js($list=false)
+	public static function module_js($list=false)
 	{
 		if (!is_array(self::$module_scripts) || !count(self::$module_scripts))
 		{
@@ -948,7 +969,7 @@ class Assets {
 		Returns:
 			Void
 	*/
-	public function clear_cache()
+	public static function clear_cache()
 	{
 		self::$ci->load->helper('file');
 
@@ -1054,10 +1075,10 @@ class Assets {
 
 		if (self::$ci->config->item("assets.{$type}_minify"))
 		{
-			$file_path .= ".min";
+			$file_path .= '.min';
 		}
 
-		$file_path .= ".".$file_type;
+		$file_path .= '.'.$file_type;
 
 		$modified_time	= 0;			// Holds the last modified date of all included files.
 		$actual_file_time = 0;		// The modified time of the combined file.
@@ -1114,7 +1135,7 @@ class Assets {
 
 				if (!empty($file_output))
 				{
-					$asset_output .= $file_output."\n";
+					$asset_output .= $file_output. PHP_EOL;
 				}
 			}
 
@@ -1133,7 +1154,7 @@ class Assets {
 					}
 					break;
 				default:
-					throw new LoaderException("Unknown file type - $file_type.");
+					throw new LoaderException("Unknown file type - {$file_type}.");
 					break;
 			}
 
@@ -1212,9 +1233,9 @@ class Assets {
 
 		if (self::$debug)
 		{
-			echo "Active Theme = $active_theme<br/>";
-			echo "Default Theme = $default_theme<br/>";
-			echo 'Site Path = '. $site_path .'<br/>';
+			echo "Active Theme = {$active_theme}<br/>";
+			echo "Default Theme = {$default_theme}<br/>";
+			echo "Site Path = {$site_path}<br/>";
 			echo 'File(s) to find: '; print_r($files);
 		}
 
@@ -1276,7 +1297,7 @@ class Assets {
 
 				if (self::$debug)
 				{
-					echo '[Assets] Lookin for MODULE asset at: '. $path ."<br/>";
+					echo "[Assets] Lookin for MODULE asset at: {$path}<br/>" . PHP_EOL;
 				}
 
 				if (!empty($path))
@@ -1304,18 +1325,18 @@ class Assets {
 				foreach ($paths as $path)
 				{
 					if (self::$debug) {
-						echo '[Assets] Looking in: <ul><li>'. $site_path . $path .'/'. $default_theme . $file ."{$type}</li>";
-						echo '<li>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file . $type ."</li>";
+						echo "[Assets] Looking in: <ul><li>{$site_path}{$path}/{$default_theme}{$file}{$type}</li>" . PHP_EOL;
+						echo "<li>{$site_path}{$path}/{$default_theme}{$type}/{$file}{$type}</li>" . PHP_EOL;
 
 						if (!empty($active_theme))
 						{
-							echo '<li>'. $site_path . $path .'/'. $active_theme . $file ."{$type}</li>";
-							echo '<li>'. $site_path . $path .'/'. $active_theme . $type .'/'. $file ."{$type}</li>";
+							echo "<li>{$site_path}{$path}/{$active_theme}{$file}{$type}</li>" . PHP_EOL;
+							echo "<li>{$site_path}{$path}/{$active_theme}{$type}/{$file}{$type}</li>" . PHP_EOL;
 						}
 
-						echo '<li>'. $site_path . self::$asset_base .'/'. $type .'/'. $file ."{$type}</li>";
+						echo '<li>'. $site_path . self::$asset_base ."/{$type}/{$file}{$type}</li>" . PHP_EOL;
 
-						echo '</ul>';
+						echo '</ul>' . PHP_EOL;
 					}
 
 					if (!$bypass_inheritance)
@@ -1556,4 +1577,3 @@ function assets_path ( )
 
 /* End of file assets.php */
 /* Location: ./application/libraries/assets.php */
-

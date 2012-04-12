@@ -53,7 +53,7 @@
 
 <?php else : ?>
 
-	<div class="notification information">
+	<div class="alert alert-warning">
 		<p><?php echo lang('em_stat_no_queue'); ?></p>
 	</div>
 

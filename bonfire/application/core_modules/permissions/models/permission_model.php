@@ -124,4 +124,32 @@ class Permission_model extends BF_Model {
 
 	// --------------------------------------------------------------------
 
+	/*
+		Method: permission_exists()
+		
+		Checks to see whether a permission is in the system or not.
+		
+		Parameters:
+			$permission	- The name of the permission to check for.
+			
+		Returns:
+			true/false
+	*/
+	public function permission_exists($permission=null) 
+	{
+		if (empty($permission))
+		{
+			return null;
+		}
+		
+		if ($this->find_by('name', $permission))
+		{
+			return TRUE;
+		}
+		
+		return FALSE;
+	}
+	
+	//--------------------------------------------------------------------
+	
 }

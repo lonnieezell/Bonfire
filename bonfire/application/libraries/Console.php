@@ -77,7 +77,7 @@ class Console {
 	*/
 	public static function log($data=null) 
 	{
-		if (empty($data)) 
+		if ($data !== 0 && empty($data)) 
 		{ 
 			$data = 'empty';
 		}

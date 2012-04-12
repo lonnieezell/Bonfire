@@ -634,7 +634,7 @@ class Template {
 	 */
 	public function parse_views($parse)
 	{
-		self::parse_views($parse);
+		self::$parse_views = $parse;
 	}
 
 	//--------------------------------------------------------------------
@@ -1100,9 +1100,9 @@ function breadcrumb( $my_segments=null , $wrap = false, $echo = true )
 			} else {
 				if ( $wrap === true )
 				{
-					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', strtolower($segment)) .'</a>' . $seperator . '</li>' . PHP_EOL;
+					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', mb_strtolower($segment)) .'</a>' . $seperator . '</li>' . PHP_EOL;
 				} else {
-					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', strtolower($segment)) .'</a>' . $seperator . PHP_EOL;
+					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', mb_strtolower($segment)) .'</a>' . $seperator . PHP_EOL;
 				}
 			}
 		}
@@ -1126,9 +1126,9 @@ function breadcrumb( $my_segments=null , $wrap = false, $echo = true )
 
 				if ( $wrap === true )
 				{
-					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', strtolower($title)) .'</a>' . $seperator . '</li>' . PHP_EOL;
+					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', mb_strtolower($title)) .'</a>' . $seperator . '</li>' . PHP_EOL;
 				} else {
-					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', strtolower($title)) .'</a>' . $seperator . PHP_EOL;
+					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', mb_strtolower($title)) .'</a>' . $seperator . PHP_EOL;
 				}
 
 			}

@@ -93,12 +93,13 @@ class Contexts {
 
 		Parameters:
 			$mode	- What to display in the top menu. Either 'icon', 'text', or 'both'.
+			$order-by	- Determines the sort order of the elements. Valid options are 'normal', 'reverse', 'asc', 'desc'.
 			$top_level_only	- If TRUE, will only display the top-level links.
 
 		Returns:
 			A string with the built navigation.
 	*/
-	public static function render_menu($mode='icon', $top_level_only = false)
+	public static function render_menu($mode='icon', $order_by='normal', $top_level_only = false)
 	{
 		self::$ci->benchmark->mark('context_menu_start');
 
@@ -121,6 +122,23 @@ class Contexts {
 			array_push($contexts, 'developer');
 		}
 
+		// Sorting
+		switch ($order_by)
+		{
+			case 'reverse':
+				$contexts = array_reverse($contexts);
+				break;
+			case 'asc':
+				natsort($contexts);
+				break;
+			case 'desc':
+				rsort($contexts);
+				break;
+			case 'normal':
+			case 'default':
+				break;
+		}
+
 		$nav_id = ( trim (self::$outer_id) != '' ) ? ' id="'. self::$outer_id . '"' : '';
 		$nav = '<ul class="'. self::$outer_class .'" ' . $nav_id . ' >';
 
@@ -129,12 +147,20 @@ class Contexts {
 		*/
 		foreach ($contexts as $context)
 		{
-			if (has_permission('Site.'. ucfirst($context) .'.View'))
+			if ( has_permission('Site.'. ucfirst($context) .'.View') == true || permission_exists('Site.'. ucfirst($context) .'.View') == false)
 			{
 				$url = site_url(SITE_AREA .'/'.$context);
 				$class = check_class($context, true);
 				$id = 'tb_'. $context;
-				$title = lang('bf_context_'. $context);
+
+				if (lang('bf_context_'. $context))
+				{
+					$title = lang('bf_context_'. $context);
+				}
+				else
+				{
+					$title = ucfirst($context);
+				}
 
 				$nav .= "<li class='dropdown {$class}'><a href='{$url}' id='{$id}' class='dropdown-toggle' title='{$title}' data-toggle='dropdown' data-id='{$context}_menu'>";
 
@@ -157,7 +183,7 @@ class Contexts {
 					$nav .= self::context_nav($context);
 				}
 
-				$nav .= "</li>\n<li class=\"divider-vertical\"></li>";
+				$nav .= "</li>\n";
 			}
 
 		}
@@ -223,7 +249,16 @@ class Contexts {
 		{
 			if (module_controller_exists($context, $module) === true)
 			{
-				self::$actions[] = $module;
+				$mod_config = module_config($module);
+
+				self::$actions[$module] = array(
+					'weight'		=> isset($mod_config['weights'][$context]) ? $mod_config['weights'][$context] : 0,
+					'display_name'	=> isset($mod_config['name']) ? $mod_config['name'] : $module,
+					'title' 		=> isset($mod_config['description']) ? $mod_config['description'] : $module,
+					'menus'			=> isset($mod_config['menus']) ? $mod_config['menus'] : false,
+				);
+
+				self::$actions[$module]['menu_topic'] = isset($mod_config['menu_topic']) ? $mod_config['menu_topic'] : self::$actions[$module]['display_name'];
 			}
 		}
 
@@ -235,35 +270,35 @@ class Contexts {
 			return '<ul class="'. $class .'"></ul>';
 		}
 
+		// Order our actions by their weight, then alphabetically
+		self::sort_actions();
+
 		// Grab our module permissions so we know who can see what on the sidebar
 		$permissions = self::$ci->config->item('module_permissions');
 
+//		echo "<pre>" . print_r(self::$actions, TRUE) . "</pre>";
+
 		// Build up our menu array
-		foreach (self::$actions as $module)
+		foreach (self::$actions as $module => $config)
 		{
 			// Make sure the user has permission to view this page.
 			if ((isset($permissions[$context][$module]) && has_permission($permissions[$context][$module])) || (isset($permissions[$context]) && is_array($permissions[$context]) && !array_key_exists($module, $permissions[$context])))
+//			if (has_permission('Bonfire.'.ucfirst($module).'.View') || has_permission(ucfirst($module).'.'.ucfirst($context).'.View'))
 			{
-				// Grab our module config array, if any.
-				$mod_config = module_config($module);
-
-				$display_name = isset($mod_config['name']) ? $mod_config['name'] : $module;
-				$title = isset($mod_config['description']) ? $mod_config['description'] : $module;
-
-				$menu_topic = isset($mod_config['menu_topic'][$context]) ? $mod_config['menu_topic'][$context] : $display_name;
-
 				// Drop-down menus?
-				if (isset($mod_config['menus']) && isset($mod_config['menus'][$context]))
+				if ($config['menus'] && isset($config['menus'][$context]))
 				{
-					$menu_view = $mod_config['menus'][$context];
+					$menu_view = $config['menus'][$context];
 				} else
 				{
 					$menu_view = '';
 				}
 
+				$menu_topic = isset($config['menu_topic'][$context]) ? $config['menu_topic'][$context] : $config['display_name'];
+
 				self::$menu[$menu_topic][$module] = array(
-						'title'			=> $title,
-						'display_name'	=> $display_name,
+						'title'			=> $config['title'],
+						'display_name'	=> $config['display_name'],
 						'menu_view'		=> $menu_view,
 						'menu_topic'	=> $menu_topic
 				);
@@ -440,4 +475,22 @@ class Contexts {
 	}
 
 	//--------------------------------------------------------------------
+
+	private function sort_actions()
+	{
+		$weights 		= array();
+		$display_names	= array();
+
+		foreach (self::$actions as $key => $action)
+		{
+			$weights[$key] 			= $action['weight'];
+			$display_names[$key]	= $action['display_name'];
+		}
+
+		array_multisort($weights, SORT_DESC, $display_names, SORT_ASC, self::$actions);
+		//echo '<pre>'. print_r(self::$actions, true) .'</pre>';
+	}
+
+	//--------------------------------------------------------------------
+
 }

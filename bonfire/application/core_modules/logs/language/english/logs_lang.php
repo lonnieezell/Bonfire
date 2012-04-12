@@ -39,6 +39,7 @@ $lang['logs_delete_confirm']	= 'Are you sure you want to delete these logs?';
 $lang['log_big_file_note']		= 'Logging can rapidly create very large files, if you log too much information. For live sites, you should probably log only Errors.';
 $lang['log_delete_note']		= 'Deleting log files is permanent. There is no going back, so please make sure.';
 $lang['log_delete1_note']		= 'Deleting log files is a permanent action. There is no going back, so please make sure you understand what you are doing.';
+$lang['log_delete_confirm'] = 'Are you sure you want to delete this log file?';
 
 $lang['log_not_found']			= 'Either the log file could not be located, or it was empty.';
 $lang['log_show_all_entries']	= 'All entries';
@@ -52,3 +53,5 @@ $lang['log_settings']			= 'Settings';
 $lang['log_title']				= 'System Logs';
 $lang['log_title_settings']		= 'System Log Settings';
 $lang['log_deleted']			= 'Log files deleted';
+$lang['log_filter_label'] = 'View';
+$lang['log_intro']        = 'These are your error and debug logs....';

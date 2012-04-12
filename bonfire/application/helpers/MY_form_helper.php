@@ -384,7 +384,7 @@ if ( ! function_exists('form_dropdown'))
 	<div class="control-group">
 		<label class="control-label" for="{$defaults['name']}">{$label}</label>
 		<div class="controls">
-			 <select {$output}>
+			 <select {$output} {$extra}>
 				{$options_vals}
 			</select>
 			{$tooltip}

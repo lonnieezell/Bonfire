@@ -22,6 +22,8 @@
 */
 
 $lang['em_template']			= 'Template';
+$lang['em_email_template']		= 'Email Template';
+$lang['em_emailer_queue']		= 'Email Queue';
 
 $lang['em_system_email']		= 'System Email';
 $lang['em_system_email_note']	= 'The email that all system-generated emails are sent from.';

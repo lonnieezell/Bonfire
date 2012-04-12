@@ -1,9 +1,10 @@
 <?php
 	Assets::add_css( array(
-		base_url() . 'assets/css/bootstrap.css',
-		base_url() . 'assets/css/bootstrap-responsive.min.css',
+		css_path() . 'bootstrap.min.css',
+		css_path() . 'bootstrap-responsive.min.css',
 		'screen.css'
 	));
+
 	if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
 		Assets::add_js($this->load->view('ui/shortcut_keys', $shortcut_data, true), 'inline');
 	}
@@ -13,19 +14,13 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-    <title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo $this->settings_lib->item('site.title') ?></title>
+	<title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo $this->settings_lib->item('site.title') ?></title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <?php echo Assets::css(null, true); ?>
+	<?php echo Assets::css(null, true); ?>
 
-    <script src="<?php echo base_url() .'assets/js/head.min.js' ?>"></script>
-	<script>
-	head.feature("placeholder", function() {
-		var inputElem = document.createElement('input');
-		return new Boolean('placeholder' in inputElem);
-	});
-	</script>
+	<script src="<?php echo js_path(); ?>modernizr-2.5.3.js"></script>
 </head>
 <body class="desktop">
 <!--[if lt IE 7]>
@@ -47,10 +42,10 @@
 										<span class="icon-bar"></span>
 								</a>
 								<h1><?php echo anchor( '/', $this->settings_lib->item('site.title'), 'class="brand"' ); ?></h1>
-					<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>
 
 				<div class="nav-collapse">
 
+				<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>
 					<div class="nav pull-right">
 					<div class="btn-group">
 						<a class="dropdown-toggle dark btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png') ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts"/></a>
@@ -72,12 +67,12 @@
 								</li>
 						</ul>
 					</div>
+					</div>
 					<?php endif;?>
-				</div>
 				<div class="nav pull-right">
 					<div class="btn-group">
 						<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $current_user->id) ?>" id="tb_email" class="btn dark" title="<?php echo lang('bf_user_settings') ?>">
-							<?php echo config_item('auth.use_usernames') ? (config_item('auth.use_own_names') ? $current_user->username : $current_user->username) : $current_user->email ?>
+							<?php echo (isset($current_user->display_name) && !empty($current_user->display_name)) ? $current_user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $current_user->username : $current_user->email); ?>
 						</a>
 						<a class="btn dropdown-toggle dark" data-toggle="dropdown" href="#"><span class="caret"></span></a>
 						<ul class="dropdown-menu toolbar-profile">
@@ -104,7 +99,7 @@
 
 			</div> <!-- END OF nav-collapse -->
 
-				<?php echo Contexts::render_menu('both'); ?>
+				<?php echo Contexts::render_menu('both', 'normal'); ?>
 			</div><!-- /container -->
 			<div style="clearfix"></div>
 		</div><!-- /topbar-inner -->

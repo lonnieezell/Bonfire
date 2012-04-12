@@ -29,20 +29,15 @@
 */
 
 
-/*
-	Function: relative_time()
-	
-	Takes a UNIX timestamp and returns a string representing how long ago
-	that date was, like "moments ago", "2 weeks ago", etc.
-	
-	Parameters:
-		$timestamp	- A UNIX timestamp
-		
-	Returns: 
-		string	- a human-readable amount of time 'ago'
-*/
-if (!function_exists('relative_time'))
+if ( ! function_exists('relative_time'))
 {
+	/**
+	 * Takes a UNIX timestamp and returns a string representing how long ago that date was, like "moments ago", "2 weeks ago", etc.
+	 *
+	 * @param $timestamp int A UNIX timestamp
+	 *
+	 * @return string A human-readable amount of time 'ago'
+	 */
 	function relative_time($timestamp)
 	{
 		$difference = time() - $timestamp;
@@ -89,24 +84,18 @@ if (!function_exists('relative_time'))
 
 //---------------------------------------------------------------
 
-/*
-	Function: date_difference
-	
-	Returns the difference between two dates. 
-	
-	Parameters:
-		$start		- The start date in either unix timestamp or a format 
-					  that can be used within strtotime().
-		$end		- The ending date in either unix timestamp or a format 
-					  that can be used within strtotime().
-		$interval	- A string with the interval to use. Choices 'week', 'day', 'hour', 'minute'
-		$reformat	- If TRUE, will reformat the time using strtotime()
-		
-	Returns:
-		A number representing the difference between the two dates in the interval desired.
-*/
 if (!function_exists('date_difference'))
 {
+	/**
+	 * Returns the difference between two dates.
+	 *
+	 * @param $start mixed The start date in either unix timestamp or a format that can be used within strtotime().
+	 * @param $end mixed The ending date in either unix timestamp or a format that can be used within strtotime().
+	 * @param $interval string A string with the interval to use. Choices 'week', 'day', 'hour', 'minute'.
+	 * @param $reformat boolean If TRUE, will reformat the time using strtotime().
+	 *
+	 * @return int A number representing the difference between the two dates in the interval desired.
+	 */
 	function date_difference($start=null, $end=null, $interval='day', $reformat=false)
 	{
 		if (is_null($start))
@@ -135,5 +124,53 @@ if (!function_exists('date_difference'))
 		$diff = $end - $start;
 		
 		return round($diff / $times[$interval]);
+	}
+}
+
+//---------------------------------------------------------------
+
+/*
+	Function: user_time()
+
+	Converts unix time to a human readable time in user timezone
+	or in a given timezone.
+
+	Parameters:
+		$timestamp	- A UNIX timestamp. If non is given current time will be used.
+		$timezone	- The timezone we want to convert to.
+						  If none is given a current logged user timezone will be used.
+						  For supported timezones visit - http://php.net/manual/timezones.php
+		$format		- The format of the outputted date/time string
+						  For accepted formats visit - http://php.net/manual/function.date.php
+
+	Examples:
+		echo user_time();
+		echo user_time($timestamp, 'EET', 'l jS \of F Y h:i:s A');
+
+	Returns:
+		A string formatted according to the given format using the given timestamp
+		and given timezone or the current time if no timestamp is given.
+*/
+
+if ( ! function_exists('user_time'))
+{
+	function user_time($timestamp = NULL, $timezone = NULL, $format = 'r')
+	{
+		if ( ! $timezone)
+		{
+			$CI =& get_instance();
+			$CI->load->library('users/auth');
+			if ($CI->auth->is_logged_in())
+			{
+				$current_user = $CI->user_model->find($CI->auth->user_id());
+				$timezone = $current_user->timezone;
+			}
+		}
+
+		$timestamp = ($timestamp) ? $timestamp : time();
+
+		$dtzone = new DateTimeZone($timezone);
+		$dtime = new DateTime();
+		return $dtime->setTimestamp($timestamp)->setTimeZone($dtzone)->format($format);
 	}
 }

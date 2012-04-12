@@ -47,7 +47,7 @@ class Migration_User_meta_move extends Migration {
 		*/
 		$this->load->dbutil();
 		
-		$filename = APPPATH .'backup_meta_users_table.txt';
+		$filename = BFPATH .'/db/backups/backup_meta_users_table.txt';
 
 		$prefs = array(
 			'tables'		=> $this->db->dbprefix .'users',

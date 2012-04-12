@@ -41,10 +41,25 @@
 			<div class="control-group">
 				<label class="control-label" for="list_limit"><?php echo lang('bf_top_number') ?></label>
 				<div class="controls">
-					<input type="text" name="list_limit" value="<?php echo isset($settings['site.list_limit']) ? $settings['site.list_limit'] : set_value('site.list_limit') ?>" class="span1" />
+					<input type="text" name="list_limit" value="<?php echo set_value('list_limit', isset($settings['site.list_limit']) ? $settings['site.list_limit'] : '')  ?>" class="span1" />
 					<p class="help-inline"><?php echo lang('bf_top_number_help') ?></p>
 				</div>
 			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="status"><?php echo lang('bf_language') ?></label>
+				<div class="controls">
+					<select name="languages[]" multiple="mulitple">
+					<?php if (is_array($languages) && count($languages)):?>
+						<?php foreach($languages as $language):?>
+						<option value="<?php echo $language;?>" <?php echo set_select('languages', $language, in_array($language, $selected_languages) ? TRUE : FALSE) ?>><?php echo ucfirst($language) ?></option>
+						<?php endforeach;?>
+					<?php endif;?>
+					</select>
+					<p class="help-inline"><?php echo lang('bf_language_help') ?></p>
+				</div>
+			</div>
+
 		</fieldset>
 
 		<fieldset>
@@ -82,10 +97,6 @@
 					<label class="radio">
 						<input type="radio" name="use_usernames" id="use_usernames" value="0" <?php echo $settings['auth.use_usernames'] == 0 ? 'checked="checked"' : set_radio('auth.use_usernames', 0); ?> />
 						<span><?php echo lang('bf_email') ?></span>
-					</label>
-					<label class="checkbox">
-						<input type="checkbox" name="use_own_names" id="use_own_names" value="1" <?php echo $settings['auth.use_own_names'] == 1 ? 'checked="checked"' : set_checkbox('auth.use_own_names', 2); ?> />
-						<span><?php echo lang('bf_use_own_name') ?></span>
 					</label>
 				</div>
 			</div>
@@ -129,6 +140,26 @@
 						<option value="1814400" <?php echo $settings['auth.remember_length']== '1814400' ? 'selected="selected"' : '' ?>>3 <?php echo lang('bf_weeks') ?></option>
 						<option value="2592000" <?php echo $settings['auth.remember_length'] == '2592000' ? 'selected="selected"' : '' ?>>30 <?php echo lang('bf_days') ?></option>
 					</select>
+				</div>
+			</div>
+
+			<div class="control-group" id="password-strength">
+				<label class="control-label" for="password-strength"><?php echo lang('bf_password_strength') ?></label>
+				<div class="controls">
+					<input type="text" name="password_min_length" value="<?php echo set_value('password_min_length', isset($settings['auth.password_min_length']) ? $settings['auth.password_min_length'] : '') ?>" class="span1" />
+					<p class="help-inline"><?php echo lang('bf_password_length_help') ?></p>
+					<label class="checkbox" for="password_force_numbers">
+						<input type="checkbox" name="password_force_numbers" value="1" <?php echo set_checkbox('password_force_numbers', 1, isset($settings['auth.password_force_numbers']) && $settings['auth.password_force_numbers'] == 1 ? TRUE : FALSE); ?> />
+						<span><?php echo lang('bf_password_force_numbers') ?></span>
+					</label>
+					<label class="checkbox" for="password_force_symbols">
+						<input type="checkbox" name="password_force_symbols" value="1" <?php echo set_checkbox('password_force_symbols', 1, isset($settings['auth.password_force_symbols']) && $settings['auth.password_force_symbols'] == 1 ? TRUE : FALSE); ?> />
+						<span><?php echo lang('bf_password_force_symbols') ?></span>
+					</label>
+					<label class="checkbox" for="password_force_mixed_case">
+						<input type="checkbox" name="password_force_mixed_case" value="1" <?php echo set_checkbox('password_force_mixed_case', 1, isset($settings['auth.password_force_mixed_case']) && $settings['auth.password_force_mixed_case'] == 1 ? TRUE : FALSE); ?> />
+						<span><?php echo lang('bf_password_force_mixed_case') ?></span>
+					</label>
 				</div>
 			</div>
 

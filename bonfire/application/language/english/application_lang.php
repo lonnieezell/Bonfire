@@ -35,6 +35,9 @@ $lang['bf_top_number']			= 'Items <em>per</em> page:';
 $lang['bf_top_number_help']		= 'When viewing reports, how many items should be listed at a time?';
 $lang['bf_home']				= 'Home';
 $lang['bf_site_information']	= 'Site Information';
+$lang['bf_timezone']			= 'Timezone';
+$lang['bf_language']			= 'Language';
+$lang['bf_language_help']		= 'Choose the languages available to the user.';
 
 //--------------------------------------------------------------------
 // ! AUTH SETTINGS
@@ -120,6 +123,12 @@ $lang['bf_show_profiler']		= 'Show Admin Profiler?';
 $lang['bf_show_front_profiler']	= 'Show Front End Profiler?';
 
 $lang['bf_cache_not_writable']  = 'The application cache folder is not writable';
+
+$lang['bf_password_strength']			= 'Password Strength Settings';
+$lang['bf_password_length_help']		= 'Minimum password length e.g. 8';
+$lang['bf_password_force_numbers']		= 'Should password force numbers?';
+$lang['bf_password_force_symbols']		= 'Should password force symbols?';
+$lang['bf_password_force_mixed_case']	= 'Should password force mixed case?';
 
 //--------------------------------------------------------------------
 // ! USER/PROFILE
