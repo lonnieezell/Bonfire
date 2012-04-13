@@ -147,7 +147,7 @@ if (!function_exists('list_languages'))
 	
 	//--------------------------------------------------------------------
 	
-	function save_lang_file($filename=null, $language='english', $settings=null)
+	function save_lang_file($filename=null, $language='english', $settings=null, $return=false)
 	{ 
 		if (empty($filename) || !is_array($settings))
 		{
@@ -244,7 +244,14 @@ if (!function_exists('list_languages'))
 			$CI->load->helper('file');
 		}
 
-		$result = write_file($path, $contents);
+        if ($return == false)
+        {
+		    $result = write_file($path, $contents);
+        }
+        else
+        {
+            return $contents;
+        }
 		
 		if ($result === FALSE)
 		{
