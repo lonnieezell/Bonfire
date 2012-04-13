@@ -35,6 +35,8 @@ class App_hooks
 	/**
 	 * Stores the CodeIgniter core object.
 	 *
+	 * @access private
+	 *
 	 * @var object
 	 */
 	private $ci;
@@ -42,6 +44,8 @@ class App_hooks
 	/**
 	 * List of pages where the hooks are not run.
 	 *
+	 * @access private
+	 * 
 	 * @var array
 	 */
 	private $ignore_pages = array('login', 'logout', 'register', 'forgot_password');

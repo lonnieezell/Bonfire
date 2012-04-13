@@ -1,38 +1,48 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
+// ------------------------------------------------------------------------
 
-class MY_Unit_test extends CI_Unit_test {
-	
-	/*
-		clears the results array so multiple files don't
-		bleed over into each other.
-	*/
-	public function reset() 
+/**
+ * Unit Testing
+ *
+ * This class extends the CodeIgniter core Unit_test library to add
+ * extra functionality used in Bonfire.
+ *
+ * @package    Bonfire
+ * @subpackage Libraries
+ * @category   Libraries
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/core/unit_test.html
+ *
+ */
+class MY_Unit_test extends CI_Unit_test
+{
+
+	/**
+	 * Clears the results array so multiple files don't
+	 * bleed over into each other.
+	 *
+	 * @return void
+	 */
+	public function reset()
 	{
 		$this->results = array();
-	}
-	
+	}//end reset()
+
 	//--------------------------------------------------------------------
-	
-	
-}
+
+
+}//end class
