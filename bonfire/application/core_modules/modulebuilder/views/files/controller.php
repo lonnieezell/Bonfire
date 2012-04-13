@@ -419,8 +419,8 @@ for($counter=1; $field_total >= $counter; $counter++)
       }
       elseif ($textarea_editor == 'tinymce') {
         $extras .= '
-                    Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce.js\));
-                    Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce_init.js\));';
+        Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce.js\'));
+        Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce_init.js\'));';
       }
 			$textarea_included = TRUE;
 		}
