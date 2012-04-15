@@ -512,7 +512,7 @@ class Assets {
 
 		if (is_string($script))
 		{
-			if (!isset(self::$$type[$script]))
+			if (!in_array($script, self::$$type))
 			{
 				if ($prepend)
 				{
