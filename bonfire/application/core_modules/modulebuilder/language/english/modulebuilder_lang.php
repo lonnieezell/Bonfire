@@ -92,6 +92,7 @@ $lang['mb_form_fieldnum']		= 'Additional table fields';
 $lang['mb_form_field_details']	= 'Field details';
 $lang['mb_form_table_name']		= 'Table Name';
 $lang['mb_form_table_name_ph']	= 'Lowercase, no spaces';
+$lang['mb_form_table_as_field_prefix']		= 'Use table name as field prefix';
 $lang['mb_form_label']			= 'Label';
 $lang['mb_form_label_ph']		= 'The name that will be used on webpages';
 $lang['mb_form_fieldname']		= 'Name (no spaces)';

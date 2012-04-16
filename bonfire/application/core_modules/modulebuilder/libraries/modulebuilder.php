@@ -40,7 +40,7 @@ class Modulebuilder
 
 	//--------------------------------------------------------------------
 
-	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name) {
+	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix) {
 
 		$this->CI->load->helper('inflector');
 
@@ -107,7 +107,7 @@ class Modulebuilder
 
     		// db based files - migrations
     		if( $db_required == 'new') {
-    			$content['db_migration'] =  $this->build_db_sql($field_total, $module_name, $primary_key_field, $table_name);
+    			$content['db_migration'] =  $this->build_db_sql($field_total, $module_name, $primary_key_field, $table_name, $table_as_field_prefix);
     		}
         }
 
@@ -503,19 +503,20 @@ class Modulebuilder
     * @return string
     */
 
-	private function build_db_sql($field_total, $module_name, $primary_key_field, $table_name)
+	private function build_db_sql($field_total, $module_name, $primary_key_field, $table_name, $table_as_field_prefix)
 	{
 		if ($field_total == NULL)
 		{
 			return FALSE;
 		}
-
-		$data['field_total'] = $field_total;
-		$data['module_name'] = str_replace(" ", "_", $module_name);
+            
+		$data['field_total']       = $field_total;
+		$data['module_name']       = str_replace(" ", "_", $module_name);
 		$data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
 		$data['primary_key_field'] = $primary_key_field;
-		$data['table_name']			= $table_name;
-
+		$data['table_name']	   = $table_name;
+            $data['table_as_field_prefix']   = $table_as_field_prefix;
+            
 		$db_migration = $this->CI->load->view('files/db_migration', $data, TRUE);
 
 		return $db_migration;
