@@ -439,7 +439,9 @@ class Developer extends Admin_Controller {
 		$role_id			= $this->input->post('role_id');
 
 		$db_required = $this->input->post('module_db');
-
+            
+            $table_as_field_prefix = (bool) $this->input->post('table_as_field_prefix');
+            
 		$primary_key_field = $this->input->post('primary_key_field');
 		if( $primary_key_field == '') {
 			$primary_key_field = $this->options['primary_key_field'];
@@ -457,7 +459,7 @@ class Developer extends Admin_Controller {
 			$form_error_delimiters = $this->options['$form_error_delimiters'];
 		}
 
-		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name);
+		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix);
 
 		// make the variables available to the view file
 		$data['module_name']		= $module_name;
