@@ -531,7 +531,7 @@ class Assets {
 			// Remove any potential duplicates
 			foreach ($script as $s)
 			{
-				if (!isset(self::$$type[$s]))
+				if (!in_array($s, self::$$type))
 				{
 					$temp[] = $s;
 				}
