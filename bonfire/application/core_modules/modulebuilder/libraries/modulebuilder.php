@@ -72,13 +72,13 @@ class Modulebuilder
 				$public_context = TRUE;
 			}
 
-			$content['controllers'][$context_name] = $this->build_controller($field_total, $module_name, $context_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name);
+			$content['controllers'][$context_name] = $this->build_controller($field_total, $module_name, $context_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name, $table_as_field_prefix);
 
 			// view files
 			if ($public_context === TRUE)
 			{
 				// only build this view in the Public context
-				$content['views'][$context_name]['index'] = $this->build_view($field_total, $module_name, $context_name, 'index_front', 'Index', $primary_key_field, $form_input_delimiters);
+				$content['views'][$context_name]['index'] = $this->build_view($field_total, $module_name, $context_name, 'index_front', 'Index', $primary_key_field, $form_input_delimiters, $table_as_field_prefix);
 			}
 			else {
 				// only build these views for the Admin contexts
@@ -368,7 +368,7 @@ class Modulebuilder
     * @return string
  	*
 	*/
-	private function build_controller($field_total, $module_name, $controller_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name)
+	private function build_controller($field_total, $module_name, $controller_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name, $table_as_field_prefix)
 	{
 		if ($field_total == NULL)
 		{
@@ -385,6 +385,7 @@ class Modulebuilder
 		$data['db_required'] = $db_required;
 		$data['form_error_delimiters'] = $form_error_delimiters;
 		$data['textarea_editor'] = $this->CI->input->post('textarea_editor');
+            $data['table_as_field_prefix'] = $table_as_field_prefix;
 		$controller = $this->CI->load->view('files/controller', $data, TRUE);
 		return $controller;
 	}

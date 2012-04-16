@@ -36,7 +36,24 @@ for($counter=1; $field_total >= $counter; $counter++)
 	}
 
 	$field_label = set_value("view_field_label$counter");
-	$field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
+      
+      if($db_required == 'new' && $table_as_field_prefix === TRUE)
+      {
+            $field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
+            $form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
+      }
+      elseif($db_required == 'new' && $table_as_field_prefix === FALSE)
+      {
+            $field_name = set_value("view_field_name$counter");
+            $form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
+      }
+      else 
+      {
+            $field_name = set_value("view_field_name$counter");
+            $form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
+      }
+      
+//	$field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
 	$field_type = set_value("view_field_type$counter");
 
 	$validation_rules = $this->input->post('validation_rules'.$counter);
@@ -57,8 +74,8 @@ for($counter=1; $field_total >= $counter; $counter++)
 	}
 
 	$view .= <<<EOT
-		<div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
-			<?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
+		<div class="control-group <?php echo form_error('{$form_name}') ? 'error' : ''; ?>">
+			<?php echo form_label('{$field_label}'{$required}, '{$form_name}', array('class' => "control-label") ); ?>
 			{$form_input_delimiters[0]}
 EOT;
 
@@ -92,9 +109,9 @@ EOT;
 
 			}
 			$view .= "
-			<?php echo form_textarea( array( 'name' => '$field_name', 'id' => '$field_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>";
+			<?php echo form_textarea( array( 'name' => '$form_name', 'id' => '$form_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$form_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>";
 			$view .= '
-			<span class="help-inline"><?php echo form_error(\''.$field_name.'\'); ?></span>';
+			<span class="help-inline"><?php echo form_error(\''.$form_name.'\'); ?></span>';
 			$view .= "
 		".$form_input_delimiters[1];
 			break;
@@ -103,11 +120,11 @@ EOT;
 
 			$view .= '
 		<label class="radio">
-			<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option1" <?php echo set_radio(\''.$field_name.'\', \'option1\', TRUE); ?> />
-			'. form_label('Radio option 1', $field_name) .'
-			<input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option2" <?php echo set_radio(\''.$field_name.'\', \'option2\'); ?> />
-			'. form_label('Radio option 2', $field_name) .'
-			<span class="help-inline"><?php echo form_error(\''.$field_name.'\'); ?></span>
+			<input id="'.$form_name.'" name="'.$form_name.'" type="radio" class="" value="option1" <?php echo set_radio(\''.$form_name.'\', \'option1\', TRUE); ?> />
+			'. form_label('Radio option 1', $form_name) .'
+			<input id="'.$form_name.'" name="'.$form_name.'" type="radio" class="" value="option2" <?php echo set_radio(\''.$form_name.'\', \'option2\'); ?> />
+			'. form_label('Radio option 2', $form_name) .'
+			<span class="help-inline"><?php echo form_error(\''.$form_name.'\'); ?></span>
 			</label>
 		'.$form_input_delimiters[1].'
 
@@ -135,9 +152,9 @@ EOT;
 			$view .= '
 ); ?>
 
-        <?php echo form_dropdown(\''.$field_name.'\', $options, set_value(\''.$field_name.'\', isset($'.$module_name_lower.'[\''.$field_name.'\']) ? $'.$module_name_lower.'[\''.$field_name.'\'] : \'\'))?>';
+        <?php echo form_dropdown(\''.$form_name.'\', $options, set_value(\''.$form_name.'\', isset($'.$module_name_lower.'[\''.$field_name.'\']) ? $'.$module_name_lower.'[\''.$field_name.'\'] : \'\'))?>';
 			$view .= '
-			<span class="help-inline"><?php echo form_error(\''.$field_name.'\'); ?></span>
+			<span class="help-inline"><?php echo form_error(\''.$form_name.'\'); ?></span>
 		'.$form_input_delimiters[1].'
                         ';
 			break;
@@ -146,9 +163,9 @@ EOT;
 
 			$view .= <<<EOT
 
-			<label class="checkbox" for="{$field_name}">
-			<input type="checkbox" id="{$field_name}" name="{$field_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$field_name}', 1); ?>>
-			<span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
+			<label class="checkbox" for="{$form_name}">
+			<input type="checkbox" id="{$form_name}" name="{$form_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$form_name}', 1); ?>>
+			<span class="help-inline"><?php echo form_error('{$form_name}'); ?></span>
 			</label>
 
 		{$form_input_delimiters[1]}
@@ -175,8 +192,8 @@ EOT;
 
 			$view .= <<<EOT
 
-        <input id="{$field_name}" type="{$type}" name="{$field_name}" {$maxlength} value="<?php echo set_value('{$field_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>"  />
-		<span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
+        <input id="{$form_name}" type="{$type}" name="{$form_name}" {$maxlength} value="<?php echo set_value('{$form_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>"  />
+		<span class="help-inline"><?php echo form_error('{$form_name}'); ?></span>
 		{$form_input_delimiters[1]}
 
 EOT;
