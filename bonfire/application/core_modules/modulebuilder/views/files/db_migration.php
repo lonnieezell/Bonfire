@@ -37,7 +37,7 @@ class Migration_Install_'.$table_name.' extends Migration {
 		if ($this->input->post('use_soft_deletes') == 'true')
 		{
 			$db_migration .= '
-			$this->dbforge->add_field("`deleted` INT(11) NOT NULL DEFAULT \'0\'");';
+			$this->dbforge->add_field("`deleted` TINYINT(1) NOT NULL DEFAULT \'0\'");';
 		}
 		
 		// use the created field? Add field and custom name if chosen.
