@@ -38,36 +38,36 @@ if ( ! function_exists('relative_time'))
 	function relative_time($timestamp)
 	{
 		$difference = time() - $timestamp;
-		
+
 		$periods = array("moment", "min", "hour", "day", "week",
 		"month", "years", "decade");
-		
+
 		$lengths = array("60","60","24","7","4.35","12","10");
-		
-		if ($difference > 0) 
-		{ 
+
+		if ($difference > 0)
+		{
 			// this was in the past
 			$ending = "ago";
 		}
 		else
-		{ 
+		{
 			// this was in the future
 			$difference = -$difference;
 			$ending = "to go";
 		}
-		
+
 		for ($j = 0; $difference >= $lengths[$j]; $j++)
 		{
 			$difference /= $lengths[$j];
 		}
-		
+
 		$difference = round($difference);
-		
-		if ($difference != 1) 
+
+		if ($difference != 1)
 		{
 			$periods[$j].= "s";
 		}
-		
+
 		if ($difference < 60 && $j == 0)
 		{
 			$text = "$periods[$j] $ending";
@@ -76,7 +76,7 @@ if ( ! function_exists('relative_time'))
 		{
 			$text = "$difference $periods[$j] $ending";
 		}
-		
+
 		return $text;
 
 	}//end relative_time()
@@ -102,27 +102,27 @@ if (!function_exists('date_difference'))
 		{
 			return false;
 		}
-		
+
 		if (is_null($end))
 		{
 			$end = date('Y-m-d H:i:s');
 		}
-		
+
 		$times = array(
 			'week'		=> 604800,
 			'day'		=> 86400,
 			'hour'		=> 3600,
 			'minute'	=> 60
 		);
-		
+
 		if ($reformat === true)
 		{
 			$start 	= strtotime($start);
 			$end	= strtotime($end);
 		}
-		
+
 		$diff = $end - $start;
-		
+
 		return round($diff / $times[$interval]);
 
 	}//end date_difference()
@@ -139,9 +139,8 @@ if ( ! function_exists('user_time'))
 	 * For supported timezones visit - http://php.net/manual/timezones.php
 	 * For accepted formats visit - http://php.net/manual/function.date.php
 	 *
-	 * Examples:
-	 *  echo user_time();
-	 *  echo user_time($timestamp, 'EET', 'l jS \of F Y h:i:s A');
+	 * @example echo user_time();
+	 * @example echo user_time($timestamp, 'EET', 'l jS \of F Y h:i:s A');
 	 *
 	 * @param int    $timestamp A UNIX timestamp. If non is given current time will be used.
 	 * @param string $timezone  The timezone we want to convert to. If none is given a current logged user timezone will be used.
