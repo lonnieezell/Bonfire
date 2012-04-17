@@ -37,19 +37,19 @@ for($counter=1; $field_total >= $counter; $counter++)
 
 	$field_label = set_value("view_field_label$counter");
       
-      if($db_required == 'new' && $table_as_field_prefix === TRUE)
-      {
-            $field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
-      }
-      elseif($db_required == 'new' && $table_as_field_prefix === FALSE)
-      {
-            $field_name = set_value("view_field_name$counter");
-      }
-      else 
-      {
-            $field_name = set_value("view_field_name$counter");
-      }
-      $form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
+	if($db_required == 'new' && $table_as_field_prefix === TRUE)
+	{
+		$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
+	}
+	elseif($db_required == 'new' && $table_as_field_prefix === FALSE)
+	{
+		$field_name = set_value("view_field_name$counter");
+	}
+	else 
+	{
+		$field_name = set_value("view_field_name$counter");
+	}
+	$form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
       
 	$field_type = set_value("view_field_type$counter");
 

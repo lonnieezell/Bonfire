@@ -5,11 +5,11 @@ $no_length = array('TEXT', 'BOOL', 'DATE', 'DATETIME', 'TIMESTAMP', 'BLOB', 'TIN
 
 if(!$table_as_field_prefix)
 {
-      $module_name_lower = '';
+	$module_name_lower = '';
 } 
 else
 {
-     $module_name_lower = $module_name_lower .'_';
+	$module_name_lower = $module_name_lower .'_';
 }
 
 $db_migration = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allowed\');

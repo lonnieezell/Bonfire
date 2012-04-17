@@ -440,7 +440,7 @@ class Developer extends Admin_Controller {
 
 		$db_required = $this->input->post('module_db');
             
-            $table_as_field_prefix = (bool) $this->input->post('table_as_field_prefix');
+		$table_as_field_prefix = (bool) $this->input->post('table_as_field_prefix');
             
 		$primary_key_field = $this->input->post('primary_key_field');
 		if( $primary_key_field == '') {

@@ -107,7 +107,7 @@ class Modulebuilder
 
     		// db based files - migrations
     		if( $db_required == 'new') {
-    			$content['db_migration'] =  $this->build_db_sql($field_total, $module_name, $primary_key_field, $table_name, $table_as_field_prefix);
+			$content['db_migration'] =  $this->build_db_sql($field_total, $module_name, $primary_key_field, $table_name, $table_as_field_prefix);
     		}
         }
 
@@ -385,7 +385,7 @@ class Modulebuilder
 		$data['db_required'] = $db_required;
 		$data['form_error_delimiters'] = $form_error_delimiters;
 		$data['textarea_editor'] = $this->CI->input->post('textarea_editor');
-            $data['table_as_field_prefix'] = $table_as_field_prefix;
+		$data['table_as_field_prefix'] = $table_as_field_prefix;
 		$controller = $this->CI->load->view('files/controller', $data, TRUE);
 		return $controller;
 	}
@@ -516,7 +516,7 @@ class Modulebuilder
 		$data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
 		$data['primary_key_field'] = $primary_key_field;
 		$data['table_name']	   = $table_name;
-            $data['table_as_field_prefix']   = $table_as_field_prefix;
+		$data['table_as_field_prefix']   = $table_as_field_prefix;
             
 		$db_migration = $this->CI->load->view('files/db_migration', $data, TRUE);
 
