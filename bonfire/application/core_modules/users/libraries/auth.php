@@ -553,6 +553,7 @@ class Auth  {
 	
 		// If no role is being provided, assume it's for the current
 		// logged in user.
+		$this->perms = array();
 		if (empty($role_id))
 		{
 			$role_id = $this->role_id();
