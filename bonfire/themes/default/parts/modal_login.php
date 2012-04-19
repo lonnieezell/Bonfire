@@ -1,4 +1,4 @@
-<?php if (isset($current_user->email)) : ?>
+<?php if (!isset($current_user->email)) : ?>
 
 <div class="modal hide" id="modal-login">
 	<div class="modal-header">
