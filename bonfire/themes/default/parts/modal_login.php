@@ -1,3 +1,5 @@
+<?php if (isset($current_user->email)) : ?>
+
 <div class="modal hide" id="modal-login">
 	<div class="modal-header">
 		<h3><?php echo lang('bf_action_login') ?></h3>
@@ -53,3 +55,5 @@
 	
 	<?php echo form_close(); ?>
 </div>
+
+<?php endif; ?>
