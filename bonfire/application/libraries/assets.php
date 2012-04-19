@@ -512,7 +512,7 @@ class Assets {
 
 		if (is_string($script))
 		{
-			if (!isset(self::$$type[$script]))
+			if (!in_array($script, self::$$type))
 			{
 				if ($prepend)
 				{
@@ -531,7 +531,7 @@ class Assets {
 			// Remove any potential duplicates
 			foreach ($script as $s)
 			{
-				if (!isset(self::$$type[$s]))
+				if (!in_array($s, self::$$type))
 				{
 					$temp[] = $s;
 				}
