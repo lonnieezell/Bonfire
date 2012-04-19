@@ -355,11 +355,11 @@ class Users extends Front_Controller {
 		if ($this->input->post('submit'))
 		{
 			// Validate input
-			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|max_length[120]|unique[bf_users.email]|xsx_clean');
+			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|max_length[120]|unique[users.email]|xsx_clean');
 
 			if ($this->settings_lib->item('auth.use_usernames'))
 			{
-				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username]|xsx_clean');
+				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[users.username]|xsx_clean');
 			}
 
 			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password|xsx_clean');
@@ -416,7 +416,7 @@ class Users extends Front_Controller {
 	public function unique_username($username)
 	{
 
-		if ($this->user_model->is_unique('username', $username.',bf_users.id') === true)
+		if ($this->user_model->is_unique('username', $username.',users.id') === true)
 		{
 			return true;
 		} else {
@@ -448,7 +448,7 @@ class Users extends Front_Controller {
 		$payload = array ( 'user_id' => $id, 'data' => $this->input->post() );
 
 
-		$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[bf_users.email,bf_users.id]|xss_clean');
+		$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email,users.id]|xss_clean');
 		$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|strip_tags|min_length[8]|max_length[120]|valid_password|xss_clean');
 
 		// check if a value has been entered for the password - if so then the pass_confirm is required
@@ -458,7 +458,7 @@ class Users extends Front_Controller {
 
 		if ($this->settings_lib->item('auth.use_usernames'))
 		{
-			$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[bf_users.username,bf_users.id]|xsx_clean');
+			$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[users.username,users.id]|xsx_clean');
 		}
 
 		$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim|strip_tags|xss_clean');
