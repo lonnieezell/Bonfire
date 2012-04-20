@@ -112,7 +112,7 @@ class MY_Form_validation extends CI_Form_validation
 	/**
 	 * Checks that a value is unique in the database
 	 *
-	 * i.e. '…|required|unique[bf_users.name.id.4]|trim…'
+	 * i.e. '…|required|unique[users.name.id.4]|trim…'
 	 *
 	 * @abstract Rule to force value to be unique in table
 	 * @usage "unique[tablename.fieldname.(primaryKey-used-for-updates).(uniqueID-used-for-updates)]"

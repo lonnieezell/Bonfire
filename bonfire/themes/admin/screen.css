@@ -605,6 +605,35 @@ Additional Buttons
 }
 
 /*
+  AJAX Loader
+*/
+#loader {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0,0,0,0.6);
+	z-index: 9999;
+	display: none;
+}
+#loader .box {
+	position: relative;
+	margin: 20px auto;
+	text-align: center;
+	padding: 20px 15px;
+	background: #fff;
+	border: 5px solid #3a527c;
+	border-left: 0;
+	border-right: 0;
+}
+#loader .box img {
+	display: block;
+	padding: 10px;
+	margin: 0 auto;
+}
+
+/*
  * Drop-down menu 3rd Level fix/hack?
  */
 li.parent-menu {
