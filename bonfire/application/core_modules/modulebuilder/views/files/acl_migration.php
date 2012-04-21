@@ -15,7 +15,7 @@ class Migration_Install_'.$module_name_lower.'_permissions extends Migration {
 			{
 				$permission = '';
 				$permission = ucfirst($module_name).".";
-				$permission .= lang('bf_context_'.strtolower($context)).".";
+				$permission .= ucfirst($context).".";
 				foreach($action_names as $action_name) {
 					$action_permission = '';
 					$action_name = ucfirst($action_name);
