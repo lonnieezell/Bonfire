@@ -231,9 +231,12 @@ class Settings_lib
 
 		$settings = $this->ci->settings_model->find_all_by($field, $value);
 
-		foreach($settings as $setting)
+		if (is_array($settings) && count($settings))
 		{
-			self::$cache[$setting['name']] = $setting['value'];
+			foreach($settings as $key => $value)
+			{
+				self::$cache[$key] = $value;
+			}
 		}
 
 		return $settings;
