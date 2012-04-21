@@ -56,11 +56,14 @@ for($counter=1; $field_total >= $counter; $counter++)
 		}
 	}
 
-	$view .= <<<EOT
+	if ($field_type != 'select')
+	{
+		$view .= <<<EOT
 		<div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
 			<?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
 			{$form_input_delimiters[0]}
 EOT;
+	}
 
 	// field type
 	switch($field_type)
@@ -135,11 +138,7 @@ EOT;
 			$view .= '
 ); ?>
 
-        <?php echo form_dropdown(\''.$field_name.'\', $options, set_value(\''.$field_name.'\', isset($'.$module_name_lower.'[\''.$field_name.'\']) ? $'.$module_name_lower.'[\''.$field_name.'\'] : \'\'))?>';
-			$view .= '
-			<span class="help-inline"><?php echo form_error(\''.$field_name.'\'); ?></span>
-		'.$form_input_delimiters[1].'
-                        ';
+        <?php echo form_dropdown(\''.$field_name.'\', $options, set_value(\''.$field_name.'\', isset($'.$module_name_lower.'[\''.$field_name.'\']) ? $'.$module_name_lower.'[\''.$field_name.'\'] : \'\'), \''.$field_label.'\''.$required.')?>';
 			break;
 
 		case('checkbox'):
@@ -184,10 +183,12 @@ EOT;
 			break;
 
 	} // end switch
-
-	$view .= '
+	if ($field_type != 'select')
+	{
+		$view .= '
 
 		</div>' . PHP_EOL;
+	}
 } // end for loop
 
 if (!empty($on_click))
