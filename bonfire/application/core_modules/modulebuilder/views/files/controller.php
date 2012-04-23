@@ -388,8 +388,8 @@ for($counter=1; $field_total >= $counter; $counter++)
 			if ($date_included === FALSE)
 			{
 				$extras .= '
-				Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
-				Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
+			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
+			Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
 			}
 			$extras .= '
 			Assets::add_css(\'jquery-ui-timepicker.css\');
@@ -402,25 +402,25 @@ for($counter=1; $field_total >= $counter; $counter++)
 			// if a date field hasn't been included already then add in the jquery ui files
 			if ($textarea_editor == 'ckeditor') {
 				$extras .= '
-				Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
+			Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
 			}
 			elseif ($textarea_editor == 'xinha') {
 				$extras .= '
-				Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
-				Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
+			Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
+			Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
 			}
 			elseif ($textarea_editor == 'markitup') {
 				$extras .= '
-				Assets::add_css(Template::theme_url(\'js/editors/markitup/skins/markitup/style.css\'));
-				Assets::add_css(Template::theme_url(\'js/editors/markitup/sets/default/style.css\'));
+			Assets::add_css(Template::theme_url(\'js/editors/markitup/skins/markitup/style.css\'));
+			Assets::add_css(Template::theme_url(\'js/editors/markitup/sets/default/style.css\'));
 
-				Assets::add_js(Template::theme_url(\'js/editors/markitup/jquery.markitup.js\'));
-				Assets::add_js(Template::theme_url(\'js/editors/markitup/sets/default/set.js\'));';
+			Assets::add_js(Template::theme_url(\'js/editors/markitup/jquery.markitup.js\'));
+			Assets::add_js(Template::theme_url(\'js/editors/markitup/sets/default/set.js\'));';
 			}
 			elseif ($textarea_editor == 'tinymce') {
 				$extras .= '
-				Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce.js\'));
-				Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce_init.js\'));';
+			Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce.js\'));
+			Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce_init.js\'));';
 			}
 			$textarea_included = TRUE;
 		}
@@ -550,7 +550,7 @@ if ($controller_name != $module_name_lower)
 				$rules .= '|';
 			}
 
-			if (set_value("db_field_type$counter") == 'DECIMAL')	{
+			if (set_value("db_field_type$counter") == 'DECIMAL' || set_value("db_field_type$counter") == 'FLOAT')	{
 				list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
 				$max = $len;
 				if (isset($decimal) && $decimal != 0) {
