@@ -34,12 +34,16 @@ class Activity_model extends BF_Model
 	/**
 	 * Name of the table
 	 *
+	 * @access protected
+	 *
 	 * @var string
 	 */
 	protected $table = 'activities';
 
 	/**
 	 * Name of the primary key
+	 *
+	 * @access protected
 	 *
 	 * @var string
 	 */
@@ -48,12 +52,16 @@ class Activity_model extends BF_Model
 	/**
 	 * Use soft deletes or not
 	 *
+	 * @access protected
+	 *
 	 * @var bool
 	 */
 	protected $soft_deletes = TRUE;
 
 	/**
 	 * The date format to use
+	 *
+	 * @access protected
 	 *
 	 * @var string
 	 */
@@ -62,12 +70,16 @@ class Activity_model extends BF_Model
 	/**
 	 * Set the created time automatically on a new record
 	 *
+	 * @access protected
+	 *
 	 * @var bool
 	 */
 	protected $set_created = TRUE;
 
 	/**
 	 * Set the modified time automatically on editing a record
+	 *
+	 * @access protected
 	 *
 	 * @var bool
 	 */
@@ -77,11 +89,11 @@ class Activity_model extends BF_Model
 
 	/**
 	 * Returns all activities created by one or more modules.
-	 * 
+	 *
 	 * @access public
-	 * 
+	 *
 	 * @param array $modules Either a string or an array of module names.
-	 * 
+	 *
 	 * @return bool/array An array of activity objects.
 	 */
 	public function find_by_module($modules=array())

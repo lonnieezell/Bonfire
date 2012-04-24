@@ -1,81 +1,124 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+// ------------------------------------------------------------------------
 
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
+/**
+ * Role Permissions Settings Model
+ *
+ * Provides access and utility methods for handling permission storage
+ * in the database.
+ *
+ * Permissions are a simple string made up of 3 parts:
+ * * Domain	- A generic classification system
+ * * Context	- Typically the module name
+ * * Action	- The testable action (View, Manage, etc)
+ *
+ * Examples permissions would be:
+ * * Site.Signin.Allow
+ * * Site.Developer.View
+ * * Bonfire.Users.Manage
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Roles
+ * @category   Models
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Role_permission_model extends BF_Model
+{
 
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
-/*
-	Class: Role_permission_model
-
-	Provides access and utility methods for handling permission storage
-	in the database.
-
-	Permissions are a simple string made up of 3 parts:
-
-	- Domain	- A generic classification system
-	- Context	- Typically the module name
-	- Action	- The testable action (View, Manage, etc)
-
-	Examples permissions would be:
-
-	- Site.Signin.Allow
-	- Site.Developer.View
-	- Bonfire.Users.Manage
-
-	Extends:
-		BF_Model
-
-	Package:
-		Roles
-*/
-class Role_permission_model extends BF_Model {
-
+	/**
+	 * Name of the table
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
 	protected $table		= 'role_permissions';
+
+	/**
+	 * Name of the primary key
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
 	protected $key			= 'permission_id';
-	protected $soft_deletes	= false;
-	protected $date_format	= 'datetime';
-	protected $set_modified = false;
-	protected $set_created	= false;
+
+	/**
+	 * Use soft deletes or not
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $soft_deletes	= FALSE;
+
+	/**
+	 * The date format to use
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
+	protected $date_format = 'datetime';
+
+	/**
+	 * Set the created time automatically on a new record
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $set_created = FALSE;
+
+	/**
+	 * Set the modified time automatically on editing a record
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $set_modified = FALSE;
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: create()
-
-		Creates a new role permission entry
-
-		Parameter:
-			$role_id			- ID of the role
-			$permission_id		- ID of the permission
-	*/
-	public function create($role_id, $permission_id=null)
+	/**
+	 * Creates a new role permission entry
+	 *
+	 * @access public
+	 *
+	 * @param int $role_id       ID of the role
+	 * @param int $permission_id ID of the permission
+	 *
+	 * @return mixed ID of the new record or FALSE if an error
+	 */
+	public function create($role_id, $permission_id=NULL)
 	{
 		if (empty($role_id))
 		{
 			$this->error = 'No Role given.';
-			return false;
+			return FALSE;
 		}
+
 		if (empty($permission_id))
 		{
 			$this->error = 'No Permission given.';
-			return false;
+			return FALSE;
 		}
 
 		$data['role_id'] = $role_id;
@@ -84,33 +127,33 @@ class Role_permission_model extends BF_Model {
 		$id = parent::insert($data);
 
 		return $id;
-	}
+
+	}//end create()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: delete()
-
-		Removes a permission record from the role permissions table.
-
-		Parameters:
-			$role_id			- ID of the role
-			$permission_id		- ID of the permission
-
-		Returns:
-			true/false
-	*/
+	/**
+	 * Removes a permission record from the role permissions table.
+	 *
+	 * @access public
+	 *
+	 * @param int $role_id       ID of the role
+	 * @param int $permission_id ID of the permission
+	 *
+	 * @return bool TRUE/FALSE
+	 */
 	public function delete($role_id, $permission_id)
 	{
 		if (empty($role_id))
 		{
 			$this->error = 'No Role given.';
-			return false;
+			return FALSE;
 		}
+
 		if (empty($permission_id))
 		{
 			$this->error = 'No Permission given.';
-			return false;
+			return FALSE;
 		}
 
 		$this->db->delete($this->table, array('role_id' => $role_id, 'permission_id' => $permission_id));
@@ -119,63 +162,65 @@ class Role_permission_model extends BF_Model {
 
 		if ($result)
 		{
-			return true;
+			return TRUE;
 		}
 
 		$this->error = 'DB Error: ' . mysql_error();
 
-		return false;
-	}
+		return FALSE;
 
-	/*
-		Method: delete_for_role()
+	}//end delete()
 
-		Removes a permission record from the role permissions table.
 
-		Parameters:
-			$role_id			- ID of the role
+	//--------------------------------------------------------------------
 
-		Returns:
-			true/false
-	*/
-	public function delete_for_role($role_id=null)
+	/**
+	 * Removes a permission record from the role permissions table.
+	 *
+	 * @param int $role_id ID of the role
+	 *
+	 * @return bool TRUE/FALSE
+	 */
+	public function delete_for_role($role_id=NULL)
 	{
 		if (empty($role_id))
 		{
 			$this->error = 'No Role given.';
-			return false;
+			return FALSE;
 		}
+
 		$this->db->delete($this->table, array('role_id' => $role_id));
 
 		$result = $this->db->affected_rows();
 
 		if ($result)
 		{
-			return true;
+			return TRUE;
 		}
 
 		$this->error = 'DB Error: ' . mysql_error();
 
-		return false;
-	}
+		return FALSE;
 
-	/*
-		Method: delete_for_permission()
+	}//end delete_for_role()
 
-		Removes a permission record from the role permissions table.
+	//--------------------------------------------------------------------
 
-		Parameters:
-			$permission_id		- ID of the permission
-
-		Returns:
-			true/false
-	*/
+	/**
+	 * Removes a permission record from the role permissions table.
+	 *
+	 * @access public
+	 *
+	 * @param int $permission_id ID of the permission
+	 *
+	 * @return bool TRUE/FALSE
+	 */
 	public function delete_for_permission($permission_id)
 	{
 		if (empty($permission_id))
 		{
 			$this->error = 'No Permission given.';
-			return false;
+			return FALSE;
 		}
 
 		$this->db->delete($this->table, array('permission_id' => $permission_id));
@@ -184,32 +229,30 @@ class Role_permission_model extends BF_Model {
 
 		if ($result)
 		{
-			return true;
+			return TRUE;
 		}
 
 		$this->error = 'DB Error: ' . mysql_error();
 
-		return false;
-	}
+		return FALSE;
+
+	}//end delete_for_permission()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: set_for_role()
-
-		Sets the permissions for a single role.
-
-		Parameters:
-			$role_id		- The int id of the target role.
-			$permissions	- A simple array with the values being equal
-							to the name of the permission to set. All other
-							permissions are set to 0.
-	*/
-	public function set_for_role($role_id=null, $permissions = array())
+	/**
+	 * Sets the permissions for a single role.
+	 *
+	 * @param int   $role_id     The int id of the target role.
+	 * @param array $permissions A simple array with the values being equal to the name of the permission to set. All other permissions are set to 0.
+	 *
+	 * @return void
+	 */
+	public function set_for_role($role_id=NULL, $permissions = array())
 	{
 		if (empty($role_id) || !is_numeric($role_id))
 		{
-			return false;
+			return FALSE;
 		}
 
 		$role = $this->find_by('role_id', $role_id);
@@ -225,101 +268,91 @@ class Role_permission_model extends BF_Model {
 			$data = array('role_id' => $role_id, 'permission_id' => $permission_id);
 			$id = parent::insert($data);
 		}
-	}
+
+	}//end set_for_role()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: find_for_role()
-
-		Returns the permissions array for a single role.
-
-		Parameters:
-			$role_id	- The int id of the role to find permissions for.
-
-		Returns:
-			object	- The list of permissions
+	/**
+	 * Returns the permissions array for a single role.
+	 *
+	 * @access public
+	 *
+	 * @param int $role_id The int id of the role to find permissions for.
+	 *
+	 * @return object
 	 */
-	public function find_for_role($role_id=null)
+	public function find_for_role($role_id=NULL)
 	{
 		parent::select('permission_id');
 		return parent::find_all_by('role_id', $role_id);
-	}
+
+	}//end find_for_role()
 
 	// --------------------------------------------------------------------
 
-	/*
-		Method: find_all_role_permissions()
-
-		Finds all the role permissions (role_id and permission_id)
-
-		Parameters:
-			none
-
-		Return:
-			object
-	*/
+	/**
+	 * Finds all the role permissions (role_id and permission_id)
+	 *
+	 * @access public
+	 *
+	 * @return object
+	 */
 	function find_all_role_permissions()
 	{
 		return $this->role_permission_model->find_all();
-	}
+
+	}//end find_all_role_permissions()
 
 	// --------------------------------------------------------------------
 
-	/*
-		Method: find_all_roles()
-
-		Finds all the roles
-
-		Parameters:
-			none
-
-		Return:
-			object
-	*/
+	/**
+	 * Finds all the roles
+	 *
+	 * @access public
+	 *
+	 * @return object
+	 */
 	function find_all_roles()
 	{
 		return $this->role_model->find_all();
-	}
+
+	}//end find_all_roles()
 
 	// --------------------------------------------------------------------
 
-	/*
-		Method: create_role_permissions()
-
-		Creates a new role permission entry
-
-		Parameter:
-			$role_id			- ID of the role
-			$permission_id		- ID of the permission
-
-		Return:
-			true / false
-	*/
+	/**
+	 * Creates a new role permission entry
+	 *
+	 * @access public
+	 *
+	 * @param int $role_id       ID of the role
+	 * @param int $permission_id ID of the permission#
+	 *
+	 * @return bool TRUE/FALSE
+	 */
 	function create_role_permissions($role_id, $permission_id)
 	{
 		return $this->role_permission_model->create($role_id, $permission_id);
-	}
+
+	}//end create_role_permissions()
 
 	// --------------------------------------------------------------------
 
-	/*
-		Method: delete_role_permissions()
-
-		Parameters:
-			$role_id			- ID of the role
-			$permission_id		- ID of the permission
-
-		Returns:
-			true/false
-	*/
+	/**
+	 * Delete the permission for the role
+	 *
+	 * @param int $role_id       ID of the role
+	 * @param int $permission_id ID of the permission#
+	 *
+	 * @return bool TRUE/FALSE
+	 */
 	function delete_role_permissions($role_id, $permission_id)
 	{
 		return $this->role_permission_model->delete($role_id, $permission_id);
-	}
+
+	}//end delete_role_permissions()
 
 	//--------------------------------------------------------------------
 
-}
-
-// End Permission Model
+}//end Role_permission_model

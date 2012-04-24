@@ -22,7 +22,7 @@
  * settings, as well as editing the template and viewing emails that are in the queue.
  *
  * @package    Bonfire
- * @subpackage Emailer
+ * @subpackage Modules_Emailer
  * @category   Controllers
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html

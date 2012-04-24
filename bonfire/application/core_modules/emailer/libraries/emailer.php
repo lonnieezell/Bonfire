@@ -28,7 +28,7 @@
  * one template is supported at the moment.
  *
  * @package    Bonfire
- * @subpackage Emailer
+ * @subpackage Modules_Emailer
  * @category   Libraries
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html

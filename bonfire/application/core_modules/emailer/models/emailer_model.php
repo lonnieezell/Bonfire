@@ -19,7 +19,7 @@
  * Emailer Model
  *
  * @package    Bonfire
- * @subpackage Emailer
+ * @subpackage Modules_Emailer
  * @category   Model
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
@@ -32,12 +32,16 @@ class Emailer_model extends BF_Model
 	/**
 	 * Name of the table
 	 *
+	 * @access protected
+	 *
 	 * @var string
 	 */
 	protected $table = 'email_queue';
 
 	/**
 	 * Name of the primary key
+	 *
+	 * @access protected
 	 *
 	 * @var string
 	 */
@@ -46,12 +50,16 @@ class Emailer_model extends BF_Model
 	/**
 	 * Use soft deletes or not
 	 *
+	 * @access protected
+	 *
 	 * @var bool
 	 */
 	protected $soft_deletes = FALSE;
 
 	/**
 	 * The date format to use
+	 *
+	 * @access protected
 	 *
 	 * @var string
 	 */
@@ -60,12 +68,16 @@ class Emailer_model extends BF_Model
 	/**
 	 * Set the created time automatically on a new record
 	 *
+	 * @access protected
+	 *
 	 * @var bool
 	 */
 	protected $set_created = FALSE;
 
 	/**
 	 * Set the modified time automatically on editing a record
+	 *
+	 * @access protected
 	 *
 	 * @var bool
 	 */
