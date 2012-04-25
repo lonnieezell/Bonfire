@@ -21,7 +21,7 @@
  * Allows the administrator to view the activity logs.
  *
  * @package    Bonfire
- * @subpackage Activities
+ * @subpackage Modules_Activities
  * @category   Controllers
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html

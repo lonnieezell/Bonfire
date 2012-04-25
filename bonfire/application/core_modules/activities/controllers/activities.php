@@ -21,7 +21,7 @@
  * Allows the developer to manage basic user activity methods
  *
  * @package    Bonfire
- * @subpackage Activities
+ * @subpackage Modules_Activities
  * @category   Controllers
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
@@ -40,7 +40,7 @@ class Activities extends Admin_Controller
 	public function __construct()
 	{
 		parent::__construct();
-		
+
 		// Make sure the model is loaded...
 		$this->load->model('activities/Activity_model', 'activity_model');
 	}//end __construct()

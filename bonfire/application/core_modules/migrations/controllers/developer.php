@@ -21,7 +21,7 @@
  * Manages the database migrations in Bonfire.
  *
  * @package    Bonfire
- * @subpackage Migrations
+ * @subpackage Modules_Migrations
  * @category   Controllers
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html

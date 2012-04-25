@@ -38,7 +38,7 @@
  * access to the CI super-global.
  *
  * @package    Bonfire
- * @subpackage Migrations
+ * @subpackage Modules_Migrations
  * @category   Libraries
  * @abstract
  * @author     Phil Sturgeon http://philsturgeon.co.uk/

@@ -22,7 +22,7 @@
  * in both core- and custom-modules.
  *
  * @package    Bonfire
- * @subpackage Activities
+ * @subpackage Modules_Activities
  * @category   Models
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html

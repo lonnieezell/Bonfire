@@ -21,7 +21,7 @@
  * Various tools to manage the Database tables.
  *
  * @package    Bonfire
- * @subpackage Database
+ * @subpackage Modules_Database
  * @category   Controllers
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
@@ -32,9 +32,9 @@ class Developer extends Admin_Controller
 
 	/**
 	 * Path to the backups
-	 * 
+	 *
 	 * @access private
-	 * 
+	 *
 	 * @var string
 	 */
 	private $backup_folder	= 'db/backups/';
@@ -43,7 +43,7 @@ class Developer extends Admin_Controller
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @return void
 	 */
 	public function __construct()
@@ -58,16 +58,16 @@ class Developer extends Admin_Controller
 
 		Template::set_block('sub_nav', 'developer/_sub_nav');
 		Template::set('sidebar', 'admin/sidebar');
-		
+
 	}//end __construct()
 
 	//---------------------------------------------------------------
 
 	/**
 	 * Displays a list of tables in the database.
-	 * 
+	 *
 	 * @access public
-	 * 
+	 *
 	 * @return void
 	 */
 	public function index()
@@ -107,7 +107,7 @@ class Developer extends Admin_Controller
 		{
 			Template::set('toolbar_title', 'Database Maintenance');
 		}
-		
+
 		Template::render();
 
 	}//end index()
@@ -116,42 +116,42 @@ class Developer extends Admin_Controller
 
 	/**
 	 * Browse the DB tables
-	 * 
+	 *
 	 * @access public
-	 * 
+	 *
 	 * @param string $table Name of the table to browse
-	 * 
+	 *
 	 * @return void
 	 */
-	public function browse($table = '') 
+	public function browse($table = '')
 	{
 		if (empty($table))
 		{
 			Template::set_message('No table name was provided.', 'error');
 			redirect(SITE_AREA .'/developer/database');
 		}
-		
+
 		$query = $this->db->get($table);
-		
+
 		if ($query->num_rows())
 		{
 			Template::set('rows', $query->result());
 		}
-		
+
 		Template::set('query', $this->db->last_query());
-		
+
 		Template::set('toolbar_title', lang('db_browse') .': '. $table);
 		Template::render();
-		
+
 	}//end browse()
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * List the existing backups
-	 * 
+	 *
 	 * @access public
-	 * 
+	 *
 	 * @return void
 	 */
 	public function backups()
@@ -168,11 +168,11 @@ class Developer extends Admin_Controller
 
 	/**
 	 * Performs the actual backup.
-	 * 
+	 *
 	 * @access public
-	 * 
+	 *
 	 * @param array $tables Array of tables
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function backup($tables=null)
