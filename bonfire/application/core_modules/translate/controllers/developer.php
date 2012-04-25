@@ -1,12 +1,62 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-class Developer extends Admin_Controller {
+// ------------------------------------------------------------------------
 
+/**
+ * Translate Module
+ *
+ * Manages the language files in Bonfire and allows an easy way for the user
+ * to add language files for other languages.  The user can export current language
+ * files for translation.
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Translate
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Developer extends Admin_Controller
+{
+
+	/**
+	 * The default language
+	 *
+	 * @access private
+	 *
+	 * @var string
+	 */
 	private $trans_lang = 'english';
+
+	/**
+	 * Array of current languages
+	 *
+	 * @var array
+	 */
 	private $langs;
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Loads required classes
+	 *
+	 * @todo Add permission restrictions
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -28,16 +78,19 @@ class Developer extends Admin_Controller {
 		}
 
 		Template::set_block('sub_nav', 'developer/_sub_nav');
-	}
+
+	}//end __construct()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: index()
-
-		Displays a list of all core language files, as well as a list of
-		modules that the user can choose to edit.
-	*/
+	/**
+	 * Displays a list of all core language files, as well as a list of
+	 * modules that the user can choose to edit.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function index()
 	{
 		// Selecting a different language?
@@ -57,7 +110,7 @@ class Developer extends Admin_Controller {
 			{
 				$this->langs[] = $this->trans_lang;
 			}
-		}
+		}//end if
 
 		$all_lang_files = list_lang_files();
 		Template::set('languages', $this->langs);
@@ -71,10 +124,18 @@ class Developer extends Admin_Controller {
 
 		Template::set('toolbar_title', lang('tr_translate_title') .' to '. ucfirst($this->trans_lang));
 		Template::render();
-	}
+
+	}//end index()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Allow the user to edit a language file
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function edit()
 	{
 		$lang_file = $this->input->get('file');
@@ -112,10 +173,18 @@ class Developer extends Admin_Controller {
 		Template::set('toolbar_title', lang('tr_edit_title') .' to '. ucfirst($this->trans_lang) . ': '. $lang_file);
 
 		Template::render();
-	}
+
+	}//end edit()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Export a set of files for a panguage
+	 *
+	 * @acces spublic
+	 *
+	 * @return void
+	 */
 	public function export()
 	{
 		if ($this->input->post('submit'))
@@ -129,16 +198,25 @@ class Developer extends Admin_Controller {
 
 		Template::set('toolbar_title', lang('tr_export'));
 		Template::render();
-	}
+
+	}//end export()
 
 	//--------------------------------------------------------------------
 
-	public function do_export($language=null, $include_core=false, $include_custom=false)
+	/**
+	 * Retrieve all files for a language, zip them and send the zip file
+	 * to the browser for immediate download
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function do_export($language=NULL, $include_core=FALSE, $include_custom=FALSE)
 	{
 		if (empty($language))
 		{
 			$this->error = 'No language file chosen.';
-			return false;
+			return FALSE;
 		}
 
 		$all_lang_files = list_lang_files($language);
@@ -146,7 +224,7 @@ class Developer extends Admin_Controller {
 		if (!count($all_lang_files))
 		{
 			$this->error = 'No files found to archive.';
-			return false;
+			return FALSE;
 		}
 
 		// Make the zip file
@@ -157,14 +235,14 @@ class Developer extends Admin_Controller {
             if (is_numeric($key) && $include_core)
             {
                 $content = load_lang_file($file, $language);
-                $this->zip->add_data($file, save_lang_file($file, $language, $content, true));
+                $this->zip->add_data($file, save_lang_file($file, $language, $content, TRUE));
             }
             else if ($key == 'core' && $include_core)
             {
                 foreach ($file as $f)
                 {
                     $content = load_lang_file($f, $language);
-                    $this->zip->add_data($f, save_lang_file($f, $language, $content, true));
+                    $this->zip->add_data($f, save_lang_file($f, $language, $content, TRUE));
                 }
             }
             else if ($key == 'custom' && $include_custom)
@@ -172,15 +250,16 @@ class Developer extends Admin_Controller {
                 foreach ($file as $f)
                 {
                     $content = load_lang_file($f, $language);
-                    $this->zip->add_data($f, save_lang_file($f, $language, $content, true));
+                    $this->zip->add_data($f, save_lang_file($f, $language, $content, TRUE));
                 }
             }
-        }
+        }//end foreach
 
 		$this->zip->download('bonfire_'. $language .'_files.zip');
         die();
-	}
+
+	}//end do_export()
 
 	//--------------------------------------------------------------------
 
-}
+}//end Developer
