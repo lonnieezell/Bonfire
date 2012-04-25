@@ -98,7 +98,7 @@ abstract class Migration
  * Utility main controller.
  *
  * @package    Bonfire
- * @subpackage Migrations
+ * @subpackage Modules_Migrations
  * @category   Libraries
  * @author     Mat�as Montes
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
