@@ -148,17 +148,23 @@
 				<div class="controls">
 					<input type="text" name="password_min_length" value="<?php echo set_value('password_min_length', isset($settings['auth.password_min_length']) ? $settings['auth.password_min_length'] : '') ?>" class="span1" />
 					<p class="help-inline"><?php echo lang('bf_password_length_help') ?></p>
+				</div>
+			</div>
+
+			<div class="control-group">
+				<label class="control-label">Password Options</label>
+				<div class="controls">
 					<label class="checkbox" for="password_force_numbers">
-						<input type="checkbox" name="password_force_numbers" value="1" <?php echo set_checkbox('password_force_numbers', 1, isset($settings['auth.password_force_numbers']) && $settings['auth.password_force_numbers'] == 1 ? TRUE : FALSE); ?> />
-						<span><?php echo lang('bf_password_force_numbers') ?></span>
+						<input type="checkbox" name="password_force_numbers" id="password_force_numbers" value="1" <?php echo set_checkbox('password_force_numbers', 1, isset($settings['auth.password_force_numbers']) && $settings['auth.password_force_numbers'] == 1 ? TRUE : FALSE); ?> />
+						<?php echo lang('bf_password_force_numbers') ?>
 					</label>
 					<label class="checkbox" for="password_force_symbols">
-						<input type="checkbox" name="password_force_symbols" value="1" <?php echo set_checkbox('password_force_symbols', 1, isset($settings['auth.password_force_symbols']) && $settings['auth.password_force_symbols'] == 1 ? TRUE : FALSE); ?> />
-						<span><?php echo lang('bf_password_force_symbols') ?></span>
+						<input type="checkbox" name="password_force_symbols" id="password_force_symbols" value="1" <?php echo set_checkbox('password_force_symbols', 1, isset($settings['auth.password_force_symbols']) && $settings['auth.password_force_symbols'] == 1 ? TRUE : FALSE); ?> />
+						<?php echo lang('bf_password_force_symbols') ?>
 					</label>
 					<label class="checkbox" for="password_force_mixed_case">
-						<input type="checkbox" name="password_force_mixed_case" value="1" <?php echo set_checkbox('password_force_mixed_case', 1, isset($settings['auth.password_force_mixed_case']) && $settings['auth.password_force_mixed_case'] == 1 ? TRUE : FALSE); ?> />
-						<span><?php echo lang('bf_password_force_mixed_case') ?></span>
+						<input type="checkbox" name="password_force_mixed_case" id="password_force_mixed_case" value="1" <?php echo set_checkbox('password_force_mixed_case', 1, isset($settings['auth.password_force_mixed_case']) && $settings['auth.password_force_mixed_case'] == 1 ? TRUE : FALSE); ?> />
+						<?php echo lang('bf_password_force_mixed_case') ?>
 					</label>
 				</div>
 			</div>
@@ -174,20 +180,20 @@
 			<label class="control-label" >&nbsp;</label>
 				<div class="controls">
 					<label class="checkbox" for="show_profiler">
-						<input type="checkbox" name="show_profiler" value="1" <?php echo  $settings['site.show_profiler'] == 1 ? 'checked="checked"' : set_checkbox('auth.use_extended_profile', 1); ?> />
+						<input type="checkbox" name="show_profiler" id="show_profiler" value="1" <?php echo  $settings['site.show_profiler'] == 1 ? 'checked="checked"' : set_checkbox('auth.use_extended_profile', 1); ?> />
 						<span><?php echo lang('bf_show_profiler') ?></span>
 					</label>
 					<label class="checkbox" for="show_front_profiler">
-						<input type="checkbox" name="show_front_profiler" value="1" <?php echo  $settings['site.show_front_profiler'] == 1 ? 'checked="checked"' : set_checkbox('site.show_front_profiler', 1); ?> />
+						<input type="checkbox" name="show_front_profiler" id="show_front_profiler" value="1" <?php echo  $settings['site.show_front_profiler'] == 1 ? 'checked="checked"' : set_checkbox('site.show_front_profiler', 1); ?> />
 						<span><?php echo lang('bf_show_front_profiler') ?></span>
 					</label>
 					<label class="checkbox" for="do_check">
-						<input type="checkbox" name="do_check" value="1" <?php echo $settings['updates.do_check'] == 1 ? 'checked="checked"' : set_checkbox('updates.do_check', 1); ?> />
+						<input type="checkbox" name="do_check" id="do_check" value="1" <?php echo $settings['updates.do_check'] == 1 ? 'checked="checked"' : set_checkbox('updates.do_check', 1); ?> />
 						<span><?php echo lang('bf_do_check') ?></span>
 						<p class="help-block"><?php echo lang('bf_do_check_edge') ?></p>
 					</label>
 					<label class="checkbox" for="bleeding_edge">
-						<input type="checkbox" name="bleeding_edge" value="1" <?php echo $settings['updates.bleeding_edge'] == 1 ? 'checked="checked"' : set_checkbox('updates.bleeding_edge', 1); ?> />
+						<input type="checkbox" name="bleeding_edge" id="bleeding_edge" value="1" <?php echo $settings['updates.bleeding_edge'] == 1 ? 'checked="checked"' : set_checkbox('updates.bleeding_edge', 1); ?> />
 						<span><?php echo lang('bf_update_show_edge') ?></span>
 						<p class="help-block"><?php echo lang('bf_update_info_edge') ?></p>
 					</label>
