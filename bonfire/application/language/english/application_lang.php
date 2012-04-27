@@ -196,3 +196,13 @@ $lang['log_intro']              = 'These are your log messages';
 $lang['bf_action_register']		= 'Sign Up';
 $lang['bf_forgot_password']		= 'Forgot your password?';
 $lang['bf_remember_me']			= 'Remember me';
+
+//--------------------------------------------------------------------
+// Password Help Fields to be used as a warning on register
+//--------------------------------------------------------------------
+$lang['bf_password_number_required_help']  = 'Password must contain at least 1 punctuation mark.';
+$lang['bf_password_caps_required_help']    = 'Password must contain at least 1 capital letter.';
+$lang['bf_password_symbols_required_help'] = 'Password must contain at least 1 symbol.';
+
+$lang['bf_password_min_length_help']       = 'Password must be at least %s characters long.';         
+
