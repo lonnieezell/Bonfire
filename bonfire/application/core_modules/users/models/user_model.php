@@ -37,9 +37,46 @@ class User_model extends BF_Model {
 	{
 		parent::__construct();
 	}
-	
+
 	//--------------------------------------------------------------------
-	
+
+	/**
+	 * Helper Method for Generating Password Hints based on Settings library.
+	 *
+	 * Call this method in your controller and echo $password_hints in your view.
+	 *
+	 */
+	public function password_hints()
+	{
+		$min_length = (string) $this->settings_lib->item('auth.password_min_length');
+
+		$message = sprintf( lang('bf_password_min_length_help'), $min_length );
+
+
+		if ( $this->settings_lib->item('auth.password_force_numbers') == 1 )
+		{
+			$message .= '<br />' . lang('bf_password_number_required_help');
+		}
+
+		if ( $this->settings_lib->item('auth.password_force_symbols') == 1 )
+		{
+			$message .= '<br />' . lang('bf_password_symbols_required_help');
+		}
+
+		if ( $this->settings_lib->item('auth.password_force_mixed_case') == 1 )
+		{
+			$message .= '<br />' . lang('bf_password_caps_required_help');
+		}
+
+		Template::set('password_hints', $message);
+
+		unset ($min_length, $message);
+	}
+
+
+	//--------------------------------------------------------------------
+
+
 	/*
 		Method: insert()
 		
