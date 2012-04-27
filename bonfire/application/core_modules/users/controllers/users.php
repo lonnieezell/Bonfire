@@ -250,6 +250,9 @@ class Users extends Front_Controller {
 		// get the current user information
 		$user = $this->user_model->find_user_and_meta ( $this->current_user->id );
 
+		// Generate password hint messages.
+		$this->user_model->password_hints();
+
 		Template::set('user', $user);
 		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
@@ -390,6 +393,9 @@ class Users extends Front_Controller {
 				}
 			}
 		}
+
+		// Generate password hint messages.
+		$this->user_model->password_hints();
 
 		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
