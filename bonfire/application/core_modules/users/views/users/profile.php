@@ -30,7 +30,8 @@
 	<div class="span8 offset2">
 		<div class="alert alert-info fade in">
 		  <a data-dismiss="alert" class="close">&times;</a>
-			<?php echo lang('bf_required_note'); ?>
+			<h4 class="alert-heading"><?php echo lang('bf_required_note'); ?></h4>
+			<?php if (isset($password_hints) ) echo $password_hints; ?>
 		</div>
 	</div>
 </div>
