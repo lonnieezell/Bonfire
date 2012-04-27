@@ -104,20 +104,20 @@ class User_model extends BF_Model {
 		
 		if (!isset($data['password']) || empty($data['password']))
 		{
-			$this->error = 'No Password present.';
+			$this->error = lang('us_no_password');
 			return false;
 		}
 		
 		if (!isset($data['email']) || empty($data['email']))
 		{
-			$this->error = 'No Email given.';
+			$this->error = lang('us_no_email');
 			return false;
 		}
 		
 		// Is this a unique email?
 		if ($this->is_unique('email', $data['email']) == false)
 		{
-			$this->error = 'Email already exists.';
+			$this->error = lang('us_email_taken');
 			return false;
 		}
 	
@@ -502,7 +502,7 @@ class User_model extends BF_Model {
 	{
 		if (!is_numeric($user_id))
 		{
-			$this->error = 'Invalid User ID';
+			$this->error = lang('us_invalid_user_id');
 		}
 		
 		$this->table	= 'user_meta';
@@ -562,7 +562,7 @@ class User_model extends BF_Model {
 	{
 		if (!is_numeric($user_id))
 		{
-			$this->error = 'Invalid User ID';
+			$this->error = lang('us_invalid_user_id');
 		}
 		
 		$this->table	= 'user_meta';
@@ -617,7 +617,7 @@ class User_model extends BF_Model {
 	{
 		if (!is_numeric($user_id))
 		{
-			$this->error = 'Invalid User ID';
+			$this->error = lang('us_invalid_user_id');
 		}
 
 		$result = $this->find( $user_id );
