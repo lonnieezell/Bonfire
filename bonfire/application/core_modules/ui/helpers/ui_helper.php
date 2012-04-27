@@ -1,28 +1,40 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+// ------------------------------------------------------------------------
 
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
+/**
+ * UI Helper
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Ui
+ * @category   Helpers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
 
 if (!function_exists('render_search_box'))
 {
+	/**
+	 * Displays a search box
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	function render_search_box()
 	{
 		$ci =& get_instance();
@@ -38,72 +50,80 @@ if (!function_exists('render_search_box'))
 END;
 
 		echo $form;
-	}
+
+	}//end render_search_box()
 }
 
 //--------------------------------------------------------------------
 
-/*
-	Function: render filter_first_letter()
-
-	Displays an alpha list used to filter a list by first letter.
-
-	Parameters:
-		$caption	- A string with the text to display before the list.
-*/
-
-function render_filter_first_letter($caption=null)
+if (!function_exists('render_filter_first_letter'))
 {
-	$ci =& get_instance();
-
-	$out = '<span class="filter-link-list">';
-
-	// All get params
-	$params = $ci->input->get();
-
-	// Current Filter
-	if (isset($params['firstletter']))
+	/**
+	 * Displays an alpha list used to filter a list by first letter.
+	 *
+	 * @access public
+	 *
+	 * @param string $caption A string with the text to display before the list.
+	 *
+	 * @return void
+	 */
+	function render_filter_first_letter($caption=null)
 	{
-		$current = strtolower($params['firstletter']);
-		unset($params['firstletter']);
-	}
-	else {
-		$current = '';
-	}
+		$ci =& get_instance();
 
-	// Build our url
-	if (is_array($params))
-	{
-		$url = current_url() .'?'. array_implode('=', '&', $params);
-	} else
-	{
-		$url = current_url() .'?';
-	}
+		$out = '<span class="filter-link-list">';
 
-	// If there's a current filter, we need to
-	// replace the caption with a clear button.
-	if (!empty($current))
-	{
-		$out .= '<a href="'. $url .'" class="btn btn-small btn-primary">'. lang('bf_clear') .'</a>';
-	} else
-	{
-		$out .= $caption;
-	}
+		// All get params
+		$params = $ci->input->get();
 
-	// Source
-	$letters = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+		// Current Filter
+		if (isset($params['firstletter']))
+		{
+			$current = strtolower($params['firstletter']);
+			unset($params['firstletter']);
+		}
+		else
+		{
+			$current = '';
+		}
 
-	// Create our list.
-	foreach ($letters as $letter)
-	{
-		$out .= '<a href="'. $url .'&firstletter='. strtolower($letter) .'">';
-		$out .= $letter;
-		$out .= '</a>';
-	}
+		// Build our url
+		if (is_array($params))
+		{
+			$url = current_url() .'?'. array_implode('=', '&', $params);
+		}
+		else
+		{
+			$url = current_url() .'?';
+		}
 
-	$out .= '</span>';
+		// If there's a current filter, we need to
+		// replace the caption with a clear button.
+		if (!empty($current))
+		{
+			$out .= '<a href="'. $url .'" class="btn btn-small btn-primary">'. lang('bf_clear') .'</a>';
+		}
+		else
+		{
+			$out .= $caption;
+		}
 
-	echo $out;
+		// Source
+		$letters = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+
+		// Create our list.
+		foreach ($letters as $letter)
+		{
+			$out .= '<a href="'. $url .'&firstletter='. strtolower($letter) .'">';
+			$out .= $letter;
+			$out .= '</a>';
+		}
+
+		$out .= '</span>';
+
+		echo $out;
+
+	}//end render_filter_first_letter()
+
 }
-
 //--------------------------------------------------------------------
