@@ -161,7 +161,7 @@ class Front_Controller extends Base_Controller {
 		$this->load->library('template');
 		$this->load->library('assets');
 
-		Template::set_theme('default');
+		Template::set_theme($this->config->item('default_theme'));
 	}
 
 	//--------------------------------------------------------------------
