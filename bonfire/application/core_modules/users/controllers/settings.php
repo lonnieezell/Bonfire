@@ -1,327 +1,408 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+// ------------------------------------------------------------------------
 
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
+/**
+ * Users Controller
+ *
+ * Manages the user functionality on the frontend profile pages.
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Users
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
 class Settings extends Admin_Controller
 {
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Setup the required permissions
+	 *
+	 * @return void
+	 */
 	public function __construct()
     {
-			parent::__construct();
+		parent::__construct();
 
-			$this->auth->restrict('Site.Settings.View');
-			$this->auth->restrict('Bonfire.Users.View');
+		$this->auth->restrict('Site.Settings.View');
+		$this->auth->restrict('Bonfire.Users.View');
 
-			$this->load->model('roles/role_model');
+		$this->load->model('roles/role_model');
 
-			$this->lang->load('users');
+		$this->lang->load('users');
 
-			Template::set_block('sub_nav', 'settings/sub_nav');
-	}
+		Template::set_block('sub_nav', 'settings/sub_nav');
+
+	}//end __construct()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Remap methods
+	 *
+	 * @access public
+	 *
+	 * @param string $method Name of the method being requested
+	 */
 	public function _remap($method)
 	{
-			if (method_exists($this, $method))
-			{
-					$this->$method();
-			}
-	}
+		if (method_exists($this, $method))
+		{
+			$this->$method();
+		}
+
+	}//end _remap()
 
 	//--------------------------------------------------------------------
 
+	/*
+	 * Display the user list and manage the user deletions/banning/purge
+	 *
+	 * @access public
+	 *
+	 * @return  void
+	 */
 	public function index()
 	{
 
-			$roles = $this->role_model->select('role_id, role_name')->where('deleted', 0)->find_all();
-			Template::set('roles', $roles);
+		$roles = $this->role_model->select('role_id, role_name')->where('deleted', 0)->find_all();
+		Template::set('roles', $roles);
 
-			$offset = $this->uri->segment(5);
+		$offset = $this->uri->segment(5);
 
-			// Do we have any actions?
-			$action = $this->input->post('submit').$this->input->post('delete').$this->input->post('purge');
+		// Do we have any actions?
+		$action = $this->input->post('submit').$this->input->post('delete').$this->input->post('purge');
 
-			if (!empty($action))
+		if (!empty($action))
+		{
+			$checked = $this->input->post('checked');
+
+			switch(strtolower($action))
 			{
-					$checked = $this->input->post('checked');
+				case 'ban':
+					$this->ban($checked);
+					break;
+				case 'delete':
+					$this->delete($checked);
+					break;
+				case 'purge':
+					$this->purge($checked);
+					break;
+			}
+		}
 
-					switch(strtolower($action))
+		$where = array();
+		$show_deleted = FALSE;
+
+		// Filters
+		$filter = $this->input->get('filter');
+		switch($filter)
+		{
+			case 'banned':
+				$where['users.banned'] = 1;
+				break;
+			case 'deleted':
+				$where['users.deleted'] = 1;
+				$show_deleted = TRUE;
+				break;
+			case 'role':
+				$role_id = (int)$this->input->get('role_id');
+				$where['users.role_id'] = $role_id;
+
+				foreach ($roles as $role)
+				{
+					if ($role->role_id == $role_id)
 					{
-							case 'ban':
-									$this->ban($checked);
-									break;
-							case 'delete':
-									$this->delete($checked);
-									break;
-							case 'purge':
-									$this->purge($checked);
-									break;
+						Template::set('filter_role', $role->role_name);
+						break;
 					}
-			}
+				}
+				break;
 
-			$where = array();
-			$show_deleted = FALSE;
+			default:
+				$where['users.deleted'] = 0;
+				$this->user_model->where('users.deleted', 0);
+				break;
+		}
 
-			// Filters
-			$filter = $this->input->get('filter');
-			switch($filter)
-			{
-				case 'banned':
-					$where['users.banned'] = 1;
-					break;
-				case 'deleted':
-					$where['users.deleted'] = 1;
-					$show_deleted = TRUE;
-					break;
-				case 'role':
-					$role_id = (int)$this->input->get('role_id');
-					$where['users.role_id'] = $role_id;
+		// First Letter
+		$first_letter = $this->input->get('firstletter');
+		if (!empty($first_letter))
+		{
+			$where['SUBSTRING( LOWER(username), 1, 1)='] = $first_letter;
+		}
 
-					foreach ($roles as $role)
-					{
-						if ($role->role_id == $role_id)
-						{
-							Template::set('filter_role', $role->role_name);
-							break;
-						}
-					}
-					break;
+		$this->load->helper('ui/ui');
 
-				default:
-					$where['users.deleted'] = 0;
-					$this->user_model->where('users.deleted', 0);
-					break;
-			}
+		$this->user_model->limit($this->limit, $offset)->where($where);
+		$this->user_model->select('users.id, users.role_id, username, display_name, email, last_login, banned, users.deleted, role_name');
 
-			// First Letter
-			$first_letter = $this->input->get('firstletter');
-			if (!empty($first_letter))
-			{
-					$where['SUBSTRING( LOWER(username), 1, 1)='] = $first_letter;
-			}
+		Template::set('users', $this->user_model->find_all($show_deleted));
 
-			$this->load->helper('ui/ui');
+		// Pagination
+		$this->load->library('pagination');
 
-			$this->user_model->limit($this->limit, $offset)->where($where);
-			$this->user_model->select('users.id, users.role_id, username, display_name, email, last_login, banned, users.deleted, role_name');
-
-			Template::set('users', $this->user_model->find_all($show_deleted));
-
-			// Pagination
-			$this->load->library('pagination');
-
-			$this->user_model->where($where);
-			$total_users = $this->user_model->count_all();
+		$this->user_model->where($where);
+		$total_users = $this->user_model->count_all();
 
 
-			$this->pager['base_url'] = site_url(SITE_AREA .'/settings/users/index');
-			$this->pager['total_rows'] = $total_users;
-			$this->pager['per_page'] = $this->limit;
-			$this->pager['uri_segment']	= 5;
+		$this->pager['base_url'] = site_url(SITE_AREA .'/settings/users/index');
+		$this->pager['total_rows'] = $total_users;
+		$this->pager['per_page'] = $this->limit;
+		$this->pager['uri_segment']	= 5;
 
-			$this->pagination->initialize($this->pager);
+		$this->pagination->initialize($this->pager);
 
-			Template::set('current_url', current_url());
-			Template::set('filter', $filter);
+		Template::set('current_url', current_url());
+		Template::set('filter', $filter);
 
-			Template::set('toolbar_title', lang('us_user_management'));
-			Template::render();
-	}
+		Template::set('toolbar_title', lang('us_user_management'));
+		Template::render();
+
+	}//end index()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Manage creating a new user
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function create()
 	{
-			$this->auth->restrict('Bonfire.Users.Add');
+		$this->auth->restrict('Bonfire.Users.Add');
 
-			$this->load->config('address');
-			$this->load->helper('address');
-			$this->load->helper('date');
+		$this->load->config('address');
+		$this->load->helper('address');
+		$this->load->helper('date');
 
-			if ($this->input->post('submit'))
+		if ($this->input->post('submit'))
+		{
+			if ($id = $this->save_user())
 			{
+				$this->load->model('activities/Activity_model', 'activity_model');
 
-					if ($id = $this->save_user())
-					{
-							$this->load->model('activities/Activity_model', 'activity_model');
+				$user = $this->user_model->find($id);
+				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+				$this->activity_model->log_activity($this->current_user->id, lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
 
-							$user = $this->user_model->find($id);
-							$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-							$this->activity_model->log_activity($this->current_user->id, lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
-
-							Template::set_message('User successfully created.', 'success');
-							Template::redirect(SITE_AREA .'/settings/users');
-					}
-
+				Template::set_message('User successfully created.', 'success');
+				Template::redirect(SITE_AREA .'/settings/users');
 			}
+		}
 
-			Template::set('roles', $this->role_model->select('role_id, role_name, default')->where('deleted', 0)->find_all());
-			Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
+		Template::set('roles', $this->role_model->select('role_id, role_name, default')->where('deleted', 0)->find_all());
+		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
-			Template::set('toolbar_title', lang('us_create_user'));
-			Template::set_view('settings/user_form');
-			Template::render();
-	}
+		Template::set('toolbar_title', lang('us_create_user'));
+		Template::set_view('settings/user_form');
+		Template::render();
+
+	}//end create()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Edit a user
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function edit()
 	{
-			$this->auth->restrict('Bonfire.Users.Manage');
+		$this->auth->restrict('Bonfire.Users.Manage');
 
-			$this->load->config('address');
-			$this->load->helper('address');
-			$this->load->helper('form');
-			$this->load->helper('date');
+		$this->load->config('address');
+		$this->load->helper('address');
+		$this->load->helper('form');
+		$this->load->helper('date');
 
-			$user_id = $this->uri->segment(5);
-			if (empty($user_id))
-			{
-					Template::set_message(lang('us_empty_id'), 'error');
-					redirect(SITE_AREA .'/settings/users');
-			}
-
-			if ($this->input->post('submit'))
-			{
-
-					if ($this->save_user('update', $user_id))
-					{
-							$this->load->model('activities/Activity_model', 'activity_model');
-
-							$user = $this->user_model->find($user_id);
-							$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-							$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
-
-							Template::set_message('User successfully updated.', 'success');
-					}
-
-			}
-
-			$user = $this->user_model->find($user_id);
-			if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage'))
-			{
-					Template::set('user', $user);
-					Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
-					Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
-					Template::set_view('settings/user_form');
-			} else {
-					Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');
-					redirect(SITE_AREA .'/settings/users');
-			}
-
-			Template::set('toolbar_title', lang('us_edit_user'));
-
-			Template::render();
-	}
-
-	//--------------------------------------------------------------------
-
-	public function ban($users=false, $ban_message='')
-	{
-
-			if (!$users)
-			{
-					return;
-			}
-
-			$this->auth->restrict('Bonfire.Users.Manage');
-
-			foreach ($users as $user_id)
-			{
-					$data = array(
-																			'banned'		=> 1,
-																			'ban_message'	=> $ban_message
-																			);
-
-					$this->user_model->update($user_id, $data);
-			}
-	}
-
-	//--------------------------------------------------------------------
-
-	public function delete($users)
-	{
-
-			if (empty($users))
-			{
-					$user_id = $this->uri->segment(5);
-
-					if(!empty($user_id))
-					{
-							$users = array($user_id);
-					}
-			}
-
-			if (!empty($users))
-			{
-					$this->auth->restrict('Bonfire.Users.Manage');
-
-					foreach ($users as $id)
-					{
-							$user = $this->user_model->find($id);
-
-							if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage') && $user->id != $this->current_user->id)
-							{
-									if ($this->user_model->delete($id))
-									{
-											$this->load->model('activities/Activity_model', 'activity_model');
-
-											$user = $this->user_model->find($id);
-											$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-											$this->activity_model->log_activity($this->current_user->id, lang('us_log_delete') . ': '.$log_name, 'users');
-											Template::set_message(lang('us_action_deleted'), 'success');
-									} else {
-											Template::set_message(lang('us_action_not_deleted'). $this->user_model->error, 'error');
-									}
-							} else {
-									if ($user->id == $this->current_user->id)
-									{
-											Template::set_message(lang('us_self_delete'), 'error');
-									} else {
-											Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');
-									}
-							}
-					}
-			} else {
-					Template::set_message(lang('us_empty_id'), 'error');
-			}
-
+		$user_id = $this->uri->segment(5);
+		if (empty($user_id))
+		{
+			Template::set_message(lang('us_empty_id'), 'error');
 			redirect(SITE_AREA .'/settings/users');
-	}
+		}
+
+		if ($this->input->post('submit'))
+		{
+			if ($this->save_user('update', $user_id))
+			{
+				$this->load->model('activities/Activity_model', 'activity_model');
+
+				$user = $this->user_model->find($user_id);
+				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
+
+				Template::set_message('User successfully updated.', 'success');
+			}
+		}
+
+		$user = $this->user_model->find($user_id);
+		if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage'))
+		{
+			Template::set('user', $user);
+			Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
+			Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
+			Template::set_view('settings/user_form');
+		}
+		else
+		{
+			Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');
+			redirect(SITE_AREA .'/settings/users');
+		}
+
+		Template::set('toolbar_title', lang('us_edit_user'));
+
+		Template::render();
+
+	}//end edit()
 
 	//--------------------------------------------------------------------
 
-	public function purge($users)
+	/**
+	 * Ban a user or group of users
+	 *
+	 * @access public
+	 *
+	 * @param array  $users       Array of users to ban
+	 * @param string $ban_message Set a message for the user as the reason for banning them
+	 *
+	 * @return void
+	 */
+	public function ban($users=array(), $ban_message='')
 	{
+
+		if (empty($users))
+		{
+			return;
+		}
+
+		$this->auth->restrict('Bonfire.Users.Manage');
+
+		foreach ($users as $user_id)
+		{
+			$data = array(
+				'banned'		=> 1,
+				'ban_message'	=> $ban_message
+				);
+
+			$this->user_model->update($user_id, $data);
+		}
+
+	}//end ban()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Delete a user or group of users
+	 *
+	 * @access public
+	 *
+	 * @param array $users Array of users to delete
+	 *
+	 * @return void
+	 */
+	public function delete($users=array())
+	{
+		// if the users array is empty then get the user from the segment
 		if (empty($users))
 		{
 			$user_id = $this->uri->segment(5);
 
 			if(!empty($user_id))
 			{
-					$users = array($user_id);
+				$users = array($user_id);
+			}
+		}
+
+		if (!empty($users))
+		{
+			$this->auth->restrict('Bonfire.Users.Manage');
+
+			foreach ($users as $id)
+			{
+				$user = $this->user_model->find($id);
+
+				if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage') && $user->id != $this->current_user->id)
+				{
+					if ($this->user_model->delete($id))
+					{
+						$this->load->model('activities/Activity_model', 'activity_model');
+
+						$user = $this->user_model->find($id);
+						$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+						$this->activity_model->log_activity($this->current_user->id, lang('us_log_delete') . ': '.$log_name, 'users');
+						Template::set_message(lang('us_action_deleted'), 'success');
+					}
+					else
+					{
+						Template::set_message(lang('us_action_not_deleted'). $this->user_model->error, 'error');
+					}
+				}
+				else
+				{
+					if ($user->id == $this->current_user->id)
+					{
+							Template::set_message(lang('us_self_delete'), 'error');
+					}
+					else
+					{
+							Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');
+					}
+				}//end if
+			}//end foreach
+		}
+		else
+		{
+			Template::set_message(lang('us_empty_id'), 'error');
+		}//end if
+
+		redirect(SITE_AREA .'/settings/users');
+
+	}//end delete()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Purge the selected users which are already marked as deleted
+	 *
+	 * @access public
+	 *
+	 * @param array $users
+	 *
+	 * @return void
+	 */
+	public function purge($users=array())
+	{
+		// if the users array is empty then get the user from the segment
+		if (empty($users))
+		{
+			$user_id = $this->uri->segment(5);
+
+			if(!empty($user_id))
+			{
+				$users = array($user_id);
 			}
 		}
 
@@ -331,7 +412,7 @@ class Settings extends Admin_Controller
 
 			foreach ($users as $id)
 			{
-				$this->user_model->delete($id, true);
+				$this->user_model->delete($id, TRUE);
 			}
 			Template::set_message(lang('us_action_purged'), 'success');
 		}
@@ -340,25 +421,34 @@ class Settings extends Admin_Controller
 		}
 
 		Template::redirect(SITE_AREA .'/settings/users');
-	}
+
+	}//end purge()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Restore the deleted user
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function restore()
 	{
-			$id = $this->uri->segment(5);
+		$id = $this->uri->segment(5);
 
-			if ($this->user_model->update($id, array('users.deleted'=>0)))
-			{
-				Template::set_message('User successfully restored.', 'success');
-			}
-			else
-			{
-				Template::set_message('Unable to restore user: '. $this->user_model->error, 'error');
-			}
+		if ($this->user_model->update($id, array('users.deleted'=>0)))
+		{
+			Template::set_message('User successfully restored.', 'success');
+		}
+		else
+		{
+			Template::set_message('Unable to restore user: '. $this->user_model->error, 'error');
+		}
 
-			Template::redirect(SITE_AREA .'/settings/users');
-	}
+		Template::redirect(SITE_AREA .'/settings/users');
+
+	}//end restore()
 
 	//--------------------------------------------------------------------
 
@@ -367,12 +457,22 @@ class Settings extends Admin_Controller
 	// !HMVC METHODS
 	//--------------------------------------------------------------------
 
+	/**
+	 * Show the access logs
+	 *
+	 * @access public
+	 *
+	 * @param int $limit Limit the number of logs to show at a time
+	 *
+	 * @return string Show the access logs
+	 */
 	public function access_logs($limit=15)
 	{
-			$logs = $this->user_model->get_access_logs($limit);
+		$logs = $this->user_model->get_access_logs($limit);
 
-			return $this->load->view('settings/access_logs', array('access_logs' => $logs), true);
-	}
+		return $this->load->view('settings/access_logs', array('access_logs' => $logs), TRUE);
+		
+	}//end access_logs()
 
 	//--------------------------------------------------------------------
 
@@ -382,21 +482,41 @@ class Settings extends Admin_Controller
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 
+	/**
+	 * Callback method to check that the email is unique
+	 * 
+	 * @access public
+	 * 
+	 * @param string $str The email to check
+	 * 
+	 * @return bool
+	 */
 	public function unique_email($str)
 	{
 		if ($this->user_model->is_unique('email', $str))
 		{
-			return true;
+			return TRUE;
 		}
 		else
 		{
 			$this->form_validation->set_message('unique_email', lang('us_email_in_use'));
-			return false;
+			return FALSE;
 		}
-	}
+		
+	}//end unique_email()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Save the user
+	 * 
+	 * @access private
+	 * 
+	 * @param string $type The type of operation (insert or edit)
+	 * @param int    $id   The id of the user in the case of an edit operation
+	 * 
+	 * @return bool
+	 */
 	private function save_user($type='insert', $id=0)
 	{
 
@@ -406,7 +526,8 @@ class Settings extends Admin_Controller
 			$this->form_validation->set_rules('password', lang('bf_password'), 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password|xss_clean');
 			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), 'required|trim|strip_tags|matches[password]|xss_clean');
 		}
-		else {
+		else
+		{
 			$_POST['id'] = $id;
 			$this->form_validation->set_rules('email', lang('us_label_email'), 'required|trim|unique[users.email,users.id]|valid_email|max_length[120]|xss_clean');
 			$this->form_validation->set_rules('password', lang('bf_password'), 'trim|strip_tags|min_length[8]|max_length[120]|valid_password|matches[pass_confirm]|xss_clean');
@@ -428,9 +549,9 @@ class Settings extends Admin_Controller
 		$this->form_validation->set_rules('timezones', lang('bf_timezone'), 'required|trim|strip_tags|max_length[4]|xss_clean');
 		$this->form_validation->set_rules('role_id', lang('us_role'), 'required|trim|strip_tags|max_length[2]|is_numeric|xss_clean');
 
-		if ($this->form_validation->run() === false)
+		if ($this->form_validation->run() === FALSE)
 		{
-			return false;
+			return FALSE;
 		}
 
 		// Compile our core user elements to save.
@@ -461,11 +582,12 @@ class Settings extends Admin_Controller
 		Events::trigger('save_user', $this->input->post());
 
 		return $return;
-	}
+		
+	}//end save_user()
 
 	//--------------------------------------------------------------------
 
-}
+}//end Settings
 
 // End of Admin User Controller
 /* End of file settings.php */

@@ -1,51 +1,109 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-class Developer extends Admin_Controller {
+// ------------------------------------------------------------------------
 
-	public function __construct() 
+/**
+ * Sysinfo Module
+ *
+ * Displays various system information to the user
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Sysinfo
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Developer extends Admin_Controller
+{
+
+	/**
+	 * Loads required classes
+	 *
+	 * @return void
+	 */
+	public function __construct()
 	{
 		parent::__construct();
-		
+
 		$this->lang->load('sysinfo');
-		
+
 		Template::set('toolbar_title', lang('si.system_info'));
-		
+
 		Template::set_block('sub_nav', 'developer/sub_nav');
-	}
-	
+
+	}//end __construct()
+
 	//--------------------------------------------------------------------
-	
-	public function index() 
+
+	/**
+	 * Display the system information, including Bonfire and PHP versions,
+	 * to the user
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function index()
 	{
 		Template::render();
-	}
-	
+
+	}//end index()
+
 	//--------------------------------------------------------------------
-	
-	public function modules() 
+
+	/**
+	 * Display the list of modules in the Bonfire installation
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function modules()
 	{
 		$modules = module_list();
 		$configs = array();
-	
+
 		foreach ($modules as $module)
 		{
 			$configs[$module] = module_config($module);
-			
+
 			if (!isset($configs[$module]['name']))
 			{
 				$configs[$module]['name'] = ucwords($module);
 			}
 		}
-		
+
 		ksort($configs);
 		Template::set('modules', $configs);
-		
+
 		Template::render();
-	}
-	
+
+	}//end modules()
+
 	//--------------------------------------------------------------------
-	
-	public function php_info() 
+
+	/**
+	 * Display the PHP info settings to the user
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function php_info()
 	{
 		ob_start();
 
@@ -67,12 +125,13 @@ class Developer extends Admin_Controller {
 		$output = preg_replace("/<hr.*?>/", "<br />", $output);
 		$output = preg_replace("/<tr(.*?).*?".">/", "<tr \\1>\n", $output);
 		$output = preg_replace('/<h(1|2)\s*(class="p")?/i', '<h\\1', $output);
-		
+
 		Template::set('phpinfo', $output);
-	
+
 		Template::render();
-	}
-	
+
+	}//end php_info()
+
 	//--------------------------------------------------------------------
-	
-}
+
+}//end Developer

@@ -1,31 +1,86 @@
-<?php
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
 /**
- * ModuleBuilder
+ * Module Builder library
  *
- * An easy module generator for the Bonfire project on the CodeIgniter framework
- *
- * @package   ModuleBuilder
- * @version   0.5.0
- * @author    Sean Downey, <sean[at]considerweb.com>
- * @copyright Copyright (c) 2011, Sean Downey
- * @license   http://www.opensource.org/licenses/mit-license.php
- * @link      http://github.com/seandowney/bonfire_modulebuilder
+ * This library performs the heavy-lifting while creating new modules for Bonfire.
  *
  * This code is originally based on Ollie Rattue's http://formigniter.org/ project
+ *
+ * @package    Bonfire
+ * @subpackage Modules_ModuleBuilder
+ * @category   Libraries
+ * @author     Bonfire Dev Team
+ * @link       http://cibonfire.com/guides/core_modules/modulebuilder.html
+ *
  */
 class Modulebuilder
 {
+
+	/**
+	 * A pointer to the CodeIgniter instance.
+	 *
+	 * @access public
+	 *
+	 * @var object
+	 */
 	public $CI;
+
+	/**
+	 * Contains various settings from the modulebuilder config file
+	 *
+	 * @access public
+	 *
+	 * @var array
+	 */
 	public $options = array();
+
+	/**
+	 * @todo Not used?
+	 */
 	public $field_numbers = array(6,10,20,40);
+
+	/**
+	 * Total number of fields being used in this module
+	 *
+	 * @access private
+	 *
+	 * @var int
+	 */
 	private $field_total = 0;
+
+	/**
+	 * Array of the files being output for the current module
+	 *
+	 * @access private
+	 *
+	 * @var array
+	 */
 	private $files = array();
 
 
+	//--------------------------------------------------------------------
+
+	/**
+	 * Setup the options
+	 *
+	 * @return void
+	 */
 	function __construct()
 	{
-
 		$this->CI = &get_instance();
 		$this->CI->load->config('modulebuilder');
 		$this->options = $this->CI->config->item('modulebuilder');
@@ -36,12 +91,32 @@ class Modulebuilder
 	                        'controller' => 'myform',
 	                        'migration'  => 'migration'
 	                        );
-	}
+
+	}//end __construct
 
 	//--------------------------------------------------------------------
 
-	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name) {
-
+	/**
+	 * Generare the files required for the module
+	 *
+	 * @access public
+	 *
+	 * @param int    $field_total           The number of fields to add to the table
+	 * @param string $module_name           The name given to the module
+	 * @param array  $contexts              An array of contexts selected
+	 * @param array  $action_names          An array of the controller actions (methods) required
+	 * @param string $primary_key_field     The name of the primary key
+	 * @param string $db_required           The database requirement setting (new, existing or none)
+	 * @param array  $form_input_delimiters An array with the html delimiters for input fields
+	 * @param array  $form_error_delimiters An array with the html delimiters for error messages
+	 * @param string $module_description    A description for the module which appears in the config file
+	 * @param int    $role_id               The id of the role which receives full access to the module
+	 * @param string $table_name            The name of the table in the database
+	 *
+	 * @return array An array with the content for the generated files
+	 */
+	public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name)
+	{
 		$this->CI->load->helper('inflector');
 
 		// filenames
@@ -145,7 +220,8 @@ class Modulebuilder
 		$data['db_table'] = $table_name;
 
 		return $data;
-	}
+
+	}//end build_files()
 
 	//--------------------------------------------------------------------
 
@@ -153,6 +229,18 @@ class Modulebuilder
 	// PRIVATE METHODS
 	//--------------------------------------------------------------------
 
+	/**
+	 * Write the files for the module to the server
+	 *
+	 * @access private
+	 *
+	 * @param string $module_name The name of the module
+	 * @param array  $content     An array containing the content for the files
+	 * @param string $table_name  The name of the db table
+	 * @param string $db_required The database requirement setting (new, existing or none)
+	 *
+	 * @return array An array containing the status and error message
+	 */
 	private function _write_files($module_name, $content, $table_name, $db_required)
 	{
 
@@ -234,7 +322,7 @@ class Modulebuilder
 								break;
 							}
 						}
-					}
+					}//end foreach
 				}
 				else {
 					// check if the content is blank
@@ -279,27 +367,32 @@ class Modulebuilder
 							$ret_val['error'] = $error_msg. " " .$path;
 							break;
 						}
-					}
-				}
-			}
-
-
-		}
+					}//end if
+				}//end if
+			}//end foreach
+		}//end if
 
 		return $ret_val;
-	}
+
+	}//end _write_files()
 
 	//--------------------------------------------------------------------
 
-   /**
-    * function build_view()
-    *
-    * write view file
-    * @access private
-    * @param	integer $field_total
-    * @return string
-    *
-    */
+	/**
+	 * Generate the content for a view file
+	 *
+	 * @access private
+	 *
+	 * @param int    $field_total           The number of fields to add to the table
+	 * @param string $module_name           The name given to the module
+	 * @param string $controller_name       The name of the controller class
+	 * @param string $action_name           The name of the controller method which will use the view
+	 * @param string $action_label          The value used on the submit button
+	 * @param string $primary_key_field     The name of the primary key
+	 * @param array  $form_input_delimiters An array with the html delimiters for input fields
+	 *
+	 * @return mixed FALSE on error/A string containing the content of the view file
+	 */
 	private function build_view($field_total, $module_name, $controller_name, $action_name, $action_label, $primary_key_field, $form_input_delimiters)
 	{
 		if ($field_total == NULL)
@@ -324,8 +417,8 @@ class Modulebuilder
 		if($action_name != 'insert' && $action_name != 'add') {
 			$id_val = '$id';
 		}
-		$data['id_val'] = $id_val;
 
+		$data['id_val'] = $id_val;
 
 		switch ($action_name)
 		{
@@ -354,20 +447,27 @@ class Modulebuilder
 
         return $view;
 
-	}
+	}//end build_view()
 
 
 	//--------------------------------------------------------------------
 
-   /**
-    * function build_controller()
-    *
-    * write view file
-    * @access private
-    * @param integer $field_total
-    * @return string
- 	*
-	*/
+	/**
+	 * Generate the content of a controller file
+	 *
+	 * @access private
+	 *
+	 * @param int    $field_total           The number of fields to add to the table
+	 * @param string $module_name           The name given to the module
+	 * @param string $controller_name       The name of the controller class
+	 * @param array  $action_names          An array of the controller actions (methods) required
+	 * @param string $primary_key_field     The name of the primary key
+	 * @param string $db_required           The database requirement setting (new, existing or none)
+	 * @param array  $form_error_delimiters An array with the html delimiters for error messages
+	 * @param string $table_name            The name of the table in the database
+	 *
+	 * @return mixed FALSE on error/A string containing the content of the controller file
+	 */
 	private function build_controller($field_total, $module_name, $controller_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name)
 	{
 		if ($field_total == NULL)
@@ -387,19 +487,24 @@ class Modulebuilder
 		$data['textarea_editor'] = $this->CI->input->post('textarea_editor');
 		$controller = $this->CI->load->view('files/controller', $data, TRUE);
 		return $controller;
-	}
+
+	}//end build_controller()
 
 	//--------------------------------------------------------------------
 
-   /**
-    * function build_model()
-    *
-    * write model file
-    * @access private
-    * @param integer $field_total
-    * @return string
-    */
-
+	/**
+	 * Generate the content of a model file
+	 *
+	 * @access private
+	 *
+	 * @param int    $field_total       The number of fields to add to the table
+	 * @param string $module_file_name  The name given to the module
+	 * @param array  $action_names      An array of the controller actions (methods) required
+	 * @param string $primary_key_field The name of the primary key
+	 * @param string $table_name        The name of the table in the database
+	 *
+	 * @return mixed FALSE on error/A string containing the content of the model file
+	 */
 	private function build_model($field_total, $module_file_name, $action_names, $primary_key_field, $table_name)
 	{
 		if ($field_total == NULL)
@@ -416,20 +521,22 @@ class Modulebuilder
 		$model = $this->CI->load->view('files/model', $data, TRUE);
 
 		return $model;
-	}
+
+	}//end build_model()
 
 	//--------------------------------------------------------------------
 
 
-   /**
-    * function build_lang()
-    *
-    * write language file
-    * @access private
-    * @param string $module_name	Module Name to use in the language file
-    * @return string
-    */
-
+	/**
+	 * Generate the content of a language file
+	 *
+	 * @access private
+	 *
+	 * @param string $module_name       The name given to the module
+	 * @param string $module_name_lower The name given to the module in lowercase
+	 *
+	 * @return string A string containing the content of the language file
+	 */
 	private function build_lang($module_name, $module_name_lower)
 	{
 		$data['module_name'] = $module_name;
@@ -437,21 +544,22 @@ class Modulebuilder
 		$lang = $this->CI->load->view('files/lang', $data, TRUE);
 
 		return $lang;
-	}
+
+	}//end build_lang()
 
 	//--------------------------------------------------------------------
 
 
-   /**
-    * function build_config()
-    *
-    * write config file
-    * @access private
-    * @param string $module_name		Module Name to use in the config file
-    * @param string $module_description	Module Description to use in the config file
-    * @return string
-    */
-
+	/**
+	 * Generate the content of the module config file
+	 *
+	 * @access private
+	 *
+	 * @param string $module_name        The name given to the module
+	 * @param string $module_description The description text for the module
+	 *
+	 * @return string A string containing the content of the config file
+	 */
 	private function build_config($module_name, $module_description)
 	{
 		$data['module_name'] = $module_name;
@@ -464,19 +572,24 @@ class Modulebuilder
 		$lang = $this->CI->load->view('files/config', $data, TRUE);
 
 		return $lang;
-	}
+
+	}//end build_config()
 
 	//--------------------------------------------------------------------
 
-    /**
-    * function build_acl_sql()
-    *
-    * write acl (permissions) migration file
-    * @access private
-    * @param string $module_name
-    * @return string
-    */
-
+	/**
+	 * Generate the acl (permissions) migration file
+	 *
+	 * @access private
+	 *
+	 * @param int    $field_total  The number of fields to add to the table
+	 * @param string $module_name  The name given to the module
+	 * @param array  $contexts     An array of contexts selected
+	 * @param array  $action_names An array of the controller actions (methods) required
+	 * @param int    $role_id      The id of the role which receives full access to the module
+	 *
+	 * @return string A string containing the content of the permission migration file
+	 */
 	private function build_acl_sql($field_total, $module_name, $contexts, $action_names, $role_id)
 	{
 		$data['field_total'] = $field_total;
@@ -489,20 +602,24 @@ class Modulebuilder
 		$acl_migration = $this->CI->load->view('files/acl_migration', $data, TRUE);
 
 		return $acl_migration;
-	}
+
+	}//end build_acl_sql()
 
 	//--------------------------------------------------------------------
 
 
-   /**
-    * function build_db_sql()
-    *
-    * write view file
-    * @access private
-    * @param integer $field_total
-    * @return string
-    */
-
+	/**
+	 * Generate the module migration file which creates the database table
+	 *
+	 * @access private
+	 *
+	 * @param int    $field_total       The number of fields to add to the table
+	 * @param string $module_name       The name given to the module
+	 * @param string $primary_key_field The name of the primary key
+	 * @param string $table_name        The name of the table in the database
+	 *
+	 * @return string A string containing the content of the database migration file
+	 */
 	private function build_db_sql($field_total, $module_name, $primary_key_field, $table_name)
 	{
 		if ($field_total == NULL)
@@ -519,21 +636,24 @@ class Modulebuilder
 		$db_migration = $this->CI->load->view('files/db_migration', $data, TRUE);
 
 		return $db_migration;
-	}
+
+	}//end build_db_sql()
 
 	//--------------------------------------------------------------------
 
-	/** Custom Form Validation Callback Rule
+	/**
+	 * Custom Form Validation Callback Rule
 	 *
 	 * Checks that one field doesn't match all the others.
 	 * This code is not really portable. Would of been nice to create a rule that accepted an array
 	 *
-	 * @access	public
-	 * @param	string
-	 * @param	fields array
-	 * @return	bool
+	 * @access protected
+	 *
+	 * @param string $str     Name of the field
+	 * @param int    $fieldno The position number of this field
+	 *
+	 * @return bool
 	 */
-
 	protected function no_match($str, $fieldno)
 	{
 		for($counter=1; $this->field_total >= $counter; $counter++)
@@ -553,25 +673,29 @@ class Modulebuilder
 		}
 
 		return TRUE;
-	}
+
+	}//end no_match
 
 	//--------------------------------------------------------------------
 
-   	/**
-   	* Makes directory, returns TRUE if exists or made
-   	*
-   	* @param string $pathname The directory path.
-   	* @return boolean returns TRUE if exists or made or FALSE on failure.
-   	* http://uk2.php.net/manual/en/function.mkdir.php#81656
-   	*/
-
+	/**
+	 * Makes directory, returns TRUE if exists or made
+	 *
+	 * @access private
+	 *
+	 * @param string $pathname The directory path.
+	 * @param string $mode     The unix permissions on the directory eg (0775)
+	 *
+	 * @return bool TRUE if exists or made or FALSE on failure.
+	 */
    	private function mkdir_recursive($pathname, $mode)
    	{
 		is_dir(dirname($pathname)) || mkdir_recursive(dirname($pathname), $mode);
 		return is_dir($pathname) || @mkdir($pathname, $mode);
-   	}
+
+   	}//end mkdir_recursive()
 
 
 	//--------------------------------------------------------------------
 
-}
+}//end Modulebuilder

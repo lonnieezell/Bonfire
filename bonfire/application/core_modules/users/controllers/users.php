@@ -1,35 +1,42 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+// ------------------------------------------------------------------------
 
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
-/*
-	Class: Users
-
-	Provides front-end functions for users, like login and logout.
-*/
-class Users extends Front_Controller {
+/**
+ * Users Controller
+ *
+ * Provides front-end functions for users, like login and logout.
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Users
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Users extends Front_Controller
+{
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Setup the required libraries etc
+	 *
+	 * @retun void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -48,29 +55,29 @@ class Users extends Front_Controller {
 		$this->load->library('users/auth');
 
 		$this->lang->load('users');
-	}
+
+	}//end __construct()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: login()
-
-		Presents the login function and allows the user to actually login.
-	*/
+	/**
+	 * Presents the login function and allows the user to actually login.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function login()
 	{
-
 		// if the user is not logged in continue to show the login page
-		if ($this->auth->is_logged_in() === false)
+		if ($this->auth->is_logged_in() === FALSE)
 		{
-
 			if ($this->input->post('submit'))
 			{
-
-				$remember = $this->input->post('remember_me') == '1' ? true : false;
+				$remember = $this->input->post('remember_me') == '1' ? TRUE : FALSE;
 
 				// Try to login
-				if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === true)
+				if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === TRUE)
 				{
 					$this->load->model('activities/Activity_model', 'activity_model');
 
@@ -97,48 +104,54 @@ class Users extends Front_Controller {
 							Template::redirect('/');
 						}
 					}
-				}
-
-			}
+				}//end if
+			}//end if
 
 			Template::set_view('users/users/login');
 			Template::set('page_title', 'Login');
 			Template::render('login');
 		}
-		else {
+		else
+		{
 
 			Template::redirect('/');
-		}
-	}
+		}//end if
+
+	}//end login()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: logout()
-
-		Calls the auth->logout method to destroy the session and cleanup,
-		then redirects to the home page.
-	*/
+	/**
+	 * Calls the auth->logout method to destroy the session and cleanup,
+	 * then redirects to the home page.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function logout()
 	{
 		$this->auth->logout();
 		redirect('/');
-	}
+
+	}//end  logout()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: forgot_password
-
-		Allows a user to start the process of resetting their password.
-		An email is allowed with a special temporary link that is only valid
-		for 24 hours. This link takes them to reset_password().
-	*/
+	/**
+	 * Allows a user to start the process of resetting their password.
+	 * An email is allowed with a special temporary link that is only valid
+	 * for 24 hours. This link takes them to reset_password().
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function forgot_password()
 	{
 
 		// if the user is not logged in continue to show the login page
-		if ($this->auth->is_logged_in() === false)
+		if ($this->auth->is_logged_in() === FALSE)
 		{
 			if (isset($_POST['submit']))
 			{
@@ -147,7 +160,9 @@ class Users extends Front_Controller {
 				if ($this->form_validation->run() === FALSE)
 				{
 					Template::set_message('Cannot find that email in our records.', 'error');
-				} else {
+				}
+				else
+				{
 					// We validated. Does the user actually exist?
 					$user = $this->user_model->find_by('email', $_POST['email']);
 
@@ -172,7 +187,7 @@ class Users extends Front_Controller {
 						$data = array(
 									'to'	=> $_POST['email'],
 									'subject'	=> 'Your Temporary Password',
-									'message'	=> $this->load->view('_emails/forgot_password', array('link' => $pass_link), true)
+									'message'	=> $this->load->view('_emails/forgot_password', array('link' => $pass_link), TRUE)
 							 );
 
 						if ($this->emailer->send($data))
@@ -183,28 +198,31 @@ class Users extends Front_Controller {
 						{
 							Template::set_message('Unable to send an email: '. $this->emailer->errors, 'error');
 						}
-					}
-				}
-
-			}
+					}//end if
+				}//end if
+			}//end if
 
 			Template::set_view('users/users/forgot_password');
 			Template::set('page_title', 'Password Reset');
 			Template::render();
 		}
-		else {
+		else
+		{
 
 			Template::redirect('/');
-		}
-	}
+		}//end if
+
+	}//end forgot_password()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: profile
-
-		Allows a user to edit their own profileinformation.
-	*/
+	/**
+	 * Allows a user to edit their own profile information.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function profile()
 	{
 
@@ -222,7 +240,6 @@ class Users extends Front_Controller {
 			$user_id = $this->current_user->id;
 			if ($this->save_user($user_id))
 			{
-
 				$this->load->model('activities/Activity_model', 'activity_model');
 
 				$user = $this->user_model->find($user_id);
@@ -258,25 +275,27 @@ class Users extends Front_Controller {
 
 		Template::set_view('users/users/profile');
 		Template::render();
-	}
+
+	}//end profile()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: reset_password()
-
-		Allows the user to create a new password for their account. At the moment,
-		the only way to get here is to go through the forgot_password() process,
-		which creates a unique code that is only valid for 24 hours.
-
-		Parameters:
-			$email	- The email address to check against.
-			$code	- A randomly generated alphanumeric code. (Generated by forgot_password() ).
-	*/
+	/**
+	 * Allows the user to create a new password for their account. At the moment,
+	 * the only way to get here is to go through the forgot_password() process,
+	 * which creates a unique code that is only valid for 24 hours.
+	 *
+	 * @access public
+	 *
+	 * @param string $email The email address to check against.
+	 * @param string $code  A randomly generated alphanumeric code. (Generated by forgot_password() ).
+	 *
+	 * @return void
+	 */
 	public function reset_password($email='', $code='')
 	{
 		// if the user is not logged in continue to show the login page
-		if ($this->auth->is_logged_in() === false)
+		if ($this->auth->is_logged_in() === FALSE)
 		{
 			// If there is no code, then it's not a valid request.
 			if (empty($code) || empty($email))
@@ -291,7 +310,7 @@ class Users extends Front_Controller {
 				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password|xsx_clean');
 				$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
 
-				if ($this->form_validation->run() !== false)
+				if ($this->form_validation->run() !== FALSE)
 				{
 					// The user model will create the password hash for us.
 					$data = array('password' => $this->input->post('password'),
@@ -312,15 +331,15 @@ class Users extends Front_Controller {
 						Template::set_message('There was an error resetting your password: '. $this->user_model->error, 'error');
 					}
 				}
-			}
+			}//end if
 
 			// Check the code against the database
 			$email = str_replace(':', '@', $email);
 			$user = $this->user_model->find_by(array(
-			                                        'email' => $email,
-													'reset_hash' => $code,
-													'reset_by >=' => time()
-			                                   ));
+                                        'email' => $email,
+										'reset_hash' => $code,
+										'reset_by >=' => time()
+                                   ));
 
 			// It will be an Object if a single result was returned.
 			if (!is_object($user))
@@ -335,14 +354,23 @@ class Users extends Front_Controller {
 			Template::set_view('users/users/reset_password');
 			Template::render();
 		}
-		else {
+		else
+		{
 
 			Template::redirect('/');
-		}
-	}
+		}//end if
+
+	}//end reset_password()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Display the registration form for the user and manage the registration process
+	 * 
+	 * @access public
+	 * 
+	 * @return void
+	 */
 	public function register()
 	{
 		// Are users even allowed to register?
@@ -372,7 +400,7 @@ class Users extends Front_Controller {
 			$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|strip_tags|max_length[4]|xss_clean');
 			$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|strip_tags|max_length[255]|xss_clean');
 
-			if ($this->form_validation->run() !== false)
+			if ($this->form_validation->run() !== FALSE)
 			{
 				// Time to save the user...
 				$data = array(
@@ -392,7 +420,7 @@ class Users extends Front_Controller {
 					redirect('login');
 				}
 			}
-		}
+		}//end if
 
 		// Generate password hint messages.
 		$this->user_model->password_hints();
@@ -402,37 +430,71 @@ class Users extends Front_Controller {
 		Template::set_view('users/users/register');
 		Template::set('page_title', 'Register');
 		Template::render();
-	}
+		
+	}//end register()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Callback method to check that the email is unique
+	 * 
+	 * @access public
+	 * 
+	 * @param string $email The email address to check
+	 * 
+	 * @return bool
+	 */
 	public function unique_email($email)
 	{
-		if ($this->user_model->is_unique('email', $email) === true)
+		if ($this->user_model->is_unique('email', $email) === TRUE)
 		{
-			return true;
-		} else {
-			$this->form_validation->set_message('unique_email', 'That email address is already in use.');
-			return false;
+			return TRUE;
 		}
-	}
+		else
+		{
+			$this->form_validation->set_message('unique_email', 'That email address is already in use.');
+			return FALSE;
+		}
+		
+	}//end unique_email()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Callback method to check that the username is unique
+	 *
+	 * @access public
+	 *
+	 * @param string $username The username to check
+	 *
+	 * @return bool
+	 */
 	public function unique_username($username)
 	{
 
-		if ($this->user_model->is_unique('username', $username.',users.id') === true)
+		if ($this->user_model->is_unique('username', $username.',users.id') === TRUE)
 		{
-			return true;
-		} else {
-			$this->form_validation->set_message('unique_username', 'That username is already in use.');
-			return false;
+			return TRUE;
 		}
-	}
+		else
+		{
+			$this->form_validation->set_message('unique_username', 'That username is already in use.');
+			return FALSE;
+		}
+
+	}//end unique_username()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Save the user
+	 *
+	 * @access private
+	 *
+	 * @param int $id The id of the user in the case of an edit operation
+	 *
+	 * @return bool
+	 */
 	private function save_user($id=0)
 	{
 
@@ -447,7 +509,7 @@ class Users extends Front_Controller {
 		if ( $_POST['id'] != $this->current_user->id )
 		{
 			$this->form_validation->set_message('email', 'Invalid user id.');
-			return false;
+			return FALSE;
 		}
 
 		// Setting the payload for Events system.
@@ -474,9 +536,9 @@ class Users extends Front_Controller {
 		// Added Event "before_user_validation" to run before the form validation
 		Events::trigger('before_user_validation', $payload );
 
-		if ($this->form_validation->run() === false)
+		if ($this->form_validation->run() === FALSE)
 		{
-			return false;
+			return FALSE;
 		}
 
 		// Compile our core user elements to save.
@@ -487,15 +549,21 @@ class Users extends Front_Controller {
 		);
 
 		if ($this->input->post('password'))
+		{
 			$data['password'] = $this->input->post('password');
+		}
 
 		if ($this->input->post('display_name'))
+		{
 			$data['display_name'] = $this->input->post('display_name');
+		}
 
 		if ($this->settings_lib->item('auth.use_usernames'))
 		{
 			if ($this->input->post('username'))
+			{
 				$data['username'] = $this->input->post('username');
+			}
 		}
 
 		// Any modules needing to save data?
@@ -503,11 +571,12 @@ class Users extends Front_Controller {
 		Events::trigger('save_user', $payload );
 
 		return $this->user_model->update($id, $data);
-	}
+
+	}//end save_user()
 
 	//--------------------------------------------------------------------
 
-}
+}//end Users
 
 /* Front-end Users Controller */
 /* End of file users.php */

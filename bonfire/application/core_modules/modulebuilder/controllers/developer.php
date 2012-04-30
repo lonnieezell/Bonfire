@@ -1,24 +1,44 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 /**
- * ModuleBuilder
+ * Bonfire
  *
- * An easy module generator for the Bonfire project on the CodeIgniter framework
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
  *
- * @package   ModuleBuilder
- * @version   0.5.0
- * @author    Sean Downey, <sean[at]considerweb.com>
- * @copyright Copyright (c) 2011, Sean Downey
- * @license   http://www.opensource.org/licenses/mit-license.php
- * @link      http://github.com/seandowney/bonfire_modulebuilder
- *
- * This code is originally based on Ollie Rattue's http://formigniter.org/ project
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
  */
 
+// ------------------------------------------------------------------------
+
+/**
+ * Module Builder Developer Context Controller
+ *
+ * This controller displays the list of current modules in the bonfire/modules folder
+ * and also allows the users to create new modules.
+ *
+ * This code is originally based on Ollie Rattue's http://formigniter.org/ project
+ *
+ * @package    Bonfire
+ * @subpackage Modules_ModuleBuilder
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/core_modules/modulebuilder.html
+ *
+ */
 class Developer extends Admin_Controller {
 
 	//---------------------------------------------------------------
 
+	/**
+	 * Setup restrictions and load configs, libraries and language files
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -33,16 +53,19 @@ class Developer extends Admin_Controller {
 		$this->options = $this->config->item('modulebuilder');
 
 		Template::set_block('sub_nav', 'developer/_sub_nav');
-	}
+
+	}//end __construct
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: index()
-
-		Displays a list of installed modules with the option to create
-		a new one.
-	*/
+	/**
+	 * Displays a list of installed modules with the option to create
+	 * a new one.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function index()
 	{
 		$modules = module_list(true);
@@ -66,15 +89,17 @@ class Developer extends Admin_Controller {
 		Template::set('toolbar_title', 'Manage Modules');
 		Template::render();
 
-	}
+	}//end index()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: create()
-
-		Displays the create a module form.
-	*/
+	/**
+	 * Displays the create a module form.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function create()
 	{
 		Assets::add_module_js('modulebuilder', 'modulebuilder.js');
@@ -168,7 +193,7 @@ class Developer extends Admin_Controller {
 			$this->activity_model->log_activity((integer) $this->current_user->id, lang('mb_act_create').': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
 
 			Template::set_view('developer/output');
-		}
+		}//end if
 
 		// check that the modules folder is writeable
 		Template::set('writeable', $this->_check_writeable());
@@ -178,15 +203,18 @@ class Developer extends Admin_Controller {
 		Template::set('toolbar_title', 'Module Builder');
 
 		Template::render();
-	}
+
+	}//end create
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: delete()
-
-		Deletes a module and all of it's files.
-	*/
+	/**
+	 * Deletes a module and all of it's files.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function delete()
 	{
 		$module_name = preg_replace("/[ -]/", "_", $this->uri->segment(5));
@@ -266,7 +294,8 @@ class Developer extends Admin_Controller {
 		}//end if
 
 		Template::redirect(SITE_AREA .'/developer/modulebuilder');
-	}
+
+	}//end delete()
 
 	//--------------------------------------------------------------------
 
@@ -274,11 +303,15 @@ class Developer extends Admin_Controller {
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 
-	/*
-		Method: validate_form()
-
-		Handles the validation of the modulebuilder form.
-	*/
+	/**
+	 * Handles the validation of the modulebuilder form.
+	 *
+	 * @access private
+	 *
+	 * @param int $field_total The number of fields to add to the table
+	 *
+	 * @return bool Whether the form data was valid or not
+	 */
 	private function validate_form($field_total=0)
 	{
 		$this->form_validation->set_rules("contexts_content",'Contexts :: Content',"trim|xss_clean|is_numeric");
@@ -350,19 +383,24 @@ class Developer extends Admin_Controller {
 				$this->form_validation->set_rules("db_field_length_value$counter","DB Field Length $counter","trim|".$db_len_required."xss_clean");
 				$this->form_validation->set_rules('validation_rules'.$counter.'[]',"Validation Rules $counter",'trim|xss_clean');
 			}
-		}
+		}//end if
 
 		return $this->form_validation->run();
-	}
+
+	}//end validate_form()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: table_info()
-
-		Returns an array with the structure and details for the fields in the specified
-		DB table.
-	*/
+	/**
+	 * Returns an array with the structure and details for the fields in the specified
+	 * DB table.
+	 *
+	 * @access private
+	 *
+	 * @param string $table_name Name of the table to check
+	 *
+	 * @return mixed An array of fields or FALSE if the table does not exist
+	 */
 	private function table_info($table_name)
 	{
 		$fields = array();
@@ -418,17 +456,20 @@ class Developer extends Admin_Controller {
 
 		return FALSE;
 
-
 	}//end table_info()
 
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: build_module()
-
-		Handles the heavy-lifting of building a module from ther user's specs.
-	*/
+	/**
+	 * Handles the heavy-lifting of building a module from ther user's specs.
+	 *
+	 * @access private
+	 *
+	 * @param int $field_total The number of fields to add to the table
+	 *
+	 * @return void
+	 */
 	private function build_module($field_total=0)
 	{
 		$module_name 		= $this->input->post('module_name');
@@ -493,22 +534,25 @@ class Developer extends Admin_Controller {
 		}
 
 		Template::set($data);
-	}
+
+	}//end build_module()
 
 	//--------------------------------------------------------------------
 
 
-	/** Custom Form Validation Callback Rule
+	/**
+	 * Custom Form Validation Callback Rule
 	 *
 	 * Checks that one field doesn't match all the others.
 	 * This code is not really portable. Would of been nice to create a rule that accepted an array
 	 *
 	 * @access	public
-	 * @param	string
-	 * @param	fields array
-	 * @return	bool
+	 *
+	 * @param string $str    String to check against the other fields
+	 * @param array $fieldno The field number of this field
+	 *
+	 * @return bool
 	 */
-
 	function no_match($str, $fieldno)
 	{
 		for($counter=1; $this->field_total >= $counter; $counter++)
@@ -533,9 +577,11 @@ class Developer extends Admin_Controller {
 	//--------------------------------------------------------------------
 
 
-	/** Check that the Modules folder is writeable
+	/**
+	 * Check that the Modules folder is writeable
 	 *
 	 * @access	private
+	 *
 	 * @return	bool
 	 */
 	function _check_writeable()
@@ -548,7 +594,10 @@ class Developer extends Admin_Controller {
 	/**
 	 * Check the module name is valid
 	 *
-	 * @access	private
+	 * @access	public
+	 *
+	 * @param string $str String to check
+	 *
 	 * @return	bool
 	 */
 	public function modulename_check($str)
@@ -562,5 +611,7 @@ class Developer extends Admin_Controller {
 		{
 			return TRUE;
 		}
-	}
-}
+
+	}//end modulename_check()
+
+}//end Developer

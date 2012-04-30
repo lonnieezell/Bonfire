@@ -1,84 +1,131 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+// ------------------------------------------------------------------------
 
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
+/**
+ * Permissions Settings Model
+ *
+ * Provides access and utility methods for handling permission storage
+ * in the database.
+ *
+ * Permissions are a simple string made up of 3 parts:
+ * - Domain	- A generic classification system
+ * - Context	- Typically the module name
+ * - Action	- The testable action (View, Manage, etc)
+ *
+ * Examples permissions would be:
+ * - Site.Signin.Allow
+ * - Site.Developer.View
+ * - Bonfire.Users.Manage
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Permissions
+ * @category   Models
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Permission_model extends BF_Model
+{
 
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
-/*
-	Class: Permission_model
-
-	Provides access and utility methods for handling permission storage
-	in the database.
-
-	Permissions are a simple string made up of 3 parts:
-
-	- Domain	- A generic classification system
-	- Context	- Typically the module name
-	- Action	- The testable action (View, Manage, etc)
-
-	Examples permissions would be:
-
-	- Site.Signin.Allow
-	- Site.Developer.View
-	- Bonfire.Users.Manage
-
-	Extends:
-		MY_Model
-
-	Package:
-		Roles
-*/
-class Permission_model extends BF_Model {
-
+	/**
+	 * Name of the table
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
 	protected $table		= 'permissions';
-	protected $key			= 'permission_id';
-	protected $soft_deletes	= false;
-	protected $date_format	= 'datetime';
-	protected $set_modified = false;
-	protected $set_created	= false;
 
-	function __construct()
-	{
-		parent::__construct();
-	}
+	/**
+	 * Name of the primary key
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
+	protected $key			= 'permission_id';
+
+	/**
+	 * Use soft deletes or not
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $soft_deletes = FALSE;
+
+	/**
+	 * The date format to use
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
+	protected $date_format = 'datetime';
+
+	/**
+	 * Set the created time automatically on a new record
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $set_created = FALSE;
+
+	/**
+	 * Set the modified time automatically on editing a record
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $set_modified = FALSE;
 
 	// --------------------------------------------------------------------
 
-	/*
-		Method: delete()
-
-		Delete a particular permission from the database
-
-		Parameters:
-			$id			- Permission ID
-			$purge		- Whether to use soft delete or not
-
-		Return:
-			true/false
-	*/
-	function delete($id=0, $purge=false)
+	/**
+	 * Constructor
+	 *
+	 * @return void
+	 */
+	function __construct()
 	{
-		if ($purge === true)
+		parent::__construct();
+
+	}//end __construct()
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Delete a particular permission from the database
+	 *
+	 * @access public
+	 *
+	 * @param int  $id    Permission ID
+	 * @param bool $purge Whether to use soft delete or not
+	 *
+	 * @return bool TRUE/FALSE
+	 */
+	function delete($id=0, $purge=FALSE)
+	{
+		if ($purge === TRUE)
 		{
-			// temporarily set the soft_deletes to true.
-			$this->soft_deletes = false;
+			// temporarily set the soft_deletes to TRUE.
+			$this->soft_deletes = FALSE;
 		}
 
 		// delete the ercord
@@ -92,23 +139,22 @@ class Permission_model extends BF_Model {
 		}
 
 		return $deleted;
-	}
+
+	}//end delete()
 
 	// --------------------------------------------------------------------
 
-	/*
-		Method: update()
-
-		Update a particular permission from the database
-		Remove it from role_permissions if set to inactive
-
-		Parameters:
-			$id		- The primary_key value of the row to update.
-			$data	- An array of key/value pairs to update.
-
-		Return:
-			true/false
-	*/
+	/**
+	 * Update a particular permission from the database
+	 * Remove it from role_permissions if set to inactive
+	 *
+	 * @access public
+	 *
+	 * @param int   $id   The primary_key value of the row to update.
+	 * @param array $data An array of key/value pairs to update.
+	 *
+	 * @return bool TRUE/FALSE
+	 */
 	function update($id, $data)
 	{
 		$updated = parent::update($id, $data);
@@ -120,36 +166,36 @@ class Permission_model extends BF_Model {
 		}
 
 		return $updated;
-	}
+
+	}//end update()
 
 	// --------------------------------------------------------------------
 
-	/*
-		Method: permission_exists()
-		
-		Checks to see whether a permission is in the system or not.
-		
-		Parameters:
-			$permission	- The name of the permission to check for.
-			
-		Returns:
-			true/false
-	*/
-	public function permission_exists($permission=null) 
+	/**
+	 * Checks to see whether a permission is in the system or not.
+	 *
+	 * @access public
+	 *
+	 * @param string $permission The name of the permission to check for.
+	 *
+	 * @return bool TUE/FALSE
+	 */
+	public function permission_exists($permission=null)
 	{
 		if (empty($permission))
 		{
 			return null;
 		}
-		
+
 		if ($this->find_by('name', $permission))
 		{
 			return TRUE;
 		}
-		
+
 		return FALSE;
-	}
-	
+
+	}//end permission_exists()
+
 	//--------------------------------------------------------------------
-	
-}
+
+}//end Permission_model

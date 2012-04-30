@@ -1,33 +1,86 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+// ------------------------------------------------------------------------
 
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
+/**
+ * Emailer Model
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Emailer
+ * @category   Model
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Emailer_model extends BF_Model
+{
 
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
 
-class Emailer_model extends BF_Model {
+	/**
+	 * Name of the table
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
+	protected $table = 'email_queue';
 
-	protected $table		= 'email_queue';
-	protected $key			= 'id';
-	protected $soft_deletes	= false;
-	protected $date_format	= 'datetime';
-	protected $set_created	= false;
-	protected $set_modified = false;
+	/**
+	 * Name of the primary key
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
+	protected $key = 'id';
 
-}
+	/**
+	 * Use soft deletes or not
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $soft_deletes = FALSE;
+
+	/**
+	 * The date format to use
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
+	protected $date_format = 'datetime';
+
+	/**
+	 * Set the created time automatically on a new record
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $set_created = FALSE;
+
+	/**
+	 * Set the modified time automatically on editing a record
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $set_modified = FALSE;
+
+}//end class

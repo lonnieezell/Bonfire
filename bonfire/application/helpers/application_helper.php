@@ -1,32 +1,31 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
-/*
-	File: Application Helper
-
-	Pulls together various helper functions from across the core modules
-	to ease editing and minimize physical files that need loaded.
-*/
+/**
+ * Application Helpers
+ *
+ * Pulls together various helper functions from across the core modules
+ * to ease editing and minimize physical files that need loaded.
+ *
+ * @package    Bonfire
+ * @subpackage Helpers
+ * @category   Helpers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/application_helpers.html
+ *
+ */
 
 if ( ! function_exists('gravatar_link'))
 {
@@ -38,7 +37,7 @@ if ( ! function_exists('gravatar_link'))
 	 * Note that if gravatar does not have an image that matches the criteria,
 	 * it will return a link to an image under *your_theme/images/user.png*.
 	 * Also, by explicity omitting email you're denying http-req to gravatar.com.
-	 * 
+	 *
 	 * @param $email string The email address to check for. If null, defaults to theme img.
 	 * @param $size int The width (and height) of the resulting image to grab.
 	 * @param $alt string Alt text to be put in the link tag.
@@ -99,18 +98,18 @@ if ( ! function_exists('logit'))
 	 *
 	 * @return void
 	 */
-	function logit($message='', $level='debug') 
-	{	
+	function logit($message='', $level='debug')
+	{
 		if (empty($message))
 		{
 			return;
 		}
-		
+
 		if (class_exists('Console'))
 		{
 			Console::log($message);
 		}
-		
+
 		log_message($level, $message);
 	}
 }
@@ -134,6 +133,8 @@ if ( ! function_exists('module_list'))
 	/**
 	 * Returns a list of all modules in the system.
 	 *
+	 * @param bool $exclude_core Whether to exclude the Bonfire core modules or not
+	 *
 	 * @return array A list of all modules in the system.
 	 */
 	function module_list($exclude_core=false)
@@ -154,10 +155,10 @@ if ( ! function_exists('module_list'))
 			{
 				continue;
 			}
-			
+
 			$map = array_merge($map, directory_map($folder, 1));
 		}
-		
+
 		// Clean out any html or php files
 		if ($count = count($map))
 		{
@@ -169,7 +170,7 @@ if ( ! function_exists('module_list'))
 				}
 			}
 		}
-		
+
 		return $map;
 	}
 }
@@ -190,7 +191,7 @@ if ( ! function_exists('module_controller_exists'))
 		{
 			return false;
 		}
-		
+
 		// Look in all module paths
 		foreach (module_folders() as $folder)
 		{
@@ -199,7 +200,7 @@ if ( ! function_exists('module_controller_exists'))
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 }
@@ -221,11 +222,11 @@ if ( ! function_exists('module_file_path'))
 		{
 			return false;
 		}
-		
+
 		foreach (module_folders() as $module_folder)
 		{
 			$test_file = $module_folder . $module .'/'. $folder .'/'. $file;
-		
+
 			if (is_file($test_file))
 			{
 				return $test_file;
@@ -274,16 +275,16 @@ if ( ! function_exists('module_files'))
 	 *
 	 * @return array An associative array, like: array('module_name' => array('folder' => array('file1', 'file2')))
 	 */
-	function module_files($module_name=null, $module_folder=null, $exclude_core=false) 
+	function module_files($module_name=null, $module_folder=null, $exclude_core=false)
 	{
 		if (!function_exists('directory_map'))
 		{
 			$ci =& get_instance();
 			$ci->load->helper('directory');
 		}
-	
+
 		$files = array();
-	
+
 		foreach (module_folders() as $path)
 		{
 			// If we're ignoring core modules and we find the core_module folder... skip it.
@@ -291,26 +292,26 @@ if ( ! function_exists('module_files'))
 			{
 				continue;
 			}
-		
+
 			if (!empty($module_name) && is_dir($path . $module_name))
 			{
 				$path = $path . $module_name;
 				$modules[$module_name] = directory_map($path);
 			}
-			else 
-			{		
+			else
+			{
 				$modules = directory_map($path);
 			}
-			
-			// If the element is not an array, we know that it's a file, 
+
+			// If the element is not an array, we know that it's a file,
 			// so we ignore it, otherwise it is assumbed to be a module.
 			if (!is_array($modules) || !count($modules))
 			{
 				continue;
 			}
-	
+
 			foreach ($modules as $mod_name => $values)
-			{	
+			{
 				if (is_array($values))
 				{
 					// Add just the specified folder for this module
@@ -328,7 +329,7 @@ if ( ! function_exists('module_files'))
 				}
 			}
 		}
-		
+
 		return count($files) ? $files : false;
 	}
 }
@@ -363,16 +364,16 @@ if ( ! function_exists('module_config'))
 	function module_config($module_name=null, $return_full=false)
 	{
 		$config_param = array();
-	
+
 		$config_file = module_file_path($module_name, 'config', 'config.php');
-		
-		if (file_exists($config_file)) 
-		{ 
+
+		if (file_exists($config_file))
+		{
 			include($config_file);
-		
+
 			/* Check for the optional module_config and serialize if exists*/
-			if (isset($config['module_config'])) 
-			{	
+			if (isset($config['module_config']))
+			{
 				$config_param =$config['module_config'];
 			}
 			else if ($return_full === true && isset($config) && is_array($config))
@@ -380,9 +381,9 @@ if ( ! function_exists('module_config'))
 				$config_param = $config;
 			}
 		}
-		
+
 		return $config_param;
-	}	
+	}
 }
 
 
@@ -400,10 +401,10 @@ if ( ! function_exists('dump'))
 		list($callee) = debug_backtrace();
 		$arguments = func_get_args();
 		$total_arguments = count($arguments);
-		
+
 		echo '<fieldset style="background: #fefefe !important; border:2px red solid; padding:5px">';
 	    echo '<legend style="background:lightgrey; padding:5px;">'.$callee['file'].' @ line: '.$callee['line'].'</legend><pre>';
-	    
+
 	    $i = 0;
 	    foreach ($arguments as $argument)
 	    {
@@ -443,24 +444,19 @@ if (!function_exists('e'))
 
 if (!function_exists('array_implode'))
 {
-	/*
-		Function: array_implode()
-
-		Implode an array with the key and value pair giving a glue,
-		a separator between pairs and the array to implode.
-
-		Example:
-			// Encode Query Strings
-			$query = url_encode( array_implode( '=', '&', $array ) );
-
-		Parameters:
-			$glue		- The glue between key and value.
-			$separator	- Separator between pairs.
-			$array		- The array to implode.
-
-		Returns:
-			A string with the combined elements.
-	*/
+	/**
+	 * Implode an array with the key and value pair giving a glue,
+	 * a separator between pairs and the array to implode.
+	 *
+	 * Encode Query Strings
+	 * @example $query = url_encode( array_implode( '=', '&', $array ) );
+	 *
+	 * @param string $glue      The glue between key and value.
+	 * @param string $separator Separator between pairs.
+	 * @param array  $array     The array to implode.
+	 *
+	 * @return string A string with the combined elements.
+	 */
 	function array_implode($glue, $separator, $array)
 	{
 		if ( ! is_array( $array ) )
@@ -481,12 +477,22 @@ if (!function_exists('array_implode'))
 		}
 
 		return implode( $separator, $string );
-	}
+
+	}//end array_implode()
 }
 //--------------------------------------------------------------------
 
 if ( !function_exists('obj_value') )
 {
+	/**
+	 *
+	 * @param object $obj   Object
+	 * @param string $key   Name of the object element
+	 * @param string $type  Input type
+	 * @param int    $value Value to check the key against
+	 *
+	 * @return null|string
+	 */
 	function obj_value($obj, $key, $type='text', $value=0)
 	{
 		if (isset($obj->$key))
@@ -513,7 +519,8 @@ if ( !function_exists('obj_value') )
 		}
 
 		return null;
-	}
+
+	}//end obj_value()
 }
 //--------------------------------------------------------------------
 
@@ -539,5 +546,5 @@ if ( !function_exists('iif') )
 		{
 			echo ( $expression == 0 ) ? $returnfalse : $returntrue;
 		}
-	}
+	}//end iif()
 }
