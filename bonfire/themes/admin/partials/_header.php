@@ -14,10 +14,12 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
+	<link rel="dns-prefetch" href="//ajax.googleapis.com">
 	<title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo $this->settings_lib->item('site.title') ?></title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+	<meta name="robots" content="noindex" />
 	<?php echo Assets::css(null, true); ?>
 
 	<script src="<?php echo js_path(); ?>modernizr-2.5.3.js"></script>
@@ -108,11 +110,6 @@
 
  <div class="subnav navbar-fixed-top" >
 				<div class="container-fluid">
-						<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-						</a>
 
 			<div class="pull-right">
 				<?php Template::block('sub_nav', ''); ?>
