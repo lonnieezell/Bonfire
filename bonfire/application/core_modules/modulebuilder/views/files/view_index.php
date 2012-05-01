@@ -19,7 +19,7 @@ $view =<<<END
 				<tr>
 					<td colspan="{cols_total}">
 						<?php echo lang('bf_with_selected') ?>
-						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
+						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="Delete" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
 					</td>
 				</tr>
 				<?php endif;?>
