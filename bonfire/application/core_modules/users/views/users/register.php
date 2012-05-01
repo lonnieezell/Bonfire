@@ -31,7 +31,7 @@
 
 
 	<div class="control-group <?php echo iif( form_error('email') , 'error'); ?>">
-		<label class="control-label" for="email"><?php echo lang('bf_email'); ?></label>
+		<label class="control-label required" for="email"><?php echo lang('bf_email'); ?></label>
 		<div class="controls">
 			<input class="span6" type="text" name="email" id="email"  value="<?php echo set_value('email'); ?>"  placeholder="email" />
 		</div>
@@ -47,7 +47,7 @@
 	<?php if ( $this->settings_lib->item('auth.login_type') !== 'email' OR $this->settings_lib->item('auth.use_usernames') == 1): ?>
 
 	<div class="control-group <?php echo iif( form_error('username') , 'error'); ?>">
-		<label class="control-label" for="username"><?php echo lang('bf_username'); ?></label>
+		<label class="control-label required" for="username"><?php echo lang('bf_username'); ?></label>
 		<div class="controls">
 			<input class="span6" type="text" name="username" id="username" value="<?php echo set_value('username') ?>" placeholder="username" />
 		</div>
@@ -57,7 +57,7 @@
 	<br/>
 
 		<div class="control-group <?php echo iif( form_error('password') , 'error'); ?>">
-			<label class="control-label" for="password"><?php echo lang('bf_password'); ?></label>
+			<label class="control-label required" for="password"><?php echo lang('bf_password'); ?></label>
 			<div class="controls">
 				<input class="span6" type="password" name="password" id="password" value="" placeholder="password" />
 				<p class="help-block"><?php echo lang('us_password_mins'); ?></p>
@@ -65,14 +65,14 @@
 		</div>
 
 		<div class="control-group <?php echo iif( form_error('pass_confirm') , 'error'); ?>">
-			<label class="control-label" for="pass_confirm"><?php echo lang('bf_password_confirm'); ?></label>
+			<label class="control-label required" for="pass_confirm"><?php echo lang('bf_password_confirm'); ?></label>
 			<div class="controls">
 				<input class="span6" type="password" name="pass_confirm" id="pass_confirm" value="" placeholder="<?php echo lang('bf_password_confirm'); ?>" />
 			</div>
 		</div>
 
 		<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
-			<label class="control-label" for="language"><?php echo lang('bf_language') ?></label>
+			<label class="control-label required" for="language"><?php echo lang('bf_language') ?></label>
 			<div class="controls">
 				<select name="language" id="language" class="chzn-select">
 				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
@@ -89,7 +89,7 @@
 		</div>
 
 		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
-			<label class="control-label" for="timezones"><?php echo lang('bf_timezone') ?></label>
+			<label class="control-label required" for="timezones"><?php echo lang('bf_timezone') ?></label>
 			<div class="controls">
 				<?php echo timezone_menu(set_value('timezones')); ?>
 				<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
