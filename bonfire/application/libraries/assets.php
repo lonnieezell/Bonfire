@@ -671,12 +671,13 @@ class Assets
 	 * @access public
 	 * @static
 	 *
-	 * @param mixed $new_js Either a string or an array containing the names of files to link to.
-	 * @param bool  $list   If TRUE, will echo out a list of scriptnames, enclosed in quotes and comma separated. Convenient for using with third-party js loaders.
+	 * @param mixed $new_js  Either a string or an array containing the names of files to link to.
+	 * @param bool  $list    If TRUE, will echo out a list of scriptnames, enclosed in quotes and comma separated. Convenient for using with third-party js loaders.
+	 * @param bool  $add_ext Automatically add the .js extension when adding files
 	 *
 	 * @return string
 	 */
-	public static function external_js($new_js=null, $list=FALSE)
+	public static function external_js($new_js=null, $list=FALSE, $add_ext=TRUE)
 	{
 		$return = '';
 		$scripts = array();
@@ -725,7 +726,7 @@ class Assets
 
 			foreach ($scripts as $script)
 			{
-				if (substr($script, -3) != '.js')
+				if (TRUE === $add_ext && substr($script, -3) != '.js')
 				{
 					$script .= '.js';
 				}
