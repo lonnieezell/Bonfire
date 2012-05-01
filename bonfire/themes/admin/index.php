@@ -1,11 +1,10 @@
 <?php
-		Assets::add_js(array(
-																							Template::theme_url('js/bootstrap.min.js'),
-																							Template::theme_url('js/jwerty.js')
-																						),
-																	'external',
-																	true
-																);
+	Assets::add_js( array(
+		                 Template::theme_url('js/bootstrap.min.js'),
+		                 Template::theme_url('js/jwerty.js')) ,
+		                 'external',
+		                 true
+		                 );
 ?>
 <?php echo theme_view('partials/_header'); ?>
 
