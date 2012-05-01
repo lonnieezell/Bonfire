@@ -325,9 +325,50 @@ class MY_Form_validation extends CI_Form_validation
 		$type = explode('|', $types);
 		$filetype = pathinfo($str['name'],PATHINFO_EXTENSION);
 
-		return (in_array($filetype, $type)) ? TRUE : FALSE;
+		if (!in_array($filetype, $type))
+		{
+			$this->CI->form_validation->set_message('allowed_types', '%s must contain one of the allowed selections.');
+			return FALSE;
+		}
+
+		return TRUE;
 
 	}//end allowed_types()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Checks that the entered string is one of the values entered as the second parameter.
+	 * Please seperate the allowed file types with a comma.
+	 *
+	 * @access public
+	 *
+	 * @param string $str      String field name to validate
+	 * @param string $options String allowed values
+	 *
+	 * @return bool If files are in the allowed type array then TRUE else FALSE
+	 */
+	public function one_of($str, $options = NULL)
+	{
+		if (!$options)
+		{
+			log_message('debug', 'form_validation method one_of was called without any possible values.');
+			return FALSE;
+		}
+
+		log_message('debug', 'form_validation one_of options:'.$options);
+
+		$possible_values = explode(',', $options);
+
+		if (!in_array($str, $possible_values))
+		{
+			$this->CI->form_validation->set_message('one_of', '%s must contain one of the available selections.');
+			return FALSE;
+		}
+
+		return TRUE;
+
+	}//end one_of()
 
 	//--------------------------------------------------------------------
 
@@ -366,7 +407,7 @@ class MY_Form_validation extends CI_Form_validation
  * Check if the form has an error
  *
  * @access public
- * 
+ *
  * @param string $field Name of the field
  *
  * @return bool

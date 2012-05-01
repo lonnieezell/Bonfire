@@ -2,7 +2,7 @@
 	<h3><?php echo $toolbar_title ?></h3>
 
 <?php if (isset($backups) && is_array($backups) && count($backups) > 0) : ?>
-	<?php echo form_open(SITE_AREA .'/developer/database/delete', array('style' => 'padding: 0')); ?>
+	<?php echo form_open($this->uri->uri_string(), array('style' => 'padding: 0')); ?>
 		<table class="table table-striped">
 			<thead>
 				<tr>
@@ -17,7 +17,7 @@
 				<tr>
 					<td colspan="3">
 						<?php echo lang('db_delete_note'); ?>
-						<button type="submit" name="submit" class="btn btn-danger"><?php echo lang('bf_action_delete'); ?></button>
+						<button type="submit" name="submit" class="btn btn-danger" onclick="return confirm('<?php echo lang('db_backup_delete_confirm'); ?>')"><?php echo lang('bf_action_delete'); ?></button>
 					</td>
 				</tr>
 			</tfoot>

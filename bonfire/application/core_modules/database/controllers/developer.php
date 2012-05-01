@@ -156,6 +156,32 @@ class Developer extends Admin_Controller
 	 */
 	public function backups()
 	{
+		// Make sure we have something to delete
+		if (isset($_POST['checked']) && is_array($_POST['checked']) && count($_POST['checked']) > 0)
+		{
+			// Delete the files.
+			$count = count($_POST['checked']);
+
+			$this->load->helper('file');
+
+			foreach ($_POST['checked'] as $file)
+			{
+				// Make sure the file is closed
+				$fh = fopen($this->backup_folder . $file, 'w') or die("can't open file");
+				fclose($fh);
+
+				// Actually delete it.
+				unlink($this->backup_folder . $file);
+			}
+
+			// Tell them it was good.
+			Template::set_message($count . ' backup files were deleted.', 'success');
+		}
+		else if ($this->input->post() && !isset($_POST['checked']))
+		{
+			Template::set_message(lang('db_backup_delete_none'), 'error');
+		}
+
 		// Get a list of existing backup files
 		$this->load->helper('file');
 		Template::set('backups', get_dir_file_info($this->backup_folder));
@@ -189,38 +215,57 @@ class Developer extends Admin_Controller
 		}
 		else if (isset($_POST['submit']))
 		{
-			// Do the backup.
-			$this->load->dbutil();
+			$this->load->library('form_validation');
 
-			$add_drop = ($_POST['drop_tables'] == 'Yes') ? TRUE : FALSE;
-			$add_insert = ($_POST['add_inserts'] == 'Yes') ? TRUE : FALSE;
-			$filename = $this->backup_folder . $_POST['file_name'] . '.' . $_POST['file_type'];
+			$yes_no = lang('bf_no').','.lang('bf_yes');
 
-			$prefs = array(
-							'tables' 		=> $_POST['tables'],
-							'format'		=> $_POST['file_type'],
-							'filename'		=> $filename,
-							'add_drop'		=> $add_drop,
-							'add_insert'	=> $add_insert
-						);
-			$backup =& $this->dbutil->backup($prefs);
+			$this->form_validation->set_rules('file_name', 'lang:db_filename', 'required|trim|max_length[220]|xss_clean');
+			$this->form_validation->set_rules('drop_tables', 'lang:db_drop_tables', 'required|trim|one_of['.$yes_no.']|xss_clean');
+			$this->form_validation->set_rules('add_inserts', 'lang:db_add_inserts', 'required|trim|one_of['.$yes_no.']|xss_clean');
+			$this->form_validation->set_rules('file_type', 'lang:db_compress_type', 'required|trim|one_of[txt,'.lang('db_gzip').','.lang('db_zip').']|xss_clean');
+			$this->form_validation->set_rules('tables', 'lang:db_tables', 'required|is_array|xss_clean');
 
-			$this->load->helper('file');
-			write_file($filename, $backup);
-
-			if (file_exists($filename))
+			if ($this->form_validation->run() !== FALSE)
 			{
-				Template::set_message('Backup file successfully saved. It can be found at <a href="/'. $filename .'">'. $filename .'</a>.', 'success');
+				// Do the backup.
+				$this->load->dbutil();
+
+				$add_drop = ($_POST['drop_tables'] == 'Yes') ? TRUE : FALSE;
+				$add_insert = ($_POST['add_inserts'] == 'Yes') ? TRUE : FALSE;
+				$filename = $this->backup_folder . $_POST['file_name'] . '.' . $_POST['file_type'];
+
+				$prefs = array(
+								'tables' 		=> $_POST['tables'],
+								'format'		=> $_POST['file_type'],
+								'filename'		=> $filename,
+								'add_drop'		=> $add_drop,
+								'add_insert'	=> $add_insert
+							);
+				$backup =& $this->dbutil->backup($prefs);
+
+				$this->load->helper('file');
+				write_file($filename, $backup);
+
+				if (file_exists($filename))
+				{
+					Template::set_message('Backup file successfully saved. It can be found at <a href="/'. $filename .'">'. $filename .'</a>.', 'success');
+				}
+				else
+				{
+					Template::set_message('There was a problem saving the backup file.', 'error');
+				}
+
+				redirect(SITE_AREA .'/developer/database');
 			}
 			else
 			{
+				Template::set('tables', $this->input->post('tables'));
 				Template::set_message('There was a problem saving the backup file.', 'error');
 			}
+		}//end if
 
-			redirect(SITE_AREA .'/developer/database');
-		}
-
-		return FALSE;
+		Template::set('toolbar_title', 'Create New Backup');
+		Template::render();
 
 	}//end backup()
 
@@ -331,6 +376,7 @@ class Developer extends Admin_Controller
 	 * Deletes a database table.
 	 *
 	 * @access public
+	 * @todo   Remove this now as it is all done in the "backups" method?
 	 *
 	 * @return void
 	 */
@@ -402,6 +448,11 @@ class Developer extends Admin_Controller
 
 			Template::set_message(($count - $failed) .' of '. $count .' tables were successfully repaired.', $quality);
 			redirect(SITE_AREA .'/developer/database');
+		}
+		else
+		{
+			Template::set_message(lang('db_repair_none'), 'error');
+			redirect(SITE_AREA .'/developer/database');
 		}//end if
 
 		return;
@@ -457,7 +508,7 @@ class Developer extends Admin_Controller
 			Template::set_view('developer/drop');
 			return TRUE;
 		}
-		else if (is_array($_POST['tables']))
+		else if (isset($_POST['tables']) && is_array($_POST['tables']))
 		{
 			// Actually delete the files....
 			$this->load->dbforge();
@@ -469,6 +520,11 @@ class Developer extends Admin_Controller
 
 			$grammar = count($_POST['tables'] == 1) ? ' table' : ' tables';
 			Template::set_message(count($_POST['tables']) .$grammar.' successfully dropped.', 'success');
+			redirect(SITE_AREA .'/developer/database');
+		}
+		else
+		{
+			Template::set_message(lang('db_drop_none'), 'error');
 			redirect(SITE_AREA .'/developer/database');
 		}
 
