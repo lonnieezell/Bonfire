@@ -13,8 +13,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">
-	<link rel="dns-prefetch" href="//ajax.googleapis.com">
+	<meta charset="utf-8">	
 	<title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo $this->settings_lib->item('site.title') ?></title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
