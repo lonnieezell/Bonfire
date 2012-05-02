@@ -442,6 +442,9 @@ class Users extends Front_Controller
 
 				if ($user_id = $this->user_model->insert($data))
 				{
+					// now add the meta is there is meta data
+					$this->user_model->save_meta_for($user_id, $meta_data);
+
 					$this->load->model('activities/Activity_model', 'activity_model');
 
 					$this->activity_model->log_activity($user_id, lang('us_log_register') , 'users');
