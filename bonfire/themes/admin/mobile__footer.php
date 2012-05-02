@@ -7,7 +7,8 @@
 
 				<div class="column size1of2 last-column">
 					<p>{elapsed_time} seconds. {memory_usage}<br/>
-					Built with <a href="http://cibonfire.com" target="_blank">Bonfire</a></p>
+					Built with <a href="http://cibonfire.com" target="_blank"><i class="icon-fire" style="color:red;">&nbsp;</i>&nbsp;Bonfire</a>
+					</p>
 				</div>
 			</div>
 		</div>
