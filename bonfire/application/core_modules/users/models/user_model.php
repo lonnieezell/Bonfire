@@ -1,31 +1,17 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Bonfire
- *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
- *
- * @package   Bonfire
- * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
- * @link      http://cibonfire.com
- * @since     Version 1.0
- * @filesource
- */
-
-// ------------------------------------------------------------------------
-
-/**
  * User Model
  *
  * The central way to access and perform CRUD on users.
  *
  * @package    Bonfire
  * @subpackage Modules_Users
- * @category   Controllers
+ * @category   Models
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- *
+ * @copyright  Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license    http://guides.cibonfire.com/license.html
+ * @link       http://cibonfire.com
+ * @since      Version 1.0
  */
 class User_model extends BF_Model
 {
@@ -543,41 +529,45 @@ class User_model extends BF_Model
 		
 		$this->table	= 'user_meta';
 		$this->key		= 'meta_id';
-		
+
 		foreach ($data as $key => $value)
-		{ 
-			$this->db->where('user_id', $user_id);
-			$this->db->where('meta_key', $key);
-			$query = $this->db->get('user_meta');
-				
-			$obj = array(
-				'user_id'		=> $user_id,
-				'meta_key'		=> $key,
-				'meta_value'	=> $value
-			);
-			
-			if ($query->num_rows() == 0)
-			{ 
-				// Insert
-				$this->db->insert('user_meta', $obj);
-			}
-			// Update
-			else if ($query->num_rows() > 0)
+		{
+			if (!empty($value))
 			{
-				$row = $query->row();
-				$meta_id = $row->meta_id;
-				
 				$this->db->where('user_id', $user_id);
 				$this->db->where('meta_key', $key);
-				$this->db->set('meta_value', $value);
-				$this->db->update('user_meta', $obj);
+				$query = $this->db->get('user_meta');
+
+				$obj = array(
+					'user_id'		=> $user_id,
+					'meta_key'		=> $key,
+					'meta_value'	=> $value
+				);
+
+				if ($query->num_rows() == 0)
+				{
+					// Insert
+					$this->db->insert('user_meta', $obj);
+				}
+				// Update
+				else if ($query->num_rows() > 0)
+				{
+					$row = $query->row();
+					$meta_id = $row->meta_id;
+
+					$this->db->where('user_id', $user_id);
+					$this->db->where('meta_key', $key);
+					$this->db->set('meta_value', $value);
+					$this->db->update('user_meta', $obj);
+				}
 			}
-		}//end foreach
-		
+
+		}
+
+
 		// Reset our table info
 		$this->table	= 'users';
 		$this->key		= 'id';
-
 	}//end save_meta_for()
 	
 	//--------------------------------------------------------------------

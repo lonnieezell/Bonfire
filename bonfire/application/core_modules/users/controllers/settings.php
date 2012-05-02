@@ -1,30 +1,17 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Bonfire
- *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
- *
- * @package   Bonfire
- * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
- * @link      http://cibonfire.com
- * @since     Version 1.0
- * @filesource
- */
-
-// ------------------------------------------------------------------------
-
-/**
  * Users Controller
  *
- * Manages the user functionality on the frontend profile pages.
+ * Manages the user functionality on the admin pages.
  *
  * @package    Bonfire
  * @subpackage Modules_Users
  * @category   Controllers
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ * @copyright  Copyright (c) 2011 - 2012, Bonfire Dev Team 
+ * @license    http://guides.cibonfire.com/license.html
+ * @link       http://cibonfire.com
+ * @since      Version 1.0
  *
  */
 class Settings extends Admin_Controller
@@ -195,17 +182,32 @@ class Settings extends Admin_Controller
 		$this->load->helper('address');
 		$this->load->helper('date');
 
+
+		$this->load->config('user_meta');
+		$meta_fields = config_item('user_meta_fields');
+		Template::set('meta_fields', $meta_fields);
+
 		if ($this->input->post('submit'))
 		{
 			if ($id = $this->save_user())
 			{
+
+				$meta_data = array();
+				foreach ($meta_fields as $field)
+				{
+					$meta_data[$field['name']] = $this->input->post($field['name']);
+				}
+
+				// now add the meta is there is meta data
+				$this->user_model->save_meta_for($id, $meta_data);
+				
 				$this->load->model('activities/Activity_model', 'activity_model');
 
 				$user = $this->user_model->find($id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
 
-				Template::set_message('User successfully created.', 'success');
+				Template::set_message(lang('us_user_created_success'), 'success');
 				Template::redirect(SITE_AREA .'/settings/users');
 			}
 		}
@@ -232,11 +234,6 @@ class Settings extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Users.Manage');
 
-		$this->load->config('address');
-		$this->load->helper('address');
-		$this->load->helper('form');
-		$this->load->helper('date');
-
 		$user_id = $this->uri->segment(5);
 		if (empty($user_id))
 		{
@@ -244,17 +241,32 @@ class Settings extends Admin_Controller
 			redirect(SITE_AREA .'/settings/users');
 		}
 
+		$this->load->config('address');
+		$this->load->helper('address');
+		$this->load->helper('form');
+		$this->load->helper('date');
+
 		if ($this->input->post('submit'))
 		{
 			if ($this->save_user('update', $user_id))
 			{
+
+				$meta_data = array();
+				foreach ($meta_fields as $field)
+				{
+					$meta_data[$field['name']] = $this->input->post($field['name']);
+				}
+
+				// now add the meta is there is meta data
+				$this->user_model->save_meta_for($user_id, $meta_data);
+
 				$this->load->model('activities/Activity_model', 'activity_model');
 
 				$user = $this->user_model->find($user_id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
 
-				Template::set_message('User successfully updated.', 'success');
+				Template::set_message(lang('us_user_update_success'), 'success');
 			}
 		}
 
@@ -439,11 +451,11 @@ class Settings extends Admin_Controller
 
 		if ($this->user_model->update($id, array('users.deleted'=>0)))
 		{
-			Template::set_message('User successfully restored.', 'success');
+			Template::set_message(lang('us_user_restored_success'), 'success');
 		}
 		else
 		{
-			Template::set_message('Unable to restore user: '. $this->user_model->error, 'error');
+			Template::set_message(lang('us_user_restored_error'). $this->user_model->error, 'error');			
 		}
 
 		Template::redirect(SITE_AREA .'/settings/users');
@@ -549,7 +561,16 @@ class Settings extends Admin_Controller
 		$this->form_validation->set_rules('timezones', lang('bf_timezone'), 'required|trim|strip_tags|max_length[4]|xss_clean');
 		$this->form_validation->set_rules('role_id', lang('us_role'), 'required|trim|strip_tags|max_length[2]|is_numeric|xss_clean');
 
-		if ($this->form_validation->run() === FALSE)
+		$meta_data = array();
+
+		foreach ($meta_fields as $field)
+		{
+			$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
+
+			$meta_data[$field['name']] = $this->input->post($field['name']);
+		}
+
+		if ($this->form_validation->run($this) === FALSE)
 		{
 			return FALSE;
 		}
@@ -562,12 +583,35 @@ class Settings extends Admin_Controller
 			'timezone'	=> $this->input->post('timezones'),
 		);
 
-		if ($this->input->post('password'))	$data['password'] = $this->input->post('password');
-		if ($this->input->post('pass_confirm'))	$data['pass_confirm'] = $this->input->post('pass_confirm');
-		if ($this->input->post('role_id')) $data['role_id'] = $this->input->post('role_id');
-		if ($this->input->post('restore')) $data['deleted'] = 0;
-		if ($this->input->post('unban')) $data['banned'] = 0;
-		if ($this->input->post('display_name')) $data['display_name'] = $this->input->post('display_name');
+		if ($this->input->post('password'))	
+		{
+			$data['password'] = $this->input->post('password');
+		}
+			
+		if ($this->input->post('pass_confirm'))	
+		{
+			$data['pass_confirm'] = $this->input->post('pass_confirm');
+		}
+			
+		if ($this->input->post('role_id')) 
+		{
+			$data['role_id'] = $this->input->post('role_id');
+		}
+
+		if ($this->input->post('restore')) 
+		{
+			$data['deleted'] = 0;
+		}
+
+		if ($this->input->post('unban'))
+		{
+			$data['banned'] = 0;
+		}
+		 
+		if ($this->input->post('display_name'))
+		{
+			$data['display_name'] = $this->input->post('display_name');
+		} 
 
 		if ($type == 'insert')
 		{

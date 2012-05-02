@@ -1,21 +1,5 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Bonfire
- *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
- *
- * @package   Bonfire
- * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
- * @link      http://cibonfire.com
- * @since     Version 1.0
- * @filesource
- */
-
-// ------------------------------------------------------------------------
-
-/**
  * Users Controller
  *
  * Provides front-end functions for users, like login and logout.
@@ -24,7 +8,9 @@
  * @subpackage Modules_Users
  * @category   Controllers
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
  *
  */
 class Users extends Front_Controller
@@ -159,7 +145,7 @@ class Users extends Front_Controller
 
 				if ($this->form_validation->run() === FALSE)
 				{
-					Template::set_message('Cannot find that email in our records.', 'error');
+					Template::set_message(lang('us_invalid_email'), 'error');
 				}
 				else
 				{
@@ -186,17 +172,17 @@ class Users extends Front_Controller
 
 						$data = array(
 									'to'	=> $_POST['email'],
-									'subject'	=> 'Your Temporary Password',
+									'subject'	=> lang('us_reset_password_email_subject'),
 									'message'	=> $this->load->view('_emails/forgot_password', array('link' => $pass_link), TRUE)
 							 );
 
 						if ($this->emailer->send($data))
 						{
-							Template::set_message('Please check your email for instructions to reset your password.', 'success');
+							Template::set_message(lang('us_reset_pass_message'), 'success');
 						}
 						else
 						{
-							Template::set_message('Unable to send an email: '. $this->emailer->errors, 'error');
+							Template::set_message(lang('us_reset_pass_error'). $this->emailer->errors, 'error');
 						}
 					}//end if
 				}//end if
@@ -234,19 +220,37 @@ class Users extends Front_Controller
 
 		$this->load->helper('date');
 
+		$this->load->config('address');
+		$this->load->helper('address');
+
+		$this->load->config('user_meta');
+		$meta_fields = config_item('user_meta_fields');
+
+		Template::set('meta_fields', $meta_fields);
+
 		if ($this->input->post('submit'))
 		{
 
 			$user_id = $this->current_user->id;
 			if ($this->save_user($user_id))
 			{
+
+				$meta_data = array();
+				foreach ($meta_fields as $field)
+				{
+					$meta_data[$field['name']] = $this->input->post($field['name']);
+				}
+
+				// now add the meta is there is meta data
+				$this->user_model->save_meta_for($user_id, $meta_data);
+
 				$this->load->model('activities/Activity_model', 'activity_model');
 
 				$user = $this->user_model->find($user_id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit_profile') .': '.$log_name, 'users');
 
-				Template::set_message('Profile successfully updated.', 'success');
+				Template::set_message(lang('us_profile_updated_success'), 'success');
 
 				// redirect to make sure any language changes are picked up
 				Template::redirect('/users/profile');
@@ -254,16 +258,10 @@ class Users extends Front_Controller
 			}
 			else
 			{
-				Template::set_message('There was a problem updating your profile', 'error');
+				Template::set_message(lang('us_profile_updated_error'), 'error');
 			}//end if
 		}//end if
 
-	/*
-		@TODO : I do not think these are being used anymore so they are a waste of memory.
-
-		$this->load->config('address');
-		$this->load->helper('address');
-	*/
 		// get the current user information
 		$user = $this->user_model->find_user_and_meta ( $this->current_user->id );
 
@@ -300,8 +298,8 @@ class Users extends Front_Controller
 			// If there is no code, then it's not a valid request.
 			if (empty($code) || empty($email))
 			{
-				Template::set_message('That did not appear to be a valid password reset request.', 'attention');
-				redirect('/login');
+				Template::set_message(lang('us_reset_invalid_email'), 'error');
+				Template::redirect('/login');
 			}
 
 			// Handle the form
@@ -323,12 +321,13 @@ class Users extends Front_Controller
 						$this->load->model('activities/Activity_model', 'activity_model');
 
 						$this->activity_model->log_activity($this->input->post('user_id'), lang('us_log_reset') , 'users');
-						Template::set_message('Please login using your new password.', 'success');
-						redirect('/login');
+						Template::set_message(lang('us_reset_password_success'), 'success');
+						Template::redirect('/login');
 					}
 					else
 					{
-						Template::set_message('There was an error resetting your password: '. $this->user_model->error, 'error');
+						Template::set_message(lang('us_reset_password_error'). $this->user_model->error, 'error');
+							
 					}
 				}
 			}//end if
@@ -344,8 +343,8 @@ class Users extends Front_Controller
 			// It will be an Object if a single result was returned.
 			if (!is_object($user))
 			{
-				Template::set_message('That did not appear to be a valid password reset request.', 'attention');
-				redirect('/login');
+				Template::set_message( lang('us_reset_invalid_email'), 'error');
+				Template::redirect('/login');
 			}
 
 			// If we're here, then it is a valid request....
@@ -376,12 +375,19 @@ class Users extends Front_Controller
 		// Are users even allowed to register?
 		if (!$this->settings_lib->item('auth.allow_register'))
 		{
-			Template::set_message('New account registrations are not allowed.', 'attention');
-			redirect('/');
+			Template::set_message(lang('us_register_disabled'), 'error');
+			Template::redirect('/');
 		}
 
 		$this->load->model('roles/role_model');
 		$this->load->helper('date');
+
+		$this->load->config('address');
+		$this->load->helper('address');
+
+		$this->load->config('user_meta');
+		$meta_fields = config_item('user_meta_fields');
+		Template::set('meta_fields', $meta_fields);
 
 		if ($this->input->post('submit'))
 		{
@@ -400,7 +406,16 @@ class Users extends Front_Controller
 			$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|strip_tags|max_length[4]|xss_clean');
 			$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|strip_tags|max_length[255]|xss_clean');
 
-			if ($this->form_validation->run() !== FALSE)
+
+			$meta_data = array();
+			foreach ($meta_fields as $field)
+			{
+				$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
+
+				$meta_data[$field['name']] = $this->input->post($field['name']);
+			}
+
+			if ($this->form_validation->run($this) !== FALSE)
 			{
 				// Time to save the user...
 				$data = array(
@@ -416,8 +431,8 @@ class Users extends Front_Controller
 					$this->load->model('activities/Activity_model', 'activity_model');
 
 					$this->activity_model->log_activity($user_id, lang('us_log_register') , 'users');
-					Template::set_message('Your account has been created. Please log in.', 'success');
-					redirect('login');
+					Template::set_message(lang('us_account_created_success'), 'success');
+					Template::redirect('login');
 				}
 			}
 		}//end if
@@ -452,7 +467,7 @@ class Users extends Front_Controller
 		}
 		else
 		{
-			$this->form_validation->set_message('unique_email', 'That email address is already in use.');
+			$this->form_validation->set_message('unique_email', 'lang:us_email_already_used');
 			return FALSE;
 		}
 		
@@ -478,7 +493,7 @@ class Users extends Front_Controller
 		}
 		else
 		{
-			$this->form_validation->set_message('unique_username', 'That username is already in use.');
+			$this->form_validation->set_message('unique_username', 'lang:us_username_already_used');
 			return FALSE;
 		}
 
@@ -508,7 +523,7 @@ class Users extends Front_Controller
 		// Simple check to make the posted id is equal to the current user's id, minor security check
 		if ( $_POST['id'] != $this->current_user->id )
 		{
-			$this->form_validation->set_message('email', 'Invalid user id.');
+			$this->form_validation->set_message('email', 'lang:us_invalid_userid');
 			return FALSE;
 		}
 
@@ -536,7 +551,17 @@ class Users extends Front_Controller
 		// Added Event "before_user_validation" to run before the form validation
 		Events::trigger('before_user_validation', $payload );
 
-		if ($this->form_validation->run() === FALSE)
+
+		$meta_data = array();
+		foreach ($meta_fields as $field)
+		{
+			$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
+
+			$meta_data[$field['name']] = $this->input->post($field['name']);
+		}
+
+
+		if ($this->form_validation->run($this) === FALSE)
 		{
 			return FALSE;
 		}

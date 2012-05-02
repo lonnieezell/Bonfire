@@ -115,3 +115,41 @@ $lang['us_no_password']             = 'No Password present.';
 $lang['us_no_email']                = 'No Email given.';
 $lang['us_email_taken']             = 'Email already exists.';
 $lang['us_invalid_user_id']         = 'Invalid User ID';
+
+$lang['us_no_password']             = 'No Password present.';
+
+$lang['us_no_email']                = 'No Email given.';
+
+$lang['us_email_taken']             = 'Email already exists.';
+$lang['us_invalid_user_id']         = 'Invalid User ID';
+
+
+
+$lang['us_account_created_success'] = 'Your account has been created. Please log in.';
+
+$lang['us_email_already_used']      = 'That email address is already in use.';
+$lang['us_username_already_used']   = 'That username is already in use.';
+$lang['us_invalid_user_id']         = 'Invalid user id.';
+$lang['us_invalid_email']           = 'Cannot find that email in our records.';
+
+$lang['us_reset_invalid_email']     = 'That did not appear to be a valid password reset request.';
+$lang['us_reset_pass_subject']      = 'Your Temporary Password';
+$lang['us_reset_pass_message']      = 'Please check your email for instructions to reset your password.';
+$lang['us_reset_pass_error']        = 'Unable to send an email: ';
+$lang['us_reset_password_success']  = 'Please login using your new password.';
+$lang['us_reset_password_error']    = 'There was an error resetting your password: ';
+
+
+$lang['us_profile_updated_success'] = 'Profile successfully updated.';
+$lang['us_profile_updated_error']   = 'There was a problem updating your profile ';
+
+$lang['us_register_disabled']       = 'New account registrations are not allowed.';
+
+
+$lang['us_user_created_success']    = 'User successfully created.';
+$lang['us_user_update_success']     = 'User successfully updated.';
+
+$lang['us_user_restored_success']   = 'User successfully restored.';
+$lang['us_user_restored_error']     = 'Unable to restore user: ';
+
+
