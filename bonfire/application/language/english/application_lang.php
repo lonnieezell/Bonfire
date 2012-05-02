@@ -204,5 +204,9 @@ $lang['bf_password_number_required_help']  = 'Password must contain at least 1 p
 $lang['bf_password_caps_required_help']    = 'Password must contain at least 1 capital letter.';
 $lang['bf_password_symbols_required_help'] = 'Password must contain at least 1 symbol.';
 
-$lang['bf_password_min_length_help']       = 'Password must be at least %s characters long.';         
+$lang['bf_password_min_length_help']       = 'Password must be at least %s characters long.';
 
+$lang['user_meta_street_name']	= 'Street Name';
+$lang['user_meta_type']			= 'Type';
+$lang['user_meta_country']		= 'Country';
+$lang['user_meta_state']		= 'State';

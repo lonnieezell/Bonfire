@@ -1,5 +1,21 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
+
+// ------------------------------------------------------------------------
+
+/**
  * User Model
  *
  * The central way to access and perform CRUD on users.
@@ -8,10 +24,7 @@
  * @subpackage Modules_Users
  * @category   Models
  * @author     Bonfire Dev Team
- * @copyright  Copyright (c) 2011 - 2012, Bonfire Dev Team
- * @license    http://guides.cibonfire.com/license.html
  * @link       http://cibonfire.com
- * @since      Version 1.0
  */
 class User_model extends BF_Model
 {
@@ -105,7 +118,7 @@ class User_model extends BF_Model
 	}//end password_hints()
 
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Creates a new user in the database.
 	 *
@@ -121,37 +134,37 @@ class User_model extends BF_Model
 	 *
 	 * @return bool|int The ID of the new user.
 	 */
-	public function insert($data=array()) 
+	public function insert($data=array())
 	{
 		if (!$this->_function_check(FALSE, $data))
 		{
 			return FALSE;
 		}
-		
+
 		if (!isset($data['password']) || empty($data['password']))
 		{
 			$this->error = lang('us_no_password');
 			return FALSE;
 		}
-		
+
 		if (!isset($data['email']) || empty($data['email']))
 		{
 			$this->error = lang('us_no_email');
 			return FALSE;
 		}
-		
+
 		// Is this a unique email?
 		if ($this->is_unique('email', $data['email']) == FALSE)
 		{
 			$this->error = lang('us_email_taken');
 			return FALSE;
 		}
-	
-		if (empty($data['username'])) 
+
+		if (empty($data['username']))
 		{
 		  unset($data['username']);
 		}
-		
+
 		// Display Name
 		if (!isset($data['display_name']) || (isset($data['display_name']) && empty($data['display_name'])))
 		{
@@ -166,12 +179,12 @@ class User_model extends BF_Model
 		}
 
 		list($password, $salt) = $this->hash_password($data['password']);
-		
+
 		unset($data['password'], $data['pass_confirm'], $data['submit']);
-		
+
 		$data['password_hash'] = $password;
 		$data['salt'] = $salt;
-		
+
 		// What's the default role?
 		if (!isset($data['role_id']))
 		{
@@ -183,17 +196,17 @@ class User_model extends BF_Model
 
 			$data['role_id'] = $this->role_model->default_role_id();
 		}
-		
+
 		$id = parent::insert($data);
-		
+
 		Events::trigger('after_create_user', $id);
-		
+
 		return $id;
 
 	}//end insert()
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Updates an existing user. Before saving, it will:
 	 * * generate a new password/salt combo if both password and pass_confirm are passed in.
@@ -206,22 +219,22 @@ class User_model extends BF_Model
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function update($id=null, $data=array()) 
-	{	
+	public function update($id=null, $data=array())
+	{
 		if ($id)
 		{
 			$trigger_data = array('user_id'=>$id, 'data'=>$data);
 			Events::trigger('before_user_update', $trigger_data);
 		}
-		
-		if (empty($data['pass_confirm']) && isset($data['password'])) 
+
+		if (empty($data['pass_confirm']) && isset($data['password']))
 		{
 			unset($data['pass_confirm'], $data['password']);
-		} 
+		}
 		else if (!empty($data['password']) && !empty($data['pass_confirm']) && $data['password'] == $data['pass_confirm'])
 		{
 			list($password, $salt) = $this->hash_password($data['password']);
-		
+
 			unset($data['password'], $data['pass_confirm']);
 
 			$data['password_hash'] = $password;
@@ -236,19 +249,19 @@ class User_model extends BF_Model
 		}
 
 		$return = parent::update($id, $data);
-		
+
 		if ($return)
 		{
 			$trigger_data = array('user_id'=>$id, 'data'=>$data);
 			Events::trigger('after_user_update', $trigger_data);
 		}
-		
+
 		return $return;
 
 	}//end update()
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Finds an individual user record. Also returns role information for the user.
 	 *
@@ -258,21 +271,21 @@ class User_model extends BF_Model
 	 *
 	 * @return bool|object An object with the user's information.
 	 */
-	public function find($id=null) 
+	public function find($id=null)
 	{
 		if (empty($this->selects))
 		{
 			$this->select($this->table .'.*, role_name');
 		}
-	
+
 		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
-	
+
 		return parent::find($id);
 
 	}//end find()
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Returns all user records, and their associated role information.
 	 *
@@ -282,26 +295,26 @@ class User_model extends BF_Model
 	 *
 	 * @return bool An array of objects with each user's information.
 	 */
-	public function find_all($show_deleted=FALSE) 
+	public function find_all($show_deleted=FALSE)
 	{
 		if (empty($this->selects))
 		{
 			$this->select($this->table .'.*, role_name');
 		}
-	
+
 		if ($show_deleted === FALSE)
 		{
 			$this->db->where('users.deleted', 0);
 		}
-		
+
 		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
-		
+
 		return parent::find_all();
 
 	}//end find_all()
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Locates a single user based on a field/value match, with their role information.
 	 * If the $field string is 'both', then it will attempt to find the user
@@ -314,31 +327,31 @@ class User_model extends BF_Model
 	 *
 	 * @return bool|object An object with the user's info, or FALSE on failure.
 	 */
-	public function find_by($field=null, $value=null) 
+	public function find_by($field=null, $value=null)
 	{
 		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
-		
+
 		if (empty($this->selects))
 		{
 			$this->select($this->table .'.*, role_name');
 		}
-		
+
 		if ($field == 'both')
 		{
 			$field = array(
 				'username'	=> $value,
 				'email'		=> $value
 			);
-			
+
 			return parent::find_by($field, null, 'or');
 		}
-		
+
 		return parent::find_by($field, $value);
 
 	}//end find_by()
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the number of users that belong to each role.
 	 *
@@ -346,17 +359,17 @@ class User_model extends BF_Model
 	 *
 	 * @return bool|array An array of objects representing the number in each role.
 	 */
-	public function count_by_roles() 
+	public function count_by_roles()
 	{
 		$prefix = $this->db->dbprefix;
-	
+
 		$sql = "SELECT role_name, COUNT(1) as count
 				FROM {$prefix}users, {$prefix}roles
 				WHERE {$prefix}users.role_id = {$prefix}roles.role_id
 				GROUP BY {$prefix}users.role_id";
-		
+
 		$query = $this->db->query($sql);
-		
+
 		if ($query->num_rows())
 		{
 			return $query->result();
@@ -365,9 +378,9 @@ class User_model extends BF_Model
 		return FALSE;
 
 	}//end count_by_roles()
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Counts all users in the system.
 	 *
@@ -377,24 +390,24 @@ class User_model extends BF_Model
 	 *
 	 * @return int An INT with the number of users found.
 	 */
-	public function count_all($get_deleted = FALSE) 
-	{	
+	public function count_all($get_deleted = FALSE)
+	{
 		if ($get_deleted)
 		{
 			// Get only the deleted users
 			$this->db->where('users.deleted !=', 0);
 		}
-		else 
+		else
 		{
 			$this->db->where('users.deleted', 0);
 		}
-		
+
 		return $this->db->count_all_results('users');
 
 	}//end count_all()
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Performs a standard delete, but also allows for purging of a record.
 	 *
@@ -405,25 +418,25 @@ class User_model extends BF_Model
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function delete($id=0, $purge=FALSE) 
+	public function delete($id=0, $purge=FALSE)
 	{
 		if ($purge === TRUE)
 		{
 			// temporarily set the soft_deletes to TRUE.
 			$this->soft_deletes = FALSE;
 		}
-		
+
 		return parent::delete($id);
 
 	}//end delete()
-	
+
 	//--------------------------------------------------------------------
-	
-	
+
+
 	//--------------------------------------------------------------------
 	// !AUTH HELPER METHODS
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Generates a new salt and password hash for the given password.
 	 *
@@ -433,20 +446,20 @@ class User_model extends BF_Model
 	 *
 	 * @return array An array with the hashed password and new salt.
 	 */
-	public function hash_password($old='') 
+	public function hash_password($old='')
 	{
 		if (!function_exists('do_hash'))
 		{
 			$this->load->helper('security');
 		}
-	
+
 		$salt = $this->generate_salt();
 		$pass = do_hash($salt . $old);
-		
+
 		return array($pass, $salt);
 
 	}//end hash_password()
-	
+
 	//--------------------------------------------------------------------
 
 	/**
@@ -456,24 +469,24 @@ class User_model extends BF_Model
 	 *
 	 * @return string A random string of 7 characters
 	 */
-	private function generate_salt() 
+	private function generate_salt()
 	{
 		if (!function_exists('random_string'))
 		{
 			$this->load->helper('string');
 		}
-		
+
 		return random_string('alnum', 7);
 
 	}//end generate_salt()
-	
+
 	//--------------------------------------------------------------------
-	
-	
+
+
 	//--------------------------------------------------------------------
 	// !HMVC METHOD HELPERS
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Returns the most recent login attempts and their description.
 	 *
@@ -483,27 +496,27 @@ class User_model extends BF_Model
 	 *
 	 * @return bool|array An array of objects with the login information.
 	 */
-	public function get_login_attempts($limit=15) 
+	public function get_login_attempts($limit=15)
 	{
 		$this->db->limit($limit);
 		$this->db->order_by('login', 'desc');
 		$query = $this->db->get('login_attempts');
-		
+
 		if ($query->num_rows())
 		{
 			return $query->result();
 		}
-		
+
 		return FALSE;
 
 	}//end get_login_attempts()
-	
+
 	//--------------------------------------------------------------------
-	
+
 	//--------------------------------------------------------------------
 	// !META METHODS
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Saves one or more key/value pairs of additional meta information for a user.
 	 *
@@ -520,13 +533,13 @@ class User_model extends BF_Model
 	 *
 	 * @return void
 	 */
-	public function save_meta_for($user_id=null, $data=array()) 
+	public function save_meta_for($user_id=null, $data=array())
 	{
 		if (!is_numeric($user_id))
 		{
 			$this->error = lang('us_invalid_user_id');
 		}
-		
+
 		$this->table	= 'user_meta';
 		$this->key		= 'meta_id';
 
@@ -569,9 +582,9 @@ class User_model extends BF_Model
 		$this->table	= 'users';
 		$this->key		= 'id';
 	}//end save_meta_for()
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 * Retrieves all meta values defined for a user.
 	 *
@@ -582,29 +595,29 @@ class User_model extends BF_Model
 	 *
 	 * @return null A stdObject with the key/value pairs, or NULL.
 	 */
-	public function find_meta_for($user_id=null, $fields=null) 
+	public function find_meta_for($user_id=null, $fields=null)
 	{
 		if (!is_numeric($user_id))
 		{
 			$this->error = lang('us_invalid_user_id');
 		}
-		
+
 		$this->table	= 'user_meta';
 		$this->key		= 'meta_id';
-		
-		// Limiting to certain fields? 
+
+		// Limiting to certain fields?
 		if (is_array($fields))
 		{
 			$this->db->where_in('meta_key', $fields);
 		}
-		
+
 		$this->db->where('user_id', $user_id);
 		$query = $this->db->get('user_meta');
-	
+
 		if ($query->num_rows())
 		{
 			$rows = $query->result();
-			
+
 			$result = null;
 			foreach ($rows as $row)
 			{
@@ -616,11 +629,11 @@ class User_model extends BF_Model
 		{
 			$result = null;
 		}
-	
+
 		// Reset our table info
 		$this->table	= 'users';
 		$this->key		= 'id';
-		
+
 		return $result;
 
 	}//end find_meta_for()
@@ -667,5 +680,5 @@ class User_model extends BF_Model
 	//--------------------------------------------------------------------
 
 	//--------------------------------------------------------------------
-	
+
 }//end User_model

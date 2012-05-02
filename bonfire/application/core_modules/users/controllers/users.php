@@ -1,5 +1,21 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
+
+// ------------------------------------------------------------------------
+
+/**
  * Users Controller
  *
  * Provides front-end functions for users, like login and logout.
@@ -8,9 +24,7 @@
  * @subpackage Modules_Users
  * @category   Controllers
  * @author     Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
- * @link      http://cibonfire.com
- * @since     Version 1.0
+ * @link       http://cibonfire.com
  *
  */
 class Users extends Front_Controller
@@ -327,7 +341,7 @@ class Users extends Front_Controller
 					else
 					{
 						Template::set_message(lang('us_reset_password_error'). $this->user_model->error, 'error');
-							
+
 					}
 				}
 			}//end if
@@ -365,9 +379,9 @@ class Users extends Front_Controller
 
 	/**
 	 * Display the registration form for the user and manage the registration process
-	 * 
+	 *
 	 * @access public
-	 * 
+	 *
 	 * @return void
 	 */
 	public function register()
@@ -445,18 +459,18 @@ class Users extends Front_Controller
 		Template::set_view('users/users/register');
 		Template::set('page_title', 'Register');
 		Template::render();
-		
+
 	}//end register()
 
 	//--------------------------------------------------------------------
 
 	/**
 	 * Callback method to check that the email is unique
-	 * 
+	 *
 	 * @access public
-	 * 
+	 *
 	 * @param string $email The email address to check
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function unique_email($email)
@@ -470,7 +484,7 @@ class Users extends Front_Controller
 			$this->form_validation->set_message('unique_email', 'lang:us_email_already_used');
 			return FALSE;
 		}
-		
+
 	}//end unique_email()
 
 	//--------------------------------------------------------------------

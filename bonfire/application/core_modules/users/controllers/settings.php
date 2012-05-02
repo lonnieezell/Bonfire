@@ -1,5 +1,21 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
+
+// ------------------------------------------------------------------------
+
+/**
  * Users Controller
  *
  * Manages the user functionality on the admin pages.
@@ -8,10 +24,7 @@
  * @subpackage Modules_Users
  * @category   Controllers
  * @author     Bonfire Dev Team
- * @copyright  Copyright (c) 2011 - 2012, Bonfire Dev Team 
- * @license    http://guides.cibonfire.com/license.html
  * @link       http://cibonfire.com
- * @since      Version 1.0
  *
  */
 class Settings extends Admin_Controller
@@ -189,7 +202,7 @@ class Settings extends Admin_Controller
 
 		if ($this->input->post('submit'))
 		{
-			if ($id = $this->save_user())
+			if ($id = $this->save_user('insert', NULL, $meta_fields))
 			{
 
 				$meta_data = array();
@@ -200,7 +213,7 @@ class Settings extends Admin_Controller
 
 				// now add the meta is there is meta data
 				$this->user_model->save_meta_for($id, $meta_data);
-				
+
 				$this->load->model('activities/Activity_model', 'activity_model');
 
 				$user = $this->user_model->find($id);
@@ -234,6 +247,10 @@ class Settings extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Users.Manage');
 
+		$this->load->config('address');
+		$this->load->helper('address');
+		$this->load->helper('date');
+
 		$user_id = $this->uri->segment(5);
 		if (empty($user_id))
 		{
@@ -241,14 +258,14 @@ class Settings extends Admin_Controller
 			redirect(SITE_AREA .'/settings/users');
 		}
 
-		$this->load->config('address');
-		$this->load->helper('address');
-		$this->load->helper('form');
-		$this->load->helper('date');
+
+		$this->load->config('user_meta');
+		$meta_fields = config_item('user_meta_fields');
+		Template::set('meta_fields', $meta_fields);
 
 		if ($this->input->post('submit'))
 		{
-			if ($this->save_user('update', $user_id))
+			if ($this->save_user('update', $user_id, $meta_fields))
 			{
 
 				$meta_data = array();
@@ -270,7 +287,7 @@ class Settings extends Admin_Controller
 			}
 		}
 
-		$user = $this->user_model->find($user_id);
+		$user = $this->user_model->find_user_and_meta($user_id);
 		if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage'))
 		{
 			Template::set('user', $user);
@@ -455,7 +472,7 @@ class Settings extends Admin_Controller
 		}
 		else
 		{
-			Template::set_message(lang('us_user_restored_error'). $this->user_model->error, 'error');			
+			Template::set_message(lang('us_user_restored_error'). $this->user_model->error, 'error');
 		}
 
 		Template::redirect(SITE_AREA .'/settings/users');
@@ -483,7 +500,7 @@ class Settings extends Admin_Controller
 		$logs = $this->user_model->get_access_logs($limit);
 
 		return $this->load->view('settings/access_logs', array('access_logs' => $logs), TRUE);
-		
+
 	}//end access_logs()
 
 	//--------------------------------------------------------------------
@@ -496,11 +513,11 @@ class Settings extends Admin_Controller
 
 	/**
 	 * Callback method to check that the email is unique
-	 * 
+	 *
 	 * @access public
-	 * 
+	 *
 	 * @param string $str The email to check
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function unique_email($str)
@@ -514,22 +531,23 @@ class Settings extends Admin_Controller
 			$this->form_validation->set_message('unique_email', lang('us_email_in_use'));
 			return FALSE;
 		}
-		
+
 	}//end unique_email()
 
 	//--------------------------------------------------------------------
 
 	/**
 	 * Save the user
-	 * 
+	 *
 	 * @access private
-	 * 
-	 * @param string $type The type of operation (insert or edit)
-	 * @param int    $id   The id of the user in the case of an edit operation
-	 * 
+	 *
+	 * @param string $type        The type of operation (insert or edit)
+	 * @param int    $id          The id of the user in the case of an edit operation
+	 * @param array  $meta_fields Array of meta fields fur the user
+	 *
 	 * @return bool
 	 */
-	private function save_user($type='insert', $id=0)
+	private function save_user($type='insert', $id=0, $meta_fields)
 	{
 
 		if ($type == 'insert')
@@ -583,22 +601,22 @@ class Settings extends Admin_Controller
 			'timezone'	=> $this->input->post('timezones'),
 		);
 
-		if ($this->input->post('password'))	
+		if ($this->input->post('password'))
 		{
 			$data['password'] = $this->input->post('password');
 		}
-			
-		if ($this->input->post('pass_confirm'))	
+
+		if ($this->input->post('pass_confirm'))
 		{
 			$data['pass_confirm'] = $this->input->post('pass_confirm');
 		}
-			
-		if ($this->input->post('role_id')) 
+
+		if ($this->input->post('role_id'))
 		{
 			$data['role_id'] = $this->input->post('role_id');
 		}
 
-		if ($this->input->post('restore')) 
+		if ($this->input->post('restore'))
 		{
 			$data['deleted'] = 0;
 		}
@@ -607,11 +625,11 @@ class Settings extends Admin_Controller
 		{
 			$data['banned'] = 0;
 		}
-		 
+
 		if ($this->input->post('display_name'))
 		{
 			$data['display_name'] = $this->input->post('display_name');
-		} 
+		}
 
 		if ($type == 'insert')
 		{
@@ -626,7 +644,7 @@ class Settings extends Admin_Controller
 		Events::trigger('save_user', $this->input->post());
 
 		return $return;
-		
+
 	}//end save_user()
 
 	//--------------------------------------------------------------------
