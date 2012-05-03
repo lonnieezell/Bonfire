@@ -1,11 +1,10 @@
-	<?php  if (count($select_options) > 2): // one for all, one for the only choice = 2 ?>
 	<div class="box select admin-box">
 		<h3><?php echo lang('activity_filter_head'); ?></h3>
 		<?php
 
 			echo form_open(SITE_AREA . '/reports/activities/' . $vars['which'], 'class="form-horizontal constrained ajax-form"');
 			$form_help = '<span class="help-inline">' . sprintf(lang('activity_filter_note'),($vars['view_which'] == ucwords(lang('activity_date')) ? 'from before':'only for'),strtolower($vars['view_which'])) . '</span>';
-			$form_data = array('name' => 'activity_select', 'id' => 'activity_select', 'class' => 'span3' );
+			$form_data = array('name' => $vars['which'].'_select', 'id' => $vars['which'].'_select', 'class' => 'span3' );
 			echo form_dropdown($form_data, $select_options, $filter, lang('activity_filter_head') , '' , $form_help);
 			//echo form_dropdown("activity_select", $select_options, $filter,array('id' => 'activity_select', 'class' => 'span4' ) );
 			unset ( $form_data, $form_help);
@@ -15,12 +14,20 @@
 			echo form_submit('submit', lang('activity_submit'), 'class="btn btn-primary"');
 			echo form_close();
 			?>
+			<?php if ($vars['which'] == 'activity_own' && has_permission('Activities.Own.Delete')): ?>
+			<a class="btn btn-danger" id="delete-activity_own"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_own_delete'); ?></a>
+			<?php elseif ($vars['which'] == 'activity_user' && has_permission('Activities.User.Delete')): ?>
+			<a class="btn btn-danger" id="delete-activity_user"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_user_delete'); ?></a>
+			<?php elseif ($vars['which'] == 'activity_module' && has_permission('Activities.Module.Delete')): ?>
+			<a class="btn btn-danger" id="delete-activity_module"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_module_delete'); ?></a>
+			<?php elseif ($vars['which'] == 'activity_date' && has_permission('Activities.Date.Delete')): ?>
+			<a class="btn btn-danger" id="delete-activity_date"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_date_delete'); ?></a>
+			<?php endif; ?>
 		</div>
 
 	</div>
 
 	<br/>
-	<?php endif; ?>
 
 	<h2><?php echo sprintf(lang('activity_view'),($vars['view_which'] == ucwords(lang('activity_date')) ? $vars['view_which'] . ' before' : $vars['view_which']),$vars['name']); ?></h2>
 

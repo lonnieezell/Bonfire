@@ -134,7 +134,7 @@
 				</td>
 
 				<td style="width: 15em; text-align: right">
-					<a class="btn btn-danger" id="delete-activity_own"><i class"icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_own_delete'); ?></a>
+					<a class="btn btn-danger" id="delete-activity_own"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_own_delete'); ?></a>
 				</td>
 			</tr>
 			<?php $empty_table = false; ?>
@@ -153,7 +153,7 @@
 				</td>
 
 				<td style="width: 15em; text-align: right">
-					<a class="btn btn-danger" id="delete-activity_user"><i class"icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_user_delete'); ?></a>
+					<a class="btn btn-danger" id="delete-activity_user"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_user_delete'); ?></a>
 				</td>
 			</tr>
 			<?php $empty_table = false; ?>
@@ -172,7 +172,7 @@
 					</select>
 				</td>
 				<td style="width: 15em; text-align: right">
-					<a class="btn btn-danger" id="delete-activity_module"><i class"icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_module_delete'); ?></a>
+					<a class="btn btn-danger" id="delete-activity_module"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_module_delete'); ?></a>
 				</td>
 			</tr>
 			<?php $empty_table = false; ?>
@@ -190,7 +190,7 @@
 					</select>
 				</td>
 				<td style="width: 15em; text-align: right">
-					<a class="btn btn-danger" id="delete-activity_date"><i class"icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_date_delete'); ?></a>
+					<a class="btn btn-danger" id="delete-activity_date"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_date_delete'); ?></a>
 				</td>
 			</tr>
 			<?php $empty_table = false; ?>

@@ -81,11 +81,20 @@ class Reports extends Admin_Controller
 		{
 			// get top 5 modules
 			$this->db->group_by('module');
-			Template::set('top_modules', $this->activity_model->select('module, COUNT(module) AS activity_count')->limit(5)->order_by('activity_count', 'DESC')->find_all() );
+			Template::set('top_modules', $this->activity_model->select('module, COUNT(module) AS activity_count')
+					->where('activities.deleted', 0)
+					->limit(5)
+					->order_by('activity_count', 'DESC')
+					->find_all() );
 
 			// get top 5 users and usernames
 			$this->db->join('users', 'activities.user_id = users.id', 'left');
-			$query = $this->db->select('username, user_id, COUNT(user_id) AS activity_count')->group_by('user_id')->order_by('activity_count','DESC')->limit(5)->get($this->activity_model->get_table());
+			$query = $this->db->select('username, user_id, COUNT(user_id) AS activity_count')
+					->where('activities.deleted', 0)
+					->group_by('user_id')
+					->order_by('activity_count','DESC')
+					->limit(5)
+					->get($this->activity_model->get_table());
 			Template::set('top_users', $query->result());
 
 			Template::set('users', $this->user_model->find_all());
@@ -139,7 +148,7 @@ class Reports extends Admin_Controller
 			Template::redirect(SITE_AREA .'/reports/activities');
 		}
 
-		return $this->_get_activity('activity_user', $this->current_user->id);
+		return $this->_get_activity('activity_own', $this->current_user->id);
 
 	}//end activity_own()
 
@@ -282,16 +291,16 @@ class Reports extends Admin_Controller
 	 */
 	public function _get_activity($which='activity_user',$find_value=FALSE)
 	{
-		Template::set('filter', $this->input->post('activity_select'));
+		Template::set('filter', $this->input->post($which.'_select'));
 
 		// set a couple default variables
-		$options = array(0 => 'All');
+		$options = array('all' => 'All');
 		$name = 'All';
 
 		// check if $find_value has anything in it
 		if ($find_value === FALSE)
 		{
-			$find_value = ($this->input->post('activity_select') == '') ? $this->uri->segment(5) : $this->input->post('activity_select');
+			$find_value = ($this->input->post($which.'_select') == '') ? $this->uri->segment(5) : $this->input->post($which.'_select');
 		}
 
 		switch ($which)
@@ -311,7 +320,7 @@ class Reports extends Admin_Controller
 			break;
 
 			case 'activity_date':
-				foreach($this->activity_model->find_all() as $e)
+				foreach($this->activity_model->find_all_by('deleted', 0) as $e)
 				{
 					$options[$e->activity_id] = $e->created_on;
 
@@ -323,6 +332,7 @@ class Reports extends Admin_Controller
 				$where = 'activity_id';
 			break;
 
+			case 'activity_own':
 			default:
 				if (has_permission('Activities.User.View'))
 				{
@@ -338,6 +348,7 @@ class Reports extends Admin_Controller
 				}
 				else if (has_permission('Activities.Own.View'))
 				{
+					$options = array();
 					$options[$this->current_user->id] = $this->current_user->username;
 					$name = $this->current_user->username;
 				}
@@ -358,7 +369,7 @@ class Reports extends Admin_Controller
 
 		// if we have a filter, apply it here
 		$this->db->order_by($where,'asc');
-		if ($find_value)
+		if (!empty($find_value) && $find_value != 'all')
 		{
 			$where = ($where == 'activity_id') ? 'activity_id <' : $where;
 			$this->db->where($where,$find_value);
