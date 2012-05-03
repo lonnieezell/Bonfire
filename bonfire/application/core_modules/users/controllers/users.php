@@ -131,7 +131,11 @@ class Users extends Front_Controller
 	 */
 	public function logout()
 	{
+		$this->load->model('activities/Activity_model', 'activity_model');
+		$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged_out').': ' . $this->input->ip_address(), 'users');
+
 		$this->auth->logout();
+
 		redirect('/');
 
 	}//end  logout()

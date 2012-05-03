@@ -34,6 +34,7 @@ $lang['us_log_create']				= 'created a new';
 $lang['us_log_edit']				= 'modified user';
 $lang['us_log_delete']				= 'deleted user';
 $lang['us_log_logged']				= 'logged in from';
+$lang['us_log_logged_out']			= 'logged out from';
 $lang['us_log_reset']				= 'reset their password.';
 $lang['us_log_register']			= 'registered a new account.';
 $lang['us_log_edit_profile']		= 'updated their profile';
