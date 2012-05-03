@@ -56,7 +56,12 @@ class Reports extends Admin_Controller
 		Assets::add_module_css ('activities', 'datatables.css');
 
 
-		Template::set_block('sub_nav', 'reports/_sub_nav');
+		if (has_permission('Activities.User.View')
+				|| has_permission('Activities.Module.View')
+				|| has_permission('Activities.Date.View'))
+		{
+			Template::set_block('sub_nav', 'reports/_sub_nav');
+		}
 	}//end __construct()
 
 	//--------------------------------------------------------------------
@@ -70,19 +75,29 @@ class Reports extends Admin_Controller
 	 */
 	public function index()
 	{
-		// get top 5 modules
-		$this->db->group_by('module');
-		Template::set('top_modules', $this->activity_model->select('module, COUNT(module) AS activity_count')->limit(5)->order_by('activity_count', 'DESC')->find_all() );
+		if (has_permission('Activities.User.View')
+				|| has_permission('Activities.Module.View')
+				|| has_permission('Activities.Date.View'))
+		{
+			// get top 5 modules
+			$this->db->group_by('module');
+			Template::set('top_modules', $this->activity_model->select('module, COUNT(module) AS activity_count')->limit(5)->order_by('activity_count', 'DESC')->find_all() );
 
-		// get top 5 users and usernames
-		$this->db->join('users', 'activities.user_id = users.id', 'left');
-		$query = $this->db->select('username, user_id, COUNT(user_id) AS activity_count')->group_by('user_id')->order_by('activity_count','DESC')->limit(5)->get($this->activity_model->get_table());
-		Template::set('top_users', $query->result());
+			// get top 5 users and usernames
+			$this->db->join('users', 'activities.user_id = users.id', 'left');
+			$query = $this->db->select('username, user_id, COUNT(user_id) AS activity_count')->group_by('user_id')->order_by('activity_count','DESC')->limit(5)->get($this->activity_model->get_table());
+			Template::set('top_users', $query->result());
 
-		Template::set('users', $this->user_model->find_all());
-		Template::set('modules', module_list());
-		Template::set('activities', $this->activity_model->find_all());
-		Template::render();
+			Template::set('users', $this->user_model->find_all());
+			Template::set('modules', module_list());
+			Template::set('activities', $this->activity_model->find_all());
+			Template::render();
+		}
+		else if(has_permission('Activities.Own.View'))
+		{
+			$this->activity_own();
+
+		}
 
 	}//end index()
 
@@ -98,7 +113,7 @@ class Reports extends Admin_Controller
 	public function activity_user()
 	{
 
-		if (!has_permission('Activities.Own.View') || !has_permission('Activities.User.View')) {
+		if (!has_permission('Activities.User.View')) {
 			Template::set_message(lang('activity_restricted'), 'error');
 			Template::redirect(SITE_AREA .'/reports/activities');
 		}
@@ -106,6 +121,27 @@ class Reports extends Admin_Controller
 		return $this->_get_activity();
 
 	}//end activity_user()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Shows the activities for the current user.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function activity_own()
+	{
+
+		if (!has_permission('Activities.Own.View')) {
+			Template::set_message(lang('activity_restricted'), 'error');
+			Template::redirect(SITE_AREA .'/reports/activities');
+		}
+
+		return $this->_get_activity('activity_user', $this->current_user->id);
+
+	}//end activity_own()
 
 	//--------------------------------------------------------------------
 
@@ -288,15 +324,24 @@ class Reports extends Admin_Controller
 			break;
 
 			default:
-				foreach($this->user_model->find_all() as $e)
+				if (has_permission('Activities.User.View'))
 				{
-					$options[$e->id] = $e->username;
-
-					if ($find_value == $e->id)
+					foreach($this->user_model->find_all() as $e)
 					{
-						$name = $e->username;
+						$options[$e->id] = $e->username;
+
+						if ($find_value == $e->id)
+						{
+							$name = $e->username;
+						}
 					}
 				}
+				else if (has_permission('Activities.Own.View'))
+				{
+					$options[$this->current_user->id] = $this->current_user->username;
+					$name = $this->current_user->username;
+				}
+
 				$where = 'user_id';
 			break;
 		}

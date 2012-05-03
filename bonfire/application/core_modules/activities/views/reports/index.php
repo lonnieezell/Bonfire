@@ -2,7 +2,7 @@
 
 	<?php if (has_permission('Activities.Own.View')): ?>
 	<div class="column size1of4 media-box">
-		<a href="<?php echo site_url(SITE_AREA .'/reports/activities/activity_user') ?>">
+		<a href="<?php echo site_url(SITE_AREA .'/reports/activities/activity_own') ?>">
 			<img src="<?php echo Template::theme_url('images/activity-user.png') ?>" />
 		</a>
 
@@ -54,12 +54,12 @@
 
 <div class="row">
 	<div class="column size1of2">
-		
+
 		<!-- Active Modules -->
 		<div class="admin-box">
 			<h3><?php echo lang('activity_top_modules'); ?></h3>
 			<?php if (isset($top_modules) && is_array($top_modules) && count($top_modules)) : ?>
-	
+
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -78,20 +78,20 @@
 					<?php endforeach; ?>
 					</tbody>
 				</table>
-	
+
 			<?php else : ?>
 				<?php echo lang('activity_no_top_modules'); ?>
 			<?php endif; ?>
 		</div>
 
 	</div>
-		
+
 	<div class="column size1of2 last-column">
 		<div class="admin-box">
 			<!-- Active Users -->
 			<h3><?php echo lang('activity_top_users'); ?></h3>
 			<?php if (isset($top_users) && is_array($top_users) && count($top_users)) : ?>
-	
+
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -108,7 +108,7 @@
 				<?php endforeach; ?>
 					</tbody>
 				</table>
-	
+
 			<?php else : ?>
 				<?php echo lang('activity_no_top_users'); ?>
 			<?php endif; ?>
@@ -119,9 +119,9 @@
 
 <div class="admin-box">
 	<h3>Activity Cleanup</h3>
-	
+
 	<?php $empty_table = true; ?>
-	
+
 	<table class="table table-striped">
 		<tbody>
 			<?php if (has_permission('Activities.Own.Delete')): ?>
@@ -132,14 +132,14 @@
 						<option value="<?php echo $current_user->id; ?>"><?php echo $current_user->username; ?></option>))
 					</select>
 				</td>
-			
+
 				<td style="width: 15em; text-align: right">
 					<a class="btn btn-danger" id="delete-activity_own"><i class"icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_own_delete'); ?></a>
 				</td>
 			</tr>
 			<?php $empty_table = false; ?>
 			<?php endif; ?>
-			
+
 			<?php if (has_permission('Activities.User.Delete')): ?>
 			<tr>
 				<td>
@@ -151,14 +151,14 @@
 					<?php endforeach; ?>
 					</select>
 				</td>
-			
+
 				<td style="width: 15em; text-align: right">
 					<a class="btn btn-danger" id="delete-activity_user"><i class"icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_user_delete'); ?></a>
 				</td>
 			</tr>
 			<?php $empty_table = false; ?>
 			<?php endif; ?>
-			
+
 			<?php if (has_permission('Activities.Module.Delete')): ?>
 			<tr>
 				<td>
@@ -177,7 +177,7 @@
 			</tr>
 			<?php $empty_table = false; ?>
 			<?php endif; ?>
-			
+
 			<?php if (has_permission('Activities.Date.Delete')): ?>
 			<tr>
 				<td>
@@ -195,7 +195,7 @@
 			</tr>
 			<?php $empty_table = false; ?>
 			<?php endif; ?>
-			
+
 			<?php if ($empty_table) :?>
 			<tr>
 				<td><?php echo lang('activity_none_found'); ?></td>
