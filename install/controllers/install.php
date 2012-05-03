@@ -414,6 +414,7 @@ class Install extends CI_Controller {
 			'role_id'	=> 1,
 			'email'		=> $this->input->post('email'),
 			'username'	=> $this->input->post('username'),
+			'active'    => 1,
 		);
 		list($password, $salt) = $this->hash_password($this->input->post('password'));
 

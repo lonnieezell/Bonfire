@@ -88,7 +88,7 @@ class Settings extends Admin_Controller
 		$offset = $this->uri->segment(5);
 
 		// Do we have any actions?
-		$action = $this->input->post('submit').$this->input->post('delete').$this->input->post('purge');
+		$action = $this->input->post('submit').$this->input->post('delete').$this->input->post('purge').$this->input->post('activate').$this->input->post('deactivate');
 
 		if (!empty($action))
 		{
@@ -96,6 +96,12 @@ class Settings extends Admin_Controller
 
 			switch(strtolower($action))
 			{
+				case 'activate':
+					$this->activate($checked);
+					break;
+				case 'deactivate':
+					$this->deactivate($checked);
+					break;
 				case 'ban':
 					$this->ban($checked);
 					break;
@@ -115,6 +121,9 @@ class Settings extends Admin_Controller
 		$filter = $this->input->get('filter');
 		switch($filter)
 		{
+			case 'inactive':
+				$where['users.active'] = 0;
+				break;
 			case 'banned':
 				$where['users.banned'] = 1;
 				break;
@@ -152,7 +161,7 @@ class Settings extends Admin_Controller
 		$this->load->helper('ui/ui');
 
 		$this->user_model->limit($this->limit, $offset)->where($where);
-		$this->user_model->select('users.id, users.role_id, username, display_name, email, last_login, banned, users.deleted, role_name');
+		$this->user_model->select('users.id, users.role_id, username, display_name, email, last_login, banned, active, users.deleted, role_name');
 
 		Template::set('users', $this->user_model->find_all($show_deleted));
 
@@ -631,6 +640,16 @@ class Settings extends Admin_Controller
 			$data['display_name'] = $this->input->post('display_name');
 		}
 
+		// Activation
+		if ($this->input->post('activate'))
+		{
+			$data['active'] = 1;
+		}
+		else if ($this->input->post('deactivate'))
+		{
+			$data['active'] = 0;
+		}
+
 		if ($type == 'insert')
 		{
 			$return = $this->user_model->insert($data);
@@ -646,6 +665,145 @@ class Settings extends Admin_Controller
 		return $return;
 
 	}//end save_user()
+
+	//--------------------------------------------------------------------
+
+	//--------------------------------------------------------------------
+	// ACTIVATION METHODS
+	//--------------------------------------------------------------------
+	/**
+	 * Activates selected users accounts.
+	 *
+	 * @access public
+	 *
+	 * @param array $users Array of User ID ints
+	 *
+	 * @return void
+	 */
+	public function activate($users=false)
+	{
+		if (!$users)
+		{
+			return;
+		}
+
+		$this->auth->restrict('Bonfire.Users.Manage');
+		foreach ($users as $user_id)
+		{
+			$this->user_status($user_id,1,0);
+		}
+
+	}//end activate()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Deactivates selected users accounts.
+	 *
+	 * @access public
+	 *
+	 * @param array $users Array of User ID ints
+	 *
+	 * @return void
+	 */
+	public function deactivate($users=false)
+	{
+		if (!$users)
+		{
+			return;
+		}
+
+		$this->auth->restrict('Bonfire.Users.Manage');
+
+		foreach ($users as $user_id)
+		{
+			$this->user_status($user_id,0,0);
+		}
+
+	}//end deactivate()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Activates or deavtivates a user from the users dashboard.
+	 * Redirects to /settings/users on completion.
+	 *
+	 * @access private
+	 *
+	 * @param int  $user_id       User ID int
+	 * @param int $status        1 = Activate, -1 = Deactivate
+	 * @param int $supress_email 1 = Supress, All others = send email
+	 *
+	 * @return void
+	 */
+	private function user_status($user_id = false, $status = 1, $supress_email = 0)
+	{
+		$supress_email = (isset($supress_email) && $supress_email == 1 ? true : false);
+
+		if ($user_id !== false && $user_id != -1)
+		{
+			$result = false;
+			$type = '';
+			if ($status == 1)
+			{
+				$result = $this->user_model->admin_activation($user_id);
+				$type = lang('bf_action_activate');
+			}
+			else
+			{
+				$result = $this->user_model->admin_deactivation($user_id);
+				$type = lang('bf_action_deactivate');
+			}
+
+			$user = $this->user_model->find($user_id);
+			$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
+			if (!isset($this->activity_model))
+			{
+				$this->load->model('activities/activity_model');
+			}
+
+			$this->activity_model->log_activity($this->current_user->id, lang('us_log_status_change') . ': '.$log_name . ' : '.$type."ed", 'users');
+			if ($result)
+			{
+				$message = lang('us_active_status_changed');
+				if (!$supress_email)
+				{
+					// Now send the email
+					$this->load->library('emailer/emailer');
+
+					$settings = $this->settings_lib->find_by('name','site.title');
+
+					$data = array
+					(
+						'to'		=> $this->user_model->find($user_id)->email,
+						'subject'	=> lang('us_account_active'),
+						'message'	=> $this->load->view('_emails/activated', array('link'=>site_url(),'title'=>$settings->value), true)
+					);
+
+					if ($this->emailer->send($data))
+					{
+						$message = lang('us_active_email_sent');
+					}
+					else
+					{
+						$message=lang('us_err_no_email'). $this->emailer->errors;
+					}
+				}
+				Template::set_message($message, 'success');
+			}
+			else
+			{
+				Template::set_message(lang('us_err_status_error').$this->user_model->error,'error');
+			}//end if
+		}
+		else
+		{
+			Template::set_message(lang('us_err_no_id'),'error');
+		}//end if
+
+		Template::redirect(SITE_AREA.'/settings/users');
+
+	}//end user_status()
 
 	//--------------------------------------------------------------------
 

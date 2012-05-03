@@ -206,7 +206,28 @@ $lang['bf_password_symbols_required_help'] = 'Password must contain at least 1 s
 
 $lang['bf_password_min_length_help']       = 'Password must be at least %s characters long.';
 
+//--------------------------------------------------------------------
+// User Meta examples
+//--------------------------------------------------------------------
+
 $lang['user_meta_street_name']	= 'Street Name';
 $lang['user_meta_type']			= 'Type';
 $lang['user_meta_country']		= 'Country';
 $lang['user_meta_state']		= 'State';
+
+// Activation
+//--------------------------------------------------------------------
+$lang['bf_activate_method']			= 'Activation Method';
+$lang['bf_activate_none']			= 'None';
+$lang['bf_activate_email']			= 'Email';
+$lang['bf_activate_admin']			= 'Admin';
+$lang['bf_activate']				= 'Activate';
+$lang['bf_activate_resend']			= 'Resend Activation';
+
+$lang['bf_reg_complete_error']		= 'An error occurred completing your registration. Please try again or contact the site administrator for help.';
+$lang['bf_reg_activate_email'] 		= 'An email containing your activation code has been sent to [EMAIL].';
+$lang['bf_reg_activate_admin'] 		= 'You will be notified when the site administrator has approved your membership.';
+$lang['bf_reg_activate_none'] 		= 'Please login to begin using the site.';
+$lang['bf_user_not_active'] 		= 'User account is not active.';
+$lang['bf_login_activate_title']	= 'Need to activate your account?';
+$lang['bf_login_activate_email'] 	= '<b>Have an activation code to enter to activate your membership?</b> Enter it on the [ACCOUNT_ACTIVATE_URL] page.<br /><br />    <b>Need your code again?</b> Request it again on the [ACTIVATE_RESEND_URL] page.';

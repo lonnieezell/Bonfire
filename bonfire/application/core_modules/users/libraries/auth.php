@@ -147,7 +147,7 @@ class Auth
 		}
 
 		// Grab the user from the db
-		$selects = 'id, email, username, users.role_id, salt, password_hash, users.role_id, users.deleted';
+		$selects = 'id, email, username, users.role_id, salt, password_hash, users.role_id, users.deleted, users.active';
 
 		if ($this->ci->settings_lib->item('auth.do_login_redirect'))
 		{
@@ -166,6 +166,22 @@ class Auth
 		if (is_array($user))
 		{
 			$user = $user[0];
+		}
+
+		// check if the account has been activated.
+		$activation_type = $this->ci->settings_lib->item('auth.user_activation_method');
+		if ($user->active == 0 && $activation_type > 0) // in case we go to a unix timestamp later, this will still work.
+		{
+			if ($activation_type == 1)
+			{
+				Template::set_message(lang('us_account_not_active'), 'error');
+			}
+			elseif ($activation_type == 2)
+			{
+				Template::set_message(lang('us_admin_approval_pending'), 'error');
+			}
+
+			return FALSE;
 		}
 
 		// check if the account has been soft deleted.
@@ -260,9 +276,9 @@ class Auth
 
 	/**
 	 * Checks the session for the required info, then verifies against the database.
-	 * 
+	 *
 	 * @access public
-	 * 
+	 *
 	 * @return bool|NULL
 	 */
 	public function is_logged_in()
@@ -303,7 +319,7 @@ class Auth
 
 		$this->logged_in = FALSE;
 		return FALSE;
-		
+
 	}//end is_logged_in()
 
 	//--------------------------------------------------------------------

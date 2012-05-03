@@ -154,3 +154,54 @@ $lang['us_user_restored_success']   = 'User successfully restored.';
 $lang['us_user_restored_error']     = 'Unable to restore user: ';
 
 
+/* Activations */
+$lang['us_status']					= 'Status';
+$lang['us_inactive_users']			= 'Inactive users';
+$lang['us_activate']				= 'Activation';
+$lang['us_user_activate_note']		= 'Enter your activation code to confirm your e-mail address and activate your membership.';
+$lang['us_activate_note']			= 'Activate the user and allow them access to the site';
+$lang['us_deactivate_note']			= 'Deactivate the user to prevent access to the site';
+$lang['us_activate_enter']			= 'Please enter your activation code to continue.';
+$lang['us_activate_code']			= 'Activation Code';
+$lang['us_activate_request']		= 'Request a new one';
+$lang['us_activate_resend']			= 'Resend Activation Code';
+$lang['us_activate_resend_note']	= 'Enter your email and we will resend your activation code to you.';
+$lang['us_confirm_activate_code']	= 'Confirm Activation Code';
+$lang['us_activate_code_send']		= 'Send Activation Code';
+$lang['bf_action_activate']			= 'Activate';
+$lang['bf_action_deactivate']		= 'Deactivate';
+$lang['us_purge_del_accounts']		= 'Purge Deleted Accounts';
+$lang['us_no_inactive']				= 'There are not any users requiring activation in the database.';
+$lang['us_activate_accounts']		= 'Activate All Accounts';
+$lang['us_purge_act_note']			= '<h3>Activate All Accounts</h3><p>batch activate all users requiring activation.</p>';
+$lang['us_account_activated']		= 'User account activation.';
+$lang['us_account_deactivated']		= 'User account deactivation.';
+$lang['us_account_activated_admin']	= 'Administrative account activation.';
+$lang['us_account_deactivated_admin']	= 'Administrative account deactivation.';
+$lang['us_active']					= 'Active.';
+$lang['us_inactive']				= 'Inactive.';
+//email subjects
+$lang['us_email_subj_activate']		= 'Activate Your membership';
+$lang['us_email_subj_pending']		= 'Registration Complete. Activation Pending.';
+$lang['us_email_thank_you']			= 'Thank you for registering! ';
+// Activation Statuses
+$lang['us_registration_fail'] 		= 'Registration did not complete successfully. ';
+$lang['us_check_activate_email'] 	= 'Please check your email for instructions to activate your account.';
+$lang['us_admin_approval_pending']  = 'Your account is pending admin approval. You will receive email notification if your account is activated.';
+$lang['us_account_not_active'] 		= 'Your account is not yet active please activate your account by entering the code.';
+$lang['us_account_active'] 			= 'Congratulations. Your account is now active!.';
+$lang['us_account_active_login'] 	= 'Your account is active and you can now login.';
+$lang['us_account_reg_complete'] 	= 'Registration to [SITE_TITLE] completed!';
+$lang['us_active_status_changed'] 	= 'The user status was successfully changed.';
+$lang['us_active_email_sent'] 		= 'Activation email was sent.';
+// Activation Errors
+$lang['us_err_no_id'] 				= 'No User ID was received.';
+$lang['us_err_status_error'] 		= 'The users status was not changed: ';
+$lang['us_err_no_email'] 			= 'Unable to send an email: ';
+$lang['us_err_activate_fail'] 		= 'Your membership could not be activated at this time due to the following reason: ';
+$lang['us_err_activate_code'] 		= 'Please check your code and try again or contact the site administrator for help.';
+$lang['us_err_no_activate_code'] 	= 'A required activation validation code was missing.';
+$lang['us_err_no_matching_code'] 	= 'No matching activation code was found in the system.';
+$lang['us_err_no_matching_id'] 		= 'No matching user id was found in the system.';
+$lang['us_err_user_is_active'] 		= 'The user is already active.';
+$lang['us_err_user_is_inactive'] 	= 'The user is already inactive.';

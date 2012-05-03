@@ -45,10 +45,10 @@ class App_hooks
 	 * List of pages where the hooks are not run.
 	 *
 	 * @access private
-	 * 
+	 *
 	 * @var array
 	 */
-	private $ignore_pages = array('login', 'logout', 'register', 'forgot_password');
+	private $ignore_pages = array('login', 'logout', 'register', 'forgot_password', 'activate', 'resend_activation');
 
 	//--------------------------------------------------------------------
 
