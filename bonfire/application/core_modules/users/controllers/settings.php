@@ -547,7 +547,7 @@ class Settings extends Admin_Controller
 	 *
 	 * @return bool
 	 */
-	private function save_user($type='insert', $id=0, $meta_fields)
+	private function save_user($type='insert', $id=0, $meta_fields=array())
 	{
 
 		if ($type == 'insert')

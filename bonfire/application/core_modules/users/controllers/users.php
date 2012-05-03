@@ -246,7 +246,7 @@ class Users extends Front_Controller
 		{
 
 			$user_id = $this->current_user->id;
-			if ($this->save_user($user_id))
+			if ($this->save_user($user_id, $meta_fields))
 			{
 
 				$meta_data = array();
@@ -277,7 +277,7 @@ class Users extends Front_Controller
 		}//end if
 
 		// get the current user information
-		$user = $this->user_model->find_user_and_meta ( $this->current_user->id );
+		$user = $this->user_model->find_user_and_meta($this->current_user->id);
 
 		// Generate password hint messages.
 		$this->user_model->password_hints();
@@ -523,11 +523,12 @@ class Users extends Front_Controller
 	 *
 	 * @access private
 	 *
-	 * @param int $id The id of the user in the case of an edit operation
+	 * @param int   $id          The id of the user in the case of an edit operation
+	 * @param array $meta_fields Array of meta fields fur the user
 	 *
 	 * @return bool
 	 */
-	private function save_user($id=0)
+	private function save_user($id=0, $meta_fields=array())
 	{
 
 		if ( $id == 0 )
