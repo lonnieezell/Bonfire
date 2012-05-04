@@ -245,7 +245,18 @@ class Role_model extends BF_Model
 		// delete the record
 		$deleted = parent::delete($id);
 
-		if ($deleted === TRUE && $purge === TRUE)
+		if ($deleted === TRUE)
+		{
+			// Now update the users to the default role
+			if (!class_exists('User_model'))
+			{
+				$this->load->model('users/User_model','user_model');
+			}
+
+			$this->user_model->set_to_default_role($id);
+
+		}
+		else if ($deleted === TRUE && $purge === TRUE)
 		{
 			// now delete the role_permissions for this permission
 			$this->role_permission_model->delete_for_role($id);
