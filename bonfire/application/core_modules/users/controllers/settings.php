@@ -300,7 +300,7 @@ class Settings extends Admin_Controller
 		if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage'))
 		{
 			Template::set('user', $user);
-			Template::set('roles', $this->role_model->select('role_id, role_name, default')->find_all());
+			Template::set('roles', $this->role_model->select('role_id, role_name, default')->where('deleted', 0)->find_all());
 			Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 			Template::set_view('settings/user_form');
 		}
