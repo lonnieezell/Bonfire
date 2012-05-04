@@ -166,7 +166,7 @@ class Settings extends Admin_Controller
 	 */
 	public function delete()
 	{
-		$id = $this->uri->segment(5);
+		$id = (int) $this->uri->segment(5);
 
 		if (!empty($id))
 		{
@@ -303,7 +303,7 @@ class Settings extends Admin_Controller
 			$this->form_validation->set_message('unique_email', 'The %s address is already in use. Please choose another.');
 			return FALSE;
 		}
-		
+
 	}//end unique_email()
 
 	//--------------------------------------------------------------------
@@ -322,14 +322,19 @@ class Settings extends Admin_Controller
 	{
 		if ($type == 'insert')
 		{
-			$this->form_validation->set_rules('role_name', 'Role Name', 'required|trim|strip_tags|callback_unique_role|max_length[60]|xss_clean');
+			$this->form_validation->set_rules('role_name', 'lang:role_name', 'required|trim|strip_tags|unique[roles.role_name]|max_length[60]|xss_clean');
 		}
 		else
 		{
-			$this->form_validation->set_rules('role_name', 'Role Name', 'required|trim|strip_tags|max_length[60]|xss_clean');
+			$this->form_validation->set_rules('role_name', 'lang:role_name', 'required|trim|strip_tags|unique[roles.role_name,roles.role_id]|max_length[60]|xss_clean');
 		}
 
-		$this->form_validation->set_rules('description', 'Description', 'trim|strip_tags|max_length[255]|xss_clean');
+		$this->form_validation->set_rules('description', 'lang:bf_description', 'trim|strip_tags|max_length[255]|xss_clean');
+		$this->form_validation->set_rules('login_destination', 'lang:role_login_destination', 'trim|strip_tags|max_length[255]|xss_clean');
+		$this->form_validation->set_rules('default', 'lang:role_default_role', 'trim|strip_tags|is_numeric|max_length[1]|xss_clean');
+		$this->form_validation->set_rules('can_delete', 'lang:role_can_delete_role', 'trim|strip_tags|is_numeric|max_length[1]|xss_clean');
+
+		$_POST['role_id'] = $id;
 
 		if ($this->form_validation->run() === FALSE)
 		{
