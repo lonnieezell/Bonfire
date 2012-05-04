@@ -260,6 +260,44 @@ class User_model extends BF_Model
 
 	}//end update()
 
+
+	/**
+	 * Returns the number of users that belong to each role.
+	 *
+	 * @access public
+	 *
+	 * @return bool|array An array of objects representing the number in each role.
+	 */
+	public function set_to_default_role($current_role)
+	{
+		$prefix = $this->db->dbprefix;
+
+		if (!is_int($current_role)) {
+			return FALSE;
+		}
+
+		// We better have a guardian here
+		if (!class_exists('Role_model'))
+		{
+			$this->load->model('roles/Role_model','role_model');
+		}
+
+		$data = array();
+		$data['role_id'] = $this->role_model->default_role_id();
+
+		$query = $this->db->where('role_id', $current_role)
+				->update($this->table, $data);
+
+		if ($query)
+		{
+			return TRUE;
+		}
+
+		return FALSE;
+
+	}//end set_to_default_role()
+
+
 	//--------------------------------------------------------------------
 
 	/**
