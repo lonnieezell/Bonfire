@@ -88,7 +88,7 @@
 			</div>
 		</div>
 
-		<?php if (has_permission('Bonfire.Roles.Manage')) :?>
+		<?php if (has_permission('Bonfire.Roles.Manage') && isset($roles)) :?>
 		<fieldset>
 			<legend><?php echo lang('us_role'); ?></legend>
 
