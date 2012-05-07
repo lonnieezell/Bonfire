@@ -694,14 +694,12 @@ class Template
 	 * Set whether or not the views will be passed through CI's parser.
 	 *
 	 * @access public
-	 * @todo   Should this have a default value and check that the value passed in is boolean
-	 * @todo   Added Default Value of False for now, testing.
 	 *
 	 * @param bool $parse Boolean value. Should we parse views?
 	 */
 	public function parse_views($parse = FALSE)
 	{
-		self::$parse_views = $parse;
+		self::$parse_views = (bool) $parse;
 
 	}//end parse_views()
 
@@ -821,14 +819,6 @@ class Template
 
 	//--------------------------------------------------------------------
 
-
-	/*
-			$view		-
-			$data		-
-			$override	-
-			$is_themed	-
-			&$output	-
-	 */
 	/**
 	 * Loads a view based on the current themes.
 	 *
@@ -1037,12 +1027,18 @@ function theme_view($view=null, $data=null, $ignore_mobile=FALSE)
  * A simple helper method for checking menu items against the current
  * class that is running.
  *
+ * <code>
+ *   <a href="<?php echo site_url(SITE_AREA . '/content'); ?>" <?php echo check_class(SITE_AREA . '/content'); ?> >
+ *    Admin Home
+ *  </a>
+ *
+ * </code>
  * @access public
  *
  * @param string $item       The name of the class to check against.
  * @param bool   $class_only If TRUE, will only return 'active'. If FALSE, will return 'class="active"'.
  *
- * @return string Either <b>class="current"</b> or an empty string.
+ * @return string Either <b>class="active"</b> or an empty string.
  */
 function check_class($item='', $class_only=FALSE)
 {
@@ -1067,7 +1063,7 @@ function check_class($item='', $class_only=FALSE)
  *
  * @param string $item The name of the method to check against. Can be an array of names.
  *
- * @return string Either <b>class="current"</b> or an empty string.
+ * @return string Either <b>class="active"</b> or an empty string.
  */
 function check_method($item)
 {
