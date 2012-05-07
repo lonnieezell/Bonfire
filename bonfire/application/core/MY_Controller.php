@@ -107,6 +107,12 @@ class Base_Controller extends MX_Controller
 		    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 		}
 
+		// Testing niceties...
+		else if (ENVIRONMENT == 'testing')
+		{
+			$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
+		}
+
 		// Development niceties...
 		else if (ENVIRONMENT == 'development')
 		{
