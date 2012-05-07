@@ -358,10 +358,10 @@ class Template
 	 * @access public
 	 * @static
 	 *
-	 * @param type $block_name   The name of the block to render.
-	 * @param type $default_view The view to render if no other view has been set with the set_block() method.
-	 * @param type $data         An array of data to pass to the view.
-	 * @param type $themed       Whether we should look in the themes or standard view locations.
+	 * @param string $block_name   The name of the block to render.
+	 * @param string $default_view The view to render if no other view has been set with the set_block() method.
+	 * @param array  $data         An array of data to pass to the view.
+	 * @param bool   $themed       Whether we should look in the themes or standard view locations.
 	 *
 	 * @return void
 	 */
@@ -630,28 +630,28 @@ class Template
 	public static function set($var_name='', $value='')
 	{
 		// Added by dkenzik
-	    // 20101001
-	    // Easier migration when $data is scaterred all over your project
-	    //
-	    if(is_array($var_name) && $value=='')
-	    {
-	        foreach($var_name as $key => $value)
-	        {
-	        	self::$data[$key] = $value;
-	        }
-	    }
-	    else
-	    {
-	    	// Is it a class property?
-	    	if (isset(self::$$var_name))
-	    	{
-	    		self::$$var_name = $value;
-	    	}
-	    	else
-	    	{
-	        	self::$data[$var_name] = $value;
-	        }
-	    }//end if
+		// 20101001
+		// Easier migration when $data is scaterred all over your project
+		//
+		if(is_array($var_name) && $value=='')
+		{
+			foreach($var_name as $key => $value)
+			{
+				self::$data[$key] = $value;
+			}
+		}
+		else
+		{
+			// Is it a class property?
+			if (isset(self::$$var_name))
+			{
+				self::$$var_name = $value;
+			}
+			else
+			{
+				self::$data[$var_name] = $value;
+			}
+		}//end if
 
 	}//end set()
 
@@ -695,10 +695,11 @@ class Template
 	 *
 	 * @access public
 	 * @todo   Should this have a default value and check that the value passed in is boolean
+	 * @todo   Added Default Value of False for now, testing.
 	 *
 	 * @param bool $parse Boolean value. Should we parse views?
 	 */
-	public function parse_views($parse)
+	public function parse_views($parse = FALSE)
 	{
 		self::$parse_views = $parse;
 
@@ -813,7 +814,7 @@ class Template
 	{
 		$url = strpos($url, 'http') === FALSE ? site_url($url) : $url;
 
-		echo "<script>window.location='$url'</script>";
+		echo "<script>window.location='{$url}'</script>";
 		exit();
 
 	}//end redirect()
