@@ -149,9 +149,11 @@
 
 				<?php else:
 
-
 					$form_method = 'form_' . $field['form_detail']['type'];
-					echo $form_method($field['form_detail']['settings'], set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : ''), $field['label']);
+					if (is_callable($form_method))
+					{
+						echo $form_method($field['form_detail']['settings'], set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : ''), $field['label']);
+					}
 
 				endif;
 			endif;
@@ -161,21 +163,18 @@
 
 	<!-- End of User Meta -->
 
+	<!-- Start of Form Actions -->
+	<div class="form-actions">
+		<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?>
+		<?php echo anchor(SITE_AREA .'/settings/users', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-warning"'); ?>
 
-	<div class="control-group">
-		<label class="control-label" for="submit">&nbsp;</label>
-		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" value="<?php echo lang('bf_action_save') ?> " />
-		</div>
-	</div>
-
-	<?php if (isset($user) && has_permission('Site.User.Manage')) : ?>
-	<div class="box delete rounded">
-		<a class="button" id="delete-me" href="<?php echo site_url(SITE_AREA .'/settings/users/delete/'. $user->id); ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')"><i class="icon-trash icon-white">&nbsp;</i><?php echo lang('us_delete_account'); ?></a>
+		<?php if (isset($user) && has_permission('Site.User.Manage')) : ?>
+		<a class="btn btn-danger" id="delete-me" href="<?php echo site_url(SITE_AREA .'/settings/users/delete/'. $user->id); ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')"><i class="icon-trash icon-white">&nbsp;</i><?php echo lang('us_delete_account'); ?></a>
 
 		<?php echo lang('us_delete_account_note'); ?>
+		<?php endif; ?>
 	</div>
-	<?php endif; ?>
+	<!-- End of Form Actions -->
 
 <?php echo form_close(); ?>
 
