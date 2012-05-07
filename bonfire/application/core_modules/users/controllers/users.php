@@ -444,6 +444,16 @@ class Users extends Front_Controller
 						'timezone'	=> $this->input->post('timezones'),
 					);
 
+				// User activation method
+				$activation_method = $this->settings_lib->item('auth.user_activation_method');
+
+				// No activation method
+				if ($activation_method == 0)
+				{
+					// Activate the user automatically
+					$data['active'] = 1;
+				}
+
 				if ($user_id = $this->user_model->insert($data))
 				{
 					// now add the meta is there is meta data
@@ -461,7 +471,7 @@ class Users extends Front_Controller
 					$site_title = $this->settings_lib->item('site.title');
 					$error = false;
 
-					switch ($this->settings_lib->item('auth.user_activation_method'))
+					switch ($activation_method)
 					{
 						case 0:
 							// No activation required. Activate the user and send confirmation email

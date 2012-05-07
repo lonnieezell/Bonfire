@@ -652,6 +652,15 @@ class Settings extends Admin_Controller
 
 		if ($type == 'insert')
 		{
+			$activation_method = $this->settings_lib->item('auth.user_activation_method');
+
+			// No activation method
+			if ($activation_method == 0)
+			{
+				// Activate the user automatically
+				$data['active'] = 1;
+			}
+
 			$return = $this->user_model->insert($data);
 		}
 		else	// Update
