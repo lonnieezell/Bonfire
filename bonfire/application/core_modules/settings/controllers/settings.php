@@ -41,7 +41,9 @@ class Settings extends Admin_Controller
 	{
 		parent::__construct();
 
-		$this->auth->restrict('Site.Settings.View');
+		// restrict access - View and Manage
+		$this->auth->restrict('Bonfire.Settings.View');
+		$this->auth->restrict('Bonfire.Settings.Manage');
 
 		Template::set('toolbar_title', 'Site Settings');
 
