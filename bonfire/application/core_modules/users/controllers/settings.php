@@ -301,17 +301,16 @@ class Settings extends Admin_Controller
 		{
 
 			Template::set('roles', $this->role_model->select('role_id, role_name, default')->where('deleted', 0)->find_all());
+			
+			Template::set('user', $user);
+			Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 		}
 		else
 		{
-			$user_id = (int) $this->current_user->id;
-			$user    = $this->user_model->find_user_and_meta($user_id);
-//			Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');
-//			redirect(SITE_AREA .'/settings/users');
+			Template::set_message(sprintf(lang('us_unauthorized'),$user->role_name), 'error');
+			redirect(SITE_AREA .'/settings/users');
 		}
 
-		Template::set('user', $user);
-		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
 		Template::set('toolbar_title', lang('us_edit_user'));
 
