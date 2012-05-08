@@ -73,7 +73,8 @@
 	</div>
 </div>
 
-<?php if ($this->settings_lib->item('auth.user_activation_method') != 0) : ?>
+<?php // show for Email Activation (1) only
+	if ($this->settings_lib->item('auth.user_activation_method') == 1) : ?>
 <!-- Activation Block -->
 <div class="row-fluid">
 	<div class="span12">
