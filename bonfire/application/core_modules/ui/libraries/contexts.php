@@ -335,13 +335,13 @@ class Contexts
 				if ($config['menus'] && isset($config['menus'][$context]))
 				{
 					$menu_view = $config['menus'][$context];
-				} else
+				}
+				else
 				{
 					$menu_view = '';
 				}
 
-				$menu_topic = isset($config['menu_topic'][$context]) ? $config['menu_topic'][$context] : $config['display_name'];
-
+				$menu_topic = is_array($config['menu_topic']) && isset($config['menu_topic'][$context]) ? $config['menu_topic'][$context] : $config['display_name'];
 				self::$menu[$menu_topic][$module] = array(
 						'title'			=> $config['title'],
 						'display_name'	=> $config['display_name'],
