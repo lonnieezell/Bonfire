@@ -1103,7 +1103,7 @@ function check_method($item)
  *
  * @return string A Breadcrumb of your page structure.
  */
-function breadcrumb( $my_segments=null , $wrap = false, $echo = true )
+function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 {
 	$ci =& get_instance();
 
@@ -1118,11 +1118,13 @@ function breadcrumb( $my_segments=null , $wrap = false, $echo = true )
 	if ( $ci->config->item('template.breadcrumb_symbol') == '' )
 	{
 		$seperator = '/';
-	} else {
+	} 
+	else
+	{
 		$seperator = $ci->config->item('template.breadcrumb_symbol');
 	}
 
-	if ( $wrap === true )
+	if ($wrap === TRUE)
 	{
 		$seperator = '<span class="divider">' . $seperator . '</span>' . PHP_EOL;
 	}
@@ -1132,7 +1134,9 @@ function breadcrumb( $my_segments=null , $wrap = false, $echo = true )
 	{
 		$segments = $ci->uri->segment_array();
 		$total    = $ci->uri->total_segments();
-	} else {
+	} 
+	else 
+	{
 		$total    = count($my_segments);
 	}
 
@@ -1141,16 +1145,20 @@ function breadcrumb( $my_segments=null , $wrap = false, $echo = true )
 	if ( $in_admin == TRUE )
 	{
 		$home_link = site_url(SITE_AREA);
-	} else {
+	} 
+	else 
+	{
 		$home_link = site_url();
 	}
 
-	if ( $wrap === true )
+	if ($wrap === TRUE)
 	{
 		$output  = '<ul class="breadcrumb">' . PHP_EOL;
-		$output .= '<li><a href="' . $home_link . '"><i class="icon-home">&nbsp;</i></a> ' . $seperator . '</li>' . PHP_EOL;
-	} else {
-		$output  = '<a href="' . $home_link . '">home</a> ' . $seperator;
+		$output .= '<li><a href="'.$home_link.'"><i class="icon-home">&nbsp;</i></a> '.$seperator.'</li>' . PHP_EOL;
+	} 
+	else 
+	{
+		$output  = '<a href="'.$home_link.'">home</a> '.$seperator;
 	}
 
 	$url = '';
@@ -1166,22 +1174,30 @@ function breadcrumb( $my_segments=null , $wrap = false, $echo = true )
 
 			if ($count == $total)
 			{
-				if ( $wrap === true )
+				if ($wrap === TRUE)
 				{
 					$output .= '<li class="active">' . ucfirst(str_replace('_', ' ', $segment)) . '</li>' . PHP_EOL;
-				} else {
+				} 
+				else 
+				{
 					$output .= ucfirst(str_replace('_', ' ', $segment)) . PHP_EOL;
 				}
-			} else {
-				if ( $wrap === true )
+			} 
+			else 
+			{
+				if ($wrap === TRUE)
 				{
 					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(strtolower($segment))) .'</a>' . $seperator . '</li>' . PHP_EOL;
-				} else {
+				} 
+				else 
+				{
 					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(strtolower($segment))) .'</a>' . $seperator . PHP_EOL;
 				}
 			}
 		}
-	} else {
+	} 
+	else 
+	{
 		// USER-SUPPLIED BREADCRUMB
 		foreach ($my_segments as $title => $uri)
 		{
@@ -1190,19 +1206,25 @@ function breadcrumb( $my_segments=null , $wrap = false, $echo = true )
 
 			if ($count == $total)
 			{
-				if ( $wrap === true )
+				if ($wrap === TRUE)
 				{
 					$output .= '<li class="active">' . str_replace('_', ' ', $title) . '</li>' . PHP_EOL;
-				} else {
+				} 
+				else 
+				{
 					$output .= str_replace('_', ' ', $title);
 				}
 
-			} else {
+			} 
+			else 
+			{
 
-				if ( $wrap === true )
+				if ($wrap === TRUE)
 				{
 					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(strtolower($title))) .'</a>' . $seperator . '</li>' . PHP_EOL;
-				} else {
+				} 
+				else 
+				{
 					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(strtolower($title))) .'</a>' . $seperator . PHP_EOL;
 				}
 
@@ -1210,16 +1232,20 @@ function breadcrumb( $my_segments=null , $wrap = false, $echo = true )
 		}
 	}
 
-	if ( $wrap === true )
+	if ($wrap === TRUE)
 	{
 		$output .= PHP_EOL . '</ul>' . PHP_EOL;
 	}
 
-	if ( $echo === true )
+	unset($in_admin, $seperator, $url, $wrap);
+
+	if ($echo === TRUE)
 	{
 		echo $output;
-		unset ( $output);
-	} else {
+		unset ($output);
+	} 
+	else 
+	{
 		return $output;
 	}
 
