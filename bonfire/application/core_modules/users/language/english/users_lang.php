@@ -205,3 +205,12 @@ $lang['us_err_no_matching_code'] 	= 'No matching activation code was found in th
 $lang['us_err_no_matching_id'] 		= 'No matching user id was found in the system.';
 $lang['us_err_user_is_active'] 		= 'The user is already active.';
 $lang['us_err_user_is_inactive'] 	= 'The user is already inactive.';
+
+/* Password strength/match */
+$lang['us_pass_strength']			= 'Strength';
+$lang['us_pass_match']				= 'Comparison';
+$lang['us_passwords_no_match']		= 'No match!';
+$lang['us_passwords_match']			= 'Match!';
+$lang['us_pass_weak']				= 'Weak';
+$lang['us_pass_good']				= 'Good';
+$lang['us_pass_strong']				= 'Strong';
