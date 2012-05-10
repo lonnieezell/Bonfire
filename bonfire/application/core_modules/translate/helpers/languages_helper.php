@@ -290,6 +290,12 @@ if (!function_exists('save_lang_file'))
 				$contents .= '$lang[\''.$name.'\'] = '. $val .";\n";
 			}
 		}//end foreach
+		
+		// is the code we are producing OK?
+		if (!is_null(eval(str_replace('<?php', '', $contents))))
+		{
+			return FALSE;
+		}
 
 		// Make sure the file still has the php opening header in it...
 		if (strpos($contents, '<?php') === FALSE)
