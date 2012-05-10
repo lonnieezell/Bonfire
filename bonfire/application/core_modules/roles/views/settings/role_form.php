@@ -65,7 +65,7 @@
 		</fieldset>
 
 		<!-- Permissions -->
-		<?php if (has_permission('Permissions.Settings.Manage')) : ?>
+		<?php if (has_permission('Bonfire.Permissions.Manage')) : ?>
 		<fieldset>
 			<legend><?php echo lang('role_permissions'); ?></legend>
 				<br/>
