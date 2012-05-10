@@ -255,9 +255,6 @@ class Role_model extends BF_Model
 
 			$this->user_model->set_to_default_role($id);
 
-		}
-		else if ($deleted === TRUE && $purge === TRUE)
-		{
 			// now delete the role_permissions for this permission
 			$this->role_permission_model->delete_for_role($id);
 
@@ -270,11 +267,19 @@ class Role_model extends BF_Model
 			}
 
 			$perm = $this->permission_model->find_by('name','Permissions.'.ucwords($role->role_name).'.Manage');
-
 			if ($perm)
 			{
-				$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Permissions.".ucwords($role->role_name).".Manage')");
+				// remove the role_permissions for this permission
 				$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='".$perm->permission_id."';");
+
+				if ($deleted === TRUE && $purge === TRUE)
+				{
+					$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Permissions.".ucwords($role->role_name).".Manage')");
+				}
+				else
+				{
+					$this->db->query("UPDATE {$prefix}permissions SET status = 'inactive' WHERE (name = 'Permissions.".ucwords($role->role_name).".Manage')");
+				}
 			}
 		}//end if
 
