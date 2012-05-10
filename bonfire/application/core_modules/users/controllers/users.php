@@ -283,7 +283,13 @@ class Users extends Front_Controller
 		// get the current user information
 		$user = $this->user_model->find_user_and_meta($this->current_user->id);
 
-		// Generate password hint messages.
+        $settings = $this->settings_lib->find_all();
+        if ($settings['auth.password_show_labels'] == 1) {
+            Assets::add_module_js('users','password_strength.js');
+            Assets::add_module_js('users','jquery.strength.js');
+            Assets::add_js($this->load->view('users_js', array('settings'=>$settings), true), 'inline');
+        }
+        // Generate password hint messages.
 		$this->user_model->password_hints();
 
 		Template::set('user', $user);
@@ -365,7 +371,13 @@ class Users extends Front_Controller
 				Template::redirect('/login');
 			}
 
-			// If we're here, then it is a valid request....
+            $settings = $this->settings_lib->find_all();
+            if ($settings['auth.password_show_labels'] == 1) {
+                Assets::add_module_js('users','password_strength.js');
+                Assets::add_module_js('users','jquery.strength.js');
+                Assets::add_js($this->load->view('users_js', array('settings'=>$settings), true), 'inline');
+            }
+            // If we're here, then it is a valid request....
 			Template::set('user', $user);
 
 			Template::set_view('users/users/reset_password');
@@ -565,7 +577,14 @@ class Users extends Front_Controller
 			}//end if
 		}//end if
 
-		// Generate password hint messages.
+        $settings = $this->settings_lib->find_all();
+        if ($settings['auth.password_show_labels'] == 1) {
+            Assets::add_module_js('users','password_strength.js');
+            Assets::add_module_js('users','jquery.strength.js');
+            Assets::add_js($this->load->view('users_js', array('settings'=>$settings), true), 'inline');
+        }
+
+        // Generate password hint messages.
 		$this->user_model->password_hints();
 
 		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
