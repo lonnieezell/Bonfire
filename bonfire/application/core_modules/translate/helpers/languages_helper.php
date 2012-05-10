@@ -278,7 +278,7 @@ if (!function_exists('save_lang_file'))
 			}
 			else
 			{
-				$val ='"' . $val .'"';
+				$val ='\'' . str_replace("'", "\'", $val) .'\'';
 			}
 
 			if (!$empty)
