@@ -13,7 +13,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<meta charset="utf-8">	
+	<meta charset="utf-8">
 	<title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo $this->settings_lib->item('site.title') ?></title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,7 +72,7 @@
 					<?php endif;?>
 				<div class="nav pull-right">
 					<div class="btn-group">
-						<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $current_user->id) ?>" id="tb_email" class="btn dark" title="<?php echo lang('bf_user_settings') ?>">
+						<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit') ?>" id="tb_email" class="btn dark" title="<?php echo lang('bf_user_settings') ?>">
 							<?php echo (isset($current_user->display_name) && !empty($current_user->display_name)) ? $current_user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $current_user->username : $current_user->email); ?>
 						</a>
 						<a class="btn dropdown-toggle dark" data-toggle="dropdown" href="#"><span class="caret"></span></a>
@@ -89,8 +89,8 @@
 												</p>
 
 												<br/>
-												<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $current_user->id) ?>">Profile</a>
-												<a href="<?php echo site_url('logout'); ?>">Logout</a>
+												<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit') ?>"><?php echo lang('bf_user_settings')?></a>
+												<a href="<?php echo site_url('logout'); ?>"><?php echo lang('bf_action_logout')?></a>
 											</div>
 										</div>
 								</li>
