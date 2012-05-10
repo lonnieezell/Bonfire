@@ -74,7 +74,7 @@ if (!function_exists('list_lang_files'))
 		$lang_files = array();
 
 		// Base language files.
-		$lang_files = array_merge($lang_files, find_lang_files(APPPATH .'language/'. $language .'/', $language));
+		$lang_files = array_merge($lang_files, find_lang_files(APPPATH .'language/'. $language .'/'));
 
 		// Module lang files
 		$modules = module_list();
@@ -91,12 +91,12 @@ if (!function_exists('list_lang_files'))
 
 				if (in_array($module, $custom_modules))
 				{
-					$files = find_lang_files(realpath(APPPATH .'../modules/'. $path) .'/', $language);
+					$files = find_lang_files(realpath(APPPATH .'../modules/'. $path) .'/');
 					$type = 'custom';
 				}
 				else
 				{
-					$files = find_lang_files(APPPATH .'core_modules/'. $path .'/', $language);
+					$files = find_lang_files(APPPATH .'core_modules/'. $path .'/');
 				}
 
 				foreach ($files as $file)
@@ -123,9 +123,9 @@ if (!function_exists('find_lang_files'))
 	 *
 	 * @return array An array of files
 	 */
-	function find_lang_files($path=NULL, $language='english')
+	function find_lang_files($path=NULL)
 	{
-		if (!is_dir($path) || empty($language))
+		if (!is_dir($path))
 		{
 			return NULL;
 		}
