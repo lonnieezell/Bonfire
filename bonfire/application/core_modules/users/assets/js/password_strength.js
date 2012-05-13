@@ -21,7 +21,9 @@ var PasswordStrength = function() {
 			if (this.options.min_password_len != null) this.min_password_len = this.options.min_password_len;
 			
 			this.score += this.scoreFor("password_size");
+			this.score += this.scoreFor("number");
 			this.score += this.scoreFor("numbers");
+			this.score += this.scoreFor("symbol");
 			this.score += this.scoreFor("symbols");
 			this.score += this.scoreFor("uppercase_lowercase");
 			this.score += this.scoreFor("numbers_chars");
@@ -68,22 +70,38 @@ var PasswordStrength = function() {
 					score = this.password.length * this.min_password_len;
 				}
 				break;
+			
+			case "number":
+				if (this.options.force_numbers != null && this.options.force_numbers === true) {
+					if (this.password.match(/\d.*?\d/)) {
+						score = 10;
+					} else {
+						score = -50;
+					}
+				}
+			
+				break;
 
 			case "numbers":
 				if (this.password.match(MULTIPLE_NUMBERS_RE)) {
 					score = 5;
-				} else {
-					if (this.options.force_numbers != null && this.options.force_numbers === true)
-						score = -50;
 				}
+				break;
+
+			case "symbol":
+				if (this.options.force_symbols != null && this.options.force_symbols === true) {
+					if (this.password.match(/[!@#$%^&*?_~].*?/)) {
+						score = 10;
+					} else {
+						score = -50;
+					}
+				}
+			
 				break;
 
 			case "symbols":
 				if (this.password.match(MULTIPLE_SYMBOLS_RE)) {
 					score = 5;
-				} else {
-					if (this.options.force_symbols != null && this.options.force_symbols === true)
-						score = -50;
 				}
 				break;
 
@@ -138,7 +156,8 @@ var PasswordStrength = function() {
 				break;
 
 			case "username":
-				if ((this.options.use_username == null) || (this.options.use_username != null && this.options.use_username === true)) {
+				if (((this.options.use_username == null) || (this.options.use_username != null && this.options.use_username === true))
+				&& (this.username && this.username != '')) {
 					if (this.password == this.username) {
 						score = -100;
 					} else if (this.password.indexOf(this.username) != -1) {
@@ -148,7 +167,8 @@ var PasswordStrength = function() {
 				break;
 
 			case "email":
-				if ((this.options.use_email == null) || (this.options.use_email != null && this.options.use_email === true)) {
+				if ((this.options.use_email != null && this.options.use_email === true)
+				&& (this.email && this.email != '')) {	
 					if (this.password == this.email) {
 						score = -100;
 					} else if (this.password.indexOf(this.email) != -1) {
@@ -168,7 +188,6 @@ var PasswordStrength = function() {
         		score += -(this.repetitions(this.password, 4) * 2);
 				break;
 		};
-
 		return score;
 	};
 

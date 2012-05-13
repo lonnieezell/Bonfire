@@ -15,7 +15,6 @@ $.strength("#username", "#password", { force_numbers: force_numbers, force_symbo
 force_mixed_case: force_mixed_case, min_password_len: min_password_len, use_username: use_username, 
 use_email: use_email }, 
 function(username, password, strength) {
-	console.log("here");
 	var span = $("#strength"),
 	classes = {
 		"weak": "important",
@@ -34,7 +33,7 @@ function(username, password, strength) {
 	};
 			
 	if (!span.length) {
-		$(password).after('<span class="help-inline" id="strength"><span class="label"><i class="strength-icon icon-white"></i> <span class="txt"></span></span></span>');
+		$(password).after('<span class="help-inline" id="strength" style="display: inline-block;"><span class="label"><i class="strength-icon icon-white"></i> <span class="txt"></span></span></span>');
 	}
 	$('#strength .label')
 		.removeClass('label-important')
@@ -49,7 +48,7 @@ function(username, password, strength) {
 		.removeClass('icon-warning-sign')
 		.addClass('icon-'+icons[strength.status]+'-sign');
 
-});
+}, "#email");
 
 /**
  *	Test if entered passwords match.
@@ -59,7 +58,7 @@ $('#pass_confirm').blur(function() {
 	{
         var span = $("#match");
         if (!span.length) {
-            $('#pass_confirm').after('<span class="help-inline" id="match"><span class="label"><i class="match-icon icon-white"></i> <span class="txt"></span></span></span>');
+            $('#pass_confirm').after('<span class="help-inline" id="match" style="display: inline-block;"><span class="label"><i class="match-icon icon-white"></i> <span class="txt"></span></span></span>');
         }
         var thisClass ='', txt = '', icon = '';
 		if ($('#pass_confirm').val() != $('#password').val()) 	
