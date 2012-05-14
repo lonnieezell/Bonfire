@@ -100,7 +100,7 @@
 							</div>
 						</div>
 					
-						<?php echo Contexts::render_menu('both', 'normal'); ?>
+						<?php echo Contexts::render_menu('text', 'normal'); ?>
 					</div> <!-- END OF nav-collapse -->
 
 			</div><!-- /container -->
