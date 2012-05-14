@@ -39,8 +39,8 @@ class Settings extends Admin_Controller
 	{
  		parent::__construct();
 
-		$this->auth->restrict('Permissions.Settings.View');
-		$this->auth->restrict('Permissions.Settings.Manage');
+		$this->auth->restrict('Bonfire.Permissions.View');
+		$this->auth->restrict('Bonfire.Permissions.Manage');
 
 		$this->load->library('form_validation');
 		$this->load->helper('form');

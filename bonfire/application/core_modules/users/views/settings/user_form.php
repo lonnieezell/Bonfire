@@ -88,7 +88,7 @@
 			</div>
 		</div>
 
-		<?php if (has_permission('Bonfire.Roles.Manage') && isset($roles)) :?>
+		<?php if (has_permission('Bonfire.Roles.Manage') && has_permission('Permissions.'.$user->role_name.'.Manage') && isset($roles)) :?>
 		<fieldset>
 			<legend><?php echo lang('us_role'); ?></legend>
 
@@ -131,7 +131,7 @@
 		<!-- Start of User Meta -->
 		<?php
 		foreach ($meta_fields as $field):
-	
+
 			if ($field['form_detail']['type'] == 'dropdown'):
 
 				echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']));
@@ -221,7 +221,7 @@
 
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?> 
+			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?>
 			<?php echo anchor(SITE_AREA .'/settings/users', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-warning"'); ?>
 		</div>
 

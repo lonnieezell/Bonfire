@@ -41,7 +41,6 @@ class Settings extends Admin_Controller
     {
 		parent::__construct();
 
-		$this->auth->restrict('Site.Settings.View');
 		$this->auth->restrict('Bonfire.Users.View');
 
 		$this->load->model('roles/role_model');
@@ -81,6 +80,7 @@ class Settings extends Admin_Controller
 	 */
 	public function index()
 	{
+		$this->auth->restrict('Bonfire.Users.Manage');
 
 		$roles = $this->role_model->select('role_id, role_name')->where('deleted', 0)->find_all();
 		Template::set('roles', $roles);
@@ -260,17 +260,23 @@ class Settings extends Admin_Controller
 	 */
 	public function edit()
 	{
-		$this->auth->restrict('Bonfire.Users.Manage');
-
 		$this->load->config('address');
 		$this->load->helper('address');
 		$this->load->helper('date');
 
-		$user_id = $this->uri->segment(5);
+		// if there is no id passed in edit the current user
+		// this is so we don't have to pass the user id in the url for editing the current users profile
+		$user_id = $this->uri->segment(5) != '' ? $this->uri->segment(5) : $this->current_user->id;
+
 		if (empty($user_id))
 		{
 			Template::set_message(lang('us_empty_id'), 'error');
 			redirect(SITE_AREA .'/settings/users');
+		}
+
+		if ($user_id != $this->current_user->id)
+		{
+			$this->auth->restrict('Bonfire.Users.Manage');
 		}
 
 
@@ -278,9 +284,11 @@ class Settings extends Admin_Controller
 		$meta_fields = config_item('user_meta_fields');
 		Template::set('meta_fields', $meta_fields);
 
+		$user = $this->user_model->find_user_and_meta($user_id);
+
 		if ($this->input->post('submit'))
 		{
-			if ($this->save_user('update', $user_id, $meta_fields))
+			if ($this->save_user('update', $user_id, $meta_fields, $user->role_name))
 			{
 
 				$meta_data = array();
@@ -294,7 +302,7 @@ class Settings extends Admin_Controller
 
 				$this->load->model('activities/Activity_model', 'activity_model');
 
-				$user = $this->user_model->find($user_id);
+				$user = $this->user_model->find_user_and_meta($user_id);;
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
 
@@ -302,12 +310,9 @@ class Settings extends Admin_Controller
 			}
 		}
 
-		$user = $this->user_model->find_user_and_meta($user_id);
-		if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage'))
+		if (isset($user))
 		{
-
 			Template::set('roles', $this->role_model->select('role_id, role_name, default')->where('deleted', 0)->find_all());
-			
 			Template::set('user', $user);
 			Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 		}
@@ -566,13 +571,14 @@ class Settings extends Admin_Controller
 	 *
 	 * @access private
 	 *
-	 * @param string $type        The type of operation (insert or edit)
-	 * @param int    $id          The id of the user in the case of an edit operation
-	 * @param array  $meta_fields Array of meta fields fur the user
+	 * @param string $type          The type of operation (insert or edit)
+	 * @param int    $id            The id of the user in the case of an edit operation
+	 * @param array  $meta_fields   Array of meta fields fur the user
+	 * @param string $cur_role_name The current role for the user being edited
 	 *
 	 * @return bool
 	 */
-	private function save_user($type='insert', $id=0, $meta_fields=array())
+	private function save_user($type='insert', $id=0, $meta_fields=array(), $cur_role_name = '')
 	{
 
 		if ($type == 'insert')
@@ -602,7 +608,11 @@ class Settings extends Admin_Controller
 
 		$this->form_validation->set_rules('language', lang('bf_language'), 'required|trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('timezones', lang('bf_timezone'), 'required|trim|strip_tags|max_length[4]|xss_clean');
-		$this->form_validation->set_rules('role_id', lang('us_role'), 'required|trim|strip_tags|max_length[2]|is_numeric|xss_clean');
+
+		if (has_permission('Bonfire.Roles.Manage') && has_permission('Permissions.'.$cur_role_name.'.Manage'))
+		{
+			$this->form_validation->set_rules('role_id', lang('us_role'), 'required|trim|strip_tags|max_length[2]|is_numeric|xss_clean');
+		}
 
 		$meta_data = array();
 

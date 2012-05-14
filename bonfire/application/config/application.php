@@ -65,35 +65,6 @@ $config['contexts'] = array( 'content', 'reports', 'settings', 'developer' );
 
 
 //--------------------------------------------------------------------
-// !MODULES
-//--------------------------------------------------------------------
-
-/*
-	These module settings determine what permissions are needed to view
-	modules in the left-hand sidebar.
-*/
-$config['module_permissions'] = array(
-	'content'		=> array(
-		'views'		=> 'Site.Content.View'
-	),
-	'reports'		=> array(
-		'emailer'	=> 'Bonfire.Emailer.View'
-	),
-	'appearance'	=> array(
-
-	),
-	'settings'		=> array(
-		'database'	=> 'Bonfire.Database.Manage',
-		'emailer'	=> 'Bonfire.Emailer.Manage',
-		'roles'		=> 'Bonfire.Roles.Manage',
-		'users'		=> 'Bonfire.Users.View'
-	),
-	'developer'		=> array(
-		'database'	=> 'Bonfire.Database.Manage',
-	)
-);
-
-//--------------------------------------------------------------------
 // !TEMPLATE
 //--------------------------------------------------------------------
 

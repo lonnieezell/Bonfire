@@ -42,7 +42,7 @@ class Reports extends Admin_Controller
 		parent::__construct();
 
 		$this->auth->restrict('Site.Reports.View');
-		$this->auth->restrict('Bonfire.Activities.Manage');
+		$this->auth->restrict('Bonfire.Activities.View');
 
 		$this->lang->load('activities');
 		$this->lang->load('datatable');
