@@ -59,7 +59,7 @@ class Base_Controller extends MX_Controller
 	 *
 	 * @var object
 	 */
-	protected $current_user = null;
+	protected $current_user = NULL;
 
 	//--------------------------------------------------------------------
 
@@ -102,7 +102,7 @@ class Base_Controller extends MX_Controller
 		*/
 		if (ENVIRONMENT == 'production')
 		{
-		    $this->db->save_queries = false;
+		    $this->db->save_queries = FALSE;
 
 		    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 		}
@@ -120,7 +120,7 @@ class Base_Controller extends MX_Controller
 			if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_front_profiler'))
 			{
 				$this->load->library('Console');
-				$this->output->enable_profiler(true);
+				$this->output->enable_profiler(TRUE);
 			}
 
 			// Auto-migrate our core and/or app to latest version.
@@ -302,7 +302,7 @@ class Admin_Controller extends Authenticated_Controller
 			if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_profiler'))
 			{
 				$this->load->library('Console');
-				$this->output->enable_profiler(true);
+				$this->output->enable_profiler(TRUE);
 			}
 		}
 
