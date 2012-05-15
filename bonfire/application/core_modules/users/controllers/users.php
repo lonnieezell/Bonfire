@@ -170,7 +170,7 @@ class Users extends Front_Controller
 					// We validated. Does the user actually exist?
 					$user = $this->user_model->find_by('email', $_POST['email']);
 
-					if (count($user) == 1)
+					if ($user !== FALSE)
 					{
 						// User exists, so create a temp password.
 						$this->load->helpers(array('string', 'security'));
@@ -830,7 +830,7 @@ class Users extends Front_Controller
 					// We validated. Does the user actually exist?
 					$user = $this->user_model->find_by('email', $_POST['email']);
 
-					if (count($user) == 1)
+					if ($user !== FALSE)
 					{
 						// User exists, so create a temp password.
 						$this->load->helpers(array('string', 'security'));

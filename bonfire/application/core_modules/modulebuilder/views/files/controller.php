@@ -202,7 +202,7 @@ $mb_edit = "
 	{
 		\$this->auth->restrict('{edit_permission}');
 
-		\$id = (int)\$this->uri->segment(5);
+		\$id = \$this->uri->segment(5);
 
 		if (empty(\$id))
 		{
