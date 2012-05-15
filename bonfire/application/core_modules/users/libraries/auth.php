@@ -345,8 +345,9 @@ class Auth
 		// If user isn't logged in, don't need to check permissions
 		if ($this->is_logged_in() === FALSE)
 		{
-			Template::set_message( $this->ci->lang->line('us_must_login'), 'error');
-			redirect('login');
+			$this->logout();
+			Template::set_message($this->ci->lang->line('us_must_login'), 'error');
+			Template::redirect('login');
 		}
 
 		// Check to see if the user has the proper permissions
