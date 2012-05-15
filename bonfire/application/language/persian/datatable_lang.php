@@ -20,6 +20,7 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 */
+//Translator Sajjad Servatjoo <sajjad.servatjoo[at]gmail[dot]com>
 $lang['sProcessing']= 'درحال پردازش...';
 $lang['sLengthMenu']= 'نمایش محتویات _MENU_';
 $lang['sZeroRecords']= 'موردی یافت نشد';

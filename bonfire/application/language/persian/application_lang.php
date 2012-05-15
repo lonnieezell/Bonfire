@@ -20,128 +20,216 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 */
+//Translator Sajjad Servatjoo <sajjad.servatjoo[at]gmail[dot]com>
+
 
 //--------------------------------------------------------------------
-// !SETTINGS
+// ! GENERAL SETTINGS
 //--------------------------------------------------------------------
 
-$lang['bf_site_name']			= 'نام سايت';
-$lang['bf_site_email']			= 'پست الکترونيکي';
-$lang['bf_site_email_help']		= 'ايميل پيش فرض جهت ارسال ايميل هاي ايجاد شده توسط سيستم.';
-$lang['bf_site_status']			= 'وضعيت سايت';
-$lang['bf_online']				= 'آنلاين';
-$lang['bf_offline']				= 'آفلاين';
-$lang['bf_top_number']			= 'تعداد موارد <em> در هر </em> صفحه:';
-$lang['bf_top_number_help']		= 'به هنگام نمايش گزارشات چند مورد در هر صفحه نمايش داده شود؟';
+$lang['bf_site_name']			= 'نام سایت';
+$lang['bf_site_email']			= 'تنظیمات ایمیل';
+$lang['bf_site_email_help']		= 'آدرس پست الکترونیکی پیشفرض که ایمیل های تولید شده توسط سیستم به وسیله آن ارسال میشود';
+$lang['bf_site_status']			= 'وضعیت سایت';
+$lang['bf_online']				= 'آنلاین';
+$lang['bf_offline']				= 'آفلایت';
+$lang['bf_top_number']			= 'مورد <em> در هر</em> صفحه:';
+$lang['bf_top_number_help']		= 'به هنگام نمایش گزارشات چند مورد در هر صفحه نمایش داده شود؟';
+$lang['bf_home']				= 'خانه';
+$lang['bf_site_information']	= 'اطلاعات سایت';
+$lang['bf_timezone']			= 'منطقه ی زمانی';
+$lang['bf_language']			= 'زبان';
+$lang['bf_language_help']		= 'زبان های قابل دسترس کاربران را انتخاب نمایید.';
 
-$lang['bf_security']			= 'امنيت';
-$lang['bf_login_type']			= 'نوع ورود:';
-$lang['bf_login_type_email']	= 'فقط ايميل';
-$lang['bf_login_type_username']	= 'فقط نام کاربري';
-$lang['bf_allow_register']		= 'فعال سازي ثبت نام توسط کاربران؟';
-$lang['bf_login_type_both']		= 'ايميل و يا نام کاربري';
-$lang['bf_use_usernames']		= 'نمايش کاربران در محيط سايت:';
-$lang['bf_use_own_name']		= 'از نام شخصي استفاده شود';
-$lang['bf_allow_remember']		= 'اجازه \'به خاطر سپردن\' کاربرات؟';
-$lang['bf_remember_time']		= 'به خاطر سپردن کاربران به مدت:';
+//--------------------------------------------------------------------
+// ! AUTH SETTINGS
+//--------------------------------------------------------------------
+
+$lang['bf_security']			= 'امنیت';
+$lang['bf_login_type']			= 'نوع ورود';
+$lang['bf_login_type_email']	= 'فقط ایمیل';
+$lang['bf_login_type_username']	= 'فقط نام کاربری';
+$lang['bf_allow_register']		= 'اجازه ثبت نام توسط کاربران؟';
+$lang['bf_login_type_both']		= 'ایمیل یا نام کاربری';
+$lang['bf_use_usernames']		= 'نمایش کاربران در بن فایر با:';
+$lang['bf_use_own_name']		= 'استفاده از نام شخصی';
+$lang['bf_allow_remember']		= 'اجازه استفاده از \'مرا به خاطر داشته باش\'؟';
+$lang['bf_remember_time']		= 'به خاطر داشتن کاربران به مدت:';
 $lang['bf_week']				= 'هفته';
 $lang['bf_weeks']				= 'هفته';
 $lang['bf_days']				= 'روز';
-$lang['bf_username']			= 'نام کاربري';
+$lang['bf_username']			= 'نام کاربری';
 $lang['bf_password']			= 'کلمه عبور';
-$lang['bf_password_confirm']	= 'تکرار کلمه عبور';
+$lang['bf_password_confirm']	= 'کلمه عبور (تکرار)';
+$lang['bf_display_name']		= 'نام نمایشی';
 
-$lang['bf_home_page']			= 'صفحه خانگي';
+//--------------------------------------------------------------------
+// ! CRUD SETTINGS
+//--------------------------------------------------------------------
+
+$lang['bf_home_page']			= 'صفحه اصلی';
 $lang['bf_pages']				= 'صفحات';
-$lang['bf_enable_rte']			= 'فعال سازي اديتور براي صفحات؟';
-$lang['bf_rte_type']			= 'نوع اديتور';
-$lang['bf_searchable_default']	= 'به طور پيش فرض قابل جستجو باشد؟';
-$lang['bf_cacheable_default']	= 'به طور پيش فرض قابل کش باشد؟';
-$lang['bf_track_hits']			= 'پيگيري بازديد از صفحات؟';
+$lang['bf_enable_rte']			= 'فعال بودن ادیتور برای صفحات؟';
+$lang['bf_rte_type']			= 'نوع ادیتور';
+$lang['bf_searchable_default']	= 'به صورت پیشفرض قابل جستجو باشد؟';
+$lang['bf_cacheable_default']	= 'به صورت پیشفرض قابلیت کش را داشته باشد؟';
+$lang['bf_track_hits']			= 'پیگیری نمایش صفحه؟';
 
-$lang['bf_action_save']			= 'ذخيره';
+$lang['bf_action_save']			= 'ذخیره';
 $lang['bf_action_delete']		= 'حذف';
 $lang['bf_action_cancel']		= 'انصراف';
 $lang['bf_action_download']		= 'دانلود';
-$lang['bf_action_preview']		= 'پيش نمايش';
+$lang['bf_action_preview']		= 'پیش نمایش';
 $lang['bf_action_search']		= 'جستجو';
-$lang['bf_action_purge']		= 'پاکسازي';
-$lang['bf_action_restore']		= 'بازيابي';
-$lang['bf_action_show']			= 'نمايش';
+$lang['bf_action_purge']		= 'پالایش';
+$lang['bf_action_restore']		= 'بازگردانی';
+$lang['bf_action_show']			= 'نمایش';
 $lang['bf_action_login']		= 'ورود';
-$lang['bf_actions']				= 'عمليات';
+$lang['bf_action_logout']		= 'خروج';
+$lang['bf_actions']				= 'عملیات';
+$lang['bf_clear']				= 'پاک کردن';
+$lang['bf_action_list']			= 'لیست';
+$lang['bf_action_create']		= 'ایجاد';
+$lang['bf_action_ban']			= 'تحریم کردن';
 
-$lang['bf_do_check']			= 'بررسي جهت به روز رساني؟';
-$lang['bf_do_check_edge']		= 'جهت ديدن آخرين به روز رساني ها اين گزينه را فعال نماييد.';
+//--------------------------------------------------------------------
+// ! SETTINGS LIB
+//--------------------------------------------------------------------
 
-$lang['bf_update_show_edge']	= 'نمايش تمامي به روز رساني ها؟';
-$lang['bf_update_info_edge']	= 'جهت نمايش به  روز رساني هاي تاييد شده اين گزينه را فعال نکنيد. چنانچه ميخواهيد تمامي به روز رساني ها را مشاهده کنيد اين گزينه را فعال نماييد.';
+$lang['bf_do_check']			= 'بررسی به روز رسانی؟';
+$lang['bf_do_check_edge']		= 'جهت دیدن به روز رسانی ها این گزینه باید فعال باشد.';
 
-$lang['bf_ext_profile_show']	= 'آيا کاربران داراي صفحه مشخصات پيشرفته باشند؟';
-$lang['bf_ext_profile_info']	= 'جهت استفاده از صفحه مشخصات پيشرفته براي کاربران گزينه مشخصات پيشرفته را فعال نماييد.';
+$lang['bf_update_show_edge']	= 'نمایش به روز رسانی های آتی';
+$lang['bf_update_info_edge']	= 'جهت نمایش به روز رسانی های آتی این گزینه باید فعال باشد.';
+
+$lang['bf_ext_profile_show']	= 'آیا حساب های کاربری شامل مشخصات پیشرفته هستند؟';
+$lang['bf_ext_profile_info']	= 'اگر میخواهید کاربران مشخصات بیشتری را در مورد خود در صفحه مشخصات وارد نمایند این گزینه را فعال نمایید';
 
 $lang['bf_yes']					= 'بله';
-$lang['bf_no']					= 'خير';
-$lang['bf_none']				= 'هيچ';
+$lang['bf_no']					= 'خیر';
+$lang['bf_none']				= 'هیچ';
+$lang['bf_id']					= 'ID';
 
-$lang['bf_or']					= 'يا';
+$lang['bf_or']					= 'یا';
 $lang['bf_size']				= 'اندازه';
-$lang['bf_files']				= 'فايل ها';
-$lang['bf_file']				= 'فايل';
+$lang['bf_files']				= 'فایل ها';
+$lang['bf_file']				= 'فایل';
 
-$lang['bf_with_selected']		= 'انتخاب شده ';
+$lang['bf_with_selected']		= 'با انتخاب شده ها';
 
-$lang['bf_env_dev']				= 'توسعه';
-$lang['bf_env_test']			= 'آزمايش';
-$lang['bf_env_prod']			= 'محصول نهايي';
+$lang['bf_env_dev']				= 'گسترش';
+$lang['bf_env_test']			= 'آزمایشی';
+$lang['bf_env_prod']			= 'محصول نهایی';
+
+$lang['bf_show_profiler']		= 'نمایش اطلاعات اجرا در پنل مدیریت؟';
+$lang['bf_show_front_profiler']	= 'نمایش اطلاعات اجرا در سایت؟';
+
+$lang['bf_cache_not_writable']  = 'پوشه کش برنامه قابل نوشت نمی باشد.';
+
+$lang['bf_password_strength']			= 'تنظیمات کلمه عبور';
+$lang['bf_password_length_help']		= 'حداقل طول برای کلمه عبور به طور مثال : 8';
+$lang['bf_password_force_numbers']		= 'آیا کلمه عبور حتما باید شامل عدد باشد؟';
+$lang['bf_password_force_symbols']		= 'آیا کلمه عبور حتما باید شامل کاراکتر های سمبل باشد؟';
+$lang['bf_password_force_mixed_case']	= 'آیا کلمه عبور حتما باید شامل حروف کوچک به همراه حروف بزرگ باشد؟';
+
+//--------------------------------------------------------------------
+// ! USER/PROFILE
+//--------------------------------------------------------------------
 
 $lang['bf_user']				= 'کاربر';
 $lang['bf_users']				= 'کاربران';
-$lang['bf_username']			= 'نام کاربري';
-$lang['bf_description']			= 'توضيحات';
-$lang['bf_email']				= 'ايميل';
+$lang['bf_username']			= 'نام کاربری';
+$lang['bf_description']			= 'توضیحات';
+$lang['bf_email']				= 'پست الکترونیکی';
 $lang['bf_user_settings']		= 'مشخصات من';
+
+//--------------------------------------------------------------------
+// !
+//--------------------------------------------------------------------
 
 $lang['bf_both']				= 'هر دو';
 $lang['bf_go_back']				= 'بازگشت';
-$lang['bf_new']					= 'جديد';
-$lang['bf_required_note']		= 'گزينه هاي اجباري <b>ضخيم تر</b> هستند.';
-
-$lang['bf_show_profiler']		= 'نمايش اطلاعات اجرا در بخش مديريت';
-$lang['bf_show_front_profiler']	= 'نمايش اطلاعات اجرا در بخش کاربري';
-
-$lang['bf_cache_not_writable']  = 'پوشه مربوط به کش قابل نوشتن نمي باشد';
+$lang['bf_new']					= 'جدید';
+$lang['bf_required_note']		= 'گزینه های اجباری به صورت <b>ضخیم تر</b> می باشند.';
+$lang['bf_form_label_required'] = '<span class="required">*</span>';
 
 //--------------------------------------------------------------------
 // MY_Model
 //--------------------------------------------------------------------
-$lang['bf_model_no_data']		= 'چيزي يافت نشد.';
-$lang['bf_model_invalid_id']	= 'مشخصه ارسال شده صحيح نمي باشد.';
-$lang['bf_model_no_table']		= 'جدول پايگاه داده نامشخص است.';
-$lang['bf_model_fetch_error']	= 'اطلاعات کافي جهت واکشي موجود نيست.';
-$lang['bf_model_count_error']	= 'اطلاعات کافي جهت شمارش نتايج موجود نيست.';
-$lang['bf_model_unique_error']	= 'اطلاعات کافي جهت بررسي يکتا بودن موجود نيست.';
-$lang['bf_model_find_error']	= 'اطلاعات کافي جهت جستجو موجود نيست.';
+$lang['bf_model_db_error']		= 'خطای پایگاه داده: ';
+$lang['bf_model_no_data']		= 'چیزی یافت نشد.';
+$lang['bf_model_invalid_id']	= 'ID ارسال شده نا معتبر می باشد.';
+$lang['bf_model_no_table']		= 'جدول پایگاه داده صحیح نمی باشد.';
+$lang['bf_model_fetch_error']	= 'اطلاعات کافی جهت واکشی فیلد موجود نیست.';
+$lang['bf_model_count_error']	= 'اطلاعات کافی جهت شمارش نتایج موجود نمی باشد.';
+$lang['bf_model_unique_error']	= 'اطلاعات کافی جهت بررسی یکتا بودن موجود نمی باشد.';
+$lang['bf_model_find_error']	= 'اطلاعات کافی جهت جستجو موجود نیست.';
 $lang['bf_model_bad_select']	= 'انتخاب نادرست.';
 
 //--------------------------------------------------------------------
 // Contexts
 //--------------------------------------------------------------------
-$lang['bf_no_contexts']			= 'آرايه ي contexts به صورت صحيح پيکر بندي نشده است. فايل کانفيگ برنامه را بررسي نماييد.';
-$lang['bf_context_content']		= 'محتوي';
+$lang['bf_no_contexts']			= 'آرایه بخش های مدیریت به صورت صحیح وارد نشده اند. لطفا فایل کانفیگ را جهت اصلاع بررسی نمایید.';
+$lang['bf_context_content']		= 'محتوی';
 $lang['bf_context_reports']		= 'گزارشات';
-$lang['bf_context_settings']	= 'تنظيمات';
-$lang['bf_context_developer']	= 'توسعه';
+$lang['bf_context_settings']	= 'تنظیمات';
+$lang['bf_context_developer']	= 'گسترش';
 
 //--------------------------------------------------------------------
 // Activities
 //--------------------------------------------------------------------
-$lang['bf_act_settings_saved']	= 'تنظيمان برنامه ذخيره شدند توسط ';
-$lang['bf_unauthorized_attempt']= 'تلاش نا موفق جهت دسترسي به صفحه اي که نياز به مجوز "%s" دارد توسط ';
+$lang['bf_act_settings_saved']	= 'تنظیمات برنامه ذخیره شدند.';
+$lang['bf_unauthorized_attempt']= 'تلاش نا موفق جهت دسترسی به صفحه ای که نیاز به مجوز "%s" دارد.';
 
-$lang['bf_keyboard_shortcuts']    = 'کليد هاي ميانبر در دسترس:';
+$lang['bf_keyboard_shortcuts']		= 'کلید های میانبر قابل دسترس:';
+$lang['bf_keyboard_shortcuts_none']	= 'کلید میانبری تعریف نشده است.';
+$lang['bf_keyboard_shortcuts_edit']	= 'ویرایش کلید های میانبر';
+
 //--------------------------------------------------------------------
 // Common
 //--------------------------------------------------------------------
-$lang['bf_question_mark']	= '؟';
+$lang['bf_question_mark']	      = '؟';
 $lang['bf_language_direction']	= 'rtl';
+$lang['log_intro']              = 'این ها پیام های ورود شما هستند:';
+
+//--------------------------------------------------------------------
+// Login
+//--------------------------------------------------------------------
+$lang['bf_action_register']		= 'ثبت نام';
+$lang['bf_forgot_password']		= 'کلمه عبور خود را فراموش کرده اید؟';
+$lang['bf_remember_me']			= 'مرا به یاد داشته باش';
+
+//--------------------------------------------------------------------
+// Password Help Fields to be used as a warning on register
+//--------------------------------------------------------------------
+$lang['bf_password_number_required_help']  = 'کلمه عبور حداقل باید شامل یک نقطه باشد.';
+$lang['bf_password_caps_required_help']    = 'کلمه عبور باید حداقل شامل یک حرف بزرگ باشد.';
+$lang['bf_password_symbols_required_help'] = 'کلمه عبور حداقل باید شامل یک کاراکتر سمبل باشد.';
+
+$lang['bf_password_min_length_help']       = 'طول کلمه عبور حداقل باید %s کاراکتر باشد.';
+
+//--------------------------------------------------------------------
+// User Meta examples
+//--------------------------------------------------------------------
+
+$lang['user_meta_street_name']	= 'نام خیابان';
+$lang['user_meta_type']			= 'نوع';
+$lang['user_meta_country']		= 'کشور';
+$lang['user_meta_state']		= 'استان';
+
+// Activation
+//--------------------------------------------------------------------
+$lang['bf_activate_method']			= 'روش فعال سازی';
+$lang['bf_activate_none']			= 'هیچ';
+$lang['bf_activate_email']			= 'ایمیل';
+$lang['bf_activate_admin']			= 'ادمین';
+$lang['bf_activate']				= 'فعال سازی';
+$lang['bf_activate_resend']			= 'ارسال دوباره فعال سازی';
+
+$lang['bf_reg_complete_error']		= 'در ثبت نام شما مشکلی بوجود آمده است. لطفا مجددا سعی کنید و یا با مدیریت سایت تماس بگیرید.';
+$lang['bf_reg_activate_email'] 		= 'ایمیلی حاوی لینک فعال سازی به [EMAIL] ارسال شده است.';
+$lang['bf_reg_activate_admin'] 		= 'شما باید منتظر تایید ثبت نامتان توسط مدیریت باشید.';
+$lang['bf_reg_activate_none'] 		= 'لطفا جهت استفاده از سایت وارد شوید.';
+$lang['bf_user_not_active'] 		= 'حساب کاربری غیر فعال است.';
+$lang['bf_login_activate_title']	= 'نیاز دارید که حساب کاربریتان را فعال نمایید؟';
+$lang['bf_login_activate_email'] 	= '<b>کد فعال سازی حساب کاربری خودتان را دارید؟</b> کد را در [ACCOUNT_ACTIVATE_URL] وارد نمایید.<br /><br />    <b>کد فعال سازی ندارید؟</b> میتوانید این کد را در صفحه ی [ACTIVATE_RESEND_URL] درخواست نمایید.';
