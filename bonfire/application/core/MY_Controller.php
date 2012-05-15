@@ -278,6 +278,10 @@ class Admin_Controller extends Authenticated_Controller
 		$this->pager['next_tag_close']	= '</li>';
 		$this->pager['prev_tag_open']	= '<li>';
 		$this->pager['prev_tag_close']	= '</li>';
+		$this->pager['first_tag_open']	= '<li>';
+		$this->pager['first_tag_close']	= '</li>';
+		$this->pager['last_tag_open']	= '<li>';
+		$this->pager['last_tag_close']	= '</li>';
 		$this->pager['cur_tag_open']	= '<li class="active"><a href="#">';
 		$this->pager['cur_tag_close']	= '</a></li>';
 		$this->pager['num_tag_open']	= '<li>';
