@@ -7,7 +7,11 @@
 
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url() .'views/screen.css'; ?>" />
+	<?php if(lang('bf_language_direction') == 'rtl'): ?>
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url() .'views/screen-rtl.css'; ?>" />
+	<?php else: ?>
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url() .'views/screen.css'; ?>" />
+	<?php endif; ?>
 </head>
 <body>
 
