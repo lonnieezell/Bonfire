@@ -871,8 +871,7 @@ class Template
 						self::$ci->load->library('parser');				
 					}
 					
-
-					//$output = self::$ci->parser->parse($view, $data, true);
+					
 					$output = self::$ci->load->_ci_load(array('_ci_path' => $view_path.$view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));
 					
 					if (count($data) > 0)
