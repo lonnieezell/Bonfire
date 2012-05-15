@@ -864,7 +864,34 @@ class Template
 				//self::$ci->load->_ci_view_path = self::$orig_view_path;
 
 				if (self::$parse_views === TRUE)
-				{
+				{			  	
+					
+					if (!class_exists('CI_Parser'))
+					{
+						self::$ci->load->library('parser');				
+					}
+					
+
+					//$output = self::$ci->parser->parse($view, $data, true);
+					$output = self::$ci->load->_ci_load(array('_ci_path' => $view_path.$view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));
+					
+					if (count($data) > 0)
+					{
+						$temp = array();
+						foreach($data as $key => $value)
+						{
+							if (count($value) > 0)
+							{
+								$value = (array) $value;
+							}
+							$temp[$key] = $value;
+						}
+						$data = array();
+
+						$data = $temp;
+						unset($temp);
+					}
+					
 					$output = self::$ci->parser->parse($view, $data, TRUE);
 				}
 				else
