@@ -116,11 +116,15 @@ class Base_Controller extends MX_Controller
 		// Development niceties...
 		else if (ENVIRONMENT == 'development')
 		{
-			// Profiler bar?
-			if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_front_profiler'))
+			if (has_permission('Bonfire.Profiler.View'))
 			{
-				$this->load->library('Console');
-				$this->output->enable_profiler(TRUE);
+				// Profiler bar?
+				if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_front_profiler'))
+				{
+					$this->load->library('Console');
+					$this->output->enable_profiler(TRUE);
+				}
+
 			}
 
 			// Auto-migrate our core and/or app to latest version.
@@ -133,8 +137,12 @@ class Base_Controller extends MX_Controller
 			$this->load->driver('cache', array('adapter' => 'dummy'));
 		}
 
-		$this->previous_page = $this->session->userdata('previous_page');
-		$this->requested_page = $this->session->userdata('requested_page');
+		// Make sure no assets in up as a requested page or a 404 page.
+		if (!preg_match('/\.(gif|jpg|jpeg|png|css|js|ico|shtml)$/i', $this->uri->uri_string()))
+		{
+			$this->previous_page = $this->session->userdata('previous_page');
+			$this->requested_page = $this->session->userdata('requested_page');
+		}
 
 		// Pre-Controller Event
 		Events::trigger('after_controller_constructor', get_class($this));
@@ -297,9 +305,10 @@ class Admin_Controller extends Authenticated_Controller
 		Template::set('shortcut_data', $shortcut_data);
 
 		// Profiler Bar?
-		if (ENVIRONMENT == 'development')
+		if (ENVIRONMENT == 'development' && has_permission('Bonfire.Profiler.View'))
 		{
-			if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_profiler'))
+			// Profiler bar?
+			if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_front_profiler'))
 			{
 				$this->load->library('Console');
 				$this->output->enable_profiler(TRUE);
