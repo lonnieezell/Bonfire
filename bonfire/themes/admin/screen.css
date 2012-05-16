@@ -114,14 +114,7 @@ Page Structure
 	display: block;
 }
 
-h1.branding {
-	line-height: 40px;
-	font-size: 16px;
-	font-wieght: normal;
-	color: #fff;
-	margin: 0;
-	padding: 0;
-	height: 1.8em;
+a.brand {
 	width: 200px;
 	overflow: hidden;
 	white-space: nowrap;
@@ -129,8 +122,6 @@ h1.branding {
 	-o-text-overflow: ellipsis;
 	-ms-text-overflow: ellipsis;
 	text-overflow: ellipsis;
-	display: inline-block;
-	float: left;
 }
 
 /* Subnav */
