@@ -14,7 +14,7 @@
 	
 	#ci-profiler-menu a:link, #ci-profiler-menu a:visited { display: inline-block; padding: 7px 0; margin: 0; color: #ccc; text-decoration: none; font-weight: lighter; cursor: pointer; text-align: center; width: 15.5%; border-bottom: 4px solid #444; }
 	#ci-profiler-menu a:hover, #ci-profiler-menu a.current { background-color: #222; border-color: #999; }
-	#ci-profiler-menu a span { display: block; font-weight: bold; font-size: 16px !important; line-height: 1.2; }
+	#ci-profiler-menu a span { display: block; font-weight: bold; font-size: 15px !important; line-height: 1.2; }
 	
 	#ci-profiler-menu-time span, #ci-profiler-benchmarks h2 { color: #B72F09; }
 	#ci-profiler-menu-memory span, #ci-profiler-memory h2 { color: #953FA1; }
