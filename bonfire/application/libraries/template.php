@@ -245,7 +245,7 @@ class Template
 	 *
 	 * @return void
 	 */
-	public static function render($layout=null)
+	public static function render($layout=NULL)
 	{
 		$output = '';
 		$controller = self::$ci->router->class;
@@ -262,7 +262,7 @@ class Template
 			self::$ci->output->set_header("Pragma: no-cache");
 			self::$ci->output->set_header('Content-Type: text/html');
 
-			$controller = null;
+			$controller = NULL;
 		}
 
 		// Grab our current view name, based on controller/method
@@ -307,7 +307,7 @@ class Template
 
 		if (self::$debug) { echo 'Current View = '. self::$current_view; }
 
-		self::load_view(self::$current_view, null, self::$ci->router->class .'/'. self::$ci->router->method, FALSE, $output);
+		self::load_view(self::$current_view, NULL, self::$ci->router->class .'/'. self::$ci->router->method, FALSE, $output);
 
 		Events::trigger('after_page_render', $output);
 
@@ -419,7 +419,7 @@ class Template
 	 *
 	 * @return bool
 	 */
-	public static function add_theme_path($path=null)
+	public static function add_theme_path($path=NULL)
 	{
 		if (empty($path) || !is_string($path))
 		{
@@ -464,7 +464,7 @@ class Template
 	 *
 	 * @return void
 	 */
-	public static function remove_theme_path($path=null)
+	public static function remove_theme_path($path=NULL)
 	{
 		if (empty($path) || !is_string($path))
 		{
@@ -492,7 +492,7 @@ class Template
 	 *
 	 * @return void
 	 */
-	public static function set_theme($theme=null, $default_theme=null)
+	public static function set_theme($theme=NULL, $default_theme=NULL)
 	{
 		if (empty($theme) || !is_string($theme))
 		{
@@ -528,7 +528,7 @@ class Template
 	 *
 	 * @return void
 	 */
-	public static function set_default_theme($theme=null)
+	public static function set_default_theme($theme=NULL)
 	{
 		if (empty($theme) || !is_string($theme))
 		{
@@ -605,7 +605,7 @@ class Template
 	 *
 	 * @return void
 	 */
-	public static function set_view($view=null)
+	public static function set_view($view=NULL)
 	{
 		if (empty($view) || !is_string($view))
 		{
@@ -668,7 +668,7 @@ class Template
 	 *
 	 * @return mixed The value of the class property or view data.
 	 */
-	public static function get($var_name=null)
+	public static function get($var_name=NULL)
 	{
 		if (empty($var_name))
 		{
@@ -808,7 +808,7 @@ class Template
 	 *
 	 * @return void
 	 */
-	public function redirect($url=null)
+	public function redirect($url=NULL)
 	{
 		$url = strpos($url, 'http') === FALSE ? site_url($url) : $url;
 
@@ -833,7 +833,7 @@ class Template
 	 *
 	 * @return void
 	 */
-	public static function load_view($view=null, $data=null, $override='', $is_themed=TRUE, &$output)
+	public static function load_view($view=NULL, $data=NULL, $override='', $is_themed=TRUE, &$output)
 	{
 		if (empty($view))	return '';
 
@@ -864,7 +864,33 @@ class Template
 				//self::$ci->load->_ci_view_path = self::$orig_view_path;
 
 				if (self::$parse_views === TRUE)
-				{
+				{			  	
+					
+					if (!class_exists('CI_Parser'))
+					{
+						self::$ci->load->library('parser');				
+					}
+					
+					
+					$output = self::$ci->load->_ci_load(array('_ci_path' => $view_path.$view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));
+					
+					if (count($data) > 0)
+					{
+						$temp = array();
+						foreach($data as $key => $value)
+						{
+							if (count($value) > 0)
+							{
+								$value = (array) $value;
+							}
+							$temp[$key] = $value;
+						}
+						$data = array();
+
+						$data = $temp;
+						unset($temp);
+					}
+					
 					$output = self::$ci->parser->parse($view, $data, TRUE);
 				}
 				else
@@ -897,7 +923,7 @@ class Template
 	 *
 	 * @return string The content of the file, if found, else empty.
 	 */
-	private function find_file($view=null, $data=null)
+	private function find_file($view=NULL, $data=NULL)
 	{
 		if (empty($view))
 		{
@@ -990,7 +1016,7 @@ class Template
  *
  * @return string
  */
-function theme_view($view=null, $data=null, $ignore_mobile=FALSE)
+function theme_view($view=NULL, $data=NULL, $ignore_mobile=FALSE)
 {
 	if (empty($view)) return '';
 
@@ -1006,7 +1032,7 @@ function theme_view($view=null, $data=null, $ignore_mobile=FALSE)
 
 		if ($ci->agent->is_mobile())
 		{
-			Template::load_view('mobile_'. $view, $data, null, TRUE, $output);
+			Template::load_view('mobile_'. $view, $data, NULL, TRUE, $output);
 		}
 	}
 
@@ -1014,7 +1040,7 @@ function theme_view($view=null, $data=null, $ignore_mobile=FALSE)
 	// or we weren't looking for one to begin with.
 	if (empty($output))
 	{
-		Template::load_view($view, $data, null, TRUE, $output);
+		Template::load_view($view, $data, NULL, TRUE, $output);
 	}
 
 	return $output;

@@ -20,10 +20,12 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 */
+//Translator: Sajjad Servatjoo <sajjad.servatjoo[at]gmail[dot]com>
 
 // INDEX page
 $lang['mb_actions']				= 'عمليات';
 $lang['mb_create_button']		= 'ايجاد افزونه';
+$lang['mb_create_link']			= 'ایجاد افزونه جدید';
 $lang['mb_create_note']			= 'جهت ساخت افزونه ي خود ميتوانيد از افزونه ساز ما استفاده کنيد. تمام فايل هاي مورد نياز به صورت اتوماتيک توليد خواهند شد.';
 $lang['mb_not_writeable_note']	= 'خطا: پوشه ي bonfire/modules قابل نوشتن نمي باشد.';
 $lang['mb_delete']				= 'حذف';
@@ -56,6 +58,8 @@ $lang['mb_out_lang']			= 'فايل زبان';
 $lang['mb_out_lang_path']		= '%s_lang.php';
 $lang['mb_out_migration']		= 'فالي (هاي) ارتقا';
 $lang['mb_out_migration_path']	= 'migrations/002_Install_%s.php';
+$lang['mb_new_module']			= 'افزونه جدید';
+$lang['mb_exist_modules']		= 'افزونه های موجود';
 
 // FORM page
 $lang['mb_form_note'] = '<p><b>فيلد هاي مورد نياز افزونه را وارد کنيد (يک فيلد "id" به صورت خودکار ايجاد مي شود). اگر ميخواهيد SQL را جهت ايجاد پايگاه داده ايجاد نماييد "ايجاد جدول براي افزونه" را بررسي نماييد.</b></p><p>اين فرم جهت ايجاد يک افزونه براي CodeIgniter مي باشد (model, controller and views).</p>';

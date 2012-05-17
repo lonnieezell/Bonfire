@@ -307,6 +307,10 @@ class Settings extends Admin_Controller
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
 
 				Template::set_message(lang('us_user_update_success'), 'success');
+
+				// redirect back to the edit page to make sure that a users password change
+				// forces a login check
+				Template::redirect($this->uri->uri_string());
 			}
 		}
 
@@ -590,7 +594,7 @@ class Settings extends Admin_Controller
 		else
 		{
 			$_POST['id'] = $id;
-			$this->form_validation->set_rules('email', lang('us_label_email'), 'required|trim|unique[users.email,users.id]|valid_email|max_length[120]|xss_clean');
+			$this->form_validation->set_rules('email', lang('bf_email'), 'required|trim|unique[users.email,users.id]|valid_email|max_length[120]|xss_clean');
 			$this->form_validation->set_rules('password', lang('bf_password'), 'trim|strip_tags|min_length[8]|max_length[120]|valid_password|matches[pass_confirm]|xss_clean');
 			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), 'trim|strip_tags|xss_clean');
 		}
@@ -601,7 +605,7 @@ class Settings extends Admin_Controller
 		{
 			$extra_unique_rule = $type == 'update' ? ',users.id' : '';
 
-			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|strip_tags|max_length[30]|unique[users.username'.$extra_unique_rule.']|xsx_clean');
+			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|strip_tags|max_length[30]|unique[users.username'.$extra_unique_rule.']|xss_clean');
 		}
 
 		$this->form_validation->set_rules('display_name', lang('bf_display_name'), 'trim|strip_tags|max_length[255]|xss_clean');

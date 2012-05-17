@@ -59,7 +59,7 @@ class Base_Controller extends MX_Controller
 	 *
 	 * @var object
 	 */
-	protected $current_user = null;
+	protected $current_user = NULL;
 
 	//--------------------------------------------------------------------
 
@@ -102,7 +102,7 @@ class Base_Controller extends MX_Controller
 		*/
 		if (ENVIRONMENT == 'production')
 		{
-		    $this->db->save_queries = false;
+		    $this->db->save_queries = FALSE;
 
 		    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 		}
@@ -116,11 +116,15 @@ class Base_Controller extends MX_Controller
 		// Development niceties...
 		else if (ENVIRONMENT == 'development')
 		{
-			// Profiler bar?
-			if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_front_profiler'))
+			if (has_permission('Bonfire.Profiler.View'))
 			{
-				$this->load->library('Console');
-				$this->output->enable_profiler(true);
+				// Profiler bar?
+				if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_front_profiler'))
+				{
+					$this->load->library('Console');
+					$this->output->enable_profiler(TRUE);
+				}
+
 			}
 
 			// Auto-migrate our core and/or app to latest version.
@@ -133,8 +137,12 @@ class Base_Controller extends MX_Controller
 			$this->load->driver('cache', array('adapter' => 'dummy'));
 		}
 
-		$this->previous_page = $this->session->userdata('previous_page');
-		$this->requested_page = $this->session->userdata('requested_page');
+		// Make sure no assets in up as a requested page or a 404 page.
+		if (!preg_match('/\.(gif|jpg|jpeg|png|css|js|ico|shtml)$/i', $this->uri->uri_string()))
+		{
+			$this->previous_page = $this->session->userdata('previous_page');
+			$this->requested_page = $this->session->userdata('requested_page');
+		}
 
 		// Pre-Controller Event
 		Events::trigger('after_controller_constructor', get_class($this));
@@ -221,6 +229,8 @@ class Authenticated_Controller extends Base_Controller
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('', '');
 		$this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
+		
+		Template::set_theme($this->config->item('default_theme'));
 	}//end construct()
 
 	//--------------------------------------------------------------------
@@ -276,6 +286,10 @@ class Admin_Controller extends Authenticated_Controller
 		$this->pager['next_tag_close']	= '</li>';
 		$this->pager['prev_tag_open']	= '<li>';
 		$this->pager['prev_tag_close']	= '</li>';
+		$this->pager['first_tag_open']	= '<li>';
+		$this->pager['first_tag_close']	= '</li>';
+		$this->pager['last_tag_open']	= '<li>';
+		$this->pager['last_tag_close']	= '</li>';
 		$this->pager['cur_tag_open']	= '<li class="active"><a href="#">';
 		$this->pager['cur_tag_close']	= '</a></li>';
 		$this->pager['num_tag_open']	= '<li>';
@@ -291,12 +305,13 @@ class Admin_Controller extends Authenticated_Controller
 		Template::set('shortcut_data', $shortcut_data);
 
 		// Profiler Bar?
-		if (ENVIRONMENT == 'development')
+		if (ENVIRONMENT == 'development' && has_permission('Bonfire.Profiler.View'))
 		{
-			if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_profiler'))
+			// Profiler bar?
+			if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_front_profiler'))
 			{
 				$this->load->library('Console');
-				$this->output->enable_profiler(true);
+				$this->output->enable_profiler(TRUE);
 			}
 		}
 

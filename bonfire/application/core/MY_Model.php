@@ -709,7 +709,7 @@ class BF_Model extends CI_Model
 	*/
 	public function get_field($id=NULL, $field='')
 	{
-		if (!is_numeric($id) || $id === 0 || empty($field))
+		if (empty($id) || $id === 0 || empty($field))
 		{
 			$this->error = $this->lang->line('bf_model_fetch_error');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_fetch_error'));
@@ -942,7 +942,7 @@ class BF_Model extends CI_Model
 		// Check the ID, but only if it's a non-FALSE value
 		if ($id !== FALSE)
 		{
-			if (!is_numeric($id) || $id == 0)
+			if (empty($id) || $id == 0)
 			{
 				$this->error = $this->lang->line('bf_model_invalid_id');
 				$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_invalid_id'));

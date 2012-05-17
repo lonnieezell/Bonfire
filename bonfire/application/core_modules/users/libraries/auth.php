@@ -137,7 +137,7 @@ class Auth
 		if (empty($login) || empty($password))
 		{
 			$error = $this->ci->settings_lib->item('auth.login_type') == lang('bf_both') ? lang('bf_username') .'/'. lang('bf_email') : ucfirst($this->ci->settings_lib->item('auth.login_type'));
-			$this->errors[] = $error .' and Password fields must be filled out.';
+			Template::set_message(sprintf(lang('us_fields_required'), $error), 'error');
 			return FALSE;
 		}
 
@@ -159,7 +159,7 @@ class Auth
 		// check to see if a value of FALSE came back, meaning that the username or email or password doesn't exist.
 		if($user == FALSE)
 		{
-			$this->errors[] = $this->ci->lang->line('us_bad_email_pass');
+			Template::set_message(lang('us_bad_email_pass'), 'error');
 			return FALSE;
 		}
 
@@ -206,7 +206,7 @@ class Auth
 				if (!$this->has_permission('Site.Signin.Allow', $user->role_id))
 				{
 					$this->increase_login_attempts($login);
-					$this->errors[] = $this->ci->lang->line('us_banned_msg');
+					Template::set_message(lang('us_banned_msg'), 'error');
 					return FALSE;
 				}
 
@@ -234,12 +234,13 @@ class Auth
 			// Bad password
 			else
 			{
+				Template::set_message(lang('us_bad_email_pass'), 'error');
 				$this->increase_login_attempts($login);
 			}
 		}
 		else
 		{
-			$this->errors[] = $this->ci->lang->line('us_bad_email_pass');
+			Template::set_message(lang('us_bad_email_pass'), 'error');
 		}//end if
 
 		return FALSE;
@@ -344,8 +345,9 @@ class Auth
 		// If user isn't logged in, don't need to check permissions
 		if ($this->is_logged_in() === FALSE)
 		{
-			Template::set_message( $this->ci->lang->line('us_must_login'), 'error');
-			redirect('login');
+			$this->logout();
+			Template::set_message($this->ci->lang->line('us_must_login'), 'error');
+			Template::redirect('login');
 		}
 
 		// Check to see if the user has the proper permissions
