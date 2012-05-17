@@ -234,7 +234,13 @@ class Settings extends Admin_Controller
 			}
 		}
 
-		Template::set('roles', $this->role_model->select('role_id, role_name, default')->where('deleted', 0)->find_all());
+        $settings = $this->settings_lib->find_all();
+        if ($settings['auth.password_show_labels'] == 1) {
+            Assets::add_module_js('users','password_strength.js');
+            Assets::add_module_js('users','jquery.strength.js');
+            Assets::add_js($this->load->view('users_js', array('settings'=>$settings), true), 'inline');
+        }
+        Template::set('roles', $this->role_model->select('role_id, role_name, default')->where('deleted', 0)->find_all());
 		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
 		Template::set('toolbar_title', lang('us_create_user'));
@@ -320,8 +326,14 @@ class Settings extends Admin_Controller
 			redirect(SITE_AREA .'/settings/users');
 		}
 
+        $settings = $this->settings_lib->find_all();
+        if ($settings['auth.password_show_labels'] == 1) {
+            Assets::add_module_js('users','password_strength.js');
+            Assets::add_module_js('users','jquery.strength.js');
+            Assets::add_js($this->load->view('users_js', array('settings'=>$settings), true), 'inline');
+        }
 
-		Template::set('toolbar_title', lang('us_edit_user'));
+        Template::set('toolbar_title', lang('us_edit_user'));
 
 		Template::set_view('settings/user_form');
 

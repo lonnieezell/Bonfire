@@ -115,6 +115,7 @@ class Settings extends Admin_Controller
 		$this->form_validation->set_rules('password_force_numbers', lang('bf_password_force_numbers'), 'trim|strip_tags|numeric|xss_clean');
 		$this->form_validation->set_rules('password_force_symbols', lang('bf_password_force_symbols'), 'trim|strip_tags|numeric|xss_clean');
 		$this->form_validation->set_rules('password_force_mixed_case', lang('bf_password_force_mixed_case'), 'trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('password_show_labels', lang('bf_password_show_labels'), 'trim|strip_tags|numeric|xss_clean');
 		$this->form_validation->set_rules('languages[]', lang('bf_language'), 'required|trim|strip_tags|is_array|xss_clean');
 
 		if ($this->form_validation->run() === FALSE)
@@ -142,6 +143,7 @@ class Settings extends Admin_Controller
 			array('name' => 'auth.password_force_numbers', 'value' => $this->input->post('password_force_numbers')),
 			array('name' => 'auth.password_force_symbols', 'value' => $this->input->post('password_force_symbols')),
 			array('name' => 'auth.password_force_mixed_case', 'value' => $this->input->post('password_force_mixed_case')),
+			array('name' => 'auth.password_show_labels', 'value' => $this->input->post('password_show_labels') ? 1 : 0),
 
 			array('name' => 'updates.do_check', 'value' => isset($_POST['do_check']) ? 1 : 0),
 			array('name' => 'updates.bleeding_edge', 'value' => isset($_POST['bleeding_edge']) ? 1 : 0),

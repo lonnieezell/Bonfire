@@ -177,6 +177,10 @@
 						<input type="checkbox" name="password_force_mixed_case" id="password_force_mixed_case" value="1" <?php echo set_checkbox('password_force_mixed_case', 1, isset($settings['auth.password_force_mixed_case']) && $settings['auth.password_force_mixed_case'] == 1 ? TRUE : FALSE); ?> />
 						<?php echo lang('bf_password_force_mixed_case') ?>
 					</label>
+                    <label class="checkbox" for="password_show_labels">
+                        <input type="checkbox" name="password_show_labels" id="password_show_labels" value="1" <?php echo set_checkbox('password_show_labels', 1, isset($settings['auth.password_show_labels']) && $settings['auth.password_show_labels'] == 1 ? TRUE : FALSE); ?> />
+                        <?php echo lang('bf_password_show_labels') ?>
+                    </label>
 				</div>
 			</div>
 
