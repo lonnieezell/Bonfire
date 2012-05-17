@@ -129,6 +129,7 @@ $lang['bf_password_length_help']		= 'Minimum password length e.g. 8';
 $lang['bf_password_force_numbers']		= 'Should password force numbers?';
 $lang['bf_password_force_symbols']		= 'Should password force symbols?';
 $lang['bf_password_force_mixed_case']	= 'Should password force mixed case?';
+$lang['bf_password_show_labels']	    = 'Display password validation labels';
 
 //--------------------------------------------------------------------
 // ! USER/PROFILE
