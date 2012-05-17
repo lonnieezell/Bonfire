@@ -74,7 +74,7 @@ if (!function_exists('list_lang_files'))
 		$lang_files = array();
 
 		// Base language files.
-		$lang_files = array_merge($lang_files, find_lang_files(APPPATH .'language/'. $language .'/'));
+		$lang_files['core'] = find_lang_files(APPPATH .'language/'. $language .'/');
 
 		// Module lang files
 		$modules = module_list();
@@ -163,7 +163,7 @@ if (!function_exists('load_lang_file'))
 		$array = FALSE;
 
 		// Is it the application_lang file?
-		if ($filename == 'application_lang.php')
+		if ($filename == 'application_lang.php' || $filename == 'datatable_lang.php')
 		{
 			$path = APPPATH .'language/'. $language .'/'. $filename;
 		}
@@ -213,7 +213,7 @@ if (!function_exists('save_lang_file'))
 		}
 
 		// Is it the application_lang file?
-		if ($filename == 'application_lang.php')
+		if ($filename == 'application_lang.php' || $filename == 'datatable_lang.php')
 		{
 			$path = APPPATH .'language/'. $language .'/'. $filename;
 		}
