@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-				<script src="<?php echo js_path(); ?>modernizr-2.5.3.js"></script>
+				<script src="<?php echo Template::theme_url('js/modernizr-2.5.3.js') ?>"></script>
 
 				<?php echo Assets::css(); ?>
 
