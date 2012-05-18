@@ -45,7 +45,8 @@ $("#flex_table").dataTable({
 ?>
 
 $("#flex_table").dataTable({
-		"sDom": 'rt<"top"fpi>',
+		/* "sDom": 'rt<"top"fpi>', */
+		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
 		"sPaginationType": "listbox",
 		"bProcessing": true,
 		"bLengthChange": false,

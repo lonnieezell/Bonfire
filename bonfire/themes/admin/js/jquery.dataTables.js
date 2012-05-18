@@ -76,7 +76,8 @@
 				"nTh": nTh ? nTh : document.createElement('th'),
 				"sTitle":    oDefaults.sTitle    ? oDefaults.sTitle    : nTh ? nTh.innerHTML : '',
 				"aDataSort": oDefaults.aDataSort ? oDefaults.aDataSort : [iCol],
-				"mDataProp": oDefaults.mDataProp ? oDefaults.oDefaults : iCol
+				"mDataProp": oDefaults.mDataProp ? oDefaults.oDefaults : iCol,
+				"sWrapper": "dataTables_wrapper form-inline"
 			} );
 			oSettings.aoColumns.push( oCol );
 			
