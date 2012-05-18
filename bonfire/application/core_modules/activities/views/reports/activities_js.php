@@ -62,13 +62,7 @@ $("#flex_table").dataTable({
 $("#flex_table").dataTable({
 		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
 		"sPaginationType": "bootstrap",
-<?php
-/*
-		"sDom": 'rt<"top"fpi>',
-		"sPaginationType": "listbox",
-		"iDisplayLength": <?= config_item('site.list_limit') ? config_item('site.list_limit') : 15; ?>,
-
-*/?>
+		"iDisplayLength": <?php echo ($this->settings_lib->item('site.list_limit')) ? $this->settings_lib->item('site.list_limit') : 15; ?>,
 		"bProcessing": true,
 		"bLengthChange": false,
 		"aaSorting": [[3,'desc']],
