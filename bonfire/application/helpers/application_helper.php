@@ -361,12 +361,18 @@ if ( ! function_exists('module_config'))
 	 *
 	 * @return array An array of config settings, or an empty array if empty/not found.
 	 */
-	function module_config($module_name=null, $return_full=false)
+	function module_config($module_name=null, $return_full=false,$language=false)
 	{
 		$config_param = array();
-
-		$config_file = module_file_path($module_name, 'config', 'config.php');
-
+		if($language === true)
+		{
+			$config_file = module_file_path($module_name, 'language/' . config_item('language'), 'config.php');
+		}
+		if($language == false || ! file_exists($config_file))
+		{
+			$config_file = module_file_path($module_name, 'config', 'config.php');
+		}
+		
 		if (file_exists($config_file))
 		{
 			include($config_file);
