@@ -479,25 +479,26 @@ class bf_date {
 
 		return array($gy, $gm, $gd);
 	}
+
 	function relative_time($timestamp)
 	{
 		$difference = time() - $timestamp;
 
-		$periods = array("moment", "min", "hour", "day", "week",
-		"month", "years", "decade");
+		$periods = array("دقیقه", "دقیقه", "ساعت", "روز", "هفته",
+		"ماه", "سال", "دهه");
 
 		$lengths = array("60","60","24","7","4.35","12","10");
 
 		if ($difference > 0)
 		{
 			// this was in the past
-			$ending = "ago";
+			$ending = "قبل";
 		}
 		else
 		{
 			// this was in the future
 			$difference = -$difference;
-			$ending = "to go";
+			$ending = "بعد";
 		}
 
 		for ($j = 0; $difference >= $lengths[$j]; $j++)
@@ -506,11 +507,6 @@ class bf_date {
 		}
 
 		$difference = round($difference);
-
-		if ($difference != 1)
-		{
-			$periods[$j].= "s";
-		}
 
 		if ($difference < 60 && $j == 0)
 		{
