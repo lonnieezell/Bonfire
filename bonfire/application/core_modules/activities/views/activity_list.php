@@ -10,7 +10,7 @@
 		?>
 
 		<li>
-			<span class="small"><?php echo relative_time(strtotime($activity->created_on)) ?></span>
+			<span class="small"><?php echo bf_date::relative_time(strtotime($activity->created_on)) ?></span>
 			<br/>
 			<b><?php echo $identity ?></b> <?php echo $activity->activity ?>
 		</li>

@@ -57,7 +57,7 @@
 					<td><i class="icon-user">&nbsp;</i>&nbsp;<?php echo $activity->username; ?></td>
 					<td><?php echo $activity->activity; ?></td>
 					<td><?php echo $activity->module; ?></td>
-					<td><?php echo date('M j, Y g:i A', strtotime($activity->created)); ?></td>
+					<td><?php echo bf_date::date('M j, Y g:i A', strtotime($activity->created)); ?></td>
 				</tr>
 				<?php endforeach; ?>
 			</tbody>
