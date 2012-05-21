@@ -22,54 +22,15 @@ $('.btn').click( function() {
 	verify_delete(whom,action);
 });
 
-<?
-/*
-$("#flex_table").dataTable({
-		"sDom": 'rt<"top"fpi>',
-		"sPaginationType": "listbox",
-		"bProcessing": true,
-		"bLengthChange": false,
-		"iDisplayLength": <?php echo config_item('site.list_limit') ? config_item('site.list_limit') : 15; ?>,
-		"aaSorting": [[3,'desc']],
-		"bAutoWidth": false,
-		"aoColumns": [
-			{ "sWidth": "10%" },
-			null,
-			{ "sWidth": "8em" },
-			{ "sWidth": "12em" }
-		],
-                "oLanguage": {
-                    "sProcessing":   "<?php echo lang('sProcessing') ?>",
-                    "sLengthMenu":   "<?php echo lang('sLengthMenu') ?>",
-                    "sZeroRecords":  "<?php echo lang('sZeroRecords') ?>",
-                    "sInfo":         "<?php echo lang('sInfo') ?>",
-                    "sInfoEmpty":    "<?php echo lang('sInfoEmpty') ?>",
-                    "sInfoFiltered": "<?php echo lang('sInfoFiltered') ?>",
-                    "sInfoPostFix":  "<?php echo lang('sInfoPostFix') ?>",
-                    "sSearch":       "<?php echo lang('sSearch') ?>",
-                    "sUrl":          "<?php echo lang('sUrl') ?>",
-                    "oPaginate": {
-                        "sFirst":    "<?php echo lang('sFirst') ?>",
-                        "sPrevious": "<?php echo lang('sPrevious') ?>",
-                        "sNext":     "<?php echo lang('sNext') ?>",
-                        "sLast":     "<?php echo lang('sLast') ?>"
-                    }
-                }
-});
-*/
-?>
 
 $("#flex_table").dataTable({
-		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+		"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
 		"sPaginationType": "bootstrap",
-<?php
-/*
-		"sDom": 'rt<"top"fpi>',
-		"sPaginationType": "listbox",
-		"iDisplayLength": <?= config_item('site.list_limit') ? config_item('site.list_limit') : 15; ?>,
-
-*/?>
+		"iDisplayLength": <?php echo ($this->settings_lib->item('site.list_limit')) ? $this->settings_lib->item('site.list_limit') : 15; ?>,
+		"bInfo": false,
+		"bPaginate": false,
 		"bProcessing": true,
+		"bServerSide": false,
 		"bLengthChange": false,
 		"aaSorting": [[3,'desc']],
 		"bAutoWidth": false,
