@@ -51,7 +51,7 @@ class MY_Form_validation extends CI_Form_validation
 	function __construct($config = array())
 	{
 		// Merged super-global $_FILES to $_POST to allow for better file validation inside of Form_validation library
-		$_POST = ( isset($_FILES) && is_array( $_FILES ) && count($_FILES) > 0) ? array_merge($_POST,$_FILES) : $_POST;
+		$_POST = (isset($_FILES) && is_array($_FILES) && count($_FILES) > 0) ? array_merge($_POST,$_FILES) : $_POST;
 
 		parent::__construct($config);
 
@@ -68,7 +68,7 @@ class MY_Form_validation extends CI_Form_validation
 	 */
 	public function validation_errors_list()
 	{
-		if ( is_array($this->CI->form_validation->_error_array))
+		if (is_array($this->CI->form_validation->_error_array))
 		{
 			$errors = (array) $this->CI->form_validation->_error_array;
 			$error  = '<ul>' . PHP_EOL;
@@ -146,7 +146,8 @@ class MY_Form_validation extends CI_Form_validation
 			list($where_table, $where_field) = explode(".", $fields[1], 2);
 
 			$where_value = $this->CI->input->post($where_field);
-			if (isset($where_value)) {
+			if (isset($where_value))
+			{
 				// add the extra where condition
 				$this->CI->db->where($where_field.' !=', $this->CI->input->post($where_field));
 			}
@@ -304,7 +305,7 @@ class MY_Form_validation extends CI_Form_validation
 
 	/**
 	 * Allows setting allowed file-types in your form_validation rules.
-	 * Please seperate the allowed file types with a pipe or |.
+	 * Please separate the allowed file types with a pipe or |.
 	 *
 	 * @author Shawn Crigger <support@s-vizion.com>
 	 * @access public
@@ -339,7 +340,7 @@ class MY_Form_validation extends CI_Form_validation
 
 	/**
 	 * Checks that the entered string is one of the values entered as the second parameter.
-	 * Please seperate the allowed file types with a comma.
+	 * Please separate the allowed file types with a comma.
 	 *
 	 * @access public
 	 *
@@ -383,9 +384,9 @@ class MY_Form_validation extends CI_Form_validation
 	 *
 	 * @return bool
 	 */
-	public function max_file_size($str, $size = 0 )
+	public function max_file_size($str, $size = 0)
 	{
-		if ( $size = 0 )
+		if ($size == 0)
 		{
 			log_message('error', 'Form_validation rule, max_file_size was called without setting a allowable file size.');
 			return FALSE;
@@ -403,27 +404,27 @@ class MY_Form_validation extends CI_Form_validation
 // Helper Functions for Form Validation LIbrary
 //--------------------------------------------------------------------
 
-/**
- * Check if the form has an error
- *
- * @access public
- *
- * @param string $field Name of the field
- *
- * @return bool
- */
-function form_has_error($field=null)
-{
-
-	if (FALSE === ($OBJ =& _get_validation_object()))
+	/**
+	 * Check if the form has an error
+	 *
+	 * @access public
+	 *
+	 * @param string $field Name of the field
+	 *
+	 * @return bool
+	 */
+	function form_has_error($field=null)
 	{
-		return FALSE;
-	}
 
-	$return = $OBJ->has_error($field);
+		if (FALSE === ($OBJ =& _get_validation_object()))
+		{
+			return FALSE;
+		}
 
-	return $return;
-}//end form_has_error()
+		$return = $OBJ->has_error($field);
+
+		return $return;
+	}//end form_has_error()
 
 //--------------------------------------------------------------------
 
