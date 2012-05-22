@@ -373,7 +373,7 @@ class Developer extends Admin_Controller {
 				// make sure that the length field is required if the DB Field type requires a length
 				$db_len_required = '';
 				$field_type = $this->input->post("db_field_type$counter");
-				if( !empty($label) && !($field_type == 'TEXT' OR $field_type == 'BOOL'
+				if( !empty($label) && !($field_type == 'TEXT' OR $field_type == 'MEDIUMTEXT' OR $field_type == 'LONGTEXT' OR $field_type == 'BOOL'
 					OR $field_type == 'DATE' OR $field_type == 'TIME' OR $field_type == 'DATETIME'
 					OR $field_type == 'TIMESTAMP' OR $field_type == 'YEAR'
 					 OR $field_type == 'TINYBLOB' OR $field_type == 'BLOB' OR $field_type == 'MEDIUMBLOB' OR $field_type == 'LONGBLOB') )

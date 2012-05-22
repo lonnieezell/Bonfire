@@ -397,7 +397,10 @@ for($counter=1; $field_total >= $counter; $counter++)
 			$date_included = TRUE;
 			$datetime_included = TRUE;
 		}
-		elseif ($db_field_type == 'TEXT' AND $textarea_included === FALSE AND !empty($textarea_editor) )
+		elseif (($db_field_type == 'TEXT' || $db_field_type == 'MEDIUMTEXT' || $db_field_type == 'LONGTEXT')
+			&& $textarea_included === FALSE
+			&& !empty($textarea_editor)
+		)
 		{
 			// if a date field hasn't been included already then add in the jquery ui files
 			if ($textarea_editor == 'ckeditor') {
