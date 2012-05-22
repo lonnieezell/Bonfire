@@ -543,14 +543,16 @@ if ($controller_name != $module_name_lower)
 			}
 		}
 
-		if (set_value("db_field_type$counter") != 'ENUM' && set_value("db_field_length_value$counter") != NULL)
+		$db_field_type = set_value("db_field_type".$counter);
+
+		if ($db_field_type != 'ENUM' && $db_field_type != 'SET' && set_value("db_field_length_value$counter") != NULL)
 		{
 			if ($rule_counter > 0)
 			{
 				$rules .= '|';
 			}
 
-			if (set_value("db_field_type$counter") == 'DECIMAL' || set_value("db_field_type$counter") == 'FLOAT')	{
+			if ($db_field_type == 'DECIMAL' || $db_field_type == 'FLOAT')	{
 				list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
 				$max = $len;
 				if (isset($decimal) && $decimal != 0) {
