@@ -10,6 +10,27 @@
 
 	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
+	<div class="tabbable">
+		<ul class="nav nav-tabs">
+			<li class="active">
+				<a href="#main-settings" data-toggle="tab">Main Settings</a>
+			</li>
+			<li>
+				<a href="#security" data-toggle="tab">Security Settings</a>
+			</li>
+
+			<?php if (has_permission('Site.Developer.View')) : ?>
+			<li>
+				<a href="#developer" data-toggle="tab">Developer Settings</a>
+			</li>
+			<?php endif; ?>
+		</ul>
+
+		<div class="tab-content" style="padding-bottom: 9px; border-bottom: 1px solid #ddd;">
+
+		<!-- Start of Main Settings Tab Pane -->
+		<div class="tab-pane active" id="main-settings">
+
 		<fieldset>
 			<legend><?php echo lang('bf_site_information') ?></legend>
 
@@ -61,6 +82,11 @@
 			</div>
 
 		</fieldset>
+
+		</div>
+
+		<!-- Start of Security Settings Tab Pane -->
+		<div class="tab-pane" id="security">
 
 		<fieldset>
 			<legend><?php echo lang('bf_security') ?></legend>
@@ -130,7 +156,7 @@
 				</div>
 			</div>
 
-			<div class="control-group"
+			<div class="control-group">
 			<label class="control-label">&nbsp;</label>
 				<div class="controls">
 					<div class="inputs-list">
@@ -185,8 +211,12 @@
 			</div>
 
 		</fieldset>
+	</div>
 
-		<?php if ($this->auth->has_permission('Site.Developer.View')) : ?>
+	<?php if (has_permission('Site.Developer.View')) : ?>
+
+	<!-- Start of Developer Settings Tab Pane -->
+	<div class="tab-pane" id="developer">
 		<!-- Developer Settings -->
 		<fieldset>
 			<legend>Developer</legend>
@@ -216,11 +246,16 @@
 			</div>
 
 		</fieldset>
-		<?php endif; ?>
+	</div>
+	<!-- End of Developer Tab Options Pane -->
+	<?php endif; ?>
 
-		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_context_settings') ?>" />
-		</div>
+	</div>
+</div>
+
+	<div class="form-actions">
+		<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_context_settings') ?>" />
+	</div>
 
 	<?php echo form_close(); ?>
 </div> <!-- /admin-box -->
