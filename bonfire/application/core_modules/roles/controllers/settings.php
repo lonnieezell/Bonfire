@@ -481,7 +481,7 @@ class Settings extends Admin_Controller
 			return FALSE;
 		}
 
-		if ($this->input->post('action', TRUE) == 'TRUE')
+		if ($this->input->post('action', TRUE) == 'true')
 		{
 			if(is_numeric($this->role_permission_model->create_role_permissions($pieces[0],$pieces[1])))
 			{
@@ -494,7 +494,7 @@ class Settings extends Admin_Controller
 		}
 		else
 		{
-			if($this->role_permission_model->delete_role_permissions($pieces[0],$pieces[1]))
+			if($this->role_permission_model->delete_role_permissions($pieces[0], $pieces[1]))
 			{
 				die(lang("matrix_delete_success"));
 			}

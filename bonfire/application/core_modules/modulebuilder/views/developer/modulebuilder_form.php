@@ -354,8 +354,12 @@
 						<label class="control-label" for="db_field_length_value<?php echo $count; ?>"><?php echo lang('mb_form_length'); ?></label>
 					<?php
 						$default_max_len = '';
-						if (isset($existing_table_fields[$count]) && $existing_table_fields[$count]['type'] != 'TEXT') {
-							$default_max_len = $existing_table_fields[$count]['type'] == 'ENUM' ? $existing_table_fields[$count]['values'] : $existing_table_fields[$count]['max_length'];
+						if (isset($existing_table_fields[$count])
+								&& $existing_table_fields[$count]['type'] != 'TEXT'
+								&& $existing_table_fields[$count]['type'] != 'MEDIUMTEXT'
+								&& $existing_table_fields[$count]['type'] != 'LONGTEXT'
+						) {
+							$default_max_len = ($existing_table_fields[$count]['type'] == 'ENUM' || $existing_table_fields[$count]['type'] == 'SET') ? $existing_table_fields[$count]['values'] : $existing_table_fields[$count]['max_length'];
 						}
 					?>
 						<div class="controls">
