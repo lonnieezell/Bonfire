@@ -104,7 +104,11 @@ class Console {
 	{
 		if ($data !== 0 && empty($data))
 		{
-			$data = 'empty';
+			// Anyone know why we were allowing
+			// loggin of empty data? I can't think of
+			// a good reason for it.
+			//$data = 'empty';
+			return false;
 		}
 
 		$log_item = array(

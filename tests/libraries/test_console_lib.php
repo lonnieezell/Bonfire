@@ -2,7 +2,7 @@
 
 class test_console_lib extends CodeIgniterUnitTestCase {
 	
-	private $first_log_count;
+	private $first_log_count = 0;
 	
 	//--------------------------------------------------------------------
 	
