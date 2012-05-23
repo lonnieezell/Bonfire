@@ -274,6 +274,32 @@ class Role_permission_model extends BF_Model
 	//--------------------------------------------------------------------
 
 	/**
+	 *	A convenience method to assign a single permission to a role by
+	 *	names, rather than by ids.
+	 *
+	 * @access	public
+	 *
+	 * @param	str	$role_name			The name of the role
+	 * @param	str	$permission_name	The name of the permission to assign.
+	 */
+	public function assign_to_role($role_name=null, $permission_name=null)
+	{
+		$this->load->model('roles/role_model');
+
+		$role	= $this->role_model->find_by('role_name', $role_name);
+		$perm	= $this->permission_model->find_by('name', $permission_name);
+
+		if (!$role || !$perm)
+		{
+			return false;
+		}
+
+		return $this->create($role->role_id, $perm->permission_id);
+	}
+
+	//--------------------------------------------------------------------
+
+	/**
 	 * Returns the permissions array for a single role.
 	 *
 	 * @access public
