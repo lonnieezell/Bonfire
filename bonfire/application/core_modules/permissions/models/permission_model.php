@@ -145,6 +145,25 @@ class Permission_model extends BF_Model
 	// --------------------------------------------------------------------
 
 	/**
+	 * Deletes a particular permission from the database by name. 
+	 * 
+	 * @access public
+	 * 
+	 * @param str	$name	The name of the permission to delete
+	 * @param bool	$purge	Whether to use soft delete or not.
+	 *
+	 * @return bool TRUE/FALSE
+	 */
+	public function delete_by_name($name=null, $purge=false) 
+	{	
+		$perm = $this->find_by('name', $name);
+		
+		return $this->delete($perm->permission_id, $purge);
+	}
+	
+	//--------------------------------------------------------------------
+
+	/**
 	 * Update a particular permission from the database
 	 * Remove it from role_permissions if set to inactive
 	 *
