@@ -52,7 +52,8 @@ class Home extends Admin_Controller
 	 */
 	public function index()
 	{
-		redirect(SITE_AREA .'/content');
+		$default_context = $this->settings_lib->item('site.default_context');
+		redirect(SITE_AREA .'/'.(isset($default_context) && !empty($default_context) ? $default_context : 'content'));
 	}//end index()
 
 	//--------------------------------------------------------------------

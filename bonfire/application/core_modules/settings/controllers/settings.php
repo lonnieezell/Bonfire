@@ -81,6 +81,8 @@ class Settings extends Admin_Controller
 		$settings = $this->settings_lib->find_all();
 		Template::set('settings', $settings);
 
+		Template::set('contexts', list_contexts(true));
+		
 		// Get the possible languages
 		$this->load->helper('translate/languages');
 		Template::set('languages', list_languages());
@@ -117,6 +119,7 @@ class Settings extends Admin_Controller
 		$this->form_validation->set_rules('password_force_mixed_case', lang('bf_password_force_mixed_case'), 'trim|strip_tags|numeric|xss_clean');
 		$this->form_validation->set_rules('password_show_labels', lang('bf_password_show_labels'), 'trim|strip_tags|numeric|xss_clean');
 		$this->form_validation->set_rules('languages[]', lang('bf_language'), 'required|trim|strip_tags|is_array|xss_clean');
+		$this->form_validation->set_rules('default_context', lang('bf_default_context'), 'required|trim|strip_tags|xss_clean');
 
 		if ($this->form_validation->run() === FALSE)
 		{
@@ -150,6 +153,7 @@ class Settings extends Admin_Controller
 			array('name' => 'site.show_profiler', 'value' => isset($_POST['show_profiler']) ? 1 : 0),
 			array('name' => 'site.show_front_profiler', 'value' => isset($_POST['show_front_profiler']) ? 1 : 0),
 			array('name' => 'site.languages', 'value' => $this->input->post('languages') != '' ? serialize($this->input->post('languages')) : ''),
+			array('name' => 'site.default_context', 'value' => $this->input->post('default_context')),
 
 
 		);
