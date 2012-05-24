@@ -74,7 +74,7 @@
 				</td>
 				<td><?php echo $user->display_name ?></td>
 				<td>
-					<a href="mailto://<?php echo $user->email ?>"><?php echo $user->email ?></a>
+					<a href="mailto:<?php echo $user->email ?>"><?php echo $user->email ?></a>
 				</td>
 				<td>
 					<?php echo $roles[$user->role_id]->role_name ?>
