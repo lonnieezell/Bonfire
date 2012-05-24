@@ -16,7 +16,7 @@
 		<div class="control-group <?php echo form_has_error('role_name') ? 'error' : ''; ?>">
 			<label class="control-label" for="role_name"><?php echo lang('role_name'); ?></label>
 			<div class="controls">
-				<input type="text" name="role_name" class="input-xlarge" value="<?php echo set_value('role_name', isset($role) ? $role->role_name : '') ?>" />
+				<input type="text" name="role_name" id="role_name" class="input-xlarge" value="<?php echo set_value('role_name', isset($role) ? $role->role_name : '') ?>" />
 				<span class="help-inline"><?php echo form_error('role_name'); ?></span>
 			</div>
 		</div>
@@ -24,7 +24,7 @@
 		<div class="control-group <?php echo form_has_error('description') ? 'error' : ''; ?>" style="vertical-align: top">
 			<label class="control-label" for="description"><?php echo lang('bf_description'); ?></label>
 			<div class="controls">
-				<textarea name="description" rows="3" class="input-xlarge"><?php echo set_value('description', isset($role) ? $role->description : '') ?></textarea>
+				<textarea name="description" id="description" rows="3" class="input-xlarge"><?php echo set_value('description', isset($role) ? $role->description : '') ?></textarea>
 				<span class="help-inline"><?php echo form_error('description') ? form_error('description') : lang('role_max_desc_length'); ?></span>
 			</div>
 		</div>
@@ -32,7 +32,7 @@
 		<div class="control-group <?php echo form_has_error('login_destination') ? 'error' : ''; ?>">
 			<label class="control-label" for="login_destination"><?php echo lang('role_login_destination'); ?>?</label>
 			<div class="controls">
-				<input type="text" name="login_destination" class="input-xlarge" value="<?php echo set_value('login_destination', isset($role) ? $role->login_destination : '') ?>"  />
+				<input type="text" name="login_destination" id="login_destination" class="input-xlarge" value="<?php echo set_value('login_destination', isset($role) ? $role->login_destination : '') ?>"  />
 				<span class="help-inline"><?php echo form_error('login_destination') ? form_error('login_destination') : lang('role_destination_note'); ?></span>
 			</div>
 		</div>
@@ -55,7 +55,7 @@
 			<label class="control-label"><?php echo lang('role_default_role')?></label>
 			<div class="controls">
 				<label class="checkbox" for="default" >
-					<input type="checkbox" name="default" value="1" <?php echo set_checkbox('default', 1, isset($role) && $role->default == 1 ? TRUE : FALSE) ?> />
+					<input type="checkbox" name="default" id="default" value="1" <?php echo set_checkbox('default', 1, isset($role) && $role->default == 1 ? TRUE : FALSE) ?> />
 					<?php echo lang('role_default_note'); ?>
 				</label>
 			</div>

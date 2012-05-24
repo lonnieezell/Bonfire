@@ -37,14 +37,14 @@
 			<div class="control-group">
 				<label class="control-label" for="title"><?php echo lang('bf_site_name') ?></label>
 				<div class="controls">
-					<input type="text" name="title" class="span6" value="<?php echo isset($settings['site.title']) ? $settings['site.title'] : set_value('site.title') ?>" />
+					<input type="text" name="title" id="title" class="span6" value="<?php echo isset($settings['site.title']) ? $settings['site.title'] : set_value('site.title') ?>" />
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label class="control-label" for="system_email"><?php echo lang('bf_site_email') ?></label>
 				<div class="controls">
-					<input type="text" name="system_email" class="span4" value="<?php echo isset($settings['site.system_email']) ? $settings['site.system_email'] : set_value('site.system_email') ?>" />
+					<input type="text" name="system_email" id="system_email" class="span4" value="<?php echo isset($settings['site.system_email']) ? $settings['site.system_email'] : set_value('site.system_email') ?>" />
 					<p class="help-inline"><?php echo lang('bf_site_email_help') ?></p>
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 			<div class="control-group">
 				<label class="control-label" for="status"><?php echo lang('bf_site_status') ?></label>
 				<div class="controls">
-					<select name="status">
+					<select name="status" id="status">
 						<option value="1" <?php echo isset($settings) && $settings['site.status'] == 1 ? 'selected="selected"' : set_select('site.status', '1') ?>><?php echo lang('bf_online') ?></option>
 						<option value="0" <?php echo isset($settings) && $settings['site.status'] == 0 ? 'selected="selected"' : set_select('site.status', '1') ?>><?php echo lang('bf_offline') ?></option>
 					</select>
@@ -62,15 +62,15 @@
 			<div class="control-group">
 				<label class="control-label" for="list_limit"><?php echo lang('bf_top_number') ?></label>
 				<div class="controls">
-					<input type="text" name="list_limit" value="<?php echo set_value('list_limit', isset($settings['site.list_limit']) ? $settings['site.list_limit'] : '')  ?>" class="span1" />
+					<input type="text" name="list_limit" id="list_limit" value="<?php echo set_value('list_limit', isset($settings['site.list_limit']) ? $settings['site.list_limit'] : '')  ?>" class="span1" />
 					<p class="help-inline"><?php echo lang('bf_top_number_help') ?></p>
 				</div>
 			</div>
 
 			<div class="control-group">
-				<label class="control-label" for="status"><?php echo lang('bf_language') ?></label>
+				<label class="control-label" for="languages"><?php echo lang('bf_language') ?></label>
 				<div class="controls">
-					<select name="languages[]" multiple="multiple">
+					<select name="languages[]" id="languages" multiple="multiple">
 					<?php if (is_array($languages) && count($languages)):?>
 						<?php foreach($languages as $language):?>
 						<option value="<?php echo $language;?>" <?php echo set_select('languages', $language, in_array($language, $selected_languages) ? TRUE : FALSE) ?>><?php echo ucfirst($language) ?></option>
@@ -116,7 +116,7 @@
 			<div class="control-group">
 				<label class="control-label" for="login_type"><?php echo lang('bf_login_type') ?></label>
 				<div class="controls">
-					<select name="login_type">
+					<select name="login_type" id="login_type">
 						<option value="email" <?php echo $settings['auth.login_type'] == 'email' ? 'selected="selected"' : ''; ?>><?php echo lang('bf_login_type_email') ?></option>
 						<option value="username" <?php echo $settings['auth.login_type'] == 'username' ? 'selected="selected"' : ''; ?>><?php echo lang('bf_login_type_username') ?></option>
 						<option value="both" <?php echo $settings['auth.login_type'] == 'both' ? 'selected="selected"' : ''; ?>><?php echo lang('bf_login_type_both') ?></option>
@@ -180,9 +180,9 @@
 			</div>
 
 			<div class="control-group" id="password-strength">
-				<label class="control-label" for="password-strength"><?php echo lang('bf_password_strength') ?></label>
+				<label class="control-label" for="password_min_length"><?php echo lang('bf_password_strength') ?></label>
 				<div class="controls">
-					<input type="text" name="password_min_length" value="<?php echo set_value('password_min_length', isset($settings['auth.password_min_length']) ? $settings['auth.password_min_length'] : '') ?>" class="span1" />
+					<input type="text" name="password_min_length" id="password_min_length" value="<?php echo set_value('password_min_length', isset($settings['auth.password_min_length']) ? $settings['auth.password_min_length'] : '') ?>" class="span1" />
 					<p class="help-inline"><?php echo lang('bf_password_length_help') ?></p>
 				</div>
 			</div>

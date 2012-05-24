@@ -40,7 +40,7 @@
 	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
 		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" name="display_name" value="<?php echo set_value('display_name'); ?>" />
+			<input class="span6" type="text" name="display_name" id="display_name" value="<?php echo set_value('display_name'); ?>" />
 		</div>
 	</div>
 

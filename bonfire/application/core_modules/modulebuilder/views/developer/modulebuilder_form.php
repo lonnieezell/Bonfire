@@ -285,7 +285,7 @@
 					</div>
 
 					<div class="control-group <?php echo form_has_error("view_field_name{$count}") ? 'error' : ''; ?>">
-						<label class="control-label" for="view_field_name"><?php echo lang('mb_form_fieldname'); ?></label>
+						<label class="control-label" for="view_field_name<?php echo $count; ?>"><?php echo lang('mb_form_fieldname'); ?></label>
 						<div class="controls">
 							<input name="view_field_name<?php echo $count; ?>" id="view_field_name<?php echo $count; ?>" type="text" value="<?php echo set_value("view_field_name{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['name'] : ''); ?>" maxlength="30" placeholder="<?php echo lang('mb_form_fieldname_ph'); ?>" />
 							<span class="help-inline"><?php echo form_error("view_field_name{$count}"); ?></span>

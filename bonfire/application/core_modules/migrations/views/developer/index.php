@@ -140,7 +140,7 @@
 						<div class="control-group">
 							<label class="control-label" for="migration"><?php echo lang('mig_choose_migration'); ?></label>
 							<div class="controls">
-								<select name="migration">
+								<select name="migration" id="migration">
 								<?php foreach ($core_migrations as $migration) :?>
 									<option value="<?php echo (int)substr($migration, 0, 3) ?>" <?php echo ((int)substr($migration, 0, 3) == $this->uri->segment(5)) ? 'selected="selected"' : '' ?>><?php echo $migration ?></option>
 								<?php endforeach; ?>

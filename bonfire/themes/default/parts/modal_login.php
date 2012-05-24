@@ -10,26 +10,26 @@
 
 	<div class="modal-body">
 			<div class="control-group">
-				<label class="control-label" for="login">
+				<label class="control-label" for="modal-login-value">
 					<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_login_type_both') : ucwords($this->settings_lib->item('auth.login_type')) ?>
 				</label>
 				<div class="controls">
-					<input type="text" name="login" class="input-xlarge" placeholder="<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords($this->settings_lib->item('auth.login_type')) ?>" value="">
+					<input type="text" name="login" id="modal-login-value" class="input-xlarge" placeholder="<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords($this->settings_lib->item('auth.login_type')) ?>" value="">
 				</div>
 			</div>
 
 			<div class="control-group">
-				<label class="control-label" for="password"><?php echo lang('bf_password') ?></label>
+				<label class="control-label" for="modal-login-password"><?php echo lang('bf_password') ?></label>
 				<div class="controls">
-					<input type="password" name="password" class="input-xlarge" placeholder="Password" value="">
+					<input type="password" name="password" id="modal-login-password" class="input-xlarge" placeholder="Password" value="">
 				</div>
 			</div>
 
 			<?php if ($this->settings_lib->item('auth.allow_remember')) : ?>
 			<div class="control-group">
 				<div class="controls">
-					<label class="checkbox" for="remember">
-						<input type="checkbox" name="remember" value="1" checked>
+					<label class="checkbox" for="modal-login-remember">
+						<input type="checkbox" name="remember" id="modal-login-remember" value="1" checked>
 						<?php echo lang('bf_remember_me') ?>
 					</label>
 				</div>
