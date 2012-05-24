@@ -116,7 +116,7 @@ class Modulebuilder
      *
      * @return array An array with the content for the generated files
      */
-public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix) {
+    public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix) {
     {
         $this->CI->load->helper('inflector');
 
@@ -222,7 +222,7 @@ public function build_files($field_total, $module_name, $contexts, $action_names
         return $data;
 
     }//end build_files()
-
+ }
     //--------------------------------------------------------------------
 
     //--------------------------------------------------------------------
@@ -468,7 +468,7 @@ public function build_files($field_total, $module_name, $contexts, $action_names
      *
      * @return mixed FALSE on error/A string containing the content of the controller file
      */
-    private function build_controller($field_total, $module_name, $controller_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name)
+    private function build_controller($field_total, $module_name, $controller_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name, $table_as_field_prefix)
     {
         if ($field_total == NULL)
         {
@@ -621,7 +621,7 @@ public function build_files($field_total, $module_name, $contexts, $action_names
      *
      * @return string A string containing the content of the database migration file
      */
-    private function build_db_sql($field_total, $module_name, $primary_key_field, $table_name)
+    private function build_db_sql($field_total, $module_name, $primary_key_field, $table_name, $table_as_field_prefix)
     {
         if ($field_total == NULL)
         {
