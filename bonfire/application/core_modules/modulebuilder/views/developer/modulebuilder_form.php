@@ -125,6 +125,9 @@
         </div>
       </div>
 
+		</fieldset>
+
+
 		<fieldset style="margin-top: 0" id="db_details">
 			<legend><?php echo lang('mb_form_table_details'); ?></legend>
 

@@ -155,8 +155,9 @@
 							<p><?php echo lang('mig_no_migrations') ?></p>
 						<?php endif; ?>
 					<?php echo form_close(); ?>
-				</div>
-			</fieldset>
+				</fieldset>
+			</div>
 		</div>
+	</div>
 
 <?php endif; ?>
