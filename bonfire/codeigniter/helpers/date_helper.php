@@ -499,11 +499,12 @@ if ( ! function_exists('human_to_unix'))
  * @param	string	timezone
  * @param	string	classname
  * @param	string	menu name
+ * @param	string	menu id
  * @return	string
  */
 if ( ! function_exists('timezone_menu'))
 {
-	function timezone_menu($default = 'UTC', $class = "", $name = 'timezones')
+	function timezone_menu($default = 'UTC', $class = "", $name = 'timezones', $id = 'timezones')
 	{
 		$CI =& get_instance();
 		$CI->lang->load('date');
@@ -511,7 +512,7 @@ if ( ! function_exists('timezone_menu'))
 		if ($default == 'GMT')
 			$default = 'UTC';
 
-		$menu = '<select name="'.$name.'"';
+		$menu = '<select name="'.$name.'" id="'.$id.'"';
 
 		if ($class != '')
 		{
