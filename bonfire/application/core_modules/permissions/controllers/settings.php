@@ -1,35 +1,46 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+// ------------------------------------------------------------------------
 
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
+/**
+ * Permissions Settings Context
+ *
+ * Allows the management of the Bonfire permissions.
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Permissions
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Settings extends Admin_Controller
+{
 
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
-
-class Settings extends Admin_Controller {
-
+	/**
+	 * Sets up the require permissions and loads required classes
+	 *
+	 * @return void
+	 */
 	function __construct()
 	{
  		parent::__construct();
 
-		$this->auth->restrict('Permissions.Settings.View');
-		$this->auth->restrict('Permissions.Settings.Manage');
+		$this->auth->restrict('Bonfire.Permissions.View');
+		$this->auth->restrict('Bonfire.Permissions.Manage');
 
 		$this->load->library('form_validation');
 		$this->load->helper('form');
@@ -39,14 +50,17 @@ class Settings extends Admin_Controller {
 		$this->load->helper('inflector');
 
 		Template::set_block('sub_nav', 'settings/_sub_nav');
-	}
+
+	}//end __construct()
 
 	//--------------------------------------------------------------------
 
 	/**
-	 * function index
+	 * Displays a list of all permissions with pagination
 	 *
-	 * list form data
+	 * @access public
+	 *
+	 * @return void
 	 */
 	function index()
 	{
@@ -79,7 +93,7 @@ class Settings extends Admin_Controller {
 					Template::set_message(lang('permissions_del_error') . $this->permission_model->error, 'error');
 				}
 			}
-		}
+		}//end if
 
 		$total = $this->permission_model->count_all();
 
@@ -89,22 +103,30 @@ class Settings extends Admin_Controller {
 		$offset = $this->input->get('per_page');
 
 		$limit = $this->settings_lib->item('site.list_limit');
-		
+
 		$this->pager['base_url'] 			= current_url() .'?';
 		$this->pager['total_rows'] 			= $total;
 		$this->pager['per_page'] 			= $limit;
-		$this->pager['page_query_string']	= true;
+		$this->pager['page_query_string']	= TRUE;
 
 		$this->pagination->initialize($this->pager);
-		
+
 		Template::set('results', $this->permission_model->limit($limit, $offset)->find_all());
 
 		Template::set("toolbar_title", lang("permissions_manage"));
 		Template::render();
-	}
+
+	}//end index()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Create a new permission in the database
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function create()
 	{
 		if ($this->input->post('submit'))
@@ -119,10 +141,18 @@ class Settings extends Admin_Controller {
 		Template::set('toolbar_title', lang("permissions_create_new_button"));
 		Template::set_view('settings/permission_form');
 		Template::render();
-	}
+
+	}//end create()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Edit a permission record
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function edit()
 	{
 		$id = (int)$this->uri->segment(5);
@@ -146,10 +176,18 @@ class Settings extends Admin_Controller {
 		Template::set('toolbar_title', lang("permissions_edit_heading"));
 		Template::set_view('settings/permission_form');
 		Template::render();
-	}
+
+	}//end edit()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Delete a permission record from the database
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function delete()
 	{
 		$id = $this->uri->segment(5);
@@ -167,19 +205,30 @@ class Settings extends Admin_Controller {
 		}
 
 		redirect(SITE_AREA .'/settings/permissions');
-	}
+
+	}//end delete()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Save the permission record to the database
+	 *
+	 * @access public
+	 *
+	 * @param string $type The type of save operation (insert or edit)
+	 * @param int    $id   The record ID in the case of edit
+	 *
+	 * @return bool
+	 */
 	public function save_permissions($type='insert', $id=0)
 	{
 
 		$this->form_validation->set_rules('name','Name','required|trim|xss_clean|max_length[30]');
 		$this->form_validation->set_rules('description','Description','trim|xss_clean|max_length[100]');
 		$this->form_validation->set_rules('status','Status','required|trim|xss_clean');
-		if ($this->form_validation->run() === false)
+		if ($this->form_validation->run() === FALSE)
 		{
-			return false;
+			return FALSE;
 		}
 
 		if ($type == 'insert')
@@ -188,10 +237,11 @@ class Settings extends Admin_Controller {
 
 			if (is_numeric($id))
 			{
-				$return = true;
-			} else
+				$return = TRUE;
+			}
+			else
 			{
-				$return = false;
+				$return = FALSE;
 			}
 		}
 		else if ($type == 'update')
@@ -200,7 +250,8 @@ class Settings extends Admin_Controller {
 		}
 
 		return $return;
-	}
+
+	}//end save_permissions()
 
 	//--------------------------------------------------------------------
-}
+}//end settings

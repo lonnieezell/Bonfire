@@ -22,36 +22,34 @@ $('.btn').click( function() {
 	verify_delete(whom,action);
 });
 
-<?php
-/*
- @TODO : FIX OR REMOVE THIS CODE
- This is debugging code
-$("#flex_table").dataTable({
-        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-        "sPaginationType": "bootstrap",
-        "iDisplayLength": <?php echo config_item('site.list_limit') ? config_item('site.list_limit') : 15; ?>,
-        "bAutoWidth": false,
-        "aoColumns": [
-            { "sWidth": "10%" },
-            null,
-            { "sWidth": "8em" },
-            { "sWidth": "12em" }
-        ],
-        "oLanguage": {
-            "sLengthMenu": "_MENU_ records per page"
-        }
-});
-*/
-?>
 
 $("#flex_table").dataTable({
-		"sDom": 'rt<"top"fpi>',
-		"sPaginationType": "listbox",
+		"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+		"sPaginationType": "bootstrap",
+		"iDisplayLength": <?php echo ($this->settings_lib->item('site.list_limit')) ? $this->settings_lib->item('site.list_limit') : 15; ?>,
+		"bInfo": false,
+		"bPaginate": false,
 		"bProcessing": true,
+		"bServerSide": false,
 		"bLengthChange": false,
-		"iDisplayLength": <?php echo config_item('site.list_limit') ? config_item('site.list_limit') : 15; ?>,
 		"aaSorting": [[3,'desc']],
 		"bAutoWidth": false,
+<?php
+/* This is for server side processing
+		"bServerSide": true,
+		'sAjaxSource'    : '<?= base_url(); ?>admin/reports/activities/ajax_activity',
+		'fnServerData'   : function(sSource, aoData, fnCallback)
+		{
+			$.ajax({
+			'dataType': 'json',
+			'type'    : 'POST',
+			'url'     : sSource,
+			'data'    : aoData,
+			'success' : fnCallback
+			});
+		},
+*/
+?>
 		"aoColumns": [
 			{ "sWidth": "10%" },
 			null,

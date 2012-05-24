@@ -20,20 +20,19 @@
 		<label class="control-label"><?php echo lang('tr_include') ?></label>
 		<div class="controls">
 			<label for="include_core">
-				<input type="checkbox" name="include_core" value="1" checked="checked" />
+				<input type="checkbox" id="include_core" name="include_core" value="1" checked="checked" />
 				<?php echo lang('tr_include_core'); ?>
 			</label>
 			<label for="include_mods">
-				<input type="checkbox" name="include_mods" value="1" />
+				<input type="checkbox" id="include_mods" name="include_mods" value="1" />
 				<?php echo lang('tr_include_mods'); ?>
 			</label>
 		</div>
 	</div>
-	
+
 
 	<div class="form-actions">
 		<input type="submit" name="submit" class="btn btn-primary" value="Export" />
 	</div>
 
 <?php echo form_close(); ?>
-	

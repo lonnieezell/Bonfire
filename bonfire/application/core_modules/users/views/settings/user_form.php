@@ -4,6 +4,16 @@
 </div>
 <?php endif; ?>
 
+<div class="row-fluid">
+	<div class="span8 offset2">
+		<div class="alert alert-info fade in">
+		  <a data-dismiss="alert" class="close">&times;</a>
+			<h4 class="alert-heading"><?php echo lang('bf_required_note'); ?></h4>
+			<?php if (isset($password_hints) ) echo $password_hints; ?>
+		</div>
+	</div>
+</div>
+
 <div class="admin-box">
 
 	<h3><?php echo $toolbar_title ?></h3>
@@ -78,7 +88,8 @@
 			</div>
 		</div>
 
-		<?php if (has_permission('Bonfire.Roles.Manage')) :?>
+
+		<?php if (isset($user) && has_permission('Bonfire.Roles.Manage') && has_permission('Permissions.'.$user->role_name.'.Manage') && isset($roles) ) :?>
 		<fieldset>
 			<legend><?php echo lang('us_role'); ?></legend>
 
@@ -118,9 +129,72 @@
 		?>
 
 
+		<!-- Start of User Meta -->
+		<?php
+		foreach ($meta_fields as $field):
+
+			if ($field['form_detail']['type'] == 'dropdown'):
+
+				echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']));
+
+
+			elseif ($field['form_detail']['type'] == 'state_select' && is_callable('country_select')) : ?>
+
+				<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
+					<label class="control-label" for="<?= $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
+					<div class="controls">
+
+						<?php echo state_select(isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
+
+					</div>
+				</div>
+
+			<?php elseif ($field['form_detail']['type'] == 'country_select' && is_callable('country_select')) : ?>
+
+				<div class="control-group <?php echo iif( form_error('country') , 'error'); ?>">
+					<label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
+					<div class="controls">
+
+						<?php echo country_select(isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']), 'US', 'country', 'span6 chzn-select'); ?>
+
+					</div>
+				</div>
+
+			<?php else:
+
+
+				$form_method = 'form_' . $field['form_detail']['type'];
+				if ( is_callable($form_method) )
+				{
+					echo $form_method($field['form_detail']['settings'], isset($user->$field['name']) ? $user->$field['name'] : set_value($field['name']), $field['label']);
+				}
+
+
+			endif;
+
+		endforeach;
+		?>
+
+	<!-- End of User Meta -->
+
+
 		<?php if (isset($user) && has_permission('Permissions.'. ucfirst($user->role_name).'.Manage') && $user->id != $this->auth->user_id() && ($user->banned || $user->deleted)) : ?>
 		<fieldset>
 			<legend><?php echo lang('us_account_status') ?></legend>
+
+			<?php
+			$field = 'activate';
+			if ($user->active) :
+					$field = 'de'.$field;
+			endif; ?>
+			<div class="control-group">
+					<div class="controls">
+							<label>
+									<input type="checkbox" name="<?php echo $field; ?>" value="1">
+									<?php echo lang('us_'.$field.'_note') ?>
+							</label>
+					</div>
+			</div>
 
 			<?php if ($user->deleted) : ?>
 			<div class="control-group">
@@ -148,7 +222,8 @@
 
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?> <?php echo anchor(SITE_AREA .'/settings/users', lang('bf_action_cancel')); ?>
+			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?>
+			<?php echo anchor(SITE_AREA .'/settings/users', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-warning"'); ?>
 		</div>
 
 	<?php echo form_close(); ?>

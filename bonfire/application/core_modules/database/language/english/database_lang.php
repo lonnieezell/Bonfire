@@ -28,11 +28,15 @@ $lang['db_backup_warning']		= 'Note: Due to the limited execution time and memor
 $lang['db_filename']			= 'File Name';
 
 $lang['db_drop_question']		= 'Add &lsquo;Drop Tables&rsquo; command to SQL?';
+$lang['db_drop_tables']			= 'Drop Tables';
 $lang['db_compress_question']	= 'Compression type?';
+$lang['db_compress_type']		= 'Compression type';
 $lang['db_insert_question']		= 'Add &lsquo;Inserts&rsquo; for data to SQL?';
+$lang['db_add_inserts']			= 'Add Inserts';
 
 $lang['db_restore_note']		= 'The Restore option is only capable of reading un-compressed files. Gzip and Zip compression is good if you just want a backup to download and store on your computer.';
 
+$lang['db_apply']				= 'Apply';
 $lang['db_gzip']				= 'gzip';
 $lang['db_zip']					= 'zip';
 $lang['db_backup']				= 'Backup';
@@ -47,8 +51,11 @@ $lang['db_migrations']			= 'Migrations';
 $lang['db_delete_note']			= 'Delete selected backup files: ';
 $lang['db_no_backups']			= 'No previous backups were found.';
 $lang['db_backup_delete_confirm']	= 'Really delete the following backup files?';
+$lang['db_backup_delete_none']	= 'No backup files were selected for deletion';
 $lang['db_drop_confirm']		= 'Really delete the following database tables?';
+$lang['db_drop_none']			= 'No tables were selected to drop';
 $lang['db_drop_attention']		= '<p>Deleting tables from the database will result in loss of data.</p><p><strong>This may make your application non-functional.</strong></p>';
+$lang['db_repair_none']			= 'No tables were selected to repair';
 
 $lang['db_table_name']			= 'Table Name';
 $lang['db_records']				= 'Records';

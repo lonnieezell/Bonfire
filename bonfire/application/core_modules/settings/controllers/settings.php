@@ -1,44 +1,67 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+// ------------------------------------------------------------------------
 
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
-class Settings extends Admin_Controller {
+/**
+ * Settings Module
+ *
+ * Allows the user to management the preferences for the site.
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Settings
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Settings extends Admin_Controller
+{
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Sets up the require permissions and loads required classes
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
 
-		$this->auth->restrict('Site.Settings.View');
+		// restrict access - View and Manage
+		$this->auth->restrict('Bonfire.Settings.View');
+		$this->auth->restrict('Bonfire.Settings.Manage');
 
 		Template::set('toolbar_title', 'Site Settings');
 
 		$this->load->helper('config_file');
 		$this->lang->load('settings');
-	}
+
+	}//end __construct()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Displays a form with various site setings including site name and
+	 * registration settings
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function index()
 	{
 		if ($this->input->post('submit'))
@@ -47,11 +70,13 @@ class Settings extends Admin_Controller {
 			{
 				Template::set_message('Your settings were successfully saved.', 'success');
 				redirect(SITE_AREA .'/settings');
-			} else
+			}
+			else
 			{
 				Template::set_message('There was an error saving your settings.', 'error');
 			}
 		}
+
 		// Read our current settings
 		$settings = $this->settings_lib->find_all();
 		Template::set('settings', $settings);
@@ -65,7 +90,8 @@ class Settings extends Admin_Controller {
 
 		Template::set_view('settings/settings/index');
 		Template::render();
-	}
+
+	}//end index()
 
 	//--------------------------------------------------------------------
 
@@ -73,6 +99,13 @@ class Settings extends Admin_Controller {
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 
+	/**
+	 * Performs the form validation and saves the settings to the database
+	 *
+	 * @access private
+	 *
+	 * @return bool
+	 */
 	private function save_settings()
 	{
 		$this->form_validation->set_rules('title', lang('bf_site_name'), 'required|trim|strip_tags|xss_clean');
@@ -82,11 +115,12 @@ class Settings extends Admin_Controller {
 		$this->form_validation->set_rules('password_force_numbers', lang('bf_password_force_numbers'), 'trim|strip_tags|numeric|xss_clean');
 		$this->form_validation->set_rules('password_force_symbols', lang('bf_password_force_symbols'), 'trim|strip_tags|numeric|xss_clean');
 		$this->form_validation->set_rules('password_force_mixed_case', lang('bf_password_force_mixed_case'), 'trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('password_show_labels', lang('bf_password_show_labels'), 'trim|strip_tags|numeric|xss_clean');
 		$this->form_validation->set_rules('languages[]', lang('bf_language'), 'required|trim|strip_tags|is_array|xss_clean');
 
-		if ($this->form_validation->run() === false)
+		if ($this->form_validation->run() === FALSE)
 		{
-			return false;
+			return FALSE;
 		}
 
 		$data = array(
@@ -96,6 +130,7 @@ class Settings extends Admin_Controller {
 			array('name' => 'site.list_limit', 'value' => $this->input->post('list_limit')),
 
 			array('name' => 'auth.allow_register', 'value' => isset($_POST['allow_register']) ? 1 : 0),
+			array('name' => 'auth.user_activation_method', 'value' => isset($_POST['user_activation_method']) ? $_POST['user_activation_method'] : 0),
 			array('name' => 'auth.login_type', 'value' => $this->input->post('login_type')),
 			array('name' => 'auth.use_usernames', 'value' => isset($_POST['use_usernames']) ? $this->input->post('use_usernames') : 0),
 			array('name' => 'auth.allow_remember', 'value' => isset($_POST['allow_remember']) ? 1 : 0),
@@ -108,6 +143,7 @@ class Settings extends Admin_Controller {
 			array('name' => 'auth.password_force_numbers', 'value' => $this->input->post('password_force_numbers')),
 			array('name' => 'auth.password_force_symbols', 'value' => $this->input->post('password_force_symbols')),
 			array('name' => 'auth.password_force_mixed_case', 'value' => $this->input->post('password_force_mixed_case')),
+			array('name' => 'auth.password_show_labels', 'value' => $this->input->post('password_show_labels') ? 1 : 0),
 
 			array('name' => 'updates.do_check', 'value' => isset($_POST['do_check']) ? 1 : 0),
 			array('name' => 'updates.bleeding_edge', 'value' => isset($_POST['bleeding_edge']) ? 1 : 0),
@@ -133,7 +169,8 @@ class Settings extends Admin_Controller {
 		$updated = $this->settings_model->update_batch($data, 'name');
 
 		return $updated;
-	}
+
+	}//end save_settings()
 
 	//--------------------------------------------------------------------
-}
+}//end Settings()

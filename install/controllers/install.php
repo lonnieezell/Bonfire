@@ -74,6 +74,7 @@ class Install extends CI_Controller {
 		'/bonfire/application/config/testing',
 		'/bonfire/application/config/production',
 		'/bonfire/application/archives',
+		'/bonfire/application/archives/config',
 		'/bonfire/application/db/backups',
 		'/bonfire/application/db/migrations',
 		'/assets/cache'
@@ -414,6 +415,7 @@ class Install extends CI_Controller {
 			'role_id'	=> 1,
 			'email'		=> $this->input->post('email'),
 			'username'	=> $this->input->post('username'),
+			'active'    => 1,
 		);
 		list($password, $salt) = $this->hash_password($this->input->post('password'));
 

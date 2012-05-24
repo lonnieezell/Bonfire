@@ -1,30 +1,42 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+// ------------------------------------------------------------------------
 
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
-class Settings extends Admin_Controller {
+/**
+ * UI Module
+ *
+ * Manages the keyboard shortcuts used in the Bonfire admin interface.
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Ui
+ * @category   Controllers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Settings extends Admin_Controller
+{
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Setups the required permissions and loads required classes
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -35,10 +47,20 @@ class Settings extends Admin_Controller {
 		Template::set('toolbar_title', 'UI Settings');
 
 		Assets::add_module_js('ui', 'ui.js');
-	}
+
+	}//end __construct()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Displays the available shortcuts and the details of the keys setup
+	 * for these shortcut options.  Manages adding, editing and deleting of
+	 * the shortcut keys.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
 	public function index()
 	{
 		if ($this->input->post('add_shortcut'))
@@ -46,7 +68,6 @@ class Settings extends Admin_Controller {
 			if ($this->add())
 			{
 				Template::set_message(lang('ui_shortcut_success'), 'success');
-				redirect(uri_string());
 			}
 			else
 			{
@@ -58,7 +79,6 @@ class Settings extends Admin_Controller {
 			if ($this->remove())
 			{
 				Template::set_message(lang('ui_shortcut_remove_success'), 'success');
-				redirect(uri_string());
 			}
 			else
 			{
@@ -76,7 +96,7 @@ class Settings extends Admin_Controller {
 			{
 				Template::set_message(lang('ui_shortcut_save_error'), 'error');
 			}
-		}
+		}//end if
 
 		// Read our current settings from the application config
 		Template::set('current', config_item('ui.current_shortcuts'));
@@ -85,24 +105,24 @@ class Settings extends Admin_Controller {
 		Template::set('settings', $settings);
 
 		Template::render();
-	}
+
+	}//end index()
 
 	//--------------------------------------------------------------------
 
-	// --------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	// !PRIVATE METHODS
+	//--------------------------------------------------------------------
 
-	/*
-		Method: add()
 
-		Parameter:
-			$role_perm	- A CSV string of the role and the permission to modify
-			$action		- boolean ()True = Insert, False = Delete)
-
-		Return:
-			string result
-	*/
-
-	public function add()
+	/**
+	 * Add a shortcut key for an option
+	 *
+	 * @access private
+	 *
+	 * @return bool
+	 */
+	private function add()
 	{
 
 		$this->form_validation->set_rules('action1', lang('ui_actions'), 'required|xss_clean');
@@ -125,16 +145,20 @@ class Settings extends Admin_Controller {
 		}
 
 		return FALSE;
-	}
+
+	}//end add()
 
 	//--------------------------------------------------------------------
 
 
-	//--------------------------------------------------------------------
-	// !PRIVATE METHODS
-	//--------------------------------------------------------------------
-
-	public function remove()
+	/**
+	 * Remove a shortcut key
+	 *
+	 * @access private
+	 *
+	 * @return bool
+	 */
+	private function remove()
 	{
 		$this->form_validation->set_rules('remove_action', lang('ui_actions'), 'required|xss_clean');
 
@@ -154,10 +178,19 @@ class Settings extends Admin_Controller {
 		}
 
 		return FALSE;
-	}
+
+	}//end remove()
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Save multiple shortcut keys at the same time allowing the user to
+	 * edit the settings
+	 *
+	 * @param array $settings Array of shortcuts
+	 *
+	 * @return bool
+	 */
 	private function save_settings($settings = array())
 	{
 		if (empty($settings))
@@ -170,7 +203,7 @@ class Settings extends Admin_Controller {
 				foreach ($actions as $num => $value)
 				{
 					$this->form_validation->set_rules('action['.$num.']', lang('ui_actions'), 'required|xss_clean');
-					$this->form_validation->set_rules('shortcut['.$num.']', lang('ui_shortcuts'), 'required|callback_validate_shortcuts|xss_clean');
+					$this->form_validation->set_rules('shortcut['.$num.']', lang('ui_shortcuts'), 'required|callback__validate_shortcuts|xss_clean');
 
 					$settings[$value] = $shortcuts[$num];
 				}
@@ -181,7 +214,7 @@ class Settings extends Admin_Controller {
 				}
 			}
 
-		}
+		}//end if
 
 		if (is_array($settings))
 		{
@@ -197,22 +230,30 @@ class Settings extends Admin_Controller {
 		$this->activity_model->log_activity($this->current_user->id, lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'ui');
 
 		return $updated;
-	}
+
+	}//end save_settings()
 
 	//--------------------------------------------------------------------
 
-	public function validate_shortcuts($shortcut)
+	/**
+	 * Callback method to make sure that the shortcut ksys are valid
+	 *
+	 * @param string $shortcut The shortcut key
+	 *
+	 * @return bool
+	 */
+	public function _validate_shortcuts($shortcut)
 	{
 		// Make sure that the shortcuts don't have spaces
 
 		if (stristr($shortcut, " ") !== FALSE)
 		{
-			$this->form_validation->set_message('validate_shortcuts', lang('ui_shortcut_error'));
+			$this->form_validation->set_message('_validate_shortcuts', lang('ui_shortcut_error'));
 			return FALSE;
 		}
 
 		return TRUE;
 
-	}
+	}//end _validate_shortcuts()
 
-}
+}//end Settings

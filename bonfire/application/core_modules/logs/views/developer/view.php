@@ -51,7 +51,7 @@
 		</div>
 
 		<div class="form-actions">
-			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'.$log_file); ?>" onclick="return confirm(<?php echo lang('log_delete_confirm') ?>)"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('log_delete1_button'); ?></a>
+			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'.$log_file); ?>" onclick="return confirm('<?php echo lang('log_delete_confirm') ?>')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('log_delete1_button'); ?></a>
 		</div>
 	</div>
 	<?php endif; ?>

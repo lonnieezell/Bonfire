@@ -129,6 +129,7 @@ $lang['bf_password_length_help']		= 'Minimum password length e.g. 8';
 $lang['bf_password_force_numbers']		= 'Should password force numbers?';
 $lang['bf_password_force_symbols']		= 'Should password force symbols?';
 $lang['bf_password_force_mixed_case']	= 'Should password force mixed case?';
+$lang['bf_password_show_labels']	    = 'Display password validation labels';
 
 //--------------------------------------------------------------------
 // ! USER/PROFILE
@@ -196,3 +197,38 @@ $lang['log_intro']              = 'These are your log messages';
 $lang['bf_action_register']		= 'Sign Up';
 $lang['bf_forgot_password']		= 'Forgot your password?';
 $lang['bf_remember_me']			= 'Remember me';
+
+//--------------------------------------------------------------------
+// Password Help Fields to be used as a warning on register
+//--------------------------------------------------------------------
+$lang['bf_password_number_required_help']  = 'Password must contain at least 1 punctuation mark.';
+$lang['bf_password_caps_required_help']    = 'Password must contain at least 1 capital letter.';
+$lang['bf_password_symbols_required_help'] = 'Password must contain at least 1 symbol.';
+
+$lang['bf_password_min_length_help']       = 'Password must be at least %s characters long.';
+
+//--------------------------------------------------------------------
+// User Meta examples
+//--------------------------------------------------------------------
+
+$lang['user_meta_street_name']	= 'Street Name';
+$lang['user_meta_type']			= 'Type';
+$lang['user_meta_country']		= 'Country';
+$lang['user_meta_state']		= 'State';
+
+// Activation
+//--------------------------------------------------------------------
+$lang['bf_activate_method']			= 'Activation Method';
+$lang['bf_activate_none']			= 'None';
+$lang['bf_activate_email']			= 'Email';
+$lang['bf_activate_admin']			= 'Admin';
+$lang['bf_activate']				= 'Activate';
+$lang['bf_activate_resend']			= 'Resend Activation';
+
+$lang['bf_reg_complete_error']		= 'An error occurred completing your registration. Please try again or contact the site administrator for help.';
+$lang['bf_reg_activate_email'] 		= 'An email containing your activation code has been sent to [EMAIL].';
+$lang['bf_reg_activate_admin'] 		= 'You will be notified when the site administrator has approved your membership.';
+$lang['bf_reg_activate_none'] 		= 'Please login to begin using the site.';
+$lang['bf_user_not_active'] 		= 'User account is not active.';
+$lang['bf_login_activate_title']	= 'Need to activate your account?';
+$lang['bf_login_activate_email'] 	= '<b>Have an activation code to enter to activate your membership?</b> Enter it on the [ACCOUNT_ACTIVATE_URL] page.<br /><br />    <b>Need your code again?</b> Request it again on the [ACTIVATE_RESEND_URL] page.';

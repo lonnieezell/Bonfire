@@ -59,7 +59,7 @@ class Migration_Restructure_keyboard_shortcut_settings extends Migration {
 			$new_keys = array();
 			foreach ($query->result() as $key)
 			{
-				$new_keys[$name] = $key->value;
+				$new_keys[$key->name] = $key->value;
 			}
 
 			// store keys in one setting record

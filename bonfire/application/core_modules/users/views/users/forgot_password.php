@@ -4,7 +4,7 @@
 
 <?php if (auth_errors() || validation_errors()) : ?>
 <div class="row-fluid">
-	<div class="span8 offset2">
+	<div class="span12">
 		<div class="alert alert-error fade in">
 		  <a data-dismiss="alert" class="close">&times;</a>
 			<?php echo auth_errors() . validation_errors(); ?>
@@ -14,7 +14,7 @@
 <?php endif; ?>
 
 <div class="row-fluid">
-	<div class="span8 offset2">
+	<div class="span12">
 		<div class="alert alert-info fade in">
 		  <a data-dismiss="alert" class="close">&times;</a>
 			<?php echo lang('us_reset_note'); ?>
@@ -23,7 +23,7 @@
 </div>
 
 <div class="row-fluid">
-	<div class="span8 offset2">
+	<div class="span12">
 
 <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 

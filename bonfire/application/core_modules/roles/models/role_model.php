@@ -1,55 +1,96 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
+// ------------------------------------------------------------------------
 
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
+/**
+ * Role Settings Model
+ *
+ * Provides access and utility methods for handling role storage
+ * in the database.
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Roles
+ * @category   Models
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class Role_model extends BF_Model
+{
 
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
-/*
-	Class: Role_model
-
-	Provides access and utility methods for handling role storage
-	in the database.
-
-	Extends:
-		MY_Model
-
-	Package:
-		Roles
-*/
-class Role_model extends BF_Model {
-
+	/**
+	 * Name of the table
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
 	protected $table		= 'roles';
+
+	/**
+	 * Name of the primary key
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
 	protected $key			= 'role_id';
-	protected $soft_deletes	= true;
-	protected $date_format	= 'datetime';
-	protected $set_modified = false;
-	protected $set_created	= false;
+
+	/**
+	 * Use soft deletes or not
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $soft_deletes	= TRUE;
+
+	/**
+	 * The date format to use
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
+	protected $date_format = 'datetime';
+
+	/**
+	 * Set the created time automatically on a new record
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $set_created = FALSE;
+
+	/**
+	 * Set the modified time automatically on editing a record
+	 *
+	 * @access protected
+	 *
+	 * @var bool
+	 */
+	protected $set_modified = FALSE;
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: __construct()
-
-		Class constructor. Will load the permission_model, if it's not
-		already loaded.
-	*/
+	/**
+	 * Class constructor. Will load the permission_model, if it's not
+	 * already loaded.
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -58,85 +99,81 @@ class Role_model extends BF_Model {
 		{
 			$this->load->model('permissions/permission_model');
 		}
-	}
+
+	}//end __construct()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: find()
-
-		Returns a single role, with an array of permissions.
-
-		Parameters:
-			$id		- An int that matches the role_id of the role in question.
-
-		Returns:
-			An array of information about the role, along with a sub-array
-			that contains the role's applicable permissions.
-	*/
-	public function find($id=null)
+	/**
+	 * Returns a single role, with an array of permissions.
+	 *
+	 * @access public
+	 *
+	 * @param int $id An int that matches the role_id of the role in question.
+	 *
+	 * @return array An array of information about the role, along with a sub-array that contains the role's applicable permissions.
+	 */
+	public function find($id=NULL)
 	{
 		if (empty($id) || !is_integer($id))
 		{
-			return false;
+			return FALSE;
 		}
 
 		$role = parent::find($id);
 
-		if ($role == false)
+		if ($role == FALSE)
 		{
-			return false;
+			return FALSE;
 		}
 
 		$this->get_role_permissions($role);
 
 		return $role;
-	}
+
+	}//end find()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: find_by_name()
-
-		Locates a role based on the role name. Case doesn't matter.
-
-		Parameters:
-			$name	- A string with the name of the role.
-
-		Returns:
-			An object with the role and it's permissions.
-	*/
-	public function find_by_name($name=null)
+	/**
+	 * Locates a role based on the role name. Case doesn't matter.
+	 *
+	 * @access public
+	 *
+	 * @param string $name A string with the name of the role.
+	 *
+	 * @return object An object with the role and it's permissions.
+	 */
+	public function find_by_name($name=NULL)
 	{
 		if (empty($name))
 		{
-			return false;
+			return FALSE;
 		}
 
 		$role = $this->find_by('role_name', $name);
-echo $this->db->last_query();
+
 		$this->get_role_permissions($role);
 
 		return $role;
-	}
+
+	}//end find_by_name()
 
 	//--------------------------------------------------------------------
 
 
-	/*
-		Method: update()
-
-		A simple update of the role. This does, however, clean things up
-		when setting this role as the default role for new users.
-
-		Parameters:
-			$id		- An int, being the role_id
-			$data	- An array of key/value pairs to update the db with.
-
-		Returns:
-			true/false
-	*/
-	public function update($id=null, $data=null)
+	/**
+	 * A simple update of the role. This does, however, clean things up
+	 * when setting this role as the default role for new users.
+	 *
+	 * @access public
+	 *
+	 * @param int   $id   An int, being the role_id
+	 * @param array $data An array of key/value pairs to update the db with.
+	 *
+	 * @return bool TRUE/FALSE
+	 */
+	public function update($id=NULL, $data=NULL)
 	{
 		// If this one is set to default, then we need to
 		// reset all others to NOT be default
@@ -147,21 +184,18 @@ echo $this->db->last_query();
 		}
 
 		return parent::update($id, $data);
-	}
+
+	}//end update()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: can_delete_role()
-
-		Verifies that a role can be deleted.
-
-		Parameters:
-			$role_id	- The role to verify.
-
-		Returns:
-			true/false
-	*/
+	/**
+	 * Verifies that a role can be deleted.
+	 *
+	 * @param int $role_id The role to verify.
+	 *
+	 * @return bool TRUE/FALSE
+	 */
 	public function can_delete_role($role_id=0)
 	{
 		$this->db->select('role_id, can_delete');
@@ -173,38 +207,36 @@ echo $this->db->last_query();
 		}
 
 		return FALSE;
-	}
+
+	}//end can_delete_role()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: delete()
-
-		Deletes a role. By default, it will perform a soft_delete and
-		leave the permissions untouched. However, if $purge == TRUE, then
-		all permissions related to this role are also deleted.
-
-		Parameters:
-			$id		- An integer with the role_id to delete.
-			$purge	- If false, will perform a soft_delete.
-					  If true, will remove the role and related permissions from db.
-
-		Returns:
-			true/false
-	*/
-	function delete($id=0, $purge=false)
+	/**
+	 * Deletes a role. By default, it will perform a soft_delete and
+	 * leave the permissions untouched. However, if $purge == TRUE, then
+	 * all permissions related to this role are also deleted.
+	 *
+	 * @access public
+	 *
+	 * @param int  $id    An integer with the role_id to delete.
+	 * @param bool $purge If FALSE, will perform a soft_delete. If TRUE, will remove the role and related permissions from db.
+	 *
+	 * @return bool TRUE/FALSE
+	 */
+	function delete($id=0, $purge=FALSE)
 	{
-		if ($purge === true)
+		if ($purge === TRUE)
 		{
-			// temporarily set the soft_deletes to true.
-			$this->soft_deletes = false;
+			// temporarily set the soft_deletes to TRUE.
+			$this->soft_deletes = FALSE;
 		}
 
 		// We might not be allowed to delete this role.
-		if ($this->can_delete_role($id) == false)
+		if ($this->can_delete_role($id) == FALSE)
 		{
 			$this->error = 'This role can not be deleted.';
-			return false;
+			return FALSE;
 		}
 
 		// get the name for management deletion later
@@ -213,8 +245,16 @@ echo $this->db->last_query();
 		// delete the record
 		$deleted = parent::delete($id);
 
-		if ($deleted === TRUE && $purge === TRUE)
+		if ($deleted === TRUE)
 		{
+			// Now update the users to the default role
+			if (!class_exists('User_model'))
+			{
+				$this->load->model('users/User_model','user_model');
+			}
+
+			$this->user_model->set_to_default_role($id);
+
 			// now delete the role_permissions for this permission
 			$this->role_permission_model->delete_for_role($id);
 
@@ -227,27 +267,35 @@ echo $this->db->last_query();
 			}
 
 			$perm = $this->permission_model->find_by('name','Permissions.'.ucwords($role->role_name).'.Manage');
-
 			if ($perm)
 			{
-				$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Permissions.".ucwords($role->role_name).".Manage')");
+				// remove the role_permissions for this permission
 				$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='".$perm->permission_id."';");
+
+				if ($deleted === TRUE && $purge === TRUE)
+				{
+					$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Permissions.".ucwords($role->role_name).".Manage')");
+				}
+				else
+				{
+					$this->db->query("UPDATE {$prefix}permissions SET status = 'inactive' WHERE (name = 'Permissions.".ucwords($role->role_name).".Manage')");
+				}
 			}
-		}
+		}//end if
 
 		return $deleted;
-	}
+
+	}//end delete()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: default_role_id()
-
-		Returns the id of the default role.
-
-		Return:
-			An int with the default role_id, or false if none found.
-	*/
+	/**
+	 * Returns the id of the default role.
+	 *
+	 * @access public
+	 *
+	 * @return mixed ID of the default role or FALSE
+	 */
 	public function default_role_id()
 	{
 		$this->db->where('default', 1);
@@ -258,8 +306,9 @@ echo $this->db->last_query();
 			return (int)$query->row()->role_id;
 		}
 
-		return false;
-	}
+		return FALSE;
+
+	}//end default_role_id()
 
 	//--------------------------------------------------------------------
 
@@ -267,21 +316,15 @@ echo $this->db->last_query();
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 
-	/*
-		Method: get_role_permissions()
-
-		Finds the permissions and role_permissions array for a single role.
-
-		Parameters:
-			$role	- A reference to an existing role object. This object
-					  is modified directly.
-
-		Returns:
-			void
-
-		Access:
-			Private
-	*/
+	/**
+	 * Finds the permissions and role_permissions array for a single role.
+	 *
+	 * @access public
+	 *
+	 * @param int $role A reference to an existing role object. This object is modified directly.
+	 *
+	 * @return void
+	 */
 	public function get_role_permissions(&$role)
 	{
 		if (!is_object($role))
@@ -299,6 +342,7 @@ echo $this->db->last_query();
 		{
 			$permission_array[$permission->name] = $permission;
 		}
+
 		$role->permissions = $permission_array;
 
 		if (!class_exists('Role_permission_model'))
@@ -320,8 +364,9 @@ echo $this->db->last_query();
 
 		$role->role_permissions = $permission_array;
 		unset($permission_array);
-	}
+
+	}//end get_role_permissions()
 
 	//--------------------------------------------------------------------
 
-}
+}//end Role_model

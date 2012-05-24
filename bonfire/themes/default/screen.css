@@ -97,3 +97,5 @@ footer.footer {
 	border-top: 1px solid #ddd;
 	text-align: right;
 }
+
+label.required{font-weight: bold}

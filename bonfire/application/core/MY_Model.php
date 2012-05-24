@@ -1,97 +1,91 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
-/*
-	Class: BF_Model
-
-	The Base model implements standard CRUD functions that can be
-	used and overriden by module models. This helps to maintain
-	a standard interface to program to, and makes module creation
-	faster.
-
-	Author:
-		Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
  */
-class BF_Model extends CI_Model {
 
-	/*
-		Var: $error
-		Stores custom errors that can be used in UI error reporting.
-	*/
+// ------------------------------------------------------------------------
+
+/**
+ * Bonfire Base Model
+ *
+ * The Base model implements standard CRUD functions that can be
+ * used and overriden by module models. This helps to maintain
+ * a standard interface to program to, and makes module creation
+ * faster.
+ *
+ * @package    Bonfire
+ * @subpackage MY_Model
+ * @category   Models
+ * @author     Lonnie Ezell
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
+ */
+class BF_Model extends CI_Model
+{
+
+	/**
+	 * Stores custom errors that can be used in UI error reporting.
+	 *
+	 * @var string
+	 */
 	public $error 		= '';
 
-	/*
-		Var: $table
-		The name of the db table this model primarily uses.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * The name of the db table this model primarily uses.
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $table 	= '';
 
-	/*
-		Var: $key
-		The primary key of the table. Used as the 'id' throughout.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * The primary key of the table. Used as the 'id' throughout.
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $key		= 'id';
 
-	/*
-		Var: $created_field
-		Field name to use to the created time column in the DB table.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Field name to use to the created time column in the DB table.
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $created_field = 'created_on';
 
-	/*
-		Var: $modified_field
-		Field name to use to the modified time column in the DB table.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Field name to use to the modified time column in the DB table.
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $modified_field = 'modified_on';
 
-	/*
-		Var: $set_created
-		Whether or not to auto-fill a 'created_on' field on inserts.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Whether or not to auto-fill a 'created_on' field on inserts.
+	 *
+	 * @var boolean
+	 * @access protected
+	 */
 	protected $set_created	= TRUE;
 
-	/*
-		Var: $set_modified
-		Whether or not to auto-fill a 'modified_on' field on updates.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Whether or not to auto-fill a 'modified_on' field on updates.
+	 *
+	 * @var boolean
+	 * @access protected
+	 */
 	protected $set_modified = TRUE;
 	
 	/*
@@ -130,33 +124,30 @@ class BF_Model extends CI_Model {
 	*/
 	protected $deleted_by_field = 'deleted_by';
 
-	/*
-		Var: $date_format
-		The type of date/time field used for created_on and modified_on fields.
-		Valid types are: 'int', 'datetime', 'date'
-
-		Access:
-			protected
-	*/
+	/**
+	 * The type of date/time field used for created_on and modified_on fields.
+	 * Valid types are: 'int', 'datetime', 'date'
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $date_format = 'int';
 
-	/*
-		Var: $soft_deletes
-		If FALSE, the delete() method will perform a TRUE delete of that row.
-		If TRUE, a 'deleted' field will be set to 1.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * If FALSE, the delete() method will perform a TRUE delete of that row.
+	 * If TRUE, a 'deleted' field will be set to 1.
+	 *
+	 * @var boolean
+	 * @access protected
+	 */
 	protected $soft_deletes = FALSE;
 
-	/*
-		Var: $selects
-		Stores any selects here for use by the find* functions.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Stores any selects here for use by the find* functions.
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $selects = '';
 
 	/*
@@ -171,6 +162,10 @@ class BF_Model extends CI_Model {
 
 	//---------------------------------------------------------------
 
+	/**
+	 * Setup the DB connection if it doesn't exist
+	 *
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -714,7 +709,7 @@ class BF_Model extends CI_Model {
 	*/
 	public function get_field($id=NULL, $field='')
 	{
-		if (!is_numeric($id) || $id === 0 || empty($field))
+		if (empty($id) || $id === 0 || empty($field))
 		{
 			$this->error = $this->lang->line('bf_model_fetch_error');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_fetch_error'));
@@ -947,7 +942,7 @@ class BF_Model extends CI_Model {
 		// Check the ID, but only if it's a non-FALSE value
 		if ($id !== FALSE)
 		{
-			if (!is_numeric($id) || $id == 0)
+			if (empty($id) || $id == 0)
 			{
 				$this->error = $this->lang->line('bf_model_invalid_id');
 				$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_invalid_id'));

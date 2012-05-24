@@ -114,14 +114,7 @@ Page Structure
 	display: block;
 }
 
-h1.branding {
-	line-height: 40px;
-	font-size: 16px;
-	font-wieght: normal;
-	color: #fff;
-	margin: 0;
-	padding: 0;
-	height: 1.8em;
+a.brand {
 	width: 200px;
 	overflow: hidden;
 	white-space: nowrap;
@@ -129,23 +122,21 @@ h1.branding {
 	-o-text-overflow: ellipsis;
 	-ms-text-overflow: ellipsis;
 	text-overflow: ellipsis;
-	display: inline-block;
-	float: left;
 }
 
 /* Subnav */
 .subnav {
 	width: 100%;
 	background-color: #eeeeee; /* Old browsers */
-background-repeat: repeat-x; /* Repeat the gradient */
-background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+	background-repeat: repeat-x; /* Repeat the gradient */
+	background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
 
 	background-image: -moz-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
 	background-image: -o-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
 	background-image: -ms-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
 	background-image: linear-gradient(top, #f5f5f5 0%, #eeeeee 100%); /* W3C */
 
--webkit-border-radius: 0px;
+	-webkit-border-radius: 0px;
 	-moz-border-radius: 0px;
 	border-radius: 0px;
 	border-bottom: 1px solid #d5d5d5;
@@ -165,6 +156,7 @@ background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
 
 .subnav .nav {
 	margin-bottom: 0;
+	margin-top: -36px;
 }
 
 .subnav .nav > li > a {
@@ -180,6 +172,8 @@ background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
 	-moz-border-radius: 0;
 	border-radius: 0;
 }
+
+.subnav .nav > li:last-child > a { border-right: none; }
 
 .subnav .nav > li > a:hover,.subnav .nav .active a,.subnav .nav a:hover,.subnav .nav .active a {
 	background: transparent;
@@ -638,4 +632,35 @@ Additional Buttons
  */
 li.parent-menu {
 	position: relative;
+}
+
+/*--------------------------------------------------------------------
+// RESPONSIVE FIXES
+//-------------------------------------------------------------------*/
+
+@media (max-width: 979px) {
+	.navbar-fixed-top { position: relative; }
+	.subnav { margin-top: 0; margin-bottom: 0; }
+	#topbar { margin-bottom: 0; }
+	.body { padding-top: 20px; margin-top: -5px; }
+	.navbar .btn-navbar { display: inline; }
+	#shortcuts { display: none; }
+	#user-menu a { display: inline-block; width: auto; }
+	.toolbar-profile-img { width: auto; }
+	.toolbar-profile-img img { width: 24px; height: 24px; }
+	#tb_email, 
+	#user-menu .dropdown-toggle,
+	#user-menu p { display: none !important; }
+	.dropdown-menu > li:hover > ul { display: none; }
+}
+
+@media (max-width: 767px) {
+	.navbar-fixed-top { margin-left: 0; margin-right: 0; }
+}
+
+@media (max-width: 480px) {
+	#sub-menu { display: block; float: none; margin-top: 36px; }
+	.form-horizontal .control-group > label { display: block; width: inherit; margin-left: 20px; }
+	.form-horizontal .control-group .controls { margin-left: 20px; }
+	.form-horizontal .form-actions { padding-left: 20px; }
 }

@@ -58,22 +58,22 @@ for($counter=1; $field_total >= $counter; $counter++)
 		continue; 	// move onto next iteration of the loop
 	}
 	$headers .= '
-		<th>'. set_value("view_field_label$counter").'</th>';
+					<th>'. set_value("view_field_label$counter").'</th>';
 }
 if ($use_soft_deletes == 'true')
 {
 	$headers .= '
-		<th>Deleted</th>';
+					<th>Deleted</th>';
 }
 if ($use_created == 'true')
 {
 	$headers .= '
-		<th>Created</th>';
+					<th>Created</th>';
 }
 if ($use_modified == 'true')
 {
 	$headers .= '
-		<th>Modified</th>';
+					<th>Modified</th>';
 }
 
 $table_records = '';
