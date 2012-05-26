@@ -18,7 +18,7 @@
 
 	<h3><?php echo $toolbar_title ?></h3>
 
-	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
+	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="off"'); ?>
 
 	<fieldset>
 		<legend><?php echo lang('us_account_details') ?></legend>

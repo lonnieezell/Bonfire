@@ -41,9 +41,7 @@
 <div class="row-fluid">
 	<div class="span12">
 
-<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
-
-
+<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="off"'); ?>
 
 	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
 		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>
@@ -151,7 +149,7 @@
 
 
 					$form_method = 'form_' . $field['form_detail']['type'];
-					if ( is_callable($form_method) )
+					if (is_callable($form_method))
 					{
 						echo $form_method($field['form_detail']['settings'], isset($user->$field['name']) ? $user->$field['name'] : set_value($field['name']), $field['label']);
 					}
