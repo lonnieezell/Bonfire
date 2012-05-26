@@ -12,7 +12,7 @@ function verify_delete(whom, action) {
     return false;
 }
 
-$('.btn').click( function() {
+$('.btn').not('[id="tb_email"]').click( function() {
 	var which = $(this).attr('id').replace('delete-', '');
 	var whom = $('#'+which+'_select option:selected').text();
 	var action = which + '/' + $('#'+which+'_select option:selected').val();
