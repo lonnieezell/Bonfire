@@ -11,13 +11,13 @@ class Migration_User_language extends Migration {
 			'language' => array(
 				'type'			=> 'varchar',
 				'constraint'	=> 20,
-				'default'		=> 'english'
+				'default'		=> 'en-us'
 			)
 		);
 
 		$this->dbforge->add_column('users', $field);
 
-		$languages = serialize(array('english', 'portuguese', 'persian'));
+		$languages = serialize(array('en-us', 'pt-pt', 'fa'));
 		$language_setting = "
 			INSERT INTO `{$prefix}settings` (`name`, `module`, `value`) VALUES
 			 ('site.languages', 'core', '".$languages."');

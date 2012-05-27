@@ -39,7 +39,7 @@ class Developer extends Admin_Controller
 	 *
 	 * @var string
 	 */
-	private $trans_lang = 'english';
+	private $trans_lang = 'en-us';
 
 	/**
 	 * Array of current languages
@@ -69,7 +69,7 @@ class Developer extends Admin_Controller
 		Assets::add_module_js('translate', 'translate.js');
 
 		// Which language are we translating to?
-		$this->trans_lang = $this->input->get('lang') ? $this->input->get('lang') : 'english';
+		$this->trans_lang = $this->input->get('lang') ? $this->input->get('lang') : 'en-us';
 		Template::set('trans_lang', $this->trans_lang);
 
 		if (!in_array($this->trans_lang, $this->langs))
@@ -157,7 +157,7 @@ class Developer extends Admin_Controller
 		// Get the lang file
 		if ($lang_file)
 		{
-			$orig	= load_lang_file($lang_file, 'english');
+			$orig	= load_lang_file($lang_file, 'en-us');
 			$new	= load_lang_file($lang_file, $this->trans_lang);
 
 			if (!$new)

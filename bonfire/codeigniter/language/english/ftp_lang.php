@@ -15,4 +15,4 @@ $lang['ftp_unable_to_move']			= "Unable to move the file. Please make sure the d
 
 
 /* End of file ftp_lang.php */
-/* Location: ./system/language/english/ftp_lang.php */
+/* Location: ./system/language/en-us/ftp_lang.php */

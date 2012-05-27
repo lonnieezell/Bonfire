@@ -60,6 +60,12 @@ class Base_Controller extends MX_Controller
 	 */
 	protected $current_user = NULL;
 
+	private $language_array = array(
+		'english' => 'en-us',
+		'persian' => 'fa',
+		'portuguese' => 'pt-pt',
+	);
+
 	//--------------------------------------------------------------------
 
 	/**

@@ -21,4 +21,4 @@ $lang['imglib_save_failed'] = "Unable to save the image.  Please make sure the i
 
 
 /* End of file imglib_lang.php */
-/* Location: ./system/language/english/imglib_lang.php */
+/* Location: ./system/language/en-us/imglib_lang.php */
