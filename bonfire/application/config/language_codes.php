@@ -209,3 +209,20 @@ $config['language_codes'] = array(
 	'zh' => array('name' => 'chinese',			'printable' => 'Chinese'),
 	'zu' => array('name' => 'zulu',				'printable' => 'Zulu'),
 );
+
+/**
+ * Language Code Array
+ *
+ * Used by the language code helpers to map language codes to language names
+ *
+ * @package		Bonfire
+ * @subpackage	Config
+ * @category	Config
+ * @author		San Diego State University
+ */
+$config['language_codes.variants'] = array(
+	'en-US' => array('name' => 'united states english',			'printable' => 'English (United States)'),
+	'en-GB' => array('name' => 'british english',		'printable' => 'English (United Kingdom)'),
+	'pt-PT' => array('name' => 'portugal portuguese',		'printable' => 'Portuguese (Portugal)'),
+	'pt-BR' => array('name' => 'brazilian portuguese',			'printable' => 'Portuguese (Brazil)'),
+);
