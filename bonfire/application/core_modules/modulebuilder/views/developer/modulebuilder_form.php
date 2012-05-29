@@ -141,7 +141,13 @@
 					<span class="help-inline"><?php echo form_error('table_name'); ?></span>
 				</div>
 			</div>
-
+			<div class="control-group mb_advanced <?php echo form_has_error('table_as_field_prefix') ? 'error' : ''; ?>">
+				<label for="table_as_field_prefix" class="control-label block"><?php echo lang('mb_form_table_as_field_prefix'); ?></label>
+				<div class="controls">
+					<input name="table_as_field_prefix" id="table_as_field_prefix" type="checkbox" value="<?php echo set_value("table_as_field_prefix", 1); ?>" checked />
+								<span class="help-inline"><?php echo form_error('table_as_field_prefix'); ?></span>
+				</div>
+			</div>
 			<div class="control-group mb_advanced <?php echo form_has_error('form_input_delimiters') ? 'error' : ''; ?>">
 				<label for="form_input_delimiters" class="control-label block"><?php echo lang('mb_form_delims'); ?></label>
 				<div class="controls">

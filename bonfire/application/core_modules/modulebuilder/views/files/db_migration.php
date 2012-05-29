@@ -3,6 +3,15 @@
  // There are no doubt more types where a value/length isn't possible - needs investigating
 $no_length = array('TEXT', 'BOOL', 'DATE', 'DATETIME', 'TIMESTAMP', 'BLOB', 'TINYBLOB', 'TINYTEXT', 'MEDIUMBLOB', 'MEDIUMTEXT', 'LONGBLOB', 'LONGTEXT');
 
+if(!$table_as_field_prefix)
+{
+	$module_name_lower = '';
+} 
+else
+{
+	$module_name_lower = $module_name_lower .'_';
+}
+
 $db_migration = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allowed\');
 
 class Migration_Install_'.$table_name.' extends Migration {
@@ -21,7 +30,7 @@ class Migration_Install_'.$table_name.' extends Migration {
 			}
 
 			$db_migration .= '
-			$this->dbforge->add_field("`'.$module_name_lower.'_'.strtolower(set_value("view_field_name$counter")).'` '.addcslashes(set_value("db_field_type$counter"),'"');
+			$this->dbforge->add_field("`'.$module_name_lower.strtolower(set_value("view_field_name$counter")).'` '.addcslashes(set_value("db_field_type$counter"),'"');
 		
 			if (!in_array(set_value("db_field_type$counter"), $no_length))
 			{
