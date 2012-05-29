@@ -19,4 +19,4 @@ $lang['upload_not_writable'] = "The upload destination folder does not appear to
 
 
 /* End of file upload_lang.php */
-/* Location: ./system/language/english/upload_lang.php */
+/* Location: ./system/language/en-us/upload_lang.php */

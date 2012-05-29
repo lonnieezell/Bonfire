@@ -264,7 +264,7 @@ class Modulebuilder
 			@mkdir($this->options['output_path']."{$module_name}/controllers/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/views/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/language/",0777);
-			@mkdir($this->options['output_path']."{$module_name}/language/english/",0777);
+			@mkdir($this->options['output_path']."{$module_name}/language/en-us/",0777);
 			@mkdir($this->options['output_path']."{$module_name}/migrations/",0777);
 
 			// create the models folder if the db is required
@@ -345,7 +345,7 @@ class Modulebuilder
 								break;
 							case 'lang':
 								$file_name .= "_lang";
-								$path = $this->options['output_path']."{$module_name}/language/english";
+								$path = $this->options['output_path']."{$module_name}/language/en-us";
 								break;
 							case 'config':
 								$file_name = "config";

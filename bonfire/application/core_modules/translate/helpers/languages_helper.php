@@ -66,7 +66,7 @@ if (!function_exists('list_lang_files'))
 	 *
 	 * @return array An array of files.
 	 */
-	function list_lang_files($language='english')
+	function list_lang_files($language='en-us')
 	{
 		$ci =& get_instance();
 		$ci->load->helper('file');
@@ -153,7 +153,7 @@ if (!function_exists('load_lang_file'))
 	 *
 	 * @return mixed An array on loading the language file, FALSE on error
 	 */
-	function load_lang_file($filename=NULL, $language='english')
+	function load_lang_file($filename=NULL, $language='en-us')
 	{
 		if (empty($filename))
 		{
@@ -205,7 +205,7 @@ if (!function_exists('save_lang_file'))
 	 *
 	 * @return mixed A string when the $return setting is TRUE
 	 */
-	function save_lang_file($filename=NULL, $language='english', $settings=NULL, $return=FALSE)
+	function save_lang_file($filename=NULL, $language='en-us', $settings=NULL, $return=FALSE)
 	{
 		if (empty($filename) || !is_array($settings))
 		{
@@ -290,7 +290,7 @@ if (!function_exists('save_lang_file'))
 				$contents .= '$lang[\''.$name.'\'] = '. $val .";\n";
 			}
 		}//end foreach
-		
+
 		// is the code we are producing OK?
 		if (!is_null(eval(str_replace('<?php', '', $contents))))
 		{

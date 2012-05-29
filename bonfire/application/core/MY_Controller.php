@@ -60,6 +60,12 @@ class Base_Controller extends MX_Controller
 	 */
 	protected $current_user = NULL;
 
+	private $language_array = array(
+		'english' => 'en-us',
+		'persian' => 'fa',
+		'portuguese' => 'pt-pt',
+	);
+
 	//--------------------------------------------------------------------
 
 	/**
@@ -221,6 +227,8 @@ class Authenticated_Controller extends Base_Controller
 	{
 		parent::__construct();
 
+		Events::trigger('before_authenticated_controller');
+
 		// Make sure we're logged in.
 		$this->auth->restrict();
 
@@ -229,8 +237,10 @@ class Authenticated_Controller extends Base_Controller
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('', '');
 		$this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
-		
+
 		Template::set_theme($this->config->item('default_theme'));
+
+		Events::trigger('after_authenticated_controller');
 	}//end construct()
 
 	//--------------------------------------------------------------------
@@ -269,6 +279,8 @@ class Admin_Controller extends Authenticated_Controller
 	public function __construct()
 	{
 		parent::__construct();
+
+		Events::trigger('before_admin_controller');
 
 		$this->load->helper('application');
 
@@ -320,6 +332,8 @@ class Admin_Controller extends Authenticated_Controller
 
 		// Basic setup
 		Template::set_theme('admin', 'junk');
+
+		Events::trigger('after_admin_controller');
 	}//end construct()
 
 	//--------------------------------------------------------------------
