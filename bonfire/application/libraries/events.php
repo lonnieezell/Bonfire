@@ -128,7 +128,7 @@ class Events
 				continue;
 			}
 
-			@include($file_path);
+			@include_once($file_path);
 
 			if (!class_exists($subscriber['class']))
 			{
