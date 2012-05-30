@@ -293,11 +293,11 @@
 					<?php
 						$view_field_types = array(
 							'input' 	=> 'INPUT',
-							'textarea' 	=> 'TEXTAREA',
-							'select' 	=> 'SELECT',
-							'radio' 	=> 'RADIO',
 							'checkbox' 	=> 'CHECKBOX',
-							'password' 	=> 'PASSWORD'
+							'password' 	=> 'PASSWORD',
+							'radio' 	=> 'RADIO',
+							'select' 	=> 'SELECT',
+							'textarea' 	=> 'TEXTAREA',
 							);
 
 						$default_field_type = 'INPUT';
@@ -324,34 +324,34 @@
 					<?php
 						$db_field_types = array(
 							'VARCHAR' 		=> 'VARCHAR',
-							'TINYINT' 		=> 'TINYINT',
-							'TEXT' 			=> 'TEXT',
-							'DATE' 			=> 'DATE',
-							'SMALLINT' 		=> 'SMALLINT',
-							'MEDIUMINT' 	=> 'MEDIUMINT',
-							'INT' 			=> 'INT',
 							'BIGINT' 		=> 'BIGINT',
-							'FLOAT' 		=> 'FLOAT',
-							'DOUBLE' 		=> 'DOUBLE',
-							'DECIMAL' 		=> 'DECIMAL',
-							'DATETIME' 		=> 'DATETIME',
-							'TIMESTAMP' 	=> 'TIMESTAMP',
-							'TIME' 			=> 'TIME',
-							'YEAR' 			=> 'YEAR',
-							'CHAR' 			=> 'CHAR',
-							'TINYBLOB' 		=> 'TINYBLOB',
-							'TINYTEXT' 		=> 'TINYTEXT',
+							'BINARY' 		=> 'BINARY',
+							'BIT' 			=> 'BIT',
 							'BLOB' 			=> 'BLOB',
-							'MEDIUMBLOB' 	=> 'MEDIUMBLOB',
-							'MEDIUMTEXT' 	=> 'MEDIUMTEXT',
+							'BOOL' 			=> 'BOOL',
+							'CHAR' 			=> 'CHAR',
+							'DATE' 			=> 'DATE',
+							'DATETIME' 		=> 'DATETIME',
+							'DECIMAL' 		=> 'DECIMAL',
+							'DOUBLE' 		=> 'DOUBLE',
+							'ENUM' 			=> 'ENUM',
+							'FLOAT' 		=> 'FLOAT',
+							'INT' 			=> 'INT',
 							'LONGBLOB' 		=> 'LONGBLOB',
 							'LONGTEXT' 		=> 'LONGTEXT',
-							'ENUM' 			=> 'ENUM',
+							'MEDIUMBLOB' 	=> 'MEDIUMBLOB',
+							'MEDIUMINT' 	=> 'MEDIUMINT',
+							'MEDIUMTEXT' 	=> 'MEDIUMTEXT',
 							'SET' 			=> 'SET',
-							'BIT' 			=> 'BIT',
-							'BOOL' 			=> 'BOOL',
-							'BINARY' 		=> 'BINARY',
-							'VARBINARY' 	=> 'VARBINARY'
+							'SMALLINT' 		=> 'SMALLINT',
+							'TEXT' 			=> 'TEXT',
+							'TIME' 			=> 'TIME',
+							'TIMESTAMP' 	=> 'TIMESTAMP',
+							'TINYBLOB' 		=> 'TINYBLOB',
+							'TINYINT' 		=> 'TINYINT',
+							'TINYTEXT' 		=> 'TINYTEXT',
+							'VARBINARY' 	=> 'VARBINARY',
+							'YEAR' 			=> 'YEAR',
 							);
 					?>
 					<?php echo form_dropdown("db_field_type{$count}", $db_field_types, set_value("db_field_type{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['type'] : ''), lang('mb_form_dbtype'), 'id="db_field_type'.$count.'"', '<span class="help-inline">'. form_error("db_field_type{$count}").'</span>'); ?>
