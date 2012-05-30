@@ -287,7 +287,8 @@ class Developer extends Admin_Controller {
 
                     Template::set_message('The module and associated database entries were successfully deleted.', 'success');
                 }
-                else {
+                else
+                {
                     Template::set_message('The module and associated database entries were successfully deleted, HOWEVER, the module folder and files were not removed. They must be removed manually.', 'info');
                 }
             }//end if
@@ -331,7 +332,8 @@ class Developer extends Admin_Controller {
         $this->form_validation->set_rules("role_id",'Give Role Full Access',"trim|xss_clean|is_numeric");
 
         // no point doing all this checking if we don't want a table
-        if ($this->input->post('module_db')) {
+        if ($this->input->post('module_db'))
+        {
             $this->form_validation->set_rules("table_name",'Table Name',"trim|required|xss_clean|alpha_dash");
 
             if ($this->input->post('module_db') == 'new')
@@ -344,7 +346,8 @@ class Developer extends Admin_Controller {
                 $this->form_validation->set_rules("use_modified",'Use Modified Field',"trim|xss_clean|alpha");
                 $this->form_validation->set_rules("modified_field",'Modified Field Name',"trim|xss_clean|alpha_dash");
             }
-            elseif ($this->input->post('module_db') == 'existing' && $field_total > 0) {
+            elseif ($this->input->post('module_db') == 'existing' && $field_total > 0)
+            {
                 $this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");
             }
 
@@ -410,31 +413,39 @@ class Developer extends Admin_Controller {
         {
 
             $query_string = "SHOW COLUMNS FROM ".$this->db->dbprefix.$table_name;
-            if($query = $this->db->query($query_string)) {
+            if($query = $this->db->query($query_string))
+            {
 
                 // We have a title - Edit it
-                foreach($query->result_array() as $field) {
+                foreach($query->result_array() as $field)
+                {
                     $field_array = array();
 
                     $field_array['name'] = $field['Field'];
 
                     $type = '';
-                    if(strpos($field['Type'], "(")) {
+                    if(strpos($field['Type'], "("))
+                    {
                         list($type, $max_length) = explode("--", str_replace("(", "--", str_replace(")", "", $field['Type'])));
                     }
-                    else {
+                    else
+                    {
                         $type = $field['Type'];
                     }
+
                     $field_array['type'] = strtoupper($type);
 
                     $values = '';
-                    if(is_numeric($max_length)) {
+                    if(is_numeric($max_length))
+                    {
                         $max_length = $max_length;
                     }
-                    else {
+                    else
+                    {
                         $values = $max_length;
                         $max_length = 1;
                     }
+
                     $field_array['max_length'] = $max_length;
                     $field_array['values'] = $values;
 
@@ -481,26 +492,28 @@ class Developer extends Admin_Controller {
 
         $db_required = $this->input->post('module_db');
 
-	$table_as_field_prefix = (bool) $this->input->post('table_as_field_prefix');
+		$table_as_field_prefix = (bool) $this->input->post('table_as_field_prefix');
 
         $primary_key_field = $this->input->post('primary_key_field');
-        if( $primary_key_field == '') {
+        if( $primary_key_field == '')
+        {
             $primary_key_field = $this->options['primary_key_field'];
         }
-        $primary_key_field = strtolower($primary_key_field);
 
         $form_input_delimiters = explode(',', $this->input->post('form_input_delimiters'));
 
-        if( !is_array($form_input_delimiters) OR count($form_input_delimiters) != 2) {
+        if( !is_array($form_input_delimiters) OR count($form_input_delimiters) != 2)
+        {
             $form_input_delimiters = $this->options['form_input_delimiters'];
         }
 
         $form_error_delimiters = explode(',', $this->input->post('form_error_delimiters'));
-        if( !is_array($form_error_delimiters) OR count($form_error_delimiters) != 2) {
+        if( !is_array($form_error_delimiters) OR count($form_error_delimiters) != 2)
+        {
             $form_error_delimiters = $this->options['$form_error_delimiters'];
         }
 
-	$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix);
+		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix);
 
         // make the variables available to the view file
         $data['module_name']        = $module_name;
