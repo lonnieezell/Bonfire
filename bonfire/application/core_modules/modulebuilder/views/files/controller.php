@@ -527,8 +527,21 @@ if ($controller_name != $module_name_lower)
 		$rules .= '
 		$this->form_validation->set_rules(\''.$form_name.'\',\''.set_value("view_field_label$counter").'\',\'';
 
-		$save_data_array .= '
-		$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\');';
+	// setup the data array for saving to the db
+	// set defaults for certain field types
+	switch (set_value("db_field_type$counter"))
+	{
+		case 'DATE':
+			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00\';';
+			break;
+		case 'DATETIME':
+			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00 00:00:00\';';
+			break;
+		default:
+			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\');';
+			break;
+	}
+
 
 		// set a friendly variable name
 		$validation_rules = $this->input->post('validation_rules'.$counter);
