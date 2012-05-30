@@ -307,6 +307,7 @@
 									$default_field_type = 'textarea';
 									break;
 								case 'ENUM':
+								case 'SET':
 									$default_field_type = 'select';
 									break;
 								case 'TINYINT':
