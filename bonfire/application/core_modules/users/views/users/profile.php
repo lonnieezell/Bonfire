@@ -123,7 +123,7 @@
 					echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']));
 
 
-				elseif ($field['form_detail']['type'] == 'state_select' && is_callable('country_select')) : ?>
+				elseif ($field['form_detail']['type'] == 'state_select' && is_callable('state_select')) : ?>
 
 					<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
 						<label class="control-label" for="<?= $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
@@ -134,7 +134,7 @@
 						</div>
 					</div>
 
-					<?php elseif ($field['form_detail']['type'] == 'country_select' && is_callable('country_select')) : ?>
+				<?php elseif ($field['form_detail']['type'] == 'country_select' && is_callable('country_select')) : ?>
 
 					<div class="control-group <?php echo iif( form_error('country') , 'error'); ?>">
 						<label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
@@ -145,7 +145,7 @@
 						</div>
 					</div>
 
-					<?php else:
+				<?php else:
 
 
 					$form_method = 'form_' . $field['form_detail']['type'];
