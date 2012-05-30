@@ -12,14 +12,16 @@ function verify_delete(whom, action) {
     return false;
 }
 
-$('.btn').not('[id="tb_email"]').click( function() {
-	var which = $(this).attr('id').replace('delete-', '');
-	var whom = $('#'+which+'_select option:selected').text();
-	var action = which + '/' + $('#'+which+'_select option:selected').val();
+$('.btn').not('[id="tb_email"]').click( function(event) {
+	if (typeof $(this).attr('id') !== 'undefined') {
+		var which = $(this).attr('id').replace('delete-', '');
+		var whom = $('#'+which+'_select option:selected').text();
+		var action = which + '/' + $('#'+which+'_select option:selected').val();
 
-	event.stopImmediatePropagation();
-	event.preventDefault();
-	verify_delete(whom,action);
+		event.stopImmediatePropagation();
+		event.preventDefault();
+		verify_delete(whom,action);
+	}
 });
 
 
