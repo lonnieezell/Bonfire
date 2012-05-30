@@ -147,7 +147,7 @@ $config['template.default_theme']	= 'default/';
 | This is the folder name that contains the default admin theme to use
 |
 */
-$config['template.admin_theme'] = 'admin/';
+$config['template.admin_theme'] = 'admin';
 
 /*
 |--------------------------------------------------------------------
