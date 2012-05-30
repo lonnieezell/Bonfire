@@ -320,7 +320,7 @@ class Admin_Controller extends Authenticated_Controller
 		}
 
 		// Basic setup
-		Template::set_theme($this->config->item('template.admin_theme'), 'admin');
+		Template::set_theme($this->config->item('template.admin_theme'), 'junk');
 	}//end construct()
 
 	//--------------------------------------------------------------------
