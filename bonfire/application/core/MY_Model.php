@@ -259,18 +259,36 @@ class BF_Model extends CI_Model
 		Paremeters:
 			$field	- The table field to search in.
 			$value	- The value that field should be.
+			$type   - The type of where clause to create. Either 'and' or 'or'.
 
 		Return:
 			An array of objects representing the results, or FALSE on failure or empty set.
 	*/
-	public function find_all_by($field=NULL, $value=NULL)
+	public function find_all_by($field=NULL, $value=NULL, $type='and')
 	{
 		if (empty($field)) return FALSE;
 
-		$this->set_selects();
-
 		// Setup our field/value check
-		$this->db->where($field, $value);
+		if (is_array($field))
+		{
+			foreach ($field as $key => $value)
+			{
+				if ($type == 'or')
+				{
+					$this->db->or_where($key, $value);
+				}
+				else
+				{
+					$this->db->where($key, $value);
+				}
+			}
+		}
+		else
+		{
+			$this->db->where($field, $value);
+		}
+
+		$this->set_selects();
 
 		return $this->find_all();
 	}
