@@ -120,7 +120,7 @@
 
 				if ($field['form_detail']['type'] == 'dropdown'):
 
-					echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']));
+					echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : ''));
 
 
 				elseif ($field['form_detail']['type'] == 'state_select' && is_callable('state_select')) : ?>
@@ -129,7 +129,7 @@
 						<label class="control-label" for="<?= $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
 						<div class="controls">
 
-							<?php echo state_select(isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
+							<?php echo state_select(set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : 'SC'), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
 
 						</div>
 					</div>
@@ -140,7 +140,7 @@
 						<label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
 						<div class="controls">
 
-							<?php echo country_select(isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']), 'US', 'country', 'span6 chzn-select'); ?>
+							<?php echo country_select(set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : 'US'), 'US', 'country', 'span6 chzn-select'); ?>
 
 						</div>
 					</div>
@@ -151,7 +151,7 @@
 					$form_method = 'form_' . $field['form_detail']['type'];
 					if (is_callable($form_method))
 					{
-						echo $form_method($field['form_detail']['settings'], isset($user->$field['name']) ? $user->$field['name'] : set_value($field['name']), $field['label']);
+						echo $form_method($field['form_detail']['settings'], set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : ''), $field['label']);
 					}
 
 
