@@ -8,9 +8,9 @@
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
 	<?php if(lang('bf_language_direction') == 'rtl'): ?>
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url() .'views/screen-rtl.css'; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url() .'assets/css/screen-rtl.css'; ?>" />
 	<?php else: ?>
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url() .'views/screen.css'; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url() .'assets/css/screen.css'; ?>" />
 	<?php endif; ?>
 </head>
 <body>
@@ -20,6 +20,15 @@
 			<div class="inner">
 				<h1><img src="<?php echo site_url('views/images/bonfire_logo.png') ?>" /></h1>
 			</div>
+			<ul id="flags">
+			<?php foreach($languages as $language): ?>
+				<li>
+					<a href="<?php echo base_url('change/'.$language); ?>" title="<?php echo $language; ?>">
+						<img src="<?php echo base_url(); ?>assets/images/flags/<?php echo $language; ?>.png" alt="<?php echo $language; ?>" height="32" />
+					</a>
+				</li>
+			<?php endforeach; ?>
+			</ul>
 		</div>
 
 		<div class="main">

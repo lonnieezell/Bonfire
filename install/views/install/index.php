@@ -8,7 +8,7 @@
 	
 	<?php echo $startup_errors; ?>
 	
-	<p style="text-align: right; margin-top: 3em;"><?php echo anchor('/install', 'Reload Page'); ?></p>
+	<p style="text-align: right; margin-top: 3em;"><?php echo anchor('/install', lang('in_reload_page')); ?></p>
 
 <?php else : ?>
 	<h2><?php echo lang('in_db_settings'); ?></h2>
@@ -25,7 +25,7 @@
 	<?php echo form_open(uri_string(), array('id' => 'db-form') ) ?>
 	
 		<div>
-			<label for="environment"><?php echo lang('in_environment'); ?></label>
+			<?php echo form_simple_label('environment', lang('in_environment')); ?>
 			<select name="environment">
 				<option value="development" <?php echo set_select('environment', 'development', TRUE); ?>>Development</option>
 				<option value="testing" <?php echo set_select('environment', 'testing'); ?>>Testing</option>
@@ -34,27 +34,27 @@
 		</div>
 		
 		<div>
-			<label for="hostname"><?php echo lang('in_host'); ?></label>
+			<?php echo form_simple_label('hostname', lang('in_host')); ?>
 			<input type="text" name="hostname" value="<?php echo set_value('hostname', 'localhost') ?>" />
 		</div>
 		
 		<div>
-			<label for="username"><?php echo lang('bf_username'); ?></label>
+			<?php echo form_simple_label('username', lang('in_username')); ?>
 			<input type="text" name="username" value="<?php echo set_value('username') ?>" />
 		</div>
 		
 		<div>
-			<label for="password"><?php echo lang('bf_password'); ?></label>
+			<?php echo form_simple_label('password', lang('in_password')); ?>
 			<input type="password" name="password" id="password" value="" />
 		</div>
 		
 		<div>
-			<label for="database"><?php echo lang('in_database'); ?></label>
+			<?php echo form_simple_label('database', lang('in_database')); ?>
 			<input type="text" name="database" id="database" value="<?php echo set_value('database', 'bonfire_dev') ?>" />
 		</div>
 		
 		<div>
-			<label for="db_prefix"><?php echo lang('in_prefix'); ?></label>
+			<?php echo form_simple_label('db_prefix', lang('in_prefix')); ?>
 			<input type="text" name="db_prefix" value="<?php echo set_value('db_prefix', 'bf_'); ?>" />
 		</div>
 		

@@ -8,7 +8,7 @@
 	
 	<?php echo $startup_errors; ?>
 	
-	<p style="text-align: right; margin-top: 3em;"><?php echo anchor('install', 'Reload Page'); ?></p>
+	<p style="text-align: right; margin-top: 3em;"><?php echo anchor('install', lang('in_reload_page')); ?></p>
 
 <?php else : ?>
 
@@ -31,33 +31,33 @@
 	<?php echo form_open(current_url()) ?>
 	
 		<div>
-			<label for="site_title"><?php echo lang('in_site_title'); ?></label>
-			<input type="text" name="site_title" id="site_title" placeholder="My Great Bonfire App" value="<?php echo set_value('site_title', config_item('site.title')) ?>" />
+			<?php echo form_simple_label('site_title', lang('in_site_title')); ?>
+			<input type="text" name="site_title" id="site_title" placeholder="Ma magnifique application Bonfire" value="<?php echo set_value('site_title', config_item('site.title')) ?>" />
 		</div>
 		
 		<div>
-			<label for="username"><?php echo lang('bf_username'); ?></label>
+			<?php echo form_simple_label('username', lang('in_username')); ?>
 			<input type="text" name="username" id="username" value="<?php echo set_value('username') ?>" />
 		</div>
 		
 		<br />
 		
 		<div>
-			<label for="password"><?php echo lang('bf_password'); ?></label>
+			<?php echo form_simple_label('password', lang('in_password')); ?>
 			<input type="password" name="password" id="password" value="" />
 			<p class="small"><?php echo lang('in_password_note'); ?></p>
 		</div>
 		
 		<div>
-			<label for="pass_confirm"><?php echo lang('in_password_again'); ?></label>
+			<?php echo form_simple_label('pass_confirm', lang('in_password_again')); ?>
 			<input type="password" name="pass_confirm" id="pass_confirm" value="" />
 		</div>
 		
 		<br/>
 		
 		<div>
-			<label for="email"><?php echo lang('in_email'); ?></label>
-			<input type="email" name="email" id="email" placeholder="me@home.com" value="<?php echo set_value('email') ?>" />
+			<?php echo form_simple_label('email', lang('in_email')); ?>
+			<input type="email" name="email" id="email" placeholder="moi@maison.com" value="<?php echo set_value('email') ?>" />
 			<p class="small"><?php echo lang('in_email_note'); ?></p>
 		</div>
 		

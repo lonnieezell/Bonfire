@@ -202,3 +202,14 @@ input[type=password] {
 }
 
 .profile{text-align:right}
+
+#flags {
+	position: absolute;
+	right: 5px;
+	top: 5px;
+}
+
+#flags li {
+	float: left;
+	list-style-type: none;
+}

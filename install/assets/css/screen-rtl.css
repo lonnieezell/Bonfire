@@ -206,3 +206,14 @@ input[type=password] {
 }
 
 .profile{text-align:left}
+
+#flags {
+	position: absolute;
+	left: 5px;
+	top: 5px;
+}
+
+#flags li {
+	float: right;
+	list-style-type: none;
+}

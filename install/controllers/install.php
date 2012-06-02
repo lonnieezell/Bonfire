@@ -101,6 +101,11 @@ class Install extends CI_Controller {
 
 	private $vdata = array();
 
+	/**
+	 * Array of languages supported by the installer
+	 */
+	private $_languages	= array ();
+	
 	//--------------------------------------------------------------------
 
 	public function __construct()
@@ -111,15 +116,16 @@ class Install extends CI_Controller {
 
 		$this->output->enable_profiler(false);
 
-		$this->lang->load('application');
-		$this->lang->load('install');
-
 		// check if the app is installed
 		$this->load->config('application');
 
 		$this->load->helper('install');
+		$this->load->helper('form');
 
 		$this->cURL_check();
+
+		// Sets the language
+		$this->_set_language();
 	}
 
 	//--------------------------------------------------------------------
@@ -128,11 +134,11 @@ class Install extends CI_Controller {
 	{
 		$this->load->library('form_validation');
 		//$this->form_validation->CI =& $this;
-		$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('database', lang('in_database'), 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('environment', 'lang:in_environment', 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('hostname', 'lang:in_host', 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('username', 'lang:in_username', 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('database', 'lang:in_database', 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('db_prefix', 'lang:in_prefix', 'trim|strip_tags|xss_clean');
 
 		$this->startup_check();
 
@@ -195,6 +201,7 @@ class Install extends CI_Controller {
 			}
 		}
 
+		$this->vdata['languages'] = $this->_languages;
 		$this->load->view('install/index', $this->vdata);
 	}
 
@@ -209,11 +216,11 @@ class Install extends CI_Controller {
 			$this->load->library('form_validation');
 			//$this->form_validation->CI =& $this;
 
-			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|strip_tags|min_length[1]|xss_clean');
-			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('password', lang('in_password'), 'required|trim|strip_tags|alpha_dash|min_length[8]|xss_clean');
-			$this->form_validation->set_rules('pass_confirm', lang('in_password_again'), 'required|trim|matches[password]');
-			$this->form_validation->set_rules('email', lang('in_email'), 'required|trim|strip_tags|valid_email|xss_clean');
+			$this->form_validation->set_rules('site_title', 'lang:in_site_title', 'required|trim|strip_tags|min_length[1]|xss_clean');
+			$this->form_validation->set_rules('username', 'lang:in_username', 'required|trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('password', 'lang:in_password', 'required|trim|strip_tags|alpha_dash|min_length[8]|xss_clean');
+			$this->form_validation->set_rules('pass_confirm', 'lang:in_password_again', 'required|trim|matches[password]');
+			$this->form_validation->set_rules('email', 'lang:in_email', 'required|trim|strip_tags|valid_email|xss_clean');
 
 			if ($this->form_validation->run() !== false)
 			{
@@ -242,6 +249,7 @@ class Install extends CI_Controller {
         // if $this->curl_error = 1, show warning on "account" page of setup
         $this->vdata['curl_error'] = $this->curl_error;
 
+		$this->vdata['languages'] = $this->_languages;
 		$this->load->view($view, $this->vdata);
 	}
 
@@ -278,7 +286,7 @@ class Install extends CI_Controller {
 
 		if (!empty($folder_errors))
 		{
-			$errors = '<p>'.lang('in_writeable_directories_message').':</p><ul>' . $folder_errors .'</ul>';
+			$errors = '<p>'.lang('in_writeable_directories_message').':</p><ul>' . $folder_errors .'</ul><br />';
 		}
 
 		// Check files
@@ -549,6 +557,55 @@ class Install extends CI_Controller {
 		return $mod_versions;
 	}
 
+	/**
+	 * Changes the active language
+	 *
+	 * @access	public
+	 * @author	tamplan
+	 * @param	string $language
+	 * @return	void
+	 */
+	public function change($language)
+	{
+		
+		if (in_array($language, $this->_languages))
+		{
+			$this->session->set_userdata('language', $language);
+		}
+
+		redirect('');
+	}
+
+	/**
+	 * Sets the language and loads the corresponding language files
+	 *
+	 * @access	private
+	 * @author	tamplan
+	 * @return	void
+	 */
+	private function _set_language()
+	{
+
+		if ($handle = opendir(APPPATH.'assets/images/flags')) {
+				while (false !== ($entry = readdir($handle))) {
+						if ($entry != "." && $entry != "..") {
+								list($language, $dummy) = explode('.', $entry);
+								$this->_languages[] = $language;
+						}
+				}
+				closedir($handle);
+		}
+		
+		// let's check if the language is supported
+		if (in_array($this->session->userdata('language'), $this->_languages))
+		{
+			// if so we set it
+			$this->config->set_item('language', $this->session->userdata('language'));
+		}
+
+		$this->lang->load('application');
+		$this->lang->load('install');
+	}
 
 	//--------------------------------------------------------------------
 }
