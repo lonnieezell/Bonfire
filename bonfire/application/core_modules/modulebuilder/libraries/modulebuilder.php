@@ -139,7 +139,7 @@ class Modulebuilder
         $field_total = (empty($field_total) && $db_required != '') ? 1 : $field_total;
 
         // build the files
-        $module_file_name = str_replace(" ", "_", strtolower($module_name));
+        $module_file_name = strtolower(preg_replace("/[ -]/", "_", $module_name));
         foreach( $contexts as $key => $context_name) {
             // controller
             $public_context = FALSE;
@@ -402,7 +402,7 @@ class Modulebuilder
 
         $data['field_total'] = $field_total;
         $data['module_name'] = $module_name;
-        $data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
+        $data['module_name_lower'] = preg_replace("/[ -]/", "_", strtolower($module_name));
         $data['controller_name'] = $controller_name;
         $data['action_name'] = $action_name;
         $data['primary_key_field'] = $primary_key_field;
@@ -478,7 +478,7 @@ class Modulebuilder
         $data['field_total'] = $field_total;
         $data['module_name'] = $module_name;
         $data['table_name'] = $table_name;
-        $data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
+        $data['module_name_lower'] = preg_replace("/[ -]/", "_", strtolower($module_name));
         $data['controller_name'] = $controller_name;
         $data['action_names'] = $action_names;
         $data['primary_key_field'] = $primary_key_field;
@@ -594,8 +594,8 @@ class Modulebuilder
     private function build_acl_sql($field_total, $module_name, $contexts, $action_names, $role_id)
     {
         $data['field_total'] = $field_total;
-        $data['module_name'] = str_replace(" ", "_", $module_name);
-        $data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
+        $data['module_name'] = preg_replace("/[ -]/", "_", $module_name);
+        $data['module_name_lower'] = preg_replace("/[ -]/", "_", strtolower($module_name));
         $data['contexts'] = $contexts;
         $data['action_names'] = $action_names;
         $data['role_id'] = $role_id;
@@ -629,8 +629,8 @@ class Modulebuilder
         }
 
         $data['field_total'] = $field_total;
-        $data['module_name'] = str_replace(" ", "_", $module_name);
-        $data['module_name_lower'] = str_replace(" ", "_", strtolower($module_name));
+        $data['module_name'] = preg_replace("/[ -]/", "_", $module_name);
+        $data['module_name_lower'] = preg_replace("/[ -]/", "_", strtolower($module_name));
         $data['primary_key_field'] = $primary_key_field;
         $data['table_name']         = $table_name;
         $data['table_as_field_prefix']   = $table_as_field_prefix;
