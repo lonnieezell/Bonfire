@@ -24,8 +24,8 @@ foreach($contexts as $context)
 			$action_status = 'active';
 			$action_description = '';
 
-			$acl_migrations .= '
-		array(\'name\' => \''.$action_permission.'\', \'description\' => \''.$action_description.'\', \'status\' => \''.$action_status.'\',),';
+			$acl_migrations .= "
+		array('name' => '".$action_permission."', 'description' => '".$action_description."', 'status' => '".$action_status."',),";
 		}
 	}
 }
