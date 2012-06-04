@@ -90,7 +90,7 @@ class Migration_Install_'.$table_name.' extends Migration {
 	{
 		$created_field = ($this->input->post('created_field')) ? $this->input->post('created_field') : 'created_on';
 		$db_migration .= "
-			''.$created_field.'' => array(
+			'".$created_field."' => array(
 				'type' => 'datetime',
 				'default' => '0000-00-00 00:00:00',
 			),";
@@ -101,7 +101,7 @@ class Migration_Install_'.$table_name.' extends Migration {
 	{
 		$modified_field = ($this->input->post('modified_field')) ? $this->input->post('modified_field') : 'modified_on';
 		$db_migration .= "
-			''.$modified_field.'' => array(
+			'".$modified_field."' => array(
 				'type' => 'datetime',
 				'default' => '0000-00-00 00:00:00',
 			),";
