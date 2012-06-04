@@ -22,7 +22,7 @@
 				<td colspan="7">
 					<?php echo lang('bf_with_selected'); ?>:
 
-					<select name="action">
+					<select name="action" class="span2" style="margin-bottom:0; ">
 						<option><?php echo lang('db_backup'); ?></option>
 						<option><?php echo lang('db_repair'); ?></option>
 						<option><?php echo lang('db_optimize'); ?></option>
@@ -30,7 +30,7 @@
 						<option><?php echo lang('db_drop'); ?></option>
 					</select>
 					&nbsp;&nbsp;
-					<input type="submit" name="submit" value="<?php echo lang('db_apply')?>" />
+					<input type="submit" name="submit" value="<?php echo lang('db_apply')?>" class="btn btn-primary" />
 				</td>
 			</tr>
 		</tfoot>
