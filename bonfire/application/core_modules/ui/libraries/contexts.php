@@ -297,7 +297,7 @@ class Contexts
 		{
 			if (module_controller_exists($context, $module) === true)
 			{
-				$mod_config = module_config($module);
+				$mod_config = module_config($module,false,true);
 
 				self::$actions[$module] = array(
 					'weight'		=> isset($mod_config['weights'][$context]) ? $mod_config['weights'][$context] : 0,
@@ -436,6 +436,7 @@ class Contexts
 					// If it has a sub-menu, echo out that menu only…
 					if (isset($vals['menu_view']) && !empty($vals['menu_view']))
 					{
+						self::$ci->lang->load($module . '/submenu');
 						$view = self::$ci->load->view($vals['menu_view'], null, true);
 
 						// To maintain backwards compatility, strip out and <ul> tags
@@ -498,6 +499,7 @@ class Contexts
 		// Sub Menus?
 		if (!empty($menu_view))
 		{
+			self::$ci->lang->load($module . '/submenu');
 			// Only works if it's a valid view…
 			$view = self::$ci->load->view($menu_view, null, true);
 

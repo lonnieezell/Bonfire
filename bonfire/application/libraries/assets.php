@@ -1472,10 +1472,10 @@ class Assets
 							if ( lang('bf_language_direction') == 'rtl' )
 							{
 								//looking for RTL file
-								if ( is_file($site_path . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl . $type ) )
+								if ( is_file($site_path . self::$asset_base .'/'. $clean_type .'/'. $file_rtl . "{$type}" ) )
 								{
-								$file_path 		= base_url() . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl . $type;
-								$server_path	= $site_path . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl . $type;
+								$file_path 		= base_url() . self::$asset_base .'/' . $clean_type .'/'. $file_rtl . $type;
+								$server_path	= $site_path . self::$asset_base .'/'. $clean_type .'/'. $file_rtl . "{$type}";
 								}
 							}
 
@@ -1497,10 +1497,10 @@ class Assets
 							if(lang('bf_language_direction') == 'rtl')
 							{
 								//looking for RTL file
-								if(is_file($site_path . self::$asset_base .'/'. $file_rtl . $type ))
+								if(is_file($site_path . self::$asset_base .'/'. $file_rtl . "{$type}" ))
 								{
-									$file_path 		= base_url() . self::$asset_base .'/'. $file_rtl .$type;
-									$server_path	= $site_path . self::$asset_base .'/'. $file_rtl . $type;
+									$file_path 		= base_url() . self::$asset_base .'/'. $file_rtl ."{$type}";
+									$server_path	= $site_path . self::$asset_base .'/'. $file_rtl . "{$type}";
 								}
 							}
 

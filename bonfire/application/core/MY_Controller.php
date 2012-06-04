@@ -90,7 +90,14 @@ class Base_Controller extends MX_Controller
 			}
 
 		}
-
+		if (file_exists(APPPATH . 'language/' .$this->config->item('language') . '/bf_date.php'))
+		{
+			include APPPATH . 'language/' .$this->config->item('language') . '/bf_date.php';
+		}
+		else
+		{
+			include APPPATH . 'language/english/bf_date.php';
+		}
 		// Make the current user available in the views
 		$this->load->vars( array('current_user' => $this->current_user) );
 
