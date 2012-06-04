@@ -1,10 +1,3 @@
-<style>
-	#header-editor, #footer-editor {
-		position: absolute;
-		width: 100%;
-		height: 400px;
-	}
-</style>
 <p class="intro"><?php echo lang('em_template_note'); ?></p>
 
 <div class="admin-box">
@@ -14,13 +7,9 @@
 	
 		<fieldset>
 			<legend><?php echo lang('em_header'); ?></legend>
-			<label for="header"></label>
 			<div class="clearfix">
 				<div class="input">
 					<textarea name="header" rows="15" style="width: 99%"><?php echo htmlspecialchars_decode($this->load->view('email/_header', null, true)) ;?></textarea>
-					<div style="position:relative; height: 450px; " >
-						<div id="header-editor"></div>
-					</div>
 				</div>
 			</div>
 		</fieldset>
@@ -32,9 +21,6 @@
 				<label for="footer"></label>
 				<div class="input">
 					<textarea name="footer" rows="15" style="width: 99%"><?php echo htmlspecialchars_decode($this->load->view('email/_footer', null, true)) ;?></textarea>
-					<div style="position:relative; height: 450px; " >
-						<div id="footer-editor"></div>
-					</div>
 				</div>
 			</div>
 		</fieldset>
