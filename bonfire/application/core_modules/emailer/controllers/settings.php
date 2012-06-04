@@ -153,6 +153,12 @@ class Settings extends Admin_Controller
 			redirect(SITE_AREA .'/settings/emailer/template');
 		}
 
+
+		Assets::add_js(Template::theme_url('js/editors/ace/ace.js'));
+		Assets::add_js(Template::theme_url('js/editors/ace/theme-monokai.js'));
+		Assets::add_js(Template::theme_url('js/editors/ace/mode-html.js'));
+		Assets::add_module_js('emailer', 'js/ace');
+
 		Template::set('toolbar_title', lang('em_email_template'));
 
 		Template::render();
@@ -217,6 +223,38 @@ class Settings extends Admin_Controller
 		$offset = $this->uri->segment(5);
 
 		$this->load->model('Emailer_model', 'emailer_model', TRUE);
+
+		// Deleting anything?
+		if ($action = $this->input->post('action'))
+		{
+
+			if ($action == 'Delete')
+			{
+				$checked = $this->input->post('checked');
+
+				if (is_array($checked) && count($checked))
+				{
+					$result = FALSE;
+					foreach ($checked as $pid)
+					{
+						$result = $this->emailer_model->delete($pid);
+					}
+
+					if ($result)
+					{
+						Template::set_message(count($checked) .' '. lang('em_delete_success'), 'success');
+					}
+					else
+					{
+						Template::set_message(lang('em_delete_failure') . $this->emailer_model->error, 'error');
+					}
+				}
+				else
+				{
+					Template::set_message(lang('em_delete_error') . $this->emailer_model->error, 'error');
+				}
+			}
+		}
 
 		Template::set('emails', $this->emailer_model->limit($this->limit, $offset)->find_all());
 		Template::set('total_in_queue', $this->emailer_model->count_by('date_sent IS NULL'));
