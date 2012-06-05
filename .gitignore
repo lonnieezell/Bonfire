@@ -17,6 +17,7 @@ nbactions.xml
 .properties
 
 # Ignore Bonfire Application Specifics
+install/installed
 bonfire/application/logs/*
 !bonfire/application/logs/index.html
 bonfire/application/cache/*
@@ -44,4 +45,4 @@ bonfire/modules/*
 
 # Remove PHPStorm Project folders
 bonfire/.ideas
-
+.idea/*
