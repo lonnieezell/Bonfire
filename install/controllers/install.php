@@ -67,6 +67,7 @@ class Install extends CI_Controller {
 		sure they can be written to.
 	*/
 	private $writeable_folders = array(
+		'/install',
 		'/bonfire/application/cache',
 		'/bonfire/application/logs',
 		'/bonfire/application/config',
@@ -219,6 +220,8 @@ class Install extends CI_Controller {
 			{
 				if ($this->setup())
 				{
+					//create file to let bonfire know the installer has completed
+					touch(FCPATH.'installed');
 					$this->vdata['success'] = message(lang('in_success_notification'), 'success');
 
 					$success_data = array();
@@ -398,7 +401,7 @@ class Install extends CI_Controller {
 			}
 		}
 
-		// update the emailer serder_email
+		// update the emailer sender_email
 		$setting_rec = array('name' => 'sender_email', 'module' => 'email', 'value' => $this->input->post('email'));
 
 		$this->db->where('name', 'sender_email');
