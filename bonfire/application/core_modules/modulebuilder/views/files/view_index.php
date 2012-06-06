@@ -52,7 +52,6 @@ for($counter=1; $field_total >= $counter; $counter++)
 	// only build on fields that have data entered.
 
 	//Due to the required if rule if the first field is set the the others must be
-
 	if (set_value("view_field_label$counter") == NULL)
 	{
 		continue; 	// move onto next iteration of the loop
@@ -83,12 +82,11 @@ for($counter=1; $field_total >= $counter; $counter++)
 	// only build on fields that have data entered.
 
 	//Due to the requiredif rule if the first field is set the the others must be
-
 	if (set_value("view_field_name$counter") == NULL || set_value("view_field_name$counter") == $primary_key_field)
 	{
 		continue; 	// move onto next iteration of the loop
 	}
-      
+
 	if($db_required == 'new' && $table_as_field_prefix === TRUE)
 	{
 		$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
@@ -97,25 +95,28 @@ for($counter=1; $field_total >= $counter; $counter++)
 	{
 		$field_name = set_value("view_field_name$counter");
 	}
-	else 
+	else
 	{
 		$field_name = set_value("view_field_name$counter");
 	}
 
-	if ($counter == 1) {
+	if ($counter == 1)
+	{
 		$table_records .= "
 				<?php if (\$this->auth->has_permission('{edit_permission}')) : ?>
 				<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name.") ?></td>
 				<?php else: ?>
 				<td><?php echo \$record->".$field_name." ?></td>
-				<?php endif; ?>		
+				<?php endif; ?>
 			";
 	}
-	else {
+	else
+	{
 		$table_records .= '
 				<td><?php echo $record->'.$field_name.'?></td>';
 	}
 }
+
 if ($use_soft_deletes == 'true')
 {
 	$table_records .= '
@@ -131,8 +132,6 @@ if ($use_modified == 'true')
 	$table_records .= '
 				<td><?php echo $record->'.set_value("modified_field").'?></td>';
 }
-
-
 
 $view = str_replace('{cols_total}', $field_total + 2 , $view);
 $view = str_replace('{table_header}', $headers, $view);
