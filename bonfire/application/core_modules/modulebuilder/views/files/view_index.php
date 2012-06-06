@@ -19,7 +19,7 @@ $view =<<<END
 				<tr>
 					<td colspan="{cols_total}">
 						<?php echo lang('bf_with_selected'); ?>
-						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete'); ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
+						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete'); ?>" onclick="return confirm('<?php echo lang("{$module_name_lower}_delete_confirm"); ?>')">
 					</td>
 				</tr>
 				<?php endif;?>
@@ -103,17 +103,17 @@ for($counter=1; $field_total >= $counter; $counter++)
 	if ($counter == 1)
 	{
 		$table_records .= "
-				<?php if (\$this->auth->has_permission('{edit_permission}')) : ?>
-				<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name."); ?></td>
-				<?php else: ?>
-				<td><?php echo \$record->".$field_name."; ?></td>
-				<?php endif; ?>
+					<?php if (\$this->auth->has_permission('{edit_permission}')) : ?>
+					<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name."); ?></td>
+					<?php else: ?>
+					<td><?php echo \$record->".$field_name."; ?></td>
+					<?php endif; ?>
 			";
 	}
 	else
 	{
 		$table_records .= '
-				<td><?php echo $record->'.$field_name.'; ?></td>';
+					<td><?php echo $record->'.$field_name.'; ?></td>';
 	}
 }
 
@@ -122,19 +122,19 @@ for($counter=1; $field_total >= $counter; $counter++)
 if ($use_soft_deletes == 'true')
 {
 	$table_records .= '
-				<td><?php echo $record->deleted > 0 ? lang(\''.$module_name_lower.'_true\') : lang(\''.$module_name_lower.'_false\'); ?></td>';
+					<td><?php echo $record->deleted > 0 ? lang(\''.$module_name_lower.'_true\') : lang(\''.$module_name_lower.'_false\'); ?></td>';
 	$field_total++;
 }
 if ($use_created == 'true')
 {
 	$table_records .= '
-				<td><?php echo $record->'.set_value("created_field").'; ?></td>';
+					<td><?php echo $record->'.set_value("created_field").'; ?></td>';
 	$field_total++;
 }
 if ($use_modified == 'true')
 {
 	$table_records .= '
-				<td><?php echo $record->'.set_value("modified_field").'; ?></td>';
+					<td><?php echo $record->'.set_value("modified_field").'; ?></td>';
 	$field_total++;
 }
 
