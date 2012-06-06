@@ -44,4 +44,4 @@ bonfire/modules/*
 
 # Remove PHPStorm Project folders
 bonfire/.ideas
-
+.idea/*
