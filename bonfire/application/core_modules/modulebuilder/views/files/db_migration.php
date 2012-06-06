@@ -12,20 +12,20 @@ else
 	$module_name_lower = $module_name_lower .'_';
 }
 
-$db_migration = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allowed\');
+$db_migration = "<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Install_'.$table_name.' extends Migration {
+class Migration_Install_".$table_name.' extends Migration {
 
 	public function up()
 	{
 		$prefix = $this->db->dbprefix;
 
 		$fields = array(
-			\''.$primary_key_field.'\' => array(
-				\'type\' => \'INT\',
-				\'constraint\' => 11,
-				\'auto_increment\' => TRUE,
-			),';
+			\''.$primary_key_field."' => array(
+				'type' => 'INT',
+				'constraint' => 11,
+				'auto_increment' => TRUE,
+			),";
 
 	for($counter=1; $field_total >= $counter; $counter++)
 	{
@@ -37,33 +37,32 @@ class Migration_Install_'.$table_name.' extends Migration {
 
 		$db_migration .= "
 			'".$module_name_lower.set_value("view_field_name$counter")."' => array(
-				'type' => '".addcslashes(set_value("db_field_type$counter"),'"')."',
-				";
+				'type' => '".addcslashes(set_value("db_field_type$counter"),'"')."',";
 
 		if (!in_array(set_value("db_field_type$counter"), $no_length))
 		{
-			$db_migration .= "'constraint' => ".addcslashes($this->input->post("db_field_length_value$counter"),'"').',
-				';
+			$db_migration .= "
+				'constraint' => ".addcslashes($this->input->post("db_field_length_value$counter"),'"').',';
 		}
 
 		// NOT NULL is the default when using the fields array,
 		// but should probably be set based on user input rather than assumed,
 		// replace FALSE with a proper conditional
 		if (FALSE) {
-			$db_migration .= "'null' => TRUE,
-				";
+			$db_migration .= "
+				'null' => TRUE,";
 		}
 
 		// set defaults for certain field types
 		switch (set_value("db_field_type$counter"))
 		{
 			case 'DATE':
-				$db_migration .= "'default' => '0000-00-00',
-				";
+				$db_migration .= "
+				'default' => '0000-00-00',";
 				break;
 			case 'DATETIME':
-				$db_migration .= "'default' => '0000-00-00 00:00:00',
-				";
+				$db_migration .= "
+				'default' => '0000-00-00 00:00:00',";
 				break;
 			default:
 				break;
@@ -111,7 +110,7 @@ class Migration_Install_'.$table_name.' extends Migration {
 		);
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key(\''.$primary_key_field.'\', true);
-		$this->dbforge->create_table(\''.$table_name.'\');
+		$this->dbforge->create_table("{$prefix}'.$table_name.'");
 
 	}
 
@@ -121,7 +120,7 @@ class Migration_Install_'.$table_name.' extends Migration {
 	{
 		$prefix = $this->db->dbprefix;
 
-		$this->dbforge->drop_table(\''.$table_name.'\');
+		$this->dbforge->drop_table("{$prefix}'.$table_name.'");
 
 	}
 

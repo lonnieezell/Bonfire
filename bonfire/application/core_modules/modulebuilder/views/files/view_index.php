@@ -18,8 +18,8 @@ $view =<<<END
 				<?php if (\$this->auth->has_permission('{delete_permission}')) : ?>
 				<tr>
 					<td colspan="{cols_total}">
-						<?php echo lang('bf_with_selected') ?>
-						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
+						<?php echo lang('bf_with_selected'); ?>
+						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete'); ?>" onclick="return confirm('<?php echo lang("{$module_name_lower}_delete_confirm"); ?>')">
 					</td>
 				</tr>
 				<?php endif;?>
@@ -30,7 +30,7 @@ $view =<<<END
 			<?php foreach (\$records as \$record) : ?>
 				<tr>
 					<?php if (\$this->auth->has_permission('{delete_permission}')) : ?>
-					<td><input type="checkbox" name="checked[]" value="<?php echo \$record->{$primary_key_field} ?>" /></td>
+					<td><input type="checkbox" name="checked[]" value="<?php echo \$record->{$primary_key_field}; ?>" /></td>
 					<?php endif;?>
 					{table_records}
 				</tr>
@@ -88,7 +88,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 	{
 		continue; 	// move onto next iteration of the loop
 	}
-      
+
 	if($db_required == 'new' && $table_as_field_prefix === TRUE)
 	{
 		$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
@@ -97,44 +97,50 @@ for($counter=1; $field_total >= $counter; $counter++)
 	{
 		$field_name = set_value("view_field_name$counter");
 	}
-	else 
+	else
 	{
 		$field_name = set_value("view_field_name$counter");
 	}
 
-	if ($counter == 1) {
+	if ($counter == 1)
+	{
 		$table_records .= "
-				<?php if (\$this->auth->has_permission('{edit_permission}')) : ?>
-				<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name.") ?></td>
-				<?php else: ?>
-				<td><?php echo \$record->".$field_name." ?></td>
-				<?php endif; ?>		
+					<?php if (\$this->auth->has_permission('{edit_permission}')) : ?>
+					<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name."); ?></td>
+					<?php else: ?>
+					<td><?php echo \$record->".$field_name."; ?></td>
+					<?php endif; ?>
 			";
 	}
-	else {
+	else
+	{
 		$table_records .= '
-				<td><?php echo $record->'.$field_name.'?></td>';
+					<td><?php echo $record->'.$field_name.'; ?></td>';
 	}
 }
+
+// increment $field_total to set correct cols_total if
+// using soft deletes, created, or modified fields
 if ($use_soft_deletes == 'true')
 {
 	$table_records .= '
-				<td><?php echo $record->deleted > 0 ? lang(\''.$module_name_lower.'_true\') : lang(\''.$module_name_lower.'_false\')?></td>';
+					<td><?php echo $record->deleted > 0 ? lang(\''.$module_name_lower.'_true\') : lang(\''.$module_name_lower.'_false\'); ?></td>';
+	$field_total++;
 }
 if ($use_created == 'true')
 {
 	$table_records .= '
-				<td><?php echo $record->'.set_value("created_field").'?></td>';
+					<td><?php echo $record->'.set_value("created_field").'; ?></td>';
+	$field_total++;
 }
 if ($use_modified == 'true')
 {
 	$table_records .= '
-				<td><?php echo $record->'.set_value("modified_field").'?></td>';
+					<td><?php echo $record->'.set_value("modified_field").'; ?></td>';
+	$field_total++;
 }
 
-
-
-$view = str_replace('{cols_total}', $field_total + 2 , $view);
+$view = str_replace('{cols_total}', $field_total + 1, $view);
 $view = str_replace('{table_header}', $headers, $view);
 $view = str_replace('{table_records}', $table_records, $view);
 $view = str_replace('{delete_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $view);
