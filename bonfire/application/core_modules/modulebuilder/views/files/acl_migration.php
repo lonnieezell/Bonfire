@@ -1,8 +1,8 @@
 <?php
 
-$acl_migrations = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allowed\');
+$acl_migrations = "<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Install_'.$module_name_lower.'_permissions extends Migration {
+class Migration_Install_".$module_name_lower.'_permissions extends Migration {
 
 	// permissions to migrate
 	private $permission_values = array(';
