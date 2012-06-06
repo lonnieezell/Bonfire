@@ -12,7 +12,7 @@ $view = '
 if( isset($'.$module_name_lower.') ) {
     $'.$module_name_lower.' = (array)$'.$module_name_lower.';
 }
-$id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? "/".$'.$module_name_lower.'[\''.$primary_key_field.'\'] : \'\';
+$id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? $'.$module_name_lower.'[\''.$primary_key_field.'\'] : \'\';
 ';
 $view .= '?>';
 $view .= '
