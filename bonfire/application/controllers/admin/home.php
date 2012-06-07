@@ -52,7 +52,12 @@ class Home extends Admin_Controller
 	 */
 	public function index()
 	{
-		$default_context = $this->settings_lib->item('site.default_context');
+        if(!isset($this->role_model))
+        {
+            $this->load->model('role_model');
+        }
+        $user_role = $this->role_model->find($this->current_user->role_id);
+        $default_context = ($user_role->default_context !== false) ? $user_role->default_context : '';
 		redirect(SITE_AREA .'/'.(isset($default_context) && !empty($default_context) ? $default_context : 'content'));
 	}//end index()
 

@@ -50,6 +50,8 @@ $lang['role_not_used']				= 'Not used';
 
 $lang['role_login_destination']		= 'Login Destination';
 $lang['role_destination_note']		= 'The site URL to redirect to on successful login.';
+$lang['role_default_context']		= 'Default Admin Context';
+$lang['role_default_context_note']	= 'The admin context to load when no context is specified (I.E. http://yoursite.com/admin/)';
 
 $lang['matrix_header']				= 'Permission Matrix';
 $lang['matrix_permission']			= 'Permission';

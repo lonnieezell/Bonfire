@@ -81,19 +81,6 @@
 				</div>
 			</div>
 
-			<div class="control-group">
-				<label class="control-label" for="default_context"><?php echo lang('bf_default_context') ?></label>
-				<div class="controls">
-					<select name="default_context" id="default_context">
-					<?php if (isset($contexts) && is_array($contexts) && count($contexts)):?>
-						<?php foreach($contexts as $context):?>
-						<option value="<?php echo $context;?>" <?php echo set_select('default_context', $context, (isset($settings['site.default_context']) && $settings['site.default_context'] == $context) ? TRUE : FALSE) ?>><?php echo ucfirst($context) ?></option>
-						<?php endforeach;?>
-					<?php endif;?>
-					</select>
-				</div>
-			</div>
-
 		</fieldset>
 
 		</div>
