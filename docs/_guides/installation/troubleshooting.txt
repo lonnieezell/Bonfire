@@ -6,7 +6,7 @@ If you run into problems installing Bonfire, the following troubleshooting tips 
 
 About: Only the Welcome to Bonfire page will display
 
-It might be that your server environment does not support the PATH_INFO variable needed to serve search-engine friendly pages. As a first step, open your *bonfire/application/config/config.php* and look for the _URI Protocol_ setting. By default, this is set to AUTO and works in most cases. Try changing this variable to one each of the other settings, one at a time, and see if one of these works for your environment. 
+It might be that your server environment does not support the PATH_INFO variable needed to serve search-engine friendly pages. As a first step, open your *bonfire/application/config/config.php* and look for the _URI Protocol_ setting. By default, this is set to AUTO and works in most cases. Try changing this variable to each one of the other settings, one at a time, and see if one of these works for your environment. 
 
 > $config['uri_protocol']	= 'AUTO';
 

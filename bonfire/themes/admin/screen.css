@@ -358,7 +358,7 @@ Grids
 	margin-bottom: 18px;
 
 	-ms-overflow-x: scroll;
-	overflow-x: scroll;
+	overflow-x: auto;
 	min-height: 250px;
 }
 

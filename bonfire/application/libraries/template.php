@@ -558,8 +558,7 @@ class Template
 	 */
 	public static function theme()
 	{
-		return self::$active_theme;
-
+		return ( ! empty(self::$active_theme)) ? self::$active_theme : self::$default_theme;
 	}//end theme()
 
 	//--------------------------------------------------------------------

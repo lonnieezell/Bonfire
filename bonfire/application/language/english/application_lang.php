@@ -207,6 +207,7 @@ $lang['bf_password_caps_required_help']    = 'Password must contain at least 1 c
 $lang['bf_password_symbols_required_help'] = 'Password must contain at least 1 symbol.';
 
 $lang['bf_password_min_length_help']       = 'Password must be at least %s characters long.';
+$lang['bf_password_length']                = 'Password Length';
 
 //--------------------------------------------------------------------
 // User Meta examples

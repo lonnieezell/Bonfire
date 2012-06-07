@@ -371,7 +371,6 @@ $textarea_included = FALSE;
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$db_field_type = set_value("db_field_type$counter");
-	$field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");;
 	$view_datepicker = '';
 	if ($db_field_type != NULL)
 	{
@@ -511,13 +510,38 @@ if ($controller_name != $module_name_lower)
 
 		// we set this variable as it will be used to place the comma after the last item to build the insert db array
 		$last_field = $counter;
-		$field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
-
+            
+		if($db_required == 'new' && $table_as_field_prefix === TRUE)
+		{
+				$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
+		}
+		elseif($db_required == 'new' && $table_as_field_prefix === FALSE)
+		{
+				$field_name = set_value("view_field_name$counter");
+		}
+		else 
+		{
+				$field_name = set_value("view_field_name$counter");
+		}
+		$form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
 		$rules .= '
-		$this->form_validation->set_rules(\''.$field_name.'\',\''.set_value("view_field_label$counter").'\',\'';
+		$this->form_validation->set_rules(\''.$form_name.'\',\''.set_value("view_field_label$counter").'\',\'';
 
-		$save_data_array .= '
-		$data[\''.$field_name.'\']        = $this->input->post(\''.$field_name.'\');';
+	// setup the data array for saving to the db
+	// set defaults for certain field types
+	switch (set_value("db_field_type$counter"))
+	{
+		case 'DATE':
+			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00\';';
+			break;
+		case 'DATETIME':
+			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00 00:00:00\';';
+			break;
+		default:
+			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\');';
+			break;
+	}
+
 
 		// set a friendly variable name
 		$validation_rules = $this->input->post('validation_rules'.$counter);

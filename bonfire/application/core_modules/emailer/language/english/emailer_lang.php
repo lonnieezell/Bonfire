@@ -65,3 +65,8 @@ $lang['em_subject']				= 'Subject';
 
 $lang['em_missing_data']		= 'One or more required fields are missing.';
 $lang['em_no_debug']			= 'Email was queued. No debug data is available.';
+
+$lang['em_delete_success']      = '(x) records deleted.';
+$lang['em_delete_failure']		= 'Could not delete records : ';
+$lang['em_delete_error']		= 'Error deleting records : ';
+$lang['em_delete_confirm']		= 'Are you sure you want to delete these emails? ';

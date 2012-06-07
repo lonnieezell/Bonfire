@@ -27,8 +27,7 @@
  * at: https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home
  * for more detail on the HMVC code used in Bonfire.
  *
- * @package    Bonfire
- * @subpackage MY_Controller
+ * @package    Bonfire\Core\Controllers
  * @category   Controllers
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
@@ -81,6 +80,7 @@ class Base_Controller extends MX_Controller
 		if ($this->auth->is_logged_in())
 		{
 			$this->current_user = $this->user_model->find($this->auth->user_id());
+			$this->current_user->id = (int)$this->current_user->id;
 			$this->current_user->user_img = gravatar_link($this->current_user->email, 22, $this->current_user->email, "{$this->current_user->email} Profile", ' ', ' ' );
 
 			// if the user has a language setting then use it
@@ -116,10 +116,10 @@ class Base_Controller extends MX_Controller
 		// Development niceties...
 		else if (ENVIRONMENT == 'development')
 		{
-			if (has_permission('Bonfire.Profiler.View'))
+			if ($this->settings_lib->item('site.show_front_profiler') AND has_permission('Bonfire.Profiler.View'))
 			{
 				// Profiler bar?
-				if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_front_profiler'))
+				if ( ! $this->input->is_cli_request() AND ! $this->input->is_ajax_request())
 				{
 					$this->load->library('Console');
 					$this->output->enable_profiler(TRUE);
@@ -138,7 +138,7 @@ class Base_Controller extends MX_Controller
 		}
 
 		// Make sure no assets in up as a requested page or a 404 page.
-		if (!preg_match('/\.(gif|jpg|jpeg|png|css|js|ico|shtml)$/i', $this->uri->uri_string()))
+		if ( ! preg_match('/\.(gif|jpg|jpeg|png|css|js|ico|shtml)$/i', $this->uri->uri_string()))
 		{
 			$this->previous_page = $this->session->userdata('previous_page');
 			$this->requested_page = $this->session->userdata('requested_page');
@@ -161,8 +161,7 @@ class Base_Controller extends MX_Controller
  * This class provides a common place to handle any tasks that need to
  * be done for all public-facing controllers.
  *
- * @package    Bonfire
- * @subpackage MY_Controller
+ * @package    Bonfire\Core\Controllers
  * @category   Controllers
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
@@ -181,11 +180,14 @@ class Front_Controller extends Base_Controller
 	{
 		parent::__construct();
 
+		Events::trigger('before_front_controller');
+
 		$this->load->library('template');
 		$this->load->library('assets');
 
 		Template::set_theme($this->config->item('default_theme'));
 
+		Events::trigger('after_front_controller');
 	}//end __construct()
 
 	//--------------------------------------------------------------------
@@ -201,8 +203,7 @@ class Front_Controller extends Base_Controller
  * Provides a base class for all controllers that must check user login
  * status.
  *
- * @package    Bonfire
- * @subpackage MY_Controller
+ * @package    Bonfire\Core\Controllers
  * @category   Controllers
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
@@ -305,18 +306,21 @@ class Admin_Controller extends Authenticated_Controller
 		Template::set('shortcut_data', $shortcut_data);
 
 		// Profiler Bar?
-		if (ENVIRONMENT == 'development' && has_permission('Bonfire.Profiler.View'))
+		if (ENVIRONMENT == 'development')
 		{
-			// Profiler bar?
-			if (!$this->input->is_cli_request() && $this->settings_lib->item('site.show_front_profiler'))
+			if ($this->settings_lib->item('site.show_profiler') AND has_permission('Bonfire.Profiler.View'))
 			{
-				$this->load->library('Console');
-				$this->output->enable_profiler(TRUE);
+				// Profiler bar?
+				if ( ! $this->input->is_cli_request() AND ! $this->input->is_ajax_request())
+				{
+					$this->load->library('Console');
+					$this->output->enable_profiler(TRUE);
+				}
 			}
 		}
 
 		// Basic setup
-		Template::set_theme('admin', 'junk');
+		Template::set_theme($this->config->item('template.admin_theme'), 'junk');
 	}//end construct()
 
 	//--------------------------------------------------------------------

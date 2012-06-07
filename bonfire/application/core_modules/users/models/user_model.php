@@ -583,37 +583,33 @@ class User_model extends BF_Model
 
 		foreach ($data as $key => $value)
 		{
-			if (!empty($value))
+			$this->db->where('user_id', $user_id);
+			$this->db->where('meta_key', $key);
+			$query = $this->db->get('user_meta');
+
+			$obj = array(
+				'user_id'		=> $user_id,
+				'meta_key'		=> $key,
+				'meta_value'	=> $value
+			);
+
+			if ($query->num_rows() == 0 && !empty($value))
 			{
+				// Insert
+				$this->db->insert('user_meta', $obj);
+			}
+			// Update
+			else if ($query->num_rows() > 0)
+			{
+				$row = $query->row();
+				$meta_id = $row->meta_id;
+
 				$this->db->where('user_id', $user_id);
 				$this->db->where('meta_key', $key);
-				$query = $this->db->get('user_meta');
-
-				$obj = array(
-					'user_id'		=> $user_id,
-					'meta_key'		=> $key,
-					'meta_value'	=> $value
-				);
-
-				if ($query->num_rows() == 0)
-				{
-					// Insert
-					$this->db->insert('user_meta', $obj);
-				}
-				// Update
-				else if ($query->num_rows() > 0)
-				{
-					$row = $query->row();
-					$meta_id = $row->meta_id;
-
-					$this->db->where('user_id', $user_id);
-					$this->db->where('meta_key', $key);
-					$this->db->set('meta_value', $value);
-					$this->db->update('user_meta', $obj);
-				}
-			}
-
-		}
+				$this->db->set('meta_value', $value);
+				$this->db->update('user_meta', $obj);
+			}//end if
+		}//end foreach
 
 
 		// Reset our table info

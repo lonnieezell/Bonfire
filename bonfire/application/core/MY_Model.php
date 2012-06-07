@@ -7,7 +7,7 @@
  * @package   Bonfire
  * @author    Bonfire Dev Team
  * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @license   http://cibonfire.com/docs/guides/license.html
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -27,7 +27,7 @@
  * @subpackage MY_Model
  * @category   Models
  * @author     Lonnie Ezell
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ * @link       http://cibonfire.com/docs/guides/models.html
  *
  */
 class BF_Model extends CI_Model
@@ -176,21 +176,18 @@ class BF_Model extends CI_Model
 		{
 			$this->load->database();
 		}
-	}
+
+	}//end __construct()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: find()
-
-		Searches for a single row in the database.
-
-		Parameter:
-			$id		- The primary key of the record to search for.
-
-		Return:
-			An object representing the db row, or FALSE.
-	*/
+	/**
+	 * Searches for a single row in the database.
+	 *
+	 * @param string $id The primary key of the record to search for.
+	 *
+	 * @return mixed An object representing the db row, or FALSE.
+	 */
 	public function find($id='')
 	{
 		if ($this->_function_check($id) === FALSE)
@@ -208,23 +205,21 @@ class BF_Model extends CI_Model
 		}
 
 		return FALSE;
-	}
+
+	}//end find()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: find_all()
-
-		Returns all records in the table.
-
-		By default, there is no 'where' clause, but you can filter
-		the results that are returned by using either CodeIgniter's
-		Active Record functions before calling this function, or
-		through method chaining with the where() method of this class.
-
-		Return:
-			An array of objects representing the results, or FALSE on failure or empty set.
-	*/
+	/**
+	 * Returns all records in the table.
+	 *
+	 * By default, there is no 'where' clause, but you can filter
+	 * the results that are returned by using either CodeIgniter's
+	 * Active Record functions before calling this function, or
+	 * through method chaining with the where() method of this class.
+	 *
+	 * @return mixed An array of objects representing the results, or FALSE on failure or empty set.
+	 */
 	public function find_all()
 	{
 		if ($this->_function_check() === FALSE)
@@ -246,52 +241,61 @@ class BF_Model extends CI_Model
 		$this->error = $this->lang->line('bf_model_bad_select');
 		$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_bad_select'));
 		return FALSE;
-	}
+
+	}//end find_all()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: find_all_by()
-
-		A convenience method that combines a where() and find_all()
-		call into a single call.
-
-		Paremeters:
-			$field	- The table field to search in.
-			$value	- The value that field should be.
-
-		Return:
-			An array of objects representing the results, or FALSE on failure or empty set.
-	*/
-	public function find_all_by($field=NULL, $value=NULL)
+	/**
+	 * A convenience method that combines a where() and find_all() call into a single call.
+	 *
+	 * @param mixed  $field The table field to search in.
+	 * @param mixed  $value The value that field should be.
+	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
+	 *
+	 * @return bool|mixed An array of objects representing the results, or FALSE on failure or empty set.
+	 */
+	public function find_all_by($field=NULL, $value=NULL, $type='and')
 	{
 		if (empty($field)) return FALSE;
 
+		// Setup our field/value check
+		if (is_array($field))
+		{
+			foreach ($field as $key => $value)
+			{
+				if ($type == 'or')
+				{
+					$this->db->or_where($key, $value);
+				}
+				else
+				{
+					$this->db->where($key, $value);
+				}
+			}
+		}
+		else
+		{
+			$this->db->where($field, $value);
+		}
+
 		$this->set_selects();
 
-		// Setup our field/value check
-		$this->db->where($field, $value);
-
 		return $this->find_all();
-	}
+
+	}//end find_all_by()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: find_by()
-
-		Returns the first result that matches the field/values passed.
-
-		Parameters:
-			$field	- Either a string or an array of fields to match against.
-					  If an array is passed it, the $value parameter is ignored
-					  since the array is expected to have key/value pairs in it.
-			$value	- The value to match on the $field. Only used when $field is a string.
-			$type	- The type of where clause to create. Either 'and' or 'or'.
-
-		Return:
-			An object representing the first result returned.
-	*/
+	/**
+	 * Returns the first result that matches the field/values passed.
+	 *
+	 * @param string $field Either a string or an array of fields to match against. If an array is passed it, the $value parameter is ignored since the array is expected to have key/value pairs in it.
+	 * @param string $value The value to match on the $field. Only used when $field is a string.
+	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
+	 *
+	 * @return bool|mixed An object representing the first result returned.
+	 */
 	public function find_by($field='', $value='', $type='and')
 	{
 		if (empty($field) || (!is_array($field) && empty($value)))
@@ -330,21 +334,18 @@ class BF_Model extends CI_Model
 		}
 
 		return FALSE;
-	}
+
+	}//end find_by()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: insert()
-
-		Inserts a row of data into the database.
-
-		Parameters:
-			$data	- an array of key/value pairs to insert.
-
-		Return:
-			Either the $id of the row inserted, or FALSE on failure.
-	*/
+	/**
+	 * Inserts a row of data into the database.
+	 *
+	 * @param array $data an array of key/value pairs to insert.
+	 *
+	 * @return bool|mixed Either the $id of the row inserted, or FALSE on failure.
+	 */
 	public function insert($data=NULL)
 	{
 		if ($this->_function_check(FALSE, $data) === FALSE)
@@ -369,28 +370,25 @@ class BF_Model extends CI_Model
 		if ($status != FALSE)
 		{
 			return $this->db->insert_id();
-		} else
+		}
+		else
 		{
 			$this->error = mysql_error();
 			return FALSE;
 		}
 
-	}
+	}//end insert()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: update()
-
-		Updates an existing row in the database.
-
-		Parameters:
-			$id		- The primary_key value of the row to update.
-			$data	- An array of key/value pairs to update.
-
-		Return:
-			TRUE/FALSE
-	*/
+	/**
+	 * Updates an existing row in the database.
+	 *
+	 * @param mixed   $id The primary_key value of the row to update.
+	 * @param array $data An array of key/value pairs to update.
+	 *
+	 * @return bool TRUE/FALSE
+	 */
 	public function update($id=NULL, $data=NULL)
 	{
 
@@ -417,24 +415,20 @@ class BF_Model extends CI_Model
 		}
 
 		return FALSE;
-	}
+
+	}//end update()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: update_where()
-
-		A convenience method that allows you to use any field/value pair
-		as the 'where' portion of your update.
-
-		Parameters:
-			$field	- The field to match on.
-			$value	- The value to search the $field for.
-			$data	- An array of key/value pairs to update.
-
-		Return:
-			TRUE/FALSE
-	*/
+	/**
+	 * A convenience method that allows you to use any field/value pair as the 'where' portion of your update.
+	 *
+	 * @param string $field The field to match on.
+	 * @param string $value The value to search the $field for.
+	 * @param array  $data  An array of key/value pairs to update.
+	 *
+	 * @return bool TRUE/FALSE
+	 */
 	public function update_where($field=NULL, $value=NULL, $data=NULL)
 	{
 		if (empty($field) || empty($value) || !is_array($data))
@@ -445,22 +439,19 @@ class BF_Model extends CI_Model
 		}
 
 		return $this->db->update($this->table, $data, array($field => $value));
-	}
+
+	}//end update_where()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: update_batch()
-
-		Updates a batch of existing rows in the database.
-
-		Parameters:
-			$data	- An array of key/value pairs to update.
-			$index	- A string value of the db column to use as the where key
-
-		Return:
-			TRUE/FALSE
-	*/
+	/**
+	 * Updates a batch of existing rows in the database.
+	 *
+	 * @param array  $data  An array of key/value pairs to update.
+	 * @param string $index A string value of the db column to use as the where key
+	 *
+	 * @return bool TRUE/FALSE
+	 */
 	public function update_batch($data = NULL, $index = NULL)
 	{
 		if (is_null($index))
@@ -487,23 +478,20 @@ class BF_Model extends CI_Model
 		}
 
 		return FALSE;
-	}
+
+	}//end update_batch()
 
 	//--------------------------------------------------------------------
 
 
-	/*
-		Method: delete()
-
-		Performs a delete on the record specified. If $this->soft_deletes is TRUE,
-		it will attempt to set a field 'deleted' on the current record
-		to '1', to allow the data to remain in the database.
-
-		Parameters:
-			$id		- The primary_key value to match against.
-
-		Return:
-			TRUE/FALSE
+	/**
+	 * Performs a delete on the record specified. If $this->soft_deletes is TRUE,
+	 * it will attempt to set a field 'deleted' on the current record
+	 * to '1', to allow the data to remain in the database.
+	 *
+	 * @param mixed $id The primary_key value to match against.
+	 *
+	 * @return bool TRUE/FALSE
 	 */
 	public function delete($id=NULL)
 	{
@@ -546,28 +534,24 @@ class BF_Model extends CI_Model
 		}
 
 		return FALSE;
-	}
+
+	}//end delete()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: delete_where()
-
-		Performs a delete using any field/value pair(s) as the 'where'
-		portion of your delete statement. If $this->soft_deletes is
-		TRUE, it will attempt to set a field 'deleted' on the current
-		record to '1', to allow the data to remain in the database.
-
-		Parameters:
-			$data	- key/value pairs accepts an associative
-					  array or a string
-
-				ie.  1) array( 'key' => 'value', 'key2' => 'value2' )
-				     2) ' (`key` = "value" AND `key2` = "value2") '
-
-		Return:
-			TRUE/FALSE
-	*/
+	/**
+	 * Performs a delete using any field/value pair(s) as the 'where'
+	 * portion of your delete statement. If $this->soft_deletes is
+	 * TRUE, it will attempt to set a field 'deleted' on the current
+	 * record to '1', to allow the data to remain in the database.
+	 *
+	 * @param array $data key/value pairs accepts an associative array or a string
+	 *
+	 * @example 1) array( 'key' => 'value', 'key2' => 'value2' )
+	 * @example 2) ' (`key` = "value" AND `key2` = "value2") '
+	 *
+	 * @return bool TRUE/FALSE
+	 */
 	public function delete_where($data=NULL)
 	{
 		if (empty($data))
@@ -608,7 +592,8 @@ class BF_Model extends CI_Model
 		$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
 
 		return FALSE;
-	}
+
+	}//end delete_where()
 
 	//---------------------------------------------------------------
 
@@ -616,18 +601,14 @@ class BF_Model extends CI_Model
 	// HELPER FUNCTIONS
 	//---------------------------------------------------------------
 
-	/*
-		Method: is_unique()
-
-		Checks whether a field/value pair exists within the table.
-
-		Parameters:
-			$field	- The field to search for.
-			$value	- The value to match $field against.
-
-		Return:
-			TRUE/FALSE
-	*/
+	/**
+	 * Checks whether a field/value pair exists within the table.
+	 *
+	 * @param string $field The field to search for.
+	 * @param string $value The value to match $field against.
+	 *
+	 * @return bool TRUE/FALSE
+	 */
 	public function is_unique($field='', $value='')
 	{
 		if (empty($field) || empty($value))
@@ -646,37 +627,32 @@ class BF_Model extends CI_Model
 		}
 
 		return FALSE;
-	}
+
+	}//end is_unique()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: count_all()
-
-		Returns the number of rows in the table.
-
-		Return:
-			int
-	*/
+	/**
+	 * Returns the number of rows in the table.
+	 *
+	 * @return int
+	 */
 	public function count_all()
 	{
 		return $this->db->count_all_results($this->table);
-	}
+
+	}//end count_all()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: count_by()
-
-		Returns the number of elements that match the field/value pair.
-
-		Parameters:
-			$field	- The field to search for.
-			$value	- The value to match $field against.
-
-		Return:
-			int
-	*/
+	/**
+	 * Returns the number of elements that match the field/value pair.
+	 *
+	 * @param string $field The field to search for.
+	 * @param string $value The value to match $field against.
+	 *
+	 * @return bool|int
+	 */
 	public function count_by($field='', $value=NULL)
 	{
 		if (empty($field))
@@ -691,22 +667,19 @@ class BF_Model extends CI_Model
 		$this->db->where($field, $value);
 
 		return (int)$this->db->count_all_results($this->table);
-	}
+
+	}//end count_by()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: get_field()
-
-		A convenience method to return only a single field of the specified row.
-
-		Parameters:
-			$field	- The field to search for.
-			$value	- The value to match $field against.
-
-		Return:
-			The value of the field.
-	*/
+	/**
+	 * A convenience method to return only a single field of the specified row.
+	 *
+	 * @param mixed  $id    The primary_key value to match against.
+	 * @param string $field The field to search for.
+	 *
+	 * @return bool|mixed The value of the field.
+	 */
 	public function get_field($id=NULL, $field='')
 	{
 		if (empty($id) || $id === 0 || empty($field))
@@ -726,21 +699,18 @@ class BF_Model extends CI_Model
 		}
 
 		return FALSE;
-	}
+
+	}//end get_field()
 
 	//---------------------------------------------------------------
 
-	/*
-		Method: format_dropdown()
-
-		A convenience method to return options for form dropdown menus.
-
-		Parameters:
-			Can pass either Key ID and Label Table names or Just Label Table name.
-
-		Return:
-			array The options for the dropdown.
-	*/
+	/**
+	 * A convenience method to return options for form dropdown menus.
+	 *
+	 * Can pass either Key ID and Label Table names or Just Label Table name.
+	 *
+	 * @return array The options for the dropdown.
+	 */
 	function format_dropdown()
 	{
 		$args = & func_get_args();
@@ -764,26 +734,21 @@ class BF_Model extends CI_Model
 		}
 
 		return $options;
-	}
+
+	}//end format_dropdown()
 
 	//--------------------------------------------------------------------
 	// !CHAINABLE UTILITY METHODS
 	//--------------------------------------------------------------------
 
-	/*
-		Method: where()
-
-		Sets the where portion of the query in a chainable format.
-
-		Parameters:
-			$field	- The field to search the db on. Can be either a string with the field
-					  name to search, or an associative array of key/value pairs.
-			$value	- The value to match the field against. If $field is an array,
-					  this value is ignored.
-
-		Return:
-			An instance of this class.
-	*/
+	/**
+	 * Sets the where portion of the query in a chainable format.
+	 *
+	 * @param mixed  $field The field to search the db on. Can be either a string with the field name to search, or an associative array of key/value pairs.
+	 * @param string $value The value to match the field against. If $field is an array, this value is ignored.
+	 *
+	 * @return BF_Model An instance of this class.
+	 */
 	public function where($field=NULL, $value=NULL)
 	{
 		if (!empty($field))
@@ -799,23 +764,21 @@ class BF_Model extends CI_Model
 		}
 
 		return $this;
-	}
+
+	}//end where()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: select()
-
-		Sets the select portion of the query in a chainable format. The value
-		is stored for use in the find* methods so that child classes can
-		have more flexibility in joins and what is selected.
-
-		Parameters:
-			$selects	- A string representing the selection.
-
-		Return:
-			An instance of this class.
-	*/
+	/**
+	 * Sets the select portion of the query in a chainable format. The value
+	 * is stored for use in the find* methods so that child classes can
+	 * have more flexibility in joins and what is selected.
+	 *
+	 * @param string $selects A string representing the selection.
+	 * @param string $escape  A string representing the escape.
+	 *
+	 * @return BF_Model An instance of this class.
+	 */
 	public function select($selects=NULL, $escape=NULL)
 	{
 		if (!empty($selects))
@@ -828,71 +791,62 @@ class BF_Model extends CI_Model
 		}
 
 		return $this;
-	}
+
+	}//end select()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: limit()
-
-		Sets the limit portion of the query in a chainable format.
-
-		Parameters:
-			$limit	- An int showing the max results to return.
-			$offset	- An in showing how far into the results to start returning info.
-
-		Return:
-			An instance of this class.
-	*/
+	/**
+	 * Sets the limit portion of the query in a chainable format.
+	 *
+	 * @param int $limit  An int showing the max results to return.
+	 * @param int $offset An in showing how far into the results to start returning info.
+	 *
+	 * @return BF_Model An instance of this class.
+	 */
 	public function limit($limit=0, $offset=0)
 	{
 		$this->db->limit($limit, $offset);
 
 		return $this;
-	}
+
+	}//end limit()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: join()
-
-		Generates the JOIN portion of the query.
-
-		Parameters:
-			$table	- A string containing the table name.
-			$cond	- A string with the join condiction.
-			$type	- A string containing the type of join - INNER, OUTER etc.
-
-		Return:
-			An instance of this class.
-	*/
+	/**
+	 * Generates the JOIN portion of the query.
+	 *
+	 * @param string $table A string containing the table name.
+	 * @param string $cond  A string with the join condiction.
+	 * @param string $type  A string containing the type of join - INNER, OUTER etc.
+	 *
+	 * @return BF_Model An instance of this class.
+	 */
 	public function join($table, $cond, $type = '')
 	{
 		$this->db->join($table, $cond, $type);
 
 		return $this;
-	}
+
+	}//end join()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: order_by()
-
-		Inserts a chainable order_by method from either a string or an
-		array of field/order combinations. If the $field value is an array,
-		it should look like:
-
-		 array(
-		 	'field1' => 'asc',
-		 	'field2' => 'desc'
-		 );
-
-		 Parameters:
-		 	$field	- The field to order the results by.
-		 	$order	- Which direction to order the results ('asc' or 'desc')
-
-		 Return:
-		 	An instance of this class.
+	/**
+	 * Inserts a chainable order_by method from either a string or an
+	 * array of field/order combinations. If the $field value is an array,
+	 * it should look like:
+	 *
+	 * array(
+	 *     'field1' => 'asc',
+	 *     'field2' => 'desc'
+	 * );
+	 *
+	 * @param string $field The field to order the results by.
+	 * @param string $order Which direction to order the results ('asc' or 'desc')
+	 *
+	 * @return BF_Model An instance of this class.
 	 */
 	public function order_by($field=NULL, $order='asc')
 	{
@@ -912,7 +866,8 @@ class BF_Model extends CI_Model
 		}
 
 		return $this;
-	}
+
+	}//end order_by()
 
 	//--------------------------------------------------------------------
 
@@ -920,15 +875,20 @@ class BF_Model extends CI_Model
 	// !UTILITY FUNCTIONS
 	//---------------------------------------------------------------
 
-	/*
-		Method: _function_check()
-
-		A utility method that does some error checking and cleanup for other methods:
-
-		- Makes sure that a table has been set at $this->table.
-		- If passed in, will make sure that $id is of the valid type.
-		- If passed in, will verify the $data is not empty.
-	*/
+	/**
+	 * A utility method that does some error checking and cleanup for other methods:
+	 *
+	 * * Makes sure that a table has been set at $this->table.
+	 * * If passed in, will make sure that $id is of the valid type.
+	 * * If passed in, will verify the $data is not empty.
+	 *
+	 * @param mixed      $id   The primary_key value to match against.
+	 * @param array|bool $data Array of data
+	 *
+	 * @access protected
+	 *
+	 * @return bool
+	 */
 	protected function _function_check($id=FALSE, &$data=FALSE)
 	{
 		// Does the model have a table set?
@@ -966,6 +926,7 @@ class BF_Model extends CI_Model
 		{
 			unset($data['submit']);
 		}
+
 		// Strip the 'func' field, if set
 		if (isset($data['func']))
 		{
@@ -973,29 +934,28 @@ class BF_Model extends CI_Model
 		}
 
 		return TRUE;
-	}
+
+	}//end _function_check()
 
     //---------------------------------------------------------------
 
-	/*
-		Method: set_date()
-
-		A utility function to allow child models to use the type of
-		date/time format that they prefer. This is primarily used for
-		setting created_on and modified_on values, but can be used by
-		inheriting classes.
-
-		The available time formats are:
-			'int'		- Stores the date as an integer timestamp.
-			'datetime'	- Stores the date and time in the SQL datetime format.
-			'date'		- Stores teh date (only) in the SQL date format.
-
-		Parameters:
-			$user_date	- An optional PHP timestamp to be converted.
-
-		Return:
-			The current/user time converted to the proper format.
-	*/
+	/**
+	 * A utility function to allow child models to use the type of
+	 * date/time format that they prefer. This is primarily used for
+	 * setting created_on and modified_on values, but can be used by
+	 * inheriting classes.
+	 *
+	 * The available time formats are:
+	 * * 'int'		- Stores the date as an integer timestamp.
+	 * * 'datetime'	- Stores the date and time in the SQL datetime format.
+	 * * 'date'		- Stores teh date (only) in the SQL date format.
+	 *
+	 * @param mixed $user_date An optional PHP timestamp to be converted.
+	 *
+	 * @access protected
+	 *
+	 * @return int|null|string The current/user time converted to the proper format.
+	 */
 	protected function set_date($user_date=NULL)
 	{
 		$curr_date = !empty($user_date) ? $user_date : time();
@@ -1012,102 +972,114 @@ class BF_Model extends CI_Model
 				return date( 'Y-m-d', $curr_date);
 				break;
 		}
-	}
+
+	}//end set_date()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: set_table()
-
-		Allows you to set the table to use for all methods during runtime.
-
-		Parameters:
-			$table	- The table name to use (do not include the prefix!)
-	*/
+	/**
+	 * Allows you to set the table to use for all methods during runtime.
+	 *
+	 * @param string $table The table name to use (do not include the prefix!)
+	 *
+	 * @return void
+	 */
 	public function set_table($table='')
 	{
 		$this->table = $table;
-	}
+
+	}//end set_table()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: get_table()
-
-		Allows you to get the table name
-
-		Parameters:
-			none
-
-		Returns:
-			string $this->table (current model table name)
-	*/
+	/**
+	 * Allows you to get the table name
+	 *
+	 * @return string $this->table (current model table name)
+	 */
 	public function get_table()
 	{
 		return $this->table;
-	}
+
+	}//end get_table()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: set_date_format()
-
-		Sets the date_format to use for setting created_on and modified_on values.
-
-		Parameters:
-			$format	- String describing format.
-						Valid values are: 'int', 'datetime', 'date'
-	*/
+	/**
+	 * Sets the date_format to use for setting created_on and modified_on values.
+	 *
+	 * @param string $format String describing format. Valid values are: 'int', 'datetime', 'date'
+	 *
+	 * @return bool
+	 */
 	public function set_date_format($format='int')
 	{
+		if ($format != 'int' && $format != 'datetime' && $format != 'date')
+		{
+			return FALSE;
+		}
+
 		$this->date_format = $format;
-	}
+
+		return TRUE;
+
+	}//end set_date_format()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: set_modified()
-
-		Sets whether to auto-create modified_on dates in the update method.
-
-		Parameters:
-			$modified	- TRUE/FALSE
-	*/
+	/**
+	 * Sets whether to auto-create modified_on dates in the update method.
+	 *
+	 * @param bool $modified
+	 *
+	 * @return bool
+	 */
 	public function set_modified($modified=TRUE)
 	{
+		if ($modified !== TRUE && $modified !== FALSE)
+		{
+			return FALSE;
+		}
+
 		$this->set_modified = $modified;
-	}
+
+		return TRUE;
+
+	}//end set_modified()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: set_soft_deletes()
-
-		Sets whether soft deletes are used by the delete method.
-
-		Parameters:
-			$soft	- TRUE/FALSE
-	*/
+	/**
+	 * Sets whether soft deletes are used by the delete method.
+	 *
+	 * @param bool $soft
+	 *
+	 * @return bool
+	 */
 	public function set_soft_deletes($soft=TRUE)
 	{
+		if ($soft !== TRUE && $soft !== FALSE)
+		{
+			return FALSE;
+		}
+
 		$this->soft_deletes = $soft;
-	}
+
+		return TRUE;
+
+	}//end set_soft_deletes()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: set_selects()
-
-		Takes the string in $this->selects, if not empty, and sets it
-		with the ActiveRecord db class. If $this->escape is FALSE it
-		will not try to protect your field or table names with backticks.
-
-		Clears the string afterword
-		to make sure it's clean for the next call.
-
-		Access:
-			Private
-	*/
+	/**
+	 * Takes the string in $this->selects, if not empty, and sets it
+	 * with the ActiveRecord db class. If $this->escape is FALSE it
+	 * will not try to protect your field or table names with backticks.
+	 *
+	 * Clears the string afterword to make sure it's clean for the next call.
+	 *
+	 * @access protected
+	 */
 	protected function set_selects()
 	{
 		if (!empty($this->selects) && $this->escape === FALSE)
@@ -1125,24 +1097,26 @@ class BF_Model extends CI_Model
 			// Clear it out for the next process.
 			$this->selects = NULL;
 		}
-	}
+
+	}//end set_selects()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: logit()
-
-		Logs an error to the Console (if loaded) and to the log files.
-
-		Parameters:
-			$message	- The string to write to the logs.
-			$level		- The log level, as per CI log_message method.
-	*/
+	/**
+	 * Logs an error to the Console (if loaded) and to the log files.
+	 *
+	 * @param string $message The string to write to the logs.
+	 * @param string $level   The log level, as per CI log_message method.
+	 *
+	 * @access protected
+	 *
+	 * @return mixed
+	 */
 	protected function logit($message='', $level='debug')
 	{
 		if (empty($message))
 		{
-			return;
+			return FALSE;
 		}
 
 		if (class_exists('Console'))
@@ -1151,23 +1125,30 @@ class BF_Model extends CI_Model
 		}
 
 		log_message($level, $message);
-	}
+
+	}//end logit()
 
 	//--------------------------------------------------------------------
 
-}
-
-// END: Class BF_model
+}//end BF_model
 
 //--------------------------------------------------------------------
 
-/*
-	Class: MY_Model
+/**
+ * MY_Model
+ *
+ * This simply extends BF_Model for backwards compatibility,
+ * and to provide a placeholder class that your project can customize
+ * extend as needed.
+ *
+ * @package    Bonfire
+ * @subpackage MY_Model
+ * @category   Models
+ * @author     Lonnie Ezell
+ * @link       http://cibonfire.com/docs/guides/models.html
+ *
+ */
 
-	This simply extends BF_Model for backwards compatibility,
-	and to provide a placeholder class that your project can customize
-	extend as needed.
-*/
 class MY_Model extends BF_Model { }
 
 // END: Class MY_model

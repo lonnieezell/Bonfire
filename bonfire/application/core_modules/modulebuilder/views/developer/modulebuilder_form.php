@@ -141,7 +141,13 @@
 					<span class="help-inline"><?php echo form_error('table_name'); ?></span>
 				</div>
 			</div>
-
+			<div class="control-group mb_advanced <?php echo form_has_error('table_as_field_prefix') ? 'error' : ''; ?>">
+				<label for="table_as_field_prefix" class="control-label block"><?php echo lang('mb_form_table_as_field_prefix'); ?></label>
+				<div class="controls">
+					<input name="table_as_field_prefix" id="table_as_field_prefix" type="checkbox" value="<?php echo set_value("table_as_field_prefix", 1); ?>" checked />
+								<span class="help-inline"><?php echo form_error('table_as_field_prefix'); ?></span>
+				</div>
+			</div>
 			<div class="control-group mb_advanced <?php echo form_has_error('form_input_delimiters') ? 'error' : ''; ?>">
 				<label for="form_input_delimiters" class="control-label block"><?php echo lang('mb_form_delims'); ?></label>
 				<div class="controls">
@@ -287,11 +293,11 @@
 					<?php
 						$view_field_types = array(
 							'input' 	=> 'INPUT',
-							'textarea' 	=> 'TEXTAREA',
-							'select' 	=> 'SELECT',
-							'radio' 	=> 'RADIO',
 							'checkbox' 	=> 'CHECKBOX',
-							'password' 	=> 'PASSWORD'
+							'password' 	=> 'PASSWORD',
+							'radio' 	=> 'RADIO',
+							'select' 	=> 'SELECT',
+							'textarea' 	=> 'TEXTAREA',
 							);
 
 						$default_field_type = 'INPUT';
@@ -301,6 +307,7 @@
 									$default_field_type = 'textarea';
 									break;
 								case 'ENUM':
+								case 'SET':
 									$default_field_type = 'select';
 									break;
 								case 'TINYINT':
@@ -318,34 +325,34 @@
 					<?php
 						$db_field_types = array(
 							'VARCHAR' 		=> 'VARCHAR',
-							'TINYINT' 		=> 'TINYINT',
-							'TEXT' 			=> 'TEXT',
-							'DATE' 			=> 'DATE',
-							'SMALLINT' 		=> 'SMALLINT',
-							'MEDIUMINT' 	=> 'MEDIUMINT',
-							'INT' 			=> 'INT',
 							'BIGINT' 		=> 'BIGINT',
-							'FLOAT' 		=> 'FLOAT',
-							'DOUBLE' 		=> 'DOUBLE',
-							'DECIMAL' 		=> 'DECIMAL',
-							'DATETIME' 		=> 'DATETIME',
-							'TIMESTAMP' 	=> 'TIMESTAMP',
-							'TIME' 			=> 'TIME',
-							'YEAR' 			=> 'YEAR',
-							'CHAR' 			=> 'CHAR',
-							'TINYBLOB' 		=> 'TINYBLOB',
-							'TINYTEXT' 		=> 'TINYTEXT',
+							'BINARY' 		=> 'BINARY',
+							'BIT' 			=> 'BIT',
 							'BLOB' 			=> 'BLOB',
-							'MEDIUMBLOB' 	=> 'MEDIUMBLOB',
-							'MEDIUMTEXT' 	=> 'MEDIUMTEXT',
+							'BOOL' 			=> 'BOOL',
+							'CHAR' 			=> 'CHAR',
+							'DATE' 			=> 'DATE',
+							'DATETIME' 		=> 'DATETIME',
+							'DECIMAL' 		=> 'DECIMAL',
+							'DOUBLE' 		=> 'DOUBLE',
+							'ENUM' 			=> 'ENUM',
+							'FLOAT' 		=> 'FLOAT',
+							'INT' 			=> 'INT',
 							'LONGBLOB' 		=> 'LONGBLOB',
 							'LONGTEXT' 		=> 'LONGTEXT',
-							'ENUM' 			=> 'ENUM',
+							'MEDIUMBLOB' 	=> 'MEDIUMBLOB',
+							'MEDIUMINT' 	=> 'MEDIUMINT',
+							'MEDIUMTEXT' 	=> 'MEDIUMTEXT',
 							'SET' 			=> 'SET',
-							'BIT' 			=> 'BIT',
-							'BOOL' 			=> 'BOOL',
-							'BINARY' 		=> 'BINARY',
-							'VARBINARY' 	=> 'VARBINARY'
+							'SMALLINT' 		=> 'SMALLINT',
+							'TEXT' 			=> 'TEXT',
+							'TIME' 			=> 'TIME',
+							'TIMESTAMP' 	=> 'TIMESTAMP',
+							'TINYBLOB' 		=> 'TINYBLOB',
+							'TINYINT' 		=> 'TINYINT',
+							'TINYTEXT' 		=> 'TINYTEXT',
+							'VARBINARY' 	=> 'VARBINARY',
+							'YEAR' 			=> 'YEAR',
 							);
 					?>
 					<?php echo form_dropdown("db_field_type{$count}", $db_field_types, set_value("db_field_type{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['type'] : ''), lang('mb_form_dbtype'), 'id="db_field_type'.$count.'"', '<span class="help-inline">'. form_error("db_field_type{$count}").'</span>'); ?>
