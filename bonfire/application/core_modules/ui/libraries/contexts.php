@@ -10,7 +10,6 @@
  * @license   http://guides.cibonfire.com/license.html
  * @link      http://cibonfire.com
  * @since     Version 1.0
- * @filesource
  */
 
 // ------------------------------------------------------------------------
@@ -67,7 +66,7 @@ class Contexts
 	 *
 	 * @var string
 	 */
-	protected static $outer_id	= NULL;
+	protected static $outer_id	= null;
 
 	/**
 	 * The class to attach to li tags with children
@@ -98,6 +97,26 @@ class Contexts
 	 * @var string
 	 */
 	protected static $ci;
+
+	/**
+	 * Admin Area to Link to or other Context.
+	 *
+	 * @access protected
+	 * @static
+	 *
+	 * @var string
+	 */
+	protected static $site_area = SITE_AREA;
+
+	/**
+	 * Stores the context menus config.
+	 *
+	 * @access protected
+	 * @static
+	 *
+	 * @var array
+	 */
+	protected static $contexts = array();
 
 	//--------------------------------------------------------------------
 
@@ -130,9 +149,55 @@ class Contexts
 			self::$ci->load->helper('application');
 		}
 
+		self::$contexts = self::$ci->config->item('contexts');
 		log_message('debug', 'UI/Contexts library loaded');
 
 	}//end init()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Sets the contexts array
+	 *
+	 * @static
+	 *
+	 * @param  array  Array of Context Menus to Display normally stored in application config.
+	 * @param  string Area to link to defaults to SITE_AREA or Admin area.	 
+	 *
+	 * @return void
+	 */
+	public static function set_contexts($contexts = array(), $site_area = SITE_AREA)
+	{
+		if (empty($contexts) || ! is_array($contexts) || ! count($contexts))
+		{
+			die(lang('bf_no_contexts'));
+		}
+
+		self::$contexts  = $contexts;
+
+		self::$site_area = $site_area;
+
+		unset($contexts, $site_area);
+		
+		log_message('debug', 'UI/Contexts set_contexts has been called.');
+
+	}//end set_contexts()
+
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Returns the context array just in case it is needed later.
+	 *
+	 * @static
+	 *
+	 * @return array 
+	 */
+	public static function get_contexts()
+	{
+		return self::$contexts;
+	}//end get_contexts()
+
 
 	//--------------------------------------------------------------------
 
@@ -148,11 +213,11 @@ class Contexts
 	 *
 	 * @return string A string with the built navigation.
 	 */
-	public static function render_menu($mode='icon', $order_by='normal', $top_level_only = FALSE)
+	public static function render_menu($mode='text', $order_by='normal', $top_level_only = FALSE)
 	{
 		self::$ci->benchmark->mark('context_menu_start');
 
-		$contexts = self::$ci->config->item('contexts');
+		$contexts = self::$contexts;
 
 		if (empty($contexts) || !is_array($contexts) || !count($contexts))
 		{
@@ -196,10 +261,10 @@ class Contexts
 		*/
 		foreach ($contexts as $context)
 		{
-			if ( has_permission('Site.'. ucfirst($context) .'.View') == TRUE || permission_exists('Site.'. ucfirst($context) .'.View') == FALSE)
+			if ( has_permission('Site.'. ucfirst($context) .'.View') == true || permission_exists('Site.'. ucfirst($context) .'.View') == false)
 			{
-				$url = site_url(SITE_AREA .'/'.$context);
-				$class = check_class($context, TRUE);
+				$url = site_url(self::$site_area .'/'.$context);
+				$class = check_class($context, true);
 				$id = 'tb_'. $context;
 
 				if (lang('bf_context_'. $context))
@@ -257,7 +322,7 @@ class Contexts
 	 */
 	public static function render_mobile_navs()
 	{
-		$contexts = self::$ci->config->item('contexts');
+		$contexts = self::$contexts;
 
 		$out = '';
 
@@ -491,7 +556,7 @@ class Contexts
 	 */
 	private static function build_item($module, $title, $display_name, $context, $menu_view='')
 	{
-		$item  = '<li {listclass}><a href="'. site_url(SITE_AREA .'/'. $context .'/'. $module) .'" class="{class}"';
+		$item  = '<li {listclass}><a href="'. site_url(self::$site_area .'/'. $context .'/'. $module) .'" class="{class}"';
 		$item .= ' title="'. $title .'">'. ucwords(str_replace('_', '', $display_name)) ."</a>\n";
 
 		// Sub Menus?
@@ -543,7 +608,7 @@ class Contexts
 		}
 
 		array_multisort($weights, SORT_DESC, $display_names, SORT_ASC, self::$actions);
-		//echo '<pre>'. print_r(self::$actions, TRUE) .'</pre>';
+		//echo '<pre>'. print_r(self::$actions, true) .'</pre>';
 
 	}//end sort_actions()
 
