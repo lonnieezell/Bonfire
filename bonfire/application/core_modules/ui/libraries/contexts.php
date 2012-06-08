@@ -20,11 +20,10 @@
  *
  * Provides helper methods for displaying Context Navigation.
  *
- * @package    Bonfire
- * @subpackage Modules_Ui
+ * @package    Bonfire\Core\Modules\Libraries\Modules_Ui
  * @category   Libraries
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ * @link       http://cibonfire.com/docs/guides/contexts.html
  *
  */
 class Contexts
@@ -68,7 +67,7 @@ class Contexts
 	 *
 	 * @var string
 	 */
-	protected static $outer_id	= null;
+	protected static $outer_id	= NULL;
 
 	/**
 	 * The class to attach to li tags with children
@@ -149,7 +148,7 @@ class Contexts
 	 *
 	 * @return string A string with the built navigation.
 	 */
-	public static function render_menu($mode='icon', $order_by='normal', $top_level_only = false)
+	public static function render_menu($mode='icon', $order_by='normal', $top_level_only = FALSE)
 	{
 		self::$ci->benchmark->mark('context_menu_start');
 
@@ -197,10 +196,10 @@ class Contexts
 		*/
 		foreach ($contexts as $context)
 		{
-			if ( has_permission('Site.'. ucfirst($context) .'.View') == true || permission_exists('Site.'. ucfirst($context) .'.View') == false)
+			if ( has_permission('Site.'. ucfirst($context) .'.View') == TRUE || permission_exists('Site.'. ucfirst($context) .'.View') == FALSE)
 			{
 				$url = site_url(SITE_AREA .'/'.$context);
-				$class = check_class($context, true);
+				$class = check_class($context, TRUE);
 				$id = 'tb_'. $context;
 
 				if (lang('bf_context_'. $context))
@@ -265,7 +264,7 @@ class Contexts
 		foreach ($contexts as $context)
 		{
 			$out .= "<ul id='{$context}_menu' class='mobile_nav'>";
-			$out .= self::context_nav($context, '', true);
+			$out .= self::context_nav($context, '', TRUE);
 			$out .= "</ul>";
 		}
 
@@ -287,7 +286,7 @@ class Contexts
 	 *
 	 * @return string The HTML necessary to display the menu.
 	 */
-	public function context_nav($context=null, $class='dropdown-menu', $ignore_ul=false)
+	public function context_nav($context=NULL, $class='dropdown-menu', $ignore_ul=FALSE)
 	{
 		// Get a list of modules with a controller matching
 		// $context ('content', 'settings', 'reports', or 'developer')
@@ -295,7 +294,7 @@ class Contexts
 
 		foreach ($module_list as $module)
 		{
-			if (module_controller_exists($context, $module) === true)
+			if (module_controller_exists($context, $module) === TRUE)
 			{
 				$mod_config = module_config($module);
 
@@ -303,7 +302,7 @@ class Contexts
 					'weight'		=> isset($mod_config['weights'][$context]) ? $mod_config['weights'][$context] : 0,
 					'display_name'	=> isset($mod_config['name']) ? $mod_config['name'] : $module,
 					'title' 		=> isset($mod_config['description']) ? $mod_config['description'] : $module,
-					'menus'			=> isset($mod_config['menus']) ? $mod_config['menus'] : false,
+					'menus'			=> isset($mod_config['menus']) ? $mod_config['menus'] : FALSE,
 				);
 
 				self::$actions[$module]['menu_topic'] = isset($mod_config['menu_topic']) ? $mod_config['menu_topic'] : self::$actions[$module]['display_name'];
@@ -381,7 +380,7 @@ class Contexts
 	{
 		if (!is_array($attrs))
 		{
-			return null;
+			return NULL;
 		}
 
 		foreach ($attrs as $attr => $value)
@@ -407,7 +406,7 @@ class Contexts
 	 *
 	 * @return string HTML for the sub menu
 	 */
-	public static function build_sub_menu($context, $ignore_ul=false)
+	public static function build_sub_menu($context, $ignore_ul=FALSE)
 	{
 		$list = '';
 
@@ -420,7 +419,7 @@ class Contexts
 		foreach (self::$menu as $topic_name => $topic)
 		{
 			// If the topic has other items, we're not closed.
-			$closed = true;
+			$closed = TRUE;
 
 			// If there is more than one item in the topic, we need to build
 			// out a menu based on the multiple items.
@@ -436,7 +435,7 @@ class Contexts
 					// If it has a sub-menu, echo out that menu only…
 					if (isset($vals['menu_view']) && !empty($vals['menu_view']))
 					{
-						$view = self::$ci->load->view($vals['menu_view'], null, true);
+						$view = self::$ci->load->view($vals['menu_view'], NULL, TRUE);
 
 						// To maintain backwards compatility, strip out and <ul> tags
 						$view = str_ireplace('<ul>', '', $view);
@@ -499,7 +498,7 @@ class Contexts
 		if (!empty($menu_view))
 		{
 			// Only works if it's a valid view…
-			$view = self::$ci->load->view($menu_view, null, true);
+			$view = self::$ci->load->view($menu_view, NULL, TRUE);
 
 			$item .= $view;
 		}
@@ -544,7 +543,7 @@ class Contexts
 		}
 
 		array_multisort($weights, SORT_DESC, $display_names, SORT_ASC, self::$actions);
-		//echo '<pre>'. print_r(self::$actions, true) .'</pre>';
+		//echo '<pre>'. print_r(self::$actions, TRUE) .'</pre>';
 
 	}//end sort_actions()
 
