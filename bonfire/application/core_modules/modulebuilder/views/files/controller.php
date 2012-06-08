@@ -164,8 +164,6 @@ if ($db_required != '') {
 			if (\$insert_id = \$this->save_".$module_name_lower."())
 			{
 				// Log the activity
-				\$this->load->model('activities/Activity_model', 'activity_model');
-
 				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_create_record').': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
 
 				Template::set_message(lang('".$module_name_lower."_create_success'), 'success');
@@ -217,8 +215,6 @@ if ($db_required != '') {
 			if (\$this->save_".$module_name_lower."('update', \$id))
 			{
 				// Log the activity
-				\$this->load->model('activities/Activity_model', 'activity_model');
-
 				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
 
 				Template::set_message(lang('".$module_name_lower."_edit_success'), 'success');
@@ -266,8 +262,6 @@ if ($db_required != '') {
 			if (\$this->".$module_name_lower."_model->delete(\$id))
 			{
 				// Log the activity
-				\$this->load->model('activities/Activity_model', 'activity_model');
-
 				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
 
 				Template::set_message(lang('".$module_name_lower."_delete_success'), 'success');
