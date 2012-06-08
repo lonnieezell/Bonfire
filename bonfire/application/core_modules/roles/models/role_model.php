@@ -122,9 +122,7 @@ class Role_model extends BF_Model
 
 		$role = parent::find($id);
 
-        echo($this->db->last_query());
-
-		if ($role == FALSE)
+		if ($role === FALSE)
 		{
 			return FALSE;
 		}
