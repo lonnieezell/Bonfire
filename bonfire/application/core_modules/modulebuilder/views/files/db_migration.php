@@ -111,7 +111,7 @@ class Migration_Install_'.$table_name.' extends Migration {
 		);
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key(\''.$primary_key_field.'\', true);
-		$this->dbforge->create_table("{$prefix}'.$table_name.'");
+		$this->dbforge->create_table(\''.$table_name.'\');
 
 	}
 
@@ -121,7 +121,7 @@ class Migration_Install_'.$table_name.' extends Migration {
 	{
 		$prefix = $this->db->dbprefix;
 
-		$this->dbforge->drop_table({$prefix}'.$table_name.'");
+		$this->dbforge->drop_table(\''.$table_name.'\');
 
 	}
 
