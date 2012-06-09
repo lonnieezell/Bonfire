@@ -25,6 +25,7 @@
  * @category   Libraries
  * @author     Bonfire Dev Team
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ * @TODO       Update File Link to a Docs/Guides on the Settings_lib methods
  *
  */
 class Settings_lib
@@ -66,6 +67,7 @@ class Settings_lib
 
 	}//end __construct()
 
+	// ------------------------------------------------------------------------
 
 	/**
 	 * Gets the setting value requested
@@ -80,6 +82,7 @@ class Settings_lib
 
 	}//end __get
 
+	// ------------------------------------------------------------------------
 
 	/**
 	 * Sets the setting value requested
@@ -97,6 +100,7 @@ class Settings_lib
 
 	}//end __set
 
+	// ------------------------------------------------------------------------
 
 	/**
 	 * Retrieves a setting.
@@ -129,6 +133,7 @@ class Settings_lib
 
 	}//end item()
 
+	// ------------------------------------------------------------------------
 
 	/**
 	 * Sets a config item
@@ -168,6 +173,7 @@ class Settings_lib
 
 	}//end set()
 
+	// ------------------------------------------------------------------------
 
 	/**
 	 * Delete config item
@@ -203,6 +209,7 @@ class Settings_lib
 
 	}//end delete()
 
+	// ------------------------------------------------------------------------
 
 	/**
 	 * Gets all the settings
@@ -229,6 +236,7 @@ class Settings_lib
 
 	}//end find_all()
 
+	// ------------------------------------------------------------------------
 
 	/**
 	 * Find By
@@ -257,6 +265,7 @@ class Settings_lib
 
 	}//end find_by()
 
+	// ------------------------------------------------------------------------
 
 	/**
 	 * Find All By
@@ -291,4 +300,31 @@ class Settings_lib
 
 }//end Settings_lib
 
-/* End of file Settings.php */
+// ------------------------------------------------------------------------
+// ! HELPER METHOD BELOW
+// ------------------------------------------------------------------------
+
+if ( ! function_exists('settings_item'))
+{
+	/**
+	 * Helper method to retrieve a setting.
+	 *
+	 * @param string $name The name of the item to retrieve
+	 *
+	 * @return bool|string Returns result of setting or false if none.
+	 */
+	function settings_item($name = NULL)
+	{
+		if ($name === NULL)
+		{
+			return FALSE;
+		}
+
+		return Settings_lib::item($name);
+	}//end settings_item()
+
+}
+
+
+/* End of class Settings.php */
+/* End of file application/core_modules/settings/libraries/Settings.php */
