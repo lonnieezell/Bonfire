@@ -1162,6 +1162,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 	} 
 	else 
 	{
+		$segments = $my_segments;
 		$total    = count($my_segments);
 	}
 
