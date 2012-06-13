@@ -208,3 +208,12 @@ $lang['us_err_no_matching_code'] 	= 'Nenhum código de activação correspondent
 $lang['us_err_no_matching_id'] 		= 'Nenhum ID usuário correspondente foi encontrado no sistema.';
 $lang['us_err_user_is_active'] 		= 'O usuário já está ativo.';
 $lang['us_err_user_is_inactive'] 	= 'O usuário já está inativo.';
+
+/* Password strength/match */
+$lang['us_pass_strength']			= 'força';
+$lang['us_pass_match']				= 'Comparação';
+$lang['us_passwords_no_match']		= 'Não bate!';
+$lang['us_passwords_match']			= 'Combinar!';
+$lang['us_pass_weak']				= 'Fraco';
+$lang['us_pass_good']				= 'Bom';
+$lang['us_pass_strong']				= 'Forte';

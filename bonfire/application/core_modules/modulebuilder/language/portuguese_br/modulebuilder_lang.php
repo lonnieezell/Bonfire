@@ -27,11 +27,8 @@
 $lang['mb_actions']				= 'Ações';
 $lang['mb_create_button']		= 'Criar Módulo';
 $lang['mb_create_link']			= 'Criar um novo Módulo';
-$lang['mb_create_note']			= '
-Utilize o nosso assistente wizbang de criaçõa de módulo para criar o seu próximo módulo. Nós fazemos todo o trabalho pesado, gerando todos os controladores, modelos, visualizações e arquivos de idioma que você precisa.';
-$lang['mb_not_writeable_note']	= '
-Erro : A pasta Bonfire/modules não é   
-Error: The bonfire/modules folder is not gravável, então o móduloi não podê ser gravado no servidor. Por favor dê permissão de gravação e atualize esta página.';
+$lang['mb_create_note']			= 'Utilize o nosso assistente wizbang de criaçõa de módulo para criar o seu próximo módulo. Nós fazemos todo o trabalho pesado, gerando todos os controladores, modelos, visualizações e arquivos de idioma que você precisa.';
+$lang['mb_not_writeable_note']	= 'Erro : A pasta Bonfire/modules não é gravável, então o módulo não podê ser gravado no servidor. Por favor dê permissão de gravação nesta pasta e atualize esta página.';
 $lang['mb_delete']				= 'Deletar';
 $lang['mb_generic_description']	= 'Sua descrição aqui.';
 $lang['mb_installed_head']		= 'Instalados os módulos de aplicação';
@@ -100,6 +97,7 @@ $lang['mb_form_fieldnum']		= 'Campos da tabela adicional';
 $lang['mb_form_field_details']	= 'Detalhes do campo';
 $lang['mb_form_table_name']		= 'Nome da tabela';
 $lang['mb_form_table_name_ph']	= 'Minúsculas, sem espaços';
+$lang['mb_form_table_as_field_prefix']		= 'Use table name as field prefix';
 $lang['mb_form_label']			= 'Rótulo';
 $lang['mb_form_label_ph']		= 'O nome que será utilizado no site';
 $lang['mb_form_fieldname']		= 'Nome (sem espaços)';

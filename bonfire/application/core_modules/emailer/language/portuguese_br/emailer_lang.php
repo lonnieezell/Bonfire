@@ -44,8 +44,7 @@ $lang['em_header']				= 'Cabeçalho';
 $lang['em_footer']				= 'Rodapé';
 
 $lang['em_test_header']			= 'Teste suas definições';
-$lang['em_test_intro']			= '
-Insira um endereço de e-mail abaixo para verificar se as configurações de e-mail estão funcionando. <br/> Salvar as configurações atuais antes dos testes.';
+$lang['em_test_intro']			= 'Insira um endereço de e-mail abaixo para verificar se as configurações de e-mail estão funcionando. <br/> Salvar as configurações atuais antes dos testes.';
 $lang['em_test_button']			= 'Enviar e-mail de teste';
 $lang['em_test_result_header']	= 'Resultados do Teste';
 $lang['em_test_no_results']		= 'Either the test did not run, or did not return any results.';
@@ -68,3 +67,8 @@ $lang['em_subject']				= 'Assunto';
 
 $lang['em_missing_data']		= 'Um ou mais campos obrigatórios não foram preenchidos.';
 $lang['em_no_debug']			= 'O E-mail foi enfileirado. Não há dados de depuração (debug) disponível.';
+
+$lang['em_delete_success']      = '(x) registros deletados.';
+$lang['em_delete_failure']		= 'Não foi possível excluir os registros : ';
+$lang['em_delete_error']		= 'Erro ao deletar os registros : ';
+$lang['em_delete_confirm']		= 'Tem certeza de que deseja excluir estes e-mails? ';

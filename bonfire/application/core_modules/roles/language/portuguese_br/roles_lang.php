@@ -62,14 +62,3 @@ $lang['matrix_insert_fail']			= 'Houve um problema ao adicionar a permissão par
 $lang['matrix_delete_success']		= 'Permissão removido para a função.';
 $lang['matrix_delete_fail']			= 'Houve um problema ao excluir a permissão para a função: ';
 $lang['matrix_auth_fail']			= 'Autenticação: Você não tem a capacidade de gerenciar o controle de acesso para esta função.';
-
-
-
-
-
-
-
-
-
-
-
