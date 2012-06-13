@@ -30,7 +30,7 @@
 		<?php foreach($matrix_permissions as $matrix_perm ) : ?>
 			<?php $matrix_perm = (array)$matrix_perm; ?>
 			
-			<?php if (has_permission($matrix_perm['name'])) : ?>
+			<?php if (has_permission($matrix_perm['name']) || $current_user->role_id == 1): //Admin?>
 			<tr title="<?php echo $matrix_perm['name']; ?>">
 				<td><?php echo $matrix_perm['name']; ?></td>
 				<?php

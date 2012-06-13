@@ -42,7 +42,7 @@ class Settings extends Admin_Controller
 		parent::__construct();
 
 		$this->auth->restrict('Site.Settings.View');
-		$this->auth->restrict('Bonfire.Roles.Manage');
+		$this->auth->restrict('Bonfire.Roles.View');
 
 		$this->load->model('role_model');
 
@@ -93,6 +93,8 @@ class Settings extends Admin_Controller
 	 */
 	public function create()
 	{
+		$this->auth->restrict('Bonfire.Roles.New');
+
 		if ($this->input->post('submit'))
 		{
 			if ($this->save_role())
@@ -123,6 +125,8 @@ class Settings extends Admin_Controller
 	 */
 	public function edit()
 	{
+		$this->auth->restrict('Bonfire.Roles.Manage');
+
 		$id = (int)$this->uri->segment(5);
 
 		if (empty($id))
@@ -130,8 +134,6 @@ class Settings extends Admin_Controller
 			Template::set_message('Invalid Role ID.', 'error');
 			redirect(SITE_AREA .'/settings/roles');
 		}
-
-		$this->auth->restrict('Bonfire.Roles.Manage');
 
 		if ($this->input->post('submit'))
 		{
@@ -166,12 +168,12 @@ class Settings extends Admin_Controller
 	 */
 	public function delete()
 	{
+		$this->auth->restrict('Bonfire.Roles.Manage');
+
 		$id = (int) $this->uri->segment(5);
 
 		if (!empty($id))
 		{
-			$this->auth->restrict('Bonfire.Roles.Manage');
-
 			if ($this->role_model->delete($id))
 			{
 				Template::set_message('The Role was successfully deleted.', 'success');
@@ -481,7 +483,7 @@ class Settings extends Admin_Controller
 			return FALSE;
 		}
 
-		if ($this->input->post('action', TRUE) == 'TRUE')
+		if ($this->input->post('action', TRUE) == 'true')
 		{
 			if(is_numeric($this->role_permission_model->create_role_permissions($pieces[0],$pieces[1])))
 			{
@@ -494,7 +496,7 @@ class Settings extends Admin_Controller
 		}
 		else
 		{
-			if($this->role_permission_model->delete_role_permissions($pieces[0],$pieces[1]))
+			if($this->role_permission_model->delete_role_permissions($pieces[0], $pieces[1]))
 			{
 				die(lang("matrix_delete_success"));
 			}

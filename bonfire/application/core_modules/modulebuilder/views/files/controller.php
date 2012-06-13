@@ -164,8 +164,6 @@ if ($db_required != '') {
 			if (\$insert_id = \$this->save_".$module_name_lower."())
 			{
 				// Log the activity
-				\$this->load->model('activities/Activity_model', 'activity_model');
-
 				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_create_record').': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
 
 				Template::set_message(lang('".$module_name_lower."_create_success'), 'success');
@@ -217,8 +215,6 @@ if ($db_required != '') {
 			if (\$this->save_".$module_name_lower."('update', \$id))
 			{
 				// Log the activity
-				\$this->load->model('activities/Activity_model', 'activity_model');
-
 				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
 
 				Template::set_message(lang('".$module_name_lower."_edit_success'), 'success');
@@ -266,8 +262,6 @@ if ($db_required != '') {
 			if (\$this->".$module_name_lower."_model->delete(\$id))
 			{
 				// Log the activity
-				\$this->load->model('activities/Activity_model', 'activity_model');
-
 				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
 
 				Template::set_message(lang('".$module_name_lower."_delete_success'), 'success');
@@ -371,7 +365,6 @@ $textarea_included = FALSE;
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$db_field_type = set_value("db_field_type$counter");
-	$field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");;
 	$view_datepicker = '';
 	if ($db_field_type != NULL)
 	{
@@ -397,7 +390,10 @@ for($counter=1; $field_total >= $counter; $counter++)
 			$date_included = TRUE;
 			$datetime_included = TRUE;
 		}
-		elseif ($db_field_type == 'TEXT' AND $textarea_included === FALSE AND !empty($textarea_editor) )
+		elseif (($db_field_type == 'TEXT' || $db_field_type == 'MEDIUMTEXT' || $db_field_type == 'LONGTEXT')
+			&& $textarea_included === FALSE
+			&& !empty($textarea_editor)
+		)
 		{
 			// if a date field hasn't been included already then add in the jquery ui files
 			if ($textarea_editor == 'ckeditor') {
@@ -508,13 +504,38 @@ if ($controller_name != $module_name_lower)
 
 		// we set this variable as it will be used to place the comma after the last item to build the insert db array
 		$last_field = $counter;
-		$field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
-
+            
+		if($db_required == 'new' && $table_as_field_prefix === TRUE)
+		{
+				$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
+		}
+		elseif($db_required == 'new' && $table_as_field_prefix === FALSE)
+		{
+				$field_name = set_value("view_field_name$counter");
+		}
+		else 
+		{
+				$field_name = set_value("view_field_name$counter");
+		}
+		$form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
 		$rules .= '
-		$this->form_validation->set_rules(\''.$field_name.'\',\''.set_value("view_field_label$counter").'\',\'';
+		$this->form_validation->set_rules(\''.$form_name.'\',\''.set_value("view_field_label$counter").'\',\'';
 
-		$save_data_array .= '
-		$data[\''.$field_name.'\']        = $this->input->post(\''.$field_name.'\');';
+	// setup the data array for saving to the db
+	// set defaults for certain field types
+	switch (set_value("db_field_type$counter"))
+	{
+		case 'DATE':
+			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00\';';
+			break;
+		case 'DATETIME':
+			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00 00:00:00\';';
+			break;
+		default:
+			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\');';
+			break;
+	}
+
 
 		// set a friendly variable name
 		$validation_rules = $this->input->post('validation_rules'.$counter);
@@ -543,14 +564,16 @@ if ($controller_name != $module_name_lower)
 			}
 		}
 
-		if (set_value("db_field_type$counter") != 'ENUM' && set_value("db_field_length_value$counter") != NULL)
+		$db_field_type = set_value("db_field_type".$counter);
+
+		if ($db_field_type != 'ENUM' && $db_field_type != 'SET' && set_value("db_field_length_value$counter") != NULL)
 		{
 			if ($rule_counter > 0)
 			{
 				$rules .= '|';
 			}
 
-			if (set_value("db_field_type$counter") == 'DECIMAL' || set_value("db_field_type$counter") == 'FLOAT')	{
+			if ($db_field_type == 'DECIMAL' || $db_field_type == 'FLOAT')	{
 				list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
 				$max = $len;
 				if (isset($decimal) && $decimal != 0) {

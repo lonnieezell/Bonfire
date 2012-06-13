@@ -31,7 +31,7 @@ $config['user_meta_fields'] =  array(
 	array(
 		'name'   => 'street_name',
 		'label'   => lang('user_meta_street_name'),
-		'rules'   => 'required|trim|max_length[100]|xss_clean',
+		'rules'   => 'trim|max_length[100]|xss_clean',
 		'form_detail' => array(
 			'type' => 'input',
 			'settings' => array(
@@ -39,7 +39,7 @@ $config['user_meta_fields'] =  array(
 				'id'		=> 'street_name',
 				'maxlength'	=> '100',
 				'class'		=> 'span6',
-				'required'	=> TRUE,
+//				'required'	=> TRUE,
 			),
 		),
 	),

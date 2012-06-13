@@ -58,12 +58,12 @@
 }
 
 .dataTables_length {
-	width: 40%;
+	/* width: 40%; */
 	float: left;
 }
 
 .dataTables_filter {
-	width: 50%;
+	/* width: 50%; */
 	float: right;
 	text-align: right;
 	margin-top: -5px;
@@ -352,3 +352,22 @@ table.display tr.gradeX {
 table.display tr.gradeU {
 	background-color: #ddd;
 }
+
+/*
+ * Bootstrap 2.0 Compatibility
+ */
+table.table thead .sorting,
+table.table thead .sorting_asc,
+table.table thead .sorting_desc,
+table.table thead .sorting_asc_disabled,
+table.table thead .sorting_desc_disabled {
+    cursor: pointer;
+    *cursor: hand;
+}
+ 
+table.table thead .sorting { background: url('../datatable_images/sort_both.png') no-repeat center right; }
+table.table thead .sorting_asc { background: url('../datatable_images/sort_asc.png') no-repeat center right; }
+table.table thead .sorting_desc { background: url('../datatable_images/sort_desc.png') no-repeat center right; }
+ 
+table.table thead .sorting_asc_disabled { background: url('../datatable_images/sort_asc_disabled.png') no-repeat center right; }
+table.table thead .sorting_desc_disabled { background: url('../datatable_images/sort_desc_disabled.png') no-repeat center right; }

@@ -13,6 +13,8 @@
  * @filesource
  */
 
+//--------------------------------------------------------------------
+
 /**
  * Form Helpers
  *
@@ -23,7 +25,7 @@
  * make it as simple as possible for a developer to maintain styling
  * with the core. Also makes changing the core a snap.
  *
- * All methods (including overriden versions of the originals) now
+ * All methods (including overridden versions of the originals) now
  * support passing a final 'label' attribute that will create the
  * label along with the field.
  *
@@ -35,11 +37,13 @@
  *
  */
 
-if (!function_exists('_form_common'))
+if ( ! function_exists('_form_common'))
 {
 	/**
 	 * Used by many of the new functions to wrap the input in the correct
 	 * tags so that the styling is automatic.
+	 *
+	 * @access private
 	 *
 	 * @param string $type    A string with the name of the element type.
 	 * @param string $data    Either a string with the element name, or an array of key/value pairs of all attributes.
@@ -60,16 +64,29 @@ if (!function_exists('_form_common'))
 			$defaults['name'] = $data['name'];
 			unset($data['name']);
 		}
+
+		$error = '';
+
+		if (function_exists('form_error'))
+		{
+			if (form_error($defaults['name']))
+			{
+				$error   = ' error';
+				$tooltip = '<span class="help-inline">' . form_error($defaults['name']) . '</span>' . PHP_EOL;
+			}
+		}
+
 		$output = _parse_form_attributes($data, $defaults);
+
 		$output = <<<EOL
 
-	<div class="control-group">
-		<label class="control-label" for="{$defaults['name']}">{$label}</label>
-		<div class="controls">
-			 <input {$output} {$extra} />
-			{$tooltip}
-		</div>
+<div class="control-group {$error}">
+	<label class="control-label" for="{$defaults['name']}">{$label}</label>
+	<div class="controls">
+		 <input {$output} {$extra} />
+		{$tooltip}
 	</div>
+</div>
 
 EOL;
 
@@ -80,7 +97,7 @@ EOL;
 
 //--------------------------------------------------------------------
 
-if (!function_exists('form_input'))
+if ( ! function_exists('form_input'))
 {
 	/**
 	 * Returns a properly templated text input field.
@@ -93,7 +110,7 @@ if (!function_exists('form_input'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_input($data='', $value='', $label='', $extra='', $tooltip = '' )
+	function form_input($data='', $value='', $label='', $extra='', $tooltip = '')
 	{
 		return _form_common('text', $data, $value, $label, $extra, $tooltip);
 
@@ -102,7 +119,7 @@ if (!function_exists('form_input'))
 
 //--------------------------------------------------------------------
 
-if (!function_exists('form_email'))
+if ( ! function_exists('form_email'))
 {
 	/**
 	 * Returns a properly templated email input field.
@@ -115,7 +132,7 @@ if (!function_exists('form_email'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_email($data='', $value='', $label='', $extra='', $tooltip = '' )
+	function form_email($data='', $value='', $label='', $extra='', $tooltip = '')
 	{
 		return _form_common('email', $data, $value, $label, $extra, $tooltip);
 
@@ -124,7 +141,7 @@ if (!function_exists('form_email'))
 
 //--------------------------------------------------------------------
 
-if (!function_exists('form_password'))
+if ( ! function_exists('form_password'))
 {
 	/**
 	 * Returns a properly templated password input field.
@@ -137,7 +154,7 @@ if (!function_exists('form_password'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_password($data='', $value='', $label='', $extra='', $tooltip = '' )
+	function form_password($data='', $value='', $label='', $extra='', $tooltip = '')
 	{
 		return _form_common('password', $data, $value, $label, $extra, $tooltip);
 
@@ -146,7 +163,7 @@ if (!function_exists('form_password'))
 
 //--------------------------------------------------------------------
 
-if (!function_exists('form_url'))
+if ( ! function_exists('form_url'))
 {
 	/**
 	 * Returns a properly templated URL input field.
@@ -159,7 +176,7 @@ if (!function_exists('form_url'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_url($data='', $value='', $label='', $extra='', $tooltip = '' )
+	function form_url($data='', $value='', $label='', $extra='', $tooltip = '')
 	{
 		return _form_common('url', $data, $value, $label, $extra, $tooltip);
 
@@ -181,7 +198,7 @@ if ( ! function_exists('form_telephone'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_telephone($data='', $value='', $label='', $extra='', $tooltip = '' )
+	function form_telephone($data='', $value='', $label='', $extra='', $tooltip = '')
 	{
 		return _form_common('tel', $data, $value, $label, $extra, $tooltip);
 
@@ -203,7 +220,7 @@ if ( ! function_exists('form_number'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_number($data='', $value='', $label='', $extra='', $tooltip = '' )
+	function form_number($data='', $value='', $label='', $extra='', $tooltip = '')
 	{
 		return _form_common('number', $data, $value, $label, $extra, $tooltip);
 
@@ -225,7 +242,7 @@ if ( ! function_exists('form_color'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_color($data='', $value='', $label='', $extra='', $tooltip = '' )
+	function form_color($data='', $value='', $label='', $extra='', $tooltip = '')
 	{
 		return _form_common('color', $data, $value, $label, $extra, $tooltip);
 
@@ -247,7 +264,7 @@ if ( ! function_exists('form_search'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_search($data='', $value='', $label='', $extra='', $tooltip = '' )
+	function form_search($data='', $value='', $label='', $extra='', $tooltip = '')
 	{
 		return _form_common('search', $data, $value, $label, $extra, $tooltip);
 
@@ -269,7 +286,7 @@ if ( ! function_exists('form_date'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_date($data='', $value='', $label='', $extra='', $tooltip = '' )
+	function form_date($data='', $value='', $label='', $extra='', $tooltip = '')
 	{
 		return _form_common('date', $data, $value, $label, $extra, $tooltip);
 
@@ -292,7 +309,7 @@ if ( ! function_exists('form_dropdown'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_dropdown($data, $options=array(), $selected='', $label='', $extra='', $tooltip = '' )
+	function form_dropdown($data, $options=array(), $selected='', $label='', $extra='', $tooltip = '')
 	{
 		$defaults = array('name' => (( ! is_array($data)) ? $data : ''));
 
@@ -327,7 +344,7 @@ if ( ! function_exists('form_dropdown'))
 
 			if (is_array($val) && ! empty($val))
 			{
-				$options_vals .= '<optgroup label="'.$key.'">'."\n";
+				$options_vals .= '<optgroup label="'.$key.'">'.PHP_EOL;
 
 				foreach ($val as $optgroup_key => $optgroup_val)
 				{
@@ -336,7 +353,7 @@ if ( ! function_exists('form_dropdown'))
 					$options_vals .= '<option value="'.$optgroup_key.'"'.$sel.'>'.(string) $optgroup_val."</option>\n";
 				}
 
-				$options_vals .= '</optgroup>'."\n";
+				$options_vals .= '</optgroup>'.PHP_EOL;
 			}
 			else
 			{
@@ -346,17 +363,28 @@ if ( ! function_exists('form_dropdown'))
 			}
 		}
 
+		$error = '';
+
+		if (function_exists('form_error'))
+		{
+			if (form_error($defaults['name']))
+			{
+				$error   = ' error';
+				$tooltip = '<span class="help-inline">' . form_error($defaults['name']) . '</span>' . PHP_EOL;
+			}
+		}
+
 		$output = <<<EOL
 
-	<div class="control-group">
-		<label class="control-label" for="{$defaults['name']}">{$label}</label>
-		<div class="controls">
-			 <select {$output} {$extra}>
-				{$options_vals}
-			</select>
-			{$tooltip}
-		</div>
+<div class="control-group {$error}">
+	<label class="control-label" for="{$defaults['name']}">{$label}</label>
+	<div class="controls">
+		 <select {$output} {$extra}>
+			{$options_vals}
+		</select>
+		{$tooltip}
 	</div>
+</div>
 
 EOL;
 

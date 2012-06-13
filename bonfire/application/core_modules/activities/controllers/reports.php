@@ -45,15 +45,20 @@ class Reports extends Admin_Controller
 		$this->auth->restrict('Bonfire.Activities.View');
 
 		$this->lang->load('activities');
-		$this->lang->load('datatable');
-		$this->load->model('activities/Activity_model', 'activity_model');
+		$this->lang->load('datatable');		
 
 		Template::set('toolbar_title', lang('activity_title'));
 
+		Assets::add_js(Template::theme_url('js/bootstrap.js'));
 		Assets::add_js($this->load->view('reports/activities_js', null, true), 'inline');
+
 		Assets::add_js( array ( Template::theme_url('js/jquery.dataTables.min.js' )) );
+		Assets::add_js( array ( Template::theme_url('js/bootstrap-dataTables.js' )) );
 		Assets::add_css( array ( Template::theme_url('css/datatable.css') ) ) ;
-		Assets::add_module_css ('activities', 'datatables.css');
+		Assets::add_css( array ( Template::theme_url('css/bootstrap-dataTables.css') ) ) ;		
+
+
+		//Assets::add_module_css ('activities', 'datatables.css');
 
 
 		if (has_permission('Activities.User.View')

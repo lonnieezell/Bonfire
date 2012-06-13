@@ -118,7 +118,7 @@
 					<label class="control-label" for="<?= $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
 					<div class="controls">
 
-					<?php echo state_select(set_select($field['name']), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
+					<?php echo state_select(set_value($field['name']), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
 
 					</div>
 				</div>
@@ -129,7 +129,7 @@
 					<label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
 					<div class="controls">
 
-					<?php echo country_select(set_select($field['name']), 'US', 'country', 'span6 chzn-select'); ?>
+					<?php echo country_select(set_value($field['name']), 'US', 'country', 'span6 chzn-select'); ?>
 
 					</div>
 				</div>

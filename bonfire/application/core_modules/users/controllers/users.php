@@ -79,8 +79,8 @@ class Users extends Front_Controller
 				// Try to login
 				if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === TRUE)
 				{
-					$this->load->model('activities/Activity_model', 'activity_model');
 
+					// Log the Activity
 					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged').': ' . $this->input->ip_address(), 'users');
 
 					/*
@@ -131,7 +131,7 @@ class Users extends Front_Controller
 	 */
 	public function logout()
 	{
-		$this->load->model('activities/Activity_model', 'activity_model');
+		// Log the Activity
 		$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged_out').': ' . $this->input->ip_address(), 'users');
 
 		$this->auth->logout();
@@ -262,7 +262,7 @@ class Users extends Front_Controller
 				// now add the meta is there is meta data
 				$this->user_model->save_meta_for($user_id, $meta_data);
 
-				$this->load->model('activities/Activity_model', 'activity_model');
+				// Log the Activity
 
 				$user = $this->user_model->find($user_id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
@@ -283,7 +283,13 @@ class Users extends Front_Controller
 		// get the current user information
 		$user = $this->user_model->find_user_and_meta($this->current_user->id);
 
-		// Generate password hint messages.
+        $settings = $this->settings_lib->find_all();
+        if ($settings['auth.password_show_labels'] == 1) {
+            Assets::add_module_js('users','password_strength.js');
+            Assets::add_module_js('users','jquery.strength.js');
+            Assets::add_js($this->load->view('users_js', array('settings'=>$settings), true), 'inline');
+        }
+        // Generate password hint messages.
 		$this->user_model->password_hints();
 
 		Template::set('user', $user);
@@ -336,7 +342,7 @@ class Users extends Front_Controller
 
 					if ($this->user_model->update($this->input->post('user_id'), $data))
 					{
-						$this->load->model('activities/Activity_model', 'activity_model');
+						// Log the Activity
 
 						$this->activity_model->log_activity($this->input->post('user_id'), lang('us_log_reset') , 'users');
 						Template::set_message(lang('us_reset_password_success'), 'success');
@@ -365,7 +371,13 @@ class Users extends Front_Controller
 				Template::redirect('/login');
 			}
 
-			// If we're here, then it is a valid request....
+            $settings = $this->settings_lib->find_all();
+            if ($settings['auth.password_show_labels'] == 1) {
+                Assets::add_module_js('users','password_strength.js');
+                Assets::add_module_js('users','jquery.strength.js');
+                Assets::add_js($this->load->view('users_js', array('settings'=>$settings), true), 'inline');
+            }
+            // If we're here, then it is a valid request....
 			Template::set('user', $user);
 
 			Template::set_view('users/users/reset_password');
@@ -552,7 +564,7 @@ class Users extends Front_Controller
 
 					Template::set_message($message, $type);
 
-					$this->load->model('activities/Activity_model', 'activity_model');
+					// Log the Activity
 
 					$this->activity_model->log_activity($user_id, lang('us_log_register') , 'users');
 					Template::redirect('login');
@@ -565,7 +577,14 @@ class Users extends Front_Controller
 			}//end if
 		}//end if
 
-		// Generate password hint messages.
+        $settings = $this->settings_lib->find_all();
+        if ($settings['auth.password_show_labels'] == 1) {
+            Assets::add_module_js('users','password_strength.js');
+            Assets::add_module_js('users','jquery.strength.js');
+            Assets::add_js($this->load->view('users_js', array('settings'=>$settings), true), 'inline');
+        }
+
+        // Generate password hint messages.
 		$this->user_model->password_hints();
 
 		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));

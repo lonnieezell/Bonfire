@@ -129,6 +129,7 @@ $lang['bf_password_length_help']		= 'Minimum password length e.g. 8';
 $lang['bf_password_force_numbers']		= 'Should password force numbers?';
 $lang['bf_password_force_symbols']		= 'Should password force symbols?';
 $lang['bf_password_force_mixed_case']	= 'Should password force mixed case?';
+$lang['bf_password_show_labels']	    = 'Display password validation labels';
 
 //--------------------------------------------------------------------
 // ! USER/PROFILE
@@ -205,6 +206,7 @@ $lang['bf_password_caps_required_help']    = 'Password must contain at least 1 c
 $lang['bf_password_symbols_required_help'] = 'Password must contain at least 1 symbol.';
 
 $lang['bf_password_min_length_help']       = 'Password must be at least %s characters long.';
+$lang['bf_password_length']                = 'Password Length';
 
 //--------------------------------------------------------------------
 // User Meta examples

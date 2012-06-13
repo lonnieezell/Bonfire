@@ -1,8 +1,7 @@
 <?php
 	Assets::add_css( array(
-		css_path() . 'bootstrap.css',
-		css_path() . 'bootstrap-responsive.css',
-		'screen.css'
+		'bootstrap.css',
+		'bootstrap-responsive.css',
 	));
 
 	if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
@@ -21,7 +20,7 @@
 	<meta name="robots" content="noindex" />
 	<?php echo Assets::css(null, true); ?>
 
-	<script src="<?php echo js_path(); ?>modernizr-2.5.3.js"></script>
+	<script src="<?php echo Template::theme_url('js/modernizr-2.5.3.js'); ?>"></script>
 </head>
 <body class="desktop">
 <!--[if lt IE 7]>

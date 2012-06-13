@@ -114,14 +114,7 @@ Page Structure
 	display: block;
 }
 
-h1.branding {
-	line-height: 40px;
-	font-size: 16px;
-	font-wieght: normal;
-	color: #fff;
-	margin: 0;
-	padding: 0;
-	height: 1.8em;
+a.brand {
 	width: 200px;
 	overflow: hidden;
 	white-space: nowrap;
@@ -129,8 +122,6 @@ h1.branding {
 	-o-text-overflow: ellipsis;
 	-ms-text-overflow: ellipsis;
 	text-overflow: ellipsis;
-	display: inline-block;
-	float: left;
 }
 
 /* Subnav */
@@ -367,7 +358,7 @@ Grids
 	margin-bottom: 18px;
 
 	-ms-overflow-x: scroll;
-	overflow-x: scroll;
+	overflow-x: auto;
 	min-height: 250px;
 }
 
@@ -669,4 +660,7 @@ li.parent-menu {
 
 @media (max-width: 480px) {
 	#sub-menu { display: block; float: none; margin-top: 36px; }
+	.form-horizontal .control-group > label { display: block; width: inherit; margin-left: 20px; }
+	.form-horizontal .control-group .controls { margin-left: 20px; }
+	.form-horizontal .form-actions { padding-left: 20px; }
 }

@@ -5,11 +5,11 @@
 </div>
 <?php endif; ?>
 
+<div class="admin-box">
+	<h3><?php echo lang('ui_shortcuts') ?></h3>
+
 <?php echo form_open($this->uri->uri_string(), array('class' => "form-horizontal", 'id' => 'shortcut_form')); ?>
 	<input type="hidden" name="remove_action" id="remove_action" />
-
-	<fieldset>
-		<legend><?php echo lang('ui_shortcuts') ?></legend>
 
 		<div class="alert alert-info fade in">
 			<a class="close" data-dismiss="alert">&times;</a>
@@ -64,6 +64,7 @@
 				</tr>
 			</tbody>
 		</table>
-	</fieldset>
 
 <?php echo form_close(); ?>
+
+</div>
