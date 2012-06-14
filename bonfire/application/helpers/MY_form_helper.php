@@ -364,3 +364,33 @@ EOL;
 
 	}//end form_dropdown()
 }
+
+//--------------------------------------------------------------------
+
+if ( ! function_exists('form_simple_label'))
+{
+	/**
+	 * Returns a properly templated label field.
+	 *
+	 * @param string $for 		 A string with the for attribtes of the label
+	 * @param string $label    A string with the label of the element.
+	 * @param bool $required	 To change the label class if the field is required.
+	 *
+	 * @return string A string with the formatted label tag.
+	 */
+	function form_simple_label($for='', $label='', $required=FALSE )
+	{
+		$ci =& get_instance();
+		$caption = $label . $ci->lang->line('bf_form_label_end');
+		$extra_class = ($required) ? ' required' : '';
+
+		$output = <<<EOL
+
+		<label class="control-label{$extra_class}" for="{$for}">{$caption}</label>
+
+EOL;
+
+		return $output;
+
+	}//end form_simple_label()
+}
