@@ -3,24 +3,22 @@
 </div>
 
 <div class="admin-box">
-	<h3><?php echo lang('bf_users') ?></h3>
+	<h3><?php echo lang('us_users_list') ?></h3>
 
 	<ul class="nav nav-tabs" >
-		<li <?php echo $filter=='' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url; ?>">All Users</a></li>
-		<li <?php echo $filter=='inactive' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=inactive'; ?>">Inactive</a></li>
-		<li <?php echo $filter=='banned' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=banned'; ?>">Banned</a></li>
-		<li <?php echo $filter=='deleted' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=deleted'; ?>">Deleted</a></li>
+		<li <?php echo $filter=='' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url; ?>"><?php echo lang('us_t_all_users') ?></a></li>
+		<li <?php echo $filter=='inactive' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=inactive'; ?>"><?php echo lang('us_t_inactive_users') ?></a></li>
+		<li <?php echo $filter=='banned' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=banned'; ?>"><?php echo lang('us_t_banned_users') ?></a></li>
+		<li <?php echo $filter=='deleted' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=deleted'; ?>"><?php echo lang('us_t_deleted_users') ?></a></li>
 		<li class="<?php echo $filter=='role' ? 'active ' : ''; ?>dropdown">
 			<a href="#" class="drodown-toggle" data-toggle="dropdown">
-				By Role <?php echo isset($filter_role) ? ": $filter_role" : ''; ?>
+				<?php echo lang('us_t_by_role_users') ?> <?php echo isset($filter_role) ? ": $filter_role" : ''; ?>
 				<b class="caret light-caret"></b>
 			</a>
 			<ul class="dropdown-menu">
 			<?php foreach ($roles as $role) : ?>
 				<li>
-					<a href="<?php echo site_url(SITE_AREA .'/settings/users?filter=role&role_id='. $role->role_id) ?>">
-						<?php echo $role->role_name; ?>
-					</a>
+					<?php echo anchor(SITE_AREA . '/settings/users?filter=role&role_id='. $role->role_id, $role->role_name); ?>
 				</li>
 			<?php endforeach; ?>
 			</ul>
@@ -38,7 +36,7 @@
 				<th><?php echo lang('bf_display_name'); ?></th>
 				<th><?php echo lang('bf_email'); ?></th>
 				<th style="width: 11em"><?php echo lang('us_last_login'); ?></th>
-				<th style="width: 10em"><?php echo lang('us_status'); ?></th>
+				<th style="width: 10em"><?php echo lang('bf_status'); ?></th>
 			</tr>
 		</thead>
 		<?php if (isset($users) && is_array($users) && count($users)) : ?>
@@ -51,7 +49,7 @@
 					<?php else: ?>
 					<input type="submit" name="activate" class="btn" value="<?php echo lang('bf_action_activate') ?>">
 					<input type="submit" name="deactivate" class="btn" value="<?php echo lang('bf_action_deactivate') ?>">
-					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_ban') ?>">
+					<input type="submit" name="ban" class="btn" value="<?php echo lang('bf_action_ban') ?>">
 					<input type="submit" name="delete" class="btn btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')">
 					<?php endif;?>
 				</td>
@@ -68,18 +66,18 @@
 				</td>
 				<td><?php echo $user->id ?></td>
 				<td>
-					<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $user->id); ?>"><?php echo $user->username; ?></a>
+					<?php echo anchor(SITE_AREA . '/settings/users/edit/'. $user->id, $user->username); ?>
 					<?php if ($user->banned) echo '<span class="label label-warning">Banned</span>'; ?>
 				</td>
 				<td><?php echo $user->display_name ?></td>
 				<td>
-					<a href="mailto://<?php echo $user->email ?>"><?php echo $user->email ?></a>
+					<?php echo anchor('mailto://'. $user->email, $user->email); ?>
 				</td>
 				<td>
 					<?php
 						if ($user->last_login != '0000-00-00 00:00:00')
 						{
-							echo date('M j, y g:i A', strtotime($user->last_login));
+							echo bf_date::date(lang('us_logged_in_date_format'), strtotime($user->last_login));
 						}
 						else
 						{
@@ -101,15 +99,15 @@
 
 					}
 					?>
-					<span class="label<?php echo($class); ?>">
+					<span class="label<?php echo $class; ?>">
 					<?php
 						if ($user->active == 1)
 						{
-							echo(lang('us_active'));
+							echo lang('us_active');
 						}
 						else
 						{
-							echo(lang('us_inactive'));
+							echo lang('us_inactive');
 						}
 						?>
 					</span>
@@ -118,7 +116,7 @@
 			<?php endforeach; ?>
 		<?php else: ?>
 			<tr>
-				<td colspan="6">No users found that match your selection.</td>
+				<td colspan="7"><?php echo lang('us_no_user_found'); ?></td>
 			</tr>
 		<?php endif; ?>
 		</tbody>

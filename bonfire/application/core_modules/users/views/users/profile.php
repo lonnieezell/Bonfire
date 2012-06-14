@@ -46,14 +46,14 @@
 
 
 	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
-		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>
+		<?php echo form_simple_label('display_name', lang('bf_display_name')); ?>
 		<div class="controls">
 			<input class="span6" type="text" name="display_name" value="<?php echo isset($user) ? $user->display_name : set_value('display_name') ?>" />
 		</div>
 	</div>
 
 	<div class="control-group <?php echo iif( form_error('email') , 'error') ;?>">
-		<label class="control-label required" for="email"><?php echo lang('bf_email'); ?></label>
+		<?php echo form_simple_label('email', lang('bf_email'), TRUE); ?>
 		<div class="controls">
 			<input class="span6" type="text" name="email" value="<?php echo isset($user) ? $user->email : set_value('email') ?>" />
 		</div>
@@ -61,7 +61,7 @@
 
 	<?php if ( config_item('auth.login_type') !== 'email' OR config_item('auth.use_usernames')) : ?>
 	<div class="control-group <?php echo iif( form_error('username') , 'error') ;?>">
-		<label class="control-label required" for="username"><?php echo lang('bf_username'); ?></label>
+		<?php echo form_simple_label('username', lang('bf_username'), TRUE ); ?>
 		<div class="controls">
 			<input class="span6" type="text" name="username" value="<?php echo isset($user) ? $user->username : set_value('username') ?>" />
 		</div>
@@ -71,97 +71,99 @@
 	<br />
 
 	<div class="control-group <?php echo iif( form_error('password') , 'error') ;?>">
-		<label class="control-label" for="password"><?php echo lang('bf_password'); ?></label>
+		<?php echo form_simple_label('password', lang('bf_password')); ?>
 		<div class="controls">
 			<input class="span6" type="password" id="password" name="password" value="" />
+			<p class="help-block"><?php echo $password_mins; ?></p>
 		</div>
 	</div>
 
 	<div class="control-group <?php echo iif( form_error('pass_confirm') , 'error') ;?>">
-		<label class="control-label" for="pass_confirm"><?php echo lang('bf_password_confirm'); ?></label>
+		<?php echo form_simple_label('pass_confirm', lang('bf_password_confirm')); ?>
 		<div class="controls">
 			<input class="span6" type="password" id="pass_confirm" name="pass_confirm" value="" />
+			<p class="help-block"><?php echo $password_mins; ?></p>
 		</div>
 	</div>
 
-		<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
-			<label class="control-label required" for="language"><?php echo lang('bf_language') ?></label>
-			<div class="controls">
-				<select name="language" id="language" class="chzn-select">
-				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
-					<?php foreach ($languages as $language) : ?>
-						<option value="<?php echo $language ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
-							<?php echo ucfirst($language) ?>
-						</option>
+	<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
+		<?php echo form_simple_label('language', lang('bf_language'), TRUE); ?>
+		<div class="controls">
+			<select name="language" id="language" class="chzn-select">
+			<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
+				<?php foreach ($languages as $language) : ?>
+					<option value="<?php echo $language ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
+						<?php echo ucfirst($language) ?>
+					</option>
 
-					<?php endforeach; ?>
-				<?php endif; ?>
-				</select>
-				<?php if (form_error('language')) echo '<span class="help-inline">'. form_error('language') .'</span>'; ?>
-			</div>
+				<?php endforeach; ?>
+			<?php endif; ?>
+			</select>
+			<?php if (form_error('language')) echo '<span class="help-inline">'. form_error('language') .'</span>'; ?>
 		</div>
+	</div>
 
-		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
-			<label class="control-label required" for="timezones"><?php echo lang('bf_timezone') ?></label>
-			<div class="controls">
-				<?php echo timezone_menu(set_value('timezones', isset($user) ? $user->timezone : $current_user->timezone)); ?>
-				<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
-			</div>
+	<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
+		<?php echo form_simple_label('timezones', lang('bf_timezone'), TRUE); ?>
+		<div class="controls">
+			<?php echo timezone_menu(set_value('timezones', isset($user) ? $user->timezone : $current_user->timezone)); ?>
+			<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
 		</div>
+	</div>
 
-		<?php
-			// Allow modules to render custom fields
-			Events::trigger('render_user_form', $user );
-		?>
+	<?php
+		// Allow modules to render custom fields
+		Events::trigger('render_user_form', $user );
+	?>
 
-		<!-- Start User Meta -->
-		<?php
-		foreach ($meta_fields as $field):
+	<!-- Start User Meta -->
+	<?php
+	foreach ($meta_fields as $field):
 
-			if (!(isset($field['frontend']) && $field['frontend'] === TRUE)):
+		if (!(isset($field['frontend']) && $field['frontend'] === TRUE)):
 
-				if ($field['form_detail']['type'] == 'dropdown'):
+			if ($field['form_detail']['type'] == 'dropdown'):
 
-					echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']));
+				echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']));
 
 
-				elseif ($field['form_detail']['type'] == 'state_select' && is_callable('country_select')) : ?>
+			elseif ($field['form_detail']['type'] == 'state_select' && is_callable('country_select')) : ?>
 
-					<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
-						<label class="control-label" for="<?= $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
-						<div class="controls">
+				<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
+					<?php echo form_simple_label($field['name'], lang('user_meta_state')); ?>
+					<div class="controls">
 
-							<?php echo state_select(isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
+						<?php echo state_select(isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
 
-						</div>
 					</div>
+				</div>
 
-					<?php elseif ($field['form_detail']['type'] == 'country_select' && is_callable('country_select')) : ?>
+				<?php elseif ($field['form_detail']['type'] == 'country_select' && is_callable('country_select')) : ?>
 
-					<div class="control-group <?php echo iif( form_error('country') , 'error'); ?>">
-						<label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
-						<div class="controls">
+				<div class="control-group <?php echo iif( form_error('country') , 'error'); ?>">
+					<?php echo form_simple_label('country', lang('user_meta_country')); ?>
+					<div class="controls">
 
-							<?php echo country_select(isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']), 'US', 'country', 'span6 chzn-select'); ?>
+						<?php echo country_select(isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']), 'US', 'country', 'span6 chzn-select'); ?>
 
-						</div>
 					</div>
+				</div>
 
-					<?php else:
-
-
-					$form_method = 'form_' . $field['form_detail']['type'];
-					if ( is_callable($form_method) )
-					{
-						echo $form_method($field['form_detail']['settings'], isset($user->$field['name']) ? $user->$field['name'] : set_value($field['name']), $field['label']);
-					}
+				<?php else:
 
 
-				endif;
+				$form_method = 'form_' . $field['form_detail']['type'];
+				if ( is_callable($form_method) )
+				{
+					echo $form_method($field['form_detail']['settings'], isset($user->$field['name']) ? $user->$field['name'] : set_value($field['name']), $field['label']);
+				}
+
+
 			endif;
+		endif;
 
-		endforeach;
-		?>
+	endforeach;
+	?>
 
 	<!-- End of User Meta -->
 

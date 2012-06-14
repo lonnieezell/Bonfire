@@ -27,7 +27,7 @@
 	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
 	<div class="control-group <?php echo iif( form_error('code') , 'error') ;?>">
-		<label class="control-label required" for="code"><?php echo lang('us_activate_code'); ?></label>
+		<?php echo form_simple_label('code', lang('us_activate_code'), TRUE); ?>
 		<div class="controls">
 			<input class="span6" type="text" id="code" name="code" value="<?php echo set_value('code') ?>" />
 		</div>

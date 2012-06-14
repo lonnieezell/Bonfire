@@ -295,6 +295,8 @@ class Users extends Front_Controller
 		Template::set('user', $user);
 		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
+		Template::set('password_mins', sprintf( lang('us_password_mins'), (string) $this->settings_lib->item('auth.password_min_length')));
+		
 		Template::set_view('users/users/profile');
 		Template::render();
 
@@ -588,6 +590,8 @@ class Users extends Front_Controller
 		$this->user_model->password_hints();
 
 		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
+		
+		Template::set('password_mins', sprintf( lang('us_password_mins'), (string) $this->settings_lib->item('auth.password_min_length')));
 
 		Template::set_view('users/users/register');
 		Template::set('page_title', 'Register');
@@ -823,7 +827,7 @@ class Users extends Front_Controller
 				}
 				else
 				{
-					Template::set_message(lang('us_activate_error_msg').$this->user_model->error.'. '. lang('us_err_activate_code'), 'error');
+					Template::set_message(lang('us_activate_error_msg').$this->user_model->error.' '. lang('us_err_activate_code'), 'error');
 				}
 			}
 			Template::set_view('users/users/activate');

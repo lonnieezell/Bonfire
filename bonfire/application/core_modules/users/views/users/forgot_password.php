@@ -28,7 +28,7 @@
 <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
 	<div class="control-group <?php echo iif( form_error('email') , 'error'); ?>">
-		<label class="control-label required" for="email"><?php echo lang('bf_email'); ?></label>
+		<?php echo form_simple_label('email', lang('bf_email'), TRUE); ?>
 		<div class="controls">
 			<input class="span6" type="text" name="email" value="<?php echo set_value('email') ?>" />
 		</div>
@@ -37,7 +37,7 @@
 	<div class="control-group">
 		<label class="control-label" for="submit">&nbsp;</label>
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" value="Send Password"  />
+			<input class="btn btn-primary" type="submit" name="submit" value="<?php echo lang('us_confirm_password_send') ?>"  />
 		</div>
 	</div>
 

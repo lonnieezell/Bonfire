@@ -56,7 +56,7 @@ $lang['us_restore_account']			= 'Restore Account';
 $lang['us_restore_account_note']	= '<h3>Restore this Account</h3><p>Un-delete this user\'s account.</p>';
 $lang['us_restore_account_confirm']	= 'Restore this users account?';
 
-$lang['us_role']					= 'Role';
+$lang['us_role']					= 'Rôle';
 $lang['us_role_lower']				= 'role';
 $lang['us_no_users']				= 'No users found.';
 $lang['us_create_user']				= 'Create New User';
@@ -72,45 +72,45 @@ $lang['us_failed_logins_note']		= '<p>Congratulations!</p><p>All of your users h
 $lang['us_banned_admin_note']		= 'This user has been banned from the site.';
 $lang['us_banned_msg']				= 'This account does not have permission to enter the site.';
 
-$lang['us_first_name']				= 'First Name';
-$lang['us_last_name']				= 'Last Name';
-$lang['us_address']					= 'Address';
-$lang['us_street_1']				= 'Street 1';
-$lang['us_street_2']				= 'Street 2';
-$lang['us_city']					= 'City';
-$lang['us_state']					= 'State';
+$lang['us_first_name']				= 'Nom de famille';
+$lang['us_last_name']				= 'Prénom';
+$lang['us_address']					= 'Addresse';
+$lang['us_street_1']				= 'Rue 1';
+$lang['us_street_2']				= 'Rue 2';
+$lang['us_city']					= 'Ville';
+$lang['us_state']					= 'Etat/région';
 $lang['us_no_states']				= 'There are no states/provences/counties/regions for this country. Create them in the address config file';
-$lang['us_country']					= 'Country';
-$lang['us_zipcode']					= 'Zipcode';
+$lang['us_country']					= 'Pays';
+$lang['us_zipcode']					= 'Code postal';
 
-$lang['us_user_management']			= 'User Management';
+$lang['us_user_management']			= 'Gestion des utlisateurs';
 $lang['us_email_in_use']			= 'The %s address is already in use. Please choose another.';
 
-$lang['us_edit_profile']			= 'Edit Profile';
+$lang['us_edit_profile']			= '&Eacute;dition du profil';
 $lang['us_edit_note']				= 'Enter your details below and click Save.';
-$lang['us_create_account']			= 'Creating a user account';
+$lang['us_create_account']			= 'Création d\'un compte utilisateur';
 
-$lang['us_reset_password']			= 'Reset Password';
-$lang['us_reset_note']				= 'Enter your email and we will send a temporary password to you.';
-$lang['us_confirm_password_send']		= 'Send Password';
+$lang['us_reset_password']			= 'Réinitialisation du mot de passe';
+$lang['us_reset_note']				= 'Entrez votre adresse de courriel et nous vous ferons parvenir un mot de passe temporaire.';
+$lang['us_confirm_password_send']		= 'Demander un nouveau mot de passe';
 
-$lang['us_login_account']			= 'Account login User';
-$lang['us_no_account']				= 'Don&rsquo;t have an account?';
-$lang['us_sign_up']					= 'Sign up today';
-$lang['us_forgot_your_password']	= 'Forgot Your Password?';
+$lang['us_login_account']			= 'Connexion au compte utilisateur';
+$lang['us_no_account']				= 'Besoin d\'un compte ? ';
+$lang['us_sign_up']					= 'Inscrivez-vous maintenant !';
+$lang['us_forgot_your_password']	= 'J\'ai oublié mon mot de passe';
 
-$lang['us_password_mins']			= 'Minimum %s characters.';
+$lang['us_password_mins']			= 'Minimum %s caractères.';
 $lang['us_register']				= 'Register';
-$lang['us_already_registered']		= 'Already registered?';
+$lang['us_already_registered']		= 'Déjà inscrit ?';
 
-$lang['us_action_save']				= 'Save User';
+$lang['us_action_save']				= 'Sauvegarder l\'utilisateur';
 $lang['us_unauthorized']			= 'Unauthorized. Sorry you do not have the appropriate permission to manage the "%s" role.';
 $lang['us_empty_id']				= 'No userid provided. You must provide a userid to perform this action.';
 $lang['us_self_delete']				= 'Unauthorized. Sorry, you can not delete yourself.';
 
-$lang['us_filter_first_letter']		= 'Username starts with: ';
-$lang['us_account_details']			= 'Account Details';
-$lang['us_last_login']				= 'Last Login';
+$lang['us_filter_first_letter']		= 'Le nom d\'utilisateur commence par : ';
+$lang['us_account_details']			= 'Détails du compte';
+$lang['us_last_login']				= 'Dernière connexion';
 
 
 
@@ -143,48 +143,48 @@ $lang['us_reset_password_success']  = 'Please login using your new password.';
 $lang['us_reset_password_error']    = 'There was an error resetting your password: ';
 
 
-$lang['us_profile_updated_success'] = 'Profile successfully updated.';
+$lang['us_profile_updated_success'] = 'Le profil a été mis à jour avec succès.';
 $lang['us_profile_updated_error']   = 'There was a problem updating your profile ';
 
 $lang['us_register_disabled']       = 'New account registrations are not allowed.';
 
 
 $lang['us_user_created_success']    = 'User successfully created.';
-$lang['us_user_update_success']     = 'User successfully updated.';
+$lang['us_user_update_success']     = 'L\'utilisateur a été mis à jour avec succès.';
 
 $lang['us_user_restored_success']   = 'User successfully restored.';
 $lang['us_user_restored_error']     = 'Unable to restore user: ';
 
-$lang['us_users_list']					= 'Users List ';
-$lang['us_no_user_found']				= 'No user found that match your selection.';
-$lang['us_logged_in_date_format']				= 'M j, y g:i A';
+$lang['us_users_list']					= 'Liste des utilisateurs';
+$lang['us_no_user_found']				= 'Aucun utilisateur n\'a été trouvé correspondant à votre sélection.';
+$lang['us_logged_in_date_format']				= 'j F Y à H:i';
 
 /* Sub nav */
-$lang['us_s_users']					= 'Users';
-$lang['us_s_new_user']					= 'New User';
+$lang['us_s_users']					= 'Utilisateurs';
+$lang['us_s_new_user']					= 'Nouvel utilisateur';
 
 /* Tabs */
-$lang['us_t_all_users']				= 'All Users';
-$lang['us_t_inactive_users']	= 'Inactive';
-$lang['us_t_banned_users']		= 'Banned';
-$lang['us_t_deleted_users']		= 'Deleted';
-$lang['us_t_by_role_users']		= 'By Role';
+$lang['us_t_all_users']				= 'Tous les utilisateurs';
+$lang['us_t_inactive_users']	= 'Utilisateurs inactifs';
+$lang['us_t_banned_users']		= 'Utilisateurs bannis';
+$lang['us_t_deleted_users']		= 'Utilisateurs supprimés';
+$lang['us_t_by_role_users']		= 'Utilisateurs par rôle';
 
 /* Activations */
 $lang['us_inactive_users']			= 'Inactive users';
-$lang['us_activate']				= 'Activation';
-$lang['us_user_activate_note']		= 'Enter your activation code to confirm your e-mail address and activate your membership.';
+$lang['us_activate']				= 'Activation de compte';
+$lang['us_user_activate_note']		= 'Entrez votre code d\'activation pour confirmer votre adresse de courriel et activer votre compte.';
 $lang['us_activate_note']			= 'Activate the user and allow them access to the site';
 $lang['us_deactivate_note']			= 'Deactivate the user to prevent access to the site';
 $lang['us_activate_enter']			= 'Please enter your activation code to continue.';
-$lang['us_activate_code']			= 'Activation Code';
+$lang['us_activate_code']			= 'Code d\'activation';
 $lang['us_activate_request']		= 'Request a new one';
-$lang['us_activate_resend']			= 'Resend Activation Code';
-$lang['us_activate_resend_note']	= 'Enter your email and we will resend your activation code to you.';
-$lang['us_confirm_activate_code']	= 'Confirm Activation Code';
-$lang['us_activate_code_send']		= 'Send Activation Code';
-$lang['bf_action_activate']			= 'Activate';
-$lang['bf_action_deactivate']		= 'Deactivate';
+$lang['us_activate_resend']			= 'Renvoi du code d`activation';
+$lang['us_activate_resend_note']	= 'Entrez votre adresse de couriiel et nous vous renverrons votre code d\'activation .';
+$lang['us_confirm_activate_code']	= 'Confirmer le code d\'activation';
+$lang['us_activate_code_send']		= 'Demander le code d\'activation';
+$lang['bf_action_activate']			= 'Activer';
+$lang['bf_action_deactivate']		= 'Déactiver';
 $lang['us_purge_del_accounts']		= 'Purge Deleted Accounts';
 $lang['us_no_inactive']				= 'There are not any users requiring activation in the database.';
 $lang['us_activate_accounts']		= 'Activate All Accounts';
@@ -193,8 +193,8 @@ $lang['us_account_activated']		= 'User account activation.';
 $lang['us_account_deactivated']		= 'User account deactivation.';
 $lang['us_account_activated_admin']	= 'Administrative account activation.';
 $lang['us_account_deactivated_admin']	= 'Administrative account deactivation.';
-$lang['us_active']					= 'Active.';
-$lang['us_inactive']				= 'Inactive.';
+$lang['us_active']					= 'Actif';
+$lang['us_inactive']				= 'Inactif';
 //email subjects
 $lang['us_email_subj_activate']		= 'Activate Your membership';
 $lang['us_email_subj_pending']		= 'Registration Complete. Activation Pending.';
@@ -211,15 +211,15 @@ $lang['us_active_status_changed'] 	= 'The user status was successfully changed.'
 $lang['us_active_email_sent'] 		= 'Activation email was sent.';
 // Activation Errors
 $lang['us_err_no_id'] 				= 'No User ID was received.';
-$lang['us_err_status_error'] 		= 'The users status was not changed: ';
+$lang['us_err_status_error'] 		= 'Le statut de l\'utilisateur n\'a pas été modifié. ';
 $lang['us_err_no_email'] 			= 'Unable to send an email: ';
 $lang['us_err_activate_fail'] 		= 'Your membership could not be activated at this time due to the following reason: ';
-$lang['us_err_activate_code'] 		= 'Please check your code and try again or contact the site administrator for help.';
+$lang['us_err_activate_code'] 		= 'Veuillez vérifier votre code et essayez à nouveau ou contactez l\'administrateur du site pour obtenir de l\'aide.';
 $lang['us_err_no_activate_code'] 	= 'A required activation validation code was missing.';
-$lang['us_err_no_matching_code'] 	= 'No matching activation code was found in the system.';
+$lang['us_err_no_matching_code'] 	= 'Aucun code d\'activation correspondant n\'a été trouvé dans le système.';
 $lang['us_err_no_matching_id'] 		= 'No matching user id was found in the system.';
-$lang['us_err_user_is_active'] 		= 'The user is already active.';
-$lang['us_err_user_is_inactive'] 	= 'The user is already inactive.';
+$lang['us_err_user_is_active'] 		= 'L\'utilisateur est déjà actif.';
+$lang['us_err_user_is_inactive'] 	= 'L\'utilisateur est déjà inactif.';
 
 /* Password strength/match */
 $lang['us_pass_strength']			= 'Strength';

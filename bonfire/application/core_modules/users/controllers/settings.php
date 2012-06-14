@@ -47,7 +47,7 @@ class Settings extends Admin_Controller
 
 		$this->lang->load('users');
 
-		Template::set_block('sub_nav', 'settings/sub_nav');
+		Template::set_block('sub_nav', 'settings/_sub_nav');
 
 	}//end __construct()
 
@@ -88,7 +88,14 @@ class Settings extends Admin_Controller
 		$offset = $this->uri->segment(5);
 
 		// Do we have any actions?
-		$action = $this->input->post('submit').$this->input->post('delete').$this->input->post('purge').$this->input->post('activate').$this->input->post('deactivate');
+		if (is_array($this->input->post()))
+		{
+			if (array_key_exists('activate', $this->input->post())) $action = 'activate';
+			if (array_key_exists('deactivate', $this->input->post())) $action = 'deactivate';
+			if (array_key_exists('ban', $this->input->post())) $action = 'ban';
+			if (array_key_exists('delete', $this->input->post())) $action = 'delete';
+			if (array_key_exists('purge', $this->input->post())) $action = 'purge';
+		}
 
 		if (!empty($action))
 		{
@@ -170,7 +177,6 @@ class Settings extends Admin_Controller
 
 		$this->user_model->where($where);
 		$total_users = $this->user_model->count_all();
-
 
 		$this->pager['base_url'] = site_url(SITE_AREA .'/settings/users/index');
 		$this->pager['total_rows'] = $total_users;

@@ -3,7 +3,7 @@
 ?>
 <section id="login">
 	<div class="page-header">
-		<h1><?php echo lang('us_login'); ?></h1>
+		<h1><?php echo lang('us_login_account'); ?></h1>
 	</div>
 
 
@@ -37,14 +37,14 @@
 <?php echo form_open('login', 'class="form-horizontal"'); ?>
 
 	<div class="control-group <?php echo iif( form_error('login') , 'error') ;?>">
-		<label class="control-label" for="login_value"><?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_login_type_both') : ucwords($this->settings_lib->item('auth.login_type')) ?></label>
+		<?php echo form_simple_label('login_value', $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_login_type_both') : ucwords($this->settings_lib->item('auth.login_type')), TRUE); ?>
 		<div class="controls">
 			<input class="span6" type="text" name="login" id="login_value" value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords($this->settings_lib->item('auth.login_type')) ?>" />
 		</div>
 	</div>
 
 	<div class="control-group <?php echo iif( form_error('password') , 'error') ;?>">
-		<label class="control-label" for="password"><?php echo lang('bf_password'); ?></label>
+		<?php echo form_simple_label('password', lang('bf_password'), TRUE); ?>
 		<div class="controls">
 			<input class="span6" type="password" name="password" id="password" value="" tabindex="2" placeholder="<?php echo lang('bf_password'); ?>" />
 		</div>
@@ -56,7 +56,7 @@
 			<div class="controls">
 				<label class="checkbox">
 					<input type="checkbox" name="remember_me" id="remember_me" value="1" tabindex="3" />
-					<span class="inline-help"><?php echo lang('us_remember_note'); ?></span>
+					<span class="inline-help"><?php echo lang('bf_remember_me'); ?></span>
 				</label>
 			</div>
 		</div>
@@ -65,7 +65,7 @@
 	<div class="control-group">
 		<label class="control-label" for="submit">&nbsp;</label>
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="Let Me In" tabindex="5" />
+			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="<?php echo lang('bf_action_login'); ?>" tabindex="5" />
 		</div>
 	</div>
 <?php echo form_close(); ?>
@@ -96,7 +96,7 @@
 
 	<p style="text-align: center" class="well">
 		<?php if ( $site_open ) : ?>
-			<?php echo lang('us_no_account'); ?> <?php echo anchor('/register', lang('us_sign_up')); ?> &nbsp;&nbsp; &#8226; &nbsp;&nbsp;
+			<?php echo lang('us_no_account'); ?> <?php echo anchor('/register', lang('us_sign_up')); ?>&nbsp;&#8226;&nbsp;
 		<?php endif; ?>
 
 		<?php echo anchor('/forgot_password', lang('us_forgot_your_password')); ?>

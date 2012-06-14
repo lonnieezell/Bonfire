@@ -23,8 +23,16 @@
 	<fieldset>
 		<legend><?php echo lang('us_account_details') ?></legend>
 
+		<div class="control-group <?php echo form_error('display_name') ? 'error' : '' ?>">
+			<?php echo form_simple_label('display_name', lang('bf_display_name')); ?>
+			<div class="controls">
+				<input type="text" name="display_name" id="display_name" value="<?php echo isset($user) ? $user->display_name : set_value('display_name') ?>">
+				<?php if (form_error('display_name')) echo '<span class="help-inline">'. form_error('display_name') .'</span>'; ?>
+			</div>
+		</div>
+
 		<div class="control-group <?php echo form_error('email') ? 'error' : '' ?>">
-			<label for="email" class="control-label"><?php echo lang('bf_email') ?></label>
+			<?php echo form_simple_label('email', lang('bf_email')); ?>
 			<div class="controls">
 				<input type="email" name="email" id="email" value="<?php echo isset($user) ? $user->email : set_value('email') ?>">
 				<?php if (form_error('email')) echo '<span class="help-inline">'. form_error('email') .'</span>'; ?>
@@ -32,23 +40,15 @@
 		</div>
 
 		<div class="control-group <?php echo form_error('username') ? 'error' : '' ?>">
-			<label for="username" class="control-label"><?php echo lang('bf_username') ?></label>
+			<?php echo form_simple_label('email', lang('bf_username')); ?>
 			<div class="controls">
 				<input type="text" name="username" id="username" value="<?php echo isset($user) ? $user->username : set_value('username') ?>">
 				<?php if (form_error('username')) echo '<span class="help-inline">'. form_error('username') .'</span>'; ?>
 			</div>
 		</div>
 
-		<div class="control-group <?php echo form_error('display_name') ? 'error' : '' ?>">
-			<label for="display_name" class="control-label"><?php echo lang('bf_display_name') ?></label>
-			<div class="controls">
-				<input type="text" name="display_name" id="display_name" value="<?php echo isset($user) ? $user->display_name : set_value('display_name') ?>">
-				<?php if (form_error('display_name')) echo '<span class="help-inline">'. form_error('display_name') .'</span>'; ?>
-			</div>
-		</div>
-
 		<div class="control-group <?php echo form_error('password') ? 'error' : '' ?>">
-			<label for="password" class="control-label"><?php echo lang('bf_password') ?></label>
+			<?php echo form_simple_label('password', lang('bf_password')); ?>
 			<div class="controls">
 				<input type="password" id="password" name="password" value="">
 				<?php if (form_error('password')) echo '<span class="help-inline">'. form_error('password') .'</span>'; ?>
@@ -56,7 +56,7 @@
 		</div>
 
 		<div class="control-group <?php echo form_error('pass_confirm') ? 'error' : '' ?>">
-			<label class="control-label" for="pass_confirm"><?php echo lang('bf_password_confirm') ?></label>
+			<?php echo form_simple_label('pass_confirm', lang('bf_password_confirm')); ?>
 			<div class="controls">
 				<input type="password" name="pass_confirm" id="pass_confirm" value="">
 				<?php if (form_error('pass_confirm')) echo '<span class="help-inline">'. form_error('pass_confirm') .'</span>'; ?>
@@ -64,7 +64,7 @@
 		</div>
 
 		<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
-			<label class="control-label" for="language"><?php echo lang('bf_language') ?></label>
+			<?php echo form_simple_label('language', lang('bf_language')); ?>
 			<div class="controls">
 				<select name="language" id="language" class="chzn-select">
 				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
@@ -81,7 +81,7 @@
 		</div>
 
 		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
-			<label class="control-label" for="timezones"><?php echo lang('bf_timezone') ?></label>
+			<?php echo form_simple_label('timezones', lang('bf_timezone')); ?>
 			<div class="controls">
 				<?php echo timezone_menu(set_value('timezones', isset($user) ? $user->timezone : $current_user->timezone)); ?>
 				<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
@@ -94,7 +94,7 @@
 			<legend><?php echo lang('us_role'); ?></legend>
 
 			<div class="control-group">
-				<label for="role_id" class="control-label"><?php echo lang('us_role'); ?></label>
+				<?php echo form_simple_label('role_id', lang('us_role')); ?>
 				<div class="controls">
 					<select name="role_id" id="role_id" class="chzn-select">
 					<?php if (isset($roles) && is_array($roles) && count($roles)) : ?>
@@ -141,7 +141,7 @@
 			elseif ($field['form_detail']['type'] == 'state_select' && is_callable('country_select')) : ?>
 
 				<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
-					<label class="control-label" for="<?= $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
+					<?php echo form_simple_label($field['name'], lang('user_meta_state')); ?>
 					<div class="controls">
 
 						<?php echo state_select(isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
@@ -152,7 +152,7 @@
 			<?php elseif ($field['form_detail']['type'] == 'country_select' && is_callable('country_select')) : ?>
 
 				<div class="control-group <?php echo iif( form_error('country') , 'error'); ?>">
-					<label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
+					<?php echo form_simple_label('country', lang('user_meta_country')); ?>
 					<div class="controls">
 
 						<?php echo country_select(isset($user->$field['name']) ? $user->$field['name'] : set_select($field['name']), 'US', 'country', 'span6 chzn-select'); ?>
@@ -222,7 +222,7 @@
 
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?>
+			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save_changes') ?> " /> <?php echo lang('bf_or') ?>
 			<?php echo anchor(SITE_AREA .'/settings/users', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-warning"'); ?>
 		</div>
 

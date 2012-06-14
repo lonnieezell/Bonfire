@@ -1,6 +1,6 @@
 <section id="register">
 	<div class="page-header">
-		<h1><?php echo lang('us_login'); ?></h1>
+		<h1><?php echo lang('us_create_account'); ?></h1>
 	</div>
 
 <?php if (auth_errors() || validation_errors()) : ?>
@@ -30,24 +30,24 @@
 <?php echo form_open('register', 'class="form-horizontal"'); ?>
 
 
-	<div class="control-group <?php echo iif( form_error('email') , 'error'); ?>">
-		<label class="control-label required" for="email"><?php echo lang('bf_email'); ?></label>
+	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
+		<?php echo form_simple_label('display_name', lang('bf_display_name')); ?>
 		<div class="controls">
-		 <input class="span6" type="text" name="email" id="email"  value="<?php echo set_value('email'); ?>"  placeholder="email" />
+			<input class="span6" type="text" name="display_name" value="<?php echo set_value('display_name'); ?>" />
 		</div>
 	</div>
 
-	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
-		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>
+	<div class="control-group <?php echo iif( form_error('email') , 'error'); ?>">
+		<?php echo form_simple_label('email', lang('bf_email'), TRUE); ?>
 		<div class="controls">
-			<input class="span6" type="text" name="display_name" value="<?php echo set_value('display_name'); ?>" />
+		 <input class="span6" type="text" name="email" id="email"  value="<?php echo set_value('email'); ?>"  placeholder="email" />
 		</div>
 	</div>
 
 	<?php if ( $this->settings_lib->item('auth.login_type') !== 'email' OR $this->settings_lib->item('auth.use_usernames') == 1): ?>
 
 	<div class="control-group <?php echo iif( form_error('username') , 'error'); ?>">
-		<label class="control-label required" for="username"><?php echo lang('bf_username'); ?></label>
+		<?php echo form_simple_label('username', lang('bf_username'), TRUE ); ?>
 		<div class="controls">
 			<input class="span6" type="text" name="username" id="username" value="<?php echo set_value('username') ?>" placeholder="username" />
 		</div>
@@ -56,102 +56,103 @@
 	<?php endif; ?>
 	<br/>
 
-		<div class="control-group <?php echo iif( form_error('password') , 'error'); ?>">
-			<label class="control-label required" for="password"><?php echo lang('bf_password'); ?></label>
-			<div class="controls">
-				<input class="span6" type="password" name="password" id="password" value="" placeholder="password" />
-				<p class="help-block"><?php echo lang('us_password_mins'); ?></p>
-			</div>
+	<div class="control-group <?php echo iif( form_error('password') , 'error'); ?>">
+		<?php echo form_simple_label('password', lang('bf_password'), TRUE); ?>
+		<div class="controls">
+			<input class="span6" type="password" name="password" id="password" value="" placeholder="password" />
+			<p class="help-block"><?php echo $password_mins; ?></p>
 		</div>
+	</div>
 
-		<div class="control-group <?php echo iif( form_error('pass_confirm') , 'error'); ?>">
-			<label class="control-label required" for="pass_confirm"><?php echo lang('bf_password_confirm'); ?></label>
-			<div class="controls">
-				<input class="span6" type="password" name="pass_confirm" id="pass_confirm" value="" placeholder="<?php echo lang('bf_password_confirm'); ?>" />
-			</div>
+	<div class="control-group <?php echo iif( form_error('pass_confirm') , 'error'); ?>">
+		<?php echo form_simple_label('pass_confirm', lang('bf_password_confirm'), TRUE); ?>
+		<div class="controls">
+			<input class="span6" type="password" name="pass_confirm" id="pass_confirm" value="" placeholder="<?php echo lang('bf_password_confirm'); ?>" />
+			<p class="help-block"><?php echo $password_mins; ?></p>
 		</div>
+	</div>
 
-		<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
-			<label class="control-label required" for="language"><?php echo lang('bf_language') ?></label>
-			<div class="controls">
-				<select name="language" id="language" class="chzn-select">
-				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
-					<?php foreach ($languages as $language) : ?>
-						<option value="<?php echo $language ?>" <?php echo set_select('language', $language, config_item('language') == $language ? TRUE : FALSE) ?>>
-							<?php echo ucfirst($language) ?>
-						</option>
+	<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
+		<?php echo form_simple_label('language', lang('bf_language'), TRUE); ?>
+		<div class="controls">
+			<select name="language" id="language" class="chzn-select">
+			<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
+				<?php foreach ($languages as $language) : ?>
+					<option value="<?php echo $language ?>" <?php echo set_select('language', $language, config_item('language') == $language ? TRUE : FALSE) ?>>
+						<?php echo ucfirst($language) ?>
+					</option>
 
-					<?php endforeach; ?>
-				<?php endif; ?>
-				</select>
-				<?php if (form_error('language')) echo '<span class="help-inline">'. form_error('language') .'</span>'; ?>
-			</div>
+				<?php endforeach; ?>
+			<?php endif; ?>
+			</select>
+			<?php if (form_error('language')) echo '<span class="help-inline">'. form_error('language') .'</span>'; ?>
 		</div>
+	</div>
 
-		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
-			<label class="control-label required" for="timezones"><?php echo lang('bf_timezone') ?></label>
-			<div class="controls">
-				<?php echo timezone_menu(set_value('timezones')); ?>
-				<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
-			</div>
+	<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
+		<?php echo form_simple_label('timezones', lang('bf_timezone'), TRUE); ?>
+		<div class="controls">
+			<?php echo timezone_menu(set_value('timezones')); ?>
+			<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
 		</div>
+	</div>
 
-		<?php
-			// Allow modules to render custom fields
-			Events::trigger('render_user_form');
-		?>
+	<?php
+		// Allow modules to render custom fields
+		Events::trigger('render_user_form');
+	?>
 
-		<!-- Start of User Meta -->
-		<?php
-			foreach ($meta_fields as $field):
+	<!-- Start of User Meta -->
+	<?php
+		foreach ($meta_fields as $field):
 
-			if (!(isset($field['frontend']) && $field['frontend'] === FALSE)):
+		if (!(isset($field['frontend']) && $field['frontend'] === FALSE)):
 
-				if ($field['form_detail']['type'] == 'dropdown'):
+			if ($field['form_detail']['type'] == 'dropdown'):
 
-					echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], set_value($field['name']), $field['label']);
+				echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], set_value($field['name']), $field['label']);
 
 
-				elseif ($field['form_detail']['type'] == 'state_select') : ?>
+			elseif ($field['form_detail']['type'] == 'state_select') : ?>
 
-				<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
-					<label class="control-label" for="<?= $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
-					<div class="controls">
+			<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
+				<?php echo form_simple_label($field['name'], lang('user_meta_state')); ?>
+				<div class="controls">
 
-					<?php echo state_select(set_select($field['name']), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
+				<?php echo state_select(set_select($field['name']), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
 
-					</div>
 				</div>
+			</div>
 
-				<?php elseif ($field['form_detail']['type'] == 'country_select') : ?>
+			<?php elseif ($field['form_detail']['type'] == 'country_select') : ?>
 
-				<div class="control-group <?php echo iif( form_error('country') , 'error'); ?>">
-					<label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
-					<div class="controls">
+			<div class="control-group <?php echo iif( form_error('country') , 'error'); ?>">
+				<?php echo form_simple_label('country', lang('user_meta_country')); ?>
+				<div class="controls">
 
-					<?php echo country_select(set_select($field['name']), 'US', 'country', 'span6 chzn-select'); ?>
+				<?php echo country_select(set_select($field['name']), 'US', 'country', 'span6 chzn-select'); ?>
 
-					</div>
 				</div>
+			</div>
 
-				<?php else:
+			<?php else:
 
 
-					$form_method = 'form_' . $field['form_detail']['type'];
-					echo $form_method($field['form_detail']['settings'], set_value($field['name']), $field['label']);
+				$form_method = 'form_' . $field['form_detail']['type'];
+				echo $form_method($field['form_detail']['settings'], set_value($field['name']), $field['label']);
 
-				endif;
 			endif;
+		endif;
 
-			endforeach;
-		?>
+		endforeach;
+	?>
 
 	<!-- End of User Meta -->
 
 	<div class="control-group">
 		<label class="control-label" for="submit">&nbsp;</label>
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="<?php echo lang('us_register'); ?>"  />
+			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="<?php echo lang('bf_action_register'); ?>"  />
 		</div>
 	</div>
 
