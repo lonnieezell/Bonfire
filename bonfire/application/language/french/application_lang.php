@@ -25,47 +25,47 @@
 // ! GENERAL SETTINGS
 //--------------------------------------------------------------------
 
-$lang['bf_site_name']			= 'Site Name';
-$lang['bf_site_email']			= 'Site Email';
+$lang['bf_site_name']			= 'Nom du site';
+$lang['bf_site_email']			= 'Adresse de courriel';
 $lang['bf_site_email_help']		= 'The default email that system-generated emails are sent from.';
-$lang['bf_site_status']			= 'Site Status';
-$lang['bf_online']				= 'Online';
-$lang['bf_offline']				= 'Offline';
-$lang['bf_top_number']			= 'Items <em>per</em> page:';
-$lang['bf_top_number_help']		= 'When viewing reports, how many items should be listed at a time?';
-$lang['bf_home']				= 'Home';
-$lang['bf_site_information']	= 'Site Information';
-$lang['bf_timezone']			= 'Timezone';
-$lang['bf_language']			= 'Language';
-$lang['bf_language_help']		= 'Choose the languages available to the user.';
+$lang['bf_site_status']			= 'Etat du site';
+$lang['bf_online']				= 'En ligne';
+$lang['bf_offline']				= 'Hors-ligne';
+$lang['bf_top_number']			= 'Eléments <em>par</em> page';
+$lang['bf_top_number_help']		= 'Lors de la consultation de rapports, combien d\'éléments doivent être affichés à la fois ?';
+$lang['bf_home']				= 'Accueil';
+$lang['bf_timezone']			= 'Fuseaau horaire';
+$lang['bf_language']			= 'Langue';
+$lang['bf_languages']			= 'Langues';
+$lang['bf_language_help']		= 'Choisissez les langues disponibles pour les utilisateurs.';
 
 //--------------------------------------------------------------------
 // ! AUTH SETTINGS
 //--------------------------------------------------------------------
 
-$lang['bf_security']			= 'Security';
-$lang['bf_login_type']			= 'Login Type';
-$lang['bf_login_type_email']	= 'Email Only';
-$lang['bf_login_type_username']	= 'Username Only';
-$lang['bf_allow_register']		= 'Allow User Registrations?';
-$lang['bf_login_type_both']		= 'Email or Username';
-$lang['bf_use_usernames']		= 'User display across bonfire:';
+$lang['bf_security']			= 'Sécurité';
+$lang['bf_login_type']			= 'Type de connexion';
+$lang['bf_login_type_email']	= 'Uniquement avec l\'adresse de courriel';
+$lang['bf_login_type_username']	= 'Uniquement avec le nom d\'utilisateur';
+$lang['bf_allow_register']		= 'Autoriser l\'inscription des utilisateurs ?';
+$lang['bf_login_type_both']		= 'Avec l\'adresse de courriel ou le nom d\'utilisateur';
+$lang['bf_use_usernames']		= 'Affichage de l\'utilisateur<br />à travers le site';
 $lang['bf_use_own_name']		= 'Use Own Name';
 $lang['bf_allow_remember']		= 'Allow \'Remember Me\'?';
-$lang['bf_remember_time']		= 'Remember Users For';
-$lang['bf_week']				= 'Week';
-$lang['bf_weeks']				= 'Weeks';
-$lang['bf_days']				= 'Days';
-$lang['bf_username']			= 'Username';
-$lang['bf_password']			= 'Password';
-$lang['bf_password_confirm']	= 'Password (again)';
-$lang['bf_display_name']		= 'Display Name';
+$lang['bf_remember_time']		= 'Se souvenir des utilisateurs';
+$lang['bf_week']				= 'semaine';
+$lang['bf_weeks']				= 'semaines';
+$lang['bf_days']				= 'jours';
+$lang['bf_username']			= 'Nom d\'utilisateur';
+$lang['bf_password']			= 'Mot de passe';
+$lang['bf_password_confirm']	= 'Mot de passe <em>(pour confirmation)</em>';
+$lang['bf_display_name']		= 'Pseudonyme';
 
 //--------------------------------------------------------------------
 // ! CRUD SETTINGS
 //--------------------------------------------------------------------
 
-$lang['bf_home_page']			= 'Home Page';
+$lang['bf_home_page']			= 'Page d\'accueil';
 $lang['bf_pages']				= 'Pages';
 $lang['bf_enable_rte']			= 'Enable RTE for pages?';
 $lang['bf_rte_type']			= 'RTE Type';
@@ -73,22 +73,35 @@ $lang['bf_searchable_default']	= 'Searchable by default?';
 $lang['bf_cacheable_default']	= 'Cacheable by default?';
 $lang['bf_track_hits']			= 'Track Page Hits?';
 
-$lang['bf_action_save']			= 'Save';
-$lang['bf_action_delete']		= 'Delete';
-$lang['bf_action_cancel']		= 'Cancel';
-$lang['bf_action_download']		= 'Download';
+$lang['bf_action_save']			= 'Enregistrer';
+$lang['bf_action_save_changes']			= 'Enregistrer les modifications';
+$lang['bf_action_delete']		= 'Effacer';
+$lang['bf_action_cancel']		= 'Annuler';
+$lang['bf_action_download']		= 'Télécharger';
 $lang['bf_action_preview']		= 'Preview';
-$lang['bf_action_search']		= 'Search';
-$lang['bf_action_purge']		= 'Purge';
-$lang['bf_action_restore']		= 'Restore';
-$lang['bf_action_show']			= 'Show';
-$lang['bf_action_login']		= 'Sign In';
-$lang['bf_action_logout']		= 'Sign Out';
+$lang['bf_action_search']		= 'Rechercher';
+$lang['bf_action_purge']		= 'Purger';
+$lang['bf_action_restore']		= 'Restaurer';
+$lang['bf_action_show']			= 'Afficher';
+$lang['bf_action_login']		= 'Connexion';
+$lang['bf_action_logout']		= 'Déconnexion';
 $lang['bf_actions']				= 'Actions';
 $lang['bf_clear']				= 'Clear';
-$lang['bf_action_list']			= 'List';
-$lang['bf_action_create']		= 'Create';
-$lang['bf_action_ban']			= 'Ban';
+$lang['bf_action_list']			= 'Lister';
+$lang['bf_action_create']		= 'Créer';
+$lang['bf_action_ban']			= 'Bannir';
+
+$lang['bf_action_offline'] = 'Hors-ligne';
+$lang['bf_action_manage']	= 'Gérer';
+$lang['bf_action_allow']= 'Autoriser';
+$lang['bf_action_edit'] = 'Editer';
+$lang['bf_action_add'] = 'Ajouter';
+$lang['bf_action_view'] = 'Voir';
+$lang['bf_action_create'] = 'Créer';
+
+
+$lang['bf_download_file']		= 'Télécharger ce fichier';
+$lang['bf_restore_file']		= 'Restaurer ce fichier';
 
 //--------------------------------------------------------------------
 // ! SETTINGS LIB
@@ -103,17 +116,17 @@ $lang['bf_update_info_edge']	= 'Leave unchecked to only check for new tagged upd
 $lang['bf_ext_profile_show']	= 'Does User accounts have extended profile?';
 $lang['bf_ext_profile_info']	= 'Check "Extended Profiles" to have extra profile meta-data available option(wip), omiting some default bonfire fields (eg: address).';
 
-$lang['bf_yes']					= 'Yes';
-$lang['bf_no']					= 'No';
+$lang['bf_yes']					= 'Oui';
+$lang['bf_no']					= 'Non';
 $lang['bf_none']				= 'None';
 $lang['bf_id']					= 'ID';
 
-$lang['bf_or']					= 'or';
-$lang['bf_size']				= 'Size';
-$lang['bf_files']				= 'Files';
-$lang['bf_file']				= 'File';
+$lang['bf_or']					= 'ou';
+$lang['bf_size']				= 'Taille';
+$lang['bf_files']				= 'Fichiers';
+$lang['bf_file']				= 'Fichier';
 
-$lang['bf_with_selected']		= 'With selected';
+$lang['bf_with_selected']		= 'Avec la sélection ';
 
 $lang['bf_env_dev']				= 'Development';
 $lang['bf_env_test']			= 'Testing';
@@ -136,11 +149,10 @@ $lang['bf_password_show_labels']	    = 'Display password validation labels';
 //--------------------------------------------------------------------
 
 $lang['bf_user']				= 'User';
-$lang['bf_users']				= 'Users';
-$lang['bf_username']			= 'Username';
-$lang['bf_description']			= 'Description';
-$lang['bf_email']				= 'Email';
-$lang['bf_user_settings']		= 'My Profile';
+$lang['bf_users']				= 'Utilisateurs';
+$lang['bf_email']				= 'Adresse de courriel';
+$lang['bf_user_profile']		= 'Mon profil';
+$lang['bf_control_pannel']		= 'Panneau de contrôle';
 
 //--------------------------------------------------------------------
 // !
@@ -169,10 +181,10 @@ $lang['bf_model_bad_select']	= 'Invalid selection.';
 // Contexts
 //--------------------------------------------------------------------
 $lang['bf_no_contexts']			= 'The contexts array is not properly setup. Check your application config file.';
-$lang['bf_context_content']		= 'Content';
-$lang['bf_context_reports']		= 'Reports';
-$lang['bf_context_settings']	= 'Settings';
-$lang['bf_context_developer']	= 'Developer';
+$lang['bf_context_content']		= 'Contenu';
+$lang['bf_context_reports']		= 'Rapports';
+$lang['bf_context_settings']	= 'Paramètres';
+$lang['bf_context_developer']	= 'Développeur';
 
 //--------------------------------------------------------------------
 // Activities
@@ -189,14 +201,21 @@ $lang['bf_keyboard_shortcuts_edit']	= 'Update the keyboard shortcuts';
 //--------------------------------------------------------------------
 $lang['bf_question_mark']	      = '?';
 $lang['bf_language_direction']	= 'ltr';
-$lang['log_intro']              = 'These are your log messages';
+$lang['bf_form_label_end']		= ' :';
+$lang['bf_for']	= 'pour';
+$lang['bf_before']	= 'avant';
+$lang['bf_description']			= 'Description';
+$lang['bf_name']					= 'Nom';
+$lang['bf_status']				= '&Eacute;tat';
+$lang['bf_version']			= 'Version';
+$lang['bf_author']			= 'Auteur';
 
 //--------------------------------------------------------------------
 // Login
 //--------------------------------------------------------------------
-$lang['bf_action_register']		= 'Sign Up';
+$lang['bf_action_register']		= 'Créer un compte';
 $lang['bf_forgot_password']		= 'Forgot your password?';
-$lang['bf_remember_me']			= 'Remember me';
+$lang['bf_remember_me']			= 'Se souvenir de moi';
 
 //--------------------------------------------------------------------
 // Password Help Fields to be used as a warning on register
@@ -205,7 +224,7 @@ $lang['bf_password_number_required_help']  = 'Password must contain at least 1 p
 $lang['bf_password_caps_required_help']    = 'Password must contain at least 1 capital letter.';
 $lang['bf_password_symbols_required_help'] = 'Password must contain at least 1 symbol.';
 
-$lang['bf_password_min_length_help']       = 'Password must be at least %s characters long.';
+$lang['bf_password_min_length_help']       = 'Le mot de passe doit comporter au moins %s caractères de long.';
 
 //--------------------------------------------------------------------
 // User Meta examples
@@ -213,22 +232,31 @@ $lang['bf_password_min_length_help']       = 'Password must be at least %s chara
 
 $lang['user_meta_street_name']	= 'Street Name';
 $lang['user_meta_type']			= 'Type';
-$lang['user_meta_country']		= 'Country';
-$lang['user_meta_state']		= 'State';
+$lang['user_meta_country']		= 'Pays';
+$lang['user_meta_state']		= 'Etat/région';
 
+//--------------------------------------------------------------------
+// Pagination
+//--------------------------------------------------------------------
+$lang['pager_first_link']			= '&lsaquo; Première';
+$lang['pager_next_link']			= 'Suivante &gt;';
+$lang['pager_prev_link']			= '&lt; Précédente';
+$lang['pager_last_link']			= 'Dernière &rsaquo;';
+
+//--------------------------------------------------------------------
 // Activation
 //--------------------------------------------------------------------
 $lang['bf_activate_method']			= 'Activation Method';
 $lang['bf_activate_none']			= 'None';
 $lang['bf_activate_email']			= 'Email';
 $lang['bf_activate_admin']			= 'Admin';
-$lang['bf_activate']				= 'Activate';
-$lang['bf_activate_resend']			= 'Resend Activation';
+$lang['bf_activate']				= 'activation de compte';
+$lang['bf_activate_resend']			= 'renvoi du code d\'activation';
 
 $lang['bf_reg_complete_error']		= 'An error occurred completing your registration. Please try again or contact the site administrator for help.';
 $lang['bf_reg_activate_email'] 		= 'An email containing your activation code has been sent to [EMAIL].';
 $lang['bf_reg_activate_admin'] 		= 'You will be notified when the site administrator has approved your membership.';
 $lang['bf_reg_activate_none'] 		= 'Please login to begin using the site.';
 $lang['bf_user_not_active'] 		= 'User account is not active.';
-$lang['bf_login_activate_title']	= 'Need to activate your account?';
-$lang['bf_login_activate_email'] 	= '<b>Have an activation code to enter to activate your membership?</b> Enter it on the [ACCOUNT_ACTIVATE_URL] page.<br /><br />    <b>Need your code again?</b> Request it again on the [ACTIVATE_RESEND_URL] page.';
+$lang['bf_login_activate_title']	= 'Besoin d\'activer votre compte ?';
+$lang['bf_login_activate_email'] 	= '<b>Vous avez un code d\'activation à entrer pour activer votre inscription ?</b> Entrez-le sur la page [ACCOUNT_ACTIVATE_URL].<br /><br />    <b>Besoin de votre code à nouveau ?</b> Demandez-le à nouveau sur la page [ACTIVATE_RESEND_URL].';

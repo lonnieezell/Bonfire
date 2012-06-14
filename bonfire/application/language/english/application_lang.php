@@ -37,6 +37,7 @@ $lang['bf_home']				= 'Home';
 $lang['bf_site_information']	= 'Site Information';
 $lang['bf_timezone']			= 'Timezone';
 $lang['bf_language']			= 'Language';
+$lang['bf_languages']			= 'Languages';
 $lang['bf_language_help']		= 'Choose the languages available to the user.';
 
 //--------------------------------------------------------------------
@@ -74,6 +75,7 @@ $lang['bf_cacheable_default']	= 'Cacheable by default?';
 $lang['bf_track_hits']			= 'Track Page Hits?';
 
 $lang['bf_action_save']			= 'Save';
+$lang['bf_action_save_changes']			= 'Save changes';
 $lang['bf_action_delete']		= 'Delete';
 $lang['bf_action_cancel']		= 'Cancel';
 $lang['bf_action_download']		= 'Download';
@@ -89,6 +91,18 @@ $lang['bf_clear']				= 'Clear';
 $lang['bf_action_list']			= 'List';
 $lang['bf_action_create']		= 'Create';
 $lang['bf_action_ban']			= 'Ban';
+
+$lang['bf_action_offline'] = 'Offline';
+$lang['bf_action_manage']	= 'Manage';
+$lang['bf_action_allow'] = 'Allow';
+$lang['bf_action_edit'] = 'Edit';
+$lang['bf_action_add'] = 'Add';
+$lang['bf_action_view'] = 'View';
+$lang['bf_action_create'] = 'Create';
+
+$lang['bf_download_file']		= 'Download this file';
+$lang['bf_restore_file']		= 'Restore this file';
+
 
 //--------------------------------------------------------------------
 // ! SETTINGS LIB
@@ -138,9 +152,9 @@ $lang['bf_password_show_labels']	    = 'Display password validation labels';
 $lang['bf_user']				= 'User';
 $lang['bf_users']				= 'Users';
 $lang['bf_username']			= 'Username';
-$lang['bf_description']			= 'Description';
 $lang['bf_email']				= 'Email';
-$lang['bf_user_settings']		= 'My Profile';
+$lang['bf_user_profile']		= 'My Profile';
+$lang['bf_control_pannel']		= 'Control Panel';
 
 //--------------------------------------------------------------------
 // !
@@ -149,7 +163,7 @@ $lang['bf_user_settings']		= 'My Profile';
 $lang['bf_both']				= 'both';
 $lang['bf_go_back']				= 'Go Back';
 $lang['bf_new']					= 'New';
-$lang['bf_required_note']		= 'Required fields are in <b>bold</b>.';
+$lang['bf_required_note']		= 'Les champs obligatoires sont en <b>gras</b>.';
 $lang['bf_form_label_required'] = '<span class="required">*</span>';
 
 //--------------------------------------------------------------------
@@ -189,7 +203,14 @@ $lang['bf_keyboard_shortcuts_edit']	= 'Update the keyboard shortcuts';
 //--------------------------------------------------------------------
 $lang['bf_question_mark']	      = '?';
 $lang['bf_language_direction']	= 'ltr';
-$lang['log_intro']              = 'These are your log messages';
+$lang['bf_form_label_end']		= ':';
+$lang['bf_for']	= 'for';
+$lang['bf_before']	= 'before';
+$lang['bf_description']			= 'Description';
+$lang['bf_name']					= 'Name';
+$lang['bf_status']				= 'Status';
+$lang['bf_version']			= 'Version';
+$lang['bf_author']			= 'Author';
 
 //--------------------------------------------------------------------
 // Login
@@ -216,6 +237,15 @@ $lang['user_meta_type']			= 'Type';
 $lang['user_meta_country']		= 'Country';
 $lang['user_meta_state']		= 'State';
 
+//--------------------------------------------------------------------
+// Pagination
+//--------------------------------------------------------------------
+$lang['pager_first_link']			= '&lsaquo; First';
+$lang['pager_next_link']			= '&gt;';
+$lang['pager_prev_link']			= '&lt;';
+$lang['pager_last_link']			= 'Last &rsaquo;';
+	
+//--------------------------------------------------------------------
 // Activation
 //--------------------------------------------------------------------
 $lang['bf_activate_method']			= 'Activation Method';

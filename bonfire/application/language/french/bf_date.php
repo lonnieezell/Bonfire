@@ -4,7 +4,45 @@ if (!defined('BASEPATH'))
 
 class bf_date {
 	public static function date($format, $timestamp="") {
-		return date($format, $timestamp);
+
+		$ci =& get_instance();
+		$ci->lang->load('calendar');
+
+		$patterns = array();
+		$replacements = array();
+		
+		// Short day name ?
+		if (preg_match('/D/', $format, $matches))
+		{
+			$patterns[0] = '/' . date('D', $timestamp) . '/';
+			$replacements[0] = $ci->lang->line('cal_' . strtolower(date('D', $timestamp)));
+		}
+		
+		// Long day name ?
+		if (preg_match('/l/', $format, $matches))
+		{
+			$patterns[1] = '/' . date('l', $timestamp) . '/';
+			$replacements[1] = $ci->lang->line('cal_' . strtolower(date('l', $timestamp)));
+		}
+
+		// Short month name ?
+		if (preg_match('/M/', $format, $matches))
+		{
+			$patterns[2] = '/' . date('M', $timestamp) . '/';
+			$replacements[2] = strtolower($ci->lang->line('cal_' . strtolower(date('M', $timestamp))));
+		}
+		
+		// Long month name ?
+		if (preg_match('/F/', $format, $matches))
+		{
+			$patterns[3] = '/' . date('F', $timestamp) . '/';
+			$replacements[3] = strtolower($ci->lang->line('cal_' . strtolower(date('F', $timestamp))));
+		}
+
+		ksort($patterns);
+		ksort($replacements);
+
+		return preg_replace($patterns, $replacements, date($format, $timestamp));
 	}
 
 	public static function strftime($format, $timestamp="") {
@@ -26,21 +64,21 @@ class bf_date {
 	{
 		$difference = time() - $timestamp;
 
-		$periods = array("moment", "min", "hour", "day", "week",
-		"month", "years", "decade");
+		$periods = array("moment", "minute", "heure", "jour", "semaine",
+		"mois", "années", "décade");
 
 		$lengths = array("60","60","24","7","4.35","12","10");
 
 		if ($difference > 0)
 		{
 			// this was in the past
-			$ending = "ago";
+			$beginning = "Il y a";
 		}
 		else
 		{
 			// this was in the future
 			$difference = -$difference;
-			$ending = "to go";
+			$beginning = "Il y aura";
 		}
 
 		for ($j = 0; $difference >= $lengths[$j]; $j++)
@@ -57,11 +95,11 @@ class bf_date {
 
 		if ($difference < 60 && $j == 0)
 		{
-			$text = "$periods[$j] $ending";
+			$text = "$beginning $periods[$j]";
 		}
 		else
 		{
-			$text = "$difference $periods[$j] $ending";
+			$text = "$beginning $difference $periods[$j]";
 		}
 
 		return $text;
