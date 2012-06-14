@@ -4,11 +4,15 @@
 	<table class="matrix table table-striped">
 		<thead>
 			<tr>
-				<th style="width: 150px"><b style="color: #222"><?php echo $domain_name ?></b></th>
+				<th style="width: 250px">
+					<b style="color: #222">
+						<?php echo (array_key_exists(strtolower($domain_name), $modules_descriptions)) ? $modules_descriptions[strtolower($domain_name)]['display_name'] : $domain_name; ?>
+					</b>
+				</th>
 				<?php $index = 0; ?>
 				<?php foreach ($fields['actions'] as $action) : ?>
 					<th class="text-center" cellIndex="<?php echo $index ?>">
-						<a href="#"><?php echo $action ?></a>
+						<a href="#"><?php echo lang('bf_action_'.strtolower($action)); ?></a>
 					</th>
 					<?php ++$index; ?>
 				<?php endforeach; ?>
@@ -18,7 +22,23 @@
 			<?php foreach ($fields as $field_name => $field_actions) : ?>
 				<?php if ($field_name != 'actions') : ?>
 				<tr>
-					<td class="matrix-title"><b><a href="#"><?php echo $field_name ?></a></b></td>
+					<td class="matrix-title">
+						<b>
+							<?php if (isset($field_actions['Description'])) : ?>
+								<a href="#" title="<?php echo $field_actions['Description']['title']; ?>">
+								<?php echo $field_actions['Description']['display_name']; ?>
+								</a>
+							<?php else: ?>
+								<a href="#">
+								<?php if (in_array(strtolower($field_name), $this->config->item('contexts'))) : ?>
+									<?php echo lang('bf_context_'.strtolower($field_name)); ?>
+								<?php else: ?>
+									<?php echo (lang('roles_matrix_'.strtolower($domain_name).'_'.strtolower($field_name))) ? lang('roles_matrix_'.strtolower($domain_name).'_'.strtolower($field_name)) : $field_name; ?>
+								<?php endif; ?>
+								</a>
+							<?php endif; ?>
+						</b>
+					</td>
 					<?php foreach ($fields['actions'] as $action) : ?>
 						<td class="text-center">
 							<?php if (array_key_exists($action, $field_actions)) : ?>
@@ -34,7 +54,7 @@
 								?>
 								/>
 							<?php else: ?>
-								<span class="help-inline small"><?php echo lang('role_not_used') ?></span>
+								<span class="help-inline small"><?php echo lang('roles_not_used') ?></span>
 							<?php endif; ?>
 						</td>
 					<?php endforeach; ?>

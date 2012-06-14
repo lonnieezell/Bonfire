@@ -1,16 +1,16 @@
-<p class="intro"><?php e(lang('role_intro')) ?></p>
+<p class="intro"><?php e(lang('roles_intro')) ?></p>
 
 <?php if (isset($role_counts) && is_array($role_counts) && count($role_counts)) : ?>
 
 <div class="admin-box">
-	<h3><?php echo lang('role_manage') ?></h3>
+	<h3><?php echo lang('roles_list') ?></h3>
 
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<th style="width: 10em"><?php echo lang('role_account_type'); ?></th>
-				<th class="text-center" style="width: 5em"># <?php echo lang('bf_users'); ?></th>
-				<th><?php echo lang('role_description') ?></th>
+				<th style="width: 10em"><?php echo lang('roles_role'); ?></th>
+				<th class="text-center" style="width: 5em"><?php echo lang('bf_users'); ?></th>
+				<th><?php echo lang('bf_description') ?></th>
 			</tr>
 		</thead>
 		<tbody>
