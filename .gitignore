@@ -45,3 +45,6 @@ bonfire/modules/*
 # Remove PHPStorm Project folders
 bonfire/.ideas
 
+# Ignore some files for development
+index.php
+.htaccess
