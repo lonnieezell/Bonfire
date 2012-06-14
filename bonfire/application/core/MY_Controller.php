@@ -90,13 +90,17 @@ class Base_Controller extends MX_Controller
 			}
 
 		}
-		if (file_exists(APPPATH . 'language/' .$this->config->item('language') . '/bf_date.php'))
-		{
-			include APPPATH . 'language/' .$this->config->item('language') . '/bf_date.php';
-		}
-		else
-		{
-			include APPPATH . 'language/english/bf_date.php';
+		// Check to see whether the bf_date class is yet declared
+    if (!class_exists('bf_date'))
+    {
+			if (file_exists(APPPATH . 'language/' .$this->config->item('language') . '/bf_date.php'))
+			{
+				include APPPATH . 'language/' .$this->config->item('language') . '/bf_date.php';
+			}
+			else
+			{
+				include APPPATH . 'language/english/bf_date.php';
+			}
 		}
 		// Make the current user available in the views
 		$this->load->vars( array('current_user' => $this->current_user) );
@@ -277,6 +281,7 @@ class Admin_Controller extends Authenticated_Controller
 	{
 		parent::__construct();
 
+		$this->load->helper('form');
 		$this->load->helper('application');
 
 		$this->load->library('template');
@@ -287,8 +292,10 @@ class Admin_Controller extends Authenticated_Controller
 		$this->pager = array();
 		$this->pager['full_tag_open']	= '<div class="pagination pagination-right"><ul>';
 		$this->pager['full_tag_close']	= '</ul></div>';
-		$this->pager['next_link'] 		= '&rarr;';
-		$this->pager['prev_link'] 		= '&larr;';
+		$this->pager['first_link'] = lang('pager_first_link');
+		$this->pager['next_link'] = lang('pager_next_link');
+		$this->pager['prev_link'] = lang('pager_prev_link');
+		$this->pager['last_link'] = lang('pager_last_link');
 		$this->pager['next_tag_open']	= '<li>';
 		$this->pager['next_tag_close']	= '</li>';
 		$this->pager['prev_tag_open']	= '<li>';
