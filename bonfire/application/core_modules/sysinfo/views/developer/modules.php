@@ -1,14 +1,14 @@
 <div class="admin-box">
-	<h3><?php echo lang('si.installed_mods'); ?></h3>
+	<h3><?php echo lang('si_installed_mods'); ?></h3>
 
 	<?php if (isset($modules) && is_array($modules) && count($modules)) : ?>
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Name</th>
-					<th>Version</th>
-					<th>Description</th>
-					<th>Author</th>
+					<th><?php echo lang('bf_name'); ?></th>
+					<th><?php echo lang('bf_version'); ?></th>
+					<th><?php echo lang('bf_description'); ?></th>
+					<th><?php echo lang('bf_author'); ?></th>
 				</tr>
 			</thead>
 			<tbody>

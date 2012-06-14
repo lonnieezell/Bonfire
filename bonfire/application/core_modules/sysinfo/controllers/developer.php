@@ -41,9 +41,9 @@ class Developer extends Admin_Controller
 
 		$this->lang->load('sysinfo');
 
-		Template::set('toolbar_title', lang('si.system_info'));
+		Template::set('toolbar_title', lang('si_system_info'));
 
-		Template::set_block('sub_nav', 'developer/sub_nav');
+		Template::set_block('sub_nav', 'developer/_sub_nav');
 
 	}//end __construct()
 
@@ -79,7 +79,7 @@ class Developer extends Admin_Controller
 
 		foreach ($modules as $module)
 		{
-			$configs[$module] = module_config($module);
+			$configs[$module] = module_config($module,false,true);
 
 			if (!isset($configs[$module]['name']))
 			{
@@ -120,11 +120,17 @@ class Developer extends Admin_Controller
 		$output = preg_replace("/<h2>PHP License.*?<\/table>/is", "", $output);
 		$output = preg_replace("/<table(.*?)bgcolor=\".*?\">/", "\n\n<table\\1>", $output);
 		$output = preg_replace("/<table(.*?)>/", "\n\n<table\\1 class=\"table table-striped\" cellspacing=\"0\">", $output);
+		$output = preg_replace("/<\/table><br \/>\n<h2>(.*?)<\/h2>/", "</table><br />\n<h3>\\1</h3>", $output);
+		$output = preg_replace("/<h1>(.*?)<\/h1>/", "<h3>\\1</h3>", $output);
 		$output = preg_replace("/<a.*?<\/a>/", "", $output);
 		$output = preg_replace("/<th(.*?)>/", "<th \\1 >", $output);
 		$output = preg_replace("/<hr.*?>/", "<br />", $output);
 		$output = preg_replace("/<tr(.*?).*?".">/", "<tr \\1>\n", $output);
 		$output = preg_replace('/<h(1|2)\s*(class="p")?/i', '<h\\1', $output);
+		$output = preg_replace("/<h(2|3)><\/h(2|3)>/", "", $output);
+		$output = preg_replace("/<br>\n<br>/", "<br>", $output);
+
+//die($output);
 
 		Template::set('phpinfo', $output);
 
