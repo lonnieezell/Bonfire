@@ -49,3 +49,6 @@ bonfire/.ideas
 # Ignore some files for development
 index.php
 .htaccess
+bonfire/application/db/backups/*
+docs/*
+install/*
