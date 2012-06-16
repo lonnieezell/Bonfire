@@ -61,7 +61,7 @@ class Developer extends Admin_Controller
 	 */
 	public function index()
 	{
-		if ($this->input->post('submit') == lang('mig_migrate_button'))
+		if ($this->input->post('submit') == lang('mig_action_migrate_database'))
 		{
 			$core = $this->input->post('core_only') ? '' : 'app_';
 
@@ -84,7 +84,7 @@ class Developer extends Admin_Controller
 
 		Template::set('mod_migrations', $this->get_module_versions());
 
-		Template::set('toolbar_title', 'Database Migrations');
+		Template::set('toolbar_title', lang('mig_database_migrations'));
 		Template::render();
 
 	}//end index()
@@ -114,7 +114,7 @@ class Developer extends Admin_Controller
 		{
 			if ($result === 0)
 			{
-				Template::set_message('Successfully uninstalled module\'s migrations.', 'success');
+				Template::set_message(lang('mig_migrate_module_success'), 'success');
 
 				// Log the activity
 				$this->load->model('activities/Activity_model', 'activity_model');
@@ -125,7 +125,7 @@ class Developer extends Admin_Controller
 			}
 			else
 			{
-				Template::set_message('Successfully migrated database to version '. $result, 'success');
+				Template::set_message(sprintf(lang('mig_migrate_database_success'), $result), 'success');
 
 				// Log the activity
 				$this->load->model('activities/Activity_model', 'activity_model');
@@ -137,7 +137,7 @@ class Developer extends Admin_Controller
 		}
 		else
 		{
-			Template::set_message('There was an error migrating the database.', 'error');
+			Template::set_message(lang('mig_migrate_database_failure'), 'error');
 		}//end if
 
 		Template::set_message('No version to migrate to.', 'error');
