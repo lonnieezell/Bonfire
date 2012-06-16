@@ -1,4 +1,4 @@
 <ul>
-	<li><a href="<?php echo site_url(SITE_AREA .'/developer/database') ?>"><?php echo lang('db_m_maintenance') ?></a></li>
-	<li><a href="<?php echo site_url(SITE_AREA .'/developer/database/backups') ?>"><?php echo lang('db_m_backups') ?></a></li>
+	<li><?php echo anchor(SITE_AREA . '/developer/database', lang('db_m_maintenance')); ?></li>
+	<li><?php echo anchor(SITE_AREA . '/developer/backups', lang('db_m_backups')); ?></li>
 </ul>

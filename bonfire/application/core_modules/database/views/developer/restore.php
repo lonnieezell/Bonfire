@@ -21,7 +21,7 @@
 
 		<input type="hidden" name="filename" value="<?php echo $filename ?>" />
 
-		<h3><?php echo lang('db_restore_file'); ?>: <span style="color:#509b00"><?php echo $filename ?></span>?</h3>
+		<h3><?php printf(lang('db_restore_file'), '<span style="color:#509b00">' . $filename . '</span>'); ?></h3>
 
 		<div class="notification attention png_bg">
 			<div>
@@ -30,8 +30,8 @@
 		</div>
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('db_restore'); ?>" /> <?php echo lang('bf_or'); ?>
-			<a href="<?php echo site_url(SITE_AREA .'/developer/database/backups') ?>"><?php echo lang('bf_action_cancel'); ?></a>
+			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('db_action_restore') ?> " /> <?php echo lang('bf_or') ?>
+			<?php echo anchor(SITE_AREA .'/developer/database/backups', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-warning"'); ?>
 		</div>
 
 	<?php echo form_close(); ?>

@@ -5,8 +5,9 @@ $config['module_config'] = array(
 		'developer'	=> 'database/developer/menu'
 	),
 	'author'		=> 'Bonfire Team',
-	'description'	=> 'Provides tools for working with your database(s).',
+	'description'	=> 'Fournit des outils pour travailler avec vos/votre base(s) de données.',
+	'name'		=>'Gestion de la base de données',
 	'menu_topic'	=> array(
-		'developer'		=>'Database Tools'
+		'developer'		=>'Base de données'
 	)
 );

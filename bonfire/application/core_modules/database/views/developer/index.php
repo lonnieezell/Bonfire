@@ -10,7 +10,7 @@
 					<input class="check-all" type="checkbox" />
 				</th>
 				<th><?php echo lang('db_table_name'); ?></th>
-				<th style="width: 5.5em"># <?php echo lang('db_records'); ?></th>
+				<th style="width: 5.5em"><?php echo lang('db_records'); ?></th>
 				<th><?php echo lang('db_data_size'); ?></th>
 				<th><?php echo lang('db_index_size'); ?></th>
 				<th><?php echo lang('db_data_free'); ?></th>
@@ -20,17 +20,17 @@
 		<tfoot>
 			<tr>
 				<td colspan="7">
-					<?php echo lang('bf_with_selected'); ?>:
+					<?php echo lang('bf_with_selected'); ?>
 
 					<select name="action">
-						<option><?php echo lang('db_backup'); ?></option>
-						<option><?php echo lang('db_repair'); ?></option>
-						<option><?php echo lang('db_optimize'); ?></option>
+						<option value="backup" ><?php echo lang('db_action_backup'); ?></option>
+						<option value="repair" ><?php echo lang('db_action_repair'); ?></option>
+						<option value="optimize" ><?php echo lang('db_action_optimize'); ?></option>
 						<option>------</option>
-						<option><?php echo lang('db_drop'); ?></option>
+						<option value="drop" ><?php echo lang('db_action_drop'); ?></option>
 					</select>
 					&nbsp;&nbsp;
-					<input type="submit" name="submit" value="<?php echo lang('db_apply')?>" />
+					<input type="submit" name="submit" value="<?php echo lang('db_action_apply')?>" />
 				</td>
 			</tr>
 		</tfoot>

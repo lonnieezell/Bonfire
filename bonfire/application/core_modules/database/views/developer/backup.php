@@ -14,44 +14,42 @@
 		</div>
 
 		<div class="control-group <?php echo form_error('file_name') ? 'error' : '' ?>">
-			<label for="file_name" class="control-label"><?php echo lang('db_filename'); ?></label>
+			<?php echo form_simple_label('file_name', lang('db_filename')); ?>
 			<div class="controls">
 				<input type="text" name="file_name" value="<?php echo set_value('file_name', isset($file) && !empty($file) ? $file : ''); ?>" />
 				<?php if (form_error('file_name')) echo '<span class="help-inline">'. form_error('file_name') .'</span>'; ?>
 			</div>
 		</div>
 
-		<div class="control-group <?php echo form_error('drop_tables') ? 'error' : '' ?>">
-			<label for="drop_tables" class="control-label"><?php echo lang('db_drop_question') ?></label>
+		<div class="control-group">
+			<?php echo form_simple_label('backup_options', lang('db_backup_options')); ?>
 			<div class="controls">
-				<select name="drop_tables">
-					<option <?php echo set_select('drop_tables', lang('bf_no')); ?>><?php echo lang('bf_no'); ?></option>
-					<option <?php echo set_select('drop_tables', lang('bf_yes')); ?>><?php echo lang('bf_yes'); ?></option>
-				</select>
-				<?php if (form_error('drop_tables')) echo '<span class="help-inline">'. form_error('drop_tables') .'</span>'; ?>
+				<label class="checkbox" for="drop_tables">
+					<input type="checkbox" name="drop_tables" id="drop_tables" value="1" />
+					<?php echo lang('db_drop_question'); ?>
+				</label>
+				<label class="checkbox" for="add_inserts">
+					<input type="checkbox" name="add_inserts" id="add_inserts" value="1" checked="checked" />
+					<?php echo lang('db_insert_question'); ?>
+				</label>
 			</div>
 		</div>
 
-		<div class="control-group <?php echo form_error('add_inserts') ? 'error' : '' ?>">
-			<label for="add_inserts" class="control-label"><?php echo lang('db_insert_question'); ?></label>
+		<div class="control-group">
+			<?php echo form_simple_label('file_type', lang('db_compresssion_type')); ?>
 			<div class="controls">
-				<select name="add_inserts">
-					<option <?php echo set_select('add_inserts', lang('bf_no')); ?>><?php echo lang('bf_no'); ?></option>
-					<option <?php echo set_select('add_inserts', lang('bf_yes'), TRUE); ?>><?php echo lang('bf_yes'); ?></option>
-				</select>
-				<?php if (form_error('add_inserts')) echo '<span class="help-inline">'. form_error('add_inserts') .'</span>'; ?>
-			</div>
-		</div>
-
-		<div class="control-group <?php echo form_error('file_type') ? 'error' : '' ?>">
-			<label for="file_type" class="control-label"><?php echo lang('db_compress_question'); ?></label>
-			<div class="controls">
-				<select name="file_type">
-					<option value="txt" <?php echo set_select('file_type', 'txt', TRUE); ?>><?php echo lang('bf_none'); ?></option>
-					<option <?php echo set_select('file_type', lang('db_gzip')); ?>><?php echo lang('db_gzip'); ?></option>
-					<option <?php echo set_select('file_type', lang('db_zip')); ?>><?php echo lang('db_zip'); ?></option>
-				</select>
-				<?php if (form_error('file_type')) echo '<span class="help-inline">'. form_error('file_type') .'</span>'; ?>
+				<label class="radio">
+					<input type="radio" name="file_type" id="file_type" value="txt" checked="checked" />
+					<span><?php echo lang('db_compresssion_none'); ?></span>
+				</label>
+				<label class="radio">
+					<input type="radio" name="file_type" id="file_type" value="gzip" />
+					<span><?php echo lang('db_compresssion_gzip'); ?></span>
+				</label>
+				<label class="radio">
+					<input type="radio" name="file_type" id="file_type" value="zip" />
+					<span><?php echo lang('db_compresssion_zip'); ?></span>
+				</label>
 			</div>
 		</div>
 
@@ -62,7 +60,7 @@
 		</div>
 
 		<div style="padding: 20px" class="small">
-			<p><strong><?php echo lang('db_backup') .' '. lang('db_tables'); ?>: &nbsp;&nbsp;</strong>
+			<p><strong><?php echo lang('db_backup_database_tables'); ?>: &nbsp;&nbsp;</strong>
 				<?php foreach ($tables as $table) : ?>
 					<?php echo $table . '&nbsp;&nbsp;&nbsp;&nbsp;'; ?>
 				<?php endforeach; ?>
@@ -70,8 +68,8 @@
 		</div>
 
 		<div class="form-actions">
-			<button type="submit" name="submit" class="btn btn-primary" ><?php echo lang('db_backup'); ?></button> <?php echo lang('bf_or'); ?>
-			<a href="/admin/developer/database"><?php echo lang('bf_action_cancel'); ?></a>
+			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') ?> " /> <?php echo lang('bf_or') ?>
+			<?php echo anchor(SITE_AREA .'/developer/database', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-warning"'); ?>
 		</div>
 
 	<?php echo form_close(); ?>

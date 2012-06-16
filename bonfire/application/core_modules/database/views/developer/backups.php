@@ -16,7 +16,7 @@
 			<tfoot>
 				<tr>
 					<td colspan="3">
-						<?php echo lang('db_delete_note'); ?>
+						<?php echo lang('bf_with_selected'); ?>
 						<button type="submit" name="submit" class="btn btn-danger" onclick="return confirm('<?php echo lang('db_backup_delete_confirm'); ?>')"><?php echo lang('bf_action_delete'); ?></button>
 					</td>
 				</tr>
@@ -30,8 +30,8 @@
 					<td>
 						<?php echo $file ?>
 						<div class="hover-item small">
-							<a href="/admin/developer/database/get_backup/<?php echo $file ?>" title="Download this file"><?php echo lang('bf_action_download'); ?></a> |
-							<a href="/admin/developer/database/restore/<?php echo $file ?>" title="Restore this file"><?php echo lang('db_restore'); ?></a>
+							<?php echo anchor(SITE_AREA . '/developer/database/get_backup/' . $file, lang('bf_action_download'), ' title="' . lang('bf_download_file') . '"'); ?> | 
+							<?php echo anchor(SITE_AREA . '/developer/database/restore/' . $file, lang('bf_action_restore'), ' title="' . lang('bf_restore_file') . '"'); ?>
 						</div>
 					</td>
 					<td><?php echo round($atts['size'] / 1024 , 3) ?> KB</td>
