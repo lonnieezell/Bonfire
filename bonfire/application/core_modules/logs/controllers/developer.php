@@ -191,7 +191,7 @@ class Developer extends Admin_Controller
 			Template::redirect(SITE_AREA .'/developer/logs');
 		}
 
-		Assets::add_module_js('logs', 'logs');
+		Assets::add_module_js('logs', 'logs.js');
 
 		Template::set('log_file', $file);
 		Template::set('log_file_pretty', bf_date::date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file)))));

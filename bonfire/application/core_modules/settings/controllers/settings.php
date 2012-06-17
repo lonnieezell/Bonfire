@@ -86,7 +86,7 @@ class Settings extends Admin_Controller
 		Template::set('languages', list_languages());
 		Template::set('selected_languages', unserialize($settings['site.languages']));
 
-		Assets::add_module_js('settings', 'js/settings.js');
+		Assets::add_module_js('settings', 'settings.js');
 
 		Template::set_view('settings/settings/index');
 		Template::render();

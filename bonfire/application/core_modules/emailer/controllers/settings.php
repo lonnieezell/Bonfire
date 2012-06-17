@@ -119,7 +119,7 @@ class Settings extends Admin_Controller
 		$settings = $this->settings_model->select('name,value')->find_all_by('module', 'email');
 		Template::set($settings);
 
-		Assets::add_module_js('emailer', 'js/settings');
+		Assets::add_module_js('emailer', 'settings.js');
 
 		Template::set('toolbar_title', 'Email Settings');
 
