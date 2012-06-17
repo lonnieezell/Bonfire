@@ -99,7 +99,7 @@ class Developer extends Admin_Controller
 			$this->trans_lang = $this->input->post('trans_lang');
 
 			// Other?
-			if ($this->trans_lang == 'other')
+			if ($this->trans_lang == 'new')
 			{
 				$this->trans_lang = $this->input->post('new_lang');
 			}
@@ -122,7 +122,7 @@ class Developer extends Admin_Controller
 			Template::set('modules', $all_lang_files['custom']);
 		}
 
-		Template::set('toolbar_title', lang('tr_translate_title') .' to '. ucfirst($this->trans_lang));
+		Template::set('toolbar_title', sprintf(lang('tr_translate_heading'), ucfirst($this->trans_lang)));
 		Template::render();
 
 	}//end index()
@@ -170,7 +170,7 @@ class Developer extends Admin_Controller
 			Template::set('lang_file', $lang_file);
 		}
 
-		Template::set('toolbar_title', lang('tr_edit_title') .' to '. ucfirst($this->trans_lang) . ': '. $lang_file);
+		Template::set('toolbar_title', sprintf(lang('tr_edit_heading'), $lang_file, ucfirst($this->trans_lang)));
 
 		Template::render();
 
@@ -190,13 +190,13 @@ class Developer extends Admin_Controller
 		if ($this->input->post('submit'))
 		{
 			$language = $this->input->post('export_lang');
-            $this->do_export($language, $this->input->post('include_core'), $this->input->post('include_custom'));
-            die();
+			$this->do_export($language, $this->input->post('include_core'), $this->input->post('include_custom'));
+			die();
 		}
 
 		Template::set('languages', $this->langs);
 
-		Template::set('toolbar_title', lang('tr_export'));
+		Template::set('toolbar_title', lang('tr_export_heading'));
 		Template::render();
 
 	}//end export()
@@ -215,7 +215,7 @@ class Developer extends Admin_Controller
 	{
 		if (empty($language))
 		{
-			$this->error = 'No language file chosen.';
+			$this->error = lang('tr_language_none');
 			return FALSE;
 		}
 
@@ -223,7 +223,7 @@ class Developer extends Admin_Controller
 
 		if (!count($all_lang_files))
 		{
-			$this->error = 'No files found to archive.';
+			$this->error = lang('tr_archive_none');
 			return FALSE;
 		}
 
@@ -231,32 +231,32 @@ class Developer extends Admin_Controller
 		$this->load->library('zip');
 
 		foreach ($all_lang_files as $key => $file)
-        {
-            if (is_numeric($key) && $include_core)
-            {
-                $content = load_lang_file($file, $language);
-                $this->zip->add_data($file, save_lang_file($file, $language, $content, TRUE));
-            }
-            else if ($key == 'core' && $include_core)
-            {
-                foreach ($file as $f)
-                {
-                    $content = load_lang_file($f, $language);
-                    $this->zip->add_data($f, save_lang_file($f, $language, $content, TRUE));
-                }
-            }
-            else if ($key == 'custom' && $include_custom)
-            {
-                foreach ($file as $f)
-                {
-                    $content = load_lang_file($f, $language);
-                    $this->zip->add_data($f, save_lang_file($f, $language, $content, TRUE));
-                }
-            }
-        }//end foreach
+		{
+				if (is_numeric($key) && $include_core)
+				{
+						$content = load_lang_file($file, $language);
+						$this->zip->add_data($file, save_lang_file($file, $language, $content, TRUE));
+				}
+				else if ($key == 'core' && $include_core)
+				{
+						foreach ($file as $f)
+						{
+								$content = load_lang_file($f, $language);
+								$this->zip->add_data($f, save_lang_file($f, $language, $content, TRUE));
+						}
+				}
+				else if ($key == 'custom' && $include_custom)
+				{
+						foreach ($file as $f)
+						{
+								$content = load_lang_file($f, $language);
+								$this->zip->add_data($f, save_lang_file($f, $language, $content, TRUE));
+						}
+				}
+		}//end foreach
 
 		$this->zip->download('bonfire_'. $language .'_files.zip');
-        die();
+		die();
 
 	}//end do_export()
 

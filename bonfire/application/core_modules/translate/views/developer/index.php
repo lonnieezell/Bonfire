@@ -1,70 +1,80 @@
-<style>
-	form { margin: 0; }
-</style>
-<div class="well">
-	
-	<?php echo form_open(); ?>
-		<?php e(lang('tr_current_lang')); ?>
-		
-		<select name="trans_lang" id="trans_lang">
-		<?php foreach ($languages as $lang) :?>
-			<option value="<?php echo $lang ?>" <?php echo isset($trans_lang) && $trans_lang == $lang ? 'selected="selected"' : '' ?>><?php echo ucfirst($lang) ?></option>
-		<?php endforeach; ?>
-			<option value="other"><?php e(lang('tr_other')); ?></option>
-		</select>
-		
-		<input type="text" name="new_lang" id="new_lang" style="display: none" value="" />
-	
-		<input type="submit" name="select_lang" class="btn btn-small btn-primary" value="<?php e(lang('tr_select_lang')); ?>" />
-	</form>
-</div>
-
-<!-- Core -->
 <div class="admin-box">
-	<h3><?php echo lang('tr_core') ?></h3>
+	
+	<h3><?php echo $toolbar_title ?></h3>
+	
+	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
-<table class="table table-striped">
+		<fieldset>
 
-	<tbody>
-	<?php foreach ($lang_files as $file) :?>
-		<tr>
-			<td>
-				<a href="<?php echo site_url(SITE_AREA .'/developer/translate/edit?lang='. $trans_lang .'&file='. $file) ?>">
-					<?php e($file); ?>
-				</a>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	</tbody>
-</table>
-</div>
-
-<!-- Modules -->
-<div class="admin-box">
-	<h3><?php e(lang('tr_modules')); ?></h3>
-
-<table class="table table-striped">
-	<tbody>
-	<?php if (isset($modules) && is_array($modules) && count($modules)) : ?>
-	<?php foreach ($modules as $file) :?>
-		<tr>
-			<td>
-				<a href="<?php echo site_url(SITE_AREA .'/developer/translate/edit?lang='. $trans_lang .'&file='. $file) ?>">
-					<?php e($file); ?>
-				</a>
-			</td>
-		</tr>
-	<?php endforeach; ?>
-	<?php else : ?>
-		<tr>
-			<td>
-				<div class="alert alert-info fade in">
-					<a class="close" data-dismiss="alert">&times;</a>		
-					<?php echo lang('tr_no_modules'); ?>
+			<div class="control-group">
+				<?php echo form_simple_label('trans_lang', lang('tr_current_lang')); ?>
+				<div class="controls">
+					<select name="trans_lang" id="trans_lang">
+					<?php foreach ($languages as $lang) :?>
+						<option value="<?php echo $lang ?>" <?php echo isset($trans_lang) && $trans_lang == $lang ? 'selected="selected"' : '' ?>><?php echo ucfirst($lang) ?></option>
+					<?php endforeach; ?>
+						<option value="new"><?php echo lang('tr_new'); ?></option>
+					</select>
+					
+					<input type="text" name="new_lang" id="new_lang" style="display: none" value="" />
+				
+					<input type="submit" name="select_lang" class="btn btn-small btn-primary" value="<?php echo lang('tr_action_select'); ?>" />
 				</div>
-			</td>
-		</tr>
-	<?php endif; ?>
-	</tbody>
-</table>
+			</div>
+
+		</fieldset>
+
+		<!-- Core -->
+		<fieldset>
+			<legend><?php echo lang('tr_core'); ?></legend>
+
+			<table class="table table-striped">
+				<tbody>
+				<?php foreach ($lang_files as $file) :?>
+					<tr>
+						<td>
+							<a href="<?php echo site_url(SITE_AREA .'/developer/translate/edit?lang='. $trans_lang .'&file='. $file) ?>">
+								<?php echo $file; ?>
+							</a>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+				</tbody>
+			</table>
+
+		</fieldset>
+
+		<!-- Modules -->
+		<fieldset>
+			<legend><?php echo lang('tr_modules'); ?></legend>
+
+			<table class="table table-striped">
+				<tbody>
+				<?php if (isset($modules) && is_array($modules) && count($modules)) : ?>
+				<?php foreach ($modules as $file) :?>
+					<tr>
+						<td>
+							<a href="<?php echo site_url(SITE_AREA .'/developer/translate/edit?lang='. $trans_lang .'&file='. $file) ?>">
+								<?php echo $file; ?>
+							</a>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+				<?php else : ?>
+					<tr>
+						<td>
+							<div class="alert alert-info fade in">
+								<a class="close" data-dismiss="alert">&times;</a>		
+								<?php echo lang('tr_no_modules'); ?>
+							</div>
+						</td>
+					</tr>
+				<?php endif; ?>
+				</tbody>
+			</table>
+
+		</fieldset>
+
+	<?php echo form_close(); ?>
+
 </div>
