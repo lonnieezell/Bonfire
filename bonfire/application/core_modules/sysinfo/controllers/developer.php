@@ -130,8 +130,6 @@ class Developer extends Admin_Controller
 		$output = preg_replace("/<h(2|3)><\/h(2|3)>/", "", $output);
 		$output = preg_replace("/<br>\n<br>/", "<br>", $output);
 
-//die($output);
-
 		Template::set('phpinfo', $output);
 
 		Template::render();
