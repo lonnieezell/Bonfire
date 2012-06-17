@@ -1,11 +1,11 @@
 <ul class="nav nav-pills">
 	<li <?php echo $this->uri->segment(4) == '' ? 'class="active"' : '' ?>>
-		<a href="<?php echo site_url(SITE_AREA .'/settings/permissions') ?>"><?php echo lang('bf_action_list'); ?></a>
+		<?php echo anchor(SITE_AREA . '/settings/permissions', lang('permissions_s_permissions')); ?>
 	</li>
 	<li <?php echo $this->uri->segment(4) == 'create' ? 'class="active"' : '' ?>>
-		<a href="<?php echo site_url(SITE_AREA .'/settings/permissions/create') ?>" id="create_new"><?php echo lang('bf_action_create'); ?></a>
+		<?php echo anchor(SITE_AREA . '/settings/permissions/create', lang('permissions_s_new_permission'), ' id="create_new"'); ?>
 	</li>
 	<li>
-		<a href="<?php echo site_url(SITE_AREA .'/settings/roles/permission_matrix') ?>" ><?php echo lang('permissions_matrix'); ?></a>
+		<?php echo anchor(SITE_AREA . '/settings/roles/permission_matrix', lang('permissions_s_matrix')); ?>
 	</li>
 </ul>

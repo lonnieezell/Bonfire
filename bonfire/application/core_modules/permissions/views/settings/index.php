@@ -8,10 +8,10 @@
 			<thead>
 				<tr>
 					<th class="column-check"><input class="check-all" type="checkbox" /></th>
-					<th><?php echo lang('permissions_id'); ?></th>
-					<th><?php echo lang('permissions_name'); ?></th>
-					<th><?php echo lang('permissions_description'); ?></th>
-					<th><?php echo lang('permissions_status'); ?></th>
+					<th><?php echo lang('bf_id'); ?></th>
+					<th><?php echo lang('bf_name'); ?></th>
+					<th><?php echo lang('bf_description'); ?></th>
+					<th><?php echo lang('bf_status'); ?></th>
 				</tr>
 			</thead>
 
