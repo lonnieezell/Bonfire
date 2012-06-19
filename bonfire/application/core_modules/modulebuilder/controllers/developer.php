@@ -243,11 +243,11 @@ class Developer extends Admin_Controller {
                 {
                     // undo any permissions that exist
                     $this->db->where('permission_id',$row['permission_id']);
-                    $this->db->delete($prefix.'permissions');
+                    $this->db->delete('permissions');
 
                     // and fron the roles as well.
                     $this->db->where('permission_id',$row['permission_id']);
-                    $this->db->delete($prefix.'role_permissions');
+                    $this->db->delete('role_permissions');
                 }
             }
 
