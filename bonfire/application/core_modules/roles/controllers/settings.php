@@ -55,7 +55,7 @@ class Settings extends Admin_Controller
 		// for the render_search_box()
 		$this->load->helper('ui/ui');
 
-		Template::set_block('sub_nav', 'settings/sub_nav');
+		Template::set_block('sub_nav', 'settings/_sub_nav');
 	}//end __construct()
 
 	//--------------------------------------------------------------------

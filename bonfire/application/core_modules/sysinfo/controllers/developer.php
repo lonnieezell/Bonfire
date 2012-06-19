@@ -43,7 +43,7 @@ class Developer extends Admin_Controller
 
 		Template::set('toolbar_title', lang('si.system_info'));
 
-		Template::set_block('sub_nav', 'developer/sub_nav');
+		Template::set_block('sub_nav', 'developer/_sub_nav');
 
 	}//end __construct()
 
