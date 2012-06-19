@@ -47,7 +47,7 @@ class Settings extends Admin_Controller
 
 		$this->lang->load('users');
 
-		Template::set_block('sub_nav', 'settings/sub_nav');
+		Template::set_block('sub_nav', 'settings/_sub_nav');
 
 	}//end __construct()
 
