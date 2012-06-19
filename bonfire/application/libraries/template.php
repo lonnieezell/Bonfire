@@ -1213,11 +1213,11 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 			{
 				if ($wrap === TRUE)
 				{
-					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(strtolower($segment))) .'</a>' . $seperator . '</li>' . PHP_EOL;
+					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($segment))) .'</a>' . $seperator . '</li>' . PHP_EOL;
 				} 
 				else 
 				{
-					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(strtolower($segment))) .'</a>' . $seperator . PHP_EOL;
+					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($segment))) .'</a>' . $seperator . PHP_EOL;
 				}
 			}
 		}
@@ -1247,11 +1247,11 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 
 				if ($wrap === TRUE)
 				{
-					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(strtolower($title))) .'</a>' . $seperator . '</li>' . PHP_EOL;
+					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($title))) .'</a>' . $seperator . '</li>' . PHP_EOL;
 				} 
 				else 
 				{
-					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(strtolower($title))) .'</a>' . $seperator . PHP_EOL;
+					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($title))) .'</a>' . $seperator . PHP_EOL;
 				}
 
 			}
