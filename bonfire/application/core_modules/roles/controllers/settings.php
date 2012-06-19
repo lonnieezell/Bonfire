@@ -93,7 +93,7 @@ class Settings extends Admin_Controller
 	 */
 	public function create()
 	{
-		$this->auth->restrict('Bonfire.Roles.New');
+		$this->auth->restrict('Bonfire.Roles.Add');
 
 		if ($this->input->post('submit'))
 		{
