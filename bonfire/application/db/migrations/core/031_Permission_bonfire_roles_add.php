@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Permission_bonfire_roles_new extends Migration
+class Migration_Permission_bonfire_roles_add extends Migration
 {
 	//--------------------------------------------------------------------
 
