@@ -10,7 +10,6 @@
  * @license   http://guides.cibonfire.com/license.html
  * @link      http://cibonfire.com
  * @since     Version 1.0
- * @filesource
  */
 
 // ------------------------------------------------------------------------
@@ -20,11 +19,10 @@
  *
  * Provides helper methods for displaying Context Navigation.
  *
- * @package    Bonfire
- * @subpackage Modules_Ui
+ * @package    Bonfire\Core\Modules\Libraries\Modules_Ui
  * @category   Libraries
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ * @link       http://cibonfire.com/docs/guides/contexts.html
  *
  */
 class Contexts
@@ -100,6 +98,26 @@ class Contexts
 	 */
 	protected static $ci;
 
+	/**
+	 * Admin Area to Link to or other Context.
+	 *
+	 * @access protected
+	 * @static
+	 *
+	 * @var string
+	 */
+	protected static $site_area = SITE_AREA;
+
+	/**
+	 * Stores the context menus config.
+	 *
+	 * @access protected
+	 * @static
+	 *
+	 * @var array
+	 */
+	protected static $contexts = array();
+
 	//--------------------------------------------------------------------
 
 	/**
@@ -131,9 +149,55 @@ class Contexts
 			self::$ci->load->helper('application');
 		}
 
+		self::$contexts = self::$ci->config->item('contexts');
 		log_message('debug', 'UI/Contexts library loaded');
 
 	}//end init()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Sets the contexts array
+	 *
+	 * @static
+	 *
+	 * @param  array  Array of Context Menus to Display normally stored in application config.
+	 * @param  string Area to link to defaults to SITE_AREA or Admin area.	 
+	 *
+	 * @return void
+	 */
+	public static function set_contexts($contexts = array(), $site_area = SITE_AREA)
+	{
+		if (empty($contexts) || ! is_array($contexts) || ! count($contexts))
+		{
+			die(lang('bf_no_contexts'));
+		}
+
+		self::$contexts  = $contexts;
+
+		self::$site_area = $site_area;
+
+		unset($contexts, $site_area);
+		
+		log_message('debug', 'UI/Contexts set_contexts has been called.');
+
+	}//end set_contexts()
+
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Returns the context array just in case it is needed later.
+	 *
+	 * @static
+	 *
+	 * @return array 
+	 */
+	public static function get_contexts()
+	{
+		return self::$contexts;
+	}//end get_contexts()
+
 
 	//--------------------------------------------------------------------
 
@@ -149,11 +213,11 @@ class Contexts
 	 *
 	 * @return string A string with the built navigation.
 	 */
-	public static function render_menu($mode='icon', $order_by='normal', $top_level_only = false)
+	public static function render_menu($mode='text', $order_by='normal', $top_level_only = FALSE)
 	{
 		self::$ci->benchmark->mark('context_menu_start');
 
-		$contexts = self::$ci->config->item('contexts');
+		$contexts = self::$contexts;
 
 		if (empty($contexts) || !is_array($contexts) || !count($contexts))
 		{
@@ -199,7 +263,7 @@ class Contexts
 		{
 			if ( has_permission('Site.'. ucfirst($context) .'.View') == true || permission_exists('Site.'. ucfirst($context) .'.View') == false)
 			{
-				$url = site_url(SITE_AREA .'/'.$context);
+				$url = site_url(self::$site_area .'/'.$context);
 				$class = check_class($context, true);
 				$id = 'tb_'. $context;
 
@@ -258,14 +322,14 @@ class Contexts
 	 */
 	public static function render_mobile_navs()
 	{
-		$contexts = self::$ci->config->item('contexts');
+		$contexts = self::$contexts;
 
 		$out = '';
 
 		foreach ($contexts as $context)
 		{
 			$out .= "<ul id='{$context}_menu' class='mobile_nav'>";
-			$out .= self::context_nav($context, '', true);
+			$out .= self::context_nav($context, '', TRUE);
 			$out .= "</ul>";
 		}
 
@@ -287,7 +351,7 @@ class Contexts
 	 *
 	 * @return string The HTML necessary to display the menu.
 	 */
-	public function context_nav($context=null, $class='dropdown-menu', $ignore_ul=false)
+	public function context_nav($context=NULL, $class='dropdown-menu', $ignore_ul=FALSE)
 	{
 		// Get a list of modules with a controller matching
 		// $context ('content', 'settings', 'reports', or 'developer')
@@ -295,7 +359,7 @@ class Contexts
 
 		foreach ($module_list as $module)
 		{
-			if (module_controller_exists($context, $module) === true)
+			if (module_controller_exists($context, $module) === TRUE)
 			{
 				$mod_config = module_config($module);
 
@@ -303,7 +367,7 @@ class Contexts
 					'weight'		=> isset($mod_config['weights'][$context]) ? $mod_config['weights'][$context] : 0,
 					'display_name'	=> isset($mod_config['name']) ? $mod_config['name'] : $module,
 					'title' 		=> isset($mod_config['description']) ? $mod_config['description'] : $module,
-					'menus'			=> isset($mod_config['menus']) ? $mod_config['menus'] : false,
+					'menus'			=> isset($mod_config['menus']) ? $mod_config['menus'] : FALSE,
 				);
 
 				self::$actions[$module]['menu_topic'] = isset($mod_config['menu_topic']) ? $mod_config['menu_topic'] : self::$actions[$module]['display_name'];
@@ -381,7 +445,7 @@ class Contexts
 	{
 		if (!is_array($attrs))
 		{
-			return null;
+			return NULL;
 		}
 
 		foreach ($attrs as $attr => $value)
@@ -407,7 +471,7 @@ class Contexts
 	 *
 	 * @return string HTML for the sub menu
 	 */
-	public static function build_sub_menu($context, $ignore_ul=false)
+	public static function build_sub_menu($context, $ignore_ul=FALSE)
 	{
 		$list = '';
 
@@ -420,7 +484,7 @@ class Contexts
 		foreach (self::$menu as $topic_name => $topic)
 		{
 			// If the topic has other items, we're not closed.
-			$closed = true;
+			$closed = TRUE;
 
 			// If there is more than one item in the topic, we need to build
 			// out a menu based on the multiple items.
@@ -436,7 +500,7 @@ class Contexts
 					// If it has a sub-menu, echo out that menu only…
 					if (isset($vals['menu_view']) && !empty($vals['menu_view']))
 					{
-						$view = self::$ci->load->view($vals['menu_view'], null, true);
+						$view = self::$ci->load->view($vals['menu_view'], NULL, TRUE);
 
 						// To maintain backwards compatility, strip out and <ul> tags
 						$view = str_ireplace('<ul>', '', $view);
@@ -492,14 +556,14 @@ class Contexts
 	 */
 	private static function build_item($module, $title, $display_name, $context, $menu_view='')
 	{
-		$item  = '<li {listclass}><a href="'. site_url(SITE_AREA .'/'. $context .'/'. $module) .'" class="{class}"';
+		$item  = '<li {listclass}><a href="'. site_url(self::$site_area .'/'. $context .'/'. $module) .'" class="{class}"';
 		$item .= ' title="'. $title .'">'. ucwords(str_replace('_', '', $display_name)) ."</a>\n";
 
 		// Sub Menus?
 		if (!empty($menu_view))
 		{
 			// Only works if it's a valid view…
-			$view = self::$ci->load->view($menu_view, null, true);
+			$view = self::$ci->load->view($menu_view, NULL, TRUE);
 
 			$item .= $view;
 		}

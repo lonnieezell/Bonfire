@@ -223,10 +223,11 @@ $config['assets.js_opener'] = '$(document).ready(function(){'. "\n";
 $config['assets.js_closer'] = '});'. "\n";
 
 /*
-	The 'assets.combine' setting tells the Asset library whether
-	files should be combined or not.
+	The 'assets.js_combine' and 'assets.css_combine' settings tell the Asset library whether
+	js and css files, respectively, should be combined or not.
 */
-$config['assets.combine'] = FALSE;
+$config['assets.js_combine'] = FALSE;
+$config['assets.css_combine'] = FALSE;
 
 /*
 	The 'assets.encrypt' setting will mask the app structure

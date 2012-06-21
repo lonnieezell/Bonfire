@@ -79,8 +79,8 @@ class Users extends Front_Controller
 				// Try to login
 				if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === TRUE)
 				{
-					$this->load->model('activities/Activity_model', 'activity_model');
 
+					// Log the Activity
 					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged').': ' . $this->input->ip_address(), 'users');
 
 					/*
@@ -131,7 +131,7 @@ class Users extends Front_Controller
 	 */
 	public function logout()
 	{
-		$this->load->model('activities/Activity_model', 'activity_model');
+		// Log the Activity
 		$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged_out').': ' . $this->input->ip_address(), 'users');
 
 		$this->auth->logout();
@@ -262,7 +262,7 @@ class Users extends Front_Controller
 				// now add the meta is there is meta data
 				$this->user_model->save_meta_for($user_id, $meta_data);
 
-				$this->load->model('activities/Activity_model', 'activity_model');
+				// Log the Activity
 
 				$user = $this->user_model->find($user_id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
@@ -342,7 +342,7 @@ class Users extends Front_Controller
 
 					if ($this->user_model->update($this->input->post('user_id'), $data))
 					{
-						$this->load->model('activities/Activity_model', 'activity_model');
+						// Log the Activity
 
 						$this->activity_model->log_activity($this->input->post('user_id'), lang('us_log_reset') , 'users');
 						Template::set_message(lang('us_reset_password_success'), 'success');
@@ -564,7 +564,7 @@ class Users extends Front_Controller
 
 					Template::set_message($message, $type);
 
-					$this->load->model('activities/Activity_model', 'activity_model');
+					// Log the Activity
 
 					$this->activity_model->log_activity($user_id, lang('us_log_register') , 'users');
 					Template::redirect('login');

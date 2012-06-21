@@ -72,6 +72,9 @@ class Base_Controller extends MX_Controller
 
 		parent::__construct();
 
+		// Load Activity Model Since it's used everywhere.
+		$this->load->model('activities/Activity_model', 'activity_model');
+
 		// Auth setup
 		$this->load->model('users/User_model', 'user_model');
 		$this->load->library('users/auth');

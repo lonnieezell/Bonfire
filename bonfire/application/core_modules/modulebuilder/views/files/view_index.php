@@ -88,7 +88,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 	{
 		continue; 	// move onto next iteration of the loop
 	}
-      
+
 	if($db_required == 'new' && $table_as_field_prefix === TRUE)
 	{
 		$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
@@ -97,7 +97,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 	{
 		$field_name = set_value("view_field_name$counter");
 	}
-	else 
+	else
 	{
 		$field_name = set_value("view_field_name$counter");
 	}
@@ -108,7 +108,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 				<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name.") ?></td>
 				<?php else: ?>
 				<td><?php echo \$record->".$field_name." ?></td>
-				<?php endif; ?>		
+				<?php endif; ?>
 			";
 	}
 	else {
@@ -120,21 +120,24 @@ if ($use_soft_deletes == 'true')
 {
 	$table_records .= '
 				<td><?php echo $record->deleted > 0 ? lang(\''.$module_name_lower.'_true\') : lang(\''.$module_name_lower.'_false\')?></td>';
+	$field_total++;
 }
 if ($use_created == 'true')
 {
 	$table_records .= '
 				<td><?php echo $record->'.set_value("created_field").'?></td>';
+	$field_total++;
 }
 if ($use_modified == 'true')
 {
 	$table_records .= '
 				<td><?php echo $record->'.set_value("modified_field").'?></td>';
+	$field_total++;
 }
 
 
 
-$view = str_replace('{cols_total}', $field_total + 2 , $view);
+$view = str_replace('{cols_total}', $field_total + 1 , $view);
 $view = str_replace('{table_header}', $headers, $view);
 $view = str_replace('{table_records}', $table_records, $view);
 $view = str_replace('{delete_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $view);

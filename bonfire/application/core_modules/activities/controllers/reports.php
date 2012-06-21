@@ -45,8 +45,7 @@ class Reports extends Admin_Controller
 		$this->auth->restrict('Bonfire.Activities.View');
 
 		$this->lang->load('activities');
-		$this->lang->load('datatable');
-		$this->load->model('activities/Activity_model', 'activity_model');
+		$this->lang->load('datatable');		
 
 		Template::set('toolbar_title', lang('activity_title'));
 
