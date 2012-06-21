@@ -118,7 +118,7 @@ class Settings extends Admin_Controller
 		$this->form_validation->set_rules('password_show_labels', 'lang:bf_password_show_labels', 'trim|strip_tags|numeric|xss_clean');
 		$this->form_validation->set_rules('languages[]', 'lang:bf_language', 'required|trim|strip_tags|is_array|xss_clean');
 
-		if ($this->form_validation->run() === FALSE)
+        if ($this->form_validation->run() === FALSE)
 		{
 			return FALSE;
 		}
@@ -150,7 +150,6 @@ class Settings extends Admin_Controller
 			array('name' => 'site.show_profiler', 'value' => isset($_POST['show_profiler']) ? 1 : 0),
 			array('name' => 'site.show_front_profiler', 'value' => isset($_POST['show_front_profiler']) ? 1 : 0),
 			array('name' => 'site.languages', 'value' => $this->input->post('languages') != '' ? serialize($this->input->post('languages')) : ''),
-
 
 		);
 
