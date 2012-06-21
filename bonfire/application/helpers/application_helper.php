@@ -548,3 +548,50 @@ if ( !function_exists('iif') )
 		}
 	}//end iif()
 }
+//--------------------------------------------------------------------
+
+if ( !function_exists('list_contexts') )
+{
+    /**
+     * 	Returns a list of the contexts specified for the application. The options $landing_page_filter
+     * can be applied to force return of contexts that have a landing page (index.php) available.
+     *
+     *	@param	$landing_page_filter	Boolean		TRUE to filter FALSE for all
+     *	@return 						array	The context values array
+     */
+    function list_contexts($landing_page_filter = false)
+    {
+        $ci = &get_instance();
+
+        $contexts = $ci->config->item('contexts');
+        if (empty($contexts) || !is_array($contexts) || !count($contexts))
+        {
+            return false;
+        }
+
+        // Ensure settings context exists
+        if (!in_array('settings', $contexts))
+        {
+            array_push($contexts, 'settings');
+        }
+
+        // Ensure developer context exists
+        if (!in_array('developer', $contexts))
+        {
+            array_push($contexts, 'developer');
+        }
+        // Optional removal of contexts without landing pages
+        if ($landing_page_filter === true)
+        {
+            while ($context = current($contexts))
+            {
+                if (!file_exists(realpath(VIEWPATH).DIRECTORY_SEPARATOR.SITE_AREA.DIRECTORY_SEPARATOR.$context.DIRECTORY_SEPARATOR.'index.php'))
+                {
+                    array_splice($contexts, key($contexts), 1);
+                }
+                next($contexts);
+            }
+        }
+        return $contexts;
+    }
+}

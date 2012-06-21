@@ -37,6 +37,20 @@
 			</div>
 		</div>
 
+        <div class="control-group">
+            <label class="control-label" for="default_context"><?php echo lang('role_default_context') ?></label>
+            <div class="controls">
+                <select name="default_context" id="default_context">
+                    <?php if (isset($contexts) && is_array($contexts) && count($contexts)):?>
+                    <?php foreach($contexts as $context):?>
+                        <option value="<?php echo $context;?>" <?php echo set_select('default_context', $context, (isset($role) && $role->default_context == $context) ? TRUE : FALSE) ?>><?php echo ucfirst($context) ?></option>
+                        <?php endforeach;?>
+                    <?php endif;?>
+                </select>
+                <span class="help-inline"><?php echo form_error('default_context') ? form_error('default_context') : lang('role_default_context_note'); ?></span>
+            </div>
+        </div>
+
 		<div class="control-group <?php echo form_has_error('default') ? 'error' : ''; ?>">
 			<label class="control-label"><?php echo lang('role_default_role')?></label>
 			<div class="controls">
