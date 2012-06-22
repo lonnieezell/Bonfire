@@ -546,6 +546,8 @@ class Modulebuilder
         $data['use_soft_deletes'] = $this->CI->input->post('use_soft_deletes');
         $data['use_created'] = $this->CI->input->post('use_created');
         $data['use_modified'] = $this->CI->input->post('use_modified');
+        $data['field_total'] = $field_total;
+        
         $lang = $this->CI->load->view('files/lang', $data, TRUE);
 
         return $lang;
