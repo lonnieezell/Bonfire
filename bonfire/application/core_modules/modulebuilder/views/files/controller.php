@@ -137,6 +137,7 @@ if ($db_required != '') {
 }
 
 $mb_index_front .= "
+		Template::set('toolbar_title', lang('".$module_name_lower."_list_front'));
 		Template::render();
 	}
 
@@ -179,7 +180,7 @@ if ($db_required != '') {
 $mb_create .= "
 		Assets::add_module_js('".$module_name_lower."', '".$module_name_lower.".js');
 
-		Template::set('toolbar_title', lang('".$module_name_lower."_create') . ' ".$module_name."');
+		Template::set('toolbar_title', lang('".$module_name_lower."_create_heading'));
 		Template::render();
 	}
 
@@ -231,7 +232,7 @@ if ($db_required != '') {
 $mb_edit .= "
 		Assets::add_module_js('".$module_name_lower."', '".$module_name_lower.".js');
 
-		Template::set('toolbar_title', lang('".$module_name_lower."_edit') . ' ".$module_name."');
+		Template::set('toolbar_title', lang('".$module_name_lower."_edit_heading'));
 		Template::render();
 	}
 

@@ -2,7 +2,7 @@
 
 $view =<<<END
 <div>
-	<h1 class="page-header">{$module_name}</h1>
+	<h1 class="page-header"><?php echo \$toolbar_title; ?></h1>
 </div>
 
 <br />
@@ -47,23 +47,23 @@ for($counter=1; $field_total >= $counter; $counter++)
 		continue; 	// move onto next iteration of the loop
 	}
 	$headers .= '
-		<th>'. set_value("view_field_label$counter").'</th>';
+		<th><?php echo lang(\''. $module_name_lower . '_field_' . set_value("view_field_name$counter").'\'); ?></th>';
 }
 
 if ($use_soft_deletes == 'true')
 {
 	$headers .= '
-		<th>Deleted</th>';
+					<th><?php echo lang(\''. $module_name_lower . '_field_deleted\'); ?></th>';
 }
 if ($use_created == 'true')
 {
 	$headers .= '
-		<th>Created</th>';
+					<th><?php echo lang(\''. $module_name_lower . '_field_created\'); ?></th>';
 }
 if ($use_modified == 'true')
 {
 	$headers .= '
-		<th>Modified</th>';
+					<th><?php echo lang(\''. $module_name_lower . '_field_modified\'); ?></th>';
 }
 
 $view = str_replace('{table_header}', $headers, $view);

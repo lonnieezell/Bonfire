@@ -2,7 +2,7 @@
 
 $view =<<<END
 <div class="admin-box">
-	<h3>{$module_name}</h3>
+	<h3><?php echo \$toolbar_title; ?></h3>
 	<?php echo form_open(\$this->uri->uri_string()); ?>
 		<table class="table table-striped">
 			<thead>
@@ -58,22 +58,22 @@ for($counter=1; $field_total >= $counter; $counter++)
 		continue; 	// move onto next iteration of the loop
 	}
 	$headers .= '
-					<th>'. set_value("view_field_label$counter").'</th>';
+					<th><?php echo lang(\''. $module_name_lower . '_field_' . set_value("view_field_name$counter").'\'); ?></th>';
 }
 if ($use_soft_deletes == 'true')
 {
 	$headers .= '
-					<th>Deleted</th>';
+					<th><?php echo lang(\''. $module_name_lower . '_field_deleted\'); ?></th>';
 }
 if ($use_created == 'true')
 {
 	$headers .= '
-					<th>Created</th>';
+					<th><?php echo lang(\''. $module_name_lower . '_field_created\'); ?></th>';
 }
 if ($use_modified == 'true')
 {
 	$headers .= '
-					<th>Modified</th>';
+					<th><?php echo lang(\''. $module_name_lower . '_field_modified\'); ?></th>';
 }
 
 $table_records = '';

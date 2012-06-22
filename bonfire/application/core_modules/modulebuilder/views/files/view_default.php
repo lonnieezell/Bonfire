@@ -17,7 +17,7 @@ $id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? $'.$module_na
 $view .= '?>';
 $view .= '
 <div class="admin-box">
-    <h3>' . $module_name . '</h3>
+    <h3><?php echo $toolbar_title; ?></h3>
 <?php echo form_open($this->uri->uri_string(), \'class="form-horizontal"\'); ?>
     <fieldset>
 ';
@@ -35,7 +35,7 @@ for($counter=1; $field_total >= $counter; $counter++)
         continue;   // move onto next iteration of the loop
     }
 
-    $field_label = set_value("view_field_label$counter");
+    $field_label = "lang('" . $module_name_lower . '_field_' . set_value("view_field_name$counter") . "')";
     $field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
     $field_type = set_value("view_field_type$counter");
 
@@ -60,7 +60,7 @@ for($counter=1; $field_total >= $counter; $counter++)
     {
         $view .= <<<EOT
         <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
-            <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
+            <?php echo form_label({$field_label}{$required}, '{$field_name}', array('class' => "control-label") ); ?>
             {$form_input_delimiters[0]}
 EOT;
     }

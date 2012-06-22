@@ -171,7 +171,7 @@ class Modulebuilder
         $content['config'] = $this->build_config($module_name, $module_description);
 
         // build the lang file
-        $content['lang'] = $this->build_lang($module_name, $module_file_name);
+        $content['lang'] = $this->build_lang($field_total, $module_name, $module_file_name);
 
         // build the permissions migration file
         $content['acl_migration'] = $this->build_acl_sql($field_total, $module_name, $contexts, $action_names, $role_id, $table_name);
@@ -533,15 +533,19 @@ class Modulebuilder
      *
      * @access private
      *
+     * @param int    $field_total           The number of fields to add to the table
      * @param string $module_name       The name given to the module
      * @param string $module_name_lower The name given to the module in lowercase
      *
      * @return string A string containing the content of the language file
      */
-    private function build_lang($module_name, $module_name_lower)
+    private function build_lang($field_total, $module_name, $module_name_lower)
     {
         $data['module_name'] = $module_name;
         $data['module_name_lower'] = $module_name_lower;
+        $data['use_soft_deletes'] = $this->CI->input->post('use_soft_deletes');
+        $data['use_created'] = $this->CI->input->post('use_created');
+        $data['use_modified'] = $this->CI->input->post('use_modified');
         $lang = $this->CI->load->view('files/lang', $data, TRUE);
 
         return $lang;
