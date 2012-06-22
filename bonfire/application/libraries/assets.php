@@ -280,7 +280,7 @@ class Assets
 		$styles     = self::find_files($styles, 'css', $bypass_inheritance);
 		$mod_styles	= self::find_files(self::$module_styles, 'css', $bypass_inheritance);
 
-		$combine = self::$ci->config->item('assets.combine');
+		$combine = self::$ci->config->item('assets.css_combine');
 
 		// Loop through the styles, spitting out links for each one.
 		if (!$combine)
@@ -713,7 +713,7 @@ class Assets
 		$scripts = self::find_files($scripts, 'js');
 
 		// We either combine the files into one...
-		if ((empty($new_js) || is_array($new_js)) && $list==FALSE && self::$ci->config->item('assets.combine'))
+		if ((empty($new_js) || is_array($new_js)) && $list==FALSE && self::$ci->config->item('assets.js_combine'))
 		{
 			$return = self::combine_js($scripts);
 		}

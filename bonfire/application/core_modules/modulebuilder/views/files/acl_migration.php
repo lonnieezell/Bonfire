@@ -43,9 +43,9 @@ $acl_migrations .= '
 		foreach ($this->permission_values as $permission_value)
 		{
 			$permissions_data = $permission_value;
-			$this->db->insert("{$prefix}permissions", $permissions_data);
+			$this->db->insert("permissions", $permissions_data);
 			$role_permissions_data = array(\'role_id\' => \''.$role_id.'\', \'permission_id\' => $this->db->insert_id(),);
-			$this->db->insert("{$prefix}role_permissions", $role_permissions_data);
+			$this->db->insert("role_permissions", $role_permissions_data);
 		}
 	}
 
@@ -58,13 +58,13 @@ $acl_migrations .= '
         // permissions
 		foreach ($this->permission_values as $permission_value)
 		{
-			$query = $this->db->select(\'permission_id\')->get_where("{$prefix}permissions", array(\'name\' => $permission_value[\'name\'],));
+			$query = $this->db->select(\'permission_id\')->get_where("permissions", array(\'name\' => $permission_value[\'name\'],));
 			foreach ($query->result_array() as $row)
 			{
 				$permission_id = $row[\'permission_id\'];
-				$this->db->delete("{$prefix}role_permissions", array(\'permission_id\' => $permission_id));
+				$this->db->delete("role_permissions", array(\'permission_id\' => $permission_id));
 			}
-			$this->db->delete("{$prefix}permissions", array(\'name\' => $permission_value[\'name\']));
+			$this->db->delete("permissions", array(\'name\' => $permission_value[\'name\']));
 
 		}
 	}

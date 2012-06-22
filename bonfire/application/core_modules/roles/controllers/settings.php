@@ -55,7 +55,7 @@ class Settings extends Admin_Controller
 		// for the render_search_box()
 		$this->load->helper('ui/ui');
 
-		Template::set_block('sub_nav', 'settings/sub_nav');
+		Template::set_block('sub_nav', 'settings/_sub_nav');
 	}//end __construct()
 
 	//--------------------------------------------------------------------
@@ -93,7 +93,7 @@ class Settings extends Admin_Controller
 	 */
 	public function create()
 	{
-		$this->auth->restrict('Bonfire.Roles.New');
+		$this->auth->restrict('Bonfire.Roles.Add');
 
 		if ($this->input->post('submit'))
 		{
