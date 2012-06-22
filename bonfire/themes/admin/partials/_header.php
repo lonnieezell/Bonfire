@@ -20,7 +20,7 @@
 	<meta name="robots" content="noindex" />
 	<?php echo Assets::css(null, true); ?>
 
-	<script src="<?php echo Template::theme_url('js/modernizr-2.5.3.js'); ?>"></script>
+	<script src="<?php echo js_path(); ?>modernizr-2.5.3.js"></script>
 </head>
 <body class="desktop">
 <!--[if lt IE 7]>
@@ -43,7 +43,7 @@
 					</a>
 					<h1><?php echo anchor( '/', $this->settings_lib->item('site.title'), 'class="brand"' ); ?></h1>
 
-					
+
 					<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>
 					<!-- Shortcut Menu -->
 					<div class="nav pull-right" id="shortcuts">
@@ -98,7 +98,7 @@
 								</ul>
 							</div>
 						</div>
-					
+
 						<?php echo Contexts::render_menu('text', 'normal'); ?>
 					</div> <!-- END OF nav-collapse -->
 
@@ -114,7 +114,7 @@
 		<?php if (isset($toolbar_title)) : ?>
 			<h1><?php echo $toolbar_title ?></h1>
 		<?php endif; ?>
-		
+
 		<div class="pull-right" id="sub-menu">
 			<?php Template::block('sub_nav', ''); ?>
 		</div>

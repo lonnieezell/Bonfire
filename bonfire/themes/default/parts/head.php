@@ -6,9 +6,9 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-				<script src="<?php echo Template::theme_url('js/modernizr-2.5.3.js') ?>"></script>
+	<script src="<?php echo js_path(); ?>modernizr-2.5.3.js"></script>
 
-				<?php echo Assets::css(); ?>
+	<?php echo Assets::css(); ?>
 
     <!-- iPhone and Mobile favicon's and touch icons -->
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/images/favicon.ico">
