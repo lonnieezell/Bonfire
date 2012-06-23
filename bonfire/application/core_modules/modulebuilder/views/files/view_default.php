@@ -4,7 +4,6 @@ $view = '
 <?php if (validation_errors()) : ?>
 <div class="alert alert-block alert-error fade in ">
   <a class="close" data-dismiss="alert">&times;</a>
-  <h4 class="alert-heading">Please fix the following errors :</h4>
  <?php echo validation_errors(); ?>
 </div>
 <?php endif; ?>
@@ -212,7 +211,7 @@ if($action_name != 'create') {
     $delete = PHP_EOL . '
     <?php if ($this->auth->has_permission(\''.$delete_permission.'\')) : ?>
 
-            or <a class="btn btn-danger" id="delete-me" href="<?php echo site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id);?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" name="delete-me">
+            <?php echo lang(\'bf_or\'); ?> <a class="btn btn-danger" id="delete-me" href="<?php echo site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id);?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" name="delete-me">
             <i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>
             </a>
 
@@ -225,7 +224,7 @@ $view .= PHP_EOL . '
         <div class="form-actions">
             <br/>
             <input type="submit" name="submit" class="btn btn-primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' />
-            or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-warning"\'); ?>
+            <?php echo lang(\'bf_or\'); ?> <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-warning"\'); ?>
             ' . $delete . '
         </div>
     </fieldset>

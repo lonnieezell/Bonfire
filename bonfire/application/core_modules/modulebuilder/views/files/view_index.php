@@ -18,8 +18,8 @@ $view =<<<END
 				<?php if (\$this->auth->has_permission('{delete_permission}')) : ?>
 				<tr>
 					<td colspan="{cols_total}">
-						<?php echo lang('bf_with_selected') ?>
-						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
+						<?php echo lang('bf_with_selected'); ?>
+						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete'); ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
 					</td>
 				</tr>
 				<?php endif;?>
@@ -37,7 +37,7 @@ $view =<<<END
 			<?php endforeach; ?>
 			<?php else: ?>
 				<tr>
-					<td colspan="{cols_total}">No records found that match your selection.</td>
+					<td colspan="{cols_total}"><?php echo lang('{$module_name_lower}_no_records'); ?></td>
 				</tr>
 			<?php endif; ?>
 			</tbody>
