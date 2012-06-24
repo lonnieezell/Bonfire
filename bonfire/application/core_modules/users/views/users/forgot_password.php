@@ -1,5 +1,5 @@
 <div class="page-header">
-	<h1><?php echo lang('us_reset_password'); ?></h1>
+	<h1><?php echo lang('us_forgot_password'); ?></h1>
 </div>
 
 <?php if (auth_errors() || validation_errors()) : ?>
@@ -17,7 +17,7 @@
 	<div class="span12">
 		<div class="alert alert-info fade in">
 		  <a data-dismiss="alert" class="close">&times;</a>
-			<?php echo lang('us_reset_note'); ?>
+			<?php echo lang('us_forgot_password_note'); ?>
 		</div>
 	</div>
 </div>
@@ -37,7 +37,7 @@
 	<div class="control-group">
 		<label class="control-label" for="submit">&nbsp;</label>
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" value="Send Password"  />
+			<input class="btn btn-primary" type="submit" name="submit" value="<?php echo lang('us_send_password'); ?>"  />
 		</div>
 	</div>
 

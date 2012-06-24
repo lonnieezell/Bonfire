@@ -581,17 +581,19 @@ class Settings extends Admin_Controller
 	private function save_user($type='insert', $id=0, $meta_fields=array(), $cur_role_name = '')
 	{
 
+		$password_min = $this->settings_lib->item('auth.password_min_length');
+
 		if ($type == 'insert')
 		{
 			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|unique[users.email]|valid_email|max_length[120]|xss_clean');
-			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password|xss_clean');
+			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length['.$password_min.']|max_length[120]|valid_password|xss_clean');
 			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]|xss_clean');
 		}
 		else
 		{
 			$_POST['id'] = $id;
 			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|unique[users.email,users.id]|valid_email|max_length[120]|xss_clean');
-			$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|strip_tags|min_length[8]|max_length[120]|valid_password|matches[pass_confirm]|xss_clean');
+			$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|strip_tags|min_length['.$password_min.']|max_length[120]|valid_password|matches[pass_confirm]|xss_clean');
 			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'trim|strip_tags|xss_clean');
 		}
 
