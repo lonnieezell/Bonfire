@@ -40,7 +40,7 @@
 		</div>
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('permissions_save');?>" /> or 
+			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('permissions_save');?>" /> <?php echo lang('bf_or'); ?> 
 			<?php echo anchor(SITE_AREA .'/settings/permissions', lang('permissions_cancel')); ?>
 		</div>
 

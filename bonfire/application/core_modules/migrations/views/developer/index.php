@@ -52,7 +52,7 @@
 					</p>
 
 					<div class="form-actions">
-						<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
+						<input type="submit" name="submit" value="<?php echo lang('mig_migrate_button'); ?>" /> <?php echo lang('bf_or'); ?> <?php echo anchor(SITE_AREA .'/developer/migrations', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
 					</div>
 					<?php else: ?>
 						<div class="alert alert-warning fade in">
@@ -149,7 +149,7 @@
 						</div>
 
 						<div class="form-actions">
-							<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
+							<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('mig_migrate_button'); ?>" /> <?php echo lang('bf_or'); ?> <?php echo anchor(SITE_AREA .'/developer/migrations', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
 						</div>
 						<?php else: ?>
 							<p><?php echo lang('mig_no_migrations') ?></p>
