@@ -102,7 +102,7 @@
 		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
 			<label class="control-label required" for="timezones"><?php echo lang('bf_timezone') ?></label>
 			<div class="controls">
-				<?php echo timezone_menu(set_value('timezones', isset($user) ? $user->timezone : $current_user->timezone)); ?>
+				<?php echo timezone_menu(set_value('timezones', isset($user) ? $user->timezone : $current_user->timezone), '', 'timezones', array('id' => 'timezones')); ?>
 				<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
 			</div>
 		</div>
