@@ -68,12 +68,12 @@ class Settings extends Admin_Controller
 		{
 			if ($this->save_settings())
 			{
-				Template::set_message(lang('settings_saved_success'), 'success');
+				Template::set_message(lang('set_settings_saved_success'), 'success');
 				redirect(SITE_AREA .'/settings');
 			}
 			else
 			{
-				Template::set_message(lang('settings_error_success'), 'error');
+				Template::set_message(lang('set_settings_error_success'), 'error');
 			}
 		}
 
@@ -108,15 +108,15 @@ class Settings extends Admin_Controller
 	 */
 	private function save_settings()
 	{
-		$this->form_validation->set_rules('title', 'lang:bf_site_name', 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('system_email', 'lang:bf_site_email', 'required|trim|strip_tags|valid_email|xss_clean');
-		$this->form_validation->set_rules('list_limit','Items <em>p.p.</em>', 'required|trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('password_min_length','lang:bf_password_length', 'required|trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('password_force_numbers', 'lang:bf_password_force_numbers', 'trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('password_force_symbols', 'lang:bf_password_force_symbols', 'trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('password_force_mixed_case', 'lang:bf_password_force_mixed_case', 'trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('password_show_labels', 'lang:bf_password_show_labels', 'trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('languages[]', 'lang:bf_language', 'required|trim|strip_tags|is_array|xss_clean');
+		$this->form_validation->set_rules('title', 'lang:set_site_name', 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('system_email', 'lang:set_site_email', 'required|trim|strip_tags|valid_email|xss_clean');
+		$this->form_validation->set_rules('list_limit','lang:set_top_number', 'required|trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('password_min_length','lang:set_password_length', 'required|trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('password_force_numbers', 'lang:set_password_force_numbers', 'trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('password_force_symbols', 'lang:set_password_force_symbols', 'trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('password_force_mixed_case', 'lang:set_password_force_mixed_case', 'trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('password_show_labels', 'lang:set_password_show_labels', 'trim|strip_tags|numeric|xss_clean');
+		$this->form_validation->set_rules('languages[]', 'lang:se_languages', 'required|trim|strip_tags|is_array|xss_clean');
 
 		if ($this->form_validation->run() === FALSE)
 		{
@@ -161,7 +161,7 @@ class Settings extends Admin_Controller
 		}
 
 		// Log the activity
-		$this->activity_model->log_activity($this->current_user->id, lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'core');
+		$this->activity_model->log_activity($this->current_user->id, lang('set_act_settings_saved').': ' . $this->input->ip_address(), 'core');
 
 		// save the settings to the DB
 		$updated = $this->settings_model->update_batch($data, 'name');
