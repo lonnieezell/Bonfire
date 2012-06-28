@@ -31,6 +31,7 @@ $lang['up_branch']					= 'Branch: <b>develop</b>';
 $lang['up_author']					= 'Author';
 $lang['up_committed']				= 'Committed';
 $lang['up_message']					= 'Message';
+$lang['up_view_update']			= 'View Updates<';
 
 $lang['up_update_message_bleeding'] = 'A <b>bleeding edge</b> update to Bonfire is available.';
 $lang['up_update_message_new']      = ' Version %s of Bonfire is available. You are currently running '; //requires the spaces at the start and end of the string
