@@ -6,6 +6,7 @@ $lang['set_settings_error_success']     = 'There was an error saving your settin
 //--------------------------------------------------------------------
 // Main Settings
 //--------------------------------------------------------------------
+$lang['set_site_settings']	= 'Site Settings';
 $lang['set_site_name']			= 'Site Name';
 $lang['set_site_email']			= 'Site Email';
 $lang['set_site_email_help']		= 'The default email that system-generated emails are sent from.';
