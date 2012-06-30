@@ -25,28 +25,28 @@
 						<ul class="dropdown-menu">
 							<li>
 								<a href="<?php echo site_url(); ?>">
-									<?php echo lang('bf_home') ?>
+									<?php echo lang('us_home') ?>
 								</a>
 							</li>
 
 							<?php if (has_permission('Site.Content.View')) : ?>
 							<li class="divider"></li>
 							<li>
-								<?php echo anchor(SITE_AREA, 'Control Panel'); ?>
+								<?php echo anchor(SITE_AREA, lang('us_control_panel')); ?>
 							</li>
 
 							<?php endif; ?>
 							<li class="divider"></li>
 							<li>
 								<a href="<?php echo site_url('users/profile');?>">
-									<?php echo lang('bf_user_settings') ?>
+									<?php echo lang('us_my_Profile') ?>
 								</a>
 							</li>
 
 							<li class="divider"></li>
 							<li>
 								<a href="<?php echo site_url('logout');?>">
-									<?php echo lang('bf_action_logout') ?>
+									<?php echo lang('us_logout') ?>
 								</a>
 							</li>
 						</ul>
@@ -56,12 +56,12 @@
 
 						<li>
 							<a href="<?php echo site_url('register');?>">
-								<?php echo lang('bf_action_register') ?>
+								<?php echo lang('us_register') ?>
 							</a>
 						</li>
 						<li>
 							<a href="<?php echo site_url('login');?>" class="login-btn">
-								<?php echo lang('bf_action_login') ?>
+								<?php echo lang('us_login') ?>
 							</a>
 						</li>
 
@@ -73,4 +73,3 @@
 	</div>	<!-- /.navbar-inner -->
 </div>	<!-- /.navbar -->
 <!-- End of Navbar Template -->
-

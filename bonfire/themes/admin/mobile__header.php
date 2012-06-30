@@ -62,7 +62,7 @@
 	<div id="nav-bar">
 		<div class="container">
 			<?php if (isset($toolbar_title)) : ?>
-				<h1><?php echo $toolbar_title ?></h1>
+				<h1><?php echo $toolbar_title; ?></h1>
 			<?php endif; ?>
 
 			<?php Template::block('sub_nav', ''); ?>

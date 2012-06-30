@@ -48,19 +48,19 @@
 					<!-- Shortcut Menu -->
 					<div class="nav pull-right" id="shortcuts">
 					<div class="btn-group">
-						<a class="dropdown-toggle dark btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png') ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts"/></a>
+						<a class="dropdown-toggle dark btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png') ?>" id="shortkeys_show" title="<?php echo lang('bf_keyboard_shortcuts'); ?>" alt="<?php echo lang('bf_keyboard_shortcuts'); ?>"/></a>
 						<ul class="dropdown-menu toolbar-keys">
 								<li>
 										<div class="inner keys">
 											<?php if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])): ?>
-											<h4><?php echo lang('bf_keyboard_shortcuts') ?></h4>
+											<h4><?php echo lang('bf_available_keyboard_shortcuts'); ?></h4>
 											<ul>
 											<?php foreach($shortcut_data['shortcut_keys'] as $key => $data): ?>
-												<li><span><?php echo $data?></span> : <?php echo $shortcut_data['shortcuts'][$key]['description']; ?></li>
+												<li><span><?php echo $data; ?></span> : <?php echo $shortcut_data['shortcuts'][$key]['description']; ?></li>
 											<?php endforeach; ?>
 											</ul>
 											<?php else:?>
-											<h4><?php echo lang('bf_keyboard_shortcuts_empty') ?></h4>
+											<h4><?php echo lang('bf_keyboard_shortcuts_empty'); ?></h4>
 											<?php endif;?>
 											<a href="<?php echo site_url(SITE_AREA.'/settings/ui');?>"><?php echo lang('bf_keyboard_shortcuts_edit');?></a>
 										</div>
@@ -74,7 +74,7 @@
 						<!-- User Menu -->
 						<div class="nav pull-right" id="user-menu">
 							<div class="btn-group">
-								<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit') ?>" id="tb_email" class="btn dark" title="<?php echo lang('bf_user_settings') ?>">
+								<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit') ?>" id="tb_email" class="btn dark" title="<?php echo lang('us_my_Profile'); ?>">
 									<?php echo (isset($current_user->display_name) && !empty($current_user->display_name)) ? $current_user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $current_user->username : $current_user->email); ?>
 								</a>
 								<a class="btn dropdown-toggle dark" data-toggle="dropdown" href="#"><span class="caret"></span></a>
@@ -82,16 +82,16 @@
 									<li>
 										<div class="inner">
 											<div class="toolbar-profile-img">
-												<?php echo gravatar_link($current_user->email, 96, null, $current_user->display_name) ?>
+												<?php echo gravatar_link($current_user->email, 96, null, $current_user->display_name); ?>
 											</div>
 
 											<div class="toolbar-profile-info">
-												<p><b><?php echo $current_user->display_name ?></b><br/>
-													<?php e($current_user->email) ?>
+												<p><b><?php echo $current_user->display_name; ?></b><br/>
+													<?php echo $current_user->email; ?>
 													<br/>
 												</p>
-												<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit') ?>"><?php echo lang('bf_user_settings')?></a>
-												<a href="<?php echo site_url('logout'); ?>"><?php echo lang('bf_action_logout')?></a>
+												<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit'); ?>"><?php echo lang('us_my_Profile'); ?></a>
+												<a href="<?php echo site_url('logout'); ?>"><?php echo lang('us_logout'); ?></a>
 											</div>
 										</div>
 									</li>
@@ -112,7 +112,7 @@
 	<div class="container-fluid">
 
 		<?php if (isset($toolbar_title)) : ?>
-			<h1><?php echo $toolbar_title ?></h1>
+			<h1><?php echo $toolbar_title; ?></h1>
 		<?php endif; ?>
 		
 		<div class="pull-right" id="sub-menu">
@@ -124,7 +124,7 @@
 <!-- Ajax Loader Image/Overlay -->
 <div id="loader">
 	<div class="box">
-		<img src="<?php echo Template::theme_url('images/ajax_loader.gif')?>" />
+		<img src="<?php echo Template::theme_url('images/ajax_loader.gif'); ?>" />
 	</div>
 </div>
 
