@@ -6,7 +6,7 @@
 <?php endif; ?>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
+	<h3><?php echo $toolbar_title; ?></h3>
 
 	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
@@ -50,7 +50,7 @@
 			</div>
 
 			<div class="control-group">
-				<label class="control-label" for="status"><?php echo lang('bf_site_status'); ?></label>
+				<label class="control-label" for="status"><?php echo lang('set_site_status'); ?></label>
 				<div class="controls">
 					<select name="status">
 						<option value="1" <?php echo isset($settings) && $settings['site.status'] == 1 ? 'selected="selected"' : set_select('site.status', '1') ?>><?php echo lang('set_online'); ?></option>
@@ -172,10 +172,10 @@
 				<label class="control-label" for="remember_length"><?php echo lang('set_remember_time'); ?></label>
 				<div class="controls">
 					<select name="remember_length" id="remember_length">
-						<option value="604800"  <?php echo $settings['auth.remember_length'] == '604800' ?  'selected="selected"' : '' ?>>1 <?php echo lang('set_week'); ?></option>
-						<option value="1209600" <?php echo $settings['auth.remember_length'] == '1209600' ? 'selected="selected"' : '' ?>>2 <?php echo lang('set_weeks'); ?></option>
-						<option value="1814400" <?php echo $settings['auth.remember_length']== '1814400' ? 'selected="selected"' : '' ?>>3 <?php echo lang('set_weeks'); ?></option>
-						<option value="2592000" <?php echo $settings['auth.remember_length'] == '2592000' ? 'selected="selected"' : '' ?>>30 <?php echo lang('set_days'); ?></option>
+						<option value="604800"  <?php echo $settings['auth.remember_length'] == '604800' ?  'selected="selected"' : '' ?>>1 <?php echo lang('bf_week'); ?></option>
+						<option value="1209600" <?php echo $settings['auth.remember_length'] == '1209600' ? 'selected="selected"' : '' ?>>2 <?php echo lang('bf_weeks'); ?></option>
+						<option value="1814400" <?php echo $settings['auth.remember_length']== '1814400' ? 'selected="selected"' : '' ?>>3 <?php echo lang('bf_weeks'); ?></option>
+						<option value="2592000" <?php echo $settings['auth.remember_length'] == '2592000' ? 'selected="selected"' : '' ?>>30 <?php echo lang('bf_days'); ?></option>
 					</select>
 				</div>
 			</div>
@@ -254,7 +254,7 @@
 </div>
 
 	<div class="form-actions">
-		<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save_changes') ?>" />
+		<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save_settings') ?>" />
 	</div>
 
 	<?php echo form_close(); ?>
