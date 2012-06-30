@@ -5,7 +5,7 @@
 
 <?php if (isset($results)) : ?>
 
-	<?php if ($results['success'] !== false) :?>
+	<?php if ($results['success'] !== FALSE) :?>
 		<div class="alert alert-info fade in">
 				<a class="close" data-dismiss="alert">&times;</a>
 			<?php echo lang('em_test_success'); ?>

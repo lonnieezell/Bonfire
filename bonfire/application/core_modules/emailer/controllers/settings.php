@@ -64,20 +64,20 @@ class Settings extends Admin_Controller
 
 		if ($this->input->post('submit'))
 		{
-			$this->form_validation->set_rules('sender_email', 'System Email', 'required|trim|valid_email|max_length[120]|xss_clean');
-			$this->form_validation->set_rules('protocol', 'Email Server', 'trim|xss_clean');
+			$this->form_validation->set_rules('sender_email', 'lang:em_system_email', 'required|trim|valid_email|max_length[120]|xss_clean');
+			$this->form_validation->set_rules('protocol', 'lang:em_email_server', 'trim|xss_clean');
 
 			if ($this->input->post('protocol') == 'sendmail')
 			{
-				$this->form_validation->set_rules('mailpath', 'Sendmail Path', 'required|trim|xss_clean');
+				$this->form_validation->set_rules('mailpath', 'lang:em_sendmail_path', 'required|trim|xss_clean');
 			}
 			elseif ($this->input->post('protocol') == 'smtp')
 			{
-				$this->form_validation->set_rules('smtp_host', 'SMTP Server Address', 'required|trim|strip_tags|xss_clean');
-				$this->form_validation->set_rules('smtp_user', 'SMTP Username', 'trim|strip_tags|xss_clean');
-				$this->form_validation->set_rules('smtp_pass', 'SMTP Password', 'trim|strip_tags|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,20}]');
-				$this->form_validation->set_rules('smtp_port', 'SMTP Port', 'trim|strip_tags|numeric|xss_clean');
-				$this->form_validation->set_rules('smtp_timeout', 'SMTP timeout', 'trim|strip_tags|numeric|xss_clean');
+				$this->form_validation->set_rules('smtp_host', 'lang:em_smtp_host', 'required|trim|strip_tags|xss_clean');
+				$this->form_validation->set_rules('smtp_user', 'lang:em_smtp_username', 'trim|strip_tags|xss_clean');
+				$this->form_validation->set_rules('smtp_pass', 'lang:em_smtp_password', 'trim|strip_tags|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,20}]');
+				$this->form_validation->set_rules('smtp_port', 'lang:em_smtp_port', 'trim|strip_tags|numeric|xss_clean');
+				$this->form_validation->set_rules('smtp_timeout', 'lang:em_smtp_timeout', 'trim|strip_tags|numeric|xss_clean');
 			}
 
 			if ($this->form_validation->run() !== FALSE)
@@ -101,17 +101,17 @@ class Settings extends Admin_Controller
 				if ($updated)
 				{
 					// Success, so reload the page, so they can see their settings
-					Template::set_message('Email settings successfully saved.', 'success');
+					Template::set_message(lang('em_save_settings_success'), 'success');
 					redirect(SITE_AREA .'/settings/emailer');
 				}
 				else
 				{
-					Template::set_message('There was an error saving your settings.', 'error');
+					Template::set_message(lang('em_save_settings_failure'), 'error');
 				}
 			}
 			else
 			{
-				Template::set_message('There was an error saving your settings.', 'error');
+				Template::set_message(lang('em_save_settings_failure'), 'error');
 			}
 		}//end if
 
@@ -121,7 +121,7 @@ class Settings extends Admin_Controller
 
 		Assets::add_module_js('emailer', 'js/settings');
 
-		Template::set('toolbar_title', 'Email Settings');
+		Template::set('toolbar_title', lang('em_email_settings'));
 
 		Template::render();
 
@@ -148,7 +148,7 @@ class Settings extends Admin_Controller
 			write_file(APPPATH .'core_modules/emailer/views/email/_header.php', $header, 'w+');
 			write_file(APPPATH .'core_modules/emailer/views/email/_footer.php', $footer, 'w+');
 
-			Template::set_message('Template successfully saved.', 'success');
+			Template::set_message(lang('em_save_template_success'), 'success');
 
 			redirect(SITE_AREA .'/settings/emailer/template');
 		}
@@ -163,20 +163,6 @@ class Settings extends Admin_Controller
 
 		Template::render();
 	}//end template()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * @access puublic
-	 *
-	 * @return void
-	 */
-	public function emails()
-	{
-		Template::set('toolbar_title', lang('em_email_contents'));
-		Template::render();
-
-	}//end emails()
 
 	//--------------------------------------------------------------------
 
