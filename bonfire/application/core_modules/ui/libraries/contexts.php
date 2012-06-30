@@ -361,7 +361,7 @@ class Contexts
 		{
 			if (module_controller_exists($context, $module) === TRUE)
 			{
-				$mod_config = module_config($module);
+				$mod_config = module_config($module,false,true);
 
 				self::$actions[$module] = array(
 					'weight'		=> isset($mod_config['weights'][$context]) ? $mod_config['weights'][$context] : 0,
@@ -490,7 +490,7 @@ class Contexts
 			// out a menu based on the multiple items.
 			if (count($topic) > 1)
 			{
-				$list .= '<li class="no-link parent-menu"><a href="#" class="no-link parent-menu">'. ucwords($topic_name) .'</a>';
+				$list .= '<li class="no-link parent-menu"><a href="#" class="no-link parent-menu">'. ucfirst($topic_name) .'</a>';
 				$list .= '<ul>';
 
 				foreach ($topic as $module => $vals)
@@ -500,6 +500,7 @@ class Contexts
 					// If it has a sub-menu, echo out that menu only…
 					if (isset($vals['menu_view']) && !empty($vals['menu_view']))
 					{
+						self::$ci->lang->load($module . '/submenu');
 						$view = self::$ci->load->view($vals['menu_view'], NULL, TRUE);
 
 						// To maintain backwards compatility, strip out and <ul> tags
@@ -556,12 +557,14 @@ class Contexts
 	 */
 	private static function build_item($module, $title, $display_name, $context, $menu_view='')
 	{
-		$item  = '<li {listclass}><a href="'. site_url(self::$site_area .'/'. $context .'/'. $module) .'" class="{class}"';
-		$item .= ' title="'. $title .'">'. ucwords(str_replace('_', '', $display_name)) ."</a>\n";
+		$item  = '<li {listclass}><a href="'. site_url(SITE_AREA .'/'. $context .'/'. $module) .'" class="{class}"';
+		$item .= ' title="'. $title .'">'. ucfirst(str_replace('_', '', $display_name)) ."</a>\n";
 
 		// Sub Menus?
 		if (!empty($menu_view))
 		{
+			self::$ci->lang->load($module . '/submenu');
+			
 			// Only works if it's a valid view…
 			$view = self::$ci->load->view($menu_view, NULL, TRUE);
 
