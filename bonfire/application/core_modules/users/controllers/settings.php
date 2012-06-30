@@ -603,13 +603,13 @@ class Settings extends Admin_Controller
 		{
 			$extra_unique_rule = $type == 'update' ? ',users.id' : '';
 
-			$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[users.username'.$extra_unique_rule.']|xss_clean');
+			$this->form_validation->set_rules('username', 'lang:us_username', 'required|trim|strip_tags|max_length[30]|unique[users.username'.$extra_unique_rule.']|xss_clean');
 		}
 
-		$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|strip_tags|max_length[255]|xss_clean');
+		$this->form_validation->set_rules('display_name', 'lang:us_display_name', 'trim|strip_tags|max_length[255]|xss_clean');
 
-		$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|strip_tags|max_length[4]|xss_clean');
+		$this->form_validation->set_rules('language', 'lang:us_language', 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('timezones', 'lang:us_timezone', 'required|trim|strip_tags|max_length[4]|xss_clean');
 
 		if (has_permission('Bonfire.Roles.Manage') && has_permission('Permissions.'.$cur_role_name.'.Manage'))
 		{

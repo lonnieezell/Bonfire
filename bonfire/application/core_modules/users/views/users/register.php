@@ -1,6 +1,6 @@
 <section id="register">
 	<div class="page-header">
-		<h1><?php echo lang('us_login'); ?></h1>
+		<h1><?php echo lang('us_register_heading'); ?></h1>
 	</div>
 
 <?php if (auth_errors() || validation_errors()) : ?>
@@ -31,14 +31,14 @@
 
 
 	<div class="control-group <?php echo iif( form_error('email') , 'error'); ?>">
-		<label class="control-label required" for="email"><?php echo lang('bf_email'); ?></label>
+		<label class="control-label required" for="email"><?php echo lang('us_email'); ?></label>
 		<div class="controls">
-		 <input class="span6" type="text" name="email" id="email"  value="<?php echo set_value('email'); ?>"  placeholder="email" />
+		 <input class="span6" type="text" name="email" id="email"  value="<?php echo set_value('email'); ?>"  placeholder="<?php echo lang('us_email'); ?>" />
 		</div>
 	</div>
 
 	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
-		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>
+		<label class="control-label" for="display_name"><?php echo lang('us_display_name'); ?></label>
 		<div class="controls">
 			<input class="span6" type="text" name="display_name" value="<?php echo set_value('display_name'); ?>" />
 		</div>
@@ -47,9 +47,9 @@
 	<?php if ( $this->settings_lib->item('auth.login_type') !== 'email' OR $this->settings_lib->item('auth.use_usernames') == 1): ?>
 
 	<div class="control-group <?php echo iif( form_error('username') , 'error'); ?>">
-		<label class="control-label required" for="username"><?php echo lang('bf_username'); ?></label>
+		<label class="control-label required" for="username"><?php echo lang('us_username'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" name="username" id="username" value="<?php echo set_value('username') ?>" placeholder="username" />
+			<input class="span6" type="text" name="username" id="username" value="<?php echo set_value('username') ?>" placeholder="<?php echo lang('us_username'); ?>" />
 		</div>
 	</div>
 
@@ -57,28 +57,28 @@
 	<br/>
 
 		<div class="control-group <?php echo iif( form_error('password') , 'error'); ?>">
-			<label class="control-label required" for="password"><?php echo lang('bf_password'); ?></label>
+			<label class="control-label required" for="password"><?php echo lang('us_password'); ?></label>
 			<div class="controls">
-				<input class="span6" type="password" name="password" id="password" value="" placeholder="password" />
+				<input class="span6" type="password" name="password" id="password" value="" placeholder="<?php echo lang('us_password'); ?>" />
 				<p class="help-block"><?php echo $password_mins; ?></p>
 			</div>
 		</div>
 
 		<div class="control-group <?php echo iif( form_error('pass_confirm') , 'error'); ?>">
-			<label class="control-label required" for="pass_confirm"><?php echo lang('bf_password_confirm'); ?></label>
+			<label class="control-label required" for="pass_confirm"><?php echo lang('us_password_confirm'); ?></label>
 			<div class="controls">
-				<input class="span6" type="password" name="pass_confirm" id="pass_confirm" value="" placeholder="<?php echo lang('bf_password_confirm'); ?>" />
+				<input class="span6" type="password" name="pass_confirm" id="pass_confirm" value="" placeholder="<?php echo lang('us_password_confirm'); ?>" />
 			</div>
 		</div>
 
 		<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
-			<label class="control-label required" for="language"><?php echo lang('bf_language') ?></label>
+			<label class="control-label required" for="language"><?php echo lang('us_language'); ?></label>
 			<div class="controls">
 				<select name="language" id="language" class="chzn-select">
 				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
 					<?php foreach ($languages as $language) : ?>
 						<option value="<?php echo $language ?>" <?php echo set_select('language', $language, config_item('language') == $language ? TRUE : FALSE) ?>>
-							<?php echo ucfirst($language) ?>
+							<?php echo ucfirst($language); ?>
 						</option>
 
 					<?php endforeach; ?>
@@ -89,7 +89,7 @@
 		</div>
 
 		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
-			<label class="control-label required" for="timezones"><?php echo lang('bf_timezone') ?></label>
+			<label class="control-label required" for="timezones"><?php echo lang('us_timezone'); ?></label>
 			<div class="controls">
 				<?php echo timezone_menu(set_value('timezones')); ?>
 				<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
@@ -151,14 +151,14 @@
 	<div class="control-group">
 		<label class="control-label" for="submit">&nbsp;</label>
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="<?php echo lang('us_register'); ?>"  />
+			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="<?php echo lang('us_action_register'); ?>"  />
 		</div>
 	</div>
 
 <?php echo form_close(); ?>
 
 <p style="text-align: center">
-	<?php echo lang('us_already_registered'); ?> <?php echo anchor('/login', lang('bf_action_login')); ?>
+	<?php echo lang('us_already_registered'); ?> <?php echo anchor('/login', lang('us_login')); ?>
 </p>
 
 	</div>

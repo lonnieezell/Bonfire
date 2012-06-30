@@ -93,22 +93,22 @@ class User_model extends BF_Model
 	{
 		$min_length = (string) $this->settings_lib->item('auth.password_min_length');
 
-		$message = sprintf( lang('bf_password_min_length_help'), $min_length );
+		$message = sprintf( lang('us_password_min_length_help'), $min_length );
 
 
 		if ( $this->settings_lib->item('auth.password_force_numbers') == 1 )
 		{
-			$message .= '<br />' . lang('bf_password_number_required_help');
+			$message .= '<br />' . lang('us_password_number_required_help');
 		}
 
 		if ( $this->settings_lib->item('auth.password_force_symbols') == 1 )
 		{
-			$message .= '<br />' . lang('bf_password_symbols_required_help');
+			$message .= '<br />' . lang('us_password_symbols_required_help');
 		}
 
 		if ( $this->settings_lib->item('auth.password_force_mixed_case') == 1 )
 		{
-			$message .= '<br />' . lang('bf_password_caps_required_help');
+			$message .= '<br />' . lang('us_password_caps_required_help');
 		}
 
 		Template::set('password_hints', $message);

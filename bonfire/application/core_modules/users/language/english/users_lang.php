@@ -21,6 +21,23 @@
 	THE SOFTWARE.
 */
 
+$lang['us_register']		= 'Sign Up';
+$lang['us_login']		= 'Sign In';
+$lang['us_logout']		= 'Sign Out';
+
+$lang['us_username']			= 'Username';
+$lang['us_password']			= 'Password';
+$lang['us_password_confirm']	= 'Password (again)';
+$lang['us_display_name']		= 'Display Name';
+$lang['us_email']				= 'Email';
+$lang['us_timezone']			= 'Timezone';
+$lang['us_language']			= 'Language';
+$lang['us_home']				= 'Home';
+$lang['us_my_Profile']		= 'My Profile';
+$lang['us_control_panel'] = 'Control Panel';
+
+$lang['us_remember_me']			= 'Remember me';
+
 $lang['us_account_deleted']			= 'Unfortunately your account has been deleted. It has not yet been purged and <strong>may still</strong> be restored. Contact the administrator at %s.';
 
 $lang['us_bad_email_pass']			= 'Incorrect email or password.';
@@ -40,7 +57,7 @@ $lang['us_log_reset']				= 'reset their password.';
 $lang['us_log_register']			= 'registered a new account.';
 $lang['us_log_edit_profile']		= 'updated their profile';
 
-
+$lang['us_users']				= 'Users';
 $lang['us_deleted_users']			= 'Deleted Users';
 $lang['us_purge_del_accounts']		= 'Purge Deleted Accounts';
 $lang['us_purge_del_note']			= '<p>Purging deleted accounts is a permanent action. There is no going back, so please make sure.</p>';
@@ -89,22 +106,26 @@ $lang['us_email_in_use']			= 'The %s address is already in use. Please choose an
 $lang['us_edit_profile']			= 'Edit Profile';
 $lang['us_edit_note']				= 'Enter your details below and click Save.';
 
-$lang['us_forgot_password']			= 'Forgot Password';
 $lang['us_forgot_password_note']				= 'Enter your email and we will send a temporary password to you.';
 $lang['us_send_password'] = 'Send Password';
 $lang['us_reset_password']	= 'Reset Your Password';
 $lang['us_reset_password_note']	= 'Enter your new password below to reset your password.';
 $lang['us_save_password'] = 'Save New Password';
 
-$lang['us_login']					= 'My Name Is...';
+$lang['us_login_heading']					= 'My Name Is...';
 $lang['us_remember_note']			= 'Remember me for %s';
 $lang['us_no_account']				= 'Don&rsquo;t have an account?';
 $lang['us_sign_up']					= 'Sign up today';
-$lang['us_forgot_your_password']	= 'Forgot Your Password?';
-$lang['us_sign_in']					= 'Let Me In';
+$lang['us_forgot_password']	= 'Forgot Your Password?';
+$lang['us_action_sign_in']					= 'Let Me In';
+$lang['us_action_register']		= 'Register';
+
+$lang['us_activate']				= 'Activate';
+$lang['us_activate_resend']			= 'Resend Activation';
+$lang['us_login_activate_email'] 	= '<b>Have an activation code to enter to activate your membership?</b> Enter it on the [ACCOUNT_ACTIVATE_URL] page.<br /><br />    <b>Need your code again?</b> Request it again on the [ACTIVATE_RESEND_URL] page.';
 
 $lang['us_password_mins']			= 'Minimum %s characters.';
-$lang['us_register']				= 'Register';
+$lang['us_register_heading']				= 'Register';
 $lang['us_already_registered']		= 'Already registered?';
 
 $lang['us_action_save_user']				= 'Save User';
@@ -211,11 +232,24 @@ $lang['us_pass_weak']				= 'Weak';
 $lang['us_pass_good']				= 'Good';
 $lang['us_pass_strong']				= 'Strong';
 
-/* Sub nav */
-$lang['us_s_users']					= 'Users';
-$lang['us_s_new_user']					= 'New User';
+//--------------------------------------------------------------------
+// Password Help Fields to be used as a warning on register
+//--------------------------------------------------------------------
+$lang['us_password_number_required_help']  = 'Password must contain at least 1 punctuation mark.';
+$lang['us_password_caps_required_help']    = 'Password must contain at least 1 capital letter.';
+$lang['us_password_symbols_required_help'] = 'Password must contain at least 1 symbol.';
+$lang['us_password_min_length_help']       = 'Password must be at least %s characters long.';
+$lang['us_password_length']                = 'Password Length';
 
-/* Tabs */
+//--------------------------------------------------------------------
+// Sub nav
+//--------------------------------------------------------------------
+$lang['us_s_users']					= 'Users';
+$lang['us_s_new_user']			= 'New User';
+
+//--------------------------------------------------------------------
+// Tabs
+//--------------------------------------------------------------------
 $lang['us_t_all_users']				= 'All Users';
 $lang['us_t_inactive_users']	= 'Inactive';
 $lang['us_t_banned_users']		= 'Banned';
