@@ -111,13 +111,13 @@ class Role_permission_model extends BF_Model
 	{
 		if (empty($role_id))
 		{
-			$this->error = 'No Role given.';
+			$this->error = lang('roles_no_role_given');
 			return FALSE;
 		}
 
 		if (empty($permission_id))
 		{
-			$this->error = 'No Permission given.';
+			$this->error = lang('roles_no_permission_given');
 			return FALSE;
 		}
 
@@ -146,13 +146,13 @@ class Role_permission_model extends BF_Model
 	{
 		if (empty($role_id))
 		{
-			$this->error = 'No Role given.';
+			$this->error = lang('roles_no_role_given');
 			return FALSE;
 		}
 
 		if (empty($permission_id))
 		{
-			$this->error = 'No Permission given.';
+			$this->error = lang('roles_no_permission_given');
 			return FALSE;
 		}
 
@@ -165,7 +165,7 @@ class Role_permission_model extends BF_Model
 			return TRUE;
 		}
 
-		$this->error = 'DB Error: ' . mysql_error();
+		$this->error = lang('bf_model_db_error') . mysql_error();
 
 		return FALSE;
 
@@ -185,7 +185,7 @@ class Role_permission_model extends BF_Model
 	{
 		if (empty($role_id))
 		{
-			$this->error = 'No Role given.';
+			$this->error = lang('roles_no_role_given');
 			return FALSE;
 		}
 
@@ -198,7 +198,7 @@ class Role_permission_model extends BF_Model
 			return TRUE;
 		}
 
-		$this->error = 'DB Error: ' . mysql_error();
+		$this->error = lang('bf_model_db_error') . mysql_error();
 
 		return FALSE;
 
@@ -219,7 +219,7 @@ class Role_permission_model extends BF_Model
 	{
 		if (empty($permission_id))
 		{
-			$this->error = 'No Permission given.';
+			$this->error = lang('roles_no_permission_given');
 			return FALSE;
 		}
 
@@ -232,7 +232,7 @@ class Role_permission_model extends BF_Model
 			return TRUE;
 		}
 
-		$this->error = 'DB Error: ' . mysql_error();
+		$this->error = lang('bf_model_db_error') . mysql_error();
 
 		return FALSE;
 

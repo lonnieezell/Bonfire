@@ -1,21 +1,21 @@
 <script type="text/javascript">
-	window.g_permission 	= '<?php e(lang('matrix_permission')); ?>';
-	window.g_role			= '<?php e(lang('matrix_role')); ?>';
-	window.g_url			= '<?php echo site_url(SITE_AREA .'/settings/roles/matrix_update') ?>';
+	window.g_permission 	= '<?php echo lang('matrix_permission'); ?>';
+	window.g_role			= '<?php echo lang('matrix_role'); ?>';
+	window.g_url			= '<?php echo site_url(SITE_AREA .'/settings/roles/matrix_update'); ?>';
 </script>
 
 <div id="permission_table_result" class="alert alert-info fade in">
 	<a class="close" data-dismiss="alert">&times;</a>		
-	<?php echo lang('matrix_note');?>
+	<?php echo lang('matrix_note'); ?>
 </div>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
+	<h3><?php echo $toolbar_title; ?></h3>
 
 	<table class="table table-striped" id="permission_table">
 		<thead>
 			<tr>
-				<th><?php echo lang('matrix_permission');?></th>
+				<th><?php echo lang('matrix_permission'); ?></th>
 				<?php foreach($matrix_roles as $matrix_role ) : ?>
 					<?php $matrix_role = (array)$matrix_role; ?>
 					<?php if (has_permission('Permissions.'.$matrix_role['role_name'].'.Manage')) : ?>
@@ -40,7 +40,7 @@
 						$checked = in_array($checkbox_value, $matrix_role_permissions) ? ' checked="checked"' : '';
 				 ?>
 					<td class="text-center" title="<?php echo $cols[$i]['role_name']; ?>">
-						<input type="checkbox" value="<?php echo $checkbox_value; ?>"<?php echo $checked; ?> title="<?php echo lang('matrix_role');?>: <?php echo $cols[$i]['role_name']; ?>, <?php echo lang('matrix_permission');?>: <?php echo $matrix_perm['name']; ?>" />
+						<input type="checkbox" value="<?php echo $checkbox_value; ?>"<?php echo $checked; ?> title="<?php echo lang('matrix_role'); ?>: <?php echo $cols[$i]['role_name']; ?>, <?php echo lang('matrix_permission');?>: <?php echo $matrix_perm['name']; ?>" />
 					</td>
 					<?php endif; ?>
 				<?php endfor; ?>

@@ -77,7 +77,7 @@ class Settings extends Admin_Controller
 
 		Template::set('roles', $this->role_model->where('deleted', 0)->find_all());
 
-		Template::set('toolbar_title', lang("role_manage"));
+		Template::set('toolbar_title', lang('roles_manage'));
 		Template::render();
 
 	}//end index()
@@ -99,16 +99,16 @@ class Settings extends Admin_Controller
 		{
 			if ($this->save_role())
 			{
-				Template::set_message('Role successfully created.', 'success');
+				Template::set_message(lang('roles_create_failure'), 'success');
 				Template::redirect(SITE_AREA .'/settings/roles');
 			}
 			else
 			{
-				Template::set_message('There was a problem creating the role: '. $this->role_model->error, 'error');
+				Template::set_message(lang('roles_create_failure'). $this->role_model->error, 'error');
 			}
 		}
 
-		Template::set('toolbar_title', 'Create New Role');
+		Template::set('toolbar_title', lang('roles_create_heading'));
 		Template::set_view('settings/role_form');
 		Template::render();
 
@@ -131,7 +131,7 @@ class Settings extends Admin_Controller
 
 		if (empty($id))
 		{
-			Template::set_message('Invalid Role ID.', 'error');
+			Template::set_message(lang('roles_invalid_id'), 'error');
 			redirect(SITE_AREA .'/settings/roles');
 		}
 
@@ -139,19 +139,19 @@ class Settings extends Admin_Controller
 		{
 			if ($this->save_role('update', $id))
 			{
-				Template::set_message('Role successfully saved.', 'success');
+				Template::set_message(lang('roles_edit_success'), 'success');
 				// redirect to update the sidebar which will show old name otherwise.
 				Template::redirect(SITE_AREA .'/settings/roles');
 			}
 			else
 			{
-				Template::set_message('There was a problem saving the role: '. $this->role_model->error);
+				Template::set_message(lang('roles_edit_failure'). $this->role_model->error);
 			}
 		}
 
 		Template::set('role', $this->role_model->find($id));
 
-		Template::set('toolbar_title', 'Edit Role');
+		Template::set('toolbar_title', lang('roles_edit_heading'));
 		Template::set_view('settings/role_form');
 		Template::render();
 
@@ -176,11 +176,11 @@ class Settings extends Admin_Controller
 		{
 			if ($this->role_model->delete($id))
 			{
-				Template::set_message('The Role was successfully deleted.', 'success');
+				Template::set_message(lang('roles_delete_success'), 'success');
 			}
 			else
 			{
-				Template::set_message('We could not delete the role: '. $this->role_model->error, 'error');
+				Template::set_message(lang('roles_delete_failure') . $this->role_model->error, 'error');
 			}
 		}
 
@@ -199,6 +199,21 @@ class Settings extends Admin_Controller
 	 */
 	public function matrix()
 	{
+		// Make modules list to give translated display names and titles instead of just the module name in english
+		$modules_descriptions = array();
+		$module_list = module_list();
+
+		foreach ($module_list as $module)
+		{
+				$mod_config = module_config($module,FALSE,TRUE);
+
+				$modules_descriptions[$module] = array(
+					'display_name'	=> isset($mod_config['name']) ? $mod_config['name'] : ucfirst($module),
+					'title' 		=> isset($mod_config['description']) ? $mod_config['description'] : ucfirst($module),
+
+				);
+		}
+
 		$id = (int)$this->uri->segment(5);
 		$role = $this->role_model->find($id);
 
@@ -206,7 +221,7 @@ class Settings extends Admin_Controller
 		// role and won't have permissions to show.
 		if ($id == 0)
 		{
-			return '<div class="alert alert-info">'. lang('role_new_permission_message') .'</div>';
+			return '<div class="alert alert-info">'. lang('roles_new_permission_message') .'</div>';
 		}
 
 		// Verify role has permission to modify this role's access control
@@ -245,6 +260,12 @@ class Settings extends Admin_Controller
 					$domains[$domain][$name] = array(
 						$action => $value
 					);
+
+					// Add translated display names and titles for modules
+					if (array_key_exists(strtolower($name), $modules_descriptions))
+					{
+						$domains[$domain][$name]['Description'] = $modules_descriptions[strtolower($name)];
+					}
 				}
 				else
 				{
@@ -267,13 +288,13 @@ class Settings extends Admin_Controller
 		}
 		else
 		{
-			$auth_failed = lang('matrix_auth_fail');
+			$auth_failed = lang('matrix_auth_failure');
 			$domains = '';
 		}//end if
 
 		// Build the table(s) in the view to make things a little clearer,
 		// and return it!
-		return $this->load->view('settings/matrix', array('domains' => $domains, 'authentication_failed' => $auth_failed), TRUE);
+		return $this->load->view('settings/matrix', array('domains' => $domains, 'modules_descriptions' => $modules_descriptions, 'authentication_failed' => $auth_failed), TRUE);
 
 	}//end matrix()
 
@@ -302,7 +323,7 @@ class Settings extends Admin_Controller
 		}
 		else
 		{
-			$this->form_validation->set_message('unique_email', 'The %s address is already in use. Please choose another.');
+			$this->form_validation->set_message('unique_email', lang('roles_email_in_use'));
 			return FALSE;
 		}
 
@@ -373,7 +394,7 @@ class Settings extends Admin_Controller
 		if ($type ==  'insert')	{
 			$add_perm = array(
 				'name'=>'Permissions.'.ucwords($this->input->post('role_name')).'.Manage',
-				'description'=>'To manage the access control permissions for the '.ucwords($this->input->post('role_name')).' role.',
+				'description'=> sprintf(lang('roles_permission_manage_description'), ucwords($this->input->post('role_name'))),
 				'status'=>'active'
 			);
 
@@ -385,7 +406,7 @@ class Settings extends Admin_Controller
 			}
 			else
 			{
-				$this->error = 'There was an error creating the ACL permission.';
+				$this->error = lang('roles_acl_permission_failure');
 			}
 		}
 		else
@@ -399,7 +420,7 @@ class Settings extends Admin_Controller
 		// Save the permissions.
 		if ($permissions && !$this->role_permission_model->set_for_role($id, $permissions))
 		{
-			$this->error = 'There was an error saving the permissions.';
+			$this->error = lang('roles_permission_save_failure');
 		}
 
 		unset($permissions);
@@ -426,7 +447,7 @@ class Settings extends Admin_Controller
 		}
 		else
 		{
-			$this->form_validation->set_message('unique_role', 'The %s role is already in use. Please choose another.');
+			$this->form_validation->set_message('unique_role', lang('roles_role_in_use'));
 			return FALSE;
 		}
 
@@ -455,7 +476,7 @@ class Settings extends Admin_Controller
 		}
 		Template::set('matrix_role_permissions', $current_permissions);
 
-		Template::set("toolbar_title", lang('matrix_header'));
+		Template::set("toolbar_title", lang('roles_permission_matrix'));
 
 		Template::set_view('settings/permission_matrix');
 		Template::render();
@@ -479,30 +500,30 @@ class Settings extends Admin_Controller
 		$pieces = explode(',',$this->input->post('role_perm', TRUE));
 
 		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find( (int) $pieces[0])->role_name.'.Manage')) {
-			die(lang("matrix_auth_fail"));
+			die(lang('matrix_auth_failure'));
 			return FALSE;
 		}
 
-		if ($this->input->post('action', TRUE) == 'true')
+		if ($this->input->post('action', TRUE) == 'TRUE')
 		{
 			if(is_numeric($this->role_permission_model->create_role_permissions($pieces[0],$pieces[1])))
 			{
-				die(lang("matrix_insert_success"));
+				die(lang('matrix_insert_success'));
 			}
 			else
 			{
-				die(lang("matrix_insert_fail") . $this->role_permission_model->error);
+				die(lang('matrix_insert_failure') . $this->role_permission_model->error);
 			}
 		}
 		else
 		{
 			if($this->role_permission_model->delete_role_permissions($pieces[0], $pieces[1]))
 			{
-				die(lang("matrix_delete_success"));
+				die(lang('matrix_delete_success'));
 			}
 			else
 			{
-				die(lang("matrix_delete_fail"). $this->role_permission_model->error);
+				die(lang('matrix_delete_failure'). $this->role_permission_model->error);
 			}
 		}//end if
 

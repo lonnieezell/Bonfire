@@ -235,7 +235,7 @@ class Role_model extends BF_Model
 		// We might not be allowed to delete this role.
 		if ($this->can_delete_role($id) == FALSE)
 		{
-			$this->error = 'This role can not be deleted.';
+			$this->error = lang('roles_can_not_delete');
 			return FALSE;
 		}
 
