@@ -45,7 +45,7 @@ class Developer extends Admin_Controller
 		$this->auth->restrict('Bonfire.Logs.View');
 
 		$this->lang->load('logs');
-		Template::set('toolbar_title', lang('log_title'));
+		Template::set('toolbar_title', lang('logs_title'));
 
 		Template::set_block('sub_nav', 'developer/_sub_nav');
 
@@ -83,7 +83,7 @@ class Developer extends Admin_Controller
 						$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
 					}
 
-					Template::set_message(count($checked) .' '. lang('log_deleted'), 'success');
+					Template::set_message(count($checked) .' '. lang('logs_logs_delete_success'), 'success');
 				}
 			}
 		}//end if
@@ -124,7 +124,7 @@ class Developer extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Logs.Manage');
 
-		Template::set('toolbar_title', lang('log_title_settings'));
+		Template::set('toolbar_title', lang('logs_settings_heading'));
 
 		Template::render();
 
@@ -153,11 +153,11 @@ class Developer extends Admin_Controller
 				// Log the activity
 				$this->activity_model->log_activity( intval ( $this->current_user->id ), 'Log settings modified from: ' . $this->input->ip_address(), 'logs');
 
-				Template::set_message('Log settings successfully saved.', 'success');
+				Template::set_message(lang('logs_settings_save_success'), 'success');
 			}
 			else
 			{
-				Template::set_message('Unable to save log settings. Check the write permissions on <b>application/config.php</b> and try again.', 'error');
+				Template::set_message(lang('logs_settings_save_failure'), 'error');
 			}
 		}
 
@@ -176,16 +176,16 @@ class Developer extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	public function view($file='')
+	public function view($file=NULL)
 	{
 		if (empty($file))
 		{
-			$file = $this->uri->segment(4);
+			$file = $this->uri->segment(5);
 		}
 
 		if (empty($file))
 		{
-			Template::set_message('No log file provided.', 'error');
+			Template::set_message(lang('logs_no_log_provided'), 'error');
 			Template::redirect(SITE_AREA .'/developer/logs');
 		}
 
@@ -218,18 +218,18 @@ class Developer extends Admin_Controller
 		if ($file)
 		{
 			@unlink($this->config->item('log_path') . $file);
-			$activity_text = 'log file '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));
+			$activity_text = lang('logs_log_file').' '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));
 		}
 		else
 		{
 			delete_files($this->config->item('log_path'));
-			$activity_text = "all log files";
+			$activity_text = lang('logs_all_log_files');
 			// restore the index.html file
 			@copy(APPPATH.'/index.html',$this->config->item('log_path').'/index.html');
 		}
 
 		// since the $activity_text is being repurposed here, lowercase the first letter of the sentence to fit this sentence
-		Template::set_message("Successfully purged " . $activity_text,'success');
+		Template::set_message(sprintf(lang('logs_logs_purge_success'), $activity_text),'success');
 
 		// Log the activity
 		$this->activity_model->log_activity( intval ($this->current_user->id ), ucfirst($activity_text) . ' purged from: ' . $this->input->ip_address(), 'logs');

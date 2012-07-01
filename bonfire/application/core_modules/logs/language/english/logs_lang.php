@@ -21,37 +21,52 @@
 	THE SOFTWARE.
 */
 
-$lang['log_no_logs'] 			= 'No logs found.';
-$lang['log_not_enabled']		= 'Logging is not currently enabled.';
-$lang['log_the_following']		= 'Log the following:';
-$lang['log_what_0']				= '0 - Nothing';
-$lang['log_what_1']				= '1 - Error Message (including PHP Errors)';
-$lang['log_what_2']				= '2 - Debug Messages';
-$lang['log_what_3']				= '3 - Information Messages';
-$lang['log_what_4']				= '4 - All Messages';
-$lang['log_what_note']			= 'The higher log values also include all messages from the lower numbers. So, logging 2 - Debug Messages also logs 1 - Error Messages.';
+$lang['logs_no_logs'] 			= 'No logs found.';
+$lang['logs_not_enabled']		= 'Logging is not currently enabled.';
+$lang['logs_the_following']		= 'Log the following:';
+$lang['logs_what_0']				= '0 - Nothing';
+$lang['logs_what_1']				= '1 - Error Message (including PHP Errors)';
+$lang['logs_what_2']				= '2 - Debug Messages';
+$lang['logs_what_3']				= '3 - Information Messages';
+$lang['logs_what_4']				= '4 - All Messages';
+$lang['logs_what_note']			= 'The higher log values also include all messages from the lower numbers. So, logging 2 - Debug Messages also logs 1 - Error Messages.';
 
-$lang['log_save_button']		= 'Save Log Settings';
-$lang['log_delete_button']		= 'Delete Log Files';
-$lang['log_delete1_button']		= 'Delete This Log File?';
-$lang['logs_delete_confirm']	= 'Are you sure you want to delete these logs?';
+$lang['logs_action_save_settings']		= 'Save Log Settings';
+$lang['logs_action_delete_files']		= 'Delete Log Files';
+$lang['logs_action_delete_this_file']		= 'Delete This Log File?';
+$lang['logs_delete_files']		= 'Delete Log Files';
+$lang['logs_delete_file']		= 'Delete This Log File';
+$lang['logs_delete_confirm']	= 'Are you sure you want to delete this or these log(s)?';
+$lang['logs_delete_all_confirm']	= 'Are you sure you want to delete all log files?';
 
-$lang['log_big_file_note']		= 'Logging can rapidly create very large files, if you log too much information. For live sites, you should probably log only Errors.';
-$lang['log_delete_note']		= 'Deleting log files is permanent. There is no going back, so please make sure.';
-$lang['log_delete1_note']		= 'Deleting log files is a permanent action. There is no going back, so please make sure you understand what you are doing.';
-$lang['log_delete_confirm'] = 'Are you sure you want to delete this log file?';
+$lang['logs_big_file_note']		= 'Logging can rapidly create very large files, if you log too much information. For live sites, you should probably log only Errors.';
+$lang['logs_delete_note']		= 'Deleting log files is a permanent action. There is no going back, so please make sure you understand what you are doing.';
 
-$lang['log_not_found']			= 'Either the log file could not be located, or it was empty.';
-$lang['log_show_all_entries']	= 'All entries';
-$lang['log_show_errors']		= 'Errors only';
+$lang['logs_not_found']			= 'Either the log file could not be located, or it was empty.';
+$lang['logs_viewing']	= 'Viewing:';
+$lang['logs_view']	= 'View:';
+$lang['logs_show_all_entries']	= 'All entries';
+$lang['logs_show_errors']		= 'Errors only';
 
-$lang['log_date']				= 'Date';
-$lang['log_file']				= 'Filename';
-$lang['log_logs']				= 'Logs';
-$lang['log_settings']			= 'Settings';
+$lang['logs_date']				= 'Date';
+$lang['logs_file']				= 'Filename';
+$lang['logs_settings']			= 'Settings';
 
-$lang['log_title']				= 'System Logs';
-$lang['log_title_settings']		= 'System Log Settings';
-$lang['log_deleted']			= 'Log files deleted';
-$lang['log_filter_label'] = 'View';
-$lang['log_intro']        = 'These are your error and debug logs....';
+$lang['logs_title']				= 'System Logs';
+$lang['logs_settings_heading']		= 'System Log Settings';
+$lang['logs_logs_delete_success']			= 'log file(s) successfull deleted.';
+$lang['logs_settings_save_success']			= 'Log settings successfully saved.';
+$lang['logs_settings_save_failure']			= 'Unable to save log settings. Check the write permissions on <b>application/config.php</b> and try again.';
+$lang['logs_no_log_provided'] 			= 'No log file provided.';
+
+$lang['logs_log_file'] 						= 'log file(s)';
+$lang['logs_all_log_files'] 			= 'all log files';
+$lang['logs_logs_purge_success']			= 'Successfully purged %s.';
+
+$lang['logs_intro']        = 'These are your error and debug logs....';
+
+//--------------------------------------------------------------------
+// Sub nav
+//--------------------------------------------------------------------
+$lang['logs_s_logs']				= 'Logs';
+$lang['logs_s_settings']			= 'Settings';
