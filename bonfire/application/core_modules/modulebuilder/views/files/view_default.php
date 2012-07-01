@@ -4,7 +4,6 @@ $view = '
 <?php if (validation_errors()) : ?>
 <div class="alert alert-block alert-error fade in ">
   <a class="close" data-dismiss="alert">&times;</a>
-  <h4 class="alert-heading">Please fix the following errors :</h4>
  <?php echo validation_errors(); ?>
 </div>
 <?php endif; ?>
@@ -17,7 +16,7 @@ $id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? $'.$module_na
 $view .= '?>';
 $view .= '
 <div class="admin-box">
-    <h3>' . $module_name . '</h3>
+    <h3><?php echo $toolbar_title; ?></h3>
 <?php echo form_open($this->uri->uri_string(), \'class="form-horizontal"\'); ?>
     <fieldset>
 ';
@@ -35,7 +34,7 @@ for($counter=1; $field_total >= $counter; $counter++)
         continue;   // move onto next iteration of the loop
     }
 
-    $field_label = set_value("view_field_label$counter");
+    $field_label = "lang('" . $module_name_lower . '_field_' . set_value("view_field_name$counter") . "')";
     $field_name = $db_required == 'new' ? $module_name_lower . '_' . set_value("view_field_name$counter") : set_value("view_field_name$counter");
     $field_type = set_value("view_field_type$counter");
 
@@ -60,7 +59,7 @@ for($counter=1; $field_total >= $counter; $counter++)
     {
         $view .= <<<EOT
         <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
-            <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
+            <?php echo form_label({$field_label}{$required}, '{$field_name}', array('class' => "control-label") ); ?>
             {$form_input_delimiters[0]}
 EOT;
     }
@@ -212,7 +211,7 @@ if($action_name != 'create') {
     $delete = PHP_EOL . '
     <?php if ($this->auth->has_permission(\''.$delete_permission.'\')) : ?>
 
-            or <a class="btn btn-danger" id="delete-me" href="<?php echo site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id);?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" name="delete-me">
+            <?php echo lang(\'bf_or\'); ?> <a class="btn btn-danger" id="delete-me" href="<?php echo site_url(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'/delete/\'. $id);?>" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')" name="delete-me">
             <i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>
             </a>
 
@@ -225,7 +224,7 @@ $view .= PHP_EOL . '
         <div class="form-actions">
             <br/>
             <input type="submit" name="submit" class="btn btn-primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' />
-            or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-warning"\'); ?>
+            <?php echo lang(\'bf_or\'); ?> <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-warning"\'); ?>
             ' . $delete . '
         </div>
     </fieldset>

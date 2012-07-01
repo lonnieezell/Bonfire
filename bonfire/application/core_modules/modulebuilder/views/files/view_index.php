@@ -2,7 +2,7 @@
 
 $view =<<<END
 <div class="admin-box">
-	<h3>{$module_name}</h3>
+	<h3><?php echo \$toolbar_title; ?></h3>
 	<?php echo form_open(\$this->uri->uri_string()); ?>
 		<table class="table table-striped">
 			<thead>
@@ -18,8 +18,8 @@ $view =<<<END
 				<?php if (\$this->auth->has_permission('{delete_permission}')) : ?>
 				<tr>
 					<td colspan="{cols_total}">
-						<?php echo lang('bf_with_selected') ?>
-						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
+						<?php echo lang('bf_with_selected'); ?>
+						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete'); ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
 					</td>
 				</tr>
 				<?php endif;?>
@@ -37,7 +37,7 @@ $view =<<<END
 			<?php endforeach; ?>
 			<?php else: ?>
 				<tr>
-					<td colspan="{cols_total}">No records found that match your selection.</td>
+					<td colspan="{cols_total}"><?php echo lang('{$module_name_lower}_no_records'); ?></td>
 				</tr>
 			<?php endif; ?>
 			</tbody>
@@ -58,22 +58,22 @@ for($counter=1; $field_total >= $counter; $counter++)
 		continue; 	// move onto next iteration of the loop
 	}
 	$headers .= '
-					<th>'. set_value("view_field_label$counter").'</th>';
+					<th><?php echo lang(\''. $module_name_lower . '_field_' . set_value("view_field_name$counter").'\'); ?></th>';
 }
 if ($use_soft_deletes == 'true')
 {
 	$headers .= '
-					<th>Deleted</th>';
+					<th><?php echo lang(\''. $module_name_lower . '_field_deleted\'); ?></th>';
 }
 if ($use_created == 'true')
 {
 	$headers .= '
-					<th>Created</th>';
+					<th><?php echo lang(\''. $module_name_lower . '_field_created\'); ?></th>';
 }
 if ($use_modified == 'true')
 {
 	$headers .= '
-					<th>Modified</th>';
+					<th><?php echo lang(\''. $module_name_lower . '_field_modified\'); ?></th>';
 }
 
 $table_records = '';
