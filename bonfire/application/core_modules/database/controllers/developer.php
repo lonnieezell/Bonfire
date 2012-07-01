@@ -82,7 +82,7 @@ class Developer extends Admin_Controller
 
 			switch(strtolower($_POST['action']))
 			{
-				case strtolower(lang('db_backup')):
+				case 'backup':
 					$hide_form = $this->backup($_POST['checked']);
 					break;
 				case 'repair':
@@ -105,7 +105,7 @@ class Developer extends Admin_Controller
 
 		if (!Template::get('toolbar_title'))
 		{
-			Template::set('toolbar_title', 'Database Maintenance');
+			Template::set('toolbar_title', lang('db_database_maintenance'));
 		}
 
 		Template::render();
@@ -127,7 +127,7 @@ class Developer extends Admin_Controller
 	{
 		if (empty($table))
 		{
-			Template::set_message('No table name was provided.', 'error');
+			Template::set_message(lang('db_browse_none'), 'error');
 			redirect(SITE_AREA .'/developer/database');
 		}
 
@@ -140,7 +140,7 @@ class Developer extends Admin_Controller
 
 		Template::set('query', $this->db->last_query());
 
-		Template::set('toolbar_title', lang('db_browse') .': '. $table);
+		Template::set('toolbar_title', lang('db_table_browse_heading') .' '. $table);
 		Template::render();
 
 	}//end browse()
@@ -175,18 +175,27 @@ class Developer extends Admin_Controller
 			}
 
 			// Tell them it was good.
-			Template::set_message($count . ' backup files were deleted.', 'success');
+			if ($count == 1)
+			{
+				Template::set_message(lang('db_backup_file_delete_success'), 'success');
+			}
+			else
+			{
+				Template::set_message(sprintf(lang('db_backup_files_delete_success'), $count), 'success');
+			}
 		}
 		else if ($this->input->post() && !isset($_POST['checked']))
 		{
 			Template::set_message(lang('db_backup_delete_none'), 'error');
 		}
 
+		$this->load->helper('number');
+		
 		// Get a list of existing backup files
 		$this->load->helper('file');
 		Template::set('backups', get_dir_file_info($this->backup_folder));
 
-		Template::set('toolbar_title', 'Database Backups');
+		Template::set('toolbar_title', lang('db_database_backups'));
 		Template::render();
 	}//end backups()
 
@@ -210,7 +219,7 @@ class Developer extends Admin_Controller
 			Template::set('tables', $tables);
 			Template::set('file', ENVIRONMENT .'_backup_' . date('Y-m-j_His'));
 
-			Template::set('toolbar_title', 'Create New Backup');
+			Template::set('toolbar_title', lang('db_backup_create_heading'));
 			return TRUE;
 		}
 		else if (isset($_POST['submit']))
@@ -230,16 +239,14 @@ class Developer extends Admin_Controller
 				// Do the backup.
 				$this->load->dbutil();
 
-				$add_drop = ($_POST['drop_tables'] == 'Yes') ? TRUE : FALSE;
-				$add_insert = ($_POST['add_inserts'] == 'Yes') ? TRUE : FALSE;
 				$filename = $this->backup_folder . $_POST['file_name'] . '.' . $_POST['file_type'];
 
 				$prefs = array(
 								'tables' 		=> $_POST['tables'],
 								'format'		=> $_POST['file_type'],
 								'filename'		=> $filename,
-								'add_drop'		=> $add_drop,
-								'add_insert'	=> $add_insert
+								'add_drop'		=> isset($_POST['drop_tables']),
+								'add_insert'	=> isset($_POST['add_inserts'])
 							);
 				$backup =& $this->dbutil->backup($prefs);
 
@@ -248,11 +255,11 @@ class Developer extends Admin_Controller
 
 				if (file_exists($filename))
 				{
-					Template::set_message('Backup file successfully saved. It can be found at <a href="/'. $filename .'">'. $filename .'</a>.', 'success');
+					Template::set_message(sprintf(lang('db_backup_file_save_success'), '<a href="'. site_url() . $filename .'">'. $filename .'</a>'), 'success');
 				}
 				else
 				{
-					Template::set_message('There was a problem saving the backup file.', 'error');
+					Template::set_message(lang('db_backup_file_save_failure'), 'error');
 				}
 
 				redirect(SITE_AREA .'/developer/database');
@@ -260,11 +267,11 @@ class Developer extends Admin_Controller
 			else
 			{
 				Template::set('tables', $this->input->post('tables'));
-				Template::set_message('There was a problem saving the backup file.', 'error');
+				Template::set_message(lang('db_backup_file_save_failure'), 'error');
 			}
 		}//end if
 
-		Template::set('toolbar_title', 'Create New Backup');
+		Template::set('toolbar_title', lang('db_backup_create_heading'));
 		Template::render();
 
 	}//end backup()
@@ -293,7 +300,7 @@ class Developer extends Admin_Controller
 		}
 		else 	// File doesn't exist
 		{
-			Template::set_message($filename . ' could not be found.', 'error');
+			Template::set_message(sprintf(lang('db_backup_file_not_found'), $filename), 'error');
 			redirect(SITE_AREA .'/developer/database/backups');
 		}
 
@@ -340,13 +347,13 @@ class Developer extends Admin_Controller
 							if($this->db->query($templine))
 							{
 								// Query Success
-								$s .= "<strong style='color: green;'>Successfull Query</strong>: <span class='small'>$templine</span><br/>";
+								$s .= "<strong style='color: green;'>" . lang('db_successful_query') . "</strong>: <span class='small'>$templine</span><br/>";
 
 								// so reset our templine so we can start a new one
 								$templine = '';
 							}
 							else {
-								$s .= "<strong style='color:red'>Unsuccessful Query:</strong> $templine<br/><br/>";
+								$s .= "<strong style='color:red'>" . lang('db_unsuccessful_query') . "</strong> $templine<br/><br/>";
 								$templine = '';
 							}
 						}
@@ -359,61 +366,16 @@ class Developer extends Admin_Controller
 			else
 			{
 				// Couldn't read from file.
-				Template::set_message('Could not read the file: /application/db/backups/' . $filename . '.', 'error');
+				Template::set_message(sprintf(lang('db_backup_file_read_failure'), '/application/db/backups/' . $filename), 'error');
 				redirect(SITE_AREA .'/developer/database/backups');
 			}
 		}//end if
 
 		Template::set_view('developer/restore');
-		Template::set('toolbar_title', 'Database Restore');
+		Template::set('toolbar_title', lang('db_database_restore_heading'));
 		Template::render();
 
 	}//end restore()
-
-	//---------------------------------------------------------------
-
-	/**
-	 * Deletes a database table.
-	 *
-	 * @access public
-	 * @todo   Remove this now as it is all done in the "backups" method?
-	 *
-	 * @return void
-	 */
-	public function delete()
-	{
-		// Make sure we have something to delete
-		if (isset($_POST['checked']) && is_array($_POST['checked']) && count($_POST['checked']) > 0)
-		{
-			// Verify that we want to delete the files.
-			Template::set('files', $_POST['checked']);
-
-			Template::set('toolbar_title', 'Delete Backup Files');
-			Template::render();
-		}
-		else if (isset($_POST['files']) && is_array($_POST['files']) && count($_POST['files']) > 0)
-		{
-			// Delete the files.
-			$count = count($_POST['files']);
-
-			$this->load->helper('file');
-
-			foreach ($_POST['files'] as $file)
-			{
-				// Make sure the file is closed
-				$fh = fopen($this->backup_folder . $file, 'w') or die("can't open file");
-				fclose($fh);
-
-				// Actually delete it.
-				unlink($this->backup_folder . $file);
-			}
-
-			// Tell them it was good.
-			Template::set_message($count . ' backup files were deleted.', 'success');
-			redirect(SITE_AREA .'/developer/database/backups');
-		}//end if
-
-	}//end delete()
 
 	//---------------------------------------------------------------
 
@@ -446,7 +408,7 @@ class Developer extends Admin_Controller
 			// Tell them the results
 			$quality = $failed == 0 ? 'success' : 'alert';
 
-			Template::set_message(($count - $failed) .' of '. $count .' tables were successfully repaired.', $quality);
+			Template::set_message(sprintf(lang('db_table_repair_success'), ($count - $failed), $count), $quality);
 			redirect(SITE_AREA .'/developer/database');
 		}
 		else
@@ -476,11 +438,11 @@ class Developer extends Admin_Controller
 
 		if ($result == FALSE)
 		{
-			$this->session->set_flashdata('message', 'alert::Unable to optimize the table.');
+			Template::set_message(lang('db_database_optimize_failure'), 'alert');
 		}
 		else
 		{
-			$this->session->set_flashdata('message', 'success::The database was successfully optimized.');
+			Template::set_message(lang('db_database_optimize_success'), 'success');
 		}
 
 		redirect(SITE_AREA .'/developer/database', 'location');
@@ -518,8 +480,14 @@ class Developer extends Admin_Controller
 				@$this->dbforge->drop_table($table);
 			}
 
-			$grammar = count($_POST['tables'] == 1) ? ' table' : ' tables';
-			Template::set_message(count($_POST['tables']) .$grammar.' successfully dropped.', 'success');
+			if (count($_POST['tables']) == 1)
+			{
+				Template::set_message(lang('db_table_drop_success'), 'success');
+			}
+			else
+			{
+				Template::set_message(sprintf(lang('db_tables_drop_success'), $count), 'success');
+			}
 			redirect(SITE_AREA .'/developer/database');
 		}
 		else
@@ -569,10 +537,10 @@ class Developer extends Admin_Controller
 
 		if ($this->migrations->install())
 		{
-			Template::set_message('Database updated to the latest version.', 'success');
+			Template::set_message(lang('db_database_update_success'), 'success');
 		} else
 		{
-			Template::set_message('Unable to update database schema: '. $this->migrations->error, 'error');
+			Template::set_message(lang('db_database_update_failure'). $this->migrations->error, 'error');
 		}
 
 		redirect(SITE_AREA .'/database/migrations');

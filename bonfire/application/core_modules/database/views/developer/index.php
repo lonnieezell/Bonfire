@@ -1,5 +1,5 @@
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
+	<h3><?php echo $toolbar_title; ?></h3>
 
 <?php if (isset($tables) && is_array($tables) && count($tables) > 0) : ?>
 	<?php echo form_open(SITE_AREA .'/developer/database/', array('style' => 'padding: 0')) ?>
@@ -22,15 +22,15 @@
 				<td colspan="7">
 					<?php echo lang('bf_with_selected'); ?>:
 
-					<select name="action" class="span2" style="margin-bottom:0; ">
-						<option><?php echo lang('db_backup'); ?></option>
-						<option><?php echo lang('db_repair'); ?></option>
-						<option><?php echo lang('db_optimize'); ?></option>
+					<select name="action">
+						<option value="backup" ><?php echo lang('db_action_backup'); ?></option>
+						<option value="repair" ><?php echo lang('db_action_repair'); ?></option>
+						<option value="optimize" ><?php echo lang('db_action_optimize'); ?></option>
 						<option>------</option>
-						<option><?php echo lang('db_drop'); ?></option>
+						<option value="drop" ><?php echo lang('db_action_drop'); ?></option>
 					</select>
 					&nbsp;&nbsp;
-					<input type="submit" name="submit" value="<?php echo lang('db_apply')?>" class="btn btn-primary" />
+					<input type="submit" name="submit" value="<?php echo lang('db_action_apply'); ?>" class="btn btn-primary" />
 				</td>
 			</tr>
 		</tfoot>
@@ -38,18 +38,18 @@
 		<?php foreach ($tables as $table) : ?>
 			<tr>
 				<td class="column-check">
-					<input type="checkbox" value="<?php echo $table->Name ?>" name="checked[]" />
+					<input type="checkbox" value="<?php echo $table->Name; ?>" name="checked[]" />
 				</td>
 				<td>
-					<a href="<?php echo site_url(SITE_AREA .'/developer/database/browse/'. $table->Name) ?>">
-						<?php echo $table->Name ?>
+					<a href="<?php echo site_url(SITE_AREA .'/developer/database/browse/'. $table->Name); ?>">
+						<?php echo $table->Name; ?>
 					</a>
 				</td>
-				<td style="text-align: center"><?php echo $table->Rows?></td>
-				<td><?php echo byte_format($table->Data_length) ?></td>
-				<td><?php echo byte_format($table->Index_length) ?></td>
-				<td><?php echo byte_format($table->Data_free) ?></td>
-				<td><?php echo $table->Engine ?></td>
+				<td style="text-align: center"><?php echo $table->Rows; ?></td>
+				<td><?php echo byte_format($table->Data_length); ?></td>
+				<td><?php echo byte_format($table->Index_length); ?></td>
+				<td><?php echo byte_format($table->Data_free); ?></td>
+				<td><?php echo $table->Engine; ?></td>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>

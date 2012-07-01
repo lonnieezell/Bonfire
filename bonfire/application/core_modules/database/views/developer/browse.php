@@ -1,17 +1,15 @@
-
-
 <?php if (isset($rows) && is_array($rows) && count($rows)) :?>
 
 	<div class="alert alert-info">
-		<p><b><?php e(lang('db_sql_query')); ?>:</b></p>
+		<p><b><?php echo lang('db_sql_query'); ?>:</b></p>
 
-		<p><?php e($query); ?></p>
+		<p><?php echo $query; ?></p>
 	</div>
 
-	<p><?php echo e(lang('db_total_results')); ?>: <?php echo count($rows); ?></p>
+	<p><?php echo lang('db_total_results'); ?>: <?php echo count($rows); ?></p>
 
 	<div class="admin-box">
-		<h3><?php echo $toolbar_title ?></h3>
+		<h3><?php echo $toolbar_title; ?></h3>
 
 		<table class="table table-striped">
 			<thead>
@@ -40,10 +38,10 @@
 	</div>
 <?php else: ?>
 	<div class="admin-box">
-		<h3><?php echo $toolbar_title ?></h3>
+		<h3><?php echo $toolbar_title; ?></h3>
 	<br/>
 		<div class="alert alert-warning">
-			<?php e(lang('db_no_rows')); ?>
+			<?php echo lang('db_no_rows'); ?>
 		</div>
 	</div>
 <?php endif; ?>
