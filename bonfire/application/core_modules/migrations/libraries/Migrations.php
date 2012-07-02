@@ -153,14 +153,15 @@ class Migrations
 	function __construct()
 	{
 		$this->_ci =& get_instance();
-
+		$this->_ci->lang->load('migrations/migrations');
+		
 		$this->_ci->config->load('migrations/migrations');
 
 		$this->migrations_enabled = $this->_ci->config->item('migrations_enabled');
 		$this->migrations_path = realpath($this->_ci->config->item('migrations_path'));
 
 		// Idiot check
-		$this->migrations_enabled AND $this->migrations_path OR show_error('Migrations has been loaded but is disabled or set up incorrectly.');
+		$this->migrations_enabled AND $this->migrations_path OR show_error($this->_ci->lang->line('mig_migration_disabled'));
 
 		// If not set, set it
 		if ($this->migrations_path == '')
@@ -175,7 +176,6 @@ class Migrations
 		}
 
 		$this->_ci->load->dbforge();
-		$this->_ci->lang->load('migrations/migrations');
 
 		// If the schema_version table is missing, make it
 		if ( ! $this->_ci->db->table_exists('schema_version'))
@@ -668,7 +668,7 @@ class Migrations
 					$type .'version'	=> array(
 						'type'			=> 'INT',
 						'constraint'	=> 4,
-						'null'			=> true,
+						'null'			=> TRUE,
 						'default'		=> 0
 					)
 				));

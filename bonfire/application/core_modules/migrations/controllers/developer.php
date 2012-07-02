@@ -84,7 +84,7 @@ class Developer extends Admin_Controller
 
 		Template::set('mod_migrations', $this->get_module_versions());
 
-		Template::set('toolbar_title', 'Database Migrations');
+		Template::set('toolbar_title', lang('mig_database_migrations'));
 		Template::render();
 
 	}//end index()
@@ -114,7 +114,7 @@ class Developer extends Admin_Controller
 		{
 			if ($result === 0)
 			{
-				Template::set_message('Successfully uninstalled module\'s migrations.', 'success');
+				Template::set_message(lang('mig_migrate_module_success'), 'success');
 
 				// Log the activity
 				$this->activity_model->log_activity($this->current_user->id, 'Migrate Type: '. $type .' Uninstalled Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
@@ -123,7 +123,7 @@ class Developer extends Admin_Controller
 			}
 			else
 			{
-				Template::set_message('Successfully migrated database to version '. $result, 'success');
+				Template::set_message(sprintf(lang('mig_migrate_database_success'), $result), 'success');
 
 				// Log the activity
 				$this->activity_model->log_activity($this->current_user->id, 'Migrate Type: '. $type .' to Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
@@ -133,10 +133,10 @@ class Developer extends Admin_Controller
 		}
 		else
 		{
-			Template::set_message('There was an error migrating the database.', 'error');
+			Template::set_message(lang('mig_migrate_database_failure'), 'error');
 		}//end if
 
-		Template::set_message('No version to migrate to.', 'error');
+		Template::set_message(lang('mig_no_version'), 'error');
 		redirect(SITE_AREA .'/developer/migrations');
 
 	}//end migrate_to()
@@ -185,9 +185,9 @@ class Developer extends Admin_Controller
 
 		$modules = module_files(null, 'migrations');
 
-		if ($modules === false)
+		if ($modules === FALSE)
 		{
-			return false;
+			return FALSE;
 		}
 
 		foreach ($modules as $module => $migrations)
