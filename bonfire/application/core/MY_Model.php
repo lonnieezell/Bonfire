@@ -87,16 +87,16 @@ class BF_Model extends CI_Model
 	 * @access protected
 	 */
 	protected $set_modified = TRUE;
-	
+
 	/*
 		Var: $log_user
 		If TRUE, will log user id for 'created_by', 'modified_by' and 'deleted_by'.
-		
+
 		Access:
 			Protected
 	*/
 	protected $log_user = FALSE;
-	
+
 	/*
 		Var: $created_by_field
 		Field name to use to the created by column in the DB table.
@@ -114,7 +114,7 @@ class BF_Model extends CI_Model
 			Protected
 	*/
 	protected $modified_by_field = 'modified_by';
-	
+
 	/*
 		Var: $deleted_by_field
 		Field name to use for the deleted by column in the DB table.
@@ -160,6 +160,14 @@ class BF_Model extends CI_Model
 	*/
 	protected $escape = TRUE;
 
+
+	/**
+	 * DB Connection details (string or array)
+	 *
+	 * @var mixed
+	 */
+	protected $db_con = '';
+
 	//---------------------------------------------------------------
 
 	/**
@@ -169,6 +177,13 @@ class BF_Model extends CI_Model
 	public function __construct()
 	{
 		parent::__construct();
+
+		// if there are specific DB connection settings used in a model
+		// load the database using those settings.
+		if (!empty($this->db_con)) {
+
+			$this->db = $this->load->database($this->db_con, TRUE);
+		}
 
 		// If we're loading the model, then we probably need the
 		// database, so make sure it's loaded.
@@ -358,7 +373,7 @@ class BF_Model extends CI_Model
 		{
 			$data[$this->created_field] = $this->set_date();
 		}
-		
+
 		if ($this->set_created === TRUE && $this->log_user === TRUE && !array_key_exists($this->created_by_field, $data))
 		{
 			$data[$this->created_by_field] = $this->auth->user_id();
@@ -402,7 +417,7 @@ class BF_Model extends CI_Model
 		{
 			$data[$this->modified_field] = $this->set_date();
 		}
-		
+
 		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
 		{
 			$data[$this->modified_by_field] = $this->auth->user_id();
@@ -507,12 +522,12 @@ class BF_Model extends CI_Model
 				$data = array(
 					'deleted'	=> 1
 				);
-				
+
 				if ($this->log_user === TRUE && !array_key_exists($this->deleted_by_field, $data))
 				{
 					$data[$this->deleted_by_field] = $this->auth->user_id();
 				}
-			
+
 				$this->db->where($this->key, $id);
 				$result = $this->db->update($this->table, $data);
 			}
