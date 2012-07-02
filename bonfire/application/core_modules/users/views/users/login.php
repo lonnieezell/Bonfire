@@ -13,7 +13,7 @@
 	<div class="span12">
 		<div class="alert alert-danger fade in span6" >
 		  <a data-dismiss="alert" class="close">&times;</a>
-			<h4 class="alert-heading">Sorry this is invite only site.</h4>
+			<h4 class="alert-heading"><?php echo lang('us_invite_only_site'); ?></h4>
 		</div>
 	</div>
 </div>

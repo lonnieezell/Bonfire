@@ -37,6 +37,7 @@ $lang['us_my_Profile']		= 'My Profile';
 $lang['us_control_panel'] = 'Control Panel';
 
 $lang['us_remember_me']			= 'Remember me';
+$lang['us_invite_only_site'] = 'Sorry this is invite only site.';
 
 $lang['us_account_deleted']			= 'Unfortunately your account has been deleted. It has not yet been purged and <strong>may still</strong> be restored. Contact the administrator at %s.';
 
