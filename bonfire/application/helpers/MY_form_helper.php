@@ -56,7 +56,7 @@ if ( ! function_exists('_form_common'))
 	 */
 	function _form_common($type='text', $data='', $value='', $label='', $extra='', $tooltip = '')
 	{
-		$defaults = array('type' => 'text', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
+		$defaults = array('type' => $type, 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
 
 		// If name is empty at this point, try to grab it from the $data array
 		if (empty($defaults['name']) && is_array($data) && isset($data['name']))
@@ -115,6 +115,28 @@ if ( ! function_exists('form_input'))
 		return _form_common('text', $data, $value, $label, $extra, $tooltip);
 
 	}//end form_input()
+}
+
+//--------------------------------------------------------------------
+
+if ( ! function_exists('form_checkbox'))
+{
+	/**
+	 * Returns a properly templated text input field.
+	 *
+	 * @param string $data    Either a string with the element name, or an array of key/value pairs of all attributes.
+	 * @param string $value   Either a string with the value, or blank if an array is passed to the $data param.
+	 * @param string $label   A string with the label of the element.
+	 * @param string $extra   A string with any additional items to include, like Javascript.
+	 * @param string $tooltip A string for inline help or a tooltip icon
+	 *
+	 * @return string A string with the formatted input element, label tag and wrapping divs.
+	 */
+	function form_checkbox($data='', $value='', $label='', $extra='', $tooltip = '')
+	{
+		return _form_common('checkbox', $data, $value, $label, $extra, $tooltip);
+
+	}//end form_checkbox()
 }
 
 //--------------------------------------------------------------------
