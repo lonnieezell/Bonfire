@@ -91,18 +91,31 @@ $lang['us_edit_note']				= 'Enter your details below and click Save.';
 
 $lang['us_reset_password']			= 'Reset Password';
 $lang['us_reset_note']				= 'Enter your email and we will send a temporary password to you.';
+$lang['us_forgot_password']      = 'Forgot Password';
+$lang['us_forgot_password_note']        = 'Enter your email and we will send a temporary password to you.';
+$lang['us_send_password'] = 'Send Password';
+$lang['us_reset_password']  = 'Reset Your Password';
+$lang['us_reset_password_note']  = 'Enter your new password below to reset your password.';
+$lang['us_save_password'] = 'Save New Password';
+$lang['us_forgot_password']      = 'Forgot Password';
+$lang['us_forgot_password_note']        = 'Enter your email and we will send a temporary password to you.';
+$lang['us_send_password'] = 'Send Password';
+$lang['us_reset_password']  = 'Reset Your Password';
+$lang['us_reset_password_note']  = 'Enter your new password below to reset your password.';
+$lang['us_save_password'] = 'Save New Password';
 
 $lang['us_login']					= 'My Name Is...';
-$lang['us_remember_note']			= 'Remember me for two weeks';
+$lang['us_remember_note']			= 'Remember me for %s';
 $lang['us_no_account']				= 'Don&rsquo;t have an account?';
 $lang['us_sign_up']					= 'Sign up today';
 $lang['us_forgot_your_password']	= 'Forgot Your Password?';
+$lang['us_sign_in']          = 'Let Me In';
 
-$lang['us_password_mins']			= 'Minimum 8 characters.';
+$lang['us_password_mins']			= 'Minimum %s characters.';
 $lang['us_register']				= 'Register';
 $lang['us_already_registered']		= 'Already registered?';
 
-$lang['us_action_save']				= 'Save User';
+$lang['us_action_save_user']				= 'Save User';
 $lang['us_unauthorized']			= 'Unauthorized. Sorry you do not have the appropriate permission to manage the "%s" role.';
 $lang['us_empty_id']				= 'No userid provided. You must provide a userid to perform this action.';
 $lang['us_self_delete']				= 'Unauthorized. Sorry, you can not delete yourself.';
@@ -164,6 +177,7 @@ $lang['us_activate_note']			= 'Activate the user and allow them access to the si
 $lang['us_deactivate_note']			= 'Deactivate the user to prevent access to the site';
 $lang['us_activate_enter']			= 'Please enter your activation code to continue.';
 $lang['us_activate_code']			= 'Activation Code';
+$lang['us_verification_code']      = 'Verification Code';
 $lang['us_activate_request']		= 'Request a new one';
 $lang['us_activate_resend']			= 'Resend Activation Code';
 $lang['us_activate_resend_note']	= 'Enter your email and we will resend your activation code to you.';

@@ -56,7 +56,7 @@
 			<div class="controls">
 				<label class="checkbox">
 					<input type="checkbox" name="remember_me" id="remember_me" value="1" tabindex="3" />
-					<span class="inline-help"><?php echo lang('us_remember_note'); ?></span>
+					<span class="inline-help"><?php echo $remember_length; ?></span>
 				</label>
 			</div>
 		</div>
@@ -65,7 +65,7 @@
 	<div class="control-group">
 		<label class="control-label" for="submit">&nbsp;</label>
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="Let Me In" tabindex="5" />
+			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="<?php echo lang('us_sign_in'); ?>" tabindex="5" />
 		</div>
 	</div>
 <?php echo form_close(); ?>
