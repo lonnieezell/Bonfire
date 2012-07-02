@@ -67,7 +67,7 @@ class Settings extends Admin_Controller
 		// Deleting anything?
 		if ($action = $this->input->post('submit'))
 		{
-			if ($action == 'Delete')
+			if ($action == lang('bf_action_delete'))
 			{
 				$checked = $this->input->post('checked');
 
@@ -81,7 +81,14 @@ class Settings extends Admin_Controller
 
 					if ($result)
 					{
-						Template::set_message(count($checked) .' '. lang('permissions_deleted') .'.', 'success');
+						if (count($checked) == 1)
+						{
+							Template::set_message(lang('permissions_permission_delete_success'), 'success');
+						}
+						else
+						{
+							Template::set_message(sprintf(lang('permissions_permissions_delete_success'), count($checked)), 'success');
+						}
 					}
 					else
 					{
@@ -113,7 +120,7 @@ class Settings extends Admin_Controller
 
 		Template::set('results', $this->permission_model->limit($limit, $offset)->find_all());
 
-		Template::set("toolbar_title", lang("permissions_manage"));
+		Template::set('toolbar_title', lang('permissions_manage_heading'));
 		Template::render();
 
 	}//end index()
@@ -133,12 +140,12 @@ class Settings extends Admin_Controller
 		{
 			if ($this->save_permissions())
 			{
-				Template::set_message(lang("permissions_create_success"), 'success');
+				Template::set_message(lang('permissions_create_success'), 'success');
 				Template::redirect(SITE_AREA .'/settings/permissions');
 			}
 		}
 
-		Template::set('toolbar_title', lang("permissions_create_new_button"));
+		Template::set('toolbar_title', lang('permissions_create_heading'));
 		Template::set_view('settings/permission_form');
 		Template::render();
 
@@ -159,7 +166,7 @@ class Settings extends Admin_Controller
 
 		if (empty($id))
 		{
-			Template::set_message(lang("permissions_invalid_id"), 'error');
+			Template::set_message(lang('permissions_invalid_id'), 'error');
 			redirect(SITE_AREA .'/settings/permissions');
 		}
 
@@ -167,46 +174,17 @@ class Settings extends Admin_Controller
 		{
 			if ($this->save_permissions('update', $id))
 			{
-				Template::set_message(lang("permissions_edit_success"), 'success');
+				Template::set_message(lang('permissions_edit_success'), 'success');
 			}
 		}
 
 		Template::set('permissions', $this->permission_model->find($id));
 
-		Template::set('toolbar_title', lang("permissions_edit_heading"));
+		Template::set('toolbar_title', lang('permissions_edit_heading'));
 		Template::set_view('settings/permission_form');
 		Template::render();
 
 	}//end edit()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Delete a permission record from the database
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function delete()
-	{
-		$id = $this->uri->segment(5);
-
-		if (!empty($id))
-		{
-			if ($this->permission_model->delete($id))
-			{
-				Template::set_message(lang("permissions_delete_success"), 'success');
-			}
-			else
-			{
-				Template::set_message(lang("permissions_delete_failure") . $this->permission_model->error, 'error');
-			}
-		}
-
-		redirect(SITE_AREA .'/settings/permissions');
-
-	}//end delete()
 
 	//--------------------------------------------------------------------
 
@@ -223,9 +201,9 @@ class Settings extends Admin_Controller
 	public function save_permissions($type='insert', $id=0)
 	{
 
-		$this->form_validation->set_rules('name','Name','required|trim|xss_clean|max_length[30]');
-		$this->form_validation->set_rules('description','Description','trim|xss_clean|max_length[100]');
-		$this->form_validation->set_rules('status','Status','required|trim|xss_clean');
+		$this->form_validation->set_rules('name','lang:permissions_name','required|trim|xss_clean|max_length[30]');
+		$this->form_validation->set_rules('description','lang:permissions_description','trim|xss_clean|max_length[100]');
+		$this->form_validation->set_rules('status','lang:permissions_status','required|trim|xss_clean');
 		if ($this->form_validation->run() === FALSE)
 		{
 			return FALSE;
