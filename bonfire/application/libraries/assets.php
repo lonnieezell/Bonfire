@@ -1240,7 +1240,6 @@ class Assets
 		$default_theme = Template::get('default_theme');
 
 		$new_files = array();
-		$media = '';
 
 		$clean_type = $type;
 		$type = '.'. $type;
@@ -1354,17 +1353,18 @@ class Assets
 							First, check the default theme. Add it to the array. We check here first so that it
 							will get overwritten by anything in the active theme.
 						*/
-						if (is_file($site_path . $path .'/'. $default_theme . $file ."{$type}"))
+						$media = empty($media) ? '' : $media;
+						if ( ($file_array = self::get_file_array($site_path, $path . '/' . $default_theme, $file, $type, $media)) )
 						{
-							$new_files[] = self::get_file_array($site_path, $path . '/' . $default_theme, $file, $type, $media);
+							$new_files[] = $file_array;
 							$found = TRUE;
 						}
 						/*
 							If it wasn't found in the default theme root folder, look in default_theme/$type/
 						*/
-						else if (is_file($site_path . $path .'/'. $default_theme . $clean_type .'/'. $file ."{$type}"))
+						else if ( ($file_array = self::get_file_array($site_path, $path . '/' . $default_theme . $clean_type . '/', $file, $type, $media)))
 						{
-							$new_files[] = self::get_file_array($site_path, $path . '/' . $default_theme . $clean_type . '/', $file, $type, $media);
+							$new_files[] = $file_array;
 							$found = TRUE;
 						}
 					}
@@ -1375,18 +1375,21 @@ class Assets
 						handle simple CSS-only overrides for a theme, completely changing it's appearance
 						through a simple child css file.
 					*/
-					if (!empty($active_theme) && is_file($site_path . $path .'/'. $active_theme . $file ."{$type}"))
+					if (!empty($active_theme)) // separated this because the else if below should not run if $active_theme is empty
 					{
-						$new_files[] = self::get_file_array($site_path, $path . '/' . $active_theme, $file, $type, $media);
-						$found = TRUE;
-					}
-					/*
-						If it wasn't found in the active theme root folder, look in active_theme/$type/
-					*/
-					else if (is_file($site_path . $path .'/'. $active_theme . $clean_type .'/'. $file ."{$type}"))
-					{
-						$new_files[] = self::get_file_array($site_path, $path . '/' . $active_theme . $clean_type . '/', $file, $type, $media);
-						$found = TRUE;
+						if ( ($file_array = self::get_file_array($site_path, $path . '/' . $active_theme, $file, $type, $media)) )
+						{
+							$new_files[] = $file_array;
+							$found = TRUE;
+						}
+						/*
+							If it wasn't found in the active theme root folder, look in active_theme/$type/
+						*/
+						else if ( ($file_array = self::get_file_array($site_path, $path . '/' . $active_theme . $clean_type . '/', $file, $type, $media)))
+						{
+							$new_files[] = $file_array;
+							$found = TRUE;
+						}
 					}
 					/*
 						ASSET BASE
@@ -1397,9 +1400,9 @@ class Assets
 					if (!$found)
 					{
 						// Assets/type folder
-						if (is_file($site_path . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}"))
+						if ( ($file_array = self::get_file_array($site_path, self::$asset_base . '/' . $clean_type . '/', $file, $type, $media)) )
 						{
-							$new_files[] = self::get_file_array($site_path, self::$asset_base . '/' . $clean_type . '/', $file, $type, $media);
+							$new_files[] = $file_array;
 						}
 						/*
 							ASSETS ROOT
@@ -1407,9 +1410,9 @@ class Assets
 							Finally, one last check to see if it is simply under assets/. This is useful for
 							keeping collections of scripts (say, TinyMCE or MarkItUp together for easy upgrade.
 						*/
-						else if (is_file($site_path . self::$asset_base .'/'. $file ."{$type}"))
+						else if ( ($file_array = self::get_file_array($site_path, self::$asset_base . '/', $file, $type, $media)) )
 						{
-							$new_files[] = self::get_file_array($site_path, self::$asset_base . '/', $file, $type, $media);
+							$new_files[] = $file_array;
 						}
 					}	// if (!$found)
 				}	// foreach ($paths as $path)
