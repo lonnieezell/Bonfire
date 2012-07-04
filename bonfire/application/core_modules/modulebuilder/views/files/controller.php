@@ -109,7 +109,7 @@ if ($db_required != '') {
 }
 
 $mb_index .= "
-		Template::set('toolbar_title', 'Manage ".$module_name."');
+		Template::set('toolbar_title', lang('".$module_name_lower."_manage'));
 		Template::render();
 	}
 
@@ -137,6 +137,7 @@ if ($db_required != '') {
 }
 
 $mb_index_front .= "
+		Template::set('toolbar_title', lang('".$module_name_lower."_list_front'));
 		Template::render();
 	}
 
@@ -179,7 +180,7 @@ if ($db_required != '') {
 $mb_create .= "
 		Assets::add_module_js('".$module_name_lower."', '".$module_name_lower.".js');
 
-		Template::set('toolbar_title', lang('".$module_name_lower."_create') . ' ".$module_name."');
+		Template::set('toolbar_title', lang('".$module_name_lower."_create_heading'));
 		Template::render();
 	}
 
@@ -231,7 +232,7 @@ if ($db_required != '') {
 $mb_edit .= "
 		Assets::add_module_js('".$module_name_lower."', '".$module_name_lower.".js');
 
-		Template::set('toolbar_title', lang('".$module_name_lower."_edit') . ' ".$module_name."');
+		Template::set('toolbar_title', lang('".$module_name_lower."_edit_heading'));
 		Template::render();
 	}
 
@@ -518,8 +519,9 @@ if ($controller_name != $module_name_lower)
 				$field_name = set_value("view_field_name$counter");
 		}
 		$form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
+		$human_name = $module_name_lower . '_field_' . set_value("view_field_name$counter");
 		$rules .= '
-		$this->form_validation->set_rules(\''.$form_name.'\',\''.set_value("view_field_label$counter").'\',\'';
+		$this->form_validation->set_rules(\''.$form_name.'\',\'lang:'.$human_name.'\',\'';
 
 	// setup the data array for saving to the db
 	// set defaults for certain field types
