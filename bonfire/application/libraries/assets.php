@@ -1240,6 +1240,7 @@ class Assets
 		$default_theme = Template::get('default_theme');
 
 		$new_files = array();
+		$media = '';
 
 		$clean_type = $type;
 		$type = '.'. $type;
