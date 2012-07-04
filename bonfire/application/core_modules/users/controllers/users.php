@@ -256,7 +256,10 @@ class Users extends Front_Controller
 				$meta_data = array();
 				foreach ($meta_fields as $field)
 				{
-					$meta_data[$field['name']] = $this->input->post($field['name']);
+					if (!isset($field['frontend']) || $field['frontend'] === TRUE)
+					{
+						$meta_data[$field['name']] = $this->input->post($field['name']);
+					}
 				}
 
 				// now add the meta is there is meta data
@@ -440,9 +443,12 @@ class Users extends Front_Controller
 			$meta_data = array();
 			foreach ($meta_fields as $field)
 			{
-				$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
+				if (!isset($field['frontend']) || $field['frontend'] === TRUE)
+				{
+					$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
 
-				$meta_data[$field['name']] = $this->input->post($field['name']);
+					$meta_data[$field['name']] = $this->input->post($field['name']);
+				}
 			}
 
 			if ($this->form_validation->run($this) !== FALSE)
@@ -700,12 +706,12 @@ class Users extends Front_Controller
 		Events::trigger('before_user_validation', $payload );
 
 
-		$meta_data = array();
 		foreach ($meta_fields as $field)
 		{
-			$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
-
-			$meta_data[$field['name']] = $this->input->post($field['name']);
+			if (!isset($field['frontend']) || $field['frontend'] === TRUE)
+			{
+				$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
+			}
 		}
 
 
