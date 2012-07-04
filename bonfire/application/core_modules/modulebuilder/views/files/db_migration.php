@@ -1,7 +1,7 @@
 <?php
 
  // There are no doubt more types where a value/length isn't possible - needs investigating
-$no_length = array('TEXT', 'BOOL', 'DATE', 'DATETIME', 'TIMESTAMP', 'BLOB', 'TINYBLOB', 'TINYTEXT', 'MEDIUMBLOB', 'MEDIUMTEXT', 'LONGBLOB', 'LONGTEXT');
+$no_length = array('TEXT', 'BOOL', 'DATE', 'DATETIME', 'TIME', 'TIMESTAMP', 'BLOB', 'TINYBLOB', 'TINYTEXT', 'MEDIUMBLOB', 'MEDIUMTEXT', 'LONGBLOB', 'LONGTEXT');
 
 if(!$table_as_field_prefix)
 {
