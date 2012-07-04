@@ -24,7 +24,7 @@
 <div class="row-fluid">
 	<div class="span8 offset2">
 
-<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
+<?php echo form_open($this->uri->uri_string(), array('class' => "form-horizontal", 'autocomplete' => 'off')); ?>
 
 	<div class="control-group <?php echo iif( form_error('email') , 'error') ;?>">
 		<label class="control-label required" for="email"><?php echo lang('bf_email'); ?></label>

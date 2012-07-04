@@ -41,7 +41,7 @@
 <div class="row-fluid">
 	<div class="span12">
 
-<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="off"'); ?>
+<?php echo form_open($this->uri->uri_string(), array('class' => "form-horizontal", 'autocomplete' => 'off')); ?>
 
 	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
 		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>

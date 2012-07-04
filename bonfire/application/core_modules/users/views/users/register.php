@@ -27,7 +27,7 @@
 <div class="row-fluid">
 	<div class="span12">
 
-<?php echo form_open('register', 'class="form-horizontal"'); ?>
+<?php echo form_open('register', array('class' => "form-horizontal", 'autocomplete' => 'off')); ?>
 
 
 	<div class="control-group <?php echo iif( form_error('email') , 'error'); ?>">
