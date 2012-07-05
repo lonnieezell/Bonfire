@@ -60,7 +60,7 @@
 			<label class="control-label required" for="password"><?php echo lang('bf_password'); ?></label>
 			<div class="controls">
 				<input class="span6" type="password" name="password" id="password" value="" placeholder="password" />
-				<p class="help-block"><?php echo lang('us_password_mins'); ?></p>
+				<p class="help-block"><?php echo $password_mins; ?></p>
 			</div>
 		</div>
 

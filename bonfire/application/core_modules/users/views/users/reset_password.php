@@ -1,12 +1,12 @@
 		<div class="page-header">
-				<h1>Reset Your Password</h1>
+				<h1><?php echo lang('us_reset_password'); ?></h1>
 		</div>
 
 		<div class="row-fluid">
 			<div class="span12">
 				<div class="alert alert-info fade in">
 						<a data-dismiss="alert" class="close">&times;</a>
-						<h4 class="alert-heading">Enter your new password below to reset your password.</h4>
+						<h4 class="alert-heading"><?php echo lang('us_reset_password_note'); ?></h4>
 				</div>
 			</div>
 		</div>
@@ -33,8 +33,8 @@
 	<div class="control-group <?php echo iif( form_error('password') , 'error') ;?>">
 		<label class="control-label" for="password"><?php echo lang('bf_password'); ?></label>
 		<div class="controls">
-			<input class="span6" type="password" name="password" id="password" value="" placeholder="Password...." />
-			<p class="help-block"><?php echo lang('us_password_mins'); ?></p>
+			<input class="span6" type="password" name="password" id="password" value="" placeholder="<?php echo lang('bf_password'); ?>" />
+			<p class="help-block"><?php echo $password_mins; ?></p>
 		</div>
 	</div>
 
@@ -48,7 +48,7 @@
 	<div class="control-group">
 		<label class="control-label" for="submit">&nbsp;</label>
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="Save New Password"  />
+			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="<?php echo lang('us_save_password'); ?>"  />
 		</div>
 	</div>
 

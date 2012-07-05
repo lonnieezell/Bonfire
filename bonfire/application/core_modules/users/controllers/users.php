@@ -107,8 +107,24 @@ class Users extends Front_Controller
 				}//end if
 			}//end if
 
+      switch ($this->settings_lib->item('auth.remember_length'))
+      {
+        case 604800:
+          $remember_time = '1 ' . lang('bf_week');
+          break;
+        case 1209600:
+          break;
+        case 1814400:
+          $remember_time = '3 ' . lang('bf_weeks');
+          break;
+        case 2592000:
+          $remember_time = '30 ' . lang('bf_days');
+          break;
+      }
+
+			Template::set('remember_length', sprintf( lang('us_remember_note'), strtolower($remember_time)));
+
 			Template::set_view('users/users/login');
-			Template::set('page_title', 'Login');
 			Template::render('login');
 		}
 		else
@@ -207,7 +223,6 @@ class Users extends Front_Controller
 			}//end if
 
 			Template::set_view('users/users/forgot_password');
-			Template::set('page_title', 'Password Reset');
 			Template::render();
 		}
 		else
@@ -329,7 +344,9 @@ class Users extends Front_Controller
 			// Handle the form
 			if ($this->input->post('submit'))
 			{
-				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password');
+				$password_min = $this->settings_lib->item('auth.password_min_length');
+				
+				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length['.$password_min.']|max_length[120]|valid_password');
 				$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
 
 				if ($this->form_validation->run() !== FALSE)
@@ -421,6 +438,8 @@ class Users extends Front_Controller
 
 		if ($this->input->post('submit'))
 		{
+			$password_min = $this->settings_lib->item('auth.password_min_length');
+			
 			// Validate input
 			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|max_length[120]|unique[users.email]|xss_clean');
 
@@ -429,7 +448,7 @@ class Users extends Front_Controller
 				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[users.username]|xss_clean');
 			}
 
-			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password');
+			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length['.$password_min.']|max_length[120]|valid_password');
 			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
 
 			$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim|strip_tags|xss_clean');
@@ -588,9 +607,10 @@ class Users extends Front_Controller
 		$this->user_model->password_hints();
 
 		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
+		
+		Template::set('password_mins', sprintf( lang('us_password_mins'), (string) $this->settings_lib->item('auth.password_min_length')));
 
 		Template::set_view('users/users/register');
-		Template::set('page_title', 'Register');
 		Template::render();
 
 	}//end register()
@@ -678,9 +698,10 @@ class Users extends Front_Controller
 		// Setting the payload for Events system.
 		$payload = array ( 'user_id' => $id, 'data' => $this->input->post() );
 
-
+		$password_min = $this->settings_lib->item('auth.password_min_length');
+		
 		$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email,users.id]|xss_clean');
-		$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|strip_tags|min_length[8]|max_length[120]|valid_password');
+		$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|strip_tags|min_length['.$password_min.']|max_length[120]|valid_password');
 
 		// check if a value has been entered for the password - if so then the pass_confirm is required
 		// if you don't set it as "required" the pass_confirm field could be left blank and the form validation would still pass
@@ -768,7 +789,7 @@ class Users extends Front_Controller
 		{
 
 			if ($this->input->post('submit')) {
-				$this->form_validation->set_rules('code', 'Verification Code', 'required|trim|xss_clean');
+				$this->form_validation->set_rules('code', 'lang:us_verification_code', 'required|trim|xss_clean');
 				if ($this->form_validation->run() == TRUE) {
 					$code = $this->input->post('code');
 				}
@@ -827,7 +848,6 @@ class Users extends Front_Controller
 				}
 			}
 			Template::set_view('users/users/activate');
-			Template::set('page_title', 'Account Activation');
 			Template::render();
 		}
 
@@ -843,11 +863,11 @@ class Users extends Front_Controller
 		{
 			if (isset($_POST['submit']))
 			{
-				$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|xss_clean');
+				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|xss_clean');
 
 				if ($this->form_validation->run() === FALSE)
 				{
-					Template::set_message('Cannot find that email in our records.', 'error');
+					Template::set_message(lang('us_invalid_email'), 'error');
 				}
 				else
 				{
@@ -883,7 +903,7 @@ class Users extends Front_Controller
 						$data = array
 						(
 							'to'		=> $_POST['email'],
-							'subject'	=> 'Activation Code',
+							'subject'	=> lang('us_activate_request'),
 							'message'	=> $this->load->view('_emails/activate', $email_message_data, TRUE)
 						);
 						$this->emailer->enable_debug(true);
@@ -914,7 +934,6 @@ class Users extends Front_Controller
 				}
 			}
 			Template::set_view('users/users/resend_activation');
-			Template::set('page_title', 'Activate Account');
 			Template::render();
 		}
 
