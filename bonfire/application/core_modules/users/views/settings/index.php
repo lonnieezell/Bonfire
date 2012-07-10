@@ -37,6 +37,7 @@
 				<th><?php echo lang('bf_username'); ?></th>
 				<th><?php echo lang('bf_display_name'); ?></th>
 				<th><?php echo lang('bf_email'); ?></th>
+				<th><?php echo lang('us_role'); ?></th>
 				<th style="width: 11em"><?php echo lang('us_last_login'); ?></th>
 				<th style="width: 10em"><?php echo lang('us_status'); ?></th>
 			</tr>
@@ -74,6 +75,9 @@
 				<td><?php echo $user->display_name ?></td>
 				<td>
 					<a href="mailto://<?php echo $user->email ?>"><?php echo $user->email ?></a>
+				</td>
+				<td>
+					<?php echo $roles[$user->role_id]->role_name ?>
 				</td>
 				<td>
 					<?php

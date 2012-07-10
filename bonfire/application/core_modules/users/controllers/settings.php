@@ -83,7 +83,12 @@ class Settings extends Admin_Controller
 		$this->auth->restrict('Bonfire.Users.Manage');
 
 		$roles = $this->role_model->select('role_id, role_name')->where('deleted', 0)->find_all();
-		Template::set('roles', $roles);
+		$ordered_roles = array();
+		foreach ($roles as $role)
+		{
+			$ordered_roles[$role->role_id] = $role;
+		}
+		Template::set('roles', $ordered_roles);
 
 		$offset = $this->uri->segment(5);
 
