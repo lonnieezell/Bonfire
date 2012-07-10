@@ -257,7 +257,7 @@ class Users extends Front_Controller
 				foreach ($meta_fields as $field)
 				{
 					if ((isset($field['admin_only']) && $field['admin_only'] === TRUE && isset($this->current_user) && $this->current_user->role_id == 1)
-							|| !isset($field['frontend']) || $field['frontend'] === TRUE)
+							&& (!isset($field['frontend']) || $field['frontend'] === TRUE))
 					{
 						$meta_data[$field['name']] = $this->input->post($field['name']);
 					}
@@ -445,7 +445,7 @@ class Users extends Front_Controller
 			foreach ($meta_fields as $field)
 			{
 				if ((isset($field['admin_only']) && $field['admin_only'] === TRUE && isset($this->current_user) && $this->current_user->role_id == 1)
-					|| !isset($field['frontend']) || $field['frontend'] === TRUE)
+					&& (!isset($field['frontend']) || $field['frontend'] === TRUE))
 				{
 					$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
 
@@ -711,7 +711,7 @@ class Users extends Front_Controller
 		foreach ($meta_fields as $field)
 		{
 			if ((isset($field['admin_only']) && $field['admin_only'] === TRUE && isset($this->current_user) && $this->current_user->role_id == 1)
-					|| !isset($field['frontend']) || $field['frontend'] === TRUE)
+					&& (!isset($field['frontend']) || $field['frontend'] === TRUE))
 			{
 				$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
 			}
