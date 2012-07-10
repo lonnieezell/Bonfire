@@ -1,23 +1,23 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-$lang['mig_intro']					= 'Migrations help you keep your database up to date and synced between development and production servers by providing a simple way to keep &lsquo;version control&rsquo; on your database.';
-$lang['mig_not_enabled']			= 'Migrations are not enabled.';
-$lang['mig_installed_version']		= 'Installed Version:';
-$lang['mig_latest_version']			= 'Latest Available Version:';
-$lang['mig_db_not_current']			= 'Your database is not up to date.';
-$lang['mig_no_migrations']			= 'There are no available migrations.';
+$lang['mig_intro']					= 'Migraciones te ayuda a mantener su base de datos actualizada y sincronizada entre los servidores de desarrollo y producci&oacute;n, proporcionando una manera simple de mantener un control de versiones de su base de datos.';
+$lang['mig_not_enabled']			= 'Migraciones no esta dispobible.';
+$lang['mig_installed_version']		= 'Versi&oacute;n instalada:';
+$lang['mig_latest_version']			= 'La &uacute;ltima versi&oacute;n disponible:';
+$lang['mig_db_not_current']			= 'Su base de datos no esta actualizada.';
+$lang['mig_no_migrations']			= 'No hay mirgraciones disponibles.';
 
-$lang['mig_class_doesnt_exist']     = 'The %s migration class does not exist';
+$lang['mig_class_doesnt_exist']     = 'No existe la clase migraci&oacute;n %s ';
 
-$lang['mig_migrate_note']			= 'Performing migrations <b>WILL</b> change your database structure, possibly ending in disaster. If you are not comfortable with your migrations, please verify them before continuing.';
-$lang['mig_migrate_to']				= 'Migrate database to version';
-$lang['mig_choose_migration']		= 'Migrate to version:';
-$lang['mig_migrate_button']			= 'Migrate Database';
+$lang['mig_migrate_note']			= 'Aplicar las migraciones <b>CAMBIAR&Aacute;</b> la estructura de su base de datos, posiblemente terminando en desastre. Si usted no se siente seguro con la migraci&oacute;n, verifiquela antes de continuar.';
+$lang['mig_migrate_to']				= 'Migrando la base de datos a la versi&oacute;n';
+$lang['mig_choose_migration']		= 'Migrando a la versi&oacute;n:';
+$lang['mig_migrate_button']			= 'Migrando base de datos';
 
-$lang['mig_app_migrations']			= "Application Migrations";
+$lang['mig_app_migrations']			= 'Migraci&oacute;n de Aplicaciones';
 $lang['mig_core_migrations']		= "Bonfire Core Migrations";
-$lang['mig_mod_migrations']			= "Module Migrations";
+$lang['mig_mod_migrations']			= 'M&oacute;dulo de Migraciones';
 
-$lang['db_maintenance']				= 'Maintenance';
-$lang['db_backups']					= 'Backups';
-$lang['db_migrations']				= 'Migrations';
+$lang['db_maintenance']				= 'Mantenimiento';
+$lang['db_backups']					= 'Copia de Seguridad';
+$lang['db_migrations']				= 'Migraciones';
