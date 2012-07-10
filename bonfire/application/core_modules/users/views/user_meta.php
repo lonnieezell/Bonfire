@@ -1,6 +1,7 @@
-		<?php
-		foreach ($meta_fields as $field):
-
+		<?php foreach ($meta_fields as $field):?>
+			<?php if ((isset($field['admin_only']) && $field['admin_only'] === TRUE && isset($current_user) && $current_user->role_id == 1)
+						|| !isset($field['admin_only']) || $field['admin_only'] === FALSE): ?>
+			<?php
 			if (!isset($frontend_only) || ($frontend_only === TRUE && (!isset($field['frontend']) || $field['frontend'] === TRUE))):
 
 				if ($field['form_detail']['type'] == 'dropdown'):
@@ -55,6 +56,6 @@
 
 				endif;
 			endif;
-
-		endforeach;
-		?>
+			?>
+			<?php endif;?>
+		<?php endforeach; ?>
