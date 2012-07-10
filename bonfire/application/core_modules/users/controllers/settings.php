@@ -217,7 +217,10 @@ class Settings extends Admin_Controller
 				$meta_data = array();
 				foreach ($meta_fields as $field)
 				{
-					$meta_data[$field['name']] = $this->input->post($field['name']);
+					if ((isset($field['admin_only']) && $field['admin_only'] === TRUE && isset($current_user) && $this->current_user->role_id == 1))
+					{
+						$meta_data[$field['name']] = $this->input->post($field['name']);
+					}
 				}
 
 				// now add the meta is there is meta data
@@ -292,14 +295,17 @@ class Settings extends Admin_Controller
 				$meta_data = array();
 				foreach ($meta_fields as $field)
 				{
-					$meta_data[$field['name']] = $this->input->post($field['name']);
+					if ((isset($field['admin_only']) && $field['admin_only'] === TRUE && isset($current_user) && $this->current_user->role_id == 1))
+					{
+						$meta_data[$field['name']] = $this->input->post($field['name']);
+					}
 				}
 
 				// now add the meta is there is meta data
 				$this->user_model->save_meta_for($user_id, $meta_data);
 
 
-				$user = $this->user_model->find_user_and_meta($user_id);;
+				$user = $this->user_model->find_user_and_meta($user_id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
 
@@ -407,7 +413,7 @@ class Settings extends Admin_Controller
 				if (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage') && $user->id != $this->current_user->id)
 				{
 					if ($this->user_model->delete($id))
-					{						
+					{
 
 						$user = $this->user_model->find($id);
 						$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
@@ -618,9 +624,12 @@ class Settings extends Admin_Controller
 
 		foreach ($meta_fields as $field)
 		{
-			$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
+			if ((isset($field['admin_only']) && $field['admin_only'] === TRUE && isset($current_user) && $this->current_user->role_id == 1))
+			{
+				$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
 
-			$meta_data[$field['name']] = $this->input->post($field['name']);
+				$meta_data[$field['name']] = $this->input->post($field['name']);
+			}
 		}
 
 		if ($this->form_validation->run($this) === FALSE)
