@@ -190,7 +190,7 @@ class Users extends Front_Controller
 
 						$data = array(
 									'to'	=> $_POST['email'],
-									'subject'	=> lang('us_reset_password_email_subject'),
+									'subject'	=> lang('us_reset_pass_subject'),
 									'message'	=> $this->load->view('_emails/forgot_password', array('link' => $pass_link), TRUE)
 							 );
 
