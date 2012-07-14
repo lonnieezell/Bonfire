@@ -23,15 +23,15 @@
 
 // INDEX page
 $lang['mb_actions']				= 'Acciones';
-$lang['mb_create_button']		= 'Crear m&oacute;dulo';
+$lang['mb_create_button']		= 'Crear módulo';
 $lang['mb_create_link']			= 'Crear un nuevo m&oacute;dulo';
-$lang['mb_create_note']			= 'Utiliza nuestro asistente wizbang para crear tu pr&oacute;ximo m&oacute;dulo. Hacemos todo el trabajo pesado por ti mediante la generaci&oacute;n de controladores, modelos, vistas y archivos de idioma.';
-$lang['mb_not_writeable_note']	= 'Error: la carpeta bonfire/modules no tiene permisos de escritura por lo que no puede ser creado el m&oacute;dulo en el servidor. Por favor asigna los permisos de escritura a la carpeta y actualiza esta p&aacute;gina.';
+$lang['mb_create_note']			= 'Utiliza nuestro asistente wizbang para crear tu próximo módulo. Hacemos todo el trabajo pesado por ti mediante la generación de controladores, módelos, vistas y archivos de idioma.';
+$lang['mb_not_writeable_note']	= 'Error: la carpeta bonfire/modules no tiene permisos de escritura por lo que no podr&aacute; crear ning&acute;un m&oacute;dulo en el servidor. Por favor asigne los permisos de escritura a la carpeta y actualiza esta p&aacute;gina.';
 $lang['mb_delete']				= 'Eliminar';
 $lang['mb_generic_description']	= 'Su descripci&oacute;n aqu&iacute;.';
 $lang['mb_installed_head']		= 'M&oacute;dulos de aplicaci&oacute;n instaldos';
 $lang['mb_module']				= 'M&oacute;dulo';
-$lang['mb_no_modules']			= 'No hay m&oacute;dulos instalados.';
+$lang['mb_no_modules']			= 'No hay módulos instalados.';
 
 $lang['mb_table_name']			= 'Nombre';
 $lang['mb_table_version']		= 'Versi&oacute;n';
