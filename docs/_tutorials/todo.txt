@@ -10,49 +10,81 @@ Lay out the folders for your module.
 
 The first step in creating a new module is to create a home for it. All modules are stored in _bonfire/modules_. This keeps them organized and safe from upgrades.
 
-Create a new folder in _bonfire/modules_ named 'todo'. Inside this new folder, create three new folders: _controllers_, _models_, and _views_. Your folder structure should look like: 
+Create a new folder in _bonfire/modules_ named 'todo'. Inside this new folder, create three new folders: _controllers_, _migrations*_, _models_, and _views_. Your folder structure should look like: 
 
 > bonfire/
 > 	modules/
 >		todo/
 >			controllers/
+>           migrations/
 >			models/
 >			views/
 
+_migrations_ is a bonfire specific folder used to handle version control (data, permissions, etc.).
 
-About: The Data
+About: The Data & The Permissions
 
-We will create a migration that will let us easily import our data.
+We will create a migration that will let us easily import our data and setup the necessary permissions.
 
-Create a new file under _bonfire/application/db/migrations/_ called *001_Create_todo_table.php*. This will hold the <Migrations> needed to create our new table to hold the todo items. 
+Create a new file under _todo/db/migrations/_ called *001_Init_todo.php*. This will hold the <Migrations> needed to create our new table to hold the todo items and add the required permissions. 
 
 Create your migration. The file should look like: 
 
 > <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 >
-> class Migration_Create_todo_table extends Migration {
-> 
-> 	public function up() 
-> 	{
-> 		$this->dbforge->add_field('todo_id INT(10) NOT NULL AUTO_INCREMENT');
-> 		$this->dbforge->add_field('description VARCHAR(255) NOT NULL');
-> 		$this->dbforge->add_field('deleted TINYINT(1) DEFAULT 0 NOT NULL');
-> 		$this->dbforge->add_key('todo_id', true);
-> 		$this->dbforge->create_table('todos');
-> 	}
-> 	
-> 	//--------------------------------------------------------------------
-> 	
-> 	public function down() 
-> 	{
-> 		$this->dbforge->drop_table('todos');
-> 	}
-> 	
-> 	//--------------------------------------------------------------------
-> 	
+> class Migration_init_todo extends Migration {
+>    
+>    // permissions to migrate
+>    private $permission_values = array(
+>        array('name' => 'Todo.Content.View', 'description' => 'Access to view Todo', 'status' => 'active',)
+>        array('name' => 'Todo.Content.Delete'', 'description' => 'Delete a Todo item', 'status' => 'active',)
+>    );
+>
+>    //-----------------------------------------------------------------------------------------------------------
+>
+>    public function up()
+>    {
+>        // create todo table
+>        $this->dbforge->add_field('todo_id INT(10) NOT NULL AUTO_INCREMENT');
+>        $this->dbforge->add_field('description VARCHAR(255) NOT NULL');
+>        $this->dbforge->add_field('deleted TINYINT(1) DEFAULT 0 NOT NULL');
+>        $this->dbforge->add_key('todo_id', true);
+>        $this->dbforge->create_table('todos');
+>
+>        // set permissions
+>        foreach ($this->permission_values as $permission_value)
+>        {
+>            $permissions_data = $permission_value;
+>            $this->db->insert("permissions", $permissions_data);
+>            $role_permissions_data = array('role_id' => '1', 'permission_id' => $this->db->insert_id(),);
+>            $this->db->insert("role_permissions", $role_permissions_data);
+>        }
+>    }
+>
+>    //-----------------------------------------------------------------------------------------------------------
+>
+>    public function down()
+>    {
+>        // drop todo table
+>        $this->dbforge->drop_table('todos');
+>
+>        // set permissions
+>        foreach ($this->permission_values as $permission_value)
+>        {
+>            $query = $this->db->select('permission_id')->get_where("permissions", array('name' => $permission_value['name'],));
+>            foreach ($query->result_array() as $row)    
+>            {
+>                $permission_id = $row['permission_id'];
+>                $this->db->delete("role_permissions", array('permission_id' => $permission_id));
+>            }
+>            $this->db->delete("permissions", array('name' => $permission_value['name']));
+>        }      
+>    }
+>
+>    //-----------------------------------------------------------------------------------------------------------
 > }
 
-Now login to Bonfire and go to Developer / Migrations. It should tell you that the Installed Version is 2, and the Latest Available Version is 3. Click the *Install Latest Version* link. On this new page, choose *Migrate Database* to install the new table.
+Now login to Bonfire, go to Developer / Database Tools / Migrations and select the Modules tab. It should tell you that the Todo module Installed Version is 0, and the Latest Available Version is 1. Click on the dropdown box and select 001_Init_todo.php and then click on the Migrate Module button. If all went well a message should appear stating that you have successfully migrated database to version 1.
 
 About: The Model
 
@@ -130,7 +162,7 @@ About: The Form
 
 Now let's get our form built to allow creating new Todo items. 
 
-You are free to use any of the form helper functions that you want, but I typically use straight HTML except for the form_open() and form_close() methods. 
+You are free to use any of the form helper functions that you want, but I typically use straight HTML except for the form_open() and form_close() methods. Add the following or similar to your _modules/todo/views/content/index.php_ file.
 
 > <br/>
 > <?php if (auth_errors() || validation_errors()) : ?>
@@ -207,8 +239,9 @@ Now, let's modify the index method to actually push the results to the view.
 >				Template::set_message('Error creating new ToDo item.', 'error');
 >			}
 >		}
->		
+>
 >		Template::set('items', $this->todo_model->order_by('todo_id', 'desc')->find_all_by('deleted', 0));
+>
 >	
 >		Template::render();
 > 	}
@@ -251,31 +284,38 @@ If you will notice the form_open() call above, we are assigning a class of _ajax
 
 At the bottom of your view, add the following javascript.
 
-
-> <script>
-> head.ready(function() {
-> 	$('.todo-form input[type=checkbox]').change(function() {
-> 		var cid = $(this).attr('data-id');
-> 		
-> 		// Remove it from the display, with a fade effect
-> 		$(this).parents('tr').fadeOut(300);
-> 		
-> 		// Tell the server to remove it.
-> 		$.post('<?php echo current_url();?>/delete/'+ cid);
-> 	});
+> <script type="text/javascript">
+> $(document).ready(function() {    
+>   $('.todo-form input[type=checkbox]').change(function() {
+>      // checkbox
+>      var cb = $(this);
+>      // Todo's id
+>      var cid = $(this).attr('data-id');
+>      // Tell the server to remove it.
+>      $.post('<?php echo current_url();?>/delete/'+ cid, function(data){
+>          // if the response from the post result returns 'true'          
+>          if(data == 'true'){
+>              // Remove it from the display, with a fade effect
+>               $(cb).parents('tr').fadeOut(300);              
+>          }
+>      });
+>  });
 > });
 > </script>
 
-This javascript simply watches each checkbox in the _task-form_ for a click. It then fades the table row out and calls a function in the server that deletes it. For this example, we're not dealing with errors and success messages, but in a production app, you'd probably want to do that.
+This javascript simply watches each checkbox in the _task-form_ for a click. It then call a function in the server that deletes it.  If the response is "true" the server has deleted the item from the database and then fades the checkbox from view.  We not dealing with error messages, but in a production app, you'd probably want to do that.
 
 Now we need to create the _delete()_ method, so open up the content.php controller and add the following method.
 
 > public function delete() 
 > 	{
+>       // authorize todo content delete access
+>       $this->auth->restrict('Todo.Content.Delete');
+>      
 > 		$id = $this->uri->segment(5);
 > 		
 > 		$this->todo_model->delete($id);
-> 		
+> 		// simple 'true' string to show that the delete function has completed.
 > 		echo 'true';
 > 		die();
 > 	}
