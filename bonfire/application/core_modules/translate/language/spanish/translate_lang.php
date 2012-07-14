@@ -5,7 +5,7 @@ $lang['tr_no_modules']			= 'No se encontraron m&oacute;dulos con archivo de idio
 $lang['tr_no_core']				= 'No se encontro el archivo de idioma base.';
 
 $lang['tr_core']				= 'Base';
-$lang['tr_modules']				= 'M&oacute;dulos';
+$lang['tr_modules']				= 'Módulos';
 $lang['tr_current_lang']		= 'Traducir a';
 $lang['tr_language']			= 'Idioma';
 $lang['tr_other']				= 'Otro...';
@@ -21,6 +21,6 @@ $lang['tr_export_short']		= 'Exportar';
 
 $lang['tr_export_note']			= 'La exportación de archivos de idioma le proporciona un archivo. Zip con todos los archivos para un idioma en particular de modo que pueda compartirlos fácilmente.';
 
-$lang['tr_include']				= 'Selecciona las partes';
+$lang['tr_include']				= 'Incluir';
 $lang['tr_include_core']		= 'Incluir la base';
 $lang['tr_include_mods']		= 'Incluir los m&oacute;dulos personalizados';
