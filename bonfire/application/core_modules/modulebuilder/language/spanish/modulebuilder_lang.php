@@ -24,7 +24,7 @@
 // INDEX page
 $lang['mb_actions']				= 'Acciones';
 $lang['mb_create_button']		= 'Crear módulo';
-$lang['mb_create_link']			= 'Crear un nuevo m&oacute;dulo';
+$lang['mb_create_link']			= 'Crear un nuevo módulo';
 $lang['mb_create_note']			= 'Utiliza nuestro asistente wizbang para crear tu próximo módulo. Hacemos todo el trabajo pesado por ti mediante la generación de controladores, módelos, vistas y archivos de idioma.';
 $lang['mb_not_writeable_note']	= 'Error: la carpeta bonfire/modules no tiene permisos de escritura por lo que no podr&aacute; crear ning&acute;un m&oacute;dulo en el servidor. Por favor asigne los permisos de escritura a la carpeta y actualiza esta p&aacute;gina.';
 $lang['mb_delete']				= 'Eliminar';
@@ -61,14 +61,14 @@ $lang['mb_new_module']			= 'Nuevo m&oacute;dulo';
 $lang['mb_exist_modules']		= 'M&oacute;dulos existentes';
 
 // FORM page
-$lang['mb_form_note'] 			= '<p><b>Llene todos los campos que le gustar&iacute;a tener en su m&oacute;dulo (un campo "id" ser&aacute; creado autom&aacute;ticamente). Si desea crear el SQL para la tabla marque la casilla "Crear una tabla para el m&oacute;dulo".</b></p><p>Este formulario generar&aacute; un m&oacute;dulo completo de CodeIgniter (modelo, controlador y vista) y si usted lo selecciona un archivo de Migraci&oacute;n.</p>';
+$lang['mb_form_note'] 			= '<p><b>Llene todos los campos que le gustar&iacute;a tener en su m&oacute;dulo (un campo "id" ser&aacute; creado autom&aacute;ticamente). Si desea crear el SQL para la tabla marque la casilla "Crear una nueva tabla".</b></p><p>Este formulario generar&aacute; un m&oacute;dulo completo de CodeIgniter (modelo, controlador y vista) y si usted lo selecciona un archivo de Migraci&oacute;n.</p>';
 
 $lang['mb_table_note'] 			= '<p>Su tabla se crear&aacute; con al menos un campo: de clave primaria que ser&aacute; usado como identificador &uacute;nico y como un &iacute;ndice. Si requiere campos adicionales, haga clic en el n&uacute;mero que necesita para agregarlos a este formulario.</p>';
 
 $lang['mb_field_note'] 			= '<p><b>NOTA : PARA TODOS LOS CAMPOS</b><br />Si su campo para la tabla es de tipo "enum" o "set", por favor ingrese los valores usando este formato: \'a\',\'b\',\'c\'...<br />Si alguna vez necesita poner una barra invertida ("\") o una sola comilla ("\'") entre esos valores, precedalos con una barra invertida (por ejemplo \'\\xyz\' or \'a\\\'b\').</p>';
 	
 $lang['mb_form_errors']			= 'Por favor corrija los siguientes errores.';
-$lang['mb_form_mod_details']	= 'Detalles del m&oacute;dule';
+$lang['mb_form_mod_details']	= 'Detalles del m&oacute;dulo';
 $lang['mb_form_mod_name']		= 'Nombre del m&oacute;dulo';
 $lang['mb_form_mod_name_ph']	= 'Foro, Blog, Tareas';
 $lang['mb_form_mod_desc']		= 'Descripci&oacute;n del m&oacute;dulo';
@@ -88,7 +88,7 @@ $lang['mb_form_created_field']	= '"Created" field name?';
 $lang['mb_form_modified_field']	= '"Modified" field name?';
 $lang['mb_form_generate']		= 'Crear una tabla para el m&oacute;dulo';
 $lang['mb_form_role_id']		= 'Otorgar el rol de acceso completo';
-$lang['mb_form_fieldnum']		= 'Campos adicionales de la tabla';
+$lang['mb_form_fieldnum']		= 'Campos adicionales para la tabla';
 $lang['mb_form_field_details']	= 'Detalles del campo';
 $lang['mb_form_table_name']		= 'Nombre de la Tabla';
 $lang['mb_form_table_name_ph']	= 'Min&uacute;sculas, sin espacios';
@@ -97,12 +97,12 @@ $lang['mb_form_label']			= 'Etiqueta';
 $lang['mb_form_label_ph']		= 'El nombre que se usar&aacute; en la p&aacute;gina web';
 $lang['mb_form_fieldname']		= 'Nombre (sin espacios)';
 $lang['mb_form_fieldname_ph']	= 'El nombre del campo en la tabla. Usar min&uacute;sculas es lo recomendado.';
-$lang['mb_form_type']			= 'Tipo de entrada de la p&aacute;gina web';
+$lang['mb_form_type']			= 'Tipo de entrada';
 $lang['mb_form_length']			= 'longitud m&aacute;xima <b>-o-</b> Valores';
 $lang['mb_form_length_ph']		= '30, 255, 1000, etc...';
-$lang['mb_form_dbtype']			= 'Tipo de base de datos';
+$lang['mb_form_dbtype']			= 'Tipo de datos';
 $lang['mb_form_rules']			= 'Reglas de validaci&oacute;n';
-$lang['mb_form_rules_limits']	= 'Limitaciones de entrada de datos'; 
+$lang['mb_form_rules_limits']	= 'Reglas adicionales'; 
 $lang['mb_form_required']		= 'Requerido';
 $lang['mb_form_unique']			= 'Unico';
 $lang['mb_form_trim']			= 'Trim';
