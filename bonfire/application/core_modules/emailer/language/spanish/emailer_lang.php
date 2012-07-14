@@ -22,11 +22,11 @@
 */
 
 $lang['em_template']			= 'Plantilla';
-$lang['em_email_template']		= 'PLantilla de Correo';
+$lang['em_email_template']		= 'Plantilla de Correo';
 $lang['em_emailer_queue']		= 'Cola de correo';
 
-$lang['em_system_email']		= 'Sistema de Correo';
-$lang['em_system_email_note']	= 'Los correo que todo el sistema genere son enviados por.';
+$lang['em_system_email']		= 'Correo electr&oacute;nico para el sistema';
+$lang['em_system_email_note']	= 'Los correo que todo el sistema genere ser&aacute;n enviados desde este correo.';
 $lang['em_email_server']		= 'Servidor de Correo';
 $lang['em_settings']			= 'Configuraci&oacute;n de Correo';
 $lang['em_settings_note']		= '<b>Correo</b> usa la funci&oacute;n est&aacute;ndar de correo de PHP (Mail), no se requiere configuraci&oacute;n.';
@@ -43,7 +43,7 @@ $lang['em_footer']				= 'Pie de p&aacute;gina';
 
 $lang['em_test_header']			= 'Probar su configuraci&oacute;n';
 $lang['em_test_intro']			= 'Ingrese una direcci&oacute;n de correo a continuaci&oacute;n, para verificar que su configuraci&oacute;n de correo esta funcionando.<br/>Por favor guarde la configuraci&oacute;n actual antes de hacer la prueba.';
-$lang['em_test_button']			= 'Enviando un correo de prueba';
+$lang['em_test_button']			= 'Enviar un correo de prueba';
 $lang['em_test_result_header']	= 'Resultados de la prueba';
 $lang['em_test_no_results']		= 'O la prueba no se ha ejecutado o no devuelve ning&uacute;n resultado.';
 $lang['em_test_debug_header']	= 'Informaci&oacute;n de depuraci&oacute;n';
@@ -53,7 +53,7 @@ $lang['em_test_error']			= 'El correo parece no estar configurado correctamente.
 $lang['em_test_mail_subject']	= 'Felicitaciones! su sistema de env&iacute;o de correo esta funcionando!';
 $lang['em_test_mail_body']		= 'Si esta viendo este correo es porque parece que su sistema de env&iacute;o de correo esta funcionando!';
 
-$lang['em_stat_no_queue']		= 'You do not currently have any emails in the queue.';
+$lang['em_stat_no_queue']		= 'Actualmente no tiene ning&uacute;n correo en cola.';
 $lang['em_total_in_queue']		= 'Total de correos en cola:';
 $lang['em_total_sent']			= 'Total de correos enviados:';
 
