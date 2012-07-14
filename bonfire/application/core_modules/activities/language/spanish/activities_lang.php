@@ -23,7 +23,7 @@
 
 $lang['activity_home']					= 'Inicio';
 $lang['activity_title']					= 'Actividades del Sitio';
-$lang['activity_own']					= 'Su';
+$lang['activity_own']					= 'Usted';
 $lang['activity_user']					= 'Usuario';
 $lang['activity_users']					= 'Usuarios';
 $lang['activity_module']				= 'M&oacute;dulo';
