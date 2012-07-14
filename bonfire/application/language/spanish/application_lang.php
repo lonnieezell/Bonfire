@@ -100,7 +100,7 @@ $lang['bf_do_check_edge']		= 'Must be enabled to see bleeding edge updates as we
 $lang['bf_update_show_edge']	= 'View bleeding edge updates?';
 $lang['bf_update_info_edge']	= 'Deja sin marcar para buscar s&oacute;lo las nuevas actualizaciones etiquetadas. Comprobar cualquier env&iacute;o al repositorio oficial.';
 
-$lang['bf_ext_profile_show']	= 'Does User accounts have extended profile?';
+$lang['bf_ext_profile_show']	= '&iexcl;Las cuentas de usuario tienen perfil extendido?';
 $lang['bf_ext_profile_info']	= 'Check "Extended Profiles" to have extra profile meta-data available option(wip), omiting some default bonfire fields (eg: address).';
 
 $lang['bf_yes']					= 'Si';
@@ -124,8 +124,8 @@ $lang['bf_show_front_profiler']	= '&iquest;Mostrar el analizador en el Front End
 
 $lang['bf_cache_not_writable']  = 'La carpeta de cache de la aplicaci&oacute;n no es escribible';
 
-$lang['bf_password_strength']			= 'Configuraci&oacute;n de fuerza de contrase&ntilde;a';
-$lang['bf_password_length_help']		= 'Longitud m&iacute;nima para la contrase&ntilde;a ej: 8';
+$lang['bf_password_strength']			= 'Fuerza para contrase&ntilde;a';
+$lang['bf_password_length_help']		= 'Caracteres m&iacute;nimos para la contrase&ntilde;a ej: 8';
 $lang['bf_password_force_numbers']		= '&iquest;Hacer obligatorio n&uacute;meros dentro contrase&ntilde;a?';
 $lang['bf_password_force_symbols']		= '&iquest;Hacer obligatorio s&iacute;mbolos dentro de la contrase&ntilde;a?';
 $lang['bf_password_force_mixed_case']	= '&iquest;Hacer obligarorio may&uacute;sculas dentro de la contrase&ntilde;a?';
