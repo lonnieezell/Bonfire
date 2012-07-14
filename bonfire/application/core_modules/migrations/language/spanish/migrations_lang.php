@@ -12,10 +12,10 @@ $lang['mig_class_doesnt_exist']     = 'No existe la clase migraci&oacute;n %s ';
 $lang['mig_migrate_note']			= 'Aplicar las migraciones <b>CAMBIAR&Aacute;</b> la estructura de su base de datos, posiblemente terminando en desastre. Si usted no se siente seguro con la migraci&oacute;n, verifiquela antes de continuar.';
 $lang['mig_migrate_to']				= 'Migrando la base de datos a la versi&oacute;n';
 $lang['mig_choose_migration']		= 'Migrando a la versi&oacute;n:';
-$lang['mig_migrate_button']			= 'Migrando base de datos';
+$lang['mig_migrate_button']			= 'Migrar base de datos';
 
 $lang['mig_app_migrations']			= 'Migraci&oacute;n de Aplicaciones';
-$lang['mig_core_migrations']		= "Bonfire Core Migrations";
+$lang['mig_core_migrations']		= 'Migraci&oacute;n de Bonfire Core';
 $lang['mig_mod_migrations']			= 'Migraci&oacute;n de M&oacute;dulos';
 
 $lang['db_maintenance']				= 'Mantenimiento';
