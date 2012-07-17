@@ -50,7 +50,7 @@
 				No account? <a href="<?php echo site_url('register') ?>"><?php echo lang('bf_action_register'); ?>!</a> |
 			<?php endif; ?>
 
-			<a href=""><?php echo lang('bf_forgot_password'); ?></a>
+			<?php echo anchor('/forgot_password', lang('bf_forgot_password')); ?>
 		</p>
 	</div>
 
