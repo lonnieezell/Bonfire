@@ -45,12 +45,13 @@
 	</div>
 
 	<div class="modal-footer">
+		<p style="text-align: center">
 			<?php if ($this->settings_lib->item('auth.allow_register')) : ?>
-				<p style="text-align: center">
-					No account? <a href="<?php echo site_url('register') ?>"><?php echo lang('bf_action_register'); ?>!</a> |
-					<a href=""><?php echo lang('bf_forgot_password'); ?></a>
-				</p>
+				No account? <a href="<?php echo site_url('register') ?>"><?php echo lang('bf_action_register'); ?>!</a> |
 			<?php endif; ?>
+
+			<a href=""><?php echo lang('bf_forgot_password'); ?></a>
+		</p>
 	</div>
 
 	<?php echo form_close(); ?>
