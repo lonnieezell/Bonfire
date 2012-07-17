@@ -111,7 +111,6 @@
 			</div>
 
       <div class="control-group">
-        <label class="control-label" for="db_required"></label>
         <div class="controls">
           <label class="inline radio">
             <input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", $field_total == 0 ? TRUE : FALSE); ?> class="radio" /> None

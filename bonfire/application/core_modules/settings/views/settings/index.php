@@ -157,7 +157,6 @@
 			</div>
 
 			<div class="control-group">
-			<label class="control-label">&nbsp;</label>
 				<div class="controls">
 					<div class="inputs-list">
 						<label class="checkbox" for="allow_remember">
@@ -222,7 +221,6 @@
 			<legend>Developer</legend>
 
 			<div class="control-group">
-			<label class="control-label" >&nbsp;</label>
 				<div class="controls">
 					<label class="checkbox" for="show_profiler">
 						<input type="checkbox" name="show_profiler" id="show_profiler" value="1" <?php echo  $settings['site.show_profiler'] == 1 ? 'checked="checked"' : set_checkbox('auth.use_extended_profile', 1); ?> />

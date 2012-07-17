@@ -18,7 +18,6 @@
 			<legend><?php echo lang('em_footer'); ?></legend>
 	
 			<div class="clearfix">
-				<label for="footer"></label>
 				<div class="input">
 					<textarea name="footer" rows="15" style="width: 99%"><?php echo htmlspecialchars_decode($this->load->view('email/_footer', null, true)) ;?></textarea>
 				</div>
