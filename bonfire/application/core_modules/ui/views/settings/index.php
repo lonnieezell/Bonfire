@@ -44,8 +44,8 @@
 				</tr>
 				<?php foreach ($settings as $action => $shortcut): ?>
 					<?php $count++; ?>
-					<tr id="shortcut<?php echo $count; ?>">
-						<td id="shortcut<?php echo $count; ?>">
+					<tr>
+						<td>
 							<input type="hidden" id="action<?php echo $count;?>" name="action[<?php echo $count;?>]"  value="<?php echo isset($action) ? $action : set_value('actions['.$count.']') ?>" />
 							<?php echo $current[$action]['description'] ?>
 						</td>
