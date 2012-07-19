@@ -63,3 +63,8 @@ $lang['multiple_migrations_name']		= 'Multiple migrations name: %s';
 $lang['migration_class_doesnt_exist']	= 'Migration class does not exist: %s';
 $lang['wrong_migration_interface']		= 'Wrong migration interface: %s';
 $lang['invalid_migration_filename']		= 'Wrong migration filename: %s - %s';
+
+$lang['in_env_dev']				= 'Development';
+$lang['in_env_test']			= 'Testing';
+$lang['in_env_prod']			= 'Production';
+$lang['in_reload']				= 'Reload Page';
