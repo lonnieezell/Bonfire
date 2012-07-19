@@ -52,7 +52,7 @@
         </div>
 
 		<div class="control-group <?php echo form_has_error('default') ? 'error' : ''; ?>">
-			<label class="control-label"><?php echo lang('role_default_role')?></label>
+			<label class="control-label" for="default"><?php echo lang('role_default_role')?></label>
 			<div class="controls">
 				<label class="checkbox" for="default" >
 					<input type="checkbox" name="default" id="default" value="1" <?php echo set_checkbox('default', 1, isset($role) && $role->default == 1 ? TRUE : FALSE) ?> />
