@@ -52,7 +52,6 @@
 
 	<?php if ($this->settings_lib->item('auth.allow_remember')) : ?>
 		<div class="control-group">
-			<label class="control-label" for="remember_me">&nbsp;</label>
 			<div class="controls">
 				<label class="checkbox">
 					<input type="checkbox" name="remember_me" id="remember_me" value="1" tabindex="3" />
