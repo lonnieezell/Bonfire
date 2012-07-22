@@ -93,12 +93,10 @@
 
 			<div class="control-group">
 				<div class="controls">
-					<div class="inputs-list">
-						<label>
-							<input type="checkbox" name="allow_register" id="allow_register" value="1" <?php echo $settings['auth.allow_register'] == 1 ? 'checked="checked"' : set_checkbox('auth.allow_register', 1); ?> />
-							<span><?php echo lang('bf_allow_register') ?></span>
-						</label>
-					</div>
+					<label>
+						<input type="checkbox" name="allow_register" id="allow_register" value="1" <?php echo $settings['auth.allow_register'] == 1 ? 'checked="checked"' : set_checkbox('auth.allow_register', 1); ?> />
+						<span><?php echo lang('bf_allow_register') ?></span>
+					</label>
 				</div>
 			</div>
 
@@ -158,12 +156,10 @@
 
 			<div class="control-group">
 				<div class="controls">
-					<div class="inputs-list">
-						<label class="checkbox" for="allow_remember">
-							<input type="checkbox" name="allow_remember" id="allow_remember" value="1" <?php echo $settings['auth.allow_remember'] == 1 ? 'checked="checked"' : set_checkbox('auth.allow_remember', 1); ?> />
-							<span><?php echo lang('bf_allow_remember') ?></span>
-						</label>
-					</div>
+					<label class="checkbox" for="allow_remember">
+						<input type="checkbox" name="allow_remember" id="allow_remember" value="1" <?php echo $settings['auth.allow_remember'] == 1 ? 'checked="checked"' : set_checkbox('auth.allow_remember', 1); ?> />
+						<span><?php echo lang('bf_allow_remember') ?></span>
+					</label>
 				</div>
 			</div>
 

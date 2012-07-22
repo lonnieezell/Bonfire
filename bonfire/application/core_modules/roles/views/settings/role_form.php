@@ -64,15 +64,13 @@
 		<div class="control-group">
 			<label class="control-label" for="can_delete"><?php echo lang('role_can_delete_role'); ?>?</label>
 			<div class="controls">
-				<div class="inputs-list">
-					<label class="radio">
-						<input type="radio" name="can_delete" value="1" <?php echo set_radio('can_delete', 1, isset($role) && $role->can_delete == 1 ? TRUE : FALSE) ?> /> Yes
-					</label>
-					<label class="radio">
-						<input type="radio" name="can_delete" value="0" <?php echo set_radio('can_delete', 0, isset($role) && $role->can_delete == 0 ? TRUE : FALSE) ?> /> No
-					</label>
-					<span class="help-inline" style="display: inline"><?php echo lang('role_can_delete_note'); ?></span>
-				</div>
+				<label class="radio">
+					<input type="radio" name="can_delete" value="1" <?php echo set_radio('can_delete', 1, isset($role) && $role->can_delete == 1 ? TRUE : FALSE) ?> /> Yes
+				</label>
+				<label class="radio">
+					<input type="radio" name="can_delete" value="0" <?php echo set_radio('can_delete', 0, isset($role) && $role->can_delete == 0 ? TRUE : FALSE) ?> /> No
+				</label>
+				<span class="help-inline" style="display: inline"><?php echo lang('role_can_delete_note'); ?></span>
 			</div>
 		</div>
 
