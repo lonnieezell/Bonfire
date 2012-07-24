@@ -129,7 +129,7 @@
 				<td>
 					<?php echo lang('activity_delete_own_note'); ?>
 					<select id="activity_own_select">
-						<option value="<?php echo $current_user->id; ?>"><?php echo $current_user->username; ?></option>))
+						<option value="<?php echo $current_user->id; ?>"><?php echo $current_user->username; ?></option>
 					</select>
 				</td>
 
