@@ -127,6 +127,7 @@ class Install extends CI_Controller {
 	public function index()
 	{
 		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters('', '');
 		//$this->form_validation->CI =& $this;
 		$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim|strip_tags|xss_clean');
 		$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim|strip_tags|xss_clean');
@@ -207,6 +208,7 @@ class Install extends CI_Controller {
 		if ($this->input->post('submit'))
 		{
 			$this->load->library('form_validation');
+			$this->form_validation->set_error_delimiters('', '');
 			//$this->form_validation->CI =& $this;
 
 			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|strip_tags|min_length[1]|xss_clean');
