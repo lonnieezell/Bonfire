@@ -62,8 +62,8 @@
 		</div>
 
 		<div class="control-group">
-			<label class="control-label" for="can_delete"><?php echo lang('role_can_delete_role'); ?>?</label>
-			<div class="controls">
+			<label class="control-label" id="can_delete_label"><?php echo lang('role_can_delete_role'); ?>?</label>
+			<div class="controls" aria-labelledby="can_delete_label" role="group">
 				<label class="radio">
 					<input type="radio" name="can_delete" value="1" <?php echo set_radio('can_delete', 1, isset($role) && $role->can_delete == 1 ? TRUE : FALSE) ?> /> Yes
 				</label>

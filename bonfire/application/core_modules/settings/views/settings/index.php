@@ -123,14 +123,14 @@
 			</div>
 
 			<div class="control-group">
-				<label class="control-label"><?php echo lang('bf_use_usernames') ?></label>
-				<div class="controls">
+				<label class="control-label" id="use_usernames_label"><?php echo lang('bf_use_usernames') ?></label>
+				<div class="controls" aria-labelledby="use_usernames_label" role="group">
 					<label class="radio">
-						<input type="radio" name="use_usernames" id="use_usernames" value="1" <?php echo $settings['auth.use_usernames'] == 1 ? 'checked="checked"' : set_radio('auth.use_usernames', 1); ?> />
+						<input type="radio" name="use_usernames" value="1" <?php echo $settings['auth.use_usernames'] == 1 ? 'checked="checked"' : set_radio('auth.use_usernames', 1); ?> />
 						<span><?php echo lang('bf_username') ?></span>
 					</label>
 					<label class="radio">
-						<input type="radio" name="use_usernames" id="use_usernames" value="0" <?php echo $settings['auth.use_usernames'] == 0 ? 'checked="checked"' : set_radio('auth.use_usernames', 0); ?> />
+						<input type="radio" name="use_usernames" value="0" <?php echo $settings['auth.use_usernames'] == 0 ? 'checked="checked"' : set_radio('auth.use_usernames', 0); ?> />
 						<span><?php echo lang('bf_email') ?></span>
 					</label>
 				</div>

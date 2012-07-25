@@ -81,8 +81,8 @@
 
 			<div class="control-group mb_advanced">
 			<?php echo form_error("form_action"); ?>
-				<label class="control-label" for="form_action"><?php echo lang('mb_form_actions'); ?></label>
-          <div class="controls">
+				<label class="control-label" id="form_action_label"><?php echo lang('mb_form_actions'); ?></label>
+					<div class="controls" aria-labelledby="form_action_label" role="group">
 						<?php foreach($form_action_options as $action => $label): ?>
 						<label class="checkbox" for="form_action_<?php echo $action; ?>">
 						<?php
