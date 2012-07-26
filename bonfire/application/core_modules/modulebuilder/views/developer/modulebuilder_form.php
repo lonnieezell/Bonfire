@@ -61,21 +61,19 @@
 			</div>
 
 			<div class="control-group mb_advanced">
-				<label class="control-label block"><?php echo lang('mb_form_contexts'); ?></label>
-				<div class="controls">
+				<label class="control-label block" id="contexts_label"><?php echo lang('mb_form_contexts'); ?></label>
+				<div class="controls" aria-labelledby="contexts_label" role="group">
           <label class="checkbox" for="contexts_public">
 					<input name="contexts[]" id="contexts_public" type="checkbox" value="public" checked="checked" />
             <?php echo lang('mb_form_public'); ?>
           </label>
 
-					<div class="controls-list">
-						<?php foreach (config_item('contexts') as $context) : ?>
-							<label class="checkbox" for="contexts_<?php echo $context; ?>">
-								<input name="contexts[]" id="contexts_<?php echo $context; ?>" type="checkbox" value="<?php echo $context ?>" checked="checked" />
-								<?php echo ucwords($context) ?>
-							</label>
-						<?php endforeach; ?>
-					</div>
+					<?php foreach (config_item('contexts') as $context) : ?>
+						<label class="checkbox" for="contexts_<?php echo $context; ?>">
+							<input name="contexts[]" id="contexts_<?php echo $context; ?>" type="checkbox" value="<?php echo $context ?>" checked="checked" />
+							<?php echo ucwords($context) ?>
+						</label>
+					<?php endforeach; ?>
 				</div>
 			</div>
 
@@ -376,8 +374,8 @@
 					</div>
 
 					<div class="control-group">
-						<label class="control-label" ><?php echo lang('mb_form_rules'); ?></label>
-						<div class="controls">
+						<label class="control-label" id="validation_label<?php echo $count; ?>"><?php echo lang('mb_form_rules'); ?></label>
+						<div class="controls" aria-labelledby="validation_label<?php echo $count; ?>" role="group">
 							<?php echo form_error('cont_validation_rules'.$count.'[]'); ?>
 
 							<?php foreach ($validation_rules as $validation_rule) : ?>
