@@ -9,6 +9,7 @@ function show_table_props() {
 		$('#db_details').show(0);
 		$('#db_details .mb_advanced').hide();
 		$('.mb_new_table').show(0);
+		$('#field_numbers').show(0);
 		$('#all_fields').show(0);
 		$('#primary_key_field').val('' == $('#primary_key_field').val() ? 'id' : $('#primary_key_field').val());
 		var tbl_name = ( ( $('#table_name').val() == '' ) ? $('#module_name').val() : $('#table_name').val() );
