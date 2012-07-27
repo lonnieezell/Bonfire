@@ -148,6 +148,6 @@ Toggle module/table advanced options by clicking on the
 fieldset legend. Uses the div:not to not affect the visibility
 options of the "more validation rules"
 ------------------------------------------------------------*/
-$('.container legend').click( function() {
+$('.body legend').click( function() {
 	$(this).parent('fieldset').children('div:not(".mb_advanced:hidden")').toggle();
 });

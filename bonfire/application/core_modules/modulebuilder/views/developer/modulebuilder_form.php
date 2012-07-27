@@ -12,7 +12,7 @@
 <style>
 .faded { opacity: .60; }
 .faded:hover, .mb_show_advanced:hover, .mb_show_advanced_rules:hover{ opacity: 1; color: black;}
-.mb_show_advanced, .mb_show_advanced_rules, .container legend { cursor: pointer; }
+.mb_show_advanced, .mb_show_advanced_rules, .body legend { cursor: pointer; }
 .mb_advanced { display: none; }
 </style>
 
