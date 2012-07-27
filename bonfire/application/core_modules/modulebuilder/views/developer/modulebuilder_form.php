@@ -10,10 +10,30 @@
 ?>
 
 <style>
-.faded { opacity: .60; }
-.faded:hover, .mb_show_advanced:hover, .mb_show_advanced_rules:hover{ opacity: 1; color: black;}
-.mb_show_advanced, .mb_show_advanced_rules, .body legend { cursor: pointer; }
-.mb_advanced { display: none; }
+.faded {
+	opacity: .60;
+}
+
+.faded:hover,
+.faded.faded-focus,
+.mb_show_advanced:focus,
+.mb_show_advanced:hover,
+.mb_show_advanced_rules:focus,
+.mb_show_advanced_rules:hover
+{
+	opacity: 1;
+	color: black;
+}
+
+a.mb_show_advanced_rules:hover {
+	text-decoration: none;
+}
+
+.body legend { cursor: pointer; }
+
+.mb_advanced {
+	display: none;
+}
 </style>
 
 <p class="intro"><?php e(lang('mb_create_note')) ?></p>
@@ -386,7 +406,7 @@
 								</label>
 							</span>
 							<?php endforeach; ?>
-							<em class="mb_show_advanced_rules small"><?php echo lang('mb_form_show_more'); ?></em>
+							<a class="small mb_show_advanced_rules" href="#"><i><?php echo lang('mb_form_show_more'); ?></i></a>
 						</div>
 					</div>
 

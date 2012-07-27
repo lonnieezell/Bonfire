@@ -143,7 +143,9 @@ $('.mb_show_advanced').click( function(e) {
 /*-----------------------------------------------------------
 Toggle "more validation rules"
 ------------------------------------------------------------*/
-$('.mb_show_advanced_rules').click( function() {
+$('.mb_show_advanced_rules').click( function(e) {
+	e.preventDefault();
+
 	$(this).parent().parent().next('.mb_advanced').toggle();
 });
 
@@ -155,3 +157,15 @@ options of the "more validation rules"
 $('.body legend').click( function() {
 	$(this).parent('fieldset').children('div:not(".mb_advanced:hidden")').toggle();
 });
+
+/*-----------------------------------------------------------
+Highlight faded labels when the control is focused
+------------------------------------------------------------*/
+$('.faded input').on('focus', function() {
+	$(this).closest('.faded').addClass("faded-focus");
+});
+$('.faded input').on('blur', function() {
+	$(this).closest('.faded').removeClass("faded-focus");
+});
+$('.faded input:focus').closest('.faded').addClass("faded-focus");
+
