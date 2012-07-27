@@ -60,6 +60,9 @@ function store_form_data() {
 		if ( $(this).is(':checkbox') && $(this).is(':not(:checked)') ) {
 			fld_val = 'uncheck';
 		}
+		if ( $(this).is(':radio') && $(this).is(':not(:checked)') ) {
+			return;
+		}
 
 		if (fld_id && fld_val) {
 			localStorage[fld_id] = fld_val;
@@ -78,7 +81,7 @@ function get_form_data() {
 		var key = localStorage.key(i);
     	var value = localStorage[key];
 
-		if ( $('#'+key).is(':checkbox') ) {
+		if ( $('#'+key).is(':checkbox, :radio') ) {
 			if ( $('#'+key).val() == value ) {
 				$('#'+key).attr('checked','checked');
 			} else {

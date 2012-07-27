@@ -114,10 +114,10 @@
         <label class="control-label" for="db_required"></label>
         <div class="controls">
           <label class="inline radio">
-            <input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", $field_total == 0 ? TRUE : FALSE); ?> class="radio" /> None
+            <input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", TRUE); ?> class="radio" /> None
           </label>
           <label class="inline radio">
-            <input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox("module_db", "new", $field_total != 0 ? TRUE : FALSE); ?> class="radio" /> Create New Table
+            <input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox("module_db", "new"); ?> class="radio" /> Create New Table
           </label>
           <label class="inline radio">
             <input name="module_db" id="db_exists" type="radio" value="existing" <?php echo set_checkbox("module_db", "existing"); ?> class="radio" /> Build from Existing Table
