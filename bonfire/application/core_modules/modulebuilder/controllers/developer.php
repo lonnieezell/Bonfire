@@ -100,7 +100,7 @@ class Developer extends Admin_Controller {
      *
      * @return void
      */
-    public function create()
+    public function create($fields = 0)
     {
         Assets::add_module_js('modulebuilder', 'modulebuilder.js');
 
@@ -108,15 +108,7 @@ class Developer extends Admin_Controller {
 
         $hide_form = false;
 
-        $this->field_total = $this->input->post('field_total');
-        $this->field_total = 0;
-
-        $last_seg = $this->uri->segment( $this->uri->total_segments() );
-
-        if (is_numeric($last_seg))
-        {
-            $this->field_total = $last_seg;
-        }
+        $this->field_total = $fields;
 
         // validation hasn't been passed
         if ($this->validate_form($this->field_total) == FALSE)

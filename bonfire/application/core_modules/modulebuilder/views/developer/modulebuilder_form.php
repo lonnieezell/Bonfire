@@ -1,14 +1,3 @@
-<?php
-	$cur_url = uri_string();
-	$tot = $this->uri->total_segments();
-	$last_seg = $this->uri->segment( $tot);
-
-	if( is_numeric($last_seg) ) {
-		$cur_url = str_replace('/index/'.$last_seg, '', $cur_url);
-	}
-
-?>
-
 <style>
 .faded {
 	opacity: .60;
@@ -57,7 +46,7 @@ a.mb_show_advanced_rules:hover {
 <div class="admin-box">
 	<h3><?php echo $toolbar_title ?></h3>
 
-	<?php echo form_open($cur_url."/index/".$field_total."/", array('id'=>"module_form",'class'=>"form-horizontal")); ?>
+	<?php echo form_open(current_url(), array('id'=>"module_form",'class'=>"form-horizontal")); ?>
 	<div>
 		<!-- Module Details -->
 		<fieldset id="module_details">
@@ -267,7 +256,7 @@ a.mb_show_advanced_rules:hover {
 					<?php
 					$field_num_count = count($field_numbers);
 					for($ndx=0; $ndx < $field_num_count; $ndx++): ?>
-					<a href="<?php echo site_url($cur_url."/index/{$field_numbers[$ndx]}"); ?>" <?php if ($field_numbers[$ndx] == $field_total) { echo 'class="current"'; } ?>><?php echo $field_numbers[$ndx]; ?></a><?php echo $ndx < $field_num_count - 1 ? ' | ' : '';?>
+					<a href="<?php echo site_url(SITE_AREA."/developer/modulebuilder/create/{$field_numbers[$ndx]}"); ?>" <?php if ($field_numbers[$ndx] == $field_total) { echo 'class="current"'; } ?>><?php echo $field_numbers[$ndx]; ?></a><?php echo $ndx < $field_num_count - 1 ? ' | ' : '';?>
 					<?php endfor; ?>
 				</div>
 			</div>
