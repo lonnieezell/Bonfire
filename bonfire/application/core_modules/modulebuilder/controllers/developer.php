@@ -199,17 +199,15 @@ class Developer extends Admin_Controller {
     //--------------------------------------------------------------------
 
     /**
-     * Deletes a module and all of it's files.
+     * Deletes a module and all of its files.
      *
      * @access public
      *
      * @return void
      */
-    public function delete()
+    public function delete($module_name='')
     {
-        $module_name = preg_replace("/[ -]/", "_", $this->uri->segment(5));
-
-        if (!empty($module_name))
+        if ($module_name != '')
         {
             $this->auth->restrict('Bonfire.Modules.Delete');
 
