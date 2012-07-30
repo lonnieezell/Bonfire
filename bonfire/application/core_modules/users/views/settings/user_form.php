@@ -87,9 +87,9 @@
 				<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
 			</div>
 		</div>
+	</fieldset>
 
-
-		<?php if (isset($user) && has_permission('Bonfire.Roles.Manage') && has_permission('Permissions.'.$user->role_name.'.Manage') && isset($roles) ) :?>
+	<?php if (isset($user) && has_permission('Bonfire.Roles.Manage') && has_permission('Permissions.'.$user->role_name.'.Manage') && isset($roles) ) :?>
 		<fieldset>
 			<legend><?php echo lang('us_role'); ?></legend>
 
