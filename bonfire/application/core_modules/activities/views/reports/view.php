@@ -12,13 +12,13 @@
 		<div class="form-actions">
 			<?php	echo form_submit('submit', lang('activity_submit'), 'class="btn btn-primary"'); ?>
 			<?php if ($vars['which'] == 'activity_own' && has_permission('Activities.Own.Delete')): ?>
-			<a class="btn btn-danger" id="delete-activity_own"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_own_delete'); ?></a>
+			<a href="#" class="btn btn-danger" id="delete-activity_own"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_own_delete'); ?></a>
 			<?php elseif ($vars['which'] == 'activity_user' && has_permission('Activities.User.Delete')): ?>
-			<a class="btn btn-danger" id="delete-activity_user"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_user_delete'); ?></a>
+			<a href="#" class="btn btn-danger" id="delete-activity_user"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_user_delete'); ?></a>
 			<?php elseif ($vars['which'] == 'activity_module' && has_permission('Activities.Module.Delete')): ?>
-			<a class="btn btn-danger" id="delete-activity_module"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_module_delete'); ?></a>
+			<a href="#" class="btn btn-danger" id="delete-activity_module"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_module_delete'); ?></a>
 			<?php elseif ($vars['which'] == 'activity_date' && has_permission('Activities.Date.Delete')): ?>
-			<a class="btn btn-danger" id="delete-activity_date"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_date_delete'); ?></a>
+			<a href="#" class="btn btn-danger" id="delete-activity_date"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_date_delete'); ?></a>
 			<?php endif; ?>
 		</div>
 		<?php echo form_close(); ?>
