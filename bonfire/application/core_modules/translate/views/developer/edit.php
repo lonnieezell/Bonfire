@@ -17,9 +17,9 @@ form .form-actions { padding-left: 43% !important; }
 	
 		<?php foreach ($orig as $key => $val) : ?>
 		<div class="control-group">
-			<label class="control-label"><?php e($val) ?></label>
+			<label class="control-label" for="lang<?php echo $key ?>"><?php e($val) ?></label>
 			<div class="controls">
-				<input type="text" class="input-xxlarge" name="lang[<?php echo $key ?>]" value="<?php e(isset($new[$key]) ? $new[$key] : $val) ?>" />
+				<input type="text" class="input-xxlarge" name="lang[<?php echo $key ?>]" id="lang<?php echo $key ?>" value="<?php e(isset($new[$key]) ? $new[$key] : $val) ?>" />
 			</div>
 		</div>
 		<?php endforeach; ?>
