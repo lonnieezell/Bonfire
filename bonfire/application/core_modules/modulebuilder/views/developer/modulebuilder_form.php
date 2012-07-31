@@ -112,13 +112,13 @@
 
       <div class="control-group">
         <div class="controls">
-          <label class="inline radio">
+          <label class="inline radio" for="db_no">
             <input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", $field_total == 0 ? TRUE : FALSE); ?> class="radio" /> None
           </label>
-          <label class="inline radio">
+          <label class="inline radio" for="db_create">
             <input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox("module_db", "new", $field_total != 0 ? TRUE : FALSE); ?> class="radio" /> Create New Table
           </label>
-          <label class="inline radio">
+          <label class="inline radio" for="db_exists">
             <input name="module_db" id="db_exists" type="radio" value="existing" <?php echo set_checkbox("module_db", "existing"); ?> class="radio" /> Build from Existing Table
           </label>
         </div>
@@ -384,7 +384,7 @@
 
 							<?php foreach ($validation_rules as $validation_rule) : ?>
 							<span class="faded">
-								<label class="inline checkbox">
+								<label class="inline checkbox" for="validation_rules_<?php echo $validation_rule . $count; ?>">
 									<input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_rule . $count; ?>" type="checkbox" value="<?php echo $validation_rule; ?>" <?php echo set_checkbox('validation_rules'.$count.'[]', $validation_rule); ?> />
 									<?php echo lang('mb_form_'.$validation_rule); ?>
 								</label>

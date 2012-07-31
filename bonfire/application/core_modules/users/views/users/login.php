@@ -53,7 +53,7 @@
 	<?php if ($this->settings_lib->item('auth.allow_remember')) : ?>
 		<div class="control-group">
 			<div class="controls">
-				<label class="checkbox">
+				<label class="checkbox" for="remember_me">
 					<input type="checkbox" name="remember_me" id="remember_me" value="1" tabindex="3" />
 					<span class="inline-help"><?php echo lang('us_remember_note'); ?></span>
 				</label>

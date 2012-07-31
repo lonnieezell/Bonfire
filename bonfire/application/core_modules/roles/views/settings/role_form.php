@@ -64,11 +64,11 @@
 		<div class="control-group">
 			<label class="control-label" id="can_delete_label"><?php echo lang('role_can_delete_role'); ?>?</label>
 			<div class="controls" aria-labelledby="can_delete_label" role="group">
-				<label class="radio">
-					<input type="radio" name="can_delete" value="1" <?php echo set_radio('can_delete', 1, isset($role) && $role->can_delete == 1 ? TRUE : FALSE) ?> /> Yes
+				<label class="radio" for="can_delete_yes">
+					<input type="radio" name="can_delete" id="can_delete_yes" value="1" <?php echo set_radio('can_delete', 1, isset($role) && $role->can_delete == 1 ? TRUE : FALSE) ?> /> Yes
 				</label>
-				<label class="radio">
-					<input type="radio" name="can_delete" value="0" <?php echo set_radio('can_delete', 0, isset($role) && $role->can_delete == 0 ? TRUE : FALSE) ?> /> No
+				<label class="radio" for="can_delete_no">
+					<input type="radio" name="can_delete" id="can_delete_no" value="0" <?php echo set_radio('can_delete', 0, isset($role) && $role->can_delete == 0 ? TRUE : FALSE) ?> /> No
 				</label>
 				<span class="help-inline" style="display: inline"><?php echo lang('role_can_delete_note'); ?></span>
 			</div>

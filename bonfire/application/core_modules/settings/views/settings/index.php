@@ -93,7 +93,7 @@
 
 			<div class="control-group">
 				<div class="controls">
-					<label>
+					<label for="allow_register">
 						<input type="checkbox" name="allow_register" id="allow_register" value="1" <?php echo $settings['auth.allow_register'] == 1 ? 'checked="checked"' : set_checkbox('auth.allow_register', 1); ?> />
 						<span><?php echo lang('bf_allow_register') ?></span>
 					</label>
