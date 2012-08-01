@@ -99,3 +99,29 @@ footer.footer {
 }
 
 label.required{font-weight: bold}
+
+.navbar .brand{
+	background: url(https://dl.dropbox.com/u/40872/tf2trade.png) 0px -16px;
+	height: 94px;
+	width: 164px;
+	text-indent: -9999px;
+	padding: 0px;
+}
+
+.navbar .divider-vertical {
+	height: 93px;
+}
+
+.body {
+	background-color: #A79E97;
+	padding: 150px 20px 20px 20px;
+}
+
+body {
+	background: url(https://dl.dropbox.com/u/40872/RedditArmory/web/images/bg.jpg);
+}
+
+.hero-unit{
+	-webkit-box-shadow: 1px 1px 2px 2px #545454;
+	box-shadow: 1px 1px 2px 2px #545454;	
+}
