@@ -125,12 +125,12 @@
 			<div class="control-group">
 				<label class="control-label" id="use_usernames_label"><?php echo lang('bf_use_usernames') ?></label>
 				<div class="controls" aria-labelledby="use_usernames_label" role="group">
-					<label class="radio">
-						<input type="radio" name="use_usernames" value="1" <?php echo $settings['auth.use_usernames'] == 1 ? 'checked="checked"' : set_radio('auth.use_usernames', 1); ?> />
+					<label class="radio" for="use_username">
+						<input type="radio" id="use_username" name="use_usernames" value="1" <?php echo $settings['auth.use_usernames'] == 1 ? 'checked="checked"' : set_radio('auth.use_usernames', 1); ?> />
 						<span><?php echo lang('bf_username') ?></span>
 					</label>
-					<label class="radio">
-						<input type="radio" name="use_usernames" value="0" <?php echo $settings['auth.use_usernames'] == 0 ? 'checked="checked"' : set_radio('auth.use_usernames', 0); ?> />
+					<label class="radio" for="use_email">
+						<input type="radio" id="use_email" name="use_usernames" value="0" <?php echo $settings['auth.use_usernames'] == 0 ? 'checked="checked"' : set_radio('auth.use_usernames', 0); ?> />
 						<span><?php echo lang('bf_email') ?></span>
 					</label>
 				</div>
@@ -139,7 +139,7 @@
 			<div class="control-group">
 				<label class="control-label"><?php echo lang('bf_display_name'); ?></label>
 				<div class="controls">
-					<label class="checkbox">
+					<label class="checkbox" for="allow_name_change">
 						<input type="checkbox" name="allow_name_change" id="allow_name_change" <?php echo isset($settings['auth.allow_name_change']) && $settings['auth.allow_name_change'] == 1 ? 'checked="checked"' : set_checkbox('auth.allow_remember', 1); ?> >
 						<?php echo lang('set_allow_name_change_note'); ?>
 					</label>

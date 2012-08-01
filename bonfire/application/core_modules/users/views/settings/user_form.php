@@ -145,8 +145,8 @@
 			endif; ?>
 			<div class="control-group">
 					<div class="controls">
-							<label>
-									<input type="checkbox" name="<?php echo $field; ?>" value="1">
+							<label for="<?php echo $field; ?>">
+									<input type="checkbox" name="<?php echo $field; ?>" id="<?php echo $field; ?>" value="1">
 									<?php echo lang('us_'.$field.'_note') ?>
 							</label>
 					</div>
@@ -155,8 +155,8 @@
 			<?php if ($user->deleted) : ?>
 			<div class="control-group">
 				<div class="controls">
-					<label>
-						<input type="checkbox" name="restore" value="1">
+					<label for="restore">
+						<input type="checkbox" name="restore" id="restore" value="1">
 						<?php echo lang('us_restore_note') ?>
 					</label>
 				</div>
@@ -165,8 +165,8 @@
 			<?php elseif ($user->banned) :?>
 			<div class="control-group">
 				<div class="controls">
-					<label>
-						<input type="checkbox" name="unban" value="1">
+					<label for="unban">
+						<input type="checkbox" name="unban" id="unban" value="1">
 						<?php echo lang('us_unban_note') ?>
 					</label>
 				</div>

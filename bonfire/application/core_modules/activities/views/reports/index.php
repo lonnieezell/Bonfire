@@ -128,7 +128,7 @@
 			<tr>
 				<td>
 					<div class="form-inline">
-						<label>
+						<label for="activity_own_select">
 							<?php echo lang('activity_delete_own_note'); ?>
 							<select id="activity_own_select">
 								<option value="<?php echo $current_user->id; ?>"><?php echo $current_user->username; ?></option>
@@ -148,7 +148,7 @@
 			<tr>
 				<td>
 					<div class="form-inline">
-						<label>
+						<label for="activity_user_select">
 							<?php echo lang('activity_delete_user_note'); ?>
 							<select id="activity_user_select">
 								<option value="all"><?php echo lang('activity_all_users'); ?></option>
@@ -171,7 +171,7 @@
 			<tr>
 				<td>
 					<div class="form-inline">
-						<label>
+						<label for="activity_module_select">
 							<?php echo lang('activity_delete_module_note'); ?>
 							<select id="activity_module_select">
 								<option value="all"><?php echo lang('activity_all_modules'); ?></option>
@@ -194,7 +194,7 @@
 			<tr>
 				<td>
 					<div class="form-inline">
-						<label>
+						<label for="activity_date_select">
 							<?php echo lang('activity_delete_date_note'); ?>
 							<select id="activity_date_select">
 								<option value="all"><?php echo lang('activity_all_dates'); ?></option>
