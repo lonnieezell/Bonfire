@@ -104,7 +104,7 @@
 				<div class="controls">
 					<select name="role_id" id="role_id">
 					<?php foreach ($roles as $role):?>
-						<option value="<?php echo $role['role_id']?>"><?php echo $role['role_name']?></option>
+						<option value="<?php echo $role['role_id']?>"><?php e($role['role_name'])?></option>
 					<?php endforeach;?>
 				 	</select>
 				 </div>
@@ -238,7 +238,7 @@
 			<div class="control-group mb_new_table <?php echo form_has_error('primary_key_field') ? 'error' : ''; ?>">
 				<label for="primary_key_field" class="control-label block"><?php echo lang('mb_form_primarykey'); ?></label>
 				<div class="controls">
-					<input name="primary_key_field" id="primary_key_field" type="text" value="<?php echo set_value("primary_key_field", (isset($existing_table_fields[0]) && $existing_table_fields[0]['primary_key']) ? $existing_table_fields[0]['name'] : 'id'); ?>" />
+					<input name="primary_key_field" id="primary_key_field" type="text" value="<?php e(set_value("primary_key_field", (isset($existing_table_fields[0]) && $existing_table_fields[0]['primary_key']) ? $existing_table_fields[0]['name'] : 'id')); ?>" />
 					<span class="help-inline"><?php echo form_error('primary_key_field'); ?></span>
 				</div>
 			</div>
@@ -277,7 +277,7 @@
 					<div class="control-group <?php echo form_has_error("view_field_label{$count}") ? 'error' : ''; ?>">
 						<label class="control-label" for="view_field_label<?php echo $count; ?>"><?php echo lang('mb_form_label'); ?></label>
 						<div class="controls">
-							<input name="view_field_label<?php echo $count; ?>" id="view_field_label<?php echo $count; ?>" type="text" value="<?php echo set_value("view_field_label{$count}", isset($existing_table_fields[$count]) ? ucwords(str_replace("_", " ", $existing_table_fields[$count]['name'])) : ''); ?>" placeholder="<?php echo lang('mb_form_label_ph'); ?>" />
+							<input name="view_field_label<?php echo $count; ?>" id="view_field_label<?php echo $count; ?>" type="text" value="<?php e(set_value("view_field_label{$count}", isset($existing_table_fields[$count]) ? ucwords(str_replace("_", " ", $existing_table_fields[$count]['name'])) : '')); ?>" placeholder="<?php echo lang('mb_form_label_ph'); ?>" />
 							<span class="help-inline"><?php echo form_error("view_field_label{$count}"); ?></span>
 						</div>
 					</div>
@@ -285,7 +285,7 @@
 					<div class="control-group <?php echo form_has_error("view_field_name{$count}") ? 'error' : ''; ?>">
 						<label class="control-label" for="view_field_name"><?php echo lang('mb_form_fieldname'); ?></label>
 						<div class="controls">
-							<input name="view_field_name<?php echo $count; ?>" id="view_field_name<?php echo $count; ?>" type="text" value="<?php echo set_value("view_field_name{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['name'] : ''); ?>" maxlength="30" placeholder="<?php echo lang('mb_form_fieldname_ph'); ?>" />
+							<input name="view_field_name<?php echo $count; ?>" id="view_field_name<?php echo $count; ?>" type="text" value="<?php e(set_value("view_field_name{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['name'] : '')); ?>" maxlength="30" placeholder="<?php echo lang('mb_form_fieldname_ph'); ?>" />
 							<span class="help-inline"><?php echo form_error("view_field_name{$count}"); ?></span>
 						</div>
 					</div>
