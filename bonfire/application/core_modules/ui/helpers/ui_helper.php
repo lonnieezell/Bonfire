@@ -87,21 +87,21 @@ if (!function_exists('render_filter_first_letter'))
 			$current = '';
 		}
 
-		// Build our base href
+		// Build our url
 		if (is_array($params))
 		{
-			$href = current_url() .'?'. array_implode('=', '&amp;', $params);
+			$url = current_url() .'?'. array_implode('=', '&', $params);
 		}
 		else
 		{
-			$href = current_url() .'?';
+			$url = current_url() .'?';
 		}
 
 		// If there's a current filter, we need to
 		// replace the caption with a clear button.
 		if (!empty($current))
 		{
-			$out .= '<a href="'. $href .'" class="btn btn-small btn-primary">'. lang('bf_clear') .'</a>';
+			$out .= '<a href="'. $url .'" class="btn btn-small btn-primary">'. lang('bf_clear') .'</a>';
 		}
 		else
 		{
@@ -114,7 +114,7 @@ if (!function_exists('render_filter_first_letter'))
 		// Create our list.
 		foreach ($letters as $letter)
 		{
-			$out .= '<a href="'. $href .'&amp;firstletter='. strtolower($letter) .'">';
+			$out .= '<a href="'. $url .'&firstletter='. strtolower($letter) .'">';
 			$out .= $letter;
 			$out .= '</a>';
 		}

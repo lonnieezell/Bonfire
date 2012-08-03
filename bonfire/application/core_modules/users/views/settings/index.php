@@ -18,7 +18,7 @@
 			<ul class="dropdown-menu">
 			<?php foreach ($roles as $role) : ?>
 				<li>
-					<a href="<?php e(site_url(SITE_AREA .'/settings/users?filter=role&role_id='. $role->role_id)) ?>">
+					<a href="<?php echo site_url(SITE_AREA .'/settings/users?filter=role&role_id='. $role->role_id) ?>">
 						<?php echo $role->role_name; ?>
 					</a>
 				</li>
