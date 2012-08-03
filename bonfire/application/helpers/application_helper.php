@@ -84,6 +84,9 @@ if ( ! function_exists('gravatar_link'))
 
 		//$id = ( $id != '' ) ? ' id="' . $id . '" ' : '';
 
+		$alt = htmlentities($alt, ENT_QUOTES, 'UTF-8');
+		$title = htmlentities($title, ENT_QUOTES, 'UTF-8');
+
 		return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" class="'. $class .'" id="'. $id .'" />';
 	}
 }
