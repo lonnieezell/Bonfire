@@ -102,7 +102,7 @@
 					<tbody>
 					<?php foreach ($top_users as $top_user) : ?>
 						<tr>
-							<td><strong><?php echo ($top_user->username == '' ? 'Not found':$top_user->username); ?></strong></td>
+							<td><strong><?php e($top_user->username == '' ? 'Not found':$top_user->username); ?></strong></td>
 							<td><?php echo $top_user->activity_count; ?></td>
 						</tr>
 				<?php endforeach; ?>

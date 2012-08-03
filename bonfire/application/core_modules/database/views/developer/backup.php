@@ -5,7 +5,7 @@
 
 		<?php if (isset($tables) && is_array($tables) && count($tables) > 0) : ?>
 			<?php foreach ($tables as $table) : ?>
-				<input type="hidden" name="tables[]" value="<?php echo $table ?>" />
+				<input type="hidden" name="tables[]" value="<?php e($table) ?>" />
 			<?php endforeach; ?>
 		<?php endif; ?>
 
@@ -64,7 +64,7 @@
 		<div style="padding: 20px" class="small">
 			<p><strong><?php echo lang('db_backup') .' '. lang('db_tables'); ?>: &nbsp;&nbsp;</strong>
 				<?php foreach ($tables as $table) : ?>
-					<?php echo $table . '&nbsp;&nbsp;&nbsp;&nbsp;'; ?>
+					<?php e($table); ?>&nbsp;&nbsp;&nbsp;&nbsp;
 				<?php endforeach; ?>
 			</p>
 		</div>
