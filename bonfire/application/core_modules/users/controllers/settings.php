@@ -53,24 +53,6 @@ class Settings extends Admin_Controller
 
 	//--------------------------------------------------------------------
 
-	/**
-	 * Remap methods
-	 *
-	 * @access public
-	 *
-	 * @param string $method Name of the method being requested
-	 */
-	public function _remap($method)
-	{
-		if (method_exists($this, $method))
-		{
-			$this->$method();
-		}
-
-	}//end _remap()
-
-	//--------------------------------------------------------------------
-
 	/*
 	 * Display the user list and manage the user deletions/banning/purge
 	 *
@@ -78,7 +60,7 @@ class Settings extends Admin_Controller
 	 *
 	 * @return  void
 	 */
-	public function index()
+	public function index($offset=0)
 	{
 		$this->auth->restrict('Bonfire.Users.Manage');
 
@@ -89,8 +71,6 @@ class Settings extends Admin_Controller
 			$ordered_roles[$role->role_id] = $role;
 		}
 		Template::set('roles', $ordered_roles);
-
-		$offset = $this->uri->segment(5);
 
 		// Do we have any actions?
 		$action = $this->input->post('submit').$this->input->post('delete').$this->input->post('purge').$this->input->post('activate').$this->input->post('deactivate');
@@ -266,7 +246,7 @@ class Settings extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	public function edit()
+	public function edit($user_id='')
 	{
 		$this->load->config('address');
 		$this->load->helper('address');
@@ -274,7 +254,10 @@ class Settings extends Admin_Controller
 
 		// if there is no id passed in edit the current user
 		// this is so we don't have to pass the user id in the url for editing the current users profile
-		$user_id = $this->uri->segment(5) != '' ? $this->uri->segment(5) : $this->current_user->id;
+		if (empty($user_id))
+		{
+			$user_id = $this->current_user->id;
+		}
 
 		if (empty($user_id))
 		{
@@ -394,21 +377,15 @@ class Settings extends Admin_Controller
 	 *
 	 * @access public
 	 *
-	 * @param array $users Array of users to delete
+	 * @param mixed $users Single user or array of users to delete
 	 *
 	 * @return void
 	 */
 	public function delete($users=array())
 	{
-		// if the users array is empty then get the user from the segment
-		if (empty($users))
+		if (!is_array($users))
 		{
-			$user_id = $this->uri->segment(5);
-
-			if(!empty($user_id))
-			{
-				$users = array($user_id);
-			}
+			$users = array($users);
 		}
 
 		if (!empty($users))
@@ -463,24 +440,18 @@ class Settings extends Admin_Controller
 	 *
 	 * @access public
 	 *
-	 * @param array $users
+	 * @param mixed $users Single user or array of users to purge
 	 *
 	 * @return void
 	 */
 	public function purge($users=array())
 	{
-		// if the users array is empty then get the user from the segment
-		if (empty($users))
+		if (!is_array($users))
 		{
-			$user_id = $this->uri->segment(5);
-
-			if(!empty($user_id))
-			{
-				$users = array($user_id);
-			}
+			$users = array($users);
 		}
 
-		if (!empty($users) && is_array($users))
+		if (!empty($users))
 		{
 			$this->auth->restrict('Bonfire.Users.Manage');
 
@@ -490,7 +461,8 @@ class Settings extends Admin_Controller
 			}
 			Template::set_message(lang('us_action_purged'), 'success');
 		}
-		else {
+		else
+		{
 			Template::set_message(lang('us_empty_id'), 'error');
 		}
 
@@ -507,10 +479,8 @@ class Settings extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	public function restore()
+	public function restore($id='')
 	{
-		$id = $this->uri->segment(5);
-
 		if ($this->user_model->update($id, array('users.deleted'=>0)))
 		{
 			Template::set_message(lang('us_user_restored_success'), 'success');
