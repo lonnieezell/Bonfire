@@ -48,6 +48,7 @@
 				<td colspan="7">
 					<?php echo lang('bf_with_selected') ?>
 					<?php if($filter == 'deleted'):?>
+					<input type="submit" name="restore" class="btn" value="<?php echo lang('bf_action_restore') ?>">
 					<input type="submit" name="purge" class="btn btn-danger" value="<?php echo lang('bf_action_purge') ?>" onclick="return confirm('<?php echo lang('us_purge_del_confirm'); ?>')">
 					<?php else: ?>
 					<input type="submit" name="activate" class="btn" value="<?php echo lang('bf_action_activate') ?>">
