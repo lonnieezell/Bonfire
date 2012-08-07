@@ -63,3 +63,8 @@ $lang['multiple_migrations_name']		= 'Multiple migrations name: %s';
 $lang['migration_class_doesnt_exist']	= 'Migration class does not exist: %s';
 $lang['wrong_migration_interface']		= 'Wrong migration interface: %s';
 $lang['invalid_migration_filename']		= 'Wrong migration filename: %s - %s';
+
+$lang['in_installed']					= 'Bonfire is already installed. Please delete or rename the install folder to';
+$lang['in_rename_msg']					= 'If you would like, we can simply rename it for you.';
+$lang['continue']						= 'continue';
+$lang['click']							= 'Click here';
