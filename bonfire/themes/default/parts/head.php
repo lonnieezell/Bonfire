@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title><?php echo $this->settings_lib->item('site.title'); ?></title>
+    <title><?php e($this->settings_lib->item('site.title')); ?></title>
     <meta name="description" content="">
     <meta name="author" content="">
 
