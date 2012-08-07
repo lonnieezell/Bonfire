@@ -291,18 +291,40 @@ class Install extends CI_Controller {
 		moved the install folder....
 	*/
 	private function is_installed() 
-	{
-		$result = false;
-		
+	{	
 		// Does the database config exist? 
-		// If so, we've already been through this...
-		if (file_exists('../bonfire/application/config/database.php'))
+		// If not, then we definitely haven't installed yet.
+		if (!file_exists('../bonfire/application/config/development/database.php'))
 		{
-			$result = true;
+			return false;
 		}
 		
+		require('../bonfire/application/config/development/database.php');
 		
-		return $result;
+		// If the $db['default'] doesn't exist then we can't
+		// load our database.
+		if (!isset($db) || !isset($db['default']))
+		{
+			return false;
+		}
+
+		$this->load->database($db['default']);
+		
+		// Does the users table exist?
+		if (!$this->db->table_exists('users'))
+		{
+			return false;
+		}
+		
+		// Make sure at least one row exists in the users table.
+		$query = $this->db->get('users');
+		
+		if ($query->num_rows() == 0)
+		{
+			return false;
+		}
+		
+		return true;
 	}
 	
 	//--------------------------------------------------------------------
