@@ -489,31 +489,6 @@ class Settings extends Admin_Controller
 	//--------------------------------------------------------------------
 
 	/**
-	 * Callback method to check that the email is unique
-	 *
-	 * @access public
-	 *
-	 * @param string $str The email to check
-	 *
-	 * @return bool
-	 */
-	public function unique_email($str)
-	{
-		if ($this->user_model->is_unique('email', $str))
-		{
-			return TRUE;
-		}
-		else
-		{
-			$this->form_validation->set_message('unique_email', lang('us_email_in_use'));
-			return FALSE;
-		}
-
-	}//end unique_email()
-
-	//--------------------------------------------------------------------
-
-	/**
 	 * Save the user
 	 *
 	 * @access private

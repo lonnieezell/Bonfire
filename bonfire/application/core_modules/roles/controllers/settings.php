@@ -288,32 +288,6 @@ class Settings extends Admin_Controller
 	//--------------------------------------------------------------------
 
 	/**
-	 * Callback function to check that the email address entered is unique
-	 *
-	 * @access public
-	 * @todo   Is this used here?
-	 *
-	 * @param string $str The email address
-	 *
-	 * @return bool
-	 */
-	public function unique_email($str)
-	{
-		if ($this->user_model->is_unique('email', $str))
-		{
-			return TRUE;
-		}
-		else
-		{
-			$this->form_validation->set_message('unique_email', 'The %s address is already in use. Please choose another.');
-			return FALSE;
-		}
-
-	}//end unique_email()
-
-	//--------------------------------------------------------------------
-
-	/**
 	 * Saves the role record to the database
 	 *
 	 * @access public
@@ -412,32 +386,6 @@ class Settings extends Admin_Controller
 	}//end save_role()
 
 	//--------------------------------------------------------------------
-
-	/**
-	 * Callback function to check that the role name is unique
-	 *
-	 * @access public
-	 *
-	 * @param string $str The role name
-	 *
-	 * @return bool
-	 */
-	public function unique_role($str)
-	{
-		if ($this->role_model->is_unique('role_name', $str))
-		{
-			return TRUE;
-		}
-		else
-		{
-			$this->form_validation->set_message('unique_role', 'The %s role is already in use. Please choose another.');
-			return FALSE;
-		}
-
-	}//end unique_role()
-
-
-	// --------------------------------------------------------------------
 
 	/**
 	 * Creates a real-time modifiable summary table of all roles and permissions
