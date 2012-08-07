@@ -821,7 +821,7 @@ class Settings extends Admin_Controller
 			if ($result)
 			{
 				$message = lang('us_active_status_changed');
-				if (!$supress_email)
+				if ($status == 1 && !$supress_email)
 				{
 					// Now send the email
 					$this->load->library('emailer/emailer');
