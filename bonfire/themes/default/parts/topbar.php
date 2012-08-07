@@ -9,7 +9,9 @@
 				<span class="icon-bar"></span>
 			</a>
 
-			<?php echo anchor( '/', $this->settings_lib->item('site.title'), 'class="brand"' ); ?>
+			<a href="<?php site_url('/'); ?>" class="brand">
+				<?php e($this->settings_lib->item('site.title')); ?>
+			</a>
 
 			<!-- Everything you want hidden at 940px or less, place within here -->
 			<div class="nav-collapse collapse">
