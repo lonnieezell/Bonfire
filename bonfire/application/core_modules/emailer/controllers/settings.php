@@ -240,7 +240,7 @@ class Settings extends Admin_Controller
 
 					if ($result)
 					{
-						Template::set_message(count($checked) .' '. lang('em_delete_success'), 'success');
+						Template::set_message(sprintf(lang('em_delete_success'), count($checked)), 'success');
 					}
 					else
 					{
