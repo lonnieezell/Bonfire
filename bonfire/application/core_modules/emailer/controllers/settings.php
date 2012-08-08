@@ -189,8 +189,6 @@ class Settings extends Admin_Controller
 	 */
 	public function test()
 	{
-		$this->output->enable_profiler(FALSE);
-
 		$this->load->library('emailer');
 		$this->emailer->enable_debug(TRUE);
 
@@ -291,8 +289,6 @@ class Settings extends Admin_Controller
 	 */
 	public function insert_test()
 	{
-		$this->output->enable_profiler(FALSE);
-
 		$this->load->library('emailer');
 
 		$data = array(
