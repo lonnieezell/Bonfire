@@ -83,7 +83,7 @@ class Developer extends Admin_Controller
 						$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
 					}
 
-					Template::set_message(count($checked) .' '. lang('log_deleted'), 'success');
+					Template::set_message(sprintf(lang('log_deleted'), count($checked)), 'success');
 				}
 			}
 		}//end if
