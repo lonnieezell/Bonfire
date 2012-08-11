@@ -482,7 +482,8 @@ class Settings extends Admin_Controller
 	{
 
 		//Turn profiler off instead of die?
-		$this->output->profiler(FALSE);
+		$this->output->enable_profiler(FALSE);
+		
 		$pieces = explode(',',$this->input->post('role_perm', TRUE));
 
 		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find( (int) $pieces[0])->role_name.'.Manage')) {
