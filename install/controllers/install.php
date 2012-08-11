@@ -346,7 +346,7 @@ class Install extends CI_Controller {
 		{
 			$full_folder = FCPATH . '..' . $folder;
 
-			@chmod($folder, 0777);
+			@chmod($full_folder, 0777);
 			if (!is_dir($full_folder) || !is_writeable($full_folder))
 			{
 				$folder_errors .= "<li>$folder</li>";
