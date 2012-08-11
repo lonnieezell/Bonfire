@@ -480,6 +480,9 @@ class Settings extends Admin_Controller
 	 */
 	public function matrix_update()
 	{
+
+		//Turn profiler off instead of die?
+		$this->output->profiler(FALSE);
 		$pieces = explode(',',$this->input->post('role_perm', TRUE));
 
 		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find( (int) $pieces[0])->role_name.'.Manage')) {
