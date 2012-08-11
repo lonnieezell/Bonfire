@@ -435,15 +435,13 @@ class BF_Model extends CI_Model
 		// Insert it
 		$status = $this->db->insert_batch($this->table, $data);
 
-		if ($status != FALSE)
-		{
-			return TRUE;
-		}
-		else
+		if ($status === FALSE)
 		{
 			$this->error = mysql_error();
 			return FALSE;
 		}
+
+		return TRUE;
 
 	}//end insert_batch()
 
