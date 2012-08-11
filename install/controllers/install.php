@@ -126,77 +126,84 @@ class Install extends CI_Controller {
 
 	public function index()
 	{
-		$this->load->library('form_validation');
-		$this->form_validation->set_error_delimiters('', '');
-		//$this->form_validation->CI =& $this;
-		$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('database', lang('in_database'), 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim|strip_tags|xss_clean');
-
-		$this->startup_check();
-
-		if ($this->form_validation->run() !== false)
+		if ($this->is_installed())
 		{
-			// Write the database config files
-			$this->load->helper('config_file');
-
-			$dbname = strip_tags($this->input->post('database'));
-
-			// get the chosen environment
-			$environment = strip_tags($this->input->post('environment'));
-
-			$data = array(
-				'main'	=> array(
-					'hostname'	=> strip_tags($this->input->post('hostname')),
-					'username'	=> strip_tags($this->input->post('username')),
-					'password'	=> strip_tags($this->input->post('password')),
-					'database'	=> $dbname,
-					'dbprefix'	=> strip_tags($this->input->post('db_prefix'))
-				),
-				'environment' => $environment,
-			);
-
-			$this->session->set_userdata('db_data', $data);
-			if ($this->session->userdata('db_data'))
+			$this->load->view('install/installed');
+		}
+		else
+		{
+			$this->load->library('form_validation');
+			$this->form_validation->set_error_delimiters('', '');
+			//$this->form_validation->CI =& $this;
+			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('database', lang('in_database'), 'required|trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim|strip_tags|xss_clean');
+	
+			$this->startup_check();
+	
+			if ($this->form_validation->run() !== false)
 			{
-				//
-				// Make sure the database exists, otherwise create it.
-				// CRAP! dbutil and database_forge require a running database driver,
-				// which seems to require a valid database, which we don't have. To get
-				// past this, we'll deal only with MySQL for now and create things
-				// the old fashioned way. Eventually, we'll make this more generic.
-				//
-				$db = @mysql_connect(strip_tags($this->input->post('hostname')), strip_tags($this->input->post('username')), strip_tags($this->input->post('password')));
-
-				if (!$db)
+				// Write the database config files
+				$this->load->helper('config_file');
+	
+				$dbname = strip_tags($this->input->post('database'));
+	
+				// get the chosen environment
+				$environment = strip_tags($this->input->post('environment'));
+	
+				$data = array(
+					'main'	=> array(
+						'hostname'	=> strip_tags($this->input->post('hostname')),
+						'username'	=> strip_tags($this->input->post('username')),
+						'password'	=> strip_tags($this->input->post('password')),
+						'database'	=> $dbname,
+						'dbprefix'	=> strip_tags($this->input->post('db_prefix'))
+					),
+					'environment' => $environment,
+				);
+	
+				$this->session->set_userdata('db_data', $data);
+				if ($this->session->userdata('db_data'))
 				{
-					$this->vdata['error'] = message(lang('in_db_no_connect').': '. mysql_error(), 'error');
+					//
+					// Make sure the database exists, otherwise create it.
+					// CRAP! dbutil and database_forge require a running database driver,
+					// which seems to require a valid database, which we don't have. To get
+					// past this, we'll deal only with MySQL for now and create things
+					// the old fashioned way. Eventually, we'll make this more generic.
+					//
+					$db = @mysql_connect(strip_tags($this->input->post('hostname')), strip_tags($this->input->post('username')), strip_tags($this->input->post('password')));
+	
+					if (!$db)
+					{
+						$this->vdata['error'] = message(lang('in_db_no_connect').': '. mysql_error(), 'error');
+					}
+					else
+					{
+						$db_selected = mysql_select_db($dbname, $db);
+						if (!$db_selected)
+						{
+							// Table doesn't exist, so create it.
+							if (!mysql_query("CREATE DATABASE $dbname", $db))
+							{
+								die('Unable to create database: '. mysql_error());
+							}
+							mysql_close($db);
+						}
+	
+						redirect('account');
+					}
 				}
 				else
 				{
-					$db_selected = mysql_select_db($dbname, $db);
-					if (!$db_selected)
-					{
-						// Table doesn't exist, so create it.
-						if (!mysql_query("CREATE DATABASE $dbname", $db))
-						{
-							die('Unable to create database: '. mysql_error());
-						}
-						mysql_close($db);
-					}
-
-					redirect('account');
+					$this->vdata['attention'] = message(sprintf(lang('in_settings_save_error'), $environment), 'attention');
 				}
 			}
-			else
-			{
-				$this->vdata['attention'] = message(sprintf(lang('in_settings_save_error'), $environment), 'attention');
-			}
+	
+			$this->load->view('install/index', $this->vdata);
 		}
-
-		$this->load->view('install/index', $this->vdata);
 	}
 
 	//--------------------------------------------------------------------
@@ -249,9 +256,79 @@ class Install extends CI_Controller {
 
 	//--------------------------------------------------------------------
 
+	public function rename_folder() 
+	{
+		$folder = FCPATH;
+	
+		// This should always have the /install in it, but
+		// better safe than sorry.
+		if (strpos($folder, 'install') === false)
+		{
+			$folder .= '/install/';
+		}
+		
+		$new_folder = str_replace('install/', 'install_bak', $folder);
+	
+		rename($folder, $new_folder);
+		
+		$url = str_replace('install', '', base_url());
+		$url = str_replace('http://', '', $url);
+		$url = str_replace('//', '/', $url);
+		$url = 'http://'. $url;
+		
+		redirect($url);
+	}
+	
+	//--------------------------------------------------------------------
 
 	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
+	//--------------------------------------------------------------------
+
+	/*
+		Method: is_installed()
+		
+		Performs some basic checks to see if maybe, just maybe, the 
+		user has already installed the application and just hasn't 
+		moved the install folder....
+	*/
+	private function is_installed() 
+	{	
+		// Does the database config exist? 
+		// If not, then we definitely haven't installed yet.
+		if (!file_exists('../bonfire/application/config/development/database.php'))
+		{
+			return false;
+		}
+		
+		require('../bonfire/application/config/development/database.php');
+		
+		// If the $db['default'] doesn't exist then we can't
+		// load our database.
+		if (!isset($db) || !isset($db['default']))
+		{
+			return false;
+		}
+
+		$this->load->database($db['default']);
+		
+		// Does the users table exist?
+		if (!$this->db->table_exists('users'))
+		{
+			return false;
+		}
+		
+		// Make sure at least one row exists in the users table.
+		$query = $this->db->get('users');
+		
+		if ($query->num_rows() == 0)
+		{
+			return false;
+		}
+		
+		return true;
+	}
+	
 	//--------------------------------------------------------------------
 
 	/*
@@ -271,7 +348,7 @@ class Install extends CI_Controller {
 		{
 			$full_folder = FCPATH . '..' . $folder;
 
-			@chmod($folder, 0777);
+			@chmod($full_folder, 0777);
 			if (!is_dir($full_folder) || !is_writeable($full_folder))
 			{
 				$folder_errors .= "<li>$folder</li>";

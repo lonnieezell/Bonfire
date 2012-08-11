@@ -130,14 +130,14 @@ class Base_Controller extends MX_Controller
 
 			}
 
-			// Auto-migrate our core and/or app to latest version.
-			if ($this->config->item('migrate.auto_core') || $this->config->item('migrate.auto_app'))
-			{
-				$this->load->library('migrations/migrations');
-				$this->migrations->auto_latest();
-			}
-
 			$this->load->driver('cache', array('adapter' => 'dummy'));
+		}
+
+		// Auto-migrate our core and/or app to latest version.
+		if ($this->config->item('migrate.auto_core') || $this->config->item('migrate.auto_app'))
+		{
+			$this->load->library('migrations/migrations');
+			$this->migrations->auto_latest();
 		}
 
 		// Make sure no assets in up as a requested page or a 404 page.
@@ -233,7 +233,7 @@ class Authenticated_Controller extends Base_Controller
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('', '');
 		$this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
-		
+
 		Template::set_theme($this->config->item('default_theme'));
 	}//end construct()
 
