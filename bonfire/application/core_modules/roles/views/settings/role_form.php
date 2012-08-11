@@ -6,7 +6,7 @@
 <?php endif; ?>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?> <?php echo isset($role) ? ': '. $role->role_name : ''; ?></h3>
+	<h3><?php echo $toolbar_title ?> <?php e(isset($role) ? ': '. $role->role_name : ''); ?></h3>
 
 	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
@@ -16,7 +16,7 @@
 		<div class="control-group <?php echo form_has_error('role_name') ? 'error' : ''; ?>">
 			<label class="control-label" for="role_name"><?php echo lang('role_name'); ?></label>
 			<div class="controls">
-				<input type="text" name="role_name" class="input-xlarge" value="<?php echo set_value('role_name', isset($role) ? $role->role_name : '') ?>" />
+				<input type="text" name="role_name" class="input-xlarge" value="<?php echo set_value('role_name', e(isset($role) ? $role->role_name : '')) ?>" />
 				<span class="help-inline"><?php echo form_error('role_name'); ?></span>
 			</div>
 		</div>

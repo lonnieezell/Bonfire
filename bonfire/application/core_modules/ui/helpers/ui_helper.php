@@ -90,7 +90,13 @@ if (!function_exists('render_filter_first_letter'))
 		// Build our url
 		if (is_array($params))
 		{
-			$url = current_url() .'?'. array_implode('=', '&', $params);
+			$url_params = array();
+
+			foreach ($params as $key => $value)
+			{
+				$url_params[urlencode($key)] = urlencode($value);
+			}
+			$url = current_url() .'?'. array_implode('=', '&', $url_params);
 		}
 		else
 		{
@@ -101,7 +107,9 @@ if (!function_exists('render_filter_first_letter'))
 		// replace the caption with a clear button.
 		if (!empty($current))
 		{
-			$out .= '<a href="'. $url .'" class="btn btn-small btn-primary">'. lang('bf_clear') .'</a>';
+			$href = htmlentities($url, ENT_QUOTES, 'UTF-8');
+
+			$out .= '<a href="'. $href .'" class="btn btn-small btn-primary">'. lang('bf_clear') .'</a>';
 		}
 		else
 		{
@@ -114,7 +122,10 @@ if (!function_exists('render_filter_first_letter'))
 		// Create our list.
 		foreach ($letters as $letter)
 		{
-			$out .= '<a href="'. $url .'&firstletter='. strtolower($letter) .'">';
+			$href_url = $url . '&firstletter='. strtolower($letter);
+			$href = htmlentities($href_url, ENT_QUOTES, 'UTF-8');
+
+			$out .= '<a href="'. $href .'">';
 			$out .= $letter;
 			$out .= '</a>';
 		}

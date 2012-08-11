@@ -4,7 +4,7 @@
 
 	<?php if (isset($tables) && is_array($tables) && count($tables) > 0) : ?>
 		<?php foreach ($tables as $table) : ?>
-			<input type="hidden" name="tables[]" value="<?php echo $table ?>" />
+			<input type="hidden" name="tables[]" value="<?php e($table) ?>" />
 		<?php endforeach; ?>
 
 
@@ -12,7 +12,7 @@
 
 		<ul>
 		<?php foreach($tables as $file) : ?>
-			<li><?php echo $file ?></li>
+			<li><?php e($file) ?></li>
 		<?php endforeach; ?>
 		</ul>
 

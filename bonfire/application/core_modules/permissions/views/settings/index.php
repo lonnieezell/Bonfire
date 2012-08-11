@@ -35,7 +35,7 @@
 					<td>
 						<input type="checkbox" name="checked[]" value="<?php echo $record['permission_id'] ?>" />
 					</td>
-					<td><?php e($record['permission_id']) ?></td>
+					<td><?php echo $record['permission_id'] ?></td>
 					<td>
 						<a href="<?php echo site_url(SITE_AREA .'/settings/permissions/edit/'. $record['permission_id']) ?>">
 							<?php echo $record['name'] ?>

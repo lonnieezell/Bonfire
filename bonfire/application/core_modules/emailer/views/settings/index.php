@@ -9,7 +9,7 @@
 		<div class="control-group <?php echo form_error('sender_email') ? 'error' : '' ?>">
 			<label class="control-label" for="sender_email"><?php echo lang('em_system_email'); ?></label>
 			<div class="controls">
-				<input type="email" name="sender_email" class="input-xlarge" value="<?php echo set_value('sender_email', isset($sender_email) ? $sender_email : '')  ?>" />
+				<input type="email" name="sender_email" class="input-xlarge" value="<?php e(set_value('sender_email', isset($sender_email) ? $sender_email : ''))  ?>" />
 				<?php if (form_error('sender_email')) echo '<span class="help-inline">'. form_error('sender_email') .'</span>'; ?>
 				<p class="help-block"><?php echo lang('em_system_email_note'); ?></p>
 			</div>
@@ -49,7 +49,7 @@
 		<div id="sendmail" class="control-group <?php echo form_error('mailpath') ? 'error' : ''; ?>" style="padding-top: 27px">
 			<label  class="control-label" for="mailpath">Sendmail <?php echo lang('em_location'); ?></label>
 			<div class="controls">
-				<input type="text" name="mailpath" class="input-xlarge" value="<?php echo set_value('mailpath', isset($mailpath) ? $mailpath : '/usr/sbin/sendmail') ?>" />
+				<input type="text" name="mailpath" class="input-xlarge" value="<?php e(set_value('mailpath', isset($mailpath) ? $mailpath : '/usr/sbin/sendmail')) ?>" />
 				<span class="help-inline"><?php echo form_error('mailpath'); ?></span>
 			</div>
 		</div>
@@ -60,7 +60,7 @@
 			<div class="control-group <?php echo form_error('smtp_host') ? 'error' : ''; ?>">
 				<label class="control-label" for="smtp_host">SMTP <?php echo lang('em_server_address'); ?></label>
 				<div class="controls">
-					<input type="text" name="smtp_host" class="input-xlarge" value="<?php echo set_value('smtp_host', isset($smtp_host) ? $smtp_host : '') ?>" />
+					<input type="text" name="smtp_host" class="input-xlarge" value="<?php e(set_value('smtp_host', isset($smtp_host) ? $smtp_host : '')) ?>" />
 		    	    <span class="help-inline"><?php echo form_error('smtp_host'); ?></span>
 				</div>
 			</div>
@@ -68,28 +68,28 @@
 			<div class="control-group">
 				<label class="control-label" for="smtp_user">SMTP <?php echo lang('bf_username'); ?></label>
 				<div class="controls">
-					<input type="text" name="smtp_user" class="input-xlarge" value="<?php echo set_value('smtp_user', isset($smtp_user) ? $smtp_user : '') ?>" />
+					<input type="text" name="smtp_user" class="input-xlarge" value="<?php e(set_value('smtp_user', isset($smtp_user) ? $smtp_user : '')) ?>" />
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label class="control-label" for="smtp_pass">SMTP <?php echo lang('bf_password'); ?></label>
 				<div class="controls">
-					<input type="password" name="smtp_pass" class="input-xlarge" value="<?php echo set_value('smtp_pass', isset($smtp_pass) ? $smtp_pass : '') ?>" />
+					<input type="password" name="smtp_pass" class="input-xlarge" value="<?php e(set_value('smtp_pass', isset($smtp_pass) ? $smtp_pass : '')) ?>" />
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label class="control-label" for="smtp_port">SMTP <?php echo lang('em_port'); ?></label>
 				<div class="controls">
-					<input type="text" name="smtp_port" class="input-xlarge" value="<?php echo set_value('smtp_port', isset($smtp_port) ? $smtp_port : 25) ?>" />
+					<input type="text" name="smtp_port" class="input-xlarge" value="<?php e(set_value('smtp_port', isset($smtp_port) ? $smtp_port : 25)) ?>" />
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label class="control-label" for="smptp_timeout">SMTP <?php echo lang('em_timeout_secs'); ?></label>
 				<div class="controls">
-					<input type="text" name="smtp_timeout" class="input-xlarge" value="<?php echo set_value('smtp_timeout', isset($smtp_timeout) ? $smtp_timeout : '') ?>" />
+					<input type="text" name="smtp_timeout" class="input-xlarge" value="<?php e(set_value('smtp_timeout', isset($smtp_timeout) ? $smtp_timeout : '')) ?>" />
 				</div>
 			</div>
 		</div>
@@ -118,7 +118,7 @@
 			<div class="control-group">
 				<label class="control-label" for="email"><?php echo lang('bf_email'); ?></label>
 				<div class="controls">
-					<input type="email" name="test_email" id="test-email" value="<?php echo config_item('site.system_email') ?>" />
+					<input type="email" name="test_email" id="test-email" value="<?php e(config_item('site.system_email')) ?>" />
 					<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('em_test_button'); ?>" />
 				</div>
 			</div>

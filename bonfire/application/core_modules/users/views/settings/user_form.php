@@ -26,7 +26,7 @@
 		<div class="control-group <?php echo form_error('email') ? 'error' : '' ?>">
 			<label for="email" class="control-label"><?php echo lang('bf_email') ?></label>
 			<div class="controls">
-				<input type="email" name="email" id="email" value="<?php echo isset($user) ? $user->email : set_value('email') ?>">
+				<input type="email" name="email" id="email" value="<?php e(isset($user) ? $user->email : set_value('email')) ?>">
 				<?php if (form_error('email')) echo '<span class="help-inline">'. form_error('email') .'</span>'; ?>
 			</div>
 		</div>
@@ -34,7 +34,7 @@
 		<div class="control-group <?php echo form_error('username') ? 'error' : '' ?>">
 			<label for="username" class="control-label"><?php echo lang('bf_username') ?></label>
 			<div class="controls">
-				<input type="text" name="username" id="username" value="<?php echo isset($user) ? $user->username : set_value('username') ?>">
+				<input type="text" name="username" id="username" value="<?php e(isset($user) ? $user->username : set_value('username')) ?>">
 				<?php if (form_error('username')) echo '<span class="help-inline">'. form_error('username') .'</span>'; ?>
 			</div>
 		</div>
@@ -42,7 +42,7 @@
 		<div class="control-group <?php echo form_error('display_name') ? 'error' : '' ?>">
 			<label for="display_name" class="control-label"><?php echo lang('bf_display_name') ?></label>
 			<div class="controls">
-				<input type="text" name="display_name" id="display_name" value="<?php echo isset($user) ? $user->display_name : set_value('display_name') ?>">
+				<input type="text" name="display_name" id="display_name" value="<?php e(isset($user) ? $user->display_name : set_value('display_name')) ?>">
 				<?php if (form_error('display_name')) echo '<span class="help-inline">'. form_error('display_name') .'</span>'; ?>
 			</div>
 		</div>
@@ -69,8 +69,8 @@
 				<select name="language" id="language" class="chzn-select">
 				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
 					<?php foreach ($languages as $language) : ?>
-						<option value="<?php echo $language ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
-							<?php echo ucfirst($language) ?>
+						<option value="<?php e($language) ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
+							<?php e(ucfirst($language)) ?>
 						</option>
 
 					<?php endforeach; ?>
@@ -110,7 +110,7 @@
 								}
 							?>
 							<option value="<?php echo $role->role_id ?>" <?php echo set_select('role_id', $role->role_id, $default_role) ?>>
-								<?php echo ucfirst($role->role_name) ?>
+								<?php e(ucfirst($role->role_name)) ?>
 							</option>
 
 							<?php endif; ?>
