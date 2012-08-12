@@ -328,9 +328,6 @@ class Settings extends Admin_Controller
 		$permissions = $this->input->post('role_permissions');
 		unset($_POST['role_permissions']);
 
-		// grab the current role model name
-		$current_name = $this->role_model->find($id);
-
 		if ($type == 'insert')
 		{
 			$id = $this->role_model->insert($_POST);
@@ -370,9 +367,12 @@ class Settings extends Admin_Controller
 		}
 		else
 		{
+			// grab the current role model name
+			$current_name = $this->role_model->find($id)->role_name;
+
 			// update the permission name (did it this way for brevity on the update_where line)
 			$new_perm_name = 'Permissions.'.ucwords($this->input->post('role_name')).'.Manage';
-			$old_perm_name = 'Permissions.'.ucwords($current_name->role_name).'.Manage';
+			$old_perm_name = 'Permissions.'.ucwords($current_name).'.Manage';
 			$this->permission_model->update_where('name',$old_perm_name,array('name'=>$new_perm_name));
 		}
 
