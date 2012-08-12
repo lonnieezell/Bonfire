@@ -130,9 +130,6 @@ if ( ! function_exists('write_config'))
 			$empty = TRUE;
 		}
 		
-		// Clean up post
-		if (isset($settings['submit'])) unset($settings['submit']);
-		
 		foreach ($settings as $name => $val)
 		{
 			// Is the config setting in the file? 
@@ -371,9 +368,6 @@ if ( ! function_exists('write_db_config'))
 			logit('[Config_File_Helper] Invalid write_db_config PARAMETER!');
 			return FALSE;
 		}
-		
-		// Clean up post
-		if (isset($_POST['submit'])) unset($_POST['submit']);
 		
 		foreach ($settings as $env => $values)
 		{

@@ -231,6 +231,8 @@ class Settings extends Admin_Controller
 			return FALSE;
 		}
 
+		unset($_POST['submit']);
+
 		if ($type == 'insert')
 		{
 			$id = $this->permission_model->insert($_POST);

@@ -323,6 +323,8 @@ class Settings extends Admin_Controller
 			return FALSE;
 		}
 
+		unset($_POST['submit']);
+
 		// Grab our permissions out of the POST vars, if it's there.
 		// We'll need it later.
 		$permissions = $this->input->post('role_permissions');
