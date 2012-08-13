@@ -192,11 +192,13 @@ class Settings extends Admin_Controller
 	}//end delete()
 
 	//--------------------------------------------------------------------
+	// !HMVC METHODS
+	//--------------------------------------------------------------------
 
 	/**
 	 * Builds the matrix for display in the role permissions form.
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @return string The table(s) of settings, ready to be used in a form.
 	 */
