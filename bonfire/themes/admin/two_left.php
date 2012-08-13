@@ -1,6 +1,6 @@
 <?php
 Assets::add_js(array(
-                    Template::theme_url('js/bootstrap.min.js'),
+                    Template::theme_url('js/bootstrap.js'),
                     Template::theme_url('js/jwerty.js')
                ),
                'external',

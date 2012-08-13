@@ -372,7 +372,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 		{
 			$extras .= '
 			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
-			Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
+			Assets::add_js(\'jquery-ui-1.8.13.js\');';
 			$date_included = TRUE;
 		}
 		elseif ($db_field_type == 'DATETIME' && $datetime_included === FALSE)
@@ -382,7 +382,7 @@ for($counter=1; $field_total >= $counter; $counter++)
 			{
 				$extras .= '
 			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
-			Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
+			Assets::add_js(\'jquery-ui-1.8.13.js\');';
 			}
 			$extras .= '
 			Assets::add_css(\'jquery-ui-timepicker.css\');
@@ -504,7 +504,7 @@ if ($controller_name != $module_name_lower)
 
 		// we set this variable as it will be used to place the comma after the last item to build the insert db array
 		$last_field = $counter;
-            
+
 		if($db_required == 'new' && $table_as_field_prefix === TRUE)
 		{
 				$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
@@ -513,7 +513,7 @@ if ($controller_name != $module_name_lower)
 		{
 				$field_name = set_value("view_field_name$counter");
 		}
-		else 
+		else
 		{
 				$field_name = set_value("view_field_name$counter");
 		}
