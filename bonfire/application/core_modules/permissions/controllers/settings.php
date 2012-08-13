@@ -213,14 +213,14 @@ class Settings extends Admin_Controller
 	/**
 	 * Save the permission record to the database
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @param string $type The type of save operation (insert or edit)
 	 * @param int    $id   The record ID in the case of edit
 	 *
 	 * @return bool
 	 */
-	public function save_permissions($type='insert', $id=0)
+	private function save_permissions($type='insert', $id=0)
 	{
 
 		$this->form_validation->set_rules('name','Name','required|trim|xss_clean|max_length[30]');

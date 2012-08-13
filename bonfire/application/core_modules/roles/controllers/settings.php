@@ -290,14 +290,14 @@ class Settings extends Admin_Controller
 	/**
 	 * Saves the role record to the database
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @param string $type The type of save operation (insert or edit)
 	 * @param int    $id   The record ID in the case of edit
 	 *
 	 * @return bool
 	 */
-	public function save_role($type='insert', $id=0)
+	private function save_role($type='insert', $id=0)
 	{
 		if ($type == 'insert')
 		{
