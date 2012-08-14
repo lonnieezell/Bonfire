@@ -37,14 +37,14 @@
 			<div class="control-group">
 				<label class="control-label" for="title"><?php echo lang('bf_site_name') ?></label>
 				<div class="controls">
-					<input type="text" name="title" class="span6" value="<?php echo isset($settings['site.title']) ? $settings['site.title'] : set_value('site.title') ?>" />
+					<input type="text" name="title" class="span6" value="<?php echo set_value('site.title', isset($settings['site.title']) ? $settings['site.title'] : '') ?>" />
 				</div>
 			</div>
 
 			<div class="control-group">
 				<label class="control-label" for="system_email"><?php echo lang('bf_site_email') ?></label>
 				<div class="controls">
-					<input type="text" name="system_email" class="span4" value="<?php echo isset($settings['site.system_email']) ? $settings['site.system_email'] : set_value('site.system_email') ?>" />
+					<input type="text" name="system_email" class="span4" value="<?php echo set_value('site.system_email', isset($settings['site.system_email']) ? $settings['site.system_email'] : '') ?>" />
 					<p class="help-inline"><?php echo lang('bf_site_email_help') ?></p>
 				</div>
 			</div>

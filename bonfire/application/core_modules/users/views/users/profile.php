@@ -46,14 +46,14 @@
 	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
 		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" name="display_name" value="<?php echo isset($user) ? $user->display_name : set_value('display_name') ?>" />
+			<input class="span6" type="text" name="display_name" value="<?php echo set_value('display_name', isset($user) ? $user->display_name : '') ?>" />
 		</div>
 	</div>
 
 	<div class="control-group <?php echo iif( form_error('email') , 'error') ;?>">
 		<label class="control-label required" for="email"><?php echo lang('bf_email'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" name="email" value="<?php echo isset($user) ? $user->email : set_value('email') ?>" />
+			<input class="span6" type="text" name="email" value="<?php echo set_value('email', isset($user) ? $user->email : '') ?>" />
 		</div>
 	</div>
 
@@ -61,7 +61,7 @@
 	<div class="control-group <?php echo iif( form_error('username') , 'error') ;?>">
 		<label class="control-label required" for="username"><?php echo lang('bf_username'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" name="username" value="<?php echo isset($user) ? $user->username : set_value('username') ?>" />
+			<input class="span6" type="text" name="username" value="<?php echo set_value('username', isset($user) ? $user->username : '') ?>" />
 		</div>
 	</div>
 	<?php endif; ?>
