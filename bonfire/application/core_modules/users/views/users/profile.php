@@ -88,8 +88,8 @@
 				<select name="language" id="language" class="chzn-select">
 				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
 					<?php foreach ($languages as $language) : ?>
-						<option value="<?php echo $language ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
-							<?php echo ucfirst($language) ?>
+						<option value="<?php e($language) ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
+							<?php e(ucfirst($language)) ?>
 						</option>
 
 					<?php endforeach; ?>

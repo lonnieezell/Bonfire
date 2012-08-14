@@ -59,8 +59,8 @@
 			<tr>
 				<td><input type="checkbox" name="checked[]" value="<?php echo $email->id ?>" /></td>
 				<td><?php echo $email->id; ?></td>
-				<td><?php echo $email->to_email ?></td>
-				<td><?php echo $email->subject ?></td>
+				<td><?php e($email->to_email) ?></td>
+				<td><?php e($email->subject) ?></td>
 				<td class="text-center"><?php echo $email->attempts ?></td>
 				<td class="text-center"><?php echo $email->success ? lang('bf_yes') : lang('bf_no') ?></td>
 				<td class="text-center">

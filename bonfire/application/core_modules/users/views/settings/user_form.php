@@ -69,8 +69,8 @@
 				<select name="language" id="language" class="chzn-select">
 				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
 					<?php foreach ($languages as $language) : ?>
-						<option value="<?php echo $language ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
-							<?php echo ucfirst($language) ?>
+						<option value="<?php e($language) ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
+							<?php e(ucfirst($language)) ?>
 						</option>
 
 					<?php endforeach; ?>
@@ -110,7 +110,7 @@
 								}
 							?>
 							<option value="<?php echo $role->role_id ?>" <?php echo set_select('role_id', $role->role_id, $default_role) ?>>
-								<?php echo ucfirst($role->role_name) ?>
+								<?php e(ucfirst($role->role_name)) ?>
 							</option>
 
 							<?php endif; ?>

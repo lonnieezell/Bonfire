@@ -73,7 +73,7 @@
 					<select name="languages[]" multiple="mulitple">
 					<?php if (is_array($languages) && count($languages)):?>
 						<?php foreach($languages as $language):?>
-						<option value="<?php echo $language;?>" <?php echo set_select('languages', $language, in_array($language, $selected_languages) ? TRUE : FALSE) ?>><?php echo ucfirst($language) ?></option>
+						<option value="<?php e($language);?>" <?php set_select('languages', $language, in_array($language, $selected_languages) ? TRUE : FALSE) ?>><?php e(ucfirst($language)) ?></option>
 						<?php endforeach;?>
 					<?php endif;?>
 					</select>
