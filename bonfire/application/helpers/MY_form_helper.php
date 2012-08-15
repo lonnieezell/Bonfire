@@ -65,6 +65,20 @@ if ( ! function_exists('_form_common'))
 			unset($data['name']);
 		}
 
+		// If label is empty at this point, try to grab it from the $data array
+		if (empty($label) && is_array($data) && isset($data['label']))
+		{
+			$label = $data['label'];
+			unset($data['label']);
+		}
+
+		// If tooltip is empty at this point, try to grab it from the $data array
+		if (empty($tooltip) && is_array($data) && isset($data['tooltip']))
+		{
+			$tooltip = $data['tooltip'];
+			unset($data['tooltip']);
+		}
+
 		$error = '';
 
 		if (function_exists('form_error'))
