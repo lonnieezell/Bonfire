@@ -802,12 +802,13 @@ class Template
 	 * http request.
 	 *
 	 * @access public
+	 * @static
 	 *
 	 * @param string $url The url to redirect to. If not a full url, will wrap it in site_url().
 	 *
 	 * @return void
 	 */
-	public function redirect($url=NULL)
+	public static function redirect($url=NULL)
 	{
 		$url = strpos($url, 'http') === FALSE ? site_url($url) : $url;
 
@@ -863,16 +864,16 @@ class Template
 				//self::$ci->load->_ci_view_path = self::$orig_view_path;
 
 				if (self::$parse_views === TRUE)
-				{			  	
-					
+				{
+
 					if (!class_exists('CI_Parser'))
 					{
-						self::$ci->load->library('parser');				
+						self::$ci->load->library('parser');
 					}
-					
-					
+
+
 					$output = self::$ci->load->_ci_load(array('_ci_path' => $view_path.$view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));
-					
+
 					if (count($data) > 0)
 					{
 						$temp = array();
@@ -889,7 +890,7 @@ class Template
 						$data = $temp;
 						unset($temp);
 					}
-					
+
 					$output = self::$ci->parser->parse($view, $data, TRUE);
 				}
 				else
@@ -1143,7 +1144,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 	if ( $ci->config->item('template.breadcrumb_symbol') == '' )
 	{
 		$seperator = '/';
-	} 
+	}
 	else
 	{
 		$seperator = $ci->config->item('template.breadcrumb_symbol');
@@ -1159,8 +1160,8 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 	{
 		$segments = $ci->uri->segment_array();
 		$total    = $ci->uri->total_segments();
-	} 
-	else 
+	}
+	else
 	{
 		$segments = $my_segments;
 		$total    = count($my_segments);
@@ -1171,8 +1172,8 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 	if ( $in_admin == TRUE )
 	{
 		$home_link = site_url(SITE_AREA);
-	} 
-	else 
+	}
+	else
 	{
 		$home_link = site_url();
 	}
@@ -1181,8 +1182,8 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 	{
 		$output  = '<ul class="breadcrumb">' . PHP_EOL;
 		$output .= '<li><a href="'.$home_link.'"><i class="icon-home">&nbsp;</i></a> '.$seperator.'</li>' . PHP_EOL;
-	} 
-	else 
+	}
+	else
 	{
 		$output  = '<a href="'.$home_link.'">home</a> '.$seperator;
 	}
@@ -1203,26 +1204,26 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 				if ($wrap === TRUE)
 				{
 					$output .= '<li class="active">' . ucfirst(str_replace('_', ' ', $segment)) . '</li>' . PHP_EOL;
-				} 
-				else 
+				}
+				else
 				{
 					$output .= ucfirst(str_replace('_', ' ', $segment)) . PHP_EOL;
 				}
-			} 
-			else 
+			}
+			else
 			{
 				if ($wrap === TRUE)
 				{
 					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($segment))) .'</a>' . $seperator . '</li>' . PHP_EOL;
-				} 
-				else 
+				}
+				else
 				{
 					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($segment))) .'</a>' . $seperator . PHP_EOL;
 				}
 			}
 		}
-	} 
-	else 
+	}
+	else
 	{
 		// USER-SUPPLIED BREADCRUMB
 		foreach ($my_segments as $title => $uri)
@@ -1235,21 +1236,21 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 				if ($wrap === TRUE)
 				{
 					$output .= '<li class="active">' . str_replace('_', ' ', $title) . '</li>' . PHP_EOL;
-				} 
-				else 
+				}
+				else
 				{
 					$output .= str_replace('_', ' ', $title);
 				}
 
-			} 
-			else 
+			}
+			else
 			{
 
 				if ($wrap === TRUE)
 				{
 					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($title))) .'</a>' . $seperator . '</li>' . PHP_EOL;
-				} 
-				else 
+				}
+				else
 				{
 					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($title))) .'</a>' . $seperator . PHP_EOL;
 				}
@@ -1269,8 +1270,8 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 	{
 		echo $output;
 		unset ($output);
-	} 
-	else 
+	}
+	else
 	{
 		return $output;
 	}

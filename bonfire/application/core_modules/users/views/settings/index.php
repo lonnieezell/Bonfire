@@ -45,7 +45,7 @@
 		<?php if (isset($users) && is_array($users) && count($users)) : ?>
 		<tfoot>
 			<tr>
-				<td colspan="7">
+				<td colspan="8">
 					<?php echo lang('bf_with_selected') ?>
 					<?php if($filter == 'deleted'):?>
 					<input type="submit" name="purge" class="btn btn-danger" value="<?php echo lang('bf_action_purge') ?>" onclick="return confirm('<?php echo lang('us_purge_del_confirm'); ?>')">
@@ -122,7 +122,7 @@
 			<?php endforeach; ?>
 		<?php else: ?>
 			<tr>
-				<td colspan="6">No users found that match your selection.</td>
+				<td colspan="8">No users found that match your selection.</td>
 			</tr>
 		<?php endif; ?>
 		</tbody>
