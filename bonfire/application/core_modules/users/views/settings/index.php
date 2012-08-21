@@ -27,7 +27,7 @@
 		</li>
 	</ul>
 
-	<?php echo form_open($this->uri->uri_string()) ;?>
+	<?php echo form_open($current_url .'?'. htmlentities($_SERVER['QUERY_STRING'], ENT_QUOTES, 'UTF-8')); ?>
 
 	<table class="table table-striped">
 		<thead>
