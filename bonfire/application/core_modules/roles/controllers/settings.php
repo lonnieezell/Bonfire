@@ -95,7 +95,7 @@ class Settings extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Roles.Add');
 
-		if ($this->input->post('submit'))
+		if ($this->input->post('save'))
 		{
 			if ($this->save_role())
 			{
@@ -137,7 +137,7 @@ class Settings extends Admin_Controller
 			redirect(SITE_AREA .'/settings/roles');
 		}
 
-		if ($this->input->post('submit'))
+		if (isset($_POST['save']))
 		{
 			if ($this->save_role('update', $id))
 			{
@@ -150,6 +150,18 @@ class Settings extends Admin_Controller
 				Template::set_message('There was a problem saving the role: '. $this->role_model->error);
 			}
 		}
+		elseif (isset($_POST['delete']))
+		{
+			if ($this->role_model->delete($id))
+			{
+				Template::set_message('The Role was successfully deleted.', 'success');
+				redirect(SITE_AREA .'/settings/roles');
+			}
+			else
+			{
+				Template::set_message('We could not delete the role: '. $this->role_model->error, 'error');
+			}
+		}
 
 		Template::set('role', $this->role_model->find($id));
         Template::set('contexts', list_contexts(true));
@@ -159,37 +171,6 @@ class Settings extends Admin_Controller
 		Template::render();
 
 	}//end edit()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Delete a role record from the database
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function delete()
-	{
-		$this->auth->restrict('Bonfire.Roles.Manage');
-
-		$id = (int) $this->uri->segment(5);
-
-		if (!empty($id))
-		{
-			if ($this->role_model->delete($id))
-			{
-				Template::set_message('The Role was successfully deleted.', 'success');
-			}
-			else
-			{
-				Template::set_message('We could not delete the role: '. $this->role_model->error, 'error');
-			}
-		}
-
-		redirect(SITE_AREA .'/settings/roles');
-
-	}//end delete()
 
 	//--------------------------------------------------------------------
 	// !HMVC METHODS
@@ -323,7 +304,7 @@ class Settings extends Admin_Controller
 			return FALSE;
 		}
 
-		unset($_POST['submit']);
+		unset($_POST['save']);
 
 		// Grab our permissions out of the POST vars, if it's there.
 		// We'll need it later.

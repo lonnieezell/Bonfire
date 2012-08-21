@@ -49,17 +49,20 @@
 	<!-- Purge? -->
 	<div class="admin-box">
 		<h3><?php echo lang('log_delete1_button') ?></h3>
-
 		<br/>
 
+		<?php echo form_open(SITE_AREA .'/developer/logs'); ?>
 		<div class="alert alert-warning fade in">
 			<a class="close" data-dismiss="alert">&times;</a>
 			<?php echo sprintf(lang('log_delete1_note'),$log_file_pretty); ?>
 		</div>
 
 		<div class="form-actions">
-			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'.$log_file); ?>" onclick="return confirm('<?php echo lang('log_delete_confirm') ?>')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('log_delete1_button'); ?></a>
+			<input type="hidden" name="checked[]" value="<?php e($log_file); ?>" />
+
+			<button type="submit" name="action_delete" class="btn btn-danger" onclick="return confirm('<?php echo lang('log_delete_confirm') ?>')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('log_delete1_button'); ?></button>
 		</div>
+		<?php echo form_close(); ?>
 	</div>
 	<?php endif; ?>
 

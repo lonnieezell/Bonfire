@@ -189,6 +189,11 @@ class Settings extends Admin_Controller
 	 */
 	public function test()
 	{
+		if ($_SERVER['REQUEST_METHOD'] != 'POST')
+		{
+			$this->security->csrf_show_error();
+		}
+
 		$this->load->library('emailer');
 		$this->emailer->enable_debug(TRUE);
 
@@ -223,14 +228,19 @@ class Settings extends Admin_Controller
 		$this->load->model('Emailer_model', 'emailer_model', TRUE);
 
 		// Deleting anything?
-		if ($action = $this->input->post('action'))
+		if (isset($_POST['action_delete']))
 		{
+			$checked = $this->input->post('checked');
 
-			if ($action == 'Delete')
+			if (is_array($checked) && count($checked))
 			{
-				$checked = $this->input->post('checked');
+				$result = FALSE;
+				foreach ($checked as $pid)
+				{
+					$result = $this->emailer_model->delete($pid);
+				}
 
-				if (is_array($checked) && count($checked))
+				if ($result)
 				{
 					$result = FALSE;
 					foreach ($checked as $pid)
@@ -249,9 +259,34 @@ class Settings extends Admin_Controller
 				}
 				else
 				{
-					Template::set_message(lang('em_delete_error') . $this->emailer_model->error, 'error');
+					Template::set_message(lang('em_delete_failure') . $this->emailer_model->error, 'error');
 				}
 			}
+			else
+			{
+				Template::set_message(lang('em_delete_error') . $this->emailer_model->error, 'error');
+			}
+		}
+		elseif (isset($_POST['action_force_process']))
+		{
+			$this->load->library('emailer');
+
+			// Use ob to catch output designed for CRON only
+			ob_start();
+			$this->emailer->process_queue();
+			ob_end_clean();
+		}
+		elseif (isset($_POST['action_insert_test']))
+		{
+			$this->load->library('emailer');
+
+			$data = array(
+				'to'		=> $this->settings_lib->item('site.system_email'),
+				'subject'	=> lang('em_test_mail_subject'),
+				'message'	=> lang('em_test_mail_body')
+			);
+
+			$this->emailer->send($data, TRUE);
 		}
 
 		Template::set('emails', $this->emailer_model->limit($this->limit, $offset)->find_all());
@@ -280,52 +315,6 @@ class Settings extends Admin_Controller
 	}//end queue()
 
 	//--------------------------------------------------------------------
-
-	/**
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function insert_test()
-	{
-		$this->load->library('emailer');
-
-		$data = array(
-				'to'		=> $this->settings_lib->item('site.system_email'),
-				'subject'	=> lang('em_test_mail_subject'),
-				'message'	=> lang('em_test_mail_body')
-			 );
-
-		$this->emailer->send($data, TRUE);
-
-		redirect(SITE_AREA .'/settings/emailer/queue');
-
-	}//end insert_test()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Process the email queue
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function force_process()
-	{
-		$this->load->library('emailer');
-
-		ob_start();
-		$this->emailer->process_queue();
-		ob_end_clean();
-
-		redirect(SITE_AREA .'/settings/emailer/queue');
-
-	}//end force_process()
-
-	//--------------------------------------------------------------------
-
 
 	/**
 	 * Displays a preview of the email as stored in the database.

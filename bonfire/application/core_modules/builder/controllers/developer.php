@@ -263,9 +263,11 @@ class Developer extends Admin_Controller {
      *
      * @return void
      */
-    public function delete($module_name='')
+    public function delete()
     {
-        if ($module_name != '')
+        $module_name = $this->input->post('module');
+
+        if (!empty($module_name))
         {
             $this->auth->restrict('Bonfire.Modules.Delete');
 

@@ -127,14 +127,18 @@
 			<?php if (has_permission('Activities.Own.Delete')): ?>
 			<tr>
 				<td>
+					<?php echo form_open(SITE_AREA .'/reports/activities/delete', array('id' => 'activity_own_form')); ?>
+					<input type="hidden" name="action" value="activity_own" />
+
 					<?php echo lang('activity_delete_own_note'); ?>
-					<select id="activity_own_select">
+					<select name="which" id="activity_own_select">
 						<option value="<?php echo $current_user->id; ?>"><?php e($current_user->username); ?></option>))
 					</select>
+					<?php echo form_close(); ?>
 				</td>
 
 				<td style="width: 15em; text-align: right">
-					<a class="btn btn-danger" id="delete-activity_own"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_own_delete'); ?></a>
+					<button type="button" class="btn btn-danger" id="delete-activity_own"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_own_delete'); ?></button>
 				</td>
 			</tr>
 			<?php $empty_table = false; ?>
@@ -143,17 +147,21 @@
 			<?php if (has_permission('Activities.User.Delete')): ?>
 			<tr>
 				<td>
+					<?php echo form_open(SITE_AREA .'/reports/activities/delete', array('id' => 'activity_user_form')); ?>
+					<input type="hidden" name="action" value="activity_user" />
+
 					<?php echo lang('activity_delete_user_note'); ?>
-					<select id="activity_user_select">
+					<select name="which" id="activity_user_select">
 						<option value="all"><?php echo lang('activity_all_users'); ?></option>
 					<?php foreach ($users as $au) : ?>
 						<option value="<?php echo $au->id; ?>"><?php e($au->username); ?></option>
 					<?php endforeach; ?>
 					</select>
+					<?php echo form_close(); ?>
 				</td>
 
 				<td style="width: 15em; text-align: right">
-					<a class="btn btn-danger" id="delete-activity_user"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_user_delete'); ?></a>
+					<button type="button" class="btn btn-danger" id="delete-activity_user"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_user_delete'); ?></button>
 				</td>
 			</tr>
 			<?php $empty_table = false; ?>
@@ -162,17 +170,21 @@
 			<?php if (has_permission('Activities.Module.Delete')): ?>
 			<tr>
 				<td>
+					<?php echo form_open(SITE_AREA .'/reports/activities/delete', array('id' => 'activity_module_form')); ?>
+					<input type="hidden" name="action" value="activity_module" />
+
 					<?php echo lang('activity_delete_module_note'); ?>
-					<select id="activity_module_select">
+					<select name="which" id="activity_module_select">
 						<option value="all"><?php echo lang('activity_all_modules'); ?></option>
 						<option value="core"><?php echo lang('activity_core'); ?></option>
 					<?php foreach ($modules as $mod) : ?>
 						<option value="<?php echo $mod; ?>"><?php echo $mod; ?></option>
 					<?php endforeach; ?>
 					</select>
+					<?php echo form_close(); ?>
 				</td>
 				<td style="width: 15em; text-align: right">
-					<a class="btn btn-danger" id="delete-activity_module"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_module_delete'); ?></a>
+					<button type="button" class="btn btn-danger" id="delete-activity_module"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_module_delete'); ?></button>
 				</td>
 			</tr>
 			<?php $empty_table = false; ?>
@@ -181,16 +193,20 @@
 			<?php if (has_permission('Activities.Date.Delete')): ?>
 			<tr>
 				<td>
+					<?php echo form_open(SITE_AREA .'/reports/activities/delete', array('id' => 'activity_date_form')); ?>
+					<input type="hidden" name="action" value="activity_date" />
+
 					<?php echo lang('activity_delete_date_note'); ?>
-					<select id="activity_date_select">
+					<select name="which" id="activity_date_select">
 						<option value="all"><?php echo lang('activity_all_dates'); ?></option>
 					<?php foreach ($activities as $activity) : ?>
 						<option value="<?php echo $activity->activity_id; ?>"><?php echo $activity->created_on; ?></option>
 					<?php endforeach; ?>
 					</select>
+					<?php echo form_close(); ?>
 				</td>
 				<td style="width: 15em; text-align: right">
-					<a class="btn btn-danger" id="delete-activity_date"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_date_delete'); ?></a>
+					<button type="button" class="btn btn-danger" id="delete-activity_date"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('activity_date_delete'); ?></button>
 				</td>
 			</tr>
 			<?php $empty_table = false; ?>
