@@ -82,9 +82,12 @@ if ( ! function_exists('gravatar_link'))
 			$avatarURL = $default_image ;
 		}
 
-		//$id = ( $id != '' ) ? ' id="' . $id . '" ' : '';
 
-		return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" class="'. $class .'" id="'. $id .'" />';
+		$id = ($id !== NULL) ? ' id="' .$id .'" ' : ' ';
+		$class = ($class !== NULL) ? ' class="' .$class .'"' : ' ';
+
+		$alt = (trim($alt) == '') ? 'Profile Image' : $alt;
+		return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" ' . $class . $id. ' />';
 	}
 }
 
