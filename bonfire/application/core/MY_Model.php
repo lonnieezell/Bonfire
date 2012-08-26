@@ -1072,6 +1072,19 @@ class BF_Model extends CI_Model
 	//--------------------------------------------------------------------
 
 	/**
+	 * Allows you to get the table primary key
+	 *
+	 * @return string $this->key (current model table primary key)
+	 */
+	public function get_key()
+	{
+		return $this->key;
+
+	}//end get_key()
+
+	//--------------------------------------------------------------------
+
+	/**
 	 * Sets the date_format to use for setting created_on and modified_on values.
 	 *
 	 * @param string $format String describing format. Valid values are: 'int', 'datetime', 'date'
