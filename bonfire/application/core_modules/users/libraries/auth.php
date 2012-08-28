@@ -107,15 +107,12 @@ class Auth
 		// from other modules.
 		$this->ci->lang->load('users/users');
 
-		log_message('debug', 'Auth class initialized.');
-
-		if (!class_exists('CI_Session'))
-		{
-			$this->ci->load->library('session');
-		}
+		$this->ci->load->library('session');
 
 		// Try to log the user in from session/cookie data
 		$this->autologin();
+
+		log_message('debug', 'Auth class initialized.');
 
 	}//end __construct()
 
@@ -141,10 +138,7 @@ class Auth
 			return FALSE;
 		}
 
-		if (!class_exists('User_model'))
-		{
-			$this->ci->load->model('users/User_model', 'user_model', TRUE);
-		}
+		$this->ci->load->model('users/User_model', 'user_model', TRUE);
 
 		// Grab the user from the db
 		$selects = 'id, email, username, users.role_id, salt, password_hash, users.role_id, users.deleted, users.active';
@@ -191,11 +185,8 @@ class Auth
 			return FALSE;
 		}
 
-		// Validate the password
-		if (!function_exists('do_hash'))
-		{
-			$this->ci->load->helper('security');
-		}
+		// load do_hash()
+		$this->ci->load->helper('security');
 
 		// Try password
 		if (do_hash($user->salt . $password) == $user->password_hash)
@@ -284,10 +275,7 @@ class Auth
 			return $this->logged_in;
 		}
 
-		if (!class_exists('CI_Session'))
-		{
-			$this->ci->load->library('session');
-		}
+		$this->ci->load->library('session');
 
 		// Is there any session data we can use?
 		if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
@@ -297,10 +285,8 @@ class Auth
 
 			if ($user !== FALSE)
 			{
-				if (!function_exists('do_hash'))
-				{
-					$this->ci->load->helper('security');
-				}
+				// load do_hash()
+				$this->ci->load->helper('security');
 
 				// Ensure user_token is still equivalent to the SHA1 of the user_id and password_hash
 				if (do_hash($this->ci->session->userdata('user_id') . $user->password_hash) === $this->ci->session->userdata('user_token'))
@@ -485,11 +471,8 @@ class Auth
 		}
 
 		if (!isset($this->all_perms)) {
-			if (!class_exists('Permissions_model'))
-			{
-				$this->ci->load->model('permissions/permission_model');
-				$this->ci->load->model('roles/role_permission_model');
-			}
+			$this->ci->load->model('permissions/permission_model');
+			$this->ci->load->model('roles/role_permission_model');
 
 			$perms = $this->ci->permission_model->find_all();
 
@@ -519,11 +502,8 @@ class Auth
 	 */
 	public function load_permissions($role_id=NULL)
 	{
-		if (!class_exists('Permissions_model'))
-		{
-			$this->ci->load->model('permissions/permission_model');
-			$this->ci->load->model('roles/role_permission_model');
-		}
+		$this->ci->load->model('permissions/permission_model');
+		$this->ci->load->model('roles/role_permission_model');
 
 		$perms_all = $this->ci->permission_model->find_all_by('status','active');
 		$perms = array();
@@ -747,9 +727,10 @@ class Auth
 			return FALSE;
 		}
 
-		// Generate a random string for our token
-		if (!function_exists('random_string')) { $this->load->helper('string'); }
+		// load random_string()
+		$this->load->helper('string');
 
+		// Generate a random string for our token
 		$token = random_string('alnum', 128);
 
 		// If an old_token is presented, we're refreshing the autologin information
@@ -806,10 +787,7 @@ class Auth
 
 		// First things first.. grab the cookie so we know what row
 		// in the user_cookies table to delete.
-		if (!function_exists('delete_cookie'))
-		{
-			$this->ci->load->helper('cookie');
-		}
+		$this->ci->load->helper('cookie');
 
 		$cookie = get_cookie('autologin');
 		if ($cookie)
@@ -883,15 +861,10 @@ class Auth
 		}
 
 		// Save the user's session info
-		if (!class_exists('CI_Session'))
-		{
-			$this->ci->load->library('session');
-		}
+		$this->ci->load->library('session');
 
-		if (!function_exists('do_hash'))
-		{
-			$this->ci->load->helper('security');
-		}
+		// load do_hash()
+		$this->ci->load->helper('security');
 
 		$data = array(
 			'user_id'		=> $user_id,
