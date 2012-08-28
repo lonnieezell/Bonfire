@@ -337,7 +337,7 @@ class Developer extends Admin_Controller {
                     @rmdir(module_path($module_name.'/'));
 
                     // Log the activity
-                    $this->activity_model->log_activity((integer) $this->current_user->id, lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'modulebuilder');
+                    $this->activity_model->log_activity((integer) $this->current_user->id, lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'builder');
 
                     Template::set_message('The module and associated database entries were successfully deleted.', 'success');
                 }
@@ -348,7 +348,7 @@ class Developer extends Admin_Controller {
             }//end if
         }//end if
 
-        Template::redirect(SITE_AREA .'/developer/modulebuilder');
+        Template::redirect(SITE_AREA .'/developer/builder');
 
     }//end delete()
 
