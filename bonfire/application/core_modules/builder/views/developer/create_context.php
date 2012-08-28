@@ -33,7 +33,7 @@
 			</div>
 		
 		<?php endif; ?>
-		
+		<!-- TODO Add this in later.
 		<div class="control-group">
 			<div class="controls">
 				<label class="checkbox">
@@ -41,7 +41,7 @@
 				</label>
 			</div>
 		</div>
-	
+		-->
 		<div class="form-actions">
 			<input type="submit" name="submit" class="btn btn-primary" value="Create It" /> or 
 			<a href="">Cancel</a>
