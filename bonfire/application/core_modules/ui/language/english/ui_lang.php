@@ -44,3 +44,7 @@ $lang['ui_shortcut_save_error']			= 'There was an error saving your shortcuts.';
 $lang['ui_shortcut_error_exists']		= 'Shortcut already exists';
 $lang['ui_shortcut_error_unavailable']	= 'Action is unavailable';
 $lang['ui_shortcut_error']				= 'Spaces are not allowed in the shortcut keys';
+
+$lang['ui_no_context_name']		= 'Invalid Context name.';
+$lang['ui_cant_write_config']	= 'Unable to write to config file.';
+$lang['ui_context_exists']		= 'Context already exists in application config file.';
