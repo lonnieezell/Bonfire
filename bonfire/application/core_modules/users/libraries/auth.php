@@ -546,8 +546,6 @@ class Auth
 			{
 				$roles[$role->role_id] = $role->role_name;
 			}
-
-			unset($results);
 		}
 
 		// Try to return the role name
@@ -674,8 +672,6 @@ class Auth
 				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, TRUE, $test_token, $user->username);
 			}
 		}
-
-		unset($query, $user);
 
 	}//end autologin()
 
