@@ -959,12 +959,7 @@ if (!function_exists('has_permission'))
 	{
 		$ci =& get_instance();
 
-		if (class_exists('Auth'))
-		{
-			return $ci->auth->has_permission($permission, NULL, $override);
-		}
-
-		return FALSE;
+		return $ci->auth->has_permission($permission, NULL, $override);
 
 	}//end has_permission()
 }
@@ -991,12 +986,7 @@ if (!function_exists('permission_exists'))
 
 		$ci =& get_instance();
 
-		if (class_exists('Auth'))
-		{
-			return $ci->auth->permission_exists($permission);
-		}
-
-		return FALSE;
+		return $ci->auth->permission_exists($permission);
 
 	}//end permission_exists()
 }
