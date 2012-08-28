@@ -39,7 +39,7 @@
 	</table>
 <?php else: ?>
 	<div class="alert alert-warning">
-		<p><?php e(lang('mb_no_modules')); ?> <a href="<?php echo site_url(SITE_AREA .'/developer/builder/create') ?>"><?php e(lang('mb_create_link')); ?></a></p>
+		<p><?php e(lang('mb_no_modules')); ?> <a href="<?php echo site_url(SITE_AREA .'/developer/builder/create_module') ?>"><?php e(lang('mb_create_link')); ?></a></p>
 	</div>
 
 <?php endif; ?>
