@@ -46,7 +46,7 @@ class Developer extends Admin_Controller {
         $this->auth->restrict('Site.Developer.View');
         $this->load->library('modulebuilder');
         $this->load->config('modulebuilder');
-        $this->lang->load('modulebuilder');
+        $this->lang->load('builder');
         $this->load->helper('file');
         $this->load->dbforge();
 
@@ -141,7 +141,7 @@ class Developer extends Admin_Controller {
 		    }
     	}
     
-    	Template::set('toolbar_title', 'Create A Context');
+    	Template::set('toolbar_title', lang('mb_create_a_context'));
     	Template::render();
     }
     
