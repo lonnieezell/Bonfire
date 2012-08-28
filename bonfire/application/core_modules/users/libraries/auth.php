@@ -275,8 +275,6 @@ class Auth
 			return $this->logged_in;
 		}
 
-		$this->ci->load->library('session');
-
 		// Is there any session data we can use?
 		if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
 		{
@@ -861,7 +859,6 @@ class Auth
 		}
 
 		// Save the user's session info
-		$this->ci->load->library('session');
 
 		// load do_hash()
 		$this->ci->load->helper('security');
