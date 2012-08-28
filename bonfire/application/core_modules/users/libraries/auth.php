@@ -191,57 +191,50 @@ class Auth
 			return FALSE;
 		}
 
-		if ($user)
+		// Validate the password
+		if (!function_exists('do_hash'))
 		{
-			// Validate the password
-			if (!function_exists('do_hash'))
-			{
-				$this->ci->load->helper('security');
-			}
-
-			// Try password
-			if (do_hash($user->salt . $password) == $user->password_hash)
-			{
-				// Do they even have permission to log in?
-				if (!$this->has_permission('Site.Signin.Allow', $user->role_id))
-				{
-					$this->increase_login_attempts($login);
-					Template::set_message(lang('us_banned_msg'), 'error');
-					return FALSE;
-				}
-
-				$this->clear_login_attempts($login);
-
-				// We've successfully validated the login, so setup the session
-				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', $user->username);
-
-				// Save the login info
-				$data = array(
-					'last_login'			=> date('Y-m-d H:i:s', time()),
-					'last_ip'				=> $this->ip_address,
-				);
-				$this->ci->user_model->update($user->id, $data);
-
-				$trigger_data = array('user_id'=>$user->id, 'role_id'=>$user->role_id);
-				Events::trigger('after_login', $trigger_data );
-
-				// Save our redirect location
-				$this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '';
-
-				return TRUE;
-			}
-
-			// Bad password
-			else
-			{
-				Template::set_message(lang('us_bad_email_pass'), 'error');
-				$this->increase_login_attempts($login);
-			}
+			$this->ci->load->helper('security');
 		}
+
+		// Try password
+		if (do_hash($user->salt . $password) == $user->password_hash)
+		{
+			// Do they even have permission to log in?
+			if (!$this->has_permission('Site.Signin.Allow', $user->role_id))
+			{
+				$this->increase_login_attempts($login);
+				Template::set_message(lang('us_banned_msg'), 'error');
+				return FALSE;
+			}
+
+			$this->clear_login_attempts($login);
+
+			// We've successfully validated the login, so setup the session
+			$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', $user->username);
+
+			// Save the login info
+			$data = array(
+				'last_login'			=> date('Y-m-d H:i:s', time()),
+				'last_ip'				=> $this->ip_address,
+			);
+			$this->ci->user_model->update($user->id, $data);
+
+			$trigger_data = array('user_id'=>$user->id, 'role_id'=>$user->role_id);
+			Events::trigger('after_login', $trigger_data );
+
+			// Save our redirect location
+			$this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '';
+
+			return TRUE;
+		}
+
+		// Bad password
 		else
 		{
 			Template::set_message(lang('us_bad_email_pass'), 'error');
-		}//end if
+			$this->increase_login_attempts($login);
+		}
 
 		return FALSE;
 
