@@ -9,6 +9,7 @@ function show_table_props() {
 		$('#db_details').show(0);
 		$('#db_details .mb_advanced').hide();
 		$('.mb_new_table').show(0);
+		$('#field_numbers').show(0);
 		$('#all_fields').show(0);
 		$('#primary_key_field').val('' == $('#primary_key_field').val() ? 'id' : $('#primary_key_field').val());
 		var tbl_name = ( ( $('#table_name').val() == '' ) ? $('#module_name').val() : $('#table_name').val() );
@@ -59,6 +60,9 @@ function store_form_data() {
 		if ( $(this).is(':checkbox') && $(this).is(':not(:checked)') ) {
 			fld_val = 'uncheck';
 		}
+		if ( $(this).is(':radio') && $(this).is(':not(:checked)') ) {
+			return;
+		}
 
 		if (fld_id && fld_val) {
 			localStorage[fld_id] = fld_val;
@@ -77,7 +81,7 @@ function get_form_data() {
 		var key = localStorage.key(i);
     	var value = localStorage[key];
 
-		if ( $('#'+key).is(':checkbox') ) {
+		if ( $('#'+key).is(':checkbox, :radio') ) {
 			if ( $('#'+key).val() == value ) {
 				$('#'+key).attr('checked','checked');
 			} else {
@@ -139,7 +143,9 @@ $('.mb_show_advanced').click( function(e) {
 /*-----------------------------------------------------------
 Toggle "more validation rules"
 ------------------------------------------------------------*/
-$('.mb_show_advanced_rules').click( function() {
+$('.mb_show_advanced_rules').click( function(e) {
+	e.preventDefault();
+
 	$(this).parent().parent().next('.mb_advanced').toggle();
 });
 
@@ -148,6 +154,18 @@ Toggle module/table advanced options by clicking on the
 fieldset legend. Uses the div:not to not affect the visibility
 options of the "more validation rules"
 ------------------------------------------------------------*/
-$('.container legend').click( function() {
+$('.body legend').click( function() {
 	$(this).parent('fieldset').children('div:not(".mb_advanced:hidden")').toggle();
 });
+
+/*-----------------------------------------------------------
+Highlight faded labels when the control is focused
+------------------------------------------------------------*/
+$('.faded input').on('focus', function() {
+	$(this).closest('.faded').addClass("faded-focus");
+});
+$('.faded input').on('blur', function() {
+	$(this).closest('.faded').removeClass("faded-focus");
+});
+$('.faded input:focus').closest('.faded').addClass("faded-focus");
+
