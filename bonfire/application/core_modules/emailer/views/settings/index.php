@@ -106,13 +106,12 @@
 <div class="admin-box">
 	<h3><?php echo lang('em_test_header'); ?></h3>
 
-	<fieldset>
-		<legend><?php echo lang('em_test_settings') ?></legend>
+	<?php echo form_open(SITE_AREA .'/settings/emailer/test', array('class' => 'form-horizontal', 'id'=>'test-form')); ?>
+		<fieldset>
+			<legend><?php echo lang('em_test_settings') ?></legend>
 
-		<br/>
-		<p class="intro"><?php echo lang('em_test_intro'); ?></p>
-
-		<?php echo form_open(SITE_AREA .'/settings/emailer/test', array('class' => 'form-horizontal', 'id'=>'test-form')); ?>
+			<br/>
+			<p class="intro"><?php echo lang('em_test_intro'); ?></p>
 
 			<br/>
 			<div class="control-group">

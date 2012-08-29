@@ -3,6 +3,9 @@
  // There are no doubt more types where a value/length isn't possible - needs investigating
 $no_length = array('TEXT', 'BOOL', 'DATE', 'DATETIME', 'TIME', 'TIMESTAMP', 'BLOB', 'TINYBLOB', 'TINYTEXT', 'MEDIUMBLOB', 'MEDIUMTEXT', 'LONGBLOB', 'LONGTEXT');
 
+// types where a value/length is optional, will not output a constraint if the field is empty
+$optional_length = array('YEAR');
+
 if(!$table_as_field_prefix)
 {
 	$module_name_lower = '';
@@ -42,8 +45,21 @@ class Migration_Install_'.$table_name.' extends Migration {
 
 		if (!in_array(set_value("db_field_type$counter"), $no_length))
 		{
-			$db_migration .= "'constraint' => ".addcslashes($this->input->post("db_field_length_value$counter"),'"').',
-				';
+			$escaped_constraint_val = addcslashes($this->input->post("db_field_length_value$counter"),'"');
+
+			if (in_array(set_value("db_field_type$counter"), $optional_length) && empty($escaped_constraint_val) && !is_numeric($escaped_constraint_val))
+			{
+				$constraint = '';
+			}
+			else
+			{
+				$constraint = "'constraint' => {$escaped_constraint_val},
+				";
+			}
+			$db_migration .= $constraint;
+
+			unset($escaped_constraint_val);
+			unset($constraint);
 		}
 
 		// NOT NULL is the default when using the fields array,

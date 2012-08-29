@@ -38,8 +38,9 @@
 				</td>
 				<td>
 					<a href="<?php e(site_url(SITE_AREA .'/developer/logs/view/'. $log)) ?>">
-						<b><?php e(date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $log)))) ); ?></b></td>
+						<b><?php e(date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $log)))) ); ?></b>
 					</a>
+				</td>
 				<td><?php e($log) ?></td>
 			</tr>
 			<?php endif; ?>

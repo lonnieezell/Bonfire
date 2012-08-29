@@ -45,7 +45,7 @@
 		<?php if (isset($users) && is_array($users) && count($users)) : ?>
 		<tfoot>
 			<tr>
-				<td colspan="7">
+				<td colspan="8">
 					<?php echo lang('bf_with_selected') ?>
 					<?php if($filter == 'deleted'):?>
 					<input type="submit" name="restore" class="btn" value="<?php echo lang('bf_action_restore') ?>">
@@ -75,7 +75,7 @@
 				</td>
 				<td><?php echo $user->display_name ?></td>
 				<td>
-					<a href="mailto://<?php echo $user->email ?>"><?php echo $user->email ?></a>
+					<a href="mailto:<?php echo $user->email ?>"><?php echo $user->email ?></a>
 				</td>
 				<td>
 					<?php echo $roles[$user->role_id]->role_name ?>
@@ -123,7 +123,7 @@
 			<?php endforeach; ?>
 		<?php else: ?>
 			<tr>
-				<td colspan="6">No users found that match your selection.</td>
+				<td colspan="8">No users found that match your selection.</td>
 			</tr>
 		<?php endif; ?>
 		</tbody>
