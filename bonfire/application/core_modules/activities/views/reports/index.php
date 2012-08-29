@@ -102,7 +102,7 @@
 					<tbody>
 					<?php foreach ($top_users as $top_user) : ?>
 						<tr>
-							<td><strong><?php echo ($top_user->username == '' ? 'Not found':$top_user->username); ?></strong></td>
+							<td><strong><?php e($top_user->username == '' ? 'Not found':$top_user->username); ?></strong></td>
 							<td><?php echo $top_user->activity_count; ?></td>
 						</tr>
 				<?php endforeach; ?>
@@ -129,7 +129,7 @@
 				<td>
 					<?php echo lang('activity_delete_own_note'); ?>
 					<select id="activity_own_select">
-						<option value="<?php echo $current_user->id; ?>"><?php echo $current_user->username; ?></option>
+						<option value="<?php echo $current_user->id; ?>"><?php e($current_user->username); ?></option>
 					</select>
 				</td>
 
@@ -147,7 +147,7 @@
 					<select id="activity_user_select">
 						<option value="all"><?php echo lang('activity_all_users'); ?></option>
 					<?php foreach ($users as $au) : ?>
-						<option value="<?php echo $au->id; ?>"><?php echo $au->username; ?></option>
+						<option value="<?php echo $au->id; ?>"><?php e($au->username); ?></option>
 					<?php endforeach; ?>
 					</select>
 				</td>

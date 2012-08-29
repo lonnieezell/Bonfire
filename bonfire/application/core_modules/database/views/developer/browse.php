@@ -16,21 +16,18 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-				<?php
-					$heads = $rows[0];
+					<?php $heads = $rows[0]; ?>
 
-					foreach ($heads as $field => $value)
-					{
-						echo "<th>$field</th>\n";
-					}
-				?>
+					<?php foreach ($heads as $field => $value) :?>
+					<th><?php e($field) ?></th>
+					<?php endforeach; ?>
 				</tr>
 			</thead>
 			<tbody>
 			<?php foreach ($rows as $row) : ?>
 				<tr>
 					<?php foreach ($row as $key => $value) :?>
-					<td><?php echo $value; ?></td>
+					<td><?php e($value); ?></td>
 					<?php endforeach; ?>
 				</tr>
 			<?php endforeach; ?>
