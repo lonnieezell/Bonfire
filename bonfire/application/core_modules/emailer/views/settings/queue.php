@@ -47,11 +47,8 @@
 
 			</td>
 		</tr>
-		</tfoot>
-
-		<tfoot>
 			<tr>
-				<td colspan="8" class="text-left"><?php echo $this->pagination->create_links() ?></td>
+				<td colspan="7" class="text-left"><?php echo $this->pagination->create_links() ?></td>
 			</tr>
 		</tfoot>
 		<tbody>

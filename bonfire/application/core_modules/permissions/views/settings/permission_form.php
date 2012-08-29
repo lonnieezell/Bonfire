@@ -45,8 +45,6 @@
 		</div>
 
 	</fieldset>
-	
-	</div>
 	<?php echo form_close(); ?>
 
 </div>

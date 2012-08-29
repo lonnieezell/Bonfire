@@ -20,6 +20,13 @@
 	<div id="log">
 		<?php foreach ($log_content as $row) : ?>
 		<?php
+		// Log files start with PHP guard header
+		// (apparently we don't trust .htaccess)
+		if (strpos($row, '<?php') === 0)
+		{
+			continue;
+		}
+
 		$class = '';
 
 		if (strpos($row, 'ERROR') !== false)
@@ -32,7 +39,7 @@
 			}
 		?>
 		<div style="border-bottom: 1px solid #999; padding: 5px 18px; color: #222;" <?php echo 'class="'. $class .'"' ?>>
-			<?php echo $row; ?>
+			<?php e($row); ?>
 		</div>
 		<?php endforeach; ?>
 	</div>
