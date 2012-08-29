@@ -51,7 +51,7 @@
 			<tbody>
 				<?php foreach ($activity_content as $activity) : ?>
 				<tr>
-					<td><i class="icon-user">&nbsp;</i>&nbsp;<?php echo $activity->username; ?></td>
+					<td><i class="icon-user">&nbsp;</i>&nbsp;<?php e($activity->username); ?></td>
 					<td><?php echo $activity->activity; ?></td>
 					<td><?php echo $activity->module; ?></td>
 					<td><?php echo date('M j, Y g:i A', strtotime($activity->created)); ?></td>

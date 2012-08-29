@@ -111,7 +111,7 @@ a.mb_show_advanced_rules:hover {
 				<div class="controls">
 					<select name="role_id" id="role_id">
 					<?php foreach ($roles as $role):?>
-						<option value="<?php echo $role['role_id']?>"><?php echo $role['role_name']?></option>
+						<option value="<?php echo $role['role_id']?>"><?php e($role['role_name'])?></option>
 					<?php endforeach;?>
 				 	</select>
 				 </div>
