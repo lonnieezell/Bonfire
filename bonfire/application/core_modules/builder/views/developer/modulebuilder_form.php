@@ -88,8 +88,8 @@ a.mb_show_advanced_rules:hover {
 
 			<div class="control-group mb_advanced">
 			<?php echo form_error("form_action"); ?>
-				<label class="control-label" for="form_action"><?php echo lang('mb_form_actions'); ?></label>
-          <div class="controls">
+				<label class="control-label" id="form_action_label"><?php echo lang('mb_form_actions'); ?></label>
+					<div class="controls" aria-labelledby="form_action_label" role="group">
 						<?php foreach($form_action_options as $action => $label): ?>
 						<label class="checkbox" for="form_action_<?php echo $action; ?>">
 						<?php
@@ -118,19 +118,21 @@ a.mb_show_advanced_rules:hover {
 			</div>
 
       <div class="control-group">
-        <label class="control-label" for="db_required"></label>
         <div class="controls">
-          <label class="inline radio">
+          <label class="inline radio" for="db_no">
             <input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", TRUE); ?> class="radio" /> None
           </label>
-          <label class="inline radio">
+          <label class="inline radio" for="db_create">
             <input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox("module_db", "new"); ?> class="radio" /> Create New Table
           </label>
-          <label class="inline radio">
+          <label class="inline radio" for="db_exists">
             <input name="module_db" id="db_exists" type="radio" value="existing" <?php echo set_checkbox("module_db", "existing"); ?> class="radio" /> Build from Existing Table
           </label>
         </div>
       </div>
+
+		</fieldset>
+
 
 		<fieldset style="margin-top: 0" id="db_details">
 			<legend><?php echo lang('mb_form_table_details'); ?></legend>
@@ -290,7 +292,7 @@ a.mb_show_advanced_rules:hover {
 					</div>
 
 					<div class="control-group <?php echo form_has_error("view_field_name{$count}") ? 'error' : ''; ?>">
-						<label class="control-label" for="view_field_name"><?php echo lang('mb_form_fieldname'); ?></label>
+						<label class="control-label" for="view_field_name<?php echo $count; ?>"><?php echo lang('mb_form_fieldname'); ?></label>
 						<div class="controls">
 							<input name="view_field_name<?php echo $count; ?>" id="view_field_name<?php echo $count; ?>" type="text" value="<?php echo set_value("view_field_name{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['name'] : ''); ?>" maxlength="30" placeholder="<?php echo lang('mb_form_fieldname_ph'); ?>" />
 							<span class="help-inline"><?php echo form_error("view_field_name{$count}"); ?></span>
@@ -389,7 +391,7 @@ a.mb_show_advanced_rules:hover {
 
 							<?php foreach ($validation_rules as $validation_rule) : ?>
 							<span class="faded">
-								<label class="inline checkbox">
+								<label class="inline checkbox" for="validation_rules_<?php echo $validation_rule . $count; ?>">
 									<input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_rule . $count; ?>" type="checkbox" value="<?php echo $validation_rule; ?>" <?php echo set_checkbox('validation_rules'.$count.'[]', $validation_rule); ?> />
 									<?php echo lang('mb_form_'.$validation_rule); ?>
 								</label>

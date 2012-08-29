@@ -18,7 +18,7 @@
 			<ul class="dropdown-menu">
 			<?php foreach ($roles as $role) : ?>
 				<li>
-					<a href="<?php echo site_url(SITE_AREA .'/settings/users?filter=role&role_id='. $role->role_id) ?>">
+					<a href="<?php e(site_url(SITE_AREA .'/settings/users?filter=role&role_id='. $role->role_id)) ?>">
 						<?php echo $role->role_name; ?>
 					</a>
 				</li>
@@ -45,7 +45,7 @@
 		<?php if (isset($users) && is_array($users) && count($users)) : ?>
 		<tfoot>
 			<tr>
-				<td colspan="7">
+				<td colspan="8">
 					<?php echo lang('bf_with_selected') ?>
 					<?php if($filter == 'deleted'):?>
 					<input type="submit" name="purge" class="btn btn-danger" value="<?php echo lang('bf_action_purge') ?>" onclick="return confirm('<?php echo lang('us_purge_del_confirm'); ?>')">
@@ -74,7 +74,7 @@
 				</td>
 				<td><?php echo $user->display_name ?></td>
 				<td>
-					<a href="mailto://<?php echo $user->email ?>"><?php echo $user->email ?></a>
+					<a href="mailto:<?php echo $user->email ?>"><?php echo $user->email ?></a>
 				</td>
 				<td>
 					<?php echo $roles[$user->role_id]->role_name ?>
@@ -122,7 +122,7 @@
 			<?php endforeach; ?>
 		<?php else: ?>
 			<tr>
-				<td colspan="6">No users found that match your selection.</td>
+				<td colspan="8">No users found that match your selection.</td>
 			</tr>
 		<?php endif; ?>
 		</tbody>

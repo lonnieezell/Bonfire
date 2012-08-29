@@ -38,7 +38,7 @@ if ( ! function_exists('gravatar_link'))
 	 * it will return a link to an image under *your_theme/images/user.png*.
 	 * Also, by explicity omitting email you're denying http-req to gravatar.com.
 	 *
-	 * @param $email string The email address to check for. If null, defaults to theme img.
+	 * @param $email string The email address to check for. If NULL, defaults to theme img.
 	 * @param $size int The width (and height) of the resulting image to grab.
 	 * @param $alt string Alt text to be put in the link tag.
 	 * @param $title string The title text to be put in the link tag.
@@ -47,7 +47,7 @@ if ( ! function_exists('gravatar_link'))
 	 *
 	 * @return string The resulting image tag.
 	 */
-	function gravatar_link($email=null, $size=48, $alt='', $title='', $class=' ', $id=' ')
+	function gravatar_link($email=NULL, $size=48, $alt='', $title='', $class=NULL, $id=NULL)
 	{
 		// Set our default image based on required size.
 		$default_image = Template::theme_url('images/user.png');
@@ -86,7 +86,6 @@ if ( ! function_exists('gravatar_link'))
 		$id = ($id !== NULL) ? ' id="' .$id .'" ' : ' ';
 		$class = ($class !== NULL) ? ' class="' .$class .'"' : ' ';
 
-		$alt = (trim($alt) == '') ? 'Profile Image' : $alt;
 		return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" ' . $class . $id. ' />';
 	}
 }

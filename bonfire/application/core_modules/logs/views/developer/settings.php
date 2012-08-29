@@ -17,7 +17,7 @@
 		<div class="control-group">
 			<label for="log_threshold"><?php echo lang('log_the_following'); ?></label>
 			<div class="controls">
-				<select name="log_threshold" style="width: auto; max-width: none;">
+				<select name="log_threshold" id="log_threshold" style="width: auto; max-width: none;">
 					<option value="0" <?php echo ($log_threshold == 0) ? 'selected="selected"' : ''; ?>><?php echo lang('log_what_0'); ?></option>
 					<option value="1" <?php echo ($log_threshold == 1) ? 'selected="selected"' : ''; ?>><?php echo lang('log_what_1'); ?></option>
 					<option value="2" <?php echo ($log_threshold == 2) ? 'selected="selected"' : ''; ?>><?php echo lang('log_what_2'); ?></option>
