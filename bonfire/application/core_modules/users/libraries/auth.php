@@ -578,11 +578,6 @@ class Auth
 	 */
 	protected function increase_login_attempts($login)
 	{
-		if (empty($this->ip_address))
-		{
-			return;
-		}
-
 		$this->ci->db->insert('login_attempts', array('ip_address' => $this->ip_address, 'login' => $login));
 
 	}//end increase_login_attempts()
@@ -601,11 +596,6 @@ class Auth
 	 */
 	protected function clear_login_attempts($login, $expires = 86400)
 	{
-		if (empty($this->ip_address))
-		{
-			return;
-		}
-
 		$this->ci->db->where(array('ip_address' => $this->ip_address, 'login' => $login));
 
 		// Purge obsolete login attempts
