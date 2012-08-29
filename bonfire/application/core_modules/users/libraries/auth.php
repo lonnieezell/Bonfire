@@ -36,15 +36,6 @@ class Auth
 {
 
 	/**
-	 * An array of errors generated.
-	 *
-	 * @access public
-	 *
-	 * @var array
-	 */
-	public $errors = array();
-
-	/**
 	 * The url to redirect to on successful login.
 	 *
 	 * @access public
@@ -872,41 +863,6 @@ class Auth
 	//--------------------------------------------------------------------
 
 }//end Auth
-
-//--------------------------------------------------------------------
-
-if (!function_exists('auth_errors'))
-{
-	/**
-	 * A utility function for showing authentication errors.
-	 *
-	 * @access public
-	 *
-	 * @return string A string with a <ul> tag of any auth errors, or an empty string if no errors exist.
-	 */
-	function auth_errors()
-	{
-		$ci =& get_instance();
-
-		$errors = $ci->auth->errors;
-
-		if (count($errors))
-		{
-			$str = '<ul>';
-			foreach ($errors as $e)
-			{
-				$str .= "<li>$e</li>";
-			}
-
-			$str .= "</ul>";
-
-			return $str;
-		}
-
-		return '';
-
-	}//end auth_errors()
-}
 
 //--------------------------------------------------------------------
 
