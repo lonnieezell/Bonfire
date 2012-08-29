@@ -117,7 +117,7 @@ class Developer extends Admin_Controller
 				Template::set_message('Successfully uninstalled module\'s migrations.', 'success');
 
 				// Log the activity
-				$this->activity_model->log_activity($this->current_user->id, 'Migrate Type: '. $type .' Uninstalled Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+				$this->activity_model->log_activity((int)$this->auth->user_id(), 'Migrate Type: '. $type .' Uninstalled Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 
 				redirect(SITE_AREA .'/developer/migrations');
 			}
@@ -126,14 +126,17 @@ class Developer extends Admin_Controller
 				Template::set_message('Successfully migrated database to version '. $result, 'success');
 
 				// Log the activity
-				$this->activity_model->log_activity($this->current_user->id, 'Migrate Type: '. $type .' to Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+				$this->activity_model->log_activity((int)$this->auth->user_id(), 'Migrate Type: '. $type .' to Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 
 				redirect(SITE_AREA .'/developer/migrations');
 			}
 		}
 		else
 		{
-			Template::set_message('There was an error migrating the database.', 'error');
+			$msg  = '<h4 class="alert-heading">There was an error migrating the database.</h4>';
+			$msg .= isset($this->migrations->error) ? $msg . $this->migrations->error : $msg;
+			Template::set_message($msg, 'error');
+			unset($msg);
 		}//end if
 
 		Template::set_message('No version to migrate to.', 'error');
@@ -166,7 +169,7 @@ class Developer extends Admin_Controller
 		$this->migrate_to($version, $module .'_');
 
 		// Log the activity
-		$this->activity_model->log_activity($this->current_user->id, 'Migrate module: ' . $module . ' Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+		$this->activity_model->log_activity((int)$this->auth->user_id(), 'Migrate module: ' . $module . ' Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 
 	}//end migrate_module()
 
@@ -188,6 +191,16 @@ class Developer extends Admin_Controller
 		if ($modules === false)
 		{
 			return false;
+		}
+		
+		foreach ($modules as &$module) 
+		{
+			if ( ! array_key_exists('migrations', $module))
+			{
+				continue;
+			}
+
+			asort($module['migrations']);
 		}
 
 		foreach ($modules as $module => $migrations)
