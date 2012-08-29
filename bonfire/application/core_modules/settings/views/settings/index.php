@@ -70,7 +70,7 @@
 			<div class="control-group">
 				<label class="control-label" for="status"><?php echo lang('bf_language') ?></label>
 				<div class="controls">
-					<select name="languages[]" multiple="mulitple">
+					<select name="languages[]" multiple="multiple">
 					<?php if (is_array($languages) && count($languages)):?>
 						<?php foreach($languages as $language):?>
 						<option value="<?php e($language);?>" <?php set_select('languages', $language, in_array($language, $selected_languages) ? TRUE : FALSE) ?>><?php e(ucfirst($language)) ?></option>

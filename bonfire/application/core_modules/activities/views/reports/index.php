@@ -129,7 +129,7 @@
 				<td>
 					<?php echo lang('activity_delete_own_note'); ?>
 					<select id="activity_own_select">
-						<option value="<?php echo $current_user->id; ?>"><?php e($current_user->username); ?></option>))
+						<option value="<?php echo $current_user->id; ?>"><?php e($current_user->username); ?></option>
 					</select>
 				</td>
 
@@ -198,7 +198,7 @@
 
 			<?php if ($empty_table) :?>
 			<tr>
-				<td><?php echo lang('activity_none_found'); ?></td>
+				<td colspan="2"><?php echo lang('activity_none_found'); ?></td>
 			</tr>
 			<?php endif; ?>
 		</tbody>

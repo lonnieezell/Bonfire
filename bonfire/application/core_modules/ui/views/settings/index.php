@@ -39,13 +39,13 @@
 						<input type="text" id="shortcut<?php echo $count;?>" name="shortcut<?php echo $count;?>" class="medium" value="<?php echo set_value('shortcuts['.$count.']', isset($shortcut) ? $shortcut : '') ?>" />
 					</td>
 					<td>
-						<input type="submit" name="add_shortcut" class="btn" id="add_shortcut<?php echo $count;?>" value="<?php echo lang('ui_add_shortcut') ?>" class="button" />
+						<input type="submit" name="add_shortcut" class="btn" id="add_shortcut<?php echo $count;?>" value="<?php echo lang('ui_add_shortcut') ?>"/>
 					</td>
 				</tr>
 				<?php foreach ($settings as $action => $shortcut): ?>
 					<?php $count++; ?>
-					<tr id="shortcut<?php echo $count; ?>">
-						<td id="shortcut<?php echo $count; ?>">
+					<tr>
+						<td>
 							<input type="hidden" id="action<?php echo $count;?>" name="action[<?php echo $count;?>]"  value="<?php echo set_value('actions['.$count.']', isset($action) ? $action : '') ?>" />
 							<?php echo $current[$action]['description'] ?>
 						</td>
