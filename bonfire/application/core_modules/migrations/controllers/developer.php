@@ -133,10 +133,7 @@ class Developer extends Admin_Controller
 		}
 		else
 		{
-			$msg  = '<h4 class="alert-heading">There was an error migrating the database.</h4>';
-			$msg .= isset($this->migrations->error) ? $msg . $this->migrations->error : $msg;
-			Template::set_message($msg, 'error');
-			unset($msg);
+			Template::set_message('<h4 class="alert-heading">There was an error migrating the database.</h4>' . $this->migrations->error, 'error');
 		}//end if
 
 		Template::set_message('No version to migrate to.', 'error');
@@ -192,17 +189,18 @@ class Developer extends Admin_Controller
 		{
 			return false;
 		}
+
 		
-		foreach ($modules as &$module) 
+		foreach ($modules as &$mod) 
 		{
-			if ( ! array_key_exists('migrations', $module))
+			if ( ! array_key_exists('migrations', $mod))
 			{
 				continue;
 			}
 
-			asort($module['migrations']);
+			arsort($mod['migrations']);
 		}
-
+ 
 		foreach ($modules as $module => $migrations)
 		{
 			$mod_versions[$module] = array(
@@ -210,6 +208,8 @@ class Developer extends Admin_Controller
 				'latest_version'	=> $this->migrations->get_latest_version($module .'_'),
 				'migrations'		=> $migrations['migrations']
 			);
+
+
 		}
 
 		return $mod_versions;
