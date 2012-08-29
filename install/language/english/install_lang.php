@@ -21,7 +21,7 @@
 	THE SOFTWARE.
 */
 
-$lang['in_intro']					= '<h2>Welcome</h2><p>Welcome to the Bonfire installation process! Just fill in the fields below, and before you know it you will be creating CodeIgniter 2.0 based web apps faster than ever.</p>';
+$lang['in_intro']					= '<h2>Welcome</h2><p>Welcome to the Bonfire installation process! Just fill in the fields below, and before you know it you will be creating CodeIgniter 2.1 based web apps faster than ever.</p>';
 $lang['in_not_writeable_heading']	= 'Files/Folders Not Writeable';
 
 $lang['in_writeable_directories_message'] = 'Please ensure that the following directories are writeable, and try again';

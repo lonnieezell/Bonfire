@@ -29,7 +29,7 @@
 				<td><?php echo isset($config['description']) ? $config['description'] : '---'; ?></td>
 				<td><?php echo isset($config['author']) ? $config['author'] : '---'; ?></td>
 				<td>
-					<a href="<?php echo site_url(SITE_AREA .'/developer/modulebuilder/delete/'. preg_replace("/[ -]/", "_", $config['name'])); ?>" onclick="return confirm('Really delete this module and all of its files?');">
+					<a href="<?php echo site_url(SITE_AREA .'/developer/builder/delete/'. preg_replace("/[ -]/", "_", $config['name'])); ?>" onclick="return confirm('Really delete this module and all of its files?');">
 						<?php echo lang('mb_delete') ?>
 					</a>
 				</td>
@@ -39,7 +39,7 @@
 	</table>
 <?php else: ?>
 	<div class="alert alert-warning">
-		<p><?php e(lang('mb_no_modules')); ?> <a href="<?php echo site_url(SITE_AREA .'/developer/modulebuilder/create') ?>"><?php e(lang('mb_create_link')); ?></a></p>
+		<p><?php e(lang('mb_no_modules')); ?> <a href="<?php echo site_url(SITE_AREA .'/developer/builder/create_module') ?>"><?php e(lang('mb_create_link')); ?></a></p>
 	</div>
 
 <?php endif; ?>

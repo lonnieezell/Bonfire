@@ -126,3 +126,11 @@ $lang['mb_form_alpha_extra']	= 'AlphaNumerics, underscore, dash, periods and spa
 // Activities
 $lang['mb_act_create']	= 'Created Module';
 $lang['mb_act_delete']	= 'Deleted Module';
+
+$lang['mb_create_a_context']	= 'Create A Context';
+$lang['mb_tools']				= 'Tools';
+$lang['mb_mod_builder']			= 'Module Builder';
+$lang['mb_new_context']			= 'New Context';
+$lang['mb_no_context_name']		= 'Invalid Context name.';
+$lang['mb_cant_write_config']	= 'Unable to write to config file.';
+$lang['mb_context_exists']		= 'Context already exists in application config file.';
