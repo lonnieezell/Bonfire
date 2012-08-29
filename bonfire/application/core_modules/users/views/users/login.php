@@ -6,19 +6,7 @@
 		<h1><?php echo lang('us_login'); ?></h1>
 	</div>
 
-
-
-<?php if ( !$site_open ) : ?>
-<div class="row-fluid">
-	<div class="span12">
-		<div class="alert alert-danger fade in span6" >
-		  <a data-dismiss="alert" class="close">&times;</a>
-			<h4 class="alert-heading">Sorry this is invite only site.</h4>
-		</div>
-	</div>
-</div>
 <?php
-	endif;
 	if (validation_errors()) :
 ?>
 <div class="row-fluid">
