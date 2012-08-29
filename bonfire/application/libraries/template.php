@@ -42,7 +42,7 @@ class Template
 	 *
 	 * @var bool
 	 */
-	private static $debug = FALSE;
+	private static $debug = false;
 
 
 	/**
@@ -267,8 +267,9 @@ class Template
 
 		// Grab our current view name, based on controller/method
 		// which routes to views/controller/method.
+		
 		if (empty(self::$current_view))
-		{
+		{			
 			self::$current_view =  self::$ci->router->class . '/' . self::$ci->router->method;
 		}
 
@@ -861,7 +862,8 @@ class Template
 			// if $output is empty, no view was overriden, so go for the default
 			if (empty($output))
 			{
-				//self::$ci->load->_ci_view_path = self::$orig_view_path;
+				self::$ci->load->_ci_view_path = self::$orig_view_path;
+
 
 				if (self::$parse_views === TRUE)
 				{
@@ -870,9 +872,8 @@ class Template
 					{
 						self::$ci->load->library('parser');
 					}
-
-
-					$output = self::$ci->load->_ci_load(array('_ci_path' => $view_path.$view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));
+					
+//					$output = self::$ci->load->_ci_load(array('_ci_path' => $view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));
 
 					if (count($data) > 0)
 					{
@@ -891,6 +892,9 @@ class Template
 						unset($temp);
 					}
 
+					$data = (array) $data;
+
+					//$output = self::$ci->load->view($view, $data, TRUE);
 					$output = self::$ci->parser->parse($view, $data, TRUE);
 				}
 				else
@@ -898,6 +902,7 @@ class Template
 					$output = self::$ci->load->view($view, $data, TRUE);
 				}
 			}
+			self::$ci->load->_ci_view_path = self::$orig_view_path;
 		}//end if
 
 		// Put our ci view path back to normal
@@ -978,7 +983,10 @@ class Template
 			// Grab the output of the view.
 			if (self::$parse_views === TRUE)
 			{
-				$output = self::$ci->parser->parse($view, $data, TRUE);
+				$output = self::$ci->load->_ci_load(array('_ci_path' => $view_path . $view .'.php', '_ci_vars' => $data, '_ci_return' => TRUE));
+
+				//This caused Parsing to die if parsing entire template file.
+				//$output = self::$ci->parser->parse($view_path.$view, $data, TRUE, TRUE);
 			} else
 			{
 				$output = self::$ci->load->_ci_load(array('_ci_path' => $view_path . $view .'.php', '_ci_vars' => $data, '_ci_return' => TRUE));
