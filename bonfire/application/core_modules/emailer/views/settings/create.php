@@ -15,12 +15,12 @@
 		<tbody>
 			<tr>
 				<td>Subject:</td>
-				<td><input type="text" size="50" name="email_subject" id="email_subject" value="<?php if (isset($email_subject)){echo $email_subject;} ?>"></td>
+				<td><input type="text" size="50" name="email_subject" id="email_subject" value="<?php if (isset($email_subject)){e($email_subject);} ?>"></td>
 			</tr>
 			<tr>
 				<td>Content:</td>
 				<td><textarea name="email_content" id="email_content" rows="15" style="width:90%;"><?php 
-					if(isset($email_content)){echo $email_content;} 
+					if(isset($email_content)){e($email_content);}
 				?></textarea>
 				</td>
 			</tr>
@@ -58,7 +58,7 @@
 			<tr>
 				<td>
 					<input type="checkbox" name="checked[]" value="<?php echo $user->id ?>" 
-					<?php if (isset($checked) && (is_array($checked)) && (count($checked)) && (in_array($user->id,$checked))) : ?>
+					<?php if (isset($checked) && (is_array($checked)) && (count($checked)) && (in_array($user->id, $checked))) : ?>
 						checked="checked"
 					<?php endif; ?>
 					/>
