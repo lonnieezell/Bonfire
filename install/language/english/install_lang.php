@@ -21,7 +21,7 @@
 	THE SOFTWARE.
 */
 
-$lang['in_intro']					= '<h2>Welcome</h2><p>Welcome to the Bonfire installation process! Just fill in the fields below, and before you know it you will be creating CodeIgniter 2.0 based web apps faster than ever.</p>';
+$lang['in_intro']					= '<h2>Welcome</h2><p>Welcome to the Bonfire installation process! Just fill in the fields below, and before you know it you will be creating CodeIgniter 2.1 based web apps faster than ever.</p>';
 $lang['in_not_writeable_heading']	= 'Files/Folders Not Writeable';
 
 $lang['in_writeable_directories_message'] = 'Please ensure that the following directories are writeable, and try again';
@@ -63,3 +63,8 @@ $lang['multiple_migrations_name']		= 'Multiple migrations name: %s';
 $lang['migration_class_doesnt_exist']	= 'Migration class does not exist: %s';
 $lang['wrong_migration_interface']		= 'Wrong migration interface: %s';
 $lang['invalid_migration_filename']		= 'Wrong migration filename: %s - %s';
+
+$lang['in_installed']					= 'Bonfire is already installed. Please delete or rename the install folder to';
+$lang['in_rename_msg']					= 'If you would like, we can simply rename it for you.';
+$lang['continue']						= 'continue';
+$lang['click']							= 'Click here';

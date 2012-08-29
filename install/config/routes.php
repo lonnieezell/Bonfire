@@ -42,5 +42,6 @@ $route['default_controller'] = "install";
 $route['404_override'] = 'install';
 
 $route['account'] = 'install/account';
+$route['rename'] = 'install/rename_folder';
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

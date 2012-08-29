@@ -256,7 +256,7 @@ a.mb_show_advanced_rules:hover {
 					<?php
 					$field_num_count = count($field_numbers);
 					for($ndx=0; $ndx < $field_num_count; $ndx++): ?>
-					<a href="<?php echo site_url(SITE_AREA."/developer/modulebuilder/create/{$field_numbers[$ndx]}"); ?>" <?php if ($field_numbers[$ndx] == $field_total) { echo 'class="current"'; } ?>><?php echo $field_numbers[$ndx]; ?></a><?php echo $ndx < $field_num_count - 1 ? ' | ' : '';?>
+					<a href="<?php echo site_url(SITE_AREA."/developer/builder/create_module/{$field_numbers[$ndx]}"); ?>" <?php if ($field_numbers[$ndx] == $field_total) { echo 'class="current"'; } ?>><?php echo $field_numbers[$ndx]; ?></a><?php echo $ndx < $field_num_count - 1 ? ' | ' : '';?>
 					<?php endfor; ?>
 				</div>
 			</div>
