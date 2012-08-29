@@ -187,7 +187,7 @@ class Auth
 		// check if the account has been soft deleted.
 		if ($user->deleted >= 1) // in case we go to a unix timestamp later, this will still work.
 		{
-			Template::set_message(sprintf(lang('us_account_deleted'),config_item("site.system_email")), 'error');
+			Template::set_message(sprintf(lang('us_account_deleted'), settings_item("site.system_email")), 'error');
 			return FALSE;
 		}
 

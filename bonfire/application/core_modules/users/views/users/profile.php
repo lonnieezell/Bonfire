@@ -57,7 +57,7 @@
 		</div>
 	</div>
 
-	<?php if ( config_item('auth.login_type') !== 'email' OR config_item('auth.use_usernames')) : ?>
+	<?php if ( settings_item('auth.login_type') !== 'email' OR settings_item('auth.use_usernames')) : ?>
 	<div class="control-group <?php echo iif( form_error('username') , 'error') ;?>">
 		<label class="control-label required" for="username"><?php echo lang('bf_username'); ?></label>
 		<div class="controls">
