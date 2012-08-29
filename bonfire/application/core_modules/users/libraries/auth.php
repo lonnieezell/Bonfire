@@ -132,7 +132,7 @@ class Auth
 		$this->ci->load->model('users/User_model', 'user_model');
 
 		// Grab the user from the db
-		$selects = 'id, email, username, users.role_id, salt, password_hash, users.role_id, users.deleted, users.active';
+		$selects = 'id, email, username, users.role_id, salt, password_hash, users.role_id, users.deleted, users.active, banned, ban_message';
 
 		if ($this->ci->settings_lib->item('auth.do_login_redirect'))
 		{
@@ -182,11 +182,11 @@ class Auth
 		// Try password
 		if (do_hash($user->salt . $password) == $user->password_hash)
 		{
-			// Do they even have permission to log in?
-			if (!$this->has_permission('Site.Signin.Allow', $user->role_id))
+			// check if the account has been banned.
+			if ($user->banned)
 			{
 				$this->increase_login_attempts($login);
-				Template::set_message(lang('us_banned_msg'), 'error');
+				Template::set_message($user->ban_message ? $user->ban_message : lang('us_banned_msg'), 'error');
 				return FALSE;
 			}
 
