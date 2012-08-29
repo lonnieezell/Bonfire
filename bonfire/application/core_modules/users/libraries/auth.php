@@ -138,7 +138,7 @@ class Auth
 			return FALSE;
 		}
 
-		$this->ci->load->model('users/User_model', 'user_model', TRUE);
+		$this->ci->load->model('users/User_model', 'user_model');
 
 		// Grab the user from the db
 		$selects = 'id, email, username, users.role_id, salt, password_hash, users.role_id, users.deleted, users.active';
@@ -690,7 +690,7 @@ class Auth
 			if (!$this->ci->session->userdata('user_id'))
 			{
 				// Grab the current user info for the session
-				$this->ci->load->model('users/User_model', 'user_model', TRUE);
+				$this->ci->load->model('users/User_model', 'user_model');
 				$user = $this->ci->user_model->select('id, username, email, password_hash, users.role_id')->find($user_id);
 
 				if (!$user) { return; }
