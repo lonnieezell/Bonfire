@@ -52,6 +52,10 @@ class Developer extends Admin_Controller
 	{
 		parent::__construct();
 
+		// restrict access - View and Manage
+		$this->auth->restrict('Bonfire.Translate.View');
+		$this->auth->restrict('Bonfire.Translate.Manage');
+
 		$this->lang->load('translate');
 
 		$this->load->helper('languages');

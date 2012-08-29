@@ -46,13 +46,14 @@ class Developer extends Admin_Controller {
         $this->auth->restrict('Site.Developer.View');
         $this->load->library('modulebuilder');
         $this->load->config('modulebuilder');
-        $this->lang->load('modulebuilder');
+        $this->lang->load('builder');
         $this->load->helper('file');
         $this->load->dbforge();
 
         $this->options = $this->config->item('modulebuilder');
 
         Template::set_block('sub_nav', 'developer/_sub_nav');
+        Template::set_block('sidebar', 'developer/sidebar');
 
     }//end __construct
 
@@ -87,10 +88,67 @@ class Developer extends Admin_Controller {
         ksort($configs);
         Template::set('modules', $configs);
         Template::set('toolbar_title', 'Manage Modules');
-        Template::render();
+        Template::render('two_left');
 
     }//end index()
 
+    //--------------------------------------------------------------------
+
+    //-------------------------------------------------------------------- 
+    // !Context Builder
+    //--------------------------------------------------------------------
+    
+    /**
+     * Displays the create a context form.
+     *
+     * @access	public
+     *
+     * @return	void
+     */
+    public function create_context() 
+    {
+    	// Load our roles for display in the form.
+    	$this->load->model('roles/role_model');
+    	$roles = $this->role_model->select('role_id, role_name')
+    							  ->find_all();
+    	Template::set('roles', $roles);
+    	
+    	// Form submittal? 
+    	if ($this->input->post('submit'))
+    	{
+    		$this->form_validation->set_rules('context_name', 'Context Name', 'required|trim|alpha_numeric|xss_clean');
+    		
+    		if ($this->form_validation->run() !== false)
+    		{
+    			/*
+    				Validated!
+    			*/
+	    		$name		= $this->input->post('context_name');
+		    	$for_roles	= $this->input->post('roles');
+		    	$migrate	= $this->input->post('migrate') == 'on' ? true : false;
+		    	
+		    	// Try to save the context, using the UI/Context helper
+		    	$this->load->library('ui/contexts');
+		    	if (Contexts::create_context($name, $for_roles, $migrate))
+		    	{
+		    		Template::set_message('Context succesfully created.', 'success');
+			    	redirect(SITE_AREA .'/developer/builder');
+		    	}
+		    	else
+		    	{
+			    	Template::set_message('Error creating Context: '. Contexts::errors(), 'error');
+		    	}
+		    }
+    	}
+    
+    	Template::set('toolbar_title', lang('mb_create_a_context'));
+    	Template::render();
+    }
+    
+    //--------------------------------------------------------------------
+
+    //--------------------------------------------------------------------
+    // !Module Builder
     //--------------------------------------------------------------------
 
     /**
@@ -100,9 +158,9 @@ class Developer extends Admin_Controller {
      *
      * @return void
      */
-    public function create($fields = 0)
+    public function create_module($fields = 0)
     {
-        Assets::add_module_js('modulebuilder', 'modulebuilder.js');
+        Assets::add_module_js('builder', 'modulebuilder.js');
 
         $this->auth->restrict('Bonfire.Modules.Add');
 
@@ -269,7 +327,7 @@ class Developer extends Admin_Controller {
                     @rmdir(module_path($module_name.'/'));
 
                     // Log the activity
-                    $this->activity_model->log_activity((integer) $this->current_user->id, lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'modulebuilder');
+                    $this->activity_model->log_activity((integer) $this->current_user->id, lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'builder');
 
                     Template::set_message('The module and associated database entries were successfully deleted.', 'success');
                 }
@@ -280,7 +338,7 @@ class Developer extends Admin_Controller {
             }//end if
         }//end if
 
-        Template::redirect(SITE_AREA .'/developer/modulebuilder');
+        Template::redirect(SITE_AREA .'/developer/builder');
 
     }//end delete()
 

@@ -48,7 +48,7 @@
 					<!-- Shortcut Menu -->
 					<div class="nav pull-right" id="shortcuts">
 					<div class="btn-group">
-						<a class="dropdown-toggle dark btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png') ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts"/></a>
+						<a class="dropdown-toggle light btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png') ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts"/></a>
 						<ul class="dropdown-menu toolbar-keys">
 								<li>
 										<div class="inner keys">
