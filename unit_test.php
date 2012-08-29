@@ -35,9 +35,40 @@ class CodeIgniterUnitTestCase extends UnitTestCase {
 	}
 
 	public function __get($var)
-    {
-		return $this->ci->$var;
-    }
+	{
+		    return $this->ci->$var;
+	}
+
+	/**
+	*    Will be true if the value is empty.
+	*    @param mixed $value           Supposedly empty value.
+	*    @param string $message        Message to display.
+	*    @return boolean               True on pass.
+	*    @access public
+	*/
+       public function assertEmpty($value, $message = '%s') {
+	   $dumper = &new SimpleDumper();
+	   $message = sprintf(
+		   $message,
+		   '[' . $dumper->describeValue($value) . '] should be empty');
+	   return $this->assertTrue(empty($value), $message);
+       }
+
+       /**
+	*    Will be true if the value is not empty.
+	*    @param mixed $value           Supposedly not empty value.
+	*    @param string $message        Message to display.
+	*    @return boolean               True on pass.
+	*    @access public
+	*/
+       public function assertNotEmpty($value, $message = '%s') {
+	   $dumper = &new SimpleDumper();
+	   $message = sprintf(
+		   $message,
+		   '[' . $dumper->describeValue($value) . '] should not be empty');
+	   return $this->assertFalse(empty($value), $message);
+       }
+
 }
 
 class CodeIgniterWebTestCase extends WebTestCase {
