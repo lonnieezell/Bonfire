@@ -1,19 +1,28 @@
-<?php
-	$cur_url = uri_string();
-	$tot = $this->uri->total_segments();
-	$last_seg = $this->uri->segment( $tot);
-
-	if( is_numeric($last_seg) ) {
-		$cur_url = str_replace('/index/'.$last_seg, '', $cur_url);
-	}
-
-?>
-
 <style>
-.faded { opacity: .60; }
-.faded:hover, .mb_show_advanced:hover, .mb_show_advanced_rules:hover{ opacity: 1; color: black;}
-.mb_show_advanced, .mb_show_advanced_rules, .container legend { cursor: pointer; }
-.mb_advanced { display: none; }
+.faded {
+	opacity: .60;
+}
+
+.faded:hover,
+.faded.faded-focus,
+.mb_show_advanced:focus,
+.mb_show_advanced:hover,
+.mb_show_advanced_rules:focus,
+.mb_show_advanced_rules:hover
+{
+	opacity: 1;
+	color: black;
+}
+
+a.mb_show_advanced_rules:hover {
+	text-decoration: none;
+}
+
+.body legend { cursor: pointer; }
+
+.mb_advanced {
+	display: none;
+}
 </style>
 
 <p class="intro"><?php e(lang('mb_create_note')) ?></p>
@@ -37,7 +46,7 @@
 <div class="admin-box">
 	<h3><?php echo $toolbar_title ?></h3>
 
-	<?php echo form_open($cur_url."/index/".$field_total."/", array('id'=>"module_form",'class'=>"form-horizontal")); ?>
+	<?php echo form_open(current_url(), array('id'=>"module_form",'class'=>"form-horizontal")); ?>
 	<div>
 		<!-- Module Details -->
 		<fieldset id="module_details">
@@ -61,21 +70,19 @@
 			</div>
 
 			<div class="control-group mb_advanced">
-				<label class="control-label block"><?php echo lang('mb_form_contexts'); ?></label>
-				<div class="controls">
+				<label class="control-label block" id="contexts_label"><?php echo lang('mb_form_contexts'); ?></label>
+				<div class="controls" aria-labelledby="contexts_label" role="group">
           <label class="checkbox" for="contexts_public">
 					<input name="contexts[]" id="contexts_public" type="checkbox" value="public" checked="checked" />
             <?php echo lang('mb_form_public'); ?>
           </label>
 
-					<div class="controls-list">
-						<?php foreach (config_item('contexts') as $context) : ?>
-							<label class="checkbox" for="contexts_<?php echo $context; ?>">
-								<input name="contexts[]" id="contexts_<?php echo $context; ?>" type="checkbox" value="<?php echo $context ?>" checked="checked" />
-								<?php echo ucwords($context) ?>
-							</label>
-						<?php endforeach; ?>
-					</div>
+					<?php foreach (config_item('contexts') as $context) : ?>
+						<label class="checkbox" for="contexts_<?php echo $context; ?>">
+							<input name="contexts[]" id="contexts_<?php echo $context; ?>" type="checkbox" value="<?php echo $context ?>" checked="checked" />
+							<?php echo ucwords($context) ?>
+						</label>
+					<?php endforeach; ?>
 				</div>
 			</div>
 
@@ -113,10 +120,10 @@
       <div class="control-group">
         <div class="controls">
           <label class="inline radio" for="db_no">
-            <input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", $field_total == 0 ? TRUE : FALSE); ?> class="radio" /> None
+            <input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox("module_db", "", TRUE); ?> class="radio" /> None
           </label>
           <label class="inline radio" for="db_create">
-            <input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox("module_db", "new", $field_total != 0 ? TRUE : FALSE); ?> class="radio" /> Create New Table
+            <input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox("module_db", "new"); ?> class="radio" /> Create New Table
           </label>
           <label class="inline radio" for="db_exists">
             <input name="module_db" id="db_exists" type="radio" value="existing" <?php echo set_checkbox("module_db", "existing"); ?> class="radio" /> Build from Existing Table
@@ -251,7 +258,7 @@
 					<?php
 					$field_num_count = count($field_numbers);
 					for($ndx=0; $ndx < $field_num_count; $ndx++): ?>
-					<a href="<?php echo site_url($cur_url."/index/{$field_numbers[$ndx]}"); ?>" <?php if ($field_numbers[$ndx] == $field_total) { echo 'class="current"'; } ?>><?php echo $field_numbers[$ndx]; ?></a><?php echo $ndx < $field_num_count - 1 ? ' | ' : '';?>
+					<a href="<?php echo site_url(SITE_AREA."/developer/builder/create_module/{$field_numbers[$ndx]}"); ?>" <?php if ($field_numbers[$ndx] == $field_total) { echo 'class="current"'; } ?>><?php echo $field_numbers[$ndx]; ?></a><?php echo $ndx < $field_num_count - 1 ? ' | ' : '';?>
 					<?php endfor; ?>
 				</div>
 			</div>
@@ -378,8 +385,8 @@
 					</div>
 
 					<div class="control-group">
-						<label class="control-label" ><?php echo lang('mb_form_rules'); ?></label>
-						<div class="controls">
+						<label class="control-label" id="validation_label<?php echo $count; ?>"><?php echo lang('mb_form_rules'); ?></label>
+						<div class="controls" aria-labelledby="validation_label<?php echo $count; ?>" role="group">
 							<?php echo form_error('cont_validation_rules'.$count.'[]'); ?>
 
 							<?php foreach ($validation_rules as $validation_rule) : ?>
@@ -390,14 +397,14 @@
 								</label>
 							</span>
 							<?php endforeach; ?>
-							<em class="mb_show_advanced_rules small"><?php echo lang('mb_form_show_more'); ?></em>
+							<a class="small mb_show_advanced_rules" href="#"><i><?php echo lang('mb_form_show_more'); ?></i></a>
 						</div>
 					</div>
 
 
 					<div class="control-group mb_advanced">
-						<label class="control-label" ><?php echo lang('mb_form_rules_limits'); ?></label>
-						<div class="controls">
+						<label class="control-label" id="validation_limit_label<?php echo $count; ?>"><?php echo lang('mb_form_rules_limits'); ?></label>
+						<div class="controls" aria-labelledby="validation_limit_label<?php echo $count; ?>" role="group">
 							<?php echo lang('mb_form_rules_limit_note'); ?>
 							<?php foreach ($validation_limits as $validation_limit) : ?>
 							<span class="faded">
