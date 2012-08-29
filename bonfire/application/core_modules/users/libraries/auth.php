@@ -129,7 +129,7 @@ class Auth
 	 *
 	 * @return bool
 	 */
-	public function login($login=NULL, $password=NULL, $remember=FALSE)
+	public function login($login, $password, $remember=FALSE)
 	{
 		if (empty($login) || empty($password))
 		{
@@ -410,17 +410,10 @@ class Auth
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function has_permission($permission = NULL, $role_id=NULL, $override = FALSE)
+	public function has_permission($permission, $role_id=NULL, $override = FALSE)
 	{
-		if (empty($permission))
-		{
-			return FALSE;
-		}
 		// move permission to lowercase for easier checking.
-		else
-		{
-			$permission = strtolower($permission);
-		}
+		$permission = strtolower($permission);
 
 		// If no role is being provided, assume it's for the current
 		// logged in user.
@@ -456,17 +449,10 @@ class Auth
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function permission_exists($permission=NULL)
+	public function permission_exists($permission)
 	{
-		if (empty($permission))
-		{
-			return FALSE;
-		}
 		// move permission to lowercase for easier checking.
-		else
-		{
-			$permission = strtolower($permission);
-		}
+		$permission = strtolower($permission);
 
 		if (!isset($this->all_perms)) {
 			$this->ci->load->model('permissions/permission_model');
@@ -482,7 +468,7 @@ class Auth
 			}
 		}
 
-		 return in_array($permission, $this->all_perms);
+		return in_array($permission, $this->all_perms);
 
 	}//end permission_exists()
 
@@ -530,7 +516,7 @@ class Auth
 
 
 	/**
-	 * Retrieves the role_name for the request role.
+	 * Retrieves the role_name for the requested role.
 	 *
 	 * @access public
 	 *
@@ -538,9 +524,9 @@ class Auth
 	 *
 	 * @return string A string with the name of the matched role.
 	 */
-	public function role_name_by_id($role_id=0)
+	public function role_name_by_id($role_id)
 	{
-		if (empty($role_id) || !is_numeric($role_id))
+		if (!is_numeric($role_id))
 		{
 			return '';
 		}
@@ -590,9 +576,9 @@ class Auth
 	 *
 	 * @return void
 	 */
-	protected function increase_login_attempts($login=NULL)
+	protected function increase_login_attempts($login)
 	{
-		if (empty($this->ip_address) || empty($login))
+		if (empty($this->ip_address))
 		{
 			return;
 		}
@@ -613,9 +599,9 @@ class Auth
 	 *
 	 * @return void
 	 */
-	protected function clear_login_attempts($login=NULL, $expires = 86400)
+	protected function clear_login_attempts($login, $expires = 86400)
 	{
-		if (empty($this->ip_address) || empty($login))
+		if (empty($this->ip_address))
 		{
 			return;
 		}
@@ -634,7 +620,7 @@ class Auth
 	/**
 	 * Get number of attempts to login occurred from given IP-address and/or login
 	 *
-	 * @param null $login (Optional) The login id to check for (email/username). If no login is passed in, it will only check against the IP Address of the current user.
+	 * @param string $login (Optional) The login id to check for (email/username). If no login is passed in, it will only check against the IP Address of the current user.
 	 *
 	 * @return int An int with the number of attempts.
 	 */
@@ -718,9 +704,9 @@ class Auth
 	 *
 	 * @return bool Whether the autologin was created or not.
 	 */
-	private function create_autologin($user_id=0, $old_token=NULL)
+	private function create_autologin($user_id, $old_token=NULL)
 	{
-		if (empty($user_id) || $this->ci->settings_lib->item('auth.allow_remember') == FALSE)
+		if ($this->ci->settings_lib->item('auth.allow_remember') == FALSE)
 		{
 			return FALSE;
 		}
@@ -825,13 +811,8 @@ class Auth
 	 *
 	 * @return bool TRUE/FALSE on success/failure.
 	 */
-	private function setup_session($user_id=0, $username='', $password_hash=NULL, $email='', $role_id=0, $remember=FALSE, $old_token=NULL,$user_name='')
+	private function setup_session($user_id, $username, $password_hash, $email, $role_id, $remember=FALSE, $old_token=NULL,$user_name='')
 	{
-
-		if (empty($user_id) || (empty($email) && empty($username)))
-		{
-			return FALSE;
-		}
 
 		// What are we using as login identity?
 		//Should I use _identity_login() and move bellow code?
@@ -955,7 +936,7 @@ if (!function_exists('has_permission'))
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	function has_permission($permission=NULL, $override = FALSE)
+	function has_permission($permission, $override = FALSE)
 	{
 		$ci =& get_instance();
 
@@ -977,13 +958,8 @@ if (!function_exists('permission_exists'))
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	function permission_exists($permission=NULL)
+	function permission_exists($permission)
 	{
-		if (empty($permission))
-		{
-			return FALSE;
-		}
-
 		$ci =& get_instance();
 
 		return $ci->auth->permission_exists($permission);
@@ -1004,7 +980,7 @@ if (!function_exists('abbrev_name'))
 	 *
 	 * @return string The First and Last name from given parameter.
 	 */
-	function abbrev_name($name = '')
+	function abbrev_name($name)
 	{
 		if (is_string($name))
 		{
