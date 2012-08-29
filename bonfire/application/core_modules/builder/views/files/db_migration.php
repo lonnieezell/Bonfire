@@ -53,8 +53,8 @@ class Migration_Install_'.$table_name.' extends Migration {
 			}
 			else
 			{
-				$constraint = "
-				'constraint' => {$escaped_constraint_val},";
+				$constraint = "'constraint' => {$escaped_constraint_val},
+				";
 			}
 			$db_migration .= $constraint;
 
