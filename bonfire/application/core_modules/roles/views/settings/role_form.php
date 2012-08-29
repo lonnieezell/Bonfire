@@ -6,7 +6,7 @@
 <?php endif; ?>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?> <?php echo isset($role) ? ': '. $role->role_name : ''; ?></h3>
+	<h3><?php echo $toolbar_title ?> <?php e(isset($role) ? ': '. $role->role_name : ''); ?></h3>
 
 	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 
@@ -91,9 +91,9 @@
 		<?php endif; ?>
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('role_save_role'); ?>" /> or <?php echo anchor(SITE_AREA .'/settings/roles', lang('bf_action_cancel')); ?>
+			<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('role_save_role'); ?>" /> or <?php echo anchor(SITE_AREA .'/settings/roles', lang('bf_action_cancel')); ?>
 			<?php if(isset($role) && $role->can_delete == 1 && has_permission('Bonfire.Roles.Delete')):?>
-			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/settings/roles/delete/'.$role->role_id); ?>" onclick="return confirm('<?php echo lang('role_delete_confirm').' '.lang('role_delete_note') ?>')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('role_delete_role'); ?></a>
+			<button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('<?php echo lang('role_delete_confirm').' '.lang('role_delete_note') ?>')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('role_delete_role'); ?></button>
 			<?php endif;?>
 		</div>
 

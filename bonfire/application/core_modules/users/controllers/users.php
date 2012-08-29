@@ -610,57 +610,6 @@ class Users extends Front_Controller
 	//--------------------------------------------------------------------
 
 	/**
-	 * Callback method to check that the email is unique
-	 *
-	 * @access public
-	 *
-	 * @param string $email The email address to check
-	 *
-	 * @return bool
-	 */
-	public function unique_email($email)
-	{
-		if ($this->user_model->is_unique('email', $email) === TRUE)
-		{
-			return TRUE;
-		}
-		else
-		{
-			$this->form_validation->set_message('unique_email', 'lang:us_email_already_used');
-			return FALSE;
-		}
-
-	}//end unique_email()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Callback method to check that the username is unique
-	 *
-	 * @access public
-	 *
-	 * @param string $username The username to check
-	 *
-	 * @return bool
-	 */
-	public function unique_username($username)
-	{
-
-		if ($this->user_model->is_unique('username', $username.',users.id') === TRUE)
-		{
-			return TRUE;
-		}
-		else
-		{
-			$this->form_validation->set_message('unique_username', 'lang:us_username_already_used');
-			return FALSE;
-		}
-
-	}//end unique_username()
-
-	//--------------------------------------------------------------------
-
-	/**
 	 * Save the user
 	 *
 	 * @access private

@@ -263,9 +263,11 @@ class Developer extends Admin_Controller {
      *
      * @return void
      */
-    public function delete($module_name='')
+    public function delete()
     {
-        if ($module_name != '')
+        $module_name = $this->input->post('module');
+
+        if (!empty($module_name))
         {
             $this->auth->restrict('Bonfire.Modules.Delete');
 
@@ -372,7 +374,7 @@ class Developer extends Admin_Controller {
         $this->form_validation->set_rules("form_error_delimiters",'Form Error Delimiters',"required|trim|xss_clean");
         $this->form_validation->set_rules("form_input_delimiters",'Form Input Delimiters',"required|trim|xss_clean");
         $this->form_validation->set_rules("module_description",'Module Description',"trim|required|xss_clean");
-        $this->form_validation->set_rules("module_name",'Module Name',"trim|required|xss_clean|callback_modulename_check");
+        $this->form_validation->set_rules("module_name",'Module Name',"trim|required|xss_clean|callback__modulename_check");
         $this->form_validation->set_rules("role_id",'Give Role Full Access',"trim|xss_clean|is_numeric");
 
         // no point doing all this checking if we don't want a table
@@ -413,7 +415,7 @@ class Developer extends Admin_Controller {
                 {
                     $name_required = 'required|';
                 }
-                $this->form_validation->set_rules("view_field_name$counter","Name $counter","trim|".$name_required."callback_no_match[$counter]|xss_clean");
+                $this->form_validation->set_rules("view_field_name$counter","Name $counter","trim|".$name_required."callback__no_match[$counter]|xss_clean");
                 $this->form_validation->set_rules("view_field_type$counter","Field Type $counter","trim|required|xss_clean|alpha");
                 $this->form_validation->set_rules("db_field_type$counter","DB Field Type $counter","trim|xss_clean|alpha");
 
@@ -612,7 +614,7 @@ class Developer extends Admin_Controller {
      *
      * @return bool
      */
-    function no_match($str, $fieldno)
+    public function _no_match($str, $fieldno)
     {
         for($counter=1; $this->field_total >= $counter; $counter++)
         {
@@ -625,7 +627,7 @@ class Developer extends Admin_Controller {
 
             if ($str == $_POST["view_field_name{$counter}"])
             {
-                $this->form_validation->set_message('no_match', "Field names ($fieldno & $counter) must be unique!");
+                $this->form_validation->set_message('_no_match', "Field names ($fieldno & $counter) must be unique!");
                 return FALSE;
             }
         }
@@ -643,7 +645,7 @@ class Developer extends Admin_Controller {
      *
      * @return  bool
      */
-    function _check_writeable()
+    public function _check_writeable()
     {
         return is_writeable($this->options['output_path']);
 
@@ -659,11 +661,11 @@ class Developer extends Admin_Controller {
      *
      * @return  bool
      */
-    public function modulename_check($str)
+    public function _modulename_check($str)
     {
         if (!preg_match("/^([A-Za-z \-]+)$/", $str))
         {
-            $this->form_validation->set_message('modulename_check', 'The %s field is not valid');
+            $this->form_validation->set_message('_modulename_check', 'The %s field is not valid');
             return FALSE;
         }
         else
@@ -671,6 +673,6 @@ class Developer extends Admin_Controller {
             return TRUE;
         }
 
-    }//end modulename_check()
+    }//end _modulename_check()
 
 }//end Developer

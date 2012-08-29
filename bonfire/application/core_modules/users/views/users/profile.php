@@ -46,14 +46,14 @@
 	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
 		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" name="display_name" value="<?php echo isset($user) ? $user->display_name : set_value('display_name') ?>" />
+			<input class="span6" type="text" name="display_name" value="<?php echo set_value('display_name', isset($user) ? $user->display_name : '') ?>" />
 		</div>
 	</div>
 
 	<div class="control-group <?php echo iif( form_error('email') , 'error') ;?>">
 		<label class="control-label required" for="email"><?php echo lang('bf_email'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" name="email" value="<?php echo isset($user) ? $user->email : set_value('email') ?>" />
+			<input class="span6" type="text" name="email" value="<?php echo set_value('email', isset($user) ? $user->email : '') ?>" />
 		</div>
 	</div>
 
@@ -61,7 +61,7 @@
 	<div class="control-group <?php echo iif( form_error('username') , 'error') ;?>">
 		<label class="control-label required" for="username"><?php echo lang('bf_username'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" name="username" value="<?php echo isset($user) ? $user->username : set_value('username') ?>" />
+			<input class="span6" type="text" name="username" value="<?php echo set_value('username', isset($user) ? $user->username : '') ?>" />
 		</div>
 	</div>
 	<?php endif; ?>
@@ -88,8 +88,8 @@
 				<select name="language" id="language" class="chzn-select">
 				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
 					<?php foreach ($languages as $language) : ?>
-						<option value="<?php echo $language ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
-							<?php echo ucfirst($language) ?>
+						<option value="<?php e($language) ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
+							<?php e(ucfirst($language)) ?>
 						</option>
 
 					<?php endforeach; ?>
@@ -120,12 +120,6 @@
 	<div class="form-actions">
 		<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?>
 		<?php echo anchor('/', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-warning"'); ?>
-
-		<?php if (isset($user) && has_permission('Site.User.Manage')) : ?>
-		<a class="btn btn-danger" id="delete-me" href="<?php echo site_url(SITE_AREA .'/settings/users/delete/'. $user->id); ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')"><i class="icon-trash icon-white">&nbsp;</i><?php echo lang('us_delete_account'); ?></a>
-
-		<?php echo lang('us_delete_account_note'); ?>
-		<?php endif; ?>
 	</div>
 	<!-- End of Form Actions -->
 
