@@ -54,11 +54,14 @@
 
 					<?php else :  ?>
 
+						<?php if ($this->settings_lib->item('auth.allow_register')) : ?>
 						<li>
 							<a href="<?php echo site_url('register');?>">
 								<?php echo lang('bf_action_register') ?>
 							</a>
 						</li>
+						<?php endif; ?>
+
 						<li>
 							<a href="<?php echo site_url('login');?>" class="login-btn">
 								<?php echo lang('bf_action_login') ?>
