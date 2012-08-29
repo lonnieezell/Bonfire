@@ -373,19 +373,21 @@ class Settings extends Admin_Controller
 		$this->load->model('users/user_model');
 		$this->load->library('emailer');
 
-		if ($this->input->post('submit')){
-			
-			//validate subject, content and recipents
+		if ($this->input->post('submit'))
+		{
+			// validate subject, content and recipients
 			$this->form_validation->set_rules('email_subject', 'Email Subject', 'required|xss_clean|trim|min_length[1]|max_length[255]');
 			$this->form_validation->set_rules('email_content', 'Email Content', 'required|trim|min_length[1]');
 			$this->form_validation->set_rules('checked','Users', 'required');
 			
-			if ($this->form_validation->run() === FALSE){
-				Template::set('email_subject',$this->security->xss_clean($this->input->post('email_subject')));
-				Template::set('email_content',$this->input->post('email_content'));
-				Template::set('checked',$this->input->post('checked'));
-			} else {
-				
+			if ($this->form_validation->run() === FALSE)
+			{
+				Template::set('email_subject', $this->security->xss_clean($this->input->post('email_subject')));
+				Template::set('email_content', $this->input->post('email_content'));
+				Template::set('checked', $this->input->post('checked'));
+			}
+			else
+			{
 				$data = array (
 					'subject'	=> $this->input->post('email_subject'),
 					'message'	=> $this->input->post('email_content'),
@@ -421,17 +423,17 @@ class Settings extends Admin_Controller
 				else
 				{
 					Template::set_message(lang('em_create_email_error') . $this->user_model->error, 'error');
-				}
-					
-			}//end of form_validation
-			
-		}
+				}//end if
+			}//end if
+		}//end if
+
 		$users = $this->user_model->find_all();
-		Template::set('users',$users);
+		Template::set('users', $users);
 		Template::set('toolbar_title', lang('em_create_email'));
-		//Template::set_block('sub_nav', 'settings/_sub_nav');
 		Template::render();
+
 	}//end create()
+
 	//--------------------------------------------------------------------
 }//end class
 
