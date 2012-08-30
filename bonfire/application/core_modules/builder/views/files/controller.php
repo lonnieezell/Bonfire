@@ -159,7 +159,7 @@ $mb_create = "
 ";
 if ($db_required != '') {
 	$mb_create .= "
-		if (\$this->input->post('submit'))
+		if (\$this->input->post('save'))
 		{
 			if (\$insert_id = \$this->save_".$module_name_lower."())
 			{
@@ -198,8 +198,6 @@ $mb_edit = "
 	*/
 	public function edit()
 	{
-		\$this->auth->restrict('{edit_permission}');
-
 		\$id = \$this->uri->segment(5);
 
 		if (empty(\$id))
@@ -210,8 +208,10 @@ $mb_edit = "
 ";
 if ($db_required != '') {
 	$mb_edit .= "
-		if (\$this->input->post('submit'))
+		if (isset(\$_POST['save']))
 		{
+			\$this->auth->restrict('{edit_permission}');
+
 			if (\$this->save_".$module_name_lower."('update', \$id))
 			{
 				// Log the activity
@@ -223,8 +223,30 @@ if ($db_required != '') {
 			{
 				Template::set_message(lang('".$module_name_lower."_edit_failure') . \$this->".$module_name_lower."_model->error, 'error');
 			}
-		}
+		}";
 
+	if (in_array('delete', $action_names)) {
+		$mb_edit .= "
+		else if (isset(\$_POST['delete']))
+		{
+			\$this->auth->restrict('{delete_permission}');
+
+			if (\$this->".$module_name_lower."_model->delete(\$id))
+			{
+				// Log the activity
+				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
+
+				Template::set_message(lang('".$module_name_lower."_delete_success'), 'success');
+
+				redirect(SITE_AREA .'/".$controller_name."/".$module_name_lower."');
+			} else
+			{
+				Template::set_message(lang('".$module_name_lower."_delete_failure') . \$this->".$module_name_lower."_model->error, 'error');
+			}
+		}";
+	}
+
+	$mb_edit .= "
 		Template::set('".$module_name_lower."', \$this->".$module_name_lower."_model->find(\$id));";
 }
 
@@ -233,48 +255,6 @@ $mb_edit .= "
 
 		Template::set('toolbar_title', lang('".$module_name_lower."_edit') . ' ".$module_name."');
 		Template::render();
-	}
-
-	//--------------------------------------------------------------------
-
-
-";
-
-//--------------------------------------------------------------------
-
-$mb_delete = "
-	/*
-		Method: delete()
-
-		Allows deleting of ".$module_name." data.
-	*/
-	public function delete()
-	{
-		\$this->auth->restrict('{delete_permission}');
-
-		\$id = \$this->uri->segment(5);
-
-		if (!empty(\$id))
-		{
-";
-if ($db_required != '') {
-	$mb_delete .= "
-			if (\$this->".$module_name_lower."_model->delete(\$id))
-			{
-				// Log the activity
-				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
-
-				Template::set_message(lang('".$module_name_lower."_delete_success'), 'success');
-			} else
-			{
-				Template::set_message(lang('".$module_name_lower."_delete_failure') . \$this->".$module_name_lower."_model->error, 'error');
-			}";
-}
-
-$mb_delete .= "
-		}
-
-		redirect(SITE_AREA .'/".$controller_name."/".$module_name_lower."');
 	}
 
 	//--------------------------------------------------------------------
@@ -465,15 +445,6 @@ if ($controller_name != $module_name_lower)
 		$body .= $mb_edit;
 
 		$body = str_replace('{edit_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Edit', $body);
-	}
-
-	//--------------------------------------------------------------------
-
-	// Delete
-
-	if (in_array('delete', $action_names))
-	{
-		$body .= $mb_delete;
 
 		$body = str_replace('{delete_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $body);
 	}

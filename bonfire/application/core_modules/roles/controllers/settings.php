@@ -95,7 +95,7 @@ class Settings extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Roles.Add');
 
-		if ($this->input->post('submit'))
+		if ($this->input->post('save'))
 		{
 			if ($this->save_role())
 			{
@@ -137,7 +137,7 @@ class Settings extends Admin_Controller
 			redirect(SITE_AREA .'/settings/roles');
 		}
 
-		if ($this->input->post('submit'))
+		if (isset($_POST['save']))
 		{
 			if ($this->save_role('update', $id))
 			{
@@ -148,6 +148,18 @@ class Settings extends Admin_Controller
 			else
 			{
 				Template::set_message('There was a problem saving the role: '. $this->role_model->error);
+			}
+		}
+		elseif (isset($_POST['delete']))
+		{
+			if ($this->role_model->delete($id))
+			{
+				Template::set_message('The Role was successfully deleted.', 'success');
+				redirect(SITE_AREA .'/settings/roles');
+			}
+			else
+			{
+				Template::set_message('We could not delete the role: '. $this->role_model->error, 'error');
 			}
 		}
 
@@ -161,42 +173,13 @@ class Settings extends Admin_Controller
 	}//end edit()
 
 	//--------------------------------------------------------------------
-
-	/**
-	 * Delete a role record from the database
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function delete()
-	{
-		$this->auth->restrict('Bonfire.Roles.Manage');
-
-		$id = (int) $this->uri->segment(5);
-
-		if (!empty($id))
-		{
-			if ($this->role_model->delete($id))
-			{
-				Template::set_message('The Role was successfully deleted.', 'success');
-			}
-			else
-			{
-				Template::set_message('We could not delete the role: '. $this->role_model->error, 'error');
-			}
-		}
-
-		redirect(SITE_AREA .'/settings/roles');
-
-	}//end delete()
-
+	// !HMVC METHODS
 	//--------------------------------------------------------------------
 
 	/**
 	 * Builds the matrix for display in the role permissions form.
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @return string The table(s) of settings, ready to be used in a form.
 	 */
@@ -288,42 +271,16 @@ class Settings extends Admin_Controller
 	//--------------------------------------------------------------------
 
 	/**
-	 * Callback function to check that the email address entered is unique
-	 *
-	 * @access public
-	 * @todo   Is this used here?
-	 *
-	 * @param string $str The email address
-	 *
-	 * @return bool
-	 */
-	public function unique_email($str)
-	{
-		if ($this->user_model->is_unique('email', $str))
-		{
-			return TRUE;
-		}
-		else
-		{
-			$this->form_validation->set_message('unique_email', 'The %s address is already in use. Please choose another.');
-			return FALSE;
-		}
-
-	}//end unique_email()
-
-	//--------------------------------------------------------------------
-
-	/**
 	 * Saves the role record to the database
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @param string $type The type of save operation (insert or edit)
 	 * @param int    $id   The record ID in the case of edit
 	 *
 	 * @return bool
 	 */
-	public function save_role($type='insert', $id=0)
+	private function save_role($type='insert', $id=0)
 	{
 		if ($type == 'insert')
 		{
@@ -347,13 +304,12 @@ class Settings extends Admin_Controller
 			return FALSE;
 		}
 
+		unset($_POST['save']);
+
 		// Grab our permissions out of the POST vars, if it's there.
 		// We'll need it later.
 		$permissions = $this->input->post('role_permissions');
 		unset($_POST['role_permissions']);
-
-		// grab the current role model name
-		$current_name = $this->role_model->find($id);
 
 		if ($type == 'insert')
 		{
@@ -394,9 +350,12 @@ class Settings extends Admin_Controller
 		}
 		else
 		{
+			// grab the current role model name
+			$current_name = $this->role_model->find($id)->role_name;
+
 			// update the permission name (did it this way for brevity on the update_where line)
 			$new_perm_name = 'Permissions.'.ucwords($this->input->post('role_name')).'.Manage';
-			$old_perm_name = 'Permissions.'.ucwords($current_name->role_name).'.Manage';
+			$old_perm_name = 'Permissions.'.ucwords($current_name).'.Manage';
 			$this->permission_model->update_where('name',$old_perm_name,array('name'=>$new_perm_name));
 		}
 
@@ -412,32 +371,6 @@ class Settings extends Admin_Controller
 	}//end save_role()
 
 	//--------------------------------------------------------------------
-
-	/**
-	 * Callback function to check that the role name is unique
-	 *
-	 * @access public
-	 *
-	 * @param string $str The role name
-	 *
-	 * @return bool
-	 */
-	public function unique_role($str)
-	{
-		if ($this->role_model->is_unique('role_name', $str))
-		{
-			return TRUE;
-		}
-		else
-		{
-			$this->form_validation->set_message('unique_role', 'The %s role is already in use. Please choose another.');
-			return FALSE;
-		}
-
-	}//end unique_role()
-
-
-	// --------------------------------------------------------------------
 
 	/**
 	 * Creates a real-time modifiable summary table of all roles and permissions

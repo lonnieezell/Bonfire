@@ -182,45 +182,16 @@ class Settings extends Admin_Controller
 	//--------------------------------------------------------------------
 
 	/**
-	 * Delete a permission record from the database
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function delete()
-	{
-		$id = $this->uri->segment(5);
-
-		if (!empty($id))
-		{
-			if ($this->permission_model->delete($id))
-			{
-				Template::set_message(lang("permissions_delete_success"), 'success');
-			}
-			else
-			{
-				Template::set_message(lang("permissions_delete_failure") . $this->permission_model->error, 'error');
-			}
-		}
-
-		redirect(SITE_AREA .'/settings/permissions');
-
-	}//end delete()
-
-	//--------------------------------------------------------------------
-
-	/**
 	 * Save the permission record to the database
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @param string $type The type of save operation (insert or edit)
 	 * @param int    $id   The record ID in the case of edit
 	 *
 	 * @return bool
 	 */
-	public function save_permissions($type='insert', $id=0)
+	private function save_permissions($type='insert', $id=0)
 	{
 
 		$this->form_validation->set_rules('name','Name','required|trim|xss_clean|max_length[30]');
@@ -230,6 +201,8 @@ class Settings extends Admin_Controller
 		{
 			return FALSE;
 		}
+
+		unset($_POST['submit']);
 
 		if ($type == 'insert')
 		{

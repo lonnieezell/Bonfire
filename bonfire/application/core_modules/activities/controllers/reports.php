@@ -209,26 +209,50 @@ class Reports extends Admin_Controller
 	 */
 	public function delete()
 	{
-		$action = $this->uri->segment(5);
-		$which  = $this->uri->segment(6);
+		$action = $this->input->post("action");
+		$which  = $this->input->post("which");
 
+		$this->_delete_activity($action, $which);
+
+		Template::redirect(SITE_AREA .'/reports/activities');
+
+	} // end delete()
+
+	//--------------------------------------------------------------------
+
+	//--------------------------------------------------------------------
+	// !PRIVATE METHODS
+	//--------------------------------------------------------------------
+
+	/**
+	 * Delete the entries in the activity log for the specified area.
+	 *
+	 * @access private
+	 *
+	 * @param string $action The area we are in
+	 * @param string $which  A specific value to match, or "all"
+	 *
+	 * @return void
+	 */
+	private function _delete_activity($action, $which)
+	{
 		// check for permission to delete this
 		$permission = str_replace('activity_', '',$action);
 		if (!has_permission('Activities.'.ucfirst($permission).'.Delete')) {
 			Template::set_message(lang('activity_restricted'), 'error');
-			Template::redirect(SITE_AREA .'/reports/activities');
+			return;
 		}
 
 		if (empty($action))
 		{
 			Template::set_message('Delete section not specified', 'error');
-			Template::redirect(SITE_AREA .'/reports/activities');
+			return;
 		}
 
 		if (empty($which))
 		{
 			Template::set_message('Delete value not specified', 'error');
-			Template::redirect(SITE_AREA .'/reports/activities');
+			return;
 		}
 
 		// different delete where statement switch
@@ -272,17 +296,7 @@ class Reports extends Admin_Controller
 			Template::set_message('Error : '.$this->activity_model->error, 'error');
 		}
 
-		// Redirecting
-		Template::redirect(SITE_AREA .'/reports/activities');
-
-	}//end delete()
-
-
-	//--------------------------------------------------------------------
-
-	//--------------------------------------------------------------------
-	// !PRIVATE METHODS
-	//--------------------------------------------------------------------
+	}//end _delete_activity()
 
 	/**
 	 * Gets all the activity based on parameters passed
@@ -294,19 +308,24 @@ class Reports extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	public function _get_activity($which='activity_user',$find_value=FALSE)
+	private function _get_activity($which='activity_user',$find_value=FALSE)
 	{
-		Template::set('filter', $this->input->post($which.'_select'));
-
-		// set a couple default variables
-		$options = array('all' => 'All');
-		$name = 'All';
-
 		// check if $find_value has anything in it
 		if ($find_value === FALSE)
 		{
 			$find_value = ($this->input->post($which.'_select') == '') ? $this->uri->segment(5) : $this->input->post($which.'_select');
 		}
+
+		if (isset($_POST['delete']))
+		{
+			$this->_delete_activity($which, $find_value);
+		}
+
+		Template::set('filter', $this->input->post($which.'_select'));
+
+		// set a couple default variables
+		$options = array('all' => 'All');
+		$name = 'All';
 
 		switch ($which)
 		{

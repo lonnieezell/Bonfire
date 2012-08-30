@@ -1013,18 +1013,6 @@ class BF_Model extends CI_Model
 			}
 		}
 
-		// Strip the 'submit' field, if set
-		if (isset($data['submit']))
-		{
-			unset($data['submit']);
-		}
-
-		// Strip the 'func' field, if set
-		if (isset($data['func']))
-		{
-			unset($data['func']);
-		}
-
 		return TRUE;
 
 	}//end _function_check()
