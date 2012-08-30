@@ -36,15 +36,6 @@ class Auth
 {
 
 	/**
-	 * An array of errors generated.
-	 *
-	 * @access public
-	 *
-	 * @var array
-	 */
-	public $errors = array();
-
-	/**
 	 * The url to redirect to on successful login.
 	 *
 	 * @access public
@@ -107,15 +98,12 @@ class Auth
 		// from other modules.
 		$this->ci->lang->load('users/users');
 
-		log_message('debug', 'Auth class initialized.');
-
-		if (!class_exists('CI_Session'))
-		{
-			$this->ci->load->library('session');
-		}
+		$this->ci->load->library('session');
 
 		// Try to log the user in from session/cookie data
 		$this->autologin();
+
+		log_message('debug', 'Auth class initialized.');
 
 	}//end __construct()
 
@@ -132,7 +120,7 @@ class Auth
 	 *
 	 * @return bool
 	 */
-	public function login($login=NULL, $password=NULL, $remember=FALSE)
+	public function login($login, $password, $remember=FALSE)
 	{
 		if (empty($login) || empty($password))
 		{
@@ -141,10 +129,7 @@ class Auth
 			return FALSE;
 		}
 
-		if (!class_exists('User_model'))
-		{
-			$this->ci->load->model('users/User_model', 'user_model', TRUE);
-		}
+		$this->ci->load->model('users/User_model', 'user_model');
 
 		// Grab the user from the db
 		$selects = 'id, email, username, users.role_id, salt, password_hash, users.role_id, users.deleted, users.active';
@@ -191,57 +176,47 @@ class Auth
 			return FALSE;
 		}
 
-		if ($user)
+		// load do_hash()
+		$this->ci->load->helper('security');
+
+		// Try password
+		if (do_hash($user->salt . $password) == $user->password_hash)
 		{
-			// Validate the password
-			if (!function_exists('do_hash'))
+			// Do they even have permission to log in?
+			if (!$this->has_permission('Site.Signin.Allow', $user->role_id))
 			{
-				$this->ci->load->helper('security');
-			}
-
-			// Try password
-			if (do_hash($user->salt . $password) == $user->password_hash)
-			{
-				// Do they even have permission to log in?
-				if (!$this->has_permission('Site.Signin.Allow', $user->role_id))
-				{
-					$this->increase_login_attempts($login);
-					Template::set_message(lang('us_banned_msg'), 'error');
-					return FALSE;
-				}
-
-				$this->clear_login_attempts($login);
-
-				// We've successfully validated the login, so setup the session
-				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', $user->username);
-
-				// Save the login info
-				$data = array(
-					'last_login'			=> date('Y-m-d H:i:s', time()),
-					'last_ip'				=> $this->ip_address,
-				);
-				$this->ci->user_model->update($user->id, $data);
-
-				$trigger_data = array('user_id'=>$user->id, 'role_id'=>$user->role_id);
-				Events::trigger('after_login', $trigger_data );
-
-				// Save our redirect location
-				$this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '';
-
-				return TRUE;
-			}
-
-			// Bad password
-			else
-			{
-				Template::set_message(lang('us_bad_email_pass'), 'error');
 				$this->increase_login_attempts($login);
+				Template::set_message(lang('us_banned_msg'), 'error');
+				return FALSE;
 			}
+
+			$this->clear_login_attempts($login);
+
+			// We've successfully validated the login, so setup the session
+			$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', $user->username);
+
+			// Save the login info
+			$data = array(
+				'last_login'			=> date('Y-m-d H:i:s', time()),
+				'last_ip'				=> $this->ip_address,
+			);
+			$this->ci->user_model->update($user->id, $data);
+
+			$trigger_data = array('user_id'=>$user->id, 'role_id'=>$user->role_id);
+			Events::trigger('after_login', $trigger_data );
+
+			// Save our redirect location
+			$this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '';
+
+			return TRUE;
 		}
+
+		// Bad password
 		else
 		{
 			Template::set_message(lang('us_bad_email_pass'), 'error');
-		}//end if
+			$this->increase_login_attempts($login);
+		}
 
 		return FALSE;
 
@@ -291,11 +266,6 @@ class Auth
 			return $this->logged_in;
 		}
 
-		if (!class_exists('CI_Session'))
-		{
-			$this->ci->load->library('session');
-		}
-
 		// Is there any session data we can use?
 		if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
 		{
@@ -304,10 +274,8 @@ class Auth
 
 			if ($user !== FALSE)
 			{
-				if (!function_exists('do_hash'))
-				{
-					$this->ci->load->helper('security');
-				}
+				// load do_hash()
+				$this->ci->load->helper('security');
 
 				// Ensure user_token is still equivalent to the SHA1 of the user_id and password_hash
 				if (do_hash($this->ci->session->userdata('user_id') . $user->password_hash) === $this->ci->session->userdata('user_token'))
@@ -433,17 +401,10 @@ class Auth
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function has_permission($permission = NULL, $role_id=NULL, $override = FALSE)
+	public function has_permission($permission, $role_id=NULL, $override = FALSE)
 	{
-		if (empty($permission))
-		{
-			return FALSE;
-		}
 		// move permission to lowercase for easier checking.
-		else
-		{
-			$permission = strtolower($permission);
-		}
+		$permission = strtolower($permission);
 
 		// If no role is being provided, assume it's for the current
 		// logged in user.
@@ -479,24 +440,14 @@ class Auth
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function permission_exists($permission=NULL)
+	public function permission_exists($permission)
 	{
-		if (empty($permission))
-		{
-			return FALSE;
-		}
 		// move permission to lowercase for easier checking.
-		else
-		{
-			$permission = strtolower($permission);
-		}
+		$permission = strtolower($permission);
 
 		if (!isset($this->all_perms)) {
-			if (!class_exists('Permissions_model'))
-			{
-				$this->ci->load->model('permissions/permission_model');
-				$this->ci->load->model('roles/role_permission_model');
-			}
+			$this->ci->load->model('permissions/permission_model');
+			$this->ci->load->model('roles/role_permission_model');
 
 			$perms = $this->ci->permission_model->find_all();
 
@@ -508,7 +459,7 @@ class Auth
 			}
 		}
 
-		 return in_array($permission, $this->all_perms);
+		return in_array($permission, $this->all_perms);
 
 	}//end permission_exists()
 
@@ -526,11 +477,8 @@ class Auth
 	 */
 	public function load_permissions($role_id=NULL)
 	{
-		if (!class_exists('Permissions_model'))
-		{
-			$this->ci->load->model('permissions/permission_model');
-			$this->ci->load->model('roles/role_permission_model');
-		}
+		$this->ci->load->model('permissions/permission_model');
+		$this->ci->load->model('roles/role_permission_model');
 
 		$perms_all = $this->ci->permission_model->find_all_by('status','active');
 		$perms = array();
@@ -559,7 +507,7 @@ class Auth
 
 
 	/**
-	 * Retrieves the role_name for the request role.
+	 * Retrieves the role_name for the requested role.
 	 *
 	 * @access public
 	 *
@@ -567,9 +515,9 @@ class Auth
 	 *
 	 * @return string A string with the name of the matched role.
 	 */
-	public function role_name_by_id($role_id=0)
+	public function role_name_by_id($role_id)
 	{
-		if (empty($role_id) || !is_numeric($role_id))
+		if (!is_numeric($role_id))
 		{
 			return '';
 		}
@@ -589,8 +537,6 @@ class Auth
 			{
 				$roles[$role->role_id] = $role->role_name;
 			}
-
-			unset($results);
 		}
 
 		// Try to return the role name
@@ -619,13 +565,8 @@ class Auth
 	 *
 	 * @return void
 	 */
-	protected function increase_login_attempts($login=NULL)
+	protected function increase_login_attempts($login)
 	{
-		if (empty($this->ip_address) || empty($login))
-		{
-			return;
-		}
-
 		$this->ci->db->insert('login_attempts', array('ip_address' => $this->ip_address, 'login' => $login));
 
 	}//end increase_login_attempts()
@@ -642,13 +583,8 @@ class Auth
 	 *
 	 * @return void
 	 */
-	protected function clear_login_attempts($login=NULL, $expires = 86400)
+	protected function clear_login_attempts($login, $expires = 86400)
 	{
-		if (empty($this->ip_address) || empty($login))
-		{
-			return;
-		}
-
 		$this->ci->db->where(array('ip_address' => $this->ip_address, 'login' => $login));
 
 		// Purge obsolete login attempts
@@ -663,7 +599,7 @@ class Auth
 	/**
 	 * Get number of attempts to login occurred from given IP-address and/or login
 	 *
-	 * @param null $login (Optional) The login id to check for (email/username). If no login is passed in, it will only check against the IP Address of the current user.
+	 * @param string $login (Optional) The login id to check for (email/username). If no login is passed in, it will only check against the IP Address of the current user.
 	 *
 	 * @return int An int with the number of attempts.
 	 */
@@ -719,7 +655,7 @@ class Auth
 			if (!$this->ci->session->userdata('user_id'))
 			{
 				// Grab the current user info for the session
-				$this->ci->load->model('users/User_model', 'user_model', TRUE);
+				$this->ci->load->model('users/User_model', 'user_model');
 				$user = $this->ci->user_model->select('id, username, email, password_hash, users.role_id')->find($user_id);
 
 				if (!$user) { return; }
@@ -727,8 +663,6 @@ class Auth
 				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, TRUE, $test_token, $user->username);
 			}
 		}
-
-		unset($query, $user);
 
 	}//end autologin()
 
@@ -747,16 +681,17 @@ class Auth
 	 *
 	 * @return bool Whether the autologin was created or not.
 	 */
-	private function create_autologin($user_id=0, $old_token=NULL)
+	private function create_autologin($user_id, $old_token=NULL)
 	{
-		if (empty($user_id) || $this->ci->settings_lib->item('auth.allow_remember') == FALSE)
+		if ($this->ci->settings_lib->item('auth.allow_remember') == FALSE)
 		{
 			return FALSE;
 		}
 
-		// Generate a random string for our token
-		if (!function_exists('random_string')) { $this->load->helper('string'); }
+		// load random_string()
+		$this->load->helper('string');
 
+		// Generate a random string for our token
 		$token = random_string('alnum', 128);
 
 		// If an old_token is presented, we're refreshing the autologin information
@@ -813,10 +748,7 @@ class Auth
 
 		// First things first.. grab the cookie so we know what row
 		// in the user_cookies table to delete.
-		if (!function_exists('delete_cookie'))
-		{
-			$this->ci->load->helper('cookie');
-		}
+		$this->ci->load->helper('cookie');
 
 		$cookie = get_cookie('autologin');
 		if ($cookie)
@@ -856,13 +788,8 @@ class Auth
 	 *
 	 * @return bool TRUE/FALSE on success/failure.
 	 */
-	private function setup_session($user_id=0, $username='', $password_hash=NULL, $email='', $role_id=0, $remember=FALSE, $old_token=NULL,$user_name='')
+	private function setup_session($user_id, $username, $password_hash, $email, $role_id, $remember=FALSE, $old_token=NULL,$user_name='')
 	{
-
-		if (empty($user_id) || (empty($email) && empty($username)))
-		{
-			return FALSE;
-		}
 
 		// What are we using as login identity?
 		//Should I use _identity_login() and move bellow code?
@@ -890,15 +817,9 @@ class Auth
 		}
 
 		// Save the user's session info
-		if (!class_exists('CI_Session'))
-		{
-			$this->ci->load->library('session');
-		}
 
-		if (!function_exists('do_hash'))
-		{
-			$this->ci->load->helper('security');
-		}
+		// load do_hash()
+		$this->ci->load->helper('security');
 
 		$data = array(
 			'user_id'		=> $user_id,
@@ -945,41 +866,6 @@ class Auth
 
 //--------------------------------------------------------------------
 
-if (!function_exists('auth_errors'))
-{
-	/**
-	 * A utility function for showing authentication errors.
-	 *
-	 * @access public
-	 *
-	 * @return string A string with a <ul> tag of any auth errors, or an empty string if no errors exist.
-	 */
-	function auth_errors()
-	{
-		$ci =& get_instance();
-
-		$errors = $ci->auth->errors;
-
-		if (count($errors))
-		{
-			$str = '<ul>';
-			foreach ($errors as $e)
-			{
-				$str .= "<li>$e</li>";
-			}
-
-			$str .= "</ul>";
-
-			return $str;
-		}
-
-		return '';
-
-	}//end auth_errors()
-}
-
-//--------------------------------------------------------------------
-
 if (!function_exists('has_permission'))
 {
 	/**
@@ -992,16 +878,11 @@ if (!function_exists('has_permission'))
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	function has_permission($permission=NULL, $override = FALSE)
+	function has_permission($permission, $override = FALSE)
 	{
 		$ci =& get_instance();
 
-		if (class_exists('Auth'))
-		{
-			return $ci->auth->has_permission($permission, NULL, $override);
-		}
-
-		return FALSE;
+		return $ci->auth->has_permission($permission, NULL, $override);
 
 	}//end has_permission()
 }
@@ -1019,21 +900,11 @@ if (!function_exists('permission_exists'))
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	function permission_exists($permission=NULL)
+	function permission_exists($permission)
 	{
-		if (empty($permission))
-		{
-			return FALSE;
-		}
-
 		$ci =& get_instance();
 
-		if (class_exists('Auth'))
-		{
-			return $ci->auth->permission_exists($permission);
-		}
-
-		return FALSE;
+		return $ci->auth->permission_exists($permission);
 
 	}//end permission_exists()
 }
@@ -1051,7 +922,7 @@ if (!function_exists('abbrev_name'))
 	 *
 	 * @return string The First and Last name from given parameter.
 	 */
-	function abbrev_name($name = '')
+	function abbrev_name($name)
 	{
 		if (is_string($name))
 		{
