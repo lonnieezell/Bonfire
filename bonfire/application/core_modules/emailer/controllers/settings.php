@@ -231,7 +231,6 @@ class Settings extends Admin_Controller
 		if (isset($_POST['action_delete']))
 		{
 			$checked = $this->input->post('checked');
-
 			if (is_array($checked) && count($checked))
 			{
 				$result = FALSE;
@@ -242,20 +241,7 @@ class Settings extends Admin_Controller
 
 				if ($result)
 				{
-					$result = FALSE;
-					foreach ($checked as $pid)
-					{
-						$result = $this->emailer_model->delete($pid);
-					}
-
-					if ($result)
-					{
-						Template::set_message(sprintf(lang('em_delete_success'), count($checked)), 'success');
-					}
-					else
-					{
-						Template::set_message(lang('em_delete_failure') . $this->emailer_model->error, 'error');
-					}
+					Template::set_message(sprintf(lang('em_delete_success'), count($checked)), 'success');
 				}
 				else
 				{

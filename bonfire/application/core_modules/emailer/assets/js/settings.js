@@ -27,12 +27,14 @@ $(document).ready(function(){
 
 		var email	= $('#test-email').val();
 		var url		= $(this).attr('action');
+        var csrf_test_name = $('input[name=csrf_test_name]').val();
 
 		$('#test-ajax').load(
 			url,
 			{
 				email: email,
-				url: url
+				url: url,
+                csrf_test_name: csrf_test_name
 			}
 		);
 	});
