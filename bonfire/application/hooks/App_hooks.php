@@ -107,7 +107,7 @@ class App_hooks
 			$this->ci->load->library('session');
 		}
 
-		if (!in_array($this->ci->uri->uri_string(), $this->ignore_pages))
+		if (!in_array($this->ci->uri->ruri_string(), $this->ignore_pages))
 		{
 			$this->ci->session->set_userdata('requested_page', current_url());
 		}
