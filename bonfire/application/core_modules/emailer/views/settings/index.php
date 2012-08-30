@@ -117,7 +117,7 @@
 			<div class="control-group">
 				<label class="control-label" for="test-email"><?php echo lang('bf_email'); ?></label>
 				<div class="controls">
-					<input type="email" name="test_email" id="test-email" value="<?php echo set_value('test_email', settings_item('site.system_email')) ?>" />
+					<input type="email" name="email" id="test-email" value="<?php echo set_value('test_email', settings_item('site.system_email')) ?>" />
 					<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('em_test_button'); ?>" />
 				</div>
 			</div>
