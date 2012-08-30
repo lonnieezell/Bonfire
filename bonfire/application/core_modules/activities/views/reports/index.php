@@ -158,7 +158,7 @@
 							<select name="which" id="activity_user_select">
 								<option value="all"><?php echo lang('activity_all_users'); ?></option>
 							<?php foreach ($users as $au) : ?>
-								<option value="<?php echo $au->id; ?>"><?phpe($au->username); ?></option>
+								<option value="<?php echo $au->id; ?>"><?php e($au->username); ?></option>
 							<?php endforeach; ?>
 							</select>
 						</label>
