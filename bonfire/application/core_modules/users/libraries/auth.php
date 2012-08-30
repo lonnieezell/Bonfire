@@ -425,7 +425,7 @@ class Auth
 		$this->load_permissions();
 		$this->load_role_permissions($role_id);
 
-		$perms = (object)$this->role_permissions;
+		$perms = (object)$this->role_permissions[$role_id];
 
 		// Did we pass?
 		if ((isset($perms->$permission) && $perms->$permission == 1) || (!in_array($permission, $this->permissions) && $override))
@@ -499,19 +499,21 @@ class Auth
 	 */
 	private function load_role_permissions($role_id=NULL)
 	{
-		if (!isset($this->role_permissions)) {
+		$role_id = !is_null($role_id) ? $role_id : $this->role_id();
+
+		if (!isset($this->role_permissions[$role_id])) {
 			$this->ci->load->model('permissions/permission_model');
 			$this->ci->load->model('roles/role_permission_model');
 
-			$role_id = !is_null($role_id) ? $role_id : $this->role_id();
-
 			$role_perms = $this->ci->role_permission_model->find_for_role($role_id);
+
+			$this->role_permissions[$role_id] = array();
 
 			if (is_array($role_perms))
 			{
 				foreach($role_perms as $key => $permission)
 				{
-					$this->role_permissions[strtolower($perms[$permission->permission_id])] = 1;
+					$this->role_permissions[$role_id][strtolower($perms[$permission->permission_id])] = 1;
 				}
 			}
 		}
