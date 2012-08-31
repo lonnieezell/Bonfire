@@ -425,15 +425,23 @@ class Auth
 		$this->load_permissions();
 		$this->load_role_permissions($role_id);
 
-		$our_perms = $this->role_permissions[$role_id];
+		// did we pass?
+		if (isset($this->permissions[$permission]))
+		{
+			$permission_id = $this->permissions[$permission];
 
-		// Did we pass?
-		if (isset($our_perms[$permission]) || ($override && !isset($this->permissions[$permission])))
+			if (isset($this->role_permissions[$role_id][$permission_id]))
+			{
+				return TRUE;
+			}
+		}
+		elseif ($override)
 		{
 			return TRUE;
 		}
 
 		return FALSE;
+
 
 	}//end has_permission()
 
@@ -511,9 +519,9 @@ class Auth
 
 			if (is_array($role_perms))
 			{
-				foreach($role_perms as $key => $permission)
+				foreach($role_perms as $permission)
 				{
-					$this->role_permissions[$role_id][strtolower($perms[$permission->permission_id])] = TRUE;
+					$this->role_permissions[$role_id][$permission->permission_id] = TRUE;
 				}
 			}
 		}
