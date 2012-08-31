@@ -63,13 +63,22 @@ class Auth
 	private $ip_address;
 
 	/**
+	 * Stores the name of all existing permissions
+	 *
+	 * @access private
+	 *
+	 * @var array
+	 */
+	private $permissions = NULL;
+
+	/**
 	 * Stores permissions by role so we don't have to scour the database more than once.
 	 *
 	 * @access private
 	 *
 	 * @var array
 	 */
-	private $perms = array();
+	private $role_permissions = array();
 
 	/**
 	 * A pointer to the CodeIgniter instance.
@@ -413,14 +422,13 @@ class Auth
 			$role_id = $this->role_id();
 		}
 
-		if (empty($this->perms)) {
-			$this->load_permissions($role_id);
-		}
+		$this->load_permissions();
+		$this->load_role_permissions($role_id);
 
-		$perms = (object)$this->perms;
+		$our_perms = $this->role_permissions[$role_id];
 
 		// Did we pass?
-		if ((isset($perms->$permission) && $perms->$permission == 1) || (!in_array($permission, $this->perm_desc) && $override))
+		if (isset($our_perms[$permission]) || ($override && !isset($this->permissions[$permission])))
 		{
 			return TRUE;
 		}
@@ -445,29 +453,16 @@ class Auth
 		// move permission to lowercase for easier checking.
 		$permission = strtolower($permission);
 
-		if (!isset($this->all_perms)) {
-			$this->ci->load->model('permissions/permission_model');
-			$this->ci->load->model('roles/role_permission_model');
+		$this->load_permissions();
 
-			$perms = $this->ci->permission_model->find_all();
-
-			$this->all_perms = array();
-
-			foreach ($perms as $perm)
-			{
-				$this->all_perms[] = strtolower($perm->name);
-			}
-		}
-
-		return in_array($permission, $this->all_perms);
+		return isset($this->permissions[$permission]);
 
 	}//end permission_exists()
 
 	//--------------------------------------------------------------------
 
-
 	/**
-	 * Load the permission details from the database into class properties
+	 * Load the permission names from the database
 	 *
 	 * @access public
 	 *
@@ -475,33 +470,55 @@ class Auth
 	 *
 	 * @return void
 	 */
-	public function load_permissions($role_id=NULL)
+	private function load_permissions()
 	{
-		$this->ci->load->model('permissions/permission_model');
-		$this->ci->load->model('roles/role_permission_model');
+		if (!isset($this->permissions)) {
+			$this->ci->load->model('permissions/permission_model');
+			$this->ci->load->model('roles/role_permission_model');
 
-		$perms_all = $this->ci->permission_model->find_all_by('status','active');
-		$perms = array();
-		foreach($perms_all as $key => $perm_details)
-		{
-			$perms[$perm_details->permission_id] = $perm_details->name;
-		}
+			$perms = $this->ci->permission_model->find_all();
 
-		$this->perm_desc = $perms;
+			$this->permissions = array();
 
-		$role_id = !is_null($role_id) ? $role_id : $this->role_id();
-
-		$role_perms = $this->ci->role_permission_model->find_for_role($role_id);
-
-		if (is_array($role_perms))
-		{
-			foreach($role_perms as $key => $permission)
+			foreach ($perms as $perm)
 			{
-				$this->perms[strtolower($perms[$permission->permission_id])] = 1;
+				$this->permissions[strtolower($perm->name)] = TRUE;
 			}
 		}
 
 	}//end load_permissions()
+
+	/**
+	 * Load the role permissions from the database
+	 *
+	 * @access public
+	 *
+	 * @param int $role_id An INT with the role id to grab permissions for.
+	 *
+	 * @return void
+	 */
+	private function load_role_permissions($role_id=NULL)
+	{
+		$role_id = !is_null($role_id) ? $role_id : $this->role_id();
+
+		if (!isset($this->role_permissions[$role_id])) {
+			$this->ci->load->model('permissions/permission_model');
+			$this->ci->load->model('roles/role_permission_model');
+
+			$role_perms = $this->ci->role_permission_model->find_for_role($role_id);
+
+			$this->role_permissions[$role_id] = array();
+
+			if (is_array($role_perms))
+			{
+				foreach($role_perms as $key => $permission)
+				{
+					$this->role_permissions[$role_id][strtolower($perms[$permission->permission_id])] = TRUE;
+				}
+			}
+		}
+
+	}//end load_role_permissions()
 
 	//--------------------------------------------------------------------
 
