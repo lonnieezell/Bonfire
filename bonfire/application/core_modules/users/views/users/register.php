@@ -71,22 +71,26 @@
 			</div>
 		</div>
 
-		<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
-			<label class="control-label required" for="language"><?php echo lang('bf_language') ?></label>
-			<div class="controls">
-				<select name="language" id="language" class="chzn-select">
-				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
-					<?php foreach ($languages as $language) : ?>
-						<option value="<?php e($language) ?>" <?php echo set_select('language', $language, config_item('language') == $language ? TRUE : FALSE) ?>>
-							<?php e(ucfirst($language)) ?>
-						</option>
+		<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
+			<?php if(count($languages) == 1): ?>
+				<input type="hidden" id="language" name="language" value="<?php echo $languages[0]; ?>">
+			<?php else: ?>
+				<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
+					<label class="control-label required" for="language"><?php echo lang('bf_language') ?></label>
+					<div class="controls">
+						<select name="language" id="language" class="chzn-select">
+						<?php foreach ($languages as $language) : ?>
+							<option value="<?php e($language) ?>" <?php echo set_select('language', $language, config_item('language') == $language ? TRUE : FALSE) ?>>
+								<?php e(ucfirst($language)) ?>
+							</option>
 
-					<?php endforeach; ?>
-				<?php endif; ?>
-				</select>
-				<?php if (form_error('language')) echo '<span class="help-inline">'. form_error('language') .'</span>'; ?>
-			</div>
-		</div>
+						<?php endforeach; ?>
+						</select>
+						<?php if (form_error('language')) echo '<span class="help-inline">'. form_error('language') .'</span>'; ?>
+					</div>
+				</div>
+			<?php endif; ?>
+		<?php endif; ?>
 
 		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
 			<label class="control-label required" for="timezones"><?php echo lang('bf_timezone') ?></label>
