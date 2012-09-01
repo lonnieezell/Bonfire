@@ -111,11 +111,11 @@ class Emailer
 	 * @access public
 	 *
 	 * @param array $data           An array of required information need to send the email.
-	 * @param bool  $queue_override If TRUE, will queue the email, no matter what the default setting is.
+	 * @param bool  $queue_override (optional) Overrides the value of $queue_emails.
 	 *
 	 * @return bool TRUE/FALSE	Whether the operation was successful or not.
 	 */
-	public function send($data=array(), $queue_override=FALSE)
+	public function send($data=array(), $queue_override=null)
 	{
 		// Make sure we have the information we need.
 		$to = isset($data['to']) ? $data['to'] : FALSE;
@@ -142,7 +142,7 @@ class Emailer
 		}
 
 		// Should we put it in the queue?
-		if ($queue_override == TRUE || $this->queue_emails == TRUE)
+		if ($queue_override === TRUE || ($queue_override !== FALSE && $this->queue_emails == TRUE))
 		{
 			return $this->queue_email($to, $from, $subject, $templated, $alt_message);
 		}
