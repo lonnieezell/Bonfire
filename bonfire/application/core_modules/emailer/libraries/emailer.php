@@ -169,7 +169,7 @@ class Emailer
 	 *
 	 * @return bool TRUE/FALSE	Whether it was successful or not.
 	 */
-	private function queue_email(&$to=null, &$from, &$subject=null, &$message=null, &$alt_message=FALSE)
+	private function queue_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE)
 	{
 		$this->ci->db->set('to_email', $to);
 		$this->ci->db->set('subject', $subject);
@@ -206,7 +206,7 @@ class Emailer
 	 *
 	 * @return bool TRUE/FALSE	Whether it was successful or not.
 	 */
-	private function send_email(&$to=null, &$from=null, &$subject=null, &$message=null, &$alt_message=FALSE)
+	private function send_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE)
 	{
 		$this->ci->load->library('email');
 		$this->ci->load->model('settings/settings_model', 'settings_model');
