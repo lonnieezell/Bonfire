@@ -335,7 +335,7 @@ class Emailer
 	 *
 	 * @param bool $show_debug TRUE/FALSE - enable/disable debugging messages
 	 */
-	public function enable_debug($show_debug=FALSE)
+	public function enable_debug($show_debug)
 	{
 		$this->debug = $show_debug;
 
@@ -346,11 +346,11 @@ class Emailer
 	/**
 	 * Specifies whether to queue emails in the send() method.
 	 *
-	 * @param bool $queue Do NOT queue emails. Instead, send them directly. Default FALSE
+	 * @param bool $queue Queue emails instead of sending them directly.
 	 *
 	 * @return void
 	 */
-	public function queue_emails($queue=FALSE)
+	public function queue_emails($queue)
 	{
 		if ($queue !== TRUE && $queue !== FALSE)
 		{
