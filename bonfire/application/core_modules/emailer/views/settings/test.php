@@ -7,12 +7,10 @@
 
 	<?php if ($results['success'] !== false) :?>
 		<div class="alert alert-info fade in">
-				<a class="close" data-dismiss="alert">&times;</a>
 			<?php echo lang('em_test_success'); ?>
 		</div>
 	<?php else : ?>
 		<div class="alert alert-warning fade in">
-		 <a class="close" data-dismiss="alert">&times;</a>
 			<?php echo lang('em_test_error'); ?>
 		</div>
 	<?php endif; ?>
