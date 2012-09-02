@@ -37,12 +37,12 @@ class Template
 	/**
 	 * Set the debug mode on the template to output messages
 	 *
-	 * @access private
+	 * @access public
 	 * @static
 	 *
 	 * @var bool
 	 */
-	private static $debug = false;
+	public static $debug = false;
 
 
 	/**
@@ -620,7 +620,6 @@ class Template
 
 	/**
 	 * Makes it easy to save information to be rendered within the views.
-	 * As of 3.0, can also set any of the class properties.
 	 *
 	 * @param string $var_name The name of the variable to set
 	 * @param mixed  $value    The value to set it to.
@@ -642,15 +641,7 @@ class Template
 		}
 		else
 		{
-			// Is it a class property?
-			if (isset(self::$$var_name))
-			{
-				self::$$var_name = $value;
-			}
-			else
-			{
-				self::$data[$var_name] = $value;
-			}
+			self::$data[$var_name] = $value;
 		}//end if
 
 	}//end set()
