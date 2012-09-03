@@ -530,6 +530,17 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
+		// Add the modified field
+		if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
+		{
+			$data[$this->modified_field] = $this->set_date();
+		}
+
+		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
+		{
+			$data[$this->modified_by_field] = $this->auth->user_id();
+		}
+
 		return $this->db->update($this->table, $data, array($field => $value));
 
 	}//end update_where()
@@ -559,6 +570,10 @@ class BF_Model extends CI_Model
 				foreach ($data as $key => $record)
 				{
 					$data[$key][$this->modified_field] = $this->set_date();
+					if ($this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data[$key]))
+					{
+						$data[$key][$this->modified_by_field] = $this->auth->user_id();
+					}
 				}
 			}
 
@@ -667,7 +682,17 @@ class BF_Model extends CI_Model
 
 		if ($this->soft_deletes === TRUE)
 		{
-			$this->db->update($this->table, array('deleted' => 1));
+			if ($this->log_user === TRUE)
+			{
+				$this->db->update($this->table, array(
+					'deleted' => 1,
+					$this->deleted_by_field => $this->auth->user_id(),
+				));
+			}
+			else
+			{
+				$this->db->update($this->table, array('deleted' => 1));
+			}
 		}
 		else
 		{
