@@ -261,6 +261,8 @@ class Emailer
 	 */
 	public function process_queue($limit=33)
 	{
+		$success = TRUE;
+
 		//$limit = 33; // 33 emails every 5 minutes = 400 emails/hour.
 		$this->ci->load->library('email');
 
@@ -313,16 +315,17 @@ class Emailer
 				$sql = "UPDATE {$prefix}email_queue SET attempts = attempts+1, last_attempt=NOW() WHERE id=". $email->id;
 				$this->ci->db->query($sql);
 
-				if (class_exists('CI_Session'))
+				if ($this->debug)
 				{
 					$result = $this->ci->email->print_debugger();
 					$this->ci->session->set_userdata('email_debug', $result);
 				}
 
+				$success = FALSE;
 			}
 		}//end foreach
 
-		return TRUE;
+		return $success;
 
 	}//end process_queue()
 

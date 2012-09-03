@@ -256,11 +256,17 @@ class Settings extends Admin_Controller
 		elseif (isset($_POST['action_force_process']))
 		{
 			$this->load->library('emailer');
+			$this->emailer->enable_debug(TRUE);
 
 			// Use ob to catch output designed for CRON only
 			ob_start();
-			$this->emailer->process_queue();
+			$success = $this->emailer->process_queue();
 			ob_end_clean();
+
+			if ( ! $success)
+			{
+				Template::set('email_debug', $this->emailer->debug_message);
+			}
 		}
 		elseif (isset($_POST['action_insert_test']))
 		{
@@ -287,13 +293,6 @@ class Settings extends Admin_Controller
 		$this->pager['uri_segment']	= 5;
 
 		$this->pagination->initialize($this->pager);
-
-		if ($debug_msg = $this->session->userdata('email_debug'))
-		{
-			Template::set('email_debug', $debug_msg);
-			$this->session->unset_userdata('email_debug');
-			unset($debug_msg);
-		}
 
 		Template::set('toolbar_title', lang('em_emailer_queue'));
 		Template::render();
