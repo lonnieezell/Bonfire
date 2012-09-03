@@ -33,15 +33,6 @@ class Developer extends Admin_Controller
 {
 
 	/**
-	 * The default language
-	 *
-	 * @access private
-	 *
-	 * @var string
-	 */
-	private $trans_lang = 'english';
-
-	/**
 	 * Array of current languages
 	 *
 	 * @var array
@@ -61,21 +52,14 @@ class Developer extends Admin_Controller
 	{
 		parent::__construct();
 
+		// restrict access - View and Manage
+		$this->auth->restrict('Bonfire.Translate.View');
+		$this->auth->restrict('Bonfire.Translate.Manage');
+
 		$this->lang->load('translate');
 
 		$this->load->helper('languages');
 		$this->langs = list_languages();
-
-		Assets::add_module_js('translate', 'translate.js');
-
-		// Which language are we translating to?
-		$this->trans_lang = $this->input->get('lang') ? $this->input->get('lang') : 'english';
-		Template::set('trans_lang', $this->trans_lang);
-
-		if (!in_array($this->trans_lang, $this->langs))
-		{
-			$this->langs[] = $this->trans_lang;
-		}
 
 		Template::set_block('sub_nav', 'developer/_sub_nav');
 
@@ -91,26 +75,26 @@ class Developer extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	public function index()
+	public function index($trans_lang='english')
 	{
+		Assets::add_module_js('translate', 'translate.js');
+
 		// Selecting a different language?
 		if ($this->input->post('select_lang'))
 		{
-			$this->trans_lang = $this->input->post('trans_lang');
+			$trans_lang = $this->input->post('trans_lang');
 
 			// Other?
-			if ($this->trans_lang == 'other')
+			if ($trans_lang == 'other')
 			{
-				$this->trans_lang = $this->input->post('new_lang');
-			}
-
-			Template::set('trans_lang', $this->trans_lang);
-
-			if (!in_array($this->trans_lang, $this->langs))
-			{
-				$this->langs[] = $this->trans_lang;
+				$trans_lang = $this->input->post('new_lang');
 			}
 		}//end if
+
+		if (!in_array($trans_lang, $this->langs))
+		{
+			$this->langs[] = $trans_lang;
+		}
 
 		$all_lang_files = list_lang_files();
 		Template::set('languages', $this->langs);
@@ -122,7 +106,8 @@ class Developer extends Admin_Controller
 			Template::set('modules', $all_lang_files['custom']);
 		}
 
-		Template::set('toolbar_title', lang('tr_translate_title') .' to '. ucfirst($this->trans_lang));
+		Template::set('trans_lang', $trans_lang);
+		Template::set('toolbar_title', lang('tr_translate_title') .' to '. ucfirst($trans_lang));
 		Template::render();
 
 	}//end index()
@@ -136,17 +121,15 @@ class Developer extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	public function edit()
+	public function edit($trans_lang='', $lang_file='')
 	{
-		$lang_file = $this->input->get('file');
-
 		// Save the file...
 		if ($lang_file && $this->input->post('submit'))
 		{
-			if (save_lang_file($lang_file, $this->trans_lang, $_POST['lang']))
+			if (save_lang_file($lang_file, $trans_lang, $_POST['lang']))
 			{
 				Template::set_message(lang('tr_save_success'), 'success');
-				redirect(SITE_AREA .'/developer/translate?lang='. $this->trans_lang);
+				redirect(SITE_AREA .'/developer/translate/index/'. $trans_lang);
 			}
 			else
 			{
@@ -158,7 +141,7 @@ class Developer extends Admin_Controller
 		if ($lang_file)
 		{
 			$orig	= load_lang_file($lang_file, 'english');
-			$new	= load_lang_file($lang_file, $this->trans_lang);
+			$new	= load_lang_file($lang_file, $trans_lang);
 
 			if (!$new)
 			{
@@ -170,7 +153,8 @@ class Developer extends Admin_Controller
 			Template::set('lang_file', $lang_file);
 		}
 
-		Template::set('toolbar_title', lang('tr_edit_title') .' to '. ucfirst($this->trans_lang) . ': '. $lang_file);
+		Template::set('trans_lang', $trans_lang);
+		Template::set('toolbar_title', lang('tr_edit_title') .' to '. ucfirst($trans_lang) . ': '. $lang_file);
 
 		Template::render();
 
@@ -179,9 +163,9 @@ class Developer extends Admin_Controller
 	//--------------------------------------------------------------------
 
 	/**
-	 * Export a set of files for a panguage
+	 * Export a set of files for a language
 	 *
-	 * @acces spublic
+	 * @access public
 	 *
 	 * @return void
 	 */

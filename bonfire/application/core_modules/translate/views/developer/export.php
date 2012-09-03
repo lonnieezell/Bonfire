@@ -7,9 +7,9 @@
 	<div class="control-group">
 		<label for="export_lang" class="control-label"><?php echo lang('tr_language') ?></label>
 		<div class="controls">
-			<select name="export_lang">
+			<select name="export_lang" id="export_lang">
 			<?php foreach ($languages as $lang) :?>
-				<option value="<?php echo $lang ?>" <?php echo isset($trans_lang) && $trans_lang == $lang ? 'selected="selected"' : '' ?>><?php echo ucfirst($lang) ?></option>
+				<option value="<?php e($lang) ?>" <?php echo isset($trans_lang) && $trans_lang == $lang ? 'selected="selected"' : '' ?>><?php e(ucfirst($lang)) ?></option>
 			<?php endforeach; ?>
 				<option value="other"><?php e(lang('tr_other')); ?></option>
 			</select>

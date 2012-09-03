@@ -78,18 +78,18 @@
 								<th style="width: 6em">Installed Version</th>
 								<th style="width: 6em">Latest Version</th>
 								<th></th>
-								<th></th>
 							</tr>
 						</thead>
 						<tbody>
 							<?php foreach ($mod_migrations as $module => $migrations) : ?>
-								<?php echo form_open(site_url(SITE_AREA .'/developer/migrations/migrate_module/'. $module), 'class="form-horizontal"'); ?>
-									<input type="hidden" name="is_module" value="1" />
 							<tr>
 								<td><?php echo ucfirst($module) ?></td>
 								<td><?php echo $migrations['installed_version'] ?></td>
 								<td><?php echo $migrations['latest_version'] ?></td>
-								<td style="width: 25em; text-align: right;">
+								<td style="width: 35em; text-align: right">
+									<?php echo form_open(site_url(SITE_AREA .'/developer/migrations/migrate_module/'. $module), 'class="form-horizontal"'); ?>
+									<input type="hidden" name="is_module" value="1" />
+
 									<select name="version">
 										<option value="uninstall">Uninstall</option>
 									<?php foreach ($migrations as $migration) : ?>
@@ -100,12 +100,11 @@
 										<?php endif;?>
 									<?php endforeach; ?>
 									</select>
-								</td>
-								<td style="width: 10em">
+
 									<input type="submit" name="submit" class="btn btn-primary" value="Migrate Module" />
+									<?php echo form_close(); ?>
 								</td>
 							</tr>
-							</form>
 							<?php endforeach; ?>
 						</tbody>
 					</table>
@@ -140,7 +139,7 @@
 						<div class="control-group">
 							<label class="control-label" for="migration"><?php echo lang('mig_choose_migration'); ?></label>
 							<div class="controls">
-								<select name="migration">
+								<select name="migration" id="migration">
 								<?php foreach ($core_migrations as $migration) :?>
 									<option value="<?php echo (int)substr($migration, 0, 3) ?>" <?php echo ((int)substr($migration, 0, 3) == $this->uri->segment(5)) ? 'selected="selected"' : '' ?>><?php echo $migration ?></option>
 								<?php endforeach; ?>
@@ -155,8 +154,9 @@
 							<p><?php echo lang('mig_no_migrations') ?></p>
 						<?php endif; ?>
 					<?php echo form_close(); ?>
-				</div>
-			</fieldset>
+				</fieldset>
+			</div>
 		</div>
+	</div>
 
 <?php endif; ?>

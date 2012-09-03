@@ -25,14 +25,17 @@ $(document).ready(function(){
 	$('#test-form').submit(function(e){
 		e.preventDefault();
 
-		var email	= $('#test-email').val();
+		// Grab all the form data, including the CodeIgniter anti-CSRF token
+		var data    = $(this).serialize();
+
+		// Submit the form by AJAX, and display the result.
 		var url		= $(this).attr('action');
 
-		$('#test-ajax').load(
+		$.post(
 			url,
-			{
-				email: email,
-				url: url
+			data,
+			function success(data) {
+				$('#test-ajax').html(data);
 			}
 		);
 	});

@@ -241,7 +241,7 @@ class Assets
 		$return = '';
 
 		//Debugging issues with media being set to 1 on module_js
-		if ( $media == '1')
+		if ($media == '1')
 		{
 			$media = 'screen';
 		}
@@ -348,11 +348,7 @@ class Assets
 	public static function combine_css($files=array(), $media='screen', $type = '')
 	{
 		// Are there any scripts to include?
-		if ($type == 'module' AND count($files) == 0)
-		{
-			return;
-		}
-		else if ($type != 'module' && count($files) == 0)
+		if (count($files) == 0)
 		{
 			return;
 		}
@@ -387,7 +383,7 @@ class Assets
 		}
 
 		//Debugging issues with media being set to 1 on module_js
-		if ( $media == '1')
+		if ($media == '1')
 		{
 			$media = 'screen';
 		}
@@ -427,7 +423,7 @@ class Assets
 		if (empty($style)) return;
 
 		//Debugging issues with media being set to 1 on module_js
-		if ( $media == '1' )
+		if ($media == '1')
 		{
 			$media = 'screen';
 		}
@@ -472,7 +468,7 @@ class Assets
 	{
 		if (empty($file_path)) return;
 
-		if ( $media == '1' )
+		if ($media == '1')
 		{
 			$media = 'screen';
 		}
@@ -722,7 +718,14 @@ class Assets
 		{
 			//Check for HTTPS or HTTP connection
 
-			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https";} else { $http_protocol = "http";}
+			if (isset($_SERVER['HTTPS']))
+			{
+				$http_protocol = "https";
+			}
+			else
+			{
+				$http_protocol = "http";
+			}
 
 			foreach ($scripts as $script)
 			{
@@ -734,7 +737,7 @@ class Assets
 				$attr = array(
 					'src'	=> (strpos($script, $http_protocol . ':') !== FALSE ||
 										strpos($script, 'http:') !== FALSE ||
-										strpos($script, 'https:') !== FALSE ) ?
+										strpos($script, 'https:') !== FALSE) ?
 
 						// It has a full url built in, so leave it alone
 						$script :
@@ -777,7 +780,7 @@ class Assets
 		$url = base_url() . self::$asset_base . '/';
 
 		// Add resource type folder if needed.
-		if ( $type !== NULL && ( array_key_exists( $type, self::$asset_folders ) ) )
+		if ($type !== NULL && (array_key_exists($type, self::$asset_folders)))
 		{
 			$url .= self::$asset_folders[$type] . '/';
 		}
@@ -1181,12 +1184,12 @@ class Assets
 
 			self::$ci->load->helper('file');
 
-			if ( !is_dir($cache_path))
+			if (!is_dir($cache_path))
 			{
 				@mkdir($cache_path);
 			}
 
-			if ( ! write_file($file_path, $asset_output))
+			if (! write_file($file_path, $asset_output))
 			{
 				return FALSE;
 			}
@@ -1260,23 +1263,29 @@ class Assets
 		{
 			// If it's an array, we're dealing with css and it has both
 			// a file and media keys. Store them for later use.
-			if ($type == '.css' && is_array($file))
+			if (is_array($file))
 			{
-				$media = $file['media'];
-				$module	= isset($file['module']) ? $file['module'] : '';
-				$file = $file['file'];
-			} else if ($type == '.js' && is_array($file))
-			{
+				if ($type == '.css')
+				{
+					$media = $file['media'];
+				}
 				$module	= isset($file['module']) ? $file['module'] : '';
 				$file = $file['file'];
 			}
 
 			// Strip out the file type for consistency
-			$file     = str_replace($type, '', $file);
-			$file_rtl = $file . '-rtl';
+			$file = str_replace($type, '', $file);
+			$rtl = 'rtl';
 
 			//Check for HTTPS or HTTP connection
-			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https";} else { $http_protocol = "http";}
+			if (isset($_SERVER['HTTPS']))
+			{
+				$http_protocol = "https";
+			}
+			else
+			{
+				$http_protocol = "http";
+			}
 
 			// If it contains an external URL, we're all done here.
 			if (strpos((string)$file, $http_protocol, 0) !== FALSE)
@@ -1290,26 +1299,20 @@ class Assets
 			// Is it a module file?
 			if (!empty($module))
 			{
-				$path = module_file_path($module, 'assets', $file . $type);
-				if ( !empty($path) && lang('bf_language_direction') == 'rtl' )
-				{
-					// looking for RTL Files
-					$path_rtl = module_file_path($module, 'assets', $file_rtl . $type);
-					if ( !empty($path_rtl) )
-						$path = $path_rtl;
-				}
-
+				$file_path_name = $file;
+				$path = module_file_path($module, 'assets', $file_path_name . $type);
 				if (empty($path))
 				{
+					$file_path_name = $clean_type . '/' . $file;
 					// Try assets/type folder
-					$path = module_file_path($module, 'assets', $clean_type .'/'. $file . $type);
-					if(!empty($path) && lang('bf_language_direction') == 'rtl')
-					{
-						$path_rtl = module_file_path($module, 'assets', $clean_type .'/'. $file_rtl . $type);
-						if ( !empty($path_rtl) )
-							$path = $path_rtl;
-					}
+					$path = module_file_path($module, 'assets', $file_path_name . $type);
+				}
 
+				if (!empty($path) && lang('bf_language_direction') == $rtl)
+				{
+					$path_rtl = module_file_path($module, 'assets', $file_path_name . '-' . $rtl . $type);
+					if (!empty($path_rtl))
+						$path = $path_rtl;
 				}
 
 				if (self::$debug)
@@ -1338,6 +1341,7 @@ class Assets
 			// Non-module files
 			else
 			{
+				$media = empty($media) ? '' : $media;
 				// We need to check all of the possible theme_paths
 				foreach ($paths as $path)
 				{
@@ -1369,47 +1373,18 @@ class Assets
 							First, check the default theme. Add it to the array. We check here first so that it
 							will get overwritten by anything in the active theme.
 						*/
-
-						if (is_file($site_path . $path .'/'. $default_theme . $file ."{$type}"))
+						if (($file_array = self::get_file_array($site_path, $path . '/' . $default_theme, $file, $type, $media)))
 						{
-							$file_path		= base_url() . $path .'/'. $default_theme . $file ."{$type}";
-							$server_path	= $site_path . $path .'/'. $default_theme . $file ."{$type}";
-							if ( lang('bf_language_direction') == 'rtl' )
-							{
-								//looking for RTL file
-								if(is_file($site_path . $path .'/'. $default_theme . $file_rtl ."{$type}"))
-								{
-									$file_path = base_url() . $path .'/'. $default_theme . $file_rtl . $type;
-									$server_path	= $site_path . $path .'/'. $default_theme . $file_rtl .$type;
-								}
-							}
-
-							$new_files[]	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
+							$new_files[] = $file_array;
 							$found = TRUE;
-
-							if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $file ."{$type}" ."</b><br/>";
 						}
 						/*
 							If it wasn't found in the default theme root folder, look in default_theme/$type/
 						*/
-						else if (is_file($site_path . $path .'/'. $default_theme . $clean_type .'/'. $file ."{$type}"))
+						else if (($file_array = self::get_file_array($site_path, $path . '/' . $default_theme . $clean_type . '/', $file, $type, $media)))
 						{
-							$file_path 		= base_url() . $path .'/'. $default_theme . $clean_type .'/'. $file ."$type";
-							$server_path	= $site_path . $path .'/'. $default_theme . $clean_type .'/'. $file ."{$type}";
-							if( lang('bf_language_direction') == 'rtl' )
-							{
-								//looking for RTL file
-								if ( is_file($site_path . $path .'/'. $default_theme . $clean_type .'/'. $file_rtl ."{$type}" ) )
-								{
-									$file_path 		= base_url() . $path .'/'. $default_theme . $clean_type .'/'. $file_rtl . $type ;
-									$server_path	= $site_path . $path .'/'. $default_theme . $clean_type .'/'. $file_rtl . $type;
-								}
-							}
-
-							$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
+							$new_files[] = $file_array;
 							$found = TRUE;
-
-							if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $default_theme . $type .'/'. $file ."{$type}" ."</b><br/>";
 						}
 					}
 
@@ -1420,45 +1395,21 @@ class Assets
 						handle simple CSS-only overrides for a theme, completely changing it's appearance
 						through a simple child css file.
 					*/
-					if (!empty($active_theme) && is_file($site_path . $path .'/'. $active_theme . $file ."{$type}"))
+					if (!empty($active_theme)) // separated this because the else if below should not run if $active_theme is empty
 					{
-						$file_path 		= base_url() . $path .'/'. $active_theme . $file . $type ;
-						$server_path	= $site_path . $path .'/'. $active_theme . $file . $type ;
-						if ( lang('bf_language_direction') == 'rtl' )
+						if (($file_array = self::get_file_array($site_path, $path . '/' . $active_theme, $file, $type, $media)))
 						{
-							//looking for RTL file
-							if(is_file($site_path . $path .'/'. $active_theme . $file_rtl . $type ) )
-							{
-								$file_path 		= base_url() . $path .'/'. $active_theme . $file_rtl . $type;
-								$server_path	= $site_path . $path .'/'. $active_theme . $file_rtl . $type;
-							}
+							$new_files[] = $file_array;
+							$found = TRUE;
 						}
-
-						$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
-						$found = TRUE;
-
-						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $active_theme . $file ."{$type}" ."</b><br/>";
-					}
-					/*
-						If it wasn't found in the active theme root folder, look in active_theme/$type/
-					*/
-					else if (is_file($site_path . $path .'/'. $active_theme . $clean_type .'/'. $file ."{$type}"))
-					{
-						$file_path 		= base_url() . $path .'/'. $active_theme . $clean_type .'/'. $file . $type ;
-						$server_path	= $site_path . $path .'/'. $active_theme . $clean_type .'/'. $file . $type ;
-						if(lang('bf_language_direction') == 'rtl')
+						/*
+							If it wasn't found in the active theme root folder, look in active_theme/$type/
+						*/
+						else if (($file_array = self::get_file_array($site_path, $path . '/' . $active_theme . $clean_type . '/', $file, $type, $media)))
 						{
-							//looking for RTL file
-							if(is_file($site_path . self::$asset_base .'/'. $clean_type .'/'. $file_rtl . $type ))
-							{
-								$file_path 		= base_url() . self::$asset_base .'/'. $clean_type .'/'. $file_rtl . $type;
-								$server_path	= $site_path . self::$asset_base .'/'. $clean_type .'/'. $file_rtl . $type;
-							}
+							$new_files[] = $file_array;
+							$found = TRUE;
 						}
-						$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
-						$found = TRUE;
-
-						if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . $path .'/'. $active_theme . $type .'/'. $file ."{$type}" ."</b><br/>";
 					}
 
 					/*
@@ -1470,23 +1421,9 @@ class Assets
 					if (!$found)
 					{
 						// Assets/type folder
-						if (is_file($site_path . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}"))
+						if (($file_array = self::get_file_array($site_path, self::$asset_base . '/' . $clean_type . '/', $file, $type, $media)))
 						{
-							$file_path 		= base_url() . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}";
-							$server_path	= $site_path . self::$asset_base .'/'. $clean_type .'/'. $file ."{$type}";
-							if ( lang('bf_language_direction') == 'rtl' )
-							{
-								//looking for RTL file
-								if ( is_file($site_path . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl . $type ) )
-								{
-								$file_path 		= base_url() . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl . $type;
-								$server_path	= $site_path . $path .'/'. $active_theme . $clean_type .'/'. $file_rtl . $type;
-								}
-							}
-
-							$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
-
-							if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . self::$asset_base .'/'. $type .'/'. $file ."{$type}" ."</b><br/>";
+							$new_files[] = $file_array;
 						}
 
 						/*
@@ -1495,23 +1432,9 @@ class Assets
 							Finally, one last check to see if it is simply under assets/. This is useful for
 							keeping collections of scripts (say, TinyMCE or MarkItUp together for easy upgrade.
 						*/
-						else if (is_file($site_path . self::$asset_base .'/'. $file ."{$type}"))
+						else if (($file_array = self::get_file_array($site_path, self::$asset_base . '/', $file, $type, $media)))
 						{
-							$file_path 		= base_url() . self::$asset_base .'/'. $file ."{$type}";
-							$server_path	= $site_path . self::$asset_base .'/'. $file ."{$type}";
-							if(lang('bf_language_direction') == 'rtl')
-							{
-								//looking for RTL file
-								if(is_file($site_path . self::$asset_base .'/'. $file_rtl . $type ))
-								{
-									$file_path 		= base_url() . self::$asset_base .'/'. $file_rtl .$type;
-									$server_path	= $site_path . self::$asset_base .'/'. $file_rtl . $type;
-								}
-							}
-
-							$new_files[] 	= isset($media) ? array('file'=>$file_path, 'media'=>$media, 'server_path'=>$server_path) : $file_path;
-
-							if (self::$debug) echo '[Assets] Found file at: <b>'. $site_path . self::$asset_base .'/'. $file ."{$type}" ."</b><br/>";
+							$new_files[] = $file_array;
 						}
 					}	// if (!$found)
 				}	// foreach ($paths as $path)
@@ -1524,6 +1447,33 @@ class Assets
 
 	//--------------------------------------------------------------------
 
+	private function get_file_array($site_path='', $path='', $file='', $type='', $media='')
+	{
+		if (empty($file) || empty($type))
+		{
+			return false;
+		}
+		$return = false;
+		$rtl = 'rtl';
+		$file_name = $path.$file;
+		if (is_file($site_path.$file_name.$type))
+		{
+			$file_path = base_url().$file_name.$type;
+			$server_path=$site_path.$file_name.$type;
+			if (lang('bf_language_direction') == $rtl)
+			{
+				if (is_file($site_path.$file_name.'-'.$rtl.$type))
+				{
+					$file_path = base_url().$file_name.'-'.$rtl.$type;
+					$server_path=$site_path.$file_name.'-'.$rtl.$type;
+				}
+			}
+			$return = empty($media) ? $file_path : array('file' => $file_path, 'media' => $media, 'server_path' => $server_path);
+
+			if (self::$debug) echo "[Assets] Found file at: <b>{$site_path}{$file_name}{$type}</b><br/>";
+		}
+		return $return;
+	}
 }//end class
 
 

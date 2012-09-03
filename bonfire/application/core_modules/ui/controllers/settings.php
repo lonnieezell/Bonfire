@@ -41,6 +41,7 @@ class Settings extends Admin_Controller
 	{
 		parent::__construct();
 
+		$this->auth->restrict('Bonfire.UI.View');
 		$this->auth->restrict('Bonfire.UI.Manage');
 		$this->lang->load('ui');
 

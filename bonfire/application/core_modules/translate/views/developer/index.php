@@ -8,7 +8,7 @@
 		
 		<select name="trans_lang" id="trans_lang">
 		<?php foreach ($languages as $lang) :?>
-			<option value="<?php echo $lang ?>" <?php echo isset($trans_lang) && $trans_lang == $lang ? 'selected="selected"' : '' ?>><?php echo ucfirst($lang) ?></option>
+			<option value="<?php e($lang) ?>" <?php echo isset($trans_lang) && $trans_lang == $lang ? 'selected="selected"' : '' ?>><?php e(ucfirst($lang)) ?></option>
 		<?php endforeach; ?>
 			<option value="other"><?php e(lang('tr_other')); ?></option>
 		</select>
@@ -29,7 +29,7 @@
 	<?php foreach ($lang_files as $file) :?>
 		<tr>
 			<td>
-				<a href="<?php echo site_url(SITE_AREA .'/developer/translate/edit?lang='. $trans_lang .'&file='. $file) ?>">
+				<a href="<?php echo site_url(SITE_AREA .'/developer/translate/edit/'. $trans_lang .'/'. $file) ?>">
 					<?php e($file); ?>
 				</a>
 			</td>
@@ -49,7 +49,7 @@
 	<?php foreach ($modules as $file) :?>
 		<tr>
 			<td>
-				<a href="<?php echo site_url(SITE_AREA .'/developer/translate/edit?lang='. $trans_lang .'&file='. $file) ?>">
+				<a href="<?php echo site_url(SITE_AREA .'/developer/translate/edit/'. $trans_lang .'/'. $file) ?>">
 					<?php e($file); ?>
 				</a>
 			</td>

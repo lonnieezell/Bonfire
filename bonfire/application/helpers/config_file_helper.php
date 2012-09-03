@@ -89,6 +89,9 @@ if ( ! function_exists('write_config'))
 	 * Saves the passed array settings into a single config file located
 	 * in the /config directory.
 	 *
+	 * The $settings passed in should be an array of key/value pairs, where
+	 * the key is the name of the config setting and the value is it's value.
+	 *
 	 * @param $file string The config file to write to.
 	 * @param $settings array An array of key/value pairs to be written to the file.
 	 * @param $module string Name of the module where the config file exists.
@@ -126,9 +129,6 @@ if ( ! function_exists('write_config'))
 			$contents = '';
 			$empty = TRUE;
 		}
-		
-		// Clean up post
-		if (isset($settings['submit'])) unset($settings['submit']);
 		
 		foreach ($settings as $name => $val)
 		{
@@ -368,9 +368,6 @@ if ( ! function_exists('write_db_config'))
 			logit('[Config_File_Helper] Invalid write_db_config PARAMETER!');
 			return FALSE;
 		}
-		
-		// Clean up post
-		if (isset($_POST['submit'])) unset($_POST['submit']);
 		
 		foreach ($settings as $env => $values)
 		{

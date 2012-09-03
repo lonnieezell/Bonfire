@@ -8,8 +8,10 @@
 		<p><b><?php echo lang('em_total_sent'); ?></b> <?php echo $total_sent ? $total_sent : '0' ?></p>
 	</div>
 	<div class="column size1of3 last-column text-right">
-		<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/force_process'); ?>" class="btn btn-primary">Process Now</a>
-		<a href="<?php echo site_url(SITE_AREA . '/settings/emailer/insert_test'); ?>" class="btn btn-warning">Insert Test Email</a>
+		<?php echo form_open($this->uri->uri_string(), array('class' => 'form-inline')); ?>
+		<input type="submit" name="action_force_process" class="btn btn-primary" value="Process Now">
+		<input type="submit" name="action_insert_test" class="btn btn-warning" value="Insert Test Email">
+		<?php echo form_close(); ?>
 	</div>
 </div>
 
@@ -39,7 +41,7 @@
 			<?php if (isset($emails) && count($emails)) : ?>
 
 				<?php echo lang('bf_with_selected') ?>
-				<button type="submit" name="action" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('em_delete_confirm'); ?>')">
+				<button type="submit" name="action_delete" id="delete-me" class="btn btn-danger" onclick="return confirm('<?php echo lang('em_delete_confirm'); ?>')">
 					<i class="icon-white icon-trash"></i> <?php echo lang('bf_action_delete') ?>
 				</button>
 
@@ -47,11 +49,8 @@
 
 			</td>
 		</tr>
-		</tfoot>
-
-		<tfoot>
 			<tr>
-				<td colspan="8" class="text-left"><?php echo $this->pagination->create_links() ?></td>
+				<td colspan="7" class="text-left"><?php echo $this->pagination->create_links() ?></td>
 			</tr>
 		</tfoot>
 		<tbody>
@@ -59,8 +58,8 @@
 			<tr>
 				<td><input type="checkbox" name="checked[]" value="<?php echo $email->id ?>" /></td>
 				<td><?php echo $email->id; ?></td>
-				<td><?php echo $email->to_email ?></td>
-				<td><?php echo $email->subject ?></td>
+				<td><?php e($email->to_email) ?></td>
+				<td><?php e($email->subject) ?></td>
 				<td class="text-center"><?php echo $email->attempts ?></td>
 				<td class="text-center"><?php echo $email->success ? lang('bf_yes') : lang('bf_no') ?></td>
 				<td class="text-center">

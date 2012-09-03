@@ -5,12 +5,10 @@
 		<thead>
 			<tr>
 				<th style="width: 150px"><b style="color: #222"><?php echo $domain_name ?></b></th>
-				<?php $index = 0; ?>
 				<?php foreach ($fields['actions'] as $action) : ?>
-					<th class="text-center" cellIndex="<?php echo $index ?>">
+					<th class="text-center">
 						<a href="#"><?php echo $action ?></a>
 					</th>
-					<?php ++$index; ?>
 				<?php endforeach; ?>
 			</tr>
 		</thead>

@@ -25,7 +25,7 @@
 			<tr>
 				<td colspan="3">
 					<?php echo lang('bf_with_selected'); ?>:
-					<input type="submit" name="submit" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>"  onclick="return confirm('<?php echo lang('logs_delete_confirm'); ?>')"/>
+					<input type="submit" name="action_delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>"  onclick="return confirm('<?php echo lang('logs_delete_confirm'); ?>')"/>
 				</td>
 			</tr>
 		</tfoot>
@@ -38,8 +38,9 @@
 				</td>
 				<td>
 					<a href="<?php e(site_url(SITE_AREA .'/developer/logs/view/'. $log)) ?>">
-						<b><?php e(date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $log)))) ); ?></b></td>
+						<b><?php e(date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $log)))) ); ?></b>
 					</a>
+				</td>
 				<td><?php e($log) ?></td>
 			</tr>
 			<?php endif; ?>
@@ -55,17 +56,18 @@
 	<!-- Purge? -->
 	<div class="admin-box">
 		<h3><?php echo lang('log_delete_button'); ?></h3>
-
 		<br/>
 
+		<?php echo form_open(); ?>
 		<div class="alert alert-warning fade in">
 			<a class="close" data-dismiss="alert">&times;</a>
 			<?php echo lang('log_delete_note'); ?>
 		</div>
 
 		<div class="form-actions">
-			<a class="btn btn-danger" href="<?php echo site_url(SITE_AREA .'/developer/logs/purge/'); ?>" onclick="return confirm('Are you sure you want to delete all log files?')"><i class="icon-white icon-trash">&nbsp;</i>&nbsp;<?php echo lang('log_delete_button'); ?></a>
+			<button type="submit" name="action_delete_all" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete all log files?')"><i class="icon-white icon-trash">&nbsp;</i>&nbsp;<?php echo lang('log_delete_button'); ?></button>
 		</div>
+		<?php echo form_close(); ?>
 	</div>
 <?php else : ?>
 

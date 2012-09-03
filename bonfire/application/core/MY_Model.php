@@ -200,10 +200,11 @@ class BF_Model extends CI_Model
 	 * Searches for a single row in the database.
 	 *
 	 * @param string $id The primary key of the record to search for.
+	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
-	 * @return mixed An object representing the db row, or FALSE.
+	 * @return mixed An object/array representing the db row, or FALSE.
 	 */
-	public function find($id='')
+	public function find($id='', $return_type = 0)
 	{
 		if ($this->_function_check($id) === FALSE)
 		{
@@ -216,7 +217,14 @@ class BF_Model extends CI_Model
 
 		if ($query->num_rows())
 		{
-			return $query->row();
+			if($return_type == 0)
+			{
+				return $query->row();
+			}
+			else
+			{
+				return $query->row_array();
+			}
 		}
 
 		return FALSE;
@@ -233,9 +241,11 @@ class BF_Model extends CI_Model
 	 * Active Record functions before calling this function, or
 	 * through method chaining with the where() method of this class.
 	 *
-	 * @return mixed An array of objects representing the results, or FALSE on failure or empty set.
+	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
+	 *
+	 * @return mixed An array of objects/arrays representing the results, or FALSE on failure or empty set.
 	 */
-	public function find_all()
+	public function find_all($return_type = 0)
 	{
 		if ($this->_function_check() === FALSE)
 		{
@@ -250,7 +260,14 @@ class BF_Model extends CI_Model
 
 		if (!empty($query) && $query->num_rows() > 0)
 		{
-			return $query->result();
+			if($return_type == 0)
+			{
+				return $query->result();
+			}
+			else
+			{
+				return $query->result_array();
+			}
 		}
 
 		$this->error = $this->lang->line('bf_model_bad_select');
@@ -267,10 +284,11 @@ class BF_Model extends CI_Model
 	 * @param mixed  $field The table field to search in.
 	 * @param mixed  $value The value that field should be.
 	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
+	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return bool|mixed An array of objects representing the results, or FALSE on failure or empty set.
 	 */
-	public function find_all_by($field=NULL, $value=NULL, $type='and')
+	public function find_all_by($field=NULL, $value=NULL, $type='and', $return_type = 0)
 	{
 		if (empty($field)) return FALSE;
 
@@ -296,7 +314,7 @@ class BF_Model extends CI_Model
 
 		$this->set_selects();
 
-		return $this->find_all();
+		return $this->find_all($return_type);
 
 	}//end find_all_by()
 
@@ -308,10 +326,11 @@ class BF_Model extends CI_Model
 	 * @param string $field Either a string or an array of fields to match against. If an array is passed it, the $value parameter is ignored since the array is expected to have key/value pairs in it.
 	 * @param string $value The value to match on the $field. Only used when $field is a string.
 	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
+	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return bool|mixed An object representing the first result returned.
 	 */
-	public function find_by($field='', $value='', $type='and')
+	public function find_by($field='', $value='', $type='and', $return_type = 0)
 	{
 		if (empty($field) || (!is_array($field) && empty($value)))
 		{
@@ -345,7 +364,14 @@ class BF_Model extends CI_Model
 
 		if ($query && $query->num_rows() > 0)
 		{
-			return $query->row();
+			if($return_type == 0)
+			{
+				return $query->row();
+			}
+			else
+			{
+				return $query->row_result();
+			}
 		}
 
 		return FALSE;
@@ -987,18 +1013,6 @@ class BF_Model extends CI_Model
 			}
 		}
 
-		// Strip the 'submit' field, if set
-		if (isset($data['submit']))
-		{
-			unset($data['submit']);
-		}
-
-		// Strip the 'func' field, if set
-		if (isset($data['func']))
-		{
-			unset($data['func']);
-		}
-
 		return TRUE;
 
 	}//end _function_check()
@@ -1068,6 +1082,19 @@ class BF_Model extends CI_Model
 		return $this->table;
 
 	}//end get_table()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Allows you to get the table primary key
+	 *
+	 * @return string $this->key (current model table primary key)
+	 */
+	public function get_key()
+	{
+		return $this->key;
+
+	}//end get_key()
 
 	//--------------------------------------------------------------------
 

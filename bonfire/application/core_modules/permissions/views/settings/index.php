@@ -18,7 +18,7 @@
 			<tfoot>
 				<?php if (isset($results) && is_array($results) && count($results)) : ?>
 				<tr>
-					<td colspan="4">
+					<td colspan="5">
 						<?php echo lang('bf_with_selected') ?>
 						<input type="submit" name="submit" class="btn btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('permissions_delete_confirm'); ?>')">
 					</td>
@@ -35,7 +35,7 @@
 					<td>
 						<input type="checkbox" name="checked[]" value="<?php echo $record['permission_id'] ?>" />
 					</td>
-					<td><?php e($record['permission_id']) ?></td>
+					<td><?php echo $record['permission_id'] ?></td>
 					<td>
 						<a href="<?php echo site_url(SITE_AREA .'/settings/permissions/edit/'. $record['permission_id']) ?>">
 							<?php echo $record['name'] ?>

@@ -25,13 +25,14 @@
 		<?php foreach ($modules as $module => $config) : ?>
 			<tr>
 				<td><?php echo $config['name'] ?></td>
-				<td><?php echo isset($config['version']) ? $config['version'] : '---'; ?></td>
-				<td><?php echo isset($config['description']) ? $config['description'] : '---'; ?></td>
-				<td><?php echo isset($config['author']) ? $config['author'] : '---'; ?></td>
+				<td><?php e(isset($config['version']) ? $config['version'] : '---'); ?></td>
+				<td><?php e(isset($config['description']) ? $config['description'] : '---'); ?></td>
+				<td><?php e(isset($config['author']) ? $config['author'] : '---'); ?></td>
 				<td>
-					<a href="<?php echo site_url(SITE_AREA .'/developer/modulebuilder/delete/'. preg_replace("/[ -]/", "_", $config['name'])); ?>" onclick="return confirm('Really delete this module and all of its files?');">
-						<?php echo lang('mb_delete') ?>
-					</a>
+					<?php echo form_open(SITE_AREA .'/developer/builder/delete'); ?>
+					<input type="hidden" name="module" value="<?php echo preg_replace("/[ -]/", "_", $config['name']); ?>">
+					<input type="submit" class="btn btn-danger" onclick="return confirm('Really delete this module and all of its files?');" value="<?php echo lang('mb_delete') ?>" />
+					<?php echo form_close(); ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>
@@ -39,7 +40,7 @@
 	</table>
 <?php else: ?>
 	<div class="alert alert-warning">
-		<p><?php e(lang('mb_no_modules')); ?> <a href="<?php echo site_url(SITE_AREA .'/developer/modulebuilder/create') ?>"><?php e(lang('mb_create_link')); ?></a></p>
+		<p><?php e(lang('mb_no_modules')); ?> <a href="<?php echo site_url(SITE_AREA .'/developer/builder/create_module') ?>"><?php e(lang('mb_create_link')); ?></a></p>
 	</div>
 
 <?php endif; ?>
