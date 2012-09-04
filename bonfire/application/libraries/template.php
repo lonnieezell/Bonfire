@@ -873,10 +873,12 @@ class Template
 						self::$ci->load->library('parser');
 					}
 					
-//					$output = self::$ci->load->_ci_load(array('_ci_path' => $view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));
+//					$output = self::$ci->load->_ci_load(array('_ci_path' => $view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));					
 
 					if (count($data) > 0)
 					{
+						$data = array_merge((array)$data,self::$ci->load->_ci_cached_vars);
+
 						$temp = array();
 						foreach($data as $key => $value)
 						{
@@ -891,8 +893,10 @@ class Template
 						$data = $temp;
 						unset($temp);
 					}
-
-					$data = (array) $data;
+					else
+					{
+						$data = self::$ci->load->_ci_cached_vars;
+					}
 
 					//$output = self::$ci->load->view($view, $data, TRUE);
 					$output = self::$ci->parser->parse($view, $data, TRUE);
@@ -983,9 +987,11 @@ class Template
 			// Grab the output of the view.
 			if (self::$parse_views === TRUE)
 			{
+
+				$data = array_merge((array)$data,self::$ci->load->_ci_cached_vars);
 				$output = self::$ci->load->_ci_load(array('_ci_path' => $view_path . $view .'.php', '_ci_vars' => $data, '_ci_return' => TRUE));
 
-				//This caused Parsing to die if parsing entire template file.
+				//Parser dies on looping, better then before but not fixed.
 				//$output = self::$ci->parser->parse($view_path.$view, $data, TRUE, TRUE);
 			} else
 			{

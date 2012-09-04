@@ -110,33 +110,36 @@ class Developer extends Admin_Controller
 
 		$result = $this->migrations->version($version, $type);
 
-		if ($result !== FALSE)
+		if ($result !== FALSE && strlen($this->migrations->error) == 0)
 		{
 			if ($result === 0)
 			{
-				Template::set_message('Successfully uninstalled module\'s migrations.', 'success');
+				Template::set_message('<h4 class="alert-heading">Successfully uninstalled module\'s migrations.</h4>', 'success');
 
 				// Log the activity
-				$this->activity_model->log_activity($this->current_user->id, 'Migrate Type: '. $type .' Uninstalled Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+				$this->activity_model->log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' Uninstalled Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 
 				redirect(SITE_AREA .'/developer/migrations');
 			}
 			else
 			{
-				Template::set_message('Successfully migrated database to version '. $result, 'success');
+				Template::set_message('<h4 class="alert-heading">Successfully migrated database to version '. $result.'</h4>', 'success');
 
 				// Log the activity
-				$this->activity_model->log_activity($this->current_user->id, 'Migrate Type: '. $type .' to Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+				$this->activity_model->log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' to Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 
 				redirect(SITE_AREA .'/developer/migrations');
 			}
 		}
 		else
 		{
-			Template::set_message('There was an error migrating the database.', 'error');
+			$msg = 'There was an error migrating the database.'; 
+			logit($msg . "\n" . $this->migrations->error, 'error');	
+			$msg = '<h4 class="alert-heading">' . $msg . '</h4><br /><strong>' . $this->migrations->error . '</strong>';			
+			Template::set_message($msg, 'error');
 		}//end if
 
-		Template::set_message('No version to migrate to.', 'error');
+		Template::set_message('<h4 class="alert-heading">No version to migrate to.</h4>', 'error');
 		redirect(SITE_AREA .'/developer/migrations');
 
 	}//end migrate_to()
@@ -188,6 +191,17 @@ class Developer extends Admin_Controller
 		if ($modules === false)
 		{
 			return false;
+		}
+
+		// Sort Module Migrations in Reverse Order instead of Randomness.
+		foreach ($modules as &$mod) 
+		{
+			if ( ! array_key_exists('migrations', $mod))
+			{
+				continue;
+			}
+
+			arsort($mod['migrations']);
 		}
 
 		foreach ($modules as $module => $migrations)
