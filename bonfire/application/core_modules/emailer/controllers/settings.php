@@ -203,9 +203,10 @@ class Settings extends Admin_Controller
 				'message'	=> lang('em_test_mail_body')
 			 );
 
-		$results = $this->emailer->send($data, FALSE);
+		$success = $this->emailer->send($data, FALSE);
 
-		Template::set('results', $results);
+		Template::set('success', $success);
+		Template::set('debug', $this->emailer->debug_message);
 		Template::render();
 
 	}//end test()

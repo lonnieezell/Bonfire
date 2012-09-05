@@ -52,6 +52,24 @@ class Emailer
 
 
 	/**
+	 * Extra information about the running of the script and the sending of an immediate email.
+	 *
+	 * @access public
+	 *
+	 * @var string
+	 */
+	public $debug_message = '';
+
+	/**
+	 * Whether to set $debug_message.
+	 *
+	 * @access private
+	 *
+	 * @var bool
+	 */
+	private $debug = FALSE;
+
+	/**
 	 * An array of errors generated during the course of the script running.
 	 *
 	 * @access public
@@ -60,16 +78,6 @@ class Emailer
 	 */
 	public $errors = array();
 
-
-	/**
-	 * A private variable for reporting extra information about the
-	 * running of the script and the sending of immediate emails.
-	 *
-	 * @access private
-	 *
-	 * @var bool
-	 */
-	private $debug = FALSE;
 
 	/**
 	 * A pointer to the CodeIgniter instance.
@@ -180,14 +188,11 @@ class Emailer
 			$this->ci->db->set('alt_message', $alt_message);
 		}
 
-		$result['success'] = $this->ci->db->insert('email_queue');
-
 		if ($this->debug)
 		{
-			$result['debug'] = lang('em_no_debug');
+			$this->debug_message = lang('em_no_debug');
 		}
-
-		return $result;
+		return $this->ci->db->insert('email_queue');
 
 	}//end queue_email
 
@@ -228,16 +233,16 @@ class Emailer
 				$this->ci->load->helper('file');
 			}
 			write_file($this->ci->config->item('log_path').str_replace(" ","_",strtolower($subject)).substr(md5($to.time()),0,8).".html",$message);
-			$result['success'] = TRUE;
+			$result = TRUE;
 		}
 		else
 		{
-			$result['success'] = $this->ci->email->send();
+			$result = $this->ci->email->send();
 		}
 
 		if ($this->debug)
 		{
-			$result['debug'] = $this->ci->email->print_debugger();
+			$this->debug_message = $this->ci->email->print_debugger();
 		}
 
 		return $result;
@@ -317,8 +322,7 @@ class Emailer
 
 				if ($this->debug)
 				{
-					$result = $this->ci->email->print_debugger();
-					$this->ci->session->set_userdata('email_debug', $result);
+					$this->debug_message = $this->ci->email->print_debugger();
 				}
 
 				$success = FALSE;
@@ -332,15 +336,15 @@ class Emailer
 	//--------------------------------------------------------------------
 
 	/**
-	 * Tells the emailer lib to show or hide the debugger string.
+	 * Tells the emailer lib whether to generate debugging messages.
 	 *
 	 * @access public
 	 *
-	 * @param bool $show_debug TRUE/FALSE - enable/disable debugging messages
+	 * @param bool $enable_debug TRUE/FALSE - enable/disable debugging messages
 	 */
-	public function enable_debug($show_debug)
+	public function enable_debug($enable_debug)
 	{
-		$this->debug = $show_debug;
+		$this->debug = $enable_debug;
 
 	}//end enable_debug()
 
