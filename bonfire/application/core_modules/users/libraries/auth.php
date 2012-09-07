@@ -583,6 +583,10 @@ class Auth
 		}
 		else
 		{
+			if (! class_exists('Role_model'))
+			{
+				$this->ci->load->model('roles/role_model');
+			}
 			$results = $this->ci->role_model->select('role_id, role_name')->find_all();
 
 			foreach ($results as $role)
