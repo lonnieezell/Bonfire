@@ -111,11 +111,11 @@ class Emailer
 	 * @access public
 	 *
 	 * @param array $data           An array of required information need to send the email.
-	 * @param bool  $queue_override If TRUE, will queue the email, no matter what the default setting is.
+	 * @param bool  $queue_override (optional) Overrides the value of $queue_emails.
 	 *
 	 * @return bool TRUE/FALSE	Whether the operation was successful or not.
 	 */
-	public function send($data=array(), $queue_override=FALSE)
+	public function send($data=array(), $queue_override=null)
 	{
 		// Make sure we have the information we need.
 		$to = isset($data['to']) ? $data['to'] : FALSE;
@@ -142,7 +142,7 @@ class Emailer
 		}
 
 		// Should we put it in the queue?
-		if ($queue_override == TRUE || $this->queue_emails == TRUE)
+		if ($queue_override === TRUE || ($queue_override !== FALSE && $this->queue_emails == TRUE))
 		{
 			return $this->queue_email($to, $from, $subject, $templated, $alt_message);
 		}
@@ -169,7 +169,7 @@ class Emailer
 	 *
 	 * @return bool TRUE/FALSE	Whether it was successful or not.
 	 */
-	private function queue_email(&$to=null, &$from, &$subject=null, &$message=null, &$alt_message=FALSE)
+	private function queue_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE)
 	{
 		$this->ci->db->set('to_email', $to);
 		$this->ci->db->set('subject', $subject);
@@ -206,7 +206,7 @@ class Emailer
 	 *
 	 * @return bool TRUE/FALSE	Whether it was successful or not.
 	 */
-	private function send_email(&$to=null, &$from=null, &$subject=null, &$message=null, &$alt_message=FALSE)
+	private function send_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE)
 	{
 		$this->ci->load->library('email');
 		$this->ci->load->model('settings/settings_model', 'settings_model');
@@ -335,7 +335,7 @@ class Emailer
 	 *
 	 * @param bool $show_debug TRUE/FALSE - enable/disable debugging messages
 	 */
-	public function enable_debug($show_debug=FALSE)
+	public function enable_debug($show_debug)
 	{
 		$this->debug = $show_debug;
 
@@ -346,11 +346,11 @@ class Emailer
 	/**
 	 * Specifies whether to queue emails in the send() method.
 	 *
-	 * @param bool $queue Do NOT queue emails. Instead, send them directly. Default FALSE
+	 * @param bool $queue Queue emails instead of sending them directly.
 	 *
 	 * @return void
 	 */
-	public function queue_emails($queue=FALSE)
+	public function queue_emails($queue)
 	{
 		if ($queue !== TRUE && $queue !== FALSE)
 		{
