@@ -1000,6 +1000,10 @@ class Assets
 
 		delete_files($cache_path);
 
+		//Write the index.html file back in
+		$indexhtml_data = '<html><head><title>403 Forbidden</title></head><body><p>Directory access is forbidden.</p></body></html>';
+		write_file($cache_path.'/index.html', $indexhtml_data);
+
 	}//end clear_cache()
 
 	//--------------------------------------------------------------------
