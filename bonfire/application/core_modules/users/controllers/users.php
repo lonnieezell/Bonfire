@@ -807,7 +807,7 @@ class Users extends Front_Controller
 		{
 			if (isset($_POST['submit']))
 			{
-				$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|xss_clean');
+				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|xss_clean');
 
 				if ($this->form_validation->run() === FALSE)
 				{

@@ -73,32 +73,25 @@ $mb_index = "
 if ($db_required != '') {
 	$mb_index .= "
 		// Deleting anything?
-		if (\$action = \$this->input->post('delete'))
+		if (isset(\$_POST['delete']))
 		{
-			if (\$action == 'Delete')
+			\$checked = \$this->input->post('checked');
+
+			if (is_array(\$checked) && count(\$checked))
 			{
-				\$checked = \$this->input->post('checked');
-
-				if (is_array(\$checked) && count(\$checked))
+				\$result = FALSE;
+				foreach (\$checked as \$pid)
 				{
-					\$result = FALSE;
-					foreach (\$checked as \$pid)
-					{
-						\$result = \$this->".$module_name_lower."_model->delete(\$pid);
-					}
+					\$result = \$this->".$module_name_lower."_model->delete(\$pid);
+				}
 
-					if (\$result)
-					{
-						Template::set_message(count(\$checked) .' '. lang('".$module_name_lower."_delete_success'), 'success');
-					}
-					else
-					{
-						Template::set_message(lang('".$module_name_lower."_delete_failure') . \$this->".$module_name_lower."_model->error, 'error');
-					}
+				if (\$result)
+				{
+					Template::set_message(count(\$checked) .' '. lang('".$module_name_lower."_delete_success'), 'success');
 				}
 				else
 				{
-					Template::set_message(lang('".$module_name_lower."_delete_error') . \$this->".$module_name_lower."_model->error, 'error');
+					Template::set_message(lang('".$module_name_lower."_delete_failure') . \$this->".$module_name_lower."_model->error, 'error');
 				}
 			}
 		}

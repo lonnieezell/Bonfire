@@ -18,7 +18,7 @@
 				<th><?php echo lang('mb_table_version'); ?></th>
 				<th><?php echo lang('mb_table_description'); ?></th>
 				<th><?php echo lang('mb_table_author'); ?></th>
-				<th><?php echo lang('mb_actions'); ?></th>
+				<th><?php echo lang('bf_actions'); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -31,7 +31,7 @@
 				<td>
 					<?php echo form_open(SITE_AREA .'/developer/builder/delete'); ?>
 					<input type="hidden" name="module" value="<?php echo preg_replace("/[ -]/", "_", $config['name']); ?>">
-					<input type="submit" class="btn btn-danger" onclick="return confirm('Really delete this module and all of its files?');" value="<?php echo lang('mb_delete') ?>" />
+					<input type="submit" class="btn btn-danger" onclick="return confirm('Really delete this module and all of its files?');" value="<?php echo lang('bf_action_delete') ?>" />
 					<?php echo form_close(); ?>
 				</td>
 			</tr>

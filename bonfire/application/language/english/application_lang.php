@@ -137,7 +137,6 @@ $lang['bf_password_show_labels']	    = 'Display password validation labels';
 
 $lang['bf_user']				= 'User';
 $lang['bf_users']				= 'Users';
-$lang['bf_username']			= 'Username';
 $lang['bf_description']			= 'Description';
 $lang['bf_email']				= 'Email';
 $lang['bf_user_settings']		= 'My Profile';
