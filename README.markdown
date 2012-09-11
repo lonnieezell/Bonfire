@@ -11,15 +11,16 @@ All wrapped up in an elegant interface that will make you proud when you hand th
 ## Current Features
 
 - Very flexible template/theme system, capable of Wordpress-like parent/child themes.
+- Uses Twitter Bootstrap for the Admin and Default themes
 - Fully modular and built around HMVC
 - 4 ‘contexts’ ready for your code: Content, Reports, Settings and Developer Tools
 - Database backup and maintenance interface
 - Role-based access control
 - Built-in users/auth system
-- Module Builder with CRUD generation
+- Code Builder with CRUD generation
 - Simple email queue system
 - 2-step installer
-- Ready for Reactor’s multiple-environment config files. (database settings already use it.)
+- Uses multiple-environment config files.
 - Migration-ready (using either raw SQL or Database Forge commands)
 - Log view/maintenance
 
@@ -46,3 +47,5 @@ The Bonfire Team is made up from developers around the world interested in makin
 - [Lonnie Ezell](http://lonnieezell.com) - Lead Developer
 - [Sean Downey](https://github.com/seandowney)
 - [Shawn Crigger](https://github.com/svizion)
+- [Alan Jenkins](https://github.com/sourcejedi)
+- [Mat Whitney](https://github.com/mwhitneysdsu)
