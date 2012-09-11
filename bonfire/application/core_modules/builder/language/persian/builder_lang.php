@@ -23,12 +23,10 @@
 //Translator: Sajjad Servatjoo <sajjad.servatjoo[at]gmail[dot]com>
 
 // INDEX page
-$lang['mb_actions']				= 'عمليات';
 $lang['mb_create_button']		= 'ايجاد افزونه';
 $lang['mb_create_link']			= 'ایجاد افزونه جدید';
 $lang['mb_create_note']			= 'جهت ساخت افزونه ي خود ميتوانيد از افزونه ساز ما استفاده کنيد. تمام فايل هاي مورد نياز به صورت اتوماتيک توليد خواهند شد.';
 $lang['mb_not_writeable_note']	= 'خطا: پوشه ي bonfire/modules قابل نوشتن نمي باشد.';
-$lang['mb_delete']				= 'حذف';
 $lang['mb_generic_description']	= 'توضيحات را اينجا وارد کنيد.';
 $lang['mb_installed_head']		= 'افزونه هاي نصب شده';
 $lang['mb_module']				= 'افزونه';

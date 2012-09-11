@@ -41,7 +41,7 @@
 
 		<div class="form-actions">
 			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('permissions_save');?>" /> or 
-			<?php echo anchor(SITE_AREA .'/settings/permissions', lang('permissions_cancel')); ?>
+			<?php echo anchor(SITE_AREA .'/settings/permissions', lang('bf_cancel')); ?>
 		</div>
 
 	</fieldset>
