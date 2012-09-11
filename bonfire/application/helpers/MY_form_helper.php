@@ -325,16 +325,12 @@ if ( ! function_exists('form_dropdown'))
 	 */
 	function form_dropdown($data, $options=array(), $selected='', $label='', $extra='', $tooltip = '')
 	{
-		$defaults = array('name' => (( ! is_array($data)) ? $data : ''));
-
-		// If name is empty at this point, try to grab it from the $data array
-		if (empty($defaults['name']) && is_array($data) && isset($data['name']))
+		if (! is_array($data))
 		{
-			$defaults['name'] = $data['name'];
-			unset($data['name']);
+			$data = array('name' => $data);
 		}
 
-		$output = _parse_form_attributes($data, $defaults);
+		$output = _parse_form_attributes($data, array());
 
 		if ( ! is_array($selected))
 		{
@@ -381,17 +377,17 @@ if ( ! function_exists('form_dropdown'))
 
 		if (function_exists('form_error'))
 		{
-			if (form_error($defaults['name']))
+			if (form_error($data['name']))
 			{
 				$error   = ' error';
-				$tooltip = '<span class="help-inline">' . form_error($defaults['name']) . '</span>' . PHP_EOL;
+				$tooltip = '<span class="help-inline">' . form_error($data['name']) . '</span>' . PHP_EOL;
 			}
 		}
 
 		$output = <<<EOL
 
 <div class="control-group {$error}">
-	<label class="control-label" for="{$defaults['name']}">{$label}</label>
+	<label class="control-label" for="{$data['name']}">{$label}</label>
 	<div class="controls">
 		 <select {$output} {$extra}>
 			{$options_vals}
