@@ -20,7 +20,7 @@
 				<tr>
 					<td colspan="5">
 						<?php echo lang('bf_with_selected') ?>
-						<input type="submit" name="submit" class="btn btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('permissions_delete_confirm'); ?>')">
+						<input type="submit" name="delete" class="btn btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('permissions_delete_confirm'); ?>')">
 					</td>
 				</tr>
 				<?php endif;?>

@@ -65,33 +65,30 @@ class Settings extends Admin_Controller
 	function index()
 	{
 		// Deleting anything?
-		if ($action = $this->input->post('submit'))
+		if (isset($_POST['delete']))
 		{
-			if ($action == 'Delete')
+			$checked = $this->input->post('checked');
+
+			if (is_array($checked) && count($checked))
 			{
-				$checked = $this->input->post('checked');
-
-				if (is_array($checked) && count($checked))
+				$result = FALSE;
+				foreach ($checked as $pid)
 				{
-					$result = FALSE;
-					foreach ($checked as $pid)
-					{
-						$result = $this->permission_model->delete($pid);
-					}
+					$result = $this->permission_model->delete($pid);
+				}
 
-					if ($result)
-					{
-						Template::set_message(count($checked) .' '. lang('permissions_deleted') .'.', 'success');
-					}
-					else
-					{
-						Template::set_message(lang('permissions_del_failure') . $this->permission_model->error, 'error');
-					}
+				if ($result)
+				{
+					Template::set_message(count($checked) .' '. lang('permissions_deleted') .'.', 'success');
 				}
 				else
 				{
-					Template::set_message(lang('permissions_del_error') . $this->permission_model->error, 'error');
+					Template::set_message(lang('permissions_del_failure') . $this->permission_model->error, 'error');
 				}
+			}
+			else
+			{
+				Template::set_message(lang('permissions_del_error') . $this->permission_model->error, 'error');
 			}
 		}//end if
 
