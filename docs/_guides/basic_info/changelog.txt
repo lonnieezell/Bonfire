@@ -1,5 +1,23 @@
 Topic: Changelog
 
+Version 0.6
+
+Additions:
+- Major UI Upgrade to use Twitter Bootstrap
+- Application and other settings are moved into the DB
+- Renaming Module Builder to Code Builder
+- Adding Context creation UI to Code Builder
+- Many security improvements
+- Many User Profile improvements including password strength and email verification
+- Language preferences
+- Cleanup of permissions
+- Language Translation UI
+- Custom User Fields
+- More Keyboard Shortcuts
+- Installer improvements
+- Many other bug fixes and improvements
+
+
 Version 0.5.2
 
 Additions:
@@ -152,7 +170,7 @@ Enhancements:
 - Migrations have been separated so that the core Bonfire migrations are separate from the app-specific migrations.
 - Each module can maintain it's own set of migrations.
 - Modules can have a settings array that allows for drop-down menus, custom names, and more. Added module_config() method to application helper.
-- Initial translation to Portuguese. 
+- Initial translation to Portuguese.
 - Bonfire core database migrations moved to migrations/core/ to remove conflicts between your app and Bonfire.
 - Roles can now be set as deletable or not in the UI. New Permission: Bonfire.Roles.Delete to use to check if the role is allowed to delete other roles.
 - Improved the installer - user brought to the install page if the app hasn't been installed already, allows user to choose which environment is being installed, tries to set the file and folder permissions.
@@ -160,7 +178,7 @@ Enhancements:
 - Adding activity log when saving the App settings
 - Moved site, update and email based config settings into the new settings database table - this removed the need for the config/email.php
 
-Bugs: 
+Bugs:
 - Upgraded to the latest version of head.js to fix a bug where AJAX page loads were not working in FF3 and IE.
 - Misc. bugfixes in the install routine that should allow for smooth installation in a larger number of cases.
 - Deleted users can now be restored.

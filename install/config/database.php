@@ -37,10 +37,10 @@
 | The $active_record variables lets you determine whether or not to load
 | the active record class
 */
- 
+
 $active_group = 'default';
 $active_record = TRUE;
- 
+
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = '';
 $db['default']['password'] = '';
@@ -56,7 +56,7 @@ $db['default']['dbcollat'] = 'utf8_general_ci';
 $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = TRUE;
- 
- 
+
+
 /* End of file database.php */
 /* Location: ./application/config/database.php */

@@ -1,66 +1,81 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
+// ------------------------------------------------------------------------
 
-class App_hooks {
+/**
+ * Application Hooks
+ *
+ * This class provides a set of methods used for the CodeIgniter hooks.
+ * http://www.codeigniter.com/user_guide/general/hooks.html
+ *
+ * @package    Bonfire
+ * @subpackage Hooks
+ * @category   Hooks
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/core/hooks.html
+ *
+ */
+class App_hooks
+{
 
+
+	/**
+	 * Stores the CodeIgniter core object.
+	 *
+	 * @access private
+	 *
+	 * @var object
+	 */
 	private $ci;
-	
-	private $ignore_pages = array('login', 'logout');
-	
+
+	/**
+	 * List of pages where the hooks are not run.
+	 *
+	 * @access private
+	 *
+	 * @var array
+	 */
+	private $ignore_pages = array('login', 'logout', 'register', 'forgot_password', 'activate', 'resend_activation', 'images');
+
 	//--------------------------------------------------------------------
-	
-	public function __construct() 
+
+
+	/**
+	 * Costructor
+	 */
+	public function __construct()
 	{
 		$this->ci =& get_instance();
-	}
-	
+	}//end __construct()
+
 	//--------------------------------------------------------------------
-	
-	
+
+
 	/**
 	 * Stores the name of the current uri in the session as 'previous_page'.
 	 * This allows redirects to take us back to the previous page without
 	 * relying on inconsistent browser support or spoofing.
-	 * 
-	 * @access	public
-	 * @return	void
+	 *
+	 * Called by the "post_controller" hook.
+	 *
+	 * @access public
+	 *
+	 * @return void
 	 */
-	public function prep_redirect() 
-	{
-		if (!class_exists('CI_Session'))
-		{
-			$this->ci->load->library('session');
-		}
-	
-		if (!in_array($this->ci->uri->uri_string(), $this->ignore_pages))
-		{
-			$this->ci->session->set_userdata('previous_page', current_url()); 
-		}
-	}
-	
-	//--------------------------------------------------------------------
-
-	public function save_requested() 
+	public function prep_redirect()
 	{
 		if (!class_exists('CI_Session'))
 		{
@@ -69,16 +84,50 @@ class App_hooks {
 
 		if (!in_array($this->ci->uri->uri_string(), $this->ignore_pages))
 		{
-			$this->ci->session->set_userdata('requested_page', current_url()); 
+			$this->ci->session->set_userdata('previous_page', current_url());
 		}
-	}
-	
+	}//end prep_redirect()
+
 	//--------------------------------------------------------------------
-	
-	
-	public function check_site_status() 
+
+	/**
+	 * Store the requested page in the session data so we can use it
+	 * after the user logs in.
+	 *
+	 * Called by the "pre_controller" hook.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function save_requested()
 	{
-//		if ($this->ci->config->item('site.status') == 0)
+		if (!class_exists('CI_Session'))
+		{
+			$this->ci->load->library('session');
+		}
+
+		if (!in_array($this->ci->uri->ruri_string(), $this->ignore_pages))
+		{
+			$this->ci->session->set_userdata('requested_page', current_url());
+		}
+	}//end save_requested()
+
+	//--------------------------------------------------------------------
+
+
+	/**
+	 * Check the online/offline status of the site.
+	 *
+	 * Called by the "post_controller_constructor" hook.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 *
+	 */
+	public function check_site_status()
+	{
 		if ($this->ci->settings_lib->item('site.status') == 0)
 		{
 			if (!class_exists('Auth'))
@@ -92,10 +141,8 @@ class App_hooks {
 				die();
 			}
 		}
-	}
-	
-	//--------------------------------------------------------------------
-	
-}
+	}//end check_site_status()
 
-// End App_hooks class
+	//--------------------------------------------------------------------
+
+}//end class

@@ -44,7 +44,7 @@ class Migration_Permission_system_upgrade extends Migration {
 		}
 
 		// modify the permissions table
-		$this->dbforge->rename_table($prefix.'permissions', $prefix.'permissions_old');
+		$this->dbforge->rename_table('permissions', 'permissions_old');
 		
 		$fields = array(
 						'permission_id' => array(

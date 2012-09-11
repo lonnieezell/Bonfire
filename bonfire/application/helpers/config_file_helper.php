@@ -1,37 +1,33 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2012, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
-/*
-	File: Config File Helper
-	
-	Functions to aid in reading and saving config items to and from
-	configuration files. 
-	
-	The config files are expected to be found in the APPPATH .'/config' folder.
-	It does not currently work within modules.
-	
-	Author:
-		Lonnie Ezell
+/**
+ * Config File Helpers
+ *
+ * Functions to aid in reading and saving config items to and from
+ * configuration files.
+ *
+ * The config files are expected to be found in the APPPATH .'/config' folder.
+ * It does not currently work within modules.
+ *
+ * @package    Bonfire
+ * @subpackage Helpers
+ * @category   Helpers
+ * @author     Bonfire Dev Team
+ * @link       http://guides.cibonfire.com/helpers/config_file_helpers.html
+ *
  */
 
 if ( ! function_exists('read_config'))
@@ -41,10 +37,10 @@ if ( ! function_exists('read_config'))
 	 * config file.
 	 *
 	 * @param $file string The config file to read.
-	 * @param $fail_gracefully boolean Whether to show errors or simply return false.
+	 * @param $fail_gracefully boolean Whether to show errors or simply return FALSE.
 	 * @param $module string Name of the module where the config file exists.
 	 *
-	 * @return array An array of settings, or false on failure (when $fail_gracefully = true).
+	 * @return array An array of settings, or FALSE on failure (when $fail_gracefully = TRUE).
 	 */
 	function read_config($file, $fail_gracefully = TRUE, $module = '') 
 	{
@@ -83,7 +79,8 @@ if ( ! function_exists('read_config'))
 		}
 		
 		return $config;
-	}
+		
+	}//end read_config()
 }
 
 if ( ! function_exists('write_config'))
@@ -91,6 +88,9 @@ if ( ! function_exists('write_config'))
 	/**
 	 * Saves the passed array settings into a single config file located
 	 * in the /config directory.
+	 *
+	 * The $settings passed in should be an array of key/value pairs, where
+	 * the key is the name of the config setting and the value is it's value.
 	 *
 	 * @param $file string The config file to write to.
 	 * @param $settings array An array of key/value pairs to be written to the file.
@@ -102,7 +102,7 @@ if ( ! function_exists('write_config'))
 	{
 		if (empty($file) || !is_array($settings	))
 		{
-			return false;
+			return FALSE;
 		}
 				
 		$config_file = 'config/'.$file;
@@ -122,16 +122,13 @@ if ( ! function_exists('write_config'))
 		if (is_file($config_file . EXT))
 		{
 			$contents = file_get_contents($config_file.EXT);
-			$empty = false;
+			$empty = FALSE;
 		}
 		else 
 		{
 			$contents = '';
-			$empty = true;
+			$empty = TRUE;
 		}
-		
-		// Clean up post
-		if (isset($settings['submit'])) unset($settings['submit']);
 		
 		foreach ($settings as $name => $val)
 		{
@@ -171,7 +168,7 @@ if ( ! function_exists('write_config'))
 		$source = $config_file.EXT;	
 		$dest = $module == '' ? APPPATH . 'archives/config/'.$file.EXT.'.bak' : $config_file.EXT.'.bak';
 	
-		if ($empty === false) copy($source, $dest);
+		if ($empty === FALSE) copy($source, $dest);
 		
 		// Make sure the file still has the php opening header in it...
 		if (strpos($contents, '<?php') === FALSE)
@@ -190,11 +187,14 @@ if ( ! function_exists('write_config'))
 		
 		if ($result === FALSE)
 		{
-			return false;
-		} else {
-			return true;
+			return FALSE;
 		}
-	}
+		else
+		{
+			return TRUE;
+		}
+		
+	}//end write_config()
 }
 
 if ( ! function_exists('config_array_output'))
@@ -211,7 +211,7 @@ if ( ! function_exists('config_array_output'))
 	{
 		if (!is_array($array))
 		{
-			return false;
+			return FALSE;
 		}
 		
 		$tval  = 'array(';
@@ -251,7 +251,8 @@ if ( ! function_exists('config_array_output'))
 		$tval .= ')';
 			
 		return $tval;
-	}
+
+	}//end config_array_output()
 }
 
 if ( ! function_exists('read_db_config'))
@@ -260,11 +261,11 @@ if ( ! function_exists('read_db_config'))
 	 * Retrieves the config/database.php file settings. Plays nice with CodeIgniter 2.0's
 	 * multiple environment support.
 	 *
-	 * @param $environment string (Optional) The envinroment to get. If empty, will return all environments.
+	 * @param $environment string (Optional) The environment to get. If empty, will return all environments.
 	 * @param $new_db string (Optional) Returns an new db config array with parameter as $db active_group name.
-	 * @param $fail_gracefully boolean Whether to halt on errors or simply return false.
+	 * @param $fail_gracefully boolean Whether to halt on errors or simply return FALSE.
 	 *
-	 * @return array|false An array of database settings or abrupt failure (when $fail_gracefully == FALSE)
+	 * @return array|FALSE An array of database settings or abrupt failure (when $fail_gracefully == FALSE)
 	 */
 	function read_db_config($environment=null, $new_db = NULL, $fail_gracefully = TRUE)
 	{
@@ -279,7 +280,8 @@ if ( ! function_exists('read_db_config'))
 			$files['development']	= 'development/database';
 			$files['testing']		= 'testing/database';
 			$files['production']	= 'production/database';
-		} else 
+		}
+		else
 		{
 			$files[$environment]	= "$environment/database";
 		}
@@ -291,10 +293,10 @@ if ( ! function_exists('read_db_config'))
 			{
 				include(APPPATH.'config/'.$file.EXT);
 			}
-			else if ($fail_gracefully === FALSE)
-				{
-					show_error('The configuration file '.$file.EXT.' does not exist.');
-				}
+			elseif ($fail_gracefully === FALSE)
+			{
+				show_error('The configuration file '.$file.EXT.' does not exist.');
+			}
 		
 			//Acts as a reseter for given environment and active_group
 			if (empty($db) && ($new_db !== NULL)) 
@@ -334,7 +336,8 @@ if ( ! function_exists('read_db_config'))
 		unset($files);
 		
 		return $settings;
-	}	
+
+	}//end read_db_config()
 }
 
 if ( ! function_exists('write_db_config'))
@@ -363,15 +366,12 @@ if ( ! function_exists('write_db_config'))
 		if (!is_array($settings	))
 		{
 			logit('[Config_File_Helper] Invalid write_db_config PARAMETER!');
-			return false;
+			return FALSE;
 		}
-		
-		// Clean up post
-		if (isset($_POST['submit'])) unset($_POST['submit']);
 		
 		foreach ($settings as $env => $values)
 		{
-			if (strpos($env, '/') === false)
+			if (strpos($env, '/') === FALSE)
 			{
 				$env .= '/';
 			}
@@ -397,8 +397,8 @@ if ( ! function_exists('write_db_config'))
 				{
 					// Convert on/off to TRUE/FALSE values
 					//$value = strtolower($value);
-					if (strtolower($value) == 'on' || strtolower($value) == 'yes' || strtolower($value) == 'true') $value = 'TRUE';
-					if (strtolower($value) == 'on' || strtolower($value) == 'no' || strtolower($value) == 'false') $value = 'FALSE';
+					if (strtolower($value) == 'on' || strtolower($value) == 'yes' || strtolower($value) == 'TRUE') $value = 'TRUE';
+					if (strtolower($value) == 'on' || strtolower($value) == 'no' || strtolower($value) == 'FALSE') $value = 'FALSE';
 				
 					if ($value != 'TRUE' && $value != 'FALSE')
 					{
@@ -422,7 +422,7 @@ if ( ! function_exists('write_db_config'))
 				// Make sure our directory exists
 				if (!is_dir($dest_folder))
 				{
-					mkdir($dest_folder, 0755, true);
+					mkdir($dest_folder, 0755, TRUE);
 				}
 				
 				copy($source, $dest);
@@ -442,5 +442,6 @@ if ( ! function_exists('write_db_config'))
 		}
 		
 		return $result;
-	}	
+
+	}//end write_db_config()
 }

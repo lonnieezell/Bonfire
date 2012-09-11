@@ -1,1 +1,1 @@
-<?php echo $email->message; ?>
+<?php e($email->message); ?>

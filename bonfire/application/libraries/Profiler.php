@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
+ * @copyright	Copyright © 2008 - 2011, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -49,6 +49,8 @@ class CI_Profiler {
 										'userdata'
 										);
 	protected $_sections = array();		// Stores _compile_x() results 
+	
+	protected $_time_format = 'ms';		// Benchmark time format for display - either 'sec' or 'ms'.
 
 	// --------------------------------------------------------------------
 
@@ -121,7 +123,14 @@ class CI_Profiler {
 			{
 				if (isset($this->CI->benchmark->marker[$match[1].'_end']) AND isset($this->CI->benchmark->marker[$match[1].'_start']))
 				{
-					$profile[$match[1]] = $this->CI->benchmark->elapsed_time($match[1].'_start', $key);
+					$time = $this->CI->benchmark->elapsed_time($match[1].'_start', $key);
+				
+					if ($this->_time_format == 'ms')
+					{
+						$time = round($time * 1000) .' ms';
+					}
+				
+					$profile[$match[1]] = $time;
 				}
 			}
 		}
@@ -149,7 +158,6 @@ class CI_Profiler {
 	{
 		$dbs = array();
 		$output = array();
-		$output['duplicates'] = 0;
 
 		// Let's determine which databases are currently connected to
 		foreach (get_object_vars($this->CI) as $CI_object)
@@ -164,12 +172,8 @@ class CI_Profiler {
 		{
 			return $this->CI->lang->line('profiler_no_db');
 		}
-
-		// Load the text helper so we can highlight the SQL
-		$this->CI->load->helper('text');
-
-		// Key words we want bolded
-		$highlight = array('SELECT', 'DISTINCT', 'FROM', 'WHERE', 'AND', 'LEFT&nbsp;JOIN', 'ORDER&nbsp;BY', 'GROUP&nbsp;BY', 'LIMIT', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'OR&nbsp;', 'HAVING', 'OFFSET', 'NOT&nbsp;IN', 'IN', 'LIKE', 'NOT&nbsp;LIKE', 'COUNT', 'MAX', 'MIN', 'ON', 'AS', 'AVG', 'SUM', '(', ')');
+		
+				$highlight = array('SELECT', 'DISTINCT', 'FROM', 'WHERE', 'AND', 'LEFT&nbsp;JOIN', 'ORDER&nbsp;BY', 'GROUP&nbsp;BY', 'LIMIT', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'OR&nbsp;', 'HAVING', 'OFFSET', 'NOT&nbsp;IN', ' IN', 'LIKE', 'NOT&nbsp;LIKE', 'COUNT', 'MAX', 'MIN', ' ON', 'AS', 'AVG', 'SUM', '(', ')');
 
 		foreach ($dbs as $db)
 		{
@@ -179,49 +183,50 @@ class CI_Profiler {
 			}
 			else
 			{
+				$total = 0; // total query time
 				$counts = array_count_values($db->queries);
 				
-				/*
-				echo '<pre>';
-				print_r($db->queries);
-				die(print_r($counts));
-				*/
-				
 				foreach ($db->queries as $key => $val)
-				{	
-					// duplicates?
-					if ($counts[$val] > 1)
-					{	
-						$output['duplicates']++;
-						$duplicate = true;
-					} else
-					{
-						$duplicate = false;
-					}
+				{
+					$duplicate = false;
 				
 					$time = number_format($db->query_times[$key], 4);
+					
 					$query = $duplicate ? '<span class="ci-profiler-duplicate">'. $val .'</span>' : $val;
 					
-					// Explain the query, but make sure it isn't a subquery (breaks profiler)
-					$explain = (strpos($val, 'SELECT') !== false && strpos($val, '=(SELECT') === false) ? $this->CI->db->query('EXPLAIN '. $val) : null;
+					$explain = strpos($val, 'SELECT') !== false ? $this->CI->db->query('EXPLAIN '. $val) : NULL;
 					if (!is_null($explain))
 					{
 						$query .= $this->build_sql_explain($explain->row(), $time);
 					}
 					
-					$output[] = $query;
+					$total += $db->query_times[$key];
+					
+					foreach ($highlight as $bold)
+					{
+						$query = str_replace($bold, '<b>'. $bold .'</b>', $query);
+					}
+					
+					$output[] = array(
+						'query' => $query,
+						'time'	=> $time
+					);
 				}
+				
+				$total = number_format($total, 4);
+				$output[][$total] = 'Total Query Execution Time';
 			}
 
 		}
-
+//die('<pre>' .print_r($output, true));
 		return $output;
 	}
-	
-	//--------------------------------------------------------------------
-	
-	private function build_sql_explain($data, $time)
-	{	
+
+
+	// --------------------------------------------------------------------
+
+	public function build_sql_explain($data, $time) 
+	{
 		$output = '<span class="ci-profiler-db-explain">';
 		
 		$output .= 'Speed: <em>'. $time .'</em>';
@@ -235,9 +240,9 @@ class CI_Profiler {
 		
 		return $output;
 	}
-
-
-	// --------------------------------------------------------------------
+	
+	//--------------------------------------------------------------------
+	
 
 	/**
 	 * Compile $_GET Data
@@ -452,8 +457,6 @@ class CI_Profiler {
 			}
 		}
 		
-		//echo '<pre>'; print_r($logs); echo '</pre>';
-		
 		return $logs;
 	}
 	
@@ -463,24 +466,28 @@ class CI_Profiler {
 	{
 		$output = array();
 	
-		$compiled_userdata = $this->CI->session->all_userdata();
+		if (FALSE !== $this->CI->load->is_loaded('session')) 
+		{
 		
-		if (count($compiled_userdata))
-		{		
-			foreach ($compiled_userdata as $key => $val)
-			{
-				if (is_numeric($key))
+			$compiled_userdata = $this->CI->session->all_userdata();
+
+			if (count($compiled_userdata))
+			{		
+				foreach ($compiled_userdata as $key => $val)
 				{
-					$output[$key] = "'$val'";
-				}
-				
-				if (is_array($val))
-				{
-					$output[$key] = htmlspecialchars(stripslashes(print_r($val, true)));
-				}
-				else
-				{
-					$output[$key] = htmlspecialchars(stripslashes($val));
+					if (is_numeric($key))
+					{
+						$output[$key] = "'$val'";
+					}
+
+					if (is_array($val))
+					{
+						$output[$key] = htmlspecialchars(stripslashes(print_r($val, true)));
+					}
+					else
+					{
+						$output[$key] = htmlspecialchars(stripslashes($val));
+					}
 				}
 			}
 		}
@@ -501,9 +508,10 @@ class CI_Profiler {
 		foreach ($sizes as $sizestring) {
 	       	if ($size < 1024) { break; }
 	           if ($sizestring != $lastsizestring) { $size /= 1024; }
-	       }
-	       if ($sizestring == $sizes[0]) { $retstring = '%01d %s'; } // Bytes aren't normally fractional
-	       return sprintf($retstring, $size, $sizestring);
+		}
+		
+		if ($sizestring == $sizes[0]) { $retstring = '%01d %s'; } // Bytes aren't normally fractional
+		return sprintf($retstring, $size, $sizestring);
 	}
 	
 	//--------------------------------------------------------------------
@@ -524,6 +532,7 @@ class CI_Profiler {
 			if ($this->_compile_{$section} !== FALSE)
 			{
 				$func = "_compile_{$section}";
+				if ($section == 'http_headers') $section = 'headers';
 				$this->_sections[$section] = $this->{$func}();
 				$fields_displayed++;				
 			}
@@ -532,18 +541,17 @@ class CI_Profiler {
 		// Has the user created an override in application/views?
 		if (is_file(APPPATH .'views/profiler_template'.EXT))
 		{
-			$output = $this->CI->load->view('profiler_template', array('sections' => $this->_sections), true);
+			$output = $this->CI->load->view('profiler_template', array('sections' => $this->_sections, 'cip_time_format' => $this->_time_format), true);
 		}
 		else
 		{
 			// Load the view from system/views
 			$orig_view_path = $this->CI->load->_ci_view_path;
 			$this->CI->load->_ci_view_path = BASEPATH .'views/';
-			//echo $this->CI->load->_ci_view_path;
 
 			$output = $this->CI->load->_ci_load(array(
 					'_ci_view' 		=> 'profiler_template', 
-					'_ci_vars' 		=> array('sections' => $this->_sections), 
+					'_ci_vars' 		=> array('sections' => $this->_sections, 'cip_time_format' => $this->_time_format), 
 					'_ci_return'	=> true,
 			));
 		

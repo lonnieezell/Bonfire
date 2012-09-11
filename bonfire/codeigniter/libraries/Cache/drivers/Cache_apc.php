@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2006 - 2011 EllisLab, Inc.
+ * @copyright	Copyright (c) 2006 - 2012 EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 2.0
@@ -25,7 +25,7 @@
  * @link		
  */
 
-class Cache_apc extends CI_Driver {
+class CI_Cache_apc extends CI_Driver {
 
 	/**
 	 * Get 
@@ -132,7 +132,7 @@ class Cache_apc extends CI_Driver {
 	 */
 	public function is_supported()
 	{
-		if ( ! extension_loaded('apc') OR ! function_exists('apc_store'))
+		if ( ! extension_loaded('apc') OR ini_get('apc.enabled') != "1")
 		{
 			log_message('error', 'The APC PHP extension must be loaded to use APC Cache.');
 			return FALSE;

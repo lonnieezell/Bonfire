@@ -50,18 +50,21 @@ if ( ! function_exists('site_url'))
 
 /**
  * Base URL
- *
- * Returns the "base_url" item from your config file
+ * 
+ * Create a local URL based on your basepath.
+ * Segments can be passed in as a string or an array, same as site_url
+ * or a URL to a file can be passed in, e.g. to an image file.
  *
  * @access	public
+ * @param string
  * @return	string
  */
 if ( ! function_exists('base_url'))
 {
-	function base_url()
+	function base_url($uri = '')
 	{
 		$CI =& get_instance();
-		return $CI->config->slash_item('base_url');
+		return $CI->config->base_url($uri);
 	}
 }
 
@@ -463,39 +466,35 @@ if ( ! function_exists('prep_url'))
  * Create URL Title
  *
  * Takes a "title" string as input and creates a
- * human-friendly URL string with either a dash
- * or an underscore as the word separator.
+ * human-friendly URL string with a "separator" string 
+ * as the word separator.
  *
  * @access	public
  * @param	string	the string
- * @param	string	the separator: dash, or underscore
+ * @param	string	the separator
  * @return	string
  */
 if ( ! function_exists('url_title'))
 {
-	function url_title($str, $separator = 'dash', $lowercase = FALSE)
+	function url_title($str, $separator = '-', $lowercase = FALSE)
 	{
-		if ($separator == 'dash')
+		if ($separator == 'dash') 
 		{
-			$search		= '_';
-			$replace	= '-';
+		    $separator = '-';
 		}
-		else
+		else if ($separator == 'underscore')
 		{
-			$search		= '-';
-			$replace	= '_';
+		    $separator = '_';
 		}
+		
+		$q_separator = preg_quote($separator);
 
 		$trans = array(
-						'&\#\d+?;'				=> '',
-						'&\S+?;'				=> '',
-						'\s+'					=> $replace,
-						'[^a-z0-9\-\._]'		=> '',
-						$replace.'+'			=> $replace,
-						$replace.'$'			=> $replace,
-						'^'.$replace			=> $replace,
-						'\.+$'					=> ''
-					);
+			'&.+?;'                 => '',
+			'[^a-z0-9 _-]'          => '',
+			'\s+'                   => $separator,
+			'('.$q_separator.')+'   => $separator
+		);
 
 		$str = strip_tags($str);
 
@@ -509,7 +508,7 @@ if ( ! function_exists('url_title'))
 			$str = strtolower($str);
 		}
 
-		return trim(stripslashes($str));
+		return trim($str, $separator);
 	}
 }
 

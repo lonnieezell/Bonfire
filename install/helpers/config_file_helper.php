@@ -8,10 +8,10 @@
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in
 	all copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,34 +23,34 @@
 
 /*
 	File: Config File Helper
-	
+
 	Functions to aid in reading and saving config items to and from
-	configuration files. 
-	
+	configuration files.
+
 	The config files are expected to be found in the APPPATH .'/config' folder.
 	It does not currently work within modules.
-	
+
 	Author:
 		Lonnie Ezell
  */
- 
+
  //--------------------------------------------------------------------
 
 /*
 	Function: read_config()
-	
-	Returns an array of configuration settings from a single 
-	config file. 
-	
+
+	Returns an array of configuration settings from a single
+	config file.
+
 	Parameters:
 		$file				- The config file to read.
 		$fail_gracefully	- true/false. Whether to show errors or simply return false.
 		$module				- Name of the module where the config file exists
-		
+
 	Return:
 		An array of settings, or false on failure (when $fail_gracefully = true).
  */
-function read_config($file, $fail_gracefully = TRUE, $module = '') 
+function read_config($file, $fail_gracefully = TRUE, $module = '')
 {
 	$file = ($file == '') ? 'config' : str_replace(EXT, '', $file);
 	$file = 'config/'.$file;
@@ -60,7 +60,7 @@ function read_config($file, $fail_gracefully = TRUE, $module = '')
 	{
 		$file_details = Modules::find($file, $module, '');
 	}
-	
+
 	if (is_array($file_details) && !empty($file_details[0]))
 	{
 		$file = implode("", $file_details);
@@ -69,7 +69,7 @@ function read_config($file, $fail_gracefully = TRUE, $module = '')
 	{
 		$file = APPPATH.$file;
 	}
-	
+
 	if ( ! file_exists($file.EXT))
 	{
 		if ($fail_gracefully === TRUE)
@@ -78,9 +78,9 @@ function read_config($file, $fail_gracefully = TRUE, $module = '')
 		}
 		show_error('The configuration file '.$file.EXT.' does not exist.');
 	}
-	
+
 	include($file.EXT);
-	
+
 	if ( ! isset($config) OR ! is_array($config))
 	{
 		if ($fail_gracefully === TRUE)
@@ -89,7 +89,7 @@ function read_config($file, $fail_gracefully = TRUE, $module = '')
 		}
 		show_error('Your '.$file.EXT.' file does not appear to contain a valid configuration array.');
 	}
-	
+
 	return $config;
 }
 
@@ -97,16 +97,16 @@ function read_config($file, $fail_gracefully = TRUE, $module = '')
 
 /*
 	Function: write_config()
-	
+
 	Saves the passed array settings into a single config file located
-	in the /config directory. 
-	
+	in the /config directory.
+
 	Parameters:
 		$file		- The config file to write to.
 		$settigns	- An array of key/value pairs to be written to the file.
 		$module				- Name of the module where the config file exists
-		
-	Return: 
+
+	Return:
 		true/false
  */
 function write_config($file='', $settings=null, $module='')
@@ -115,7 +115,7 @@ function write_config($file='', $settings=null, $module='')
 	{
 		return false;
 	}
-			
+
 	$config_file = APPPATH.'../bonfire/application/config/'.$file;
 
 	// Load the file so we can loop through the lines
@@ -124,25 +124,22 @@ function write_config($file='', $settings=null, $module='')
 		$contents = file_get_contents($config_file.EXT);
 		$empty = false;
 	}
-	else 
+	else
 	{
 		$contents = '';
 		$empty = true;
 	}
-	
-	// Clean up post
-	if (isset($settings['submit'])) unset($settings['submit']);
-	
+
 	foreach ($settings as $name => $val)
 	{
-		// Is the config setting in the file? 
+		// Is the config setting in the file?
 		$start = strpos($contents, '$config[\''.$name.'\']');
 		$end = strpos($contents, ';', $start);
-		
+
 		$search = substr($contents, $start, $end-$start+1);
-		
+
 		//var_dump($search); die();
-		
+
 		if (is_array($val))
 		{
 			// get the array output
@@ -161,18 +158,18 @@ function write_config($file='', $settings=null, $module='')
 		{
 			$contents = str_replace($search, '$config[\''.$name.'\'] = '. $val .';', $contents);
 		}
-		else 
+		else
 		{
 			$contents .= '$config[\''.$name.'\'] = '. $val .";\n";
 		}
 	}
-	
+
 	// Make sure the file still has the php opening header in it...
 	if (strpos($contents, '<?php') === FALSE)
 	{
 		$contents = '<?php if ( ! defined(\'BASEPATH\')) exit(\'No direct script access allowed\');' . "\n\n" . $contents;
 	}
-	
+
 	// Write the changes out...
 	if (!function_exists('write_file'))
 	{
@@ -181,7 +178,7 @@ function write_config($file='', $settings=null, $module='')
 	}
 
 	$result = write_file($config_file.EXT, $contents);
-	
+
 	if ($result === FALSE)
 	{
 		return false;
@@ -197,21 +194,21 @@ function write_config($file='', $settings=null, $module='')
 	Function: config_array_output()
 
 	Outputs the array string which is then used in the config file.
-	
+
 	Parameters:
 		$array			- Array of values to store in the config
 		$num_tabs		- (Optional) The number of tabs to use in front of the array elements - makes it all nice !
-		
+
 	Return:
 		A string of text which will make up the array values in the config file
- */  
+ */
 function config_array_output($array, $num_tabs=1)
 {
 	if (!is_array($array))
 	{
 		return false;
 	}
-	
+
 	$tval  = 'array(';
 
 	// allow for two-dimensional arrays
@@ -228,7 +225,7 @@ function config_array_output($array, $num_tabs=1)
 		{
 			$tabs .= "\t";
 		}
-		
+
 		// non-numeric keys
 		foreach ($array as $key => $value)
 		{
@@ -242,12 +239,12 @@ function config_array_output($array, $num_tabs=1)
 				$tval .= "\n".$tabs."'".$key."' => '". $value. "',";
 			}
 		}//end foreach
-		
+
 		$tval .= "\n".$tabs;
 	}//end if
-	
+
 	$tval .= ')';
-		
+
 	return $tval;
 }//end config_array_output()
 
@@ -259,15 +256,15 @@ function config_array_output($array, $num_tabs=1)
 
 	Retrieves the config/database.php file settings. Plays nice with CodeIgniter 2.0's
 	multiple environment support.
-	
+
 	Parameters:
 		$environment	- (Optional) The envinroment to get. If empty, will return all environments.
 		$new_db	(str)		- (Optional) Returns an new db config array with parameter as $db active_group name
 		$fail_gracefully	- true/false. Whether to halt on errors or simply return false.
-		
+
 	Return:
 		An array of database settings or abrupt failure (when $fail_gracefully == FALSE)
- */  
+ */
 function read_db_config($environment=null, $new_db = NULL, $fail_gracefully = TRUE)
 {
 	$files = array();
@@ -281,14 +278,14 @@ function read_db_config($environment=null, $new_db = NULL, $fail_gracefully = TR
 		$files['development']	= 'development/database';
 		$files['testing']		= 'testing/database';
 		$files['production']	= 'production/database';
-	} else 
+	} else
 	{
 		$files[$environment]	= "$environment/database";
 	}
-	
+
 	// Grab our required settings
 	foreach ($files as $env => $file)
-	{	
+	{
 		if ( file_exists(APPPATH.'config/'.$file.EXT))
 		{
 			include(APPPATH.'config/'.$file.EXT);
@@ -297,12 +294,12 @@ function read_db_config($environment=null, $new_db = NULL, $fail_gracefully = TR
 			{
 				show_error('The configuration file '.$file.EXT.' does not exist.');
 			}
-	
+
 		//Acts as a reseter for given environment and active_group
-		if (empty($db) && ($new_db !== NULL)) 
+		if (empty($db) && ($new_db !== NULL))
 			//Do I wanna make sure we won't overwrite existing $db?
 			//If not, removing empty($db) will always return a new db array for given ENV
-		{ 
+		{
 			$db[$new_db]['hostname'] = '';
 			$db[$new_db]['username'] = '';
 			$db[$new_db]['password'] = '';
@@ -320,21 +317,21 @@ function read_db_config($environment=null, $new_db = NULL, $fail_gracefully = TR
 			$db[$new_db]['stricton'] = TRUE;
 			$db[$new_db]['stricton'] = TRUE;
 		}
-	
-		
+
+
 		 //found file but is empty or clearly malformed
 		if (empty($db) OR ! is_array($db))
 		{
 			//logit('[Config_File_Helper] Corrupt DB ENV file: '.$env,'debug');
 			continue;
 		}
-		
+
 		$settings[$env] = $db;
 		unset($db);
 	}
-	
+
 	unset($files);
-	
+
 	return $settings;
 }
 
@@ -344,7 +341,7 @@ function read_db_config($environment=null, $new_db = NULL, $fail_gracefully = TR
 	Function: write_db_config()
 
 	Saves the settings to the config/database.php file.
-	
+
 	Parameters:
 		$settings	- The array of database settings. Should be in the format:
 					array(
@@ -356,29 +353,26 @@ function read_db_config($environment=null, $new_db = NULL, $fail_gracefully = TR
 							...
 						)
 					);
-					
-	Return: 
+
+	Return:
 		true/false
  */
-function write_db_config($settings=null) 
-{	
+function write_db_config($settings=null)
+{
 	if (!is_array($settings	))
 	{
 		logit('[Config_File_Helper] Invalid write_db_config PARAMETER!');
 		return false;
 	}
-	
-	// Clean up post
-	if (isset($_POST['submit'])) unset($_POST['submit']);
-	
+
 	foreach ($settings as $env => $values)
 	{
 		if (strpos($env, '/') === false)
 		{
 			$env .= '/';
 		}
-		
-		// Is it the main file? 
+
+		// Is it the main file?
 		if ($env == 'main' || $env == 'main/')
 		{
 			$env = '';
@@ -401,18 +395,18 @@ function write_db_config($settings=null)
 				//$value = strtolower($value);
 				if (strtolower($value) == 'on' || strtolower($value) == 'yes' || strtolower($value) == 'true') $value = 'TRUE';
 				if (strtolower($value) == 'on' || strtolower($value) == 'no' || strtolower($value) == 'false') $value = 'FALSE';
-			
+
 				if ($value != 'TRUE' && $value != 'FALSE')
 				{
 					$value = "'$value'";
 				}
-			
-				// Is the config setting in the file? 
+
+				// Is the config setting in the file?
 				$start = strpos($contents, '$db[\'default\'][\''. $name .'\']');
 				$end = strpos($contents, ';', $start);
-				
+
 				$search = substr($contents, $start, $end-$start+1);
-				
+
 				$contents = str_replace($search, '$db[\'default\'][\''. $name .'\'] = '. $value .';', $contents);
 			}
 
@@ -421,15 +415,15 @@ function write_db_config($settings=null)
 			{
 				$contents = '<?php' . "\n" . $contents;
 			}
-			
+
 			$CI = get_instance();
 			$CI->load->helper('file');;
-			
+
 			// Write the changes out...
 			$result = write_file(APPPATH.'../bonfire/application/config/'.$env .'database'.EXT, $contents);
 		}
 	}
-	
+
 	return $result;
 }
 //---------------------------------------------------------------

@@ -504,12 +504,7 @@ class XML_RPC_Response
 	function decode($array=FALSE)
 	{
 		$CI =& get_instance();
-
-		if ($this->xss_clean && ! isset($CI->security))
-		{
-			$CI->load->library('security');
-		}
-
+		
 		if ($array !== FALSE && is_array($array))
 		{
 			while (list($key) = each($array))
@@ -1121,12 +1116,7 @@ class XML_RPC_Message extends CI_Xmlrpc
 	function output_parameters($array=FALSE)
 	{
 		$CI =& get_instance();
-
-		if ($this->xss_clean && ! isset($CI->security))
-		{
-			$CI->load->library('security');
-		}
-
+		
 		if ($array !== FALSE && is_array($array))
 		{
 			while (list($key) = each($array))
@@ -1414,14 +1404,14 @@ class XML_RPC_Values extends CI_Xmlrpc
 	{
 		if ($utc == 1)
 		{
-			$t = strftime("%Y%m%dT%H:%M:%S", $time);
+			$t = strftime("%Y%m%dT%H:%i:%s", $time);
 		}
 		else
 		{
 			if (function_exists('gmstrftime'))
-				$t = gmstrftime("%Y%m%dT%H:%M:%S", $time);
+				$t = gmstrftime("%Y%m%dT%H:%i:%s", $time);
 			else
-				$t = strftime("%Y%m%dT%H:%M:%S", $time - date('Z'));
+				$t = strftime("%Y%m%dT%H:%i:%s", $time - date('Z'));
 		}
 		return $t;
 	}

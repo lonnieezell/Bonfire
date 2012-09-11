@@ -2,5 +2,8 @@
 
 $config['module_config'] = array(
 	'description'	=> 'Allows users to exist in Bonfire.',
-	'author'		=> 'Bonfire Team'
+	'author'		=> 'Bonfire Team',
+	'weights'		=> array(
+		'settings'	=> 1
+	)
 );
