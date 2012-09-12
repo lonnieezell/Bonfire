@@ -312,7 +312,7 @@ if ( ! function_exists('form_date'))
 if ( ! function_exists('form_dropdown'))
 {
 	/**
-	 * Returns a properly templated date dropdown field.
+	 * Returns a properly templated dropdown field.
 	 *
 	 * @param string $data     Either a string with the element name, or an array of key/value pairs of all attributes.
 	 * @param array  $options  Array of options for the drop down list
@@ -323,7 +323,7 @@ if ( ! function_exists('form_dropdown'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_dropdown($data, $options=array(), $selected='', $label='', $extra='', $tooltip = '')
+	function form_dropdown($data, $options=array(), $selected=array(), $label='', $extra='', $tooltip = '')
 	{
 		if (! is_array($data))
 		{
