@@ -329,7 +329,7 @@ a.mb_show_advanced_rules:hover {
 						}
 
 					?>
-					<?php echo form_dropdown("view_field_type{$count}", $view_field_types, set_value("view_field_type{$count}", $default_field_type), lang('mb_form_type'), 'id="view_field_type'.$count.'"', '<span class="help-inline">'. form_error("view_field_type{$count}").'</span>'); ?>
+					<?php echo form_dropdown("view_field_type{$count}", $view_field_types, set_value("view_field_type{$count}", $default_field_type), lang('mb_form_type'), '', '<span class="help-inline">'. form_error("view_field_type{$count}").'</span>'); ?>
 
 					<?php
 						$db_field_types = array(
@@ -364,7 +364,7 @@ a.mb_show_advanced_rules:hover {
 							'YEAR' 			=> 'YEAR',
 							);
 					?>
-					<?php echo form_dropdown("db_field_type{$count}", $db_field_types, set_value("db_field_type{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['type'] : ''), lang('mb_form_dbtype'), 'id="db_field_type'.$count.'"', '<span class="help-inline">'. form_error("db_field_type{$count}").'</span>'); ?>
+					<?php echo form_dropdown("db_field_type{$count}", $db_field_types, set_value("db_field_type{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['type'] : ''), lang('mb_form_dbtype'), '', '<span class="help-inline">'. form_error("db_field_type{$count}").'</span>'); ?>
 
 					<div class="control-group <?php echo form_has_error("db_field_length_value{$count}") ? 'error' : ''; ?>">
 						<label class="control-label" for="db_field_length_value<?php echo $count; ?>"><?php echo lang('mb_form_length'); ?></label>
