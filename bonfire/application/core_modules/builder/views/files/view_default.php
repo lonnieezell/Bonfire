@@ -56,15 +56,6 @@ for($counter=1; $field_total >= $counter; $counter++)
         }
     }
 
-    if ($field_type != 'select')
-    {
-        $view .= <<<EOT
-        <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
-            <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
-            {$form_input_delimiters[0]}
-EOT;
-    }
-
     // field type
     switch($field_type)
     {
@@ -94,27 +85,37 @@ EOT;
                 }
 
             }
-            $view .= "
-            <?php echo form_textarea( array( 'name' => '$field_name', 'id' => '$field_name', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>";
-            $view .= '
-            <span class="help-inline"><?php echo form_error(\''.$field_name.'\'); ?></span>';
-            $view .= "
-        ".$form_input_delimiters[1];
+            $view .= <<<EOT
+        <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
+            <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
+            <div class="controls">
+                <?php echo form_textarea( array( 'name' => '{$field_name}', 'id' => '{$field_name}', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>
+                <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
+            </div>
+
+        </div>
+EOT;
             break;
 
         case('radio'):
 
-            $view .= '
-        <label class="radio">
-            <input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option1" <?php echo set_radio(\''.$field_name.'\', \'option1\', TRUE); ?> />
-            '. form_label('Radio option 1', $field_name) .'
-            <input id="'.$field_name.'" name="'.$field_name.'" type="radio" class="" value="option2" <?php echo set_radio(\''.$field_name.'\', \'option2\'); ?> />
-            '. form_label('Radio option 2', $field_name) .'
-            <span class="help-inline"><?php echo form_error(\''.$field_name.'\'); ?></span>
-            </label>
-        '.$form_input_delimiters[1].'
+            $view .= <<<EOT
+        <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
+            <?php echo form_label('{$field_label}'{$required}, '', array('class' => "control-label", 'id'=>"{$field_name}_label") ); ?>
+            <div class="controls" aria-labelled-by="{$field_name}_label">
+                <label class="radio" for="{$field_name}_option1">
+                    <input id="{$field_name}_option1" name="{$field_name}" type="radio" class="" value="option1" <?php echo set_radio('{$field_name}', 'option1', TRUE); ?> />
+                    Radio option 1
+                </label>
+                <label class="radio" for="{$field_name}_option2">
+                    <input id="{$field_name}_option2" name="{$field_name}" type="radio" class="" value="option2" <?php echo set_radio('{$field_name}', 'option2'); ?> />
+                    Radio option 2
+                </label>
+                <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
+            </div>
 
-';
+        </div>
+EOT;
             break;
 
         case('select'):
@@ -135,22 +136,28 @@ EOT;
                 $view .= '
                 '.strip_slashes($option).' => '.strip_slashes($option).',';
             }
-            $view .= '
+            $view .= <<<EOT
 ); ?>
 
-        <?php echo form_dropdown(\''.$field_name.'\', $options, set_value(\''.$field_name.'\', isset($'.$module_name_lower.'[\''.$field_name.'\']) ? $'.$module_name_lower.'[\''.$field_name.'\'] : \'\'), \''.$field_label.'\''.$required.')?>';
+        <?php echo form_dropdown('{$field_name}', \$options, set_value('{$field_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''), '{$field_label}'{$required})?>
+EOT;
             break;
 
         case('checkbox'):
 
             $view .= <<<EOT
+        <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
+            <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
+            <div class="controls">
 
-            <label class="checkbox" for="{$field_name}">
-            <input type="checkbox" id="{$field_name}" name="{$field_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$field_name}', 1); ?>>
-            <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
-            </label>
+                <label class="checkbox" for="{$field_name}">
+                    <input type="checkbox" id="{$field_name}" name="{$field_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$field_name}', 1); ?>>
+                    <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
+                </label>
 
-        {$form_input_delimiters[1]}
+            </div>
+
+        </div>
 EOT;
             break;
 
@@ -181,22 +188,20 @@ EOT;
             $db_field_type = set_value("db_field_type$counter");
 
             $view .= <<<EOT
+        <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
+            <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
+            <div class="controls">
 
-        <input id="{$field_name}" type="{$type}" name="{$field_name}" {$maxlength} value="<?php echo set_value('{$field_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>"  />
-        <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
-        {$form_input_delimiters[1]}
+               <input id="{$field_name}" type="{$type}" name="{$field_name}" {$maxlength} value="<?php echo set_value('{$field_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>"  />
+               <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
+            </div>
 
+        </div>
 EOT;
 
             break;
 
     } // end switch
-    if ($field_type != 'select')
-    {
-        $view .= '
-
-        </div>' . PHP_EOL;
-    }
 } // end for loop
 
 if (!empty($on_click))

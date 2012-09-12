@@ -107,7 +107,6 @@ class Modulebuilder
      * @param array  $action_names          An array of the controller actions (methods) required
      * @param string $primary_key_field     The name of the primary key
      * @param string $db_required           The database requirement setting (new, existing or none)
-     * @param array  $form_input_delimiters An array with the html delimiters for input fields
      * @param array  $form_error_delimiters An array with the html delimiters for error messages
      * @param string $module_description    A description for the module which appears in the config file
      * @param int    $role_id               The id of the role which receives full access to the module
@@ -116,7 +115,7 @@ class Modulebuilder
      *
      * @return array An array with the content for the generated files
      */
-    public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix) {
+    public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix) {
     {
         $this->CI->load->helper('inflector');
 
@@ -153,17 +152,17 @@ class Modulebuilder
             if ($public_context === TRUE)
             {
                 // only build this view in the Public context
-                $content['views'][$context_name]['index'] = $this->build_view($field_total, $module_name, $context_name, 'index_front', 'Index', $primary_key_field, $form_input_delimiters, $table_as_field_prefix);
+                $content['views'][$context_name]['index'] = $this->build_view($field_total, $module_name, $context_name, 'index_front', 'Index', $primary_key_field, $table_as_field_prefix);
             }
             else {
                 // only build these views for the Admin contexts
                 foreach($action_names as $key => $action_name) {
                     if ($action_name != 'delete' ) {
-                        $content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
+                        $content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $primary_key_field);
                     }
                 }
-                $content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
-                $content['views'][$context_name]['_sub_nav'] = $this->build_view($field_total, $module_name, $context_name, 'sub_nav', $this->options['form_action_options'][$action_name], $primary_key_field, $form_input_delimiters);
+                $content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field);
+                $content['views'][$context_name]['_sub_nav'] = $this->build_view($field_total, $module_name, $context_name, 'sub_nav', $this->options['form_action_options'][$action_name], $primary_key_field);
             }
         }
 
@@ -389,11 +388,10 @@ class Modulebuilder
      * @param string $action_name           The name of the controller method which will use the view
      * @param string $action_label          The value used on the submit button
      * @param string $primary_key_field     The name of the primary key
-     * @param array  $form_input_delimiters An array with the html delimiters for input fields
      *
      * @return mixed FALSE on error/A string containing the content of the view file
      */
-    private function build_view($field_total, $module_name, $controller_name, $action_name, $action_label, $primary_key_field, $form_input_delimiters)
+    private function build_view($field_total, $module_name, $controller_name, $action_name, $action_label, $primary_key_field)
     {
         if ($field_total == NULL)
         {
@@ -407,7 +405,6 @@ class Modulebuilder
         $data['action_name'] = $action_name;
         $data['primary_key_field'] = $primary_key_field;
         $data['action_label'] = $action_label;
-        $data['form_input_delimiters'] = $form_input_delimiters;
         $data['textarea_editor'] = $this->CI->input->post('textarea_editor');
         $data['use_soft_deletes'] = $this->CI->input->post('use_soft_deletes');
         $data['use_created'] = $this->CI->input->post('use_created');

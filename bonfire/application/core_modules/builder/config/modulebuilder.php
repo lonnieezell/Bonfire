@@ -25,11 +25,6 @@ $config[ 'modulebuilder' ][ 'validation_limits' ] = array('alpha', 'is_numeric',
 $config[ 'modulebuilder' ][ 'primary_key_field' ] = 'id';
 
 /*
- * default form input delimiters
- */
-$config[ 'modulebuilder' ][ 'form_input_delimiters' ] = array('<p>','</p>');
-
-/*
  * default form error delimiters
  */
 $config[ 'modulebuilder' ][ 'form_error_delimiters' ] = array('<span class="error">', '</span>');
