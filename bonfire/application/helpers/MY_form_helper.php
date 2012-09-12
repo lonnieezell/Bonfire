@@ -314,7 +314,7 @@ if ( ! function_exists('form_dropdown'))
 	/**
 	 * Returns a properly templated dropdown field.
 	 *
-	 * @param string $data     Either a string with the element name, or an array of key/value pairs of all attributes.
+	 * @param string $data     Either a string with the element name, or an array of key/value pairs of all attributes, which must include a name or id.
 	 * @param array  $options  Array of options for the drop down list
 	 * @param string $selected Either a string of the selected item or an array of selected items
 	 * @param string $label    A string with the label of the element.
@@ -328,6 +328,11 @@ if ( ! function_exists('form_dropdown'))
 		if (! is_array($data))
 		{
 			$data = array('name' => $data);
+		}
+
+		if (! isset($data['id']))
+		{
+			$data['id'] = $data['name'];
 		}
 
 		$output = _parse_form_attributes($data, array());
@@ -387,7 +392,7 @@ if ( ! function_exists('form_dropdown'))
 		$output = <<<EOL
 
 <div class="control-group {$error}">
-	<label class="control-label" for="{$data['name']}">{$label}</label>
+	<label class="control-label" for="{$data['id']}">{$label}</label>
 	<div class="controls">
 		 <select {$output} {$extra}>
 			{$options_vals}
