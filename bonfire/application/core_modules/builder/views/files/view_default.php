@@ -88,10 +88,10 @@ for($counter=1; $field_total >= $counter; $counter++)
             $view .= <<<EOT
         <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
             <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
-            {$form_input_delimiters[0]}
+            <div class="controls">
                 <?php echo form_textarea( array( 'name' => '{$field_name}', 'id' => '{$field_name}', 'rows' => '5', 'cols' => '80', 'value' => set_value('$field_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>
                 <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
-            {$form_input_delimiters[1]}
+            </div>
 
         </div>
 EOT;
@@ -102,7 +102,7 @@ EOT;
             $view .= <<<EOT
         <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
             <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
-            {$form_input_delimiters[0]}
+            <div class="controls">
                 <label class="radio">
                     <input id="{$field_name}" name="{$field_name}" type="radio" class="" value="option1" <?php echo set_radio('{$field_name}', 'option1', TRUE); ?> />
                     <?php echo form_label('Radio option 1', '{$field_name}'); ?>
@@ -110,7 +110,7 @@ EOT;
                     <?php echo form_label('Radio option 2', '{$field_name}'); ?>
                     <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
                 </label>
-            {$form_input_delimiters[1]}
+            </div>
 
         </div>
 EOT;
@@ -146,14 +146,14 @@ EOT;
             $view .= <<<EOT
         <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
             <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
-            {$form_input_delimiters[0]}
+            <div class="controls">
 
                 <label class="checkbox" for="{$field_name}">
                     <input type="checkbox" id="{$field_name}" name="{$field_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$field_name}', 1); ?>>
                     <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
                 </label>
 
-            {$form_input_delimiters[1]}
+            </div>
 
         </div>
 EOT;
@@ -188,11 +188,11 @@ EOT;
             $view .= <<<EOT
         <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
             <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
-            {$form_input_delimiters[0]}
+            <div class="controls">
 
                <input id="{$field_name}" type="{$type}" name="{$field_name}" {$maxlength} value="<?php echo set_value('{$field_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>"  />
                <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
-            {$form_input_delimiters[1]}
+            </div>
 
         </div>
 EOT;

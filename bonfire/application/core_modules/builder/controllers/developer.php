@@ -372,7 +372,6 @@ class Developer extends Admin_Controller {
         $this->form_validation->set_rules("form_action_edit",'Form Actions :: View',"trim|xss_clean|is_numeric");
         $this->form_validation->set_rules("form_action_view",'Form Actions :: List',"trim|xss_clean|is_numeric");
         $this->form_validation->set_rules("form_error_delimiters",'Form Error Delimiters',"required|trim|xss_clean");
-        $this->form_validation->set_rules("form_input_delimiters",'Form Input Delimiters',"required|trim|xss_clean");
         $this->form_validation->set_rules("module_description",'Module Description',"trim|required|xss_clean");
         $this->form_validation->set_rules("module_name",'Module Name',"trim|required|xss_clean|callback__modulename_check");
         $this->form_validation->set_rules("role_id",'Give Role Full Access',"trim|xss_clean|is_numeric");
@@ -546,20 +545,13 @@ class Developer extends Admin_Controller {
             $primary_key_field = $this->options['primary_key_field'];
         }
 
-        $form_input_delimiters = explode(',', $this->input->post('form_input_delimiters'));
-
-        if( !is_array($form_input_delimiters) OR count($form_input_delimiters) != 2)
-        {
-            $form_input_delimiters = $this->options['form_input_delimiters'];
-        }
-
         $form_error_delimiters = explode(',', $this->input->post('form_error_delimiters'));
         if( !is_array($form_error_delimiters) OR count($form_error_delimiters) != 2)
         {
             $form_error_delimiters = $this->options['$form_error_delimiters'];
         }
 
-		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_input_delimiters, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix);
+		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix);
 
         // make the variables available to the view file
         $data['module_name']        = $module_name;
