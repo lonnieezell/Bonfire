@@ -101,15 +101,17 @@ EOT;
 
             $view .= <<<EOT
         <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
-            <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
-            <div class="controls">
-                <label class="radio">
-                    <input id="{$field_name}" name="{$field_name}" type="radio" class="" value="option1" <?php echo set_radio('{$field_name}', 'option1', TRUE); ?> />
-                    <?php echo form_label('Radio option 1', '{$field_name}'); ?>
-                    <input id="{$field_name}" name="{$field_name}" type="radio" class="" value="option2" <?php echo set_radio('{$field_name}', 'option2'); ?> />
-                    <?php echo form_label('Radio option 2', '{$field_name}'); ?>
-                    <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
+            <?php echo form_label('{$field_label}'{$required}, '', array('class' => "control-label", 'id'=>"{$field_name}_label") ); ?>
+            <div class="controls" aria-labelled-by="{$field_name}_label">
+                <label class="radio" for="{$field_name}_option1">
+                    <input id="{$field_name}_option1" name="{$field_name}" type="radio" class="" value="option1" <?php echo set_radio('{$field_name}', 'option1', TRUE); ?> />
+                    Radio option 1
                 </label>
+                <label class="radio" for="{$field_name}_option2">
+                    <input id="{$field_name}_option2" name="{$field_name}" type="radio" class="" value="option2" <?php echo set_radio('{$field_name}', 'option2'); ?> />
+                    Radio option 2
+                </label>
+                <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
             </div>
 
         </div>
