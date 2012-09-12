@@ -161,11 +161,7 @@ class Users extends Front_Controller
 			{
 				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|xss_clean');
 
-				if ($this->form_validation->run() === FALSE)
-				{
-					Template::set_message(lang('us_invalid_email'), 'error');
-				}
-				else
+				if ($this->form_validation->run() !== FALSE)
 				{
 					// We validated. Does the user actually exist?
 					$user = $this->user_model->find_by('email', $_POST['email']);
@@ -202,6 +198,10 @@ class Users extends Front_Controller
 						{
 							Template::set_message(lang('us_reset_pass_error'). $this->emailer->errors, 'error');
 						}
+					}
+					else
+					{
+						Template::set_message(lang('us_invalid_email'), 'error');
 					}//end if
 				}//end if
 			}//end if
