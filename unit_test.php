@@ -3,6 +3,10 @@
  * Please note this file shouldn't be exposed on a live server,
  * there is no filtering of $_POST!!!!
  */
+// Plus we disable CSRF protection in order to avoid
+// modifying simpletest
+$_POST['ci_csrf_token'] = $_COOKIE['ci_csrf_token'];
+
 error_reporting(0);
 $cli_mode = setup_cli($argv); // Determines if running in cli mode
 
