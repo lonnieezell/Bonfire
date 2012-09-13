@@ -75,12 +75,12 @@ class Settings extends Admin_Controller
 		// Do we have any actions?
 	    if (!empty($_POST))
 	    {
-			if (isset($_POST, 'activate')    $action = '_activate';
-			if (isset($_POST, 'deactivate')  $action = '_deactivate';
-			if (isset($_POST, 'ban')         $action = '_ban';
-			if (isset($_POST, 'delete')      $action = '_delete';
-			if (isset($_POST, 'purge')       $action = '_purge';
-			if (isset($_POST, 'restore')     $action = '_restore';
+			if (isset($_POST['activate']))    $action = '_activate';
+			if (isset($_POST['deactivate']))  $action = '_deactivate';
+			if (isset($_POST['ban']))         $action = '_ban';
+			if (isset($_POST['delete']))      $action = '_delete';
+			if (isset($_POST['purge']))       $action = '_purge';
+			if (isset($_POST['restore']))     $action = '_restore';
 		}
 
 		if (isset($action))
