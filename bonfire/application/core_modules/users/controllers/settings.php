@@ -73,9 +73,17 @@ class Settings extends Admin_Controller
 		Template::set('roles', $ordered_roles);
 
 		// Do we have any actions?
-		$action = $this->input->post('ban').$this->input->post('delete').$this->input->post('purge').$this->input->post('restore').$this->input->post('activate').$this->input->post('deactivate');
+	    if (!empty($_POST))
+	    {
+			if (isset($_POST, 'activate')    $action = '_activate';
+			if (isset($_POST, 'deactivate')  $action = '_deactivate';
+			if (isset($_POST, 'ban')         $action = '_ban';
+			if (isset($_POST, 'delete')      $action = '_delete';
+			if (isset($_POST, 'purge')       $action = '_purge';
+			if (isset($_POST, 'restore')     $action = '_restore';
+		}
 
-		if (!empty($action))
+		if (isset($action))
 		{
 			$checked = $this->input->post('checked');
 
@@ -83,27 +91,7 @@ class Settings extends Admin_Controller
 			{
 				foreach($checked as $user_id)
 				{
-					switch(strtolower($action))
-					{
-						case 'activate':
-							$this->_activate($user_id);
-							break;
-						case 'deactivate':
-							$this->_deactivate($user_id);
-							break;
-						case 'ban':
-							$this->_ban($user_id);
-							break;
-						case 'delete':
-							$this->_delete($user_id);
-							break;
-						case 'purge':
-							$this->_purge($user_id);
-							break;
-						case 'restore':
-							$this->_restore($user_id);
-							break;
-					}
+					$this->$action($user_id);
 				}
 			}
 			else
