@@ -295,16 +295,13 @@ class BF_Model extends CI_Model
 		// Setup our field/value check
 		if (is_array($field))
 		{
-			foreach ($field as $key => $value)
+			if ($type == 'or')
 			{
-				if ($type == 'or')
-				{
-					$this->db->or_where($key, $value);
-				}
-				else
-				{
-					$this->db->where($key, $value);
-				}
+				$this->db->or_where($field);
+			}
+			else
+			{
+				$this->db->where($field);
 			}
 		}
 		else
@@ -341,16 +338,13 @@ class BF_Model extends CI_Model
 
 		if (is_array($field))
 		{
-			foreach ($field as $key => $value)
+			if ($type == 'or')
 			{
-				if ($type == 'or')
-				{
-					$this->db->or_where($key, $value);
-				}
-				else
-				{
-					$this->db->where($key, $value);
-				}
+				$this->db->or_where($field);
+			}
+			else
+			{
+				$this->db->where($field);
 			}
 		}
 		else
