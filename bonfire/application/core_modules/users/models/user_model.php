@@ -166,7 +166,7 @@ class User_model extends BF_Model
 		}
 
 		// Display Name
-		if (!isset($data['display_name']) || (isset($data['display_name']) && empty($data['display_name'])))
+		if (!isset($data['display_name']) || empty($data['display_name'])))
 		{
 			if ($this->settings_lib->item('auth.use_usernames') == 1 && !empty($data['username']))
 			{
