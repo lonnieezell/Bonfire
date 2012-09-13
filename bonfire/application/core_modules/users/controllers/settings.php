@@ -73,7 +73,7 @@ class Settings extends Admin_Controller
 		Template::set('roles', $ordered_roles);
 
 		// Do we have any actions?
-		$action = $this->input->post('submit').$this->input->post('delete').$this->input->post('purge').$this->input->post('restore').$this->input->post('activate').$this->input->post('deactivate');
+		$action = $this->input->post('ban').$this->input->post('delete').$this->input->post('purge').$this->input->post('restore').$this->input->post('activate').$this->input->post('deactivate');
 
 		if (!empty($action))
 		{

@@ -53,7 +53,7 @@
 					<?php else: ?>
 					<input type="submit" name="activate" class="btn" value="<?php echo lang('bf_action_activate') ?>">
 					<input type="submit" name="deactivate" class="btn" value="<?php echo lang('bf_action_deactivate') ?>">
-					<input type="submit" name="submit" class="btn" value="<?php echo lang('bf_action_ban') ?>">
+					<input type="submit" name="ban" class="btn" value="<?php echo lang('bf_action_ban') ?>">
 					<input type="submit" name="delete" class="btn btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')">
 					<?php endif;?>
 				</td>
