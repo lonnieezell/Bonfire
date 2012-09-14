@@ -318,7 +318,7 @@ class BF_Model extends CI_Model {
 			return $this->db->insert_id();
 		} else
 		{
-			$this->error = mysql_error();
+			$this->error = $this->db->_error_message();
 			return false;
 		}
 
@@ -427,7 +427,7 @@ class BF_Model extends CI_Model {
 			return true;
 		} 
 		
-		$this->error = 'DB Error: ' . mysql_error();
+		$this->error = 'DB Error: ' . $this->db->_error_message();
 	
 		return false;
 	}
@@ -489,7 +489,7 @@ class BF_Model extends CI_Model {
 			return $result;
 		} 
 		
-		$this->error = 'DB Error: ' . mysql_error();
+		$this->error = 'DB Error: ' . $this->db->_error_message();
 	
 		return false;
 	}

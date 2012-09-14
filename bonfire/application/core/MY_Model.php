@@ -408,7 +408,7 @@ class BF_Model extends CI_Model
 		}
 		else
 		{
-			$this->error = mysql_error();
+			$this->error = $this->db->_error_message();
 			return FALSE;
 		}
 
@@ -457,7 +457,7 @@ class BF_Model extends CI_Model
 
 		if ($status === FALSE)
 		{
-			$this->error = mysql_error();
+			$this->error = $this->db->_error_message();
 			return FALSE;
 		}
 
@@ -627,7 +627,7 @@ class BF_Model extends CI_Model
 				return TRUE;
 			}
 
-			$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
+			$this->error = $this->lang->line('bf_model_db_error') . $this->db->_error_message();
 		}
 		else
 		{
@@ -700,7 +700,7 @@ class BF_Model extends CI_Model
 			return $result;
 		}
 
-		$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
+		$this->error = $this->lang->line('bf_model_db_error') . $this->db->_error_message();
 
 		return FALSE;
 
