@@ -293,20 +293,18 @@ class BF_Model extends CI_Model
 		if (empty($field)) return FALSE;
 
 		// Setup our field/value check
-		if (is_array($field))
+		if ( ! is_array($field))
 		{
-			if ($type == 'or')
-			{
-				$this->db->or_where($field);
-			}
-			else
-			{
-				$this->db->where($field);
-			}
+			$field = array($field => $value);
+		}
+
+		if ($type == 'or')
+		{
+			$this->db->or_where($field);
 		}
 		else
 		{
-			$this->db->where($field, $value);
+			$this->db->where($field);
 		}
 
 		$this->set_selects();
@@ -336,20 +334,18 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
-		if (is_array($field))
+		if ( ! is_array($field))
 		{
-			if ($type == 'or')
-			{
-				$this->db->or_where($field);
-			}
-			else
-			{
-				$this->db->where($field);
-			}
+			$field = array($field => $value);
+		}
+
+		if ($type == 'or')
+		{
+			$this->db->or_where($field);
 		}
 		else
 		{
-			$this->db->where($field, $value);
+			$this->db->where($field);
 		}
 
 		$this->set_selects();
