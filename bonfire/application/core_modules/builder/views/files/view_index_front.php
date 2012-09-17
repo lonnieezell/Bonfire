@@ -11,9 +11,9 @@ $view =<<<END
 				
 	<table class="table table-striped table-bordered">
 		<thead>
-		
-			{table_header}
-		
+			<tr>
+				{table_header}
+			</tr>
 		</thead>
 		<tbody>
 		
