@@ -278,7 +278,6 @@ class Users extends Front_Controller
 
 				// redirect to make sure any language changes are picked up
 				Template::redirect('/users/profile');
-				exit;
 			}
 			else
 			{
