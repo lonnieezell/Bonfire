@@ -816,8 +816,14 @@ class Template
 		echo <<<EOF
 <!doctype html>
 <meta charset="utf-8">
-<title></title>
-<script>window.location='{$url}'</script>
+<title>
+EOF;
+		// Output URL somewhere where we know how to escape it safely
+		e($url);
+		// then JS can grab it
+		echo <<<EOF
+</title>
+<script>window.location=document.title</script>
 EOF;
 		exit();
 
