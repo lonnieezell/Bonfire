@@ -142,7 +142,6 @@ class Settings extends Admin_Controller
 			if ($this->save_role('update', $id))
 			{
 				Template::set_message('Role successfully saved.', 'success');
-				// redirect to update the sidebar which will show old name otherwise.
 				Template::redirect(SITE_AREA .'/settings/roles');
 			}
 			else
