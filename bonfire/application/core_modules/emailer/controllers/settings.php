@@ -384,7 +384,7 @@ class Settings extends Admin_Controller
 					if ($result)
 					{
 						Template::set_message($success_count .' '. lang('em_create_email_success'), 'success');
-						Template::redirect(SITE_AREA . '/settings/emailer/queue');
+						redirect(SITE_AREA . '/settings/emailer/queue');
 					}
 					else
 					{

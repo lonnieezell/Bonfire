@@ -129,7 +129,7 @@ class Reports extends Admin_Controller
 
 		if (!has_permission('Activities.User.View')) {
 			Template::set_message(lang('activity_restricted'), 'error');
-			Template::redirect(SITE_AREA .'/reports/activities');
+			redirect(SITE_AREA .'/reports/activities');
 		}
 
 		return $this->_get_activity();
@@ -150,7 +150,7 @@ class Reports extends Admin_Controller
 
 		if (!has_permission('Activities.Own.View')) {
 			Template::set_message(lang('activity_restricted'), 'error');
-			Template::redirect(SITE_AREA .'/reports/activities');
+			redirect(SITE_AREA .'/reports/activities');
 		}
 
 		return $this->_get_activity('activity_own', $this->current_user->id);
@@ -173,7 +173,7 @@ class Reports extends Admin_Controller
 		}
 
 		Template::set_message(lang('activity_restricted'), 'error');
-		Template::redirect(SITE_AREA .'/reports/activities');
+		redirect(SITE_AREA .'/reports/activities');
 
 	}//end activity_module()
 
@@ -193,7 +193,7 @@ class Reports extends Admin_Controller
 		}
 
 		Template::set_message(lang('activity_restricted'), 'error');
-		Template::redirect(SITE_AREA .'/reports/activities');
+		redirect(SITE_AREA .'/reports/activities');
 
 	}//end activity_date()
 
@@ -214,7 +214,7 @@ class Reports extends Admin_Controller
 
 		$this->_delete_activity($action, $which);
 
-		Template::redirect(SITE_AREA .'/reports/activities');
+		redirect(SITE_AREA .'/reports/activities');
 
 	} // end delete()
 

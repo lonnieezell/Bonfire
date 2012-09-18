@@ -219,7 +219,7 @@ class Settings extends Admin_Controller
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
 
 				Template::set_message(lang('us_user_created_success'), 'success');
-				Template::redirect(SITE_AREA .'/settings/users');
+				redirect(SITE_AREA .'/settings/users');
 			}
 		}
 
@@ -306,7 +306,7 @@ class Settings extends Admin_Controller
 
 				// redirect back to the edit page to make sure that a users password change
 				// forces a login check
-				Template::redirect($this->uri->uri_string());
+				redirect($this->uri->uri_string());
 			}
 		}
 
@@ -731,7 +731,7 @@ class Settings extends Admin_Controller
 			Template::set_message(lang('us_err_no_id'),'error');
 		}//end if
 
-		Template::redirect(SITE_AREA.'/settings/users');
+		redirect(SITE_AREA.'/settings/users');
 
 	}//end user_status()
 

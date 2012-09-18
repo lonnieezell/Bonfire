@@ -100,7 +100,7 @@ class Settings extends Admin_Controller
 			if ($this->save_role())
 			{
 				Template::set_message('Role successfully created.', 'success');
-				Template::redirect(SITE_AREA .'/settings/roles');
+				redirect(SITE_AREA .'/settings/roles');
 			}
 			else
 			{
@@ -142,7 +142,7 @@ class Settings extends Admin_Controller
 			if ($this->save_role('update', $id))
 			{
 				Template::set_message('Role successfully saved.', 'success');
-				Template::redirect(SITE_AREA .'/settings/roles');
+				redirect(SITE_AREA .'/settings/roles');
 			}
 			else
 			{

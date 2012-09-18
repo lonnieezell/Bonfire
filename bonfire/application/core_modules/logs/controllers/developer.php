@@ -199,7 +199,7 @@ class Developer extends Admin_Controller
 		if (empty($file))
 		{
 			Template::set_message('No log file provided.', 'error');
-			Template::redirect(SITE_AREA .'/developer/logs');
+			redirect(SITE_AREA .'/developer/logs');
 		}
 
 		Assets::add_module_js('logs', 'logs');

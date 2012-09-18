@@ -340,7 +340,7 @@ class Developer extends Admin_Controller {
             }//end if
         }//end if
 
-        Template::redirect(SITE_AREA .'/developer/builder');
+        redirect(SITE_AREA .'/developer/builder');
 
     }//end delete()
 
