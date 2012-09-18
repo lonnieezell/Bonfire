@@ -813,7 +813,12 @@ class Template
 	{
 		$url = strpos($url, 'http') === FALSE ? site_url($url) : $url;
 
-		echo "<script>window.location='{$url}'</script>";
+		echo <<<EOF
+<!doctype html>
+<meta charset="utf-8">
+<title></title>
+<script>window.location='{$url}'</script>
+EOF;
 		exit();
 
 	}//end redirect()
