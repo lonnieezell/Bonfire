@@ -468,11 +468,10 @@ class BF_Model extends CI_Model
 	 *
 	 * @param mixed	$where	The primary_key value of the row to update or the where clause.
 	 * @param array $data	An array of key/value pairs to update.
-	 * @param int	$limit	The limit clause
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function update($where=NULL, $data=NULL, $limit=NULL)
+	public function update($where=NULL, $data=NULL)
 	{
 
 		if (is_array($where))
@@ -493,12 +492,6 @@ class BF_Model extends CI_Model
 			$where = array($this->key, $where);
 		}
 
-		// If the $limit is not numeric, throw it out
-		if ( ! is_numeric($limit))
-		{
-			$limit = NULL;
-		}
-
 		// Add the modified field if using a modified field
 		if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
 		{
@@ -511,7 +504,7 @@ class BF_Model extends CI_Model
 			$data[$this->modified_by_field] = $this->auth->user_id();
 		}
 
-		if ($this->db->update($this->table, $data, $where, $limit))
+		if ($this->db->update($this->table, $data, $where))
 		{
 			return TRUE;
 		}
@@ -533,26 +526,7 @@ class BF_Model extends CI_Model
 	 */
 	public function update_where($field=NULL, $value=NULL, $data=NULL)
 	{
-		if (empty($field) || empty($value) || !is_array($data))
-		{
-			$this->error = $this->lang->line('bf_model_no_data');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
-			return FALSE;
-		}
-
-		// Add the modified field
-		if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
-		{
-			$data[$this->modified_field] = $this->set_date();
-		}
-
-		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
-		{
-			$data[$this->modified_by_field] = $this->auth->user_id();
-		}
-
-		return $this->db->update($this->table, $data, array($field => $value));
-
+		return $this->update(array($field => $value), $data);
 	}//end update_where()
 
 	//---------------------------------------------------------------
