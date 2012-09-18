@@ -490,7 +490,7 @@ class Auth
 
 			foreach ($perms as $perm)
 			{
-				$this->permissions[strtolower($perm->name)] = TRUE;
+				$this->permissions[strtolower($perm->name)] = $perm->permission_id;
 			}
 		}
 
