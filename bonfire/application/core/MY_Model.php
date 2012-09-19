@@ -411,7 +411,7 @@ class BF_Model extends CI_Model
 	}//end insert()
 
 	//---------------------------------------------------------------
-	
+
 	/**
 	 * Inserts a batch of data into the database.
 	 *
@@ -425,14 +425,14 @@ class BF_Model extends CI_Model
 		{
 			return FALSE;
 		}
-		
+
 		$set = array();
 
 		// Add the created field
 		if ($this->set_created === TRUE )
 		{
 			$set[$this->created_field] = $this->set_date();
-		} 
+		}
 
 		if ($this->set_created === TRUE && $this->log_user === TRUE)
 		{
@@ -466,32 +466,45 @@ class BF_Model extends CI_Model
 	/**
 	 * Updates an existing row in the database.
 	 *
-	 * @param mixed   $id The primary_key value of the row to update.
-	 * @param array $data An array of key/value pairs to update.
+	 * @param mixed	$where	The primary_key value of the row to update or the where clause.
+	 * @param array $data	An array of key/value pairs to update.
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function update($id=NULL, $data=NULL)
+	public function update($where=NULL, $data=NULL)
 	{
 
-		if ($this->_function_check($id, $data) === FALSE)
+		if (is_array($where))
 		{
-			return FALSE;
+			if ($this->_function_check(FALSE, $data) === FALSE)
+			{
+				return FALSE;
+			}
+		}
+		// If $where is not an array, it should be the primary key value of the row to update
+		else
+		{
+			if ($this->_function_check($where, $data) === FALSE)
+			{
+				return FALSE;
+			}
+
+			$where = array($this->key => $where);
 		}
 
-		// Add the modified field
+		// Add the modified field if using a modified field
 		if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
 		{
 			$data[$this->modified_field] = $this->set_date();
 		}
 
+		// Add the user id if using a modified_by field
 		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
 		{
 			$data[$this->modified_by_field] = $this->auth->user_id();
 		}
 
-		$this->db->where($this->key, $id);
-		if ($this->db->update($this->table, $data))
+		if ($this->db->update($this->table, $data, $where))
 		{
 			return TRUE;
 		}
@@ -513,26 +526,7 @@ class BF_Model extends CI_Model
 	 */
 	public function update_where($field=NULL, $value=NULL, $data=NULL)
 	{
-		if (empty($field) || empty($value) || !is_array($data))
-		{
-			$this->error = $this->lang->line('bf_model_no_data');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
-			return FALSE;
-		}
-
-		// Add the modified field
-		if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
-		{
-			$data[$this->modified_field] = $this->set_date();
-		}
-
-		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
-		{
-			$data[$this->modified_by_field] = $this->auth->user_id();
-		}
-
-		return $this->db->update($this->table, $data, array($field => $value));
-
+		return $this->update(array($field => $value), $data);
 	}//end update_where()
 
 	//---------------------------------------------------------------
