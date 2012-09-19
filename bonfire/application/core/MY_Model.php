@@ -411,7 +411,7 @@ class BF_Model extends CI_Model
 	}//end insert()
 
 	//---------------------------------------------------------------
-	
+
 	/**
 	 * Inserts a batch of data into the database.
 	 *
@@ -425,14 +425,14 @@ class BF_Model extends CI_Model
 		{
 			return FALSE;
 		}
-		
+
 		$set = array();
 
 		// Add the created field
 		if ($this->set_created === TRUE )
 		{
 			$set[$this->created_field] = $this->set_date();
-		} 
+		}
 
 		if ($this->set_created === TRUE && $this->log_user === TRUE)
 		{
@@ -489,7 +489,7 @@ class BF_Model extends CI_Model
 				return FALSE;
 			}
 
-			$where = array($this->key, $where);
+			$where = array("{$this->key}" => $where);
 		}
 
 		// Add the modified field if using a modified field
