@@ -489,7 +489,7 @@ class BF_Model extends CI_Model
 				return FALSE;
 			}
 
-			$where = array("{$this->key}" => $where);
+			$where = array($this->key => $where);
 		}
 
 		// Add the modified field if using a modified field
