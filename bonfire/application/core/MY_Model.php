@@ -408,7 +408,7 @@ class BF_Model extends CI_Model
 		}
 		else
 		{
-			$this->error = $this->db->_error_message();
+			$this->error = $this->get_db_error_message();
 			return FALSE;
 		}
 
@@ -457,7 +457,7 @@ class BF_Model extends CI_Model
 
 		if ($status === FALSE)
 		{
-			$this->error = $this->db->_error_message();
+			$this->error = $this->get_db_error_message();
 			return FALSE;
 		}
 
@@ -627,7 +627,7 @@ class BF_Model extends CI_Model
 				return TRUE;
 			}
 
-			$this->error = $this->lang->line('bf_model_db_error') . $this->db->_error_message();
+			$this->error = $this->lang->line('bf_model_db_error') . $this->get_db_error_message();
 		}
 		else
 		{
@@ -700,7 +700,7 @@ class BF_Model extends CI_Model
 			return $result;
 		}
 
-		$this->error = $this->lang->line('bf_model_db_error') . $this->db->_error_message();
+		$this->error = $this->lang->line('bf_model_db_error') . $this->get_db_error_message();
 
 		return FALSE;
 
@@ -1074,6 +1074,22 @@ class BF_Model extends CI_Model
 
 	}//end set_date()
 
+	//--------------------------------------------------------------------
+
+	/**
+	 * Allows you to retrieve error messages from the database
+	 *
+	 * @return string
+	 */
+	protected function get_db_error_message()
+	{
+		/*
+		 * !WARNING! $this->db->_error_message() is supposed to be private and
+		 * possibly won't be available in future versions of CI
+		 */
+		return $this->db->_error_message();
+	}
+	
 	//--------------------------------------------------------------------
 
 	/**

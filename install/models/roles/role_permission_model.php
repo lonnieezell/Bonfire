@@ -122,7 +122,7 @@ class Role_permission_model extends BF_Model {
 			return true;
 		} 
 		
-		$this->error = 'DB Error: ' . $this->db->_error_message();
+		$this->error = 'DB Error: ' . $this->get_db_error_message();
 	
 		return false;
 	}
@@ -154,7 +154,7 @@ class Role_permission_model extends BF_Model {
 			return true;
 		} 
 		
-		$this->error = 'DB Error: ' . $this->db->_error_message();
+		$this->error = 'DB Error: ' . $this->get_db_error_message();
 	
 		return false;
 	}
@@ -187,7 +187,7 @@ class Role_permission_model extends BF_Model {
 			return true;
 		} 
 		
-		$this->error = 'DB Error: ' . $this->db->_error_message();
+		$this->error = 'DB Error: ' . $this->get_db_error_message();
 	
 		return false;
 	}
