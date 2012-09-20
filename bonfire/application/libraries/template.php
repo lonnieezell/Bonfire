@@ -257,10 +257,6 @@ class Template
 		if (self::$ci->input->is_ajax_request())
 		{
 			$layout = self::$ci->config->item('template.ajax_layout');
-			self::$ci->output->set_header("Cache-Control: no-store, no-cache, must-revalidate");
-			self::$ci->output->set_header("Cache-Control: post-check=0, pre-check=0");
-			self::$ci->output->set_header("Pragma: no-cache");
-			self::$ci->output->set_header('Content-Type: text/html');
 
 			$controller = NULL;
 		}
