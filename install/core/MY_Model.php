@@ -827,6 +827,22 @@ class BF_Model extends CI_Model {
 	
 	//--------------------------------------------------------------------
 	
+	/**
+	 * Allows you to retrieve error messages from the database
+	 *
+	 * @return string
+	 */
+	protected function get_db_error_message()
+	{
+		/*
+		 * !WARNING! $this->db->_error_message() is supposed to be private and
+		 * possibly won't be available in future versions of CI
+		 */
+		return $this->db->_error_message();
+	}
+	
+	//--------------------------------------------------------------------
+	
 	/*
 		Method: set_table()
 		
