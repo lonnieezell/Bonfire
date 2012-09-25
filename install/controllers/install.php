@@ -178,7 +178,7 @@ class Install extends CI_Controller {
 	
 					if (!$db)
 					{
-						$this->vdata['error'] = message(lang('in_db_no_connect').': '. mysql_error(), 'error');
+						$this->vdata['message'] = message(lang('in_db_no_connect').': '. mysql_error(), 'error');
 					}
 					else
 					{
@@ -198,7 +198,7 @@ class Install extends CI_Controller {
 				}
 				else
 				{
-					$this->vdata['attention'] = message(sprintf(lang('in_settings_save_error'), $environment), 'attention');
+					$this->vdata['message'] = message(sprintf(lang('in_settings_save_error'), $environment), 'attention');
 				}
 			}
 	
@@ -228,7 +228,7 @@ class Install extends CI_Controller {
 			{
 				if ($this->setup())
 				{
-					$this->vdata['success'] = message(lang('in_success_notification'), 'success');
+					$this->vdata['message'] = message(lang('in_success_notification'), 'success');
 
 					$success_data = array();
 					// check if we are running in a sub directory
@@ -243,7 +243,7 @@ class Install extends CI_Controller {
 				}
 				else
 				{
-					$this->vdata['error']= message(lang('in_db_setup_error').': '. $this->errors, 'error');
+					$this->vdata['message']= message(lang('in_db_setup_error').': '. $this->errors, 'error');
 				}
 			}
 		}
