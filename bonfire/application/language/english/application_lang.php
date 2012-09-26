@@ -200,7 +200,7 @@ $lang['bf_remember_me']			= 'Remember me';
 //--------------------------------------------------------------------
 // Password Help Fields to be used as a warning on register
 //--------------------------------------------------------------------
-$lang['bf_password_number_required_help']  = 'Password must contain at least 1 punctuation mark.';
+$lang['bf_password_number_required_help']  = 'Password must contain at least 1 number.';
 $lang['bf_password_caps_required_help']    = 'Password must contain at least 1 capital letter.';
 $lang['bf_password_symbols_required_help'] = 'Password must contain at least 1 symbol.';
 
