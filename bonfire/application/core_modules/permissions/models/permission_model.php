@@ -178,7 +178,7 @@ class Permission_model extends BF_Model
 	{
 		$updated = parent::update($id, $data);
 
-		if ($data['status'] == 'inactive' && $updated === TRUE)
+		if (isset($data['status']) && $data['status'] == 'inactive' && $updated === TRUE)
 		{
 			// now delete the role_permissions for this permission since it is no longer active
 			$updated = $this->role_permission_model->delete_for_permission($id);
