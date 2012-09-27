@@ -1,7 +1,7 @@
 <?php $this->load->view('header'); ?>
 
 <div class="notification">
-	<?php echo lang('in_installed') . ' <a href="'. preg_replace('{install/$}', '', site_url()) .'">'. lang('continue') .'</a>.'; ?>
+	<?php echo lang('in_installed') . ' <a href="'. preg_replace('{install/$}', '', base_url()) .'">'. lang('continue') .'</a>.'; ?>
 </div>
 
 <form action="<?php echo site_url('rename') ?>" method="post" class="form-inline">
