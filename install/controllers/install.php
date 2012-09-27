@@ -258,6 +258,11 @@ class Install extends CI_Controller {
 
 	public function rename_folder() 
 	{
+		if ($_SERVER['REQUEST_METHOD'] != 'POST')
+		{
+			$this->security->csrf_show_error();
+		}
+
 		$folder = FCPATH;
 	
 		// This should always have the /install in it, but
