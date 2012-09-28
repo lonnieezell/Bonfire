@@ -580,23 +580,35 @@ class BF_Model extends CI_Model
 	 * it will attempt to set a field 'deleted' on the current record
 	 * to '1', to allow the data to remain in the database.
 	 *
-	 * @param mixed $id The primary_key value to match against.
+	 * @param mixed $where The primary_key value to match against, or the where clause
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function delete($id=NULL)
+	public function delete($where=NULL)
 	{
-		if ($this->_function_check($id) === FALSE)
+		if (is_array($where))
 		{
-			return FALSE;
+			if ($this->_function_check() === FALSE)
+			{
+				return FALSE;
+			}
+		}
+		else
+		{
+			if ($this->_function_check($where) === FALSE)
+			{
+				return FALSE;
+			}
+
+			$where = array($this->key => $where);
 		}
 
-		if ($this->find($id) !== FALSE)
+		if ($this->find_by($where) !== FALSE)
 		{
 			if ($this->soft_deletes === TRUE)
 			{
 				$data = array(
-					'deleted'	=> 1
+					'deleted' => 1
 				);
 
 				if ($this->log_user === TRUE && !array_key_exists($this->deleted_by_field, $data))
@@ -604,12 +616,11 @@ class BF_Model extends CI_Model
 					$data[$this->deleted_by_field] = $this->auth->user_id();
 				}
 
-				$this->db->where($this->key, $id);
-				$result = $this->db->update($this->table, $data);
+				$result = $this->db->update($this->table, $data, $where);
 			}
 			else
 			{
-				$result = $this->db->delete($this->table, array($this->key => $id));
+				$result = $this->db->delete($this->table, $where);
 			}
 
 			if ($result)
@@ -645,55 +656,7 @@ class BF_Model extends CI_Model
 	 */
 	public function delete_where($data=NULL)
 	{
-		if (empty($data))
-		{
-			$this->error = $this->lang->line('bf_model_no_data');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
-			return FALSE;
-		}
-
-		if (is_array($data))
-		{
-			foreach($data as $field => $value)
-			{
-				$this->db->where($field,$value);
-			}
-		}
-		else
-		{
-			$this->db->where($data);
-		}
-
-		if ($this->soft_deletes === TRUE)
-		{
-			if ($this->log_user === TRUE)
-			{
-				$this->db->update($this->table, array(
-					'deleted' => 1,
-					$this->deleted_by_field => $this->auth->user_id(),
-				));
-			}
-			else
-			{
-				$this->db->update($this->table, array('deleted' => 1));
-			}
-		}
-		else
-		{
-			$this->db->delete($this->table);
-		}
-
-		$result = $this->db->affected_rows();
-
-		if ($result)
-		{
-			return $result;
-		}
-
-		$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
-
-		return FALSE;
-
+		return $this->delete($data);
 	}//end delete_where()
 
 	//---------------------------------------------------------------
