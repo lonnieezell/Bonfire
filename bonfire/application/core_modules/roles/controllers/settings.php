@@ -387,16 +387,17 @@ class Settings extends Admin_Controller
 		Template::set('matrix_roles', $this->role_model->select('role_id, role_name')->find_all());
 
 		$role_permissions = $this->role_permission_model->find_all_role_permissions();
-		foreach($role_permissions as $rp) {
+
+		foreach($role_permissions as $rp)
+		{
 			$current_permissions[] = $rp->role_id.','.$rp->permission_id;
 		}
-		Template::set('matrix_role_permissions', $current_permissions);
 
+		Template::set('matrix_role_permissions', $current_permissions);
 		Template::set("toolbar_title", lang('matrix_header'));
 
 		Template::set_view('settings/permission_matrix');
 		Template::render();
-
 	}//end permission_matrix()
 
 
@@ -413,14 +414,13 @@ class Settings extends Admin_Controller
 	 */
 	public function matrix_update()
 	{
-
-		//Turn profiler off instead of die?
 		$this->output->enable_profiler(FALSE);
-		
+
 		$pieces = explode(',',$this->input->post('role_perm', TRUE));
 
-		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find( (int) $pieces[0])->role_name.'.Manage')) {
-			die(lang("matrix_auth_fail"));
+		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find( (int) $pieces[0])->role_name.'.Manage'))
+		{
+			$this->output->set_output(lang("matrix_auth_fail"));
 			return FALSE;
 		}
 
@@ -428,25 +428,26 @@ class Settings extends Admin_Controller
 		{
 			if(is_numeric($this->role_permission_model->create_role_permissions($pieces[0],$pieces[1])))
 			{
-				die(lang("matrix_insert_success"));
+				$msg = lang("matrix_insert_success");
 			}
 			else
 			{
-				die(lang("matrix_insert_fail") . $this->role_permission_model->error);
+				$msg = lang("matrix_insert_fail") . $this->role_permission_model->error;
 			}
 		}
 		else
 		{
 			if($this->role_permission_model->delete_role_permissions($pieces[0], $pieces[1]))
 			{
-				die(lang("matrix_delete_success"));
+				$msg = lang("matrix_delete_success");
 			}
 			else
 			{
-				die(lang("matrix_delete_fail"). $this->role_permission_model->error);
+				$msg = lang("matrix_delete_fail"). $this->role_permission_model->error;
 			}
 		}//end if
 
+		$this->output->set_output($msg);
 	}//end matrix_update()
 
 	//--------------------------------------------------------------------
