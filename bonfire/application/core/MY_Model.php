@@ -404,7 +404,7 @@ class BF_Model extends CI_Model
 		}
 		else
 		{
-			$this->error = mysql_error();
+			$this->error = $this->get_db_error_message();
 			return FALSE;
 		}
 
@@ -453,7 +453,7 @@ class BF_Model extends CI_Model
 
 		if ($status === FALSE)
 		{
-			$this->error = mysql_error();
+			$this->error = $this->get_db_error_message();
 			return FALSE;
 		}
 
@@ -617,7 +617,7 @@ class BF_Model extends CI_Model
 				return TRUE;
 			}
 
-			$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
+			$this->error = $this->lang->line('bf_model_db_error') . $this->get_db_error_message();
 		}
 		else
 		{
@@ -690,7 +690,7 @@ class BF_Model extends CI_Model
 			return $result;
 		}
 
-		$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
+		$this->error = $this->lang->line('bf_model_db_error') . $this->get_db_error_message();
 
 		return FALSE;
 
@@ -1064,6 +1064,50 @@ class BF_Model extends CI_Model
 
 	}//end set_date()
 
+	//--------------------------------------------------------------------
+
+	/**
+	 * Allows you to retrieve error messages from the database
+	 *
+	 * @return string
+	 */
+	protected function get_db_error_message()
+	{
+		switch ($this->db->platform())
+		{
+			case 'cubrid':
+				return cubrid_errno($this->db->conn_id);
+			case 'mssql':
+				return mssql_get_last_message();
+			case 'mysql':
+				return mysql_error($this->db->conn_id);
+			case 'mysqli':
+				return mysqli_error($this->db->conn_id);
+			case 'oci8':
+				// If the error was during connection, no conn_id should be passed
+				$error = is_resource($this->db->conn_id) ? oci_error($this->db->conn_id) : oci_error();
+				return $error['message'];
+			case 'odbc':
+				return odbc_errormsg($this->db->conn_id);
+			case 'pdo':
+				$error_array = $this->db->conn_id->errorInfo();
+				return $error_array[2];
+			case 'postgre':
+				return pg_last_error($this->db->conn_id);
+			case 'sqlite':
+				return sqlite_error_string(sqlite_last_error($this->db->conn_id));
+			case 'sqlsrv':
+				$error = array_shift(sqlsrv_errors());
+				return !empty($error['message']) ? $error['message'] : null;
+			default:
+				/*
+				 * !WARNING! $this->db->_error_message() is supposed to be private and
+				 * possibly won't be available in future versions of CI
+				 */
+				return $this->db->_error_message();
+		}
+	}
+	
 	//--------------------------------------------------------------------
 
 	/**
