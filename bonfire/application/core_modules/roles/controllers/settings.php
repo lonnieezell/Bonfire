@@ -405,8 +405,6 @@ class Settings extends Admin_Controller
 
 	/**
 	 * Update the role_permissions table.
-	 *
-	 * @return mixed
 	 */
 	public function matrix_update()
 	{
@@ -419,7 +417,8 @@ class Settings extends Admin_Controller
 		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find( (int) $pieces[0])->role_name.'.Manage'))
 		{
 			$this->output->set_output(lang("matrix_auth_fail"));
-			return FALSE;
+
+			return;
 		}
 
 		if ($this->input->post('action', TRUE) == 'true')
