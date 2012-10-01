@@ -404,16 +404,14 @@ class Settings extends Admin_Controller
 	// --------------------------------------------------------------------
 
 	/**
-	 * Updates the role_permissions table.
-	 *
-	 * Responses use "die()" instead of "echo()" in case the profiler is
-	 * enabled. The profiler will add a lot of HTML to the end of the response
-	 * which causes errors.
+	 * Update the role_permissions table.
 	 *
 	 * @return mixed
 	 */
 	public function matrix_update()
 	{
+		// The profiler would add a lot of HTML to the end of the response.
+		// This response is supposed to be single piece of text used by JS.
 		$this->output->enable_profiler(FALSE);
 
 		$pieces = explode(',',$this->input->post('role_perm', TRUE));
