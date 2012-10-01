@@ -180,8 +180,43 @@ class Permission_model extends BF_Model
 
 		if (isset($data['status']) && $data['status'] == 'inactive' && $updated === TRUE)
 		{
+			$id_is_array = is_array($id);
+
 			// now delete the role_permissions for this permission since it is no longer active
-			$updated = $this->role_permission_model->delete_for_permission($id);
+
+			// if $id is an array and we don't have the key
+			if ($id_is_array && ! isset($id[$key]))
+			{
+				// find the key(s) and perform the delete
+				$result = $this->permission_model->select($key)->find_all_by($id);
+				
+				if ($result)
+				{
+					foreach ($result as $permission_key)
+					{
+						$deleted = $this->role_permission_model->delete_for_permission($permission_key);
+						
+						if ($deleted === FALSE)
+						{
+							return $deleted;
+						}
+					}
+				}
+			}
+			// if we have the key
+			else
+			{
+				if ($id_is_array)
+				{
+					$id_key = $id[$key];
+				}
+				else
+				{
+					$id_key = $id;
+				}
+
+				$updated = $this->role_permission_model->delete_for_permission($id_key);
+			}
 		}
 
 		return $updated;
