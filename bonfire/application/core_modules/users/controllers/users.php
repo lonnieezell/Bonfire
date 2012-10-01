@@ -871,7 +871,7 @@ class Users extends Front_Controller
 								{
 									$errors = $this->emailer->errors;
 								}
-								Template::set_message(lang('us_err_no_email').$errors.", ".$this->emailer->debug, 'error');
+								Template::set_message(lang('us_err_no_email').$errors.", ".$this->emailer->debug_message, 'error');
 							}
 						}
 					}
