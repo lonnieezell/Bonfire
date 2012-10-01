@@ -12,11 +12,7 @@ $('#permission_table input:checkbox').change(function() {
 	$.ajax({
 			url: window.g_url +"/",
 			type: 'POST',
-			data: {
-				"role_perm": val,
-				"action": what,
-				"ci_csrf_token" : $.cookie('ci_csrf_token')
-			},
+			data: { "role_perm": val, "action": what },
 			success: function(data) {
 				var newtext = data.replace(/g_permission/i, '"'+p_name+'"');
 				newtext = newtext.replace(/g_role/i, '"'+r_name+'" role');

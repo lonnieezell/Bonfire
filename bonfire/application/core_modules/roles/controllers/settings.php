@@ -49,7 +49,6 @@ class Settings extends Admin_Controller
 		$this->lang->load('roles');
 
 		Assets::add_module_css('roles', 'css/settings.css');
-		Assets::add_js('jquery.cookie.js');
 		Assets::add_module_js('roles', 'jquery.tablehover.pack.js');
 		Assets::add_module_js('roles', 'js/settings.js');
 
