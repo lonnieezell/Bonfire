@@ -258,6 +258,11 @@ class Install extends CI_Controller {
 
 	public function rename_folder() 
 	{
+		if ($_SERVER['REQUEST_METHOD'] != 'POST')
+		{
+			$this->security->csrf_show_error();
+		}
+
 		$folder = FCPATH;
 	
 		// This should always have the /install in it, but
@@ -267,11 +272,11 @@ class Install extends CI_Controller {
 			$folder .= '/install/';
 		}
 		
-		$new_folder = str_replace('install/', 'install_bak', $folder);
+		$new_folder = preg_replace('{install/$}', 'install_bak', $folder);
 	
 		rename($folder, $new_folder);
 		
-		$url = str_replace('install', '', base_url());
+		$url = preg_replace('{install/$}', '', base_url());
 		$url = str_replace('http://', '', $url);
 		$url = str_replace('//', '/', $url);
 		$url = 'http://'. $url;
