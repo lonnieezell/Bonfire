@@ -168,6 +168,25 @@ class BF_Model extends CI_Model
 	 */
 	protected $db_con = '';
 
+	/**
+	 * Observer Arrays
+	 *
+	 * Each array can contain the names of callback functions within the extending model
+	 * That will be called during each event.
+	 *
+	 * <code>
+	 *	$before_insert = array('set_created', 'validate_fields');
+	 * </code>
+	 */
+	protected $before_insert	= array();
+	protected $after_insert		= array();
+	protected $before_update	= array();
+	protected $after_update		= array();
+	protected $before_find		= array();
+	protected $after_find		= array();
+	protected $before_delete	= array();
+	protected $after_delete		= array();
+
 	//---------------------------------------------------------------
 
 	/**
@@ -192,6 +211,11 @@ class BF_Model extends CI_Model
 			$this->load->database();
 		}
 
+		// Check our auto-set features and make sure they are part of
+		// our observer system.
+		if ($this->set_created) array_unshift($this->before_insert, 'created_on');
+		if ($this->set_modified) array_unshift($this->before_update, 'modified_on');
+
 	}//end __construct()
 
 	//---------------------------------------------------------------
@@ -206,6 +230,8 @@ class BF_Model extends CI_Model
 	 */
 	public function find($id='', $return_type = 0)
 	{
+		$this->trigger('before_find');
+
 		if ($this->_function_check($id) === FALSE)
 		{
 			return FALSE;
@@ -219,12 +245,16 @@ class BF_Model extends CI_Model
 		{
 			if($return_type == 0)
 			{
-				return $query->row();
+				$return = $query->row();
 			}
 			else
 			{
-				return $query->row_array();
+				$return = $query->row_array();
 			}
+
+			$return = $this->trigger('after_find', $return);
+
+			return $return;
 		}
 
 		return FALSE;
@@ -252,6 +282,8 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
+		$this->trigger('before_find');
+
 		$this->set_selects();
 
 		$this->db->from($this->table);
@@ -262,12 +294,16 @@ class BF_Model extends CI_Model
 		{
 			if($return_type == 0)
 			{
-				return $query->result();
+				$return = $query->result();
 			}
 			else
 			{
-				return $query->result_array();
+				$return = $query->result_array();
 			}
+
+			$return = $this->trigger('after_find', $return);
+
+			return $return;
 		}
 
 		$this->error = $this->lang->line('bf_model_bad_select');
@@ -339,6 +375,8 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
+		$this->trigger('before_find');
+
 		if (is_array($field))
 		{
 			foreach ($field as $key => $value)
@@ -366,12 +404,16 @@ class BF_Model extends CI_Model
 		{
 			if($return_type == 0)
 			{
-				return $query->row();
+				$return = $query->row();
 			}
 			else
 			{
-				return $query->row_result();
+				$return = $query->row_result();
 			}
+
+			$return = $this->trigger('after_find', $return);
+
+			return $return;
 		}
 
 		return FALSE;
@@ -394,11 +436,7 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
-		// Add the created field
-		if ($this->set_created === TRUE && !array_key_exists($this->created_field, $data))
-		{
-			$data[$this->created_field] = $this->set_date();
-		}
+		$data = $this->trigger('before_insert', $data);
 
 		if ($this->set_created === TRUE && $this->log_user === TRUE && !array_key_exists($this->created_by_field, $data))
 		{
@@ -410,7 +448,10 @@ class BF_Model extends CI_Model
 
 		if ($status != FALSE)
 		{
-			return $this->db->insert_id();
+			$id = $this->db->insert_id();
+
+			$id = $this->trigger('after_insert', $id);
+			return $id;
 		}
 		else
 		{
@@ -421,7 +462,7 @@ class BF_Model extends CI_Model
 	}//end insert()
 
 	//---------------------------------------------------------------
-	
+
 	/**
 	 * Inserts a batch of data into the database.
 	 *
@@ -435,14 +476,14 @@ class BF_Model extends CI_Model
 		{
 			return FALSE;
 		}
-		
+
 		$set = array();
 
 		// Add the created field
 		if ($this->set_created === TRUE )
 		{
 			$set[$this->created_field] = $this->set_date();
-		} 
+		}
 
 		if ($this->set_created === TRUE && $this->log_user === TRUE)
 		{
@@ -451,8 +492,10 @@ class BF_Model extends CI_Model
 
 		if(!empty($set))
 		{
-			foreach($data as $key => $record)
+			foreach($data as $key => &$record)
 			{
+				$record = $this->trigger('before_insert', $record);
+
 				$data[$key] = array_merge($set,$data[$key]);
 			}
 		}
@@ -489,11 +532,7 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
-		// Add the modified field
-		if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
-		{
-			$data[$this->modified_field] = $this->set_date();
-		}
+		$data = $this->trigger('before_update', $data);
 
 		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
 		{
@@ -501,8 +540,9 @@ class BF_Model extends CI_Model
 		}
 
 		$this->db->where($this->key, $id);
-		if ($this->db->update($this->table, $data))
+		if ($result = $this->db->update($this->table, $data))
 		{
+			$this->trigger('after_update', array($data, $result));
 			return TRUE;
 		}
 
@@ -530,18 +570,18 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
-		// Add the modified field
-		if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
-		{
-			$data[$this->modified_field] = $this->set_date();
-		}
+		$data = $this->trigger('before_update', $data);
 
 		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
 		{
 			$data[$this->modified_by_field] = $this->auth->user_id();
 		}
 
-		return $this->db->update($this->table, $data, array($field => $value));
+		$result = $this->db->update($this->table, $data, array($field => $value));
+
+		$this->trigger('after_update', array($data, $result));
+
+		return $result;
 
 	}//end update_where()
 
@@ -607,6 +647,8 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
+		$this->trigger('before_delete', $id);
+
 		if ($this->find($id) !== FALSE)
 		{
 			if ($this->soft_deletes === TRUE)
@@ -630,6 +672,7 @@ class BF_Model extends CI_Model
 
 			if ($result)
 			{
+				$this->trigger('after_delete', $result);
 				return TRUE;
 			}
 
@@ -659,25 +702,27 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function delete_where($data=NULL)
+	public function delete_where($where=NULL)
 	{
-		if (empty($data))
+		if (empty($where))
 		{
 			$this->error = $this->lang->line('bf_model_no_data');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
 			return FALSE;
 		}
 
-		if (is_array($data))
+		$where = $this->trigger('before_delete', $where);
+
+		if (is_array($where))
 		{
-			foreach($data as $field => $value)
+			foreach($where as $field => $value)
 			{
 				$this->db->where($field,$value);
 			}
 		}
 		else
 		{
-			$this->db->where($data);
+			$this->db->where($where);
 		}
 
 		if ($this->soft_deletes === TRUE)
@@ -703,6 +748,8 @@ class BF_Model extends CI_Model
 
 		if ($result)
 		{
+			$this->trigger('after_delete', $result);
+
 			return $result;
 		}
 
@@ -988,9 +1035,86 @@ class BF_Model extends CI_Model
 
 	//--------------------------------------------------------------------
 
+	//--------------------------------------------------------------------
+	// !OBSERVERS
+	//--------------------------------------------------------------------
+
+	/**
+	 * Sets the created on date for the object based on the
+	 * current date/time and date_format. Will not overwrite existing.
+	 *
+	 * @param array  $row  The array of data to be inserted
+	 *
+	 * @return array
+	 */
+	public function created_on($row)
+	{
+		if (!array_key_exists($this->created_field, $row))
+		{
+			$row[$this->created_field] = $this->set_date();
+		}
+
+		return $row;
+	} // end created_on()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Sets the modified_on date for the object based on the
+	 * current date/time and date_format. Will not overwrite existing.
+	 *
+	 * @param array  $row  The array of data to be inserted
+	 *
+	 * @return array
+	 */
+	public function modified_on($row)
+	{
+		if (!array_key_exists($this->modified_field, $row))
+		{
+			$row[$this->modified_field] = $this->set_date();
+		}
+
+		return $row;
+	}
+
+	//--------------------------------------------------------------------
+
+
 	//---------------------------------------------------------------
 	// !UTILITY FUNCTIONS
 	//---------------------------------------------------------------
+
+	/**
+	 * Triggers a model-specific event and call each of it's observers.
+	 *
+	 * @param string 	$event 	The name of the event to trigger
+	 * @param mixed 	$data 	The data to be passed to the callback functions.
+	 *
+	 * @return mixed
+	 */
+	public function trigger($event, $data=false)
+	{
+		if (!isset($this->$event) || !is_array($this->$event))
+		{
+			return $data;
+		}
+
+		foreach ($this->$event as $method)
+		{
+			if (strpos($method, '('))
+			{
+				preg_match('/([a-zA-Z0-9\_\-]+)(\(([a-zA-Z0-9\_\-\., ]+)\))?/', $method, $matches);
+				$this->callback_parameters = explode(',', $matches[3]);
+			}
+
+			$data = call_user_func_array(array($this, $method), array($data));
+		}
+
+		return $data;
+	}
+
+	//--------------------------------------------------------------------
+
 
 	/**
 	 * A utility method that does some error checking and cleanup for other methods:
