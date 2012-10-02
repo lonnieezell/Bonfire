@@ -73,9 +73,17 @@ class Settings extends Admin_Controller
 		Template::set('roles', $ordered_roles);
 
 		// Do we have any actions?
-		$action = $this->input->post('submit').$this->input->post('delete').$this->input->post('purge').$this->input->post('restore').$this->input->post('activate').$this->input->post('deactivate');
+	    if (!empty($_POST))
+	    {
+			if (isset($_POST['activate']))    $action = '_activate';
+			if (isset($_POST['deactivate']))  $action = '_deactivate';
+			if (isset($_POST['ban']))         $action = '_ban';
+			if (isset($_POST['delete']))      $action = '_delete';
+			if (isset($_POST['purge']))       $action = '_purge';
+			if (isset($_POST['restore']))     $action = '_restore';
+		}
 
-		if (!empty($action))
+		if (isset($action))
 		{
 			$checked = $this->input->post('checked');
 
@@ -83,27 +91,7 @@ class Settings extends Admin_Controller
 			{
 				foreach($checked as $user_id)
 				{
-					switch(strtolower($action))
-					{
-						case 'activate':
-							$this->_activate($user_id);
-							break;
-						case 'deactivate':
-							$this->_deactivate($user_id);
-							break;
-						case 'ban':
-							$this->_ban($user_id);
-							break;
-						case 'delete':
-							$this->_delete($user_id);
-							break;
-						case 'purge':
-							$this->_purge($user_id);
-							break;
-						case 'restore':
-							$this->_restore($user_id);
-							break;
-					}
+					$this->$action($user_id);
 				}
 			}
 			else
@@ -231,7 +219,7 @@ class Settings extends Admin_Controller
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
 
 				Template::set_message(lang('us_user_created_success'), 'success');
-				Template::redirect(SITE_AREA .'/settings/users');
+				redirect(SITE_AREA .'/settings/users');
 			}
 		}
 
@@ -318,7 +306,7 @@ class Settings extends Admin_Controller
 
 				// redirect back to the edit page to make sure that a users password change
 				// forces a login check
-				Template::redirect($this->uri->uri_string());
+				redirect($this->uri->uri_string());
 			}
 		}
 
@@ -708,7 +696,7 @@ class Settings extends Admin_Controller
 			if ($result)
 			{
 				$message = lang('us_active_status_changed');
-				if (!$supress_email)
+				if ($status == 1 && !$supress_email)
 				{
 					// Now send the email
 					$this->load->library('emailer/emailer');
@@ -743,7 +731,7 @@ class Settings extends Admin_Controller
 			Template::set_message(lang('us_err_no_id'),'error');
 		}//end if
 
-		Template::redirect(SITE_AREA.'/settings/users');
+		redirect(SITE_AREA.'/settings/users');
 
 	}//end user_status()
 

@@ -1,7 +1,7 @@
 	<div class="box select admin-box">
 		<h3><?php echo lang('activity_filter_head'); ?></h3>
 		<?php
-			echo form_open(SITE_AREA . '/reports/activities/' . $vars['which'], 'class="form-horizontal constrained ajax-form"');
+			echo form_open(SITE_AREA . '/reports/activities/' . $vars['which'], 'class="form-horizontal constrained"');
 
 			$form_help = '<span class="help-inline">' . sprintf(lang('activity_filter_note'),($vars['view_which'] == ucwords(lang('activity_date')) ? 'from before':'only for'),strtolower($vars['view_which'])) . '</span>';
 			$form_data = array('name' => $vars['which'].'_select', 'id' => $vars['which'].'_select', 'class' => 'span3' );

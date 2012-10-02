@@ -131,7 +131,7 @@ class Settings extends Admin_Controller
 			if ($this->save_permissions())
 			{
 				Template::set_message(lang("permissions_create_success"), 'success');
-				Template::redirect(SITE_AREA .'/settings/permissions');
+				redirect(SITE_AREA .'/settings/permissions');
 			}
 		}
 

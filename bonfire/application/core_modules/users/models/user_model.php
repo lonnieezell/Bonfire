@@ -166,7 +166,7 @@ class User_model extends BF_Model
 		}
 
 		// Display Name
-		if (!isset($data['display_name']) || (isset($data['display_name']) && empty($data['display_name'])))
+		if (!isset($data['display_name']) || empty($data['display_name']))
 		{
 			if ($this->settings_lib->item('auth.use_usernames') == 1 && !empty($data['username']))
 			{
@@ -809,7 +809,12 @@ class User_model extends BF_Model
 
 		$this->db->update($this->table, array('active'=>0,'activate_hash' => $activate_hash), array($login_type => $user_id));
 
-		return ($this->db->affected_rows() == 1) ? $activate_hash : FALSE;
+		if ($this->db->affected_rows() != 1)
+		{
+			return FALSE;
+		}
+
+		return $make_hash ? $activate_hash : TRUE;
 
 	}//end deactivate()
 

@@ -161,11 +161,7 @@ class Users extends Front_Controller
 			{
 				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|xss_clean');
 
-				if ($this->form_validation->run() === FALSE)
-				{
-					Template::set_message(lang('us_invalid_email'), 'error');
-				}
-				else
+				if ($this->form_validation->run() !== FALSE)
 				{
 					// We validated. Does the user actually exist?
 					$user = $this->user_model->find_by('email', $_POST['email']);
@@ -202,6 +198,10 @@ class Users extends Front_Controller
 						{
 							Template::set_message(lang('us_reset_pass_error'). $this->emailer->errors, 'error');
 						}
+					}
+					else
+					{
+						Template::set_message(lang('us_invalid_email'), 'error');
 					}//end if
 				}//end if
 			}//end if
@@ -278,7 +278,6 @@ class Users extends Front_Controller
 
 				// redirect to make sure any language changes are picked up
 				Template::redirect('/users/profile');
-				exit;
 			}
 			else
 			{
@@ -461,11 +460,12 @@ class Users extends Front_Controller
 			{
 				// Time to save the user...
 				$data = array(
-						'email'		=> $_POST['email'],
-						'username'	=> isset($_POST['username']) ? $_POST['username'] : '',
-						'password'	=> $_POST['password'],
-						'language'	=> $this->input->post('language'),
-						'timezone'	=> $this->input->post('timezones'),
+						'email'			=> $_POST['email'],
+						'username'		=> isset($_POST['username']) ? $_POST['username'] : '',
+						'password'		=> $_POST['password'],
+						'language'		=> $this->input->post('language'),
+						'timezone'		=> $this->input->post('timezones'),
+						'display_name'	=> $this->input->post('display_name'),
 					);
 
 				// User activation method
@@ -871,7 +871,7 @@ class Users extends Front_Controller
 								{
 									$errors = $this->emailer->errors;
 								}
-								Template::set_message(lang('us_err_no_email').$errors.", ".$this->emailer->debug, 'error');
+								Template::set_message(lang('us_err_no_email').$errors.", ".$this->emailer->debug_message, 'error');
 							}
 						}
 					}

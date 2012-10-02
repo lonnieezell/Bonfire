@@ -11,9 +11,9 @@ $view =<<<END
 				
 	<table class="table table-striped table-bordered">
 		<thead>
-		
-			{table_header}
-		
+			<tr>
+				{table_header}
+			</tr>
 		</thead>
 		<tbody>
 		
@@ -23,7 +23,13 @@ $view =<<<END
 			<?php foreach(\$record as \$field => \$value) : ?>
 				
 				<?php if (\$field != '{$primary_key_field}') : ?>
-					<td><?php echo (\$field == 'deleted') ? ((\$value > 0) ? lang('{$module_name_lower}_true') : lang('{$module_name_lower}_false')) : \$value; ?></td>
+					<td>
+						<?php if (\$field == 'deleted'): ?>
+							<?php e((\$value > 0) ? lang('{$module_name_lower}_true') : lang('{$module_name_lower}_false')); ?>
+						<?php else: ?>
+							<?php e(\$value); ?>
+						<?php endif ?>
+					</td>
 				<?php endif; ?>
 				
 			<?php endforeach; ?>

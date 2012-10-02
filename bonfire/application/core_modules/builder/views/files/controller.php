@@ -160,7 +160,7 @@ if ($db_required != '') {
 				\$this->activity_model->log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_create_record').': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
 
 				Template::set_message(lang('".$module_name_lower."_create_success'), 'success');
-				Template::redirect(SITE_AREA .'/".$controller_name."/".$module_name_lower."');
+				redirect(SITE_AREA .'/".$controller_name."/".$module_name_lower."');
 			}
 			else
 			{

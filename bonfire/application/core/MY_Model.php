@@ -329,23 +329,18 @@ class BF_Model extends CI_Model
 		if (empty($field)) return FALSE;
 
 		// Setup our field/value check
-		if (is_array($field))
+		if ( ! is_array($field))
 		{
-			foreach ($field as $key => $value)
-			{
-				if ($type == 'or')
-				{
-					$this->db->or_where($key, $value);
-				}
-				else
-				{
-					$this->db->where($key, $value);
-				}
-			}
+			$field = array($field => $value);
+		}
+
+		if ($type == 'or')
+		{
+			$this->db->or_where($field);
 		}
 		else
 		{
-			$this->db->where($field, $value);
+			$this->db->where($field);
 		}
 
 		$this->set_selects();
@@ -377,23 +372,18 @@ class BF_Model extends CI_Model
 
 		$this->trigger('before_find');
 
-		if (is_array($field))
+		if ( ! is_array($field))
 		{
-			foreach ($field as $key => $value)
-			{
-				if ($type == 'or')
-				{
-					$this->db->or_where($key, $value);
-				}
-				else
-				{
-					$this->db->where($key, $value);
-				}
-			}
+			$field = array($field => $value);
+		}
+
+		if ($type == 'or')
+		{
+			$this->db->or_where($field);
 		}
 		else
 		{
-			$this->db->where($field, $value);
+			$this->db->where($field);
 		}
 
 		$this->set_selects();
@@ -455,7 +445,7 @@ class BF_Model extends CI_Model
 		}
 		else
 		{
-			$this->error = mysql_error();
+			$this->error = $this->get_db_error_message();
 			return FALSE;
 		}
 
@@ -506,7 +496,7 @@ class BF_Model extends CI_Model
 
 		if ($status === FALSE)
 		{
-			$this->error = mysql_error();
+			$this->error = $this->get_db_error_message();
 			return FALSE;
 		}
 
@@ -519,28 +509,42 @@ class BF_Model extends CI_Model
 	/**
 	 * Updates an existing row in the database.
 	 *
-	 * @param mixed   $id The primary_key value of the row to update.
-	 * @param array $data An array of key/value pairs to update.
+	 * @param mixed	$where	The primary_key value of the row to update or the where clause.
+	 * @param array $data	An array of key/value pairs to update.
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function update($id=NULL, $data=NULL)
+	public function update($where=NULL, $data=NULL)
 	{
 
-		if ($this->_function_check($id, $data) === FALSE)
+		if (is_array($where))
 		{
-			return FALSE;
+			if ($this->_function_check(FALSE, $data) === FALSE)
+			{
+				return FALSE;
+			}
 		}
+		// If $where is not an array, it should be the primary key value of the row to update
+		else
+		{
+			if ($this->_function_check($where, $data) === FALSE)
+			{
+				return FALSE;
+			}
+
+			$where = array($this->key => $where);
+		}
+
 
 		$data = $this->trigger('before_update', $data);
 
+		// Add the user id if using a modified_by field
 		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
 		{
 			$data[$this->modified_by_field] = $this->auth->user_id();
 		}
 
-		$this->db->where($this->key, $id);
-		if ($result = $this->db->update($this->table, $data))
+		if ($result = $this->db->update($this->table, $data, $where))
 		{
 			$this->trigger('after_update', array($data, $result));
 			return TRUE;
@@ -563,26 +567,7 @@ class BF_Model extends CI_Model
 	 */
 	public function update_where($field=NULL, $value=NULL, $data=NULL)
 	{
-		if (empty($field) || empty($value) || !is_array($data))
-		{
-			$this->error = $this->lang->line('bf_model_no_data');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
-			return FALSE;
-		}
-
-		$data = $this->trigger('before_update', $data);
-
-		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
-		{
-			$data[$this->modified_by_field] = $this->auth->user_id();
-		}
-
-		$result = $this->db->update($this->table, $data, array($field => $value));
-
-		$this->trigger('after_update', array($data, $result));
-
-		return $result;
-
+		return $this->update(array($field => $value), $data);
 	}//end update_where()
 
 	//---------------------------------------------------------------
@@ -676,7 +661,7 @@ class BF_Model extends CI_Model
 				return TRUE;
 			}
 
-			$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
+			$this->error = $this->lang->line('bf_model_db_error') . $this->get_db_error_message();
 		}
 		else
 		{
@@ -753,7 +738,7 @@ class BF_Model extends CI_Model
 			return $result;
 		}
 
-		$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
+		$this->error = $this->lang->line('bf_model_db_error') . $this->get_db_error_message();
 
 		return FALSE;
 
@@ -1203,6 +1188,50 @@ class BF_Model extends CI_Model
 		}
 
 	}//end set_date()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Allows you to retrieve error messages from the database
+	 *
+	 * @return string
+	 */
+	protected function get_db_error_message()
+	{
+		switch ($this->db->platform())
+		{
+			case 'cubrid':
+				return cubrid_errno($this->db->conn_id);
+			case 'mssql':
+				return mssql_get_last_message();
+			case 'mysql':
+				return mysql_error($this->db->conn_id);
+			case 'mysqli':
+				return mysqli_error($this->db->conn_id);
+			case 'oci8':
+				// If the error was during connection, no conn_id should be passed
+				$error = is_resource($this->db->conn_id) ? oci_error($this->db->conn_id) : oci_error();
+				return $error['message'];
+			case 'odbc':
+				return odbc_errormsg($this->db->conn_id);
+			case 'pdo':
+				$error_array = $this->db->conn_id->errorInfo();
+				return $error_array[2];
+			case 'postgre':
+				return pg_last_error($this->db->conn_id);
+			case 'sqlite':
+				return sqlite_error_string(sqlite_last_error($this->db->conn_id));
+			case 'sqlsrv':
+				$error = array_shift(sqlsrv_errors());
+				return !empty($error['message']) ? $error['message'] : null;
+			default:
+				/*
+				 * !WARNING! $this->db->_error_message() is supposed to be private and
+				 * possibly won't be available in future versions of CI
+				 */
+				return $this->db->_error_message();
+		}
+	}
 
 	//--------------------------------------------------------------------
 

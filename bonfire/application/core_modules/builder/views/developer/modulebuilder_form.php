@@ -46,7 +46,11 @@ a.mb_show_advanced_rules:hover {
 <div class="admin-box">
 	<h3><?php echo $toolbar_title ?></h3>
 
+<?php if($field_total>0): ?>
+	<?php echo form_open(current_url().'/'.$field_total, array('id'=>"module_form",'class'=>"form-horizontal")); ?>
+<?php elseif($field_total==0): ?>
 	<?php echo form_open(current_url(), array('id'=>"module_form",'class'=>"form-horizontal")); ?>
+<?php endif; ?>
 	<div>
 		<!-- Module Details -->
 		<fieldset id="module_details">
@@ -155,13 +159,6 @@ a.mb_show_advanced_rules:hover {
 				<div class="controls">
 					<input name="table_as_field_prefix" id="table_as_field_prefix" type="checkbox" value="<?php echo set_value("table_as_field_prefix", 1); ?>" checked />
 								<span class="help-inline"><?php echo form_error('table_as_field_prefix'); ?></span>
-				</div>
-			</div>
-			<div class="control-group mb_advanced <?php echo form_has_error('form_input_delimiters') ? 'error' : ''; ?>">
-				<label for="form_input_delimiters" class="control-label block"><?php echo lang('mb_form_delims'); ?></label>
-				<div class="controls">
-					<input name="form_input_delimiters" id="form_input_delimiters" type="text" value="<?php echo set_value("form_input_delimiters", "<div class='controls'>,</div>"); ?>" />
-					<span class="help-inline"><?php echo form_error('form_input_delimiters'); ?></span>
 				</div>
 			</div>
 
@@ -329,7 +326,7 @@ a.mb_show_advanced_rules:hover {
 						}
 
 					?>
-					<?php echo form_dropdown("view_field_type{$count}", $view_field_types, set_value("view_field_type{$count}", $default_field_type), lang('mb_form_type'), 'id="view_field_type'.$count.'"', '<span class="help-inline">'. form_error("view_field_type{$count}").'</span>'); ?>
+					<?php echo form_dropdown("view_field_type{$count}", $view_field_types, set_value("view_field_type{$count}", $default_field_type), lang('mb_form_type'), '', '<span class="help-inline">'. form_error("view_field_type{$count}").'</span>'); ?>
 
 					<?php
 						$db_field_types = array(
@@ -364,7 +361,7 @@ a.mb_show_advanced_rules:hover {
 							'YEAR' 			=> 'YEAR',
 							);
 					?>
-					<?php echo form_dropdown("db_field_type{$count}", $db_field_types, set_value("db_field_type{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['type'] : ''), lang('mb_form_dbtype'), 'id="db_field_type'.$count.'"', '<span class="help-inline">'. form_error("db_field_type{$count}").'</span>'); ?>
+					<?php echo form_dropdown("db_field_type{$count}", $db_field_types, set_value("db_field_type{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['type'] : ''), lang('mb_form_dbtype'), '', '<span class="help-inline">'. form_error("db_field_type{$count}").'</span>'); ?>
 
 					<div class="control-group <?php echo form_has_error("db_field_length_value{$count}") ? 'error' : ''; ?>">
 						<label class="control-label" for="db_field_length_value<?php echo $count; ?>"><?php echo lang('mb_form_length'); ?></label>

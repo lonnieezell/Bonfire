@@ -434,13 +434,13 @@ if (!function_exists('e'))
 		Function: e()
 
 		A convenience function to make sure your output is safe to display.
-		Helps to defeat XSS attacks by running the text through htmlentities().
+		Helps to defeat XSS attacks by running the text through htmlspecialchars().
 
 		Should be used anywhere you are displaying user-submitted text.
 	*/
 	function e($str)
 	{
-		echo htmlentities($str, ENT_QUOTES, 'UTF-8');
+		echo htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 	}
 }
 

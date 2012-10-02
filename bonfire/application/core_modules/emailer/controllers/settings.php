@@ -203,9 +203,10 @@ class Settings extends Admin_Controller
 				'message'	=> lang('em_test_mail_body')
 			 );
 
-		$results = $this->emailer->send($data, FALSE);
+		$success = $this->emailer->send($data, FALSE);
 
-		Template::set('results', $results);
+		Template::set('success', $success);
+		Template::set('debug', $this->emailer->debug_message);
 		Template::render();
 
 	}//end test()
@@ -256,11 +257,17 @@ class Settings extends Admin_Controller
 		elseif (isset($_POST['action_force_process']))
 		{
 			$this->load->library('emailer');
+			$this->emailer->enable_debug(TRUE);
 
 			// Use ob to catch output designed for CRON only
 			ob_start();
-			$this->emailer->process_queue();
+			$success = $this->emailer->process_queue();
 			ob_end_clean();
+
+			if ( ! $success)
+			{
+				Template::set('email_debug', $this->emailer->debug_message);
+			}
 		}
 		elseif (isset($_POST['action_insert_test']))
 		{
@@ -287,13 +294,6 @@ class Settings extends Admin_Controller
 		$this->pager['uri_segment']	= 5;
 
 		$this->pagination->initialize($this->pager);
-
-		if ($debug_msg = $this->session->userdata('email_debug'))
-		{
-			Template::set('email_debug', $debug_msg);
-			$this->session->unset_userdata('email_debug');
-			unset($debug_msg);
-		}
 
 		Template::set('toolbar_title', lang('em_emailer_queue'));
 		Template::render();
@@ -384,7 +384,7 @@ class Settings extends Admin_Controller
 					if ($result)
 					{
 						Template::set_message($success_count .' '. lang('em_create_email_success'), 'success');
-						Template::redirect(SITE_AREA . '/settings/emailer/queue');
+						redirect(SITE_AREA . '/settings/emailer/queue');
 					}
 					else
 					{

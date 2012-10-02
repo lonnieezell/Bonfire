@@ -12,12 +12,12 @@
 		</div>
 
 
-<?php if (auth_errors() || validation_errors()) : ?>
+<?php if (validation_errors()) : ?>
 		<div class="row-fluid">
 			<div class="span12">
 				<div class="alert alert-error fade in">
 						<a data-dismiss="alert" class="close">&times;</a>
-					<?php echo auth_errors() . validation_errors(); ?>
+					<?php echo validation_errors(); ?>
 				</div>
 			</div>
 		</div>

@@ -37,12 +37,12 @@ class Template
 	/**
 	 * Set the debug mode on the template to output messages
 	 *
-	 * @access private
+	 * @access public
 	 * @static
 	 *
 	 * @var bool
 	 */
-	private static $debug = false;
+	public static $debug = false;
 
 
 	/**
@@ -257,10 +257,6 @@ class Template
 		if (self::$ci->input->is_ajax_request())
 		{
 			$layout = self::$ci->config->item('template.ajax_layout');
-			self::$ci->output->set_header("Cache-Control: no-store, no-cache, must-revalidate");
-			self::$ci->output->set_header("Cache-Control: post-check=0, pre-check=0");
-			self::$ci->output->set_header("Pragma: no-cache");
-			self::$ci->output->set_header('Content-Type: text/html');
 
 			$controller = NULL;
 		}
@@ -620,7 +616,6 @@ class Template
 
 	/**
 	 * Makes it easy to save information to be rendered within the views.
-	 * As of 3.0, can also set any of the class properties.
 	 *
 	 * @param string $var_name The name of the variable to set
 	 * @param mixed  $value    The value to set it to.
@@ -642,15 +637,7 @@ class Template
 		}
 		else
 		{
-			// Is it a class property?
-			if (isset(self::$$var_name))
-			{
-				self::$$var_name = $value;
-			}
-			else
-			{
-				self::$data[$var_name] = $value;
-			}
+			self::$data[$var_name] = $value;
 		}//end if
 
 	}//end set()
@@ -813,7 +800,21 @@ class Template
 	{
 		$url = strpos($url, 'http') === FALSE ? site_url($url) : $url;
 
-		echo "<script>window.location='{$url}'</script>";
+		echo <<<EOF
+<!doctype html>
+<meta charset="utf-8">
+<title></title>
+
+EOF;
+		// Output URL somewhere where we know how to escape it safely
+		echo '<div id="url" data-url="';
+		e($url);
+		echo '"></div>';
+		// then JS can grab it
+		echo <<<EOF
+
+<script>window.location = document.getElementById('url').getAttribute('data-url')</script>
+EOF;
 		exit();
 
 	}//end redirect()
