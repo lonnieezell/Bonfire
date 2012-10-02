@@ -5,7 +5,10 @@
  */
 // Plus we disable CSRF protection in order to avoid
 // modifying simpletest
-$_POST['ci_csrf_token'] = $_COOKIE['ci_csrf_token'];
+if ($_SERVER["REQUEST_METHOD"] == "POST")
+{
+	$_POST['ci_csrf_token'] = $_COOKIE['ci_csrf_token'];
+}
 
 error_reporting(0);
 $cli_mode = setup_cli($argv); // Determines if running in cli mode
