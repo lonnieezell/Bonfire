@@ -213,8 +213,8 @@ class BF_Model extends CI_Model
 
 		// Check our auto-set features and make sure they are part of
 		// our observer system.
-		if ($this->set_created) array_unshift($this->before_insert, 'created_on');
-		if ($this->set_modified) array_unshift($this->before_update, 'modified_on');
+		if ($this->set_created === true) array_unshift($this->before_insert, 'created_on');
+		if ($this->set_modified === true) array_unshift($this->before_update, 'modified_on');
 
 	}//end __construct()
 
