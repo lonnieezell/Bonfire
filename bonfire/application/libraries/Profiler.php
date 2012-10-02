@@ -266,7 +266,7 @@ class CI_Profiler {
 					$key = "'".$key."'";
 				}
 
-				$output .= "<tr><td style='width:50%;color:#000;background-color:#ddd;padding:5px'>&#36;_GET[".$key."]&nbsp;&nbsp; </td><td style='width:50%;padding:5px;color:#cd6e00;font-weight:normal;background-color:#ddd;'>";
+				//$output .= "<tr><td style='width:50%;color:#000;background-color:#ddd;padding:5px'>&#36;_GET[".$key."]&nbsp;&nbsp; </td><td style='width:50%;padding:5px;color:#cd6e00;font-weight:normal;background-color:#ddd;'>";
 				if (is_array($val))
 				{
 					$output['&#36;_GET['. $key .']'] = "<pre>" . htmlspecialchars(stripslashes(print_r($val, true))) . "</pre>";
