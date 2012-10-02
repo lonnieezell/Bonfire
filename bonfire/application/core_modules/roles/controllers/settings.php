@@ -412,7 +412,7 @@ class Settings extends Admin_Controller
 		// This response is supposed to be single piece of text used by JS.
 		$this->output->enable_profiler(FALSE);
 
-		$pieces = explode(',',$this->input->post('role_perm', TRUE));
+		$pieces = explode(',',$this->input->post('role_perm'));
 
 		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find( (int) $pieces[0])->role_name.'.Manage'))
 		{
@@ -421,7 +421,7 @@ class Settings extends Admin_Controller
 			return;
 		}
 
-		if ($this->input->post('action', TRUE) == 'true')
+		if ($this->input->post('action') == 'true')
 		{
 			if(is_numeric($this->role_permission_model->create_role_permissions($pieces[0],$pieces[1])))
 			{
