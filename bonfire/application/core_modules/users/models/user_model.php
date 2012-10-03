@@ -399,14 +399,21 @@ class User_model extends BF_Model
 	 */
 	public function count_by_roles()
 	{
-		$prefix = $this->db->dbprefix;
+		$join_table		= 'roles';
+		$join_type		= 'left';
+		$join_stmt		= "{$join_table}.role_id = {$this->table}.role_id";
+		$group_stmt		= "{$this->table}.role_id";
+		$select_stmt	= array(
+			"{$join_table}.role_name",
+			'count(1) as count',
+		);
 
-		$sql = "SELECT role_name, COUNT(1) as count
-				FROM {$prefix}users, {$prefix}roles
-				WHERE {$prefix}users.role_id = {$prefix}roles.role_id
-				GROUP BY {$prefix}users.role_id";
+		$this->db->select($select_stmt)
+			->from($this->table)
+			->join($join_table, $join_stmt, $join_type)
+			->group_by($group_stmt);
 
-		$query = $this->db->query($sql);
+		$query = $this->db->get();
 
 		if ($query->num_rows())
 		{

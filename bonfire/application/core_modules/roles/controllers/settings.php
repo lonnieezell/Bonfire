@@ -338,10 +338,9 @@ class Settings extends Admin_Controller
 			);
 
 			if ( $this->permission_model->insert($add_perm) ) {
-				$prefix = $this->db->dbprefix;
 				// give current_role, or admin fallback, access to manage new role ACL
 				$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
-				$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(".$assign_role.",".$this->db->insert_id().")");
+				$this->db->insert('role_permissions', array('role_id' => $assign_role, 'permission_id' => $this->db->insert_id()));
 			}
 			else
 			{
