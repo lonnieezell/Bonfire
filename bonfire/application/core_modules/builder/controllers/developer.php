@@ -285,7 +285,9 @@ class Developer extends Admin_Controller {
             }
 
             // get any permission ids
-            $query = $this->db->query('SELECT permission_id FROM '.$prefix.'permissions WHERE name LIKE "'.$module_name.'.%.%"');
+			$this->db->select('permission_id')->like('name', "{$module_name}.%.%", 'none');
+
+			$query = $this->db->get('permissions');
 
             if ($query->num_rows() > 0)
             {
@@ -457,6 +459,7 @@ class Developer extends Admin_Controller {
         if ($this->db->table_exists($table_name))
         {
 
+			// TODO: Replace SHOW COLUMNS FROM with field_data($table_name) ?
             $query_string = "SHOW COLUMNS FROM ".$this->db->dbprefix.$table_name;
             if($query = $this->db->query($query_string))
             {

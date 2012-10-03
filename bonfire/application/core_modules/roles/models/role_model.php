@@ -270,15 +270,15 @@ class Role_model extends BF_Model
 			if ($perm)
 			{
 				// remove the role_permissions for this permission
-				$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='".$perm->permission_id."';");
+				$this->db->delete('role_permissions', array('permission_id' => $perm->permission_id));
 
 				if ($deleted === TRUE && $purge === TRUE)
 				{
-					$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Permissions.".ucwords($role->role_name).".Manage')");
+					$this->db->delete('permissions', array('name' => 'Permissions.' . ucwords($role->role_name) . '.Manage'));
 				}
 				else
 				{
-					$this->db->query("UPDATE {$prefix}permissions SET status = 'inactive' WHERE (name = 'Permissions.".ucwords($role->role_name).".Manage')");
+					$this->db->update('permissions', array('status' => 'inactive'), array('name' => 'Permissions.' . ucwords($role->role_name) . '.Manage'));
 				}
 			}
 		}//end if
