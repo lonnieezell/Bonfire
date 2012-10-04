@@ -333,14 +333,19 @@ class Auth
 			// set message telling them no permission THEN redirect
 			Template::set_message( lang('us_no_permission'), 'attention');
 
-			if ($uri)
+			if (! $uri)
 			{
-				Template::redirect($uri);
+				$uri = $this->ci->session->userdata('previous_page');
+
+				// If previous page was the same (e.g. user pressed F5),
+				// but permission has been removed, then redirecting
+				// to it will cause an infinite loop.
+				if ($uri == current_url())
+				{
+					$uri = site_url();
+				}
 			}
-			else
-			{
-				Template::redirect($this->ci->session->userdata('previous_page'));
-			}
+			Template::redirect($uri);
 		}
 
 		return TRUE;

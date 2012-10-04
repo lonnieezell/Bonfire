@@ -785,9 +785,8 @@ class Template
 	//---------------------------------------------------------------
 
 	/**
-	 * Returns a javascript solution for page redirection. This is especially
-	 * handy when you want to redirect out of an ajax request to a standard
-	 * http request.
+	 * Like CodeIgniter redirect(), but uses javascript if needed
+	 * to redirect out of an ajax request.
 	 *
 	 * @access public
 	 * @static
@@ -800,21 +799,30 @@ class Template
 	{
 		$url = strpos($url, 'http') === FALSE ? site_url($url) : $url;
 
-		echo <<<EOF
-<!doctype html>
-<meta charset="utf-8">
-<title></title>
+		if (!self::$ci->input->is_ajax_request())
+		{
+			header("Location: ".$url);
 
-EOF;
-		// Output URL somewhere where we know how to escape it safely
-		echo '<div id="url" data-url="';
-		e($url);
-		echo '"></div>';
-		// then JS can grab it
-		echo <<<EOF
+			// A full HTML document requires certain elements to
+			// be considered valid.  We don't return any content,
+			// so override the default header which specifies HTML.
+			header("Content-Type: text/plain");
+		}
+		else
+		{
+			// Output URL somewhere where we know how to escape it safely
+			echo '<div id="url" data-url="';
+			e($url);
+			echo '"></div>';
 
-<script>window.location = document.getElementById('url').getAttribute('data-url')</script>
+			// then JS can grab it
+			echo <<<EOF
+<script>
+window.location = document.getElementById('url').getAttribute('data-url');
+</script>
 EOF;
+		}
+
 		exit();
 
 	}//end redirect()
