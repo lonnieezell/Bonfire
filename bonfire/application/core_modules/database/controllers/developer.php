@@ -217,11 +217,9 @@ class Developer extends Admin_Controller
 		{
 			$this->load->library('form_validation');
 
-			$yes_no = lang('bf_no').','.lang('bf_yes');
-
 			$this->form_validation->set_rules('file_name', 'lang:db_filename', 'required|trim|max_length[220]|xss_clean');
-			$this->form_validation->set_rules('drop_tables', 'lang:db_drop_tables', 'required|trim|one_of['.$yes_no.']|xss_clean');
-			$this->form_validation->set_rules('add_inserts', 'lang:db_add_inserts', 'required|trim|one_of['.$yes_no.']|xss_clean');
+			$this->form_validation->set_rules('drop_tables', 'lang:db_drop_tables', 'required|trim|one_of[0,1]|xss_clean');
+			$this->form_validation->set_rules('add_inserts', 'lang:db_add_inserts', 'required|trim|one_of[0,1]|xss_clean');
 			$this->form_validation->set_rules('file_type', 'lang:db_compress_type', 'required|trim|one_of[txt,'.lang('db_gzip').','.lang('db_zip').']|xss_clean');
 			$this->form_validation->set_rules('tables', 'lang:db_tables', 'required|is_array|xss_clean');
 
@@ -230,8 +228,8 @@ class Developer extends Admin_Controller
 				// Do the backup.
 				$this->load->dbutil();
 
-				$add_drop = ($_POST['drop_tables'] == 'Yes') ? TRUE : FALSE;
-				$add_insert = ($_POST['add_inserts'] == 'Yes') ? TRUE : FALSE;
+				$add_drop = ($_POST['drop_tables'] == '1');
+				$add_insert = ($_POST['add_inserts'] == '1');
 				$filename = $this->backup_folder . $_POST['file_name'] . '.' . $_POST['file_type'];
 
 				$prefs = array(

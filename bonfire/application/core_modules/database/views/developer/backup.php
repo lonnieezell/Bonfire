@@ -25,8 +25,8 @@
 			<label for="drop_tables" class="control-label"><?php echo lang('db_drop_question') ?></label>
 			<div class="controls">
 				<select name="drop_tables" id="drop_tables">
-					<option <?php echo set_select('drop_tables', lang('bf_no')); ?>><?php echo lang('bf_no'); ?></option>
-					<option <?php echo set_select('drop_tables', lang('bf_yes')); ?>><?php echo lang('bf_yes'); ?></option>
+					<option value="0" <?php echo set_select('drop_tables', '0'); ?>><?php echo lang('bf_no'); ?></option>
+					<option value="1" <?php echo set_select('drop_tables', '1'); ?>><?php echo lang('bf_yes'); ?></option>
 				</select>
 				<?php if (form_error('drop_tables')) echo '<span class="help-inline">'. form_error('drop_tables') .'</span>'; ?>
 			</div>
@@ -36,8 +36,8 @@
 			<label for="add_inserts" class="control-label"><?php echo lang('db_insert_question'); ?></label>
 			<div class="controls">
 				<select name="add_inserts" id="add_inserts">
-					<option <?php echo set_select('add_inserts', lang('bf_no')); ?>><?php echo lang('bf_no'); ?></option>
-					<option <?php echo set_select('add_inserts', lang('bf_yes'), TRUE); ?>><?php echo lang('bf_yes'); ?></option>
+					<option value="0" <?php echo set_select('add_inserts', '0'); ?>><?php echo lang('bf_no'); ?></option>
+					<option value="1" <?php echo set_select('add_inserts', '1', TRUE); ?>><?php echo lang('bf_yes'); ?></option>
 				</select>
 				<?php if (form_error('add_inserts')) echo '<span class="help-inline">'. form_error('add_inserts') .'</span>'; ?>
 			</div>
