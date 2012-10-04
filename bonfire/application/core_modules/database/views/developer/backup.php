@@ -48,8 +48,8 @@
 			<div class="controls">
 				<select name="file_type" id="file_type">
 					<option value="txt" <?php echo set_select('file_type', 'txt', TRUE); ?>><?php echo lang('bf_none'); ?></option>
-					<option <?php echo set_select('file_type', lang('db_gzip')); ?>><?php echo lang('db_gzip'); ?></option>
-					<option <?php echo set_select('file_type', lang('db_zip')); ?>><?php echo lang('db_zip'); ?></option>
+					<option value="gzip" <?php echo set_select('file_type', 'gzip'); ?>><?php echo lang('db_gzip'); ?></option>
+					<option value="zip" <?php echo set_select('file_type', 'zip'); ?>><?php echo lang('db_zip'); ?></option>
 				</select>
 				<?php if (form_error('file_type')) echo '<span class="help-inline">'. form_error('file_type') .'</span>'; ?>
 			</div>
