@@ -32,9 +32,9 @@
 			<label for="status" class="control-label"><?php echo lang('permissions_status') ?><span class="required">*</span></label>
 			<div class="controls">
 				<select name="status" id="status">
-					<option value="active" <?php echo set_select('status', lang('permissions_active')) ?>><?php echo lang('permissions_active') ?></option>
-					<option value="inactive" <?php echo set_select('status', lang('permissions_inactive')) ?>><?php echo lang('permissions_inactive') ?></option>
-					<option value="deleted" <?php echo set_select('status', lang('permissions_deleted')) ?>><?php echo lang('permissions_deleted') ?></option>
+					<option value="active" <?php echo set_select('status', 'active') ?>><?php echo lang('permissions_active') ?></option>
+					<option value="inactive" <?php echo set_select('status', 'inactive') ?>><?php echo lang('permissions_inactive') ?></option>
+					<option value="deleted" <?php echo set_select('status', 'Permissions deleted') ?>><?php echo lang('permissions_deleted') ?></option>
 				</select>
 			</div>
 		</div>
