@@ -39,6 +39,7 @@ if ( ! function_exists('read_config'))
 	 * @param $file string The config file to read.
 	 * @param $fail_gracefully boolean Whether to show errors or simply return FALSE.
 	 * @param $module string Name of the module where the config file exists.
+	 * @param $module_only Whether to fail if config does not exist in module directory.
 	 *
 	 * @return array An array of settings, or FALSE on failure (when $fail_gracefully = TRUE).
 	 */
