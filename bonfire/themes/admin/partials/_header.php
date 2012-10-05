@@ -13,7 +13,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-	<title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo $this->settings_lib->item('site.title') ?></title>
+	<title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php e($this->settings_lib->item('site.title')) ?></title>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -41,7 +41,7 @@
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</a>
-					<?php echo anchor( '/', $this->settings_lib->item('site.title'), 'class="brand"' ); ?>
+					<?php echo anchor( '/', html_escape($this->settings_lib->item('site.title')), 'class="brand"' ); ?>
 
 
 					<?php if(isset($shortcut_data) && is_array($shortcut_data['shortcuts']) && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])):?>
