@@ -38,7 +38,7 @@
 					<td><?php echo $record['permission_id'] ?></td>
 					<td>
 						<a href="<?php echo site_url(SITE_AREA .'/settings/permissions/edit/'. $record['permission_id']) ?>">
-							<?php echo $record['name'] ?>
+							<?php e($record['name']) ?>
 						</a>
 					</td>
 					<td><?php e($record['description']) ?></td>

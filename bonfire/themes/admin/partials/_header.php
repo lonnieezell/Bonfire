@@ -56,7 +56,7 @@
 											<h4><?php echo lang('bf_keyboard_shortcuts') ?></h4>
 											<ul>
 											<?php foreach($shortcut_data['shortcut_keys'] as $key => $data): ?>
-												<li><span><?php echo $data?></span> : <?php echo $shortcut_data['shortcuts'][$key]['description']; ?></li>
+												<li><span><?php e($data)?></span> : <?php echo $shortcut_data['shortcuts'][$key]['description']; ?></li>
 											<?php endforeach; ?>
 											</ul>
 											<?php else:?>

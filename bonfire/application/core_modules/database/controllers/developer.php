@@ -253,7 +253,7 @@ class Developer extends Admin_Controller
 
 				if (file_exists($filename))
 				{
-					Template::set_message('Backup file successfully saved. It can be found at <a href="'. site_url(SITE_AREA . '/developer/database/get_backup/' .  $basename) .'">'. $filename .'</a>.', 'success');
+					Template::set_message('Backup file successfully saved. It can be found at <a href="'. html_escape(site_url(SITE_AREA . '/developer/database/get_backup/' .  $basename)) .'">'. html_escape($filename) .'</a>.', 'success');
 				}
 				else
 				{

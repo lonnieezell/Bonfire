@@ -25,7 +25,7 @@
 			<?php foreach ($backups as $file => $atts) :?>
 				<tr class="hover-toggle">
 					<td class="column-check">
-						<input type="checkbox" value="<?php echo $file ?>" name="checked[]" />
+						<input type="checkbox" value="<?php e($file); ?>" name="checked[]" />
 					</td>
 					<td>
 						<?php echo $file ?>
