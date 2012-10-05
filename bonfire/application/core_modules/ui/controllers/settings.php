@@ -126,8 +126,8 @@ class Settings extends Admin_Controller
 	private function add()
 	{
 
-		$this->form_validation->set_rules('action1', lang('ui_actions'), 'required|xss_clean');
-		$this->form_validation->set_rules('shortcut1', lang('ui_shortcuts'), 'required|callback_validate_shortcuts|xss_clean');
+		$this->form_validation->set_rules('action1', lang('ui_actions'), 'required');
+		$this->form_validation->set_rules('shortcut1', lang('ui_shortcuts'), 'required|callback_validate_shortcuts');
 
 		if ($this->form_validation->run() === FALSE)
 		{
@@ -161,7 +161,7 @@ class Settings extends Admin_Controller
 	 */
 	private function remove()
 	{
-		$this->form_validation->set_rules('remove_action', lang('ui_actions'), 'required|xss_clean');
+		$this->form_validation->set_rules('remove_action', lang('ui_actions'), 'required');
 
 		if ($this->form_validation->run() === FALSE)
 		{
@@ -203,8 +203,8 @@ class Settings extends Admin_Controller
 			{
 				foreach ($actions as $num => $value)
 				{
-					$this->form_validation->set_rules('action['.$num.']', lang('ui_actions'), 'required|xss_clean');
-					$this->form_validation->set_rules('shortcut['.$num.']', lang('ui_shortcuts'), 'required|callback__validate_shortcuts|xss_clean');
+					$this->form_validation->set_rules('action['.$num.']', lang('ui_actions'), 'required');
+					$this->form_validation->set_rules('shortcut['.$num.']', lang('ui_shortcuts'), 'required|callback__validate_shortcuts');
 
 					$settings[$value] = $shortcuts[$num];
 				}

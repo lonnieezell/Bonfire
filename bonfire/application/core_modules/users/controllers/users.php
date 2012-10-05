@@ -159,7 +159,7 @@ class Users extends Front_Controller
 		{
 			if (isset($_POST['submit']))
 			{
-				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|xss_clean');
+				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email');
 
 				if ($this->form_validation->run() !== FALSE)
 				{
@@ -330,8 +330,8 @@ class Users extends Front_Controller
 			// Handle the form
 			if ($this->input->post('submit'))
 			{
-				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password');
-				$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
+				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|min_length[8]|max_length[120]|valid_password');
+				$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|matches[password]');
 
 				if ($this->form_validation->run() !== FALSE)
 				{
@@ -423,19 +423,19 @@ class Users extends Front_Controller
 		if ($this->input->post('submit'))
 		{
 			// Validate input
-			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|max_length[120]|unique[users.email]|xss_clean');
+			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email]');
 
 			if ($this->settings_lib->item('auth.use_usernames'))
 			{
-				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[users.username]|xss_clean');
+				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|max_length[30]|unique[users.username]');
 			}
 
-			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password');
-			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
+			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|min_length[8]|max_length[120]|valid_password');
+			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|matches[password]');
 
-			$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|strip_tags|max_length[4]|xss_clean');
-			$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|strip_tags|max_length[255]|xss_clean');
+			$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim');
+			$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|max_length[4]');
+			$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|max_length[255]');
 
 
 			$meta_data = array();
@@ -636,22 +636,22 @@ class Users extends Front_Controller
 		$payload = array ( 'user_id' => $id, 'data' => $this->input->post() );
 
 
-		$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email,users.id]|xss_clean');
-		$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|strip_tags|min_length[8]|max_length[120]|valid_password');
+		$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email,users.id]');
+		$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|min_length[8]|max_length[120]|valid_password');
 
 		// check if a value has been entered for the password - if so then the pass_confirm is required
 		// if you don't set it as "required" the pass_confirm field could be left blank and the form validation would still pass
 		$extra_rules = !empty($_POST['password']) ? 'required|' : '';
-		$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'trim|strip_tags|'.$extra_rules.'matches[password]');
+		$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'trim|'.$extra_rules.'matches[password]');
 
 		if ($this->settings_lib->item('auth.use_usernames'))
 		{
-			$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[users.username,users.id]|xss_clean');
+			$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|max_length[30]|unique[users.username,users.id]');
 		}
 
-		$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|strip_tags|max_length[4]|xss_clean');
-		$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|strip_tags|max_length[255]|xss_clean');
+		$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim');
+		$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|max_length[4]');
+		$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|max_length[255]');
 
 		// Added Event "before_user_validation" to run before the form validation
 		Events::trigger('before_user_validation', $payload );
@@ -728,7 +728,7 @@ class Users extends Front_Controller
 		{
 
 			if ($this->input->post('submit')) {
-				$this->form_validation->set_rules('code', 'Verification Code', 'required|trim|xss_clean');
+				$this->form_validation->set_rules('code', 'Verification Code', 'required|trim');
 				if ($this->form_validation->run() == TRUE) {
 					$code = $this->input->post('code');
 				}
@@ -803,7 +803,7 @@ class Users extends Front_Controller
 		{
 			if (isset($_POST['submit']))
 			{
-				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|xss_clean');
+				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email');
 
 				if ($this->form_validation->run())
 				{
