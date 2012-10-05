@@ -125,13 +125,13 @@ if ($use_soft_deletes == 'true')
 if ($use_created == 'true')
 {
 	$table_records .= '
-				<td><?php echo $record->'.set_value("created_field").'?></td>';
+				<td><?php e($record->'.set_value("created_field").') ?></td>';
 	$field_total++;
 }
 if ($use_modified == 'true')
 {
 	$table_records .= '
-				<td><?php echo $record->'.set_value("modified_field").'?></td>';
+				<td><?php e($record->'.set_value("modified_field").') ?></td>';
 	$field_total++;
 }
 
