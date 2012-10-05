@@ -71,16 +71,20 @@ class Events
 			$ci->load->helper('config_file');
 		}
 
-		self::$events = read_config('events');
+
+		self::$events = read_config('events', TRUE, NULL, FALSE);
 
         // merge other modules events
         foreach(module_list(TRUE) as $module)
         {
-            if($module_events = read_config('events', TRUE, $module))
+        	$module_events = read_config('events', TRUE, $module, TRUE);
+
+            if(is_array($module_events))
             {
                 self::$events = array_merge_recursive(self::$events, $module_events);
             }
         }
+
 
 		if (self::$events == false)
 		{
