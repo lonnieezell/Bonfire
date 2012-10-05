@@ -230,7 +230,9 @@ class Developer extends Admin_Controller
 
 				$add_drop = ($_POST['drop_tables'] == '1');
 				$add_insert = ($_POST['add_inserts'] == '1');
-				$filename = $this->backup_folder . $_POST['file_name'] . '.' . $_POST['file_type'];
+
+				$basename = $_POST['file_name'] . '.' . $_POST['file_type'];
+				$filename = $this->backup_folder . $basename;
 
 				$prefs = array(
 								'tables' 		=> $_POST['tables'],
@@ -246,7 +248,7 @@ class Developer extends Admin_Controller
 
 				if (file_exists($filename))
 				{
-					Template::set_message('Backup file successfully saved. It can be found at <a href="/'. $filename .'">'. $filename .'</a>.', 'success');
+					Template::set_message('Backup file successfully saved. It can be found at <a href="'. site_url(SITE_AREA . '/developer/database/get_backup/' .  $basename) .'">'. $filename .'</a>.', 'success');
 				}
 				else
 				{
