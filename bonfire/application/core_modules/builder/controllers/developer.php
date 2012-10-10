@@ -285,7 +285,7 @@ class Developer extends Admin_Controller {
             }
 
             // get any permission ids
-			$this->db->select('permission_id')->like('name', "{$module_name}.%.%", 'none');
+			$this->db->select('permission_id')->like('name', "{$module_name}.", 'after');
 
 			$query = $this->db->get('permissions');
 
