@@ -28,8 +28,8 @@
 			<?php if ($this->settings_lib->item('auth.allow_remember')) : ?>
 			<div class="control-group">
 				<div class="controls">
-					<label class="checkbox" for="modal-login-remember">
-						<input type="checkbox" name="remember" id="modal-login-remember" value="1" checked>
+					<label class="checkbox" for="modal-login-remember-me">
+						<input type="checkbox" name="remember_me" id="modal-login-remember-me" value="1">
 						<?php echo lang('bf_remember_me') ?>
 					</label>
 				</div>
