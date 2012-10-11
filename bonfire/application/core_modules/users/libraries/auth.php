@@ -723,7 +723,7 @@ class Auth
 		}
 
 		// load random_string()
-		$this->load->helper('string');
+		$this->ci->load->helper('string');
 
 		// Generate a random string for our token
 		$token = random_string('alnum', 128);
