@@ -1,1 +1,0 @@
-<?php e($email->message); ?>
