@@ -218,6 +218,9 @@ if (!is_dir(dirname(__FILE__).'/install') == true)
 	// Name of the "system folder"
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
 
+	// Bonfire Path
+	define('BFPATH', '../bonfire/');
+
 	// The path to the "application" folder
 	if (is_dir($application_folder))
 	{

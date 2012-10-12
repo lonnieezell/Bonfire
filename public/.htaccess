@@ -20,28 +20,28 @@
   #   Normalize to standard type (it's sniffed in IE anyways)
   #   tools.ietf.org/html/rfc4329#section-7.2
   AddType application/javascript         js
-  
+
   # Audio
   AddType audio/ogg                      oga ogg
   AddType audio/mp4                      m4a
-  
+
   # Video
   AddType video/ogg                      ogv
   AddType video/mp4                      mp4 m4v
   AddType video/webm                     webm
-  
+
   # SVG
   #   Required for svg webfonts on iPad
   #   twitter.com/FontSquirrel/status/14855840545
   AddType     image/svg+xml              svg svgz
   AddEncoding gzip                       svgz
-  
+
   # Webfonts
   AddType application/vnd.ms-fontobject  eot
   AddType application/x-font-ttf         ttf ttc
   AddType font/opentype                  otf
   AddType application/x-font-woff        woff
-  
+
   # Assorted types
   AddType image/x-icon                        ico
   AddType image/webp                          webp
@@ -113,12 +113,12 @@
 <IfModule mod_rewrite.c>
   Options +FollowSymlinks -Indexes
   RewriteEngine On
-  
-  # If you installed Bonfire in a subfolder, you will need to 
-  # change the following line to match the subfolder you need. 
+
+  # If you installed Bonfire in a subfolder, you will need to
+  # change the following line to match the subfolder you need.
   # http://httpd.apache.org/docs/current/mod/mod_rewrite.html#rewritebase
   RewriteBase /
-  
+
   #Removes access to the system folder by users.
   #Additionally this will allow you to create a System.php controller,
   #previously this would not have been possible.
@@ -136,7 +136,7 @@
 </IfModule>
 
 
-	
+
 #Checks to see if the user is attempting to access a valid file,
 #such as an image or css document, if this isn't true it sends the
 #request to index.php

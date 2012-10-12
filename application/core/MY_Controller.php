@@ -124,7 +124,7 @@ class Base_Controller extends MX_Controller
 				// Profiler bar?
 				if ( ! $this->input->is_cli_request() AND ! $this->input->is_ajax_request())
 				{
-					$this->load->library('Console');
+					require (BFPATH .'libraries/Console.php');
 					$this->output->enable_profiler(TRUE);
 				}
 
@@ -232,7 +232,7 @@ class Authenticated_Controller extends Base_Controller
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('', '');
-		$this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
+		//$this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
 
 		Template::set_theme($this->config->item('default_theme'));
 	}//end construct()
@@ -316,7 +316,10 @@ class Admin_Controller extends Authenticated_Controller
 				// Profiler bar?
 				if ( ! $this->input->is_cli_request() AND ! $this->input->is_ajax_request())
 				{
-					$this->load->library('Console');
+					if (!class_exists('Console'))
+					{
+						require (BFPATH .'libraries/Console.php');
+					}
 					$this->output->enable_profiler(TRUE);
 				}
 			}

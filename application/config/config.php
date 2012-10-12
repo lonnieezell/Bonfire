@@ -2,8 +2,8 @@
 
 /* define the module locations and offset */
 $config['modules_locations'] = array(
-	FCPATH .'bonfire/modules/' => '../../modules/',
-	FCPATH .'bonfire/application/core_modules/' => '../core_modules/'
+	realpath(APPPATH .'../bonfire/modules') .'/' => '../../bonfire/modules/',
+	realpath(APPPATH) . '/modules/' => '../application/modules/'
 );
 
 /*
@@ -186,7 +186,7 @@ $config['directory_trigger']	= 'd'; // experimental not currently in use
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 1;
+$config['log_threshold'] = 2;
 
 /*
 |--------------------------------------------------------------------------

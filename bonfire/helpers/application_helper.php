@@ -84,7 +84,7 @@ if ( ! function_exists('gravatar_link'))
 
 		$alt = htmlentities($alt, ENT_QUOTES, 'UTF-8');
 		$title = htmlentities($title, ENT_QUOTES, 'UTF-8');
-		
+
 		$id = ($id !== NULL) ? ' id="' .$id .'" ' : ' ';
 		$class = ($class !== NULL) ? ' class="' .$class .'"' : ' ';
 
@@ -155,12 +155,15 @@ if ( ! function_exists('module_list'))
 		{
 			// If we're excluding core modules and this module
 			// is in the 'core_modules' folder... ignore it.
-			if ($exclude_core && strpos($folder, 'core_modules') !== false)
+			if ($exclude_core && strpos($folder, 'bonfire/modules') !== false)
 			{
 				continue;
 			}
 
-			$map = array_merge($map, directory_map($folder, 1));
+			$dirs = directory_map($folder, 1);
+			if (!is_array($dirs)) $dirs = array();
+
+			$map = array_merge($map, $dirs);
 		}
 
 		// Clean out any html or php files
