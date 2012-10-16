@@ -40,6 +40,8 @@ bonfire/modules/**/.git/*
 bonfire/modules/**/.hg/*
 application/modules/**/.git/*
 application/modules/**/.hg/*
+!application/modules/index.html
+
 
 # Ignore all custom modules.
 application/modules/*
