@@ -18,26 +18,28 @@ nbactions.xml
 .properties
 
 # Ignore Bonfire Application Specifics
-bonfire/application/logs/*
-!bonfire/application/logs/index.html
-bonfire/application/cache/*
-!bonfire/application/cache/index.html
-assets/cache/*
-!assets/cache/index.html
+application/logs/*
+!application/logs/index.html
+application/cache/*
+!application/cache/index.html
+public/assets/cache/*
+!public/assets/cache/index.html
 
 # Ignore Custom config files
-bonfire/application/config/development/*
-bonfire/application/config/testing/*
-bonfire/application/config/production/*
+application/config/development/*
+application/config/testing/*
+application/config/production/*
 
 # but leave the config folders there
-!bonfire/application/config/development/index.html
-!bonfire/application/config/testing/index.html
-!bonfire/application/config/production/index.html
+!application/config/development/index.html
+!application/config/testing/index.html
+!application/config/production/index.html
 
 # Helping GUIs omiting subtree repos
 bonfire/modules/**/.git/*
 bonfire/modules/**/.hg/*
+application/modules/**/.git/*
+application/modules/**/.hg/*
 
 # Ignore all custom modules.
 application/modules/*
