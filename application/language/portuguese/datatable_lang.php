@@ -20,16 +20,16 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 */
-$lang['sProcessing']= 'A processar...';
-$lang['sLengthMenu']= 'Mostrar _MENU_ registos';
-$lang['sZeroRecords']= 'Não foram encontrados resultados';
-$lang['sInfo']= 'Mostrando de _START_ até _END_ de _TOTAL_ registos';
-$lang['sInfoEmpty']= 'Mostrando de 0 até 0 de 0 registros';
-$lang['sInfoFiltered']= '(filtrado de _MAX_ registos no total)';
-$lang['sInfoPostFix']= '';
-$lang['sSearch']= 'Procurar:';
-$lang['sUrl']= '';
-$lang['sFirst']= 'Primeiro';
-$lang['sPrevious']= 'Anterior';
-$lang['sNext']= 'Seguint';
-$lang['sLast']= 'Último';
+$lang['sProcessing'] = 'A processar...';
+$lang['sLengthMenu'] = 'Mostrar _MENU_ registos';
+$lang['sZeroRecords'] = 'Não foram encontrados resultados';
+$lang['sInfo'] = 'Mostrando de _START_ até _END_ de _TOTAL_ registos';
+$lang['sInfoEmpty'] = 'Mostrando de 0 até 0 de 0 registros';
+$lang['sInfoFiltered'] = '(filtrado de _MAX_ registos no total)';
+$lang['sInfoPostFix'] = '';
+$lang['sSearch'] = 'Procurar:';
+$lang['sUrl'] = '';
+$lang['sFirst'] = 'Primeiro';
+$lang['sPrevious'] = 'Anterior';
+$lang['sNext'] = 'Seguint';
+$lang['sLast'] = 'Último';

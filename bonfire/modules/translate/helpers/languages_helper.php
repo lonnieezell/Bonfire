@@ -93,15 +93,19 @@ if (!function_exists('list_lang_files'))
 				{
 					$files = find_lang_files(realpath(APPPATH .'../modules/'. $path) .'/');
 					$type = 'custom';
+
 				}
 				else
 				{
-					$files = find_lang_files(APPPATH .'core_modules/'. $path .'/');
+					$files = find_lang_files(BFPATH .'modules/'. $path .'/');
 				}
 
-				foreach ($files as $file)
+				if (is_array($files))
 				{
-					$lang_files[$type][] = $file;
+					foreach ($files as $file)
+					{
+						$lang_files[$type][] = $file;
+					}
 				}
 			}//end if
 		}//end foreach
@@ -125,6 +129,7 @@ if (!function_exists('find_lang_files'))
 	 */
 	function find_lang_files($path=NULL)
 	{
+
 		if (!is_dir($path))
 		{
 			return NULL;
@@ -290,7 +295,7 @@ if (!function_exists('save_lang_file'))
 				$contents .= '$lang[\''.$name.'\'] = '. $val .";\n";
 			}
 		}//end foreach
-		
+
 		// is the code we are producing OK?
 		if (!is_null(eval(str_replace('<?php', '', $contents))))
 		{
