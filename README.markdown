@@ -1,4 +1,4 @@
-# Faster Development of CodeIgniter 2.0 Apps
+# Faster Development of CodeIgniter 2.1.2 Apps
 
 <div style="float: right; margin: 0 20px 20px 0">
 	<a href='http://www.pledgie.com/campaigns/15326'><img alt='Click here to lend your support to: Bonfire - faster CodeIgniter development and make a donation at www.pledgie.com !' src='http://pledgie.com/campaigns/15326.png?skin_name=chrome' border='0' /></a>
@@ -39,6 +39,12 @@ If you're interested in helping out, fork the project and start coding! I'd love
 *NOTE: Latest database dump can be found under bonfire/application/db/backups. Import that into a new database, and setup your database connections and you should be good to go. You can login to the admin /admin with email: admin@bonfire.com, pass: bonfire.*
 
 Let's make this the best kick-start to any CodeIgniter project.
+
+## Bug Reports 
+
+We strive to make Bonfire a solid base to work with.  In doing so your Bug Reports are very vital to us.  Before making a Bug Report please check the existing
+[Issue Tracker](https://github.com/ci-bonfire/Bonfire/issues) , if the bug you have found does not exist in the issue tracker already, please text a minute to read the [guide lines](https://github.com/ci-bonfire/Bonfire/wiki/Issue-Tracking-and-Pull-Requests) to making a Good Bug report.
+
 
 ## The Team
 
