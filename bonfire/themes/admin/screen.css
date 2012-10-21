@@ -629,12 +629,6 @@ Additional Buttons
 	margin: 0 auto;
 }
 
-/*
- * Drop-down menu 3rd Level fix/hack?
- */
-li.parent-menu {
-	position: relative;
-}
 
 /*--------------------------------------------------------------------
 // RESPONSIVE FIXES
