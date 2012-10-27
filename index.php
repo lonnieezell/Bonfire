@@ -3,8 +3,9 @@
 // Check if the install folder exists - if so then show the installer app
 if (is_dir(dirname(__FILE__).'/install') == true)
 {
+	$host  = $_SERVER['HTTP_HOST'];
 	$dir = dirname($_SERVER['SCRIPT_NAME']);
-	header("Location: {$dir}/install");
+	header("Location: http://$host/install");
 	exit;
 }
 
