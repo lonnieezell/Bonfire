@@ -99,7 +99,16 @@ class Images extends Base_Controller {
 
 		if (!is_file($img_file))
 		{
-			die('Image could not be found.');
+			// Try all subdirectories
+			$dirs = array_filter(glob($assets . '/*'), 'is_dir');
+			foreach($dirs as $d){
+				if ( !empty($img_found) && is_file(FCPATH . $d . '/' . $file)) {
+					$img_file = FCPATH . $d . '/' . $file; 
+					$img_found = true;
+				}
+			}
+			
+			if (!empty($img_found)) { die('Image could not be found.'); }
 		}
 
 		$new_file = FCPATH .'assets/cache/'. str_replace('.'. $ext, '', $file) ."_{$width}x{$height}.". $ext;
