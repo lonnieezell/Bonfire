@@ -71,7 +71,7 @@ class CI_Profiler {
 		// Make sure the Console is loaded.
 		if (!class_exists('Console'))
 		{
-			require ( BFPATH .'libraries/Console.php');
+			$this->load->library('Console');
 		}
 
 		$this->set_sections($config);

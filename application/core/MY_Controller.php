@@ -124,7 +124,7 @@ class Base_Controller extends MX_Controller
 				// Profiler bar?
 				if ( ! $this->input->is_cli_request() AND ! $this->input->is_ajax_request())
 				{
-					require (BFPATH .'libraries/Console.php');
+					$this->load->library('Console');
 					$this->output->enable_profiler(TRUE);
 				}
 
@@ -316,10 +316,7 @@ class Admin_Controller extends Authenticated_Controller
 				// Profiler bar?
 				if ( ! $this->input->is_cli_request() AND ! $this->input->is_ajax_request())
 				{
-					if (!class_exists('Console'))
-					{
-						require (BFPATH .'libraries/Console.php');
-					}
+					$this->load->library('Console');
 					$this->output->enable_profiler(TRUE);
 				}
 			}
