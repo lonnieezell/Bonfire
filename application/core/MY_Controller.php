@@ -232,7 +232,7 @@ class Authenticated_Controller extends Base_Controller
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('', '');
-		//$this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
+		$this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
 
 		Template::set_theme($this->config->item('default_theme'));
 	}//end construct()
