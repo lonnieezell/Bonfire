@@ -511,9 +511,12 @@ Forms
 	margin-bottom: 0;
 }
 
-.form-horizontal .control-group > label {
-	font-weight: bold;
+.form-horizontal .control-group > label {	
 	width: 180px;
+}
+
+.form-horizontal .control-label.required {
+	font-weight: bold;
 }
 
 .form-horizontal .control-group .controls {
