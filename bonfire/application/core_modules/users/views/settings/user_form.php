@@ -24,7 +24,7 @@
 		<legend><?php echo lang('us_account_details') ?></legend>
 
 		<div class="control-group <?php echo form_error('email') ? 'error' : '' ?>">
-			<label for="email" class="control-label"><?php echo lang('bf_email') ?></label>
+			<label for="email" class="control-label required"><?php echo lang('bf_email') ?></label>
 			<div class="controls">
 				<input type="email" name="email" id="email" value="<?php echo set_value('email', isset($user) ? $user->email : '') ?>">
 				<?php if (form_error('email')) echo '<span class="help-inline">'. form_error('email') .'</span>'; ?>
@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="control-group <?php echo form_error('username') ? 'error' : '' ?>">
-			<label for="username" class="control-label"><?php echo lang('bf_username') ?></label>
+			<label for="username" class="control-label required"><?php echo lang('bf_username') ?></label>
 			<div class="controls">
 				<input type="text" name="username" id="username" value="<?php echo set_value('username', isset($user) ? $user->username : '') ?>">
 				<?php if (form_error('username')) echo '<span class="help-inline">'. form_error('username') .'</span>'; ?>
