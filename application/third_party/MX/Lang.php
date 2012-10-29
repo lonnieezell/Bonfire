@@ -35,7 +35,7 @@
  **/
 class MX_Lang extends CI_Lang
 {
-	public function load($langfile, $lang = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '', $_module = '')	{
+	public function load($langfile = array(), $lang = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '', $_module = '')	{
 		
 		if (is_array($langfile)) {
 			foreach($langfile as $_lang) $this->load($_lang);
