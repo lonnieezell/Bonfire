@@ -41,7 +41,18 @@ class MX_Loader extends CI_Loader
 	public $_ci_cached_vars = array();
 	public $_ci_view_path = '';
 	
-	/** Initialize for the module **/
+	public function __construct() {
+		
+		parent::__construct();
+		
+		/* set the module name */
+		$this->_module = CI::$APP->router->fetch_module();
+		
+		/* add this module path to the loader variables */
+		$this->_add_module_paths($this->_module);
+	}
+	
+	/** Initialize the module **/
 	public function _init($controller) {
 		
 		/* references to ci loader variables */
@@ -51,16 +62,13 @@ class MX_Loader extends CI_Loader
 		
 		/* set a reference to the module controller */
  		$this->controller = $controller;
-
-		/* set the module name */
-		$this->_module = CI::$APP->router->fetch_module();
-
-		/* add this module path to the loader variables */
-		$this->_add_module_paths($this->_module);
+ 		$this->__construct();
 	}
 
 	/** Add a module path loader variables **/
 	public function _add_module_paths($module = '') {
+		
+		if (empty($module)) return;
 		
 		foreach (Modules::$locations as $location => $offset) {
 			
