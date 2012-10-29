@@ -79,6 +79,16 @@ class Contexts
 	protected static $parent_class	= 'dropdown';
 
 	/**
+	 * The class to apply to li tags within ul tags inside.
+	 *
+	 * @access protected
+	 * @static
+	 *
+	 * @var string
+	 */
+	protected static $submenu_class	= 'dropdown-submenu';
+
+	/**
 	 * The class to apply to ul tags within li tags.
 	 *
 	 * @access protected
@@ -312,7 +322,7 @@ class Contexts
 					$title = ucfirst($context);
 				}
 
-				$nav .= "<li class='dropdown {$class}'><a href='{$url}' id='{$id}' class='dropdown-toggle' title='{$title}' data-toggle='dropdown' data-id='{$context}_menu'>";
+				$nav .= "<li class='" . self::$parent_class . " {$class}'><a href='{$url}' id='{$id}' class='dropdown-toggle' title='{$title}' data-toggle='dropdown' data-id='{$context}_menu'>";
 
 				// Image
 				if ($mode=='icon' || $mode=='both')
@@ -623,8 +633,9 @@ class Contexts
 			// out a menu based on the multiple items.
 			if (count($topic) > 1)
 			{
-				$list .= '<li class="no-link parent-menu"><a href="#" class="no-link parent-menu">'. ucwords($topic_name) .'</a>';
-				$list .= '<ul>';
+				Console::log($topic);
+				$list .= '<li class="' . self::$submenu_class . '"><a href="#" >'. ucwords($topic_name) .'</a>';
+				$list .= '<ul class="' . self::$child_class .'">';
 
 				foreach ($topic as $module => $vals)
 				{
@@ -647,7 +658,6 @@ class Contexts
 						$list .= self::build_item($module, $vals['title'], $vals['display_name'], $context, $vals['menu_view']);
 					}
 				}
-
 				$list .= '</ul></li>';
 			}
 			else
@@ -707,8 +717,8 @@ class Contexts
 		$class = $module == self::$ci->uri->segment(3) ? 'active' : '';
 		if (!empty($menu_view))
 		{
-			$class .= ' parent-menu';
-			$listclass = 'class="parent-menu" ';
+			$class .= ' ';
+			$listclass = 'class="' . self::$submenu_class . '" ';
 		}
 
 

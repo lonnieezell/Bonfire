@@ -45,7 +45,12 @@ class Migration_Install_'.$table_name.' extends Migration {
 
 		if (!in_array(set_value("db_field_type$counter"), $no_length))
 		{
-			$escaped_constraint_val = addcslashes($this->input->post("db_field_length_value$counter"),'"');
+			$escaped_constraint_val = $this->input->post("db_field_length_value$counter");
+
+			// ENUM or SET
+			if (in_array(set_value("db_field_type$counter"), array("ENUM", "SET"))){
+				$escaped_constraint_val = "'" . addcslashes($this->input->post("db_field_length_value$counter"),"'") . "'";
+			}
 
 			if (in_array(set_value("db_field_type$counter"), $optional_length) && empty($escaped_constraint_val) && !is_numeric($escaped_constraint_val))
 			{

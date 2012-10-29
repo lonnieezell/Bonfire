@@ -3,8 +3,12 @@
 // Check if the install folder exists - if so then show the installer app
 if (!is_dir(dirname(__FILE__).'/install') == true)
 {
-	$dir = dirname($_SERVER['SCRIPT_NAME']);
-	header("Location: {$dir}/install");
+	// Auto $base_url copied from codeigniter/core/Config.php
+	$base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
+	$base_url .= '://'. $_SERVER['HTTP_HOST'];
+	$base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+
+	header("Location: {$base_url}install");
 	exit;
 }
 
