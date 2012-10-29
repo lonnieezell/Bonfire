@@ -74,6 +74,14 @@ if (!is_dir(dirname(__FILE__).'/install') == true)
 		date_default_timezone_set('GMT');
 	}
 
+
+/*
+ *---------------------------------------------------------------
+ * BONFIRE PATH
+ *---------------------------------------------------------------
+ */
+	define('BFPATH', '../bonfire/');
+
 /*
  *---------------------------------------------------------------
  * SYSTEM FOLDER NAME
@@ -84,7 +92,7 @@ if (!is_dir(dirname(__FILE__).'/install') == true)
  * as this file.
  *
  */
-	$system_path = "../bonfire/codeigniter";
+	$system_path = BFPATH."codeigniter";
 
 /*
  *---------------------------------------------------------------
@@ -221,9 +229,6 @@ if (!is_dir(dirname(__FILE__).'/install') == true)
 
 	// Name of the "system folder"
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
-
-	// Bonfire Path
-	define('BFPATH', '../bonfire/');
 
 	// The path to the "application" folder
 	if (is_dir($application_folder))
