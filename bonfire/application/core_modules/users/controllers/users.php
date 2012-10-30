@@ -229,12 +229,8 @@ class Users extends Front_Controller
 	 */
 	public function profile()
 	{
-
-		if ($this->auth->is_logged_in() === FALSE)
-		{
-			$this->auth->logout();
-			redirect('login');
-		}
+		// Make sure we're logged in. 
+		$this->auth->restrict();
 
 		$this->load->helper('date');
 
