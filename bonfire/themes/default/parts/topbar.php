@@ -24,7 +24,7 @@
 						<?php echo $current_user->user_img; ?>
 						<b class="caret"></b></a>
 
-						<ul class="dropdown-menu">
+						<ul class="dropdown-menu pull-right">
 							<li>
 								<a href="<?php echo site_url(); ?>">
 									<?php echo lang('bf_home') ?>

@@ -49,7 +49,7 @@
 					<div class="nav pull-right" id="shortcuts">
 					<div class="btn-group">
 						<a class="dropdown-toggle light btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png') ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts"/></a>
-						<ul class="dropdown-menu toolbar-keys">
+						<ul class="dropdown-menu pull-right toolbar-keys">
 								<li>
 										<div class="inner keys">
 											<?php if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])): ?>
@@ -79,7 +79,7 @@
 								</a>
 								<!-- Change **light** to **dark** to match colors -->
 								<a class="btn dropdown-toggle light" data-toggle="dropdown" href="#"><span class="caret"></span></a>
-								<ul class="dropdown-menu toolbar-profile">
+								<ul class="dropdown-menu pull-right toolbar-profile">
 									<li>
 										<div class="inner">
 											<div class="toolbar-profile-img">
