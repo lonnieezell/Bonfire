@@ -711,7 +711,21 @@ class Assets
 		// We either combine the files into one...
 		if ((empty($new_js) || is_array($new_js)) && $list==FALSE && self::$ci->config->item('assets.js_combine'))
 		{
-			$return = self::combine_js($scripts);
+			$src = self::combine_js($scripts);
+
+			if ($list)
+			{
+				$return .= '"'. $src .'", ';
+			}
+			else
+			{
+				$attr = array(
+					'src'   => $src,
+					'type'  => 'text/javascript'
+				);
+
+				$return .= '<script'. self::attributes($attr) ." ></script>\n";
+			}
 		}
 		// Or generate individual links
 		else
