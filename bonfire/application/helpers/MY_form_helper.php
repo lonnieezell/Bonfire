@@ -309,6 +309,76 @@ if ( ! function_exists('form_date'))
 
 //--------------------------------------------------------------------
 
+if ( ! function_exists('form_textarea'))
+{
+	/**
+	 * Returns a properly templated textarea field.
+	 *
+	 * @param string $data    Either a string with the element name, or an array of key/value pairs of all attributes.
+	 * @param string $value   Either a string with the value, or blank if an array is passed to the $data param.
+	 * @param string $label   A string with the label of the element.
+	 * @param string $extra   A string with any additional items to include, like Javascript.
+	 * @param string $tooltip A string for inline help or a tooltip icon
+	 *
+	 * @return string A string with the formatted input element, label tag and wrapping divs.
+	 */
+	function form_textarea($data='', $value='', $label='', $extra='', $tooltip = '')
+	{
+		$defaults = array('name' => (( ! is_array($data)) ? $data : ''));
+
+		// If name is empty at this point, try to grab it from the $data array
+		if (empty($defaults['name']) && is_array($data) && isset($data['name']))
+		{
+			$defaults['name'] = $data['name'];
+			unset($data['name']);
+		}
+
+		if ( ! is_array($data) OR ! isset($data['value']))
+		{
+			$val = $value;
+		}
+		else
+		{
+			$val = $data['value'];
+			unset($data['value']); // textareas don't use the value attribute
+		}
+
+		$output = _parse_form_attributes($data, $defaults);
+
+		$error = '';
+
+		if (function_exists('form_error'))
+		{
+			if (form_error($defaults['name']))
+			{
+				$error   = ' error';
+				$tooltip = '<span class="help-inline">' . form_error($defaults['name']) . '</span>' . PHP_EOL;
+			}
+		}
+
+		$name = $defaults['name'];
+
+		$val = form_prep($val, $name);
+
+		$output = <<<EOL
+
+<div class="control-group {$error}">
+	<label class="control-label" for="{$name}">{$label}</label>
+	<div class="controls">
+		 <textarea {$output} {$extra}>{$val}</textarea>
+		{$tooltip}
+	</div>
+</div>
+
+EOL;
+
+		return $output;
+
+	}//end form_textarea()
+}
+
+//--------------------------------------------------------------------
+
 if ( ! function_exists('form_dropdown'))
 {
 	/**
