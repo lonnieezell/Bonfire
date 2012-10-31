@@ -243,6 +243,40 @@ if ( ! function_exists('form_number'))
 
 //--------------------------------------------------------------------
 
+if ( ! function_exists('form_range'))
+{
+	/**
+	 * Returns a properly templated range input field.
+	 *
+	 * NOTE: The $data value should be an array and should contain both
+	 * 'min' and 'max' values. If they are not present, then they will
+	 * default to 1 and 10, respectively.
+	 *
+	 * @param string $data    Either a string with the element name, or an array of key/value pairs of all attributes.
+	 * @param string $value   Either a string with the value, or blank if an array is passed to the $data param.
+	 * @param string $label   A string with the label of the element.
+	 * @param string $extra   A string with any additional items to include, like Javascript.
+	 * @param string $tooltip A string for inline help or a tooltip icon
+	 *
+	 * @return string A string with the formatted input element, label tag and wrapping divs.
+	 */
+	function form_range($data='', $value='', $label='', $extra='', $tooltip = '')
+	{
+		if (is_string($data))
+		{
+			$data = (array)$data;
+		}
+
+		$data['min'] = isset($opts['min']) ? $opts['min'] : 1;
+		$data['max'] = isset($opts['max']) ? $opts['max'] : 10;
+
+		return _form_common('range', $data, $value, $label, $extra, $tooltip);
+
+	}//end form_color()
+}
+
+//--------------------------------------------------------------------
+
 if ( ! function_exists('form_color'))
 {
 	/**
@@ -303,6 +337,50 @@ if ( ! function_exists('form_date'))
 	function form_date($data='', $value='', $label='', $extra='', $tooltip = '')
 	{
 		return _form_common('date', $data, $value, $label, $extra, $tooltip);
+
+	}//end form_date()
+}
+
+//--------------------------------------------------------------------
+
+if ( ! function_exists('form_datetime'))
+{
+	/**
+	 * Returns a properly templated date input field.
+	 *
+	 * @param string $data    Either a string with the element name, or an array of key/value pairs of all attributes.
+	 * @param string $value   Either a string with the value, or blank if an array is passed to the $data param.
+	 * @param string $label   A string with the label of the element.
+	 * @param string $extra   A string with any additional items to include, like Javascript.
+	 * @param string $tooltip A string for inline help or a tooltip icon
+	 *
+	 * @return string A string with the formatted input element, label tag and wrapping divs.
+	 */
+	function form_datetime($data='', $value='', $label='', $extra='', $tooltip = '')
+	{
+		return _form_common('datetime', $data, $value, $label, $extra, $tooltip);
+
+	}//end form_date()
+}
+
+//--------------------------------------------------------------------
+
+if ( ! function_exists('form_month'))
+{
+	/**
+	 * Returns a properly templated month input field.
+	 *
+	 * @param string $data    Either a string with the element name, or an array of key/value pairs of all attributes.
+	 * @param string $value   Either a string with the value, or blank if an array is passed to the $data param.
+	 * @param string $label   A string with the label of the element.
+	 * @param string $extra   A string with any additional items to include, like Javascript.
+	 * @param string $tooltip A string for inline help or a tooltip icon
+	 *
+	 * @return string A string with the formatted input element, label tag and wrapping divs.
+	 */
+	function form_month($data='', $value='', $label='', $extra='', $tooltip = '')
+	{
+		return _form_common('month', $data, $value, $label, $extra, $tooltip);
 
 	}//end form_date()
 }
