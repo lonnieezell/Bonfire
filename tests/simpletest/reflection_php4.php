@@ -3,7 +3,7 @@
  *  base include file for SimpleTest
  *  @package    SimpleTest
  *  @subpackage UnitTester
- *  @version    $Id: reflection_php4.php 1672 2008-03-02 04:47:34Z edwardzyang $
+ *  @version    $Id: reflection_php4.php 2011 2011-04-29 08:22:48Z pp11 $
  */
 
 /**
@@ -20,7 +20,7 @@ class SimpleReflection {
      *    @param string $interface    Class or interface
      *                                to inspect.
      */
-    function __construct($interface) {
+    function SimpleReflection($interface) {
         $this->_interface = $interface;
     }
 
@@ -112,7 +112,7 @@ class SimpleReflection {
     function isInterface() {
         return false;
     }
-        
+
     /**
      *    Scans for final methods, but as it's PHP 4 there
      *    aren't any.
