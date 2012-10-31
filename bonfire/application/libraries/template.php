@@ -797,7 +797,10 @@ class Template
 	 */
 	public static function redirect($url=NULL)
 	{
-		$url = strpos($url, 'http') === FALSE ? site_url($url) : $url;
+		if ( ! preg_match('#^https?://#i', $url))
+		{
+			$url = site_url($url);
+		}
 
 		if (!self::$ci->input->is_ajax_request())
 		{
