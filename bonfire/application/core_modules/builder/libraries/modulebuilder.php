@@ -467,7 +467,7 @@ class Modulebuilder
      */
     private function build_controller($field_total, $module_name, $controller_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name, $table_as_field_prefix)
     {
-        if ($field_total == NULL)
+        if (is_null($field_total))
         {
             return FALSE;
         }

@@ -37,6 +37,14 @@ if ( ! function_exists('relative_time'))
 	 */
 	function relative_time($timestamp)
 	{
+		if($timestamp != "" && !is_int($timestamp)){
+			$timestamp = strtotime($timestamp);
+		}
+
+		if(!is_int($timestamp)){
+			return "never";
+		}
+
 		$difference = time() - $timestamp;
 
 		$periods = array("moment", "min", "hour", "day", "week",
