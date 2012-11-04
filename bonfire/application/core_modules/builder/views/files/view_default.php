@@ -217,7 +217,7 @@ if($action_name != 'create') {
     $delete = PHP_EOL . '
     <?php if ($this->auth->has_permission(\''.$delete_permission.'\')) : ?>
 
-            or <button type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php echo lang(\''.$module_name_lower.'_delete_confirm\'); ?>\')">
+            or <button type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php echo lang(\''.singular($module_name_lower).'_delete_confirm\'); ?>\')">
             <i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>
             </button>
 
@@ -229,7 +229,7 @@ $view .= PHP_EOL . '
 
         <div class="form-actions">
             <br/>
-            <input type="submit" name="save" class="btn btn-primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' />
+            <input type="submit" name="save" class="btn btn-primary" value="'.$action_label.' '.singular($module_name).'"'.$on_click.' />
             or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-warning"\'); ?>
             ' . $delete . '
         </div>
