@@ -330,8 +330,8 @@ class Users extends Front_Controller
 			// Handle the form
 			if ($this->input->post('submit'))
 			{
-				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|min_length[8]|max_length[120]|valid_password');
-				$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|matches[password]');
+				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|min_length[8]|max_length[120]|valid_password');
+				$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|matches[password]');
 
 				if ($this->form_validation->run() !== FALSE)
 				{
@@ -430,8 +430,8 @@ class Users extends Front_Controller
 				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|max_length[30]|unique[users.username]');
 			}
 
-			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|min_length[8]|max_length[120]|valid_password');
-			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|matches[password]');
+			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|min_length[8]|max_length[120]|valid_password');
+			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|matches[password]');
 
 			$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim');
 			$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|max_length[4]');

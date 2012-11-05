@@ -494,15 +494,15 @@ class Settings extends Admin_Controller
 		if ($type == 'insert')
 		{
 			$this->form_validation->set_rules('email', lang('bf_email'), 'required|trim|unique[users.email]|valid_email|max_length[120]');
-			$this->form_validation->set_rules('password', lang('bf_password'), 'required|trim|min_length[8]|max_length[120]|valid_password');
-			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), 'required|trim|matches[password]');
+			$this->form_validation->set_rules('password', lang('bf_password'), 'required|min_length[8]|max_length[120]|valid_password');
+			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), 'required|matches[password]');
 		}
 		else
 		{
 			$_POST['id'] = $id;
 			$this->form_validation->set_rules('email', lang('bf_email'), 'required|trim|unique[users.email,users.id]|valid_email|max_length[120]');
-			$this->form_validation->set_rules('password', lang('bf_password'), 'trim|min_length[8]|max_length[120]|valid_password|matches[pass_confirm]');
-			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), 'trim');
+			$this->form_validation->set_rules('password', lang('bf_password'), 'min_length[8]|max_length[120]|valid_password|matches[pass_confirm]');
+			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), '');
 		}
 
 		$use_usernames = $this->settings_lib->item('auth.use_usernames');
