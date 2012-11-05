@@ -67,17 +67,17 @@ class Install extends CI_Controller {
 		sure they can be written to.
 	*/
 	private $writeable_folders = array(
-		'/bonfire/application/cache',
-		'/bonfire/application/logs',
-		'/bonfire/application/config',
-		'/bonfire/application/config/development',
-		'/bonfire/application/config/testing',
-		'/bonfire/application/config/production',
-		'/bonfire/application/archives',
-		'/bonfire/application/archives/config',
-		'/bonfire/application/db/backups',
-		'/bonfire/application/db/migrations',
-		'/assets/cache'
+		'bonfire/application/cache',
+		'bonfire/application/logs',
+		'bonfire/application/config',
+		'bonfire/application/config/development',
+		'bonfire/application/config/testing',
+		'bonfire/application/config/production',
+		'bonfire/application/archives',
+		'bonfire/application/archives/config',
+		'bonfire/application/db/backups',
+		'bonfire/application/db/migrations',
+		'assets/cache'
 	);
 
 	/*
@@ -86,7 +86,7 @@ class Install extends CI_Controller {
 		installation.
 	*/
 	private $reverse_writeable_folders = array(
-		'/bonfire/application/config',
+		'bonfire/application/config',
 	);
 
 	/*
@@ -95,8 +95,8 @@ class Install extends CI_Controller {
 		sure they can be written to.
 	*/
 	private $writeable_files = array(
-		'/bonfire/application/config/application.php',
-		'/bonfire/application/config/database.php',
+		'bonfire/application/config/application.php',
+		'bonfire/application/config/database.php',
 	);
 
 	private $vdata = array();
@@ -351,7 +351,7 @@ class Install extends CI_Controller {
 		// Check Folders
 		foreach ($this->writeable_folders as $folder)
 		{
-			$full_folder = FCPATH . '..' . $folder;
+			$full_folder = FCPATH . '../' . $folder;
 
 			@chmod($full_folder, 0777);
 			if (!is_dir($full_folder) || !is_writeable($full_folder))
@@ -368,8 +368,8 @@ class Install extends CI_Controller {
 		// Check files
 		foreach ($this->writeable_files as $file)
 		{
-			@chmod(FCPATH . '..' . $file, 0666);
-			if (!is_writeable(FCPATH . '..' . $file))
+			@chmod(FCPATH . '../' . $file, 0666);
+			if (!is_writeable(FCPATH . '../' . $file))
 			{
 				$file_errors .= "<li>$file</li>";
 			}
@@ -526,7 +526,7 @@ class Install extends CI_Controller {
 		// Reverse Folders
 		foreach ($this->reverse_writeable_folders as $folder)
 		{
-			@chmod(FCPATH . '..' . $folder, 0775);
+			@chmod(FCPATH . '../' . $folder, 0775);
 		}
 
 		// We made it to the end, so we're good to go!
