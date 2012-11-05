@@ -805,11 +805,7 @@ class Users extends Front_Controller
 			{
 				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|xss_clean');
 
-				if ($this->form_validation->run() === FALSE)
-				{
-					Template::set_message('Cannot find that email in our records.', 'error');
-				}
-				else
+				if ($this->form_validation->run())
 				{
 					// We validated. Does the user actually exist?
 					$user = $this->user_model->find_by('email', $_POST['email']);
@@ -870,6 +866,10 @@ class Users extends Front_Controller
 								Template::set_message(lang('us_err_no_email').$errors.", ".$this->emailer->debug_message, 'error');
 							}
 						}
+					}
+					else
+					{
+						Template::set_message('Cannot find that email in our records.', 'error');
 					}
 				}
 			}
