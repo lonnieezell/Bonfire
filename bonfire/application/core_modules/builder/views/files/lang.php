@@ -24,7 +24,7 @@ $lang[\''.$module_name_lower.'_delete_failure\']			= \'We could not delete the r
 $lang[\''.$module_name_lower.'_delete_error\']			= \'You have not selected any records to delete.\';
 $lang[\''.$module_name_lower.'_actions\']			= \'Actions\';
 $lang[\''.$module_name_lower.'_cancel\']			= \'Cancel\';
-$lang[\''.$module_name_lower.'_delete_record\']			= \'Delete this '.$module_name.'\';
+$lang[\''.$module_name_lower.'_delete_record\']			= \'Delete this '.singular($module_name).'\';
 $lang[\''.$module_name_lower.'_delete_confirm\']			= \'Are you sure you want to delete this '.$module_name_lower.'?\';
 $lang[\''.$module_name_lower.'_edit_heading\']			= \'Edit '.$module_name.'\';
 
