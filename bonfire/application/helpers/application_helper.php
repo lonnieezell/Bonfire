@@ -446,6 +446,44 @@ if (!function_exists('e'))
 
 //--------------------------------------------------------------------
 
+if (!function_exists('js_escape'))
+{
+	/*
+		Function: js_escape()
+
+		Like html_escape() for javascript string literals.
+
+		Inside attributes like onclick, you need to use
+		html_escape() *as well*.  Inside script tags,
+		html_excape() would do the wrong thing, and
+		js_escape is enough on it's own.
+
+		Useful for confirm() or alert() - but of course not
+		document.write() or similar, so take care.
+	*/
+
+	function js_escape($str)
+	{
+		/*
+		$escape =
+			// Obvious string literal escapes:
+			'\'' . "\"" . "\\" .
+
+			// Newlines could also break the literal;
+			// escape all the C0 controls including \r\n
+			"\0..\037" .
+
+			// Escape </script> - n.b. '<' alone wouldn't work.
+			// This works for HTML - XHTML would need much more here.
+			"\/";
+		*/
+
+		return addcslashes($str, "\"'\\\0..\037\/");
+	}
+}
+
+//--------------------------------------------------------------------
+
 if (!function_exists('array_implode'))
 {
 	/**
