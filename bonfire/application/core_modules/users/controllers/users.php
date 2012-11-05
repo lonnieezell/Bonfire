@@ -637,12 +637,12 @@ class Users extends Front_Controller
 
 
 		$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email,users.id]');
-		$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|min_length[8]|max_length[120]|valid_password');
+		$this->form_validation->set_rules('password', 'lang:bf_password', 'min_length[8]|max_length[120]|valid_password');
 
 		// check if a value has been entered for the password - if so then the pass_confirm is required
 		// if you don't set it as "required" the pass_confirm field could be left blank and the form validation would still pass
 		$extra_rules = !empty($_POST['password']) ? 'required|' : '';
-		$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'trim|'.$extra_rules.'matches[password]');
+		$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', ''.$extra_rules.'matches[password]');
 
 		if ($this->settings_lib->item('auth.use_usernames'))
 		{
