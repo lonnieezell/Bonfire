@@ -750,7 +750,7 @@ class Users extends Front_Controller
 			}
 
 
-			if (!empty($code))
+			if ($code !== FALSE)
 			{
 				$activated = $this->user_model->activate($email, $code);
 				if ($activated)
