@@ -278,7 +278,7 @@ if (!function_exists('save_lang_file'))
 			}
 			else
 			{
-				$val ='\'' . str_replace("'", "\'", $val) .'\'';
+				$val ='\'' . addcslashes($val, '\'\\') .'\'';
 			}
 
 			if (!$empty)
