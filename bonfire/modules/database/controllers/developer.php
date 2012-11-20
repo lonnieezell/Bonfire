@@ -217,11 +217,11 @@ class Developer extends Admin_Controller
 		{
 			$this->load->library('form_validation');
 
-			$this->form_validation->set_rules('file_name', 'lang:db_filename', 'required|trim|max_length[220]|xss_clean');
-			$this->form_validation->set_rules('drop_tables', 'lang:db_drop_tables', 'required|trim|one_of[0,1]|xss_clean');
-			$this->form_validation->set_rules('add_inserts', 'lang:db_add_inserts', 'required|trim|one_of[0,1]|xss_clean');
-			$this->form_validation->set_rules('file_type', 'lang:db_compress_type', 'required|trim|one_of[txt,gzip,zip]|xss_clean');
-			$this->form_validation->set_rules('tables', 'lang:db_tables', 'required|is_array|xss_clean');
+			$this->form_validation->set_rules('file_name', 'lang:db_filename', 'required|trim|max_length[220]');
+			$this->form_validation->set_rules('drop_tables', 'lang:db_drop_tables', 'required|trim|one_of[0,1]');
+			$this->form_validation->set_rules('add_inserts', 'lang:db_add_inserts', 'required|trim|one_of[0,1]');
+			$this->form_validation->set_rules('file_type', 'lang:db_compress_type', 'required|trim|one_of[txt,gzip,zip]');
+			$this->form_validation->set_rules('tables', 'lang:db_tables', 'required|is_array');
 
 			if ($this->form_validation->run() !== FALSE)
 			{
@@ -253,7 +253,7 @@ class Developer extends Admin_Controller
 
 				if (file_exists($filename))
 				{
-					Template::set_message('Backup file successfully saved. It can be found at <a href="'. site_url(SITE_AREA . '/developer/database/get_backup/' .  $basename) .'">'. $filename .'</a>.', 'success');
+					Template::set_message('Backup file successfully saved. It can be found at <a href="'. html_escape(site_url(SITE_AREA . '/developer/database/get_backup/' .  $basename)) .'">'. html_escape($filename) .'</a>.', 'success');
 				}
 				else
 				{

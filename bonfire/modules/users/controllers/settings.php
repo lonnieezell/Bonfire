@@ -493,16 +493,16 @@ class Settings extends Admin_Controller
 
 		if ($type == 'insert')
 		{
-			$this->form_validation->set_rules('email', lang('bf_email'), 'required|trim|unique[users.email]|valid_email|max_length[120]|xss_clean');
-			$this->form_validation->set_rules('password', lang('bf_password'), 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password|xss_clean');
-			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), 'required|trim|strip_tags|matches[password]|xss_clean');
+			$this->form_validation->set_rules('email', lang('bf_email'), 'required|trim|unique[users.email]|valid_email|max_length[120]');
+			$this->form_validation->set_rules('password', lang('bf_password'), 'required|min_length[8]|max_length[120]|valid_password');
+			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), 'required|matches[password]');
 		}
 		else
 		{
 			$_POST['id'] = $id;
-			$this->form_validation->set_rules('email', lang('bf_email'), 'required|trim|unique[users.email,users.id]|valid_email|max_length[120]|xss_clean');
-			$this->form_validation->set_rules('password', lang('bf_password'), 'trim|strip_tags|min_length[8]|max_length[120]|valid_password|matches[pass_confirm]|xss_clean');
-			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), 'trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('email', lang('bf_email'), 'required|trim|unique[users.email,users.id]|valid_email|max_length[120]');
+			$this->form_validation->set_rules('password', lang('bf_password'), 'min_length[8]|max_length[120]|valid_password|matches[pass_confirm]');
+			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), '');
 		}
 
 		$use_usernames = $this->settings_lib->item('auth.use_usernames');
@@ -511,17 +511,17 @@ class Settings extends Admin_Controller
 		{
 			$extra_unique_rule = $type == 'update' ? ',users.id' : '';
 
-			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|strip_tags|max_length[30]|unique[users.username'.$extra_unique_rule.']|xss_clean');
+			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|max_length[30]|unique[users.username'.$extra_unique_rule.']');
 		}
 
-		$this->form_validation->set_rules('display_name', lang('bf_display_name'), 'trim|strip_tags|max_length[255]|xss_clean');
+		$this->form_validation->set_rules('display_name', lang('bf_display_name'), 'trim|max_length[255]');
 
-		$this->form_validation->set_rules('language', lang('bf_language'), 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('timezones', lang('bf_timezone'), 'required|trim|strip_tags|max_length[4]|xss_clean');
+		$this->form_validation->set_rules('language', lang('bf_language'), 'required|trim');
+		$this->form_validation->set_rules('timezones', lang('bf_timezone'), 'required|trim|max_length[4]');
 
 		if (has_permission('Bonfire.Roles.Manage') && has_permission('Permissions.'.$cur_role_name.'.Manage'))
 		{
-			$this->form_validation->set_rules('role_id', lang('us_role'), 'required|trim|strip_tags|max_length[2]|is_numeric|xss_clean');
+			$this->form_validation->set_rules('role_id', lang('us_role'), 'required|trim|max_length[2]|is_numeric');
 		}
 
 		$meta_data = array();

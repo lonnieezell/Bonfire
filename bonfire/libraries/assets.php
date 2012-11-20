@@ -711,7 +711,21 @@ class Assets
 		// We either combine the files into one...
 		if ((empty($new_js) || is_array($new_js)) && $list==FALSE && self::$ci->config->item('assets.js_combine'))
 		{
-			$return = self::combine_js($scripts);
+			$src = self::combine_js($scripts);
+
+			if ($list)
+			{
+				$return .= '"'. $src .'", ';
+			}
+			else
+			{
+				$attr = array(
+					'src'   => $src,
+					'type'  => 'text/javascript'
+				);
+
+				$return .= '<script'. self::attributes($attr) ." ></script>\n";
+			}
 		}
 		// Or generate individual links
 		else
@@ -1086,7 +1100,7 @@ class Assets
 	 *
 	 * @return type True if file generated successfully, False if there were errors.
 	 */
-	private function generate_file($files=array(), $file_name, $file_type='css', $type='')
+	private static function generate_file($files=array(), $file_name, $file_type='css', $type='')
 	{
 		if (count($files) == 0)
 		{
@@ -1242,7 +1256,7 @@ class Assets
 	 *
 	 * @return array The complete list of files with url paths.
 	 */
-	private function find_files($files=array(), $type='css', $bypass_inheritance=FALSE)
+	private static function find_files($files=array(), $type='css', $bypass_inheritance=FALSE)
 	{
 		// Grab the theme paths from the template library.
 		$paths = Template::get('theme_paths');
@@ -1451,7 +1465,7 @@ class Assets
 
 	//--------------------------------------------------------------------
 
-	private function get_file_array($site_path='', $path='', $file='', $type='', $media='')
+	private static function get_file_array($site_path='', $path='', $file='', $type='', $media='')
 	{
 		if (empty($file) || empty($type))
 		{

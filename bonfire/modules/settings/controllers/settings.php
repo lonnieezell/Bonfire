@@ -108,15 +108,15 @@ class Settings extends Admin_Controller
 	 */
 	private function save_settings()
 	{
-		$this->form_validation->set_rules('title', 'lang:bf_site_name', 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('system_email', 'lang:bf_site_email', 'required|trim|strip_tags|valid_email|xss_clean');
-		$this->form_validation->set_rules('list_limit','Items <em>p.p.</em>', 'required|trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('password_min_length','lang:bf_password_length', 'required|trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('password_force_numbers', 'lang:bf_password_force_numbers', 'trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('password_force_symbols', 'lang:bf_password_force_symbols', 'trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('password_force_mixed_case', 'lang:bf_password_force_mixed_case', 'trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('password_show_labels', 'lang:bf_password_show_labels', 'trim|strip_tags|numeric|xss_clean');
-		$this->form_validation->set_rules('languages[]', 'lang:bf_language', 'required|trim|strip_tags|is_array|xss_clean');
+		$this->form_validation->set_rules('title', 'lang:bf_site_name', 'required|trim');
+		$this->form_validation->set_rules('system_email', 'lang:bf_site_email', 'required|trim|valid_email');
+		$this->form_validation->set_rules('list_limit','Items <em>p.p.</em>', 'required|trim|numeric');
+		$this->form_validation->set_rules('password_min_length','lang:bf_password_length', 'required|trim|numeric');
+		$this->form_validation->set_rules('password_force_numbers', 'lang:bf_password_force_numbers', 'trim|numeric');
+		$this->form_validation->set_rules('password_force_symbols', 'lang:bf_password_force_symbols', 'trim|numeric');
+		$this->form_validation->set_rules('password_force_mixed_case', 'lang:bf_password_force_mixed_case', 'trim|numeric');
+		$this->form_validation->set_rules('password_show_labels', 'lang:bf_password_show_labels', 'trim|numeric');
+		$this->form_validation->set_rules('languages[]', 'lang:bf_language', 'required|trim|is_array');
 
 		if ($this->form_validation->run() === FALSE)
 		{

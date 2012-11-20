@@ -17,7 +17,7 @@
 				<tr>
 					<td colspan="3">
 						<?php echo lang('db_delete_note'); ?>
-						<button type="submit" name="submit" class="btn btn-danger" onclick="return confirm('<?php echo lang('db_backup_delete_confirm'); ?>')"><?php echo lang('bf_action_delete'); ?></button>
+						<button type="submit" name="submit" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('db_backup_delete_confirm'))); ?>')"><?php echo lang('bf_action_delete'); ?></button>
 					</td>
 				</tr>
 			</tfoot>
@@ -25,7 +25,7 @@
 			<?php foreach ($backups as $file => $atts) :?>
 				<tr class="hover-toggle">
 					<td class="column-check">
-						<input type="checkbox" value="<?php echo $file ?>" name="checked[]" />
+						<input type="checkbox" value="<?php e($file); ?>" name="checked[]" />
 					</td>
 					<td>
 						<?php echo $file ?>

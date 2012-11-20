@@ -104,7 +104,6 @@ $lang['mb_form_rules_limits']	= 'Input Limitations';
 $lang['mb_form_required']		= 'Required';
 $lang['mb_form_unique']			= 'Unique';
 $lang['mb_form_trim']			= 'Trim';
-$lang['mb_form_xss_clean']		= 'Sanitize';
 $lang['mb_form_valid_email']	= 'Valid Email';
 $lang['mb_form_is_numeric']		= '0-9';
 $lang['mb_form_alpha']			= 'a-Z';

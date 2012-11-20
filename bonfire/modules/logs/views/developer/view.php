@@ -60,7 +60,7 @@
 		<div class="form-actions">
 			<input type="hidden" name="checked[]" value="<?php e($log_file); ?>" />
 
-			<button type="submit" name="action_delete" class="btn btn-danger" onclick="return confirm('<?php echo lang('log_delete_confirm') ?>')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('log_delete1_button'); ?></button>
+			<button type="submit" name="action_delete" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('log_delete_confirm'))) ?>')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('log_delete1_button'); ?></button>
 		</div>
 		<?php echo form_close(); ?>
 	</div>

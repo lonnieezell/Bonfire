@@ -31,7 +31,7 @@ $config['user_meta_fields'] =  array(
 	array(
 		'name'   => 'street_name',
 		'label'   => lang('user_meta_street_name'),
-		'rules'   => 'trim|max_length[100]|xss_clean',
+		'rules'   => 'trim|max_length[100]',
 		'frontend' => TRUE,
 		'form_detail' => array(
 			'type' => 'input',
@@ -49,7 +49,7 @@ $config['user_meta_fields'] =  array(
 	array(
 		'name'   => 'state',
 		'label'   => lang('user_meta_state'),
-		'rules'   => 'required|trim|max_length[2]|xss_clean',
+		'rules'   => 'required|trim|max_length[2]',
 		'form_detail' => array(
 			'type' => 'state_select',
 			'settings' => array(
@@ -64,7 +64,7 @@ $config['user_meta_fields'] =  array(
 	array(
 		'name'   => 'country',
 		'label'   => lang('user_meta_country'),
-		'rules'   => 'required|trim|max_length[100]|xss_clean',
+		'rules'   => 'required|trim|max_length[100]',
 		'admin_only' => FALSE,
 		'form_detail' => array(
 			'type' => 'country_select',
@@ -80,7 +80,7 @@ $config['user_meta_fields'] =  array(
 	array(
 		'name'   => 'type',
 		'label'   => lang('user_meta_type'),
-		'rules'   => 'required|xss_clean',
+		'rules'   => 'required',
 		'frontend' => FALSE,
 		'admin_only' => TRUE,
 		'form_detail' => array(

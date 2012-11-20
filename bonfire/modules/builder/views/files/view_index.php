@@ -19,7 +19,7 @@ $view =<<<END
 				<tr>
 					<td colspan="{cols_total}">
 						<?php echo lang('bf_with_selected') ?>
-						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('{$module_name_lower}_delete_confirm'); ?>')">
+						<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php e(js_escape(lang('{$module_name_lower}_delete_confirm'))); ?>')">
 					</td>
 				</tr>
 				<?php endif;?>
@@ -125,13 +125,13 @@ if ($use_soft_deletes == 'true')
 if ($use_created == 'true')
 {
 	$table_records .= '
-				<td><?php echo $record->'.set_value("created_field").'?></td>';
+				<td><?php e($record->'.set_value("created_field").') ?></td>';
 	$field_total++;
 }
 if ($use_modified == 'true')
 {
 	$table_records .= '
-				<td><?php echo $record->'.set_value("modified_field").'?></td>';
+				<td><?php e($record->'.set_value("modified_field").') ?></td>';
 	$field_total++;
 }
 

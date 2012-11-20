@@ -49,12 +49,12 @@
 					<?php echo lang('bf_with_selected') ?>
 					<?php if($filter == 'deleted'):?>
 					<input type="submit" name="restore" class="btn" value="<?php echo lang('bf_action_restore') ?>">
-					<input type="submit" name="purge" class="btn btn-danger" value="<?php echo lang('bf_action_purge') ?>" onclick="return confirm('<?php echo lang('us_purge_del_confirm'); ?>')">
+					<input type="submit" name="purge" class="btn btn-danger" value="<?php echo lang('bf_action_purge') ?>" onclick="return confirm('<?php e(js_escape(lang('us_purge_del_confirm'))); ?>')">
 					<?php else: ?>
 					<input type="submit" name="activate" class="btn" value="<?php echo lang('bf_action_activate') ?>">
 					<input type="submit" name="deactivate" class="btn" value="<?php echo lang('bf_action_deactivate') ?>">
 					<input type="submit" name="ban" class="btn" value="<?php echo lang('bf_action_ban') ?>">
-					<input type="submit" name="delete" class="btn btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('us_delete_account_confirm'); ?>')">
+					<input type="submit" name="delete" class="btn btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php e(js_escape(lang('us_delete_account_confirm'))); ?>')">
 					<?php endif;?>
 				</td>
 			</tr>

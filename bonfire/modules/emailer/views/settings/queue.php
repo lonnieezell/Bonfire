@@ -41,7 +41,7 @@
 			<?php if (isset($emails) && count($emails)) : ?>
 
 				<?php echo lang('bf_with_selected') ?>
-				<button type="submit" name="action_delete" id="delete-me" class="btn btn-danger" onclick="return confirm('<?php echo lang('em_delete_confirm'); ?>')">
+				<button type="submit" name="action_delete" id="delete-me" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('em_delete_confirm'))); ?>')">
 					<i class="icon-white icon-trash"></i> <?php echo lang('bf_action_delete') ?>
 				</button>
 

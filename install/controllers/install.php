@@ -173,29 +173,29 @@ class Install extends CI_Controller {
 	{
 			$this->form_validation->set_error_delimiters('', '');
 
-			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('database', lang('in_database'), 'required|trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim|strip_tags|xss_clean');
+			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim');
+			$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim');
+			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim');
+			$this->form_validation->set_rules('database', lang('in_database'), 'required|trim');
+			$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim');
 	
 			if ($this->form_validation->run() !== false)
 			{
 				// Write the database config files
 				$this->load->helper('config_file');
 	
-				$dbname = strip_tags($this->input->post('database'));
+				$dbname = $this->input->post('database');
 	
 				// get the chosen environment
-				$environment = strip_tags($this->input->post('environment'));
+				$environment = $this->input->post('environment');
 	
 				$data = array(
 					'main'	=> array(
-						'hostname'	=> strip_tags($this->input->post('hostname')),
-						'username'	=> strip_tags($this->input->post('username')),
-						'password'	=> strip_tags($this->input->post('password')),
+						'hostname'	=> $this->input->post('hostname'),
+						'username'	=> $this->input->post('username'),
+						'password'	=> $this->input->post('password'),
 						'database'	=> $dbname,
-						'dbprefix'	=> strip_tags($this->input->post('db_prefix'))
+						'dbprefix'	=> $this->input->post('db_prefix')
 					),
 					'environment' => $environment,
 				);
@@ -210,7 +210,7 @@ class Install extends CI_Controller {
 					// past this, we'll deal only with MySQL for now and create things
 					// the old fashioned way. Eventually, we'll make this more generic.
 					//
-					$db = @mysql_connect(strip_tags($this->input->post('hostname')), strip_tags($this->input->post('username')), strip_tags($this->input->post('password')));
+					$db = @mysql_connect($this->input->post('hostname'), $this->input->post('username'), $this->input->post('password'));
 	
 					if (!$db)
 					{
@@ -253,11 +253,11 @@ class Install extends CI_Controller {
 			$this->form_validation->set_error_delimiters('', '');
 			//$this->form_validation->CI =& $this;
 
-			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|strip_tags|min_length[1]|xss_clean');
-			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('password', lang('in_password'), 'required|trim|strip_tags|alpha_dash|min_length[8]|xss_clean');
-			$this->form_validation->set_rules('pass_confirm', lang('in_password_again'), 'required|trim|matches[password]');
-			$this->form_validation->set_rules('email', lang('in_email'), 'required|trim|strip_tags|valid_email|xss_clean');
+			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|min_length[1]');
+			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim');
+			$this->form_validation->set_rules('password', lang('in_password'), 'required|min_length[8]');
+			$this->form_validation->set_rules('pass_confirm', lang('in_password_again'), 'required|matches[password]');
+			$this->form_validation->set_rules('email', lang('in_email'), 'required|trim|valid_email');
 
 			if ($this->form_validation->run() !== false)
 			{
@@ -459,7 +459,7 @@ class Install extends CI_Controller {
 		// Reverse Folders
 		foreach ($this->reverse_writeable_folders as $folder)
 		{
-			@chmod(FCPATH . '..' . $folder, 0775);
+			@chmod(FCPATH . '../' . $folder, 0775);
 		}
 
 		// We made it to the end, so we're good to go!
