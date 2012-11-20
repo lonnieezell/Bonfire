@@ -220,8 +220,8 @@ class Install extends CI_Controller {
 
 			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|min_length[1]');
 			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim');
-			$this->form_validation->set_rules('password', lang('in_password'), 'required|trim|alpha_dash|min_length[8]');
-			$this->form_validation->set_rules('pass_confirm', lang('in_password_again'), 'required|trim|matches[password]');
+			$this->form_validation->set_rules('password', lang('in_password'), 'required|alpha_dash|min_length[8]');
+			$this->form_validation->set_rules('pass_confirm', lang('in_password_again'), 'required|matches[password]');
 			$this->form_validation->set_rules('email', lang('in_email'), 'required|trim|valid_email');
 
 			if ($this->form_validation->run() !== false)
