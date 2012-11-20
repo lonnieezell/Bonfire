@@ -13,7 +13,7 @@
 		<legend><?php echo lang('permissions_details') ?></legend>
 	
 		<div class="control-group <?php echo form_has_error('name') ? 'error' : ''; ?>">
-			<label for="name" class="control-label"><?php echo lang('permissions_name') ?><span class="required">*</span></label>
+			<label for="name" class="control-label"><?php echo lang('permissions_name') ?></label>
 	    	<div class="controls">
 	    	    <input id="name" type="text" name="name" class="input-large" maxlength="30" value="<?php echo set_value('name', isset($permissions['name']) ? $permissions['name'] : ''); ?>"  />
 	    	    <span class="help-inline"><?php echo form_error('name'); ?></span>
@@ -29,7 +29,7 @@
 		</div>
 	
 		<div class="control-group">
-			<label for="status" class="control-label"><?php echo lang('permissions_status') ?><span class="required">*</span></label>
+			<label for="status" class="control-label"><?php echo lang('permissions_status') ?></label>
 			<div class="controls">
 				<select name="status" id="status">
 					<option value="active" <?php echo set_select('status', 'active') ?>><?php echo lang('permissions_active') ?></option>

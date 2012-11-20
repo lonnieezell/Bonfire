@@ -82,7 +82,7 @@ class Install extends CI_Controller {
 	 * @var		array
 	 */
 	private $reverse_writeable_folders = array(
-		'/bonfire/application/config',
+		'application/config',
 	);
 
 	/**
@@ -184,11 +184,18 @@ class Install extends CI_Controller {
 		
 		if ($this->input->post('install_db'))
 		{
-			
+			$this->form_validation->set_error_delimiters('', '');
+
+			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim');
+			$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim');
+			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim');
+			$this->form_validation->set_rules('database', lang('in_database'), 'required|trim');
+			$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim');
 		}
 		
 		// Supported DB Drivers
 		$data->drivers = $this->supported_dbs;
+
 	
 		/*
 		$this->form_validation->set_error_delimiters('', '');
@@ -223,23 +230,44 @@ class Install extends CI_Controller {
 			$this->session->set_userdata('db_data', $data);
 			if ($this->session->userdata('db_data'))
 			{
-				//
-				// Make sure the database exists, otherwise create it.
-				// CRAP! dbutil and database_forge require a running database driver,
-				// which seems to require a valid database, which we don't have. To get
-				// past this, we'll deal only with MySQL for now and create things
-				// the old fashioned way. Eventually, we'll make this more generic.
-				//
-				$db = @mysql_connect(strip_tags($this->input->post('hostname')), strip_tags($this->input->post('username')), strip_tags($this->input->post('password')));
 
-				if (!$db)
+				// Write the database config files
+				$this->load->helper('config_file');
+	
+				$dbname = $this->input->post('database');
+	
+				// get the chosen environment
+				$environment = $this->input->post('environment');
+	
+				$data = array(
+					'main'	=> array(
+						'hostname'	=> $this->input->post('hostname'),
+						'username'	=> $this->input->post('username'),
+						'password'	=> $this->input->post('password'),
+						'database'	=> $dbname,
+						'dbprefix'	=> $this->input->post('db_prefix')
+					),
+					'environment' => $environment,
+				);
+	
+				$this->session->set_userdata('db_data', $data);
+				if ($this->session->userdata('db_data'))
 				{
-					$this->vdata['message'] = message(lang('in_db_no_connect').': '. mysql_error(), 'error');
-				}
-				else
-				{
-					$db_selected = mysql_select_db($dbname, $db);
-					if (!$db_selected)
+					//
+					// Make sure the database exists, otherwise create it.
+					// CRAP! dbutil and database_forge require a running database driver,
+					// which seems to require a valid database, which we don't have. To get
+					// past this, we'll deal only with MySQL for now and create things
+					// the old fashioned way. Eventually, we'll make this more generic.
+					//
+					$db = @mysql_connect($this->input->post('hostname'), $this->input->post('username'), $this->input->post('password'));
+	
+					if (!$db)
+					{
+						$this->vdata['message'] = message(lang('in_db_no_connect').': '. mysql_error(), 'error');
+					}
+					else
+
 					{
 						// Table doesn't exist, so create it.
 						if (!mysql_query("CREATE DATABASE $dbname", $db))
@@ -273,11 +301,11 @@ class Install extends CI_Controller {
 			$this->form_validation->set_error_delimiters('', '');
 			//$this->form_validation->CI =& $this;
 
-			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|strip_tags|min_length[1]|xss_clean');
-			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('password', lang('in_password'), 'required|trim|strip_tags|alpha_dash|min_length[8]|xss_clean');
-			$this->form_validation->set_rules('pass_confirm', lang('in_password_again'), 'required|trim|matches[password]');
-			$this->form_validation->set_rules('email', lang('in_email'), 'required|trim|strip_tags|valid_email|xss_clean');
+			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|min_length[1]');
+			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim');
+			$this->form_validation->set_rules('password', lang('in_password'), 'required|min_length[8]');
+			$this->form_validation->set_rules('pass_confirm', lang('in_password_again'), 'required|matches[password]');
+			$this->form_validation->set_rules('email', lang('in_email'), 'required|trim|valid_email');
 
 			if ($this->form_validation->run() !== false)
 			{
@@ -479,7 +507,7 @@ class Install extends CI_Controller {
 		// Reverse Folders
 		foreach ($this->reverse_writeable_folders as $folder)
 		{
-			@chmod(FCPATH . '..' . $folder, 0775);
+			@chmod(FCPATH . '../' . $folder, 0775);
 		}
 
 		// We made it to the end, so we're good to go!

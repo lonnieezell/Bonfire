@@ -64,20 +64,20 @@ class Settings extends Admin_Controller
 
 		if ($this->input->post('submit'))
 		{
-			$this->form_validation->set_rules('sender_email', 'System Email', 'required|trim|valid_email|max_length[120]|xss_clean');
-			$this->form_validation->set_rules('protocol', 'Email Server', 'trim|xss_clean');
+			$this->form_validation->set_rules('sender_email', 'System Email', 'required|trim|valid_email|max_length[120]');
+			$this->form_validation->set_rules('protocol', 'Email Server', 'trim');
 
 			if ($this->input->post('protocol') == 'sendmail')
 			{
-				$this->form_validation->set_rules('mailpath', 'Sendmail Path', 'required|trim|xss_clean');
+				$this->form_validation->set_rules('mailpath', 'Sendmail Path', 'required|trim');
 			}
 			elseif ($this->input->post('protocol') == 'smtp')
 			{
-				$this->form_validation->set_rules('smtp_host', 'SMTP Server Address', 'required|trim|strip_tags|xss_clean');
-				$this->form_validation->set_rules('smtp_user', 'SMTP Username', 'trim|strip_tags|xss_clean');
-				$this->form_validation->set_rules('smtp_pass', 'SMTP Password', 'trim|strip_tags|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,20}]');
-				$this->form_validation->set_rules('smtp_port', 'SMTP Port', 'trim|strip_tags|numeric|xss_clean');
-				$this->form_validation->set_rules('smtp_timeout', 'SMTP timeout', 'trim|strip_tags|numeric|xss_clean');
+				$this->form_validation->set_rules('smtp_host', 'SMTP Server Address', 'required|trim');
+				$this->form_validation->set_rules('smtp_user', 'SMTP Username', 'trim');
+				$this->form_validation->set_rules('smtp_pass', 'SMTP Password', 'trim|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,20}]');
+				$this->form_validation->set_rules('smtp_port', 'SMTP Port', 'trim|numeric');
+				$this->form_validation->set_rules('smtp_timeout', 'SMTP timeout', 'trim|numeric');
 			}
 
 			if ($this->form_validation->run() !== FALSE)
@@ -347,13 +347,13 @@ class Settings extends Admin_Controller
 		if ($this->input->post('submit'))
 		{
 			// validate subject, content and recipients
-			$this->form_validation->set_rules('email_subject', 'Email Subject', 'required|xss_clean|trim|min_length[1]|max_length[255]');
+			$this->form_validation->set_rules('email_subject', 'Email Subject', 'required|trim|min_length[1]|max_length[255]');
 			$this->form_validation->set_rules('email_content', 'Email Content', 'required|trim|min_length[1]');
 			$this->form_validation->set_rules('checked','Users', 'required');
 			
 			if ($this->form_validation->run() === FALSE)
 			{
-				Template::set('email_subject', $this->security->xss_clean($this->input->post('email_subject')));
+				Template::set('email_subject', $this->input->post('email_subject'));
 				Template::set('email_content', $this->input->post('email_content'));
 				Template::set('checked', $this->input->post('checked'));
 			}

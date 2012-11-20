@@ -91,7 +91,7 @@
 		<div class="form-actions">
 			<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('role_save_role'); ?>" /> or <?php echo anchor(SITE_AREA .'/settings/roles', lang('bf_action_cancel')); ?>
 			<?php if(isset($role) && $role->can_delete == 1 && has_permission('Bonfire.Roles.Delete')):?>
-			<button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('<?php echo lang('role_delete_confirm').' '.lang('role_delete_note') ?>')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('role_delete_role'); ?></button>
+			<button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('role_delete_confirm').' '.lang('role_delete_note'))) ?>')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('role_delete_role'); ?></button>
 			<?php endif;?>
 		</div>
 

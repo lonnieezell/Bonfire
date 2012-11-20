@@ -191,9 +191,9 @@ class Settings extends Admin_Controller
 	private function save_permissions($type='insert', $id=0)
 	{
 
-		$this->form_validation->set_rules('name','Name','required|trim|xss_clean|max_length[30]');
-		$this->form_validation->set_rules('description','Description','trim|xss_clean|max_length[100]');
-		$this->form_validation->set_rules('status','Status','required|trim|xss_clean');
+		$this->form_validation->set_rules('name','Name','required|trim|max_length[30]');
+		$this->form_validation->set_rules('description','Description','trim|max_length[100]');
+		$this->form_validation->set_rules('status','Status','required|trim');
 		if ($this->form_validation->run() === FALSE)
 		{
 			return FALSE;

@@ -20,7 +20,7 @@ if (!is_file(dirname(__FILE__).'/install/installed.txt'))
 	$base_url .= '://'. $_SERVER['HTTP_HOST'];
 	$base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
 
-	header("Location: {$base_url}install");
+	header("Location: {$base_url}install/index.php");
 	exit;
 }
 

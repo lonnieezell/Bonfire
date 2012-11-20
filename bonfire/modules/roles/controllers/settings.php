@@ -284,18 +284,18 @@ class Settings extends Admin_Controller
 	{
 		if ($type == 'insert')
 		{
-			$this->form_validation->set_rules('role_name', 'lang:role_name', 'required|trim|strip_tags|unique[roles.role_name]|max_length[60]|xss_clean');
+			$this->form_validation->set_rules('role_name', 'lang:role_name', 'required|trim|unique[roles.role_name]|max_length[60]');
 		}
 		else
 		{
-			$this->form_validation->set_rules('role_name', 'lang:role_name', 'required|trim|strip_tags|unique[roles.role_name,roles.role_id]|max_length[60]|xss_clean');
+			$this->form_validation->set_rules('role_name', 'lang:role_name', 'required|trim|unique[roles.role_name,roles.role_id]|max_length[60]');
 		}
 
-		$this->form_validation->set_rules('description', 'lang:bf_description', 'trim|strip_tags|max_length[255]|xss_clean');
-		$this->form_validation->set_rules('login_destination', 'lang:role_login_destination', 'trim|strip_tags|max_length[255]|xss_clean');
-        $this->form_validation->set_rules('default_context', 'lang:role_default_context', 'trim|strip_tags|xss_clean');
-        $this->form_validation->set_rules('default', 'lang:role_default_role', 'trim|strip_tags|is_numeric|max_length[1]|xss_clean');
-		$this->form_validation->set_rules('can_delete', 'lang:role_can_delete_role', 'trim|strip_tags|is_numeric|max_length[1]|xss_clean');
+		$this->form_validation->set_rules('description', 'lang:bf_description', 'trim|max_length[255]');
+		$this->form_validation->set_rules('login_destination', 'lang:role_login_destination', 'trim|max_length[255]');
+        $this->form_validation->set_rules('default_context', 'lang:role_default_context', 'trim');
+        $this->form_validation->set_rules('default', 'lang:role_default_role', 'trim|is_numeric|max_length[1]');
+		$this->form_validation->set_rules('can_delete', 'lang:role_can_delete_role', 'trim|is_numeric|max_length[1]');
 
 		$_POST['role_id'] = $id;
 

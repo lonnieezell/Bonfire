@@ -509,7 +509,7 @@ if ($controller_name != $module_name_lower)
 
 		if (is_array($validation_rules))
 		{
-			// add rules such as trim|required|xss_clean
+			// add rules such as trim|required
 			foreach($validation_rules as $key => $value)
 			{
 				if ($rule_counter > 0)

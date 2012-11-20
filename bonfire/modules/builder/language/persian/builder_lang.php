@@ -104,7 +104,6 @@ $lang['mb_form_rules_limits']	= 'محدوديت ورودي';
 $lang['mb_form_required']		= 'اجباري';
 $lang['mb_form_unique']			= 'يکتا';
 $lang['mb_form_trim']			= 'بدون فاصله در ابتدا و انتها';
-$lang['mb_form_xss_clean']		= 'عاري از xss';
 $lang['mb_form_valid_email']	= 'Email معتبر';
 $lang['mb_form_is_numeric']		= '0-9';
 $lang['mb_form_alpha']			= 'a-Z';
