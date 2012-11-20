@@ -25,19 +25,65 @@ class Installer_lib {
 	
 	//--------------------------------------------------------------------
 	
-	public function mysql_available() 
+	/**
+	 *	Tests whether the specified database type can even be found.
+	 *
+	 * @access	public
+	 * @return	boolean
+	 */
+	public function db_available() 
 	{
-		return function_exists('mysql_connect');
+		$driver = $this->ci->input->post('driver');
+		
+		switch ($driver)
+		{
+			case 'mysql':
+				return function_exists('mysql_connect');
+				break;
+			case 'mysqli':
+				return class_exists('Mysqli');
+				break;
+			default: 
+				return false;
+		}
 	}
 	
 	//--------------------------------------------------------------------
 	
-	public function mysql_acceptable($type='server') 
+	/**
+	 *	Attempts to connect to the database given the existing $_POST vars.
+	 *
+	 * @access	public
+	 * @return	boolean
+	 */
+	public function test_db_connection() 
 	{
-		// Server version
-		if ($type == 'server')
+		$driver	= $this->ci->input->post('driver');
+		
+		$hostname	= $this->ci->input->post('hostname');
+		$username	= $this->ci->input->post('username');
+		$password	= $this->ci->input->post('password');
+		$port		= $this->ci->input->post('port');
+		
+		switch ($driver)
 		{
-			
+			case 'mysql':
+				return $this->db_available() && @mysql_connect("$hostname:$port", $username, $password);
+				break;
+			case 'mysqli':
+				$mysqli = new mysqli($hostname, $username, $password, '', $port);
+
+				if ($mysqli->connect_error)
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+				break;
+			default: 
+				return false;
 		}
 	}
 	

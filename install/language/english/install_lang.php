@@ -40,6 +40,7 @@ $lang['in_writeable_files_message']       = 'Please ensure that the following fi
 $lang['in_db_settings']				= 'Database Settings';
 $lang['in_db_settings_note']		= '<p>Please fill out the database information below.</p>';
 $lang['in_environment_note']		= '<p class="small">These settings will be saved to both the main <b>config/database.php</b> file and to the appropriate environment (i.e. <b>config/development/database.php)</b>. </p>';
+$lang['in_db_not_available']		= 'Unable to find database.';
 $lang['in_db_connect']				= 'Database settings OK';
 $lang['in_db_no_connect']           = 'Invalid database settings.';
 $lang['in_db_setup_error']          = 'There was an error setting up your database';

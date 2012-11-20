@@ -11,7 +11,7 @@
 	<?php echo lang('in_environment_note'); ?>
 	
 	
-	<?php echo form_open(uri_string(), array('id' => 'db-form') ) ?>
+	<?php echo form_open(current_url(), array('id' => 'db-form') ) ?>
 	
 		<div>
 			<label for="environment"><?php echo lang('in_environment'); ?></label>
@@ -67,7 +67,7 @@
 		<div id="confirm_db"></div>
 		
 		<div class="form-actions">
-			<input type="submit" name="submit" id="submit" value="<?php echo lang('in_continue'); ?>" />
+			<input type="submit" name="install_db" id="submit" value="<?php echo lang('in_continue'); ?>" />
 		</div>
 		
 	
