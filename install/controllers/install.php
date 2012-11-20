@@ -135,11 +135,11 @@ class Install extends CI_Controller {
 			$this->load->library('form_validation');
 			$this->form_validation->set_error_delimiters('', '');
 			//$this->form_validation->CI =& $this;
-			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim|xss_clean');
-			$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim|xss_clean');
-			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|xss_clean');
-			$this->form_validation->set_rules('database', lang('in_database'), 'required|trim|xss_clean');
-			$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim|xss_clean');
+			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim');
+			$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim');
+			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim');
+			$this->form_validation->set_rules('database', lang('in_database'), 'required|trim');
+			$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim');
 	
 			$this->startup_check();
 	
@@ -218,11 +218,11 @@ class Install extends CI_Controller {
 			$this->form_validation->set_error_delimiters('', '');
 			//$this->form_validation->CI =& $this;
 
-			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|min_length[1]|xss_clean');
-			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim|xss_clean');
-			$this->form_validation->set_rules('password', lang('in_password'), 'required|trim|alpha_dash|min_length[8]|xss_clean');
+			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|min_length[1]');
+			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim');
+			$this->form_validation->set_rules('password', lang('in_password'), 'required|trim|alpha_dash|min_length[8]');
 			$this->form_validation->set_rules('pass_confirm', lang('in_password_again'), 'required|trim|matches[password]');
-			$this->form_validation->set_rules('email', lang('in_email'), 'required|trim|valid_email|xss_clean');
+			$this->form_validation->set_rules('email', lang('in_email'), 'required|trim|valid_email');
 
 			if ($this->form_validation->run() !== false)
 			{
