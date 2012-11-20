@@ -21,8 +21,17 @@
 	THE SOFTWARE.
 */
 
-$lang['in_intro']					= '<h2>Welcome</h2><p>Welcome to the Bonfire installation process! Just fill in the fields below, and before you know it you will be creating CodeIgniter 2.1 based web apps faster than ever.</p>';
+$lang['in_intro']					= '<h2>Welcome to Bonfire</h2><p>Please verify the system requirements below, then click "Next" to get started.</p>';
 $lang['in_not_writeable_heading']	= 'Files/Folders Not Writeable';
+
+$lang['in_php_version']				= 'PHP Version';
+$lang['in_curl_enabled']			= 'cURL Enabled?';
+$lang['in_enabled']					= 'Enabled';
+$lang['in_disabled']				= 'Disabled';
+$lang['in_folders']					= 'Writeable Folders';
+$lang['in_files']					= 'Writeable Files';
+$lang['in_writeable']				= 'Writeable';
+$lang['in_not_writeable']			= 'Not Writeable';
 
 $lang['in_writeable_directories_message'] = 'Please ensure that the following directories are writeable, and try again';
 $lang['in_writeable_files_message']       = 'Please ensure that the following files are writeable, and try again';

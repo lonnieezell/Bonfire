@@ -21,19 +21,19 @@
 	THE SOFTWARE.
 */
 
-/*
-	Class: Install
-
-	Helps the developer with the initial install of the application for developement
-	purposes by...
-
-	1. Creating necessary config files so they won't be overwritten during upgrades.
-	2. Sets up the database.
-	3. Creates the initial database schema.
-	4. Creates the initial admin user.
-
-	Module:	Installer
-*/
+/**
+ * Helps the developer with the initial install of the application for developement
+ * purposes by...
+ *
+ * 1. Creating necessary config files so they won't be overwritten during upgrades.
+ * 2. Sets up the database.
+ * 3. Creates the initial database schema.
+ * 4. Creates the initial admin user.
+ *
+ * @author Lonnie Ezell
+ * @author Bonfire Dev Team
+ * @package Bonfire\Installer\Controllers
+ */
 class Install extends CI_Controller {
 
 	public static $locations;
@@ -53,95 +53,136 @@ class Install extends CI_Controller {
 	*/
 	private $curl_update = 1;
 
-
-	/*
-		Var: $app_path
-		Boolean that says whether we should check
-		for updates.
-	*/
-	private $app_path = '../bonfire/application/';
-
-	/*
-		Var: $writable_folders
-		An array of folders the installer checks to make
-		sure they can be written to.
-	*/
+	/**
+	 * An array of folders the installer checks to make
+	 * sure they can be written to.
+	 *
+	 * @access	private
+	 * @var		array
+	 */
 	private $writeable_folders = array(
-		'/bonfire/application/cache',
-		'/bonfire/application/logs',
-		'/bonfire/application/config',
-		'/bonfire/application/config/development',
-		'/bonfire/application/config/testing',
-		'/bonfire/application/config/production',
-		'/bonfire/application/archives',
-		'/bonfire/application/archives/config',
-		'/bonfire/application/db/backups',
-		'/bonfire/application/db/migrations',
-		'/assets/cache'
+		'application/cache',
+		'application/logs',
+		'application/config',
+		'application/config/development',
+		'application/config/testing',
+		'application/config/production',
+		'application/archives',
+		'application/archives/config',
+		'application/db/backups',
+		'application/db/migrations',
+		'public/assets/cache'
 	);
 
-	/*
-		Var: $reverse_writable_folders
-		An array of folders the installer can make unwriteable after
-		installation.
-	*/
+	/**
+	 * An array of folders the installer can make unwriteable after
+	 * installation.
+	 *
+	 * @access	private
+	 * @var		array
+	 */
 	private $reverse_writeable_folders = array(
 		'/bonfire/application/config',
 	);
 
-	/*
-		Var: $writeable_files
-		An array of files the installer checks to make
-		sure they can be written to.
-	*/
+	/**
+	 * An array of files the installer checks to make
+	 * sure they can be written to.
+	 *
+	 * @access	private
+	 * @var 	array
+	 */
 	private $writeable_files = array(
-		'/bonfire/application/config/application.php',
-		'/bonfire/application/config/database.php',
+		'application/config/application.php',
+		'application/config/database.php',
 	);
 
+	/** 
+	 * @access	private
+	 * @var		array
+	 */
 	private $vdata = array();
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Constructor method.
+	 *
+	 * @access	public
+	 * @return	void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
 
-		$this->load->helper('form');
-
-		$this->output->enable_profiler(false);
-
-		$this->lang->load('application');
-		$this->lang->load('install');
-
-		// check if the app is installed
-		$this->load->config('application');
-
+		// Contains most of our installer utility functions
+		$this->load->library('installer_lib');
 		$this->load->helper('install');
 
-		$this->cURL_check();
+		// Load form validation
+		$this->load->library('form_validation');
+
+		// Sets our language
+		$this->set_language();
+
+		// check if the app is installed
+		//$this->load->config('application');
 	}
 
 	//--------------------------------------------------------------------
 
+	/** 
+	 *	Index Method
+	 *
+	 * @access	public
+	 * @return	void
+	 */
+	 
 	public function index()
 	{
-		if ($this->is_installed())
+		if ($this->installer_lib->is_installed())
 		{
 			$this->load->view('install/installed');
 		}
 		else
 		{
-			$this->load->library('form_validation');
+			$data = new stdClass();
+			
+			// PHP Version Check
+			$data->php_min_version	= '5.2';
+			$data->php_acceptable	= $this->installer_lib->php_acceptable($data->php_min_version);
+			$data->php_version		= $this->installer_lib->php_version;
+			
+			// Curl Enabled? 
+			$data->curl_enabled		= $this->installer_lib->cURL_enabled();
+			
+			// Files/Folders writeable?
+			$data->folders			= $this->installer_lib->check_folders($this->writeable_folders);
+			$data->files			= $this->installer_lib->check_files($this->writeable_files);
+		
+			$this->load->view('install/req_check', $data);
+		}
+	}
+	
+	//--------------------------------------------------------------------
+	 
+	public function index2()
+	{
+		if ($this->installer_lib->is_installed())
+		{
+			$this->load->view('install/installed');
+		}
+		else
+		{
 			$this->form_validation->set_error_delimiters('', '');
-			//$this->form_validation->CI =& $this;
+
 			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('database', lang('in_database'), 'required|trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim|strip_tags|xss_clean');
 	
-			$this->startup_check();
+			$this->installer_lib->startup_check();
 	
 			if ($this->form_validation->run() !== false)
 			{
@@ -290,115 +331,13 @@ class Install extends CI_Controller {
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 
-	/*
-		Method: is_installed()
-		
-		Performs some basic checks to see if maybe, just maybe, the 
-		user has already installed the application and just hasn't 
-		moved the install folder....
-	*/
-	private function is_installed() 
-	{	
-		// Does the database config exist? 
-		// If not, then we definitely haven't installed yet.
-		if (!file_exists('../bonfire/application/config/development/database.php'))
-		{
-			return false;
-		}
-		
-		require('../bonfire/application/config/development/database.php');
-		
-		// If the $db['default'] doesn't exist then we can't
-		// load our database.
-		if (!isset($db) || !isset($db['default']))
-		{
-			return false;
-		}
-
-		$this->load->database($db['default']);
-		
-		// Does the users table exist?
-		if (!$this->db->table_exists('users'))
-		{
-			return false;
-		}
-		
-		// Make sure at least one row exists in the users table.
-		$query = $this->db->get('users');
-		
-		if ($query->num_rows() == 0)
-		{
-			return false;
-		}
-		
-		return true;
-	}
-	
-	//--------------------------------------------------------------------
 
 	/*
-		Method: startup_check()
-
-		Verifies that the folders and files needed are writeable. Sets
-		'startup_errors' as a string in the template if not.
+		Copies generic file versions to their appropriate spots.
+		This provides a safe way to perform upgrades, as well
+		as simplifying what will need to be modified when some
+		sweeping changes are made.
 	*/
-	private function startup_check()
-	{
-		$errors = '';
-		$folder_errors = '';
-		$file_errors = '';
-
-		// Check Folders
-		foreach ($this->writeable_folders as $folder)
-		{
-			$full_folder = FCPATH . '..' . $folder;
-
-			@chmod($full_folder, 0777);
-			if (!is_dir($full_folder) || !is_writeable($full_folder))
-			{
-				$folder_errors .= "<li>$folder</li>";
-			}
-		}
-
-		if (!empty($folder_errors))
-		{
-			$errors = '<p>'.lang('in_writeable_directories_message').':</p><ul>' . $folder_errors .'</ul>';
-		}
-
-		// Check files
-		foreach ($this->writeable_files as $file)
-		{
-			@chmod(FCPATH . '..' . $file, 0666);
-			if (!is_writeable(FCPATH . '..' . $file))
-			{
-				$file_errors .= "<li>$file</li>";
-			}
-		}
-
-		if (!empty($file_errors))
-		{
-			$errors .= '<p>'.lang('in_writeable_files_message').':</p><ul>' . $file_errors .'</ul>';
-		}
-
-		// Make it available to the template lib if there are errors
-		if (!empty($errors))
-		{
-			$this->vdata['startup_errors'] = $errors;
-		}
-
-		unset($errors, $folder_errors, $file_errors);
-
-		/*
-			Copies generic file versions to their appropriate spots.
-			This provides a safe way to perform upgrades, as well
-			as simplifying what will need to be modified when some
-			sweeping changes are made.
-		*/
-	}
-
-	//--------------------------------------------------------------------
-
-
 	private function setup()
 	{
 
@@ -534,106 +473,26 @@ class Install extends CI_Controller {
 	}
 
 	//--------------------------------------------------------------------
-
-    /*
-		Method: cURL_check()
-
-		Verifies that cURL is enabled as a PHP extension. Sets
-	   'curl_update' to 0 if not.
-	*/
-	private function cURL_check()
+	
+	/**
+	 * Sets the language and loads the corresponding language files. 
+	 * For now, this method is very simple, and needs to be expanded
+	 * so that we can support multiple languages in the installation.
+	 * 
+	 * @access	private
+	 * @author	lonnieezell
+	 * @since	0.7-dev
+	 * @return	void
+	 */
+	private function set_language() 
 	{
-        if (!function_exists('curl_version'))
-        {
-          $this->curl_error = 1;
-          $this->curl_update = 0;
-        }
-    }
-
-
-	//--------------------------------------------------------------------
-
-    /*
-		Method: rewrite_check()
-
-		Verifies that mod_rewrite is enabled as a PHP extension.
-	*/
-	private function rewrite_check()
-	{
-        if (!function_exists('rewrite_check'))
-        {
-			ob_start();
-			phpinfo(INFO_MODULES);
-			$contents = ob_get_clean();
-			return strpos($contents, 'mod_rewrite') !== false;
-        }
-
-    }//end rewrite_check()
-
-	/*
-		Method: hash_password()
-
-		Generates a new salt and password hash for the given password.
-
-		Parameters:
-			$old	- The password to hash.
-
-		Returns:
-			An array with the hashed password and new salt.
-	*/
-	public function hash_password($old='')
-	{
-		if (!function_exists('do_hash'))
-		{
-			$this->load->helper('security');
-		}
-
-		$salt = $this->generate_salt();
-		$pass = do_hash($salt . $old);
-
-		return array($pass, $salt);
+		// Load our install language strings
+		$this->lang->load('install');
+	
+		// Load some application-wide, generic, language labels.
+		$this->lang->load('application');
 	}
-
-	//--------------------------------------------------------------------
-
-	private function generate_salt()
-	{
-		if (!function_exists('random_string'))
-		{
-			$this->load->helper('string');
-		}
-
-		return random_string('alnum', 7);
-	}
-
-	//--------------------------------------------------------------------
-
-	private function get_module_versions()
-	{
-		$mod_versions = array();
-
-
-
-		$modules = module_files(null, 'migrations');
-
-		if ($modules === false)
-		{
-			return false;
-		}
-
-		foreach ($modules as $module => $migrations)
-		{
-			$mod_versions[$module] = array(
-				'installed_version'	=> $this->migrations->get_schema_version($module .'_'),
-				'latest_version'	=> $this->migrations->get_latest_version($module .'_'),
-				'migrations'		=> $migrations['migrations']
-			);
-		}
-
-		return $mod_versions;
-	}
-
-
+	
 	//--------------------------------------------------------------------
 }
 

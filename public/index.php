@@ -1,7 +1,19 @@
 <?php
 
-// Check if the install folder exists - if so then show the installer app
-if (!is_dir(dirname(__FILE__).'/install') == true)
+//--------------------------------------------------------------------
+// Install Check
+//--------------------------------------------------------------------
+// Check to see if we've been isntalled yet. We can assume that we have 
+// been installed if one of 2 conditions is met: 
+//
+// 		1. The '/install' folder does not exist
+//		2. The file '/install/installed.txt' does exist.
+// 
+// This allows the user to remove the install folder completely from the
+// public path for security, or to simply create a new little text file
+// for when we're developing on it, but want to easily install later on.
+//
+if (!is_file(dirname(__FILE__).'/install/installed.txt'))
 {
 	// Auto $base_url copied from codeigniter/core/Config.php
 	$base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
