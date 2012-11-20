@@ -64,7 +64,7 @@ class Settings extends Admin_Controller
 	 */
 	public function index()
 	{
-		if ($this->input->post('submit'))
+		if ($this->input->post('save'))
 		{
 			if ($this->save_settings())
 			{

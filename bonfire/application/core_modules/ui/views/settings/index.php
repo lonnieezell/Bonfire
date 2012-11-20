@@ -57,7 +57,7 @@
 				<?php endforeach; ?>
 				<tr>
 					<td>&nbsp;</td>
-					<td><input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('ui_update_shortcuts') ?>" /></td>
+					<td><input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('ui_update_shortcuts') ?>" /></td>
 					<td>&nbsp;</td>
 				</tr>
 			</tbody>

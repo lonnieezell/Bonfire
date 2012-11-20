@@ -62,7 +62,7 @@ class Settings extends Admin_Controller
 	{
 		$this->load->library('form_validation');
 
-		if ($this->input->post('submit'))
+		if ($this->input->post('save'))
 		{
 			$this->form_validation->set_rules('sender_email', 'System Email', 'required|trim|valid_email|max_length[120]');
 			$this->form_validation->set_rules('protocol', 'Email Server', 'trim');
@@ -138,7 +138,7 @@ class Settings extends Admin_Controller
 	 */
 	public function template()
 	{
-		if ($this->input->post('submit'))
+		if ($this->input->post('save'))
 		{
 			$header = $_POST['header'];
 			$footer = $_POST['footer'];
@@ -189,7 +189,7 @@ class Settings extends Admin_Controller
 	 */
 	public function test()
 	{
-		if ($_SERVER['REQUEST_METHOD'] != 'POST')
+		if (!isset($_POST['test']))
 		{
 			$this->security->csrf_show_error();
 		}
@@ -229,7 +229,7 @@ class Settings extends Admin_Controller
 		$this->load->model('Emailer_model', 'emailer_model', TRUE);
 
 		// Deleting anything?
-		if (isset($_POST['action_delete']))
+		if (isset($_POST['delete']))
 		{
 			$checked = $this->input->post('checked');
 			if (is_array($checked) && count($checked))
@@ -254,7 +254,7 @@ class Settings extends Admin_Controller
 				Template::set_message(lang('em_delete_error') . $this->emailer_model->error, 'error');
 			}
 		}
-		elseif (isset($_POST['action_force_process']))
+		elseif (isset($_POST['process_force']))
 		{
 			$this->load->library('emailer');
 			$this->emailer->enable_debug(TRUE);
@@ -269,7 +269,7 @@ class Settings extends Admin_Controller
 				Template::set('email_debug', $this->emailer->debug_message);
 			}
 		}
-		elseif (isset($_POST['action_insert_test']))
+		elseif (isset($_POST['insert_test']))
 		{
 			$this->load->library('emailer');
 
@@ -344,7 +344,7 @@ class Settings extends Admin_Controller
 		$this->load->model('users/user_model');
 		$this->load->library('emailer');
 
-		if ($this->input->post('submit'))
+		if ($this->input->post('create'))
 		{
 			// validate subject, content and recipients
 			$this->form_validation->set_rules('email_subject', 'Email Subject', 'required|trim|min_length[1]|max_length[255]');

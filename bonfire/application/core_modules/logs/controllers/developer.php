@@ -71,7 +71,7 @@ class Developer extends Admin_Controller
 		{
 			$this->auth->restrict('Bonfire.Logs.Manage');
 
-			if (isset($_POST['action_delete']))
+			if (isset($_POST['delete']))
 			{
 				$checked = $this->input->post('checked');
 
@@ -87,7 +87,7 @@ class Developer extends Admin_Controller
 					Template::set_message(sprintf(lang('log_deleted'), count($checked)), 'success');
 				}
 			}
-			elseif (isset($_POST['action_delete_all']))
+			elseif (isset($_POST['delete_all']))
 			{
 				delete_files($this->config->item('log_path'));
 				// restore the index.html file
@@ -156,7 +156,7 @@ class Developer extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Logs.Manage');
 
-		if ($this->input->post('submit'))
+		if ($this->input->post('save'))
 		{
 			$this->load->helper('config_file');
 

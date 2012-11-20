@@ -84,7 +84,7 @@ class Settings extends Admin_Controller
 				Template::set_message(lang('ui_shortcut_remove_error'), 'error');
 			}
 		}
-		elseif ($this->input->post('submit'))
+		elseif ($this->input->post('save'))
 		{
 			if ($this->save_settings())
 			{

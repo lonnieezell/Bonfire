@@ -32,7 +32,7 @@
 
 
 	<div class="form-actions">
-		<input type="submit" name="submit" class="btn btn-primary" value="Export" />
+		<input type="submit" name="export" class="btn btn-primary" value="Export" />
 	</div>
 
 <?php echo form_close(); ?>

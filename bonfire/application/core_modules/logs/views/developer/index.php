@@ -25,7 +25,7 @@
 			<tr>
 				<td colspan="3">
 					<?php echo lang('bf_with_selected'); ?>:
-					<input type="submit" name="action_delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>"  onclick="return confirm('<?php e(js_escape(lang('logs_delete_confirm'))); ?>')"/>
+					<input type="submit" name="delete" id="delete-me" class="btn btn-danger" value="<?php echo lang('bf_action_delete') ?>"  onclick="return confirm('<?php e(js_escape(lang('logs_delete_confirm'))); ?>')"/>
 				</td>
 			</tr>
 		</tfoot>
@@ -65,7 +65,7 @@
 		</div>
 
 		<div class="form-actions">
-			<button type="submit" name="action_delete_all" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete all log files?')"><i class="icon-white icon-trash">&nbsp;</i>&nbsp;<?php echo lang('log_delete_button'); ?></button>
+			<button type="submit" name="delete_all" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete all log files?')"><i class="icon-white icon-trash">&nbsp;</i>&nbsp;<?php echo lang('log_delete_button'); ?></button>
 		</div>
 		<?php echo form_close(); ?>
 	</div>

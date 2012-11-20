@@ -126,7 +126,7 @@ class Settings extends Admin_Controller
 	 */
 	public function create()
 	{
-		if ($this->input->post('submit'))
+		if ($this->input->post('save'))
 		{
 			if ($this->save_permissions())
 			{
@@ -160,7 +160,7 @@ class Settings extends Admin_Controller
 			redirect(SITE_AREA .'/settings/permissions');
 		}
 
-		if ($this->input->post('submit'))
+		if ($this->input->post('save'))
 		{
 			if ($this->save_permissions('update', $id))
 			{

@@ -61,7 +61,7 @@ class Developer extends Admin_Controller
 	 */
 	public function index()
 	{
-		if ($this->input->post('submit') == lang('mig_migrate_button'))
+		if ($this->input->post('migrate'))
 		{
 			$core = $this->input->post('core_only') ? '' : 'app_';
 

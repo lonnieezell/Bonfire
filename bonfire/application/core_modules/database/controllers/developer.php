@@ -176,7 +176,7 @@ class Developer extends Admin_Controller
 			// Tell them it was good.
 			Template::set_message($count . ' backup files were deleted.', 'success');
 		}
-		else if ($this->input->post() && !isset($_POST['checked']))
+		else if (isset($_POST['delete']) && !isset($_POST['checked']))
 		{
 			Template::set_message(lang('db_backup_delete_none'), 'error');
 		}
@@ -212,7 +212,7 @@ class Developer extends Admin_Controller
 			Template::set('toolbar_title', 'Create New Backup');
 			return TRUE;
 		}
-		else if (isset($_POST['submit']))
+		else if (isset($_POST['backup']))
 		{
 			$this->load->library('form_validation');
 
@@ -318,7 +318,7 @@ class Developer extends Admin_Controller
 	{
 		Template::set('filename', $filename);
 
-		if (!empty($filename) && isset($_POST['submit']))
+		if (!empty($filename) && isset($_POST['restore']))
 		{
 			// Load the file from disk.
 			$this->load->helper('file');

@@ -96,7 +96,7 @@
 	</fieldset>
 
 	<div class="form-actions">
-		<input type="submit" name="submit" class="btn btn-primary" value="Save Settings" />
+		<input type="submit" name="save" class="btn btn-primary" value="Save Settings" />
 	</div>
 
 	<?php echo form_close(); ?>
@@ -118,7 +118,7 @@
 				<label class="control-label" for="test-email"><?php echo lang('bf_email'); ?></label>
 				<div class="controls">
 					<input type="email" name="email" id="test-email" value="<?php echo set_value('test_email', settings_item('site.system_email')) ?>" />
-					<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('em_test_button'); ?>" />
+					<input type="submit" name="test" class="btn btn-primary" value="<?php echo lang('em_test_button'); ?>" />
 				</div>
 			</div>
 		</fieldset>

@@ -195,7 +195,7 @@ class Settings extends Admin_Controller
 		$meta_fields = config_item('user_meta_fields');
 		Template::set('meta_fields', $meta_fields);
 
-		if ($this->input->post('submit'))
+		if ($this->input->post('save'))
 		{
 			if ($id = $this->save_user('insert', NULL, $meta_fields))
 			{
@@ -278,7 +278,7 @@ class Settings extends Admin_Controller
 
 		$user = $this->user_model->find_user_and_meta($user_id);
 
-		if ($this->input->post('submit'))
+		if ($this->input->post('save'))
 		{
 			if ($this->save_user('update', $user_id, $meta_fields, $user->role_name))
 			{

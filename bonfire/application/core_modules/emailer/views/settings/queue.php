@@ -9,8 +9,8 @@
 	</div>
 	<div class="column size1of3 last-column text-right">
 		<?php echo form_open($this->uri->uri_string(), array('class' => 'form-inline')); ?>
-		<input type="submit" name="action_force_process" class="btn btn-primary" value="Process Now">
-		<input type="submit" name="action_insert_test" class="btn btn-warning" value="Insert Test Email">
+		<input type="submit" name="force_process" class="btn btn-primary" value="Process Now">
+		<input type="submit" name="insert_test" class="btn btn-warning" value="Insert Test Email">
 		<?php echo form_close(); ?>
 	</div>
 </div>
@@ -41,7 +41,7 @@
 			<?php if (isset($emails) && count($emails)) : ?>
 
 				<?php echo lang('bf_with_selected') ?>
-				<button type="submit" name="action_delete" id="delete-me" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('em_delete_confirm'))); ?>')">
+				<button type="submit" name="delete" id="delete-me" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('em_delete_confirm'))); ?>')">
 					<i class="icon-white icon-trash"></i> <?php echo lang('bf_action_delete') ?>
 				</button>
 
