@@ -40,4 +40,12 @@
 	
 </div>
 
+<div class="form-actions">
+	<?php if ($step_passed) : ?>
+		<a href="<?php echo site_url('install/database') ?>" class="button"><?php echo lang('in_continue') ?></a>
+	<?php else : ?>	
+		<p><?php echo lang('in_bad_permissions') ?></p>
+	<?php endif; ?>
+</div>
+
 <?php $this->load->view('footer'); ?>

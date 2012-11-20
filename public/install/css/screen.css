@@ -48,12 +48,18 @@ ul {
 a:link, a:visited { color: #06c; text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+.form-actions {
+	padding: 0px 0px 20px 0;
+	text-align: right;
+}
+
 .well {
 	background: white;
 	border: 1px solid #ccc;
 	padding: 10px;
 	color: #666;
 	font-weight: lighter;
+	margin: 30px 0;
 }
 .good, .bad { font-weight: normal; }
 .good { color: #0c3; }

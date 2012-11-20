@@ -32,6 +32,7 @@ $lang['in_folders']					= 'Writeable Folders';
 $lang['in_files']					= 'Writeable Files';
 $lang['in_writeable']				= 'Writeable';
 $lang['in_not_writeable']			= 'Not Writeable';
+$lang['in_bad_permissions']			= 'Please correct the issues above and refresh this page to continue.';
 
 $lang['in_writeable_directories_message'] = 'Please ensure that the following directories are writeable, and try again';
 $lang['in_writeable_files_message']       = 'Please ensure that the following files are writeable, and try again';
@@ -75,5 +76,5 @@ $lang['invalid_migration_filename']		= 'Wrong migration filename: %s - %s';
 
 $lang['in_installed']					= 'Bonfire is already installed. Please delete or rename the install folder to';
 $lang['in_rename_msg']					= 'If you would like, we can simply rename it for you.';
-$lang['continue']						= 'continue';
-$lang['click']							= 'Click here';
+$lang['in_continue']						= 'Continue';
+$lang['in_click']							= 'Click here';

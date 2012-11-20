@@ -18,7 +18,7 @@
 		<!-- Header -->
 		<div class="head text-right">
 			<div class="inner">
-				<h1><img src="<?php echo site_url('images/bonfire_logo.png') ?>" /></h1>
+				<h1><img src="<?php echo base_url('images/bonfire_logo.png') ?>" /></h1>
 			</div>
 		</div>
 

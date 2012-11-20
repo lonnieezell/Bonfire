@@ -90,61 +90,6 @@ class Installer_lib {
 	//--------------------------------------------------------------------
 	
 	/*
-		Method: startup_check()
-
-		Verifies that the folders and files needed are writeable. Sets
-		'startup_errors' as a string in the template if not.
-	*/
-	public function startup_check()
-	{
-		$errors = '';
-		$folder_errors = '';
-		$file_errors = '';
-
-		// Check Folders
-		foreach ($this->writeable_folders as $folder)
-		{
-			$full_folder = FCPATH . '..' . $folder;
-
-			@chmod($full_folder, 0777);
-			if (!is_dir($full_folder) || !is_writeable($full_folder))
-			{
-				$folder_errors .= "<li>$folder</li>";
-			}
-		}
-
-		if (!empty($folder_errors))
-		{
-			$errors = '<p>'.lang('in_writeable_directories_message').':</p><ul>' . $folder_errors .'</ul>';
-		}
-
-		// Check files
-		foreach ($this->writeable_files as $file)
-		{
-			@chmod(FCPATH . '..' . $file, 0666);
-			if (!is_writeable(FCPATH . '..' . $file))
-			{
-				$file_errors .= "<li>$file</li>";
-			}
-		}
-
-		if (!empty($file_errors))
-		{
-			$errors .= '<p>'.lang('in_writeable_files_message').':</p><ul>' . $file_errors .'</ul>';
-		}
-
-		// Make it available to the template lib if there are errors
-		if (!empty($errors))
-		{
-			$this->vdata['startup_errors'] = $errors;
-		}
-
-		unset($errors, $folder_errors, $file_errors);
-	}
-
-	//--------------------------------------------------------------------
-	
-	/*
 		Method: cURL_check()
 
 		Verifies that cURL is enabled as a PHP extension. Sets
@@ -167,7 +112,7 @@ class Installer_lib {
 	 */
 	public function check_folders($folders) 
 	{
-		$data = new stdClass();
+		$data = array();
 		
 		// Load the file helper
 		$this->ci->load->helper('file');
@@ -181,7 +126,7 @@ class Installer_lib {
 			
 			// Try to set it to writeable if possible
 			@chmod($start . $folder, 0777);
-			$data->$folder = is_really_writable($start . $folder);
+			$data[$folder] = is_really_writable($start . $folder);
 		}
 		
 		return $data;
@@ -198,7 +143,7 @@ class Installer_lib {
 	 */
 	public function check_files($files) 
 	{
-		$data = new stdClass();
+		$data = array();
 		
 		// Load the file helper
 		$this->ci->load->helper('file');
@@ -212,7 +157,7 @@ class Installer_lib {
 			
 			// Try to set it to writeable if possible
 			@chmod($start . $file, 0666);
-			$data->$file = is_really_writable($start . $file);
+			$data[$file] = is_really_writable($start . $file);
 		}
 		
 		return $data;

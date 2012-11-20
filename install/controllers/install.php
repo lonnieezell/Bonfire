@@ -159,6 +159,9 @@ class Install extends CI_Controller {
 			// Files/Folders writeable?
 			$data->folders			= $this->installer_lib->check_folders($this->writeable_folders);
 			$data->files			= $this->installer_lib->check_files($this->writeable_files);
+			
+			// If everything is good... go ahead with install
+			$data->step_passed = $data->php_acceptable == true && !in_array(false, $data->folders) && !in_array(false, $data->files);
 		
 			$this->load->view('install/req_check', $data);
 		}
@@ -166,14 +169,8 @@ class Install extends CI_Controller {
 	
 	//--------------------------------------------------------------------
 	 
-	public function index2()
+	public function database()
 	{
-		if ($this->installer_lib->is_installed())
-		{
-			$this->load->view('install/installed');
-		}
-		else
-		{
 			$this->form_validation->set_error_delimiters('', '');
 
 			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim|strip_tags|xss_clean');
@@ -181,8 +178,6 @@ class Install extends CI_Controller {
 			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('database', lang('in_database'), 'required|trim|strip_tags|xss_clean');
 			$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim|strip_tags|xss_clean');
-	
-			$this->installer_lib->startup_check();
 	
 			if ($this->form_validation->run() !== false)
 			{
@@ -243,8 +238,7 @@ class Install extends CI_Controller {
 				}
 			}
 	
-			$this->load->view('install/index', $this->vdata);
-		}
+			$this->load->view('install/database', $this->vdata);
 	}
 
 	//--------------------------------------------------------------------
