@@ -82,7 +82,7 @@ class Install extends CI_Controller {
 	 * @var		array
 	 */
 	private $reverse_writeable_folders = array(
-		'/bonfire/application/config',
+		'application/config',
 	);
 
 	/**
