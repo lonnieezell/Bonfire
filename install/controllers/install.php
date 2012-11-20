@@ -148,18 +148,18 @@ class Install extends CI_Controller {
 				// Write the database config files
 				$this->load->helper('config_file');
 	
-				$dbname = strip_tags($this->input->post('database'));
+				$dbname = $this->input->post('database');
 	
 				// get the chosen environment
-				$environment = strip_tags($this->input->post('environment'));
+				$environment = $this->input->post('environment');
 	
 				$data = array(
 					'main'	=> array(
-						'hostname'	=> strip_tags($this->input->post('hostname')),
-						'username'	=> strip_tags($this->input->post('username')),
-						'password'	=> strip_tags($this->input->post('password')),
+						'hostname'	=> $this->input->post('hostname'),
+						'username'	=> $this->input->post('username'),
+						'password'	=> $this->input->post('password'),
 						'database'	=> $dbname,
-						'dbprefix'	=> strip_tags($this->input->post('db_prefix'))
+						'dbprefix'	=> $this->input->post('db_prefix')
 					),
 					'environment' => $environment,
 				);
@@ -174,7 +174,7 @@ class Install extends CI_Controller {
 					// past this, we'll deal only with MySQL for now and create things
 					// the old fashioned way. Eventually, we'll make this more generic.
 					//
-					$db = @mysql_connect(strip_tags($this->input->post('hostname')), strip_tags($this->input->post('username')), strip_tags($this->input->post('password')));
+					$db = @mysql_connect($this->input->post('hostname'), $this->input->post('username'), $this->input->post('password'));
 	
 					if (!$db)
 					{
