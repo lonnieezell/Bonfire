@@ -12,6 +12,10 @@
 	<?php else: ?>
 		<link rel="stylesheet" type="text/css" href="<?php echo base_url() .'css/screen.css'; ?>" />
 	<?php endif; ?>
+	
+	<script src="<?php echo base_url('js/jquery-1.7.2.min.js') ?>"></script>
+	<script src="<?php echo base_url('js/install.js') ?>"></script>
+	<script>base_url = '<?php echo base_url(); ?>';</script>
 </head>
 <body>
 

@@ -38,8 +38,10 @@ $lang['in_writeable_directories_message'] = 'Please ensure that the following di
 $lang['in_writeable_files_message']       = 'Please ensure that the following files are writeable, and try again';
 
 $lang['in_db_settings']				= 'Database Settings';
-$lang['in_db_settings_note']		= '<p>Please fill out the database information below.</p><p class="small">These settings will be saved to both the main <b>config/database.php</b> file and to the development environment (found at <b>config/development/database.php)</b>. </p>';
-$lang['in_db_no_connect']           = 'The installer could not connect to the MySQL server or the database, be sure to enter the correct information.';
+$lang['in_db_settings_note']		= '<p>Please fill out the database information below.</p>';
+$lang['in_environment_note']		= '<p class="small">These settings will be saved to both the main <b>config/database.php</b> file and to the appropriate environment (i.e. <b>config/development/database.php)</b>. </p>';
+$lang['in_db_connect']				= 'Database settings OK';
+$lang['in_db_no_connect']           = 'Invalid database settings.';
 $lang['in_db_setup_error']          = 'There was an error setting up your database';
 $lang['in_db_settings_error']       = 'There was an error inserting settings into the database';
 $lang['in_db_account_error']        = 'There was an error creating your account in the database';
@@ -49,7 +51,8 @@ $lang['in_environment']				= 'Environment';
 $lang['in_host']					= 'Host';
 $lang['in_database']				= 'Database';
 $lang['in_prefix']					= 'Prefix';
-$lang['in_test_db']					= 'Test Database';
+$lang['in_db_driver']				= 'Driver';
+$lang['in_port']					= 'Port';
 
 $lang['in_account_heading']			= '<h2>Information Needed</h2><p>Please provide the following information.</p>';
 $lang['in_site_title']				= 'Site Title';
