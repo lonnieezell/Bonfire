@@ -480,7 +480,7 @@ class Developer extends Admin_Controller
 
 		if ($result == FALSE)
 		{
-			$this->session->set_flashdata('message', 'alert::Unable to optimize the table.');
+			$this->session->set_flashdata('message', 'alert::Unable to optimize the database.');
 		}
 		else
 		{
