@@ -514,12 +514,19 @@ class Developer extends Admin_Controller
 		}
 		else if (isset($_POST['tables']) && is_array($_POST['tables']))
 		{
-			// Actually delete the files....
+			// Actually delete the tables....
 			$this->load->dbforge();
 
 			foreach ($_POST['tables'] as $table)
 			{
-				@$this->dbforge->drop_table($table);
+				// dbforge automatically adds the prefix, so we need to remove it.
+				$prefix = $this->db->dbprefix;
+
+				if (strncmp($table, $prefix, strlen($prefix)) === 0)
+				{
+					$table = substr($table, strlen($prefix));
+					@$this->dbforge->drop_table($table);
+				}
 			}
 
 			$grammar = count($_POST['tables'] == 1) ? ' table' : ' tables';
