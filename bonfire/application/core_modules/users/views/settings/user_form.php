@@ -4,14 +4,16 @@
 </div>
 <?php endif; ?>
 
+<?php if (isset($password_hints) ) : ?>
 <div class="row-fluid">
 	<div class="span8 offset2">
 		<div class="alert alert-info fade in">
 		  <a data-dismiss="alert" class="close">&times;</a>
-			<?php if (isset($password_hints) ) echo $password_hints; ?>
+			<?php echo $password_hints; ?>
 		</div>
 	</div>
 </div>
+<?php endif; ?>
 
 <div class="admin-box">
 
