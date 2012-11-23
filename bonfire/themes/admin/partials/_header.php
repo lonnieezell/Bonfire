@@ -121,12 +121,3 @@
 		</div>
 	</div>
 </div>
-
-<!-- Ajax Loader Image/Overlay -->
-<div id="loader">
-	<div class="box">
-		<img src="<?php echo Template::theme_url('images/ajax_loader.gif')?>" />
-	</div>
-</div>
-
-<!-- End Ajax Loader Image/Overlay -->
