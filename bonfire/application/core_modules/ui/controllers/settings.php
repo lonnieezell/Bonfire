@@ -47,8 +47,6 @@ class Settings extends Admin_Controller
 
 		Template::set('toolbar_title', 'UI Settings');
 
-		Assets::add_module_js('ui', 'ui.js');
-
 	}//end __construct()
 
 	//--------------------------------------------------------------------
@@ -75,7 +73,7 @@ class Settings extends Admin_Controller
 				Template::set_message(lang('ui_shortcut_add_error'), 'error');
 			}
 		}
-		elseif ($this->input->post('remove_action'))
+		elseif ($this->input->post('remove_shortcut'))
 		{
 			if ($this->remove())
 			{
@@ -161,14 +159,14 @@ class Settings extends Admin_Controller
 	 */
 	private function remove()
 	{
-		$this->form_validation->set_rules('remove_action', lang('ui_actions'), 'required');
+		$this->form_validation->set_rules('remove_shortcut[]', lang('ui_actions'), 'required|is_array');
 
 		if ($this->form_validation->run() === FALSE)
 		{
 			return FALSE;
 		}
 
-		$action   = $this->input->post('remove_action');
+		$action   = key($this->input->post('remove_shortcut'));
 
 		// Read our current settings
 		$available_actions = $this->settings_lib->find_all_by('module', 'core.ui');
