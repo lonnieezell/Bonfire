@@ -57,7 +57,6 @@ class Developer extends Admin_Controller
 		$this->lang->load('database');
 
 		Template::set_block('sub_nav', 'developer/_sub_nav');
-		Template::set('sidebar', 'admin/sidebar');
 
 	}//end __construct()
 
