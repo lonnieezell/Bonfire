@@ -73,15 +73,12 @@ class Settings extends Admin_Controller
 		Template::set('roles', $ordered_roles);
 
 		// Do we have any actions?
-	    if (!empty($_POST))
-	    {
-			if (isset($_POST['activate']))    $action = '_activate';
-			if (isset($_POST['deactivate']))  $action = '_deactivate';
-			if (isset($_POST['ban']))         $action = '_ban';
-			if (isset($_POST['delete']))      $action = '_delete';
-			if (isset($_POST['purge']))       $action = '_purge';
-			if (isset($_POST['restore']))     $action = '_restore';
-		}
+		if ($this->input->post_key_exists('activate'))    $action = '_activate';
+		if ($this->input->post_key_exists('deactivate'))  $action = '_deactivate';
+		if ($this->input->post_key_exists('ban'))         $action = '_ban';
+		if ($this->input->post_key_exists('delete'))      $action = '_delete';
+		if ($this->input->post_key_exists('purge'))       $action = '_purge';
+		if ($this->input->post_key_exists('restore'))     $action = '_restore';
 
 		if (isset($action))
 		{
@@ -195,7 +192,7 @@ class Settings extends Admin_Controller
 		$meta_fields = config_item('user_meta_fields');
 		Template::set('meta_fields', $meta_fields);
 
-		if ($this->input->post('save'))
+		if ($this->input->post_key_exists('save'))
 		{
 			if ($id = $this->save_user('insert', NULL, $meta_fields))
 			{
@@ -278,7 +275,7 @@ class Settings extends Admin_Controller
 
 		$user = $this->user_model->find_user_and_meta($user_id);
 
-		if ($this->input->post('save'))
+		if ($this->input->post_key_exists('save'))
 		{
 			if ($this->save_user('update', $user_id, $meta_fields, $user->role_name))
 			{

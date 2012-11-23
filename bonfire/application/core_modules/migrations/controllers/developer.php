@@ -61,7 +61,7 @@ class Developer extends Admin_Controller
 	 */
 	public function index()
 	{
-		if ($this->input->post('migrate'))
+		if ($this->input->post_key_exists('migrate'))
 		{
 			$core = $this->input->post('core_only') ? '' : 'app_';
 
