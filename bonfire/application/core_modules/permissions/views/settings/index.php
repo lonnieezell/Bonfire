@@ -49,7 +49,7 @@
 	<?php else: ?>
 
 				<tr>
-					<td colspan="6">No permissions found.</td>
+					<td colspan="6"><?php echo lang('permissions_no_records'); ?></td>
 				</tr>
 
 	<?php endif; ?>

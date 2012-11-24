@@ -661,11 +661,11 @@ class BF_Model extends CI_Model
 				return TRUE;
 			}
 
-			$this->error = $this->lang->line('bf_model_db_error') . $this->get_db_error_message();
+			$this->error = sprintf($this->lang->line('bf_model_db_error'), $this->get_db_error_message());
 		}
 		else
 		{
-			$this->error = $this->lang->line('bf_model_db_error') . $this->lang->line('bf_model_invalid_id');
+			$this->error = sprintf($this->lang->line('bf_model_db_error'), $this->lang->line('bf_model_invalid_id'));
 		}
 
 		return FALSE;

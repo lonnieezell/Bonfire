@@ -13,15 +13,15 @@
 	<div class="tabbable">
 		<ul class="nav nav-tabs">
 			<li class="active">
-				<a href="#main-settings" data-toggle="tab">Main Settings</a>
+				<a href="#main-settings" data-toggle="tab"><?php echo lang('set_tab_settings') ?></a>
 			</li>
 			<li>
-				<a href="#security" data-toggle="tab">Security Settings</a>
+				<a href="#security" data-toggle="tab"><?php echo lang('set_tab_security') ?></a>
 			</li>
 
 			<?php if (has_permission('Site.Developer.View')) : ?>
 			<li>
-				<a href="#developer" data-toggle="tab">Developer Settings</a>
+				<a href="#developer" data-toggle="tab"><?php echo lang('set_tab_developer') ?></a>
 			</li>
 			<?php endif; ?>
 		</ul>
@@ -185,7 +185,7 @@
 			</div>
 
 			<div class="control-group">
-				<label class="control-label">Password Options</label>
+				<label class="control-label"><?php echo lang('set_option_password'); ?></label>
 				<div class="controls">
 					<label class="checkbox" for="password_force_numbers">
 						<input type="checkbox" name="password_force_numbers" id="password_force_numbers" value="1" <?php echo set_checkbox('password_force_numbers', 1, isset($settings['auth.password_force_numbers']) && $settings['auth.password_force_numbers'] == 1 ? TRUE : FALSE); ?> />
@@ -215,7 +215,7 @@
 	<div class="tab-pane" id="developer">
 		<!-- Developer Settings -->
 		<fieldset>
-			<legend>Developer</legend>
+			<legend><?php echo lang('set_option_developer'); ?></legend>
 
 			<div class="control-group">
 				<div class="controls">

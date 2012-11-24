@@ -81,7 +81,7 @@ class Users extends Front_Controller
 				{
 
 					// Log the Activity
-					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged').': ' . $this->input->ip_address(), 'users');
+					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged') . ': ' . $this->input->ip_address(), 'users');
 
 					/*
 						In many cases, we will have set a destination for a
@@ -132,7 +132,7 @@ class Users extends Front_Controller
 	public function logout()
 	{
 		// Log the Activity
-		$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged_out').': ' . $this->input->ip_address(), 'users');
+		$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged_out') . ': ' . $this->input->ip_address(), 'users');
 
 		$this->auth->logout();
 
@@ -268,7 +268,7 @@ class Users extends Front_Controller
 
 				$user = $this->user_model->find($user_id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit_profile') .': '.$log_name, 'users');
+				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit_profile') . ': ' . $log_name, 'users');
 
 				Template::set_message(lang('us_profile_updated_success'), 'success');
 
@@ -351,7 +351,7 @@ class Users extends Front_Controller
 					}
 					else
 					{
-						Template::set_message(lang('us_reset_password_error'). $this->user_model->error, 'error');
+						Template::set_message(sprintf(lang('us_reset_password_error'), $this->user_model->error), 'error');
 
 					}
 				}
@@ -574,7 +574,7 @@ class Users extends Front_Controller
 
 					// Log the Activity
 
-					$this->activity_model->log_activity($user_id, lang('us_log_register') , 'users');
+					$this->activity_model->log_activity($user_id, lang('us_log_register'), 'users');
 					Template::redirect('login');
 				}
 				else

@@ -14,13 +14,13 @@
 
 		<ul class="nav nav-tabs">
 			<li class="active">
-				<a href="#app-tab" data-toggle="tab">Application</a>
+				<a href="#app-tab" data-toggle="tab"><?php echo lang('mix_tab_app'); ?></a>
 			</li>
 			<li>
-				<a href="#mod-tab" data-toggle="tab">Modules</a>
+				<a href="#mod-tab" data-toggle="tab"><?php echo lang('mix_tab_mod'); ?></a>
 			</li>
 			<li>
-				<a href="#core-tab" data-toggle="tab">Bonfire</a>
+				<a href="#core-tab" data-toggle="tab"><?php echo lang('mix_tab_core'); ?></a>
 			</li>
 		</ul>
 
@@ -34,8 +34,8 @@
 
 				<div class="alert alert-info fade in">
 					<a class="close" data-dismiss="alert">&times;</a>
-					<?php echo lang('mig_installed_version'); ?> <b><?php echo $installed_version; ?></b> /
-					<?php echo lang('mig_latest_version'); ?> <b><?php echo $latest_version ?></b>
+					<?php echo sprintf(lang('mig_installed_version'), $installed_version); ?> /
+					<?php echo sprintf(lang('mig_latest_version'), $latest_version); ?>
 				</div>
 
 				<?php echo form_open($this->uri->uri_string(), 'class="constrained"'); ?>
@@ -57,7 +57,6 @@
 					<?php else: ?>
 						<div class="alert alert-warning fade in">
 	  						<a class="close" data-dismiss="alert">&times;</a>
-
 							<?php echo lang('mig_no_migrations') ?>
 						</div>
 					<?php endif; ?>
@@ -74,9 +73,9 @@
 					<table class="table table-striped">
 						<thead>
 							<tr>
-								<th style="vertical-align: bottom;">Module</th>
-								<th style="width: 6em">Installed Version</th>
-								<th style="width: 6em">Latest Version</th>
+								<th style="vertical-align: bottom;"><?php echo lang('mig_tbl_module'); ?></th>
+								<th style="width: 6em"><?php echo lang('mig_tbl_installed_ver'); ?></th>
+								<th style="width: 6em"><?php echo lang('mig_tbl_latest_ver'); ?></th>
 								<th></th>
 							</tr>
 						</thead>
@@ -91,7 +90,7 @@
 									<input type="hidden" name="is_module" value="1" />
 
 									<select name="version">
-										<option value="uninstall">Uninstall</option>
+										<option value="uninstall"><?php echo lang('mig_uninstall'); ?></option>
 									<?php foreach ($migrations as $migration) : ?>
 										<?php if(is_array($migration)): ?>
 											<?php foreach ($migration as $filename) :?>
@@ -113,7 +112,7 @@
 					<br/>
 					<div class="alert alert-info fade in ">
   						<a class="close" data-dismiss="alert">&times;</a>
-						No modules have any migrations available.
+						<?php echo lang('mig_no_migrations') ?>
 					</div>
 				<?php endif; ?>
 				</fieldset>

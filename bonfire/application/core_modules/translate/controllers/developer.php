@@ -107,7 +107,7 @@ class Developer extends Admin_Controller
 		}
 
 		Template::set('trans_lang', $trans_lang);
-		Template::set('toolbar_title', lang('tr_translate_title') .' to '. ucfirst($trans_lang));
+		Template::set('toolbar_title', sprintf(lang('tr_translate_title'), ucfirst($trans_lang)));
 		Template::render();
 
 	}//end index()

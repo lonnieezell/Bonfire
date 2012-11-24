@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-$lang['tr_translate_title']		= 'Translate';
+$lang['tr_translate_title']		= 'Translate to %s';
 $lang['tr_no_modules']			= 'No Modules found with language files.';
 $lang['tr_no_core']				= 'No Core language files found.';
 
