@@ -66,7 +66,7 @@ $lang['mb_table_note'] = '<p>Your table will be created with at least one field,
 $lang['mb_field_note'] = '<p><b>NOTE : FOR ALL FIELDS</b><br />If DB field type is "enum" or "set", please enter the values using this format: \'a\',\'b\',\'c\'...<br />If you ever need to put a backslash ("\") or a single quote ("\'") amongst those values, precede it with a backslash (for example \'\\xyz\' or \'a\\\'b\').</p>';
 	
 $lang['mb_form_errors']			= 'Please correct the errors below.';
-$lang['mb_form_mod_details']	= 'Module Details ';
+$lang['mb_form_mod_details']	= 'Module Details';
 $lang['mb_form_mod_name']		= 'Module Name';
 $lang['mb_form_mod_name_ph']	= 'Forums, Blog, ToDo';
 $lang['mb_form_mod_desc']		= 'Module Description';

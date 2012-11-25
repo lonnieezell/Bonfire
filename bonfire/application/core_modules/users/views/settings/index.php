@@ -6,13 +6,13 @@
 	<h3><?php echo lang('bf_users') ?></h3>
 
 	<ul class="nav nav-tabs" >
-		<li <?php echo $filter=='' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url; ?>">All Users</a></li>
-		<li <?php echo $filter=='inactive' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=inactive'; ?>">Inactive</a></li>
-		<li <?php echo $filter=='banned' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=banned'; ?>">Banned</a></li>
-		<li <?php echo $filter=='deleted' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=deleted'; ?>">Deleted</a></li>
+		<li <?php echo $filter=='' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url; ?>"><?php echo lang('us_tab_all'); ?></a></li>
+		<li <?php echo $filter=='inactive' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=inactive'; ?>"><?php echo lang('us_tab_inactive'); ?></a></li>
+		<li <?php echo $filter=='banned' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=banned'; ?>"><?php echo lang('us_tab_banned'); ?></a></li>
+		<li <?php echo $filter=='deleted' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=deleted'; ?>"><?php echo lang('us_tab_deleted'); ?></a></li>
 		<li class="<?php echo $filter=='role' ? 'active ' : ''; ?>dropdown">
 			<a href="#" class="drodown-toggle" data-toggle="dropdown">
-				By Role <?php echo isset($filter_role) ? ": $filter_role" : ''; ?>
+				<?php echo lang('us_tab_roles'); ?> <?php echo isset($filter_role) ? ": $filter_role" : ''; ?>
 				<b class="caret light-caret"></b>
 			</a>
 			<ul class="dropdown-menu">
@@ -62,70 +62,71 @@
 		<?php endif; ?>
 		<tbody>
 
-		<?php if (isset($users) && is_array($users) && count($users)) : ?>
-			<?php foreach ($users as $user) : ?>
-			<tr>
-				<td>
-					<input type="checkbox" name="checked[]" value="<?php echo $user->id ?>" />
-				</td>
-				<td><?php echo $user->id ?></td>
-				<td>
-					<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $user->id); ?>"><?php echo $user->username; ?></a>
-					<?php if ($user->banned) echo '<span class="label label-warning">Banned</span>'; ?>
-				</td>
-				<td><?php echo $user->display_name ?></td>
-				<td>
-					<a href="mailto:<?php echo $user->email ?>"><?php echo $user->email ?></a>
-				</td>
-				<td>
-					<?php echo $roles[$user->role_id]->role_name ?>
-				</td>
-				<td>
-					<?php
-						if ($user->last_login != '0000-00-00 00:00:00')
+			<?php if (isset($users) && is_array($users) && count($users)) : ?>
+				<?php foreach ($users as $user) : ?>
+				<tr>
+					<td>
+						<input type="checkbox" name="checked[]" value="<?php echo $user->id ?>" />
+					</td>
+					<td><?php echo $user->id ?></td>
+					<td>
+						<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $user->id); ?>"><?php echo $user->username; ?></a>
+						<?php if ($user->banned) echo '<span class="label label-warning">Banned</span>'; ?>
+					</td>
+					<td><?php echo $user->display_name ?></td>
+					<td>
+						<a href="mailto:<?php echo $user->email ?>"><?php echo $user->email ?></a>
+					</td>
+					<td>
+						<?php echo $roles[$user->role_id]->role_name ?>
+					</td>
+					<td>
+						<?php
+							if ($user->last_login != '0000-00-00 00:00:00')
+							{
+								echo date('M j, y g:i A', strtotime($user->last_login));
+							}
+							else
+							{
+								echo '---';
+							}
+						?>
+					</td>
+					<td>
+						<?php
+						$class = '';
+						switch ($user->active)
 						{
-							echo date('M j, y g:i A', strtotime($user->last_login));
-						}
-						else
-						{
-							echo '---';
-						}
-					?>
-				</td>
-				<td><?php
-					$class = '';
-					switch ($user->active)
-					{
-						case 1:
-							$class = " label-success";
-							break;
-						case 0:
-						default:
-							$class = " label-warning";
-							break;
+							case 1:
+								$class = " label-success";
+								break;
+							case 0:
+							default:
+								$class = " label-warning";
+								break;
 
-					}
-					?>
-					<span class="label<?php echo($class); ?>">
-					<?php
-						if ($user->active == 1)
-						{
-							echo(lang('us_active'));
-						}
-						else
-						{
-							echo(lang('us_inactive'));
 						}
 						?>
-					</span>
-				</td>
-			</tr>
-			<?php endforeach; ?>
-		<?php else: ?>
-			<tr>
-				<td colspan="8">No users found that match your selection.</td>
-			</tr>
-		<?php endif; ?>
+						<span class="label<?php echo($class); ?>">
+							<?php
+							if ($user->active == 1)
+							{
+								echo(lang('us_active'));
+							}
+							else
+							{
+								echo(lang('us_inactive'));
+							}
+							?>
+						</span>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+			<?php else: ?>
+				<tr>
+					<td colspan="8"><?php echo lang('us_no_users'); ?></td>
+				</tr>
+			<?php endif; ?>
 		</tbody>
 	</table>
 	<?php echo form_close(); ?>

@@ -246,12 +246,12 @@ class Settings extends Admin_Controller
 				}
 				else
 				{
-					Template::set_message(lang('em_delete_failure') . $this->emailer_model->error, 'error');
+					Template::set_message(sprintf(lang('em_delete_failure'), $this->emailer_model->error), 'error');
 				}
 			}
 			else
 			{
-				Template::set_message(lang('em_delete_error') . $this->emailer_model->error, 'error');
+				Template::set_message(sprintf(lang('em_delete_error'), $this->emailer_model->error), 'error');
 			}
 		}
 		elseif (isset($_POST['action_force_process']))
@@ -388,12 +388,12 @@ class Settings extends Admin_Controller
 					}
 					else
 					{
-						Template::set_message(lang('em_create_email_failure') . $this->user_model->error, 'error');
+						Template::set_message(sprintf(lang('em_create_email_failure'), $this->user_model->error), 'error');
 					}
 				}
 				else
 				{
-					Template::set_message(lang('em_create_email_error') . $this->user_model->error, 'error');
+					Template::set_message(sprintf(lang('em_create_email_error'), $this->user_model->error), 'error');
 				}//end if
 			}//end if
 		}//end if

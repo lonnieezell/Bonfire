@@ -29,9 +29,9 @@ $lang['us_no_permission']			= 'You do not have permission to access that page.';
 $lang['us_fields_required']         = '%s and Password fields must be filled out.';
 
 $lang['us_access_logs']				= 'Access Logs';
-$lang['us_logged_in_on']			= 'logged in on';
+$lang['us_logged_in_on']			= '<b>%s</b> logged in on %s';
 $lang['us_no_access_message']		= '<p>Congratulations!</p><p>All of your users have good memories!</p>';
-$lang['us_log_create']				= 'created a new';
+$lang['us_log_create']				= 'created a new %s';
 $lang['us_log_edit']				= 'modified user';
 $lang['us_log_delete']				= 'deleted user';
 $lang['us_log_logged']				= 'logged in from';
@@ -134,12 +134,13 @@ $lang['us_username_already_used']   = 'That username is already in use.';
 $lang['us_invalid_user_id']         = 'Invalid user id.';
 $lang['us_invalid_email']           = 'Cannot find that email in our records.';
 
+$lang['us_reset_password_note']    	= 'Enter your new password below to reset your password. ';
 $lang['us_reset_invalid_email']     = 'That did not appear to be a valid password reset request.';
 $lang['us_reset_pass_subject']      = 'Your Temporary Password';
 $lang['us_reset_pass_message']      = 'Please check your email for instructions to reset your password.';
 $lang['us_reset_pass_error']        = 'Unable to send an email: ';
 $lang['us_reset_password_success']  = 'Please login using your new password.';
-$lang['us_reset_password_error']    = 'There was an error resetting your password: ';
+$lang['us_reset_password_error']    = 'There was an error resetting your password: %s';
 
 
 $lang['us_profile_updated_success'] = 'Profile successfully updated.';
@@ -215,3 +216,9 @@ $lang['us_passwords_match']			= 'Match!';
 $lang['us_pass_weak']				= 'Weak';
 $lang['us_pass_good']				= 'Good';
 $lang['us_pass_strong']				= 'Strong';
+
+$lang['us_tab_all']					= 'All Users';
+$lang['us_tab_inactive']			= 'Inactive';
+$lang['us_tab_banned']				= 'Banned';
+$lang['us_tab_deleted']				= 'Deleted';
+$lang['us_tab_roles']				= 'By Role';

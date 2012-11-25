@@ -5,10 +5,10 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
-					<th>Name</th>
-					<th>Version</th>
-					<th>Description</th>
-					<th>Author</th>
+					<th><?php echo lang('sys_mod_name'); ?></th>
+					<th><?php echo lang('sys_mod_ver'); ?></th>
+					<th><?php echo lang('sys_mod_desc'); ?></th>
+					<th><?php echo lang('sys_mod_author'); ?></th>
 				</tr>
 			</thead>
 			<tbody>

@@ -4,7 +4,7 @@
 
 	<ol>
 	<?php foreach ($access_logs as $log) : ?>
-		<li><b><?php echo $log->email ?></b> <?php echo lang('us_logged_in_on'); ?> <?php echo date('j-m-Y H:i:s',strtotime($log->last_login)) ?></li>
+		<li><?php echo sprintf(lang('us_logged_in_on'), $log->email, date('j-m-Y H:i:s',strtotime($log->last_login))); ?></li>
 	<?php endforeach; ?>
 	</ol>
 <?php else : ?>

@@ -216,7 +216,7 @@ class Settings extends Admin_Controller
 
 				$user = $this->user_model->find($id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-				$this->activity_model->log_activity($this->current_user->id, lang('us_log_create').' '. $user->role_name . ': '.$log_name, 'users');
+				$this->activity_model->log_activity($this->current_user->id, sprintf(lang('us_log_create') ,$user->role_name) . ': '.$log_name, 'users');
 
 				Template::set_message(lang('us_user_created_success'), 'success');
 				redirect(SITE_AREA .'/settings/users');
