@@ -29,7 +29,7 @@ $lang['us_no_permission']			= 'You do not have permission to access that page.';
 $lang['us_fields_required']         = '%s and Password fields must be filled out.';
 
 $lang['us_access_logs']				= 'Access Logs';
-$lang['us_logged_in_on']			= '<b>%s</b> logged in on %f';
+$lang['us_logged_in_on']			= '<b>%s</b> logged in on %s';
 $lang['us_no_access_message']		= '<p>Congratulations!</p><p>All of your users have good memories!</p>';
 $lang['us_log_create']				= 'created a new %s';
 $lang['us_log_edit']				= 'modified user';
@@ -221,4 +221,4 @@ $lang['us_tab_all']					= 'All Users';
 $lang['us_tab_inactive']			= 'Inactive';
 $lang['us_tab_banned']				= 'Banned';
 $lang['us_tab_deleted']				= 'Deleted';
-$lang['us_tab_by']					= 'By Role';
+$lang['us_tab_roles']				= 'By Role';

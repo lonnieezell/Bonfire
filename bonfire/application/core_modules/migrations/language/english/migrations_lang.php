@@ -2,8 +2,8 @@
 
 $lang['mig_intro']					= 'Migrations help you keep your database up to date and synced between development and production servers by providing a simple way to keep &lsquo;version control&rsquo; on your database.';
 $lang['mig_not_enabled']			= 'Migrations are not enabled.';
-$lang['mig_installed_version']		= 'Installed Version: <b>%f</b>';
-$lang['mig_latest_version']			= 'Latest Available Version: <b>%f</b>';
+$lang['mig_installed_version']		= 'Installed Version: <b>%d</b>';
+$lang['mig_latest_version']			= 'Latest Available Version: <b>%d</b>';
 $lang['mig_db_not_current']			= 'Your database is not up to date.';
 $lang['mig_no_migrations']			= 'There are no available migrations.';
 
@@ -28,6 +28,6 @@ $lang['mig_tbl_latest_ver']			= 'Latest Version';
 
 $lang['mig_uninstall']				= 'Uninstall';
 
-$lang['mix_tab_app']				= 'Application';
-$lang['mix_tab_mod']				= 'Modules';
-$lang['mix_tab_core']				= 'Bonfire';
+$lang['mig_tab_app']				= 'Application';
+$lang['mig_tab_mod']				= 'Modules';
+$lang['mig_tab_core']				= 'Bonfire';
