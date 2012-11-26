@@ -155,23 +155,26 @@ class Developer extends Admin_Controller
 	 */
 	public function backups()
 	{
-		// Make sure we have something to delete
-		if (isset($_POST['checked']) && is_array($_POST['checked']) && count($_POST['checked']) > 0)
+		if (isset($_POST['delete']))
 		{
-			// Delete the files.
-			$count = count($_POST['checked']);
-
-			foreach ($_POST['checked'] as $file)
+			// Make sure we have something to delete
+			if (isset($_POST['checked']) && is_array($_POST['checked']) && count($_POST['checked']) > 0)
 			{
-				unlink($this->backup_folder . $file) or die("can't delete file");
-			}
+				// Delete the files.
+				$count = count($_POST['checked']);
+				
+				foreach ($_POST['checked'] as $file)
+				{
+					unlink($this->backup_folder . $file) or die("can't delete file");
+				}
 
-			// Tell them it was good.
-			Template::set_message($count . ' backup files were deleted.', 'success');
-		}
-		else if (isset($_POST['delete']) && !isset($_POST['checked']))
-		{
-			Template::set_message(lang('db_backup_delete_none'), 'error');
+				// Tell them it was good.
+				Template::set_message($count . ' backup files were deleted.', 'success');
+			}
+			else
+			{
+				Template::set_message(lang('db_backup_delete_none'), 'error');
+			}
 		}
 
 		// Get a list of existing backup files
