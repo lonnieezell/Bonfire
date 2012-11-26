@@ -112,20 +112,10 @@ $lang['us_account_details']			= 'Account Details';
 $lang['us_last_login']				= 'Last Login';
 
 
-
 $lang['us_no_password']             = 'No Password present.';
 $lang['us_no_email']                = 'No Email given.';
 $lang['us_email_taken']             = 'Email already exists.';
 $lang['us_invalid_user_id']         = 'Invalid User ID';
-
-$lang['us_no_password']             = 'No Password present.';
-
-$lang['us_no_email']                = 'No Email given.';
-
-$lang['us_email_taken']             = 'Email already exists.';
-$lang['us_invalid_user_id']         = 'Invalid User ID';
-
-
 
 $lang['us_account_created_success'] = 'Your account has been created. Please log in.';
 
