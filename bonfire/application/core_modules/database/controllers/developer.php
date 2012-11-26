@@ -155,21 +155,22 @@ class Developer extends Admin_Controller
 	 */
 	public function backups()
 	{
-		if (isset($_POST['delete']))
+		if ($this->input->post_key_exists('delete'))
 		{
+			$checked = $this->input->post('checked');
+
 			// Make sure we have something to delete
-			if (isset($_POST['checked']) && is_array($_POST['checked']) && count($_POST['checked']) > 0)
+			if (is_array($checked) && count($checked) > 0)
 			{
 				// Delete the files.
-				$count = count($_POST['checked']);
 				
-				foreach ($_POST['checked'] as $file)
+				foreach ($checked as $file)
 				{
 					unlink($this->backup_folder . $file) or die("can't delete file");
 				}
 
 				// Tell them it was good.
-				Template::set_message($count . ' backup files were deleted.', 'success');
+				Template::set_message(count($checked) . ' backup files were deleted.', 'success');
 			}
 			else
 			{
@@ -209,7 +210,7 @@ class Developer extends Admin_Controller
 			Template::set('toolbar_title', 'Create New Backup');
 			return TRUE;
 		}
-		else if (isset($_POST['backup']))
+		else if ($this->input->post_key_exists('backup'))
 		{
 			$this->load->library('form_validation');
 
@@ -315,7 +316,7 @@ class Developer extends Admin_Controller
 	{
 		Template::set('filename', $filename);
 
-		if (!empty($filename) && isset($_POST['restore']))
+		if (!empty($filename) && $this->input_post_key_exists('restore'))
 		{
 			// Load the file from disk.
 			$this->load->helper('file');

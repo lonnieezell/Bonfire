@@ -456,13 +456,17 @@ class Users extends Front_Controller
 			{
 				// Time to save the user...
 				$data = array(
-						'email'			=> $_POST['email'],
-						'username'		=> isset($_POST['username']) ? $_POST['username'] : '',
-						'password'		=> $_POST['password'],
+						'email'			=> $this->input->post('email'),
+						'password'		=> $this->input->post('password'),
 						'language'		=> $this->input->post('language'),
 						'timezone'		=> $this->input->post('timezones'),
 						'display_name'	=> $this->input->post('display_name'),
 					);
+
+				if ($this->input->post_key_exists('username'))
+				{
+					$data['username'] = $this->input->post('username');
+				}
 
 				// User activation method
 				$activation_method = $this->settings_lib->item('auth.user_activation_method');

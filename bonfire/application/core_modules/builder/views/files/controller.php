@@ -73,7 +73,7 @@ $mb_index = "
 if ($db_required != '') {
 	$mb_index .= "
 		// Deleting anything?
-		if (isset(\$_POST['delete']))
+		if (\$this->input->post_key_exists('delete'))
 		{
 			\$checked = \$this->input->post('checked');
 

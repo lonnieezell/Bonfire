@@ -173,7 +173,7 @@ class Developer extends Admin_Controller {
         {
             Template::set('field_total', $this->field_total);
 
-            if (isset($_POST['build']))
+            if ($this->input->post_key_exists('build'))
             {
                 Template::set('form_error', TRUE);
             }
