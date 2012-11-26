@@ -161,16 +161,9 @@ class Developer extends Admin_Controller
 			// Delete the files.
 			$count = count($_POST['checked']);
 
-			$this->load->helper('file');
-
 			foreach ($_POST['checked'] as $file)
 			{
-				// Make sure the file is closed
-				$fh = fopen($this->backup_folder . $file, 'w') or die("can't open file");
-				fclose($fh);
-
-				// Actually delete it.
-				unlink($this->backup_folder . $file);
+				unlink($this->backup_folder . $file) or die("can't delete file");
 			}
 
 			// Tell them it was good.
@@ -187,6 +180,7 @@ class Developer extends Admin_Controller
 
 		Template::set('toolbar_title', 'Database Backups');
 		Template::render();
+
 	}//end backups()
 
 	//---------------------------------------------------------------
