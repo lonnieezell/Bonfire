@@ -112,15 +112,10 @@ $lang['us_account_details']			= 'Account Details';
 $lang['us_last_login']				= 'Last Login';
 
 
-$lang['us_no_password']             = 'No Password present.';
-$lang['us_no_email']                = 'No Email given.';
-$lang['us_email_taken']             = 'Email already exists.';
 $lang['us_invalid_user_id']         = 'Invalid User ID';
 
 $lang['us_account_created_success'] = 'Your account has been created. Please log in.';
 
-$lang['us_email_already_used']      = 'That email address is already in use.';
-$lang['us_username_already_used']   = 'That username is already in use.';
 $lang['us_invalid_user_id']         = 'Invalid user id.';
 $lang['us_invalid_email']           = 'Cannot find that email in our records.';
 

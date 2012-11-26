@@ -554,11 +554,6 @@ class Settings extends Admin_Controller
 			$data['password'] = $this->input->post('password');
 		}
 
-		if ($this->input->post('pass_confirm') !== '')
-		{
-			$data['pass_confirm'] = $this->input->post('pass_confirm');
-		}
-		
 		if ($this->input->post('display_name') !== '')
 		{
 			$data['display_name'] = $this->input->post('display_name');

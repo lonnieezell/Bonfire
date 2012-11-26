@@ -337,7 +337,6 @@ class Users extends Front_Controller
 				{
 					// The user model will create the password hash for us.
 					$data = array('password' => $this->input->post('password'),
-					              'pass_confirm'	=> $this->input->post('pass_confirm'),
 					              'reset_by'		=> 0,
 					              'reset_hash'	=> '');
 
@@ -689,11 +688,6 @@ class Users extends Front_Controller
 		if ($this->input->post('password') !== '')
 		{
 			$data['password'] = $this->input->post('password');
-		}
-
-		if ($this->input->post('pass_confirm') !== '')
-		{
-			$data['pass_confirm'] = $this->input->post('pass_confirm');
 		}
 
 		if ($this->input->post('display_name') !== '')

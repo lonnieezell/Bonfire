@@ -141,25 +141,6 @@ class User_model extends BF_Model
 			return FALSE;
 		}
 
-		if (!isset($data['password']) || empty($data['password']))
-		{
-			$this->error = lang('us_no_password');
-			return FALSE;
-		}
-
-		if (!isset($data['email']) || empty($data['email']))
-		{
-			$this->error = lang('us_no_email');
-			return FALSE;
-		}
-
-		// Is this a unique email?
-		if ($this->is_unique('email', $data['email']) == FALSE)
-		{
-			$this->error = lang('us_email_taken');
-			return FALSE;
-		}
-
 		if (empty($data['username']))
 		{
 		  unset($data['username']);
@@ -180,7 +161,7 @@ class User_model extends BF_Model
 
 		list($password, $salt) = $this->hash_password($data['password']);
 
-		unset($data['password'], $data['pass_confirm']);
+		unset($data['password']);
 
 		$data['password_hash'] = $password;
 		$data['salt'] = $salt;
@@ -227,15 +208,11 @@ class User_model extends BF_Model
 			Events::trigger('before_user_update', $trigger_data);
 		}
 
-		if (empty($data['pass_confirm']) && isset($data['password']))
-		{
-			unset($data['pass_confirm'], $data['password']);
-		}
-		else if (!empty($data['password']) && !empty($data['pass_confirm']) && $data['password'] == $data['pass_confirm'])
+		if (!empty($data['password']))
 		{
 			list($password, $salt) = $this->hash_password($data['password']);
 
-			unset($data['password'], $data['pass_confirm']);
+			unset($data['password']);
 
 			$data['password_hash'] = $password;
 			$data['salt'] = $salt;
