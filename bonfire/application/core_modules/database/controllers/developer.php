@@ -377,51 +377,6 @@ class Developer extends Admin_Controller
 	//---------------------------------------------------------------
 
 	/**
-	 * Deletes a database table.
-	 *
-	 * @access public
-	 * @todo   Remove this now as it is all done in the "backups" method?
-	 *
-	 * @return void
-	 */
-	public function delete()
-	{
-		// Make sure we have something to delete
-		if (isset($_POST['checked']) && is_array($_POST['checked']) && count($_POST['checked']) > 0)
-		{
-			// Verify that we want to delete the files.
-			Template::set('files', $_POST['checked']);
-
-			Template::set('toolbar_title', 'Delete Backup Files');
-			Template::render();
-		}
-		else if (isset($_POST['files']) && is_array($_POST['files']) && count($_POST['files']) > 0)
-		{
-			// Delete the files.
-			$count = count($_POST['files']);
-
-			$this->load->helper('file');
-
-			foreach ($_POST['files'] as $file)
-			{
-				// Make sure the file is closed
-				$fh = fopen($this->backup_folder . $file, 'w') or die("can't open file");
-				fclose($fh);
-
-				// Actually delete it.
-				unlink($this->backup_folder . $file);
-			}
-
-			// Tell them it was good.
-			Template::set_message($count . ' backup files were deleted.', 'success');
-			redirect(SITE_AREA .'/developer/database/backups');
-		}//end if
-
-	}//end delete()
-
-	//---------------------------------------------------------------
-
-	/**
 	 * Repairs database tables.
 	 *
 	 * @access public
