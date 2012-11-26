@@ -180,7 +180,7 @@ class User_model extends BF_Model
 
 		list($password, $salt) = $this->hash_password($data['password']);
 
-		unset($data['password'], $data['pass_confirm'], $data['submit']);
+		unset($data['password'], $data['pass_confirm']);
 
 		$data['password_hash'] = $password;
 		$data['salt'] = $salt;
