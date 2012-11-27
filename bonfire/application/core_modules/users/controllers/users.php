@@ -700,12 +700,9 @@ class Users extends Front_Controller
 			$data['display_name'] = $this->input->post('display_name');
 		}
 
-		if ($this->settings_lib->item('auth.use_usernames'))
+		if ($this->input->post_key_exists('username'))
 		{
-			if ($this->input->post('username'))
-			{
-				$data['username'] = $this->input->post('username');
-			}
+			$data['username'] = $this->input->post('username');
 		}
 
 		// Any modules needing to save data?
