@@ -25,7 +25,7 @@ form .form-actions { padding-left: 43% !important; }
 		<?php endforeach; ?>
 		
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php e(lang('bf_action_save')) ?>" /> <?php e(lang('bf_or')) ?> 
+			<input type="submit" name="save" class="btn btn-primary" value="<?php e(lang('bf_action_save')) ?>" /> <?php e(lang('bf_or')) ?> 
 			<a href="<?php echo site_url(SITE_AREA .'/developer/translate/index/'. $trans_lang); ?>">
 				<?php e(lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
 			</a>

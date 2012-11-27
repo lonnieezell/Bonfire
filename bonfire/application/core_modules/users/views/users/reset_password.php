@@ -47,7 +47,7 @@
 
 	<div class="control-group">
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="Save New Password"  />
+			<input class="btn btn-primary" type="submit" name="set_password" id="submit" value="Save New Password"  />
 		</div>
 	</div>
 

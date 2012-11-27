@@ -45,7 +45,7 @@
 			<tr>
 				<td colspan="7">
 					<?php echo lang('bf_with_selected') ?>
-					<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('em_create_email') ?>">
+					<input type="submit" name="create" class="btn btn-primary" value="<?php echo lang('em_create_email') ?>">
 					<?php echo anchor(SITE_AREA .'/settings/emailer/queue', lang('em_create_email_cancel'), 'class="btn btn-warning"'); ?>
 				</td>
 			</tr>

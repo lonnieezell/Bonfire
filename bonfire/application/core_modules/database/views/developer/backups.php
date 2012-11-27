@@ -17,7 +17,7 @@
 				<tr>
 					<td colspan="3">
 						<?php echo lang('db_delete_note'); ?>
-						<button type="submit" name="submit" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('db_backup_delete_confirm'))); ?>')"><?php echo lang('bf_action_delete'); ?></button>
+						<button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('db_backup_delete_confirm'))); ?>')"><?php echo lang('bf_action_delete'); ?></button>
 					</td>
 				</tr>
 			</tfoot>

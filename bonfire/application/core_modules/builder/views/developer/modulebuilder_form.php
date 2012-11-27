@@ -433,7 +433,7 @@ a.mb_show_advanced_rules:hover {
 	</div>
 	<div class="form-actions">
 		<?php if ($writeable): ?>
-			<?php echo form_submit('submit', 'Build the Module', 'class="btn btn-primary"'); ?>
+			<?php echo form_submit('build', 'Build the Module', 'class="btn btn-primary"'); ?>
 		<?php endif;?>
 	</div>
 	<?php echo form_close()?>

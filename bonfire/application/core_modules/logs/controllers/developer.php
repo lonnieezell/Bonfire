@@ -67,38 +67,37 @@ class Developer extends Admin_Controller
 		$this->load->helper('file');
 
 		// Are we doing bulk actions?
-		if (!empty($_POST))
+		if ($this->input->post_key_exists('delete'))
 		{
 			$this->auth->restrict('Bonfire.Logs.Manage');
+		
+			$checked = $this->input->post('checked');
 
-			if (isset($_POST['action_delete']))
+			if (is_array($checked) && count($checked))
 			{
-				$checked = $this->input->post('checked');
-
-				if (is_array($checked) && count($checked))
+				foreach ($checked as $file)
 				{
-					foreach ($checked as $file)
-					{
-						@unlink($this->config->item('log_path') . $file);
-						$activity_text = 'log file '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));
-						$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
-					}
-
-					Template::set_message(sprintf(lang('log_deleted'), count($checked)), 'success');
+					@unlink($this->config->item('log_path') . $file);
+					$activity_text = 'log file '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));
+					$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
 				}
-			}
-			elseif (isset($_POST['action_delete_all']))
-			{
-				delete_files($this->config->item('log_path'));
-				// restore the index.html file
-				@copy(APPPATH.'/index.html',$this->config->item('log_path').'/index.html');
 
-				// Log the activity
-				$activity_text = "all log files";
-				$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
-
-				Template::set_message("Successfully deleted " . $activity_text, 'success');
+				Template::set_message(sprintf(lang('log_deleted'), count($checked)), 'success');
 			}
+		}
+		elseif ($this->input->post_key_exists('delete_all'))
+		{
+			$this->auth->restrict('Bonfire.Logs.Manage');
+		
+			delete_files($this->config->item('log_path'));
+			// restore the index.html file
+			@copy(APPPATH.'/index.html',$this->config->item('log_path').'/index.html');
+
+			// Log the activity
+			$activity_text = "all log files";
+			$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
+
+			Template::set_message("Successfully deleted " . $activity_text, 'success');
 		}
 
 		// Load the Log Files
@@ -156,7 +155,7 @@ class Developer extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Logs.Manage');
 
-		if ($this->input->post('submit'))
+		if ($this->input->post_key_exists('save'))
 		{
 			$this->load->helper('config_file');
 
