@@ -30,7 +30,7 @@
 						<option><?php echo lang('db_drop'); ?></option>
 					</select>
 					&nbsp;&nbsp;
-					<input type="submit" name="submit" value="<?php echo lang('db_apply')?>" class="btn btn-primary" />
+					<input type="submit" value="<?php echo lang('db_apply')?>" class="btn btn-primary" />
 				</td>
 			</tr>
 		</tfoot>
