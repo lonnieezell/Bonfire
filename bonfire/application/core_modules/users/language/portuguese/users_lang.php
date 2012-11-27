@@ -26,7 +26,7 @@ $lang['us_must_login']				= 'Deve estar logado para ver a página.';
 $lang['us_no_permission']			= 'Não tem previlégios para ver esta página.';
 
 $lang['us_access_logs']				= 'Logs de Acesso';
-$lang['us_logged_in_on']			= 'logado em';
+$lang['us_logged_in_on']			= '<b>%s</b> logado em %s';
 $lang['us_no_access_message']		= '<p>Uau!</p><p>Ninguém esqueceu-se da password!</p>';
 
 $lang['us_deleted_users']			= 'Utilizadores inactivos';
@@ -37,7 +37,7 @@ $lang['us_no_deleted']				= 'Não existem utilizadores inactivos.';
 $lang['us_role']					= 'Papel';
 $lang['us_role_lower']				= 'papel';
 $lang['us_no_users']				= 'Não foram encontrados utilizadores';
-$lang['us_create_user']				= 'Criar novo utilizador';
+$lang['us_create_user']				= 'Criar novo utilizador %s';
 $lang['us_create_user_note']		= '<h3>Criar novo utilizador</h3><p>Criar novos utilizadores.</p>';
 $lang['us_edit_user']				= 'Editar Utilizador';
 
