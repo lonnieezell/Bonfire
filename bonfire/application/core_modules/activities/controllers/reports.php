@@ -324,8 +324,8 @@ class Reports extends Admin_Controller
 		Template::set('filter', $this->input->post($which.'_select'));
 
 		// set a couple default variables
-		$options = array('all' => 'All');
-		$name = 'All';
+		$options = array('all' => lang('activity_all'));
+		$name = lang('activity_all');
 
 		switch ($which)
 		{
