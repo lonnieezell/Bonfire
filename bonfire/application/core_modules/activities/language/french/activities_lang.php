@@ -21,7 +21,6 @@
 	THE SOFTWARE.
 */
 
-$lang['activities']						= 'Activités';
 $lang['activity_home']					= 'Accueil';
 $lang['activity_title']					= 'Activités du site';
 $lang['activity_own']					= 'Votre activité';
@@ -69,8 +68,5 @@ $lang['activity_no_top_modules']		= "Aucun enregistrement d'activité des module
 $lang['activity_no_top_users']			= "Aucun enregistrements d'activités des utilisateurs trouvés.";
 $lang['activity_logged']				= "Activités enregistrées";
 $lang['activity_none_found']			= 'Vous n\'avez pas les droits nécéssaires pour supprimer les journaux d\'activités.';
-$lang['activity_from_before']			= 'de la ';
-$lang['activity_only_for']				= 'du ';
-$lang['activity_only_for_except_1']		= 'de l\'';
 $lang['activity_all']					= 'Tous';
 $lang['activity_cleanup']				= 'Netoyage des Activités enregistrées';

@@ -131,15 +131,6 @@ $lang['bf_password_force_symbols']		= 'Le mot de passe doit-il forcer les symbol
 $lang['bf_password_force_mixed_case']	= 'Le mot de passe doit-il forcer la case ?';
 $lang['bf_password_show_labels']	    = 'Afficher les labels de validation du mot de passe';
 
-
-//--------------------------------------------------------------------
-// ! BREADCRUMB
-//--------------------------------------------------------------------
-
-$lang['bf_context_admin']		= 'Admin';
-$lang['breadcrumb_home']		= 'Accueil';
-
-
 //--------------------------------------------------------------------
 // ! USER/PROFILE
 //--------------------------------------------------------------------
