@@ -131,6 +131,15 @@ $lang['bf_password_force_symbols']		= 'Should password force symbols?';
 $lang['bf_password_force_mixed_case']	= 'Should password force mixed case?';
 $lang['bf_password_show_labels']	    = 'Display password validation labels';
 
+
+//--------------------------------------------------------------------
+// ! BREADCRUMB
+//--------------------------------------------------------------------
+
+$lang['bf_context_admin']		= 'Admin';
+$lang['breadcrumb_home']		= 'Home';
+
+
 //--------------------------------------------------------------------
 // ! USER/PROFILE
 //--------------------------------------------------------------------

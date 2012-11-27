@@ -21,6 +21,7 @@
 	THE SOFTWARE.
 */
 
+$lang['activities']						= 'Activities';
 $lang['activity_home']					= 'Home';
 $lang['activity_title']					= 'Site Activities';
 $lang['activity_own']					= 'Your';
@@ -68,3 +69,7 @@ $lang['activity_no_top_modules']		= "No module activity records found.";
 $lang['activity_no_top_users']			= "No user activity records found.";
 $lang['activity_logged']				= "Activities Logged";
 $lang['activity_none_found']			= 'You do not have permissions to delete any activities.';
+$lang['activity_from_before']			= 'from before';
+$lang['activity_only_for']				= 'only for';
+$lang['activity_all']					= 'All';
+$lang['activity_cleanup']				= 'Activity Cleanup';

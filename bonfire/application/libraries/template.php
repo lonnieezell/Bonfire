@@ -1211,7 +1211,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 	}
 	else
 	{
-		$output  = '<a href="'.$home_link.'">home</a> '.$seperator;
+		$output  = '<a href="'.$home_link.'">'.lang('breadcrumb.home').'</a> '.$seperator;
 	}
 
 	$url = '';
@@ -1225,6 +1225,9 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 			$url .= '/'. $segment;
 			$count += 1;
 
+			$lang_segment = lang($segment);
+			$lang_segment2 = (empty($lang_segment)) ? lang('bf_context_'.$segment) : $lang_segment;
+			$segment = (empty($lang_segment2)) ? $lang_segment : $lang_segment2;
 			if ($count == $total)
 			{
 				if ($wrap === TRUE)
