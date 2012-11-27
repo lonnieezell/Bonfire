@@ -141,13 +141,13 @@ class User_model extends BF_Model
 			return FALSE;
 		}
 
-		if (empty($data['username']))
+		if (!isset($data['username']) || $data['username'] === '')
 		{
-		  unset($data['username']);
+			$data['username'] = NULL;
 		}
 
 		// Display Name
-		if (!isset($data['display_name']) || empty($data['display_name']))
+		if (!isset($data['display_name']) || $data['display_name'] === '')
 		{
 			if ($this->settings_lib->item('auth.use_usernames') == 1 && !empty($data['username']))
 			{
@@ -208,7 +208,7 @@ class User_model extends BF_Model
 			Events::trigger('before_user_update', $trigger_data);
 		}
 
-		if (!empty($data['password']))
+		if (isset($data['password']) && $data['password'] !== '')
 		{
 			list($password, $salt) = $this->hash_password($data['password']);
 
