@@ -143,11 +143,6 @@ class Developer extends Admin_Controller
 			$orig	= load_lang_file($lang_file, 'english');
 			$new	= load_lang_file($lang_file, $trans_lang);
 
-			if (!$new)
-			{
-				$new = $orig;
-			}
-
 			Template::set('orig', $orig);
 			Template::set('new', $new);
 			Template::set('lang_file', $lang_file);
