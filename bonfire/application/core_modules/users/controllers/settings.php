@@ -548,21 +548,29 @@ class Settings extends Admin_Controller
 			'timezone'	=> $this->input->post('timezones'),
 		);
 
-		if ($this->input->post('password'))
+		// If empty, the password will be left unchanged.
+		if ($this->input->post('password') !== '')
 		{
 			$data['password'] = $this->input->post('password');
 		}
 
-		if ($this->input->post('pass_confirm'))
+		if ($this->input->post('pass_confirm') !== '')
 		{
 			$data['pass_confirm'] = $this->input->post('pass_confirm');
 		}
+		
+		if ($this->input->post('display_name') !== '')
+		{
+			$data['display_name'] = $this->input->post('display_name');
+		}
 
+		// Optional field
 		if ($this->input->post('role_id'))
 		{
 			$data['role_id'] = $this->input->post('role_id');
 		}
 
+		// Optional actions
 		if ($this->input->post('restore'))
 		{
 			$data['deleted'] = 0;
@@ -571,11 +579,6 @@ class Settings extends Admin_Controller
 		if ($this->input->post('unban'))
 		{
 			$data['banned'] = 0;
-		}
-
-		if ($this->input->post('display_name'))
-		{
-			$data['display_name'] = $this->input->post('display_name');
 		}
 
 		// Activation

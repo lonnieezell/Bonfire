@@ -685,17 +685,18 @@ class Users extends Front_Controller
 			'timezone'	=> $this->input->post('timezones'),
 		);
 
-		if ($this->input->post('password'))
+		// If empty, the password will be left unchanged.
+		if ($this->input->post('password') !== '')
 		{
 			$data['password'] = $this->input->post('password');
 		}
 
-		if ($this->input->post('pass_confirm'))
+		if ($this->input->post('pass_confirm') !== '')
 		{
 			$data['pass_confirm'] = $this->input->post('pass_confirm');
 		}
 
-		if ($this->input->post('display_name'))
+		if ($this->input->post('display_name') !== '')
 		{
 			$data['display_name'] = $this->input->post('display_name');
 		}
