@@ -112,25 +112,10 @@ $lang['us_account_details']			= 'مشخصات حساب کاربری';
 $lang['us_last_login']				= 'آخرین ورود';
 
 
-
-$lang['us_no_password']             = 'کلمه عبور موجود نیست.';
-$lang['us_no_email']                = 'ایمیل وارد نشده.';
-$lang['us_email_taken']             = 'این ایمیل قبلا ثبت شده است.';
 $lang['us_invalid_user_id']         = 'مشخصه کاربر معتبر نمی باشد';
-
-$lang['us_no_password']             = 'کلمه عبور موجود نیست.';
-
-$lang['us_no_email']                = 'ایمیل وارد نشده است';
-
-$lang['us_email_taken']             = 'این ایمیل قبلا ثبت شده است.';
-$lang['us_invalid_user_id']         = 'مشخصه کاربر معتبر نمی باشد';
-
-
 
 $lang['us_account_created_success'] = 'حساب کاربری شما ایجاد شد. لطفا وارد شوید.';
 
-$lang['us_email_already_used']      = 'این آدرس ایمیل قبلا ثبت شده است.';
-$lang['us_username_already_used']   = 'نام کاربری قبلا توسط شخص دیگری ثبت شده است.';
 $lang['us_invalid_user_id']         = 'مشخصع کاربر نامعتبر است.';
 $lang['us_invalid_email']           = 'آدرس ایمیل یافت نشد.';
 

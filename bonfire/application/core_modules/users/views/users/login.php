@@ -51,7 +51,7 @@
 
 	<div class="control-group">
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="Let Me In" tabindex="5" />
+			<input class="btn btn-primary" type="submit" name="log-me-in" id="submit" value="Let Me In" tabindex="5" />
 		</div>
 	</div>
 <?php echo form_close(); ?>

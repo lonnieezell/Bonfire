@@ -111,7 +111,7 @@
 
 	<div class="control-group">
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="<?php echo lang('us_register'); ?>"  />
+			<input class="btn btn-primary" type="submit" name="register" id="submit" value="<?php echo lang('us_register'); ?>"  />
 		</div>
 	</div>
 

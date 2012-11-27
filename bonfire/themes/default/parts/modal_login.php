@@ -38,7 +38,7 @@
 
 		<div class="control-group">
 			<div class="controls">
-				<input type="submit" name="submit" id="log-me-in" value="<?php echo lang('bf_action_login') ?>" class="btn btn-primary">
+				<input type="submit" name="log-me-in" id="log-me-in" value="<?php echo lang('bf_action_login') ?>" class="btn btn-primary">
 				<a class="btn" data-dismiss="modal"><?php echo lang('bf_action_cancel'); ?></a>
 			</div>
 		</div>

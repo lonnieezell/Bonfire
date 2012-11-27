@@ -62,7 +62,7 @@ class Settings extends Admin_Controller
 	 */
 	public function index()
 	{
-		if ($this->input->post('add_shortcut'))
+		if ($this->input->post_key_exists('add_shortcut'))
 		{
 			if ($this->add())
 			{
@@ -73,7 +73,7 @@ class Settings extends Admin_Controller
 				Template::set_message(lang('ui_shortcut_add_error'), 'error');
 			}
 		}
-		elseif ($this->input->post('remove_shortcut'))
+		elseif ($this->input->post_key_exists('remove_shortcut'))
 		{
 			if ($this->remove())
 			{
@@ -84,7 +84,7 @@ class Settings extends Admin_Controller
 				Template::set_message(lang('ui_shortcut_remove_error'), 'error');
 			}
 		}
-		elseif ($this->input->post('submit'))
+		elseif ($this->input->post_key_exists('save'))
 		{
 			if ($this->save_settings())
 			{

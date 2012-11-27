@@ -59,7 +59,7 @@
 		</div>
 		
 		<div class="submits">
-			<input type="submit" name="submit" id="submit" value="<?php echo lang('in_test_db'); ?>" />
+			<input type="submit" id="submit" value="<?php echo lang('in_test_db'); ?>" />
 		</div>
 	
 	<?php echo form_close(); ?>

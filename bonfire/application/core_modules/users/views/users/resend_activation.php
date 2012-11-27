@@ -35,7 +35,7 @@
 
 	<div class="control-group">
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" value="<?php echo lang('us_activate_code_send') ?>"  />
+			<input class="btn btn-primary" type="submit" name="send" value="<?php echo lang('us_activate_code_send') ?>"  />
 		</div>
 	</div>
 

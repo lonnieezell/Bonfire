@@ -22,14 +22,21 @@ $(document).ready(function(){
 	$('#server_type').trigger('change');
 
 	// Email Test
-	$('#test-form').submit(function(e){
+	$('#test-form[type=submit]').click(function(e){
 		e.preventDefault();
 
+		var form = this.form;
+		
 		// Grab all the form data, including the CodeIgniter anti-CSRF token
-		var data    = $(this).serialize();
+		var data    = $(form).serialize();
+
+		// Add the submit button which was clicked
+		if (this.name) {
+			data[this.name] = this.value;
+		}
 
 		// Submit the form by AJAX, and display the result.
-		var url		= $(this).attr('action');
+		var url		= $(form).attr('action');
 
 		$.post(
 			url,
