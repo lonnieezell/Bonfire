@@ -62,7 +62,7 @@
 		</div>
 		
 		<div class="submits">
-			<input type="submit" id="submit" value="<?php echo lang('in_install_button'); ?>" />
+			<input type="submit" name="submit" id="submit" value="<?php echo lang('in_install_button'); ?>" />
 		</div>
 	
 	<?php echo form_close(); ?>
