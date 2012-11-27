@@ -37,4 +37,4 @@ $lang['up_update_message_new']      = 'Version %s of Bonfire is available. You a
 $lang['up_update_message_latest']   = 'You are running Bonfire version %s. This is the latest available version of Bonfire.';
 $lang['up_update_message_old']      = 'You are running Bonfire version %s. The latest available <b>stable</b> version is %s.';
 $lang['up_update_message_unable']   = 'You are running Bonfire version %s. <b>Unable to retrieve the latest version at this time.</b>';
-$lang['up_update_message_view']     = 'View Updates;
+$lang['up_update_message_view']     = 'View Updates';
