@@ -21,39 +21,37 @@
 	THE SOFTWARE.
 */
 
-// PORTUGUESE (Brazil) LANGUAGE FILE - Translated by Renato Adias (adias@sowebsites.com.br)	
+$lang['log_no_logs'] = 'Não há logs encontrados.';
+$lang['log_not_enabled'] = 'O log in não está atualmente habilitada.';
+$lang['log_the_following'] = 'Log o seguinte:';
+$lang['log_what_0'] = '0 - Nada';
+$lang['log_what_1'] = '1 - Mensagem de erro (incluir erros de PHP)';
+$lang['log_what_2'] = '2 - Mensagens de Debug ';
+$lang['log_what_3'] = '3 - Mensagens de informação';
+$lang['log_what_4'] = '4 - Todas as mensagens';
+$lang['log_what_note'] = 'Os logs mais elevados também inclui todas as mensagens dos números mais baixos. Assim, o Login 2 - Mensagens de depuração também registra 1 - Mensagens de erro.';
 
-$lang['log_no_logs'] 			= 'Não há logs encontrados.';
-$lang['log_not_enabled']		= 'O log in não está atualmente habilitada.';
-$lang['log_the_following']		= 'Log o seguinte:';
-$lang['log_what_0']				= '0 - Nada';
-$lang['log_what_1']				= '1 - Mensagem de erro (incluir erros de PHP)';
-$lang['log_what_2']				= '2 - Mensagens de Debug ';
-$lang['log_what_3']				= '3 - Mensagens de informação';
-$lang['log_what_4']				= '4 - Todas as mensagens';
-$lang['log_what_note']			= 'Os logs mais elevados também inclui todas as mensagens dos números mais baixos. Assim, o Login 2 - Mensagens de depuração também registra 1 - Mensagens de erro.';
+$lang['log_save_button'] = 'Salvar configurações de log';
+$lang['log_delete_button'] = 'Excluir arquivos de log';
+$lang['log_delete1_button'] = 'Excluir este arquivo de log?';
+$lang['logs_delete_confirm'] = 'Tem certeza que deseja apagar estes logs?';
 
-$lang['log_save_button']		= 'Salvar configurações de log';
-$lang['log_delete_button']		= 'Excluir arquivos de log';
-$lang['log_delete1_button']		= 'Excluir este arquivo de log?';
-$lang['logs_delete_confirm']	= 'Tem certeza que deseja apagar estes logs?';
+$lang['log_big_file_note'] = 'Os Logs podem criar rapidamente arquivos muito grandes, se houver muita atividade no site. Para sites de clientes, você deve registrar apenas logs de erro.';
+$lang['log_delete_note'] = 'A exclusão de arquivos de log é permanente. Não há volta, por isso, certifique-se de que deseja realmente exluir este arquivo.';
+$lang['log_delete1_note'] = 'Deleting log files is a permanent action. There is no going back, so please make sure you understand what you are doing.';
+$lang['log_delete_confirm'] = 'Tem certeza de que deseja excluir este arquivo de log?';
 
-$lang['log_big_file_note']		= 'Os Logs podem criar rapidamente arquivos muito grandes, se houver muita atividade no site. Para sites de clientes, você deve registrar apenas logs de erro.';
-$lang['log_delete_note']		= 'A exclusão de arquivos de log é permanente. Não há volta, por isso, certifique-se de que deseja realmente exluir este arquivo.';
-$lang['log_delete1_note']		= 'Deleting log files is a permanent action. There is no going back, so please make sure you understand what you are doing.';
-$lang['log_delete_confirm'] 	= 'Tem certeza de que deseja excluir este arquivo de log?';
+$lang['log_not_found'] = 'Ou o arquivo de log não pôde ser localizado, ou ele estava vazio.';
+$lang['log_show_all_entries'] = 'Todas as entradas';
+$lang['log_show_errors'] = 'Somente Erros';
 
-$lang['log_not_found']			= 'Ou o arquivo de log não pôde ser localizado, ou ele estava vazio.';
-$lang['log_show_all_entries']	= 'Todas as entradas';
-$lang['log_show_errors']		= 'Somente Erros';
+$lang['log_date'] = 'Data';
+$lang['log_file'] = 'Nome do Arquivo';
+$lang['log_logs'] = 'Logs';
+$lang['log_settings'] = 'Configurações';
 
-$lang['log_date']				= 'Data';
-$lang['log_file']				= 'Nome do Arquivo';
-$lang['log_logs']				= 'Logs';
-$lang['log_settings']			= 'Configurações';
-
-$lang['log_title']				= 'Logs do sistema';
-$lang['log_title_settings']		= 'Configurações do log do sistema';
-$lang['log_deleted']			= '%d arquivos de log excluído';
-$lang['log_filter_label'] 		= 'Visualizar';
-$lang['log_intro']        		= 'Estes são seus erros e logs de debug....';
+$lang['log_title'] = 'Logs do sistema';
+$lang['log_title_settings'] = 'Configurações do log do sistema';
+$lang['log_deleted'] = '%d arquivos de log excluído';
+$lang['log_filter_label'] = 'Visualizar';
+$lang['log_intro'] = 'Estes são seus erros e logs de debug....';
