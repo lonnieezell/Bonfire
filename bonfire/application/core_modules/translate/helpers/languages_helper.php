@@ -262,7 +262,7 @@ if (!function_exists('save_lang_file'))
 				// tried to add non-existent value?
 				return FALSE;
 			}
-			$end = strpos($contents, ";\n", $start) + strlen(";\n");
+			$end = strpos($contents, "\n", $start) + strlen("\n");
 
 			if ($val !== '')
 			{
