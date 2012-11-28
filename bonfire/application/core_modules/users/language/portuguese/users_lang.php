@@ -29,11 +29,6 @@ $lang['us_access_logs']				= 'Logs de Acesso';
 $lang['us_logged_in_on']			= '<b>%s</b> logado em %s';
 $lang['us_no_access_message']		= '<p>Uau!</p><p>Ninguém esqueceu-se da password!</p>';
 
-$lang['us_deleted_users']			= 'Utilizadores inactivos';
-$lang['us_purge_del_accounts']		= 'Apagar contas inactivas';
-$lang['us_purge_del_note']			= '<h3>Cuidado ao apagar contas inactivas</h3><p>Esta acção é definitiva.</p>';
-$lang['us_no_deleted']				= 'Não existem utilizadores inactivos.';
-
 $lang['us_role']					= 'Papel';
 $lang['us_role_lower']				= 'papel';
 $lang['us_no_users']				= 'Não foram encontrados utilizadores';

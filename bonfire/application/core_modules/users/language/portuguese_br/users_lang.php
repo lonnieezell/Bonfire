@@ -43,8 +43,6 @@ $lang['us_log_register']			= 'Nova conta registrada.';
 $lang['us_log_edit_profile']		= 'Atualizar o seu/deles perfil';
 
 
-$lang['us_deleted_users']			= 'Excluir usuários';
-$lang['us_purge_del_note']			= '<p>Limpar contas deletadas é uma ação permante. Não existe volta.</p>';
 $lang['us_purge_del_confirm']		= 'Você tem certeza que deseja completar a ação de remover a(s) conta(s) de usuario(s) ?';
 $lang['us_action_purged']			= 'Usuarios excluidos.';
 $lang['us_action_deleted']			= 'O usuário foi excluído com sucesso.';
@@ -154,10 +152,6 @@ $lang['us_confirm_activate_code']	= 'Confirme o Código de Ativação';
 $lang['us_activate_code_send']		= 'Enviar Código de Activação';
 $lang['bf_action_activate']			= 'Ativar';
 $lang['bf_action_deactivate']		= 'desativar';
-$lang['us_purge_del_accounts']		= 'Limpar contas deletadas';
-$lang['us_no_inactive']				= 'Não existem usuários requirindo ativação.';
-$lang['us_activate_accounts']		= 'Ativar todas contas';
-$lang['us_purge_act_note']			= '<h3>Ativar todas contas</h3><p>quantidade de usuários requirindo ativação de conta.</p>';
 $lang['us_account_activated']		= 'Ativação da conta do usuário.';
 $lang['us_account_deactivated']		= 'Desativação da conta do usuário.';
 $lang['us_account_activated_admin']	= 'Ativação da conta administrativa.';

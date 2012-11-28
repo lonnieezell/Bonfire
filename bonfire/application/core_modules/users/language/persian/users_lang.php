@@ -41,9 +41,6 @@ $lang['us_log_register']			= 'ثبت حساب کاربري جديد.';
 $lang['us_log_edit_profile']		= 'به روز رساني مشخصات';
 
 
-$lang['us_deleted_users']			= 'کاربران حذف شده';
-$lang['us_purge_del_accounts']		= 'حساب هاي کاربري بکلي پاک شده';
-$lang['us_purge_del_note']			= '<h3>حساب هاي کاربري بکلي پاک شده</h3><p>حذف دائم حشاب هاي کاربري قابل بازيابي نمي باشند.</p>';
 $lang['us_purge_del_confirm']		= 'آیا از حذف کامل این کاربر اطمینان دارید؟ این عمل غیر قابل بازگشت می باشد';
 $lang['us_action_purged']			= 'کاربر محروم شد.';
 $lang['us_action_deleted']			= 'کاربر با موفقیت حذف شد.';
@@ -154,9 +151,6 @@ $lang['us_confirm_activate_code']	= 'تایید کد فعال سازی';
 $lang['us_activate_code_send']		= 'ارسال کد فعال سازی';
 $lang['bf_action_activate']			= 'فعال';
 $lang['bf_action_deactivate']		= 'غیر فعال';
-$lang['us_no_inactive']				= 'کاربری جهت فعال سازی وجود ندارد.';
-$lang['us_activate_accounts']		= 'فعال سازی تمامی حساب های کاربری';
-$lang['us_purge_act_note']			= '<h3>فعال سازی همه حساب های کاربری</h3><p>فعال سازی دسته ای همه حساب های کاربری که به فعال سازی نیاز دارند.</p>';
 $lang['us_account_activated']		= 'فعال سازی حساب کاربری.';
 $lang['us_account_deactivated']		= 'غیر فعال سازی حساب کاربری.';
 $lang['us_account_activated_admin']	= 'فعال سازی حساب مدیر.';

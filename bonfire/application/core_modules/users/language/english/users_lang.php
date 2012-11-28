@@ -41,9 +41,6 @@ $lang['us_log_register']			= 'registered a new account.';
 $lang['us_log_edit_profile']		= 'updated their profile';
 
 
-$lang['us_deleted_users']			= 'Deleted Users';
-$lang['us_purge_del_accounts']		= 'Purge Deleted Accounts';
-$lang['us_purge_del_note']			= '<p>Purging deleted accounts is a permanent action. There is no going back, so please make sure.</p>';
 $lang['us_purge_del_confirm']		= 'Are you sure you want to completely remove the user account(s) - there is no going back?';
 $lang['us_action_purged']			= 'Users purged.';
 $lang['us_action_deleted']			= 'The User was successfully deleted.';
@@ -155,9 +152,6 @@ $lang['us_confirm_activate_code']	= 'Confirm Activation Code';
 $lang['us_activate_code_send']		= 'Send Activation Code';
 $lang['bf_action_activate']			= 'Activate';
 $lang['bf_action_deactivate']		= 'Deactivate';
-$lang['us_no_inactive']				= 'There are not any users requiring activation in the database.';
-$lang['us_activate_accounts']		= 'Activate All Accounts';
-$lang['us_purge_act_note']			= '<h3>Activate All Accounts</h3><p>batch activate all users requiring activation.</p>';
 $lang['us_account_activated']		= 'User account activation.';
 $lang['us_account_deactivated']		= 'User account deactivation.';
 $lang['us_account_activated_admin']	= 'Administrative account activation.';
