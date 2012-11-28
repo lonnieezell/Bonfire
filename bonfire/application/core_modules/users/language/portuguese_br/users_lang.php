@@ -44,7 +44,6 @@ $lang['us_log_edit_profile']		= 'Atualizar o seu/deles perfil';
 
 
 $lang['us_deleted_users']			= 'Excluir usuários';
-$lang['us_purge_del_accounts']		= 'Purge/Limpar contas deletadas';
 $lang['us_purge_del_note']			= '<p>Limpar contas deletadas é uma ação permante. Não existe volta.</p>';
 $lang['us_purge_del_confirm']		= 'Você tem certeza que deseja completar a ação de remover a(s) conta(s) de usuario(s) ?';
 $lang['us_action_purged']			= 'Usuarios excluidos.';

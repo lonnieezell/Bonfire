@@ -112,8 +112,6 @@ $lang['us_account_details']			= 'مشخصات حساب کاربری';
 $lang['us_last_login']				= 'آخرین ورود';
 
 
-$lang['us_invalid_user_id']         = 'مشخصه کاربر معتبر نمی باشد';
-
 $lang['us_account_created_success'] = 'حساب کاربری شما ایجاد شد. لطفا وارد شوید.';
 
 $lang['us_invalid_user_id']         = 'مشخصع کاربر نامعتبر است.';
@@ -156,7 +154,6 @@ $lang['us_confirm_activate_code']	= 'تایید کد فعال سازی';
 $lang['us_activate_code_send']		= 'ارسال کد فعال سازی';
 $lang['bf_action_activate']			= 'فعال';
 $lang['bf_action_deactivate']		= 'غیر فعال';
-$lang['us_purge_del_accounts']		= 'حساب هاب کاربری تحریم شده';
 $lang['us_no_inactive']				= 'کاربری جهت فعال سازی وجود ندارد.';
 $lang['us_activate_accounts']		= 'فعال سازی تمامی حساب های کاربری';
 $lang['us_purge_act_note']			= '<h3>فعال سازی همه حساب های کاربری</h3><p>فعال سازی دسته ای همه حساب های کاربری که به فعال سازی نیاز دارند.</p>';

@@ -112,8 +112,6 @@ $lang['us_account_details']			= 'Account Details';
 $lang['us_last_login']				= 'Last Login';
 
 
-$lang['us_invalid_user_id']         = 'Invalid User ID';
-
 $lang['us_account_created_success'] = 'Your account has been created. Please log in.';
 
 $lang['us_invalid_user_id']         = 'Invalid user id.';
@@ -157,7 +155,6 @@ $lang['us_confirm_activate_code']	= 'Confirm Activation Code';
 $lang['us_activate_code_send']		= 'Send Activation Code';
 $lang['bf_action_activate']			= 'Activate';
 $lang['bf_action_deactivate']		= 'Deactivate';
-$lang['us_purge_del_accounts']		= 'Purge Deleted Accounts';
 $lang['us_no_inactive']				= 'There are not any users requiring activation in the database.';
 $lang['us_activate_accounts']		= 'Activate All Accounts';
 $lang['us_purge_act_note']			= '<h3>Activate All Accounts</h3><p>batch activate all users requiring activation.</p>';
