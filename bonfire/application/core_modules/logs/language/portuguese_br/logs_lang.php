@@ -54,6 +54,6 @@ $lang['log_settings']			= 'Configurações';
 
 $lang['log_title']				= 'Logs do sistema';
 $lang['log_title_settings']		= 'Configurações do log do sistema';
-$lang['log_deleted']			= 'Arquivos de log excluído';
+$lang['log_deleted']			= '%d arquivos de log excluído';
 $lang['log_filter_label'] 		= 'Visualizar';
 $lang['log_intro']        		= 'Estes são seus erros e logs de debug....';

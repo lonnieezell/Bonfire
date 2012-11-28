@@ -26,7 +26,7 @@
 $lang['si.system_info']		= 'Informações do Sistema';
 $lang['si.system']			= 'Sistema';
 $lang['si.modules']			= 'Módulos';
-$lang['si.php']				= 'PHP';
+$lang['si.php']					= 'PHP';
 
 $lang['si.installed_mods']	= 'Módulos instalados';
 $lang['si.php_info']		= 'Informação de PHP';

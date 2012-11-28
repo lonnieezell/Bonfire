@@ -23,7 +23,7 @@
 
 // PORTUGUESE (Brazil) LANGUAGE FILE - Translated by Renato Adias (adias@sowebsites.com.br)
 
-$lang['tr_translate_title']		= 'Traduzir';
+// $lang['tr_translate_title']		= 'Translate to %s';
 $lang['tr_no_modules']			= 'Nenhum módulo achado com o arquivo de linguagem.';
 $lang['tr_no_core']				= 'Nenhum arquivo de linguagem do Núcleo foi achado.';
 

@@ -31,7 +31,7 @@ $lang['us_no_permission']			= 'Você não tem permissão para acessar esta pági
 $lang['us_fields_required']         = '%s e os campos de senha devem ser preenchido.';
 
 $lang['us_access_logs']				= 'Logs de Acesso';
-$lang['us_logged_in_on']			= 'Logados em';
+$lang['us_logged_in_on']			= '<b>%s</b> logados em %s';
 $lang['us_no_access_message']		= '<p>Parabéns!</p><p>Todos os usuários desejam saúde e paz!</p>';
 $lang['us_log_create']				= 'Criado um novo';
 $lang['us_log_edit']				= 'Modificar usuário';
@@ -113,26 +113,8 @@ $lang['us_filter_first_letter']		= 'Nome de usuário começa com: ';
 $lang['us_account_details']			= 'Detalhes da conta';
 $lang['us_last_login']				= 'Último Login';
 
-
-
-$lang['us_no_password']             = 'senha não informada.';
-$lang['us_no_email']                = 'email não informado.';
-$lang['us_email_taken']             = 'Email ja existe.';
-$lang['us_invalid_user_id']         = 'ID de usuário inválido';
-
-$lang['us_no_password']             = 'Senha não informada.';
-
-$lang['us_no_email']                = 'Email não informado.';
-
-$lang['us_email_taken']             = 'Email ja existe.';
-$lang['us_invalid_user_id']         = 'ID de usuário inválido';
-
-
-
 $lang['us_account_created_success'] = 'Sua conta foi criada. Por favor efetue o log in.';
 
-$lang['us_email_already_used']      = 'Este email ja esta em uso.';
-$lang['us_username_already_used']   = 'Este nome de usuário ja está em uso.';
 $lang['us_invalid_user_id']         = 'ID de usuário inválido.';
 $lang['us_invalid_email']           = 'Não é possível encontrar esse e-mail em nossos registros.';
 
@@ -141,7 +123,7 @@ $lang['us_reset_pass_subject']      = 'Sua senha temporária';
 $lang['us_reset_pass_message']      = 'Por favor cheque seu email para instruções para resetar sua senha.';
 $lang['us_reset_pass_error']        = 'Não é possível enviar um e-mail: ';
 $lang['us_reset_password_success']  = 'Por favor loge-se ao sustema usando sua nova senha.';
-$lang['us_reset_password_error']    = 'Ocorreu um erro ao redefinir a sua senha :';
+$lang['us_reset_password_error']    = 'Ocorreu um erro ao redefinir a sua senha: %s';
 
 
 $lang['us_profile_updated_success'] = 'Perfil atualizado com sucesso.';

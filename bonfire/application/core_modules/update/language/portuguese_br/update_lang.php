@@ -35,7 +35,7 @@ $lang['up_committed']				= 'Cometido';
 $lang['up_message']					= 'Mensagem';
 
 $lang['up_update_message_bleeding'] = 'A <b>bleeding edge</b> update to Bonfire is available.';
-$lang['up_update_message_new']      = 'Versão %s do Bonfire está disponível. Você atualmente está rodando '; //requires the spaces at the start and end of the string
+$lang['up_update_message_new']      = 'Versão %s do Bonfire está disponível. Você atualmente está rodando %s.';
 $lang['up_update_message_latest']   = 'Você está rodando a versão do Bonfire %s. Esta é a última versão disponível do Bonfire.';
 $lang['up_update_message_old']      = 'Você está rodando a versão do Bonfire %s. Esta é a última versão <b>estavél</b> disponível, versão %s.';
 $lang['up_update_message_unable']   = 'Você está rodando a versão do Bonfire %s. <b>Não é possível visualizar a versão mais recente neste momento.</b>';

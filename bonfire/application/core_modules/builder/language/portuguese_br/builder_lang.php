@@ -24,12 +24,10 @@
 // PORTUGUESE (Brazil) LANGUAGE FILE - Translated by Renato Adias (adias@sowebsites.com.br)
 
 // INDEX page
-$lang['mb_actions']				= 'Ações';
 $lang['mb_create_button']		= 'Criar Módulo';
 $lang['mb_create_link']			= 'Criar um novo Módulo';
 $lang['mb_create_note']			= 'Utilize o nosso assistente wizbang de criaçõa de módulo para criar o seu próximo módulo. Nós fazemos todo o trabalho pesado, gerando todos os controladores, modelos, visualizações e arquivos de idioma que você precisa.';
 $lang['mb_not_writeable_note']	= 'Erro : A pasta Bonfire/modules não é gravável, então o módulo não podê ser gravado no servidor. Por favor dê permissão de gravação nesta pasta e atualize esta página.';
-$lang['mb_delete']				= 'Deletar';
 $lang['mb_generic_description']	= 'Sua descrição aqui.';
 $lang['mb_installed_head']		= 'Instalados os módulos de aplicação';
 $lang['mb_module']				= 'Módulos';
@@ -111,7 +109,6 @@ $lang['mb_form_rules_limits']	= 'Limitações de Input';
 $lang['mb_form_required']		= 'Requirido';
 $lang['mb_form_unique']			= 'Unico';
 $lang['mb_form_trim']			= 'aparar/podar';
-$lang['mb_form_xss_clean']		= 'Sanitize';
 $lang['mb_form_valid_email']	= 'E-mail válido';
 $lang['mb_form_is_numeric']		= '0-9';
 $lang['mb_form_alpha']			= 'a-Z';

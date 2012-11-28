@@ -96,7 +96,6 @@ $lang['bf_env_prod']			= 'Produção';
 
 $lang['bf_user']				= 'Utilizador';
 $lang['bf_users']				= 'Utilizadores';
-$lang['bf_username']			= 'Nome de Utilizador';
 $lang['bf_description']			= 'Descrição';
 $lang['bf_email']				= 'Email';
 $lang['bf_user_settings']		= 'My Profile';
