@@ -256,7 +256,9 @@ if (!function_exists('save_lang_file'))
 		// Save the file.
 		foreach ($settings as $name => $val)
 		{
-			$start = strpos($contents, '$lang[\''.$name.'\']');
+			// Use strrpos() instead of strpos() so we don't lose data
+			// when people have put duplicate keys in the english files
+			$start = strrpos($contents, '$lang[\''.$name.'\']');
 			if ($start === FALSE)
 			{
 				// tried to add non-existent value?
