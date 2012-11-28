@@ -316,7 +316,7 @@ class Developer extends Admin_Controller
 	{
 		Template::set('filename', $filename);
 
-		if (!empty($filename) && $this->input_post_key_exists('restore'))
+		if (!empty($filename) && $this->input->post_key_exists('restore'))
 		{
 			// Load the file from disk.
 			$this->load->helper('file');
