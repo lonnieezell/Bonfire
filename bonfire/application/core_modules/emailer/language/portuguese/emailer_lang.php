@@ -21,4 +21,5 @@
 	THE SOFTWARE.
 */
 
-$lang['em_queue'] = 'fila';
+$lang['em_template'] = 'Template';
+$lang['em_emailer_queue'] = 'fila';
