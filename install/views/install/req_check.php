@@ -1,5 +1,7 @@
 <?php $this->load->view('header'); ?>
 
+<?php $this->load->view('install/menu'); ?>
+
 <?php echo lang('in_intro'); ?>
 
 <div class="well">

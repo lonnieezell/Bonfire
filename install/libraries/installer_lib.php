@@ -255,6 +255,170 @@ class Installer_lib {
 	}
 
 	//--------------------------------------------------------------------
+	
+	/**
+	 * Performs the actuall installation of the database, creates our
+	 * config files, and installs the user account.
+	 *
+	 * @access	public
+	 * @return	string or boolean(TRUE)
+	 */
+	public function setup()
+	{
+		$environment = $this->ci->session->userdata('environment');
+
+		/*
+			1. Save our database configuration
+		*/
+		$hostname	= $this->ci->session->userdata('hostname');
+		$db_user	= $this->ci->session->userdata('username');
+		$db_pass	= $this->ci->session->userdata('password');
+		$database	= $this->ci->session->userdata('database');
+		$driver		= $this->ci->session->userdata('driver');
+		$prefix		= $this->ci->session->userdata('db_prefix');
+		$port		= $this->ci->session->userdata('port');
+		
+		$db_debug	= $environment == 'production' ? FALSE : TRUE;
+
+		$this->ci->load->helper('config_file');
+		
+		$db_data = array(
+			'hostname'	=> $hostname,
+			'port'		=> $port,
+			'username'	=> $db_user,
+			'password'	=> $db_pass,
+			'database'	=> $database,
+			'dbdriver'	=> $driver,
+			'dbprefix'	=> $prefix,
+			'db_debug'	=> $db_debug
+		);
+
+		// Write main database config file.
+		if (write_db_config( array('main' => $db_data), BFPATH ) === false)
+		{
+			$str = lang('in_db_config_error');
+			return str_replace('{file}', 'config/database.php', $str);
+		}
+
+		// Write environment database config file.
+		if (copy(BFPATH .'config/database.php', BFPATH ."config/$environment/database.php") === false)
+		{
+			$str = lang('in_db_config_error');
+			return str_replace('{file}', "config/$environment/database.php", $str);
+		}
+		
+
+		/*
+			2. Install default info into our database.
+			
+			This happens by running the app, core and module-specific migrations.
+		*/
+		
+		// use the entered Database settings to connect before calling the Migrations
+		$this->ci->load->database($db_data);
+
+		//
+		// Now install the database tables.
+		//
+		$this->ci->load->library('Migrations', array('migration_path' => str_replace('application', 'bonfire', BFPATH) .'db/migrations'));
+
+		if (!$this->ci->migrations->install())
+		{ die('yup');
+			$this->errors = $this->ci->migrations->error;
+			return false;
+		}
+
+		// get the list of custom modules in the main application
+		$module_list = $this->get_module_versions();
+
+		if (is_array($module_list) && count($module_list))
+		{
+			foreach($module_list as $module_name => $module_detail)
+			{
+				// install the migrations for the custom modules
+				if (!$this->ci->migrations->install($module_name.'_'))
+				{
+					$this->errors = $this->migrations->error;
+					return false;
+				}
+			}
+		}
+die('migrations done');
+		/*
+			Save the information to the settings table
+		*/
+
+		$settings = array(
+			'site.title'	=> $this->input->post('site_title'),
+			'site.system_email'	=> $this->input->post('email'),
+			'updates.do_check' => $this->curl_update,
+			'updates.bleeding_edge' => $this->curl_update
+		);
+
+		foreach	($settings as $key => $value)
+		{
+			$setting_rec = array('name' => $key, 'module' => 'core', 'value' => $value);
+
+			$this->ci->db->where('name', $key);
+			if ($this->ci->db->update('settings', $setting_rec) == false)
+			{
+				$this->errors = lang('in_db_settings_error');
+				return false;
+			}
+		}
+
+		// update the emailer serder_email
+		$setting_rec = array('name' => 'sender_email', 'module' => 'email', 'value' => $this->input->post('email'));
+
+		$this->ci->db->where('name', 'sender_email');
+		if ($this->ci->db->update('settings', $setting_rec) == false)
+		{
+			$this->errors = lang('in_db_settings_error');
+			return false;
+		}
+
+		//
+		// Install the user in the users table so they can actually login.
+		//
+		$data = array(
+			'role_id'	=> 1,
+			'email'		=> $this->ci->input->post('email'),
+			'username'	=> $this->ci->input->post('username'),
+			'active'    => 1,
+		);
+		list($password, $salt) = $this->hash_password($this->ci->input->post('password'));
+
+		$data['password_hash'] = $password;
+		$data['salt'] = $salt;
+
+		if ($this->ci->db->insert('users', $data) == false)
+		{
+			$this->errors = lang('in_db_account_error');
+			return false;
+		}
+
+		// Create a unique encryption key
+		$this->ci->load->helper('string');
+		$key = random_string('unique', 40);
+
+		$config_array = array('encryption_key' => $key);
+
+		// check the mod_rewrite setting
+		$config_array['index_page'] = $this->rewrite_check() ? '' : 'index.php';
+
+		write_config('config', $config_array);
+
+		// Reverse Folders
+		foreach ($this->reverse_writeable_folders as $folder)
+		{
+			@chmod(FCPATH . '../' . $folder, 0775);
+		}
+
+		// We made it to the end, so we're good to go!
+		return true;
+	}
+
+	//--------------------------------------------------------------------
 
 	//--------------------------------------------------------------------
 	// !Private Methods

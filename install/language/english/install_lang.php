@@ -47,6 +47,9 @@ $lang['in_db_setup_error']          = 'There was an error setting up your databa
 $lang['in_db_settings_error']       = 'There was an error inserting settings into the database';
 $lang['in_db_account_error']        = 'There was an error creating your account in the database';
 $lang['in_settings_save_error']     = 'There was an error saving the settings. Please verify that your database and %s/database config files are writeable.';
+$lang['in_db_no_session']			= 'Unable to retrieve your database information from the session.';
+$lang['in_user_no_session']			= 'Unable to retrieve your account information from the session.';
+$lang['in_db_config_error']			= 'We encountered an error trying to write to database config settings to {file}.';
 
 $lang['in_environment']				= 'Environment';
 $lang['in_host']					= 'Host';
@@ -55,7 +58,7 @@ $lang['in_prefix']					= 'Prefix';
 $lang['in_db_driver']				= 'Driver';
 $lang['in_port']					= 'Port';
 
-$lang['in_account_heading']			= '<h2>Information Needed</h2><p>Please provide the following information.</p>';
+$lang['in_account_heading']			= '<h2>Administrator Account</h2><p>Please provide the following information.</p>';
 $lang['in_site_title']				= 'Site Title';
 $lang['in_username']			    = 'Username';
 $lang['in_password']			    = 'Password';

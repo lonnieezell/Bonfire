@@ -164,6 +164,7 @@ class Install extends CI_Controller {
 			
 			// If everything is good... go ahead with install
 			$data->step_passed = $data->php_acceptable == true && !in_array(false, $data->folders) && !in_array(false, $data->files);
+			$this->session->set_userdata('step1_done', true);
 		
 			$this->load->view('install/req_check', $data);
 		}
@@ -206,6 +207,7 @@ class Install extends CI_Controller {
 					'db_prefix'	=> $this->input->post('db_prefix')
 				));
 				
+				$this->session->set_userdata('step2_done', true);
 				redirect('install/account');
 			}
 		}
@@ -218,14 +220,22 @@ class Install extends CI_Controller {
 
 	//--------------------------------------------------------------------
 
+	/**
+	 *	Test our database connection. This is a callback used with form_validation.
+	 * 
+	 * @access	public
+	 * @return	boolean
+	 */
 	public function test_db_connection() 
 	{
+		// Database drivers avialable? 
 		if (!$this->installer_lib->db_available())
 		{
 			$this->form_validation->set_message('test_db_connection', lang('in_db_not_available'));
 			return false;
 		}
 		
+		// Can we connect to it? 
 		if (!$this->installer_lib->test_db_connection())
 		{
 			$this->form_validation->set_message('test_db_connection', lang('in_db_no_connect'));
@@ -237,16 +247,16 @@ class Install extends CI_Controller {
 	
 	//--------------------------------------------------------------------
 
+	/**
+	 *	Retrieves the user's account information and validates it. 
+	 *
+	 * @access	public
+	 * @return	void
+	 */
 	public function account()
-	{
-		$view = 'install/account';
-
+	{	
 		if ($this->input->post('submit'))
 		{
-			$this->load->library('form_validation');
-			$this->form_validation->set_error_delimiters('', '');
-			//$this->form_validation->CI =& $this;
-
 			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|min_length[1]');
 			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim');
 			$this->form_validation->set_rules('password', lang('in_password'), 'required|min_length[8]');
@@ -255,34 +265,63 @@ class Install extends CI_Controller {
 
 			if ($this->form_validation->run() !== false)
 			{
-				if ($this->setup())
-				{
-					$this->vdata['message'] = message(lang('in_success_notification'), 'success');
-
-					$success_data = array();
-					// check if we are running in a sub directory
-					$url_path = parse_url(base_url(), PHP_URL_PATH);
-					$base_path = preg_replace('#/install/#', '', $url_path);
-					if (!empty($base_path))
-					{
-						$this->vdata['rebase'] = $base_path.'/';
-					}
-
-					$view = 'install/success';
-				}
-				else
-				{
-					$this->vdata['message']= message(lang('in_db_setup_error').': '. $this->errors, 'error');
-				}
+				// Store the user information in the session so
+				// we can access it during the next step.
+				$this->session->set_userdata( array(
+					'site_title'	=> $this->input->post('site_title'),
+					'user_username'	=> $this->input->post('username'),
+					'user_password'	=> $this->input->post('password'),
+					'user_email'	=> $this->input->post('email')
+				));
+				
+				$this->session->set_userdata('step3_done', true);
+				
+				// Redirect to the actual installer
+				redirect('install/do_install');
 			}
 		}
 
-        // if $this->curl_error = 1, show warning on "account" page of setup
-        $this->vdata['curl_error'] = $this->curl_error;
-
-		$this->load->view($view, $this->vdata);
+		$this->load->view('install/account');
 	}
 
+	//--------------------------------------------------------------------
+	
+	/**
+	 *	Do the actual installation...
+	 */
+	public function do_install() 
+	{
+		$data = new stdClass();
+		
+		$ready = true;
+		
+		// database info in session? 
+		if (!$this->session->userdata('hostname'))
+		{
+			$ready = false;
+			$data->reason = lang('in_db_no_session');
+		}
+		
+		// database info in session? 
+		if (!$this->session->userdata('user_username'))
+		{
+			$ready = false;
+			$data->reason = lang('in_user_no_session');
+		}
+		
+		// Do the install!
+		if ($ready)
+		{
+			if ($this->installer_lib->setup())
+			{
+				$this->session->set_userdata('installed', true);
+				redirect('install/complete');
+			}
+		}
+		
+		$this->load->view('install/failed', $data);
+	}
+	
 	//--------------------------------------------------------------------
 
 	public function rename_folder() 
@@ -317,149 +356,6 @@ class Install extends CI_Controller {
 
 	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
-	//--------------------------------------------------------------------
-
-
-	/*
-		Copies generic file versions to their appropriate spots.
-		This provides a safe way to perform upgrades, as well
-		as simplifying what will need to be modified when some
-		sweeping changes are made.
-	*/
-	private function setup()
-	{
-
-		// Save the DB details
-		$data = $this->session->userdata("db_data");
-		$environment = $data['environment'];
-		unset($data['environment']);
-
-		$this->load->helper('config_file');
-
-		write_db_config($data);
-
-		if (!file_exists(FCPATH . $this->app_path . 'config/development/database.php') && is_writeable(FCPATH . $this->app_path . 'config/'))
-		{
-			// Database
-			copy(FCPATH . $this->app_path . 'config/database.php', FCPATH . $this->app_path . 'config/'.$environment.'/database.php');
-		}
-
-		$server   = $data['main']['hostname'];
-		$username = $data['main']['username'];
-		$password = $data['main']['password'];
-		$database = $data['main']['database'];
-		$dbprefix = $data['main']['dbprefix'];
-
-		if( !$this->db = mysql_connect($server, $username, $password) )
-		{
-			return array('status' => FALSE, 'message' => lang('in_db_no_connect'));
-		}
-
-		// use the entered Database settings to connect before calling the Migrations
-		$dsn = 'mysql://'.$username.':'.$password.'@'.$server.'/'.$database.'?dbprefix='.$dbprefix.'&db_debug=TRUE';
-		$this->load->database($dsn);
-
-		//
-		// Now install the database tables.
-		//
-		$this->load->library('Migrations');
-
-		if (!$this->migrations->install())
-		{
-			$this->errors = $this->migrations->error;
-			return false;
-		}
-
-		// get the list of custom modules in the main application
-		$module_list = $this->get_module_versions();
-
-		if (is_array($module_list) && count($module_list))
-		{
-			foreach($module_list as $module_name => $module_detail)
-			{
-				// install the migrations for the custom modules
-				if (!$this->migrations->install($module_name.'_'))
-				{
-					$this->errors = $this->migrations->error;
-					return false;
-				}
-			}
-		}
-
-		//
-		// Save the information to the settings table
-		//
-
-		$settings = array(
-			'site.title'	=> $this->input->post('site_title'),
-			'site.system_email'	=> $this->input->post('email'),
-			'updates.do_check' => $this->curl_update,
-			'updates.bleeding_edge' => $this->curl_update
-		);
-
-		foreach	($settings as $key => $value)
-		{
-			$setting_rec = array('name' => $key, 'module' => 'core', 'value' => $value);
-
-			$this->db->where('name', $key);
-			if ($this->db->update('settings', $setting_rec) == false)
-			{
-				$this->errors = lang('in_db_settings_error');
-				return false;
-			}
-		}
-
-		// update the emailer serder_email
-		$setting_rec = array('name' => 'sender_email', 'module' => 'email', 'value' => $this->input->post('email'));
-
-		$this->db->where('name', 'sender_email');
-		if ($this->db->update('settings', $setting_rec) == false)
-		{
-			$this->errors = lang('in_db_settings_error');
-			return false;
-		}
-
-		//
-		// Install the user in the users table so they can actually login.
-		//
-		$data = array(
-			'role_id'	=> 1,
-			'email'		=> $this->input->post('email'),
-			'username'	=> $this->input->post('username'),
-			'active'    => 1,
-		);
-		list($password, $salt) = $this->hash_password($this->input->post('password'));
-
-		$data['password_hash'] = $password;
-		$data['salt'] = $salt;
-
-		if ($this->db->insert('users', $data) == false)
-		{
-			$this->errors = lang('in_db_account_error');
-			return false;
-		}
-
-		// Create a unique encryption key
-		$this->load->helper('string');
-		$key = random_string('unique', 40);
-
-		$config_array = array('encryption_key' => $key);
-
-		// check the mod_rewrite setting
-		$config_array['index_page'] = $this->rewrite_check() ? '' : 'index.php';
-
-		write_config('config', $config_array);
-
-		// Reverse Folders
-		foreach ($this->reverse_writeable_folders as $folder)
-		{
-			@chmod(FCPATH . '../' . $folder, 0775);
-		}
-
-		// We made it to the end, so we're good to go!
-		return true;
-	}
-
 	//--------------------------------------------------------------------
 	
 	/**

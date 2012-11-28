@@ -1,5 +1,7 @@
 <?php $this->load->view('header'); ?>
 
+	<?php $this->load->view('install/menu'); ?>
+
 	<?php if (validation_errors()) : ?>
 	<div class="notification information">
 		<p><?php echo validation_errors(); ?></p>
