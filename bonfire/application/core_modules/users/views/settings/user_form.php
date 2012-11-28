@@ -4,15 +4,16 @@
 </div>
 <?php endif; ?>
 
+<?php if (isset($password_hints) ) : ?>
 <div class="row-fluid">
 	<div class="span8 offset2">
 		<div class="alert alert-info fade in">
 		  <a data-dismiss="alert" class="close">&times;</a>
-			<h4 class="alert-heading"><?php echo lang('bf_required_note'); ?></h4>
-			<?php if (isset($password_hints) ) echo $password_hints; ?>
+			<?php echo $password_hints; ?>
 		</div>
 	</div>
 </div>
+<?php endif; ?>
 
 <div class="admin-box">
 
@@ -26,7 +27,7 @@
 		<div class="control-group <?php echo form_error('email') ? 'error' : '' ?>">
 			<label for="email" class="control-label"><?php echo lang('bf_email') ?></label>
 			<div class="controls">
-				<input type="email" name="email" id="email" value="<?php echo isset($user) ? $user->email : set_value('email') ?>">
+				<input type="email" name="email" id="email" value="<?php echo set_value('email', isset($user) ? $user->email : '') ?>">
 				<?php if (form_error('email')) echo '<span class="help-inline">'. form_error('email') .'</span>'; ?>
 			</div>
 		</div>
@@ -34,7 +35,7 @@
 		<div class="control-group <?php echo form_error('username') ? 'error' : '' ?>">
 			<label for="username" class="control-label"><?php echo lang('bf_username') ?></label>
 			<div class="controls">
-				<input type="text" name="username" id="username" value="<?php echo isset($user) ? $user->username : set_value('username') ?>">
+				<input type="text" name="username" id="username" value="<?php echo set_value('username', isset($user) ? $user->username : '') ?>">
 				<?php if (form_error('username')) echo '<span class="help-inline">'. form_error('username') .'</span>'; ?>
 			</div>
 		</div>
@@ -42,7 +43,7 @@
 		<div class="control-group <?php echo form_error('display_name') ? 'error' : '' ?>">
 			<label for="display_name" class="control-label"><?php echo lang('bf_display_name') ?></label>
 			<div class="controls">
-				<input type="text" name="display_name" id="display_name" value="<?php echo isset($user) ? $user->display_name : set_value('display_name') ?>">
+				<input type="text" name="display_name" id="display_name" value="<?php echo set_value('display_name', isset($user) ? $user->display_name : '') ?>">
 				<?php if (form_error('display_name')) echo '<span class="help-inline">'. form_error('display_name') .'</span>'; ?>
 			</div>
 		</div>
@@ -69,8 +70,8 @@
 				<select name="language" id="language" class="chzn-select">
 				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
 					<?php foreach ($languages as $language) : ?>
-						<option value="<?php echo $language ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
-							<?php echo ucfirst($language) ?>
+						<option value="<?php e($language) ?>" <?php echo set_select('language', $language, isset($user->language) && $user->language == $language ? TRUE : FALSE) ?>>
+							<?php e(ucfirst($language)) ?>
 						</option>
 
 					<?php endforeach; ?>
@@ -87,9 +88,9 @@
 				<?php if (form_error('timezones')) echo '<span class="help-inline">'. form_error('timezones') .'</span>'; ?>
 			</div>
 		</div>
+	</fieldset>
 
-
-		<?php if (isset($user) && has_permission('Bonfire.Roles.Manage') && has_permission('Permissions.'.$user->role_name.'.Manage') && isset($roles) ) :?>
+	<?php if (isset($user) && has_permission('Bonfire.Roles.Manage') && has_permission('Permissions.'.$user->role_name.'.Manage') && isset($roles) ) :?>
 		<fieldset>
 			<legend><?php echo lang('us_role'); ?></legend>
 
@@ -110,7 +111,7 @@
 								}
 							?>
 							<option value="<?php echo $role->role_id ?>" <?php echo set_select('role_id', $role->role_id, $default_role) ?>>
-								<?php echo ucfirst($role->role_name) ?>
+								<?php e(ucfirst($role->role_name)) ?>
 							</option>
 
 							<?php endif; ?>
@@ -130,51 +131,8 @@
 
 
 		<!-- Start of User Meta -->
-		<?php
-		foreach ($meta_fields as $field):
-
-			if ($field['form_detail']['type'] == 'dropdown'):
-
-				echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : ''));
-
-
-			elseif ($field['form_detail']['type'] == 'state_select' && is_callable('state_select')) : ?>
-
-				<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
-					<label class="control-label" for="<?= $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
-					<div class="controls">
-
-						<?php echo state_select(set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : 'SC'), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
-
-					</div>
-				</div>
-
-			<?php elseif ($field['form_detail']['type'] == 'country_select' && is_callable('country_select')) : ?>
-
-				<div class="control-group <?php echo iif( form_error('country') , 'error'); ?>">
-					<label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
-					<div class="controls">
-						<?php echo country_select(set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : 'US'), 'US', 'country', 'span6 chzn-select'); ?>
-
-					</div>
-				</div>
-
-			<?php else:
-
-
-				$form_method = 'form_' . $field['form_detail']['type'];
-				if ( is_callable($form_method) )
-				{
-					echo $form_method($field['form_detail']['settings'], set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : ''), $field['label']);
-				}
-
-
-			endif;
-
-		endforeach;
-		?>
-
-	<!-- End of User Meta -->
+		<?php $this->load->view('users/user_meta');?>
+		<!-- End of User Meta -->
 
 
 		<?php if (isset($user) && has_permission('Permissions.'. ucfirst($user->role_name).'.Manage') && $user->id != $this->auth->user_id() && ($user->banned || $user->deleted)) : ?>
@@ -188,8 +146,8 @@
 			endif; ?>
 			<div class="control-group">
 					<div class="controls">
-							<label>
-									<input type="checkbox" name="<?php echo $field; ?>" value="1">
+							<label for="<?php echo $field; ?>">
+									<input type="checkbox" name="<?php echo $field; ?>" id="<?php echo $field; ?>" value="1">
 									<?php echo lang('us_'.$field.'_note') ?>
 							</label>
 					</div>
@@ -198,8 +156,8 @@
 			<?php if ($user->deleted) : ?>
 			<div class="control-group">
 				<div class="controls">
-					<label>
-						<input type="checkbox" name="restore" value="1">
+					<label for="restore">
+						<input type="checkbox" name="restore" id="restore" value="1">
 						<?php echo lang('us_restore_note') ?>
 					</label>
 				</div>
@@ -208,8 +166,8 @@
 			<?php elseif ($user->banned) :?>
 			<div class="control-group">
 				<div class="controls">
-					<label>
-						<input type="checkbox" name="unban" value="1">
+					<label for="unban">
+						<input type="checkbox" name="unban" id="unban" value="1">
 						<?php echo lang('us_unban_note') ?>
 					</label>
 				</div>
@@ -221,7 +179,7 @@
 
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?>
+			<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?>
 			<?php echo anchor(SITE_AREA .'/settings/users', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-warning"'); ?>
 		</div>
 

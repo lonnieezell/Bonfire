@@ -164,7 +164,7 @@
     }
     
     // To minimise code bloat, add all of the top row 0-9 keys in a loop
-    i = 48, n = 0;
+    i = 47, n = 0;
     while(++i < 58) {
         _keys.keys[n] = i;
         ++n;
@@ -190,7 +190,9 @@
         ,   z
         ,   keyCombo
         ,   optionals
-        ,   jwertyCodeFragment;
+        ,   jwertyCodeFragment
+        ,   rangeMatches
+        ,   rangeI;
         
         // In-case we get called with an instance of ourselves, just return that.
         if (jwertyCode instanceof JwertyCode) return jwertyCode;
@@ -244,6 +246,32 @@
                         keyCombo[_modProps[_keys.mods[jwertyCodeFragment[z]]]] = true;
                     } else if(jwertyCodeFragment[z] in _keys.keys) {
                         keyCombo.keyCode = _keys.keys[jwertyCodeFragment[z]];
+                    } else {
+                        rangeMatches = jwertyCodeFragment[z].match(/^\[([^-]+\-?[^-]*)-([^-]+\-?[^-]*)\]$/);
+                    }
+                }
+                if (realTypeOf(keyCombo.keyCode, 'undefined')) {
+                    // If we picked up a range match earlier...
+                    if (rangeMatches && (rangeMatches[1] in _keys.keys) && (rangeMatches[2] in _keys.keys)) {
+                        rangeMatches[2] = _keys.keys[rangeMatches[2]];
+                        rangeMatches[1] = _keys.keys[rangeMatches[1]];
+                        
+                        // Go from match 1 and capture all key-comobs up to match 2
+                        for (rangeI = rangeMatches[1]; rangeI < rangeMatches[2]; ++rangeI) {
+                            optionals.push({
+                                altKey: keyCombo.altKey,
+                                shiftKey: keyCombo.shiftKey,
+                                metaKey: keyCombo.metaKey,
+                                ctrlKey: keyCombo.ctrlKey,
+                                keyCode: rangeI,
+                                jwertyCombo: String(jwertyCodeFragment)
+                            });
+                            
+                        }
+                        keyCombo.keyCode = rangeI;
+                    // Inject either keyCode or ctrl/meta/shift/altKey into keyCombo
+                    } else {
+                        keyCombo.keyCode = 0;
                     }
                 }
                 optionals.push(keyCombo);
@@ -309,7 +337,7 @@
                     // one in sequence), then fire the callback
                     } else {
                         returnValue = callbackFunction.call(
-                            callbackContext || global, event, jwertyCodeIs);
+                            callbackContext || this, event, jwertyCodeIs);
                         
                         // If the callback returned false, then we should run
                         // preventDefault();

@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2006 - 2011 EllisLab, Inc.
+ * @copyright	Copyright (c) 2006 - 2012 EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 2.0
@@ -151,13 +151,12 @@ class CI_Cache_file extends CI_Driver {
 		{
 			return FALSE;
 		}
-		
-		$data = read_file($this->_cache_path.$id);		
+
+		$data = read_file($this->_cache_path.$id);
 		$data = unserialize($data);
-		
+
 		if (is_array($data))
 		{
-			$data = $data['data'];
 			$mtime = filemtime($this->_cache_path.$id);
 
 			if ( ! isset($data['ttl']))
@@ -166,11 +165,11 @@ class CI_Cache_file extends CI_Driver {
 			}
 
 			return array(
-				'expire' 	=> $mtime + $data['ttl'],
+				'expire'	=> $mtime + $data['ttl'],
 				'mtime'		=> $mtime
 			);
 		}
-		
+
 		return FALSE;
 	}
 

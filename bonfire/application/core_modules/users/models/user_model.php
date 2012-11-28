@@ -141,32 +141,13 @@ class User_model extends BF_Model
 			return FALSE;
 		}
 
-		if (!isset($data['password']) || empty($data['password']))
+		if (!isset($data['username']) || $data['username'] === '')
 		{
-			$this->error = lang('us_no_password');
-			return FALSE;
-		}
-
-		if (!isset($data['email']) || empty($data['email']))
-		{
-			$this->error = lang('us_no_email');
-			return FALSE;
-		}
-
-		// Is this a unique email?
-		if ($this->is_unique('email', $data['email']) == FALSE)
-		{
-			$this->error = lang('us_email_taken');
-			return FALSE;
-		}
-
-		if (empty($data['username']))
-		{
-		  unset($data['username']);
+			$data['username'] = NULL;
 		}
 
 		// Display Name
-		if (!isset($data['display_name']) || (isset($data['display_name']) && empty($data['display_name'])))
+		if (!isset($data['display_name']) || $data['display_name'] === '')
 		{
 			if ($this->settings_lib->item('auth.use_usernames') == 1 && !empty($data['username']))
 			{
@@ -180,7 +161,7 @@ class User_model extends BF_Model
 
 		list($password, $salt) = $this->hash_password($data['password']);
 
-		unset($data['password'], $data['pass_confirm'], $data['submit']);
+		unset($data['password']);
 
 		$data['password_hash'] = $password;
 		$data['salt'] = $salt;
@@ -227,15 +208,11 @@ class User_model extends BF_Model
 			Events::trigger('before_user_update', $trigger_data);
 		}
 
-		if (empty($data['pass_confirm']) && isset($data['password']))
-		{
-			unset($data['pass_confirm'], $data['password']);
-		}
-		else if (!empty($data['password']) && !empty($data['pass_confirm']) && $data['password'] == $data['pass_confirm'])
+		if (isset($data['password']) && $data['password'] !== '')
 		{
 			list($password, $salt) = $this->hash_password($data['password']);
 
-			unset($data['password'], $data['pass_confirm']);
+			unset($data['password']);
 
 			$data['password_hash'] = $password;
 			$data['salt'] = $salt;
@@ -399,14 +376,21 @@ class User_model extends BF_Model
 	 */
 	public function count_by_roles()
 	{
-		$prefix = $this->db->dbprefix;
+		$join_table		= 'roles';
+		$join_type		= 'left';
+		$join_stmt		= "{$join_table}.role_id = {$this->table}.role_id";
+		$group_stmt		= "{$this->table}.role_id";
+		$select_stmt	= array(
+			"{$join_table}.role_name",
+			'count(1) as count',
+		);
 
-		$sql = "SELECT role_name, COUNT(1) as count
-				FROM {$prefix}users, {$prefix}roles
-				WHERE {$prefix}users.role_id = {$prefix}roles.role_id
-				GROUP BY {$prefix}users.role_id";
+		$this->db->select($select_stmt)
+			->from($this->table)
+			->join($join_table, $join_stmt, $join_type)
+			->group_by($group_stmt);
 
-		$query = $this->db->query($sql);
+		$query = $this->db->get();
 
 		if ($query->num_rows())
 		{
@@ -809,7 +793,12 @@ class User_model extends BF_Model
 
 		$this->db->update($this->table, array('active'=>0,'activate_hash' => $activate_hash), array($login_type => $user_id));
 
-		return ($this->db->affected_rows() == 1) ? $activate_hash : FALSE;
+		if ($this->db->affected_rows() != 1)
+		{
+			return FALSE;
+		}
+
+		return $make_hash ? $activate_hash : TRUE;
 
 	}//end deactivate()
 

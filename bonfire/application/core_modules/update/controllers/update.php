@@ -86,7 +86,7 @@ class Update extends Admin_Controller {
 				{
 					if ($tag > BONFIRE_VERSION)
 					{
-						$message .= sprintf(lang('up_update_message_new'), '<b>'. $tag .'</b>') . BONFIRE_VERSION;
+						$message .= sprintf(' '.lang('up_update_message_new'), '<b>'. $tag .'</b>', BONFIRE_VERSION);
 						break;
 					}
 				}
@@ -104,7 +104,7 @@ class Update extends Admin_Controller {
 		if (!empty($message))
 		{
 			echo '<div class="notification attention">';
-			echo $message .' <a href="'. site_url(SITE_AREA .'/developer/update') .'">View Updates</a>.';
+			echo $message .' <a href="'. site_url(SITE_AREA .'/developer/update') .'">' . lang('up_update_message_view') . '</a>.';
 			echo '</div>';
 		}
 	}

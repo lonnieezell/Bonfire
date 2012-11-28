@@ -1,6 +1,6 @@
-<p>So, you forgot your <?php echo $this->settings_lib->item('site.title') ?> password, eh? No worries!</p>
+<p>So, you forgot your <?php e($this->settings_lib->item('site.title')) ?> password, eh? No worries!</p>
 
-<p>Below you will find a link that you can use to reset your password for <?php echo $this->settings_lib->item('site.title') ?>. Then, you can change your password to something different (because we are sure your temp password isn't going to be easy to remember...)</p>
+<p>Below you will find a link that you can use to reset your password for <?php e($this->settings_lib->item('site.title')) ?>. Then, you can change your password to something different (because we are sure your temp password isn't going to be easy to remember...)</p>
 
 <p>This link is only valid for 24 hours.</p>
 

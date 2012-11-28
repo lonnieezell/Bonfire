@@ -10,11 +10,6 @@ Assets::add_js(array(
 <?php echo theme_view('partials/_header'); ?>
 
 <div class="container-fluid body">
-	<div class="row-fluid">
-		<div class="span12">
-			<?php echo breadcrumb( NULL, TRUE, TRUE); ?>
-		</div>
-	</div>
 
 	<div class="row-fluid">
 		<div class="span2">
@@ -24,7 +19,7 @@ Assets::add_js(array(
 		<div class="span10">
 			<?php echo Template::message(); ?>
 
-			<?php echo Template::yield(); ?>
+			<?php echo isset($content) ? $content : Template::yield(); ?>
 
 		</div>
 	</div>

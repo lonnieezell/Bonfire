@@ -18,9 +18,9 @@
 			<tfoot>
 				<?php if (isset($results) && is_array($results) && count($results)) : ?>
 				<tr>
-					<td colspan="4">
+					<td colspan="5">
 						<?php echo lang('bf_with_selected') ?>
-						<input type="submit" name="submit" class="btn btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php echo lang('permissions_delete_confirm'); ?>')">
+						<input type="submit" name="delete" class="btn btn-danger" id="delete-me" value="<?php echo lang('bf_action_delete') ?>" onclick="return confirm('<?php e(js_escape(lang('permissions_delete_confirm'))); ?>')">
 					</td>
 				</tr>
 				<?php endif;?>
@@ -35,10 +35,10 @@
 					<td>
 						<input type="checkbox" name="checked[]" value="<?php echo $record['permission_id'] ?>" />
 					</td>
-					<td><?php e($record['permission_id']) ?></td>
+					<td><?php echo $record['permission_id'] ?></td>
 					<td>
 						<a href="<?php echo site_url(SITE_AREA .'/settings/permissions/edit/'. $record['permission_id']) ?>">
-							<?php echo $record['name'] ?>
+							<?php e($record['name']) ?>
 						</a>
 					</td>
 					<td><?php e($record['description']) ?></td>
@@ -49,7 +49,7 @@
 	<?php else: ?>
 
 				<tr>
-					<td colspan="6">No permissions found.</td>
+					<td colspan="6"><?php echo lang('permissions_no_records'); ?></td>
 				</tr>
 
 	<?php endif; ?>

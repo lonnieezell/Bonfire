@@ -3,8 +3,8 @@
 
 $lang['mig_intro']					= 'ارتقا ها جهت ارتقاي پايگاه داده و مديريت و &lsquo;کنترل نسخه&rsquo; پايگاه داده مي باشد.';
 $lang['mig_not_enabled']			= 'ارتقا ها فعال نيستند.';
-$lang['mig_installed_version']		= 'نسخه نصب شده:';
-$lang['mig_latest_version']			= 'آخرين نسخه موجود:';
+$lang['mig_installed_version']		= 'نسخه نصب شده: <b>%d</b>';
+$lang['mig_latest_version']			= 'آخرين نسخه موجود: <b>%d</b>';
 $lang['mig_db_not_current']			= 'پايگاه داده شما به روز مي باشد.';
 $lang['mig_no_migrations']			= 'هيچ ارتقا يي وجود ندارد.';
 

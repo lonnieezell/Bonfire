@@ -79,6 +79,16 @@ class Contexts
 	protected static $parent_class	= 'dropdown';
 
 	/**
+	 * The class to apply to li tags within ul tags inside.
+	 *
+	 * @access protected
+	 * @static
+	 *
+	 * @var string
+	 */
+	protected static $submenu_class	= 'dropdown-submenu';
+
+	/**
 	 * The class to apply to ul tags within li tags.
 	 *
 	 * @access protected
@@ -117,6 +127,17 @@ class Contexts
 	 * @var array
 	 */
 	protected static $contexts = array();
+	
+	/**
+	 * Stores errors created during the 
+	 * Context creation.
+	 *
+	 * @access protected
+	 * @static
+	 *
+	 * @var array
+	 */
+	protected static $errors = array();
 
 	//--------------------------------------------------------------------
 
@@ -200,6 +221,31 @@ class Contexts
 
 
 	//--------------------------------------------------------------------
+	
+	/**
+	 * Returns a string of any errors during the create context process.
+	 *
+	 * @access	public
+	 * @static 
+	 * 
+	 * @param	string	$open	A string to place at the beginning of every error.
+	 * @param	string	$close	A string to place at the close of every error.
+	 * 
+	 * @return 	string
+	 */
+	public static function errors($open='<li>', $close='</li>') 
+	{
+		$out = '';
+	
+		foreach (self::$errors as $error)
+		{
+			$out .= $open . $error . $close ."\n";
+		}
+		
+		return $out;
+	}
+	
+	//--------------------------------------------------------------------
 
 	/**
 	 * Renders a list-based menu (with submenus) for each context.
@@ -276,7 +322,7 @@ class Contexts
 					$title = ucfirst($context);
 				}
 
-				$nav .= "<li class='dropdown {$class}'><a href='{$url}' id='{$id}' class='dropdown-toggle' title='{$title}' data-toggle='dropdown' data-id='{$context}_menu'>";
+				$nav .= "<li class='" . self::$parent_class . " {$class}'><a href='{$url}' id='{$id}' class='dropdown-toggle' title='{$title}' data-toggle='dropdown' data-id='{$context}_menu'>";
 
 				// Image
 				if ($mode=='icon' || $mode=='both')
@@ -425,7 +471,104 @@ class Contexts
 
 	//--------------------------------------------------------------------
 
+	//--------------------------------------------------------------------
+	// !BUILDER METHODS
+	//--------------------------------------------------------------------
+	
+	/**
+	 * Creates everything needed for a new context to run. Includes
+	 * creating permissions, assigning them to certain roles, and
+	 * even creating an application migration for the permissions.
+	 * 
+	 * @access public
+	 * @static
+	 *
+	 * @param	string	$name	The name of the context to create.
+	 * @param	array	$roles	The names or id's of the roles to give permissions to view.
+	 * @param	bool	$migrate	If TRUE, will create an app migration file.
+	 *
+	 * @return 	bool
+	 */
+	public static function create_context($name='', $roles=array(), $migrate=false) 
+	{
+		if (empty($name))
+		{
+			self::$errors = lang('ui_no_context_name');
+			return false;
+		}
+		
+		/*
+			1. Try to write it to the config file so that it
+				will show in the menu no matter what. 
+		*/
+		self::$ci->load->helper('config_file');
 
+		$contexts = self::$contexts;
+		
+		// If it alread exists, we don't need to do anything!
+		if (!in_array(strtolower($name), $contexts))
+		{
+			array_unshift($contexts, strtolower($name));
+		
+			if (!write_config('application', array('contexts' => $contexts), null))
+			{
+				self::$errors[] = lang('ui_cant_write_config');
+				return false;
+			}
+		}		
+	
+		/*
+			2. Create our permissions
+		*/
+		$cname = 'Site.'. ucfirst($name) .'.View';
+		
+		// First - create the actual permission
+		self::$ci->load->model('permissions/permission_model');
+		
+		if (!self::$ci->permission_model->permission_exists($cname))
+		{
+			$pid = self::$ci->permission_model->insert(array(
+				'name'			=> $cname,
+				'description'	=> 'Allow user to view the '. ucwords($name) .' Context.',
+			));
+		}
+		else
+		{
+			$pid = self::$ci->permission_model->find_by('name', $cname)->permission_id;
+			$exists = true;
+			
+		}
+	
+		// Do we have any roles to apply this to? 
+		// If we don't we can quite since there won't be anything 
+		// to migrate.
+		if (count($roles) == 0)
+		{
+			return true;
+		}
+		
+		self::$ci->load->model('roles/role_permission_model');
+		
+		foreach ($roles as $role)
+		{
+			// Assign By Id
+			if (is_numeric($role))
+			{
+				self::$ci->role_permission_model->delete_role_permissions($role, $pid);
+				self::$ci->role_permission_model->create_role_permissions($role, $pid);
+			}
+			// Assign By Name
+			else
+			{
+				self::$ci->role_permission_model->assign_to_role($role, $cname);
+			}
+		}
+	
+		// If we made it here, we were successful!
+		return true;
+	}
+	
+	//--------------------------------------------------------------------
 
 	//--------------------------------------------------------------------
 	// !UTILITY METHODS
@@ -490,8 +633,9 @@ class Contexts
 			// out a menu based on the multiple items.
 			if (count($topic) > 1)
 			{
-				$list .= '<li class="no-link parent-menu"><a href="#" class="no-link parent-menu">'. ucwords($topic_name) .'</a>';
-				$list .= '<ul>';
+				Console::log($topic);
+				$list .= '<li class="' . self::$submenu_class . '"><a href="#" >'. ucwords($topic_name) .'</a>';
+				$list .= '<ul class="' . self::$child_class .'">';
 
 				foreach ($topic as $module => $vals)
 				{
@@ -514,7 +658,6 @@ class Contexts
 						$list .= self::build_item($module, $vals['title'], $vals['display_name'], $context, $vals['menu_view']);
 					}
 				}
-
 				$list .= '</ul></li>';
 			}
 			else
@@ -574,8 +717,8 @@ class Contexts
 		$class = $module == self::$ci->uri->segment(3) ? 'active' : '';
 		if (!empty($menu_view))
 		{
-			$class .= ' parent-menu';
-			$listclass = 'class="parent-menu" ';
+			$class .= ' ';
+			$listclass = 'class="' . self::$submenu_class . '" ';
 		}
 
 

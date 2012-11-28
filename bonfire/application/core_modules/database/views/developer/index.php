@@ -30,7 +30,7 @@
 						<option><?php echo lang('db_drop'); ?></option>
 					</select>
 					&nbsp;&nbsp;
-					<input type="submit" name="submit" value="<?php echo lang('db_apply')?>" class="btn btn-primary" />
+					<input type="submit" value="<?php echo lang('db_apply')?>" class="btn btn-primary" />
 				</td>
 			</tr>
 		</tfoot>
@@ -38,11 +38,11 @@
 		<?php foreach ($tables as $table) : ?>
 			<tr>
 				<td class="column-check">
-					<input type="checkbox" value="<?php echo $table->Name ?>" name="checked[]" />
+					<input type="checkbox" value="<?php e($table->Name) ?>" name="checked[]" />
 				</td>
 				<td>
-					<a href="<?php echo site_url(SITE_AREA .'/developer/database/browse/'. $table->Name) ?>">
-						<?php echo $table->Name ?>
+					<a href="<?php e(site_url(SITE_AREA .'/developer/database/browse/'. $table->Name)) ?>">
+						<?php e($table->Name) ?>
 					</a>
 				</td>
 				<td style="text-align: center"><?php echo $table->Rows?></td>

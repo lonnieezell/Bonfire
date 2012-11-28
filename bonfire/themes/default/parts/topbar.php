@@ -9,7 +9,9 @@
 				<span class="icon-bar"></span>
 			</a>
 
-			<?php echo anchor( '/', $this->settings_lib->item('site.title'), 'class="brand"' ); ?>
+			<a href="<?php site_url('/'); ?>" class="brand">
+				<?php e($this->settings_lib->item('site.title')); ?>
+			</a>
 
 			<!-- Everything you want hidden at 940px or less, place within here -->
 			<div class="nav-collapse collapse">
@@ -22,7 +24,7 @@
 						<?php echo $current_user->user_img; ?>
 						<b class="caret"></b></a>
 
-						<ul class="dropdown-menu">
+						<ul class="dropdown-menu pull-right">
 							<li>
 								<a href="<?php echo site_url(); ?>">
 									<?php echo lang('bf_home') ?>
@@ -54,11 +56,14 @@
 
 					<?php else :  ?>
 
+						<?php if ($this->settings_lib->item('auth.allow_register')) : ?>
 						<li>
 							<a href="<?php echo site_url('register');?>">
 								<?php echo lang('bf_action_register') ?>
 							</a>
 						</li>
+						<?php endif; ?>
+
 						<li>
 							<a href="<?php echo site_url('login');?>" class="login-btn">
 								<?php echo lang('bf_action_login') ?>

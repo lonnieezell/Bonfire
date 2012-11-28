@@ -41,12 +41,11 @@ class Settings extends Admin_Controller
 	{
 		parent::__construct();
 
+		$this->auth->restrict('Bonfire.UI.View');
 		$this->auth->restrict('Bonfire.UI.Manage');
 		$this->lang->load('ui');
 
 		Template::set('toolbar_title', 'UI Settings');
-
-		Assets::add_module_js('ui', 'ui.js');
 
 	}//end __construct()
 
@@ -63,7 +62,7 @@ class Settings extends Admin_Controller
 	 */
 	public function index()
 	{
-		if ($this->input->post('add_shortcut'))
+		if ($this->input->post_key_exists('add_shortcut'))
 		{
 			if ($this->add())
 			{
@@ -74,7 +73,7 @@ class Settings extends Admin_Controller
 				Template::set_message(lang('ui_shortcut_add_error'), 'error');
 			}
 		}
-		elseif ($this->input->post('remove_action'))
+		elseif ($this->input->post_key_exists('remove_shortcut'))
 		{
 			if ($this->remove())
 			{
@@ -85,7 +84,7 @@ class Settings extends Admin_Controller
 				Template::set_message(lang('ui_shortcut_remove_error'), 'error');
 			}
 		}
-		elseif ($this->input->post('submit'))
+		elseif ($this->input->post_key_exists('save'))
 		{
 			if ($this->save_settings())
 			{
@@ -125,8 +124,8 @@ class Settings extends Admin_Controller
 	private function add()
 	{
 
-		$this->form_validation->set_rules('action1', lang('ui_actions'), 'required|xss_clean');
-		$this->form_validation->set_rules('shortcut1', lang('ui_shortcuts'), 'required|callback_validate_shortcuts|xss_clean');
+		$this->form_validation->set_rules('action1', lang('ui_actions'), 'required');
+		$this->form_validation->set_rules('shortcut1', lang('ui_shortcuts'), 'required|callback_validate_shortcuts');
 
 		if ($this->form_validation->run() === FALSE)
 		{
@@ -160,14 +159,14 @@ class Settings extends Admin_Controller
 	 */
 	private function remove()
 	{
-		$this->form_validation->set_rules('remove_action', lang('ui_actions'), 'required|xss_clean');
+		$this->form_validation->set_rules('remove_shortcut[]', lang('ui_actions'), 'required|is_array');
 
 		if ($this->form_validation->run() === FALSE)
 		{
 			return FALSE;
 		}
 
-		$action   = $this->input->post('remove_action');
+		$action   = key($this->input->post('remove_shortcut'));
 
 		// Read our current settings
 		$available_actions = $this->settings_lib->find_all_by('module', 'core.ui');
@@ -202,8 +201,8 @@ class Settings extends Admin_Controller
 			{
 				foreach ($actions as $num => $value)
 				{
-					$this->form_validation->set_rules('action['.$num.']', lang('ui_actions'), 'required|xss_clean');
-					$this->form_validation->set_rules('shortcut['.$num.']', lang('ui_shortcuts'), 'required|callback__validate_shortcuts|xss_clean');
+					$this->form_validation->set_rules('action['.$num.']', lang('ui_actions'), 'required');
+					$this->form_validation->set_rules('shortcut['.$num.']', lang('ui_shortcuts'), 'required|callback__validate_shortcuts');
 
 					$settings[$value] = $shortcuts[$num];
 				}

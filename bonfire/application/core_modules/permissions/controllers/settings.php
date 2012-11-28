@@ -65,33 +65,30 @@ class Settings extends Admin_Controller
 	function index()
 	{
 		// Deleting anything?
-		if ($action = $this->input->post('submit'))
+		if ($this->input->post_key_exists('delete'))
 		{
-			if ($action == 'Delete')
+			$checked = $this->input->post('checked');
+
+			if (is_array($checked) && count($checked))
 			{
-				$checked = $this->input->post('checked');
-
-				if (is_array($checked) && count($checked))
+				$result = FALSE;
+				foreach ($checked as $pid)
 				{
-					$result = FALSE;
-					foreach ($checked as $pid)
-					{
-						$result = $this->permission_model->delete($pid);
-					}
+					$result = $this->permission_model->delete($pid);
+				}
 
-					if ($result)
-					{
-						Template::set_message(count($checked) .' '. lang('permissions_deleted') .'.', 'success');
-					}
-					else
-					{
-						Template::set_message(lang('permissions_del_failure') . $this->permission_model->error, 'error');
-					}
+				if ($result)
+				{
+					Template::set_message(count($checked) .' '. lang('permissions_deleted') .'.', 'success');
 				}
 				else
 				{
-					Template::set_message(lang('permissions_del_error') . $this->permission_model->error, 'error');
+					Template::set_message(lang('permissions_del_failure') . $this->permission_model->error, 'error');
 				}
+			}
+			else
+			{
+				Template::set_message(lang('permissions_del_error') . $this->permission_model->error, 'error');
 			}
 		}//end if
 
@@ -129,12 +126,12 @@ class Settings extends Admin_Controller
 	 */
 	public function create()
 	{
-		if ($this->input->post('submit'))
+		if ($this->input->post_key_exists('save'))
 		{
 			if ($this->save_permissions())
 			{
 				Template::set_message(lang("permissions_create_success"), 'success');
-				Template::redirect(SITE_AREA .'/settings/permissions');
+				redirect(SITE_AREA .'/settings/permissions');
 			}
 		}
 
@@ -163,7 +160,7 @@ class Settings extends Admin_Controller
 			redirect(SITE_AREA .'/settings/permissions');
 		}
 
-		if ($this->input->post('submit'))
+		if ($this->input->post_key_exists('save'))
 		{
 			if ($this->save_permissions('update', $id))
 			{
@@ -182,54 +179,27 @@ class Settings extends Admin_Controller
 	//--------------------------------------------------------------------
 
 	/**
-	 * Delete a permission record from the database
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function delete()
-	{
-		$id = $this->uri->segment(5);
-
-		if (!empty($id))
-		{
-			if ($this->permission_model->delete($id))
-			{
-				Template::set_message(lang("permissions_delete_success"), 'success');
-			}
-			else
-			{
-				Template::set_message(lang("permissions_delete_failure") . $this->permission_model->error, 'error');
-			}
-		}
-
-		redirect(SITE_AREA .'/settings/permissions');
-
-	}//end delete()
-
-	//--------------------------------------------------------------------
-
-	/**
 	 * Save the permission record to the database
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @param string $type The type of save operation (insert or edit)
 	 * @param int    $id   The record ID in the case of edit
 	 *
 	 * @return bool
 	 */
-	public function save_permissions($type='insert', $id=0)
+	private function save_permissions($type='insert', $id=0)
 	{
 
-		$this->form_validation->set_rules('name','Name','required|trim|xss_clean|max_length[30]');
-		$this->form_validation->set_rules('description','Description','trim|xss_clean|max_length[100]');
-		$this->form_validation->set_rules('status','Status','required|trim|xss_clean');
+		$this->form_validation->set_rules('name','Name','required|trim|max_length[30]');
+		$this->form_validation->set_rules('description','Description','trim|max_length[100]');
+		$this->form_validation->set_rules('status','Status','required|trim');
 		if ($this->form_validation->run() === FALSE)
 		{
 			return FALSE;
 		}
+
+		unset($_POST['submit']);
 
 		if ($type == 'insert')
 		{

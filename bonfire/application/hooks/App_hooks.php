@@ -48,7 +48,7 @@ class App_hooks
 	 *
 	 * @var array
 	 */
-	private $ignore_pages = array('login', 'logout', 'register', 'forgot_password', 'activate', 'resend_activation', 'images');
+	private $ignore_pages = array('/users/login', '/users/logout', '/users/register', '/users/forgot_password', '/users/activate', '/users/resend_activation', '/images');
 
 	//--------------------------------------------------------------------
 
@@ -82,7 +82,7 @@ class App_hooks
 			$this->ci->load->library('session');
 		}
 
-		if (!in_array($this->ci->uri->uri_string(), $this->ignore_pages))
+		if (!in_array($this->ci->uri->ruri_string(), $this->ignore_pages))
 		{
 			$this->ci->session->set_userdata('previous_page', current_url());
 		}
@@ -107,7 +107,7 @@ class App_hooks
 			$this->ci->load->library('session');
 		}
 
-		if (!in_array($this->ci->uri->uri_string(), $this->ignore_pages))
+		if (!in_array($this->ci->uri->ruri_string(), $this->ignore_pages))
 		{
 			$this->ci->session->set_userdata('requested_page', current_url());
 		}

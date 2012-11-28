@@ -72,7 +72,7 @@ class Users extends Front_Controller
 		// if the user is not logged in continue to show the login page
 		if ($this->auth->is_logged_in() === FALSE)
 		{
-			if ($this->input->post('submit'))
+			if ($this->input->post_key_exists('log-me-in'))
 			{
 				$remember = $this->input->post('remember_me') == '1' ? TRUE : FALSE;
 
@@ -81,7 +81,7 @@ class Users extends Front_Controller
 				{
 
 					// Log the Activity
-					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged').': ' . $this->input->ip_address(), 'users');
+					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged') . ': ' . $this->input->ip_address(), 'users');
 
 					/*
 						In many cases, we will have set a destination for a
@@ -132,7 +132,7 @@ class Users extends Front_Controller
 	public function logout()
 	{
 		// Log the Activity
-		$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged_out').': ' . $this->input->ip_address(), 'users');
+		$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged_out') . ': ' . $this->input->ip_address(), 'users');
 
 		$this->auth->logout();
 
@@ -157,15 +157,11 @@ class Users extends Front_Controller
 		// if the user is not logged in continue to show the login page
 		if ($this->auth->is_logged_in() === FALSE)
 		{
-			if (isset($_POST['submit']))
+			if ($this->input->post_key_exists('send'))
 			{
-				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|xss_clean');
+				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email');
 
-				if ($this->form_validation->run() === FALSE)
-				{
-					Template::set_message(lang('us_invalid_email'), 'error');
-				}
-				else
+				if ($this->form_validation->run() !== FALSE)
 				{
 					// We validated. Does the user actually exist?
 					$user = $this->user_model->find_by('email', $_POST['email']);
@@ -190,7 +186,7 @@ class Users extends Front_Controller
 
 						$data = array(
 									'to'	=> $_POST['email'],
-									'subject'	=> lang('us_reset_password_email_subject'),
+									'subject'	=> lang('us_reset_pass_subject'),
 									'message'	=> $this->load->view('_emails/forgot_password', array('link' => $pass_link), TRUE)
 							 );
 
@@ -202,6 +198,10 @@ class Users extends Front_Controller
 						{
 							Template::set_message(lang('us_reset_pass_error'). $this->emailer->errors, 'error');
 						}
+					}
+					else
+					{
+						Template::set_message(lang('us_invalid_email'), 'error');
 					}//end if
 				}//end if
 			}//end if
@@ -229,12 +229,8 @@ class Users extends Front_Controller
 	 */
 	public function profile()
 	{
-
-		if ($this->auth->is_logged_in() === FALSE)
-		{
-			$this->auth->logout();
-			redirect('login');
-		}
+		// Make sure we're logged in. 
+		$this->auth->restrict();
 
 		$this->load->helper('date');
 
@@ -246,7 +242,7 @@ class Users extends Front_Controller
 
 		Template::set('meta_fields', $meta_fields);
 
-		if ($this->input->post('submit'))
+		if ($this->input->post_key_exists('save'))
 		{
 
 			$user_id = $this->current_user->id;
@@ -256,7 +252,13 @@ class Users extends Front_Controller
 				$meta_data = array();
 				foreach ($meta_fields as $field)
 				{
-					$meta_data[$field['name']] = $this->input->post($field['name']);
+					if ((!isset($field['admin_only']) || $field['admin_only'] === FALSE
+						|| (isset($field['admin_only']) && $field['admin_only'] === TRUE
+							&& isset($this->current_user) && $this->current_user->role_id == 1))
+						&& (!isset($field['frontend']) || $field['frontend'] === TRUE))
+					{
+						$meta_data[$field['name']] = $this->input->post($field['name']);
+					}
 				}
 
 				// now add the meta is there is meta data
@@ -266,13 +268,12 @@ class Users extends Front_Controller
 
 				$user = $this->user_model->find($user_id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit_profile') .': '.$log_name, 'users');
+				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit_profile') . ': ' . $log_name, 'users');
 
 				Template::set_message(lang('us_profile_updated_success'), 'success');
 
 				// redirect to make sure any language changes are picked up
 				Template::redirect('/users/profile');
-				exit;
 			}
 			else
 			{
@@ -327,16 +328,15 @@ class Users extends Front_Controller
 			}
 
 			// Handle the form
-			if ($this->input->post('submit'))
+			if ($this->input->post_key_exists('set_password'))
 			{
-				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password');
-				$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
+				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|min_length[8]|max_length[120]|valid_password');
+				$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|matches[password]');
 
 				if ($this->form_validation->run() !== FALSE)
 				{
 					// The user model will create the password hash for us.
 					$data = array('password' => $this->input->post('password'),
-					              'pass_confirm'	=> $this->input->post('pass_confirm'),
 					              'reset_by'		=> 0,
 					              'reset_hash'	=> '');
 
@@ -350,7 +350,7 @@ class Users extends Front_Controller
 					}
 					else
 					{
-						Template::set_message(lang('us_reset_password_error'). $this->user_model->error, 'error');
+						Template::set_message(sprintf(lang('us_reset_password_error'), $this->user_model->error), 'error');
 
 					}
 				}
@@ -419,42 +419,53 @@ class Users extends Front_Controller
 		$meta_fields = config_item('user_meta_fields');
 		Template::set('meta_fields', $meta_fields);
 
-		if ($this->input->post('submit'))
+		if ($this->input->post_key_exists('register'))
 		{
 			// Validate input
-			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|strip_tags|valid_email|max_length[120]|unique[users.email]|xss_clean');
+			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email]');
 
 			if ($this->settings_lib->item('auth.use_usernames'))
 			{
-				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[users.username]|xss_clean');
+				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|max_length[30]|unique[users.username]');
 			}
 
-			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|trim|strip_tags|min_length[8]|max_length[120]|valid_password');
-			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|trim|strip_tags|matches[password]');
+			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|min_length[8]|max_length[120]|valid_password');
+			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|matches[password]');
 
-			$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim|strip_tags|xss_clean');
-			$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|strip_tags|max_length[4]|xss_clean');
-			$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|strip_tags|max_length[255]|xss_clean');
+			$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim');
+			$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|max_length[4]');
+			$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|max_length[255]');
 
 
 			$meta_data = array();
 			foreach ($meta_fields as $field)
 			{
-				$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
+				if ((!isset($field['admin_only']) || $field['admin_only'] === FALSE
+					|| (isset($field['admin_only']) && $field['admin_only'] === TRUE
+						&& isset($this->current_user) && $this->current_user->role_id == 1))
+					&& (!isset($field['frontend']) || $field['frontend'] === TRUE))
+				{
+					$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
 
-				$meta_data[$field['name']] = $this->input->post($field['name']);
+					$meta_data[$field['name']] = $this->input->post($field['name']);
+				}
 			}
 
 			if ($this->form_validation->run($this) !== FALSE)
 			{
 				// Time to save the user...
 				$data = array(
-						'email'		=> $_POST['email'],
-						'username'	=> isset($_POST['username']) ? $_POST['username'] : '',
-						'password'	=> $_POST['password'],
-						'language'	=> $this->input->post('language'),
-						'timezone'	=> $this->input->post('timezones'),
+						'email'			=> $this->input->post('email'),
+						'password'		=> $this->input->post('password'),
+						'language'		=> $this->input->post('language'),
+						'timezone'		=> $this->input->post('timezones'),
+						'display_name'	=> $this->input->post('display_name'),
 					);
+
+				if ($this->input->post_key_exists('username'))
+				{
+					$data['username'] = $this->input->post('username');
+				}
 
 				// User activation method
 				$activation_method = $this->settings_lib->item('auth.user_activation_method');
@@ -566,7 +577,7 @@ class Users extends Front_Controller
 
 					// Log the Activity
 
-					$this->activity_model->log_activity($user_id, lang('us_log_register') , 'users');
+					$this->activity_model->log_activity($user_id, lang('us_log_register'), 'users');
 					Template::redirect('login');
 				}
 				else
@@ -594,57 +605,6 @@ class Users extends Front_Controller
 		Template::render();
 
 	}//end register()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Callback method to check that the email is unique
-	 *
-	 * @access public
-	 *
-	 * @param string $email The email address to check
-	 *
-	 * @return bool
-	 */
-	public function unique_email($email)
-	{
-		if ($this->user_model->is_unique('email', $email) === TRUE)
-		{
-			return TRUE;
-		}
-		else
-		{
-			$this->form_validation->set_message('unique_email', 'lang:us_email_already_used');
-			return FALSE;
-		}
-
-	}//end unique_email()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Callback method to check that the username is unique
-	 *
-	 * @access public
-	 *
-	 * @param string $username The username to check
-	 *
-	 * @return bool
-	 */
-	public function unique_username($username)
-	{
-
-		if ($this->user_model->is_unique('username', $username.',users.id') === TRUE)
-		{
-			return TRUE;
-		}
-		else
-		{
-			$this->form_validation->set_message('unique_username', 'lang:us_username_already_used');
-			return FALSE;
-		}
-
-	}//end unique_username()
 
 	//--------------------------------------------------------------------
 
@@ -679,33 +639,36 @@ class Users extends Front_Controller
 		$payload = array ( 'user_id' => $id, 'data' => $this->input->post() );
 
 
-		$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email,users.id]|xss_clean');
-		$this->form_validation->set_rules('password', 'lang:bf_password', 'trim|strip_tags|min_length[8]|max_length[120]|valid_password');
+		$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email,users.id]');
+		$this->form_validation->set_rules('password', 'lang:bf_password', 'min_length[8]|max_length[120]|valid_password');
 
 		// check if a value has been entered for the password - if so then the pass_confirm is required
 		// if you don't set it as "required" the pass_confirm field could be left blank and the form validation would still pass
 		$extra_rules = !empty($_POST['password']) ? 'required|' : '';
-		$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'trim|strip_tags|'.$extra_rules.'matches[password]');
+		$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', ''.$extra_rules.'matches[password]');
 
 		if ($this->settings_lib->item('auth.use_usernames'))
 		{
-			$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|strip_tags|max_length[30]|unique[users.username,users.id]|xss_clean');
+			$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|max_length[30]|unique[users.username,users.id]');
 		}
 
-		$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim|strip_tags|xss_clean');
-		$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|strip_tags|max_length[4]|xss_clean');
-		$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|strip_tags|max_length[255]|xss_clean');
+		$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim');
+		$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|max_length[4]');
+		$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|max_length[255]');
 
 		// Added Event "before_user_validation" to run before the form validation
 		Events::trigger('before_user_validation', $payload );
 
 
-		$meta_data = array();
 		foreach ($meta_fields as $field)
 		{
-			$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
-
-			$meta_data[$field['name']] = $this->input->post($field['name']);
+			if ((!isset($field['admin_only']) || $field['admin_only'] === FALSE
+				|| (isset($field['admin_only']) && $field['admin_only'] === TRUE
+					&& isset($this->current_user) && $this->current_user->role_id == 1))
+				&& (!isset($field['frontend']) || $field['frontend'] === TRUE))
+			{
+				$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
+			}
 		}
 
 
@@ -721,27 +684,20 @@ class Users extends Front_Controller
 			'timezone'	=> $this->input->post('timezones'),
 		);
 
-		if ($this->input->post('password'))
+		// If empty, the password will be left unchanged.
+		if ($this->input->post('password') !== '')
 		{
 			$data['password'] = $this->input->post('password');
 		}
 
-		if ($this->input->post('pass_confirm'))
-		{
-			$data['pass_confirm'] = $this->input->post('pass_confirm');
-		}
-
-		if ($this->input->post('display_name'))
+		if ($this->input->post('display_name') !== '')
 		{
 			$data['display_name'] = $this->input->post('display_name');
 		}
 
-		if ($this->settings_lib->item('auth.use_usernames'))
+		if ($this->input->post_key_exists('username'))
 		{
-			if ($this->input->post('username'))
-			{
-				$data['username'] = $this->input->post('username');
-			}
+			$data['username'] = $this->input->post('username');
 		}
 
 		// Any modules needing to save data?
@@ -767,8 +723,8 @@ class Users extends Front_Controller
 		public function activate($email = FALSE, $code = FALSE)
 		{
 
-			if ($this->input->post('submit')) {
-				$this->form_validation->set_rules('code', 'Verification Code', 'required|trim|xss_clean');
+			if ($this->input->post_key_exists('activate')) {
+				$this->form_validation->set_rules('code', 'Verification Code', 'required|trim');
 				if ($this->form_validation->run() == TRUE) {
 					$code = $this->input->post('code');
 				}
@@ -790,7 +746,7 @@ class Users extends Front_Controller
 			}
 
 
-			if (!empty($code))
+			if ($code !== FALSE)
 			{
 				$activated = $this->user_model->activate($email, $code);
 				if ($activated)
@@ -841,15 +797,11 @@ class Users extends Front_Controller
 		   */
 		public function resend_activation()
 		{
-			if (isset($_POST['submit']))
+			if ($this->input->post_key_exists('send'))
 			{
-				$this->form_validation->set_rules('email', 'Email', 'required|trim|strip_tags|valid_email|xss_clean');
+				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email');
 
-				if ($this->form_validation->run() === FALSE)
-				{
-					Template::set_message('Cannot find that email in our records.', 'error');
-				}
-				else
+				if ($this->form_validation->run())
 				{
 					// We validated. Does the user actually exist?
 					$user = $this->user_model->find_by('email', $_POST['email']);
@@ -907,9 +859,13 @@ class Users extends Front_Controller
 								{
 									$errors = $this->emailer->errors;
 								}
-								Template::set_message(lang('us_err_no_email').$errors.", ".$this->emailer->debug, 'error');
+								Template::set_message(lang('us_err_no_email').$errors.", ".$this->emailer->debug_message, 'error');
 							}
 						}
+					}
+					else
+					{
+						Template::set_message('Cannot find that email in our records.', 'error');
 					}
 				}
 			}

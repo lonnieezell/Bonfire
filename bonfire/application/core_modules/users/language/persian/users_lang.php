@@ -29,9 +29,9 @@ $lang['us_must_login']				= 'براي ديدن اين صفحه بايد وارد
 $lang['us_no_permission']			= 'شما مجوز لازم جهت دسترسي به اين صفحه را نداريد.';
 
 $lang['us_access_logs']				= 'لاگ دسترسي';
-$lang['us_logged_in_on']			= 'وارد شده در';
+$lang['us_logged_in_on']			= '<b>%s</b> وارد شده در %s';
 $lang['us_no_access_message']		= '<p>تبريک!</p><p>همه کاربران شما حافظه ي خوبي دارند!</p>';
-$lang['us_log_create']				= 'ايجاد کاربر جديد';
+$lang['us_log_create']				= 'ايجاد کاربر جديد %s';
 $lang['us_log_edit']				= 'وبرايش کاربر';
 $lang['us_log_delete']				= 'حذف کاربر';
 $lang['us_log_logged']				= 'وارد شده از';
@@ -112,25 +112,10 @@ $lang['us_account_details']			= 'مشخصات حساب کاربری';
 $lang['us_last_login']				= 'آخرین ورود';
 
 
-
-$lang['us_no_password']             = 'کلمه عبور موجود نیست.';
-$lang['us_no_email']                = 'ایمیل وارد نشده.';
-$lang['us_email_taken']             = 'این ایمیل قبلا ثبت شده است.';
 $lang['us_invalid_user_id']         = 'مشخصه کاربر معتبر نمی باشد';
-
-$lang['us_no_password']             = 'کلمه عبور موجود نیست.';
-
-$lang['us_no_email']                = 'ایمیل وارد نشده است';
-
-$lang['us_email_taken']             = 'این ایمیل قبلا ثبت شده است.';
-$lang['us_invalid_user_id']         = 'مشخصه کاربر معتبر نمی باشد';
-
-
 
 $lang['us_account_created_success'] = 'حساب کاربری شما ایجاد شد. لطفا وارد شوید.';
 
-$lang['us_email_already_used']      = 'این آدرس ایمیل قبلا ثبت شده است.';
-$lang['us_username_already_used']   = 'نام کاربری قبلا توسط شخص دیگری ثبت شده است.';
 $lang['us_invalid_user_id']         = 'مشخصع کاربر نامعتبر است.';
 $lang['us_invalid_email']           = 'آدرس ایمیل یافت نشد.';
 
@@ -139,7 +124,7 @@ $lang['us_reset_pass_subject']      = 'پسورد موقت شما';
 $lang['us_reset_pass_message']      = 'لطفا ایمیل خود را جهت بازیابی کلمه عبور بررسی نمایید.';
 $lang['us_reset_pass_error']        = 'عدم توانایی در ارسال ایمیل: ';
 $lang['us_reset_password_success']  = 'حال میتوانید با کلمه عبور جدید خود ، وارد سایت شوید.';
-$lang['us_reset_password_error']    = 'خطایی به هنگام بازیابی کلمه عبور شما رخ داده است: ';
+$lang['us_reset_password_error']    = 'خطایی به هنگام بازیابی کلمه عبور شما رخ داده است: %s';
 
 
 $lang['us_profile_updated_success'] = 'مشخصات با موفقیت به روز رسانی شد.';

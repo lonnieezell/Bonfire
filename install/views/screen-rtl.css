@@ -202,5 +202,12 @@ input[type=password] {
 	text-align: left;
 }
 
+
+.form-inline label {
+	width: auto;
+	margin: 0;
+	text-align: left;
+}
+
 .profile{text-align:left}
 input{direction: ltr;}

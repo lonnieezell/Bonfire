@@ -23,7 +23,7 @@
 	#ci-profiler-menu-files span, #ci-profiler-files h2 { color: #5a8616; }
 	#ci-profiler-menu-console span, #ci-profiler-console h2 { color: #5a8616; }
 	
-	#codeigniter-profiler table { width: 100%; }
+	#codeigniter-profiler table { width: 100%; border-spacing: 0; border-collapse: collapse; }
 	#codeigniter-profiler table.main td { padding: 7px 15px; text-align: left; vertical-align: top; color: #aaa; border-bottom: 1px dotted #444; line-height: 1.5; background: #101010 !important; font-size: 12px !important; }
 	#codeigniter-profiler table.main tr:hover td { background: #292929 !important; }
 	#codeigniter-profiler table.main code { font-family: inherit; padding: 0; background: transparent; border: 0; color: #fff; }
@@ -320,7 +320,7 @@ window.onload = function() {
 			
 			<?php if (is_array($sections['queries'])) : ?>
 				
-				<table class="main" cellspacing="0">
+				<table class="main">
 				<?php foreach ($sections['queries'] as $key => $query) : ?>
 					<?php if (isset($query['time'])) :?>
 						<tr><td class="hilight"><?php echo $query['time'] ?></td><td><?php echo $query['query'] ?></td></tr> 

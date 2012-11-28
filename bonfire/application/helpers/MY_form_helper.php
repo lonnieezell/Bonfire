@@ -56,13 +56,27 @@ if ( ! function_exists('_form_common'))
 	 */
 	function _form_common($type='text', $data='', $value='', $label='', $extra='', $tooltip = '')
 	{
-		$defaults = array('type' => 'text', 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
+		$defaults = array('type' => $type, 'name' => (( ! is_array($data)) ? $data : ''), 'value' => $value);
 
 		// If name is empty at this point, try to grab it from the $data array
 		if (empty($defaults['name']) && is_array($data) && isset($data['name']))
 		{
 			$defaults['name'] = $data['name'];
 			unset($data['name']);
+		}
+
+		// If label is empty at this point, try to grab it from the $data array
+		if (empty($label) && is_array($data) && isset($data['label']))
+		{
+			$label = $data['label'];
+			unset($data['label']);
+		}
+
+		// If tooltip is empty at this point, try to grab it from the $data array
+		if (empty($tooltip) && is_array($data) && isset($data['tooltip']))
+		{
+			$tooltip = $data['tooltip'];
+			unset($data['tooltip']);
 		}
 
 		$error = '';
@@ -229,6 +243,40 @@ if ( ! function_exists('form_number'))
 
 //--------------------------------------------------------------------
 
+if ( ! function_exists('form_range'))
+{
+	/**
+	 * Returns a properly templated range input field.
+	 *
+	 * NOTE: The $data value should be an array and should contain both
+	 * 'min' and 'max' values. If they are not present, then they will
+	 * default to 1 and 10, respectively.
+	 *
+	 * @param string $data    Either a string with the element name, or an array of key/value pairs of all attributes.
+	 * @param string $value   Either a string with the value, or blank if an array is passed to the $data param.
+	 * @param string $label   A string with the label of the element.
+	 * @param string $extra   A string with any additional items to include, like Javascript.
+	 * @param string $tooltip A string for inline help or a tooltip icon
+	 *
+	 * @return string A string with the formatted input element, label tag and wrapping divs.
+	 */
+	function form_range($data='', $value='', $label='', $extra='', $tooltip = '')
+	{
+		if (is_string($data))
+		{
+			$data = (array)$data;
+		}
+
+		$data['min'] = isset($opts['min']) ? $opts['min'] : 1;
+		$data['max'] = isset($opts['max']) ? $opts['max'] : 10;
+
+		return _form_common('range', $data, $value, $label, $extra, $tooltip);
+
+	}//end form_color()
+}
+
+//--------------------------------------------------------------------
+
 if ( ! function_exists('form_color'))
 {
 	/**
@@ -295,12 +343,56 @@ if ( ! function_exists('form_date'))
 
 //--------------------------------------------------------------------
 
+if ( ! function_exists('form_datetime'))
+{
+	/**
+	 * Returns a properly templated date input field.
+	 *
+	 * @param string $data    Either a string with the element name, or an array of key/value pairs of all attributes.
+	 * @param string $value   Either a string with the value, or blank if an array is passed to the $data param.
+	 * @param string $label   A string with the label of the element.
+	 * @param string $extra   A string with any additional items to include, like Javascript.
+	 * @param string $tooltip A string for inline help or a tooltip icon
+	 *
+	 * @return string A string with the formatted input element, label tag and wrapping divs.
+	 */
+	function form_datetime($data='', $value='', $label='', $extra='', $tooltip = '')
+	{
+		return _form_common('datetime', $data, $value, $label, $extra, $tooltip);
+
+	}//end form_date()
+}
+
+//--------------------------------------------------------------------
+
+if ( ! function_exists('form_month'))
+{
+	/**
+	 * Returns a properly templated month input field.
+	 *
+	 * @param string $data    Either a string with the element name, or an array of key/value pairs of all attributes.
+	 * @param string $value   Either a string with the value, or blank if an array is passed to the $data param.
+	 * @param string $label   A string with the label of the element.
+	 * @param string $extra   A string with any additional items to include, like Javascript.
+	 * @param string $tooltip A string for inline help or a tooltip icon
+	 *
+	 * @return string A string with the formatted input element, label tag and wrapping divs.
+	 */
+	function form_month($data='', $value='', $label='', $extra='', $tooltip = '')
+	{
+		return _form_common('month', $data, $value, $label, $extra, $tooltip);
+
+	}//end form_date()
+}
+
+//--------------------------------------------------------------------
+
 if ( ! function_exists('form_dropdown'))
 {
 	/**
-	 * Returns a properly templated date dropdown field.
+	 * Returns a properly templated dropdown field.
 	 *
-	 * @param string $data     Either a string with the element name, or an array of key/value pairs of all attributes.
+	 * @param string $data     Either a string with the element name, or an array of key/value pairs of all attributes, which must include a name or id.
 	 * @param array  $options  Array of options for the drop down list
 	 * @param string $selected Either a string of the selected item or an array of selected items
 	 * @param string $label    A string with the label of the element.
@@ -309,18 +401,19 @@ if ( ! function_exists('form_dropdown'))
 	 *
 	 * @return string A string with the formatted input element, label tag and wrapping divs.
 	 */
-	function form_dropdown($data, $options=array(), $selected='', $label='', $extra='', $tooltip = '')
+	function form_dropdown($data, $options=array(), $selected=array(), $label='', $extra='', $tooltip = '')
 	{
-		$defaults = array('name' => (( ! is_array($data)) ? $data : ''));
-
-		// If name is empty at this point, try to grab it from the $data array
-		if (empty($defaults['name']) && is_array($data) && isset($data['name']))
+		if (! is_array($data))
 		{
-			$defaults['name'] = $data['name'];
-			unset($data['name']);
+			$data = array('name' => $data);
 		}
 
-		$output = _parse_form_attributes($data, $defaults);
+		if (! isset($data['id']))
+		{
+			$data['id'] = $data['name'];
+		}
+
+		$output = _parse_form_attributes($data, array());
 
 		if ( ! is_array($selected))
 		{
@@ -367,17 +460,17 @@ if ( ! function_exists('form_dropdown'))
 
 		if (function_exists('form_error'))
 		{
-			if (form_error($defaults['name']))
+			if (form_error($data['name']))
 			{
 				$error   = ' error';
-				$tooltip = '<span class="help-inline">' . form_error($defaults['name']) . '</span>' . PHP_EOL;
+				$tooltip = '<span class="help-inline">' . form_error($data['name']) . '</span>' . PHP_EOL;
 			}
 		}
 
 		$output = <<<EOL
 
 <div class="control-group {$error}">
-	<label class="control-label" for="{$defaults['name']}">{$label}</label>
+	<label class="control-label" for="{$data['id']}">{$label}</label>
 	<div class="controls">
 		 <select {$output} {$extra}>
 			{$options_vals}

@@ -6,6 +6,6 @@
 <p><?php echo lang('in_success_rebase_msg').$rebase;?></p>
 <?php endif;?>
 
-<?php echo lang('in_success_msg'); ?> <?php echo anchor('../', 'Bonfire'); ?>
+<?php echo lang('in_success_msg'). ' <a href="'. preg_replace('{install/$}', '', base_url()) .'">Bonfire</a>.'; ?>
 
 <?php $this->load->view('footer'); ?>
