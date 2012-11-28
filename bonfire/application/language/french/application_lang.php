@@ -56,7 +56,7 @@ $lang['bf_remember_time']		= 'Se souvenir de moi';
 $lang['bf_week']				= 'Semaine';
 $lang['bf_weeks']				= 'Semaines';
 $lang['bf_days']				= 'Jours';
-$lang['bf_username']			= 'Nom d\utilisateur';
+$lang['bf_username']			= 'Nom d\'utilisateur';
 $lang['bf_password']			= 'Mot de passe';
 $lang['bf_password_confirm']	= 'Mot de passe (encore)';
 $lang['bf_display_name']		= 'Afficher le nom';
@@ -119,7 +119,7 @@ $lang['bf_env_dev']				= 'Developement';
 $lang['bf_env_test']			= 'Test';
 $lang['bf_env_prod']			= 'Production';
 
-$lang['bf_show_profiler']		= 'Voir le profil de l\Administrateur?';
+$lang['bf_show_profiler']		= 'Voir le profil de l\'Administrateur?';
 $lang['bf_show_front_profiler']	= 'Voir les profil sur le FrontEnd?';
 
 $lang['bf_cache_not_writable']  = 'Le répertoire de cache est protégé en écriture';
@@ -225,7 +225,7 @@ $lang['bf_activate_admin']			= 'Admin';
 $lang['bf_activate']				= 'Activer';
 $lang['bf_activate_resend']			= 'Renvoyer l\'activation';
 
-$lang['bf_reg_complete_error']		= 'Une erreur s\est produite lors de votre enregistrement. Merci de réessayer ou contacter l\'administateur du site afin d\'obtenir de l\'aide';
+$lang['bf_reg_complete_error']		= 'Une erreur s\'est produite lors de votre enregistrement. Merci de réessayer ou contacter l\'administateur du site afin d\'obtenir de l\'aide';
 $lang['bf_reg_activate_email'] 		= 'Un email contenant votre code d\'activation a été envoyé à [EMAIL].';
 $lang['bf_reg_activate_admin'] 		= 'Vous serez avertit lorsque l\'administrateur aura accepter votre enregistrement.';
 $lang['bf_reg_activate_none'] 		= 'Merci de vous connecter afin de pouvoir utiliser ce site.';
