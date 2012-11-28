@@ -68,7 +68,7 @@ $lang['mb_form_note'] = '<p><b>Preencha os campos que você gostaria em seu mód
 
 $lang['mb_table_note'] = '<p>Sua tabela será criada com pelo menos um campo, o campo de chave primária que será utilizado como um identificador único e como um índice. Se você quiser campos adicionais, clique no número desejado para adicioná-los a este formulário.</p>';
 
-$lang['mb_field_note'] = '<p><b>NOTA: Para todos os campos</b><br />Se o tipo de campo do banco de dados é "Enum" ou "Set", por favor insira os valores usando este formato: \'a\',\'b\',\'c\'...<br /> Se você precisa colocar uma barra invertida ("\") ou um apóstrofo entre esses valores, precedê-lo com uma barra invertida (por exemplo \'\\xyz\' or \'a\\\'b\').</p>';
+$lang['mb_field_note'] = '<p><b>NOTA: Para todos os campos</b><br />Se o tipo de campo do banco de dados é "Enum" ou "Set", por favor insira os valores usando este formato: \'a\',\'b\',\'c\'...<br /> Se você precisa colocar uma barra invertida ("\\") ou um apóstrofo entre esses valores, precedê-lo com uma barra invertida (por exemplo \'\\\\xyz\' or \'a\\\'b\').</p>';
 	
 $lang['mb_form_errors']			= 'Por favor, corrija os erros abaixo.';
 $lang['mb_form_mod_details']	= 'Detalhes do módulo';

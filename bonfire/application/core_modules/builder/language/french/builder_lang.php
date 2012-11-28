@@ -63,7 +63,7 @@ $lang['mb_form_note'] = '<p><b>Remplissez les champs que vous souhaitez dans vot
 
 $lang['mb_table_note'] = '<p>Votre table sera créée avec au moins un champ, le champ clé primaire qui sera utilisé comme identifiant unique et comme un index. Si vous avez besoin de champ supplémentaire, cliquez sur le nombre de champs dont vous aurez besoin afin de les ajouter à ce formulaire.</p>';
 
-$lang['mb_field_note'] = '<p><b>NOTE : POUR TOUS LES CHAMPS</b><br />Si le champs de la BDD est "enum" ou "set", merci d\'entrer la valeur en utilisant ce format : \'a\',\'b\',\'c\'...<br />Si jamais vous avez besoin de mettre une barre oblique ("\") ou un simple apostrophe ("\'") parmsi ces valeurs, faites précéder d\'une barre oblique inverse (par exemple \'\\xyz\' ou \'a\\\'b\').</p>';
+$lang['mb_field_note'] = '<p><b>NOTE : POUR TOUS LES CHAMPS</b><br />Si le champs de la BDD est "enum" ou "set", merci d\'entrer la valeur en utilisant ce format : \'a\',\'b\',\'c\'...<br />Si jamais vous avez besoin de mettre une barre oblique ("\\") ou un simple apostrophe ("\'") parmsi ces valeurs, faites précéder d\'une barre oblique inverse (par exemple \'\\\\xyz\' ou \'a\\\'b\').</p>';
 	
 $lang['mb_form_errors']			= 'Merci de corriger les erreurs ci-dessous.';
 $lang['mb_form_mod_details']	= 'Détails du Module ';
