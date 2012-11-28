@@ -25,7 +25,6 @@ $lang['permissions_description']		= 'توضيحات';
 $lang['permissions_status']				= 'وضعيت';
 $lang['permissions_active']				= 'فعال';
 $lang['permissions_inactive']			= 'غير فعال';
-$lang['permissions_deleted']			= 'حذف';
 $lang['permissions_permission']			= 'مجوز دسترسي';
 $lang['permissions_deleted']			= 'مجوز ها حذف شدند';
 $lang['permissions_del_failure']		= 'عدم توانایی در حذف مجوزها: ';

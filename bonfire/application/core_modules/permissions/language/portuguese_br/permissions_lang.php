@@ -47,7 +47,6 @@ $lang['permissions_description']		= 'Descrição';
 $lang['permissions_status']				= 'Estatus';
 $lang['permissions_active']				= 'Ativo';
 $lang['permissions_inactive']			= 'inativo';
-$lang['permissions_deleted']			= 'deletado';
 $lang['permissions_permission']			= 'Permissões';
 $lang['permissions_deleted']			= 'Permissões deletadas';
 $lang['permissions_del_failure']		= 'Não é possível excluir permissões: ';

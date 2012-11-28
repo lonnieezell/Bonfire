@@ -34,7 +34,6 @@
 				<select name="status" id="status">
 					<option value="active" <?php echo set_select('status', 'active') ?>><?php echo lang('permissions_active') ?></option>
 					<option value="inactive" <?php echo set_select('status', 'inactive') ?>><?php echo lang('permissions_inactive') ?></option>
-					<option value="deleted" <?php echo set_select('status', 'Permissions deleted') ?>><?php echo lang('permissions_deleted') ?></option>
 				</select>
 			</div>
 		</div>
