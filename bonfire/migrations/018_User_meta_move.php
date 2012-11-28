@@ -57,19 +57,24 @@ class Migration_User_meta_move extends Migration {
 			'add_drop'		=> true,
 			'add_insert'	=> true
 		);
-		$backup =& $this->dbutil->backup($prefs);
-
-		$this->load->helper('file');
-		write_file($filename, $backup);
-
-		if (file_exists($filename))
+		
+		// MySQLi does not support backups currently
+		if ($this->db->dbdriver !== 'mysqli')
 		{
-			log_message('info', 'Backup file successfully saved. It can be found at <a href="/'. $filename .'">'. $filename . '</a>.');
-		}
-		else
-		{
-			log_message('error', 'There was a problem saving the backup file.');
-			die('There was a problem saving the backup file.');
+			$backup =& $this->dbutil->backup($prefs);
+
+			$this->load->helper('file');
+			write_file($filename, $backup);
+			
+			if (file_exists($filename))
+			{
+				log_message('info', 'Backup file successfully saved. It can be found at <a href="/'. $filename .'">'. $filename . '</a>.');
+			}
+			else
+			{
+				log_message('error', 'There was a problem saving the backup file.');
+				die('There was a problem saving the backup file.');
+			}
 		}
 
 		/*

@@ -150,15 +150,15 @@ class Migrations
 	 *
 	 * @return void
 	 */
-	function __construct()
+	function __construct($migration_path=null)
 	{
 		$this->_ci =& get_instance();
 
 		$this->_ci->config->load('migrations/migrations');
 
 		$this->migrations_enabled = $this->_ci->config->item('migrations_enabled');
-		$this->migrations_path = realpath($this->_ci->config->item('migrations_path'));
-
+		$this->migrations_path = is_null($migration_path) ? realpath($this->_ci->config->item('migrations_path')) : realpath($migration_path);
+die(var_dump($this->migrations_path));
 		// Idiot check
 		$this->migrations_enabled AND $this->migrations_path OR show_error('Migrations has been loaded but is disabled or set up incorrectly.');
 

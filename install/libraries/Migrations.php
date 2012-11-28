@@ -249,7 +249,7 @@ class Migrations {
 		switch ($type)
 		{
 			case '':
-				$migrations_path = $this->migrations_path .'core/';
+				$migrations_path = $this->migrations_path;
 				break;
 			case 'app_':
 				$migrations_path = $this->migrations_path;

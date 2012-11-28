@@ -40,19 +40,6 @@ class Install extends CI_Controller {
 
 	protected $errors = '';
 
-	/*
-		Var: $curl_error
-		Boolean check if cURL is enabled in PHP
-	*/
-	private $curl_error = 0;
-
-	/*
-		Var: $curl_update
-		Boolean that says whether we should check
-		for updates.
-	*/
-	private $curl_update = 1;
-
 	/**
 	 * An array of folders the installer checks to make
 	 * sure they can be written to.
@@ -71,7 +58,8 @@ class Install extends CI_Controller {
 		'application/archives/config',
 		'application/db/backups',
 		'application/db/migrations',
-		'public/assets/cache'
+		'public/assets/cache',
+		'public/install'
 	);
 
 	/**
@@ -82,7 +70,7 @@ class Install extends CI_Controller {
 	 * @var		array
 	 */
 	private $reverse_writeable_folders = array(
-		'application/config',
+		'application/config'
 	);
 
 	/**
@@ -118,7 +106,7 @@ class Install extends CI_Controller {
 		parent::__construct();
 
 		// Contains most of our installer utility functions
-		$this->load->library('installer_lib');
+		$this->load->library('installer_lib', array('reverse_writeable_folders' => $this->reverse_writeable_folders));
 		$this->load->helper('install');
 
 		// Load form validation
@@ -126,9 +114,6 @@ class Install extends CI_Controller {
 
 		// Sets our language
 		$this->set_language();
-
-		// check if the app is installed
-		//$this->load->config('application');
 	}
 
 	//--------------------------------------------------------------------
@@ -314,12 +299,38 @@ class Install extends CI_Controller {
 		{
 			if ($this->installer_lib->setup())
 			{
+				$this->session->set_userdate('step3_done', true);
 				$this->session->set_userdata('installed', true);
 				redirect('install/complete');
 			}
 		}
 		
 		$this->load->view('install/failed', $data);
+	}
+	
+	//--------------------------------------------------------------------
+	
+	/**
+	 *	We're done!
+	 */
+	public function complete() 
+	{
+		if (!$this->session->userdata('installed'))
+		{
+			redirect('/install');
+		}
+		
+		// Write a file to /public/install/installed.txt as a simpler
+		// check whether it's installed so developing doesn't require
+		// us to remove the install folder.
+		$filename = FCPATH .'installed.txt';
+		
+		$msg = 'Installed On: '. date('r') ."\n";
+		$this->load->helper('file');
+		
+		write_file($filename, $msg);
+		
+		$this->load->view('install/complete');
 	}
 	
 	//--------------------------------------------------------------------

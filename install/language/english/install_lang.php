@@ -85,3 +85,17 @@ $lang['in_installed']					= 'Bonfire is already installed. Please delete or rena
 $lang['in_rename_msg']					= 'If you would like, we can simply rename it for you.';
 $lang['in_continue']						= 'Continue';
 $lang['in_click']							= 'Click here';
+
+$lang['in_requirements']			= 'Requirements';
+$lang['in_account']					= 'Account';
+$lang['in_complete']				= 'Install Complete';
+$lang['in_complete_heading']		= 'Time to unleash your Ninja coding skills.';
+$lang['in_complete_intro']			= 'Bonfire has been installed, and your user account is setup for you. <br/><br/>A file called <b>installed.txt</b> has been created in the install folder. Leave it there or remove "/public/install" folder and you will not be asked to install again.';
+$lang['in_complete_next']			= 'What\'s next?';
+$lang['in_complete_visit']			= 'View your';
+$lang['in_admin_area']				= 'Admin area';
+$lang['in_site_front']				= 'frontpage';
+$lang['in_read']					= 'Read the';
+$lang['in_bf_docs']					= 'Bonfire documentation';
+$lang['in_ci_docs']					= 'CodeIgniter documentation';
+$lang['in_happy_coding']			= 'Happy coding!';

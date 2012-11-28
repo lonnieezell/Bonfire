@@ -50,3 +50,6 @@ application/modules/*
 # Remove PHPStorm Project folders
 bonfire/.ideas
 .idea/*
+
+# Ignore the installed.txt file
+public/install/installed.txt

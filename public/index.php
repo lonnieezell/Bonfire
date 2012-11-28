@@ -13,7 +13,7 @@
 // public path for security, or to simply create a new little text file
 // for when we're developing on it, but want to easily install later on.
 //
-if (!is_file(dirname(__FILE__).'/install/installed.txt'))
+if (!file_exists('./install/installed.txt'))
 {
 	// Auto $base_url copied from codeigniter/core/Config.php
 	$base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';

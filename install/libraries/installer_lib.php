@@ -6,12 +6,33 @@ class Installer_lib {
 	public 	$php_version;
 	public	$mysql_server_version;
 	public	$mysql_client_version;
+	public	$reverse_writeable_folders = array();
+	
+	/*
+		Var: $curl_error
+		Boolean check if cURL is enabled in PHP
+	*/
+	private $curl_error = 0;
+
+	/*
+		Var: $curl_update
+		Boolean that says whether we should check
+		for updates.
+	*/
+	private $curl_update = 1;
 	
 	//--------------------------------------------------------------------
 	
-	public function __construct() 
+	public function __construct($config=array()) 
 	{
 		$this->ci =& get_instance();
+		
+		$this->curl_update = $this->cURL_enabled();
+		
+		if (array_key_exists('reverse_writeable_folders', $config))
+		{
+			$this->reverse_writeable_folders = $config['reverse_writeable_folders'];
+		}
 	}
 	
 	//--------------------------------------------------------------------
@@ -98,6 +119,13 @@ class Installer_lib {
 	*/
 	public function is_installed() 
 	{	
+		// First check - Does a 'install/installed.txt' file exist? If so, 
+		// then we've likely already installed. 
+		if (file_exists('installed.txt'))
+		{
+			return true;
+		}
+	
 		// Does the database config exist? 
 		// If not, then we definitely haven't installed yet.
 		if (!file_exists('../bonfire/application/config/development/database.php'))
@@ -245,7 +273,7 @@ class Installer_lib {
 	{
 		if (!function_exists('do_hash'))
 		{
-			$this->load->helper('security');
+			$this->ci->load->helper('security');
 		}
 
 		$salt = $this->generate_salt();
@@ -320,7 +348,7 @@ class Installer_lib {
 		//
 		// Now install the database tables.
 		//
-		$this->ci->load->library('Migrations', array('migration_path' => str_replace('application', 'bonfire', BFPATH) .'db/migrations'));
+		$this->ci->load->library('Migrations', array('migration_path' => str_replace('application', 'bonfire', BFPATH) .'migrations'));
 
 		if (!$this->ci->migrations->install())
 		{ die('yup');
@@ -343,14 +371,14 @@ class Installer_lib {
 				}
 			}
 		}
-die('migrations done');
+
 		/*
 			Save the information to the settings table
 		*/
 
 		$settings = array(
-			'site.title'	=> $this->input->post('site_title'),
-			'site.system_email'	=> $this->input->post('email'),
+			'site.title'	=> $this->ci->input->post('site_title'),
+			'site.system_email'	=> $this->ci->input->post('email'),
 			'updates.do_check' => $this->curl_update,
 			'updates.bleeding_edge' => $this->curl_update
 		);
@@ -368,7 +396,7 @@ die('migrations done');
 		}
 
 		// update the emailer serder_email
-		$setting_rec = array('name' => 'sender_email', 'module' => 'email', 'value' => $this->input->post('email'));
+		$setting_rec = array('name' => 'sender_email', 'module' => 'email', 'value' => $this->ci->input->post('email'));
 
 		$this->ci->db->where('name', 'sender_email');
 		if ($this->ci->db->update('settings', $setting_rec) == false)
