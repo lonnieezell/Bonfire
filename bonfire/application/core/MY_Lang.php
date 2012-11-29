@@ -15,47 +15,126 @@
 
 // ------------------------------------------------------------------------
 
-class MY_Lang extends MX_Lang
-{
-	public function load($langfile, $lang = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '', $_module = '')
+/**
+ * Bonfire Language Class
+ *
+ * This class replaces both CI_Lang and MX_Lang.
+ *
+ * It will fall back to english for un-translated lines.
+ */
+class MY_Lang extends MX_Lang {
+
+	public function __construct()
 	{
-		if (is_array($langfile))
+		log_message('debug', "Bonfire MY_Lang: Language Class Initialized");
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Load a language file
+	 *
+	 * This version always loads english first (as a fallback).
+	 * It will tolerate either file being missing (but not both).
+	 *
+	 * It doesn't implement any of the advanced options.
+	 *
+	 * @param	string	the name of the language file to be loaded
+	 * @param	string	the language (english, etc.)
+	 * @return	void
+	 */
+	public function load($langfile)
+	{
+		if (in_array($langfile . '_lang.php', $this->is_loaded, TRUE))
 		{
-			foreach ($langfile as $file)
+			return;
+		}
+
+		$config =& get_config();
+		$idiom = $config['language'];
+
+		$loaded = $this->__load($langfile, 'english');
+
+		if ($idiom != 'english')
+		{
+			$loaded_foreign = $this->__load($langfile, $idiom);
+			if ($loaded_foreign)
 			{
-				$this->load($file);
+				$loaded = TRUE;
 			}
-			return $this->language;
+			else
+			{
+				log_message('debug', "Unable to load the requested language file '$langfile' for current language '$idiom'.");
+			}
 		}
 
-		if ($lang == '')
+		if (!$loaded)
 		{
-			$lang = CI::$APP->config->item('language');
+			show_error("Unable to load the requested language file '$langfile' for current language AND for fallback to English.");
 		}
 
-		if (in_array($langfile, $this->is_loaded, TRUE))
+		$this->is_loaded[] = $langfile.'_lang.php';
+	}
+
+	private function __load($langfile, $idiom)
+	{
+		$module = CI::$APP->router->fetch_module();
+		list($path, $file) = Modules::find($langfile.'_lang', $module, 'language/'.$idiom.'/');
+		if ($path)
 		{
-			return $this->language;
+			// Module file
+			$lang = Modules::load_file($file, $path, 'lang');
 		}
 
-		// Fallback to english (rather than the dumb keys) for missing translations
-		// Bonfire used to do this in the translate editor,
-		// but that has obvious maintenance problems.
-		$result = array();
-
-		if ($lang != 'english')
+		if (!isset($lang))
 		{
-			// We need to use $return = TRUE so we can load the same $langfile twice,
-			// but with different languages
-			$result = parent::load($langfile, 'english', TRUE, $add_suffix, $alt_path);
-		}
-		$result = array_merge($result, parent::load($langfile, $lang, TRUE, $add_suffix, $alt_path));
+			// Determine where the language file is and load it
+			foreach (get_instance()->load->get_package_paths(TRUE) as $package_path)
+			{
+				$file = $package_path.'language/'.$idiom.'/'.$langfile.'_lang.php';
 
-		if (!$return)
-		{
-			$this->language = array_merge($this->language, $result);
-			$this->is_loaded[] = $langfile;
+				if (file_exists($file))
+				{
+					include $file;
+					if (!isset($lang))
+					{
+						log_message('error', "Language file contains no data? $file");
+					}
+					break;
+				}
+			}
 		}
-		return $result;
+
+		if (!isset($lang))
+		{
+			return FALSE;
+		}
+
+		$this->language = array_merge($this->language, $lang);
+		log_message('debug', 'Bonfire MY_Lang: Language file loaded: language/'.$idiom.'/'.$langfile.'_lang.php');
+		return TRUE;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Fetch a line of text from the language array
+	 *
+	 * @param	string	$line	The language line.  Not optional in this version (!)
+	 * @return	string
+	 */
+	public function line($line)
+	{
+		if (! isset($this->language[$line]))
+		{
+			log_message('error', 'Could not find the language line "'.$line.'"');
+
+			return 'FIXME ("'.$line.'")';
+		}
+
+		return $this->language[$line];
 	}
 }
+// END Language Class
+
+/* End of file MY_Lang.php */
