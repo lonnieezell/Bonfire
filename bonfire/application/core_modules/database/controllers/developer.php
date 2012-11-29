@@ -79,9 +79,9 @@ class Developer extends Admin_Controller
 			// Checked the checked() variable
 			$_POST['checked'] = isset($_POST['checked']) ? $_POST['checked'] : '';
 
-			switch(strtolower($_POST['action']))
+			switch($_POST['action'])
 			{
-				case strtolower(lang('db_backup')):
+				case 'backup':
 					$hide_form = $this->backup($_POST['checked']);
 					break;
 				case 'repair':
