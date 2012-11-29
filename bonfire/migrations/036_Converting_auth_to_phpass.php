@@ -29,25 +29,58 @@ class Migration_Converting_auth_to_phpass extends Migration
 		);
 		$this->dbforge->add_column('users', $fields);
 		
-		// And we need to change the size of the password hash and reset hash columns
+		// And we need to change the size of the password hash column
 		$fields = array(
 			'password_hash'	=> array(
 				'type'			=> 'char',
 				'constraint'	=> 60
 			),
-			'reset_hash'	=> array(
-				'type'			=> 'char',
-				'constraint'	=> 60
-			),
 		);
 		$this->dbforge->modify_column('users', $fields);
+		
+		// Add a force_password_update column
+		$fields = array(
+			'force_password_reset'	=> array(
+				'type'			=> 'tinyint',
+				'constraint'	=> 1,
+				'default'		=> 0
+			),
+		);
+		$this->dbforge->add_column('users', $fields);
+		
+		// Set all users to have their passwords reset
+		$this->db->where('force_password_reset', 0)->update('users', array('force_password_reset' => 1));
 	}
 
 	//--------------------------------------------------------------------
 
 	public function down()
 	{
+		$this->load->dbforge();
 		
+		// Add the 'salt' column back
+		$field = array(
+			'salt' => array(
+				'type'	=> 'varchar',
+				'constraint'	=> 7,
+			)
+		);
+		$this->dbforge->add_column('users', $field);
+		
+		// Drop the password_iterations column
+		$this->dbforge->drop_column('users', 'password_iterations');
+		
+		// Reshape the password_hash column
+		$fields = array(
+			'password_hash'	=> array(
+				'type'			=> 'varchar',
+				'constraint'	=> 40
+			),
+		);
+		$this->dbforge->modify_column('users', $fields);
+		
+		// Remove the force_password_reset column
+		$this->dbforge->drop_column('users', 'force_password_reset');
 	}
 
 	//--------------------------------------------------------------------
