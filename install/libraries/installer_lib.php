@@ -414,10 +414,18 @@ class Installer_lib {
 			'username'	=> $this->ci->session->userdata('user_username'),
 			'active'    => 1,
 		);
-		list($password, $salt) = $this->hash_password($this->ci->session->userdata('user_password'));
+		
+		// As of 0.7, we've switched to using phpass for password encryption...
+		require (str_replace('application', 'bonfire', BFPATH) .'modules/users/libraries/PasswordHash.php' );
+
+		$iterations	= $this->ci->config->item('password_iterations');
+		$hasher = new PasswordHash($iterations, false);
+		
+		$password = $hasher->HashPassword($this->ci->session->userdata('user_password'));
 
 		$data['password_hash'] = $password;
-		$data['salt'] = $salt;
+		$data['password_iterations'] = $iterations;
+		$data['created_on'] = date('Y-m-d H:i:s');
 
 		if ($this->ci->db->insert('users', $data) == false)
 		{

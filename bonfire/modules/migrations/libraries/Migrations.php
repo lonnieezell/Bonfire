@@ -158,7 +158,7 @@ class Migrations
 
 		$this->migrations_enabled = $this->_ci->config->item('migrations_enabled');
 		$this->migrations_path = is_null($migration_path) ? realpath($this->_ci->config->item('migrations_path')) : realpath($migration_path);
-die(var_dump($this->migrations_path));
+
 		// Idiot check
 		$this->migrations_enabled AND $this->migrations_path OR show_error('Migrations has been loaded but is disabled or set up incorrectly.');
 
