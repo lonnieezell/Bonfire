@@ -85,7 +85,7 @@ class Settings extends Admin_Controller
 				$data = array(
 						array('name' => 'sender_email', 'value' => $this->input->post('sender_email')),
 						array('name' => 'mailtype', 'value' => $this->input->post('mailtype')),
-						array('name' => 'protocol', 'value' => strtolower($_POST['protocol'])),
+						array('name' => 'protocol', 'value' => $_POST['protocol']),
 						array('name' => 'mailpath', 'value' => $_POST['mailpath']),
 						array('name' => 'smtp_host', 'value' => isset($_POST['smtp_host']) ? $_POST['smtp_host'] : ''),
 						array('name' => 'smtp_user', 'value' => isset($_POST['smtp_user']) ? $_POST['smtp_user'] : ''),
