@@ -74,24 +74,23 @@ class Developer extends Admin_Controller
 		$hide_form = FALSE;
 
 		// Are we performing an action?
-		if (isset($_POST['action']))
+		if ($this->input->post_key_exists('action']))
 		{
-			// Checked the checked() variable
-			$_POST['checked'] = isset($_POST['checked']) ? $_POST['checked'] : '';
+			$checked = $this->input->post('checked');
 
-			switch($_POST['action'])
+			switch($this->input->post('action'))
 			{
 				case 'backup':
-					$hide_form = $this->backup($_POST['checked']);
+					$hide_form = $this->backup($checked);
 					break;
 				case 'repair':
-					$this->repair($_POST['checked']);
+					$this->repair($checked);
 					break;
 				case 'optimize':
 					$this->optimize();
 					break;
 				case 'drop':
-					$hide_form = $this->drop($_POST['checked']);
+					$hide_form = $this->drop($checked);
 					break;
 			}
 		}
