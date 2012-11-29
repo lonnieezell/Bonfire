@@ -287,7 +287,7 @@ class Install extends CI_Controller {
 			$data->reason = lang('in_db_no_session');
 		}
 		
-		// database info in session? 
+		// account info in session? 
 		if (!$this->session->userdata('user_username'))
 		{
 			$ready = false;
@@ -299,7 +299,7 @@ class Install extends CI_Controller {
 		{
 			if ($this->installer_lib->setup())
 			{
-				$this->session->set_userdate('step3_done', true);
+				$this->session->set_userdata('step3_done', true);
 				$this->session->set_userdata('installed', true);
 				redirect('install/complete');
 			}

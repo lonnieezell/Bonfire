@@ -351,7 +351,7 @@ class Installer_lib {
 		$this->ci->load->library('Migrations', array('migration_path' => str_replace('application', 'bonfire', BFPATH) .'migrations'));
 
 		if (!$this->ci->migrations->install())
-		{ die('yup');
+		{ 
 			$this->errors = $this->ci->migrations->error;
 			return false;
 		}
@@ -395,7 +395,7 @@ class Installer_lib {
 			}
 		}
 
-		// update the emailer serder_email
+		// update the emailer sender_email
 		$setting_rec = array('name' => 'sender_email', 'module' => 'email', 'value' => $this->ci->input->post('email'));
 
 		$this->ci->db->where('name', 'sender_email');
@@ -410,11 +410,11 @@ class Installer_lib {
 		//
 		$data = array(
 			'role_id'	=> 1,
-			'email'		=> $this->ci->input->post('email'),
-			'username'	=> $this->ci->input->post('username'),
+			'email'		=> $this->ci->session->userdata('user_email'),
+			'username'	=> $this->ci->session->userdata('user_username'),
 			'active'    => 1,
 		);
-		list($password, $salt) = $this->hash_password($this->ci->input->post('password'));
+		list($password, $salt) = $this->hash_password($this->ci->session->userdata('user_password'));
 
 		$data['password_hash'] = $password;
 		$data['salt'] = $salt;
