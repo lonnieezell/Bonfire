@@ -38,7 +38,7 @@ if ( ! function_exists('gravatar_link'))
 	 * it will return a link to an image under *your_theme/images/user.png*.
 	 * Also, by explicity omitting email you're denying http-req to gravatar.com.
 	 *
-	 * @param $email string The email address to check for. If null, defaults to theme img.
+	 * @param $email string The email address to check for. If NULL, defaults to theme img.
 	 * @param $size int The width (and height) of the resulting image to grab.
 	 * @param $alt string Alt text to be put in the link tag.
 	 * @param $title string The title text to be put in the link tag.
@@ -47,7 +47,7 @@ if ( ! function_exists('gravatar_link'))
 	 *
 	 * @return string The resulting image tag.
 	 */
-	function gravatar_link($email=null, $size=48, $alt='', $title='', $class=' ', $id=' ')
+	function gravatar_link($email=NULL, $size=48, $alt='', $title='', $class=NULL, $id=NULL)
 	{
 		// Set our default image based on required size.
 		$default_image = Template::theme_url('images/user.png');
@@ -82,9 +82,13 @@ if ( ! function_exists('gravatar_link'))
 			$avatarURL = $default_image ;
 		}
 
-		//$id = ( $id != '' ) ? ' id="' . $id . '" ' : '';
+		$alt = html_escape($alt);
+		$title = html_escape($title);
+		
+		$id = ($id !== NULL) ? ' id="' .$id .'" ' : ' ';
+		$class = ($class !== NULL) ? ' class="' .$class .'"' : ' ';
 
-		return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" class="'. $class .'" id="'. $id .'" />';
+		return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" ' . $class . $id. ' />';
 	}
 }
 
@@ -430,13 +434,51 @@ if (!function_exists('e'))
 		Function: e()
 
 		A convenience function to make sure your output is safe to display.
-		Helps to defeat XSS attacks by running the text through htmlentities().
+		Helps to defeat XSS attacks by running the text through htmlspecialchars().
 
 		Should be used anywhere you are displaying user-submitted text.
 	*/
 	function e($str)
 	{
-		echo htmlentities($str, ENT_QUOTES, 'UTF-8');
+		echo htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
+	}
+}
+
+//--------------------------------------------------------------------
+
+if (!function_exists('js_escape'))
+{
+	/*
+		Function: js_escape()
+
+		Like html_escape() for javascript string literals.
+
+		Inside attributes like onclick, you need to use
+		html_escape() *as well*.  Inside script tags,
+		html_excape() would do the wrong thing, and
+		js_escape is enough on it's own.
+
+		Useful for confirm() or alert() - but of course not
+		document.write() or similar, so take care.
+	*/
+
+	function js_escape($str)
+	{
+		/*
+		$escape =
+			// Obvious string literal escapes:
+			'\'' . "\"" . "\\" .
+
+			// Newlines could also break the literal;
+			// escape all the C0 controls including \r\n
+			"\0..\037" .
+
+			// Escape </script> - n.b. '<' alone wouldn't work.
+			// This works for HTML - XHTML would need much more here.
+			"\/";
+		*/
+
+		return addcslashes($str, "\"'\\\0..\037\/");
 	}
 }
 

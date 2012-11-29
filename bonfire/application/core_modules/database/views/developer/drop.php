@@ -4,7 +4,7 @@
 
 	<?php if (isset($tables) && is_array($tables) && count($tables) > 0) : ?>
 		<?php foreach ($tables as $table) : ?>
-			<input type="hidden" name="tables[]" value="<?php echo $table ?>" />
+			<input type="hidden" name="tables[]" value="<?php e($table) ?>" />
 		<?php endforeach; ?>
 
 
@@ -12,7 +12,7 @@
 
 		<ul>
 		<?php foreach($tables as $file) : ?>
-			<li><?php echo $file ?></li>
+			<li><?php e($file) ?></li>
 		<?php endforeach; ?>
 		</ul>
 
@@ -21,7 +21,7 @@
 		</div>
 
 		<div class="actions">
-			<button type="submit" name="submit" class="btn btn-danger"><?php echo lang('bf_action_delete'); ?> <?php echo lang('db_tables'); ?></button> <?php echo lang('bf_or'); ?>
+			<button type="submit" name="drop" class="btn btn-danger"><?php echo lang('bf_action_delete'); ?> <?php echo lang('db_tables'); ?></button> <?php echo lang('bf_or'); ?>
 			<a href="/admin/database"><?php echo lang('bf_action_cancel'); ?></a>
 		</div>
 

@@ -52,6 +52,24 @@ class Emailer
 
 
 	/**
+	 * Extra information about the running of the script and the sending of an immediate email.
+	 *
+	 * @access public
+	 *
+	 * @var string
+	 */
+	public $debug_message = '';
+
+	/**
+	 * Whether to set $debug_message.
+	 *
+	 * @access private
+	 *
+	 * @var bool
+	 */
+	private $debug = FALSE;
+
+	/**
 	 * An array of errors generated during the course of the script running.
 	 *
 	 * @access public
@@ -60,16 +78,6 @@ class Emailer
 	 */
 	public $errors = array();
 
-
-	/**
-	 * A private variable for reporting extra information about the
-	 * running of the script and the sending of immediate emails.
-	 *
-	 * @access private
-	 *
-	 * @var bool
-	 */
-	private $debug = FALSE;
 
 	/**
 	 * A pointer to the CodeIgniter instance.
@@ -111,15 +119,15 @@ class Emailer
 	 * @access public
 	 *
 	 * @param array $data           An array of required information need to send the email.
-	 * @param bool  $queue_override If TRUE, will queue the email, no matter what the default setting is.
+	 * @param bool  $queue_override (optional) Overrides the value of $queue_emails.
 	 *
 	 * @return bool TRUE/FALSE	Whether the operation was successful or not.
 	 */
-	public function send($data=array(), $queue_override=FALSE)
+	public function send($data=array(), $queue_override=null)
 	{
 		// Make sure we have the information we need.
 		$to = isset($data['to']) ? $data['to'] : FALSE;
-		$from = $this->ci->settings_lib->item('sender_email');
+		$from = settings_item('sender_email');
 		$subject = isset($data['subject']) ? $data['subject'] : FALSE;
 		$message = isset($data['message']) ? $data['message'] : FALSE;
 		$alt_message = isset($data['alt_message']) ? $data['alt_message'] : FALSE;
@@ -132,7 +140,7 @@ class Emailer
 		}
 
 		// Wrap the $message in the email template.
-		$mailtype = $this->ci->settings_lib->item('mailtype');
+		$mailtype = settings_item('mailtype');
 		$templated = $message;
 		if ($mailtype == 'html')
 		{
@@ -142,7 +150,7 @@ class Emailer
 		}
 
 		// Should we put it in the queue?
-		if ($queue_override == TRUE || $this->queue_emails == TRUE)
+		if ($queue_override === TRUE || ($queue_override !== FALSE && $this->queue_emails == TRUE))
 		{
 			return $this->queue_email($to, $from, $subject, $templated, $alt_message);
 		}
@@ -169,7 +177,7 @@ class Emailer
 	 *
 	 * @return bool TRUE/FALSE	Whether it was successful or not.
 	 */
-	private function queue_email(&$to=null, &$from, &$subject=null, &$message=null, &$alt_message=FALSE)
+	private function queue_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE)
 	{
 		$this->ci->db->set('to_email', $to);
 		$this->ci->db->set('subject', $subject);
@@ -180,14 +188,11 @@ class Emailer
 			$this->ci->db->set('alt_message', $alt_message);
 		}
 
-		$result['success'] = $this->ci->db->insert('email_queue');
-
 		if ($this->debug)
 		{
-			$result['debug'] = lang('em_no_debug');
+			$this->debug_message = lang('em_no_debug');
 		}
-
-		return $result;
+		return $this->ci->db->insert('email_queue');
 
 	}//end queue_email
 
@@ -206,7 +211,7 @@ class Emailer
 	 *
 	 * @return bool TRUE/FALSE	Whether it was successful or not.
 	 */
-	private function send_email(&$to=null, &$from=null, &$subject=null, &$message=null, &$alt_message=FALSE)
+	private function send_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE)
 	{
 		$this->ci->load->library('email');
 		$this->ci->load->model('settings/settings_model', 'settings_model');
@@ -214,7 +219,7 @@ class Emailer
 
 		$this->ci->email->set_newline("\r\n");
 		$this->ci->email->to($to);
-		$this->ci->email->from($from, $this->ci->settings_lib->item('site.title'));
+		$this->ci->email->from($from, settings_item('site.title'));
 		$this->ci->email->subject($subject);
 		$this->ci->email->message($message);
 
@@ -228,16 +233,16 @@ class Emailer
 				$this->ci->load->helper('file');
 			}
 			write_file($this->ci->config->item('log_path').str_replace(" ","_",strtolower($subject)).substr(md5($to.time()),0,8).".html",$message);
-			$result['success'] = TRUE;
+			$result = TRUE;
 		}
 		else
 		{
-			$result['success'] = $this->ci->email->send();
+			$result = $this->ci->email->send();
 		}
 
 		if ($this->debug)
 		{
-			$result['debug'] = $this->ci->email->print_debugger();
+			$this->debug_message = $this->ci->email->print_debugger();
 		}
 
 		return $result;
@@ -261,10 +266,12 @@ class Emailer
 	 */
 	public function process_queue($limit=33)
 	{
+		$success = TRUE;
+
 		//$limit = 33; // 33 emails every 5 minutes = 400 emails/hour.
 		$this->ci->load->library('email');
 
-		$this->ci->email->initialize($this->config);
+		$config_settings = $this->ci->settings_model->select('name,value')->find_all_by('module', 'email');
 
 		// Grab records where success = 0
 		$this->ci->db->limit($limit);
@@ -285,8 +292,9 @@ class Emailer
 			echo '.';
 
 			$this->ci->email->clear();
+			$this->ci->email->initialize($config_settings);
 
-			$this->ci->email->from($this->ci->settings_lib->item('sender_email'), $this->ci->settings_lib->item('site.title'));
+			$this->ci->email->from(settings_item('sender_email'), settings_item('site.title'));
 			$this->ci->email->to($email->to_email);
 
 			$this->ci->email->subject($email->subject);
@@ -312,31 +320,31 @@ class Emailer
 				$sql = "UPDATE {$prefix}email_queue SET attempts = attempts+1, last_attempt=NOW() WHERE id=". $email->id;
 				$this->ci->db->query($sql);
 
-				if (class_exists('CI_Session'))
+				if ($this->debug)
 				{
-					$result = $this->ci->email->print_debugger();
-					$this->ci->session->set_userdata('email_debug', $result);
+					$this->debug_message = $this->ci->email->print_debugger();
 				}
 
+				$success = FALSE;
 			}
 		}//end foreach
 
-		return TRUE;
+		return $success;
 
 	}//end process_queue()
 
 	//--------------------------------------------------------------------
 
 	/**
-	 * Tells the emailer lib to show or hide the debugger string.
+	 * Tells the emailer lib whether to generate debugging messages.
 	 *
 	 * @access public
 	 *
-	 * @param bool $show_debug TRUE/FALSE - enable/disable debugging messages
+	 * @param bool $enable_debug TRUE/FALSE - enable/disable debugging messages
 	 */
-	public function enable_debug($show_debug=FALSE)
+	public function enable_debug($enable_debug)
 	{
-		$this->debug = $show_debug;
+		$this->debug = $enable_debug;
 
 	}//end enable_debug()
 
@@ -345,11 +353,11 @@ class Emailer
 	/**
 	 * Specifies whether to queue emails in the send() method.
 	 *
-	 * @param bool $queue Do NOT queue emails. Instead, send them directly. Default FALSE
+	 * @param bool $queue Queue emails instead of sending them directly.
 	 *
 	 * @return void
 	 */
-	public function queue_emails($queue=FALSE)
+	public function queue_emails($queue)
 	{
 		if ($queue !== TRUE && $queue !== FALSE)
 		{

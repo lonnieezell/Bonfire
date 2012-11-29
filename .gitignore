@@ -7,6 +7,7 @@ Icon?
 *.bak
 *.tmproj
 *.tmproject
+*~
 
 # IDEs project files/settings
 nbproject/

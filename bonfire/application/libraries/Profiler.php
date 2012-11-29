@@ -48,8 +48,8 @@ class CI_Profiler {
 										'console',
 										'userdata'
 										);
-	protected $_sections = array();		// Stores _compile_x() results 
-	
+	protected $_sections = array();		// Stores _compile_x() results
+
 	protected $_time_format = 'ms';		// Benchmark time format for display - either 'sec' or 'ms'.
 
 	// --------------------------------------------------------------------
@@ -67,7 +67,7 @@ class CI_Profiler {
 				$this->_compile_{$section} = TRUE;
 			}
 		}
-		
+
 		// Make sure the Console is loaded.
 		if (!class_exists('Console'))
 		{
@@ -114,7 +114,7 @@ class CI_Profiler {
 	{
 		$profile = array();
 		$output = array();
-		
+
 		foreach ($this->CI->benchmark->marker as $key => $val)
 		{
 			// We match the "end" marker so that the list ends
@@ -124,12 +124,12 @@ class CI_Profiler {
 				if (isset($this->CI->benchmark->marker[$match[1].'_end']) AND isset($this->CI->benchmark->marker[$match[1].'_start']))
 				{
 					$time = $this->CI->benchmark->elapsed_time($match[1].'_start', $key);
-				
+
 					if ($this->_time_format == 'ms')
 					{
 						$time = round($time * 1000) .' ms';
 					}
-				
+
 					$profile[$match[1]] = $time;
 				}
 			}
@@ -172,7 +172,7 @@ class CI_Profiler {
 		{
 			return $this->CI->lang->line('profiler_no_db');
 		}
-		
+
 				$highlight = array('SELECT', 'DISTINCT', 'FROM', 'WHERE', 'AND', 'LEFT&nbsp;JOIN', 'ORDER&nbsp;BY', 'GROUP&nbsp;BY', 'LIMIT', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'OR&nbsp;', 'HAVING', 'OFFSET', 'NOT&nbsp;IN', ' IN', 'LIKE', 'NOT&nbsp;LIKE', 'COUNT', 'MAX', 'MIN', ' ON', 'AS', 'AVG', 'SUM', '(', ')');
 
 		foreach ($dbs as $db)
@@ -185,34 +185,34 @@ class CI_Profiler {
 			{
 				$total = 0; // total query time
 				$counts = array_count_values($db->queries);
-				
+
 				foreach ($db->queries as $key => $val)
 				{
 					$duplicate = false;
-				
+
 					$time = number_format($db->query_times[$key], 4);
-					
+
 					$query = $duplicate ? '<span class="ci-profiler-duplicate">'. $val .'</span>' : $val;
-					
+
 					$explain = strpos($val, 'SELECT') !== false ? $this->CI->db->query('EXPLAIN '. $val) : NULL;
 					if (!is_null($explain))
 					{
 						$query .= $this->build_sql_explain($explain->row(), $time);
 					}
-					
+
 					$total += $db->query_times[$key];
-					
+
 					foreach ($highlight as $bold)
 					{
 						$query = str_replace($bold, '<b>'. $bold .'</b>', $query);
 					}
-					
+
 					$output[] = array(
 						'query' => $query,
 						'time'	=> $time
 					);
 				}
-				
+
 				$total = number_format($total, 4);
 				$output[][$total] = 'Total Query Execution Time';
 			}
@@ -225,24 +225,24 @@ class CI_Profiler {
 
 	// --------------------------------------------------------------------
 
-	public function build_sql_explain($data, $time) 
+	public function build_sql_explain($data, $time)
 	{
 		$output = '<span class="ci-profiler-db-explain">';
-		
+
 		$output .= 'Speed: <em>'. $time .'</em>';
-		$output .= ' - Possible keys: <em>'. $data->possible_keys .'</em>';
-		$output .= ' - Key Used: <em>'. $data->key .'</em>';
-		$output .= ' - Type: <em>'. $data->type .'</em>';
-		$output .= ' - Rows: <em>'. $data->rows .'</em>';
-		$output .= ' - Extra: <em>'. $data->Extra .'</em>';
-		
+		$output .= ' - Possible keys: <em>'. htmlentities($data->possible_keys,ENT_QUOTES, 'UTF-8') .'</em>';
+		$output .= ' - Key Used: <em>'. htmlentities($data->key,ENT_QUOTES, 'UTF-8') .'</em>';
+		$output .= ' - Type: <em>'. htmlentities($data->type,ENT_QUOTES, 'UTF-8') .'</em>';
+		$output .= ' - Rows: <em>'. htmlentities($data->rows,ENT_QUOTES, 'UTF-8') .'</em>';
+		$output .= ' - Extra: <em>'. htmlentities($data->Extra,ENT_QUOTES, 'UTF-8') .'</em>';
+
 		$output .= '</span>';
-		
+
 		return $output;
 	}
-	
+
 	//--------------------------------------------------------------------
-	
+
 
 	/**
 	 * Compile $_GET Data
@@ -252,7 +252,7 @@ class CI_Profiler {
 	protected function _compile_get()
 	{
 		$output = array();
-			
+
 		if (count($_GET) == 0)
 		{
 			$output = $this->CI->lang->line('profiler_no_get');
@@ -266,7 +266,7 @@ class CI_Profiler {
 					$key = "'".$key."'";
 				}
 
-				$output .= "<tr><td style='width:50%;color:#000;background-color:#ddd;padding:5px'>&#36;_GET[".$key."]&nbsp;&nbsp; </td><td style='width:50%;padding:5px;color:#cd6e00;font-weight:normal;background-color:#ddd;'>";
+				//$output .= "<tr><td style='width:50%;color:#000;background-color:#ddd;padding:5px'>&#36;_GET[".$key."]&nbsp;&nbsp; </td><td style='width:50%;padding:5px;color:#cd6e00;font-weight:normal;background-color:#ddd;'>";
 				if (is_array($val))
 				{
 					$output['&#36;_GET['. $key .']'] = "<pre>" . htmlspecialchars(stripslashes(print_r($val, true))) . "</pre>";
@@ -291,7 +291,7 @@ class CI_Profiler {
 	protected function _compile_post()
 	{
 		$output = array();
-	
+
 		if (count($_POST) == 0)
 		{
 			$output = $this->CI->lang->line('profiler_no_post');
@@ -427,52 +427,52 @@ class CI_Profiler {
 
 	// --------------------------------------------------------------------
 
-	public function _compile_files() 
+	public function _compile_files()
 	{
 		$files = get_included_files();
-		
+
 		sort($files);
-		
+
 		return $files;
 	}
-	
+
 	//--------------------------------------------------------------------
-	
-	public function _compile_console() 
+
+	public function _compile_console()
 	{
 		$logs = Console::get_logs();
-		
-		if ($logs['console']) 
+
+		if ($logs['console'])
 		{
-			foreach ($logs['console'] as $key => $log) 
+			foreach ($logs['console'] as $key => $log)
 			{
-				if ($log['type'] == 'log') 
+				if ($log['type'] == 'log')
 				{
 					$logs['console'][$key]['data'] = print_r($log['data'], true);
 				}
-				elseif ($log['type'] == 'memory') 
+				elseif ($log['type'] == 'memory')
 				{
 					$logs['console'][$key]['data'] = $this->get_file_size($log['data']);
 				}
 			}
 		}
-		
+
 		return $logs;
 	}
-	
+
 	//--------------------------------------------------------------------
-	
+
 	function _compile_userdata()
 	{
 		$output = array();
-	
-		if (FALSE !== $this->CI->load->is_loaded('session')) 
+
+		if (FALSE !== $this->CI->load->is_loaded('session'))
 		{
-		
+
 			$compiled_userdata = $this->CI->session->all_userdata();
 
 			if (count($compiled_userdata))
-			{		
+			{
 				foreach ($compiled_userdata as $key => $val)
 				{
 					if (is_numeric($key))
@@ -491,12 +491,12 @@ class CI_Profiler {
 				}
 			}
 		}
-		
+
 		return $output;
 	}
-	
+
 	//--------------------------------------------------------------------
-	
+
 	public static function get_file_size($size, $retstring = null) {
         // adapted from code at http://aidanlister.com/repos/v/function.size_readable.php
 	    $sizes = array('bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
@@ -509,11 +509,11 @@ class CI_Profiler {
 	       	if ($size < 1024) { break; }
 	           if ($sizestring != $lastsizestring) { $size /= 1024; }
 		}
-		
+
 		if ($sizestring == $sizes[0]) { $retstring = '%01d %s'; } // Bytes aren't normally fractional
 		return sprintf($retstring, $size, $sizestring);
 	}
-	
+
 	//--------------------------------------------------------------------
 
 	/**
@@ -524,7 +524,7 @@ class CI_Profiler {
 	public function run()
 	{
 		$this->CI->load->helper('language');
-	
+
 		$fields_displayed = 0;
 
 		foreach ($this->_available_sections as $section)
@@ -534,7 +534,7 @@ class CI_Profiler {
 				$func = "_compile_{$section}";
 				if ($section == 'http_headers') $section = 'headers';
 				$this->_sections[$section] = $this->{$func}();
-				$fields_displayed++;				
+				$fields_displayed++;
 			}
 		}
 
@@ -550,14 +550,14 @@ class CI_Profiler {
 			$this->CI->load->_ci_view_path = BASEPATH .'views/';
 
 			$output = $this->CI->load->_ci_load(array(
-					'_ci_view' 		=> 'profiler_template', 
-					'_ci_vars' 		=> array('sections' => $this->_sections, 'cip_time_format' => $this->_time_format), 
+					'_ci_view' 		=> 'profiler_template',
+					'_ci_vars' 		=> array('sections' => $this->_sections, 'cip_time_format' => $this->_time_format),
 					'_ci_return'	=> true,
 			));
-		
+
 			$this->CI->load->_ci_view_path = $orig_view_path;
 		}
-		
+
 		return $output;
 	}
 

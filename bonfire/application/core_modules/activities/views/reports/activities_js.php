@@ -1,27 +1,34 @@
-function verify_delete(whom, action) {
+function confirm_delete(event) {
+	var action = event.target.id.replace('delete-', '');
+
+	var which = $('#'+action+'_select option:selected').text();
+
 	var date_for = 'for';
 	if (action.indexOf('date') != -1) date_for = 'before';
 
-    var verify = confirm('Are you sure you wish to delete the activity logs '+date_for+' "'+whom+'"?')
-
-    if (verify) {
-        var url = '<?php echo site_url(SITE_AREA .'/reports/activities/delete/') ?>/'+ action;
-        window.location.href = url
-    }
-
-    return false;
+	return confirm('Are you sure you wish to delete the activity logs '+date_for+' "'+which+'"?')
 }
+$('.btn').filter('[id^="delete-"][type="submit"]').click(confirm_delete);
 
-$('.btn').filter('[id^="delete-"]').click( function(event) {
-	var which = $(this).attr('id').replace('delete-', '');
-	var whom = $('#'+which+'_select option:selected').text();
-	var action = which + '/' + $('#'+which+'_select option:selected').val();
+/*
+For a button which has been placed outside the form
+(due to limitations in supported CSS).
 
-	event.stopImmediatePropagation();
-	event.preventDefault();
-	verify_delete(whom,action);
-});
+No attempt is made to distinguish the submission from
+e.g. a real submit button on the form.
+That would probably be acheived by DOM manipulation,
+but it wouldn't be safe, because some browser's history
+mechanisms (quite understandably) preserve the DOM.
+*/
+function submit_delete(event) {
+	var action = event.target.id.replace('delete-', '');
 
+	if (confirm_delete(event)) {
+		var form = $('#'+action+'_form');
+		form.submit()
+	}
+}
+$('.btn').filter('[id^="delete-"][type="button"]').click(submit_delete);
 
 $("#flex_table").dataTable({
 		"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",

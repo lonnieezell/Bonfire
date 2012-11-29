@@ -1,0 +1,28 @@
+# For anything we don't specify, git will guess whether to normalize
+# line endings.  You already rely on it guessing when it shows diffs
+# (and you look at diffs when you commit, right?)
+* text=auto
+
+# diff will parse PHP instead of C, and tell us which function we're in
+*.php diff=php
+
+# These should always be text files
+*.php           text
+*.css           text
+*.js            text
+*.htaccess      text
+*.html          text
+*.markdown      text
+*.txt           text
+
+# Avoid unreadable diffs for generated text files
+# (e.g. minified JS)
+*.min.* binary
+
+# These should always be binaries
+*.ico   binary
+*.gif   binary
+*.png   binary
+*.jpg   binary
+*.ttf   binary
+*.psd   binary

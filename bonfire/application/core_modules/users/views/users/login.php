@@ -6,26 +6,14 @@
 		<h1><?php echo lang('us_login'); ?></h1>
 	</div>
 
-
-
-<?php if ( !$site_open ) : ?>
-<div class="row-fluid">
-	<div class="span12">
-		<div class="alert alert-danger fade in span6" >
-		  <a data-dismiss="alert" class="close">&times;</a>
-			<h4 class="alert-heading">Sorry this is invite only site.</h4>
-		</div>
-	</div>
-</div>
 <?php
-	endif;
-	if (auth_errors() || validation_errors()) :
+	if (validation_errors()) :
 ?>
 <div class="row-fluid">
 	<div class="span12">
 		<div class="alert alert-error fade in">
 		  <a data-dismiss="alert" class="close">&times;</a>
-			<?php echo auth_errors() . validation_errors(); ?>
+			<?php echo validation_errors(); ?>
 		</div>
 	</div>
 </div>
@@ -52,9 +40,8 @@
 
 	<?php if ($this->settings_lib->item('auth.allow_remember')) : ?>
 		<div class="control-group">
-			<label class="control-label" for="remember_me">&nbsp;</label>
 			<div class="controls">
-				<label class="checkbox">
+				<label class="checkbox" for="remember_me">
 					<input type="checkbox" name="remember_me" id="remember_me" value="1" tabindex="3" />
 					<span class="inline-help"><?php echo lang('us_remember_note'); ?></span>
 				</label>
@@ -63,9 +50,8 @@
 	<?php endif; ?>
 
 	<div class="control-group">
-		<label class="control-label" for="submit">&nbsp;</label>
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="Let Me In" tabindex="5" />
+			<input class="btn btn-primary" type="submit" name="log-me-in" id="submit" value="Let Me In" tabindex="5" />
 		</div>
 	</div>
 <?php echo form_close(); ?>

@@ -23,14 +23,14 @@
 					<?php echo lang('bf_with_selected'); ?>:
 
 					<select name="action" class="span2" style="margin-bottom:0; ">
-						<option><?php echo lang('db_backup'); ?></option>
-						<option><?php echo lang('db_repair'); ?></option>
-						<option><?php echo lang('db_optimize'); ?></option>
+						<option value="backup"><?php echo lang('db_backup'); ?></option>
+						<option value="repair"><?php echo lang('db_repair'); ?></option>
+						<option value="optimize"><?php echo lang('db_optimize'); ?></option>
 						<option>------</option>
-						<option><?php echo lang('db_drop'); ?></option>
+						<option value="drop"><?php echo lang('db_drop'); ?></option>
 					</select>
 					&nbsp;&nbsp;
-					<input type="submit" name="submit" value="<?php echo lang('db_apply')?>" class="btn btn-primary" />
+					<input type="submit" value="<?php echo lang('db_apply')?>" class="btn btn-primary" />
 				</td>
 			</tr>
 		</tfoot>
@@ -38,11 +38,11 @@
 		<?php foreach ($tables as $table) : ?>
 			<tr>
 				<td class="column-check">
-					<input type="checkbox" value="<?php echo $table->Name ?>" name="checked[]" />
+					<input type="checkbox" value="<?php e($table->Name) ?>" name="checked[]" />
 				</td>
 				<td>
-					<a href="<?php echo site_url(SITE_AREA .'/developer/database/browse/'. $table->Name) ?>">
-						<?php echo $table->Name ?>
+					<a href="<?php e(site_url(SITE_AREA .'/developer/database/browse/'. $table->Name)) ?>">
+						<?php e($table->Name) ?>
 					</a>
 				</td>
 				<td style="text-align: center"><?php echo $table->Rows?></td>

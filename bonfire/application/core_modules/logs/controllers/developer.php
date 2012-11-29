@@ -67,26 +67,38 @@ class Developer extends Admin_Controller
 		$this->load->helper('file');
 
 		// Are we doing bulk actions?
-		if ($action = $this->input->post('submit'))
+		if ($this->input->post_key_exists('delete'))
 		{
-			if ($action == lang('bf_action_delete') && has_permission('Bonfire.Logs.Manage'))
+			$this->auth->restrict('Bonfire.Logs.Manage');
+		
+			$checked = $this->input->post('checked');
+
+			if (is_array($checked) && count($checked))
 			{
-				$checked = $this->input->post('checked');
-
-				if (is_array($checked) && count($checked))
-				{					
-
-					foreach ($checked as $file)
-					{
-						@unlink($this->config->item('log_path') . $file);
-						$activity_text = 'log file '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));
-						$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
-					}
-
-					Template::set_message(count($checked) .' '. lang('log_deleted'), 'success');
+				foreach ($checked as $file)
+				{
+					@unlink($this->config->item('log_path') . $file);
+					$activity_text = 'log file '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));
+					$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
 				}
+
+				Template::set_message(sprintf(lang('log_deleted'), count($checked)), 'success');
 			}
-		}//end if
+		}
+		elseif ($this->input->post_key_exists('delete_all'))
+		{
+			$this->auth->restrict('Bonfire.Logs.Manage');
+		
+			delete_files($this->config->item('log_path'));
+			// restore the index.html file
+			@copy(APPPATH.'/index.html',$this->config->item('log_path').'/index.html');
+
+			// Log the activity
+			$activity_text = "all log files";
+			$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
+
+			Template::set_message("Successfully deleted " . $activity_text, 'success');
+		}
 
 		// Load the Log Files
 		$logs = array_reverse(get_filenames($this->config->item('log_path')));
@@ -114,7 +126,7 @@ class Developer extends Admin_Controller
 	//--------------------------------------------------------------------
 
 	/**
-	 * Disaply the page which lets the user choose the logging threshold.
+	 * Display the page which lets the user choose the logging threshold.
 	 *
 	 * @access public
 	 *
@@ -143,7 +155,7 @@ class Developer extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Logs.Manage');
 
-		if ($this->input->post('submit'))
+		if ($this->input->post_key_exists('save'))
 		{
 			$this->load->helper('config_file');
 
@@ -186,7 +198,7 @@ class Developer extends Admin_Controller
 		if (empty($file))
 		{
 			Template::set_message('No log file provided.', 'error');
-			Template::redirect(SITE_AREA .'/developer/logs');
+			redirect(SITE_AREA .'/developer/logs');
 		}
 
 		Assets::add_module_js('logs', 'logs');
@@ -197,46 +209,6 @@ class Developer extends Admin_Controller
 		Template::render();
 
 	}//end view()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Deletes all existing log files.
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function purge()
-	{
-		$this->auth->restrict('Bonfire.Logs.Manage');
-
-		$this->load->helper('file');
-
-		$file = $this->uri->segment(5);
-
-		if ($file)
-		{
-			@unlink($this->config->item('log_path') . $file);
-			$activity_text = 'log file '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));
-		}
-		else
-		{
-			delete_files($this->config->item('log_path'));
-			$activity_text = "all log files";
-			// restore the index.html file
-			@copy(APPPATH.'/index.html',$this->config->item('log_path').'/index.html');
-		}
-
-		// since the $activity_text is being repurposed here, lowercase the first letter of the sentence to fit this sentence
-		Template::set_message("Successfully purged " . $activity_text,'success');
-
-		// Log the activity
-		$this->activity_model->log_activity( intval ($this->current_user->id ), ucfirst($activity_text) . ' purged from: ' . $this->input->ip_address(), 'logs');
-
-		redirect(SITE_AREA .'/developer/logs');
-
-	}//end purge()
 
 	//--------------------------------------------------------------------
 

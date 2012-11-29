@@ -49,6 +49,7 @@ class Settings extends Admin_Controller
 		$this->lang->load('roles');
 
 		Assets::add_module_css('roles', 'css/settings.css');
+		Assets::add_js('codeigniter-csrf.js');
 		Assets::add_module_js('roles', 'jquery.tablehover.pack.js');
 		Assets::add_module_js('roles', 'js/settings.js');
 
@@ -95,12 +96,12 @@ class Settings extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Roles.Add');
 
-		if ($this->input->post('submit'))
+		if ($this->input->post_key_exists('save'))
 		{
 			if ($this->save_role())
 			{
 				Template::set_message('Role successfully created.', 'success');
-				Template::redirect(SITE_AREA .'/settings/roles');
+				redirect(SITE_AREA .'/settings/roles');
 			}
 			else
 			{
@@ -137,17 +138,28 @@ class Settings extends Admin_Controller
 			redirect(SITE_AREA .'/settings/roles');
 		}
 
-		if ($this->input->post('submit'))
+		if ($this->input->post_key_exists('save'))
 		{
 			if ($this->save_role('update', $id))
 			{
 				Template::set_message('Role successfully saved.', 'success');
-				// redirect to update the sidebar which will show old name otherwise.
-				Template::redirect(SITE_AREA .'/settings/roles');
+				redirect(SITE_AREA .'/settings/roles');
 			}
 			else
 			{
 				Template::set_message('There was a problem saving the role: '. $this->role_model->error);
+			}
+		}
+		elseif ($this->input->post_key_exists('delete'))
+		{
+			if ($this->role_model->delete($id))
+			{
+				Template::set_message('The Role was successfully deleted.', 'success');
+				redirect(SITE_AREA .'/settings/roles');
+			}
+			else
+			{
+				Template::set_message('We could not delete the role: '. $this->role_model->error, 'error');
 			}
 		}
 
@@ -161,42 +173,13 @@ class Settings extends Admin_Controller
 	}//end edit()
 
 	//--------------------------------------------------------------------
-
-	/**
-	 * Delete a role record from the database
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function delete()
-	{
-		$this->auth->restrict('Bonfire.Roles.Manage');
-
-		$id = (int) $this->uri->segment(5);
-
-		if (!empty($id))
-		{
-			if ($this->role_model->delete($id))
-			{
-				Template::set_message('The Role was successfully deleted.', 'success');
-			}
-			else
-			{
-				Template::set_message('We could not delete the role: '. $this->role_model->error, 'error');
-			}
-		}
-
-		redirect(SITE_AREA .'/settings/roles');
-
-	}//end delete()
-
+	// !HMVC METHODS
 	//--------------------------------------------------------------------
 
 	/**
 	 * Builds the matrix for display in the role permissions form.
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @return string The table(s) of settings, ready to be used in a form.
 	 */
@@ -288,57 +271,31 @@ class Settings extends Admin_Controller
 	//--------------------------------------------------------------------
 
 	/**
-	 * Callback function to check that the email address entered is unique
-	 *
-	 * @access public
-	 * @todo   Is this used here?
-	 *
-	 * @param string $str The email address
-	 *
-	 * @return bool
-	 */
-	public function unique_email($str)
-	{
-		if ($this->user_model->is_unique('email', $str))
-		{
-			return TRUE;
-		}
-		else
-		{
-			$this->form_validation->set_message('unique_email', 'The %s address is already in use. Please choose another.');
-			return FALSE;
-		}
-
-	}//end unique_email()
-
-	//--------------------------------------------------------------------
-
-	/**
 	 * Saves the role record to the database
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @param string $type The type of save operation (insert or edit)
 	 * @param int    $id   The record ID in the case of edit
 	 *
 	 * @return bool
 	 */
-	public function save_role($type='insert', $id=0)
+	private function save_role($type='insert', $id=0)
 	{
 		if ($type == 'insert')
 		{
-			$this->form_validation->set_rules('role_name', 'lang:role_name', 'required|trim|strip_tags|unique[roles.role_name]|max_length[60]|xss_clean');
+			$this->form_validation->set_rules('role_name', 'lang:role_name', 'required|trim|unique[roles.role_name]|max_length[60]');
 		}
 		else
 		{
-			$this->form_validation->set_rules('role_name', 'lang:role_name', 'required|trim|strip_tags|unique[roles.role_name,roles.role_id]|max_length[60]|xss_clean');
+			$this->form_validation->set_rules('role_name', 'lang:role_name', 'required|trim|unique[roles.role_name,roles.role_id]|max_length[60]');
 		}
 
-		$this->form_validation->set_rules('description', 'lang:bf_description', 'trim|strip_tags|max_length[255]|xss_clean');
-		$this->form_validation->set_rules('login_destination', 'lang:role_login_destination', 'trim|strip_tags|max_length[255]|xss_clean');
-        $this->form_validation->set_rules('default_context', 'lang:role_default_context', 'trim|strip_tags|xss_clean');
-        $this->form_validation->set_rules('default', 'lang:role_default_role', 'trim|strip_tags|is_numeric|max_length[1]|xss_clean');
-		$this->form_validation->set_rules('can_delete', 'lang:role_can_delete_role', 'trim|strip_tags|is_numeric|max_length[1]|xss_clean');
+		$this->form_validation->set_rules('description', 'lang:bf_description', 'trim|max_length[255]');
+		$this->form_validation->set_rules('login_destination', 'lang:role_login_destination', 'trim|max_length[255]');
+        $this->form_validation->set_rules('default_context', 'lang:role_default_context', 'trim');
+        $this->form_validation->set_rules('default', 'lang:role_default_role', 'trim|is_numeric|max_length[1]');
+		$this->form_validation->set_rules('can_delete', 'lang:role_can_delete_role', 'trim|is_numeric|max_length[1]');
 
 		$_POST['role_id'] = $id;
 
@@ -347,13 +304,12 @@ class Settings extends Admin_Controller
 			return FALSE;
 		}
 
+		unset($_POST['save']);
+
 		// Grab our permissions out of the POST vars, if it's there.
 		// We'll need it later.
 		$permissions = $this->input->post('role_permissions');
 		unset($_POST['role_permissions']);
-
-		// grab the current role model name
-		$current_name = $this->role_model->find($id);
 
 		if ($type == 'insert')
 		{
@@ -382,10 +338,9 @@ class Settings extends Admin_Controller
 			);
 
 			if ( $this->permission_model->insert($add_perm) ) {
-				$prefix = $this->db->dbprefix;
 				// give current_role, or admin fallback, access to manage new role ACL
 				$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
-				$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(".$assign_role.",".$this->db->insert_id().")");
+				$this->db->insert('role_permissions', array('role_id' => $assign_role, 'permission_id' => $this->db->insert_id()));
 			}
 			else
 			{
@@ -394,9 +349,12 @@ class Settings extends Admin_Controller
 		}
 		else
 		{
+			// grab the current role model name
+			$current_name = $this->role_model->find($id)->role_name;
+
 			// update the permission name (did it this way for brevity on the update_where line)
 			$new_perm_name = 'Permissions.'.ucwords($this->input->post('role_name')).'.Manage';
-			$old_perm_name = 'Permissions.'.ucwords($current_name->role_name).'.Manage';
+			$old_perm_name = 'Permissions.'.ucwords($current_name).'.Manage';
 			$this->permission_model->update_where('name',$old_perm_name,array('name'=>$new_perm_name));
 		}
 
@@ -414,32 +372,6 @@ class Settings extends Admin_Controller
 	//--------------------------------------------------------------------
 
 	/**
-	 * Callback function to check that the role name is unique
-	 *
-	 * @access public
-	 *
-	 * @param string $str The role name
-	 *
-	 * @return bool
-	 */
-	public function unique_role($str)
-	{
-		if ($this->role_model->is_unique('role_name', $str))
-		{
-			return TRUE;
-		}
-		else
-		{
-			$this->form_validation->set_message('unique_role', 'The %s role is already in use. Please choose another.');
-			return FALSE;
-		}
-
-	}//end unique_role()
-
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Creates a real-time modifiable summary table of all roles and permissions
 	 *
 	 * @return void
@@ -454,62 +386,64 @@ class Settings extends Admin_Controller
 		Template::set('matrix_roles', $this->role_model->select('role_id, role_name')->find_all());
 
 		$role_permissions = $this->role_permission_model->find_all_role_permissions();
-		foreach($role_permissions as $rp) {
+
+		foreach($role_permissions as $rp)
+		{
 			$current_permissions[] = $rp->role_id.','.$rp->permission_id;
 		}
-		Template::set('matrix_role_permissions', $current_permissions);
 
+		Template::set('matrix_role_permissions', $current_permissions);
 		Template::set("toolbar_title", lang('matrix_header'));
 
 		Template::set_view('settings/permission_matrix');
 		Template::render();
-
 	}//end permission_matrix()
 
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Updates the role_permissions table.
-	 *
-	 * Responses use "die()" instead of "echo()" in case the profiler is
-	 * enabled. The profiler will add a lot of HTML to the end of the response
-	 * which causes errors.
-	 *
-	 * @return mixed
+	 * Update the role_permissions table.
 	 */
 	public function matrix_update()
 	{
-		$pieces = explode(',',$this->input->post('role_perm', TRUE));
+		// The profiler would add a lot of HTML to the end of the response.
+		// This response is supposed to be single piece of text used by JS.
+		$this->output->enable_profiler(FALSE);
 
-		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find( (int) $pieces[0])->role_name.'.Manage')) {
-			die(lang("matrix_auth_fail"));
-			return FALSE;
+		$pieces = explode(',',$this->input->post('role_perm'));
+
+		if (!$this->auth->has_permission('Permissions.'.$this->role_model->find( (int) $pieces[0])->role_name.'.Manage'))
+		{
+			$this->output->set_output(lang("matrix_auth_fail"));
+
+			return;
 		}
 
-		if ($this->input->post('action', TRUE) == 'true')
+		if ($this->input->post('action') == 'true')
 		{
 			if(is_numeric($this->role_permission_model->create_role_permissions($pieces[0],$pieces[1])))
 			{
-				die(lang("matrix_insert_success"));
+				$msg = lang("matrix_insert_success");
 			}
 			else
 			{
-				die(lang("matrix_insert_fail") . $this->role_permission_model->error);
+				$msg = lang("matrix_insert_fail") . $this->role_permission_model->error;
 			}
 		}
 		else
 		{
 			if($this->role_permission_model->delete_role_permissions($pieces[0], $pieces[1]))
 			{
-				die(lang("matrix_delete_success"));
+				$msg = lang("matrix_delete_success");
 			}
 			else
 			{
-				die(lang("matrix_delete_fail"). $this->role_permission_model->error);
+				$msg = lang("matrix_delete_fail"). $this->role_permission_model->error;
 			}
 		}//end if
 
+		$this->output->set_output($msg);
 	}//end matrix_update()
 
 	//--------------------------------------------------------------------

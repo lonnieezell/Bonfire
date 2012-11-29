@@ -24,20 +24,6 @@
 
 		<div class="main">
 
-			<?php if (isset($error)) :?>
-			<div class="notification error">
-				<p><?php echo $error; ?></p>
-			</div>
-			<?php endif; ?>
-
-			<?php if (isset($attention)) :?>
-			<div class="notification attention">
-				<p><?php echo $attention; ?></p>
-			</div>
-			<?php endif; ?>
-
-			<?php if (isset($success)) :?>
-			<div class="notification success">
-				<p><?php echo $success; ?></p>
-			</div>
+			<?php if (isset($message)) :?>
+			<?php echo $message; ?>
 			<?php endif; ?>

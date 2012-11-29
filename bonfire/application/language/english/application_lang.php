@@ -137,7 +137,6 @@ $lang['bf_password_show_labels']	    = 'Display password validation labels';
 
 $lang['bf_user']				= 'User';
 $lang['bf_users']				= 'Users';
-$lang['bf_username']			= 'Username';
 $lang['bf_description']			= 'Description';
 $lang['bf_email']				= 'Email';
 $lang['bf_user_settings']		= 'My Profile';
@@ -155,7 +154,7 @@ $lang['bf_form_label_required'] = '<span class="required">*</span>';
 //--------------------------------------------------------------------
 // MY_Model
 //--------------------------------------------------------------------
-$lang['bf_model_db_error']		= 'DB Error: ';
+$lang['bf_model_db_error']		= 'DB Error: %s';
 $lang['bf_model_no_data']		= 'No data available.';
 $lang['bf_model_invalid_id']	= 'Invalid ID passed to model.';
 $lang['bf_model_no_table']		= 'Model has unspecified database table.';
@@ -201,7 +200,7 @@ $lang['bf_remember_me']			= 'Remember me';
 //--------------------------------------------------------------------
 // Password Help Fields to be used as a warning on register
 //--------------------------------------------------------------------
-$lang['bf_password_number_required_help']  = 'Password must contain at least 1 punctuation mark.';
+$lang['bf_password_number_required_help']  = 'Password must contain at least 1 number.';
 $lang['bf_password_caps_required_help']    = 'Password must contain at least 1 capital letter.';
 $lang['bf_password_symbols_required_help'] = 'Password must contain at least 1 symbol.';
 

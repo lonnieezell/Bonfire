@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8">
-    <title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php echo config_item('site.title') ?></title>
+    <title><?php echo isset($toolbar_title) ? $toolbar_title .' : ' : ''; ?> <?php e(settings_item('site.title')) ?></title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -47,7 +47,7 @@
 				<div class="nav secondary-nav">
 					<a href="<?php echo site_url('logout'); ?>" style="float: right">Logout</a>
 
-					<h1><?php e(config_item('site.title')); ?></h1>
+					<h1><?php e(settings_item('site.title')); ?></h1>
 
 					<div class="clearfix"></div>
 				</div>

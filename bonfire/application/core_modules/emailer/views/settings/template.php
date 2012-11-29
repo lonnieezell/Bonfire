@@ -18,7 +18,6 @@
 			<legend><?php echo lang('em_footer'); ?></legend>
 	
 			<div class="clearfix">
-				<label for="footer"></label>
 				<div class="input">
 					<textarea name="footer" rows="15" style="width: 99%"><?php echo htmlspecialchars_decode($this->load->view('email/_footer', null, true)) ;?></textarea>
 				</div>
@@ -26,7 +25,7 @@
 		</fieldset>
 	
 		<div class="form-actions">
-			<input type="submit" name="submit" id="submit" class="btn btn-primary" value="Save Template" /> or <?php echo anchor(SITE_AREA .'/settings/emailer', 'Cancel'); ?>
+			<input type="submit" name="save" id="submit" class="btn btn-primary" value="Save Template" /> or <?php echo anchor(SITE_AREA .'/settings/emailer', 'Cancel'); ?>
 		</div>
 	
 	<?php echo form_close(); ?>

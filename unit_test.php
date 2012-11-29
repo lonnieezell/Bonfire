@@ -3,6 +3,13 @@
  * Please note this file shouldn't be exposed on a live server,
  * there is no filtering of $_POST!!!!
  */
+// Plus we disable CSRF protection in order to avoid
+// modifying simpletest
+if ($_SERVER["REQUEST_METHOD"] == "POST")
+{
+	$_POST['ci_csrf_token'] = $_COOKIE['ci_csrf_token'];
+}
+
 error_reporting(0);
 $cli_mode = setup_cli($argv); // Determines if running in cli mode
 
@@ -35,9 +42,44 @@ class CodeIgniterUnitTestCase extends UnitTestCase {
 	}
 
 	public function __get($var)
-    {
+	{
 		return $this->ci->$var;
-    }
+	}
+
+	/**
+	 * Will be true if the value is empty.
+	 * @param  mixed  $value   Supposedly empty value.
+	 * @param  string $message Message to display.
+	 *
+	 * @return boolean True on pass.
+	 *
+	 * @access public
+	 */
+	public function assertEmpty($value, $message = '%s')
+	{
+		$dumper = &new SimpleDumper();
+		$message = sprintf($message, '[' . $dumper->describeValue($value) . '] should be empty');
+		return $this->assertTrue(empty($value), $message);
+
+	}
+
+	/**
+	 * Will be true if the value is not empty.
+	 * @param  mixed  $value   Supposedly not empty value.
+	 * @param  string $message Message to display.
+	 *
+	 * @return boolean True on pass.
+	 *
+	 * @access public
+	 */
+	public function assertNotEmpty($value, $message = '%s')
+	{
+		$dumper = &new SimpleDumper();
+		$message = sprintf($message, '[' . $dumper->describeValue($value) . '] should not be empty');
+		return $this->assertFalse(empty($value), $message);
+
+	}
+
 }
 
 class CodeIgniterWebTestCase extends WebTestCase {
@@ -50,9 +92,9 @@ class CodeIgniterWebTestCase extends WebTestCase {
 	}
 
 	public function __get($var)
-    {
+	{
 		return $this->ci->$var;
-    }
+	}
 }
 
 // Because get is removed in ci we pull it out here.
@@ -92,7 +134,7 @@ if ($run_all OR ( ! empty($_POST) && ! isset($_POST['test'])))
 			{
 				if ($file != 'index.html')
 				{
-					$test_suite->addTestFile($dir . '/' . $file);
+					$test_suite->addFile($dir . '/' . $file);
 				}
 			}
 		}
@@ -104,7 +146,7 @@ elseif (isset($_POST['test'])) //single test
 
 	if (file_exists(TESTS_DIR . $file))
 	{
-		$test_suite->addTestFile(TESTS_DIR . $file);
+		$test_suite->addFile(TESTS_DIR . $file);
 	}
 }
 
@@ -126,7 +168,7 @@ function setup_cli($argv)
 			if(stripos($argv[1],'.php') !== false)
 			{
 				$_POST['test'] = $argv[1];
-                        }
+			}
 			else 
 			{
 				$_POST[$argv[1]] = $argv[1];
@@ -175,7 +217,7 @@ function memory_usage()
 	$size = memory_get_usage(true);
 
 	$unit=array('B','KB','MB','GB','TB','PB');
-    return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
+	return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
 }
 
 //variables for report
@@ -197,8 +239,8 @@ $elapse_time =  number_format(($em + $es) - ($sm + $ss), 4);
 
 //display the form
 if ($cli_mode) {
-    exit ($test_suite->run(new TextReporter()) ? 0 : 1);
+	exit ($test_suite->run(new TextReporter()) ? 0 : 1);
 }
 else {
-    include(TESTS_DIR . 'test_gui.php');
+	include(TESTS_DIR . 'test_gui.php');
 }

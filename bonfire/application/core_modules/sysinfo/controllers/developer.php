@@ -39,6 +39,9 @@ class Developer extends Admin_Controller
 	{
 		parent::__construct();
 
+		// restrict access - View
+		$this->auth->restrict('Bonfire.Sysinfo.View');
+
 		$this->lang->load('sysinfo');
 
 		Template::set('toolbar_title', lang('si.system_info'));

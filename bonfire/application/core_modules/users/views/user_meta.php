@@ -6,7 +6,7 @@
 
 				if ($field['form_detail']['type'] == 'dropdown'):
 
-					echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : ''));
+					echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : ''), $field['label']);
 
 
 			elseif ($field['form_detail']['type'] == 'checkbox'): ?>

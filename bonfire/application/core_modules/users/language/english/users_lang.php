@@ -29,9 +29,9 @@ $lang['us_no_permission']			= 'You do not have permission to access that page.';
 $lang['us_fields_required']         = '%s and Password fields must be filled out.';
 
 $lang['us_access_logs']				= 'Access Logs';
-$lang['us_logged_in_on']			= 'logged in on';
+$lang['us_logged_in_on']			= '<b>%s</b> logged in on %s';
 $lang['us_no_access_message']		= '<p>Congratulations!</p><p>All of your users have good memories!</p>';
-$lang['us_log_create']				= 'created a new';
+$lang['us_log_create']				= 'created a new %s';
 $lang['us_log_edit']				= 'modified user';
 $lang['us_log_delete']				= 'deleted user';
 $lang['us_log_logged']				= 'logged in from';
@@ -41,9 +41,6 @@ $lang['us_log_register']			= 'registered a new account.';
 $lang['us_log_edit_profile']		= 'updated their profile';
 
 
-$lang['us_deleted_users']			= 'Deleted Users';
-$lang['us_purge_del_accounts']		= 'Purge Deleted Accounts';
-$lang['us_purge_del_note']			= '<p>Purging deleted accounts is a permanent action. There is no going back, so please make sure.</p>';
 $lang['us_purge_del_confirm']		= 'Are you sure you want to completely remove the user account(s) - there is no going back?';
 $lang['us_action_purged']			= 'Users purged.';
 $lang['us_action_deleted']			= 'The User was successfully deleted.';
@@ -112,34 +109,18 @@ $lang['us_account_details']			= 'Account Details';
 $lang['us_last_login']				= 'Last Login';
 
 
-
-$lang['us_no_password']             = 'No Password present.';
-$lang['us_no_email']                = 'No Email given.';
-$lang['us_email_taken']             = 'Email already exists.';
-$lang['us_invalid_user_id']         = 'Invalid User ID';
-
-$lang['us_no_password']             = 'No Password present.';
-
-$lang['us_no_email']                = 'No Email given.';
-
-$lang['us_email_taken']             = 'Email already exists.';
-$lang['us_invalid_user_id']         = 'Invalid User ID';
-
-
-
 $lang['us_account_created_success'] = 'Your account has been created. Please log in.';
 
-$lang['us_email_already_used']      = 'That email address is already in use.';
-$lang['us_username_already_used']   = 'That username is already in use.';
 $lang['us_invalid_user_id']         = 'Invalid user id.';
 $lang['us_invalid_email']           = 'Cannot find that email in our records.';
 
+$lang['us_reset_password_note']     = 'Enter your new password below to reset your password.';
 $lang['us_reset_invalid_email']     = 'That did not appear to be a valid password reset request.';
 $lang['us_reset_pass_subject']      = 'Your Temporary Password';
 $lang['us_reset_pass_message']      = 'Please check your email for instructions to reset your password.';
 $lang['us_reset_pass_error']        = 'Unable to send an email: ';
 $lang['us_reset_password_success']  = 'Please login using your new password.';
-$lang['us_reset_password_error']    = 'There was an error resetting your password: ';
+$lang['us_reset_password_error']    = 'There was an error resetting your password: %s';
 
 
 $lang['us_profile_updated_success'] = 'Profile successfully updated.';
@@ -171,10 +152,6 @@ $lang['us_confirm_activate_code']	= 'Confirm Activation Code';
 $lang['us_activate_code_send']		= 'Send Activation Code';
 $lang['bf_action_activate']			= 'Activate';
 $lang['bf_action_deactivate']		= 'Deactivate';
-$lang['us_purge_del_accounts']		= 'Purge Deleted Accounts';
-$lang['us_no_inactive']				= 'There are not any users requiring activation in the database.';
-$lang['us_activate_accounts']		= 'Activate All Accounts';
-$lang['us_purge_act_note']			= '<h3>Activate All Accounts</h3><p>batch activate all users requiring activation.</p>';
 $lang['us_account_activated']		= 'User account activation.';
 $lang['us_account_deactivated']		= 'User account deactivation.';
 $lang['us_account_activated_admin']	= 'Administrative account activation.';
@@ -215,3 +192,9 @@ $lang['us_passwords_match']			= 'Match!';
 $lang['us_pass_weak']				= 'Weak';
 $lang['us_pass_good']				= 'Good';
 $lang['us_pass_strong']				= 'Strong';
+
+$lang['us_tab_all']					= 'All Users';
+$lang['us_tab_inactive']			= 'Inactive';
+$lang['us_tab_banned']				= 'Banned';
+$lang['us_tab_deleted']				= 'Deleted';
+$lang['us_tab_roles']				= 'By Role';

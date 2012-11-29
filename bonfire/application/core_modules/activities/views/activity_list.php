@@ -12,7 +12,7 @@
 		<li>
 			<span class="small"><?php echo relative_time(strtotime($activity->created_on)) ?></span>
 			<br/>
-			<b><?php echo $identity ?></b> <?php echo $activity->activity ?>
+			<b><?php e($identity) ?></b> <?php echo $activity->activity ?>
 		</li>
 	<?php endforeach; ?>
 	</ul>

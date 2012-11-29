@@ -168,6 +168,25 @@ class BF_Model extends CI_Model
 	 */
 	protected $db_con = '';
 
+	/**
+	 * Observer Arrays
+	 *
+	 * Each array can contain the names of callback functions within the extending model
+	 * That will be called during each event.
+	 *
+	 * <code>
+	 *	$before_insert = array('set_created', 'validate_fields');
+	 * </code>
+	 */
+	protected $before_insert	= array();
+	protected $after_insert		= array();
+	protected $before_update	= array();
+	protected $after_update		= array();
+	protected $before_find		= array();
+	protected $after_find		= array();
+	protected $before_delete	= array();
+	protected $after_delete		= array();
+
 	//---------------------------------------------------------------
 
 	/**
@@ -192,6 +211,11 @@ class BF_Model extends CI_Model
 			$this->load->database();
 		}
 
+		// Check our auto-set features and make sure they are part of
+		// our observer system.
+		if ($this->set_created === true) array_unshift($this->before_insert, 'created_on');
+		if ($this->set_modified === true) array_unshift($this->before_update, 'modified_on');
+
 	}//end __construct()
 
 	//---------------------------------------------------------------
@@ -200,11 +224,14 @@ class BF_Model extends CI_Model
 	 * Searches for a single row in the database.
 	 *
 	 * @param string $id The primary key of the record to search for.
+	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
-	 * @return mixed An object representing the db row, or FALSE.
+	 * @return mixed An object/array representing the db row, or FALSE.
 	 */
-	public function find($id='')
+	public function find($id='', $return_type = 0)
 	{
+		$this->trigger('before_find');
+
 		if ($this->_function_check($id) === FALSE)
 		{
 			return FALSE;
@@ -216,7 +243,18 @@ class BF_Model extends CI_Model
 
 		if ($query->num_rows())
 		{
-			return $query->row();
+			if($return_type == 0)
+			{
+				$return = $query->row();
+			}
+			else
+			{
+				$return = $query->row_array();
+			}
+
+			$return = $this->trigger('after_find', $return);
+
+			return $return;
 		}
 
 		return FALSE;
@@ -233,14 +271,18 @@ class BF_Model extends CI_Model
 	 * Active Record functions before calling this function, or
 	 * through method chaining with the where() method of this class.
 	 *
-	 * @return mixed An array of objects representing the results, or FALSE on failure or empty set.
+	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
+	 *
+	 * @return mixed An array of objects/arrays representing the results, or FALSE on failure or empty set.
 	 */
-	public function find_all()
+	public function find_all($return_type = 0)
 	{
 		if ($this->_function_check() === FALSE)
 		{
 			return FALSE;
 		}
+
+		$this->trigger('before_find');
 
 		$this->set_selects();
 
@@ -250,11 +292,22 @@ class BF_Model extends CI_Model
 
 		if (!empty($query) && $query->num_rows() > 0)
 		{
-			return $query->result();
+			if($return_type == 0)
+			{
+				$return = $query->result();
+			}
+			else
+			{
+				$return = $query->result_array();
+			}
+
+			$return = $this->trigger('after_find', $return);
+
+			return $return;
 		}
 
-		$this->error = $this->lang->line('bf_model_bad_select');
-		$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_bad_select'));
+		$this->error = lang('bf_model_bad_select');
+		$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_bad_select'));
 		return FALSE;
 
 	}//end find_all()
@@ -267,36 +320,32 @@ class BF_Model extends CI_Model
 	 * @param mixed  $field The table field to search in.
 	 * @param mixed  $value The value that field should be.
 	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
+	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return bool|mixed An array of objects representing the results, or FALSE on failure or empty set.
 	 */
-	public function find_all_by($field=NULL, $value=NULL, $type='and')
+	public function find_all_by($field=NULL, $value=NULL, $type='and', $return_type = 0)
 	{
 		if (empty($field)) return FALSE;
 
 		// Setup our field/value check
-		if (is_array($field))
+		if ( ! is_array($field))
 		{
-			foreach ($field as $key => $value)
-			{
-				if ($type == 'or')
-				{
-					$this->db->or_where($key, $value);
-				}
-				else
-				{
-					$this->db->where($key, $value);
-				}
-			}
+			$field = array($field => $value);
+		}
+
+		if ($type == 'or')
+		{
+			$this->db->or_where($field);
 		}
 		else
 		{
-			$this->db->where($field, $value);
+			$this->db->where($field);
 		}
 
 		$this->set_selects();
 
-		return $this->find_all();
+		return $this->find_all($return_type);
 
 	}//end find_all_by()
 
@@ -308,35 +357,33 @@ class BF_Model extends CI_Model
 	 * @param string $field Either a string or an array of fields to match against. If an array is passed it, the $value parameter is ignored since the array is expected to have key/value pairs in it.
 	 * @param string $value The value to match on the $field. Only used when $field is a string.
 	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
+	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return bool|mixed An object representing the first result returned.
 	 */
-	public function find_by($field='', $value='', $type='and')
+	public function find_by($field='', $value='', $type='and', $return_type = 0)
 	{
 		if (empty($field) || (!is_array($field) && empty($value)))
 		{
-			$this->error = $this->lang->line('bf_model_find_error');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_find_error'));
+			$this->error = lang('bf_model_find_error');
+			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_find_error'));
 			return FALSE;
 		}
 
-		if (is_array($field))
+		$this->trigger('before_find');
+
+		if ( ! is_array($field))
 		{
-			foreach ($field as $key => $value)
-			{
-				if ($type == 'or')
-				{
-					$this->db->or_where($key, $value);
-				}
-				else
-				{
-					$this->db->where($key, $value);
-				}
-			}
+			$field = array($field => $value);
+		}
+
+		if ($type == 'or')
+		{
+			$this->db->or_where($field);
 		}
 		else
 		{
-			$this->db->where($field, $value);
+			$this->db->where($field);
 		}
 
 		$this->set_selects();
@@ -345,7 +392,18 @@ class BF_Model extends CI_Model
 
 		if ($query && $query->num_rows() > 0)
 		{
-			return $query->row();
+			if($return_type == 0)
+			{
+				$return = $query->row();
+			}
+			else
+			{
+				$return = $query->row_result();
+			}
+
+			$return = $this->trigger('after_find', $return);
+
+			return $return;
 		}
 
 		return FALSE;
@@ -368,11 +426,7 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
-		// Add the created field
-		if ($this->set_created === TRUE && !array_key_exists($this->created_field, $data))
-		{
-			$data[$this->created_field] = $this->set_date();
-		}
+		$data = $this->trigger('before_insert', $data);
 
 		if ($this->set_created === TRUE && $this->log_user === TRUE && !array_key_exists($this->created_by_field, $data))
 		{
@@ -384,11 +438,14 @@ class BF_Model extends CI_Model
 
 		if ($status != FALSE)
 		{
-			return $this->db->insert_id();
+			$id = $this->db->insert_id();
+
+			$id = $this->trigger('after_insert', $id);
+			return $id;
 		}
 		else
 		{
-			$this->error = mysql_error();
+			$this->error = $this->get_db_error_message();
 			return FALSE;
 		}
 
@@ -397,35 +454,99 @@ class BF_Model extends CI_Model
 	//---------------------------------------------------------------
 
 	/**
-	 * Updates an existing row in the database.
+	 * Inserts a batch of data into the database.
 	 *
-	 * @param mixed   $id The primary_key value of the row to update.
-	 * @param array $data An array of key/value pairs to update.
+	 * @param array $data an array of key/value pairs to insert.
 	 *
-	 * @return bool TRUE/FALSE
+	 * @return bool|mixed Either the $id of the row inserted, or FALSE on failure.
 	 */
-	public function update($id=NULL, $data=NULL)
+	public function insert_batch($data=NULL)
 	{
-
-		if ($this->_function_check($id, $data) === FALSE)
+		if ($this->_function_check(FALSE, $data) === FALSE)
 		{
 			return FALSE;
 		}
 
-		// Add the modified field
-		if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
+		$set = array();
+
+		// Add the created field
+		if ($this->set_created === TRUE )
 		{
-			$data[$this->modified_field] = $this->set_date();
+			$set[$this->created_field] = $this->set_date();
 		}
 
+		if ($this->set_created === TRUE && $this->log_user === TRUE)
+		{
+			$set[$this->created_by_field] = $this->auth->user_id();
+		}
+
+		if(!empty($set))
+		{
+			foreach($data as $key => &$record)
+			{
+				$record = $this->trigger('before_insert', $record);
+
+				$data[$key] = array_merge($set,$data[$key]);
+			}
+		}
+
+
+		// Insert it
+		$status = $this->db->insert_batch($this->table, $data);
+
+		if ($status === FALSE)
+		{
+			$this->error = $this->get_db_error_message();
+			return FALSE;
+		}
+
+		return TRUE;
+
+	}//end insert_batch()
+
+	//---------------------------------------------------------------
+
+	/**
+	 * Updates an existing row in the database.
+	 *
+	 * @param mixed	$where	The primary_key value of the row to update or the where clause.
+	 * @param array $data	An array of key/value pairs to update.
+	 *
+	 * @return bool TRUE/FALSE
+	 */
+	public function update($where=NULL, $data=NULL)
+	{
+
+		if (is_array($where))
+		{
+			if ($this->_function_check(FALSE, $data) === FALSE)
+			{
+				return FALSE;
+			}
+		}
+		// If $where is not an array, it should be the primary key value of the row to update
+		else
+		{
+			if ($this->_function_check($where, $data) === FALSE)
+			{
+				return FALSE;
+			}
+
+			$where = array($this->key => $where);
+		}
+
+
+		$data = $this->trigger('before_update', $data);
+
+		// Add the user id if using a modified_by field
 		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
 		{
 			$data[$this->modified_by_field] = $this->auth->user_id();
 		}
 
-		$this->db->where($this->key, $id);
-		if ($this->db->update($this->table, $data))
+		if ($result = $this->db->update($this->table, $data, $where))
 		{
+			$this->trigger('after_update', array($data, $result));
 			return TRUE;
 		}
 
@@ -446,15 +567,7 @@ class BF_Model extends CI_Model
 	 */
 	public function update_where($field=NULL, $value=NULL, $data=NULL)
 	{
-		if (empty($field) || empty($value) || !is_array($data))
-		{
-			$this->error = $this->lang->line('bf_model_no_data');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
-			return FALSE;
-		}
-
-		return $this->db->update($this->table, $data, array($field => $value));
-
+		return $this->update(array($field => $value), $data);
 	}//end update_where()
 
 	//---------------------------------------------------------------
@@ -482,6 +595,10 @@ class BF_Model extends CI_Model
 				foreach ($data as $key => $record)
 				{
 					$data[$key][$this->modified_field] = $this->set_date();
+					if ($this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data[$key]))
+					{
+						$data[$key][$this->modified_by_field] = $this->auth->user_id();
+					}
 				}
 			}
 
@@ -515,6 +632,8 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
+		$this->trigger('before_delete', $id);
+
 		if ($this->find($id) !== FALSE)
 		{
 			if ($this->soft_deletes === TRUE)
@@ -538,14 +657,15 @@ class BF_Model extends CI_Model
 
 			if ($result)
 			{
+				$this->trigger('after_delete', $result);
 				return TRUE;
 			}
 
-			$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
+			$this->error = sprintf(lang('bf_model_db_error'), $this->get_db_error_message());
 		}
 		else
 		{
-			$this->error = $this->lang->line('bf_model_db_error') . $this->lang->line('bf_model_invalid_id');
+			$this->error = sprintf(lang('bf_model_db_error'), lang('bf_model_invalid_id'));
 		}
 
 		return FALSE;
@@ -567,30 +687,42 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function delete_where($data=NULL)
+	public function delete_where($where=NULL)
 	{
-		if (empty($data))
+		if (empty($where))
 		{
-			$this->error = $this->lang->line('bf_model_no_data');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
+			$this->error = lang('bf_model_no_data');
+			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_no_data'));
 			return FALSE;
 		}
 
-		if (is_array($data))
+		$where = $this->trigger('before_delete', $where);
+
+		if (is_array($where))
 		{
-			foreach($data as $field => $value)
+			foreach($where as $field => $value)
 			{
 				$this->db->where($field,$value);
 			}
 		}
 		else
 		{
-			$this->db->where($data);
+			$this->db->where($where);
 		}
 
 		if ($this->soft_deletes === TRUE)
 		{
-			$this->db->update($this->table, array('deleted' => 1));
+			if ($this->log_user === TRUE)
+			{
+				$this->db->update($this->table, array(
+					'deleted' => 1,
+					$this->deleted_by_field => $this->auth->user_id(),
+				));
+			}
+			else
+			{
+				$this->db->update($this->table, array('deleted' => 1));
+			}
 		}
 		else
 		{
@@ -601,10 +733,12 @@ class BF_Model extends CI_Model
 
 		if ($result)
 		{
+			$this->trigger('after_delete', $result);
+
 			return $result;
 		}
 
-		$this->error = $this->lang->line('bf_model_db_error') . mysql_error();
+		$this->error = lang('bf_model_db_error') . $this->get_db_error_message();
 
 		return FALSE;
 
@@ -628,8 +762,8 @@ class BF_Model extends CI_Model
 	{
 		if (empty($field) || empty($value))
 		{
-			$this->error = $this->lang->line('bf_model_unique_error');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_unique_error'));
+			$this->error = lang('bf_model_unique_error');
+			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_unique_error'));
 			return FALSE;
 		}
 
@@ -672,8 +806,8 @@ class BF_Model extends CI_Model
 	{
 		if (empty($field))
 		{
-			$this->error = $this->lang->line('bf_model_count_error');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_count_error'));
+			$this->error = lang('bf_model_count_error');
+			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_count_error'));
 			return FALSE;
 		}
 
@@ -699,8 +833,8 @@ class BF_Model extends CI_Model
 	{
 		if (empty($id) || $id === 0 || empty($field))
 		{
-			$this->error = $this->lang->line('bf_model_fetch_error');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_fetch_error'));
+			$this->error = lang('bf_model_fetch_error');
+			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_fetch_error'));
 			return FALSE;
 		}
 
@@ -886,9 +1020,86 @@ class BF_Model extends CI_Model
 
 	//--------------------------------------------------------------------
 
+	//--------------------------------------------------------------------
+	// !OBSERVERS
+	//--------------------------------------------------------------------
+
+	/**
+	 * Sets the created on date for the object based on the
+	 * current date/time and date_format. Will not overwrite existing.
+	 *
+	 * @param array  $row  The array of data to be inserted
+	 *
+	 * @return array
+	 */
+	public function created_on($row)
+	{
+		if (!array_key_exists($this->created_field, $row))
+		{
+			$row[$this->created_field] = $this->set_date();
+		}
+
+		return $row;
+	} // end created_on()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Sets the modified_on date for the object based on the
+	 * current date/time and date_format. Will not overwrite existing.
+	 *
+	 * @param array  $row  The array of data to be inserted
+	 *
+	 * @return array
+	 */
+	public function modified_on($row)
+	{
+		if (!array_key_exists($this->modified_field, $row))
+		{
+			$row[$this->modified_field] = $this->set_date();
+		}
+
+		return $row;
+	}
+
+	//--------------------------------------------------------------------
+
+
 	//---------------------------------------------------------------
 	// !UTILITY FUNCTIONS
 	//---------------------------------------------------------------
+
+	/**
+	 * Triggers a model-specific event and call each of it's observers.
+	 *
+	 * @param string 	$event 	The name of the event to trigger
+	 * @param mixed 	$data 	The data to be passed to the callback functions.
+	 *
+	 * @return mixed
+	 */
+	public function trigger($event, $data=false)
+	{
+		if (!isset($this->$event) || !is_array($this->$event))
+		{
+			return $data;
+		}
+
+		foreach ($this->$event as $method)
+		{
+			if (strpos($method, '('))
+			{
+				preg_match('/([a-zA-Z0-9\_\-]+)(\(([a-zA-Z0-9\_\-\., ]+)\))?/', $method, $matches);
+				$this->callback_parameters = explode(',', $matches[3]);
+			}
+
+			$data = call_user_func_array(array($this, $method), array($data));
+		}
+
+		return $data;
+	}
+
+	//--------------------------------------------------------------------
+
 
 	/**
 	 * A utility method that does some error checking and cleanup for other methods:
@@ -909,8 +1120,8 @@ class BF_Model extends CI_Model
 		// Does the model have a table set?
 		if (empty($this->table))
 		{
-			$this->error = $this->lang->line('bf_model_no_table');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_table'), 'error');
+			$this->error = lang('bf_model_no_table');
+			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_no_table'), 'error');
 			return FALSE;
 		}
 
@@ -919,8 +1130,8 @@ class BF_Model extends CI_Model
 		{
 			if (empty($id) || $id == 0)
 			{
-				$this->error = $this->lang->line('bf_model_invalid_id');
-				$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_invalid_id'));
+				$this->error = lang('bf_model_invalid_id');
+				$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_invalid_id'));
 				return FALSE;
 			}
 		}
@@ -930,22 +1141,10 @@ class BF_Model extends CI_Model
 		{
 			if (!is_array($data) || count($data) == 0)
 			{
-				$this->error = $this->lang->line('bf_model_no_data');
-				$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_data'));
+				$this->error = lang('bf_model_no_data');
+				$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_no_data'));
 				return FALSE;
 			}
-		}
-
-		// Strip the 'submit' field, if set
-		if (isset($data['submit']))
-		{
-			unset($data['submit']);
-		}
-
-		// Strip the 'func' field, if set
-		if (isset($data['func']))
-		{
-			unset($data['func']);
 		}
 
 		return TRUE;
@@ -993,6 +1192,50 @@ class BF_Model extends CI_Model
 	//--------------------------------------------------------------------
 
 	/**
+	 * Allows you to retrieve error messages from the database
+	 *
+	 * @return string
+	 */
+	protected function get_db_error_message()
+	{
+		switch ($this->db->platform())
+		{
+			case 'cubrid':
+				return cubrid_errno($this->db->conn_id);
+			case 'mssql':
+				return mssql_get_last_message();
+			case 'mysql':
+				return mysql_error($this->db->conn_id);
+			case 'mysqli':
+				return mysqli_error($this->db->conn_id);
+			case 'oci8':
+				// If the error was during connection, no conn_id should be passed
+				$error = is_resource($this->db->conn_id) ? oci_error($this->db->conn_id) : oci_error();
+				return $error['message'];
+			case 'odbc':
+				return odbc_errormsg($this->db->conn_id);
+			case 'pdo':
+				$error_array = $this->db->conn_id->errorInfo();
+				return $error_array[2];
+			case 'postgre':
+				return pg_last_error($this->db->conn_id);
+			case 'sqlite':
+				return sqlite_error_string(sqlite_last_error($this->db->conn_id));
+			case 'sqlsrv':
+				$error = array_shift(sqlsrv_errors());
+				return !empty($error['message']) ? $error['message'] : null;
+			default:
+				/*
+				 * !WARNING! $this->db->_error_message() is supposed to be private and
+				 * possibly won't be available in future versions of CI
+				 */
+				return $this->db->_error_message();
+		}
+	}
+
+	//--------------------------------------------------------------------
+
+	/**
 	 * Allows you to set the table to use for all methods during runtime.
 	 *
 	 * @param string $table The table name to use (do not include the prefix!)
@@ -1017,6 +1260,19 @@ class BF_Model extends CI_Model
 		return $this->table;
 
 	}//end get_table()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Allows you to get the table primary key
+	 *
+	 * @return string $this->key (current model table primary key)
+	 */
+	public function get_key()
+	{
+		return $this->key;
+
+	}//end get_key()
 
 	//--------------------------------------------------------------------
 

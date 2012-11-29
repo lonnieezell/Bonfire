@@ -44,3 +44,4 @@ $lang['ui_shortcut_save_error']			= 'There was an error saving your shortcuts.';
 $lang['ui_shortcut_error_exists']		= 'Shortcut already exists';
 $lang['ui_shortcut_error_unavailable']	= 'Action is unavailable';
 $lang['ui_shortcut_error']				= 'Spaces are not allowed in the shortcut keys';
+

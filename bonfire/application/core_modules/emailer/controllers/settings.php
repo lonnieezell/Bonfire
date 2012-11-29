@@ -62,22 +62,22 @@ class Settings extends Admin_Controller
 	{
 		$this->load->library('form_validation');
 
-		if ($this->input->post('submit'))
+		if ($this->input->post_key_exists('save'))
 		{
-			$this->form_validation->set_rules('sender_email', 'System Email', 'required|trim|valid_email|max_length[120]|xss_clean');
-			$this->form_validation->set_rules('protocol', 'Email Server', 'trim|xss_clean');
+			$this->form_validation->set_rules('sender_email', 'System Email', 'required|trim|valid_email|max_length[120]');
+			$this->form_validation->set_rules('protocol', 'Email Server', 'trim');
 
 			if ($this->input->post('protocol') == 'sendmail')
 			{
-				$this->form_validation->set_rules('mailpath', 'Sendmail Path', 'required|trim|xss_clean');
+				$this->form_validation->set_rules('mailpath', 'Sendmail Path', 'required|trim');
 			}
 			elseif ($this->input->post('protocol') == 'smtp')
 			{
-				$this->form_validation->set_rules('smtp_host', 'SMTP Server Address', 'required|trim|strip_tags|xss_clean');
-				$this->form_validation->set_rules('smtp_user', 'SMTP Username', 'trim|strip_tags|xss_clean');
-				$this->form_validation->set_rules('smtp_pass', 'SMTP Password', 'trim|strip_tags|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,20}]');
-				$this->form_validation->set_rules('smtp_port', 'SMTP Port', 'trim|strip_tags|numeric|xss_clean');
-				$this->form_validation->set_rules('smtp_timeout', 'SMTP timeout', 'trim|strip_tags|numeric|xss_clean');
+				$this->form_validation->set_rules('smtp_host', 'SMTP Server Address', 'required|trim');
+				$this->form_validation->set_rules('smtp_user', 'SMTP Username', 'trim');
+				$this->form_validation->set_rules('smtp_pass', 'SMTP Password', 'trim|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,20}]');
+				$this->form_validation->set_rules('smtp_port', 'SMTP Port', 'trim|numeric');
+				$this->form_validation->set_rules('smtp_timeout', 'SMTP timeout', 'trim|numeric');
 			}
 
 			if ($this->form_validation->run() !== FALSE)
@@ -85,7 +85,7 @@ class Settings extends Admin_Controller
 				$data = array(
 						array('name' => 'sender_email', 'value' => $this->input->post('sender_email')),
 						array('name' => 'mailtype', 'value' => $this->input->post('mailtype')),
-						array('name' => 'protocol', 'value' => strtolower($_POST['protocol'])),
+						array('name' => 'protocol', 'value' => $_POST['protocol']),
 						array('name' => 'mailpath', 'value' => $_POST['mailpath']),
 						array('name' => 'smtp_host', 'value' => isset($_POST['smtp_host']) ? $_POST['smtp_host'] : ''),
 						array('name' => 'smtp_user', 'value' => isset($_POST['smtp_user']) ? $_POST['smtp_user'] : ''),
@@ -138,7 +138,7 @@ class Settings extends Admin_Controller
 	 */
 	public function template()
 	{
-		if ($this->input->post('submit'))
+		if ($this->input->post_key_exists('save'))
 		{
 			$header = $_POST['header'];
 			$footer = $_POST['footer'];
@@ -189,7 +189,10 @@ class Settings extends Admin_Controller
 	 */
 	public function test()
 	{
-		$this->output->enable_profiler(FALSE);
+		if (!$this->input->post_key_exists('test'))
+		{
+			$this->security->csrf_show_error();
+		}
 
 		$this->load->library('emailer');
 		$this->emailer->enable_debug(TRUE);
@@ -200,9 +203,10 @@ class Settings extends Admin_Controller
 				'message'	=> lang('em_test_mail_body')
 			 );
 
-		$results = $this->emailer->send($data, FALSE);
+		$success = $this->emailer->send($data, FALSE);
 
-		Template::set('results', $results);
+		Template::set('success', $success);
+		Template::set('debug', $this->emailer->debug_message);
 		Template::render();
 
 	}//end test()
@@ -225,35 +229,57 @@ class Settings extends Admin_Controller
 		$this->load->model('Emailer_model', 'emailer_model', TRUE);
 
 		// Deleting anything?
-		if ($action = $this->input->post('action'))
+		if ($this->input->post_key_exists('delete'))
 		{
-
-			if ($action == 'Delete')
+			$checked = $this->input->post('checked');
+			if (is_array($checked) && count($checked))
 			{
-				$checked = $this->input->post('checked');
-
-				if (is_array($checked) && count($checked))
+				$result = FALSE;
+				foreach ($checked as $pid)
 				{
-					$result = FALSE;
-					foreach ($checked as $pid)
-					{
-						$result = $this->emailer_model->delete($pid);
-					}
+					$result = $this->emailer_model->delete($pid);
+				}
 
-					if ($result)
-					{
-						Template::set_message(count($checked) .' '. lang('em_delete_success'), 'success');
-					}
-					else
-					{
-						Template::set_message(lang('em_delete_failure') . $this->emailer_model->error, 'error');
-					}
+				if ($result)
+				{
+					Template::set_message(sprintf(lang('em_delete_success'), count($checked)), 'success');
 				}
 				else
 				{
-					Template::set_message(lang('em_delete_error') . $this->emailer_model->error, 'error');
+					Template::set_message(sprintf(lang('em_delete_failure'), $this->emailer_model->error), 'error');
 				}
 			}
+			else
+			{
+				Template::set_message(sprintf(lang('em_delete_error'), $this->emailer_model->error), 'error');
+			}
+		}
+		elseif ($this->input->post_key_exists('force_process'))
+		{
+			$this->load->library('emailer');
+			$this->emailer->enable_debug(TRUE);
+
+			// Use ob to catch output designed for CRON only
+			ob_start();
+			$success = $this->emailer->process_queue();
+			ob_end_clean();
+
+			if ( ! $success)
+			{
+				Template::set('email_debug', $this->emailer->debug_message);
+			}
+		}
+		elseif ($this->input->post_key_exists('insert_test'))
+		{
+			$this->load->library('emailer');
+
+			$data = array(
+				'to'		=> $this->settings_lib->item('site.system_email'),
+				'subject'	=> lang('em_test_mail_subject'),
+				'message'	=> lang('em_test_mail_body')
+			);
+
+			$this->emailer->send($data, TRUE);
 		}
 
 		Template::set('emails', $this->emailer_model->limit($this->limit, $offset)->find_all());
@@ -269,67 +295,12 @@ class Settings extends Admin_Controller
 
 		$this->pagination->initialize($this->pager);
 
-		if ($debug_msg = $this->session->userdata('email_debug'))
-		{
-			Template::set('email_debug', $debug_msg);
-			$this->session->unset_userdata('email_debug');
-			unset($debug_msg);
-		}
-
 		Template::set('toolbar_title', lang('em_emailer_queue'));
 		Template::render();
 
 	}//end queue()
 
 	//--------------------------------------------------------------------
-
-	/**
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function insert_test()
-	{
-		$this->output->enable_profiler(FALSE);
-
-		$this->load->library('emailer');
-
-		$data = array(
-				'to'		=> $this->settings_lib->item('site.system_email'),
-				'subject'	=> lang('em_test_mail_subject'),
-				'message'	=> lang('em_test_mail_body')
-			 );
-
-		$this->emailer->send($data, TRUE);
-
-		redirect(SITE_AREA .'/settings/emailer/queue');
-
-	}//end insert_test()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Process the email queue
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function force_process()
-	{
-		$this->load->library('emailer');
-
-		ob_start();
-		$this->emailer->process_queue();
-		ob_end_clean();
-
-		redirect(SITE_AREA .'/settings/emailer/queue');
-
-	}//end force_process()
-
-	//--------------------------------------------------------------------
-
 
 	/**
 	 * Displays a preview of the email as stored in the database.
@@ -359,6 +330,80 @@ class Settings extends Admin_Controller
 		}
 
 	}//end preview()
+
+	/**
+	 * Create a new email and send to selected recipents
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function create()
+	{
+		
+		$this->load->model('users/user_model');
+		$this->load->library('emailer');
+
+		if ($this->input->post_key_exists('create'))
+		{
+			// validate subject, content and recipients
+			$this->form_validation->set_rules('email_subject', 'Email Subject', 'required|trim|min_length[1]|max_length[255]');
+			$this->form_validation->set_rules('email_content', 'Email Content', 'required|trim|min_length[1]');
+			$this->form_validation->set_rules('checked','Users', 'required');
+			
+			if ($this->form_validation->run() === FALSE)
+			{
+				Template::set('email_subject', $this->input->post('email_subject'));
+				Template::set('email_content', $this->input->post('email_content'));
+				Template::set('checked', $this->input->post('checked'));
+			}
+			else
+			{
+				$data = array (
+					'subject'	=> $this->input->post('email_subject'),
+					'message'	=> $this->input->post('email_content'),
+				);
+
+				$checked = $this->input->post('checked');
+				$success_count = 0;
+				if (is_array($checked) && count($checked))
+				{
+					$result = FALSE;
+					foreach ($checked as $user_id)
+					{
+						//get the email from user_id
+						$user = $this->user_model->find($user_id);
+						if ($user != NULL){
+							$data['to'] = $user->email;
+							$result = $this->emailer->send($data,TRUE);
+							if ($result) $success_count++;
+						}
+	
+					}
+
+					if ($result)
+					{
+						Template::set_message($success_count .' '. lang('em_create_email_success'), 'success');
+						redirect(SITE_AREA . '/settings/emailer/queue');
+					}
+					else
+					{
+						Template::set_message(sprintf(lang('em_create_email_failure'), $this->user_model->error), 'error');
+					}
+				}
+				else
+				{
+					Template::set_message(sprintf(lang('em_create_email_error'), $this->user_model->error), 'error');
+				}//end if
+			}//end if
+		}//end if
+
+		$users = $this->user_model->find_all();
+		Template::set('users', $users);
+		Template::set('toolbar_title', lang('em_create_email'));
+		Template::render();
+
+	}//end create()
 
 	//--------------------------------------------------------------------
 }//end class

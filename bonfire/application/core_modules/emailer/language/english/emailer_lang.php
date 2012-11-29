@@ -45,7 +45,6 @@ $lang['em_test_header']			= 'Test Your Settings';
 $lang['em_test_intro']			= 'Enter an email address below to verify that your email settings are working.<br/>Please save the current settings before testing.';
 $lang['em_test_button']			= 'Send Test Email';
 $lang['em_test_result_header']	= 'Test Results';
-$lang['em_test_no_results']		= 'Either the test did not run, or did not return any results.';
 $lang['em_test_debug_header']	= 'Debug Information';
 $lang['em_test_success']		= 'The email appears to be set correctly. If you do not see the email in your inbox, try looking in your Spam box or Junk mail.';
 $lang['em_test_error']			= 'The email looks like it is not set correctly.';
@@ -66,7 +65,14 @@ $lang['em_subject']				= 'Subject';
 $lang['em_missing_data']		= 'One or more required fields are missing.';
 $lang['em_no_debug']			= 'Email was queued. No debug data is available.';
 
-$lang['em_delete_success']      = '(x) records deleted.';
-$lang['em_delete_failure']		= 'Could not delete records : ';
-$lang['em_delete_error']		= 'Error deleting records : ';
-$lang['em_delete_confirm']		= 'Are you sure you want to delete these emails? ';
+$lang['em_delete_success']      = '%d records deleted.';
+$lang['em_delete_failure']		= 'Could not delete records: %s';
+$lang['em_delete_error']		= 'Error deleting records: %s';
+$lang['em_delete_confirm']		= 'Are you sure you want to delete these emails?';
+
+$lang['em_create_email']		= 'Send New Email';
+$lang['em_create_setting']		= 'Email Configure';
+$lang['em_create_email_error']	= 'Error in creating emails: %s';
+$lang['em_create_email_success']= 'Email(s) are inserted into email queue.';
+$lang['em_create_email_failure']= 'Fail in creating emails: %s';
+$lang['em_create_email_cancel']	= 'Cancel';

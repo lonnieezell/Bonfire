@@ -22,17 +22,27 @@ $(document).ready(function(){
 	$('#server_type').trigger('change');
 
 	// Email Test
-	$('#test-form').submit(function(e){
+	$('#test-form[type=submit]').click(function(e){
 		e.preventDefault();
 
-		var email	= $('#test-email').val();
-		var url		= $(this).attr('action');
+		var form = this.form;
+		
+		// Grab all the form data, including the CodeIgniter anti-CSRF token
+		var data    = $(form).serialize();
 
-		$('#test-ajax').load(
+		// Add the submit button which was clicked
+		if (this.name) {
+			data[this.name] = this.value;
+		}
+
+		// Submit the form by AJAX, and display the result.
+		var url		= $(form).attr('action');
+
+		$.post(
 			url,
-			{
-				email: email,
-				url: url
+			data,
+			function success(data) {
+				$('#test-ajax').html(data);
 			}
 		);
 	});

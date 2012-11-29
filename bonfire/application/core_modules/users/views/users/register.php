@@ -3,12 +3,12 @@
 		<h1><?php echo lang('us_login'); ?></h1>
 	</div>
 
-<?php if (auth_errors() || validation_errors()) : ?>
+<?php if (validation_errors()) : ?>
 		<div class="row-fluid">
 			<div class="span12">
 				<div class="alert alert-error fade in">
 						<a data-dismiss="alert" class="close">&times;</a>
-					<?php echo auth_errors() . validation_errors(); ?>
+					<?php echo validation_errors(); ?>
 				</div>
 			</div>
 		</div>
@@ -40,7 +40,7 @@
 	<div class="control-group <?php echo iif( form_error('display_name') , 'error') ;?>">
 		<label class="control-label" for="display_name"><?php echo lang('bf_display_name'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" name="display_name" value="<?php echo set_value('display_name'); ?>" />
+			<input class="span6" type="text" name="display_name" id="display_name" value="<?php echo set_value('display_name'); ?>" />
 		</div>
 	</div>
 
@@ -71,22 +71,26 @@
 			</div>
 		</div>
 
-		<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
-			<label class="control-label required" for="language"><?php echo lang('bf_language') ?></label>
-			<div class="controls">
-				<select name="language" id="language" class="chzn-select">
-				<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
-					<?php foreach ($languages as $language) : ?>
-						<option value="<?php echo $language ?>" <?php echo set_select('language', $language, config_item('language') == $language ? TRUE : FALSE) ?>>
-							<?php echo ucfirst($language) ?>
-						</option>
+		<?php if (isset($languages) && is_array($languages) && count($languages)) : ?>
+			<?php if(count($languages) == 1): ?>
+				<input type="hidden" id="language" name="language" value="<?php echo $languages[0]; ?>">
+			<?php else: ?>
+				<div class="control-group <?php echo form_error('language') ? 'error' : '' ?>">
+					<label class="control-label required" for="language"><?php echo lang('bf_language') ?></label>
+					<div class="controls">
+						<select name="language" id="language" class="chzn-select">
+						<?php foreach ($languages as $language) : ?>
+							<option value="<?php e($language) ?>" <?php echo set_select('language', $language, config_item('language') == $language ? TRUE : FALSE) ?>>
+								<?php e(ucfirst($language)) ?>
+							</option>
 
-					<?php endforeach; ?>
-				<?php endif; ?>
-				</select>
-				<?php if (form_error('language')) echo '<span class="help-inline">'. form_error('language') .'</span>'; ?>
-			</div>
-		</div>
+						<?php endforeach; ?>
+						</select>
+						<?php if (form_error('language')) echo '<span class="help-inline">'. form_error('language') .'</span>'; ?>
+					</div>
+				</div>
+			<?php endif; ?>
+		<?php endif; ?>
 
 		<div class="control-group <?php echo form_error('timezone') ? 'error' : '' ?>">
 			<label class="control-label required" for="timezones"><?php echo lang('bf_timezone') ?></label>
@@ -106,9 +110,8 @@
 		<!-- End of User Meta -->
 
 	<div class="control-group">
-		<label class="control-label" for="submit">&nbsp;</label>
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="<?php echo lang('us_register'); ?>"  />
+			<input class="btn btn-primary" type="submit" name="register" id="submit" value="<?php echo lang('us_register'); ?>"  />
 		</div>
 	</div>
 
