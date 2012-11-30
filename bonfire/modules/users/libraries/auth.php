@@ -141,7 +141,7 @@ class Auth
 		$this->ci->load->model('users/User_model', 'user_model');
 
 		// Grab the user from the db
-		$selects = 'id, email, username, users.role_id, salt, password_hash, users.role_id, users.deleted, users.active, banned, ban_message';
+		$selects = 'id, email, username, users.role_id, password_hash, users.role_id, users.deleted, users.active, banned, ban_message, password_iterations, force_password_reset';
 
 		if ($this->ci->settings_lib->item('auth.do_login_redirect'))
 		{
@@ -184,12 +184,16 @@ class Auth
 			Template::set_message(sprintf(lang('us_account_deleted'), html_escape(settings_item("site.system_email"))), 'error');
 			return FALSE;
 		}
-
-		// load do_hash()
-		$this->ci->load->helper('security');
+		
+		// Load the password hash library
+		if (!class_exists('PasswordHash'))
+		{
+			require(dirname(__FILE__) .'/PasswordHash.php');
+		}
+		$hasher = new PasswordHash($user->password_iterations, false);
 
 		// Try password
-		if (do_hash($user->salt . $password) == $user->password_hash)
+		if ($hasher->CheckPassword($password, $user->password_hash))
 		{
 			// check if the account has been banned.
 			if ($user->banned)
@@ -279,7 +283,7 @@ class Auth
 		if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
 		{
 			// Grab the user account
-			$user = $this->ci->user_model->select('id, username, email, salt, password_hash')->find($this->ci->session->userdata('user_id'));
+			$user = $this->ci->user_model->select('id, username, email, password_hash')->find($this->ci->session->userdata('user_id'));
 
 			if ($user !== FALSE)
 			{

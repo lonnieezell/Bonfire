@@ -177,13 +177,25 @@ class User_model extends BF_Model
 				$data['display_name'] = $data['email'];
 			}
 		}
+		
+		// Load the password hash library
+		if (!class_exists('PasswordHash'))
+		{
+			require(dirname(__FILE__) .'/../libraries/PasswordHash.php');
+		}
+		$hasher = new PasswordHash($this->settings_lib->item('password_iterations'), false);
 
-		list($password, $salt) = $this->hash_password($data['password']);
+		$password = $hasher->HashPassword($data['password']);
+		
+		if (strlen($password) < 20)
+		{
+			return false;
+		}
 
-		unset($data['password'], $data['pass_confirm'], $data['submit']);
+		unset($data['password'], $data['pass_confirm'], $data['submit'], $hasher);
 
 		$data['password_hash'] = $password;
-		$data['salt'] = $salt;
+		$data['password_iterations'] = $this->settings_lib->item('password_iterations');
 
 		// What's the default role?
 		if (!isset($data['role_id']))
@@ -233,12 +245,24 @@ class User_model extends BF_Model
 		}
 		else if (!empty($data['password']) && !empty($data['pass_confirm']) && $data['password'] == $data['pass_confirm'])
 		{
-			list($password, $salt) = $this->hash_password($data['password']);
+			// Load the password hash library
+			if (!class_exists('PasswordHash'))
+			{
+				require(dirname(__FILE__) .'/../libraries/PasswordHash.php');
+			}
+			$hasher = new PasswordHash($this->settings_lib->item('password_iterations'), false);
 
-			unset($data['password'], $data['pass_confirm']);
+			$password = $hasher->HashPassword($data['password']);
+			
+			if (strlen($password) < 20)
+			{
+				return false;
+			}
+
+			unset($data['password'], $data['pass_confirm'], $hasher);
 
 			$data['password_hash'] = $password;
-			$data['salt'] = $salt;
+			$data['password_iterations'] = $this->settings_lib->item('password_iterations');
 		}
 
 		// Handle the country
