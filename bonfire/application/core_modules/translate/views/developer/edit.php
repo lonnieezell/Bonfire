@@ -9,7 +9,7 @@ form .form-actions { padding-left: 43% !important; }
 
 <?php if (isset($orig) && is_array($orig) && count($orig)) : ?>
 
-	<?php echo form_open(current_url(), 'class="form-horizontal"'); ?>
+	<?php echo form_open(current_url(), 'class="form-horizontal" id="translate_form"'); ?>
 		<input type="hidden" name="trans_lang" value="<?php e($trans_lang) ?>" />
 		
 		<fieldset>
