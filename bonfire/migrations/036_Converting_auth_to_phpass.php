@@ -50,6 +50,15 @@ class Migration_Converting_auth_to_phpass extends Migration
 		
 		// Set all users to have their passwords reset
 		$this->db->where('force_password_reset', 0)->update('users', array('force_password_reset' => 1));
+		
+		// Add the default password_iterations to the settingns table
+		// Do it by hand so it still works in the installer
+		$data = array(
+			'name'		=> 'password_iterations',
+			'module'	=>	'users',
+			'value'		=> 8
+		);
+		$this->db->insert('settings', $data);
 	}
 
 	//--------------------------------------------------------------------
@@ -81,6 +90,10 @@ class Migration_Converting_auth_to_phpass extends Migration
 		
 		// Remove the force_password_reset column
 		$this->dbforge->drop_column('users', 'force_password_reset');
+		
+		// Remove the password_iterations setting
+		$this->load->library('settings/settings_lib');
+		$this->settings_lib->delete('password_iterations', 'users');
 	}
 
 	//--------------------------------------------------------------------

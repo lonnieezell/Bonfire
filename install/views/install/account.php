@@ -19,10 +19,15 @@
 
 	<?php echo lang('in_account_heading'); ?>
 	  
+	  	<div>
+			<label for="email"><?php echo lang('in_email'); ?></label>
+			<input type="email" name="email" id="email" placeholder="me@home.com" value="<?php echo set_value('email') ?>" />
+			<p class="small"><?php echo lang('in_email_note'); ?></p>
+		</div>
 		
 		<div>
 			<label for="username"><?php echo lang('bf_username'); ?></label>
-			<input type="text" name="username" id="username" value="<?php echo set_value('username') ?>" />
+			<input type="text" name="username" id="username" value="<?php echo set_value('username', 'admin') ?>" />
 		</div>
 		
 		<br />
@@ -38,13 +43,6 @@
 			<input type="password" name="pass_confirm" id="pass_confirm" value="" />
 		</div>
 		
-		<br/>
-		
-		<div>
-			<label for="email"><?php echo lang('in_email'); ?></label>
-			<input type="email" name="email" id="email" placeholder="me@home.com" value="<?php echo set_value('email') ?>" />
-			<p class="small"><?php echo lang('in_email_note'); ?></p>
-		</div>
 		
 		<div class="submits">
 			<input type="submit" name="submit" id="submit" value="<?php echo lang('in_install_button'); ?>" />

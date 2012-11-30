@@ -426,6 +426,7 @@ class Installer_lib {
 		$data['password_hash'] = $password;
 		$data['password_iterations'] = $iterations;
 		$data['created_on'] = date('Y-m-d H:i:s');
+		$data['display_name'] = $data['username'];
 
 		if ($this->ci->db->insert('users', $data) == false)
 		{
