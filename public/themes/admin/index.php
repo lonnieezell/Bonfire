@@ -3,10 +3,12 @@
 ?>
 <?php echo theme_view('partials/_header'); ?>
 
-<div class="container-fluid body">
-        <?php echo Template::message(); ?>
-
-        <?php echo isset($content) ? $content : Template::yield(); ?>
+<div class="body">
+	<div class="container-fluid">
+	        <?php echo Template::message(); ?>
+	
+	        <?php echo isset($content) ? $content : Template::yield(); ?>
+	</div>
 </div>
 
 <?php echo theme_view('partials/_footer'); ?>

@@ -3,12 +3,13 @@ Basic Typography
  */
 body {
 	background-color: #d9dde8;
+	font-family: Frutiger, "Frutiger Linotype", Univers, Calibri, "Gill Sans", "Gill Sans MT", "Myriad Pro", Myriad, "DejaVu Sans Condensed", "Liberation Sans", "Nimbus Sans L", Tahoma, Geneva, "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 h1,h2,h3 {
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", sans-serif;
 	font-weight: normal;
 	line-height: 2.0;
+	font-family: Corbel, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", "DejaVu Sans", "Bitstream Vera Sans", "Liberation Sans", Verdana, "Verdana Ref", sans-serif;
 }
 
 /*
@@ -19,10 +20,9 @@ Helpers
 }
 
 p.intro {
-	margin: 0 auto 2em auto;
+	margin: 0 0 2em 0;
 	font-size: 125%;
 	color: #777;
-	max-width: 45em;
 	text-align: center;
 }
 
@@ -47,7 +47,6 @@ p.intro {
 	font-weight: lighter;
 	line-height: 1.2em;
 	color: #999;
-	font-family: Helvetica, sans-serif;
 }
 
 .big-text {
@@ -72,8 +71,8 @@ Page Structure
 }
 
 .body {
-	background-color: white;
-	border: 1px solid #DDD;
+	background-color: #fdfdfd;
+	border: 1px solid #adadad;
 	border-top: none;
 
 	-webkit-box-shadow: 0 1px 10px rgba(0,0,0,0.1);
@@ -82,14 +81,12 @@ Page Structure
 	padding: 100px 20px 20px 20px;
 	z-index: 1;
 	min-height: 300px;
-
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
+	
+	font-weight: lighter;
 }
 
 .navbar {
-	font-size: 13px;
+	font-size: 10pt;
 }
 
 .nav .dropdown img {
@@ -129,17 +126,17 @@ a.brand {
 	width: 100%;
 	background-color: #eeeeee; /* Old browsers */
 	background-repeat: repeat-x; /* Repeat the gradient */
-	background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
+	background-image: -webkit-linear-gradient(top, #e8e8e8 0%, #d8d8d8 100%);
 
-	background-image: -moz-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
-	background-image: -o-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
-	background-image: -ms-linear-gradient(top, #f5f5f5 0%, #eeeeee 100%);
-	background-image: linear-gradient(top, #f5f5f5 0%, #eeeeee 100%); /* W3C */
+	background-image: -moz-linear-gradient(top, #e8e8e8 0%, #d8d8d8 100%);
+	background-image: -o-linear-gradient(top, #e8e8e8 0%, #d8d8d8 100%);
+	background-image: -ms-linear-gradient(top, #e8e8e8 0%, #d8d8d8 100%);
+	background-image: linear-gradient(top, #e8e8e8 0%, #d8d8d8 100%); /* W3C */
 
 	-webkit-border-radius: 0px;
 	-moz-border-radius: 0px;
 	border-radius: 0px;
-	border-bottom: 1px solid #d5d5d5;
+	border-bottom: 1px solid #c5c5c5;
 	border-top: 1px solid #163355;
 
 	-webkit-box-shadow: 0 3px 5px rgba(0,0,0,.08);
@@ -166,8 +163,8 @@ a.brand {
 	padding-bottom: 11px;
 	font-size: 13px;
 	color: #777;
-	border-right: 1px solid #d5d5d5;
-	border-left: 1px solid #f5f5f5;
+	border-right: 1px solid #c3c3c3;
+	border-left: 1px solid #e8e8e8;
 
 	-webkit-border-radius: 0;
 	-moz-border-radius: 0;
@@ -201,7 +198,7 @@ footer.footer {
 }
 
 .footer p {
-	font-size: 11px;
+	font-size: 10pt;
 }
 
 /*
@@ -349,13 +346,6 @@ Grids
 
 /* Admin Box */
 .admin-box {
-	border: 1px solid #d6e6f0;
-	-webkit-border-top-left-radius: 5px;
-	-webkit-border-top-right-radius: 5px;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius-topright: 5px;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
 	margin-bottom: 18px;
 
 	-ms-overflow-x: scroll;
@@ -364,20 +354,11 @@ Grids
 }
 
 .admin-box h3 {
-	background: #243957;
-	height: 36px;
-	line-height: 36px;
-	color: #fff;
-	font-size: 16px;
-	text-shadow: 0px 1px 2px rgba(0,0,0,0.8);
-	padding: 0 10px;
+	color: #333;
+	font-family: Arial, sans-serif;
+	font-size: 20pt;
+	padding: 0 10px 0 0;
 	margin: 0;
-	-webkit-border-top-left-radius: 5px;
-	-webkit-border-top-right-radius: 5px;
-	-moz-border-radius-topleft: 5px;
-	-moz-border-radius-topright: 5px;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
 }
 
 .admin-box .table {
@@ -386,7 +367,6 @@ Grids
 }
 
 .admin-box .table th {
-	background-color: #ddd;
 	border-bottom: 1px solid #b6b6c6;
 }
 
@@ -429,6 +409,10 @@ tfoot td {
 	line-height: 2.1 !important;
 }
 
+.table-striped tbody tr:nth-child(odd) td, .table-striped tbody tr:nth-child(odd) th {
+	background-color: #f5f5f5;
+}
+
 /*
 Login Page
  */
@@ -441,12 +425,12 @@ Login Page
 Tabs
  */
 .nav-tabs > li > a {
-	border-color: #d5d5d5;
+	border-color: #f2f2f2;
+	border-bottom-color: #d5d5d5;
 }
 
 .nav-tabs a {
 	color: #999;
-	background-color: #f2f2f2;
 }
 
 .nav-tabs .active a {
@@ -462,19 +446,19 @@ Tabs
 }
 
 .admin-box .nav-tabs {
-	background: #849cb7;
+	background: whitesmoke;
 	padding-left: 10px;
 	padding-top: 7px;
-	border-bottom: 1px solid #767676;
+	border-bottom: 1px solid #d5d5d5;
 }
 
 .admin-box .nav-tabs a {
-	background-color: #243957;
-	color: #fff;
+	background-color: none;
+	color: #333;
 }
 
 .admin-box .nav-tabs > li > a {
-	border-color: #243957;
+	border-color: none;
 }
 
 .admin-box .nav-tabs .active a {
@@ -487,9 +471,8 @@ Tabs
 
 .admin-box .nav-tabs li a:hover {
 	background-color: #f2f2f2;
-	color: #777;
-	border-color: #a6a6a6;
-	border-bottom-color: #767676;
+	color: #000;
+	border-color: #d5d5d5;
 }
 
 /*
@@ -544,10 +527,9 @@ input[type=checkbox],input[type=radio] {
 
 .admin-box legend {
 	display: block;
-	background: #d9dde8;
-	font-size: 16px;
-	text-indent: 10px;
-	font-weight: lighter;
+	padding-top: 12pt;
+	font-size: 14pt;
+	font-weight: normal;
 	margin-bottom: auto;
 }
 

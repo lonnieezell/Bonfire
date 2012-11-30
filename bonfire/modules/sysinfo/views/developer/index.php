@@ -1,7 +1,5 @@
 <?php echo modules::run('update/update/update_check'); ?>
 
-<br/>
-
 <div class="admin-box">
 	<h3><?php echo lang('si.system_info') ?></h3>
 

@@ -5,8 +5,6 @@
 	</div>
 <?php endif; ?>
 
-<p class="intro"><?php e(lang('log_intro'))  ?></p>
-
 <?php if (isset($logs) && is_array($logs) && count($logs) && count($logs) > 1) : ?>
 
 <div class="admin-box">

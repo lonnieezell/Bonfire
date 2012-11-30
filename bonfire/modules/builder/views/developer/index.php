@@ -4,8 +4,6 @@
 	</div>
 <?php endif;?>
 
-<br/>
-
 <div class="admin-box">
 	<h3><?php echo lang('mb_exist_modules') ?></h3>
 

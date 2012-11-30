@@ -54,4 +54,3 @@ $lang['log_title']				= 'System Logs';
 $lang['log_title_settings']		= 'System Log Settings';
 $lang['log_deleted']			= '%d log files deleted';
 $lang['log_filter_label'] = 'View';
-$lang['log_intro']        = 'These are your error and debug logs....';

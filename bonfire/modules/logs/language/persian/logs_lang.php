@@ -55,4 +55,3 @@ $lang['log_title']				= 'وقایع سیستم';
 $lang['log_title_settings']		= 'تنظیمات ثبت وقایع سیستم';
 $lang['log_deleted']			= '%d فایل وقایع حذف شد';
 $lang['log_filter_label'] = 'نمایش';
-$lang['log_intro']        = 'این ها پیغام های خطا و دیباگ ثبت شده شما می باشند....';

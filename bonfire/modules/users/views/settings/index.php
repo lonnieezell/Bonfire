@@ -1,10 +1,10 @@
-<div class="well shallow-well">
-	<?php render_filter_first_letter(lang('us_filter_first_letter')); ?>
-</div>
-
 <div class="admin-box">
 	<h3><?php echo lang('bf_users') ?></h3>
 
+	<div class="well shallow-well">
+		<?php render_filter_first_letter(lang('us_filter_first_letter')); ?>
+	</div>
+	
 	<ul class="nav nav-tabs" >
 		<li <?php echo $filter=='' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url; ?>">All Users</a></li>
 		<li <?php echo $filter=='inactive' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=inactive'; ?>">Inactive</a></li>
