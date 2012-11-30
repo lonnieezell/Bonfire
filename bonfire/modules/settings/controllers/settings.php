@@ -150,7 +150,7 @@ class Settings extends Admin_Controller
 			array('name' => 'site.show_profiler', 'value' => isset($_POST['show_profiler']) ? 1 : 0),
 			array('name' => 'site.show_front_profiler', 'value' => isset($_POST['show_front_profiler']) ? 1 : 0),
 			array('name' => 'site.languages', 'value' => $this->input->post('languages') != '' ? serialize($this->input->post('languages')) : ''),
-
+			array('name' => 'password_iterations', 'value' => $this->input->post('password_iterations')),
 
 		);
 

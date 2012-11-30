@@ -130,6 +130,7 @@ $lang['bf_password_force_numbers'] = 'Should password force numbers?';
 $lang['bf_password_force_symbols'] = 'Should password force symbols?';
 $lang['bf_password_force_mixed_case'] = 'Should password force mixed case?';
 $lang['bf_password_show_labels'] = 'Display password validation labels';
+$lang['bf_password_iterations_note'] = 'Higher values increase the security and the time taken to hash the passwords.<br/>See the <a href="http://www.openwall.com/phpass/" target="blank">phpass page</a> for more information. If in doubt, leave at 8.';
 
 //--------------------------------------------------------------------
 // ! USER/PROFILE
