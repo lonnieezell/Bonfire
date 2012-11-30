@@ -45,7 +45,6 @@ $lang['em_test_header']			= 'Probar su configuraci&oacute;n';
 $lang['em_test_intro']			= 'Ingrese una direcci&oacute;n de correo a continuaci&oacute;n, para verificar que su configuraci&oacute;n de correo esta funcionando.<br/>Por favor guarde la configuraci&oacute;n actual antes de hacer la prueba.';
 $lang['em_test_button']			= 'Enviar un correo de prueba';
 $lang['em_test_result_header']	= 'Resultados de la prueba';
-$lang['em_test_no_results']		= 'O la prueba no se ha ejecutado o no devuelve ning&uacute;n resultado.';
 $lang['em_test_debug_header']	= 'Informaci&oacute;n de depuraci&oacute;n';
 $lang['em_test_success']		= 'El correo parece estar configurado correctamente. Si no ve el correo en su buz&oacute;n, intente buscando en la bandeja de spam o detry looking in your Spam box or de correo basura.';
 $lang['em_test_error']			= 'El correo parece no estar configurado correctamente.';
@@ -66,7 +65,14 @@ $lang['em_subject']				= 'Asunto';
 $lang['em_missing_data']		= 'Uno o m&aacute;s campos requeridos faltan.';
 $lang['em_no_debug']			= 'El correo se puso en cola. No hay informaci&oacute;n de depuraci&oacute;n disponible.';
 
-$lang['em_delete_success']      = '(x) registros eliminados.';
-$lang['em_delete_failure']		= 'No se puede eliminar el registro : ';
-$lang['em_delete_error']		= 'Error eliminando el registro : ';
+$lang['em_delete_success']      = '%d registros eliminados.';
+$lang['em_delete_failure']		= 'No se puede eliminar el registro: %s';
+$lang['em_delete_error']		= 'Error eliminando el registro: %s';
 $lang['em_delete_confirm']		= '&iexcl;Esta seguro de que quiere eliminar este correo? ';
+
+// $lang['em_create_email']		= 'Send New Email';
+// $lang['em_create_setting']		= 'Email Configure';
+// $lang['em_create_email_error']	= 'Error in creating emails: %s';
+// $lang['em_create_email_success']= 'Email(s) are inserted into email queue.';
+// $lang['em_create_email_failure']= 'Fail in creating emails: %s';
+// $lang['em_create_email_cancel']	= 'Cancel';

@@ -29,9 +29,9 @@ $lang['us_no_permission']			= 'No tienes permiso de acceso a esta p&aacute;gina.
 $lang['us_fields_required']         = '%s y el campo de contrase&ntilde;a debe ser llenado.';
 
 $lang['us_access_logs']				= 'Registro de acceso';
-$lang['us_logged_in_on']			= 'Inicio sesi&oacute;n en';
+$lang['us_logged_in_on']			= '<b>%s</b> inicio sesi&oacute;n en %s';
 $lang['us_no_access_message']		= '<p>Felicitaciones!</p><p>Todos los usuarios tienen buena memoria!</p>';
-$lang['us_log_create']				= 'crearon uno nuevo';
+$lang['us_log_create']				= 'crearon uno nuevo %s';
 $lang['us_log_edit']				= 'usuario modificado';
 $lang['us_log_delete']				= 'usuario eliminado';
 $lang['us_log_logged']				= 'inicio de sesi&oacute;n desde';
@@ -41,9 +41,6 @@ $lang['us_log_register']			= 'registraron una cuenta nueva.';
 $lang['us_log_edit_profile']		= 'actualizaron su perfil';
 
 
-$lang['us_deleted_users']			= 'Usuarios eliminados';
-$lang['us_purge_del_accounts']		= 'Purgar las cuentas eliminadas';
-$lang['us_purge_del_note']			= '<p>Purgar las cuentas eliminadas es una acci&oacute;n permanente. No hay retorno, as&iacute; que por favor este seguro de lo que va hacer.</p>';
 $lang['us_purge_del_confirm']		= '&iexcl;Esta complentamente seguro de remover la cuenta de usuario(s) - no hay retorno?';
 $lang['us_action_purged']			= 'Usuario purgados.';
 $lang['us_action_deleted']			= 'El usuario fue eliminado.';
@@ -102,25 +99,18 @@ $lang['us_button_enter']			= 'Ingresar';
 $lang['us_password_mins']			= 'M&iacute;nimo 8 caracteres.';
 $lang['us_register']				= 'Registrar';
 $lang['us_already_registered']		= '&iquest;Ya est&aacute;s registrado?';
-
 $lang['us_action_save']				= 'Guardar Usuario';
 $lang['us_unauthorized']			= 'Sin autorizaci&oacute;n. Lo sentimos pero no tienes los permisos apropiados para gestionar el rol "%s".';
 $lang['us_empty_id']				= 'No proporciono el ID del usuario. Debes proporcionarlo para realizar esta acci&oacute;n.';
 $lang['us_self_delete']				= 'Sin autorizaci&oacute;n. Lo sentimos, no se puede eliminar a usted mismo.';
-
 $lang['us_filter_first_letter']		= 'El nombre de usuario inicia con: ';
 $lang['us_account_details']			= 'Detalles de la cuenta';
 $lang['us_last_login']				= '&uuml;ltimo inicio de sesi&oacute;n';
-
-
-
 $lang['us_no_password']             = 'No se indico contrase&ntilde;a.';
 $lang['us_no_email']                = 'No se indico el correo electr&oacute;nico.';
 $lang['us_email_taken']             = 'El correo electr&oacute;nico ya existe.';
 $lang['us_invalid_user_id']         = 'ID de usuario incorrecto';
-
 $lang['us_account_created_success'] = 'Su cuenta ha sido creada. Por favor inicie sesi&oacute;n.';
-
 $lang['us_email_already_used']      = 'Ese correo electr&oacute;nico ya se encuentra en uso.';
 $lang['us_username_already_used']   = 'Ese nombre de usuario ya se encuentra en uso.';
 
@@ -163,10 +153,6 @@ $lang['us_confirm_activate_code']	= 'Condirmar el c&oacute;digo de activaci&oacu
 $lang['us_activate_code_send']		= 'Enviar c&oacute;digo de activaci&oacute;n';
 $lang['bf_action_activate']			= 'Activar';
 $lang['bf_action_deactivate']		= 'Inactivar';
-$lang['us_purge_del_accounts']		= 'Purgar cuentas eliminadas';
-$lang['us_no_inactive']				= 'No hay usuarios que requieran la activaci&oacute;n en la base de datos.';
-$lang['us_activate_accounts']		= 'Activar todas las cuentas';
-$lang['us_purge_act_note']			= '<h3>Activar todas las cuentas</h3><p>activar en lote todos los usuarios que requieren activaci&oacute;n.</p>';
 $lang['us_account_activated']		= 'Activaci&oacute;n de cuentas de usuario.';
 $lang['us_account_deactivated']		= 'Inactivaci&oacute;n de cuentas de usuario.';
 $lang['us_account_activated_admin']	= 'Activaci&oacute;n de la cuenta administrativa.';
@@ -208,6 +194,8 @@ $lang['us_pass_weak']				= 'D&eacute;bil';
 $lang['us_pass_good']				= 'Bueno';
 $lang['us_pass_strong']				= 'Fuerte';
 
-/* Reset Password */
-$lang['us_reset_password_email_subject'] = 'Asunto';
-$lang['us_activate_error_msg']		=  'Mensaje de error';
+// $lang['us_tab_all']					= 'All Users';
+// $lang['us_tab_inactive']			= 'Inactive';
+// $lang['us_tab_banned']				= 'Banned';
+// $lang['us_tab_deleted']				= 'Deleted';
+// $lang['us_tab_roles']				= 'By Role';

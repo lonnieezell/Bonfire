@@ -2,8 +2,8 @@
 
 $lang['mig_intro']					= 'Migraciones te ayuda a mantener su base de datos actualizada y sincronizada entre los servidores de desarrollo y producci&oacute;n, proporcionando una manera simple de mantener un control de versiones de su base de datos.';
 $lang['mig_not_enabled']			= 'Migraciones no esta dispobible.';
-$lang['mig_installed_version']		= 'Versi&oacute;n instalada:';
-$lang['mig_latest_version']			= 'La &uacute;ltima versi&oacute;n disponible:';
+$lang['mig_installed_version']		= 'Versi&oacute;n instalada: <b>%d</b>';
+$lang['mig_latest_version']			= 'La &uacute;ltima versi&oacute;n disponible: <b>%d</b>';
 $lang['mig_db_not_current']			= 'Su base de datos no esta actualizada.';
 $lang['mig_no_migrations']			= 'No hay mirgraciones disponibles.';
 
@@ -21,3 +21,13 @@ $lang['mig_mod_migrations']			= 'Migraci&oacute;n de M&oacute;dulos';
 $lang['db_maintenance']				= 'Mantenimiento';
 $lang['db_backups']					= 'Copia de Seguridad';
 $lang['db_migrations']				= 'Migraciones';
+
+// $lang['mig_tbl_module']				= 'Module';
+// $lang['mig_tbl_installed_ver']		= 'Installed Version';
+// $lang['mig_tbl_latest_ver']			= 'Latest Version';
+// 
+// $lang['mig_uninstall']				= 'Uninstall';
+// 
+// $lang['mig_tab_app']				= 'Application';
+// $lang['mig_tab_mod']				= 'Modules';
+// $lang['mig_tab_core']				= 'Bonfire';

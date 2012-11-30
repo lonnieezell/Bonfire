@@ -5,3 +5,11 @@ $lang['set_name_change_frequency']	= ' cambiar cada';
 $lang['set_days']					= ' d&iacute;as';
 $lang['settings_saved_success']     = 'Su configuraci&oacute;n fue guardada correctamente.';
 $lang['settings_error_success']     = 'Hubo un error guardando su configuraci&oacute;n.';
+
+
+// $lang['set_tab_settings']			= 'Main Settings';
+// $lang['set_tab_security']			= 'Security Settings';
+// $lang['set_tab_developer']			= 'Developer Settings';
+// 
+// $lang['set_option_password']		= 'Password Options';
+// $lang['set_option_developer']		= 'Developer Options';

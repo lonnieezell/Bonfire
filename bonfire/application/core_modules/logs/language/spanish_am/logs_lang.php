@@ -52,6 +52,6 @@ $lang['log_settings']			= 'Configuraci&oacute;n';
 
 $lang['log_title']				= 'Sistema de Registro';
 $lang['log_title_settings']		= 'Configuraci&oacute;n del sistema de registro';
-$lang['log_deleted']			= 'Archivos de registro eliminados';
+$lang['log_deleted']			= '%d archivos de registro eliminados';
 $lang['log_filter_label'] 		= 'Vistas';
 $lang['log_intro']        		= 'Estos son los errores y mensajes de depuración...';

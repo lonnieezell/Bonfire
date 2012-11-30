@@ -137,7 +137,6 @@ $lang['bf_password_show_labels']	    = 'Mostrar las etiquetas de validaci&oacute
 
 $lang['bf_user']				= 'Usuario';
 $lang['bf_users']				= 'Usuarios';
-$lang['bf_username']			= 'Nombre de usuario';
 $lang['bf_description']			= 'Descripción';
 $lang['bf_email']				= 'Correo electrónico';
 $lang['bf_user_settings']		= 'Mi Perfil';
@@ -155,7 +154,7 @@ $lang['bf_form_label_required'] = '<span class="required">*</span>';
 //--------------------------------------------------------------------
 // MY_Model
 //--------------------------------------------------------------------
-$lang['bf_model_db_error']		= 'Error en la base de datos: ';
+$lang['bf_model_db_error']		= 'Error en la base de datos: %s';
 $lang['bf_model_no_data']		= 'No hay datos disponibles.';
 $lang['bf_model_invalid_id']	= 'Se paso un ID inv&aacute;lido al modelo.';
 $lang['bf_model_no_table']		= 'El modelo tiene una tabla sin especificar.';
@@ -201,7 +200,7 @@ $lang['bf_remember_me']			= 'Recordarme';
 //--------------------------------------------------------------------
 // Password Help Fields to be used as a warning on register
 //--------------------------------------------------------------------
-$lang['bf_password_number_required_help']  = 'La contraseña debe contener al menos un signo de puntuaci&oacute;n.';
+$lang['bf_password_number_required_help']  = 'La contraseña debe contener al menos un número.';
 $lang['bf_password_caps_required_help']    = 'La contrase&ntilde;a debe contener al menos una letra en may&uacute;scula.';
 $lang['bf_password_symbols_required_help'] = 'La contrase&ntilde;a debe contener al menos un s&iacute;mbolo.';
 

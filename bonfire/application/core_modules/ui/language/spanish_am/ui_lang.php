@@ -44,3 +44,4 @@ $lang['ui_shortcut_save_error']			= 'Hubo un error al guardar las teclas de m&ea
 $lang['ui_shortcut_error_exists']		= 'tecla de m&eacute;todo abreviado ya existe';
 $lang['ui_shortcut_error_unavailable']	= 'La acci&oacute;n no esta disponible';
 $lang['ui_shortcut_error']				= 'Los espacios no est&aacute;n permitidos en la tecla de m&eacute;todo abreviado';
+

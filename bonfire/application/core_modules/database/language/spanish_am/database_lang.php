@@ -101,4 +101,4 @@ $lang['db_sql_query']			= 'Consulta SQL';
 $lang['db_total_results']		= 'Resultados totales';
 $lang['db_no_rows']				= 'No se encontraron datos en la tabla.';
 $lang['db_browse']				= 'Explorar';
-$lang['db_apply']               = 'Aplicar';
+
