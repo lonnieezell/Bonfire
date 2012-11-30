@@ -377,8 +377,8 @@ class Installer_lib {
 		*/
 
 		$settings = array(
-			'site.title'	=> $this->ci->input->post('site_title'),
-			'site.system_email'	=> $this->ci->input->post('email'),
+			'site.title'	=> $this->ci->session->userdata('site_title'),
+			'site.system_email'	=> $this->ci->session->userdata('user_email'),
 			'updates.do_check' => $this->curl_update,
 			'updates.bleeding_edge' => $this->curl_update
 		);
@@ -396,7 +396,7 @@ class Installer_lib {
 		}
 
 		// update the emailer sender_email
-		$setting_rec = array('name' => 'sender_email', 'module' => 'email', 'value' => $this->ci->input->post('email'));
+		$setting_rec = array('name' => 'sender_email', 'module' => 'email', 'value' => $this->ci->session->userdata('user_email'));
 
 		$this->ci->db->where('name', 'sender_email');
 		if ($this->ci->db->update('settings', $setting_rec) == false)
