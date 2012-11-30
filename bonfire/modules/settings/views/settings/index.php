@@ -37,7 +37,7 @@
 			<div class="control-group">
 				<label class="control-label" for="title"><?php echo lang('bf_site_name') ?></label>
 				<div class="controls">
-					<input type="text" name="title" id="title" class="span6" value="<?php echo set_value('site.title', isset($settings['site.title']) ? $settings['site.title'] : '') ?>" />
+					<input type="text" name="title" id="title" class="span6" value="<?php echo set_value('site.title', isset($settings['site.title']) ? $settings['site.title'] : null) ?>" />
 				</div>
 			</div>
 
@@ -210,16 +210,16 @@
 				<label for="password_iterations" class="control-label">Password Stretching</label>
 				<div class="controls">
 					<select name="password_iterations" style="width: auto">
-                    	<option <?php echo set_select('password_iterations', 2) ?>>2</option>
-                    	<option <?php echo set_select('password_iterations', 4) ?>>4</option>
-                    	<option <?php echo set_select('password_iterations', 8, true) ?>>8</option>
-                    	<option <?php echo set_select('password_iterations', 16) ?>>16</option>
-                    	<option <?php echo set_select('password_iterations', 32) ?>>32</option>
-                    	<option <?php echo set_select('password_iterations', 64) ?>>64</option>
-                    	<option <?php echo set_select('password_iterations', 128) ?>>128</option>
-                    	<option <?php echo set_select('password_iterations', 256) ?>>256</option>
-                    	<option <?php echo set_select('password_iterations', 512) ?>>512</option>
-                    	<option <?php echo set_select('password_iterations', 1024) ?>>1024</option>
+                    	<option <?php echo set_select('password_iterations', 2, $settings['password_iterations'] == 2) ?>>2</option>
+                    	<option <?php echo set_select('password_iterations', 4, $settings['password_iterations'] == 4) ?>>4</option>
+                    	<option <?php echo set_select('password_iterations', 8, $settings['password_iterations'] == 8) ?>>8</option>
+                    	<option <?php echo set_select('password_iterations', 16, $settings['password_iterations'] == 16) ?>>16</option>
+                    	<option <?php echo set_select('password_iterations', 32, $settings['password_iterations'] == 32) ?>>32</option>
+                    	<option <?php echo set_select('password_iterations', 64, $settings['password_iterations'] == 64) ?>>64</option>
+                    	<option <?php echo set_select('password_iterations', 128, $settings['password_iterations'] == 128) ?>>128</option>
+                    	<option <?php echo set_select('password_iterations', 256, $settings['password_iterations'] == 256) ?>>256</option>
+                    	<option <?php echo set_select('password_iterations', 512, $settings['password_iterations'] == 512) ?>>512</option>
+                    	<option <?php echo set_select('password_iterations', 1024, $settings['password_iterations'] == 1024) ?>>1024</option>
                     </select>
                     <span class="help-inline"><?php echo lang('bf_password_iterations_note'); ?></span>
 				</div>
