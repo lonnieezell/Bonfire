@@ -352,8 +352,7 @@ class Installer_lib {
 
 		if (!$this->ci->migrations->install())
 		{ 
-			$this->errors = $this->ci->migrations->error;
-			return false;
+			return $this->ci->migrations->error;
 		}
 
 		// get the list of custom modules in the main application
@@ -366,8 +365,7 @@ class Installer_lib {
 				// install the migrations for the custom modules
 				if (!$this->ci->migrations->install($module_name.'_'))
 				{
-					$this->errors = $this->ci->migrations->error;
-					return false;
+					return $this->ci->migrations->error;
 				}
 			}
 		}
@@ -390,8 +388,7 @@ class Installer_lib {
 			$this->ci->db->where('name', $key);
 			if ($this->ci->db->update('settings', $setting_rec) == false)
 			{
-				$this->errors = lang('in_db_settings_error');
-				return false;
+				return lang('in_db_settings_error');
 			}
 		}
 
@@ -401,8 +398,7 @@ class Installer_lib {
 		$this->ci->db->where('name', 'sender_email');
 		if ($this->ci->db->update('settings', $setting_rec) == false)
 		{
-			$this->errors = lang('in_db_settings_error');
-			return false;
+			return lang('in_db_settings_error');
 		}
 
 		//

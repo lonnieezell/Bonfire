@@ -270,44 +270,49 @@ class Install extends CI_Controller {
 	}
 
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 *	Do the actual installation...
 	 */
 	public function do_install() 
 	{
 		$data = new stdClass();
-		
+
 		$ready = true;
-		
+
 		// database info in session? 
 		if (!$this->session->userdata('hostname'))
 		{
 			$ready = false;
 			$data->reason = lang('in_db_no_session');
 		}
-		
+
 		// account info in session? 
 		if (!$this->session->userdata('user_username'))
 		{
 			$ready = false;
 			$data->reason = lang('in_user_no_session');
 		}
-		
+
 		// Do the install!
 		if ($ready)
 		{
-			if ($this->installer_lib->setup())
+			$setup = $this->installer_lib->setup();
+			if ($setup === true)
 			{
 				$this->session->set_userdata('step3_done', true);
 				$this->session->set_userdata('installed', true);
 				redirect('install/complete');
 			}
+			else
+			{
+				$data->reason = $setup;
+			}
 		}
-		
+
 		$this->load->view('install/failed', $data);
 	}
-	
+
 	//--------------------------------------------------------------------
 	
 	/**
