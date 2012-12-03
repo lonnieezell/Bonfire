@@ -366,7 +366,7 @@ class Installer_lib {
 				// install the migrations for the custom modules
 				if (!$this->ci->migrations->install($module_name.'_'))
 				{
-					$this->errors = $this->migrations->error;
+					$this->errors = $this->ci->migrations->error;
 					return false;
 				}
 			}
@@ -487,8 +487,8 @@ class Installer_lib {
 		foreach ($modules as $module => $migrations)
 		{
 			$mod_versions[$module] = array(
-				'installed_version'	=> $this->migrations->get_schema_version($module .'_'),
-				'latest_version'	=> $this->migrations->get_latest_version($module .'_'),
+				'installed_version'	=> $this->ci->migrations->get_schema_version($module .'_'),
+				'latest_version'	=> $this->ci->migrations->get_latest_version($module .'_'),
 				'migrations'		=> $migrations['migrations']
 			);
 		}
