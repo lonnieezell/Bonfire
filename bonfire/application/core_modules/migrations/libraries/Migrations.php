@@ -267,7 +267,7 @@ class Migrations
 	 * @access public
 	 *
 	 * @param int    $version An int that is the target version to migrate to.
-	 * @param string $type    A string that represents the name of the module, or 'app_' for application migrations. If empty, it returns core migrations.
+	 * @param string $type    A string that represents the name of the module, or 'app_' for application migrations. If empty, it applies core migrations.
 	 *
 	 * @return mixed TRUE if already latest, FALSE if failed, int if upgraded
 	 */

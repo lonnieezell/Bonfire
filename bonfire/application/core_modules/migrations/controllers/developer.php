@@ -101,7 +101,7 @@ class Developer extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	public function migrate_to($version=0, $type='')
+	public function migrate_to($version, $type='')
 	{
 		$result = $this->migrations->version($version, $type);
 
