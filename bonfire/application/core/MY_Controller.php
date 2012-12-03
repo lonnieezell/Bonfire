@@ -79,10 +79,10 @@ class Base_Controller extends MX_Controller
 		$this->load->model('users/User_model', 'user_model');
 		$this->load->library('users/auth');
 
-		// Load our current logged in user so we can access it anywhere.
-		if ($this->auth->is_logged_in())
+		// Load our current logged in user for convenience
+		$this->current_user = $this->auth->user();
+		if ($this->current_user)
 		{
-			$this->current_user = $this->user_model->find($this->auth->user_id());
 			$this->current_user->id = (int)$this->current_user->id;
 			$this->current_user->user_img = gravatar_link($this->current_user->email, 22, $this->current_user->email, "{$this->current_user->email} Profile");
 
@@ -91,7 +91,6 @@ class Base_Controller extends MX_Controller
 			{
 				$this->config->set_item('language', $this->current_user->language);
 			}
-
 		}
 
 		// Make the current user available in the views
