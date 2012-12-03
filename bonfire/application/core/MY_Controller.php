@@ -95,7 +95,7 @@ class Base_Controller extends MX_Controller
 		}
 
 		// Make the current user available in the views
-		$this->load->vars( array('current_user' => $this->current_user) );
+		Template::set('current_user', $this->current_user);
 
 		// load the application lang file here so that the users language is known
 		$this->lang->load('application');
