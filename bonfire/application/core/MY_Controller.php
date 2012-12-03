@@ -262,6 +262,8 @@ class Authenticated_Controller extends Base_Controller
  */
 class Admin_Controller extends Authenticated_Controller
 {
+	protected $pager;
+	protected $limit;
 
 	//--------------------------------------------------------------------
 
@@ -281,24 +283,24 @@ class Admin_Controller extends Authenticated_Controller
 		$this->load->library('ui/contexts');
 
 		// Pagination config
-		$this->pager = array();
-		$this->pager['full_tag_open']	= '<div class="pagination pagination-right"><ul>';
-		$this->pager['full_tag_close']	= '</ul></div>';
-		$this->pager['next_link'] 		= '&rarr;';
-		$this->pager['prev_link'] 		= '&larr;';
-		$this->pager['next_tag_open']	= '<li>';
-		$this->pager['next_tag_close']	= '</li>';
-		$this->pager['prev_tag_open']	= '<li>';
-		$this->pager['prev_tag_close']	= '</li>';
-		$this->pager['first_tag_open']	= '<li>';
-		$this->pager['first_tag_close']	= '</li>';
-		$this->pager['last_tag_open']	= '<li>';
-		$this->pager['last_tag_close']	= '</li>';
-		$this->pager['cur_tag_open']	= '<li class="active"><a href="#">';
-		$this->pager['cur_tag_close']	= '</a></li>';
-		$this->pager['num_tag_open']	= '<li>';
-		$this->pager['num_tag_close']	= '</li>';
-
+		$this->pager = array(
+			'full_tag_open'     => '<div class="pagination pagination-right"><ul>',
+			'full_tag_close'    => '</ul></div>',
+			'next_link'         => '&rarr;',
+			'prev_link'         => '&larr;',
+			'next_tag_open'     => '<li>',
+			'next_tag_close'    => '</li>',
+			'prev_tag_open'     => '<li>',
+			'prev_tag_close'    => '</li>',
+			'first_tag_open'    => '<li>',
+			'first_tag_close'   => '</li>',
+			'last_tag_open'     => '<li>',
+			'last_tag_close'    => '</li>',
+			'cur_tag_open'      => '<li class="active"><a href="#">',
+			'cur_tag_close'     => '</a></li>',
+			'num_tag_open'      => '<li>',
+			'num_tag_close'     => '</li>',
+		);
 		$this->limit = $this->settings_lib->item('site.list_limit');
 
 		// load the keyboard shortcut keys
