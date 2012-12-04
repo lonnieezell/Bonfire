@@ -384,7 +384,12 @@ class Auth
 	 */
 	public function user_id()
 	{
-		return (int) $this->user()->id;
+		if (!$this->is_logged_in())
+		{
+			return FALSE;
+		}
+
+		return $this->user()->id;
 
 	}//end user_id()
 
@@ -400,7 +405,12 @@ class Auth
 	 */
 	public function identity()
 	{
-		return $this->is_logged_in ? $this->ci->session->userdata('identity') : FALSE;
+		if (!$this->is_logged_in())
+		{
+			return FALSE;
+		}
+
+		return $this->ci->session->userdata('identity');
 
 	}//end identity()
 
@@ -413,7 +423,12 @@ class Auth
 	 */
 	public function role_id()
 	{
-		return (int) $this->user()->role_id;
+		if (!$this->is_logged_in())
+		{
+			return FALSE;
+		}
+
+		return $this->user()->role_id;
 
 	}//end role_id()
 
