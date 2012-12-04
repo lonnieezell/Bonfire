@@ -52,6 +52,9 @@ $lang['in_user_no_session']			= 'Unable to retrieve your account information fro
 $lang['in_db_config_error']			= 'We encountered an error trying to write to database config settings to {file}.';
 
 $lang['in_environment']				= 'Environment';
+$lang['in_environment_dev']				= 'Development';
+$lang['in_environment_test']			= 'Testing';
+$lang['in_environment_prod']			= 'Production';
 $lang['in_host']					= 'Host';
 $lang['in_database']				= 'Database';
 $lang['in_prefix']					= 'Prefix';

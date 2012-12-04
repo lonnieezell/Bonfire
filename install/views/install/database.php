@@ -18,9 +18,9 @@
 		<div>
 			<label for="environment"><?php echo lang('in_environment'); ?></label>
 			<select name="environment" id="environment">
-				<option value="development" <?php echo set_select('environment', 'development', TRUE); ?>>Development</option>
-				<option value="testing" <?php echo set_select('environment', 'testing'); ?>>Testing</option>
-				<option value="production" <?php echo set_select('environment', 'production'); ?>>Production</option>
+				<option value="development" <?php echo set_select('environment', 'development', TRUE); ?>><?php echo lang('in_environment_dev'); ?></option>
+				<option value="testing" <?php echo set_select('environment', 'testing'); ?>><?php echo lang('in_environment_test'); ?></option>
+				<option value="production" <?php echo set_select('environment', 'production'); ?>><?php echo lang('in_environment_prod'); ?></option>
 			</select>
 		</div>
 
