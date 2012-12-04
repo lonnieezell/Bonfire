@@ -400,7 +400,7 @@ class Auth
 	 */
 	public function identity()
 	{
-		return $this->is_logged_in ? ci->session->userdata('identity') : FALSE;
+		return $this->is_logged_in ? $this->ci->session->userdata('identity') : FALSE;
 
 	}//end identity()
 
