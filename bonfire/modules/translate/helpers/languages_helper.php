@@ -220,6 +220,7 @@ if (!function_exists('save_lang_file'))
 		// Is it the application_lang file?
 		if ($filename == 'application_lang.php' || $filename == 'datatable_lang.php')
 		{
+			$orig_path = APPPATH .'language/english/'. $filename;
 			$path = APPPATH .'language/'. $language .'/'. $filename;
 		}
 		// Look in core_modules
@@ -227,6 +228,7 @@ if (!function_exists('save_lang_file'))
 		{
 			$module = str_replace('_lang.php', '', $filename);
 
+			$orig_path = module_file_path($module, 'language', 'english/'. $filename);
 			$path = module_file_path($module, 'language', $language .'/'. $filename);
 
 			// If it's empty still, just grab the module path
@@ -237,12 +239,14 @@ if (!function_exists('save_lang_file'))
 		}
 
 		// Load the file so we can loop through the lines
-		if (is_file($path))
+		if (!is_file($orig_path))
 		{
-			$contents = file_get_contents($path);
-			$empty = FALSE;
+			return FALSE;
 		}
-		else
+		$contents = file_get_contents($orig_path);
+		$contents = trim($contents) . "\n";
+
+		if (!is_file($path))
 		{
 			// Create the folder...
 			$folder = basename($path) == 'language' ? $path .'/'. $language : dirname($path);
@@ -252,48 +256,33 @@ if (!function_exists('save_lang_file'))
 				mkdir($folder);
 				$path = basename($path) == 'language' ? $folder .'/'. $module .'_lang.php' : $path;
 			}
-
-			$contents = '';
-			$empty = TRUE;
 		}
 
 		// Save the file.
 		foreach ($settings as $name => $val)
 		{
-			// Is the config setting in the file?
-			$start = strpos($contents, '$lang[\''.$name.'\']');
-			$end = strpos($contents, ';', $start);
-
-			$search = substr($contents, $start, $end-$start+1);
-
-			//var_dump($search); die();
-
-			if (is_array($val))
+			// Use strrpos() instead of strpos() so we don't lose data
+			// when people have put duplicate keys in the english files
+			$start = strrpos($contents, '$lang[\''.$name.'\']');
+			if ($start === FALSE)
 			{
-				$tval  = 'array(\'';
-				$tval .= implode("','", $val);
-				$tval .= '\')';
-
-				$val = $tval;
-				unset($tval);
+				// tried to add non-existent value?
+				return FALSE;
 			}
-			else if (is_numeric($val))
+			$end = strpos($contents, "\n", $start) + strlen("\n");
+
+			if ($val !== '')
 			{
-				$val = $val;
+				$val = '\'' . addcslashes($val, '\'\\') .'\'';
+				$replace = '$lang[\''.$name.'\'] = ' . $val . ";\n";
 			}
 			else
 			{
-				$val ='\'' . addcslashes($val, '\'\\') .'\'';
+				$replace = '// ' . substr($contents, $start, $end-$start);
 			}
 
-			if (!$empty)
-			{
-				$contents = str_replace($search, '$lang[\''.$name.'\'] = '. $val .';', $contents);
-			}
-			else
-			{
-				$contents .= '$lang[\''.$name.'\'] = '. $val .";\n";
-			}
+			$contents = substr($contents, 0, $start) . $replace . substr($contents, $end);
+
 		}//end foreach
 
 		// is the code we are producing OK?

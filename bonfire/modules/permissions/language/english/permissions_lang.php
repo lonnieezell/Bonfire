@@ -24,7 +24,6 @@ $lang['permissions_description']		= 'Description';
 $lang['permissions_status']				= 'Status';
 $lang['permissions_active']				= 'active';
 $lang['permissions_inactive']			= 'inactive';
-$lang['permissions_deleted']			= 'deleted';
 $lang['permissions_permission']			= 'Permission';
 $lang['permissions_deleted']			= 'Permissions deleted';
 $lang['permissions_del_failure']		= 'Unable to delete Permissions: ';

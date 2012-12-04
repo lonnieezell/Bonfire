@@ -34,13 +34,12 @@
 				<select name="status" id="status">
 					<option value="active" <?php echo set_select('status', 'active') ?>><?php echo lang('permissions_active') ?></option>
 					<option value="inactive" <?php echo set_select('status', 'inactive') ?>><?php echo lang('permissions_inactive') ?></option>
-					<option value="deleted" <?php echo set_select('status', 'Permissions deleted') ?>><?php echo lang('permissions_deleted') ?></option>
 				</select>
 			</div>
 		</div>
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('permissions_save');?>" /> or 
+			<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('permissions_save');?>" /> or 
 			<?php echo anchor(SITE_AREA .'/settings/permissions', lang('bf_action_cancel')); ?>
 		</div>
 

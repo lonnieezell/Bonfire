@@ -95,7 +95,7 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th><?php echo lang('activity_module'); ?></th>
+							<th><?php echo lang('activity_user'); ?></th>
 							<th><?php echo lang('activity_logged'); ?></th>
 						</tr>
 					</thead>
@@ -118,7 +118,7 @@
 
 
 <div class="admin-box">
-	<h3>Activity Cleanup</h3>
+	<h3><?php echo lang('activity_cleanup'); ?></h3>
 
 	<?php $empty_table = true; ?>
 

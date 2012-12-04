@@ -45,13 +45,13 @@ class Auth
 	public $login_destination = '/';
 
 	/**
-	 * Stores the logged in value after the first test to improve performance.
+	 * Stores the logged in user after the first test to improve performance.
 	 *
 	 * @access private
 	 *
-	 * @var NULL
+	 * @var object
 	 */
-	private $logged_in = NULL;
+	private $user;
 
 	/**
 	 * Stores the ip_address of the current user for performance reasons.
@@ -268,22 +268,24 @@ class Auth
 	 *
 	 * @access public
 	 *
-	 * @return bool|NULL
+	 * @return object (or a false value)
 	 */
-	public function is_logged_in()
+	public function user()
 	{
 		// If we've already checked this session,
 		// return that.
-		if (!is_null($this->logged_in))
+		if (isset($this->user))
 		{
-			return $this->logged_in;
+			return $this->user;
 		}
+
+		$this->user = FALSE;
 
 		// Is there any session data we can use?
 		if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
 		{
 			// Grab the user account
-			$user = $this->ci->user_model->select('id, username, email, password_hash')->find($this->ci->session->userdata('user_id'));
+			$user = $this->ci->user_model->find($this->ci->session->userdata('user_id'));
 
 			if ($user !== FALSE)
 			{
@@ -293,14 +295,28 @@ class Auth
 				// Ensure user_token is still equivalent to the SHA1 of the user_id and password_hash
 				if (do_hash($this->ci->session->userdata('user_id') . $user->password_hash) === $this->ci->session->userdata('user_token'))
 				{
-					$this->logged_in = TRUE;
-					return TRUE;
+					$this->user = $user;
 				}
 			}
 		}//end if
 
-		$this->logged_in = FALSE;
-		return FALSE;
+		return $this->user;
+
+	}//end user()
+
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Checks the session for the required info, then verifies against the database.
+	 *
+	 * @access public
+	 *
+	 * @return bool
+	 */
+	public function is_logged_in()
+	{
+		return (bool) $this->user();
 
 	}//end is_logged_in()
 
@@ -372,7 +388,12 @@ class Auth
 	 */
 	public function user_id()
 	{
-		return (int) $this->ci->session->userdata('user_id');
+		if (!$this->is_logged_in())
+		{
+			return FALSE;
+		}
+
+		return $this->user()->id;
 
 	}//end user_id()
 
@@ -388,6 +409,11 @@ class Auth
 	 */
 	public function identity()
 	{
+		if (!$this->is_logged_in())
+		{
+			return FALSE;
+		}
+
 		return $this->ci->session->userdata('identity');
 
 	}//end identity()
@@ -401,7 +427,12 @@ class Auth
 	 */
 	public function role_id()
 	{
-		return (int) $this->ci->session->userdata('role_id');
+		if (!$this->is_logged_in())
+		{
+			return FALSE;
+		}
+
+		return $this->user()->role_id;
 
 	}//end role_id()
 

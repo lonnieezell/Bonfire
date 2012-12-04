@@ -43,7 +43,7 @@
 		</div>
 		-->
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="Create It" /> or 
+			<input type="submit" name="build" class="btn btn-primary" value="Create It" /> or
 			<a href="<?php echo site_url(SITE_AREA .'/developer/builder') ?>">Cancel</a>
 		</div>
 	

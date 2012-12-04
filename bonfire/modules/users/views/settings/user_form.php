@@ -4,14 +4,16 @@
 </div>
 <?php endif; ?>
 
+<?php if (isset($password_hints) ) : ?>
 <div class="row-fluid">
 	<div class="span8 offset2">
 		<div class="alert alert-info fade in">
 		  <a data-dismiss="alert" class="close">&times;</a>
-			<?php if (isset($password_hints) ) echo $password_hints; ?>
+			<?php echo $password_hints; ?>
 		</div>
 	</div>
 </div>
+<?php endif; ?>
 
 <div class="admin-box">
 
@@ -177,7 +179,7 @@
 
 
 		<div class="form-actions">
-			<input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?>
+			<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?>
 			<?php echo anchor(SITE_AREA .'/settings/users', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-warning"'); ?>
 		</div>
 

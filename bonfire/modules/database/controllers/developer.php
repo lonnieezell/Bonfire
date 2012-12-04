@@ -57,7 +57,6 @@ class Developer extends Admin_Controller
 		$this->lang->load('database');
 
 		Template::set_block('sub_nav', 'developer/_sub_nav');
-		Template::set('sidebar', 'admin/sidebar');
 
 	}//end __construct()
 
@@ -75,24 +74,23 @@ class Developer extends Admin_Controller
 		$hide_form = FALSE;
 
 		// Are we performing an action?
-		if (isset($_POST['action']))
+		if ($this->input->post_key_exists('action'))
 		{
-			// Checked the checked() variable
-			$_POST['checked'] = isset($_POST['checked']) ? $_POST['checked'] : '';
+			$checked = $this->input->post('checked');
 
-			switch(strtolower($_POST['action']))
+			switch($this->input->post('action'))
 			{
-				case strtolower(lang('db_backup')):
-					$hide_form = $this->backup($_POST['checked']);
+				case 'backup':
+					$hide_form = $this->backup($checked);
 					break;
 				case 'repair':
-					$this->repair($_POST['checked']);
+					$this->repair($checked);
 					break;
 				case 'optimize':
 					$this->optimize();
 					break;
 				case 'drop':
-					$hide_form = $this->drop($_POST['checked']);
+					$hide_form = $this->drop($checked);
 					break;
 			}
 		}
@@ -156,30 +154,27 @@ class Developer extends Admin_Controller
 	 */
 	public function backups()
 	{
-		// Make sure we have something to delete
-		if (isset($_POST['checked']) && is_array($_POST['checked']) && count($_POST['checked']) > 0)
+		if ($this->input->post_key_exists('delete'))
 		{
-			// Delete the files.
-			$count = count($_POST['checked']);
+			$checked = $this->input->post('checked');
 
-			$this->load->helper('file');
-
-			foreach ($_POST['checked'] as $file)
+			// Make sure we have something to delete
+			if (is_array($checked) && count($checked) > 0)
 			{
-				// Make sure the file is closed
-				$fh = fopen($this->backup_folder . $file, 'w') or die("can't open file");
-				fclose($fh);
+				// Delete the files.
+				
+				foreach ($checked as $file)
+				{
+					unlink($this->backup_folder . $file) or die("can't delete file");
+				}
 
-				// Actually delete it.
-				unlink($this->backup_folder . $file);
+				// Tell them it was good.
+				Template::set_message(count($checked) . ' backup files were deleted.', 'success');
 			}
-
-			// Tell them it was good.
-			Template::set_message($count . ' backup files were deleted.', 'success');
-		}
-		else if ($this->input->post() && !isset($_POST['checked']))
-		{
-			Template::set_message(lang('db_backup_delete_none'), 'error');
+			else
+			{
+				Template::set_message(lang('db_backup_delete_none'), 'error');
+			}
 		}
 
 		// Get a list of existing backup files
@@ -188,6 +183,7 @@ class Developer extends Admin_Controller
 
 		Template::set('toolbar_title', 'Database Backups');
 		Template::render();
+
 	}//end backups()
 
 	//---------------------------------------------------------------
@@ -213,7 +209,7 @@ class Developer extends Admin_Controller
 			Template::set('toolbar_title', 'Create New Backup');
 			return TRUE;
 		}
-		else if (isset($_POST['submit']))
+		else if ($this->input->post_key_exists('backup'))
 		{
 			$this->load->library('form_validation');
 
@@ -319,7 +315,7 @@ class Developer extends Admin_Controller
 	{
 		Template::set('filename', $filename);
 
-		if (!empty($filename) && isset($_POST['submit']))
+		if (!empty($filename) && $this->input->post_key_exists('restore'))
 		{
 			// Load the file from disk.
 			$this->load->helper('file');
@@ -374,51 +370,6 @@ class Developer extends Admin_Controller
 		Template::render();
 
 	}//end restore()
-
-	//---------------------------------------------------------------
-
-	/**
-	 * Deletes a database table.
-	 *
-	 * @access public
-	 * @todo   Remove this now as it is all done in the "backups" method?
-	 *
-	 * @return void
-	 */
-	public function delete()
-	{
-		// Make sure we have something to delete
-		if (isset($_POST['checked']) && is_array($_POST['checked']) && count($_POST['checked']) > 0)
-		{
-			// Verify that we want to delete the files.
-			Template::set('files', $_POST['checked']);
-
-			Template::set('toolbar_title', 'Delete Backup Files');
-			Template::render();
-		}
-		else if (isset($_POST['files']) && is_array($_POST['files']) && count($_POST['files']) > 0)
-		{
-			// Delete the files.
-			$count = count($_POST['files']);
-
-			$this->load->helper('file');
-
-			foreach ($_POST['files'] as $file)
-			{
-				// Make sure the file is closed
-				$fh = fopen($this->backup_folder . $file, 'w') or die("can't open file");
-				fclose($fh);
-
-				// Actually delete it.
-				unlink($this->backup_folder . $file);
-			}
-
-			// Tell them it was good.
-			Template::set_message($count . ' backup files were deleted.', 'success');
-			redirect(SITE_AREA .'/developer/database/backups');
-		}//end if
-
-	}//end delete()
 
 	//---------------------------------------------------------------
 
@@ -481,7 +432,7 @@ class Developer extends Admin_Controller
 
 		if ($result == FALSE)
 		{
-			$this->session->set_flashdata('message', 'alert::Unable to optimize the table.');
+			$this->session->set_flashdata('message', 'alert::Unable to optimize the database.');
 		}
 		else
 		{
@@ -515,12 +466,19 @@ class Developer extends Admin_Controller
 		}
 		else if (isset($_POST['tables']) && is_array($_POST['tables']))
 		{
-			// Actually delete the files....
+			// Actually delete the tables....
 			$this->load->dbforge();
 
 			foreach ($_POST['tables'] as $table)
 			{
-				@$this->dbforge->drop_table($table);
+				// dbforge automatically adds the prefix, so we need to remove it.
+				$prefix = $this->db->dbprefix;
+
+				if (strncmp($table, $prefix, strlen($prefix)) === 0)
+				{
+					$table = substr($table, strlen($prefix));
+					@$this->dbforge->drop_table($table);
+				}
 			}
 
 			$grammar = count($_POST['tables'] == 1) ? ' table' : ' tables';

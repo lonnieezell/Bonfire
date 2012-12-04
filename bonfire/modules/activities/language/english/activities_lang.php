@@ -68,3 +68,5 @@ $lang['activity_no_top_modules']		= "No module activity records found.";
 $lang['activity_no_top_users']			= "No user activity records found.";
 $lang['activity_logged']				= "Activities Logged";
 $lang['activity_none_found']			= 'You do not have permissions to delete any activities.';
+$lang['activity_all']					= 'All';
+$lang['activity_cleanup']				= 'Activity Cleanup';

@@ -141,32 +141,13 @@ class User_model extends BF_Model
 			return FALSE;
 		}
 
-		if (!isset($data['password']) || empty($data['password']))
+		if (!isset($data['username']) || $data['username'] === '')
 		{
-			$this->error = lang('us_no_password');
-			return FALSE;
-		}
-
-		if (!isset($data['email']) || empty($data['email']))
-		{
-			$this->error = lang('us_no_email');
-			return FALSE;
-		}
-
-		// Is this a unique email?
-		if ($this->is_unique('email', $data['email']) == FALSE)
-		{
-			$this->error = lang('us_email_taken');
-			return FALSE;
-		}
-
-		if (empty($data['username']))
-		{
-		  unset($data['username']);
+			$data['username'] = NULL;
 		}
 
 		// Display Name
-		if (!isset($data['display_name']) || empty($data['display_name']))
+		if (!isset($data['display_name']) || $data['display_name'] === '')
 		{
 			if ($this->settings_lib->item('auth.use_usernames') == 1 && !empty($data['username']))
 			{
@@ -192,7 +173,7 @@ class User_model extends BF_Model
 			return false;
 		}
 
-		unset($data['password'], $data['pass_confirm'], $data['submit'], $hasher);
+		unset($data['password'], $hasher);
 
 		$data['password_hash'] = $password;
 		$data['password_iterations'] = $this->settings_lib->item('password_iterations');
@@ -239,11 +220,7 @@ class User_model extends BF_Model
 			Events::trigger('before_user_update', $trigger_data);
 		}
 
-		if (empty($data['pass_confirm']) && isset($data['password']))
-		{
-			unset($data['pass_confirm'], $data['password']);
-		}
-		else if (!empty($data['password']) && !empty($data['pass_confirm']) && $data['password'] == $data['pass_confirm'])
+		if (isset($data['password']) && $data['password'] !== '')
 		{
 			// Load the password hash library
 			if (!class_exists('PasswordHash'))
@@ -259,7 +236,7 @@ class User_model extends BF_Model
 				return false;
 			}
 
-			unset($data['password'], $data['pass_confirm'], $hasher);
+			unset($data['password'], $hasher);
 
 			$data['password_hash'] = $password;
 			$data['password_iterations'] = $this->settings_lib->item('password_iterations');
@@ -683,7 +660,7 @@ class User_model extends BF_Model
 		{
 			$rows = $query->result();
 
-			$result = null;
+			$result = new stdClass;
 			foreach ($rows as $row)
 			{
 				$key = $row->meta_key;
@@ -692,7 +669,7 @@ class User_model extends BF_Model
 		}
 		else
 		{
-			$result = null;
+			$result = new stdClass;
 		}
 
 		// Reset our table info

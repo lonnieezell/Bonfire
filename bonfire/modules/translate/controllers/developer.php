@@ -80,7 +80,7 @@ class Developer extends Admin_Controller
 		Assets::add_module_js('translate', 'translate.js');
 
 		// Selecting a different language?
-		if ($this->input->post('select_lang'))
+		if ($this->input->post_key_exists('select_lang'))
 		{
 			$trans_lang = $this->input->post('trans_lang');
 
@@ -107,7 +107,7 @@ class Developer extends Admin_Controller
 		}
 
 		Template::set('trans_lang', $trans_lang);
-		Template::set('toolbar_title', lang('tr_translate_title') .' to '. ucfirst($trans_lang));
+		Template::set('toolbar_title', sprintf(lang('tr_translate_title'), ucfirst($trans_lang)));
 		Template::render();
 
 	}//end index()
@@ -123,8 +123,10 @@ class Developer extends Admin_Controller
 	 */
 	public function edit($trans_lang='', $lang_file='')
 	{
+		Assets::add_module_js('translate', 'translate.js');
+
 		// Save the file...
-		if ($lang_file && $this->input->post('submit'))
+		if ($lang_file && $this->input->post_key_exists('save'))
 		{
 			if (save_lang_file($lang_file, $trans_lang, $_POST['lang']))
 			{
@@ -142,11 +144,6 @@ class Developer extends Admin_Controller
 		{
 			$orig	= load_lang_file($lang_file, 'english');
 			$new	= load_lang_file($lang_file, $trans_lang);
-
-			if (!$new)
-			{
-				$new = $orig;
-			}
 
 			Template::set('orig', $orig);
 			Template::set('new', $new);
@@ -171,7 +168,7 @@ class Developer extends Admin_Controller
 	 */
 	public function export()
 	{
-		if ($this->input->post('submit'))
+		if ($this->input->post_key_exists('export'))
 		{
 			$language = $this->input->post('export_lang');
             $this->do_export($language, $this->input->post('include_core'), $this->input->post('include_custom'));

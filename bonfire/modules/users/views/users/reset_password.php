@@ -6,7 +6,7 @@
 			<div class="span12">
 				<div class="alert alert-info fade in">
 						<a data-dismiss="alert" class="close">&times;</a>
-						<h4 class="alert-heading">Enter your new password below to reset your password.</h4>
+						<h4 class="alert-heading"><?php echo lang('us_reset_password_note'); ?></h4>
 				</div>
 			</div>
 		</div>
@@ -47,7 +47,7 @@
 
 	<div class="control-group">
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="submit" id="submit" value="Save New Password"  />
+			<input class="btn btn-primary" type="submit" name="set_password" id="submit" value="Save New Password"  />
 		</div>
 	</div>
 
