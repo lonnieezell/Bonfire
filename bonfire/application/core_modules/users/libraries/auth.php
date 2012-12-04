@@ -42,7 +42,7 @@ class Auth
 	 *
 	 * @var string
 	 */
-	public $login_destination = '/';
+	public $login_destination = '';
 
 	/**
 	 * Stores the logged in user after the first test to improve performance.
