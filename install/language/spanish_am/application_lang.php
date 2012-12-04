@@ -48,7 +48,7 @@ $lang['bf_week']				= 'Week';
 $lang['bf_weeks']				= 'Weeks';
 $lang['bf_days']				= 'Days';
 $lang['bf_username']			= 'Usuario';
-$lang['bf_password']			= 'Contrase&ntilde;a';
+$lang['bf_password']			= 'Contraseña';
 $lang['bf_password_confirm']	= 'Password (again)';
 
 $lang['bf_home_page']			= 'Home Page';
@@ -93,7 +93,7 @@ $lang['bf_with_selected']		= 'With selected';
 
 $lang['bf_env_dev']				= 'Desarrollo';
 $lang['bf_env_test']			= 'Pruebas';
-$lang['bf_env_prod']			= 'Producci&oacute;n';
+$lang['bf_env_prod']			= 'Producción';
 
 $lang['bf_user']				= 'User';
 $lang['bf_users']				= 'Users';

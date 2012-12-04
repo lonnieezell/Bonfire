@@ -2,9 +2,9 @@
 
 $lang['permissions_manage']				= 'Gestionar Permisos';
 $lang['permissions_edit_text']			= 'Modificar para que se adapte a sus requerimientos';
-$lang['permissions_no_records']			= 'No hay ning&uacute;n permiso en el sistema.';
+$lang['permissions_no_records']			= 'No hay ningún permiso en el sistema.';
 $lang['permissions_create_new']			= 'Crear un nuevo permiso';
-$lang['permissions_create_message']		= 'Crear un nuevo permiso en el sistema que le permitir&aacute; asigar acceso en los roles.';
+$lang['permissions_create_message']		= 'Crear un nuevo permiso en el sistema que le permitirá asigar acceso en los roles.';
 $lang['permissions_create_success']		= 'Permiso creado correctamente';
 $lang['permissions_create_failure']		= 'Hubo un problema creando el permiso: ';
 $lang['permissions_create_new_button']	= 'Crear un nuevo permiso';
@@ -16,11 +16,11 @@ $lang['permissions_delete_failure']		= 'No podemos eliminar el permiso: ';
 $lang['permissions_edit_heading']		= 'Modificar permiso';
 $lang['permissions_save']				= 'Guardar permiso';
 $lang['permissions_delete_record']		= 'Eliminar este permiso';
-$lang['permissions_delete_confirm']		= '&iexcl;Est&aacute; seguro de eliminar este permiso?';
-$lang['permissions_delete_warning']		= 'Al eliminar este permiso tambi&eacute;n remover&aacute; el acceso a los roles.';
+$lang['permissions_delete_confirm']		= '¡Está seguro de eliminar este permiso?';
+$lang['permissions_delete_warning']		= 'Al eliminar este permiso también removerá el acceso a los roles.';
 $lang['permissions_id']					= 'ID';
 $lang['permissions_name']				= 'Nombre';
-$lang['permissions_description']		= 'Descripci&oacute;n';
+$lang['permissions_description']		= 'Descripción';
 $lang['permissions_status']				= 'Estado';
 $lang['permissions_active']				= 'activo';
 $lang['permissions_inactive']			= 'inactivo';

@@ -25,34 +25,34 @@ $lang['em_template']			= 'Plantilla';
 $lang['em_email_template']		= 'Plantilla de Correo';
 $lang['em_emailer_queue']		= 'Cola de correo';
 
-$lang['em_system_email']		= 'Correo electr&oacute;nico para el sistema';
-$lang['em_system_email_note']	= 'Los correo que todo el sistema genere ser&aacute;n enviados desde este correo.';
+$lang['em_system_email']		= 'Correo electrónico para el sistema';
+$lang['em_system_email_note']	= 'Los correo que todo el sistema genere serán enviados desde este correo.';
 $lang['em_email_server']		= 'Servidor de Correo';
-$lang['em_settings']			= 'Configuraci&oacute;n de Correo';
-$lang['em_settings_note']		= '<b>Correo</b> usa la funci&oacute;n est&aacute;ndar de correo de PHP (Mail), no se requiere configuraci&oacute;n.';
-$lang['em_location']			= 'ubicaci&oacute;n';
-$lang['em_server_address']		= 'Direcci&oacute;n del servidor';
+$lang['em_settings']			= 'Configuración de Correo';
+$lang['em_settings_note']		= '<b>Correo</b> usa la función estándar de correo de PHP (Mail), no se requiere configuración.';
+$lang['em_location']			= 'ubicación';
+$lang['em_server_address']		= 'Dirección del servidor';
 $lang['em_port']				= 'Puerto';
 $lang['em_timeout_secs']		= 'Tiempo de espera (segundos)';
 $lang['em_email_type']			= 'Tipo de Correo';
-$lang['em_test_settings']		= 'Probar la configuraci&oacute;n de Correo';
+$lang['em_test_settings']		= 'Probar la configuración de Correo';
 
-$lang['em_template_note']		= 'Los correos son enviados en formato HTML. Los puede personalizar modificando el encabezado y el pie de p&aacute;gina.';
+$lang['em_template_note']		= 'Los correos son enviados en formato HTML. Los puede personalizar modificando el encabezado y el pie de página.';
 $lang['em_header']				= 'Encabezado';
-$lang['em_footer']				= 'Pie de p&aacute;gina';
+$lang['em_footer']				= 'Pie de página';
 
-$lang['em_test_header']			= 'Probar su configuraci&oacute;n';
-$lang['em_test_intro']			= 'Ingrese una direcci&oacute;n de correo a continuaci&oacute;n, para verificar que su configuraci&oacute;n de correo esta funcionando.<br/>Por favor guarde la configuraci&oacute;n actual antes de hacer la prueba.';
+$lang['em_test_header']			= 'Probar su configuración';
+$lang['em_test_intro']			= 'Ingrese una dirección de correo a continuación, para verificar que su configuración de correo esta funcionando.<br/>Por favor guarde la configuración actual antes de hacer la prueba.';
 $lang['em_test_button']			= 'Enviar un correo de prueba';
 $lang['em_test_result_header']	= 'Resultados de la prueba';
-$lang['em_test_debug_header']	= 'Informaci&oacute;n de depuraci&oacute;n';
-$lang['em_test_success']		= 'El correo parece estar configurado correctamente. Si no ve el correo en su buz&oacute;n, intente buscando en la bandeja de spam o detry looking in your Spam box or de correo basura.';
+$lang['em_test_debug_header']	= 'Información de depuración';
+$lang['em_test_success']		= 'El correo parece estar configurado correctamente. Si no ve el correo en su buzón, intente buscando en la bandeja de spam o detry looking in your Spam box or de correo basura.';
 $lang['em_test_error']			= 'El correo parece no estar configurado correctamente.';
 
-$lang['em_test_mail_subject']	= 'Felicitaciones! su sistema de env&iacute;o de correo esta funcionando!';
-$lang['em_test_mail_body']		= 'Si esta viendo este correo es porque parece que su sistema de env&iacute;o de correo esta funcionando!';
+$lang['em_test_mail_subject']	= 'Felicitaciones! su sistema de envío de correo esta funcionando!';
+$lang['em_test_mail_body']		= 'Si esta viendo este correo es porque parece que su sistema de envío de correo esta funcionando!';
 
-$lang['em_stat_no_queue']		= 'Actualmente no tiene ning&uacute;n correo en cola.';
+$lang['em_stat_no_queue']		= 'Actualmente no tiene ningún correo en cola.';
 $lang['em_total_in_queue']		= 'Total de correos en cola:';
 $lang['em_total_sent']			= 'Total de correos enviados:';
 
@@ -62,13 +62,13 @@ $lang['em_id']					= 'ID';
 $lang['em_to']					= 'para';
 $lang['em_subject']				= 'Asunto';
 
-$lang['em_missing_data']		= 'Uno o m&aacute;s campos requeridos faltan.';
-$lang['em_no_debug']			= 'El correo se puso en cola. No hay informaci&oacute;n de depuraci&oacute;n disponible.';
+$lang['em_missing_data']		= 'Uno o más campos requeridos faltan.';
+$lang['em_no_debug']			= 'El correo se puso en cola. No hay información de depuración disponible.';
 
 $lang['em_delete_success']      = '%d registros eliminados.';
 $lang['em_delete_failure']		= 'No se puede eliminar el registro: %s';
 $lang['em_delete_error']		= 'Error eliminando el registro: %s';
-$lang['em_delete_confirm']		= '&iexcl;Esta seguro de que quiere eliminar este correo? ';
+$lang['em_delete_confirm']		= '¡Esta seguro de que quiere eliminar este correo? ';
 
 // $lang['em_create_email']		= 'Send New Email';
 // $lang['em_create_setting']		= 'Email Configure';

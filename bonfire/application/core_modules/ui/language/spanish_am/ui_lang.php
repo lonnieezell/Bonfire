@@ -21,27 +21,27 @@
 	THE SOFTWARE.
 */
 
-$lang['ui_keyboard_shortcuts']	= 'Las teclas de m&eacute;todo abreviado se configuran en el archivo application en la carpeta config. Actualmente est&aacute;n disponibles:';
-$lang['ui_add_shortcut']		= 'Agregar teclas de m&eacute;todo abreviado';
+$lang['ui_keyboard_shortcuts']	= 'Las teclas de método abreviado se configuran en el archivo application en la carpeta config. Actualmente están disponibles:';
+$lang['ui_add_shortcut']		= 'Agregar teclas de método abreviado';
 $lang['ui_remove_shortcut']		= 'Eliminar';
-$lang['ui_no_shortcuts']		= 'No hay opciones de teclas de m&eacute;todo abreviado configuradas en el archivo application.';
+$lang['ui_no_shortcuts']		= 'No hay opciones de teclas de método abreviado configuradas en el archivo application.';
 $lang['ui_update_shortcuts']	= 'Guardar';
 
-$lang['ui_action']				= 'Acci&oacute;n';
+$lang['ui_action']				= 'Acción';
 $lang['ui_actions']				= 'Acciones';
 
-$lang['ui_shortcut']			= 'Tecla de m&eacute;todo abreviado';
+$lang['ui_shortcut']			= 'Tecla de método abreviado';
 $lang['ui_shortcut_help']       = 'Ingrese sus claves preferidas en el campo de abajo, por ejemplo, Alt + J - ver más ejemplos en la página del proyecto <a href="http://keithcirkel.co.uk/jwerty/" target="_blank"> Jwerty</a>';
-$lang['ui_shortcuts']			= 'Teclas de m&eacute;todo abreviado';
-$lang['ui_current_shortcuts']	= 'Teclas de m&eacute;todo abreviado actuales';
+$lang['ui_shortcuts']			= 'Teclas de método abreviado';
+$lang['ui_current_shortcuts']	= 'Teclas de método abreviado actuales';
 
-$lang['ui_shortcut_success']			= 'Tecla de m&eacute;todo abreviado agregada';
-$lang['ui_shortcut_add_error']			= 'Hubo un error guardando las teclas de m&eacute;todo abreviado.';
-$lang['ui_shortcut_remove_success']		= 'Sus teclas de m&eacute;todo abreviado fueron eliminadas correctamente.';
-$lang['ui_shortcut_remove_error']		= 'Hubo un error al eliminar la tecla de m&eacute;todo abreviado.';
-$lang['ui_shortcut_save_success']		= 'Sus teclas de m&eacute;todo abreviado fueron guardadas correctamente.';
-$lang['ui_shortcut_save_error']			= 'Hubo un error al guardar las teclas de m&eacute;todo abreviado.';
-$lang['ui_shortcut_error_exists']		= 'tecla de m&eacute;todo abreviado ya existe';
-$lang['ui_shortcut_error_unavailable']	= 'La acci&oacute;n no esta disponible';
-$lang['ui_shortcut_error']				= 'Los espacios no est&aacute;n permitidos en la tecla de m&eacute;todo abreviado';
+$lang['ui_shortcut_success']			= 'Tecla de método abreviado agregada';
+$lang['ui_shortcut_add_error']			= 'Hubo un error guardando las teclas de método abreviado.';
+$lang['ui_shortcut_remove_success']		= 'Sus teclas de método abreviado fueron eliminadas correctamente.';
+$lang['ui_shortcut_remove_error']		= 'Hubo un error al eliminar la tecla de método abreviado.';
+$lang['ui_shortcut_save_success']		= 'Sus teclas de método abreviado fueron guardadas correctamente.';
+$lang['ui_shortcut_save_error']			= 'Hubo un error al guardar las teclas de método abreviado.';
+$lang['ui_shortcut_error_exists']		= 'tecla de método abreviado ya existe';
+$lang['ui_shortcut_error_unavailable']	= 'La acción no esta disponible';
+$lang['ui_shortcut_error']				= 'Los espacios no están permitidos en la tecla de método abreviado';
 

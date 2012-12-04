@@ -1,7 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 $lang['tr_translate_title']		= 'Traducir a %s';
-$lang['tr_no_modules']			= 'No se encontraron m&oacute;dulos con archivo de idioma.';
+$lang['tr_no_modules']			= 'No se encontraron módulos con archivo de idioma.';
 $lang['tr_no_core']				= 'No se encontro el archivo de idioma base.';
 
 $lang['tr_core']				= 'Base';
@@ -23,4 +23,4 @@ $lang['tr_export_note']			= 'La exportación de archivos de idioma le proporcion
 
 $lang['tr_include']				= 'Incluir';
 $lang['tr_include_core']		= 'Incluir la base';
-$lang['tr_include_mods']		= 'Incluir los m&oacute;dulos personalizados';
+$lang['tr_include_mods']		= 'Incluir los módulos personalizados';

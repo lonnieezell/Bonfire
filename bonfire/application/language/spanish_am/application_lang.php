@@ -27,12 +27,12 @@
 
 $lang['bf_site_name']			= 'Nombre del sitio';
 $lang['bf_site_email']			= 'Correo electrónico del sitio';
-$lang['bf_site_email_help']		= 'El correo electr&oacute;nico por defecto que el sistema usar&aacute; de remitente.';
+$lang['bf_site_email_help']		= 'El correo electrónico por defecto que el sistema usará de remitente.';
 $lang['bf_site_status']			= 'Estado del sitio';
 $lang['bf_online']				= 'En línea';
 $lang['bf_offline']				= 'Fuera de línea';
 $lang['bf_top_number']			= 'Item <em>por</em> página:';
-$lang['bf_top_number_help']		= 'Cuando se muestran los reportes, &iquest;cu&aacute;ntos &iacute;tems se listar&aacute;n a la vez?';
+$lang['bf_top_number_help']		= 'Cuando se muestran los reportes, ¿cuántos ítems se listarán a la vez?';
 $lang['bf_home']				= 'Inicio';
 $lang['bf_site_information']	= 'Información del sitio';
 $lang['bf_timezone']			= 'Zona Horaria';
@@ -47,11 +47,11 @@ $lang['bf_security']			= 'Seguridad';
 $lang['bf_login_type']			= 'Tipo de acceso';
 $lang['bf_login_type_email']	= 'Solo correo electrónico';
 $lang['bf_login_type_username']	= 'Solo nombre de usuario';
-$lang['bf_allow_register']		= '&iquest;Permitir a los usuarios registrarse?';
+$lang['bf_allow_register']		= '¿Permitir a los usuarios registrarse?';
 $lang['bf_login_type_both']		= 'Email o Usuario';
-$lang['bf_use_usernames']		= 'Usuario a mostrar a trav&eacute;s de bonfire:';
+$lang['bf_use_usernames']		= 'Usuario a mostrar a través de bonfire:';
 $lang['bf_use_own_name']		= 'Usar el nombre propio';
-$lang['bf_allow_remember']		= '&iquest;Permitir \'Recordarme\'?';
+$lang['bf_allow_remember']		= '¿Permitir \'Recordarme\'?';
 $lang['bf_remember_time']		= 'Recordar usuario por';
 $lang['bf_week']				= 'Semana';
 $lang['bf_weeks']				= 'Semanas';
@@ -66,12 +66,12 @@ $lang['bf_display_name']		= 'Nombre';
 //--------------------------------------------------------------------
 
 $lang['bf_home_page']			= 'Inicio';
-$lang['bf_pages']				= 'P&aacute;ginas';
-$lang['bf_enable_rte']			= '&iquest;Activar el RTE para las p&aacute;ginas?';
+$lang['bf_pages']				= 'Páginas';
+$lang['bf_enable_rte']			= '¿Activar el RTE para las páginas?';
 $lang['bf_rte_type']			= 'Tipo de RTE';
-$lang['bf_searchable_default']	= '&iquest;Buscable por defecto?';
-$lang['bf_cacheable_default']	= '&iquest;Almacenable en cache por defecto?';
-$lang['bf_track_hits']			= '&iquest;Seguimiento de visitas a la p&aacute;gina?';
+$lang['bf_searchable_default']	= '¿Buscable por defecto?';
+$lang['bf_cacheable_default']	= '¿Almacenable en cache por defecto?';
+$lang['bf_track_hits']			= '¿Seguimiento de visitas a la página?';
 
 $lang['bf_action_save']			= 'Guardar';
 $lang['bf_action_delete']		= 'Eliminar';
@@ -82,7 +82,7 @@ $lang['bf_action_search']		= 'Buscar';
 $lang['bf_action_purge']		= 'Purgar';
 $lang['bf_action_restore']		= 'Restaurar';
 $lang['bf_action_show']			= 'Mostrar';
-$lang['bf_action_login']		= 'Iniciar Sesi&oacute;n';
+$lang['bf_action_login']		= 'Iniciar Sesión';
 $lang['bf_action_logout']		= 'Salir';
 $lang['bf_actions']				= 'Acciones';
 $lang['bf_clear']				= 'Limpiar';
@@ -94,13 +94,13 @@ $lang['bf_action_ban']			= 'Bloquear';
 // ! SETTINGS LIB
 //--------------------------------------------------------------------
 
-$lang['bf_do_check']			= '&iquest;Buscar actualizaciones?';
+$lang['bf_do_check']			= '¿Buscar actualizaciones?';
 $lang['bf_do_check_edge']		= 'Must be enabled to see bleeding edge updates as well.';
 
 $lang['bf_update_show_edge']	= 'View bleeding edge updates?';
-$lang['bf_update_info_edge']	= 'Deja sin marcar para buscar s&oacute;lo las nuevas actualizaciones etiquetadas. Comprobar cualquier env&iacute;o al repositorio oficial.';
+$lang['bf_update_info_edge']	= 'Deja sin marcar para buscar sólo las nuevas actualizaciones etiquetadas. Comprobar cualquier envío al repositorio oficial.';
 
-$lang['bf_ext_profile_show']	= '&iexcl;Las cuentas de usuario tienen perfil extendido?';
+$lang['bf_ext_profile_show']	= '¡Las cuentas de usuario tienen perfil extendido?';
 $lang['bf_ext_profile_info']	= 'Check "Extended Profiles" to have extra profile meta-data available option(wip), omiting some default bonfire fields (eg: address).';
 
 $lang['bf_yes']					= 'Si';
@@ -109,7 +109,7 @@ $lang['bf_none']				= 'Ninguno';
 $lang['bf_id']					= 'ID';
 
 $lang['bf_or']					= 'o';
-$lang['bf_size']				= 'Tama&ntilde;o';
+$lang['bf_size']				= 'Tamaño';
 $lang['bf_files']				= 'Archivos';
 $lang['bf_file']				= 'Archivo';
 
@@ -117,19 +117,19 @@ $lang['bf_with_selected']		= 'With selected';
 
 $lang['bf_env_dev']				= 'Desarrollo';
 $lang['bf_env_test']			= 'Pruebas';
-$lang['bf_env_prod']			= 'Producci&oacute;n';
+$lang['bf_env_prod']			= 'Producción';
 
-$lang['bf_show_profiler']		= '&iquest;Mostrar el administrador de an&aacute;lisis?';
-$lang['bf_show_front_profiler']	= '&iquest;Mostrar el analizador en el Front End?';
+$lang['bf_show_profiler']		= '¿Mostrar el administrador de análisis?';
+$lang['bf_show_front_profiler']	= '¿Mostrar el analizador en el Front End?';
 
-$lang['bf_cache_not_writable']  = 'La carpeta de cache de la aplicaci&oacute;n no es escribible';
+$lang['bf_cache_not_writable']  = 'La carpeta de cache de la aplicación no es escribible';
 
-$lang['bf_password_strength']			= 'Fuerza para contrase&ntilde;a';
-$lang['bf_password_length_help']		= 'Caracteres m&iacute;nimos para la contrase&ntilde;a ej: 8';
-$lang['bf_password_force_numbers']		= '&iquest;Hacer obligatorio n&uacute;meros dentro contrase&ntilde;a?';
-$lang['bf_password_force_symbols']		= '&iquest;Hacer obligatorio s&iacute;mbolos dentro de la contrase&ntilde;a?';
-$lang['bf_password_force_mixed_case']	= '&iquest;Hacer obligarorio may&uacute;sculas dentro de la contrase&ntilde;a?';
-$lang['bf_password_show_labels']	    = 'Mostrar las etiquetas de validaci&oacute;n de la contrase&ntilde;a';
+$lang['bf_password_strength']			= 'Fuerza para contraseña';
+$lang['bf_password_length_help']		= 'Caracteres mínimos para la contraseña ej: 8';
+$lang['bf_password_force_numbers']		= '¿Hacer obligatorio números dentro contraseña?';
+$lang['bf_password_force_symbols']		= '¿Hacer obligatorio símbolos dentro de la contraseña?';
+$lang['bf_password_force_mixed_case']	= '¿Hacer obligarorio mayúsculas dentro de la contraseña?';
+$lang['bf_password_show_labels']	    = 'Mostrar las etiquetas de validación de la contraseña';
 
 //--------------------------------------------------------------------
 // ! USER/PROFILE
@@ -156,18 +156,18 @@ $lang['bf_form_label_required'] = '<span class="required">*</span>';
 //--------------------------------------------------------------------
 $lang['bf_model_db_error']		= 'Error en la base de datos: %s';
 $lang['bf_model_no_data']		= 'No hay datos disponibles.';
-$lang['bf_model_invalid_id']	= 'Se paso un ID inv&aacute;lido al modelo.';
+$lang['bf_model_invalid_id']	= 'Se paso un ID inválido al modelo.';
 $lang['bf_model_no_table']		= 'El modelo tiene una tabla sin especificar.';
-$lang['bf_model_fetch_error']	= 'No hay suficiente informaci&oacute;n para recuperar el campo.';
-$lang['bf_model_count_error']	= 'No hay suficiente informaci&oacute;n para contar los resultados.';
-$lang['bf_model_unique_error']	= 'No hay suficiente informaci&oacute;n para verificar las claves &uacute;nicas.';
-$lang['bf_model_find_error']	= 'No hay suficiente informaci&oacute;n para buscar por.';
-$lang['bf_model_bad_select']	= 'Selecci&oacute;n incorrecta.';
+$lang['bf_model_fetch_error']	= 'No hay suficiente información para recuperar el campo.';
+$lang['bf_model_count_error']	= 'No hay suficiente información para contar los resultados.';
+$lang['bf_model_unique_error']	= 'No hay suficiente información para verificar las claves únicas.';
+$lang['bf_model_find_error']	= 'No hay suficiente información para buscar por.';
+$lang['bf_model_bad_select']	= 'Selección incorrecta.';
 
 //--------------------------------------------------------------------
 // Contexts
 //--------------------------------------------------------------------
-$lang['bf_no_contexts']			= 'La matriz de contexto no esta configurada apropiadamente. Verifica el archivo de configuraci&oacute;n.';
+$lang['bf_no_contexts']			= 'La matriz de contexto no esta configurada apropiadamente. Verifica el archivo de configuración.';
 $lang['bf_context_content']		= 'Contenido';
 $lang['bf_context_reports']		= 'Reportes';
 $lang['bf_context_settings']	= 'Configuraciones';
@@ -201,17 +201,17 @@ $lang['bf_remember_me']			= 'Recordarme';
 // Password Help Fields to be used as a warning on register
 //--------------------------------------------------------------------
 $lang['bf_password_number_required_help']  = 'La contraseña debe contener al menos un número.';
-$lang['bf_password_caps_required_help']    = 'La contrase&ntilde;a debe contener al menos una letra en may&uacute;scula.';
-$lang['bf_password_symbols_required_help'] = 'La contrase&ntilde;a debe contener al menos un s&iacute;mbolo.';
+$lang['bf_password_caps_required_help']    = 'La contraseña debe contener al menos una letra en mayúscula.';
+$lang['bf_password_symbols_required_help'] = 'La contraseña debe contener al menos un símbolo.';
 
 $lang['bf_password_min_length_help']       = 'La contraseña debe tener mínimo %s caracteres.';
-$lang['bf_password_length']                = 'Fuerza de la contrase&ntilde;a';
+$lang['bf_password_length']                = 'Fuerza de la contraseña';
 
 //--------------------------------------------------------------------
 // User Meta examples
 //--------------------------------------------------------------------
 
-$lang['user_meta_telefono']		= 'Tel&eacute;fono';
+$lang['user_meta_telefono']		= 'Teléfono';
 $lang['user_meta_celular']		= 'Celular';
 $lang['user_meta_street_name']	= 'Dirección';
 $lang['user_meta_ciudad']		= 'Ciudad';
@@ -220,12 +220,12 @@ $lang['user_meta_state']		= 'Departamento';
 
 // Activation
 //--------------------------------------------------------------------
-$lang['bf_activate_method']			= 'M&eacute;todo de Activaci&oacute;n';
+$lang['bf_activate_method']			= 'Método de Activación';
 $lang['bf_activate_none']			= 'Ninguno';
-$lang['bf_activate_email']			= 'Correo Electr&oacute;nico';
+$lang['bf_activate_email']			= 'Correo Electrónico';
 $lang['bf_activate_admin']			= 'Administrador';
 $lang['bf_activate']				= 'Activado';
-$lang['bf_activate_resend']			= 'Reenviar activaci&oacute;n';
+$lang['bf_activate_resend']			= 'Reenviar activación';
 
 $lang['bf_reg_complete_error']		= 'An error occurred completing your registration. Please try again or contact the site administrator for help.';
 $lang['bf_reg_activate_email'] 		= 'An email containing your activation code has been sent to [EMAIL].';

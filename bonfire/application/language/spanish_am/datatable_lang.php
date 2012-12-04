@@ -32,4 +32,4 @@ $lang['sUrl']= '';
 $lang['sFirst']= 'Primero';
 $lang['sPrevious']= 'Anterior';
 $lang['sNext']= 'Siguiente';
-$lang['sLast']= '&Uacute;ltimo';
+$lang['sLast']= 'Último';

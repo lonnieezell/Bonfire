@@ -23,8 +23,8 @@
 
 $lang['up_toolbar_title']			= 'Gestor de actualizaciones';
 
-$lang['up_update_off_message']		= 'La comprobaci&oacute;n de actualizaciones se desactiva en el archivo config/application.php.';
-$lang['up_curl_disabled_message']	= 'cURL <strong>no est&aacute;</strong> activado como un extensi&oacute;n de PHP. Bonfire no podr&aacute; comprobar las actualizaciones hasta que este activo.';
+$lang['up_update_off_message']		= 'La comprobación de actualizaciones se desactiva en el archivo config/application.php.';
+$lang['up_curl_disabled_message']	= 'cURL <strong>no está</strong> activado como un extensión de PHP. Bonfire no podrá comprobar las actualizaciones hasta que este activo.';
 $lang['up_edge_commits']			= 'New Bleeding Edge Commits';
 $lang['up_branch']					= 'Rama: <b>develop</b>';
 
@@ -33,8 +33,8 @@ $lang['up_committed']				= 'Committed';
 $lang['up_message']					= 'Mensaje';
 
 $lang['up_update_message_bleeding'] = 'A <b>bleeding edge</b> update to Bonfire is available.';
-$lang['up_update_message_new']      = 'Versi&oacute;n %s de Bonfire est&aacute; disponible. Actualmente estas ejecutando %s.';
-$lang['up_update_message_latest']   = 'Estas ejecutando la versi&oacute;n %s de Bonfire. Esta es la versi&oacute;n m&aacute;s reciente disponible.';
-$lang['up_update_message_old']      = 'Estas ejecutando la versi&oacute;n %s de Bonfire. La &uacute;ltima versi&oacute;n <b>stable</b> disponible es %s.';
-$lang['up_update_message_unable']   = 'Estas ejecutando la versi&oacute;n %s de Bonfire. <b>No se puede recuperar en este momento la versi&oacute;n m&aacute;s reciente.</b>';
+$lang['up_update_message_new']      = 'Versión %s de Bonfire está disponible. Actualmente estas ejecutando %s.';
+$lang['up_update_message_latest']   = 'Estas ejecutando la versión %s de Bonfire. Esta es la versión más reciente disponible.';
+$lang['up_update_message_old']      = 'Estas ejecutando la versión %s de Bonfire. La última versión <b>stable</b> disponible es %s.';
+$lang['up_update_message_unable']   = 'Estas ejecutando la versión %s de Bonfire. <b>No se puede recuperar en este momento la versión más reciente.</b>';
 // $lang['up_update_message_view']     = 'View Updates';
