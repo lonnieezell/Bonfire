@@ -79,10 +79,10 @@ class Base_Controller extends MX_Controller
 		$this->load->model('users/User_model', 'user_model');
 		$this->load->library('users/auth');
 
-		// Load our current logged in user so we can access it anywhere.
-		if ($this->auth->is_logged_in())
+		// Load our current logged in user for convenience
+		$this->current_user = $this->auth->user();
+		if ($this->current_user)
 		{
-			$this->current_user = $this->user_model->find($this->auth->user_id());
 			$this->current_user->id = (int)$this->current_user->id;
 			$this->current_user->user_img = gravatar_link($this->current_user->email, 22, $this->current_user->email, "{$this->current_user->email} Profile");
 
@@ -91,11 +91,10 @@ class Base_Controller extends MX_Controller
 			{
 				$this->config->set_item('language', $this->current_user->language);
 			}
-
 		}
 
 		// Make the current user available in the views
-		$this->load->vars( array('current_user' => $this->current_user) );
+		Template::set('current_user', $this->current_user);
 
 		// load the application lang file here so that the users language is known
 		$this->lang->load('application');
@@ -262,6 +261,8 @@ class Authenticated_Controller extends Base_Controller
  */
 class Admin_Controller extends Authenticated_Controller
 {
+	protected $pager;
+	protected $limit;
 
 	//--------------------------------------------------------------------
 
@@ -281,24 +282,24 @@ class Admin_Controller extends Authenticated_Controller
 		$this->load->library('ui/contexts');
 
 		// Pagination config
-		$this->pager = array();
-		$this->pager['full_tag_open']	= '<div class="pagination pagination-right"><ul>';
-		$this->pager['full_tag_close']	= '</ul></div>';
-		$this->pager['next_link'] 		= '&rarr;';
-		$this->pager['prev_link'] 		= '&larr;';
-		$this->pager['next_tag_open']	= '<li>';
-		$this->pager['next_tag_close']	= '</li>';
-		$this->pager['prev_tag_open']	= '<li>';
-		$this->pager['prev_tag_close']	= '</li>';
-		$this->pager['first_tag_open']	= '<li>';
-		$this->pager['first_tag_close']	= '</li>';
-		$this->pager['last_tag_open']	= '<li>';
-		$this->pager['last_tag_close']	= '</li>';
-		$this->pager['cur_tag_open']	= '<li class="active"><a href="#">';
-		$this->pager['cur_tag_close']	= '</a></li>';
-		$this->pager['num_tag_open']	= '<li>';
-		$this->pager['num_tag_close']	= '</li>';
-
+		$this->pager = array(
+			'full_tag_open'     => '<div class="pagination pagination-right"><ul>',
+			'full_tag_close'    => '</ul></div>',
+			'next_link'         => '&rarr;',
+			'prev_link'         => '&larr;',
+			'next_tag_open'     => '<li>',
+			'next_tag_close'    => '</li>',
+			'prev_tag_open'     => '<li>',
+			'prev_tag_close'    => '</li>',
+			'first_tag_open'    => '<li>',
+			'first_tag_close'   => '</li>',
+			'last_tag_open'     => '<li>',
+			'last_tag_close'    => '</li>',
+			'cur_tag_open'      => '<li class="active"><a href="#">',
+			'cur_tag_close'     => '</a></li>',
+			'num_tag_open'      => '<li>',
+			'num_tag_close'     => '</li>',
+		);
 		$this->limit = $this->settings_lib->item('site.list_limit');
 
 		// load the keyboard shortcut keys

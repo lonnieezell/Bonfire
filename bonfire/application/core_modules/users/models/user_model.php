@@ -636,7 +636,7 @@ class User_model extends BF_Model
 		{
 			$rows = $query->result();
 
-			$result = null;
+			$result = new stdClass;
 			foreach ($rows as $row)
 			{
 				$key = $row->meta_key;
@@ -645,7 +645,7 @@ class User_model extends BF_Model
 		}
 		else
 		{
-			$result = null;
+			$result = new stdClass;
 		}
 
 		// Reset our table info

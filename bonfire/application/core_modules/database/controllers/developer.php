@@ -74,7 +74,7 @@ class Developer extends Admin_Controller
 		$hide_form = FALSE;
 
 		// Are we performing an action?
-		if ($this->input->post_key_exists('action']))
+		if ($this->input->post_key_exists('action'))
 		{
 			$checked = $this->input->post('checked');
 

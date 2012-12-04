@@ -1,6 +1,7 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 //Translator: Sajjad Servatjoo <sajjad.servatjoo[at]gmail[dot]com>
 
+$lang['tr_translate_title']		= 'ترجمه به %s';
 $lang['tr_no_modules']			= 'افزونه ای با فایل زبان یافت نشد.';
 $lang['tr_no_core']				= 'فایل زبان هسته یافت نشد.';
 

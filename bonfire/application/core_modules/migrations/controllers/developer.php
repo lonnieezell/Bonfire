@@ -101,13 +101,8 @@ class Developer extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	public function migrate_to($version=0, $type='')
+	public function migrate_to($version, $type='')
 	{
-		if (!is_numeric($version))
-		{
-			$version = $this->uri->segment(5);
-		}
-
 		$result = $this->migrations->version($version, $type);
 
 		if ($result !== FALSE && strlen($this->migrations->error) == 0)

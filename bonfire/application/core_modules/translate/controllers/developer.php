@@ -123,6 +123,8 @@ class Developer extends Admin_Controller
 	 */
 	public function edit($trans_lang='', $lang_file='')
 	{
+		Assets::add_module_js('translate', 'translate.js');
+
 		// Save the file...
 		if ($lang_file && $this->input->post_key_exists('save'))
 		{
