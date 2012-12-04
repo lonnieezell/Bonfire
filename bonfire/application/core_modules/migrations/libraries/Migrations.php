@@ -23,7 +23,7 @@
  * :	}
  *
  * @package    Bonfire
- * @author     Mat�as Montes
+ * @author     Mat'as Montes
  * @author     Phil Sturgeon http://philsturgeon.co.uk/
  * @author     Spicer Matthews <spicer@cloudmanic.com> Cloudmanic Labs, LLC http://www.cloudmanic.com/
  * @author     Bonfire Dev Team
@@ -100,7 +100,7 @@ abstract class Migration
  * @package    Bonfire
  * @subpackage Modules_Migrations
  * @category   Libraries
- * @author     Mat�as Montes
+ * @author     Mat'as Montes
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
  *
  */

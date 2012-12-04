@@ -24,7 +24,7 @@
 
 
 	Author:
-		Mat�as Montes
+		Mat'as Montes
 
 	Rewritten by:
 
@@ -103,7 +103,7 @@ abstract class Migration {
 		Migrations
 
 	Author:
-		Mat�as Montes
+		Mat'as Montes
  */
 class Migrations {
 
