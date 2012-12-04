@@ -384,7 +384,7 @@ class Auth
 	 */
 	public function user_id()
 	{
-		return (int) $this->user()->user_id;
+		return (int) $this->user()->id;
 
 	}//end user_id()
 
