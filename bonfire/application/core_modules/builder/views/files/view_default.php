@@ -206,6 +206,7 @@ EOT;
 		<?php
 			if ( isset( \$create_parents[ '{$field_name}' ] ) )
 				\$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( \$create_parents[ '{$field_name}' ] );
+<<<<<<< HEAD
 			else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$withnull} );";
 
 				if ( $edit_drop_args != $withnull )
@@ -216,6 +217,11 @@ EOT;
 				}
 
 				$view .= "
+=======
+			else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$withnull} );
+			// TO-DO: use the following (instead of above) if we are a true parent of the table being dropped-down
+			// else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$edit_drop_args} );
+>>>>>>> 98aa4879816904ddd9e26644099c535a4c17248d
 		?>
 ";
 			endif;
