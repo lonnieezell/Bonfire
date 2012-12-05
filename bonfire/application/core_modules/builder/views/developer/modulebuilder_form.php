@@ -1,3 +1,59 @@
+<?php
+/**
+ * Enhanced Parent-Child Builder Functionality to support:
+ *
+ *    - Show Parent Display Name instead of parent foreign key value on index pages
+ *    - Show Tabs with Child index pages on edit pages
+ *    - Support Nullable columns
+ */
+
+// Enhanced Parent-Child Builder Functionality - modified modulebuilder_set_checkbox
+if ( ! function_exists('modulebuilder_set_checkbox'))
+{
+	function modulebuilder_set_checkbox($field = '', $value = '', $default = FALSE)
+	{
+		if ( ! isset($_POST[$field]))
+		{
+			if ($default == TRUE)
+			{
+				return ' checked="checked"';
+			}
+			return '';
+		}
+
+		$OBJ =& _get_validation_object();
+
+		if ($OBJ === FALSE)
+		{
+			$field = $_POST[$field];
+
+			if (is_array($field))
+			{
+				if ( ! in_array($value, $field))
+				{
+					return '';
+				}
+			}
+			else
+			{
+				if (($field == '' OR $value == '') OR ($field != $value))
+				{
+					return '';
+				}
+			}
+
+			return ' checked="checked"';
+		}
+
+		return $OBJ->set_checkbox($field, $value, $default);
+	}
+}
+// Enhanced Parent-Child Builder Functionality - end of modified modulebuilder_set_checkbox
+
+// Enhanced Parent-Child Builder Functionality - Add nullable attribute to validation rules
+$validation_rules[] = 'nullable';
+// Enhanced Parent-Child Builder Functionality - end of Add nullable attribute to validation rules
+?>
 <style>
 .faded {
 	opacity: .60;
@@ -249,6 +305,18 @@ a.mb_show_advanced_rules:hover {
 				</div>
 			</div>
 
+<?php // Enhanced Parent-Child Builder Functionality - Add Child Tables
+		$children = set_value("primary_key_children", ( isset( $existing_table_fields[0]) && @$existing_table_fields[0]['children'] ) ? str_replace( ',', "\n", $existing_table_fields[0]['children'] ) : '' );
+?>
+			<div class="control-group mb_new_table <?php echo form_has_error('primary_key_children') ? 'error' : ''; ?>">
+				<label for="primary_key_children" class="control-label block"><?php echo lang('mb_form_children'); ?></label>
+				<div class="controls">
+					<textarea name="primary_key_children" id="primary_key_children" rows="<?php count(explode("\n",$children))+1;?>"><?php echo $children; ?></textarea>
+					<span class="help-inline"><?php echo form_error('primary_key_children'); ?></span>
+				</div>
+			</div>
+<?php // Enhanced Parent-Child Builder Functionality - End of Add Child Tables ?>
+
 			<div id="field_numbers" class="control-group">
 				<label class="control-label"><?php echo lang('mb_form_fieldnum'); ?></label>
 				<div class="controls" style="padding-top: 5px;">
@@ -296,10 +364,33 @@ a.mb_show_advanced_rules:hover {
 						</div>
 					</div>
 
+<?php // Enhanced Parent-Child Builder Functionality - Add Reference column selection
+$has_references = ( isset( $existing_table_fields[$count]['references'] ) and !empty( $existing_table_fields[$count]['references'] ) );
+if ( $has_references ) :
+	$reference = strtolower( $existing_table_fields[$count]['references'] );
+	$ref = explode( '.', $reference );
+	$ref_table  = $ref[0];
+	$ref_column = $ref[1];
+	$ref_fields = array();
+	$ref_default = '';
+	$ref_query_string = "SHOW COLUMNS FROM ".$this->db->dbprefix.$ref_table;
+	if ( $ref_query = $this->db->query( $ref_query_string ) ) {
+		foreach( $ref_query->result_array() as $ref ) {
+			$ref_fields[ strtolower( $reference . '.' . $ref['Field'] ) ] = ucwords( str_replace( '_', ' ', $ref['Field'] ) );
+			if ( empty( $ref_default ) and strpos( strtolower( $ref[ 'Type' ] ), 'char' ) !== FALSE ) $ref_default = $reference . '.' . strtolower( $ref['Field'] );
+		}
+	}
+endif;
+// Enhanced Parent-Child Builder Functionality - end of Reference column selection
+?>
+
 					<?php
 						$view_field_types = array(
 							'input' 	=> 'INPUT',
 							'checkbox' 	=> 'CHECKBOX',
+// Enhanced Parent-Child Builder Functionality - Add Reference lookup option
+							'lookup'	=> 'LOOKUP',
+// Enhanced Parent-Child Builder Functionality - end of Add Reference lookup option
 							'password' 	=> 'PASSWORD',
 							'radio' 	=> 'RADIO',
 							'select' 	=> 'SELECT',
@@ -325,10 +416,19 @@ a.mb_show_advanced_rules:hover {
 							}
 						}
 
-					?>
-					<?php echo form_dropdown("view_field_type{$count}", $view_field_types, set_value("view_field_type{$count}", $default_field_type), lang('mb_form_type'), '', '<span class="help-inline">'. form_error("view_field_type{$count}").'</span>'); ?>
+						// Enhanced Parent-Child Builder Functionality - Add Reference column lookup
+						if ( $has_references ) $default_field_type = 'lookup';
+						else unset( $view_field_types[ 'lookup' ] );
+						// Enhanced Parent-Child Builder Functionality - End of Reference column lookup
+						echo form_dropdown("view_field_type{$count}", $view_field_types, set_value("view_field_type{$count}", $default_field_type), lang('mb_form_type'), '', '<span class="help-inline">'. form_error("view_field_type{$count}").'</span>');
 
-					<?php
+						// Enhanced Parent-Child Builder Functionality - Add Reference column selection
+						if ( $has_references )
+						{
+							echo form_dropdown("view_field_reference{$count}", $ref_fields, set_value("view_field_reference{$count}", $ref_default), lang('mb_form_reference'), '', '<span class="help-inline">'. form_error("view_field_reference{$count}").'</span>');
+						}
+						// Enhanced Parent-Child Builder Functionality - end of Reference column selection
+
 						$db_field_types = array(
 							'VARCHAR' 		=> 'VARCHAR',
 							'BIGINT' 		=> 'BIGINT',
@@ -389,7 +489,7 @@ a.mb_show_advanced_rules:hover {
 							<?php foreach ($validation_rules as $validation_rule) : ?>
 							<span class="faded">
 								<label class="inline checkbox" for="validation_rules_<?php echo $validation_rule . $count; ?>">
-									<input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_rule . $count; ?>" type="checkbox" value="<?php echo $validation_rule; ?>" <?php echo set_checkbox('validation_rules'.$count.'[]', $validation_rule); ?> />
+									<input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_rule . $count; ?>" type="checkbox" value="<?php echo $validation_rule; ?>" <?php echo modulebuilder_set_checkbox('validation_rules'.$count, $validation_rule /* Enhanced Parent-Child Builder - add default value from existing_table_fields if available */, isset( $existing_table_fields[$count][$validation_rule] ) and TRUE == $existing_table_fields[$count][$validation_rule] /* Enhanced Parent-Child Builder - end of default value */ ); ?> />
 									<?php echo lang('mb_form_'.$validation_rule); ?>
 								</label>
 							</span>

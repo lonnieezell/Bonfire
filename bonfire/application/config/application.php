@@ -27,6 +27,7 @@ $config['site.title'] = "";
 $config['site.system_email'] = "";
 $config['site.status'] = 1;		// 0 = offline, 1 = online
 $config['site.list_limit'] = 25;
+$config['site.ajax_list_limit'] = 10;
 
 //--------------------------------------------------------------------
 // !For Update messages

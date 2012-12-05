@@ -119,6 +119,10 @@ $lang['mb_form_is_natural_no_zero']	= 'Natural, no zeroes';
 $lang['mb_form_valid_ip']		= 'Valid IP';
 $lang['mb_form_valid_base64']	= 'Valid Base64';
 $lang['mb_form_alpha_extra']	= 'AlphaNumerics, underscore, dash, periods and spaces.';
+// Enhanced Parent-Child Builder Functionality - Form labels
+$lang['mb_form_reference']		= 'Reference Display';
+$lang['mb_form_nullable']		= 'Nullable';
+$lang['mb_form_children']		= 'Primary Key Children';
 
 // Activities
 $lang['mb_act_create']	= 'Created Module';

@@ -13,6 +13,14 @@
  * @filesource
  */
 
+/**
+ * Enhanced Parent-Child Builder Functionality to support:
+ *
+ *    - Show Parent Display Name instead of parent foreign key value on index pages
+ *    - Show Tabs with Child index pages on edit pages
+ *    - Support Nullable columns
+ */
+
 // ------------------------------------------------------------------------
 
 /**
@@ -459,6 +467,16 @@ class Developer extends Admin_Controller {
         if ($this->db->table_exists($table_name))
         {
 
+			// Enhanced Parent-Child Builder Functionality - get table references
+				$references = array();
+				$ref_query_string = "select column_name as col,concat(referenced_table_name, '.', referenced_column_name) as ref 
+									   from information_schema.key_column_usage 
+									  where table_name = '" . $this->db->dbprefix . $table_name . "' and referenced_table_name is not null";
+				if( $ref_query = $this->db->query( $ref_query_string ) ) {
+					foreach( $ref_query->result_array() as $ref ) $references[ $ref['col'] ] = substr( $ref['ref'], strlen( $this->db->dbprefix ) );
+				}
+			// Enhanced Parent-Child Builder Functionality - get table references (so far)
+
 			// TODO: Replace SHOW COLUMNS FROM with field_data($table_name) ?
             $query_string = "SHOW COLUMNS FROM ".$this->db->dbprefix.$table_name;
             if($query = $this->db->query($query_string))
@@ -504,6 +522,29 @@ class Developer extends Admin_Controller {
                     $field_array['primary_key'] = $primary_key;
 
                     $field_array['default'] = $field['Default'];
+
+					// Enhanced Parent-Child Builder Functionality - add children to Primary Key
+					if ( 1 == $primary_key )
+					{
+						$child_query_string = "select column_name as col,concat(table_name, '.', column_name) as child
+												 from information_schema.key_column_usage
+												where referenced_table_name = '{$this->db->dbprefix}{$table_name}' and referenced_column_name = '{$field['Field']}'";
+						if( $child_query = $this->db->query( $child_query_string ) ) {
+							$children = '';
+							foreach( $child_query->result_array() as $child ) $children .= ',' . substr( $child['child'], strlen( $this->db->dbprefix ) );
+							if ( !empty( $children ) ) $field_array['children'] = trim( $children, ',' );
+						}
+					}
+					// Enhanced Parent-Child Builder Functionality - end of add children to Primary Key
+
+					// Enhanced Parent-Child Builder Functionality - add rule defaults for required, trim, and nullable
+						$field_array['required'] = ( 'NO' == $field['Null'] and null == $field['Default'] ) ? true : false;
+						$field_array['trim']     = ( 'varchar' == substr( $field['Type'], 0, 7 ) ) ? true : false;
+						$field_array['nullable'] = ( 'YES' == $field['Null'] ) ? true : false;
+					// Enhanced Parent-Child Builder Functionality - end of add rule defaults for required, trim, and nullable
+					// Enhanced Parent-Child Builder Functionality - add references
+						$field_array['references'] = isset( $references[ $field_array['name'] ] ) ? $references[ $field_array['name'] ] : NULL;
+					// Enhanced Parent-Child Builder Functionality - end of add references
 
                     $fields[] = $field_array;
                 } // end foreach

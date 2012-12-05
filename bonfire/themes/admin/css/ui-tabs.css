@@ -1,0 +1,21 @@
+/* Tabs containers
+----------------------------------*/
+.ui-tabs { position: relative; padding: .4em; zoom: 1; }
+.ui-tabs .ui-tabs-nav { margin: 0; padding: .2em .2em 0; padding: .6em .6em 0; background: none repeat scroll 0% 0% rgb(132,156,183); }
+.ui-tabs .ui-tabs-nav li { list-style: none; float: left; position: relative; top: 0; border-bottom: 0; padding: 0; white-space: nowrap; margin: 0 .6em 0 0; background: none repeat scroll 0% 0% rgb(36,57,87); border: 0px; }
+.ui-tabs .ui-tabs-nav li:hover { background: none repeat scroll 0% 0% rgb(36,77,127); }
+.ui-tabs .ui-tabs-nav li a { float: left; padding: .5em 1em; text-decoration: none; font-weight: normal; color: white; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: -1px; padding-bottom: 1px; background: none repeat scroll 0% 0% white; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a { font-weight: bold; color: rgb(36,57,87); }
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-tabs-loading a { cursor: text; }
+.ui-tabs .ui-tabs-nav li a, .ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-active a { cursor: pointer; }
+.ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: .4em 0 .4em 0; background: none; }
+.ui-tabs .ui-tabs-hide { display: none !important; }
+
+/* Hide heading in the tab panel since it's the same as the tab heading
+-----------------------------------------------------------------------*/
+.ui-tabs .ui-tabs-panel h3 { display: none; }
+
+/* Component containers
+----------------------------------*/
+.ui-widget-content .btn { color: white; }

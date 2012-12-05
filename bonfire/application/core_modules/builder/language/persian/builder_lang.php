@@ -119,6 +119,10 @@ $lang['mb_form_is_natural_no_zero']	= 'طبيعي بدون صفر';
 $lang['mb_form_valid_ip']		= 'IP معتبر';
 $lang['mb_form_valid_base64']	= 'Base64 معتبر';
 $lang['mb_form_alpha_extra']	= 'حروف الفبا, خط زير, خط تيره, نقطه و خط فاصله.';
+// Enhanced Parent-Child Builder Functionality - Form labels
+$lang['mb_form_reference']		= 'Reference Display';
+$lang['mb_form_nullable']		= 'Nullable';
+$lang['mb_form_children']		= 'Primary Key Children';
 
 // Activities
 $lang['mb_act_create']	= 'ايجاد افزونه';

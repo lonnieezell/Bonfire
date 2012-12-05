@@ -14,6 +14,38 @@ if( isset($'.$module_name_lower.') ) {
 }
 $id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? $'.$module_name_lower.'[\''.$primary_key_field.'\'] : \'\';
 ';
+// Enhanced Parent-Child Builder - Add required parents for create
+$view .= '
+if ( \'create\' == $this->uri->rsegment(2) )
+{
+	$create_parents = set_value( \'create_parents\' );
+	if ( empty( $create_parents ) )
+	{
+		$create_parents = array();
+		foreach ( $this->'.$module_name_lower.'_model->get_columns() as $col )
+		{
+			if ( $val = $this->input->get( $col[\'name\'] ) ) $create_parents[ $col[\'name\'] ] = $val;
+		}
+	}
+	else $create_parents = implode( \',\', $create_parents );
+}';
+// Enhanced Parent-Child Builder - end of Add required parents for create
+
+// Enhanced Parent-Child Builder - Get children
+$children = array();
+$childtables = array();
+if ( $pkchildren = $this->input->post( "primary_key_children" ) )
+{
+	$children = explode( "\n", trim( strtolower( str_replace( ' ', "\n", $pkchildren ) ), "\n\r\t " ) );
+	foreach ( $children as $child )
+	{
+		$ct = substr( $child, 0, strpos( $child.'.', '.' ) );
+		if ( !isset( $childtables[ $ct ] ) ) $childtables[ $ct ] = array();
+		$childtables[ $ct ][] = $child;
+	}
+}
+// Enhanced Parent-Child Builder - end of Get children
+
 $view .= '?>';
 $view .= '
 <div class="admin-box">
@@ -144,6 +176,32 @@ EOT;
 EOT;
             break;
 
+// Enhanced Parent-Child Builder - Add parent lookup
+        case('lookup'):
+			if ( $ref = $this->input->post( "view_field_reference$counter" ) ) :
+				$v = $this->input->post( "validation_rules{$counter}" );
+				array_flip( $v );
+				$edit_drop_args = isset( $v['nullable'] ) ? 'TRUE' : 'FALSE';
+				$refparts = explode( '.', strtolower( $ref ) );
+				if ( isset( $childtables[ $refparts[0] ] ) ) $edit_drop_args = '$id, ' . $edit_drop_args;
+
+				$view .= "
+		<?php
+			\$m = \$this->model( '{$module_name_lower}/{$module_name_lower}_model' );
+			\$m = new \$m;
+			if ( isset( \$create_parents[ '{$field_name}' ] ) )
+				\$options = \$m->".set_value("view_field_name$counter")."_format_dropdown( \$create_parents[ '{$field_name}' ] );
+			else \$options = \$m->".set_value("view_field_name$counter")."_format_dropdown( {$edit_drop_args} );
+		?>
+";
+			endif;
+
+            $view .= <<<EOT
+        <?php echo form_dropdown('{$form_name}', \$options, set_value('{$form_name}', isset(\$create_parents['{$field_name}']) ? \$create_parents['{$field_name}'] : ( isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '' ) ), '{$field_label}'{$required})?>
+EOT;
+            break;
+// Enhanced Parent-Child Builder - end of Add parent lookup
+
         case('checkbox'):
 
             $view .= <<<EOT
@@ -218,7 +276,7 @@ if($action_name != 'create') {
     $delete = PHP_EOL . '
     <?php if ($this->auth->has_permission(\''.$delete_permission.'\')) : ?>
 
-            or <button type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php e(js_escape(lang(\''.$module_name_lower.'_delete_confirm\'))); ?>\')">
+            <button type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php e(js_escape(lang(\''.$module_name_lower.'_delete_confirm\'))); ?>\')">
             <i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>
             </button>
 
@@ -229,16 +287,36 @@ if($action_name != 'create') {
 $view .= PHP_EOL . '
 
         <div class="form-actions">
-            <br/>
+	<?php if ( $this->auth->has_permission(\'ServerTypes.Content.Edit\') ) : ?>
             <input type="submit" name="save" class="btn btn-primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' />
-            or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-warning"\'); ?>
+	<?php endif; ?>
+            <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-warning"\'); ?>
             ' . $delete . '
         </div>
     </fieldset>
     <?php echo form_close(); ?>
 ' . PHP_EOL;
 
-
+// Enhanced Parent-Child Builder - Add Children Tabs
+if ( !empty( $children ) ) :
+$tabs = "
+<?php if ( !isset( \$create_parents ) ) : ?>
+	<div id='tabs'>
+		<ul>";
+		foreach ( $children as $child ) :
+			$f = explode( '.', trim( $child, "\n\r" ) );
+			if ( count( $f ) < 2 ) break;
+			if ( count( $f ) == 2 ) $f[] = ucwords( $f[0] );
+			$tabs .= "
+			<li><a href='<?php echo site_url( SITE_AREA.\"/content/{$f[0]}?{$f[1]}={\$id}\" ) ?>'>{$f[2]}</a></li>";
+		endforeach;
+	$tabs .= "
+		</ul>
+	</div>
+<?php endif; ?>";
+$view .= $tabs . PHP_EOL;
+endif;
+// Enhanced Parent-Child Builder - end of Add Children Tabs
 
 if ($xinha_names != '')
 {
