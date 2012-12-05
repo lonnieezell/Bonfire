@@ -102,7 +102,7 @@ class '.ucfirst($controller_name).'_model extends BF_Model {
 	{
 		if ( !is_array( \$where ) )
 		{
-			if ( is_numeric( \$where ) ) \$where = array( {$where} );
+			if ( is_numeric( \$where ) ) \$where = array( '{$refparts[1]}' => \$where );
 			elseif ( 1 == count( func_get_args() ) )
 			{
 				\$withnull = \$where;
