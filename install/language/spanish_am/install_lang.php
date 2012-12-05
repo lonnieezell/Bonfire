@@ -36,6 +36,9 @@ $lang['in_db_account_error']        = 'Hubo un error al crear su cuenta en la ba
 $lang['in_settings_save_error']     = 'Hubo un error al guardar las configuraciones. Por favor verifique que su base de datos y el archivo de configuracion %s/database tienen permisos de escritura.';
 
 $lang['in_environment']				= 'Entorno';
+$lang['in_environment_dev']			= 'Desarrollo';
+$lang['in_environment_test']		= 'Pruebas';
+$lang['in_environment_prod']		= 'Producción';
 $lang['in_host']					= 'Servidor';
 $lang['in_database']				= 'Base de datos';
 $lang['in_prefix']					= 'Prefijo';
@@ -64,8 +67,3 @@ $lang['multiple_migrations_name']		= 'Multiples nombres de migración: %s';
 $lang['migration_class_doesnt_exist']	= 'La clase de migracion no existe: %s';
 $lang['wrong_migration_interface']		= 'Interfaz incorrecta de migración: %s';
 $lang['invalid_migration_filename']		= 'Nombre de archivo de migración incorrecto: %s - %s';
-
-$lang['in_env_dev']				= 'Desarrollo';
-$lang['in_env_test']			= 'Pruebas';
-$lang['in_env_prod']			= 'Producción';
-$lang['in_reload']				= 'Recargar Página';

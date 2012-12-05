@@ -44,3 +44,4 @@ $config['template.message_template'] =<<<EOD
 	</div>
 EOD;
 
+$config['password_iterations'] = 8;

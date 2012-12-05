@@ -115,14 +115,14 @@ class Migrations {
 
 	//--------------------------------------------------------------------
 
-	function __construct()
+	function __construct($config=array())
 	{
 		$this->_ci =& get_instance();
 
 		$this->_ci->config->load('migrations');
 
 		$this->migrations_enabled = $this->_ci->config->item('migrations_enabled');
-		$this->migrations_path = realpath($this->_ci->config->item('migrations_path'));
+		$this->migrations_path = isset($config['migration_path']) ? $config['migration_path'] : realpath($this->_ci->config->item('migrations_path'));
 
 		// Idiot check
 		$this->migrations_enabled AND $this->migrations_path OR show_error('Migrations has been loaded but is disabled or set up incorrectly.');
@@ -185,7 +185,7 @@ class Migrations {
 		switch ($type)
 		{
 			case '':
-				$migrations_path = $this->migrations_path .'core/';
+				$migrations_path = $this->migrations_path;
 				break;
 			case 'app_':
 				$migrations_path = $this->migrations_path;
@@ -196,13 +196,13 @@ class Migrations {
 		}
 
 		// Load all *_*.php files in the migrations path
-		$files = glob($migrations_path.'*_*'.EXT);
+		$files = glob($migrations_path.'*_*.php');
 		$file_count = count($files);
 
 		for($i=0; $i < $file_count; $i++)
 		{
 			// Mark wrongly formatted files as FALSE for later filtering
-			$name = basename($files[$i],EXT);
+			$name = basename($files[$i],'.php');
 			if(!preg_match('/^\d{3}_(\w+)$/',$name)) $files[$i] = FALSE;
 		}
 
@@ -249,7 +249,7 @@ class Migrations {
 		switch ($type)
 		{
 			case '':
-				$migrations_path = $this->migrations_path .'core/';
+				$migrations_path = $this->migrations_path;
 				break;
 			case 'app_':
 				$migrations_path = $this->migrations_path;
