@@ -82,6 +82,10 @@ class Users extends Front_Controller
 					// Log the Activity
 					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged') . ': ' . $this->input->ip_address(), 'users');
 
+					// Now redirect.  (If this ever changes to render something,
+					// note that auth->login() currently doesn't attempt to fix
+					// `$this->current_user` for the current page load).
+
 					/*
 						In many cases, we will have set a destination for a
 						particular user-role to redirect to. This is helpful for

@@ -109,10 +109,8 @@ class Activity_model extends BF_Model
 			$modules = array($modules);
 		}
 
-		foreach ($modules as $module)
-		{
-			$this->db->or_where('module', $module);
-		}
+		$this->db->where_in('module', $modules);
+		$this->db->where('activities.deleted', 0);
 
 		$this->db->select('activity_id, activities.user_id, activity, module, activities.created_on, display_name, username, email, last_login');
 		$this->db->join('users', 'activities.user_id = users.id', 'left');
