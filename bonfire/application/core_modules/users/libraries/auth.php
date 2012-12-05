@@ -157,11 +157,6 @@ class Auth
 			return FALSE;
 		}
 
-		if (is_array($user))
-		{
-			$user = $user[0];
-		}
-
 		// check if the account has been activated.
 		$activation_type = $this->ci->settings_lib->item('auth.user_activation_method');
 		if ($user->active == 0 && $activation_type > 0) // in case we go to a unix timestamp later, this will still work.
@@ -210,6 +205,10 @@ class Auth
 				'last_ip'				=> $this->ip_address,
 			);
 			$this->ci->user_model->update($user->id, $data);
+
+			// Clear the cached result of user() (and hence is_logged_in(), user_id() etc).
+			// Doesn't fix `$this->current_user` in controller (for this page load)...
+			unset($this->user);
 
 			$trigger_data = array('user_id'=>$user->id, 'role_id'=>$user->role_id);
 			Events::trigger('after_login', $trigger_data );
@@ -295,6 +294,12 @@ class Auth
 				}
 			}
 		}//end if
+
+		if ($this->user !== FALSE)
+		{
+			$this->user->id = (int) $this->user->id;
+			$this->user->role_id = (int) $this->user->role_id;
+		}
 
 		return $this->user;
 

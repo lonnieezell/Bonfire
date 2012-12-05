@@ -83,7 +83,7 @@ class Base_Controller extends MX_Controller
 		$this->current_user = $this->auth->user();
 		if ($this->current_user)
 		{
-			$this->current_user->id = (int)$this->current_user->id;
+			$this->current_user = clone $this->current_user;
 			$this->current_user->user_img = gravatar_link($this->current_user->email, 22, $this->current_user->email, "{$this->current_user->email} Profile");
 
 			// if the user has a language setting then use it
