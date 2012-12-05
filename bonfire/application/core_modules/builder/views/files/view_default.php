@@ -32,6 +32,7 @@ if ( \'create\' == $this->uri->rsegment(2) )
 // Enhanced Parent-Child Builder - end of Add required parents for create
 
 // Enhanced Parent-Child Builder - Get children
+$mymodel = null;
 $children = array();
 $childtables = array();
 if ( $pkchildren = $this->input->post( "primary_key_children" ) )
@@ -39,9 +40,11 @@ if ( $pkchildren = $this->input->post( "primary_key_children" ) )
 	$children = explode( "\n", trim( strtolower( str_replace( ' ', "\n", $pkchildren ) ), "\n\r\t " ) );
 	foreach ( $children as $child )
 	{
+		$child = trim( strtolower( $child ), "\n\r\t. " );
 		$ct = substr( $child, 0, strpos( $child.'.', '.' ) );
+		$cc = substr( $child, strpos( $child.'.', '.' ) +1 );
 		if ( !isset( $childtables[ $ct ] ) ) $childtables[ $ct ] = array();
-		$childtables[ $ct ][] = $child;
+		$childtables[ $ct ][] = array( 'ref' => $child, 'table' => $ct, 'col' => $cc );
 	}
 }
 // Enhanced Parent-Child Builder - end of Get children
@@ -179,19 +182,40 @@ EOT;
 // Enhanced Parent-Child Builder - Add parent lookup
         case('lookup'):
 			if ( $ref = $this->input->post( "view_field_reference$counter" ) ) :
+				if ( is_null( $mymodel ) )
+				{
+					$mymodel = "{$module_name_lower}_model";
+					$view .="
+		<?php
+			\${$mymodel} = \$this->model( '{$module_name_lower}/{$mymodel}' );
+			\${$mymodel} = new \${$mymodel};
+		?>";
+				}
+
 				$v = $this->input->post( "validation_rules{$counter}" );
 				array_flip( $v );
-				$edit_drop_args = isset( $v['nullable'] ) ? 'TRUE' : 'FALSE';
+				$edit_drop_args = $withnull = isset( $v['nullable'] ) ? 'TRUE' : 'FALSE';
 				$refparts = explode( '.', strtolower( $ref ) );
-				if ( isset( $childtables[ $refparts[0] ] ) ) $edit_drop_args = '$id, ' . $edit_drop_args;
+				if ( isset( $childtables[ $refparts[0] ] ) )
+				{
+					$col = $childtables[$refparts[0]][0]['col'];
+					$edit_drop_args = "array( '{$col}' => \$id ), " . $edit_drop_args;
+				}
 
 				$view .= "
 		<?php
-			\$m = \$this->model( '{$module_name_lower}/{$module_name_lower}_model' );
-			\$m = new \$m;
 			if ( isset( \$create_parents[ '{$field_name}' ] ) )
-				\$options = \$m->".set_value("view_field_name$counter")."_format_dropdown( \$create_parents[ '{$field_name}' ] );
-			else \$options = \$m->".set_value("view_field_name$counter")."_format_dropdown( {$edit_drop_args} );
+				\$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( \$create_parents[ '{$field_name}' ] );
+			else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$withnull} );";
+
+				if ( $edit_drop_args != $withnull )
+				{
+					$view .= "
+			// TO-DO: use the following (instead of above) if we are a true parent of the table being dropped-down
+			// else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$edit_drop_args} );";
+				}
+
+				$view .= "
 		?>
 ";
 			endif;
