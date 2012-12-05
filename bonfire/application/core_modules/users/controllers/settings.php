@@ -726,8 +726,6 @@ class Settings extends Admin_Controller
 			Template::set_message(lang('us_err_no_id'),'error');
 		}//end if
 
-		redirect(SITE_AREA.'/settings/users');
-
 	}//end user_status()
 
 	//--------------------------------------------------------------------
