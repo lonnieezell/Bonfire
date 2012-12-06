@@ -180,7 +180,7 @@ EOT;
             $view .= <<<EOT
 ); ?>
 
-        <?php echo form_dropdown('{$form_name}', \$options, set_value('{$form_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''), '{$field_label}'{$required})?>
+        <?php echo form_dropdown('{$form_name}', \$options, set_value('{$form_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''), '{$field_label}'{$required}, \$disabled)?>
 EOT;
             break;
 
@@ -226,7 +226,7 @@ EOT;
 			endif;
 
             $view .= <<<EOT
-        <?php echo form_dropdown('{$form_name}', \$options, set_value('{$form_name}', isset(\$create_parents['{$field_name}']) ? \$create_parents['{$field_name}'] : ( isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '' ) ), '{$field_label}'{$required})?>
+        <?php echo form_dropdown('{$form_name}', \$options, set_value('{$form_name}', isset(\$create_parents['{$field_name}']) ? \$create_parents['{$field_name}'] : ( isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '' ) ), '{$field_label}'{$required}, \$disabled)?>
 EOT;
             break;
 // Enhanced Parent-Child Builder - end of Add parent lookup
@@ -239,7 +239,7 @@ EOT;
             <div class="controls">
 
                 <label class="checkbox" for="{$form_name}">
-                    <input type="checkbox" id="{$form_name}" name="{$form_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$form_name}', 1); ?>>
+                    <input type="checkbox" id="{$form_name}" name="{$form_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$form_name}', 1); ?> <?php echo \$disabled; ?> >
                     <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
                 </label>
 
@@ -280,7 +280,7 @@ EOT;
             <?php echo form_label('{$field_label}'{$required}, '{$form_name}', array('class' => "control-label") ); ?>
             <div class="controls">
 
-               <input id="{$form_name}" type="{$type}" name="{$form_name}" {$maxlength} value="<?php echo set_value('{$form_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>"  />
+               <input id="{$form_name}" type="{$type}" name="{$form_name}" {$maxlength} value="<?php echo set_value('{$form_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>" <?php echo \$disabled; ?> />
                <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
             </div>
 
