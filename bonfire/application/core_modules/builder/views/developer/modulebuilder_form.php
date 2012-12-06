@@ -402,7 +402,6 @@ a.mb_show_advanced_rules:hover {
 					<div class="control-group mb_advanced">
 						<label class="control-label" id="validation_limit_label<?php echo $count; ?>"><?php echo lang('mb_form_rules_limits'); ?></label>
 						<div class="controls" aria-labelledby="validation_limit_label<?php echo $count; ?>" role="group">
-							<?php echo lang('mb_form_rules_limit_note'); ?>
 							<?php foreach ($validation_limits as $validation_limit) : ?>
 							<span class="faded">
 								<label class="inline radio" for="validation_rules_<?php echo $validation_limit . $count; ?>">
