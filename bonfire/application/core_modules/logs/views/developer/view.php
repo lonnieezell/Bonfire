@@ -6,7 +6,7 @@
 		<a class="close" data-dismiss="alert">&times;</a>
 		<?php echo lang('log_not_found'); ?>
 	</div>
-	<?php else : ?>
+<?php else : ?>
 
 	<br/>
 
@@ -43,7 +43,6 @@
 		</div>
 		<?php endforeach; ?>
 	</div>
-</div>
 
 	<?php if (has_permission('Bonfire.Logs.Manage')) : ?>
 	<!-- Purge? -->
@@ -67,3 +66,4 @@
 	<?php endif; ?>
 
 <?php endif; ?>
+</div><!--/admin-box-->
