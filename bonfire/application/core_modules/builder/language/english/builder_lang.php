@@ -22,6 +22,7 @@
 */
 
 // INDEX page
+$lang['mb_delete_confirm']		= 'Really delete this module and all of its files?';
 $lang['mb_create_button']		= 'Create Module';
 $lang['mb_create_link']			= 'Create a new module';
 $lang['mb_create_note']			= 'Use our wizbang module building wizard to create your next module. We do all the heavy lifting by generating all the controllers, models, views and language files you need.';

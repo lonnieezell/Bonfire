@@ -65,7 +65,7 @@
 		</div>
 
 		<div class="form-actions">
-			<button type="submit" name="delete_all" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete all log files?')"><i class="icon-white icon-trash">&nbsp;</i>&nbsp;<?php echo lang('log_delete_button'); ?></button>
+			<button type="submit" name="delete_all" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('logs_delete_all_confirm'))); ?>')"><i class="icon-white icon-trash">&nbsp;</i>&nbsp;<?php echo lang('log_delete_button'); ?></button>
 		</div>
 		<?php echo form_close(); ?>
 	</div>

@@ -35,6 +35,7 @@ $lang['log_save_button']		= 'Save Log Settings';
 $lang['log_delete_button']		= 'Delete Log Files';
 $lang['log_delete1_button']		= 'Delete This Log File?';
 $lang['logs_delete_confirm']	= 'Are you sure you want to delete these logs?';
+$lang['logs_delete_all_confirm']	= 'Are you sure you want to delete all log files?';
 
 $lang['log_big_file_note']		= 'Logging can rapidly create very large files, if you log too much information. For live sites, you should probably log only Errors.';
 $lang['log_delete_note']		= 'Deleting log files is permanent. There is no going back, so please make sure.';
