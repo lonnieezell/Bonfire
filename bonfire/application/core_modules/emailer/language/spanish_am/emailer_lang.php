@@ -75,4 +75,3 @@ $lang['em_delete_confirm']		= '¡Esta seguro de que quiere eliminar este correo?
 // $lang['em_create_email_error']	= 'Error in creating emails: %s';
 // $lang['em_create_email_success']= 'Email(s) are inserted into email queue.';
 // $lang['em_create_email_failure']= 'Fail in creating emails: %s';
-// $lang['em_create_email_cancel']	= 'Cancel';
