@@ -19,6 +19,7 @@ $edit_permission = preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirs
 
 
 $view .= '
+$disabled = \'\';
 if ( \'create\' == $this->uri->rsegment(2) )
 {
 	$create_parents = set_value( \'create_parents\' );
@@ -31,7 +32,8 @@ if ( \'create\' == $this->uri->rsegment(2) )
 		}
 	}
 	else $create_parents = implode( \',\', $create_parents );
-}';
+}
+elseif ( !$this->auth->has_permission(\''.$edit_permission.'\') ) $disabled = \'disabled\';';
 // Enhanced Parent-Child Builder - end of Add required parents for create
 
 // Enhanced Parent-Child Builder - Get children
@@ -128,7 +130,7 @@ for($counter=1; $field_total >= $counter; $counter++)
         <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
             <?php echo form_label('{$field_label}'{$required}, '{$form_name}', array('class' => "control-label") ); ?>
             <div class="controls">
-                <?php echo form_textarea( array( 'name' => '{$form_name}', 'id' => '{$form_name}', 'rows' => '5', 'cols' => '80', 'value' => set_value('$form_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>
+                <?php echo form_textarea( array( 'name' => '{$form_name}', 'id' => '{$form_name}', 'rows' => '5', 'cols' => '80', 'value' => set_value('$form_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ),,\$disabled )?>
                 <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
             </div>
 
@@ -147,7 +149,7 @@ EOT;
                     Radio option 1
                 </label>
                 <label class="radio" for="{$form_name}_option2">
-                    <input id="{$form_name}_option2" name="{$form_name}" type="radio" class="" value="option2" <?php echo set_radio('{$form_name}', 'option2'); ?> />
+                    <input id="{$form_name}_option2" name="{$form_name}" type="radio" class="" value="option2" <?php echo set_radio('{$form_name}', 'option2'); ?> <?php echo \$disabled; ?> />
                     Radio option 2
                 </label>
                 <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
@@ -209,7 +211,6 @@ EOT;
 		<?php
 			if ( isset( \$create_parents[ '{$field_name}' ] ) )
 				\$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( \$create_parents[ '{$field_name}' ] );
-<<<<<<< HEAD
 			else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$withnull} );";
 
 				if ( $edit_drop_args != $withnull )
@@ -220,11 +221,6 @@ EOT;
 				}
 
 				$view .= "
-=======
-			else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$withnull} );
-			// TO-DO: use the following (instead of above) if we are a true parent of the table being dropped-down
-			// else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$edit_drop_args} );
->>>>>>> 98aa4879816904ddd9e26644099c535a4c17248d
 		?>
 ";
 			endif;
