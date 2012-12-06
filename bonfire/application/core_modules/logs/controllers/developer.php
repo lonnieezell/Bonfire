@@ -198,9 +198,13 @@ class Developer extends Admin_Controller
 
 		Assets::add_module_js('logs', 'logs');
 
+		$path = $this->config->item('log_path') . $file;
+		if (file_exists($path))
+		{
+			Template::set('log_content', file($path));
+		}
 		Template::set('log_file', $file);
 		Template::set('log_file_pretty', date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file)))));
-		Template::set('log_content', file($this->config->item('log_path') . $file));
 		Template::render();
 
 	}//end view()
