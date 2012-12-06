@@ -80,10 +80,10 @@ class Base_Controller extends MX_Controller
 		$this->load->library('users/auth');
 
 		// Load our current logged in user for convenience
-		$this->current_user = $this->auth->user();
-		if ($this->current_user)
+		if ($this->auth->is_logged_in())
 		{
-			$this->current_user = clone $this->current_user;
+			$this->current_user = clone $this->auth->user();
+
 			$this->current_user->user_img = gravatar_link($this->current_user->email, 22, $this->current_user->email, "{$this->current_user->email} Profile");
 
 			// if the user has a language setting then use it
