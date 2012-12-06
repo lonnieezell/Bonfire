@@ -36,7 +36,7 @@
 
 	<div class="control-group">
 		<div class="controls">
-			<input class="btn btn-primary" type="submit" name="send" value="Send Password"  />
+			<input class="btn btn-primary" type="submit" name="send" value="<?php e(lang('us_send_password')); ?>" />
 		</div>
 	</div>
 

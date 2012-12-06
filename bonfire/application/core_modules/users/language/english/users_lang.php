@@ -88,12 +88,14 @@ $lang['us_edit_note']				= 'Enter your details below and click Save.';
 
 $lang['us_reset_password']			= 'Reset Password';
 $lang['us_reset_note']				= 'Enter your email and we will send a temporary password to you.';
+$lang['us_send_password']			= 'Send Password';
 
 $lang['us_login']					= 'My Name Is...';
 $lang['us_remember_note']			= 'Remember me for two weeks';
 $lang['us_no_account']				= 'Don&rsquo;t have an account?';
 $lang['us_sign_up']					= 'Sign up today';
 $lang['us_forgot_your_password']	= 'Forgot Your Password?';
+$lang['us_let_me_in']				= 'Let Me In';
 
 $lang['us_password_mins']			= 'Minimum 8 characters.';
 $lang['us_register']				= 'Register';
@@ -119,6 +121,8 @@ $lang['us_reset_invalid_email']     = 'That did not appear to be a valid passwor
 $lang['us_reset_pass_subject']      = 'Your Temporary Password';
 $lang['us_reset_pass_message']      = 'Please check your email for instructions to reset your password.';
 $lang['us_reset_pass_error']        = 'Unable to send an email: ';
+
+$lang['us_set_password']			= 'Save New Password';
 $lang['us_reset_password_success']  = 'Please login using your new password.';
 $lang['us_reset_password_error']    = 'There was an error resetting your password: %s';
 

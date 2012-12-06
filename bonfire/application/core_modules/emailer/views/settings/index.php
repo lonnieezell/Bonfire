@@ -96,7 +96,7 @@
 	</fieldset>
 
 	<div class="form-actions">
-		<input type="submit" name="save" class="btn btn-primary" value="Save Settings" />
+		<input type="submit" name="save" class="btn btn-primary" value="<?php e(lang('em_save_settings')); ?>" />
 	</div>
 
 	<?php echo form_close(); ?>

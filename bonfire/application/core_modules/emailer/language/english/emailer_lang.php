@@ -35,11 +35,13 @@ $lang['em_server_address']		= 'Server Address';
 $lang['em_port']				= 'Port';
 $lang['em_timeout_secs']		= 'Timeout (seconds)';
 $lang['em_email_type']			= 'Email Type';
+$lang['em_save_settings']		= 'Save Settings';
 $lang['em_test_settings']		= 'Test Email Settings';
 
 $lang['em_template_note']		= 'Emails are sent in HTML format. They can be customized by editing the header and footer, below.';
 $lang['em_header']				= 'Header';
 $lang['em_footer']				= 'Footer';
+$lang['em_save_template']		= 'Save Template';
 
 $lang['em_test_header']			= 'Test Your Settings';
 $lang['em_test_intro']			= 'Enter an email address below to verify that your email settings are working.<br/>Please save the current settings before testing.';
@@ -55,6 +57,8 @@ $lang['em_test_mail_body']		= 'If you are seeing this email, then it appears you
 $lang['em_stat_no_queue']		= 'You do not currently have any emails in the queue.';
 $lang['em_total_in_queue']		= 'Total Emails in Queue:';
 $lang['em_total_sent']			= 'Total Emails Sent:';
+$lang['em_force_process']		= 'Process Now';
+$lang['em_insert_test']			= 'Insert Test Email';
 
 $lang['em_sent']				= 'Sent';
 $lang['em_attempts']			= 'Attempts';

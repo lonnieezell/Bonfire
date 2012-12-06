@@ -9,8 +9,8 @@
 	</div>
 	<div class="column size1of3 last-column text-right">
 		<?php echo form_open($this->uri->uri_string(), array('class' => 'form-inline')); ?>
-		<input type="submit" name="force_process" class="btn btn-primary" value="Process Now">
-		<input type="submit" name="insert_test" class="btn btn-warning" value="Insert Test Email">
+		<input type="submit" name="force_process" class="btn btn-primary" value="<?php e(lang('em_force_process')); ?>">
+		<input type="submit" name="insert_test" class="btn btn-warning" value="<?php e(lang('em_insert_test')); ?>">
 		<?php echo form_close(); ?>
 	</div>
 </div>

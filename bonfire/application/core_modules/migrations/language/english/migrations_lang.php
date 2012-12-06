@@ -13,6 +13,7 @@ $lang['mig_migrate_note']			= 'Performing migrations <b>WILL</b> change your dat
 $lang['mig_migrate_to']				= 'Migrate database to version';
 $lang['mig_choose_migration']		= 'Migrate to version:';
 $lang['mig_migrate_button']			= 'Migrate Database';
+$lang['mig_migrate_module']			= 'Migrate Module';
 
 $lang['mig_app_migrations']			= "Application Migrations";
 $lang['mig_core_migrations']		= "Bonfire Core Migrations";
