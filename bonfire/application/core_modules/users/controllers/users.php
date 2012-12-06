@@ -135,9 +135,13 @@ class Users extends Front_Controller
 	 */
 	public function logout()
 	{
-		// Log the Activity
-		$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged_out') . ': ' . $this->input->ip_address(), 'users');
+		if (isset($this->current_user->id))
+		{
+			// Login session is valid.  Log the Activity
+			$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged_out') . ': ' . $this->input->ip_address(), 'users');
+		}
 
+		// Always clear browser data (don't silently ignore user requests :).
 		$this->auth->logout();
 
 		redirect('/');
