@@ -15,6 +15,9 @@ if( isset($'.$module_name_lower.') ) {
 $id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? $'.$module_name_lower.'[\''.$primary_key_field.'\'] : \'\';
 ';
 // Enhanced Parent-Child Builder - Add required parents for create
+$edit_permission = preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Edit';
+
+
 $view .= '
 if ( \'create\' == $this->uri->rsegment(2) )
 {
@@ -317,7 +320,7 @@ if($action_name != 'create') {
 $view .= PHP_EOL . '
 
         <div class="form-actions">
-	<?php if ( $this->auth->has_permission(\'ServerTypes.Content.Edit\') ) : ?>
+	<?php if ( $this->auth->has_permission(\''.$edit_permission.'\') ) : ?>
             <input type="submit" name="save" class="btn btn-primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' />
 	<?php endif; ?>
             <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-warning"\'); ?>
