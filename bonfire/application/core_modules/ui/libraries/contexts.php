@@ -431,14 +431,9 @@ class Contexts
 		// Order our actions by their weight, then alphabetically
 		self::sort_actions();
 
-		// Grab our module permissions so we know who can see what on the sidebar
-		$permissions = self::$ci->config->item('module_permissions');
-
 		// Build up our menu array
 		foreach (self::$actions as $module => $config)
 		{
-			// Make sure the user has permission to view this page.
-//			if ((isset($permissions[$context][$module]) && has_permission($permissions[$context][$module])) || (isset($permissions[$context]) && is_array($permissions[$context]) && !array_key_exists($module, $permissions[$context])))
 			if (has_permission('Bonfire.'.ucfirst($module).'.View') || has_permission(ucfirst($module).'.'.ucfirst($context).'.View'))
 			{
 				// Drop-down menus?
