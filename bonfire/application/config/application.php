@@ -1,6 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-$config['auth.use_extended_profile'] = 0;
 /*
 	Copyright (c) 2011 Lonnie Ezell
 
