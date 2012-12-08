@@ -125,7 +125,7 @@ class Settings extends Admin_Controller
 	{
 
 		$this->form_validation->set_rules('action1', lang('ui_actions'), 'required');
-		$this->form_validation->set_rules('shortcut1', lang('ui_shortcuts'), 'required|callback_validate_shortcuts');
+		$this->form_validation->set_rules('shortcut1', lang('ui_shortcuts'), 'required|callback__validate_shortcuts');
 
 		if ($this->form_validation->run() === FALSE)
 		{
