@@ -55,9 +55,6 @@ if ( ! function_exists('gravatar_link'))
 		// Set our minimum site rating to PG
 		$rating = 'PG';
 
-		// Border color
-		$border = 'd6d6d6';
-
 		// If email null, means we don't want gravatar.com HTTP request
 		if ( $email ) {
 
@@ -66,15 +63,14 @@ if ( ! function_exists('gravatar_link'))
 			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https://secure.";} else { $http_protocol = "http://www.";}
 
 			// URL for Gravatar
-			$gravatarURL =  $http_protocol . "gravatar.com/avatar.php?gravatar_id=%s&amp;default=%s&amp;size=%s&amp;border=%s&amp;rating=%s";
+			$gravatarURL =  $http_protocol . "gravatar.com/avatar/%s?s=%s&amp;r=%s&amp;d=%s";
 			$avatarURL = sprintf
 			(
 				$gravatarURL,
-				md5($email),
-				$default_image,
+				md5(strtolower(trim($email))),
 				$size,
-				$border,
-				$rating
+				strtolower($rating),
+				rawurlencode($default_image)
 			);
 		}
 		else
@@ -84,7 +80,7 @@ if ( ! function_exists('gravatar_link'))
 
 		$alt = html_escape($alt);
 		$title = html_escape($title);
-		
+
 		$id = ($id !== NULL) ? ' id="' .$id .'" ' : ' ';
 		$class = ($class !== NULL) ? ' class="' .$class .'"' : ' ';
 
