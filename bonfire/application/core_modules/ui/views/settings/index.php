@@ -14,7 +14,6 @@
 			<?php echo lang('ui_keyboard_shortcuts'); ?>
 		</div>
 
-		<?php $count = 1; ?>
 		<table class="table table-striped table-condensed">
 			<thead>
 				<tr>
@@ -25,30 +24,28 @@
 			<tbody>
 				<tr>
 					<td>
-						<select name="action<?php echo $count;?>" class="medium">
+						<select name="new_action" class="medium">
 						<?php foreach ($current as $name => $detail): ?>
 							<?php if (!array_key_exists($name, $settings)):?>
-								<option value="<?php echo $name;?>"><?php echo $detail['description'];?></option>
+								<option value="<?php echo $name;?>" <?php echo set_select('new_action', $name);?>><?php echo $detail['description'];?></option>
 							<?php endif; ?>
 						<?php endforeach; ?>
 						</select>
 					</td>
 					<td>
-						<input type="text" name="shortcut<?php echo $count;?>" class="medium" value="<?php echo set_value('shortcuts['.$count.']', isset($shortcut) ? $shortcut : '') ?>" />
+						<input type="text" name="new_shortcut" class="medium" value="<?php echo set_value('new_shortcut') ?>" />
 					</td>
 					<td>
 						<input type="submit" name="add_shortcut" class="btn" value="<?php echo lang('ui_add_shortcut') ?>"/>
 					</td>
 				</tr>
 				<?php foreach ($settings as $action => $shortcut): ?>
-					<?php $count++; ?>
 					<tr>
 						<td>
-							<input type="hidden" name="action[<?php echo $count;?>]"  value="<?php echo set_value('actions['.$count.']', isset($action) ? $action : '') ?>" />
 							<?php echo $current[$action]['description'] ?>
 						</td>
 						<td>
-							<input type="text" name="shortcut[<?php echo $count;?>]" value="<?php echo set_value('shortcuts['.$count.']', isset($shortcut) ? $shortcut : '') ?>" />
+							<input type="text" name="shortcut_<?php echo $action;?>" value="<?php echo set_value("shortcut_$action", $shortcut) ?>" />
 						</td>
 						<td>
 							<input type="submit" name="remove_shortcut[<?php echo $action;?>]" value="<?php echo lang('ui_remove_shortcut') ?>" class="btn btn-danger" />

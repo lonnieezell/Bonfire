@@ -97,7 +97,7 @@ class Settings extends Admin_Controller
 			}
 		}//end if
 
-		// Read our current settings from the application config
+		// Read available shortcuts from the application config
 		Template::set('current', config_item('ui.current_shortcuts'));
 
 		$settings = $this->settings_lib->find_all_by('module', 'core.ui');
@@ -124,18 +124,18 @@ class Settings extends Admin_Controller
 	private function add()
 	{
 
-		$this->form_validation->set_rules('action1', lang('ui_actions'), 'required');
-		$this->form_validation->set_rules('shortcut1', lang('ui_shortcuts'), 'required|callback__validate_shortcuts');
+		$this->form_validation->set_rules('new_action', lang('ui_actions'), 'required');
+		$this->form_validation->set_rules('new_shortcut', lang('ui_shortcuts'), 'required|callback__validate_shortcuts');
 
 		if ($this->form_validation->run() === FALSE)
 		{
 			return FALSE;
 		}
 
-		$action   = $this->input->post('action1');
-		$shortcut = $this->input->post('shortcut1');
+		$action   = $this->input->post('new_action');
+		$shortcut = $this->input->post('new_shortcut');
 
-		// Read our current settings from the application config
+		// Read available shortcuts from the application config
 		$available_actions = config_item('ui.current_shortcuts');
 
 		if (array_key_exists($action, $available_actions))
@@ -194,23 +194,25 @@ class Settings extends Admin_Controller
 	{
 		if (empty($settings))
 		{
-			$actions = $this->input->post('action');
-			$shortcuts = $this->input->post('shortcut');
+			// Read available shortcuts from the application config
+			$available_actions = config_item('ui.current_shortcuts');
 
-			if (is_array($actions) && !empty($actions) && is_array($shortcuts) && !empty($shortcuts))
+			// We can't use an array like the remove buttons do
+			// because the text inputs need set_value().
+			// set_value("shortcut[$action]") is not supported
+			foreach ($available_actions as $action => $shortcut)
 			{
-				foreach ($actions as $num => $value)
+				if ($this->input->post_key_exists("shortcut_$action"))
 				{
-					$this->form_validation->set_rules('action['.$num.']', lang('ui_actions'), 'required');
-					$this->form_validation->set_rules('shortcut['.$num.']', lang('ui_shortcuts'), 'required|callback__validate_shortcuts');
+					$this->form_validation->set_rules("shortcut_$action", lang('ui_shortcuts'), 'required|callback__validate_shortcuts');
 
-					$settings[$value] = $shortcuts[$num];
+					$settings[$action] = $this->input->post("shortcut_$action");
 				}
+			}
 
-				if ($this->form_validation->run() === FALSE)
-				{
-					return FALSE;
-				}
+			if ($this->form_validation->run() === FALSE)
+			{
+				return FALSE;
 			}
 
 		}//end if
