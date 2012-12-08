@@ -545,6 +545,11 @@ if ($controller_name != $module_name_lower)
 				}
 				$rules .= 'max_length['.$max.']';
 			}
+			
+			else if (set_value("view_field_type$counter") == 'file'){
+				// do nothing, no max length validation for file uploads
+			}
+			
 			else {
 				$rules .= 'max_length['.set_value("db_field_length_value$counter").']';
 			}

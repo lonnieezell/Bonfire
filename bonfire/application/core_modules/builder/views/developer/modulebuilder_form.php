@@ -47,7 +47,7 @@ a.mb_show_advanced_rules:hover {
 	<h3><?php echo $toolbar_title ?></h3>
 
 <?php if($field_total>0): ?>
-	<?php echo form_open(current_url().'/'.$field_total, array('id'=>"module_form",'class'=>"form-horizontal")); ?>
+	<?php echo form_open_multipart(current_url().'/'.$field_total, array('id'=>"module_form",'class'=>"form-horizontal")); ?>
 <?php elseif($field_total==0): ?>
 	<?php echo form_open(current_url(), array('id'=>"module_form",'class'=>"form-horizontal")); ?>
 <?php endif; ?>
@@ -304,6 +304,7 @@ a.mb_show_advanced_rules:hover {
 							'radio' 	=> 'RADIO',
 							'select' 	=> 'SELECT',
 							'textarea' 	=> 'TEXTAREA',
+							'file'		=> 'FILE'
 							);
 
 						$default_field_type = 'INPUT';

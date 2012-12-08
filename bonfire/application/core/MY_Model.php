@@ -433,6 +433,9 @@ class BF_Model extends CI_Model
 			$data[$this->created_by_field] = $this->auth->user_id();
 		}
 
+		// Prep any file uploads
+		$data = $this->save_uploads($data);
+		
 		// Insert it
 		$status = $this->db->insert($this->table, $data);
 
@@ -544,6 +547,9 @@ class BF_Model extends CI_Model
 			$data[$this->modified_by_field] = $this->auth->user_id();
 		}
 
+		// Prep any file uploads
+		$data = $this->save_uploads($data);
+		
 		if ($result = $this->db->update($this->table, $data, $where))
 		{
 			$this->trigger('after_update', array($data, $result));
@@ -750,6 +756,66 @@ class BF_Model extends CI_Model
 	// HELPER FUNCTIONS
 	//---------------------------------------------------------------
 
+	/**
+	 * Automatically save file uploads
+	 *
+	 * @param array $data The existing data array.
+	 * 
+	 * @return array Modified data array if file is uploaded.
+	 */	
+	// 
+    protected function save_uploads($data = NULL){
+		
+    	if(is_array($data)){
+    		$tempdata = array();
+    		foreach($data as $fieldname => $v){
+    			// Field is a file upload
+    			if(is_array($v) && !empty($data[$fieldname]['size'])){
+    				
+					$upload_dir = BASEPATH . "../../assets/images/" . $this->table ."/"; //Make SURE that you chmod this directory to 777!
+					if (!is_dir($upload_dir)) { @mkdir($upload_dir); }
+					$config['upload_path'] = $upload_dir; 
+					$config['allowed_types'] = 'gif|jpg|png';
+					$config['max_size']    = '0'; // 0 = no limit on file size (this also depends on your PHP configuration)
+					$config['remove_spaces']=TRUE; //Remove spaces from the file name
+					$config['overwrite'] = TRUE;
+					 
+					$this->load->library('upload', $config);
+			 
+			        if ( ! $this->upload->do_upload($this->table . "_" . $fieldname) && ! $this->upload->do_upload($fieldname)){
+		                log_message('error', $this->upload->display_errors());
+						$tempdata[$fieldname] = NULL;
+		            }
+		            else {
+		                $upload_data = array('upload_data' => $this->upload->data());
+		 				$tempdata[$fieldname] = $upload_data['upload_data']['file_name'];
+		            }
+						    				
+    			}
+				
+				// Field is a file upload and was saved previously
+				else if (is_array($v) && empty($data[$fieldname]['size']) && !empty($data["current_$fieldname"])){
+					$tempdata[$fieldname] = $data["current_$fieldname"];
+					
+				}
+				
+				// Field is a file upload and was empty previously
+				else if (is_array($v) && empty($data[$fieldname]['size']) ){
+					
+					$tempdata[$fieldname] = NULL;
+				}				
+				
+				// Non-file upload field
+				else {
+					$tempdata[$fieldname] = $v;
+				}
+						
+    		}
+    	}
+
+        return $tempdata;        
+    } 	
+	
 	/**
 	 * Checks whether a field/value pair exists within the table.
 	 *

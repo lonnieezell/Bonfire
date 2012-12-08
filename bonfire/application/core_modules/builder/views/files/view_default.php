@@ -18,7 +18,7 @@ $view .= '?>';
 $view .= '
 <div class="admin-box">
     <h3>' . $module_name . '</h3>
-<?php echo form_open($this->uri->uri_string(), \'class="form-horizontal"\'); ?>
+<?php echo form_open_multipart($this->uri->uri_string(), \'class="form-horizontal"\'); ?>
     <fieldset>
 ';
 $on_click = '';
@@ -161,6 +161,26 @@ EOT;
 EOT;
             break;
 
+        case('file'):
+
+            $view .= <<<EOT
+        <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
+            <?php echo form_label('{$field_label}'{$required}, '{$field_name}', array('class' => "control-label") ); ?>
+            <div class="controls">
+
+		    	<?php if (isset(\${$module_name_lower}['{$field_name}'])): ?>
+		    		<div><img src = "/images/<?php echo \${$module_name_lower}['{$field_name}']; ?>?assets=assets/images/{$module_name_lower}&size=100" /></div>
+		    		<?php echo form_hidden("current_{$field_name}", \${$module_name_lower}['{$field_name}']); ?>
+		    	
+		    	<?php endif; ?>
+		        <input id="{$field_name}" type="file" name="{$field_name}" />
+               <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
+            </div>
+
+        </div>
+EOT;
+            break;	
+			
         case('input'):
         case('password'):
         default: // input.. added bit of error detection setting select as default
