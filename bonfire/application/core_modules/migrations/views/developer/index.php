@@ -127,8 +127,8 @@
 					<br/>
 					<div class="alert alert-info fade in ">
   						<a class="close" data-dismiss="alert">&times;</a>
-						<?php echo lang('mig_installed_version'); ?> <b><?php echo $core_installed_version; ?></b> /
-						<?php echo lang('mig_latest_version'); ?> <b><?php echo $core_latest_version ?></b>
+						<?php echo sprintf(lang('mig_installed_version'), $core_installed_version); ?> /
+						<?php echo sprintf(lang('mig_latest_version'), $core_latest_version); ?>
 					</div>
 
 					<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
