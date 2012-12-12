@@ -357,7 +357,7 @@ function read_db_config($environment=null, $new_db = NULL, $fail_gracefully = TR
 	Return:
 		true/false
  */
-function write_db_config($settings=null)
+function write_db_config($settings=null, $apppath = APPPATH)
 {
 	if (!is_array($settings	))
 	{
@@ -379,12 +379,11 @@ function write_db_config($settings=null)
 		}
 
 		// Load the file so we can loop through the lines
-		$contents = file_get_contents(APPPATH.'config/'. $env .'database'.EXT);
+		$contents = file_get_contents($apppath.'config/'. $env .'database.php');
 
-		if (empty($contents) OR ! is_array($contents))
+		if (empty($contents))
 		{
-			//logit('[Config_File_Helper] Error getting db file contents. Loading default database_format.php');
-			$contents = file_get_contents(APPPATH.'config/database'.EXT);
+			return false;
 		}
 
 		if ($env != 'submit')
@@ -393,8 +392,8 @@ function write_db_config($settings=null)
 			{
 				// Convert on/off to TRUE/FALSE values
 				//$value = strtolower($value);
-				if (strtolower($value) == 'on' || strtolower($value) == 'yes' || strtolower($value) == 'true') $value = 'TRUE';
-				if (strtolower($value) == 'on' || strtolower($value) == 'no' || strtolower($value) == 'false') $value = 'FALSE';
+				if (strtolower($value) == 'on' || strtolower($value) == 'yes' || strtolower($value) == 'true' || $value === true) $value = 'TRUE';
+				if (strtolower($value) == 'on' || strtolower($value) == 'no' || strtolower($value) == 'false' || $value === false) $value = 'FALSE';
 
 				if ($value != 'TRUE' && $value != 'FALSE')
 				{
@@ -420,7 +419,7 @@ function write_db_config($settings=null)
 			$CI->load->helper('file');;
 
 			// Write the changes out...
-			$result = write_file(APPPATH.'../bonfire/application/config/'.$env .'database'.EXT, $contents);
+			$result = write_file($apppath .'config/'. $env .'database.php', $contents);
 		}
 	}
 
