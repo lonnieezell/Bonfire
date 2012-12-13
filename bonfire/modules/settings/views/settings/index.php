@@ -205,7 +205,7 @@
 							</label>
 				</div>
 			</div>
-			
+
 			<div class="control-group">
 				<label for="password_iterations" class="control-label">Password Stretching</label>
 				<div class="controls">
@@ -214,12 +214,7 @@
                     	<option <?php echo set_select('password_iterations', 4, $settings['password_iterations'] == 4) ?>>4</option>
                     	<option <?php echo set_select('password_iterations', 8, $settings['password_iterations'] == 8) ?>>8</option>
                     	<option <?php echo set_select('password_iterations', 16, $settings['password_iterations'] == 16) ?>>16</option>
-                    	<option <?php echo set_select('password_iterations', 32, $settings['password_iterations'] == 32) ?>>32</option>
-                    	<option <?php echo set_select('password_iterations', 64, $settings['password_iterations'] == 64) ?>>64</option>
-                    	<option <?php echo set_select('password_iterations', 128, $settings['password_iterations'] == 128) ?>>128</option>
-                    	<option <?php echo set_select('password_iterations', 256, $settings['password_iterations'] == 256) ?>>256</option>
-                    	<option <?php echo set_select('password_iterations', 512, $settings['password_iterations'] == 512) ?>>512</option>
-                    	<option <?php echo set_select('password_iterations', 1024, $settings['password_iterations'] == 1024) ?>>1024</option>
+                    	<option <?php echo set_select('password_iterations', 31, $settings['password_iterations'] == 31) ?>>31</option>
                     </select>
                     <span class="help-inline"><?php echo lang('bf_password_iterations_note'); ?></span>
 						</div>
@@ -258,7 +253,7 @@
 								</label>
 							</div>
 						</div>
-						
+
 					</fieldset>
 				</div>
 				<!-- End of Developer Tab Options Pane -->
