@@ -337,6 +337,33 @@ class Settings extends Admin_Controller
 	//--------------------------------------------------------------------
 
 	/**
+	 * Forces all users to require a password reset on their next login.
+	 *
+	 * Intended to be used as an AJAX function.
+	 *
+	 * @return void
+	 */
+	public function force_password_reset_all()
+	{
+		$this->auth->restrict('Bonfire.Users.Manage');
+
+		if ($this->user_model->force_password_reset())
+		{
+			// Resets are in place, so log the user out
+			$this->auth->logout();
+
+			Template::redirect('/login');
+		}
+		else
+		{
+			Template::redirect($this->previous_page);
+		}
+	}
+
+	//--------------------------------------------------------------------
+
+
+	/**
 	 * Ban a user or group of users
 	 *
 	 * @access private

@@ -13,3 +13,9 @@ $lang['set_tab_developer']			= 'Developer Settings';
 
 $lang['set_option_password']		= 'Password Options';
 $lang['set_option_developer']		= 'Developer Options';
+
+$lang['set_password_iterations']	= 'Password Stretching';
+$lang['set_force_reset']			= 'Force Password Resets';
+$lang['set_reset_note']				= 'This forces all users to reset their passwords on their next login. This will log you out without saving other settings.';
+$lang['set_reset']					= 'Reset Now';
+$lang['set_password_reset_confirm']	= 'Really force password reset for all users? This will log you out immediately.';

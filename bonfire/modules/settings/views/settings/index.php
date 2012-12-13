@@ -207,7 +207,7 @@
 			</div>
 
 			<div class="control-group">
-				<label for="password_iterations" class="control-label">Password Stretching</label>
+				<label for="password_iterations" class="control-label"><?php echo lang('set_password_iterations') ?></label>
 				<div class="controls">
 					<select name="password_iterations" style="width: auto">
                     	<option <?php echo set_select('password_iterations', 2, $settings['password_iterations'] == 2) ?>>2</option>
@@ -217,11 +217,22 @@
                     	<option <?php echo set_select('password_iterations', 31, $settings['password_iterations'] == 31) ?>>31</option>
                     </select>
                     <span class="help-inline"><?php echo lang('bf_password_iterations_note'); ?></span>
-						</div>
-					</div>
-
-				</fieldset>
+				</div>
 			</div>
+
+			<div class="control-group">
+				<label class="control-label" for="force_pass_reset"><?php echo lang('set_force_reset') ?></label>
+				<div class="controls">
+					<a href="<?php echo site_url(SITE_AREA .'/settings/users/force_password_reset_all'); ?>" class="btn btn-danger" onclick="return confirm('<?php echo lang('set_password_reset_confirm') ?>');">
+						<?php echo lang('set_reset'); ?>
+					</a>
+					<span class="help-inline"><?php echo lang('set_reset_note'); ?></span>
+				</div>
+			</div>
+
+		</fieldset>
+	</div>
+
 
 			<?php if (has_permission('Site.Developer.View')) : ?>
 

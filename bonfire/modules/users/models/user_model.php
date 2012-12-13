@@ -158,7 +158,7 @@ class User_model extends BF_Model
 				$data['display_name'] = $data['email'];
 			}
 		}
-		
+
 		// Load the password hash library
 		if (!class_exists('PasswordHash'))
 		{
@@ -167,7 +167,7 @@ class User_model extends BF_Model
 		$hasher = new PasswordHash($this->settings_lib->item('password_iterations'), false);
 
 		$password = $hasher->HashPassword($data['password']);
-		
+
 		if (strlen($password) < 20)
 		{
 			return false;
@@ -230,7 +230,7 @@ class User_model extends BF_Model
 			$hasher = new PasswordHash($this->settings_lib->item('password_iterations'), false);
 
 			$password = $hasher->HashPassword($data['password']);
-			
+
 			if (strlen($password) < 20)
 			{
 				return false;
@@ -475,6 +475,26 @@ class User_model extends BF_Model
 		return parent::delete($id);
 
 	}//end delete()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Flags one or more user accounts to require their password to
+	 * be reset on their next login.
+	 *
+	 * @param  int $user_id
+	 *
+	 * @return bool TRUE/FALSE
+	 */
+	public function force_password_reset($user_id=null)
+	{
+		if (!empty($user_id) && is_numeric($user_id))
+		{
+			$this->db->where('id', $user_id);
+		}
+
+		return $this->db->set('force_password_reset', 1)->update('users');
+	}
 
 	//--------------------------------------------------------------------
 
