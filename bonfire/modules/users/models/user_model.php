@@ -604,6 +604,7 @@ class User_model extends BF_Model
 		if (!is_numeric($user_id))
 		{
 			$this->error = lang('us_invalid_user_id');
+			return false;
 		}
 
 		$this->table	= 'user_meta';
