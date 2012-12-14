@@ -76,6 +76,8 @@ class MY_Lang extends MX_Lang {
 		$this->is_loaded[] = $langfile.'_lang.php';
 	}
 
+	//--------------------------------------------------------------------
+
 	private function __load($langfile, $idiom)
 	{
 		$module = CI::$APP->router->fetch_module();
