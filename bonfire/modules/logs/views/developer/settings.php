@@ -1,6 +1,6 @@
 <?php if ($log_threshold == 0) : ?>
 	<div class="alert alert-warning fade in">
-		<a class="close" data-dismiss="alert">&times;</a>				
+		<a class="close" data-dismiss="alert">&times;</a>
 		<?php echo lang('log_not_enabled'); ?>
 	</div>
 <?php endif; ?>
@@ -8,14 +8,13 @@
 <div class="admin-box">
 
 	<h3><?php echo $toolbar_title ?></h3>
-	
+
 	<?php echo form_open(site_url(SITE_AREA .'/developer/logs/enable'), 'class="form-horizontal"'); ?>
 
 	<fieldset>
-		<legend><?php echo lang('log_settings') ?></legend>
 
 		<div class="control-group">
-			<label for="log_threshold"><?php echo lang('log_the_following'); ?></label>
+			<label for="log_threshold" class="control-label"><?php echo lang('log_the_following'); ?></label>
 			<div class="controls">
 				<select name="log_threshold" id="log_threshold" style="width: auto; max-width: none;">
 					<option value="0" <?php echo ($log_threshold == 0) ? 'selected="selected"' : ''; ?>><?php echo lang('log_what_0'); ?></option>
@@ -32,7 +31,7 @@
 	</fieldset>
 
 	<div class="alert alert-info fade in">
-		<a class="close" data-dismiss="alert">&times;</a>		
+		<a class="close" data-dismiss="alert">&times;</a>
 		<?php echo lang('log_big_file_note'); ?>
 	</div>
 
