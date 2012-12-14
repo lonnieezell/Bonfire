@@ -50,7 +50,8 @@ if ( ! function_exists('gravatar_link'))
 	function gravatar_link($email=NULL, $size=48, $alt='', $title='', $class=NULL, $id=NULL)
 	{
 		// Set our default image based on required size.
-		$default_image = Template::theme_url('images/user.png');
+		//$default_image = Template::theme_url('images/user.png');
+		$default_image = 'identicon';
 
 		// Set our minimum site rating to PG
 		$rating = 'PG';
