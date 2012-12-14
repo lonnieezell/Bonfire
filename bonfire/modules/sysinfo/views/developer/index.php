@@ -12,10 +12,7 @@
 			<tr>
 				<td>CodeIgniter Version</td>
 				<td>
-					<?php 
-						echo CI_CORE == true ? 'Core ' : 'Reactor ';
-						echo CI_VERSION;
-					?>
+					<?php echo CI_VERSION; ?>
 				</td>
 			</tr>
 			<tr>
@@ -25,20 +22,20 @@
 			<tr>
 				<td>Server Time</td>
 				<td>
-				<?php 
-	
-			        $thetimeis = getdate(time()); 
-			            $thehour = $thetimeis['hours']; 
-			            $theminute = $thetimeis['minutes']; 
-			        if($thehour > 12){ 
-			            $thehour = $thehour - 12; 
-			            $dn = "pm"; 
-			        }else{ 
-			            $dn = "am"; 
-			        } 
-			        
-					echo "$thehour:$theminute $dn"; 
-				?>   
+				<?php
+
+			        $thetimeis = getdate(time());
+			            $thehour = $thetimeis['hours'];
+			            $theminute = $thetimeis['minutes'];
+			        if($thehour > 12){
+			            $thehour = $thehour - 12;
+			            $dn = "pm";
+			        }else{
+			            $dn = "am";
+			        }
+
+					echo "$thehour:$theminute $dn";
+				?>
 				</td>
 			</tr>
 			<tr>
