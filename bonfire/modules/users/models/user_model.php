@@ -627,7 +627,7 @@ class User_model extends BF_Model
 				'meta_value'	=> $value
 			);
 
-			if ($query->num_rows() == 0 && !empty($value))
+			if ($query->num_rows() == 0)
 			{
 				// Insert
 				$result = $this->db->insert('user_meta', $obj);
