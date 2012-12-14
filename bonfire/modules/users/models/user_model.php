@@ -597,7 +597,7 @@ class User_model extends BF_Model
 	 * @param int   $user_id The ID of the user to save the meta for.
 	 * @param array $data    An array of key/value pairs to save.
 	 *
-	 * @return void
+	 * @return boolean true/false
 	 */
 	public function save_meta_for($user_id=null, $data=array())
 	{
@@ -608,6 +608,12 @@ class User_model extends BF_Model
 
 		$this->table	= 'user_meta';
 		$this->key		= 'meta_id';
+
+		// While this won't give us the results of each
+		// insert, it does give some sort of indiciation about
+		// the success/failure since if one fails, it's likely
+		// others will also.
+		$result = false;
 
 		foreach ($data as $key => $value)
 		{
@@ -624,7 +630,7 @@ class User_model extends BF_Model
 			if ($query->num_rows() == 0 && !empty($value))
 			{
 				// Insert
-				$this->db->insert('user_meta', $obj);
+				$result = $this->db->insert('user_meta', $obj);
 			}
 			// Update
 			else if ($query->num_rows() > 0)
@@ -635,7 +641,7 @@ class User_model extends BF_Model
 				$this->db->where('user_id', $user_id);
 				$this->db->where('meta_key', $key);
 				$this->db->set('meta_value', $value);
-				$this->db->update('user_meta', $obj);
+				$result = $this->db->update('user_meta', $obj);
 			}//end if
 		}//end foreach
 
@@ -643,6 +649,8 @@ class User_model extends BF_Model
 		// Reset our table info
 		$this->table	= 'users';
 		$this->key		= 'id';
+
+		return $result;
 	}//end save_meta_for()
 
 	//--------------------------------------------------------------------
