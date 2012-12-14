@@ -179,7 +179,27 @@ class Auth
 			Template::set_message(sprintf(lang('us_account_deleted'), html_escape(settings_item("site.system_email"))), 'error');
 			return FALSE;
 		}
-		
+
+		// Check if the user needs to reset their password
+		if ($user->force_password_reset == 1)
+		{
+			Template::set_message(lang('us_forced_password_reset_note'), 'warning');
+
+			// Need to generate a reset hash to pass the reset_password checks...
+			$this->ci->load->helpers(array('string', 'security'));
+
+			$pass_code = random_string('alnum', 40);
+
+			$hash = do_hash($pass_code . $user->email);
+
+			// Save the hash to the db so we can confirm it later.
+			$this->ci->user_model->update_where('id', $user->id, array('reset_hash' => $hash, 'reset_by' => strtotime("+24 hours") ));
+
+			$this->ci->session->set_userdata('pass_check', $hash);
+			$this->ci->session->set_userdata('email', $user->email);
+			redirect('/users/reset_password');
+		}
+
 		// Load the password hash library
 		if (!class_exists('PasswordHash'))
 		{

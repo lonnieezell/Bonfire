@@ -236,7 +236,7 @@ class Users extends Front_Controller
 	 */
 	public function profile()
 	{
-		// Make sure we're logged in. 
+		// Make sure we're logged in.
 		$this->auth->restrict();
 
 		$this->load->helper('date');
@@ -315,6 +315,9 @@ class Users extends Front_Controller
 	 * the only way to get here is to go through the forgot_password() process,
 	 * which creates a unique code that is only valid for 24 hours.
 	 *
+	 * Since 0.7 this method is also gotten to here by the force_password_reset
+	 * security features.
+	 *
 	 * @access public
 	 *
 	 * @param string $email The email address to check against.
@@ -327,6 +330,18 @@ class Users extends Front_Controller
 		// if the user is not logged in continue to show the login page
 		if ($this->auth->is_logged_in() === FALSE)
 		{
+			// If we're set here via Bonfire and not an email link
+			// then we might have the email and code in the session.
+			if (empty($code) && $this->session->userdata('pass_check'))
+			{
+				$code = $this->session->userdata('pass_check');
+			}
+
+			if (empty($email) && $this->session->userdata('email'))
+			{
+				$email = $this->session->userdata('email');
+			}
+
 			// If there is no code, then it's not a valid request.
 			if (empty($code) || empty($email))
 			{
@@ -344,14 +359,15 @@ class Users extends Front_Controller
 				{
 					// The user model will create the password hash for us.
 					$data = array('password' => $this->input->post('password'),
-					              'reset_by'		=> 0,
-					              'reset_hash'	=> '');
+					              'reset_by'	=> 0,
+					              'reset_hash'	=> '',
+					              'force_password_reset' => 0);
 
 					if ($this->user_model->update($this->input->post('user_id'), $data))
 					{
 						// Log the Activity
-
 						$this->activity_model->log_activity($this->input->post('user_id'), lang('us_log_reset') , 'users');
+
 						Template::set_message(lang('us_reset_password_success'), 'success');
 						Template::redirect('/login');
 					}

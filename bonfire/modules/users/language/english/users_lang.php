@@ -202,3 +202,5 @@ $lang['us_tab_inactive']			= 'Inactive';
 $lang['us_tab_banned']				= 'Banned';
 $lang['us_tab_deleted']				= 'Deleted';
 $lang['us_tab_roles']				= 'By Role';
+
+$lang['us_forced_password_reset_note']	= 'Due to security reasons, you must choose a new password for your account.';
