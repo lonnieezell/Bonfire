@@ -196,21 +196,6 @@ class Settings extends Admin_Controller
 		{
 			if ($id = $this->save_user('insert', NULL, $meta_fields))
 			{
-
-				$meta_data = array();
-				foreach ($meta_fields as $field)
-				{
-					if (!isset($field['admin_only']) || $field['admin_only'] === FALSE
-						|| (isset($field['admin_only']) && $field['admin_only'] === TRUE
-							&& isset($this->current_user) && $this->current_user->role_id == 1))
-					{
-						$meta_data[$field['name']] = $this->input->post($field['name']);
-					}
-				}
-
-				// now add the meta is there is meta data
-				$this->user_model->save_meta_for($id, $meta_data);
-
 				$user = $this->user_model->find($id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, sprintf(lang('us_log_create') ,$user->role_name) . ': '.$log_name, 'users');
@@ -279,22 +264,6 @@ class Settings extends Admin_Controller
 		{
 			if ($this->save_user('update', $user_id, $meta_fields, $user->role_name))
 			{
-
-				$meta_data = array();
-				foreach ($meta_fields as $field)
-				{
-					if (!isset($field['admin_only']) || $field['admin_only'] === FALSE
-						|| (isset($field['admin_only']) && $field['admin_only'] === TRUE
-							&& isset($this->current_user) && $this->current_user->role_id == 1))
-					{
-						$meta_data[$field['name']] = $this->input->post($field['name']);
-					}
-				}
-
-				// now add the meta is there is meta data
-				$this->user_model->save_meta_for($user_id, $meta_data);
-
-
 				$user = $this->user_model->find_user_and_meta($user_id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
 				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
@@ -444,6 +413,11 @@ class Settings extends Admin_Controller
 		$this->user_model->delete($id, TRUE);
 		Template::set_message(lang('us_action_purged'), 'success');
 
+		// Purge any user meta for this user, also.
+		$this->db->where('user_id', $id)->delete('user_meta');
+
+		// Any modules needing to save data?
+		Events::trigger('purge_user', $id);
 	}//end _purge()
 
 	//--------------------------------------------------------------------
@@ -625,10 +599,17 @@ class Settings extends Admin_Controller
 			}
 
 			$return = $this->user_model->insert($data);
+			$id = $return;
 		}
 		else	// Update
 		{
 			$return = $this->user_model->update($id, $data);
+		}
+
+		// Save any meta data for this user
+		if (count($meta_data))
+		{
+			$this->user_model->save_meta_for($id, $meta_data);
 		}
 
 		// Any modules needing to save data?
