@@ -62,7 +62,7 @@ class Settings extends Admin_Controller
 	{
 		$this->load->library('form_validation');
 
-		if ($this->input->post_key_exists('save'))
+		if ($this->input->post('save'))
 		{
 			$this->form_validation->set_rules('sender_email', 'System Email', 'required|trim|valid_email|max_length[120]');
 			$this->form_validation->set_rules('protocol', 'Email Server', 'trim');
@@ -138,7 +138,7 @@ class Settings extends Admin_Controller
 	 */
 	public function template()
 	{
-		if ($this->input->post_key_exists('save'))
+		if ($this->input->post('save'))
 		{
 			$header = $_POST['header'];
 			$footer = $_POST['footer'];
@@ -189,7 +189,7 @@ class Settings extends Admin_Controller
 	 */
 	public function test()
 	{
-		if (!$this->input->post_key_exists('test'))
+		if (!$this->input->post('test'))
 		{
 			$this->security->csrf_show_error();
 		}
@@ -229,7 +229,7 @@ class Settings extends Admin_Controller
 		$this->load->model('Emailer_model', 'emailer_model', TRUE);
 
 		// Deleting anything?
-		if ($this->input->post_key_exists('delete'))
+		if ($this->input->post('delete'))
 		{
 			$checked = $this->input->post('checked');
 			if (is_array($checked) && count($checked))
@@ -254,7 +254,7 @@ class Settings extends Admin_Controller
 				Template::set_message(sprintf(lang('em_delete_error'), $this->emailer_model->error), 'error');
 			}
 		}
-		elseif ($this->input->post_key_exists('force_process'))
+		elseif ($this->input->post('force_process'))
 		{
 			$this->load->library('emailer');
 			$this->emailer->enable_debug(TRUE);
@@ -269,7 +269,7 @@ class Settings extends Admin_Controller
 				Template::set('email_debug', $this->emailer->debug_message);
 			}
 		}
-		elseif ($this->input->post_key_exists('insert_test'))
+		elseif ($this->input->post('insert_test'))
 		{
 			$this->load->library('emailer');
 
@@ -340,17 +340,17 @@ class Settings extends Admin_Controller
 	 */
 	public function create()
 	{
-		
+
 		$this->load->model('users/user_model');
 		$this->load->library('emailer');
 
-		if ($this->input->post_key_exists('create'))
+		if ($this->input->post('create'))
 		{
 			// validate subject, content and recipients
 			$this->form_validation->set_rules('email_subject', 'Email Subject', 'required|trim|min_length[1]|max_length[255]');
 			$this->form_validation->set_rules('email_content', 'Email Content', 'required|trim|min_length[1]');
 			$this->form_validation->set_rules('checked','Users', 'required');
-			
+
 			if ($this->form_validation->run() === FALSE)
 			{
 				Template::set('email_subject', $this->input->post('email_subject'));
@@ -378,7 +378,7 @@ class Settings extends Admin_Controller
 							$result = $this->emailer->send($data,TRUE);
 							if ($result) $success_count++;
 						}
-	
+
 					}
 
 					if ($result)

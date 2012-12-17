@@ -96,7 +96,7 @@ class Settings extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Roles.Add');
 
-		if ($this->input->post_key_exists('save'))
+		if ($this->input->post('save'))
 		{
 			if ($this->save_role())
 			{
@@ -138,7 +138,7 @@ class Settings extends Admin_Controller
 			redirect(SITE_AREA .'/settings/roles');
 		}
 
-		if ($this->input->post_key_exists('save'))
+		if ($this->input->post('save'))
 		{
 			if ($this->save_role('update', $id))
 			{
@@ -150,7 +150,7 @@ class Settings extends Admin_Controller
 				Template::set_message('There was a problem saving the role: '. $this->role_model->error);
 			}
 		}
-		elseif ($this->input->post_key_exists('delete'))
+		elseif ($this->input->post('delete'))
 		{
 			if ($this->role_model->delete($id))
 			{

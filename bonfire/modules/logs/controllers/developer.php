@@ -67,10 +67,10 @@ class Developer extends Admin_Controller
 		$this->load->helper('file');
 
 		// Are we doing bulk actions?
-		if ($this->input->post_key_exists('delete'))
+		if ($this->input->post('delete'))
 		{
 			$this->auth->restrict('Bonfire.Logs.Manage');
-		
+
 			$checked = $this->input->post('checked');
 
 			if (is_array($checked) && count($checked))
@@ -85,10 +85,10 @@ class Developer extends Admin_Controller
 				Template::set_message(sprintf(lang('log_deleted'), count($checked)), 'success');
 			}
 		}
-		elseif ($this->input->post_key_exists('delete_all'))
+		elseif ($this->input->post('delete_all'))
 		{
 			$this->auth->restrict('Bonfire.Logs.Manage');
-		
+
 			delete_files($this->config->item('log_path'));
 			// restore the index.html file
 			@copy(APPPATH.'/index.html',$this->config->item('log_path').'/index.html');
@@ -155,7 +155,7 @@ class Developer extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Logs.Manage');
 
-		if ($this->input->post_key_exists('save'))
+		if ($this->input->post('save'))
 		{
 			$this->load->helper('config_file');
 

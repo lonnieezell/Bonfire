@@ -45,7 +45,7 @@ class Reports extends Admin_Controller
 		$this->auth->restrict('Bonfire.Activities.View');
 
 		$this->lang->load('activities');
-		$this->lang->load('datatable');		
+		$this->lang->load('datatable');
 
 		Template::set('toolbar_title', lang('activity_title'));
 
@@ -55,7 +55,7 @@ class Reports extends Admin_Controller
 		Assets::add_js( array ( Template::theme_url('js/jquery.dataTables.min.js' )) );
 		Assets::add_js( array ( Template::theme_url('js/bootstrap-dataTables.js' )) );
 		Assets::add_css( array ( Template::theme_url('css/datatable.css') ) ) ;
-		Assets::add_css( array ( Template::theme_url('css/bootstrap-dataTables.css') ) ) ;		
+		Assets::add_css( array ( Template::theme_url('css/bootstrap-dataTables.css') ) ) ;
 
 
 		//Assets::add_module_css ('activities', 'datatables.css');
@@ -316,7 +316,7 @@ class Reports extends Admin_Controller
 			$find_value = ($this->input->post($which.'_select') == '') ? $this->uri->segment(5) : $this->input->post($which.'_select');
 		}
 
-		if ($this->input->post_key_exists('delete'))
+		if ($this->input->post('delete'))
 		{
 			$this->_delete_activity($which, $find_value);
 		}

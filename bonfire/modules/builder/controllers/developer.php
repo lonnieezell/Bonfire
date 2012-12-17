@@ -94,10 +94,10 @@ class Developer extends Admin_Controller {
 
     //--------------------------------------------------------------------
 
-    //-------------------------------------------------------------------- 
+    //--------------------------------------------------------------------
     // !Context Builder
     //--------------------------------------------------------------------
-    
+
     /**
      * Displays the create a context form.
      *
@@ -105,19 +105,19 @@ class Developer extends Admin_Controller {
      *
      * @return	void
      */
-    public function create_context() 
+    public function create_context()
     {
     	// Load our roles for display in the form.
     	$this->load->model('roles/role_model');
     	$roles = $this->role_model->select('role_id, role_name')
     							  ->find_all();
     	Template::set('roles', $roles);
-    	
-    	// Form submittal? 
-    	if ($this->input->post_key_exists('build'))
+
+    	// Form submittal?
+    	if ($this->input->post('build'))
     	{
     		$this->form_validation->set_rules('context_name', 'Context Name', 'required|trim|alpha_numeric|xss_clean');
-    		
+
     		if ($this->form_validation->run() !== false)
     		{
     			/*
@@ -126,7 +126,7 @@ class Developer extends Admin_Controller {
 	    		$name		= $this->input->post('context_name');
 		    	$for_roles	= $this->input->post('roles');
 		    	$migrate	= $this->input->post('migrate') == 'on' ? true : false;
-		    	
+
 		    	// Try to save the context, using the UI/Context helper
 		    	$this->load->library('ui/contexts');
 		    	if (Contexts::create_context($name, $for_roles, $migrate))
@@ -140,11 +140,11 @@ class Developer extends Admin_Controller {
 		    	}
 		    }
     	}
-    
+
     	Template::set('toolbar_title', lang('mb_create_a_context'));
     	Template::render();
     }
-    
+
     //--------------------------------------------------------------------
 
     //--------------------------------------------------------------------
@@ -173,7 +173,7 @@ class Developer extends Admin_Controller {
         {
             Template::set('field_total', $this->field_total);
 
-            if ($this->input->post_key_exists('build'))
+            if ($this->input->post('build'))
             {
                 Template::set('form_error', TRUE);
             }
