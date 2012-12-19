@@ -100,7 +100,7 @@
 										<?php endforeach; ?>
 										</select>
 
-										<input type="submit" name="migrate" class="btn btn-primary" value="<?php e(lang('em_migrate_module')); ?>" />
+										<input type="submit" name="migrate" class="btn btn-primary" value="<?php e(lang('mig_migrate_module')); ?>" />
 										<?php echo form_close(); ?>
 									</td>
 								</tr>
