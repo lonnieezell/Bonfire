@@ -286,10 +286,10 @@ class Migrations
 		switch ($type)
 		{
 			case '':
-				$migrations_path = $this->migrations_path .'core/';
+				$migrations_path = $this->migrations_path;
 				break;
 			case 'app_':
-				$migrations_path = $this->migrations_path;
+				$migrations_path = APPPATH .'db/migrations/';
 				break;
 			default:
 				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
