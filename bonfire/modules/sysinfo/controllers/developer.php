@@ -44,7 +44,7 @@ class Developer extends Admin_Controller
 
 		$this->lang->load('sysinfo');
 
-		Template::set('toolbar_title', lang('si.system_info'));
+		Template::set('toolbar_title', lang('si_system_info'));
 
 		Template::set_block('sub_nav', 'developer/_sub_nav');
 

@@ -1,5 +1,5 @@
 <div class="admin-box">
-	<h3><?php echo lang('si.installed_mods'); ?></h3>
+	<h3><?php echo lang('si_installed_mods'); ?></h3>
 
 	<?php if (isset($modules) && is_array($modules) && count($modules)) : ?>
 		<table class="table table-striped">

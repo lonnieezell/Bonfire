@@ -23,10 +23,10 @@
 
 // PORTUGUESE (Brazil) LANGUAGE FILE - Translated by Renato Adias (adias@sowebsites.com.br)
 
-$lang['si.system_info']		= 'Informações do Sistema';
-$lang['si.system']			= 'Sistema';
-$lang['si.modules']			= 'Módulos';
-$lang['si.php']					= 'PHP';
+$lang['si_system_info']		= 'Informações do Sistema';
+$lang['si_system']			= 'Sistema';
+$lang['si_modules']			= 'Módulos';
+$lang['si_php']					= 'PHP';
 
-$lang['si.installed_mods']	= 'Módulos instalados';
-$lang['si.php_info']		= 'Informação de PHP';
+$lang['si_installed_mods']	= 'Módulos instalados';
+$lang['si_php_info']		= 'Informação de PHP';
