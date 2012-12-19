@@ -199,7 +199,7 @@ class Settings extends Admin_Controller
 			return FALSE;
 		}
 
-		unset($_POST['submit']);
+		unset($_POST['submit'], $_POST['save']);
 
 		if ($type == 'insert')
 		{
