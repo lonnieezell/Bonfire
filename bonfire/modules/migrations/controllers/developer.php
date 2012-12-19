@@ -180,7 +180,7 @@ class Developer extends Admin_Controller
 		$mod_versions = array();
 
 		$modules = module_files(null, 'migrations');
-dump($modules);
+
 		if ($modules === false)
 		{
 			return false;
