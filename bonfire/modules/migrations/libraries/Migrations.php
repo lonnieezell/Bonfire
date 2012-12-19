@@ -157,6 +157,12 @@ class Migrations
 		$this->_ci->config->load('migrations/migrations');
 
 		$this->migrations_enabled = $this->_ci->config->item('migrations_enabled');
+		
+		if (is_array($migration_path) && isset($migration_path['migrations_path']))
+		{
+			$migration_path = $migration_path['migrations_path'];
+		}
+	
 		$this->migrations_path = is_null($migration_path) ? realpath($this->_ci->config->item('migrations_path')) : realpath($migration_path);
 
 		// Idiot check
@@ -529,10 +535,10 @@ class Migrations
 		switch ($type)
 		{
 			case '':
-				$migrations_path = $this->migrations_path .'core/';
+				$migrations_path = $this->migrations_path;
 				break;
 			case 'app_':
-				$migrations_path = $this->migrations_path;
+				$migrations_path = APPPATH .'db/migrations/';
 				break;
 			default:
 				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
@@ -561,10 +567,10 @@ class Migrations
 		switch ($type)
 		{
 			case '':
-				$migrations_path = $this->migrations_path .'core/';
+				$migrations_path = $this->migrations_path;
 				break;
 			case 'app_':
-				$migrations_path = $this->migrations_path;
+				$migrations_path = APPPATH .'db/migrations/';
 				break;
 			default:
 				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
