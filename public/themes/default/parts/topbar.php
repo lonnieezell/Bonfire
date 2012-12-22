@@ -9,7 +9,7 @@
 				<span class="icon-bar"></span>
 			</a>
 
-			<a href="<?php site_url('/'); ?>" class="brand">
+			<a href="<?php echo site_url('/'); ?>" class="brand">
 				<?php e($this->settings_lib->item('site.title')); ?>
 			</a>
 
