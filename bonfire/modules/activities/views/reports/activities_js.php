@@ -44,7 +44,7 @@ $("#flex_table").dataTable({
 <?php
 /* This is for server side processing
 		"bServerSide": true,
-		'sAjaxSource'    : '<?= base_url(); ?>admin/reports/activities/ajax_activity',
+		'sAjaxSource'    : '<?php echo base_url(); ?>admin/reports/activities/ajax_activity',
 		'fnServerData'   : function(sSource, aoData, fnCallback)
 		{
 			$.ajax({

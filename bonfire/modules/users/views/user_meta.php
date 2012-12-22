@@ -12,7 +12,7 @@
 			elseif ($field['form_detail']['type'] == 'checkbox'): ?>
 
 					<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
-					<label class="control-label" for="<?= $field['name'] ?>"><?php echo $field['label'];?></label>
+					<label class="control-label" for="<?php echo $field['name'] ?>"><?php echo $field['label'];?></label>
 					<div class="controls">
 						<?php
 						$form_method = 'form_' . $field['form_detail']['type'];
@@ -26,7 +26,7 @@
 			<?php elseif ($field['form_detail']['type'] == 'state_select' && is_callable('state_select')) : ?>
 
 				<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
-						<label class="control-label" for="<?= $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
+						<label class="control-label" for="<?php echo $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
 						<div class="controls">
 
 							<?php echo state_select(set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : 'SC'), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
