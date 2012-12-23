@@ -62,7 +62,7 @@ class Settings extends Admin_Controller
 	 */
 	public function index()
 	{
-		if ($this->input->post('add_shortcut'))
+		if ($this->input->post_key_exists('add_shortcut'))
 		{
 			if ($this->add())
 			{
@@ -73,7 +73,7 @@ class Settings extends Admin_Controller
 				Template::set_message(lang('ui_shortcut_add_error'), 'error');
 			}
 		}
-		elseif ($this->input->post('remove_shortcut'))
+		elseif ($this->input->post_key_exists('remove_shortcut'))
 		{
 			if ($this->remove())
 			{
@@ -84,7 +84,7 @@ class Settings extends Admin_Controller
 				Template::set_message(lang('ui_shortcut_remove_error'), 'error');
 			}
 		}
-		elseif ($this->input->post('save'))
+		elseif ($this->input->post_key_exists('save'))
 		{
 			if ($this->save_settings())
 			{
@@ -202,7 +202,7 @@ class Settings extends Admin_Controller
 			// set_value("shortcut[$action]") is not supported
 			foreach ($available_actions as $action => $shortcut)
 			{
-				if ($this->input->post("shortcut_$action"))
+				if ($this->input->post_key_exists("shortcut_$action"))
 				{
 					$this->form_validation->set_rules("shortcut_$action", lang('ui_shortcuts'), 'required|callback__validate_shortcuts');
 
