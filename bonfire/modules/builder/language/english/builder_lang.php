@@ -22,7 +22,6 @@
 */
 
 // INDEX page
-$lang['mb_delete_confirm']		= 'Really delete this module and all of its files?';
 $lang['mb_create_button']		= 'Create Module';
 $lang['mb_create_link']			= 'Create a new module';
 $lang['mb_create_note']			= 'Use our wizbang module building wizard to create your next module. We do all the heavy lifting by generating all the controllers, models, views and language files you need.';
@@ -64,10 +63,10 @@ $lang['mb_form_note'] = '<p><b>Fill out the fields you would like in your module
 
 $lang['mb_table_note'] = '<p>Your table will be created with at least one field, the primary key field that will be used as a unique identifier and as an index. If you required additional fields, click the number you require to add them to this form.</p>';
 
-$lang['mb_field_note'] = '<p><b>NOTE : FOR ALL FIELDS</b><br />If DB field type is "enum" or "set", please enter the values using this format: \'a\',\'b\',\'c\'...<br />If you ever need to put a backslash ("\\") or a single quote ("\'") amongst those values, precede it with a backslash (for example \'\\\\xyz\' or \'a\\\'b\').</p>';
+$lang['mb_field_note'] = '<p><b>NOTE : FOR ALL FIELDS</b><br />If DB field type is "enum" or "set", please enter the values using this format: \'a\',\'b\',\'c\'...<br />If you ever need to put a backslash ("\") or a single quote ("\'") amongst those values, precede it with a backslash (for example \'\\xyz\' or \'a\\\'b\').</p>';
 	
 $lang['mb_form_errors']			= 'Please correct the errors below.';
-$lang['mb_form_mod_details']	= 'Module Details';
+$lang['mb_form_mod_details']	= 'Module Details ';
 $lang['mb_form_mod_name']		= 'Module Name';
 $lang['mb_form_mod_name_ph']	= 'Forums, Blog, ToDo';
 $lang['mb_form_mod_desc']		= 'Module Description';
@@ -120,6 +119,10 @@ $lang['mb_form_is_natural_no_zero']	= 'Natural, no zeroes';
 $lang['mb_form_valid_ip']		= 'Valid IP';
 $lang['mb_form_valid_base64']	= 'Valid Base64';
 $lang['mb_form_alpha_extra']	= 'AlphaNumerics, underscore, dash, periods and spaces.';
+// Enhanced Parent-Child Builder Functionality - Form labels
+$lang['mb_form_reference']		= 'Reference Display';
+$lang['mb_form_nullable']		= 'Nullable';
+$lang['mb_form_children']		= 'Primary Key Children';
 
 // Activities
 $lang['mb_act_create']	= 'Created Module';

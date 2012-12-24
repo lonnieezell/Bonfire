@@ -73,7 +73,7 @@ $mb_index = "
 if ($db_required != '') {
 	$mb_index .= "
 		// Deleting anything?
-		if (\$this->input->post('delete'))
+		if (isset(\$_POST['delete']))
 		{
 			\$checked = \$this->input->post('checked');
 
@@ -95,9 +95,49 @@ if ($db_required != '') {
 				}
 			}
 		}
+";
 
-		\$records = \$this->".$module_name_lower."_model->find_all();
+// Enhanced Parent-Child Builder - Add query parms and pagination
+$mb_index .= "
+		\$where = array();
+		foreach ( \$this->{$module_name_lower}_model->get_columns() as \$col )
+		{
+			if ( \$this->input->get( \$col['name'] ) ) \$where[ '{$table_name}.'.\$col['name'] ] = \$this->input->get( \$col['name'] );
+		}
+		
+		if ( empty( \$where ) ) \$total = \$this->{$module_name_lower}_model->count_all();
+		else \$total = \$this->{$module_name_lower}_model->count_by( \$where );
 
+		// Pagination
+		\$this->load->library('pagination');
+
+		\$offset = \$this->input->get('per_page');
+		if ( IS_AJAX && \$this->settings_lib->item('site.ajax_list_limit') )
+			\$limit = \$limit = \$this->settings_lib->item('site.ajax_list_limit');
+		else \$limit = \$this->limit;
+
+		\$query = \$_GET;
+		unset( \$query['per_page'] );
+		\$base = current_url() . ( empty( \$query ) ? '' : '?' . http_build_query( \$query ) );
+		// the following is due to a bug in pagination->create_links() - it doesn't handle first query parm properly
+		if ( FALSE === strpos( \$base, '?' ) ) \$base .= '?';
+
+		\$this->pager['base_url'] 			= \$base;
+		\$this->pager['total_rows'] 		= \$total;
+		\$this->pager['per_page'] 			= \$limit;
+		\$this->pager['page_query_string']	= TRUE;
+
+		\$this->pagination->initialize( \$this->pager );
+		\$this->{$module_name_lower}_model->limit( \$limit, \$offset );
+		
+		if ( !empty( \$where ) )
+			\$records = \$this->{$module_name_lower}_model->find_all_by( \$where );
+		else
+";
+// Enhanced Parent-Child Builder - end of Add query parms and pagination
+
+$mb_index .= "
+			\$records = \$this->".$module_name_lower."_model->find_all();
 		Template::set('records', \$records);";
 }
 
@@ -201,7 +241,7 @@ $mb_edit = "
 ";
 if ($db_required != '') {
 	$mb_edit .= "
-		if (\$this->input->post('save'))
+		if (isset(\$_POST['save']))
 		{
 			\$this->auth->restrict('{edit_permission}');
 
@@ -220,7 +260,7 @@ if ($db_required != '') {
 
 	if (in_array('delete', $action_names)) {
 		$mb_edit .= "
-		else if (\$this->input->post('delete'))
+		else if (isset(\$_POST['delete']))
 		{
 			\$this->auth->restrict('{delete_permission}');
 
@@ -335,17 +375,35 @@ $extras = '';
 $date_included = FALSE;
 $datetime_included = FALSE;
 $textarea_included = FALSE;
+// Enhanced Parent-Child Builder - Add Children Tabs
+$tabs_included = FALSE;
+// Enhanced Parent-Child Builder - end of Add Children Tabs
 for($counter=1; $field_total >= $counter; $counter++)
 {
 	$db_field_type = set_value("db_field_type$counter");
 	$view_datepicker = '';
 	if ($db_field_type != NULL)
 	{
+		// Enhanced Parent-Child Builder - Add Children Tabs
+		if ( $this->input->post( 'primary_key_children' ) and $tabs_included === FALSE ) {
+			if ( $date_included === FALSE )
+			{
+				$extras .= '
+		Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
+		Assets::add_js(\'jquery-ui-1.8.13.min\');';
+				$date_included = TRUE;
+			}
+			$extras .= '
+		Assets::add_css(\'ui-tabs.css\');
+		Assets::add_js(\'ui-tabs\');';
+			$tabs_included = TRUE;
+		}
+		// Enhanced Parent-Child Builder - end of Add Children Tabs
 		if ($db_field_type == 'DATE' AND $date_included === FALSE)
 		{
 			$extras .= '
-			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
-			Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
+		Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
+		Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
 			$date_included = TRUE;
 		}
 		elseif ($db_field_type == 'DATETIME' && $datetime_included === FALSE)
@@ -354,12 +412,12 @@ for($counter=1; $field_total >= $counter; $counter++)
 			if ($date_included === FALSE)
 			{
 				$extras .= '
-			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
-			Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
+		Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
+		Assets::add_js(\'jquery-ui-1.8.13.min.js\');';
 			}
 			$extras .= '
-			Assets::add_css(\'jquery-ui-timepicker.css\');
-			Assets::add_js(\'jquery-ui-timepicker-addon.js\');';
+		Assets::add_css(\'jquery-ui-timepicker.css\');
+		Assets::add_js(\'jquery-ui-timepicker-addon.js\');';
 			$date_included = TRUE;
 			$datetime_included = TRUE;
 		}
@@ -371,25 +429,25 @@ for($counter=1; $field_total >= $counter; $counter++)
 			// if a date field hasn't been included already then add in the jquery ui files
 			if ($textarea_editor == 'ckeditor') {
 				$extras .= '
-			Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
+		Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
 			}
 			elseif ($textarea_editor == 'xinha') {
 				$extras .= '
-			Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
-			Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
+		Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
+		Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
 			}
 			elseif ($textarea_editor == 'markitup') {
 				$extras .= '
-			Assets::add_css(Template::theme_url(\'js/editors/markitup/skins/markitup/style.css\'));
-			Assets::add_css(Template::theme_url(\'js/editors/markitup/sets/default/style.css\'));
+		Assets::add_css(Template::theme_url(\'js/editors/markitup/skins/markitup/style.css\'));
+		Assets::add_css(Template::theme_url(\'js/editors/markitup/sets/default/style.css\'));
 
-			Assets::add_js(Template::theme_url(\'js/editors/markitup/jquery.markitup.js\'));
-			Assets::add_js(Template::theme_url(\'js/editors/markitup/sets/default/set.js\'));';
+		Assets::add_js(Template::theme_url(\'js/editors/markitup/jquery.markitup.js\'));
+		Assets::add_js(Template::theme_url(\'js/editors/markitup/sets/default/set.js\'));';
 			}
 			elseif ($textarea_editor == 'tinymce') {
 				$extras .= '
-			Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce.js\'));
-			Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce_init.js\'));';
+		Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce.js\'));
+		Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce_init.js\'));';
 			}
 			$textarea_included = TRUE;
 		}
@@ -468,7 +526,7 @@ if ($controller_name != $module_name_lower)
 
 		// we set this variable as it will be used to place the comma after the last item to build the insert db array
 		$last_field = $counter;
-
+            
 		if($db_required == 'new' && $table_as_field_prefix === TRUE)
 		{
 				$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
@@ -477,7 +535,7 @@ if ($controller_name != $module_name_lower)
 		{
 				$field_name = set_value("view_field_name$counter");
 		}
-		else
+		else 
 		{
 				$field_name = set_value("view_field_name$counter");
 		}
@@ -485,20 +543,28 @@ if ($controller_name != $module_name_lower)
 		$rules .= '
 		$this->form_validation->set_rules(\''.$form_name.'\',\''.set_value("view_field_label$counter").'\',\'';
 
+// Enhanced Parent-Child Builder - Make nullable fields null if empty
+	if ( $nullable = $this->input->post('validation_rules'.$counter) )
+	{
+		$nullable = array_flip( $nullable );
+		$nullable = isset( $nullable['nullable'] );
+	}
+
 	// setup the data array for saving to the db
 	// set defaults for certain field types
 	switch (set_value("db_field_type$counter"))
 	{
 		case 'DATE':
-			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00\';';
+			$save_data_array .= "\n\t\t\$data['{$field_name}']		= \$this->input->post('{$form_name}') ? \$this->input->post('{$form_name}') : " . ( $nullable ? "null;" : "'0000-00-00';");
 			break;
 		case 'DATETIME':
-			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00 00:00:00\';';
+			$save_data_array .= "\n\t\t\$data['{$field_name}']		= \$this->input->post('{$form_name}') ? \$this->input->post('{$form_name}') : " . ( $nullable ? "null;" : "'0000-00-00 00:00:00';");
 			break;
 		default:
-			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\');';
+			$save_data_array .= "\n\t\t\$data['{$field_name}']		= \$this->input->post('{$form_name}')" . ( $nullable ? " ? \$this->input->post('{$form_name}') : null" : '' ) .';';
 			break;
 	}
+// Enhanced Parent-Child Builder - end of Make nullable fields null if empty
 
 
 		// set a friendly variable name
@@ -516,6 +582,10 @@ if ($controller_name != $module_name_lower)
 				{
 					$rules .= '|';
 				}
+
+// Enhanced Parent-Child Builder - Skip nullable rule
+				if ( $value == 'nullable' ) continue;
+// Enhanced Parent-Child Builder - end of Skip nullable rule
 
 				if ($value == 'unique')	{
 					$prefix = $this->db->dbprefix;

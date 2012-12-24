@@ -14,6 +14,46 @@ if( isset($'.$module_name_lower.') ) {
 }
 $id = isset($'.$module_name_lower.'[\''.$primary_key_field.'\']) ? $'.$module_name_lower.'[\''.$primary_key_field.'\'] : \'\';
 ';
+// Enhanced Parent-Child Builder - Add required parents for create
+$edit_permission = preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Edit';
+
+
+$view .= '
+$disabled = \'\';
+if ( \'create\' == $this->uri->rsegment(2) )
+{
+	$create_parents = set_value( \'create_parents\' );
+	if ( empty( $create_parents ) )
+	{
+		$create_parents = array();
+		foreach ( $this->'.$module_name_lower.'_model->get_columns() as $col )
+		{
+			if ( $val = $this->input->get( $col[\'name\'] ) ) $create_parents[ $col[\'name\'] ] = $val;
+		}
+	}
+	else $create_parents = implode( \',\', $create_parents );
+}
+elseif ( !$this->auth->has_permission(\''.$edit_permission.'\') ) $disabled = \'disabled\';';
+// Enhanced Parent-Child Builder - end of Add required parents for create
+
+// Enhanced Parent-Child Builder - Get children
+$mymodel = null;
+$children = array();
+$childtables = array();
+if ( $pkchildren = $this->input->post( "primary_key_children" ) )
+{
+	$children = explode( "\n", trim( strtolower( str_replace( ' ', "\n", $pkchildren ) ), "\n\r\t " ) );
+	foreach ( $children as $child )
+	{
+		$child = trim( strtolower( $child ), "\n\r\t. " );
+		$ct = substr( $child, 0, strpos( $child.'.', '.' ) );
+		$cc = substr( $child, strpos( $child.'.', '.' ) +1 );
+		if ( !isset( $childtables[ $ct ] ) ) $childtables[ $ct ] = array();
+		$childtables[ $ct ][] = array( 'ref' => $child, 'table' => $ct, 'col' => $cc );
+	}
+}
+// Enhanced Parent-Child Builder - end of Get children
+
 $view .= '?>';
 $view .= '
 <div class="admin-box">
@@ -90,7 +130,7 @@ for($counter=1; $field_total >= $counter; $counter++)
         <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
             <?php echo form_label('{$field_label}'{$required}, '{$form_name}', array('class' => "control-label") ); ?>
             <div class="controls">
-                <?php echo form_textarea( array( 'name' => '{$form_name}', 'id' => '{$form_name}', 'rows' => '5', 'cols' => '80', 'value' => set_value('$form_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ) )?>
+                <?php echo form_textarea( array( 'name' => '{$form_name}', 'id' => '{$form_name}', 'rows' => '5', 'cols' => '80', 'value' => set_value('$form_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ),,\$disabled )?>
                 <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
             </div>
 
@@ -109,7 +149,7 @@ EOT;
                     Radio option 1
                 </label>
                 <label class="radio" for="{$form_name}_option2">
-                    <input id="{$form_name}_option2" name="{$form_name}" type="radio" class="" value="option2" <?php echo set_radio('{$form_name}', 'option2'); ?> />
+                    <input id="{$form_name}_option2" name="{$form_name}" type="radio" class="" value="option2" <?php echo set_radio('{$form_name}', 'option2'); ?> <?php echo \$disabled; ?> />
                     Radio option 2
                 </label>
                 <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
@@ -140,9 +180,56 @@ EOT;
             $view .= <<<EOT
 ); ?>
 
-        <?php echo form_dropdown('{$form_name}', \$options, set_value('{$form_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''), '{$field_label}'{$required})?>
+        <?php echo form_dropdown('{$form_name}', \$options, set_value('{$form_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''), '{$field_label}'{$required}, \$disabled)?>
 EOT;
             break;
+
+// Enhanced Parent-Child Builder - Add parent lookup
+        case('lookup'):
+			if ( $ref = $this->input->post( "view_field_reference$counter" ) ) :
+				if ( is_null( $mymodel ) )
+				{
+					$mymodel = "{$module_name_lower}_model";
+					$view .="
+		<?php
+			\${$mymodel} = \$this->model( '{$module_name_lower}/{$mymodel}' );
+			\${$mymodel} = new \${$mymodel};
+		?>";
+				}
+
+				$v = $this->input->post( "validation_rules{$counter}" );
+				array_flip( $v );
+				$edit_drop_args = $withnull = isset( $v['nullable'] ) ? 'TRUE' : 'FALSE';
+				$refparts = explode( '.', strtolower( $ref ) );
+				if ( isset( $childtables[ $refparts[0] ] ) )
+				{
+					$col = $childtables[$refparts[0]][0]['col'];
+					$edit_drop_args = "array( '{$col}' => \$id ), " . $edit_drop_args;
+				}
+
+				$view .= "
+		<?php
+			if ( isset( \$create_parents[ '{$field_name}' ] ) )
+				\$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( \$create_parents[ '{$field_name}' ] );
+			else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$withnull} );";
+
+				if ( $edit_drop_args != $withnull )
+				{
+					$view .= "
+			// TO-DO: use the following (instead of above) if we are a true parent of the table being dropped-down
+			// else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$edit_drop_args} );";
+				}
+
+				$view .= "
+		?>
+";
+			endif;
+
+            $view .= <<<EOT
+        <?php echo form_dropdown('{$form_name}', \$options, set_value('{$form_name}', isset(\$create_parents['{$field_name}']) ? \$create_parents['{$field_name}'] : ( isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '' ) ), '{$field_label}'{$required}, \$disabled)?>
+EOT;
+            break;
+// Enhanced Parent-Child Builder - end of Add parent lookup
 
         case('checkbox'):
 
@@ -152,7 +239,7 @@ EOT;
             <div class="controls">
 
                 <label class="checkbox" for="{$form_name}">
-                    <input type="checkbox" id="{$form_name}" name="{$form_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$form_name}', 1); ?>>
+                    <input type="checkbox" id="{$form_name}" name="{$form_name}" value="1" <?php echo (isset(\${$module_name_lower}['{$field_name}']) && \${$module_name_lower}['{$field_name}'] == 1) ? 'checked="checked"' : set_checkbox('{$form_name}', 1); ?> <?php echo \$disabled; ?> >
                     <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
                 </label>
 
@@ -193,7 +280,7 @@ EOT;
             <?php echo form_label('{$field_label}'{$required}, '{$form_name}', array('class' => "control-label") ); ?>
             <div class="controls">
 
-               <input id="{$form_name}" type="{$type}" name="{$form_name}" {$maxlength} value="<?php echo set_value('{$form_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>"  />
+               <input id="{$form_name}" type="{$type}" name="{$form_name}" {$maxlength} value="<?php echo set_value('{$form_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>" <?php echo \$disabled; ?> />
                <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
             </div>
 
@@ -218,7 +305,7 @@ if($action_name != 'create') {
     $delete = PHP_EOL . '
     <?php if ($this->auth->has_permission(\''.$delete_permission.'\')) : ?>
 
-            or <button type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php e(js_escape(lang(\''.$module_name_lower.'_delete_confirm\'))); ?>\')">
+            <button type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php e(js_escape(lang(\''.$module_name_lower.'_delete_confirm\'))); ?>\')">
             <i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang(\''.$module_name_lower.'_delete_record\'); ?>
             </button>
 
@@ -229,16 +316,36 @@ if($action_name != 'create') {
 $view .= PHP_EOL . '
 
         <div class="form-actions">
-            <br/>
+	<?php if ( $this->auth->has_permission(\''.$edit_permission.'\') ) : ?>
             <input type="submit" name="save" class="btn btn-primary" value="'.$action_label.' '.$module_name.'"'.$on_click.' />
-            or <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-warning"\'); ?>
+	<?php endif; ?>
+            <?php echo anchor(SITE_AREA .\'/'.$controller_name.'/'.$module_name_lower.'\', lang(\''.$module_name_lower.'_cancel\'), \'class="btn btn-warning"\'); ?>
             ' . $delete . '
         </div>
     </fieldset>
     <?php echo form_close(); ?>
 ' . PHP_EOL;
 
-
+// Enhanced Parent-Child Builder - Add Children Tabs
+if ( !empty( $children ) ) :
+$tabs = "
+<?php if ( !isset( \$create_parents ) ) : ?>
+	<div id='tabs'>
+		<ul>";
+		foreach ( $children as $child ) :
+			$f = explode( '.', trim( $child, "\n\r" ) );
+			if ( count( $f ) < 2 ) break;
+			if ( count( $f ) == 2 ) $f[] = ucwords( $f[0] );
+			$tabs .= "
+			<li><a href='<?php echo site_url( SITE_AREA.\"/content/{$f[0]}?{$f[1]}={\$id}\" ) ?>'>{$f[2]}</a></li>";
+		endforeach;
+	$tabs .= "
+		</ul>
+	</div>
+<?php endif; ?>";
+$view .= $tabs . PHP_EOL;
+endif;
+// Enhanced Parent-Child Builder - end of Add Children Tabs
 
 if ($xinha_names != '')
 {
