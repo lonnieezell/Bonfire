@@ -240,7 +240,6 @@ class Template
 	 * @access public
 	 * @static
 	 *
-	 * @global object $OUT Core CodeIgniter Output object
 	 * @param  string $layout The name of the a layout to use. This overrides any current or default layouts set.
 	 *
 	 * @return void
@@ -278,8 +277,7 @@ class Template
 
 		Events::trigger('after_layout_render', $output);
 
-		global $OUT;
-		$OUT->set_output($output);
+		self::$ci->output->set_output($output);
 
 		// Reset the original view path
 		//self::$ci->load->_ci_view_path = self::$orig_view_path;
