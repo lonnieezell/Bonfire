@@ -240,7 +240,6 @@ class Template
 	 * @access public
 	 * @static
 	 *
-	 * @global object $OUT Core CodeIgniter Output object
 	 * @param  string $layout The name of the a layout to use. This overrides any current or default layouts set.
 	 *
 	 * @return void
