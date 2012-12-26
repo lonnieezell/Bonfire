@@ -278,8 +278,7 @@ class Template
 
 		Events::trigger('after_layout_render', $output);
 
-		global $OUT;
-		$OUT->set_output($output);
+		self::$ci->output->set_output($output);
 
 		// Reset the original view path
 		//self::$ci->load->_ci_view_path = self::$orig_view_path;
