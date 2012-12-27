@@ -133,7 +133,7 @@ class Installer_lib {
 			return false;
 		}
 		
-		require(BFPATH . '/config/development/database.php');
+		require(BFPATH . 'config/development/database.php');
 		
 		// If the $db['default'] doesn't exist then we can't
 		// load our database.
@@ -329,7 +329,7 @@ class Installer_lib {
 		}
 
 		// Write environment database config file.
-		if (copy(BFPATH . '/config/database.php', BFPATH . "/config/" . $environment ."/database.php") === false)
+		if (copy(BFPATH . 'config/database.php', BFPATH . "config/" . $environment ."/database.php") === false)
 		{
 			$str = lang('in_db_config_error');
 			return str_replace('{file}', "config/$environment/database.php", $str);
