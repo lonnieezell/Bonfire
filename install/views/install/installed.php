@@ -5,7 +5,7 @@
 </div>
 
 <form action="<?php echo site_url('rename') ?>" method="post" class="form-inline">
-    <label for="rename"><?php echo lang('in_rename_msg'); ?> <input type="submit" id="rename" value="<?php echo lang('click') ?>"></label>
+    <label for="rename"><?php echo lang('in_rename_msg'); ?> <input type="submit" id="rename" value="<?php echo lang('in_click') ?>"></label>
 </form>
 
 <?php $this->load->view('footer'); ?>
