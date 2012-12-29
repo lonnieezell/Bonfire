@@ -168,7 +168,7 @@ class Install extends CI_Controller {
 	{
 		$data = new stdClass();
 		
-		if ($this->input->post('install_db'))
+		if ($this->input->post('install_db') !== false)
 		{
 			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim');
 			$this->form_validation->set_rules('driver', lang('in_driver'), 'required|trim');	
@@ -240,7 +240,7 @@ class Install extends CI_Controller {
 	 */
 	public function account()
 	{	
-		if ($this->input->post('submit'))
+		if ($this->input->post('submit') !== false)
 		{
 			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|min_length[1]');
 			$this->form_validation->set_rules('username', lang('in_username'), 'required|trim');
