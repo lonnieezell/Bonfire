@@ -328,7 +328,7 @@ class Install extends CI_Controller {
 		// Write a file to /public/install/installed.txt as a simpler
 		// check whether it's installed so developing doesn't require
 		// us to remove the install folder.
-		$filename = FCPATH .'installed.txt';
+		$filename = FCPATH . 'installed.txt';
 		
 		$msg = 'Installed On: '. date('r') ."\n";
 		$this->load->helper('file');
@@ -398,5 +398,5 @@ class Install extends CI_Controller {
 
 /* get module locations from config settings or use the default module location and offset */
 Install::$locations = array(
-	APPPATH.'../bonfire/modules/' => '../modules/',
+	realpath(APPPATH .'../bonfire/modules') => '../../bonfire/modules/',
 );
