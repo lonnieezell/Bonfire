@@ -485,3 +485,29 @@ EOL;
 
 	}//end form_dropdown()
 }
+
+if ( ! function_exists('form_multiselect'))
+{
+	/**
+	 * Multi-select menu
+	 *
+	 * @access	public
+	 * @param	string
+	 * @param	array
+	 * @param	mixed
+	 * @param	string
+	 * @return	type
+	 */
+	function form_multiselect($name = '', $options = array(), $selected = array(), $label = '', $extra = '')
+	{
+		if ( ! strpos($extra, 'multiple'))
+		{
+			$extra .= ' multiple="multiple"';
+		}
+		
+		return form_dropdown($name, $options, $selected, $label, $extra);
+	}
+}
+
+//--------------------------------------------------------------------
+
