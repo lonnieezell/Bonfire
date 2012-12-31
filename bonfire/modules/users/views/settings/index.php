@@ -108,15 +108,15 @@
 							<?php
 							if ($user->active == 1)
 							{
-								echo(lang('us_active'));
+								echo(lang('us_label_active'));
 							}
 							else
 							{
-								echo(lang('us_inactive'));
+								echo(lang('us_label_inactive'));
 							}
 							?>
 						</span>
-						<?php if ($user->banned) echo '<span class="label label-warning">'. lang('us_tab_banned') .'</span>'; ?>
+						<?php if ($user->banned) echo '<span class="label label-warning">'. lang('us_label_banned') .'</span>'; ?>
 					</td>
 				</tr>
 				<?php endforeach; ?>
