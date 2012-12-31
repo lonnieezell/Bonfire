@@ -73,7 +73,7 @@
 						<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $user->id); ?>"><?php echo $user->username; ?></a>
 						<?php if ($user->banned) echo '<span class="label label-warning">Banned</span>'; ?>
 					</td>
-					<td><?php echo $user->display_name ?></td>
+					<td><a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $user->id); ?>"><?php echo $user->display_name; ?></a></td>
 					<td>
 						<a href="mailto:<?php echo $user->email ?>"><?php echo $user->email ?></a>
 					</td>
