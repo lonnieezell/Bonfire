@@ -628,7 +628,6 @@ class Contexts
 			// out a menu based on the multiple items.
 			if (count($topic) > 1)
 			{
-				Console::log($topic);
 				$list .= '<li class="' . self::$submenu_class . '"><a href="#" >'. ucwords($topic_name) .'</a>';
 				$list .= '<ul class="' . self::$child_class .'">';
 
