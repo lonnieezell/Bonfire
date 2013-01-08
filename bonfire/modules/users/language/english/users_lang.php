@@ -163,7 +163,7 @@ $lang['us_account_deactivated_admin']	= 'Administrative account deactivation.';
 
 $lang['us_label_active']				= 'Active';
 $lang['us_label_inactive']				= 'Inactive';
-$lang['us_label_banned']				= 'banned';
+$lang['us_label_banned']				= 'Banned';
 
 //email subjects
 $lang['us_email_subj_activate']		= 'Activate Your membership';
