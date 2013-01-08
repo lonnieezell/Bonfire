@@ -69,8 +69,8 @@
 						<input type="checkbox" name="checked[]" value="<?php echo $user->id ?>" />
 					</td>
 					<td><?php echo $user->id ?></td>
-					<td><?php echo $user->username; ?></td>
-					<td><a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $user->id); ?>"><?php echo $user->display_name; ?></a></td>
+					<td><a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $user->id); ?>"><i class="icon-edit"></i><?php echo $user->username; ?></a></td>
+					<td><?php echo $user->display_name; ?></td>
 					<td>
 						<a href="mailto:<?php echo $user->email ?>"><?php echo $user->email ?></a>
 					</td>
