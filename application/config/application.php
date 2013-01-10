@@ -184,7 +184,7 @@ $config['template.breadcrumb_symbol']	= ' : ';
 
 	This should NOT include the trailing slash.
 */
-$config['assets.base_folder'] = 'assets';
+$config['assets.base_folder'] = 'public/assets';
 
 /*
 	The names of the folders for the various assets.
