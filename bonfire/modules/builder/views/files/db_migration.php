@@ -1,7 +1,7 @@
 <?php
 
  // There are no doubt more types where a value/length isn't possible - needs investigating
-$no_length = array('TEXT', 'BOOL', 'DATE', 'DATETIME', 'TIME', 'TIMESTAMP', 'BLOB', 'TINYBLOB', 'TINYTEXT', 'MEDIUMBLOB', 'MEDIUMTEXT', 'LONGBLOB', 'LONGTEXT');
+$no_length = array('TEXT', 'BOOL', 'DATE', 'DATETIME', 'TIME', 'TIMESTAMP', 'BLOB', 'TINYBLOB', 'TINYTEXT', 'MEDIUMBLOB', 'MEDIUMTEXT', 'LONGBLOB', 'LONGTEXT', 'TINYINT', 'INT', 'MEDIUMINT', 'BIGINT');
 
 // types where a value/length is optional, will not output a constraint if the field is empty
 $optional_length = array('YEAR');
