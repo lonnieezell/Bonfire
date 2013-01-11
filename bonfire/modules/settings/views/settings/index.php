@@ -1,6 +1,6 @@
 <?php if (validation_errors()) : ?>
 <div class="alert alert-block alert-error fade in">
-  <a class="close" data-dismiss="alert">&times;</a>
+	<a class="close" data-dismiss="alert">&times;</a>
 	<?php echo validation_errors(); ?>
 </div>
 <?php endif; ?>
@@ -269,12 +269,82 @@
 				</div>
 				<!-- End of Developer Tab Options Pane -->
 			<?php endif; ?>
-		</div>
-	</div>
 
-	<div class="form-actions">
-		<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_context_settings') ?>" />
-	</div>
+			<?php if ( ! empty($extended_settings)) : ?>
+				<!-- Start of Extended Settings Tab Pane -->
+				<div class='tab-pane' id='extended'>
+					<fieldset>
+						<legend>Extended</legend>
+			<?php
+				foreach ($extended_settings as $field)
+				{
+					if (isset($field['permission']) && ! empty($field['permission']) && has_permission($field['permission'])
+						|| ! isset($field['permission'])
+						|| empty($field['permission'])
+						|| $field['permission'] === FALSE
+					)
+					{
+						$form_error_class = form_error($field['name']) ? ' error' : '';
+						$field_control = '';
+
+						if ($field['form_detail']['type'] == 'dropdown')
+						{
+							echo form_dropdown($field['form_detail']['settings'], $field['form_detail']['options'], set_value($field['name'], isset($settings['ext.' . $field['name']]) ? $settings['ext.' . $field['name']] : ''), $field['label']);
+						}
+						elseif ($field['form_detail']['type'] == 'checkbox')
+						{
+							$field_control = form_checkbox($field['form_detail']['settings'], $field['form_detail']['value'], isset($settings['ext.' . $field['name']]) && $field['form_detail']['value'] == $settings['ext.' . $field['name']] ? TRUE : FALSE);
+						}
+						elseif ($field['form_detail']['type'] == 'state_select')
+						{
+							if ( ! is_callable('state_select'))
+							{
+								$this->load->config('address');
+								$this->load->helper('address');
+							}
+							$field_control = state_select(isset($settings['ext.' . $field['name']]) ? $settings['ext.' . $field['name']] : 'CA', 'CA', 'US', $field['name'], 'span6 chzn-select');
+						}
+						elseif ($field['form_detail']['type'] == 'country_select')
+						{
+							if ( ! is_callable('country_select'))
+							{
+								$this->load->config('address');
+								$this->load->helper('address');
+							}
+							$field_control = country_select(set_value($field['name'], isset($settings['ext.' . $field['name']]) ? $settings['ext.' . $field['name']] : 'US'), 'US', $field['name'], 'span6 chzn-select');
+						}
+						else
+						{
+							$form_method = 'form_' . $field['form_detail']['type'];
+							if (is_callable($form_method))
+							{
+								echo $form_method($field['form_detail']['settings'], set_value($field['name'], isset($settings['ext.' . $field['name']]) ? $settings['ext.' . $field['name']] : ''), $field['label']);
+							}
+						}
+
+						if ( ! empty($field_control))
+						{
+							echo "
+						<div class='control-group{$form_error_class}'>
+							<label class='control-label' for='{$field['name']}'>{$field['label']}</label>
+							<div class='controls'>
+								{$field_control}
+							</div>
+						</div>";
+						}
+					}
+				}
+			?>
+					</fieldset>
+				</div>
+			<?php endif; ?>
+
+			</div>
+		</div>
+
+		<div class="form-actions">
+			<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_context_settings') ?>" />
+		</div>
 
 	<?php echo form_close(); ?>
-</div> <!-- /admin-box -->
+</div>
