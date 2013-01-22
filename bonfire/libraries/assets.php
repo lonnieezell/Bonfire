@@ -1365,15 +1365,15 @@ class Assets
 				{
 					if (self::$debug) {
 						echo "[Assets] Looking in: <ul><li>{$site_path}{$path}/{$default_theme}{$file}{$type}</li>" . PHP_EOL;
-						echo "<li>{$site_path}{$path}/{$default_theme}{$type}/{$file}{$type}</li>" . PHP_EOL;
+						echo "<li>{$site_path}{$path}/{$default_theme}{$clean_type}/{$file}{$type}</li>" . PHP_EOL;
 
 						if (!empty($active_theme))
 						{
 							echo "<li>{$site_path}{$path}/{$active_theme}{$file}{$type}</li>" . PHP_EOL;
-							echo "<li>{$site_path}{$path}/{$active_theme}{$type}/{$file}{$type}</li>" . PHP_EOL;
+							echo "<li>{$site_path}{$path}/{$active_theme}{$clean_type}/{$file}{$type}</li>" . PHP_EOL;
 						}
 
-						echo '<li>'. $site_path . self::$asset_base ."/{$type}/{$file}{$type}</li>" . PHP_EOL;
+						echo '<li>'. $site_path . self::$asset_base ."/{$clean_type}/{$file}{$type}</li>" . PHP_EOL;
 
 						echo '</ul>' . PHP_EOL;
 					}
