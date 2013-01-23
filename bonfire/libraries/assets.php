@@ -1009,8 +1009,9 @@ class Assets
 	public static function clear_cache()
 	{
 		self::$ci->load->helper('file');
-
-		$cache_path = FCPATH . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
+		
+		$site_path = Template::get('site_path');
+		$cache_path = $site_path . self::$asset_base . '/' . self::$asset_cache_folder . '/';
 
 		delete_files($cache_path);
 
@@ -1109,8 +1110,9 @@ class Assets
 			return TRUE;
 		}
 
+		$site_path = Template::get('site_path');
 		// Where to save the combined file to.
-		$cache_path = FCPATH . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
+		$cache_path = $site_path . self::$asset_base . '/' . self::$asset_cache_folder . '/';
 
 		// full file path - without the extension
 		$file_path = $cache_path.$file_name;
@@ -1144,7 +1146,7 @@ class Assets
 				}
 				else
 				{
-					$app_file = FCPATH . '/'.str_replace(base_url(), '', $file);
+					$app_file = $site_path . str_replace(base_url(), '', $file);
 				}
 				$app_file = strpos($app_file, '.js') ? $app_file : $app_file .'.js';
 				$files_array[$key] = $app_file;
