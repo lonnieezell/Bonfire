@@ -232,10 +232,11 @@ class Assets
 	 * @param mixed  $style              The style(s) to have links rendered for.
 	 * @param string $media              The media to assign to the style(s) being passed in.
 	 * @param bool   $bypass_inheritance If TRUE, will skip the check for parent theme styles.
+	 * @param bool	 $bypass_module      If TRUE, will not output the css file named after the controller or the module styles.
 	 *
 	 * @return string A string containing all necessary links.
 	 */
-	public static function css($style=null, $media='screen', $bypass_inheritance=FALSE)
+	public static function css($style=null, $media='screen', $bypass_inheritance=FALSE, $bypass_module=FALSE)
 	{
 		$styles = array();
 		$return = '';
@@ -271,14 +272,18 @@ class Assets
 			);
 		}
 
-		// Add a style named for the controller so it will be looked for.
-		$styles[] = array(
-			'file'	=> self::$ci->router->class,
-			'media' => $media
-		);
+		if ($bypass_module == FALSE)
+		{
+			// Add a style named for the controller so it will be looked for.
+			$styles[] = array(
+				'file'	=> self::$ci->router->class,
+				'media' => $media
+			);
 
-		$styles     = self::find_files($styles, 'css', $bypass_inheritance);
-		$mod_styles	= self::find_files(self::$module_styles, 'css', $bypass_inheritance);
+			$mod_styles	= self::find_files(self::$module_styles, 'css', $bypass_inheritance);
+		}
+
+		$styles = self::find_files($styles, 'css', $bypass_inheritance);
 
 		$combine = self::$ci->config->item('assets.css_combine');
 
@@ -322,8 +327,11 @@ class Assets
 			$return .= self::combine_css($styles, $media);
 		}
 
-		// Make sure we include module styles
-		$return .= self::combine_css($mod_styles, $media, 'module');
+		if ($bypass_module == FALSE)
+		{
+			// Make sure we include module styles
+			$return .= self::combine_css($mod_styles, $media, 'module');
+		}
 
 		return $return;
 
