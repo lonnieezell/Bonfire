@@ -8,6 +8,7 @@ function show_table_props() {
 	if ($('#db_create').is(':checked')) {
 		$('#db_details').show(0);
 		$('#db_details .mb_advanced').hide();
+		$('.match-existing-notes').hide();
 		$('.mb_new_table').show(0);
 		$('#field_numbers').show(0);
 		$('#all_fields').show(0);
@@ -18,6 +19,7 @@ function show_table_props() {
 	} else if ($('#db_exists').is(':checked')) {
 		$('#db_details').show(0);
 		$('#db_details .mb_advanced').show();
+		$('.match-existing-notes').show();
 		$('.mb_new_table').hide(0);
 		$('#field_numbers').hide(0);
 		$('#all_fields').hide(0);
@@ -40,6 +42,7 @@ function show_table_props() {
 	} else {
 		$('#db_details').hide(0);
 		$('#all_fields').hide(0);
+		$('.match-existing-notes').hide();
 	}
 }
 

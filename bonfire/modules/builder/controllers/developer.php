@@ -388,6 +388,7 @@ class Developer extends Admin_Controller {
                 $this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");
                 $this->form_validation->set_rules("textarea_editor",'Textarea Editor',"trim|xss_clean|alpha_dash");
                 $this->form_validation->set_rules("use_soft_deletes",'Soft Deletes',"trim|xss_clean|alpha");
+                $this->form_validation->set_rules("soft_delete_field",'Soft Deletes Fieldname',"trim|xss_clean|alpha");
                 $this->form_validation->set_rules("use_created",'Use Created Field',"trim|xss_clean|alpha");
                 $this->form_validation->set_rules("created_field",'Created Field Name',"trim|xss_clean|alpha_dash");
                 $this->form_validation->set_rules("use_modified",'Use Modified Field',"trim|xss_clean|alpha");

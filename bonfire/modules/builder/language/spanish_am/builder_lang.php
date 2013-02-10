@@ -122,6 +122,7 @@ $lang['mb_form_is_natural_no_zero']	= 'Natural, sin ceros';
 $lang['mb_form_valid_ip']		= 'IP válida';
 $lang['mb_form_valid_base64']	= 'Base64 válido';
 $lang['mb_form_alpha_extra']	= 'Alfanumerico, subrayado, guiones, periodos y espacios.';
+$lang['mb_form_match_existing']	= 'Ensure this matches the existing fieldname!';
 
 // Activities
 $lang['mb_act_create']	= 'Módulo creado';
