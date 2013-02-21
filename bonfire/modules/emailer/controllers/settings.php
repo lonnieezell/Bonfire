@@ -145,8 +145,8 @@ class Settings extends Admin_Controller
 
 			$this->load->helper('file');
 
-			write_file(APPPATH .'core_modules/emailer/views/email/_header.php', $header, 'w+');
-			write_file(APPPATH .'core_modules/emailer/views/email/_footer.php', $footer, 'w+');
+			write_file('./bonfire/modules/emailer/views/email/_header.php', $header, 'w+');
+			write_file('./bonfire/modules/emailer/views/email/_footer.php', $footer, 'w+');
 
 			Template::set_message('Template successfully saved.', 'success');
 
@@ -154,10 +154,10 @@ class Settings extends Admin_Controller
 		}
 
 
-		Assets::add_js(Template::theme_url('js/editors/ace/ace.js'));
-		Assets::add_js(Template::theme_url('js/editors/ace/theme-monokai.js'));
-		Assets::add_js(Template::theme_url('js/editors/ace/mode-html.js'));
-		Assets::add_module_js('emailer', 'js/ace');
+		//Assets::add_js(Template::theme_url('js/editors/ace/ace.js'));
+		//Assets::add_js(Template::theme_url('js/editors/ace/theme-monokai.js'));
+		//Assets::add_js(Template::theme_url('js/editors/ace/mode-html.js'));
+		//Assets::add_module_js('emailer', 'js/ace');
 
 		Template::set('toolbar_title', lang('em_email_template'));
 
