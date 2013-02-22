@@ -157,10 +157,10 @@ class Settings extends Admin_Controller
 		}
 
 
-		//Assets::add_js(Template::theme_url('js/editors/ace/ace.js'));
-		//Assets::add_js(Template::theme_url('js/editors/ace/theme-monokai.js'));
-		//Assets::add_js(Template::theme_url('js/editors/ace/mode-html.js'));
-		//Assets::add_module_js('emailer', 'js/ace');
+		Assets::add_js(Template::theme_url('js/editors/ace/ace.js'));
+		Assets::add_js(Template::theme_url('js/editors/ace/theme-monokai.js'));
+		Assets::add_js(Template::theme_url('js/editors/ace/mode-html.js'));
+		Assets::add_module_js('emailer', 'js/ace');
 
 		Template::set('toolbar_title', lang('em_email_template'));
 
