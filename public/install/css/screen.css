@@ -289,3 +289,9 @@ input[type=password] {
 .breadcrumb li.done a:after		{ border-left-color: #333; }
 .breadcrumb li.active a			{ background: #243957; }
 .breadcrumb li.active a:after	{ border-left-color: #243957; }
+
+
+table {
+	border-spacing: 0;
+	border-collapse: collapse;
+}
