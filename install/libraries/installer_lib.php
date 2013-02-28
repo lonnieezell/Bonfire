@@ -118,22 +118,22 @@ class Installer_lib {
 		moved the install folder....
 	*/
 	public function is_installed() 
-	{	
+	{
 		// First check - Does a 'install/installed.txt' file exist? If so, 
 		// then we've likely already installed. 
-		if (file_exists('installed.txt'))
+		if (is_file(FCPATH . 'installed.txt'))
 		{
 			return true;
 		}
-	
+
 		// Does the database config exist? 
 		// If not, then we definitely haven't installed yet.
-		if (!file_exists('../bonfire/application/config/development/database.php'))
+		if (!is_file(BFPATH . 'config/development/database.php'))
 		{
 			return false;
 		}
 		
-		require('../bonfire/application/config/development/database.php');
+		require(BFPATH . 'config/development/database.php');
 		
 		// If the $db['default'] doesn't exist then we can't
 		// load our database.
@@ -141,17 +141,17 @@ class Installer_lib {
 		{
 			return false;
 		}
-
-		$this->load->database($db['default']);
+		
+		$this->ci->load->database($db['default']);
 		
 		// Does the users table exist?
-		if (!$this->db->table_exists('users'))
+		if (!$this->ci->db->table_exists('users'))
 		{
 			return false;
 		}
 		
 		// Make sure at least one row exists in the users table.
-		$query = $this->db->get('users');
+		$query = $this->ci->db->get('users');
 		
 		if ($query->num_rows() == 0)
 		{
@@ -329,7 +329,7 @@ class Installer_lib {
 		}
 
 		// Write environment database config file.
-		if (copy(BFPATH .'config/database.php', BFPATH ."config/$environment/database.php") === false)
+		if (copy(BFPATH . 'config/database.php', BFPATH . "config/" . $environment ."/database.php") === false)
 		{
 			$str = lang('in_db_config_error');
 			return str_replace('{file}', "config/$environment/database.php", $str);
