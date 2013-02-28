@@ -8,9 +8,9 @@
 	<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
 
 	<?php if(lang('bf_language_direction') == 'rtl'): ?>
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url() .'css/screen-rtl.css'; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('css/screen-rtl.css'); ?>" />
 	<?php else: ?>
-		<link rel="stylesheet" type="text/css" href="<?php echo base_url() .'css/screen.css'; ?>" />
+		<link rel="stylesheet" type="text/css" href="<?php echo base_url('css/screen.css'); ?>" />
 	<?php endif; ?>
 	
 	<script src="<?php echo base_url('js/jquery-1.7.2.min.js') ?>"></script>
