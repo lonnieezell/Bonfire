@@ -207,7 +207,7 @@ class Installer_lib {
 			// If it starts with a '/', then we assume it's
 			// in the web root. Otherwise, we try to locate
 			// it from the main folder.
-			$start = strpos($folder, '/') === 0 ? FCPATH : str_replace('application/', '', $this->APPPATH);
+			$start = strpos($folder, '/') === 0 ? FCPATH : INSTALLPATH;
 			
 			// Try to set it to writeable if possible
 			@chmod($start . $folder, 0777);
@@ -238,7 +238,7 @@ class Installer_lib {
 			// If it starts with a '/', then we assume it's
 			// in the web root. Otherwise, we try to locate
 			// it from the main folder.
-			$start = strpos($file, '/') === 0 ? FCPATH : str_replace('application/', '', $this->APPPATH);
+			$start = strpos($file, '/') === 0 ? FCPATH : INSTALLPATH;
 			
 			// Try to set it to writeable if possible
 			@chmod($start . $file, 0666);
@@ -359,7 +359,7 @@ class Installer_lib {
 		//
 		// Now install the database tables.
 		//
-		$this->ci->load->library('Migrations', array('migration_path' => str_replace('application', 'bonfire', $this->APPPATH) .'migrations'));
+		$this->ci->load->library('Migrations', array('migration_path' => $this->BFPATH .'migrations'));
 
 		if (!$this->ci->migrations->install())
 		{ 
@@ -423,7 +423,7 @@ class Installer_lib {
 		);
 		
 		// As of 0.7, we've switched to using phpass for password encryption...
-		require (str_replace('application', 'bonfire', $this->APPPATH) .'modules/users/libraries/PasswordHash.php' );
+		require ($this->BFPATH .'modules/users/libraries/PasswordHash.php' );
 
 		$iterations	= $this->ci->config->item('password_iterations');
 		$hasher = new PasswordHash($iterations, false);
