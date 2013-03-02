@@ -109,6 +109,11 @@ class Install extends CI_Controller {
 		$this->load->library('installer_lib', array('reverse_writeable_folders' => $this->reverse_writeable_folders));
 		$this->load->helper('install');
 
+		/* get module locations from config settings or use the default module location and offset */
+		Install::$locations = array(
+			$this->installer_lib->BFPATH.'modules/' => '../modules/',
+		);
+
 		// Load form validation
 		$this->load->library('form_validation');
 
@@ -395,8 +400,3 @@ class Install extends CI_Controller {
 	
 	//--------------------------------------------------------------------
 }
-
-/* get module locations from config settings or use the default module location and offset */
-Install::$locations = array(
-	APPPATH.'../bonfire/modules/' => '../modules/',
-);

@@ -42,4 +42,4 @@ $config['migrations_version'] = 1;
 | Also, writing permission is required within the migrations path.
 |
 */
-$config['migrations_path'] = APPPATH . '../bonfire/migrations/';
+// $config['migrations_path'] = '../bonfire/migrations/';
