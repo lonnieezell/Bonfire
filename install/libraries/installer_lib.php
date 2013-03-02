@@ -207,7 +207,7 @@ class Installer_lib {
 			// If it starts with a '/', then we assume it's
 			// in the web root. Otherwise, we try to locate
 			// it from the main folder.
-			$start = strpos($folder, '/') === 0 ? FCPATH : INSTALLPATH;
+			$start = strpos($folder, '/') === 0 ? $this->FCPATH : INSTALLPATH;
 			
 			// Try to set it to writeable if possible
 			@chmod($start . $folder, 0777);
@@ -238,7 +238,7 @@ class Installer_lib {
 			// If it starts with a '/', then we assume it's
 			// in the web root. Otherwise, we try to locate
 			// it from the main folder.
-			$start = strpos($file, '/') === 0 ? FCPATH : INSTALLPATH;
+			$start = strpos($file, '/') === 0 ? $this->FCPATH : INSTALLPATH;
 			
 			// Try to set it to writeable if possible
 			@chmod($start . $file, 0666);
@@ -455,7 +455,7 @@ class Installer_lib {
 		// Reverse Folders
 		foreach ($this->reverse_writeable_folders as $folder)
 		{
-			@chmod(FCPATH . '../' . $folder, 0775);
+			@chmod(INSTALLPATH . $folder, 0775);
 		}
 
 		// We made it to the end, so we're good to go!
