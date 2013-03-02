@@ -48,23 +48,30 @@ if ( ! function_exists('read_config'))
 		$file = ($file == '') ? 'config' : str_replace(EXT, '', $file);
 		$file = 'config/'.$file;
 
-		$file_details = Modules::find($file, $module, '');
-
-		if ($module_only && empty($file_details[0]))
+		// Look in module first
+		$found = FALSE;
+		if ($module)
 		{
-			$file = FALSE;
+			$file_details = Modules::find($file, $module, '');
+			
+			if (!empty($file_details) && !empty($file_details[0]))
+			{
+				$file = implode("", $file_details);
+				$found = TRUE;
+			}
 		}
 
-		if (is_array($file_details) && !empty($file_details[0]))
+		// Fall back to application directory
+		if (! $found)
 		{
-			$file = implode("", $file_details);
-		}
-		else
-		{
-			$file = APPPATH.$file;
+			if (! $module_only)
+			{
+				$file = APPPATH.$file;
+				$found = file_exists($file.EXT);
+			}
 		}
 
-		if ( ! file_exists($file.EXT))
+		if ( ! $found)
 		{
 			if ($fail_gracefully === TRUE)
 			{
@@ -72,7 +79,7 @@ if ( ! function_exists('read_config'))
 			}
 			show_error('The configuration file '.$file.EXT.' does not exist.');
 		}
-
+		
 		include($file.EXT);
 
 		if ( ! isset($config) OR ! is_array($config))
@@ -113,19 +120,28 @@ if ( ! function_exists('write_config'))
 
 		$config_file = 'config/'.$file;
 
-		$file_details = Modules::find($config_file, $module, '');
-
-		if (is_array($file_details) && !empty($file_details[0]))
+		// Look in module first
+		$found = FALSE;
+		if ($module)
 		{
-			$config_file = implode("", $file_details);
+			$file_details = Modules::find($config_file, $module, '');
+			
+			if (!empty($file_details) && !empty($file_details[0]))
+			{
+				$config_file = implode("", $file_details);
+				$found = TRUE;
+			}
 		}
-		else
+
+		// Fall back to application directory
+		if (! $found)
 		{
 			$config_file = APPPATH.$config_file;
+			$found = is_file($config_file.EXT);
 		}
 
 		// Load the file so we can loop through the lines
-		if (is_file($config_file . EXT))
+		if ($found)
 		{
 			$contents = file_get_contents($config_file.EXT);
 			$empty = FALSE;
