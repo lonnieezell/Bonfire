@@ -105,7 +105,6 @@
  *
  */
 	$application_folder = "${path}/install";
-	$bf_app_folder		= "${path}/application";
 
 /*
  * --------------------------------------------------------------------
@@ -203,8 +202,8 @@
 	// Name of the "system folder"
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
 
-	// Bonfire application folder
-	define('BFPATH', realpath(str_replace('\\', '/', $bf_app_folder)) .'/');
+	// Path to the main Bonfire installation
+	define('INSTALLPATH', realpath(str_replace('\\', '/', $path)) .'/');
 
 	// The path to the "application" folder
 	if (is_dir($application_folder))
