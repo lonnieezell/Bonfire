@@ -91,8 +91,14 @@ if (!file_exists('./install/installed.txt'))
  *---------------------------------------------------------------
  * BONFIRE PATH
  *---------------------------------------------------------------
+ *
+ * Simply change the first "path" variable, and the individual paths
+ * will be set accordingly.
  */
-	define('BFPATH', '../bonfire/');
+	$path = "..";
+
+
+	$bonfire_path = "${path}/bonfire";
 
 /*
  *---------------------------------------------------------------
@@ -104,7 +110,7 @@ if (!file_exists('./install/installed.txt'))
  * as this file.
  *
  */
-	$system_path = BFPATH."codeigniter";
+	$system_path = "${path}/bonfire/codeigniter";
 
 /*
  *---------------------------------------------------------------
@@ -120,7 +126,7 @@ if (!file_exists('./install/installed.txt'))
  * NO TRAILING SLASH!
  *
  */
-	$application_folder = "../application";
+	$application_folder = "${path}/application";
 
 /*
  *---------------------------------------------------------------
@@ -241,6 +247,9 @@ if (!file_exists('./install/installed.txt'))
 
 	// Name of the "system folder"
 	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
+
+	// Bonfire Path
+	define('BFPATH', $bonfire_path.'/');
 
 	// The path to the "application" folder
 	if (is_dir($application_folder))

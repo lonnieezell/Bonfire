@@ -63,6 +63,21 @@
 		date_default_timezone_set('GMT');
 	}
 
+
+/*
+ *---------------------------------------------------------------
+ * BONFIRE PATH
+ *---------------------------------------------------------------
+ *
+ * Change the first "path" variable, and the individual paths
+ * will be set accordingly.  This path should contain the
+ * "bonfire", "application" and "install" directories.
+ *
+ * Changing $system_path or $application_folder independently
+ * is not supported by the current installer.
+ */
+	$path = "../..";
+
 /*
  *---------------------------------------------------------------
  * SYSTEM FOLDER NAME
@@ -73,7 +88,7 @@
  * as this file.
  *
  */
-	$system_path = "../../bonfire/codeigniter";
+	$system_path = "${path}/bonfire/codeigniter";
 
 /*
  *---------------------------------------------------------------
@@ -89,8 +104,8 @@
  * NO TRAILING SLASH!
  *
  */
-	$application_folder = "../../install";
-	$bf_app_folder		= "../../application";
+	$application_folder = "${path}/install";
+	$bf_app_folder		= "${path}/application";
 
 /*
  * --------------------------------------------------------------------
