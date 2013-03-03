@@ -365,11 +365,7 @@ class Install extends CI_Controller {
 	
 		rename($folder, $new_folder);
 		
-		$url = preg_replace('{install/$}', '', base_url());
-		$url = str_replace('http://', '', $url);
-		$url = str_replace('//', '/', $url);
-		$url = 'http://'. $url;
-		
+		$url = installed_url();
 		redirect($url);
 	}
 	

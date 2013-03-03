@@ -378,5 +378,11 @@ function module_config($module_name=null, $return_full=false)
 
 //--------------------------------------------------------------------
 
+function installed_url()
+{
+		$our_url = base_url();
+
+		return preg_replace('{install/$}', '', $our_url);
+}
 
 //--------------------------------------------------------------------
