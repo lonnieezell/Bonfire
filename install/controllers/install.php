@@ -176,7 +176,7 @@ class Install extends CI_Controller {
 		if ($this->input->post('install_db'))
 		{
 			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim');
-			$this->form_validation->set_rules('driver', lang('in_driver'), 'required|trim');	
+			$this->form_validation->set_rules('driver', lang('in_db_driver'), 'required|trim');	
 			$this->form_validation->set_rules('port', lang('in_port'), 'required|trim|numeric');	
 			$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim');
 			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim');
