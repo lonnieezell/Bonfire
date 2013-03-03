@@ -36,10 +36,10 @@ class Installer_lib {
 		
 		$this->curl_update = $this->cURL_enabled();
 		
-		$this->FCPATH = realpath(FCPATH . '../');
+		$this->FCPATH = realpath(FCPATH . '..') . '/';
 		$this->APPPATH = INSTALLPATH . 'application/';
 		$this->BFPATH = INSTALLPATH . 'bonfire/';
-		
+
 		if (array_key_exists('reverse_writeable_folders', $config))
 		{
 			$this->reverse_writeable_folders = $config['reverse_writeable_folders'];
@@ -204,14 +204,21 @@ class Installer_lib {
 	
 		foreach ($folders as $folder)
 		{
-			// If it starts with a '/', then we assume it's
-			// in the web root. Otherwise, we try to locate
-			// it from the main folder.
-			$start = strpos($folder, '/') === 0 ? $this->FCPATH : INSTALLPATH;
+			// If it starts with 'public/', then that represents
+			// the web root. Otherwise, we try to locate it
+			// from the main folder.
+			if (strpos($folder, 'public/') === 0)
+			{
+				$realpath = preg_replace('{^public/}', $this->FCPATH, $folder);
+			}
+			else
+			{
+				$realpath = INSTALLPATH . $folder;
+			}
 			
 			// Try to set it to writeable if possible
-			@chmod($start . $folder, 0777);
-			$data[$folder] = is_really_writable($start . $folder);
+			@chmod($realpath, 0777);
+			$data[$folder] = is_really_writable($realpath);
 		}
 		
 		return $data;
@@ -235,14 +242,21 @@ class Installer_lib {
 	
 		foreach ($files as $file)
 		{
-			// If it starts with a '/', then we assume it's
-			// in the web root. Otherwise, we try to locate
-			// it from the main folder.
-			$start = strpos($file, '/') === 0 ? $this->FCPATH : INSTALLPATH;
+			// If it starts with 'public/', then that represents
+			// the web root. Otherwise, we try to locate it
+			// from the main folder.
+			if (strpos($file, 'public/') === 0)
+			{
+				$realpath = preg_replace('{^public/}', $this->FCPATH, $file);
+			}
+			else
+			{
+				$realpath = INSTALLPATH . $file;
+			}
 			
 			// Try to set it to writeable if possible
-			@chmod($start . $file, 0666);
-			$data[$file] = is_really_writable($start . $file);
+			@chmod($realpath, 0666);
+			$data[$file] = is_really_writable($realpath);
 		}
 		
 		return $data;
