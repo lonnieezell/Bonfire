@@ -450,7 +450,7 @@ class Installer_lib {
 		// check the mod_rewrite setting
 		$config_array['index_page'] = $this->rewrite_check() ? '' : 'index.php';
 
-		write_config('config', $config_array);
+		write_config('config', $config_array, '', $this->APPPATH);
 
 		// Reverse Folders
 		foreach ($this->reverse_writeable_folders as $folder)

@@ -111,7 +111,7 @@ if ( ! function_exists('write_config'))
 	 *
 	 * @return boolean
 	 */
-	function write_config($file='', $settings=null, $module='')
+	function write_config($file='', $settings=null, $module='', $apppath=APPPATH)
 	{
 		if (empty($file) || !is_array($settings	))
 		{
@@ -136,7 +136,7 @@ if ( ! function_exists('write_config'))
 		// Fall back to application directory
 		if (! $found)
 		{
-			$config_file = APPPATH.$config_file;
+			$config_file = $apppath.$config_file;
 			$found = is_file($config_file.EXT);
 		}
 
@@ -188,7 +188,7 @@ if ( ! function_exists('write_config'))
 
 		// Backup the file for safety
 		$source = $config_file.EXT;
-		$dest = $module == '' ? APPPATH . 'archives/config/'.$file.EXT.'.bak' : $config_file.EXT.'.bak';
+		$dest = $module == '' ? $apppath . 'archives/config/'.$file.EXT.'.bak' : $config_file.EXT.'.bak';
 
 		if ($empty === FALSE) copy($source, $dest);
 
@@ -383,17 +383,17 @@ if ( ! function_exists('write_db_config'))
 	 *
 	 * @return boolean
 	 */
-	function write_db_config($settings=null)
+	function write_db_config($settings=null, $apppath=APPPATH)
 	{
 		if (!is_array($settings	))
 		{
 			logit('[Config_File_Helper] Invalid write_db_config PARAMETER!');
-			return FALSE;
+			return false;
 		}
 
 		foreach ($settings as $env => $values)
 		{
-			if (strpos($env, '/') === FALSE)
+			if (strpos($env, '/') === false)
 			{
 				$env .= '/';
 			}
@@ -405,12 +405,11 @@ if ( ! function_exists('write_db_config'))
 			}
 
 			// Load the file so we can loop through the lines
-			$contents = file_get_contents(APPPATH.'config/'. $env .'database'.EXT);
+			$contents = file_get_contents($apppath.'config/'. $env .'database.php');
 
-			if (empty($contents) OR ! is_array($contents))
+			if (empty($contents))
 			{
-				//logit('[Config_File_Helper] Error getting db file contents. Loading default database_format.php');
-				$contents = file_get_contents(APPPATH.'config/database'.EXT);
+				return false;
 			}
 
 			if ($env != 'submit')
@@ -419,8 +418,8 @@ if ( ! function_exists('write_db_config'))
 				{
 					// Convert on/off to TRUE/FALSE values
 					//$value = strtolower($value);
-					if (strtolower($value) == 'on' || strtolower($value) == 'yes' || strtolower($value) == 'TRUE') $value = 'TRUE';
-					if (strtolower($value) == 'on' || strtolower($value) == 'no' || strtolower($value) == 'FALSE') $value = 'FALSE';
+					if (strtolower($value) == 'on' || strtolower($value) == 'yes' || strtolower($value) == 'true' || $value === true) $value = 'TRUE';
+					if (strtolower($value) == 'on' || strtolower($value) == 'no' || strtolower($value) == 'false' || $value === false) $value = 'FALSE';
 
 					if ($value != 'TRUE' && $value != 'FALSE')
 					{
@@ -437,9 +436,9 @@ if ( ! function_exists('write_db_config'))
 				}
 
 				// Backup the file for safety
-				$source = APPPATH .'config/'. $env .'database'.EXT;
-				$dest_folder = APPPATH . config_item('site.backup_folder') .'config/'. $env;
-				$dest = $dest_folder .'database'.EXT.'.bak';
+				$source = $apppath .'config/'. $env .'database.php';
+				$dest_folder = $apppath . config_item('site.backup_folder') .'config/'. $env;
+				$dest = $dest_folder .'database.php.bak';
 
 				// Make sure our directory exists
 				if (!is_dir($dest_folder))
@@ -459,7 +458,7 @@ if ( ! function_exists('write_db_config'))
 				$CI->load->helper('file');;
 
 				// Write the changes out...
-				$result = write_file(APPPATH.'config/'.$env .'database'.EXT, $contents);
+				$result = write_file($apppath .'config/'. $env .'database.php', $contents);
 			}
 		}
 
