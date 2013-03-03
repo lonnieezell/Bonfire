@@ -216,8 +216,6 @@ class Installer_lib {
 				$realpath = INSTALLPATH . $folder;
 			}
 			
-			// Try to set it to writeable if possible
-			@chmod($realpath, 0777);
 			$data[$folder] = is_really_writable($realpath);
 		}
 		
@@ -254,8 +252,6 @@ class Installer_lib {
 				$realpath = INSTALLPATH . $file;
 			}
 			
-			// Try to set it to writeable if possible
-			@chmod($realpath, 0666);
 			$data[$file] = is_really_writable($realpath);
 		}
 		
