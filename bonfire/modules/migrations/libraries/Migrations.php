@@ -106,16 +106,6 @@ abstract class Migration
  */
 class Migrations
 {
-
-	/**
-	 * Enable or disable the migrations functionality
-	 *
-	 * @access private
-	 *
-	 * @var bool
-	 */
-	private $migrations_enabled = FALSE;
-
 	/**
 	 * Path to the core migrations files
 	 *
@@ -172,7 +162,10 @@ class Migrations
 		}
 
 		// Sanity check
-		$this->migrations_enabled AND is_dir($this->migrations_path) OR show_error('Migrations has been loaded but is disabled or set up incorrectly.');
+		if ( ! is_dir($this->migrations_path))
+		{
+			show_error('Migrations has been loaded but is set up incorrectly.');
+		}
 
 		$this->_ci->load->dbforge();
 		$this->_ci->lang->load('migrations/migrations');
