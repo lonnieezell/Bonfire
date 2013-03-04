@@ -117,13 +117,13 @@ class Migrations
 	private $migrations_enabled = FALSE;
 
 	/**
-	 * Path to the migrations files
+	 * Path to the core migrations files
 	 *
 	 * @access private
 	 *
 	 * @var string
 	 */
-	private $migrations_path = ".";
+	private $migrations_path;
 
 	/**
 	 * Show verbose messages or not
@@ -150,35 +150,29 @@ class Migrations
 	 *
 	 * @return void
 	 */
-	function __construct($migration_path=null)
+	function __construct($params=array())
 	{
 		$this->_ci =& get_instance();
 
 		$this->_ci->config->load('migrations/migrations');
 
-		$this->migrations_enabled = $this->_ci->config->item('migrations_enabled');
-		
-		if (is_array($migration_path) && isset($migration_path['migrations_path']))
+		if (isset($params['migrations_path']))
 		{
-			$migration_path = $migration_path['migrations_path'];
+			$this->migrations_path = $params['migrations_path'];
 		}
-	
-		$this->migrations_path = is_null($migration_path) ? realpath($this->_ci->config->item('migrations_path')) : realpath($migration_path);
-
-		// Idiot check
-		$this->migrations_enabled AND $this->migrations_path OR show_error('Migrations has been loaded but is disabled or set up incorrectly.');
-
-		// If not set, set it
-		if ($this->migrations_path == '')
+		else
 		{
-			$this->migrations_path = APPPATH . 'migrations/';
+			$this->migrations_path = BFPATH . 'migrations';
 		}
 
 		// Add trailing slash if not set
-		else if (substr($this->migrations_path, -1) != '/')
+		if (substr($this->migrations_path, -1) != '/')
 		{
 			$this->migrations_path .= '/';
 		}
+
+		// Sanity check
+		$this->migrations_enabled AND is_dir($this->migrations_path) OR show_error('Migrations has been loaded but is disabled or set up incorrectly.');
 
 		$this->_ci->load->dbforge();
 		$this->_ci->lang->load('migrations/migrations');

@@ -57,7 +57,6 @@ class Install extends CI_Controller {
 		'application/archives',
 		'application/archives/config',
 		'application/db/backups',
-		'application/db/migrations',
 		'public/assets/cache',
 		'public/install'
 	);
