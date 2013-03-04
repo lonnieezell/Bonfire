@@ -43,7 +43,6 @@ class Developer extends Admin_Controller
 		$this->auth->restrict('Site.Developer.View');
 		$this->auth->restrict('Bonfire.Database.Manage');
 
-		$this->config->load('migrations');
 		$this->load->library('Migrations');
 		$this->lang->load('migrations');
 

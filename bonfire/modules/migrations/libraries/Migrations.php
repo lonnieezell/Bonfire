@@ -144,8 +144,6 @@ class Migrations
 	{
 		$this->_ci =& get_instance();
 
-		$this->_ci->config->load('migrations/migrations');
-
 		if (isset($params['migrations_path']))
 		{
 			$this->migrations_path = $params['migrations_path'];
@@ -462,22 +460,6 @@ class Migrations
 	//--------------------------------------------------------------------
 	// ! Utility Methods
 	//--------------------------------------------------------------------
-
-	/**
-	 * Set's the schema to the latest migration
-	 *
-	 * @access public
-	 *
-	 * @return mixed TRUE if already latest, FALSE if failed, int if upgraded
-	 */
-	public function latest()
-	{
-		$version = $this->_ci->config->item('migrations_version');
-		return $this->version($version);
-
-	}//end latest()
-
-	// --------------------------------------------------------------------
 
 	/**
 	 * Retrieves current schema version
