@@ -303,7 +303,6 @@ class Migrations
 		for($i=$start; $i != $stop; $i += $step)
 		{
 			$f = glob(sprintf($migrations_path . '%03d_*'.EXT, $i));
-			logit($f);
 			// Only one migration per step is permitted
 			if (count($f) > 1)
 			{
