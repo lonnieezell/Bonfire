@@ -7,8 +7,6 @@ $lang['mig_latest_version']			= 'La última versión disponible: <b>%d</b>';
 $lang['mig_db_not_current']			= 'Su base de datos no esta actualizada.';
 $lang['mig_no_migrations']			= 'No hay mirgraciones disponibles.';
 
-$lang['mig_class_doesnt_exist']     = 'No existe la clase migración %s ';
-
 $lang['mig_migrate_note']			= 'Aplicar las migraciones <b>CAMBIARÁ</b> la estructura de su base de datos, posiblemente terminando en desastre. Si usted no se siente seguro con la migración, verifiquela antes de continuar.';
 $lang['mig_migrate_to']				= 'Migrando la base de datos a la versión';
 $lang['mig_choose_migration']		= 'Migrando a la versión:';

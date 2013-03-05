@@ -218,6 +218,7 @@ $lang['user_meta_ciudad']		= 'Ciudad';
 $lang['user_meta_country']		= 'País';
 $lang['user_meta_state']		= 'Departamento';
 
+//--------------------------------------------------------------------
 // Activation
 //--------------------------------------------------------------------
 $lang['bf_activate_method']			= 'Método de Activación';
@@ -234,3 +235,13 @@ $lang['bf_reg_activate_none'] 		= 'Please login to begin using the site.';
 $lang['bf_user_not_active'] 		= 'User account is not active.';
 $lang['bf_login_activate_title']	= 'Need to activate your account?';
 $lang['bf_login_activate_email'] 	= '<b>Have an activation code to enter to activate your membership?</b> Enter it on the [ACCOUNT_ACTIVATE_URL] page.<br /><br />    <b>Need your code again?</b> Request it again on the [ACTIVATE_RESEND_URL] page.';
+
+//--------------------------------------------------------------------
+// Migrations lib
+//--------------------------------------------------------------------
+$lang['no_migrations_found']			= 'No se encontraron los archivos de migración';
+$lang['multiple_migrations_version']	= 'Multiples versiones de migración: %d';
+$lang['multiple_migrations_name']		= 'Multiples nombres de migración: %s';
+$lang['migration_class_doesnt_exist']	= 'La clase de migracion no existe: %s';
+$lang['wrong_migration_interface']		= 'Interfaz incorrecta de migración: %s';
+$lang['invalid_migration_filename']		= 'Nombre de archivo de migración incorrecto: %s - %s';

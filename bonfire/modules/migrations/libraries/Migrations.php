@@ -166,7 +166,6 @@ class Migrations
 		}
 
 		$this->_ci->load->dbforge();
-		$this->_ci->lang->load('migrations/migrations');
 
 		// If the schema_version table is missing, make it
 		if ( ! $this->_ci->db->table_exists('schema_version'))
@@ -346,7 +345,7 @@ class Migrations
 
 				if ( ! class_exists($class))
 				{
-					$this->error = sprintf($this->_ci->lang->line("mig_class_doesnt_exist"), $class);
+					$this->error = sprintf($this->_ci->lang->line("migration_class_doesnt_exist"), $class);
 					return 0;
 				}
 
