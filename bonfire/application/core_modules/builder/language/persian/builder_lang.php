@@ -122,6 +122,7 @@ $lang['mb_form_alpha_extra']	= 'حروف الفبا, خط زير, خط تيره,
 // Enhanced Parent-Child Builder Functionality - Form labels
 $lang['mb_form_reference']		= 'Reference Display';
 $lang['mb_form_nullable']		= 'Nullable';
+$lang['mb_form_mychild']		= 'My Child';
 $lang['mb_form_children']		= 'Primary Key Children';
 
 // Activities

@@ -468,13 +468,15 @@ class Developer extends Admin_Controller {
         {
 
 			// Enhanced Parent-Child Builder Functionality - get table references
-				$references = array();
-				$ref_query_string = "select column_name as col,concat(referenced_table_name, '.', referenced_column_name) as ref 
-									   from information_schema.key_column_usage 
-									  where table_name = '" . $this->db->dbprefix . $table_name . "' and referenced_table_name is not null";
-				if( $ref_query = $this->db->query( $ref_query_string ) ) {
-					foreach( $ref_query->result_array() as $ref ) $references[ $ref['col'] ] = substr( $ref['ref'], strlen( $this->db->dbprefix ) );
-				}
+			$references = array();
+			$ref_query_string = "select column_name as col,concat(referenced_table_name, '.', referenced_column_name) as ref 
+								   from information_schema.key_column_usage 
+								  where table_name = '" . $this->db->dbprefix . $table_name . "' and referenced_table_name is not null";
+			if( $ref_query = $this->db->query( $ref_query_string ) )
+			{
+				foreach( $ref_query->result_array() as $ref )
+					$references[ $ref['col'] ] = substr( $ref['ref'], strlen( $this->db->dbprefix ) );
+			}
 			// Enhanced Parent-Child Builder Functionality - get table references (so far)
 
 			// TODO: Replace SHOW COLUMNS FROM with field_data($table_name) ?
@@ -515,11 +517,7 @@ class Developer extends Admin_Controller {
                     $field_array['max_length'] = $max_length;
                     $field_array['values'] = $values;
 
-                    $primary_key = 0;
-                    if($field['Key'] == "PRI") {
-                        $primary_key = 1;
-                    }
-                    $field_array['primary_key'] = $primary_key;
+                    $field_array['primary_key'] = $primary_key = ( "PRI" == $field[ 'Key' ] ? 1 : 0 );
 
                     $field_array['default'] = $field['Default'];
 
@@ -531,19 +529,20 @@ class Developer extends Admin_Controller {
 												where referenced_table_name = '{$this->db->dbprefix}{$table_name}' and referenced_column_name = '{$field['Field']}'";
 						if( $child_query = $this->db->query( $child_query_string ) ) {
 							$children = '';
-							foreach( $child_query->result_array() as $child ) $children .= ',' . substr( $child['child'], strlen( $this->db->dbprefix ) );
+							foreach( $child_query->result_array() as $child )
+								$children .= ',' . substr( $child['child'], strlen( $this->db->dbprefix ) );
 							if ( !empty( $children ) ) $field_array['children'] = trim( $children, ',' );
 						}
 					}
 					// Enhanced Parent-Child Builder Functionality - end of add children to Primary Key
 
 					// Enhanced Parent-Child Builder Functionality - add rule defaults for required, trim, and nullable
-						$field_array['required'] = ( 'NO' == $field['Null'] and null == $field['Default'] ) ? true : false;
-						$field_array['trim']     = ( 'varchar' == substr( $field['Type'], 0, 7 ) ) ? true : false;
-						$field_array['nullable'] = ( 'YES' == $field['Null'] ) ? true : false;
+					$field_array['required'] = ( 'NO' == $field['Null'] and null == $field['Default'] ) ? true : false;
+					$field_array['trim']     = ( 'varchar' == substr( $field['Type'], 0, 7 ) ) ? true : false;
+					$field_array['nullable'] = ( 'YES' == $field['Null'] ) ? true : false;
 					// Enhanced Parent-Child Builder Functionality - end of add rule defaults for required, trim, and nullable
 					// Enhanced Parent-Child Builder Functionality - add references
-						$field_array['references'] = isset( $references[ $field_array['name'] ] ) ? $references[ $field_array['name'] ] : NULL;
+					$field_array['references'] = isset( $references[ $field_array['name'] ] ) ? $references[ $field_array['name'] ] : NULL;
 					// Enhanced Parent-Child Builder Functionality - end of add references
 
                     $fields[] = $field_array;

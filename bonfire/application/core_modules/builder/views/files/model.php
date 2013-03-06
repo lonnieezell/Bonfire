@@ -75,16 +75,16 @@ class '.ucfirst($controller_name).'_model extends BF_Model {
 
 // Enhanced Parent-Child Builder - Add References to selection & build check_nulls content
 	$selects = $joins = $functions = '';
-	$reftables = array();
+	$reftables = array( $table_name => '' );
 	for ( $counter = 0; $counter <= $field_total; $counter++ ) {
 		if ( $ref = $this->input->post( "view_field_reference{$counter}" ) and $this->input->post( "view_field_label{$counter}" ) and $this->input->post( "view_field_name{$counter}" ) ) {
 			$refparts = explode( '.', $ref );
 			if ( !array_key_exists( $refparts[0], $reftables ) ) $reftables[ $refparts[0] ] = '';
+			elseif ( '' == $reftables[ $refparts[0] ] ) $reftables[ $refparts[0] ] = 2;
+			else $reftables[ $refparts[0] ] += 1;
 			$colname  = $this->input->post( "view_field_name{$counter}" );
 			$selects .= ', ' . $refparts[0] . $reftables[$refparts[0]] . '.' . $refparts[2] . ' as ' . $refparts[0] . $reftables[$refparts[0]] . '_' . $refparts[2];
 			$joins   .= "\n\t\t\$this->db->join( '{$refparts[0]} {$refparts[0]}{$reftables[$refparts[0]]}', '{$refparts[0]}{$reftables[$refparts[0]]}.{$refparts[1]} = {$table_name}.{$colname}', 'left outer' );";
-			if ( '' == $reftables[ $refparts[0] ] ) $reftables[ $refparts[0] ] = 2;
-			else $reftables[ $refparts[0] ] += 1;
 			$where = "'{$refparts[1]}' => \$where";
 			if ( isset( $childtables[ $refparts[0] ] ) )
 			{
@@ -114,8 +114,8 @@ class '.ucfirst($controller_name).'_model extends BF_Model {
 		if ( is_array( \$where ) ) \${$refparts[0]}->db->where( \$where );
 		\$dropdown = \${$refparts[0]}->format_dropdown( '{$refparts[2]}' );
 		if ( !\$withnull ) return \$dropdown;
-		\$return = array( 'null' => ' ' );
-		foreach ( \$dropdown as \$key => \$value ) \$return[ \$key ] = \$value;
+		\$return = array( '' => ' ' );
+		foreach( \$dropdown as \$key => \$value ) \$return[ \$key ] = \$value;
 		return \$return;
 	}";
 		}
@@ -137,14 +137,16 @@ class '.ucfirst($controller_name).'_model extends BF_Model {
 
 	}
 
-	$model .= '
+	$model .=
+'
 
 	public function get_columns() { return $this->columns; }
 
 	public function get_children() { return $this->children; }
 ';
 
-// Enhanced Parent-Child Builder - End of References	
+// Enhanced Parent-Child Builder - End of References
+
 	$model .= 
 '
 }

@@ -199,28 +199,19 @@ EOT;
 
 				$v = $this->input->post( "validation_rules{$counter}" );
 				$v = array_flip( $v );
-				$edit_drop_args = $withnull = isset( $v['nullable'] ) ? 'TRUE' : 'FALSE';
+				$dropargs = $withnull = isset( $v['nullable'] ) ? 'TRUE' : 'FALSE';
 				$refparts = explode( '.', strtolower( $ref ) );
-				if ( isset( $childtables[ $refparts[0] ] ) )
+				if ( isset( $v['mychild'] ) and isset( $childtables[ $refparts[0] ] ) )
 				{
 					$col = $childtables[$refparts[0]][0]['col'];
-					$edit_drop_args = "array( '{$col}' => \$id ), " . $edit_drop_args;
+					$dropargs = "array( '{$col}' => \$id ), " . $dropargs;
 				}
 
 				$view .= "
 		<?php
 			if ( isset( \$create_parents[ '{$field_name}' ] ) )
 				\$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( \$create_parents[ '{$field_name}' ], {$withnull} );
-			else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$withnull} );";
-
-				if ( $edit_drop_args != $withnull )
-				{
-					$view .= "
-			// TO-DO: use the following (instead of above) if we are a true parent of the table being dropped-down
-			// else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$edit_drop_args} );";
-				}
-
-				$view .= "
+			else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$dropargs} );
 		?>
 ";
 			endif;

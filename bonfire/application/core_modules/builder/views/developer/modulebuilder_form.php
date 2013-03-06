@@ -53,6 +53,9 @@ if ( ! function_exists('modulebuilder_set_checkbox'))
 // Enhanced Parent-Child Builder Functionality - Add nullable attribute to validation rules
 $validation_rules[] = 'nullable';
 // Enhanced Parent-Child Builder Functionality - end of Add nullable attribute to validation rules
+// Enhanced Parent-Child Builder Functionality - Add true parent to validation rules
+$validation_rules[] = 'mychild';
+// Enhanced Parent-Child Builder Functionality - end of Add true parent to validation rules
 ?>
 <style>
 .faded {
@@ -487,9 +490,15 @@ endif;
 							<?php echo form_error('cont_validation_rules'.$count.'[]'); ?>
 
 							<?php foreach ($validation_rules as $validation_rule) : ?>
+							<?php	// Enhanced Parent-Child Builder - Resolve Circular References - Who's the child?
+									if ( 'mychild' == $validation_rule and !$has_references ) continue;
+									$my_field_name = set_value( "view_field_name{$count}", isset($existing_table_fields[$count] ) ? $existing_table_fields[$count]['name'] : '' );
+									$default = ( 'mychild' == $validation_rule and !empty( $my_field_name ) and $my_field_name != $ref_column );
+									// Enhanced Parent-Child Builder - end of Resolve Circular References - Who's the child?
+							?>
 							<span class="faded">
 								<label class="inline checkbox" for="validation_rules_<?php echo $validation_rule . $count; ?>">
-									<input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_rule . $count; ?>" type="checkbox" value="<?php echo $validation_rule; ?>" <?php echo modulebuilder_set_checkbox('validation_rules'.$count, $validation_rule /* Enhanced Parent-Child Builder - add default value from existing_table_fields if available */, isset( $existing_table_fields[$count][$validation_rule] ) and TRUE == $existing_table_fields[$count][$validation_rule] /* Enhanced Parent-Child Builder - end of default value */ ); ?> />
+									<input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_rule . $count; ?>" type="checkbox" value="<?php echo $validation_rule; ?>" <?php echo modulebuilder_set_checkbox('validation_rules'.$count, $validation_rule /* Enhanced Parent-Child Builder - add default value from existing_table_fields if available */, ( isset( $existing_table_fields[$count][$validation_rule] ) and TRUE == $existing_table_fields[$count][$validation_rule] ) or $default /* Enhanced Parent-Child Builder - end of default value */ ); ?> />
 									<?php echo lang('mb_form_'.$validation_rule); ?>
 								</label>
 							</span>
