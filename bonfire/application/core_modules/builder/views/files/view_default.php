@@ -130,7 +130,7 @@ for($counter=1; $field_total >= $counter; $counter++)
         <div class="control-group <?php echo form_error('{$field_name}') ? 'error' : ''; ?>">
             <?php echo form_label('{$field_label}'{$required}, '{$form_name}', array('class' => "control-label") ); ?>
             <div class="controls">
-                <?php echo form_textarea( array( 'name' => '{$form_name}', 'id' => '{$form_name}', 'rows' => '5', 'cols' => '80', 'value' => set_value('$form_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ),,\$disabled )?>
+                <?php echo form_textarea( array( 'name' => '{$form_name}', 'id' => '{$form_name}', 'rows' => '5', 'cols' => '80', 'value' => set_value('$form_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : '') ),\$disabled )?>
                 <span class="help-inline"><?php echo form_error('{$field_name}'); ?></span>
             </div>
 
@@ -198,7 +198,7 @@ EOT;
 				}
 
 				$v = $this->input->post( "validation_rules{$counter}" );
-				array_flip( $v );
+				$v = array_flip( $v );
 				$edit_drop_args = $withnull = isset( $v['nullable'] ) ? 'TRUE' : 'FALSE';
 				$refparts = explode( '.', strtolower( $ref ) );
 				if ( isset( $childtables[ $refparts[0] ] ) )
@@ -210,7 +210,7 @@ EOT;
 				$view .= "
 		<?php
 			if ( isset( \$create_parents[ '{$field_name}' ] ) )
-				\$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( \$create_parents[ '{$field_name}' ] );
+				\$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( \$create_parents[ '{$field_name}' ], {$withnull} );
 			else \$options = \${$mymodel}->".set_value("view_field_name$counter")."_format_dropdown( {$withnull} );";
 
 				if ( $edit_drop_args != $withnull )

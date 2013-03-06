@@ -4,7 +4,7 @@ $view =<<<END
 <div class="admin-box">
 	<h3>{$module_name}</h3>
 	<?php echo form_open(\$this->uri->uri_string()); ?>
-		<table class="table table-striped">
+		<table class="table table-striped" id="{$module_name_lower}">
 			<thead>
 				<tr>
 					<?php \$tblcols_total = {tblcols_total}; ?>
@@ -78,6 +78,9 @@ for($counter=1; $field_total >= $counter; $counter++)
 	{
 		continue; 	// move onto next iteration of the loop
 	}
+
+	if ( $use_soft_deletes == 'true' && 'deleted' == set_value("view_field_name$counter") ) continue;
+
 	$headers .= '
 					<th>'. set_value("view_field_label$counter").'</th>';
 	$columns[set_value("view_field_name$counter")] = set_value("view_field_name$counter");
@@ -116,6 +119,8 @@ for($counter=1; $field_total >= $counter; $counter++)
 		continue; 	// move onto next iteration of the loop
 	}
 
+	if ( $use_soft_deletes == 'true' && 'deleted' == set_value("view_field_name$counter") ) continue;
+
 	$field_counter++;
 
 	if($db_required == 'new' && $table_as_field_prefix === TRUE)
@@ -132,9 +137,13 @@ for($counter=1; $field_total >= $counter; $counter++)
 	}
 
 // Enhanced Parent-Child Builder - Add Reference column
+$reftables = array( $module_name_lower => '' );
 if ( $ref = $this->input->post( "view_field_reference$counter" ) ) {
-	$ref = explode( '.', $ref );
-	$field_name = $ref[0] . '_' . $ref[2];
+	$refparts = explode( '.', $ref );
+	if ( !array_key_exists( $refparts[0], $reftables ) ) $reftables[ $refparts[0] ] = '';
+	elseif ( '' == $reftables[ $refparts[0] ] ) $reftables[ $refparts[0] ] = 2;
+	else $reftables[ $refparts[0] ] += 1;
+	$field_name = $refparts[0] . $reftables[$refparts[0]] . '_' . $refparts[2];
 }
 // Enhanced Parent-Child Builder - End of Refference column
 
