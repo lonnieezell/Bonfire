@@ -88,8 +88,31 @@ function message($message='', $type='information')
 }
 
 //---------------------------------------------------------------
-	
 
+/**
+ * Logs an error to the Console (if loaded) and to the log files.
+ *
+ * @param $message string The string to write to the logs.
+ * @param $level string The log level, as per CI log_message method.
+ *
+ * @return void
+ */
+function logit($message='', $level='debug')
+{
+	if (empty($message))
+	{
+		return;
+	}
+
+	if (class_exists('Console'))
+	{
+		Console::log($message);
+	}
+
+	log_message($level, $message);
+}
+
+//---------------------------------------------------------------
 
 //--------------------------------------------------------------------
 // !MODULE HELPERS

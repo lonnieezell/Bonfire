@@ -180,12 +180,6 @@ class Migrations
 			$this->_ci->db->insert('schema_version', array('type' => 'core', 'version' => 0));
 		}
 
-		// Make sure out application helper is loaded.
-		if (!function_exists('logit'))
-		{
-			$this->_ci->load->helper('application');
-		}
-
 	}//end __construct()
 
 	//--------------------------------------------------------------------
