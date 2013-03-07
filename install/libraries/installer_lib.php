@@ -369,7 +369,7 @@ class Installer_lib {
 		//
 		// Now install the database tables.
 		//
-		$this->ci->load->library('Migrations', array('migration_path' => $this->BFPATH .'migrations'));
+		$this->ci->load->library('Migrations', array('migrations_path' => $this->BFPATH .'migrations'));
 
 		if (!$this->ci->migrations->install())
 		{ 

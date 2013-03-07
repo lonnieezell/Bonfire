@@ -56,10 +56,3 @@ $lang['in_curl_disabled']			= '<p class="error">cURL <strong>يافت نشد</st
 
 $lang['in_success_notification']    = 'You are good to go! Happy coding!';
 $lang['in_success_msg']				= 'لطفا پوشه ي نصب را حذف کرده و بازگرديد به ';
-
-$lang['no_migrations_found']			= 'هيچ فايل ارتقايي يافت نشد';
-$lang['multiple_migrations_version']	= 'نسخه ي تکراري براي فايل ارتقا: %d';
-$lang['multiple_migrations_name']		= 'نام تکراري براي فايل ارتقا: %s';
-$lang['migration_class_doesnt_exist']	= 'کلاس فايل ارتقا يافت نشد: %s';
-$lang['wrong_migration_interface']		= 'اينترفيس نا معتبر براي فايل ارتقا: %s';
-$lang['invalid_migration_filename']		= 'فايل ارتفاي نا معتبر: %s - %s';

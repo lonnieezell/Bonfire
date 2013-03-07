@@ -77,13 +77,6 @@ $lang['in_success_notification']    = 'You are good to go! Happy coding!';
 $lang['in_success_rebase_msg']		= 'Please set the .htaccess RewriteBase setting to: RewriteBase ';
 $lang['in_success_msg']				= 'Please remove the install folder and return to ';
 
-$lang['no_migrations_found']			= 'No migration files were found';
-$lang['multiple_migrations_version']	= 'Multiple migrations version: %d';
-$lang['multiple_migrations_name']		= 'Multiple migrations name: %s';
-$lang['migration_class_doesnt_exist']	= 'Migration class does not exist: %s';
-$lang['wrong_migration_interface']		= 'Wrong migration interface: %s';
-$lang['invalid_migration_filename']		= 'Wrong migration filename: %s - %s';
-
 $lang['in_installed']					= 'Bonfire is already installed. Please delete or rename the install folder to';
 $lang['in_rename_msg']					= 'If you would like, we can simply rename it for you.';
 $lang['in_continue']						= 'Continue';
@@ -102,3 +95,4 @@ $lang['in_read']					= 'Read the';
 $lang['in_bf_docs']					= 'Bonfire documentation';
 $lang['in_ci_docs']					= 'CodeIgniter documentation';
 $lang['in_happy_coding']			= 'Happy coding!';
+
