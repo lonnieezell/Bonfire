@@ -5,7 +5,7 @@
  * Migrations provide a simple method to version the contents of your database, and make
  * those changes easily distributable to other developers in different server environments.
  *
- * Migrations are stored in specially-named PHP files under *bonfire/application/db/migrations/*.
+ * Migrations are stored in specially-named PHP files under *application/db/migrations/*.
  * Each migration file must be numbered consecutively, starting at *001* and growing larger
  * with each new migration from there. The rest of the filename should tell what the migration does.
  *
@@ -185,7 +185,36 @@ class Migrations
 	//--------------------------------------------------------------------
 
 	/**
-	 * This will set if there should be verbose output or not
+	 * Sets the base path that Migrations uses to find it's migrations
+	 * to a user-supplied path. The path will be converted to a full
+	 * system path (via realpath) and checked to make sure it's a folder.
+	 *
+	 * @access public
+	 *
+	 * @param string $path The path to set, relative to the front controller.
+	 *
+	 * @return void
+	 */
+	public function set_path($path=null)
+	{
+		if (empty($path))
+		{
+			return;
+		}
+
+		$path = realpath($path);
+
+		if (is_dir($path))
+		{
+			$this->migrations_path = $path .'/';
+		}
+
+	}//end set_path()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Set if there should be verbose output or not
 	 *
 	 * @access public
 	 *
@@ -197,35 +226,10 @@ class Migrations
 
 	}//end set_verbose()
 
-	//--------------------------------------------------------------------
-
-	/**
-	 * Installs the schema up to the last version
-	 *
-	 * @param string $type A string that represents the name of the module, or 'app_' for application migrations. If empty, it returns core migrations.
-	 *
-	 * @return int The version number this type is at
-	 */
-	public function install($type='')
-	{
-		$latest_version = $this->get_latest_version();
-
-		if ($latest_version > 0)
-		{
-			return $this->version($latest_version);
-		}
-		else
-		{
-			$this->error = $this->_ci->lang->line('no_migrations_found');
-			return 0;
-		}
-
-	}//end install()
-
 	// --------------------------------------------------------------------
 
 	/**
-	 * Migrate to a schema version.
+	 * Migrate to a specific schema version.
 	 *
 	 * Calls each migration step required to get to the schema version of
 	 * choice.
@@ -402,10 +406,35 @@ class Migrations
 
 	}//end version()
 
+	//--------------------------------------------------------------------
+
+	/**
+	 * Install the schema up to the latest version
+	 *
+	 * @param string $type A string that represents the name of the module, or 'app_' for application migrations. If empty, it returns core migrations.
+	 *
+	 * @return int The version number this type is at
+	 */
+	public function install($type='')
+	{
+		$latest_version = $this->get_latest_version();
+
+		if ($latest_version > 0)
+		{
+			return $this->version($latest_version);
+		}
+		else
+		{
+			$this->error = $this->_ci->lang->line('no_migrations_found');
+			return 0;
+		}
+
+	}//end install()
+
 	// --------------------------------------------------------------------
 
 	/**
-	 * Handles auto-upgrading migrations of core and/or app on page load.
+	 * Handle auto-upgrading migrations of core and/or app on page load.
 	 *
 	 * @access public
 	 *
@@ -418,56 +447,20 @@ class Migrations
 
 		if ($auto_core)
 		{
-			$this->version($this->get_latest_version(''), '');
+			$this->install('');
 		}
 
 		if ($auto_app)
 		{
-			$this->version($this->get_latest_version('app_'), 'app_');
+			$this->install('app_');
 		}
 
 	}//end auto_latest()
 
 	//--------------------------------------------------------------------
 
-
-	//--------------------------------------------------------------------
-	// ! Utility Methods
-	//--------------------------------------------------------------------
-
 	/**
-	 * Retrieves current schema version
-	 *
-	 * @access public
-	 *
-	 * @param string $type A string that represents the name of the module, or 'app_' for application migrations. If empty, it returns core migrations.
-	 *
-	 * @return int Current Schema version
-	 */
-	public function get_schema_version($type='')
-	{
-		if ($this->_check_migrations_column('type'))
-		{
-			// new schema table layout
-			$type = empty($type) ? 'core' : $type;
-			$row = $this->_ci->db->get_where('schema_version', array('type' => $type))->row();
-			return isset($row->version) ? $row->version: 0;
-		}
-		else
-		{
-			$row = $this->_ci->db->get('schema_version')->row();
-
-			$schema = $type .'version';
-
-			return isset($row->$schema) ? $row->$schema : 0;
-		}
-
-	}//end latest()
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Retrieves the latest available version.
+	 * Retrieve the latest available version.
 	 *
 	 * @param string $type A string that represents the name of the module, or 'app_' for application migrations. If empty, it returns core migrations.
 	 *
@@ -494,7 +487,7 @@ class Migrations
 	//--------------------------------------------------------------------
 
 	/**
-	 * Searches the migrations folder and returns a list of available migration files.
+	 * Search the migrations folder and return a list of available migration files.
 	 *
 	 * @access public
 	 *
@@ -542,7 +535,7 @@ class Migrations
 	//--------------------------------------------------------------------
 
 	/**
-	 * Executes raw SQL migrations. Will manually break the commands on a ';' so
+	 * Execute raw SQL migrations. Will manually break the commands on a ';' so
 	 * that multiple commmands can be run at once. Very handy for using phpMyAdmin
 	 * dumps.
 	 *
@@ -574,9 +567,39 @@ class Migrations
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Retrieve current schema version
+	 *
+	 * @access public
+	 *
+	 * @param string $type A string that represents the name of the module, or 'app_' for application migrations. If empty, it returns core migrations.
+	 *
+	 * @return int Current Schema version
+	 */
+	public function get_schema_version($type='')
+	{
+		if ($this->_check_migrations_column('type'))
+		{
+			// new schema table layout
+			$type = empty($type) ? 'core' : $type;
+			$row = $this->_ci->db->get_where('schema_version', array('type' => $type))->row();
+			return isset($row->version) ? $row->version: 0;
+		}
+		else
+		{
+			$row = $this->_ci->db->get('schema_version')->row();
+
+			$schema = $type .'version';
+
+			return isset($row->$schema) ? $row->$schema : 0;
+		}
+
+	}//end latest()
+
+	// --------------------------------------------------------------------
 
 	/**
-	 * Stores the current schema version in the database.
+	 * Store the current schema version in the database.
 	 *
 	 * @access private
 	 *
@@ -643,7 +666,7 @@ class Migrations
 	//--------------------------------------------------------------------
 
 	/**
-	 * Method to check if the DB table schema_version is in the new format or old
+	 * Check if the DB table schema_version is in the new format or old
 	 *
 	 * @access private
 	 *
@@ -663,35 +686,6 @@ class Migrations
 		return FALSE;
 
 	}//end _check_migrations_column()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Sets the base path that Migrations uses to find it's migrations
-	 * to a user-supplied path. The path will be converted to a full
-	 * system path (via realpath) and checked to make sure it's a folder.
-	 *
-	 * @access public
-	 *
-	 * @param string $path The path to set, relative to the front controller.
-	 *
-	 * @return void
-	 */
-	public function set_path($path=null)
-	{
-		if (empty($path))
-		{
-			return;
-		}
-
-		$path = realpath($path);
-
-		if (is_dir($path))
-		{
-			$this->migrations_path = $path .'/';
-		}
-
-	}//end set_path()
 
 	//--------------------------------------------------------------------
 
