@@ -208,36 +208,18 @@ class Migrations
 	 */
 	public function install($type='')
 	{
-		$migrations_path = $type == 'app_' ? $this->migrations_path : $this->migrations_path .'core/';
+		$latest_version = $this->get_latest_version();
 
-		// Load all *_*.php files in the migrations path
-		$files = glob($migrations_path.'*_*'.EXT);
-		$file_count = count($files);
-
-		for($i=0; $i < $file_count; $i++)
+		if ($latest_version > 0)
 		{
-			// Mark wrongly formatted files as FALSE for later filtering
-			$name = basename($files[$i],EXT);
-			if(!preg_match('/^\d{3}_(\w+)$/',$name)) $files[$i] = FALSE;
-		}
-
-		$migrations = array_filter($files);
-
-		if ( ! empty($migrations))
-		{
-			sort($migrations);
-			$last_migration = basename(end($migrations));
-
-			// Calculate the last migration step from existing migration
-			// filenames and procceed to the standard version migration
-			$last_version =	substr($last_migration,0,3);
-			return $this->version(intval($last_version,10), $type);
+			return $this->version($latest_version);
 		}
 		else
 		{
 			$this->error = $this->_ci->lang->line('no_migrations_found');
 			return 0;
 		}
+
 	}//end install()
 
 	// --------------------------------------------------------------------
@@ -255,7 +237,7 @@ class Migrations
 	 *
 	 * @return mixed TRUE if already latest, FALSE if failed, int if upgraded
 	 */
-	function version($version, $type='')
+	public function version($version, $type='')
 	{
 		$schema_version = $this->get_schema_version($type);
 		$start = $schema_version;
@@ -493,22 +475,19 @@ class Migrations
 	 */
 	public function get_latest_version($type='')
 	{
-		switch ($type)
+		$migrations = $this->get_available_versions($type);
+
+		if (!empty($migrations))
 		{
-			case '':
-				$migrations_path = $this->migrations_path;
-				break;
-			case 'app_':
-				$migrations_path = APPPATH .'db/migrations/';
-				break;
-			default:
-				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
-				break;
+			$last_migration = end($migrations);
+			$last_version =	substr($last_migration,0,3);
+
+			return intval($last_version,10);
 		}
-
-		$f = glob($migrations_path .'*_*'.EXT);
-
-		return count($f);
+		else
+		{
+			return 0;
+		}
 
 	}//end get_latest_version()
 
@@ -538,14 +517,25 @@ class Migrations
 				break;
 		}
 
+		// List all *_*.php files in the migrations path
 		$files = glob($migrations_path .'*_*'.EXT);
 
 		for ($i=0; $i < count($files); $i++)
 		{
-			$files[$i] = str_ireplace($migrations_path, '', $files[$i]);
+			// Remove path and extension
+			$files[$i] = basename($files[$i],EXT);
+
+			// Mark wrongly formatted files as FALSE for later filtering
+			if(!preg_match('/^\d{3}_(\w+)$/',$files[$i]))
+			{
+				$files[$i] = FALSE;
+			}
 		}
 
-		return $files;
+		$migrations = array_filter($files);
+		sort($migrations);
+
+		return $migrations;
 
 	}//end get_available_versions()
 
