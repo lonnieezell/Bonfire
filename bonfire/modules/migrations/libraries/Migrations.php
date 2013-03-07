@@ -185,35 +185,6 @@ class Migrations
 	//--------------------------------------------------------------------
 
 	/**
-	 * Sets the base path that Migrations uses to find it's migrations
-	 * to a user-supplied path. The path will be converted to a full
-	 * system path (via realpath) and checked to make sure it's a folder.
-	 *
-	 * @access public
-	 *
-	 * @param string $path The path to set, relative to the front controller.
-	 *
-	 * @return void
-	 */
-	public function set_path($path=null)
-	{
-		if (empty($path))
-		{
-			return;
-		}
-
-		$path = realpath($path);
-
-		if (is_dir($path))
-		{
-			$this->migrations_path = $path .'/';
-		}
-
-	}//end set_path()
-
-	//--------------------------------------------------------------------
-
-	/**
 	 * Set if there should be verbose output or not
 	 *
 	 * @access public

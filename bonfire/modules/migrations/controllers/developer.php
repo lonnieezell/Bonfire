@@ -152,11 +152,6 @@ class Developer extends Admin_Controller
 
 		$version = $file !== 'uninstall' ? (int)(substr($file, 0, 3)) : 0;
 
-		$path = module_path($module, 'migrations');
-
-		// Reset the migrations path for this run only.
-		$this->migrations->set_path($path);
-
 		// Do the migration
 		$this->migrate_to($version, $module .'_');
 
