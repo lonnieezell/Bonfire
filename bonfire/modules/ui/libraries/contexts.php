@@ -397,7 +397,7 @@ class Contexts
 	 *
 	 * @return string The HTML necessary to display the menu.
 	 */
-	public function context_nav($context=NULL, $class='dropdown-menu', $ignore_ul=FALSE)
+	public static function context_nav($context=NULL, $class='dropdown-menu', $ignore_ul=FALSE)
 	{
 		// Get a list of modules with a controller matching
 		// $context ('content', 'settings', 'reports', or 'developer')
@@ -733,7 +733,7 @@ class Contexts
 	 *
 	 * @return void
 	 */
-	private function sort_actions()
+	private static function sort_actions()
 	{
 		$weights 		= array();
 		$display_names	= array();

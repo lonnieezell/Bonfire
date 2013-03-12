@@ -3,24 +3,31 @@
 class Installer_lib {
 	
 	private $ci;
+
 	public 	$php_version;
 	public	$mysql_server_version;
 	public	$mysql_client_version;
-	public	$reverse_writeable_folders = array();
-	
+
 	/*
 		Var: $curl_error
 		Boolean check if cURL is enabled in PHP
 	*/
-	private $curl_error = 0;
+	private	$curl_error = 0;
 
 	/*
 		Var: $curl_update
 		Boolean that says whether we should check
 		for updates.
 	*/
-	private $curl_update = 1;
-	
+	private	$curl_update = 1;
+
+	/* Paths for the real Bonfire installation */
+	public	$FCPATH;
+	public	$APPPATH;
+	public	$BFPATH;
+
+	public	$reverse_writeable_folders = array();
+
 	//--------------------------------------------------------------------
 	
 	public function __construct($config=array()) 
@@ -29,6 +36,10 @@ class Installer_lib {
 		
 		$this->curl_update = $this->cURL_enabled();
 		
+		$this->FCPATH = realpath(FCPATH . '..') . '/';
+		$this->APPPATH = INSTALLPATH . 'application/';
+		$this->BFPATH = INSTALLPATH . 'bonfire/';
+
 		if (array_key_exists('reverse_writeable_folders', $config))
 		{
 			$this->reverse_writeable_folders = $config['reverse_writeable_folders'];
@@ -118,22 +129,22 @@ class Installer_lib {
 		moved the install folder....
 	*/
 	public function is_installed() 
-	{	
+	{
 		// First check - Does a 'install/installed.txt' file exist? If so, 
 		// then we've likely already installed. 
-		if (file_exists('installed.txt'))
+		if (is_file(FCPATH . 'installed.txt'))
 		{
 			return true;
 		}
-	
+
 		// Does the database config exist? 
 		// If not, then we definitely haven't installed yet.
-		if (!file_exists('../bonfire/application/config/development/database.php'))
+		if (!is_file($this->APPPATH . 'config/development/database.php'))
 		{
 			return false;
 		}
 		
-		require('../bonfire/application/config/development/database.php');
+		require($this->APPPATH . '/config/development/database.php');
 		
 		// If the $db['default'] doesn't exist then we can't
 		// load our database.
@@ -141,17 +152,17 @@ class Installer_lib {
 		{
 			return false;
 		}
-
-		$this->load->database($db['default']);
+		
+		$this->ci->load->database($db['default']);
 		
 		// Does the users table exist?
-		if (!$this->db->table_exists('users'))
+		if (!$this->ci->db->table_exists('users'))
 		{
 			return false;
 		}
 		
 		// Make sure at least one row exists in the users table.
-		$query = $this->db->get('users');
+		$query = $this->ci->db->get('users');
 		
 		if ($query->num_rows() == 0)
 		{
@@ -193,14 +204,19 @@ class Installer_lib {
 	
 		foreach ($folders as $folder)
 		{
-			// If it starts with a '/', then we assume it's
-			// in the web root. Otherwise, we try to locate
-			// it from the main folder.
-			$start = strpos($folder, '/') === 0 ? FCPATH : str_replace('application/', '', BFPATH);
+			// If it starts with 'public/', then that represents
+			// the web root. Otherwise, we try to locate it
+			// from the main folder.
+			if (strpos($folder, 'public/') === 0)
+			{
+				$realpath = preg_replace('{^public/}', $this->FCPATH, $folder);
+			}
+			else
+			{
+				$realpath = INSTALLPATH . $folder;
+			}
 			
-			// Try to set it to writeable if possible
-			@chmod($start . $folder, 0777);
-			$data[$folder] = is_really_writable($start . $folder);
+			$data[$folder] = is_really_writable($realpath);
 		}
 		
 		return $data;
@@ -224,14 +240,19 @@ class Installer_lib {
 	
 		foreach ($files as $file)
 		{
-			// If it starts with a '/', then we assume it's
-			// in the web root. Otherwise, we try to locate
-			// it from the main folder.
-			$start = strpos($file, '/') === 0 ? FCPATH : str_replace('application/', '', BFPATH);
+			// If it starts with 'public/', then that represents
+			// the web root. Otherwise, we try to locate it
+			// from the main folder.
+			if (strpos($file, 'public/') === 0)
+			{
+				$realpath = preg_replace('{^public/}', $this->FCPATH, $file);
+			}
+			else
+			{
+				$realpath = INSTALLPATH . $file;
+			}
 			
-			// Try to set it to writeable if possible
-			@chmod($start . $file, 0666);
-			$data[$file] = is_really_writable($start . $file);
+			$data[$file] = is_really_writable($realpath);
 		}
 		
 		return $data;
@@ -322,14 +343,14 @@ class Installer_lib {
 		);
 
 		// Write main database config file.
-		if (write_db_config( array('main' => $db_data), BFPATH ) === false)
+		if (write_db_config( array('main' => $db_data), $this->APPPATH ) === false)
 		{
 			$str = lang('in_db_config_error');
 			return str_replace('{file}', 'config/database.php', $str);
 		}
 
 		// Write environment database config file.
-		if (copy(BFPATH .'config/database.php', BFPATH ."config/$environment/database.php") === false)
+		if (copy($this->APPPATH . '/config/database.php', $this->APPPATH . "/config/" . $environment ."/database.php") === false)
 		{
 			$str = lang('in_db_config_error');
 			return str_replace('{file}', "config/$environment/database.php", $str);
@@ -348,7 +369,7 @@ class Installer_lib {
 		//
 		// Now install the database tables.
 		//
-		$this->ci->load->library('Migrations', array('migration_path' => str_replace('application', 'bonfire', BFPATH) .'migrations'));
+		$this->ci->load->library('Migrations', array('migrations_path' => $this->BFPATH .'migrations'));
 
 		if (!$this->ci->migrations->install())
 		{ 
@@ -412,7 +433,7 @@ class Installer_lib {
 		);
 		
 		// As of 0.7, we've switched to using phpass for password encryption...
-		require (str_replace('application', 'bonfire', BFPATH) .'modules/users/libraries/PasswordHash.php' );
+		require ($this->BFPATH .'modules/users/libraries/PasswordHash.php' );
 
 		$iterations	= $this->ci->config->item('password_iterations');
 		$hasher = new PasswordHash($iterations, false);
@@ -439,12 +460,12 @@ class Installer_lib {
 		// check the mod_rewrite setting
 		$config_array['index_page'] = $this->rewrite_check() ? '' : 'index.php';
 
-		write_config('config', $config_array);
+		write_config('config', $config_array, '', $this->APPPATH);
 
 		// Reverse Folders
 		foreach ($this->reverse_writeable_folders as $folder)
 		{
-			@chmod(FCPATH . '../' . $folder, 0775);
+			@chmod(INSTALLPATH . $folder, 0775);
 		}
 
 		// We made it to the end, so we're good to go!

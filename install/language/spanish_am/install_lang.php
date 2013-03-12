@@ -60,10 +60,3 @@ $lang['in_success']    				= '<h2>La instalación ha finalizado</h2><p>Sólo com
 $lang['in_success_notification']    = 'Todo esta listo para iniciar!';
 $lang['in_success_rebase_msg']		= 'Configura la opción RewriteBase en el archivo .htaccess ';
 $lang['in_success_msg']				= 'Remueve la carpeta install y has clic en ';
-
-$lang['no_migrations_found']			= 'No se encontraron los archivos de migración';
-$lang['multiple_migrations_version']	= 'Multiples versiones de migración: %d';
-$lang['multiple_migrations_name']		= 'Multiples nombres de migración: %s';
-$lang['migration_class_doesnt_exist']	= 'La clase de migracion no existe: %s';
-$lang['wrong_migration_interface']		= 'Interfaz incorrecta de migración: %s';
-$lang['invalid_migration_filename']		= 'Nombre de archivo de migración incorrecto: %s - %s';

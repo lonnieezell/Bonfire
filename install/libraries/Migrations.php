@@ -1,142 +1,168 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-/*
-	Package: Migrations
-
-	Migrations provide a simple method to version the contents of your database, and make
-	those changes easily distributable to other developers in different server environments.
-
-	Migrations are stored in specially-named PHP files under *bonfire/application/db/migrations/*.
-	Each migration file must be numbered consecutively, starting at *001* and growing larger
-	with each new migration from there. The rest of the filename should tell what the migration does.
-
-	For example: 001_install_initial_schema.php
-
-	The class inside of the file must extend the abstract Migration class and implement both the
-	up() and down() methods to install and uninstall the tables/changes. The class itself should be
-	named:
-
-	:	class Migration_install_initial_schema extends Migration {
-	:
-	:		function up() {}
-	:
-	:		function down() {}
-	:	}
-
-
-	Author:
-		Mat'as Montes
-
-	Rewritten by:
-
-		Phil Sturgeon
-	 http://philsturgeon.co.uk/
-
-	and
-
-		Spicer Matthews <spicer@cloudmanic.com>
-		Cloudmanic Labs, LLC
-	 http://www.cloudmanic.com/
-
-	Raw SQL functions added by:
-
-	 Lonnie Ezell
-	 http://lonnieezell.com
-*/
+/**
+ * Migrations Library
+ *
+ * Migrations provide a simple method to version the contents of your database, and make
+ * those changes easily distributable to other developers in different server environments.
+ *
+ * Migrations are stored in specially-named PHP files under *application/db/migrations/*.
+ * Each migration file must be numbered consecutively, starting at *001* and growing larger
+ * with each new migration from there. The rest of the filename should tell what the migration does.
+ *
+ * For example: 001_install_initial_schema.php
+ *
+ * The class inside of the file must extend the abstract Migration class and implement both the
+ * up() and down() methods to install and uninstall the tables/changes. The class itself should be
+ * named:
+ *
+ * :	class Migration_install_initial_schema extends Migration {
+ * :
+ * :		function up() {}
+ * :
+ * :		function down() {}
+ * :	}
+ *
+ * @package    Bonfire
+ * @author     Mat'as Montes
+ * @author     Phil Sturgeon http://philsturgeon.co.uk/
+ * @author     Spicer Matthews <spicer@cloudmanic.com> Cloudmanic Labs, LLC http://www.cloudmanic.com/
+ * @author     Bonfire Dev Team
+ */
 
 // ------------------------------------------------------------------------
 
-/*
-	Class: Migration Interface
+/**
+ * Migration Interface
+ *
+ * All migrations should implement this, forces up() and down() and gives
+ * access to the CI super-global.
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Migrations
+ * @category   Libraries
+ * @abstract
+ * @author     Phil Sturgeon http://philsturgeon.co.uk/
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ */
+abstract class Migration
+{
 
-	All migrations should implement this, forces up() and down() and gives
-	access to the CI super-global.
-
-	Package:
-		Migrations
-
-	Author:
-		Phil Sturgeon
-*/
-abstract class Migration {
-
-	/*
-		Var: $migration_type
-		The type of migration being ran, either 'forge' or 'sql'.
-	*/
+	/**
+	 * The type of migration being ran, either 'forge' or 'sql'.
+	 *
+	 * @var string
+	 */
 	public $migration_type = 'forge';
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: up()
-
-		Abstract method ran when increasing the schema version. Typically installs
-		new data to the database or creates new tables.
-	*/
+	/**
+	 * Abstract method ran when increasing the schema version. Typically installs
+	 * new data to the database or creates new tables.
+	 *
+	 * @access public
+	 * @abstract
+	 */
 	public abstract function up();
 
-	/*
-		Method: down()
-
-		Abstract method ran when decreasing the schema version.
-	*/
+	/**
+	 * Abstract method ran when decreasing the schema version.
+	 *
+	 * @access public
+	 * @abstract
+	 */
 	public abstract function down();
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * Getter method
+	 *
+	 * @param mixed $var
+	 *
+	 * @return object
+	 */
 	function __get($var)
 	{
 		return get_instance()->$var;
-	}
+	}//end __get()
 
 	//--------------------------------------------------------------------
-}
+}//end Migration
 
 // ------------------------------------------------------------------------
 
-/*
-	Class: Migrations Class
-
-	Utility main controller.
-
-	Package:
-		Migrations
-
-	Author:
-		Mat'as Montes
+/**
+ * Migrations Library
+ *
+ * Utility main controller.
+ *
+ * @package    Bonfire
+ * @subpackage Modules_Migrations
+ * @category   Libraries
+ * @author     Mat'as Montes
+ * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ *
  */
-class Migrations {
+class Migrations
+{
+	/**
+	 * Path to the core migrations files
+	 *
+	 * @access private
+	 *
+	 * @var string
+	 */
+	private $migrations_path;
 
-	private $migrations_enabled = FALSE;
-	private $migrations_path = ".";
+	/**
+	 * Show verbose messages or not
+	 *
+	 * @access private
+	 *
+	 * @var bool
+	 */
 	private $verbose = FALSE;
 
+	/**
+	 * Error message
+	 *
+	 * @access public
+	 *
+	 * @var string
+	 */
 	public $error = "";
 
 	//--------------------------------------------------------------------
 
-	function __construct($config=array())
+	/**
+	 * Initialize the configuration settings
+	 *
+	 * @return void
+	 */
+	function __construct($params=array())
 	{
 		$this->_ci =& get_instance();
 
-		$this->_ci->config->load('migrations');
-
-		$this->migrations_enabled = $this->_ci->config->item('migrations_enabled');
-		$this->migrations_path = isset($config['migration_path']) ? $config['migration_path'] : realpath($this->_ci->config->item('migrations_path'));
-
-		// Idiot check
-		$this->migrations_enabled AND $this->migrations_path OR show_error('Migrations has been loaded but is disabled or set up incorrectly.');
-
-		// If not set, set it
-		if ($this->migrations_path == '')
+		if (isset($params['migrations_path']))
 		{
-			$this->migrations_path = APPPATH . 'migrations/';
+			$this->migrations_path = $params['migrations_path'];
+		}
+		else
+		{
+			$this->migrations_path = BFPATH . 'migrations';
 		}
 
 		// Add trailing slash if not set
-		else if (substr($this->migrations_path, -1) != '/')
+		if (substr($this->migrations_path, -1) != '/')
 		{
 			$this->migrations_path .= '/';
+		}
+
+		// Sanity check
+		if ( ! is_dir($this->migrations_path))
+		{
+			show_error('Migrations has been loaded but is set up incorrectly.');
 		}
 
 		$this->_ci->load->dbforge();
@@ -145,102 +171,48 @@ class Migrations {
 		if ( ! $this->_ci->db->table_exists('schema_version'))
 		{
 			$this->_ci->dbforge->add_field(array(
+				'type' => array('type' => 'VARCHAR', 'constraint' => 20, 'null' => FALSE),
 				'version' => array('type' => 'INT', 'constraint' => 4, 'default' => 0),
-				'app_version' => array('type' => 'INT', 'constraint' => 4, 'default' => 0),
 			));
-
+			$this->_ci->dbforge->add_key('type', TRUE);
 			$this->_ci->dbforge->create_table('schema_version', TRUE);
 
-			$this->_ci->db->insert('schema_version', array('version' => 0));
+			$this->_ci->db->insert('schema_version', array('type' => 'core', 'version' => 0));
 		}
-	}
+
+	}//end __construct()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: set_verbose()
-
-		This will set if there should be verbose output or not
-
-		Parameters:
-			$state	- true/false
-	*/
+	/**
+	 * Set if there should be verbose output or not
+	 *
+	 * @access public
+	 *
+	 * @param bool $state TRUE/FALSE
+	 */
 	public function set_verbose($state)
 	{
 		$this->verbose = $state;
-	}
 
-	//--------------------------------------------------------------------
-
-	/*
-		Method: install()
-
-		Installs the schema up to the last version
-
-		Return:
-			void	- Outputs a report of the installation
-	*/
-	public function install($type='')
-	{
-		switch ($type)
-		{
-			case '':
-				$migrations_path = $this->migrations_path;
-				break;
-			case 'app_':
-				$migrations_path = $this->migrations_path;
-				break;
-			default:
-				$migrations_path = realpath(APPPATH . module_path(substr($type, 0, -1), 'migrations')) .'/';
-				break;
-		}
-
-		// Load all *_*.php files in the migrations path
-		$files = glob($migrations_path.'*_*.php');
-		$file_count = count($files);
-
-		for($i=0; $i < $file_count; $i++)
-		{
-			// Mark wrongly formatted files as FALSE for later filtering
-			$name = basename($files[$i],'.php');
-			if(!preg_match('/^\d{3}_(\w+)$/',$name)) $files[$i] = FALSE;
-		}
-
-		$migrations = array_filter($files);
-
-		if ( ! empty($migrations))
-		{
-			sort($migrations);
-			$last_migration = basename(end($migrations));
-
-			// Calculate the last migration step from existing migration
-			// filenames and procceed to the standard version migration
-			$last_version =	substr($last_migration,0,3);
-			return $this->version(intval($last_version,10), $type);
-		}
-		else {
-			$this->error = $this->_ci->lang->line('no_migrations_found');
-			return 0;
-		}
-	}
+	}//end set_verbose()
 
 	// --------------------------------------------------------------------
 
-	/*
-		Method: version()
-
-		Migrate to a schema version.
-
-		Calls each migration step required to get to the schema version of
-		choice.
-
-		Parameters:
-			$version	- An int that is the target version to migrate to.
-
-		Return:
-			TRUE if already latest, FALSE if failed, int if upgraded
+	/**
+	 * Migrate to a specific schema version.
+	 *
+	 * Calls each migration step required to get to the schema version of
+	 * choice.
+	 *
+	 * @access public
+	 *
+	 * @param int    $version An int that is the target version to migrate to.
+	 * @param string $type    A string that represents the name of the module, or 'app_' for application migrations. If empty, it applies core migrations.
+	 *
+	 * @return mixed TRUE if already latest, FALSE if failed, int if upgraded
 	 */
-	function version($version, $type='')
+	public function version($version, $type='')
 	{
 		$schema_version = $this->get_schema_version($type);
 		$start = $schema_version;
@@ -252,10 +224,10 @@ class Migrations {
 				$migrations_path = $this->migrations_path;
 				break;
 			case 'app_':
-				$migrations_path = $this->migrations_path;
+				$migrations_path = APPPATH .'db/migrations/';
 				break;
 			default:
-				$migrations_path = realpath(APPPATH . module_path(substr($type, 0, -1), 'migrations')) .'/';
+				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
 				break;
 		}
 
@@ -281,7 +253,6 @@ class Migrations {
 		for($i=$start; $i != $stop; $i += $step)
 		{
 			$f = glob(sprintf($migrations_path . '%03d_*'.EXT, $i));
-
 			// Only one migration per step is permitted
 			if (count($f) > 1)
 			{
@@ -295,7 +266,9 @@ class Migrations {
 				// If trying to migrate up to a version greater than the last
 				// existing one, migrate to the last one.
 				if ($step == 1)
+				{
 					break;
+				}
 
 				// If trying to migrate down but we're missing a step,
 				// something must definitely be wrong.
@@ -323,7 +296,7 @@ class Migrations {
 
 				if ( ! class_exists($class))
 				{
-					$this->error = sprintf($this->_ci->lang->line("migration_class_doesnt_exist"),$class);
+					$this->error = sprintf($this->_ci->lang->line("migration_class_doesnt_exist"), $class);
 					return 0;
 				}
 
@@ -334,13 +307,12 @@ class Migrations {
 
 				$migrations[] = $match[1];
 			}
-
 			else
 			{
 				$this->error = sprintf($this->_ci->lang->line("invalid_migration_filename"),$file, $migrations_path);
 				return 0;
-			}
-		}
+			}//end if
+		}//end for
 
 		$version = $i + ($step == 1 ? -1 : 0);
 
@@ -380,7 +352,7 @@ class Migrations {
 			{
 				call_user_func(array($c, $method));
 			}
-			elseif ($c->migration_type == 'sql')
+			else if ($c->migration_type == 'sql')
 			{
 				$sql = $c->$method();
 				$this->do_sql_migration($sql);
@@ -394,7 +366,7 @@ class Migrations {
 
 			$schema_version += $step;
 			$this->_update_schema_version($schema_version, $type);
-		}
+		}//end foreach
 
 		if ($this->verbose)
 		{
@@ -402,37 +374,178 @@ class Migrations {
 		}
 
 		return $schema_version;
-	}
 
-	// --------------------------------------------------------------------
+	}//end version()
 
-	/*
-		Method: latest()
+	//--------------------------------------------------------------------
 
-		Set's the schema to the latest migration
-
-		Return:
-			TRUE if already latest, FALSE if failed, int if upgraded
-	*/
-	public function latest()
+	/**
+	 * Install the schema up to the latest version
+	 *
+	 * @param string $type A string that represents the name of the module, or 'app_' for application migrations. If empty, it returns core migrations.
+	 *
+	 * @return int The version number this type is at
+	 */
+	public function install($type='')
 	{
-		$version = $this->_ci->config->item('migrations_version');
-		return $this->version($version);
-	}
+		$latest_version = $this->get_latest_version();
+
+		if ($latest_version > 0)
+		{
+			return $this->version($latest_version);
+		}
+		else
+		{
+			$this->error = $this->_ci->lang->line('no_migrations_found');
+			return 0;
+		}
+
+	}//end install()
 
 	// --------------------------------------------------------------------
 
-	/*
-		Method: get_schema_version()
+	/**
+	 * Handle auto-upgrading migrations of core and/or app on page load.
+	 *
+	 * @access public
+	 *
+	 * @return void
+	 */
+	public function auto_latest()
+	{
+		$auto_core = $this->_ci->config->item('migrate.auto_core');
+		$auto_app = $this->_ci->config->item('migrate.auto_app');
 
-		Retrieves current schema version
+		if ($auto_core)
+		{
+			$this->install('');
+		}
 
-		Parameters:
-			$core	- If true, will return core schema version.
-					  If false, will return app schema version.
+		if ($auto_app)
+		{
+			$this->install('app_');
+		}
 
-		Return:
-			integer	- Current Schema version
+	}//end auto_latest()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Retrieve the latest available version.
+	 *
+	 * @param string $type A string that represents the name of the module, or 'app_' for application migrations. If empty, it returns core migrations.
+	 *
+	 * @return int Latest available migration file.
+	 */
+	public function get_latest_version($type='')
+	{
+		$migrations = $this->get_available_versions($type);
+
+		if (!empty($migrations))
+		{
+			$last_migration = end($migrations);
+			$last_version =	substr($last_migration,0,3);
+
+			return intval($last_version,10);
+		}
+		else
+		{
+			return 0;
+		}
+
+	}//end get_latest_version()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Search the migrations folder and return a list of available migration files.
+	 *
+	 * @access public
+	 *
+	 * @param string $type A string that represents the name of the module, or 'app_' for application migrations. If empty, it returns core migrations.
+	 *
+	 * @return array An array of migration files
+	 */
+	public function get_available_versions($type='')
+	{
+		switch ($type)
+		{
+			case '':
+				$migrations_path = $this->migrations_path;
+				break;
+			case 'app_':
+				$migrations_path = APPPATH .'db/migrations/';
+				break;
+			default:
+				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
+				break;
+		}
+
+		// List all *_*.php files in the migrations path
+		$files = glob($migrations_path .'*_*'.EXT);
+
+		for ($i=0; $i < count($files); $i++)
+		{
+			// Remove path and extension
+			$files[$i] = basename($files[$i],EXT);
+
+			// Mark wrongly formatted files as FALSE for later filtering
+			if(!preg_match('/^\d{3}_(\w+)$/',$files[$i]))
+			{
+				$files[$i] = FALSE;
+			}
+		}
+
+		$migrations = array_filter($files);
+		sort($migrations);
+
+		return $migrations;
+
+	}//end get_available_versions()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Execute raw SQL migrations. Will manually break the commands on a ';' so
+	 * that multiple commmands can be run at once. Very handy for using phpMyAdmin
+	 * dumps.
+	 *
+	 * @access public
+	 *
+	 * @param string $sql A string with one or more SQL commands to be run.
+	 *
+	 * @return void
+	 */
+	public function do_sql_migration($sql='')
+	{
+		if (empty($sql))
+		{
+			return;
+		}
+
+		// Split the sql into usable commands on ';'
+		$queries = explode(';', $sql);
+
+		foreach ($queries as $q)
+		{
+			if (trim($q))
+			{
+				$this->_ci->db->query(trim($q));
+			}
+		}
+
+	}//end do_sql_migration()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Retrieve current schema version
+	 *
+	 * @access public
+	 *
+	 * @param string $type A string that represents the name of the module, or 'app_' for application migrations. If empty, it returns core migrations.
+	 *
+	 * @return int Current Schema version
 	 */
 	public function get_schema_version($type='')
 	{
@@ -452,148 +565,29 @@ class Migrations {
 			return isset($row->$schema) ? $row->$schema : 0;
 		}
 
-	}
+	}//end latest()
 
 	// --------------------------------------------------------------------
 
-	/*
-		Method: get_latest_version()
-
-		Retrieves the latest available version.
-
-		Parameters:
-			$type	- A string that represents the name of the module, or 'app_' for
-					  application migrations. If empty, it returns core migrations.
-
-		Return:
-			integer	- Latest available migration file.
-	 */
-	public function get_latest_version($type='')
-	{
-		switch ($type)
-		{
-			case '':
-				$migrations_path = $this->migrations_path .'core/';
-				break;
-			case 'app_':
-				$migrations_path = $this->migrations_path;
-				break;
-			default:
-				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
-				break;
-		}
-
-		$f = glob($migrations_path .'*_*'.EXT);
-
-		return count($f);
-	}
-
-	//--------------------------------------------------------------------
-
-	/*
-		Method: get_available_versions()
-
-		Searches the migrations folder and returns a list of available migration files.
-
-		Parameters:
-			$core	- Show only Bonfire's core migrations.
-
-		Author:
-			Lonnie Ezell
-
-		Returns:
-			array	- An array of migration files
-	*/
-	public function get_available_versions($type='')
-	{
-		switch ($type)
-		{
-			case '':
-				$migrations_path = $this->migrations_path .'core/';
-				break;
-			case 'app_':
-				$migrations_path = $this->migrations_path;
-				break;
-			default:
-				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
-				break;
-		}
-
-		$files = glob($migrations_path .'*_*'.EXT);
-
-		for ($i=0; $i < count($files); $i++)
-		{
-			$files[$i] = str_ireplace($migrations_path, '', $files[$i]);
-		}
-
-		return $files;
-	}
-
-	//--------------------------------------------------------------------
-
-	/*
-		Method: do_sql_migration()
-
-		Executes raw SQL migrations. Will manually break the commands on a ';' so
-		that multiple commmands can be run at once. Very handy for using phpMyAdmin
-		dumps.
-
-		Parameters:
-			$sql	- A string with one or more SQL commands to be run.
-
-		Return:
-			void
-
-		Author:
-			Lonnie Ezell
-	*/
-	public function do_sql_migration($sql='')
-	{
-		if (empty($sql))
-		{
-			return;
-		}
-
-		// Split the sql into usable commands on ';'
-		$queries = explode(';', $sql);
-
-		foreach ($queries as $q)
-		{
-			if (trim($q))
-			{
-				$this->_ci->db->query(trim($q));
-			}
-		}
-	}
-
-	//--------------------------------------------------------------------
-
-
-	/*
-		Method: _update_schema_version()
-
-		Stores the current schema version in the database.
-
-		Access:
-			private
-
-		Parameters:
-			$schema_version	- An integer with the latest Schema version reached
-			$type			- A string that is appended with '_schema' to create
-								the field name to store in the database.
-
-		Return:
-			void
+	/**
+	 * Store the current schema version in the database.
+	 *
+	 * @access private
+	 *
+	 * @param int    $schema_version An integer with the latest Schema version reached
+	 * @param string $type           A string that is appended with '_schema' to create the field name to store in the database.
+	 *
+	 * @return void
 	 */
 	private function _update_schema_version($schema_version, $type='')
 	{
-//		logit('[Migrations] Schema updated to: '. $schema_version);
+		logit('[Migrations] Schema '. $type.' updated to: '. $schema_version);
 
 		if ($this->_check_migrations_column('type'))
 		{
 			// new schema table layout
 			$type = empty($type) ? 'core' : $type;
-		// If the row doesn't exist, create it...
+			// If the row doesn't exist, create it...
 			$query = $this->_ci->db->get_where('schema_version', array('type' => $type));
 
 			if ($schema_version != 0)
@@ -636,25 +630,21 @@ class Migrations {
 				$type.'version' => $schema_version
 			));
 
-		}
-	}
+		}//end if
+
+	}//end _update_schema_version()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: _check_migrations_column()
-
-		Method to check if the DB table schema_version is in the new format or old
-
-		Access:
-			private
-
-		Parameters:
-			$column_name	- Name of the column to check the existance of
-
-		Return:
-			boolean
-	*/
+	/**
+	 * Check if the DB table schema_version is in the new format or old
+	 *
+	 * @access private
+	 *
+	 * @param string $column_name Name of the column to check the existance of
+	 *
+	 * @return bool
+	 */
 	private function _check_migrations_column($column_name)
 	{
 		$row = $this->_ci->db->get('schema_version')->row();
@@ -665,40 +655,12 @@ class Migrations {
 		}
 
 		return FALSE;
-	}
+
+	}//end _check_migrations_column()
 
 	//--------------------------------------------------------------------
 
-	/*
-		Method: set_path()
-
-		Sets the base path that Migrations uses to find it's migrations
-		to a user-supplied path. The path will be converted to a full
-		system path (via realpath) and checked to make sure it's a folder.
-
-		Parameters:
-			$path	- The path to set, relative to the front controller.
-	*/
-	public function set_path($path=null)
-	{
-		if (empty($path))
-		{
-			return;
-		}
-
-		$path = realpath($path);
-
-		if (is_dir($path))
-		{
-			$this->migrations_path = $path .'/';
-		}
-	}
-
-	//--------------------------------------------------------------------
-
-}
-
-// End Migrations class
+}//end Migrations
 
 /* End of file Migrations.php */
 /* Location: ./libraries/Migrations.php */

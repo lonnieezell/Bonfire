@@ -942,7 +942,7 @@ EOF;
 	 *
 	 * @return string The content of the file, if found, else empty.
 	 */
-	private function find_file($view=NULL, $data=NULL)
+	private static function find_file($view=NULL, $data=NULL)
 	{
 		if (empty($view))
 		{

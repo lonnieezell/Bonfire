@@ -6,7 +6,7 @@
 
 <div class="well">
 	
-	<table cellpadding="0" cellspacing="0">
+	<table>
 		<tbody>
 			<!-- PHP Version -->
 			<tr>

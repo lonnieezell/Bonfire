@@ -43,7 +43,6 @@ class Developer extends Admin_Controller
 		$this->auth->restrict('Site.Developer.View');
 		$this->auth->restrict('Bonfire.Database.Manage');
 
-		$this->config->load('migrations');
 		$this->load->library('Migrations');
 		$this->lang->load('migrations');
 
@@ -152,11 +151,6 @@ class Developer extends Admin_Controller
 		$file   = $this->input->post('version');
 
 		$version = $file !== 'uninstall' ? (int)(substr($file, 0, 3)) : 0;
-
-		$path = module_path($module, 'migrations');
-
-		// Reset the migrations path for this run only.
-		$this->migrations->set_path($path);
 
 		// Do the migration
 		$this->migrate_to($version, $module .'_');

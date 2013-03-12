@@ -232,10 +232,11 @@ class Assets
 	 * @param mixed  $style              The style(s) to have links rendered for.
 	 * @param string $media              The media to assign to the style(s) being passed in.
 	 * @param bool   $bypass_inheritance If TRUE, will skip the check for parent theme styles.
+	 * @param bool	 $bypass_module      If TRUE, will not output the css file named after the controller or the module styles.
 	 *
 	 * @return string A string containing all necessary links.
 	 */
-	public static function css($style=null, $media='screen', $bypass_inheritance=FALSE)
+	public static function css($style=null, $media='screen', $bypass_inheritance=FALSE, $bypass_module=FALSE)
 	{
 		$styles = array();
 		$return = '';
@@ -271,14 +272,18 @@ class Assets
 			);
 		}
 
-		// Add a style named for the controller so it will be looked for.
-		$styles[] = array(
-			'file'	=> self::$ci->router->class,
-			'media' => $media
-		);
+		if ($bypass_module == FALSE)
+		{
+			// Add a style named for the controller so it will be looked for.
+			$styles[] = array(
+				'file'	=> self::$ci->router->class,
+				'media' => $media
+			);
 
-		$styles     = self::find_files($styles, 'css', $bypass_inheritance);
-		$mod_styles	= self::find_files(self::$module_styles, 'css', $bypass_inheritance);
+			$mod_styles	= self::find_files(self::$module_styles, 'css', $bypass_inheritance);
+		}
+
+		$styles = self::find_files($styles, 'css', $bypass_inheritance);
 
 		$combine = self::$ci->config->item('assets.css_combine');
 
@@ -322,8 +327,11 @@ class Assets
 			$return .= self::combine_css($styles, $media);
 		}
 
-		// Make sure we include module styles
-		$return .= self::combine_css($mod_styles, $media, 'module');
+		if ($bypass_module == FALSE)
+		{
+			// Make sure we include module styles
+			$return .= self::combine_css($mod_styles, $media, 'module');
+		}
 
 		return $return;
 
@@ -1009,8 +1017,9 @@ class Assets
 	public static function clear_cache()
 	{
 		self::$ci->load->helper('file');
-
-		$cache_path = FCPATH . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
+		
+		$site_path = Template::get('site_path');
+		$cache_path = $site_path . self::$asset_base . '/' . self::$asset_cache_folder . '/';
 
 		delete_files($cache_path);
 
@@ -1109,8 +1118,9 @@ class Assets
 			return TRUE;
 		}
 
+		$site_path = Template::get('site_path');
 		// Where to save the combined file to.
-		$cache_path = FCPATH . '/' . self::$asset_base . '/' . self::$asset_cache_folder . '/';
+		$cache_path = $site_path . self::$asset_base . '/' . self::$asset_cache_folder . '/';
 
 		// full file path - without the extension
 		$file_path = $cache_path.$file_name;
@@ -1144,7 +1154,7 @@ class Assets
 				}
 				else
 				{
-					$app_file = FCPATH . '/'.str_replace(base_url(), '', $file);
+					$app_file = $site_path . str_replace(base_url(), '', $file);
 				}
 				$app_file = strpos($app_file, '.js') ? $app_file : $app_file .'.js';
 				$files_array[$key] = $app_file;
@@ -1365,15 +1375,15 @@ class Assets
 				{
 					if (self::$debug) {
 						echo "[Assets] Looking in: <ul><li>{$site_path}{$path}/{$default_theme}{$file}{$type}</li>" . PHP_EOL;
-						echo "<li>{$site_path}{$path}/{$default_theme}{$type}/{$file}{$type}</li>" . PHP_EOL;
+						echo "<li>{$site_path}{$path}/{$default_theme}{$clean_type}/{$file}{$type}</li>" . PHP_EOL;
 
 						if (!empty($active_theme))
 						{
 							echo "<li>{$site_path}{$path}/{$active_theme}{$file}{$type}</li>" . PHP_EOL;
-							echo "<li>{$site_path}{$path}/{$active_theme}{$type}/{$file}{$type}</li>" . PHP_EOL;
+							echo "<li>{$site_path}{$path}/{$active_theme}{$clean_type}/{$file}{$type}</li>" . PHP_EOL;
 						}
 
-						echo '<li>'. $site_path . self::$asset_base ."/{$type}/{$file}{$type}</li>" . PHP_EOL;
+						echo '<li>'. $site_path . self::$asset_base ."/{$clean_type}/{$file}{$type}</li>" . PHP_EOL;
 
 						echo '</ul>' . PHP_EOL;
 					}

@@ -217,6 +217,7 @@ $lang['user_meta_type']			= 'نوع';
 $lang['user_meta_country']		= 'کشور';
 $lang['user_meta_state']		= 'استان';
 
+//--------------------------------------------------------------------
 // Activation
 //--------------------------------------------------------------------
 $lang['bf_activate_method']			= 'روش فعال سازی';
@@ -233,3 +234,13 @@ $lang['bf_reg_activate_none'] 		= 'لطفا جهت استفاده از سایت 
 $lang['bf_user_not_active'] 		= 'حساب کاربری غیر فعال است.';
 $lang['bf_login_activate_title']	= 'نیاز دارید که حساب کاربریتان را فعال نمایید؟';
 $lang['bf_login_activate_email'] 	= '<b>کد فعال سازی حساب کاربری خودتان را دارید؟</b> کد را در [ACCOUNT_ACTIVATE_URL] وارد نمایید.<br /><br />    <b>کد فعال سازی ندارید؟</b> میتوانید این کد را در صفحه ی [ACTIVATE_RESEND_URL] درخواست نمایید.';
+
+//--------------------------------------------------------------------
+// Migrations lib
+//--------------------------------------------------------------------
+$lang['no_migrations_found']			= 'هيچ فايل ارتقايي يافت نشد';
+$lang['multiple_migrations_version']	= 'نسخه ي تکراري براي فايل ارتقا: %d';
+$lang['multiple_migrations_name']		= 'نام تکراري براي فايل ارتقا: %s';
+$lang['migration_class_doesnt_exist']	= 'کلاس فايل ارتقا يافت نشد: %s';
+$lang['wrong_migration_interface']		= 'اينترفيس نا معتبر براي فايل ارتقا: %s';
+$lang['invalid_migration_filename']		= 'فايل ارتفاي نا معتبر: %s - %s';

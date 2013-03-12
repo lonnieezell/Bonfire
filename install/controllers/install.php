@@ -57,7 +57,6 @@ class Install extends CI_Controller {
 		'application/archives',
 		'application/archives/config',
 		'application/db/backups',
-		'application/db/migrations',
 		'public/assets/cache',
 		'public/install'
 	);
@@ -108,6 +107,13 @@ class Install extends CI_Controller {
 		// Contains most of our installer utility functions
 		$this->load->library('installer_lib', array('reverse_writeable_folders' => $this->reverse_writeable_folders));
 		$this->load->helper('install');
+
+		// Module locations copied from application/config/config.php.
+		// TODO check if '../..' needs changing in the values
+		Install::$locations = array(
+			realpath($this->installer_lib->APPPATH .'../bonfire/modules') .'/' => '../../bonfire/modules/',
+			realpath($this->installer_lib->APPPATH) . '/modules/' => '../../application/modules/'
+		);
 
 		// Load form validation
 		$this->load->library('form_validation');
@@ -171,7 +177,7 @@ class Install extends CI_Controller {
 		if ($this->input->post('install_db'))
 		{
 			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim');
-			$this->form_validation->set_rules('driver', lang('in_driver'), 'required|trim');	
+			$this->form_validation->set_rules('driver', lang('in_db_driver'), 'required|trim');	
 			$this->form_validation->set_rules('port', lang('in_port'), 'required|trim|numeric');	
 			$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim');
 			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim');
@@ -360,11 +366,7 @@ class Install extends CI_Controller {
 	
 		rename($folder, $new_folder);
 		
-		$url = preg_replace('{install/$}', '', base_url());
-		$url = str_replace('http://', '', $url);
-		$url = str_replace('//', '/', $url);
-		$url = 'http://'. $url;
-		
+		$url = installed_url();
 		redirect($url);
 	}
 	
@@ -395,8 +397,3 @@ class Install extends CI_Controller {
 	
 	//--------------------------------------------------------------------
 }
-
-/* get module locations from config settings or use the default module location and offset */
-Install::$locations = array(
-	APPPATH.'../bonfire/modules/' => '../modules/',
-);
