@@ -6,11 +6,11 @@ $no_length = array(
 	'BLOB', 'TINYBLOB', 'MEDIUMBLOB', 'LONGBLOB',
 	'BOOL',
 	'DATE', 'DATETIME', 'TIME', 'TIMESTAMP',
-	'INT', 'TINYINT', 'MEDIUMINT', 'BIGINT',
 );
 
 // types where a value/length is optional, will not output a constraint if the field is empty
 $optional_length = array(
+	'INT', 'TINYINT', 'MEDIUMINT', 'BIGINT',
 	'YEAR',
 );
 
