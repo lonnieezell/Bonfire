@@ -25,7 +25,7 @@
 $lang['mb_create_button']		= 'Créer un Module';
 $lang['mb_create_link']			= 'Créer un nouveau module';
 $lang['mb_create_note']			= 'Utilisez notre assistant pour créer votre prochain module. Nous faisons tout le travail lourd en générant tous les contrôleurs, modèles, vues et les fichiers de langue dont vous aurez besoin.';
-$lang['mb_not_writeable_note']	= 'Erreur: Le répertoire bonfire/modules n\'est pas accessible en écriture donc les modules ne peuvent pas êtres écrits sur le serveur. Merci de vous assurez que le répertoire est accessible en écriture et rafraîchissez cette page.';
+$lang['mb_not_writeable_note']	= 'Erreur: Le répertoire application/modules n\'est pas accessible en écriture donc les modules ne peuvent pas êtres écrits sur le serveur. Merci de vous assurez que le répertoire est accessible en écriture et rafraîchissez cette page.';
 $lang['mb_generic_description']	= 'Votre description ici.';
 $lang['mb_installed_head']		= 'Module de l\'application installés';
 $lang['mb_module']				= 'Module';

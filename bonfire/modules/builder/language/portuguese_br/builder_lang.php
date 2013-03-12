@@ -25,7 +25,7 @@
 $lang['mb_create_button'] = 'Criar Módulo';
 $lang['mb_create_link'] = 'Criar um novo Módulo';
 $lang['mb_create_note'] = 'Utilize o nosso assistente wizbang de criaçõa de módulo para criar o seu próximo módulo. Nós fazemos todo o trabalho pesado, gerando todos os controladores, modelos, visualizações e arquivos de idioma que você precisa.';
-$lang['mb_not_writeable_note'] = 'Erro : A pasta Bonfire/modules não é gravável, então o módulo não podê ser gravado no servidor. Por favor dê permissão de gravação nesta pasta e atualize esta página.';
+$lang['mb_not_writeable_note'] = 'Erro : A pasta application/modules não é gravável, então o módulo não podê ser gravado no servidor. Por favor dê permissão de gravação nesta pasta e atualize esta página.';
 $lang['mb_generic_description'] = 'Sua descrição aqui.';
 $lang['mb_installed_head'] = 'Instalados os módulos de aplicação';
 $lang['mb_module'] = 'Módulos';
