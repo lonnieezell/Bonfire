@@ -421,13 +421,20 @@ class Developer extends Admin_Controller {
                 $this->form_validation->set_rules("db_field_type$counter","DB Field Type $counter","trim|xss_clean|alpha");
 
                 // make sure that the length field is required if the DB Field type requires a length
+				$no_length = array(
+					'TEXT', 'TINYTEXT', 'MEDIUMTEXT', 'LONGTEXT',
+					'BLOB', 'TINYBLOB', 'MEDIUMBLOB', 'LONGBLOB',
+					'BOOL',
+					'DATE', 'DATETIME', 'TIME', 'TIMESTAMP',
+				);
+				$optional_length = array(
+					'INT', 'TINYINT', 'MEDIUMINT', 'BIGINT',
+					'YEAR',
+				);
+
                 $db_len_required = '';
                 $field_type = $this->input->post("db_field_type$counter");
-                if( !empty($label) && !($field_type == 'TEXT' OR $field_type == 'MEDIUMTEXT' OR $field_type == 'LONGTEXT' OR $field_type == 'BOOL'
-                    OR $field_type == 'DATE' OR $field_type == 'TIME' OR $field_type == 'DATETIME'
-					OR $field_type == 'TIMESTAMP' OR $field_type == 'YEAR'
-					OR $field_type == 'TINYBLOB' OR $field_type == 'BLOB' OR $field_type == 'MEDIUMBLOB' OR $field_type == 'LONGBLOB'
-					OR $field_type == 'TINYINT' OR $field_type == 'INT' OR $field_type == 'MEDIUMINT' OR $field_type == 'BIGINT'))
+                if( !empty($label) && !in_array($field_type, $no_length) && !in_array($field_type, $optional_length))
                 {
                     $db_len_required = 'required|';
                 }
