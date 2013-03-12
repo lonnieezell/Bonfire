@@ -46,11 +46,7 @@ a.mb_show_advanced_rules:hover {
 <div class="admin-box">
 	<h3><?php echo $toolbar_title ?></h3>
 
-<?php if($field_total>0): ?>
-	<?php echo form_open(current_url().'/'.$field_total, array('id'=>"module_form",'class'=>"form-horizontal")); ?>
-<?php elseif($field_total==0): ?>
-	<?php echo form_open(current_url(), array('id'=>"module_form",'class'=>"form-horizontal")); ?>
-<?php endif; ?>
+<?php echo form_open(current_url().(($field_total>0)?('/'.$field_total):''), array('id'=>"module_form",'class'=>"form-horizontal")); ?>
 	<div>
 		<!-- Module Details -->
 		<fieldset id="module_details">
@@ -195,6 +191,7 @@ a.mb_show_advanced_rules:hover {
 						<option value="<?php echo $val?>"><?php echo $label?></option>
 						<?php endforeach;?>
 					</select>
+					<input type="hidden" name="soft_delete_field" id="soft_delete_field" value="deleted" />
 				</div>
 			</div>
 
@@ -213,6 +210,7 @@ a.mb_show_advanced_rules:hover {
 				<label for="created_field" class="control-label block"><?php echo lang('mb_form_created_field'); ?></label>
 				<div class="controls">
 					<input name="created_field" id="created_field" type="text" value="<?php echo set_value("created_field", "created_on"); ?>" />
+					<span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
 					<span class="help-inline"><?php echo form_error('created_field'); ?></span>
 				</div>
 			</div>
@@ -232,6 +230,7 @@ a.mb_show_advanced_rules:hover {
 				<label for="modified_field" class="control-label block"><?php echo lang('mb_form_modified_field'); ?></label>
 				<div class="controls">
 					<input name="modified_field" id="modified_field" type="text" value="<?php echo set_value("modified_field", "modified_on"); ?>" />
+					<span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
 					<span class="help-inline"><?php echo form_error('modified_field'); ?></span>
 				</div>
 			</div>
