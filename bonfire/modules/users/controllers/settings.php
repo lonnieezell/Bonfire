@@ -704,13 +704,13 @@ class Settings extends Admin_Controller
 					// Now send the email
 					$this->load->library('emailer/emailer');
 
-					$settings = $this->settings_lib->find_by('name','site.title');
+					$site_title = $this->settings_lib->item('site.title');
 
 					$data = array
 					(
 						'to'		=> $this->user_model->find($user_id)->email,
 						'subject'	=> lang('us_account_active'),
-						'message'	=> $this->load->view('_emails/activated', array('link'=>site_url(),'title'=>$settings->value), true)
+						'message'	=> $this->load->view('_emails/activated', array('link'=>site_url(),'title'=>$site_title), true)
 					);
 
 					if ($this->emailer->send($data))
