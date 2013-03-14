@@ -352,7 +352,7 @@ class Users extends Front_Controller
 			// Handle the form
 			if ($this->input->post('set_password'))
 			{
-				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|min_length[8]|max_length[120]|valid_password');
+				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|max_length[120]|valid_password');
 				$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|matches[password]');
 
 				if ($this->form_validation->run() !== FALSE)
@@ -452,7 +452,7 @@ class Users extends Front_Controller
 				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|max_length[30]|unique[users.username]');
 			}
 
-			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|min_length[8]|max_length[120]|valid_password');
+			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|max_length[120]|valid_password');
 			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|matches[password]');
 
 			$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim');
@@ -663,7 +663,7 @@ class Users extends Front_Controller
 
 
 		$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email,users.id]');
-		$this->form_validation->set_rules('password', 'lang:bf_password', 'min_length[8]|max_length[120]|valid_password');
+		$this->form_validation->set_rules('password', 'lang:bf_password', 'max_length[120]|valid_password');
 
 		// check if a value has been entered for the password - if so then the pass_confirm is required
 		// if you don't set it as "required" the pass_confirm field could be left blank and the form validation would still pass
