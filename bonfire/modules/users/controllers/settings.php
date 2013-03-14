@@ -742,4 +742,3 @@ class Settings extends Admin_Controller
 
 // End of Admin User Controller
 /* End of file settings.php */
-/* Location: ./application/core_modules/controllers/settings.php */

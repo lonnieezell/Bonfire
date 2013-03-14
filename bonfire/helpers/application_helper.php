@@ -151,7 +151,7 @@ if ( ! function_exists('module_list'))
 		foreach (module_folders() as $folder)
 		{
 			// If we're excluding core modules and this module
-			// is in the 'core_modules' folder... ignore it.
+			// is in the core modules folder... ignore it.
 			if ($exclude_core && strpos($folder, 'bonfire/modules') !== false)
 			{
 				continue;
@@ -291,8 +291,8 @@ if ( ! function_exists('module_files'))
 
 		foreach (module_folders() as $path)
 		{
-			// If we're ignoring core modules and we find the core_module folder... skip it.
-			if ($exclude_core === true && strpos($path, 'core_modules') !== false)
+			// If we're ignoring core modules and we find the core module folder... skip it.
+			if ($exclude_core === true && strpos($path, 'bonfire/modules') !== false)
 			{
 				continue;
 			}

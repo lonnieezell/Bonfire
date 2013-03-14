@@ -373,4 +373,3 @@ class Emailer
 }//end class
 
 /* End of file emailer.php */
-/* Location: ./application/core_modules/emailer/libraries/emailer.php */

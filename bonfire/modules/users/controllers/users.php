@@ -901,4 +901,3 @@ class Users extends Front_Controller
 
 /* Front-end Users Controller */
 /* End of file users.php */
-/* Location: ./application/core_modules/users/controllers/users.php */

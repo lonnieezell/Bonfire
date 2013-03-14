@@ -327,4 +327,3 @@ if ( ! function_exists('settings_item'))
 
 
 /* End of class Settings.php */
-/* End of file application/core_modules/settings/libraries/Settings.php */

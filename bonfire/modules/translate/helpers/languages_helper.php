@@ -59,7 +59,7 @@ if (!function_exists('list_lang_files'))
 {
 	/**
 	 * Finds a list of all language files for a specific language by
-	 * searching the application/languages folder as well as all core_module
+	 * searching the application/languages folder as well as all core module
 	 * folders for folders matching the language name.
 	 *
 	 * @param string $language The language
@@ -223,7 +223,7 @@ if (!function_exists('save_lang_file'))
 			$orig_path = APPPATH .'language/english/'. $filename;
 			$path = APPPATH .'language/'. $language .'/'. $filename;
 		}
-		// Look in core_modules
+		// Look in core modules
 		else
 		{
 			$module = str_replace('_lang.php', '', $filename);
