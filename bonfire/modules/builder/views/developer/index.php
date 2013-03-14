@@ -4,6 +4,8 @@
 	</div>
 <?php endif;?>
 
+<br/>
+
 <div class="admin-box">
 	<h3><?php echo lang('mb_exist_modules') ?></h3>
 
@@ -29,7 +31,7 @@
 				<td>
 					<?php echo form_open(SITE_AREA .'/developer/builder/delete'); ?>
 					<input type="hidden" name="module" value="<?php echo preg_replace("/[ -]/", "_", $config['name']); ?>">
-					<input type="submit" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('mb_delete_confirm'))) ?>');" value="<?php e(lang('bf_action_delete')) ?>" />
+					<input type="submit" class="btn btn-danger" onclick="return confirm('Really delete this module and all of its files?');" value="<?php echo lang('bf_action_delete') ?>" />
 					<?php echo form_close(); ?>
 				</td>
 			</tr>

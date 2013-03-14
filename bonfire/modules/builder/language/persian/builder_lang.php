@@ -64,7 +64,7 @@ $lang['mb_form_note'] = '<p><b>فيلد هاي مورد نياز افزونه ر
 
 $lang['mb_table_note'] = '<p>جدول پايگاه داده حداقل بايد شامل يک فيلد باشد ، کليد اصلي جهت ايندکس گذاري استفاده مي شود و يکتا است. اگر فيلد هاي بيشتري نياز داريد ، بر روي تعداد مورد نياز کليک کنيد تا به فرم اضافه شوند.</p>';
 
-$lang['mb_field_note'] = '<p><b>نکته :</b><br />اگر نوع فيلد "enum" و يا "set" باشد ، لطفا مقدار را با استفاده از اين فرمت وارد کنيد : \'a\',\'b\',\'c\'...<br />اگر به بک اسلش نياز بود ("\\") يا علامت نقل قول ("\'") از بک بک اسلش اضافي استفاده کنيد (براي مثال \'\\\\xyz\' يا \'a\\\'b\').</p>';
+$lang['mb_field_note'] = '<p><b>نکته :</b><br />اگر نوع فيلد "enum" و يا "set" باشد ، لطفا مقدار را با استفاده از اين فرمت وارد کنيد : \'a\',\'b\',\'c\'...<br />اگر به بک اسلش نياز بود ("\") يا علامت نقل قول ("\'") از بک بک اسلش اضافي استفاده کنيد (براي مثال \'\\xyz\' يا \'a\\\'b\').</p>';
 
 $lang['mb_form_errors']			= 'لطفا خطا هاي مقابل را تصحيح نماييد.';
 $lang['mb_form_mod_details']	= 'توضيحات افزونه ';
@@ -119,6 +119,10 @@ $lang['mb_form_is_natural_no_zero']	= 'طبيعي بدون صفر';
 $lang['mb_form_valid_ip']		= 'IP معتبر';
 $lang['mb_form_valid_base64']	= 'Base64 معتبر';
 $lang['mb_form_alpha_extra']	= 'حروف الفبا, خط زير, خط تيره, نقطه و خط فاصله.';
+// Enhanced Parent-Child Builder Functionality - Form labels
+$lang['mb_form_reference']		= 'Reference Display';
+$lang['mb_form_nullable']		= 'Nullable';
+$lang['mb_form_children']		= 'Primary Key Children';
 
 // Activities
 $lang['mb_act_create']	= 'ايجاد افزونه';

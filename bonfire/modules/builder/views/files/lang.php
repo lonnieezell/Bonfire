@@ -32,6 +32,10 @@ $lang[\''.$module_name_lower.'_edit_heading\']			= \'Edit '.$module_name.'\';
 $lang[\''.$module_name_lower.'_act_create_record\']			= \'Created record with ID\';
 $lang[\''.$module_name_lower.'_act_edit_record\']			= \'Updated record with ID\';
 $lang[\''.$module_name_lower.'_act_delete_record\']			= \'Deleted record with ID\';
+
+// Enhanced Parent-Child Builder - Add Delete Selected
+$lang[\''.$module_name_lower.'_delete_selected\']			= \'Delete selected '.$module_name.'\';
+$lang[\''.$module_name_lower.'_no_records_found\']			= \'No '.$module_name.' were found that match your selection.\';
 ';
 
 echo $lang;
