@@ -41,22 +41,6 @@ $("#flex_table").dataTable({
 		"bLengthChange": false,
 		"aaSorting": [[3,'desc']],
 		"bAutoWidth": false,
-<?php
-/* This is for server side processing
-		"bServerSide": true,
-		'sAjaxSource'    : '<?php echo base_url(); ?>admin/reports/activities/ajax_activity',
-		'fnServerData'   : function(sSource, aoData, fnCallback)
-		{
-			$.ajax({
-			'dataType': 'json',
-			'type'    : 'POST',
-			'url'     : sSource,
-			'data'    : aoData,
-			'success' : fnCallback
-			});
-		},
-*/
-?>
 		"aoColumns": [
 			{ "sWidth": "10%" },
 			null,
