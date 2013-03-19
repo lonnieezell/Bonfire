@@ -60,7 +60,7 @@ $route[SITE_AREA .'/reports']				= "admin/reports/index";
 $route[SITE_AREA .'/developer']				= "admin/developer/index";
 $route[SITE_AREA .'/settings']				= "settings/index";
 
-$route[SITE_AREA]	= SITE_AREA .'/home';
+$route[SITE_AREA]	= 'admin/home';
 
 // Activation
 $route['activate']		        = 'users/activate';
