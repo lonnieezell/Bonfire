@@ -150,6 +150,14 @@ class Developer extends Admin_Controller
 		$module = $this->uri->segment(5);
 		$file   = $this->input->post('version');
 
+		if (empty($file))
+		{
+			$msg = 'No version selected for migration.';
+			$msg = '<h4 class="alert-heading">' . $msg . '</h4>';
+			Template::set_message($msg, 'info');
+			redirect(SITE_AREA . '/developer/migrations');
+		}
+
 		$version = $file !== 'uninstall' ? (int)(substr($file, 0, 3)) : 0;
 
 		// Do the migration
