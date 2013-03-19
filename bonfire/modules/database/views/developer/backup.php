@@ -71,7 +71,7 @@
 
 		<div class="form-actions">
 			<button type="submit" name="backup" class="btn btn-primary" ><?php echo lang('db_backup'); ?></button> <?php echo lang('bf_or'); ?>
-			<a href="/admin/developer/database"><?php echo lang('bf_action_cancel'); ?></a>
+			<?php echo anchor(SITE_AREA .'/developer/database', lang('bf_action_cancel')); ?>
 		</div>
 
 	<?php echo form_close(); ?>

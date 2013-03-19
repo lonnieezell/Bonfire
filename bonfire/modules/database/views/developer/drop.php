@@ -22,7 +22,7 @@
 
 		<div class="actions">
 			<button type="submit" name="drop" class="btn btn-danger"><?php echo lang('bf_action_delete'); ?> <?php echo lang('db_tables'); ?></button> <?php echo lang('bf_or'); ?>
-			<a href="/admin/database"><?php echo lang('bf_action_cancel'); ?></a>
+			<?php echo anchor(SITE_AREA .'/database', lang('bf_action_cancel')); ?>
 		</div>
 
 	<?php endif; ?>

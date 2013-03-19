@@ -4,7 +4,7 @@
 	<h3><?php echo lang('db_restore_results'); ?>:</h3>
 
 	<div style="text-align: right; margin-bottom: 10px;">
-		<a href="/admin/database/backups"><?php echo lang('db_back_to_tools'); ?></a>
+		<?php echo anchor(SITE_AREA .'/database/backups', lang('db_back_to_tools')); ?>
 	</div>
 
 	<div class="content-box" style="padding: 15px">
@@ -12,7 +12,7 @@
 	</div>
 
 	<div class="text-right">
-		<a href="/admin/database/backups"><?php echo lang('db_back_to_tools'); ?></a>
+		<?php echo anchor(SITE_AREA .'/database/backups', lang('db_back_to_tools')); ?>
 	</div>
 
 <?php else : ?>
@@ -31,7 +31,7 @@
 
 		<div class="form-actions">
 			<input type="submit" name="restore" class="btn btn-primary" value="<?php echo lang('db_restore'); ?>" /> <?php echo lang('bf_or'); ?>
-			<a href="<?php echo site_url(SITE_AREA .'/developer/database/backups') ?>"><?php echo lang('bf_action_cancel'); ?></a>
+			<?php echo anchor(SITE_AREA .'/developer/database/backups', lang('bf_action_cancel')); ?>
 		</div>
 
 	<?php echo form_close(); ?>
