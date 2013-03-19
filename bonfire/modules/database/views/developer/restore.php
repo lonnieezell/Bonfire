@@ -4,7 +4,7 @@
 	<h3><?php echo lang('db_restore_results'); ?>:</h3>
 
 	<div style="text-align: right; margin-bottom: 10px;">
-		<?php echo anchor(SITE_AREA .'/database/backups', lang('db_back_to_tools')); ?>
+		<?php echo anchor(SITE_AREA .'/developer/database/backups', lang('db_back_to_tools')); ?>
 	</div>
 
 	<div class="content-box" style="padding: 15px">
@@ -12,7 +12,7 @@
 	</div>
 
 	<div class="text-right">
-		<?php echo anchor(SITE_AREA .'/database/backups', lang('db_back_to_tools')); ?>
+		<?php echo anchor(SITE_AREA .'/developer/database/backups', lang('db_back_to_tools')); ?>
 	</div>
 
 <?php else : ?>
