@@ -262,9 +262,9 @@ class Template
 
 		// Grab our current view name, based on controller/method
 		// which routes to views/controller/method.
-		
+
 		if (empty(self::$current_view))
-		{			
+		{
 			self::$current_view =  self::$ci->router->class . '/' . self::$ci->router->method;
 		}
 
@@ -882,8 +882,8 @@ EOF;
 					{
 						self::$ci->load->library('parser');
 					}
-					
-//					$output = self::$ci->load->_ci_load(array('_ci_path' => $view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));					
+
+//					$output = self::$ci->load->_ci_load(array('_ci_path' => $view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));
 
 					if (count($data) > 0)
 					{
@@ -1111,11 +1111,12 @@ function check_class($item='', $class_only=FALSE)
  *
  * @access public
  *
- * @param string $item The name of the method to check against. Can be an array of names.
+ * @param string	$item		The name of the method to check against. Can be an array of names.
+ * @param bool		$class_only	If TRUE, will only return 'active'. If FALSE, will return 'class="active"'.
  *
  * @return string Either <b>class="active"</b> or an empty string.
  */
-function check_method($item)
+function check_method($item, $class_only=FALSE)
 {
 	$ci =& get_instance();
 
@@ -1132,7 +1133,7 @@ function check_method($item)
 
 	if (in_array($ci->router->fetch_method(), $items))
 	{
-		return 'class="active"';
+		return $class_only ? 'active' : 'class="active"';
 	}
 
 	return '';
