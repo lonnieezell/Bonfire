@@ -81,6 +81,7 @@
 									<input type="hidden" name="is_module" value="1" />
 
 									<select name="version">
+										<option value=""><?php echo lang('mig_choose_migration'); ?></option>
 										<option value="uninstall"><?php echo lang('mig_uninstall'); ?></option>
 									<?php foreach ($migrations as $migration) : ?>
 										<?php if(is_array($migration)): ?>
