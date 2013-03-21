@@ -44,36 +44,41 @@ class Migration_User_meta_move extends Migration {
 
 		/*
 			Backup our users table
+
+			...assuming BFPATH is set.   It's not in the installer,
+			but we don't actually want a backup for fresh installs
 		*/
-		$this->load->dbutil();
-
-		$filename  = defined('BFPATH') ? BFPATH : APPPATH;
-		$filename .= '/db/backups/backup_meta_users_table.txt';
-
-		$prefs = array(
-			'tables'		=> $this->db->dbprefix .'users',
-			'format'		=> 'txt',
-			'filename'		=> $filename,
-			'add_drop'		=> true,
-			'add_insert'	=> true
-		);
-		
-		// MySQLi does not support backups currently
-		if ($this->db->dbdriver !== 'mysqli')
+		if (defined('BFPATH'))
 		{
-			$backup =& $this->dbutil->backup($prefs);
+			$filename = BFPATH .'/db/backups/backup_meta_users_table.txt';
 
-			$this->load->helper('file');
-			write_file($filename, $backup);
-			
-			if (file_exists($filename))
+			$this->load->dbutil();
+
+			$prefs = array(
+				'tables'		=> $this->db->dbprefix .'users',
+				'format'		=> 'txt',
+				'filename'		=> $filename,
+				'add_drop'		=> true,
+				'add_insert'	=> true
+			);
+
+			// MySQLi does not support backups currently
+			if ($this->db->dbdriver !== 'mysqli')
 			{
-				log_message('info', 'Backup file successfully saved. It can be found at <a href="/'. $filename .'">'. $filename . '</a>.');
-			}
-			else
-			{
-				log_message('error', 'There was a problem saving the backup file.');
-				die('There was a problem saving the backup file.');
+				$backup =& $this->dbutil->backup($prefs);
+
+				$this->load->helper('file');
+				write_file($filename, $backup);
+				
+				if (file_exists($filename))
+				{
+					log_message('info', 'Backup file successfully saved. It can be found at <a href="/'. $filename .'">'. $filename . '</a>.');
+				}
+				else
+				{
+					log_message('error', 'There was a problem saving the backup file.');
+					die('There was a problem saving the backup file.');
+				}
 			}
 		}
 
