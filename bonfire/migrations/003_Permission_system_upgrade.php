@@ -76,12 +76,17 @@ class Migration_Permission_system_upgrade extends Migration {
 		{
 			if($field != 'role_id' && $field != 'permission_id')
 			{
-				$this->db->query("INSERT INTO {$prefix}permissions VALUES (0,'{$field}','','active');");
+				$this->db->insert('permissions', array('name' => $field));
 			}
 		}
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES (0,'Permissions.Settings.View','Allow access to view the Permissions menu unders Settings Context','active');");
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES (0,'Permissions.Settings.Manage','Allow access to manage the Permissions in the system','active');");
-		
+		$this->db->insert('permissions', array(
+			'name' 			=> 'Permissions.Settings.View',
+			'description'	=> 'Allow access to view the Permissions menu unders Settings Context'
+		));
+		$this->db->insert('permissions', array(
+			'name'			=> 'Permissions.Settings.Manage',
+			'description'	=> 'Allow access to manage the Permissions in the system',
+		));
 		
 		// create the new bf_role_permissions table
 		$this->dbforge->add_field("role_id int(11) NOT NULL");

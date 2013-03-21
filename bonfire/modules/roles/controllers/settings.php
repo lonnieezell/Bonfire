@@ -297,8 +297,6 @@ class Settings extends Admin_Controller
         $this->form_validation->set_rules('default', 'lang:role_default_role', 'trim|is_numeric|max_length[1]');
 		$this->form_validation->set_rules('can_delete', 'lang:role_can_delete_role', 'trim|is_numeric|max_length[1]');
 
-		$_POST['role_id'] = $id;
-
 		if ($this->form_validation->run() === FALSE)
 		{
 			return FALSE;
