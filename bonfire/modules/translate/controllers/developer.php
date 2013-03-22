@@ -80,7 +80,7 @@ class Developer extends Admin_Controller
 		Assets::add_module_js('translate', 'translate.js');
 
 		// Selecting a different language?
-		if ($this->input->post('select_lang'))
+		if (isset($_POST['select_lang']))
 		{
 			$trans_lang = $this->input->post('trans_lang');
 
@@ -126,7 +126,7 @@ class Developer extends Admin_Controller
 		Assets::add_module_js('translate', 'translate.js');
 
 		// Save the file...
-		if ($lang_file && $this->input->post('save'))
+		if ($lang_file && isset($_POST['save']))
 		{
 			if (save_lang_file($lang_file, $trans_lang, $_POST['lang']))
 			{
@@ -168,7 +168,7 @@ class Developer extends Admin_Controller
 	 */
 	public function export()
 	{
-		if ($this->input->post('export'))
+		if (isset($_POST['export']))
 		{
 			$language = $this->input->post('export_lang');
             $this->do_export($language, $this->input->post('include_core'), $this->input->post('include_custom'));

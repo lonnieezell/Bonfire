@@ -71,7 +71,7 @@ class Users extends Front_Controller
 		// if the user is not logged in continue to show the login page
 		if ($this->auth->is_logged_in() === FALSE)
 		{
-			if ($this->input->post('log-me-in'))
+			if (isset($_POST['log-me-in']))
 			{
 				$remember = $this->input->post('remember_me') == '1' ? TRUE : FALSE;
 
@@ -164,7 +164,7 @@ class Users extends Front_Controller
 		// if the user is not logged in continue to show the login page
 		if ($this->auth->is_logged_in() === FALSE)
 		{
-			if ($this->input->post('send'))
+			if (isset($_POST['send']))
 			{
 				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email');
 
@@ -249,7 +249,7 @@ class Users extends Front_Controller
 
 		Template::set('meta_fields', $meta_fields);
 
-		if ($this->input->post('save'))
+		if (isset($_POST['save']))
 		{
 
 			$user_id = $this->current_user->id;
@@ -350,7 +350,7 @@ class Users extends Front_Controller
 			}
 
 			// Handle the form
-			if ($this->input->post('set_password'))
+			if (isset($_POST['set_password']))
 			{
 				$this->form_validation->set_rules('password', 'lang:bf_password', 'required|max_length[120]|valid_password');
 				$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|matches[password]');
@@ -442,7 +442,7 @@ class Users extends Front_Controller
 		$meta_fields = config_item('user_meta_fields');
 		Template::set('meta_fields', $meta_fields);
 
-		if ($this->input->post('register'))
+		if (isset($_POST['register']))
 		{
 			// Validate input
 			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email]');
@@ -485,7 +485,7 @@ class Users extends Front_Controller
 						'display_name'	=> $this->input->post('display_name'),
 					);
 
-				if ($this->input->post('username'))
+				if (isset($_POST['username']))
 				{
 					$data['username'] = $this->input->post('username');
 				}
@@ -716,7 +716,7 @@ class Users extends Front_Controller
 			$data['display_name'] = $this->input->post('display_name');
 		}
 
-		if ($this->input->post('username'))
+		if (isset($_POST['username']))
 		{
 			$data['username'] = $this->input->post('username');
 		}
@@ -744,7 +744,7 @@ class Users extends Front_Controller
 		public function activate($email = FALSE, $code = FALSE)
 		{
 
-			if ($this->input->post('activate')) {
+			if (isset($_POST['activate'])) {
 				$this->form_validation->set_rules('code', 'Verification Code', 'required|trim');
 				if ($this->form_validation->run() == TRUE) {
 					$code = $this->input->post('code');
@@ -818,7 +818,7 @@ class Users extends Front_Controller
 		   */
 		public function resend_activation()
 		{
-			if ($this->input->post('send'))
+			if (isset($_POST['send']))
 			{
 				$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email');
 
