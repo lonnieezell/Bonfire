@@ -74,7 +74,7 @@ class Developer extends Admin_Controller
 		$hide_form = FALSE;
 
 		// Are we performing an action?
-		if ($this->input->post('action'))
+		if (isset($_POST['action']))
 		{
 			$checked = $this->input->post('checked');
 
@@ -154,7 +154,7 @@ class Developer extends Admin_Controller
 	 */
 	public function backups()
 	{
-		if ($this->input->post('delete'))
+		if (isset($_POST['delete']))
 		{
 			$checked = $this->input->post('checked');
 
@@ -209,7 +209,7 @@ class Developer extends Admin_Controller
 			Template::set('toolbar_title', 'Create New Backup');
 			return TRUE;
 		}
-		else if ($this->input->post('backup'))
+		else if (isset($_POST['backup']))
 		{
 			$this->load->library('form_validation');
 
@@ -315,7 +315,7 @@ class Developer extends Admin_Controller
 	{
 		Template::set('filename', $filename);
 
-		if (!empty($filename) && $this->input->post('restore'))
+		if (!empty($filename) && isset($_POST['restore']))
 		{
 			// Load the file from disk.
 			$this->load->helper('file');

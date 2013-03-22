@@ -114,7 +114,7 @@ class Developer extends Admin_Controller {
     	Template::set('roles', $roles);
 
     	// Form submittal?
-    	if ($this->input->post('build'))
+    	if (isset($_POST['build']))
     	{
     		$this->form_validation->set_rules('context_name', 'Context Name', 'required|trim|alpha_numeric|xss_clean');
 
@@ -173,7 +173,7 @@ class Developer extends Admin_Controller {
         {
             Template::set('field_total', $this->field_total);
 
-            if ($this->input->post('build'))
+            if (isset($_POST['build']))
             {
                 Template::set('form_error', TRUE);
             }

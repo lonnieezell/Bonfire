@@ -316,7 +316,7 @@ class Reports extends Admin_Controller
 			$find_value = ($this->input->post($which.'_select') == '') ? $this->uri->segment(5) : $this->input->post($which.'_select');
 		}
 
-		if ($this->input->post('delete'))
+		if (isset($_POST['delete']))
 		{
 			$this->_delete_activity($which, $find_value);
 		}

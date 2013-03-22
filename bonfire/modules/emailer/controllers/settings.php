@@ -62,7 +62,7 @@ class Settings extends Admin_Controller
 	{
 		$this->load->library('form_validation');
 
-		if ($this->input->post('save'))
+		if (isset($_POST['save']))
 		{
 			$this->form_validation->set_rules('sender_email', 'System Email', 'required|trim|valid_email|max_length[120]');
 			$this->form_validation->set_rules('protocol', 'Email Server', 'trim');
@@ -138,7 +138,7 @@ class Settings extends Admin_Controller
 	 */
 	public function template()
 	{
-		if ($this->input->post('save'))
+		if (isset($_POST['save']))
 		{
 			$header = $_POST['header'];
 			$footer = $_POST['footer'];
@@ -189,7 +189,7 @@ class Settings extends Admin_Controller
 	 */
 	public function test()
 	{
-		if (!$this->input->post('test'))
+		if (!isset($_POST['test']))
 		{
 			$this->security->csrf_show_error();
 		}
@@ -229,7 +229,7 @@ class Settings extends Admin_Controller
 		$this->load->model('Emailer_model', 'emailer_model', TRUE);
 
 		// Deleting anything?
-		if ($this->input->post('delete'))
+		if (isset($_POST['delete']))
 		{
 			$checked = $this->input->post('checked');
 			if (is_array($checked) && count($checked))
@@ -254,7 +254,7 @@ class Settings extends Admin_Controller
 				Template::set_message(sprintf(lang('em_delete_error'), $this->emailer_model->error), 'error');
 			}
 		}
-		elseif ($this->input->post('force_process'))
+		elseif (isset($_POST['force_process']))
 		{
 			$this->load->library('emailer');
 			$this->emailer->enable_debug(TRUE);
@@ -269,7 +269,7 @@ class Settings extends Admin_Controller
 				Template::set('email_debug', $this->emailer->debug_message);
 			}
 		}
-		elseif ($this->input->post('insert_test'))
+		elseif (isset($_POST['insert_test']))
 		{
 			$this->load->library('emailer');
 
@@ -344,7 +344,7 @@ class Settings extends Admin_Controller
 		$this->load->model('users/user_model');
 		$this->load->library('emailer');
 
-		if ($this->input->post('create'))
+		if (isset($_POST['create']))
 		{
 			// validate subject, content and recipients
 			$this->form_validation->set_rules('email_subject', 'Email Subject', 'required|trim|min_length[1]|max_length[255]');

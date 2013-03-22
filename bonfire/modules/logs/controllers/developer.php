@@ -67,7 +67,7 @@ class Developer extends Admin_Controller
 		$this->load->helper('file');
 
 		// Are we doing bulk actions?
-		if ($this->input->post('delete'))
+		if (isset($_POST['delete']))
 		{
 			$this->auth->restrict('Bonfire.Logs.Manage');
 
@@ -85,7 +85,7 @@ class Developer extends Admin_Controller
 				Template::set_message(sprintf(lang('log_deleted'), count($checked)), 'success');
 			}
 		}
-		elseif ($this->input->post('delete_all'))
+		elseif (isset($_POST['delete_all']))
 		{
 			$this->auth->restrict('Bonfire.Logs.Manage');
 
@@ -155,7 +155,7 @@ class Developer extends Admin_Controller
 	{
 		$this->auth->restrict('Bonfire.Logs.Manage');
 
-		if ($this->input->post('save'))
+		if (isset($_POST['save']))
 		{
 			$this->load->helper('config_file');
 

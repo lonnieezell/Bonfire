@@ -73,7 +73,7 @@ $mb_index = "
 if ($db_required != '') {
 	$mb_index .= "
 		// Deleting anything?
-		if (\$this->input->post('delete'))
+		if (isset(\$_POST['delete']))
 		{
 			\$checked = \$this->input->post('checked');
 
@@ -152,7 +152,7 @@ $mb_create = "
 ";
 if ($db_required != '') {
 	$mb_create .= "
-		if (\$this->input->post('save'))
+		if (isset(\$_POST['save']))
 		{
 			if (\$insert_id = \$this->save_".$module_name_lower."())
 			{
@@ -201,7 +201,7 @@ $mb_edit = "
 ";
 if ($db_required != '') {
 	$mb_edit .= "
-		if (\$this->input->post('save'))
+		if (isset(\$_POST['save']))
 		{
 			\$this->auth->restrict('{edit_permission}');
 
@@ -220,7 +220,7 @@ if ($db_required != '') {
 
 	if (in_array('delete', $action_names)) {
 		$mb_edit .= "
-		else if (\$this->input->post('delete'))
+		else if (isset(\$_POST['delete']))
 		{
 			\$this->auth->restrict('{delete_permission}');
 
