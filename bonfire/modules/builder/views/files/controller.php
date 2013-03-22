@@ -73,7 +73,7 @@ $mb_index = "
 if ($db_required != '') {
 	$mb_index .= "
 		// Deleting anything?
-		if (\$this->input->post('delete'))
+		if (\$this->input->post_key_exists('delete'))
 		{
 			\$checked = \$this->input->post('checked');
 
@@ -152,7 +152,7 @@ $mb_create = "
 ";
 if ($db_required != '') {
 	$mb_create .= "
-		if (\$this->input->post('save'))
+		if (\$this->input->post_key_exists('save'))
 		{
 			if (\$insert_id = \$this->save_".$module_name_lower."())
 			{
@@ -201,7 +201,7 @@ $mb_edit = "
 ";
 if ($db_required != '') {
 	$mb_edit .= "
-		if (\$this->input->post('save'))
+		if (\$this->input->post_key_exists('save'))
 		{
 			\$this->auth->restrict('{edit_permission}');
 
@@ -220,7 +220,7 @@ if ($db_required != '') {
 
 	if (in_array('delete', $action_names)) {
 		$mb_edit .= "
-		else if (\$this->input->post('delete'))
+		else if (\$this->input->post_key_exists('delete'))
 		{
 			\$this->auth->restrict('{delete_permission}');
 
@@ -464,7 +464,7 @@ if ($controller_name != $module_name_lower)
 
 		// we set this variable as it will be used to place the comma after the last item to build the insert db array
 		$last_field = $counter;
-
+            
 		if($db_required == 'new' && $table_as_field_prefix === TRUE)
 		{
 				$field_name = $module_name_lower . '_' . set_value("view_field_name$counter");
@@ -473,7 +473,7 @@ if ($controller_name != $module_name_lower)
 		{
 				$field_name = set_value("view_field_name$counter");
 		}
-		else
+		else 
 		{
 				$field_name = set_value("view_field_name$counter");
 		}

@@ -60,7 +60,7 @@ class Developer extends Admin_Controller
 	 */
 	public function index()
 	{
-		if ($this->input->post('migrate'))
+		if ($this->input->post_key_exists('migrate'))
 		{
 			$core = $this->input->post('core_only') ? '' : 'app_';
 
@@ -125,9 +125,9 @@ class Developer extends Admin_Controller
 		}
 		else
 		{
-			$msg = 'There was an error migrating the database.';
-			logit($msg . "\n" . $this->migrations->error, 'error');
-			$msg = '<h4 class="alert-heading">' . $msg . '</h4><br /><strong>' . $this->migrations->error . '</strong>';
+			$msg = 'There was an error migrating the database.'; 
+			logit($msg . "\n" . $this->migrations->error, 'error');	
+			$msg = '<h4 class="alert-heading">' . $msg . '</h4><br /><strong>' . $this->migrations->error . '</strong>';			
 			Template::set_message($msg, 'error');
 		}//end if
 
@@ -189,7 +189,7 @@ class Developer extends Admin_Controller
 		}
 
 		// Sort Module Migrations in Reverse Order instead of Randomness.
-		foreach ($modules as &$mod)
+		foreach ($modules as &$mod) 
 		{
 			if ( ! array_key_exists('migrations', $mod))
 			{
