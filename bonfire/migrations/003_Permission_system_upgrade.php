@@ -76,7 +76,10 @@ class Migration_Permission_system_upgrade extends Migration {
 		{
 			if($field != 'role_id' && $field != 'permission_id')
 			{
-				$this->db->insert('permissions', array('name' => $field));
+				$this->db->insert('permissions', array(
+					'name'			=> $field,
+					'description'	=> ''
+				));
 			}
 		}
 		$this->db->insert('permissions', array(
