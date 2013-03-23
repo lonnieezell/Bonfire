@@ -64,7 +64,6 @@ class Migration_Permission_system_upgrade extends Migration {
 						'status' => array(
 												'type' => 'ENUM',
 												'constraint' => "'active','inactive','deleted'",
-												'null' => TRUE,
 												'default' => 'active'
 										  ),
 				);
