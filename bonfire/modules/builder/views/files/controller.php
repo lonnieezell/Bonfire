@@ -277,6 +277,10 @@ $mb_save =<<<END
 	*/
 	private function save_{$module_name_lower}(\$type='insert', \$id=0)
 	{
+		if (\$type == 'update') {
+			\$_POST['{$primary_key_field}'] = \$id;
+		}
+
 		{validation_rules}
 
 		if (\$this->form_validation->run() === FALSE)

@@ -649,8 +649,10 @@ class Users extends Front_Controller
 			$id = $this->current_user->id; /* ( $this->input->post('id') > 0 ) ? $this->input->post('id') :  */
 		}
 
+		$_POST['id'] = $id;
+
 		// Simple check to make the posted id is equal to the current user's id, minor security check
-		if ( $id != $this->current_user->id )
+		if ( $_POST['id'] != $this->current_user->id )
 		{
 			$this->form_validation->set_message('email', 'lang:us_invalid_userid');
 			return FALSE;
