@@ -288,6 +288,7 @@ class Settings extends Admin_Controller
 		}
 		else
 		{
+			$_POST['role_id'] = $id;
 			$this->form_validation->set_rules('role_name', 'lang:role_name', 'required|trim|unique[roles.role_name,roles.role_id]|max_length[60]');
 		}
 
@@ -296,8 +297,6 @@ class Settings extends Admin_Controller
         $this->form_validation->set_rules('default_context', 'lang:role_default_context', 'trim');
         $this->form_validation->set_rules('default', 'lang:role_default_role', 'trim|is_numeric|max_length[1]');
 		$this->form_validation->set_rules('can_delete', 'lang:role_can_delete_role', 'trim|is_numeric|max_length[1]');
-
-		$_POST['role_id'] = $id;
 
 		if ($this->form_validation->run() === FALSE)
 		{
