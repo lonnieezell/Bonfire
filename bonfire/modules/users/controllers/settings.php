@@ -60,7 +60,7 @@ class Settings extends Admin_Controller
 	 *
 	 * @return  void
 	 */
-	public function index($offset=0)
+	public function index()
 	{
 		$this->auth->restrict('Bonfire.Users.Manage');
 
@@ -143,6 +143,7 @@ class Settings extends Admin_Controller
 
 		$this->load->helper('ui/ui');
 
+		$offset = $this->uri->segment(5);
 		$this->user_model->limit($this->limit, $offset)->where($where);
 		$this->user_model->select('users.id, users.role_id, username, display_name, email, last_login, banned, active, users.deleted, role_name');
 
