@@ -115,7 +115,7 @@ class Modulebuilder
      *
      * @return array An array with the content for the generated files
      */
-    public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix) {
+    public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix)
     {
         $this->CI->load->helper('inflector');
 
@@ -221,7 +221,7 @@ class Modulebuilder
         return $data;
 
     }//end build_files()
- }
+
     //--------------------------------------------------------------------
 
     //--------------------------------------------------------------------
