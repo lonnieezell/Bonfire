@@ -60,10 +60,11 @@ class Settings extends Admin_Controller
 	 *
 	 * @return  void
 	 */
-	public function index()
+	public function index($filter='all', $offset=0)
 	{
 		$this->auth->restrict('Bonfire.Users.Manage');
 
+		// Fetch roles we might want to filter on
 		$roles = $this->role_model->select('role_id, role_name')->where('deleted', 0)->find_all();
 		$ordered_roles = array();
 		foreach ($roles as $role)
@@ -97,25 +98,42 @@ class Settings extends Admin_Controller
 			}
 		}
 
+		// Actions done, now display the view
 		$where = array();
 		$show_deleted = FALSE;
 
 		// Filters
-		$filter = $this->input->get('filter');
-		switch($filter)
+		if (preg_match('{first_letter-([A-Z])}', $filter, $matches))
+		{
+			$filter_type = 'first_letter';
+			$first_letter = $matches[1];
+		}
+		elseif (preg_match('{role_id-([0-9]*)}', $filter, $matches))
+		{
+			$filter_type = 'role_id';
+			$role_id = (int) $matches[1];
+		}
+		else
+		{
+			$filter_type = $filter;
+		}
+
+		switch($filter_type)
 		{
 			case 'inactive':
 				$where['users.active'] = 0;
 				break;
+
 			case 'banned':
 				$where['users.banned'] = 1;
 				break;
+
 			case 'deleted':
 				$where['users.deleted'] = 1;
 				$show_deleted = TRUE;
 				break;
-			case 'role':
-				$role_id = (int)$this->input->get('role_id');
+
+			case 'role_id':
 				$where['users.role_id'] = $role_id;
 
 				foreach ($roles as $role)
@@ -128,25 +146,21 @@ class Settings extends Admin_Controller
 				}
 				break;
 
-			default:
-				$where['users.deleted'] = 0;
-				$this->user_model->where('users.deleted', 0);
+			case 'first_letter':
+				$where['SUBSTRING( LOWER(username), 1, 1)='] = $first_letter;
 				break;
+
+			case 'all':
+				// Nothing to do
+				break;
+
+			default:
+				show_404("users/index/$filter/");
 		}
 
-		// First Letter
-		$first_letter = $this->input->get('firstletter');
-		if (!empty($first_letter))
-		{
-			$where['SUBSTRING( LOWER(username), 1, 1)='] = $first_letter;
-		}
-
-		$this->load->helper('ui/ui');
-
-		$offset = $this->uri->segment(5);
+		// Fetch the users to display
 		$this->user_model->limit($this->limit, $offset)->where($where);
 		$this->user_model->select('users.id, users.role_id, username, display_name, email, last_login, banned, active, users.deleted, role_name');
-
 		Template::set('users', $this->user_model->find_all($show_deleted));
 
 		// Pagination
@@ -155,16 +169,15 @@ class Settings extends Admin_Controller
 		$this->user_model->where($where);
 		$total_users = $this->user_model->count_all();
 
-
-		$this->pager['base_url'] = site_url(SITE_AREA .'/settings/users/index');
+		$this->pager['base_url'] = site_url(SITE_AREA ."/settings/users/index/$filter/");
 		$this->pager['total_rows'] = $total_users;
 		$this->pager['per_page'] = $this->limit;
-		$this->pager['uri_segment']	= 5;
+		$this->pager['uri_segment']	= 6;
 
 		$this->pagination->initialize($this->pager);
 
-		Template::set('current_url', current_url());
-		Template::set('filter', $filter);
+		Template::set('index_url', site_url(SITE_AREA .'/settings/users/index/') .'/');
+		Template::set('filter_type', $filter_type);
 
 		Template::set('toolbar_title', lang('us_user_management'));
 		Template::render();

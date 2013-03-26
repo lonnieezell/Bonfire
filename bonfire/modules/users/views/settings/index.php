@@ -2,15 +2,27 @@
 	<h3><?php echo lang('bf_users') ?></h3>
 
 	<div class="well shallow-well">
-		<?php render_filter_first_letter(lang('us_filter_first_letter')); ?>
+		<span class="filter-link-list">
+			<?php /* If there's a current filter, we need to replace the caption with a clear button. */ ?>
+			<?php if ($filter_type=='first_letter'): ?>
+				<a href="<?php echo $index_url; ?>" class="btn btn-small btn-primary"><?php echo lang('bf_clear') ?></a>
+			<?php else: ?>
+				<?php e(lang('us_filter_first_letter')) ?>
+			<?php endif; ?>
+
+			<?php $letters = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'); ?>
+			<?php foreach ($letters as $letter): ?>
+				<a href="<?php echo $index_url . 'first_letter-' . $letter; ?>"><?php echo $letter; ?></a>
+			<?php endforeach; ?>
+		</span>
 	</div>
-	
+
 	<ul class="nav nav-tabs" >
-		<li <?php echo $filter=='' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url; ?>"><?php echo lang('us_tab_all'); ?></a></li>
-		<li <?php echo $filter=='inactive' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=inactive'; ?>"><?php echo lang('us_tab_inactive'); ?></a></li>
-		<li <?php echo $filter=='banned' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=banned'; ?>"><?php echo lang('us_tab_banned'); ?></a></li>
-		<li <?php echo $filter=='deleted' ? 'class="active"' : ''; ?>><a href="<?php echo $current_url .'?filter=deleted'; ?>"><?php echo lang('us_tab_deleted'); ?></a></li>
-		<li class="<?php echo $filter=='role' ? 'active ' : ''; ?>dropdown">
+		<li <?php echo $filter_type=='all' ? 'class="active"' : ''; ?>><a href="<?php echo $index_url; ?>"><?php echo lang('us_tab_all'); ?></a></li>
+		<li <?php echo $filter_type=='inactive' ? 'class="active"' : ''; ?>><a href="<?php echo $index_url .'inactive/'; ?>"><?php echo lang('us_tab_inactive'); ?></a></li>
+		<li <?php echo $filter_type=='banned' ? 'class="active"' : ''; ?>><a href="<?php echo $index_url .'banned/'; ?>"><?php echo lang('us_tab_banned'); ?></a></li>
+		<li <?php echo $filter_type=='deleted' ? 'class="active"' : ''; ?>><a href="<?php echo $index_url .'deleted/'; ?>"><?php echo lang('us_tab_deleted'); ?></a></li>
+		<li class="<?php echo $filter_type=='role_id' ? 'active ' : ''; ?>dropdown">
 			<a href="#" class="drodown-toggle" data-toggle="dropdown">
 				<?php echo lang('us_tab_roles'); ?> <?php echo isset($filter_role) ? ": $filter_role" : ''; ?>
 				<b class="caret light-caret"></b>
@@ -18,7 +30,7 @@
 			<ul class="dropdown-menu">
 			<?php foreach ($roles as $role) : ?>
 				<li>
-					<a href="<?php e(site_url(SITE_AREA .'/settings/users?filter=role&role_id='. $role->role_id)) ?>">
+					<a href="<?php echo $index_url . 'role_id-' . $role->role_id; ?>">
 						<?php echo $role->role_name; ?>
 					</a>
 				</li>
@@ -27,7 +39,7 @@
 		</li>
 	</ul>
 
-	<?php echo form_open($current_url .'?'. htmlentities($_SERVER['QUERY_STRING'], ENT_QUOTES, 'UTF-8')); ?>
+	<?php echo form_open(); ?>
 
 	<table class="table table-striped">
 		<thead>
@@ -47,7 +59,7 @@
 			<tr>
 				<td colspan="8">
 					<?php echo lang('bf_with_selected') ?>
-					<?php if($filter == 'deleted'):?>
+					<?php if($filter_type == 'deleted'):?>
 					<input type="submit" name="restore" class="btn" value="<?php echo lang('bf_action_restore') ?>">
 					<input type="submit" name="purge" class="btn btn-danger" value="<?php echo lang('bf_action_purge') ?>" onclick="return confirm('<?php e(js_escape(lang('us_purge_del_confirm'))); ?>')">
 					<?php else: ?>
