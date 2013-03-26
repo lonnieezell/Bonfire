@@ -26,8 +26,6 @@ class Installer_lib {
 	public	$APPPATH;
 	public	$BFPATH;
 
-	public	$reverse_writeable_folders = array();
-
 	//--------------------------------------------------------------------
 	
 	public function __construct($config=array()) 
@@ -39,11 +37,6 @@ class Installer_lib {
 		$this->FCPATH = realpath(FCPATH . '..') . '/';
 		$this->APPPATH = INSTALLPATH . 'application/';
 		$this->BFPATH = INSTALLPATH . 'bonfire/';
-
-		if (array_key_exists('reverse_writeable_folders', $config))
-		{
-			$this->reverse_writeable_folders = $config['reverse_writeable_folders'];
-		}
 	}
 	
 	//--------------------------------------------------------------------
@@ -461,12 +454,6 @@ class Installer_lib {
 		$config_array['index_page'] = $this->rewrite_check() ? '' : 'index.php';
 
 		write_config('config', $config_array, '', $this->APPPATH);
-
-		// Reverse Folders
-		foreach ($this->reverse_writeable_folders as $folder)
-		{
-			@chmod(INSTALLPATH . $folder, 0775);
-		}
 
 		// We made it to the end, so we're good to go!
 		return true;

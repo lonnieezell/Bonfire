@@ -62,17 +62,6 @@ class Install extends CI_Controller {
 	);
 
 	/**
-	 * An array of folders the installer can make unwriteable after
-	 * installation.
-	 *
-	 * @access	private
-	 * @var		array
-	 */
-	private $reverse_writeable_folders = array(
-		'application/config'
-	);
-
-	/**
 	 * An array of files the installer checks to make
 	 * sure they can be written to.
 	 *
@@ -105,7 +94,7 @@ class Install extends CI_Controller {
 		parent::__construct();
 
 		// Contains most of our installer utility functions
-		$this->load->library('installer_lib', array('reverse_writeable_folders' => $this->reverse_writeable_folders));
+		$this->load->library('installer_lib');
 		$this->load->helper('install');
 
 		// Module locations copied from application/config/config.php.
