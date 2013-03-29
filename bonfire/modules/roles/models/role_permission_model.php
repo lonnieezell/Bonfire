@@ -286,7 +286,7 @@ class Role_permission_model extends BF_Model
 	{
 		$this->load->model('roles/role_model');
 
-		$role	= $this->role_model->find_by('role_name', $role_name);
+		$role	= $this->role_model->where('deleted', 0)->find_by('role_name', $role_name);
 		$perm	= $this->permission_model->find_by('name', $permission_name);
 
 		if (!$role || !$perm)

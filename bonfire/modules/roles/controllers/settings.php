@@ -381,7 +381,7 @@ class Settings extends Admin_Controller
 		$this->load->helper('inflector');
 
 		Template::set('matrix_permissions', $this->permission_model->select('permission_id, name')->order_by('name')->find_all());
-		Template::set('matrix_roles', $this->role_model->select('role_id, role_name')->find_all());
+		Template::set('matrix_roles', $this->role_model->select('role_id, role_name')->where('deleted', 0)->find_all());
 
 		$role_permissions = $this->role_permission_model->find_all_role_permissions();
 

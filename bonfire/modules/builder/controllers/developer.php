@@ -110,6 +110,7 @@ class Developer extends Admin_Controller {
     	// Load our roles for display in the form.
     	$this->load->model('roles/role_model');
     	$roles = $this->role_model->select('role_id, role_name')
+    							  ->where('deleted', 0)
     							  ->find_all();
     	Template::set('roles', $roles);
 
@@ -181,7 +182,7 @@ class Developer extends Admin_Controller {
             {
                 Template::set('form_error', FALSE);
             }
-            $query = $this->db->select('role_id,role_name')->order_by('role_name')->get('roles');
+            $query = $this->db->select('role_id,role_name')->where('deleted', 0)->order_by('role_name')->get('roles');
             Template::set('roles', $query->result_array());
             Template::set('form_action_options', $this->options['form_action_options']);
             Template::set('validation_rules', $this->options['validation_rules']);
