@@ -388,11 +388,11 @@ class Migrations
 	 */
 	public function install($type='')
 	{
-		$latest_version = $this->get_latest_version();
+		$latest_version = $this->get_latest_version($type);
 
 		if ($latest_version > 0)
 		{
-			return $this->version($latest_version);
+			return $this->version($latest_version, $type);
 		}
 		else
 		{
