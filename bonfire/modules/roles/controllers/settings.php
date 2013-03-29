@@ -380,7 +380,6 @@ class Settings extends Admin_Controller
 		// for the permission matrix
 		$this->load->helper('inflector');
 
-		Template::set('roles', $this->role_model->find_all());
 		Template::set('matrix_permissions', $this->permission_model->select('permission_id, name')->order_by('name')->find_all());
 		Template::set('matrix_roles', $this->role_model->select('role_id, role_name')->find_all());
 
