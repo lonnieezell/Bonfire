@@ -447,10 +447,13 @@ class Users extends Front_Controller
 			// Validate input
 			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email]');
 
-			if ($this->settings_lib->item('auth.use_usernames'))
+			$username_required = '';
+			if ($this->settings_lib->item('auth.login_type') == 'username' ||
+			    $this->settings_lib->item('auth.use_usernames'))
 			{
-				$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|max_length[30]|unique[users.username]');
+				$username_required = 'required|';
 			}
+			$this->form_validation->set_rules('username', 'lang:bf_username', $username_required . 'trim|max_length[30]|unique[users.username]');
 
 			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|max_length[120]|valid_password');
 			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|matches[password]');
@@ -670,10 +673,13 @@ class Users extends Front_Controller
 		$extra_rules = !empty($_POST['password']) ? 'required|' : '';
 		$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', ''.$extra_rules.'matches[password]');
 
-		if ($this->settings_lib->item('auth.use_usernames'))
+		$username_required = '';
+		if ($this->settings_lib->item('auth.login_type') == 'username' ||
+		    $this->settings_lib->item('auth.use_usernames'))
 		{
-			$this->form_validation->set_rules('username', 'lang:bf_username', 'required|trim|max_length[30]|unique[users.username,users.id]');
+			$username_required = 'required|';
 		}
+		$this->form_validation->set_rules('username', 'lang:bf_username', $username_required . 'trim|max_length[30]|unique[users.username,users.id]');
 
 		$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim');
 		$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|max_length[4]');

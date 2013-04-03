@@ -517,14 +517,16 @@ class Settings extends Admin_Controller
 			$this->form_validation->set_rules('pass_confirm', lang('bf_password_confirm'), '');
 		}
 
-		$use_usernames = $this->settings_lib->item('auth.use_usernames');
-
-		if ($use_usernames)
+		$username_required = '';
+		if ($this->settings_lib->item('auth.login_type') == 'username' ||
+		    $this->settings_lib->item('auth.use_usernames'))
 		{
-			$extra_unique_rule = $type == 'update' ? ',users.id' : '';
-
-			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim|max_length[30]|unique[users.username'.$extra_unique_rule.']');
+			$username_required = 'required|';
 		}
+		$extra_unique_rule = $type == 'update' ? ',users.id' : '';
+
+		$this->form_validation->set_rules('username', lang('bf_username'), $username_required . 'trim|max_length[30]|unique[users.username'.$extra_unique_rule.']');
+
 
 		$this->form_validation->set_rules('display_name', lang('bf_display_name'), 'trim|max_length[255]');
 
