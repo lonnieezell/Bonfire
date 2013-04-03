@@ -116,18 +116,11 @@ class Permission_model extends BF_Model
 	 * @access public
 	 *
 	 * @param int  $id    Permission ID
-	 * @param bool $purge Whether to use soft delete or not
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	function delete($id=0, $purge=FALSE)
+	function delete($id=0)
 	{
-		if ($purge === TRUE)
-		{
-			// temporarily set the soft_deletes to TRUE.
-			$this->soft_deletes = FALSE;
-		}
-
 		// delete the ercord
 		$deleted = parent::delete($id);
 
