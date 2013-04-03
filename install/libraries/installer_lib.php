@@ -369,21 +369,6 @@ class Installer_lib {
 			return $this->ci->migrations->error;
 		}
 
-		// get the list of custom modules in the main application
-		$module_list = $this->get_module_versions();
-
-		if (is_array($module_list) && count($module_list))
-		{
-			foreach($module_list as $module_name => $module_detail)
-			{
-				// install the migrations for the custom modules
-				if (!$this->ci->migrations->install($module_name.'_'))
-				{
-					return $this->ci->migrations->error;
-				}
-			}
-		}
-
 		/*
 			Save the information to the settings table
 		*/
@@ -454,6 +439,26 @@ class Installer_lib {
 		$config_array['index_page'] = $this->rewrite_check() ? '' : 'index.php';
 
 		write_config('config', $config_array, '', $this->APPPATH);
+
+		/*
+		 * Run custom migrations last.  In particular this comes after
+		 * the core migrations, and after we've populated the user table.
+		 */
+
+		// get the list of custom modules in the main application
+		$module_list = $this->get_module_versions();
+
+		if (is_array($module_list) && count($module_list))
+		{
+			foreach($module_list as $module_name => $module_detail)
+			{
+				// install the migrations for the custom modules
+				if (!$this->ci->migrations->install($module_name.'_'))
+				{
+					return $this->ci->migrations->error;
+				}
+			}
+		}
 
 		// We made it to the end, so we're good to go!
 		return true;
