@@ -79,7 +79,7 @@ class Install extends CI_Controller {
 	 * @access	private
 	 * @var		array
 	 */
-	private $supported_dbs = array('mysqli', 'mysql');
+	private $supported_dbs = array('mysql', 'mysqli');
 
 	//--------------------------------------------------------------------
 
