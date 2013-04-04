@@ -239,6 +239,12 @@ class Role_model extends BF_Model
 			return FALSE;
 		}
 
+		if ($this->default_role_id() == $id)
+		{
+			$this->error = 'The default role can not be deleted.';
+			return FALSE;
+		}
+
 		// get the name for management deletion later
 		$role = $this->role_model->find($id);
 
