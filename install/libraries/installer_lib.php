@@ -251,25 +251,6 @@ class Installer_lib {
 		return $data;
 	}
 	
-	//--------------------------------------------------------------------
-	
-	/*
-		Method: rewrite_check()
-
-		Verifies that mod_rewrite is enabled as a PHP extension.
-	*/
-	public function rewrite_check()
-	{
-        if (!function_exists('rewrite_check'))
-        {
-			ob_start();
-			phpinfo(INFO_MODULES);
-			$contents = ob_get_clean();
-			return strpos($contents, 'mod_rewrite') !== false;
-        }
-
-    }
-    
     //--------------------------------------------------------------------
     
     /*
@@ -434,9 +415,6 @@ class Installer_lib {
 		$key = random_string('unique', 40);
 
 		$config_array = array('encryption_key' => $key);
-
-		// check the mod_rewrite setting
-		$config_array['index_page'] = $this->rewrite_check() ? '' : 'index.php';
 
 		write_config('config', $config_array, '', $this->APPPATH);
 
