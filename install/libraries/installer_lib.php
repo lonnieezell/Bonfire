@@ -419,8 +419,8 @@ class Installer_lib {
 		write_config('config', $config_array, '', $this->APPPATH);
 
 		/*
-		 * Run custom migrations last.  In particular this comes after
-		 * the core migrations, and after we've populated the user table.
+			Run custom migrations last.  In particular this comes after
+			the core migrations, and after we've populated the user table.
 		 */
 
 		// get the list of custom modules in the main application
@@ -437,6 +437,16 @@ class Installer_lib {
 				}
 			}
 		}
+
+		// Write a file to /public/install/installed.txt as a simpler
+		// check whether it's installed, so developing doesn't require
+		// us to remove the install folder.
+		$filename = FCPATH .'installed.txt';
+
+		$msg = 'Installed On: '. date('r') ."\n";
+		$this->load->helper('file');
+
+		write_file($filename, $msg);
 
 		// We made it to the end, so we're good to go!
 		return true;

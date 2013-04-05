@@ -319,17 +319,7 @@ class Install extends CI_Controller {
 		{
 			redirect('/install');
 		}
-		
-		// Write a file to /public/install/installed.txt as a simpler
-		// check whether it's installed so developing doesn't require
-		// us to remove the install folder.
-		$filename = FCPATH .'installed.txt';
-		
-		$msg = 'Installed On: '. date('r') ."\n";
-		$this->load->helper('file');
-		
-		write_file($filename, $msg);
-		
+
 		$this->load->view('install/complete');
 	}
 	
