@@ -444,8 +444,7 @@ class Installer_lib {
 		$filename = FCPATH .'installed.txt';
 
 		$msg = 'Installed On: '. date('r') ."\n";
-		$this->load->helper('file');
-
+		$this->ci->load->helper('file');
 		write_file($filename, $msg);
 
 		// We made it to the end, so we're good to go!
