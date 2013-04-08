@@ -330,25 +330,20 @@ class User_model extends BF_Model
 	 *
 	 * @access public
 	 *
-	 * @param bool $show_deleted If FALSE, will only return non-deleted users. If TRUE, will return both deleted and non-deleted users.
+	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return bool An array of objects with each user's information.
 	 */
-	public function find_all($show_deleted=FALSE)
+	public function find_all($return_type=0)
 	{
 		if (empty($this->selects))
 		{
 			$this->select($this->table .'.*, role_name');
 		}
 
-		if ($show_deleted === FALSE)
-		{
-			$this->db->where('users.deleted', 0);
-		}
-
 		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
 
-		return parent::find_all();
+		return parent::find_all($return_type);
 
 	}//end find_all()
 

@@ -99,8 +99,7 @@ class Settings extends Admin_Controller
 		}
 
 		// Actions done, now display the view
-		$where = array();
-		$show_deleted = FALSE;
+		$where = array('users.deleted' => 0);
 
 		// Filters
 		if (preg_match('{first_letter-([A-Z])}', $filter, $matches))
@@ -130,7 +129,6 @@ class Settings extends Admin_Controller
 
 			case 'deleted':
 				$where['users.deleted'] = 1;
-				$show_deleted = TRUE;
 				break;
 
 			case 'role_id':
@@ -161,7 +159,7 @@ class Settings extends Admin_Controller
 		// Fetch the users to display
 		$this->user_model->limit($this->limit, $offset)->where($where);
 		$this->user_model->select('users.id, users.role_id, username, display_name, email, last_login, banned, active, users.deleted, role_name');
-		Template::set('users', $this->user_model->find_all($show_deleted));
+		Template::set('users', $this->user_model->find_all());
 
 		// Pagination
 		$this->load->library('pagination');

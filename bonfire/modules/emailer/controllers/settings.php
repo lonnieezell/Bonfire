@@ -398,7 +398,7 @@ class Settings extends Admin_Controller
 			}//end if
 		}//end if
 
-		$users = $this->user_model->find_all();
+		$users = $this->user_model->where('users.deleted', 0)->find_all();
 		Template::set('users', $users);
 		Template::set('toolbar_title', lang('em_create_email'));
 		Template::render();

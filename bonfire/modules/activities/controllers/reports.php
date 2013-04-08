@@ -102,7 +102,7 @@ class Reports extends Admin_Controller
 					->get($this->activity_model->get_table());
 			Template::set('top_users', $query->result());
 
-			Template::set('users', $this->user_model->find_all());
+			Template::set('users', $this->user_model->where('users.deleted', 0)->find_all());
 			Template::set('modules', module_list());
 			Template::set('activities', $this->activity_model->find_all());
 			Template::render();
@@ -360,7 +360,7 @@ class Reports extends Admin_Controller
 			default:
 				if (has_permission('Activities.User.View'))
 				{
-					foreach($this->user_model->find_all() as $e)
+					foreach($this->user_model->where('users.deleted', 0)->find_all() as $e)
 					{
 						$options[$e->id] = $e->username;
 
