@@ -218,17 +218,85 @@ class BF_Model extends CI_Model
 
 	}//end __construct()
 
+
+	/**
+	 * Tell a find() method to return records as objects
+	 */
+	const RETURN_OBJECT = 0;
+
+	/**
+	 * Tell a find() method to return records as arrays
+	 */
+	const RETURN_ARRAY = 1;
+
+
+	/*
+	 * Return one record from a CI results object,
+	 * as an object or array according to the value of $return_type
+	 */
+	protected function query_row($query, $return_type)
+	{
+		if ( $query == FALSE || $query->num_rows() == 0)
+		{
+			return FALSE;
+		}
+
+		switch($return_type)
+		{
+			case RETURN_OBJECT:
+				return $query->row();
+
+			case RETURN_ARRAY:
+				return $query->row_array();
+
+			default:
+				$this->logit(('['. get_class($this) .': '. __METHOD__ .'] '.
+				                  'BF_Model: bad $return_type, should be RETURN_OBJECT or RETURN_ARRAY',
+				             'error');
+
+				return FALSE;
+		}
+	}
+
+	/*
+	 * Return all records from a CI results object,
+	 * as objects or arrays according to the value of $return_type
+	 */
+	protected function query_result($query, $return_type)
+	{
+		if ( $query == FALSE || $query->num_rows() == 0)
+		{
+			return FALSE;
+		}
+
+		switch($return_type)
+		{
+			case BF_Model::RETURN_OBJECT:
+				return $query->result();
+
+			case BF_Model::RETURN_ARRAY:
+				return $query->result_array();
+
+			default:
+				$this->logit(('['. get_class($this) .': '. __METHOD__ .'] '.
+				                  'BF_Model: bad $return_type, should be RETURN_OBJECT or RETURN_ARRAY',
+				             'error');
+
+				return FALSE;
+		}
+	}
+
 	//---------------------------------------------------------------
 
 	/**
 	 * Searches for a single row in the database.
 	 *
 	 * @param string $id The primary key of the record to search for.
-	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
+	 * @param int $return_type Choose the return type, BF_Model::RETURN_OBJECT (default) or _ARRAY
 	 *
 	 * @return mixed An object/array representing the db row, or FALSE.
 	 */
-	public function find($id='', $return_type = 0)
+	public function find($id='', $return_type=BF_Model::RETURN_OBJECT)
 	{
 		$this->trigger('before_find');
 
@@ -241,23 +309,15 @@ class BF_Model extends CI_Model
 
 		$query = $this->db->get_where($this->table, array($this->table.'.'. $this->key => $id));
 
-		if ($query->num_rows())
+		$return = $this->query_row($query, $return_type);
+		if ($return === FALSE)
 		{
-			if($return_type == 0)
-			{
-				$return = $query->row();
-			}
-			else
-			{
-				$return = $query->row_array();
-			}
-
-			$return = $this->trigger('after_find', $return);
-
-			return $return;
+			return FALSE;
 		}
 
-		return FALSE;
+		$return = $this->trigger('after_find', $return);
+
+		return $return;
 
 	}//end find()
 
@@ -271,11 +331,11 @@ class BF_Model extends CI_Model
 	 * Active Record functions before calling this function, or
 	 * through method chaining with the where() method of this class.
 	 *
-	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
+	 * @param int $return_type Choose the return type, BF_Model::RETURN_OBJECT (default) or _ARRAY
 	 *
 	 * @return mixed An array of objects/arrays representing the results, or FALSE on failure or empty set.
 	 */
-	public function find_all($return_type = 0)
+	public function find_all($return_type=BF_Model::RETURN_OBJECT)
 	{
 		if ($this->_function_check() === FALSE)
 		{
@@ -290,25 +350,17 @@ class BF_Model extends CI_Model
 
 		$query = $this->db->get();
 
-		if (!empty($query) && $query->num_rows() > 0)
+		$return = $this->query_result($query, $return_type);
+		if ($return === FALSE)
 		{
-			if($return_type == 0)
-			{
-				$return = $query->result();
-			}
-			else
-			{
-				$return = $query->result_array();
-			}
-
-			$return = $this->trigger('after_find', $return);
-
-			return $return;
+			$this->error = lang('bf_model_bad_select');
+			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_bad_select'));
+			return FALSE;
 		}
 
-		$this->error = lang('bf_model_bad_select');
-		$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_bad_select'));
-		return FALSE;
+		$return = $this->trigger('after_find', $return);
+
+		return $return;
 
 	}//end find_all()
 
@@ -320,11 +372,11 @@ class BF_Model extends CI_Model
 	 * @param mixed  $field The table field to search in.
 	 * @param mixed  $value The value that field should be.
 	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
-	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
+	 * @param int $return_type Choose the return type, BF_Model::RETURN_OBJECT (default) or _ARRAY
 	 *
 	 * @return bool|mixed An array of objects representing the results, or FALSE on failure or empty set.
 	 */
-	public function find_all_by($field=NULL, $value=NULL, $type='and', $return_type = 0)
+	public function find_all_by($field=NULL, $value=NULL, $type='and', $return_type=BF_Model::RETURN_OBJECT)
 	{
 		if (empty($field)) return FALSE;
 
@@ -357,11 +409,11 @@ class BF_Model extends CI_Model
 	 * @param string $field Either a string or an array of fields to match against. If an array is passed it, the $value parameter is ignored since the array is expected to have key/value pairs in it.
 	 * @param string $value The value to match on the $field. Only used when $field is a string.
 	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
-	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
+	 * @param int $return_type Choose the return type, BF_Model::RETURN_OBJECT (default) or _ARRAY
 	 *
 	 * @return bool|mixed An object representing the first result returned.
 	 */
-	public function find_by($field='', $value='', $type='and', $return_type = 0)
+	public function find_by($field='', $value='', $type='and', $return_type=BF_Model::RETURN_OBJECT)
 	{
 		if (empty($field) || (!is_array($field) && empty($value)))
 		{
@@ -390,23 +442,15 @@ class BF_Model extends CI_Model
 
 		$query = $this->db->get($this->table);
 
-		if ($query && $query->num_rows() > 0)
+		$return = $this->query_result($query, $return_type);
+		if ($return === FALSE)
 		{
-			if($return_type == 0)
-			{
-				$return = $query->row();
-			}
-			else
-			{
-				$return = $query->row_result();
-			}
-
-			$return = $this->trigger('after_find', $return);
-
-			return $return;
+			return FALSE;
 		}
 
-		return FALSE;
+		$return = $this->trigger('after_find', $return);
+
+		return $return;
 
 	}//end find_by()
 
