@@ -155,8 +155,11 @@ $lang['us_account_activated']		= 'فعال سازی حساب کاربری.';
 $lang['us_account_deactivated']		= 'غیر فعال سازی حساب کاربری.';
 $lang['us_account_activated_admin']	= 'فعال سازی حساب مدیر.';
 $lang['us_account_deactivated_admin']	= 'غیر فعال سازی حساب مدیر.';
-$lang['us_active']					= 'فعال.';
-$lang['us_inactive']				= 'غیر فعال.';
+
+$lang['us_label_active']				= 'فعال';
+$lang['us_label_inactive']				= 'غیر فعال';
+$lang['us_label_banned']				= 'Banned'; // Translate
+
 //email subjects
 $lang['us_email_subj_activate']		= 'فعال سازی حساب کاربری';
 $lang['us_email_subj_pending']		= 'ثبت نام شما کامل شد و منتظر فعال سازی می باشد.';

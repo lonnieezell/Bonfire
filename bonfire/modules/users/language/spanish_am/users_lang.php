@@ -157,8 +157,11 @@ $lang['us_account_activated']		= 'Activación de cuentas de usuario.';
 $lang['us_account_deactivated']		= 'Inactivación de cuentas de usuario.';
 $lang['us_account_activated_admin']	= 'Activación de la cuenta administrativa.';
 $lang['us_account_deactivated_admin']	= 'Inactivación de la cuenta administrativa.';
-$lang['us_active']					= 'Activo.';
-$lang['us_inactive']				= 'Inactivo.';
+
+$lang['us_label_active']			= 'Activo';
+$lang['us_label_inactive']			= 'Inactivo';
+$lang['us_label_banned']			= 'Banned'; // Translate
+
 //email subjects
 $lang['us_email_subj_activate']		= 'Activa tu cuenta';
 $lang['us_email_subj_pending']		= 'Registro completado. Pendiente por activación.';

@@ -81,11 +81,8 @@
 						<input type="checkbox" name="checked[]" value="<?php echo $user->id ?>" />
 					</td>
 					<td><?php echo $user->id ?></td>
-					<td>
-						<a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $user->id); ?>"><?php echo $user->username; ?></a>
-						<?php if ($user->banned) echo '<span class="label label-warning">Banned</span>'; ?>
-					</td>
-					<td><?php echo $user->display_name ?></td>
+					<td><a href="<?php echo site_url(SITE_AREA .'/settings/users/edit/'. $user->id); ?>"><i class="icon-edit"></i><?php echo $user->username; ?></a></td>
+					<td><?php echo $user->display_name; ?></td>
 					<td>
 						<a href="mailto:<?php echo $user->email ?>"><?php echo $user->email ?></a>
 					</td>
@@ -123,14 +120,15 @@
 							<?php
 							if ($user->active == 1)
 							{
-								echo(lang('us_active'));
+								echo(lang('us_label_active'));
 							}
 							else
 							{
-								echo(lang('us_inactive'));
+								echo(lang('us_label_inactive'));
 							}
 							?>
 						</span>
+						<?php if ($user->banned) echo '<span class="label label-warning">'. lang('us_label_banned') .'</span>'; ?>
 					</td>
 				</tr>
 				<?php endforeach; ?>

@@ -68,3 +68,7 @@ $lang['us_forgot_your_password']	= 'Esqueceu a password?';
 $lang['us_password_mins']			= 'Minimo 8 caracteres.';
 $lang['us_register']				= 'Registar';
 $lang['us_already_registered']		= 'Ir para Login';
+
+$lang['us_label_active']			= 'Active'; // Translate
+$lang['us_label_inactive']			= 'Inactive'; // Translate
+$lang['us_label_banned']			= 'Banned'; // Translate
