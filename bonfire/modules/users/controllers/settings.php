@@ -733,7 +733,7 @@ class Settings extends Admin_Controller
 					}
 					else
 					{
-						$message=lang('us_err_no_email'). $this->emailer->errors;
+						$message=lang('us_err_no_email'). $this->emailer->error;
 					}
 				}
 				Template::set_message($message, 'success');

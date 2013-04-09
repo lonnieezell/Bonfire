@@ -203,7 +203,7 @@ class Users extends Front_Controller
 						}
 						else
 						{
-							Template::set_message(lang('us_reset_pass_error'). $this->emailer->errors, 'error');
+							Template::set_message(lang('us_reset_pass_error'). $this->emailer->error, 'error');
 						}
 					}
 					else
@@ -586,7 +586,7 @@ class Users extends Front_Controller
 
 					if (!$this->emailer->send($data))
 					{
-						$message .= lang('us_err_no_email'). $this->emailer->errors;
+						$message .= lang('us_err_no_email'). $this->emailer->error;
 						$error    = true;
 					}
 
@@ -802,7 +802,7 @@ class Users extends Front_Controller
 					}
 					else
 					{
-						Template::set_message(lang('us_err_no_email'). $this->emailer->errors, 'error');
+						Template::set_message(lang('us_err_no_email'). $this->emailer->error, 'error');
 					}
 					Template::redirect('/');
 				}
@@ -874,22 +874,7 @@ class Users extends Front_Controller
 						}
 						else
 						{
-							if (isset($this->emailer->errors))
-							{
-								$errors = '';
-								if (is_array($this->emailer->errors))
-								{
-									foreach ($this->emailer->errors as $error)
-									{
-										$errors .= $error."<br />";
-									}
-								}
-								else
-								{
-									$errors = $this->emailer->errors;
-								}
-								Template::set_message(lang('us_err_no_email').$errors.", ".$this->emailer->debug_message, 'error');
-							}
+							Template::set_message(lang('us_err_no_email').$this->emailer->error.", ".$this->emailer->debug_message, 'error');
 						}
 					}
 					else

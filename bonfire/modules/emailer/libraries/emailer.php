@@ -70,13 +70,13 @@ class Emailer
 	private $debug = FALSE;
 
 	/**
-	 * An array of errors generated during the course of the script running.
+	 * An error generated during the course of the script running.
 	 *
 	 * @access public
 	 *
-	 * @var array
+	 * @var string
 	 */
-	public $errors = array();
+	public $error = '';
 
 
 	/**
@@ -135,7 +135,7 @@ class Emailer
 		// If we don't have everything, return FALSE.
 		if ($to == FALSE || $subject == FALSE || $message == FALSE)
 		{
-			$this->errors[] = lang('em_missing_data');
+			$this->error = lang('em_missing_data');
 			return FALSE;
 		}
 
