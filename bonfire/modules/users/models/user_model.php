@@ -141,11 +141,6 @@ class User_model extends BF_Model
 			return FALSE;
 		}
 
-		if (!isset($data['username']) || $data['username'] === '')
-		{
-			$data['username'] = NULL;
-		}
-
 		// Display Name
 		if (!isset($data['display_name']) || $data['display_name'] === '')
 		{
