@@ -179,7 +179,6 @@ $lang['us_err_status_error'] 		= 'El estado de los usuario no se cambió: ';
 $lang['us_err_no_email'] 			= 'No se puede enviar un correo a: ';
 $lang['us_err_activate_fail'] 		= 'Su cuenta no pudos ser activada en este momento por una de las siguientes razones: ';
 $lang['us_err_activate_code'] 		= 'Por favor verifique su código e intente nuevamente o contacte al administrador del sitio solicitando su ayuda.';
-$lang['us_err_no_activate_code'] 	= 'El dódigo de activación requerido no se encuentra.';
 $lang['us_err_no_matching_code'] 	= 'No se encuentran coincidencias del código de activación en el sistema.';
 $lang['us_err_no_matching_id'] 		= 'No se encuentran coincidencias del ID de usuario en el sistema.';
 $lang['us_err_user_is_active'] 		= 'El usuario ya se encuentra activo.';

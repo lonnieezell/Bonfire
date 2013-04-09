@@ -178,7 +178,6 @@ $lang['us_err_status_error'] = 'O estatus do usuário não foi alterado: ';
 $lang['us_err_no_email'] = 'Não é possível enviar um e-mail: ';
 $lang['us_err_activate_fail'] = 'Seu registro não pôde ser ativado neste momento devido à seguinte razão: ';
 $lang['us_err_activate_code'] = 'Por favor, verifique o seu código e tente novamente ou contate o administrador do site para obter ajuda.';
-$lang['us_err_no_activate_code'] = 'O código de ativação foi perdido.';
 $lang['us_err_no_matching_code'] = 'Nenhum código de activação correspondente foi encontrado no sistema.';
 $lang['us_err_no_matching_id'] = 'Nenhum ID usuário correspondente foi encontrado no sistema.';
 $lang['us_err_user_is_active'] = 'O usuário já está ativo.';

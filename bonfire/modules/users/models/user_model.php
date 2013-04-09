@@ -761,16 +761,9 @@ class User_model extends BF_Model
 	 *
 	 * @return int User Id on success, FALSE on error
 	 */
-	public function activate($email = FALSE, $code = FALSE, $leave_inactive = FALSE)
+	public function activate($email, $code, $leave_inactive = FALSE)
 	{
-
-		if ($code === FALSE)
-		{
-	        $this->error = lang('us_err_no_activate_code');
-			return FALSE;
-	    }
-
-		if (!empty($email))
+		if ($email)
 		{
 			$this->db->where('email', $email);
 		}
