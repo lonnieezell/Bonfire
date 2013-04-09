@@ -39,6 +39,24 @@ class User_model extends BF_Model
 	protected $table = 'users';
 
 	/**
+	 * Name of the user meta table
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
+	protected $meta_table = 'user_meta';
+
+	/**
+	 * Name of the roles table
+	 *
+	 * @access protected
+	 *
+	 * @var string
+	 */
+	protected $roles_table = 'roles';
+
+	/**
 	 * Use soft deletes or not
 	 *
 	 * @access protected
@@ -311,7 +329,7 @@ class User_model extends BF_Model
 			$this->select($this->table .'.*, role_name');
 		}
 
-		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
+		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table . '.role_id', 'left');
 
 		return parent::find($id, $return_type);
 
@@ -335,7 +353,7 @@ class User_model extends BF_Model
 			$this->select($this->table .'.*, role_name');
 		}
 
-		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
+		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table . '.role_id', 'left');
 
 		return parent::find_all($return_type);
 
@@ -359,12 +377,12 @@ class User_model extends BF_Model
 	 */
 	public function find_by($field=null, $value=null, $type='and', $return_type = 0)
 	{
-		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
-
 		if (empty($this->selects))
 		{
 			$this->select($this->table .'.*, role_name');
 		}
+
+		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table . '.role_id', 'left');
 
 		return parent::find_by($field, $value, $type, $return_type);
 
@@ -381,19 +399,13 @@ class User_model extends BF_Model
 	 */
 	public function count_by_roles()
 	{
-		$join_table		= 'roles';
-		$join_type		= 'left';
-		$join_stmt		= "{$join_table}.role_id = {$this->table}.role_id";
-		$group_stmt		= "{$this->table}.role_id";
-		$select_stmt	= array(
-			"{$join_table}.role_name",
-			'count(1) as count',
-		);
-
-		$this->db->select($select_stmt)
+		$this->db->select(array(
+				$this->roles_table . '.role_name',
+				'count(1) as count',
+			))
 			->from($this->table)
-			->join($join_table, $join_stmt, $join_type)
-			->group_by($group_stmt);
+			->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table . '.role_id', 'left')
+			->group_by($this->table . '.role_id');
 
 		$query = $this->db->get();
 
@@ -422,14 +434,14 @@ class User_model extends BF_Model
 		if ($get_deleted)
 		{
 			// Get only the deleted users
-			$this->db->where('users.deleted !=', 0);
+			$this->db->where($this->table . '.deleted !=', 0);
 		}
 		else
 		{
-			$this->db->where('users.deleted', 0);
+			$this->db->where($this->table . '.deleted', 0);
 		}
 
-		return $this->db->count_all_results('users');
+		return $this->db->count_all_results($this->table);
 
 	}//end count_all()
 
@@ -474,7 +486,7 @@ class User_model extends BF_Model
 			$this->db->where('id', $user_id);
 		}
 
-		return $this->db->set('force_password_reset', 1)->update('users');
+		return $this->db->set('force_password_reset', 1)->update($this->table);
 	}
 
 	//--------------------------------------------------------------------
@@ -598,7 +610,7 @@ class User_model extends BF_Model
 		{
 			$this->db->where('user_id', $user_id);
 			$this->db->where('meta_key', $key);
-			$query = $this->db->get('user_meta');
+			$query = $this->db->get($this->meta_table);
 
 			$obj = array(
 				'user_id'		=> $user_id,
@@ -609,7 +621,7 @@ class User_model extends BF_Model
 			if ($query->num_rows() == 0)
 			{
 				// Insert
-				$result = $this->db->insert('user_meta', $obj);
+				$result = $this->db->insert($this->meta_table, $obj);
 			}
 			// Update
 			else if ($query->num_rows() > 0)
@@ -620,7 +632,7 @@ class User_model extends BF_Model
 				$this->db->where('user_id', $user_id);
 				$this->db->where('meta_key', $key);
 				$this->db->set('meta_value', $value);
-				$result = $this->db->update('user_meta', $obj);
+				$result = $this->db->update($this->meta_table, $obj);
 			}//end if
 		}//end foreach
 
@@ -653,7 +665,7 @@ class User_model extends BF_Model
 		}
 
 		$this->db->where('user_id', $user_id);
-		$query = $this->db->get('user_meta');
+		$query = $this->db->get($this->meta_table);
 
 		if ($query->num_rows())
 		{
@@ -696,7 +708,7 @@ class User_model extends BF_Model
 		$result = $this->find( $user_id );
 
 		$this->db->where('user_id', $user_id);
-		$query = $this->db->get('user_meta');
+		$query = $this->db->get($this->meta_table);
 
 		if ($query->num_rows())
 		{
