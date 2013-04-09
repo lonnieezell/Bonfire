@@ -602,9 +602,6 @@ class User_model extends BF_Model
 			return false;
 		}
 
-		$this->table	= 'user_meta';
-		$this->key		= 'meta_id';
-
 		// While this won't give us the results of each
 		// insert, it does give some sort of indiciation about
 		// the success/failure since if one fails, it's likely
@@ -641,11 +638,6 @@ class User_model extends BF_Model
 			}//end if
 		}//end foreach
 
-
-		// Reset our table info
-		$this->table	= 'users';
-		$this->key		= 'id';
-
 		return $result;
 	}//end save_meta_for()
 
@@ -667,9 +659,6 @@ class User_model extends BF_Model
 		{
 			$this->error = lang('us_invalid_user_id');
 		}
-
-		$this->table	= 'user_meta';
-		$this->key		= 'meta_id';
 
 		// Limiting to certain fields?
 		if (is_array($fields))
@@ -695,10 +684,6 @@ class User_model extends BF_Model
 		{
 			$result = new stdClass;
 		}
-
-		// Reset our table info
-		$this->table	= 'users';
-		$this->key		= 'id';
 
 		return $result;
 
