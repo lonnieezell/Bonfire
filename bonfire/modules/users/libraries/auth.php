@@ -148,7 +148,14 @@ class Auth
 			$selects .= ', login_destination';
 		}
 
-		$user = $this->ci->user_model->select($selects)->find_by($this->ci->settings_lib->item('auth.login_type'), $login);
+		if ($this->ci->settings_lib->item('auth.login_type') == lang('bf_both'))
+		{
+			$user = $this->ci->user_model->select($selects)->find_by(array('username' => $login, 'email' => $login), null, 'or');
+		}
+		else
+		{
+			$user = $this->ci->user_model->select($selects)->find_by($this->ci->settings_lib->item('auth.login_type'), $login);
+		}
 
 		// check to see if a value of FALSE came back, meaning that the username or email or password doesn't exist.
 		if($user == FALSE)

@@ -266,8 +266,6 @@ class User_model extends BF_Model
 	 */
 	public function set_to_default_role($current_role)
 	{
-		$prefix = $this->db->dbprefix;
-
 		if (!is_int($current_role)) {
 			return FALSE;
 		}
@@ -302,10 +300,11 @@ class User_model extends BF_Model
 	 * @access public
 	 *
 	 * @param int $id An INT with the user's ID.
+	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return bool|object An object with the user's information.
 	 */
-	public function find($id=null)
+	public function find($id=null, $return_type=0)
 	{
 		if (empty($this->selects))
 		{
@@ -314,7 +313,7 @@ class User_model extends BF_Model
 
 		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
 
-		return parent::find($id);
+		return parent::find($id, $return_type);
 
 	}//end find()
 
@@ -353,10 +352,12 @@ class User_model extends BF_Model
 	 *
 	 * @param string $field A string with the field to match.
 	 * @param string $value A string with the value to search for.
+	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
+	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return bool|object An object with the user's info, or FALSE on failure.
 	 */
-	public function find_by($field=null, $value=null)
+	public function find_by($field=null, $value=null, $type='and', $return_type = 0)
 	{
 		$this->db->join('roles', 'roles.role_id = users.role_id', 'left');
 
@@ -365,17 +366,7 @@ class User_model extends BF_Model
 			$this->select($this->table .'.*, role_name');
 		}
 
-		if ($field == 'both')
-		{
-			$field = array(
-				'username'	=> $value,
-				'email'		=> $value
-			);
-
-			return parent::find_by($field, null, 'or');
-		}
-
-		return parent::find_by($field, $value);
+		return parent::find_by($field, $value, $type, $return_type);
 
 	}//end find_by()
 
