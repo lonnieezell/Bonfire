@@ -283,6 +283,13 @@ class Developer extends Admin_Controller
 	 */
 	public function get_backup($filename=null)
 	{
+		// CSRF could try `../../dev/temperamental-special-file` or `COM1`
+		// and we'd really rather exclude the possibility of that happening anyway.
+		if (preg_match('{[\\/]}', $filename) || ! fnmatch('*.*', $filename))
+		{
+			$this->security->csrf_show_error();
+		}
+
 		$this->load->helper('download');
 
 		if (file_exists($this->backup_folder . $filename))
@@ -315,7 +322,7 @@ class Developer extends Admin_Controller
 	{
 		Template::set('filename', $filename);
 
-		if (!empty($filename) && isset($_POST['restore']))
+		if (isset($_POST['restore']) && !empty($filename))
 		{
 			// Load the file from disk.
 			$this->load->helper('file');
@@ -365,6 +372,7 @@ class Developer extends Admin_Controller
 			}
 		}//end if
 
+		// Show our verification screen.
 		Template::set_view('developer/restore');
 		Template::set('toolbar_title', 'Database Restore');
 		Template::render();
@@ -376,13 +384,13 @@ class Developer extends Admin_Controller
 	/**
 	 * Repairs database tables.
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @param array $tables Array of tables to repair
 	 *
 	 * @return mixed
 	 */
-	public function repair($tables=null)
+	private function repair($tables=null)
 	{
 		if (is_array($tables))
 		{
@@ -420,11 +428,11 @@ class Developer extends Admin_Controller
 	/**
 	 * Optimize the entire database
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @return void
 	 */
-	public function optimize()
+	private function optimize()
 	{
 		$this->load->dbutil();
 
@@ -492,57 +500,5 @@ class Developer extends Admin_Controller
 		}
 
 	}//end drop()
-
-	//---------------------------------------------------------------
-
-	//--------------------------------------------------------------------
-	// !MIGRATIONS
-	//--------------------------------------------------------------------
-
-	/**
-	 * Display migrations
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function migrations()
-	{
-		$this->load->library('Migrations');
-
-		Template::set('installed_version', $this->migrations->get_schema_version());
-		Template::set('latest_version', $this->migrations->get_latest_version());
-
-		Template::render();
-
-	}//end migrations()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Perform a migration
-	 *
-	 * @access public
-	 *
-	 * @return void
-	 */
-	public function migrate()
-	{
-		$this->load->library('Migrations');
-
-		if ($this->migrations->install())
-		{
-			Template::set_message('Database updated to the latest version.', 'success');
-		} else
-		{
-			Template::set_message('Unable to update database schema: '. $this->migrations->error, 'error');
-		}
-
-		redirect(SITE_AREA .'/database/migrations');
-
-	}//end migrate()
-
-	//--------------------------------------------------------------------
-
 
 }//end class
