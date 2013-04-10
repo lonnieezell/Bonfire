@@ -133,7 +133,7 @@ class Auth
 	{
 		if (empty($login) || empty($password))
 		{
-			$error = $this->ci->settings_lib->item('auth.login_type') == lang('bf_both') ? lang('bf_username') .'/'. lang('bf_email') : ucfirst($this->ci->settings_lib->item('auth.login_type'));
+			$error = $this->ci->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucfirst($this->ci->settings_lib->item('auth.login_type'));
 			Template::set_message(sprintf(lang('us_fields_required'), $error), 'error');
 			return FALSE;
 		}
@@ -148,7 +148,7 @@ class Auth
 			$selects .= ', login_destination';
 		}
 
-		if ($this->ci->settings_lib->item('auth.login_type') == lang('bf_both'))
+		if ($this->ci->settings_lib->item('auth.login_type') == 'both')
 		{
 			$user = $this->ci->user_model->select($selects)->find_by(array('username' => $login, 'email' => $login), null, 'or');
 		}
