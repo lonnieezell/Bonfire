@@ -66,7 +66,7 @@ class Developer extends Admin_Controller
 
 			if ($version = $this->input->post('migration'))
 			{
-				redirect(SITE_AREA .'/developer/migrations/migrate_to/'. $version .'/'. $core);
+				$this->migrate_to($version, $core);
 			}
 		}
 
@@ -91,14 +91,14 @@ class Developer extends Admin_Controller
 	/**
 	 * Migrate the selected migration type to a specific migration number
 	 *
-	 * @access public
+	 * @access private
 	 *
 	 * @param int    $version The version number to migrate to
 	 * @param string $type    The migration type (core, app_, MODULE_)
 	 *
 	 * @return void
 	 */
-	public function migrate_to($version, $type='')
+	private function migrate_to($version, $type)
 	{
 		$result = $this->migrations->version($version, $type);
 
@@ -110,8 +110,6 @@ class Developer extends Admin_Controller
 
 				// Log the activity
 				$this->activity_model->log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' Uninstalled Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
-
-				redirect(SITE_AREA .'/developer/migrations');
 			}
 			else
 			{
@@ -119,8 +117,6 @@ class Developer extends Admin_Controller
 
 				// Log the activity
 				$this->activity_model->log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' to Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
-
-				redirect(SITE_AREA .'/developer/migrations');
 			}
 		}
 		else
@@ -129,12 +125,9 @@ class Developer extends Admin_Controller
 			logit($msg . "\n" . $this->migrations->error, 'error');
 			$msg = '<h4 class="alert-heading">' . $msg . '</h4><br /><strong>' . $this->migrations->error . '</strong>';
 			Template::set_message($msg, 'error');
-
-			redirect(SITE_AREA .'/developer/migrations');
 		}//end if
 
 		Template::set_message('<h4 class="alert-heading">No version to migrate to.</h4>', 'error');
-		redirect(SITE_AREA .'/developer/migrations');
 
 	}//end migrate_to()
 
@@ -147,26 +140,30 @@ class Developer extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	public function migrate_module()
+	public function migrate_module($module='')
 	{
-		$module = $this->uri->segment(5);
-		$file   = $this->input->post('version');
-
-		if (empty($file))
+		if (isset($_POST['migrate']))
 		{
-			$msg = 'No version selected for migration.';
-			$msg = '<h4 class="alert-heading">' . $msg . '</h4>';
-			Template::set_message($msg, 'info');
-			redirect(SITE_AREA . '/developer/migrations');
+			$file   = $this->input->post('version');
+
+			if (empty($file))
+			{
+				$msg = 'No version selected for migration.';
+				$msg = '<h4 class="alert-heading">' . $msg . '</h4>';
+				Template::set_message($msg, 'info');
+				redirect(SITE_AREA . '/developer/migrations');
+			}
+
+			$version = $file !== 'uninstall' ? (int)(substr($file, 0, 3)) : 0;
+
+			// Do the migration
+			$this->migrate_to($version, $module .'_');
+
+			// Log the activity
+			$this->activity_model->log_activity($this->current_user->id, 'Migrate module: ' . $module . ' Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 		}
 
-		$version = $file !== 'uninstall' ? (int)(substr($file, 0, 3)) : 0;
-
-		// Do the migration
-		$this->migrate_to($version, $module .'_');
-
-		// Log the activity
-		$this->activity_model->log_activity($this->current_user->id, 'Migrate module: ' . $module . ' Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+		redirect(SITE_AREA .'/developer/migrations');
 
 	}//end migrate_module()
 
