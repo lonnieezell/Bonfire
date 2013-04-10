@@ -768,7 +768,7 @@ class Users extends Front_Controller
 					}
 					else
 					{
-						Template::set_message(lang('us_activate_error_msg').$this->user_model->error.'. '. lang('us_err_activate_code'), 'error');
+						Template::set_message($this->user_model->error.'. '. lang('us_err_activate_code'), 'error');
 					}
 				}
 			}
