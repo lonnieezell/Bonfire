@@ -20,6 +20,7 @@ nbactions.xml
 # Ignore Bonfire Application Specifics
 application/logs/*
 !application/logs/index.html
+install/logs/*
 application/cache/*
 !application/cache/index.html
 public/assets/cache/*
