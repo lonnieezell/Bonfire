@@ -163,7 +163,6 @@ $lang['bf_model_fetch_error'] = 'Not enough information to fetch field.';
 $lang['bf_model_count_error'] = 'Not enough information to count results.';
 $lang['bf_model_unique_error'] = 'Not enough information to check uniqueness.';
 $lang['bf_model_find_error'] = 'Not enough information to find by.';
-$lang['bf_model_bad_select'] = 'Invalid selection.';
 
 //--------------------------------------------------------------------
 // Contexts

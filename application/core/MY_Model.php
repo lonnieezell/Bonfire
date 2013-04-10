@@ -306,8 +306,6 @@ class BF_Model extends CI_Model
 			return $return;
 		}
 
-		$this->error = lang('bf_model_bad_select');
-		$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_bad_select'));
 		return FALSE;
 
 	}//end find_all()

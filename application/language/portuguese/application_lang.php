@@ -118,7 +118,6 @@ $lang['bf_model_fetch_error']	= 'Informação insucificente para fetch.';
 $lang['bf_model_count_error']	= 'Informação insucificente para count results.';
 $lang['bf_model_unique_error']	= 'Informação insucificente para check uniqueness.';
 $lang['bf_model_find_error']	= 'Informação insucificente para find by.';
-$lang['bf_model_bad_select']	= 'Selecção Inválida.';
 
 //--------------------------------------------------------------------
 // Activities

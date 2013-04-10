@@ -162,7 +162,6 @@ $lang['bf_model_fetch_error']	= 'Pas assez d\'informations pour rechercher le ch
 $lang['bf_model_count_error']	= 'Pas assez d\'informations pour compter les résultats.';
 $lang['bf_model_unique_error']	= 'Pas assez d\'informations pour vérifier l\'unicité.';
 $lang['bf_model_find_error']	= 'Pas assez d\'informations pour trouver.';
-$lang['bf_model_bad_select']	= 'Sélection non valide.';
 
 //--------------------------------------------------------------------
 // Contexts

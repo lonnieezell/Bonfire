@@ -162,7 +162,6 @@ $lang['bf_model_fetch_error']	= 'No hay suficiente información para recuperar e
 $lang['bf_model_count_error']	= 'No hay suficiente información para contar los resultados.';
 $lang['bf_model_unique_error']	= 'No hay suficiente información para verificar las claves únicas.';
 $lang['bf_model_find_error']	= 'No hay suficiente información para buscar por.';
-$lang['bf_model_bad_select']	= 'Selección incorrecta.';
 
 //--------------------------------------------------------------------
 // Contexts

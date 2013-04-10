@@ -162,7 +162,6 @@ $lang['bf_model_fetch_error'] = 'Informação insuficiente para fetch.';
 $lang['bf_model_count_error'] = 'Informação insuficiente para count results.';
 $lang['bf_model_unique_error'] = 'Informação insuficiente para check uniqueness.';
 $lang['bf_model_find_error'] = 'Informação insuficiente para find by.';
-$lang['bf_model_bad_select'] = 'Seleção Inválida.';
 
 //--------------------------------------------------------------------
 // Contexts
