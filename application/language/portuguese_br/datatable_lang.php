@@ -20,16 +20,16 @@
 	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 	THE SOFTWARE.
 */
-$lang['sProcessing'] = 'A processar...';
-$lang['sLengthMenu'] = 'Mostrar _MENU_ registos';
-$lang['sZeroRecords'] = 'Não foram encontrados resultados';
-$lang['sInfo'] = 'Mostrando de _START_ até _END_ de _TOTAL_ registos';
+$lang['sProcessing'] = 'Processando...';
+$lang['sLengthMenu'] = 'Mostrar _MENU_ registros';
+$lang['sZeroRecords'] = 'Nenhum resultado encontrado';
+$lang['sInfo'] = 'Mostrando de _START_ até _END_ de _TOTAL_ registros';
 $lang['sInfoEmpty'] = 'Mostrando de 0 até 0 de 0 registros';
-$lang['sInfoFiltered'] = '(filtrado de _MAX_ registos no total)';
+$lang['sInfoFiltered'] = '(filtrado de _MAX_ registros no total)';
 // $lang['sInfoPostFix']= '';
 $lang['sSearch'] = 'Procurar:';
 // $lang['sUrl']= '';
 $lang['sFirst'] = 'Primeiro';
 $lang['sPrevious'] = 'Anterior';
-$lang['sNext'] = 'Seguint';
+$lang['sNext'] = 'Seguinte';
 $lang['sLast'] = 'Último';
