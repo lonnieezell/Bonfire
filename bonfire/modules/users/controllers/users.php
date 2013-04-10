@@ -529,34 +529,11 @@ class Users extends Front_Controller
 							$message 		.= lang('us_account_active_login');
 							break;
 						case 1:
-							// 	Email Activiation.
-							//	Create the link to activate membership
+							// Email Activiation.
+							// Create the link to activate membership
 							// Run the account deactivate to assure everything is set correctly
-							// Switch on the login type to test the correct field
-							$login_type = $this->settings_lib->item('auth.login_type');
-							switch ($login_type)
-							{
-								case 'username':
-									if ($this->settings_lib->item('auth.use_usernames'))
-									{
-										$id_val = $_POST['username'];
-									}
-									else
-									{
-										$id_val = $_POST['email'];
-										$login_type = 'email';
-									}
-									break;
-								case 'email':
-								case 'both':
-								default:
-									$id_val = $_POST['email'];
-									$login_type = 'email';
-									break;
-							} // END switch
-
-							$activation_code = $this->user_model->deactivate($id_val, $login_type);
-							$activate_link   = site_url('activate/'. str_replace('@', ':', $_POST['email']) .'/'. $activation_code);
+							$activation_code = $this->user_model->deactivate($user_id);
+							$activate_link   = site_url('activate/'. $user_id);
 							$subject         =  lang('us_email_subj_activate');
 
 							$email_message_data = array(
@@ -749,66 +726,50 @@ class Users extends Front_Controller
 			account. If the code fails, an error is generated and returned.
 
 		*/
-		public function activate($email = FALSE, $code = FALSE)
+		public function activate($user_id = NULL)
 		{
-
-			if (isset($_POST['activate'])) {
+			if (isset($_POST['activate']))
+			{
 				$this->form_validation->set_rules('code', 'Verification Code', 'required|trim');
-				if ($this->form_validation->run() == TRUE) {
+				if ($this->form_validation->run() == TRUE)
+				{
 					$code = $this->input->post('code');
-				}
-			} else {
-				if ($email === FALSE)
-				{
-					$email = $this->uri->segment(2);
-				}
-				if ($code === FALSE)
-				{
-					$code = $this->uri->segment(3);
-				}
-			}
 
-			// fix up the email
-			if (!empty($email))
-			{
-				$email = str_replace(":", "@", $email);
-			}
-
-
-			if ($code !== FALSE)
-			{
-				$activated = $this->user_model->activate($email, $code);
-				if ($activated)
-				{
-					// Now send the email
-					$this->load->library('emailer/emailer');
-
-					$site_title = $this->settings_lib->item('site.title');
-
-					$email_message_data = array(
-						'title' => $site_title,
-						'link'  => site_url('login')
-					);
-					$data = array
-					(
-						'to'		=> $this->user_model->find($activated)->email,
-						'subject'	=> lang('us_account_active'),
-						'message'	=> $this->load->view('_emails/activated', $email_message_data, TRUE)
-					);
-
-					if ($this->emailer->send($data))
+					$activated = $this->user_model->activate($user_id, $code);
+					if ($activated)
 					{
-						Template::set_message(lang('us_account_active'), 'success');
+						$user_id = $activated;
+
+						// Now send the email
+						$this->load->library('emailer/emailer');
+
+						$site_title = $this->settings_lib->item('site.title');
+
+						$email_message_data = array(
+							'title' => $site_title,
+							'link'  => site_url('login')
+						);
+						$data = array
+						(
+							'to'		=> $this->user_model->find($user_id)->email,
+							'subject'	=> lang('us_account_active'),
+							'message'	=> $this->load->view('_emails/activated', $email_message_data, TRUE)
+						);
+
+						if ($this->emailer->send($data))
+						{
+							Template::set_message(lang('us_account_active'), 'success');
+						}
+						else
+						{
+							Template::set_message(lang('us_err_no_email'). $this->emailer->error, 'error');
+						}
+						Template::redirect('/');
 					}
 					else
 					{
-						Template::set_message(lang('us_err_no_email'). $this->emailer->error, 'error');
+						Template::set_message(lang('us_activate_error_msg').$this->user_model->error.'. '. lang('us_err_activate_code'), 'error');
 					}
-					Template::redirect('/');
-				}
-				else
-				{
-					Template::set_message(lang('us_activate_error_msg').$this->user_model->error.'. '. lang('us_err_activate_code'), 'error');
 				}
 			}
 			Template::set_view('users/users/activate');

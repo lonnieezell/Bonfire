@@ -755,23 +755,22 @@ class User_model extends BF_Model
 	 *
 	 * @access public
 	 *
-	 * @param string $email          The email address to be verified
+	 * @param int    $user_id        The user to be activated (NULL will match any)
 	 * @param string $code           The activation code to be verified
 	 * @param bool   $leave_inactive Flag whether to remove the activate hash value, but leave active = 0
 	 *
 	 * @return int User Id on success, FALSE on error
 	 */
-	public function activate($email, $code, $leave_inactive = FALSE)
+	public function activate($user_id, $code, $leave_inactive = FALSE)
 	{
-		if ($email)
+		if ($user_id)
 		{
-			$this->db->where('email', $email);
+			$this->db->where('id', $user_id);
 		}
 
-	    $query = $this->db->select('id')
-               	      ->where('activate_hash', $code)
-               	      ->limit(1)
-               	      ->get($this->table);
+		$query = $this->db->select('id')
+		                  ->where('activate_hash', $code)
+		                  ->get($this->table);
 
 		if ($query->num_rows() !== 1)
 		{
@@ -779,11 +778,15 @@ class User_model extends BF_Model
 	        return FALSE;
 		}
 
-	    $result = $query->row();
+		// Now we can find the $user_id, even if it was passed as NULL
+		$result = $query->row();
+		$user_id = $result->id;
+
 		$active = ($leave_inactive === FALSE) ? 1 : 0;
-		if ($this->update($result->id, array('activate_hash' => '','active' => $active)))
+
+		if ($this->update($user_id, array('activate_hash' => '','active' => $active)))
 		{
-			return $result->id;
+			return $user_id;
 		}
 
 	}//end activate()
@@ -800,13 +803,8 @@ class User_model extends BF_Model
 	 *
 	 * @return mixed $activate_hash on success, FALSE on error
 	 */
-	public function deactivate($user_id = FALSE, $login_type = 'email', $make_hash = TRUE)
+	public function deactivate($user_id, $make_hash = TRUE)
 	{
-	    if ($user_id === FALSE)
-		{
-	        return FALSE;
-	    }
-
 		// create a temp activation code.
         $activate_hash = '';
 		if ($make_hash === true)
@@ -815,7 +813,7 @@ class User_model extends BF_Model
 			$activate_hash = do_hash(random_string('alnum', 40) . time());
 		}
 
-		$this->db->update($this->table, array('active'=>0,'activate_hash' => $activate_hash), array($login_type => $user_id));
+		$this->db->update($this->table, array('active'=>0,'activate_hash' => $activate_hash), array('id' => $user_id));
 
 		if ($this->db->affected_rows() != 1)
 		{
