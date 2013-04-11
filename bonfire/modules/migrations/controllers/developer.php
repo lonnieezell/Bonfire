@@ -127,8 +127,6 @@ class Developer extends Admin_Controller
 			Template::set_message($msg, 'error');
 		}//end if
 
-		Template::set_message('<h4 class="alert-heading">No version to migrate to.</h4>', 'error');
-
 	}//end migrate_to()
 
 	//--------------------------------------------------------------------
