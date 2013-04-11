@@ -32,7 +32,7 @@ $lang['bf_site_status'] = 'Status';
 $lang['bf_online'] = 'Online';
 $lang['bf_offline'] = 'Offline';
 $lang['bf_top_number'] = 'Máx. de registos por página';
-$lang['bf_top_number_help'] = 'Nos reportes, quantos items por página?';
+$lang['bf_top_number_help'] = 'Nos relatórios, quantos itens por página?';
 // $lang['bf_home']				= 'Home';
 // $lang['bf_site_information']	= 'Site Information';
 // $lang['bf_timezone']			= 'Timezone';
@@ -46,19 +46,19 @@ $lang['bf_top_number_help'] = 'Nos reportes, quantos items por página?';
 $lang['bf_security'] = 'Segurança';
 $lang['bf_login_type'] = 'Tipo de Login';
 $lang['bf_login_type_email'] = 'Apenas Email';
-$lang['bf_login_type_username'] = 'Apenas Username';
-$lang['bf_allow_register'] = 'Permite que os utilizadores se registem';
-$lang['bf_login_type_both'] = 'Username ou Email';
-$lang['bf_use_usernames'] = 'Usernames - Nome de Utilizador';
-$lang['bf_use_own_name'] = 'Use Own Name';
-$lang['bf_allow_remember'] = 'Permite o  \'Lembrar login\'?';
+$lang['bf_login_type_username'] = 'Apenas Nome de usuário';
+$lang['bf_allow_register'] = 'Permite que os usuários se registrem';
+$lang['bf_login_type_both'] = 'Nome de usuário ou Email';
+$lang['bf_use_usernames'] = 'Nome de Usuário bonfire';
+$lang['bf_use_own_name'] = 'Usar nome próprio';
+$lang['bf_allow_remember'] = 'Permite \'Lembrar login\'?';
 $lang['bf_remember_time'] = 'Lembrar Utilizadores de';
 $lang['bf_week'] = 'Semana';
 $lang['bf_weeks'] = 'Semanas';
 $lang['bf_days'] = 'Dias';
-$lang['bf_username'] = 'Utilizador';
-$lang['bf_password'] = 'Password';
-$lang['bf_password_confirm'] = 'Password (novamente)';
+$lang['bf_username'] = 'Usuário';
+$lang['bf_password'] = 'Senha';
+$lang['bf_password_confirm'] = 'Senha (novamente)';
 // $lang['bf_display_name']		= 'Display Name';
 
 //--------------------------------------------------------------------
@@ -73,18 +73,18 @@ $lang['bf_searchable_default'] = 'Buscável por padrão?';
 $lang['bf_cacheable_default'] = 'Cacheable por padrão?';
 $lang['bf_track_hits'] = 'Gravar quantidade de entrada nas páginas?';
 
-$lang['bf_action_save'] = 'Guardar';
-$lang['bf_action_delete'] = 'Apagar';
+$lang['bf_action_save'] = 'Salvar';
+$lang['bf_action_delete'] = 'Excluir';
 $lang['bf_action_cancel'] = 'Cancelar';
 $lang['bf_action_download'] = 'Download';
-$lang['bf_action_preview'] = 'Previsualizar';
+$lang['bf_action_preview'] = 'Visualizar';
 $lang['bf_action_search'] = 'Procurar';
-$lang['bf_action_purge'] = 'Purgar';
-$lang['bf_action_restore'] = 'Recuperar';
+$lang['bf_action_purge'] = 'Limpar';
+$lang['bf_action_restore'] = 'Restaurar';
 $lang['bf_action_show'] = 'Mostrar';
 $lang['bf_action_login'] = 'Login';
 // $lang['bf_action_logout']		= 'Sign Out';
-$lang['bf_actions'] = 'Acções';
+$lang['bf_actions'] = 'Ações';
 // $lang['bf_clear']				= 'Clear';
 // $lang['bf_action_list']			= 'List';
 // $lang['bf_action_create']		= 'Create';
@@ -135,11 +135,11 @@ $lang['bf_show_profiler'] = 'Mostrar Perfil?';
 // ! USER/PROFILE
 //--------------------------------------------------------------------
 
-$lang['bf_user'] = 'Utilizador';
-$lang['bf_users'] = 'Utilizadores';
+$lang['bf_user'] = 'Usuário';
+$lang['bf_users'] = 'Usuários';
 $lang['bf_description'] = 'Descrição';
 $lang['bf_email'] = 'Email';
-$lang['bf_user_settings'] = 'My Profile';
+$lang['bf_user_settings'] = 'Meu perfil';
 
 //--------------------------------------------------------------------
 // !
@@ -148,7 +148,7 @@ $lang['bf_user_settings'] = 'My Profile';
 $lang['bf_both'] = 'ambos';
 $lang['bf_go_back'] = 'Anterior';
 $lang['bf_new'] = 'Novo';
-$lang['bf_required_note'] = 'Campos obrigatórios a <strong>negrito</strong>.';
+$lang['bf_required_note'] = 'Campos obrigatórios em <strong>negrito</strong>.';
 // $lang['bf_form_label_required'] = '<span class="required">*</span>';
 
 //--------------------------------------------------------------------
@@ -156,7 +156,7 @@ $lang['bf_required_note'] = 'Campos obrigatórios a <strong>negrito</strong>.';
 //--------------------------------------------------------------------
 // $lang['bf_model_db_error']		= 'DB Error: %s';
 $lang['bf_model_no_data'] = 'Sem dados para mostrar.';
-$lang['bf_model_invalid_id'] = 'IID inválido passado ao modelo.';
+$lang['bf_model_invalid_id'] = 'ID inválido passado ao modelo.';
 $lang['bf_model_no_table'] = 'Modelo sem tabela da BD especificada.';
 $lang['bf_model_fetch_error'] = 'Informação insuficiente para fetch.';
 $lang['bf_model_count_error'] = 'Informação insuficiente para count results.';
@@ -170,7 +170,7 @@ $lang['bf_model_find_error'] = 'Informação insuficiente para find by.';
 $lang['bf_context_content'] = 'Conteúdo';
 // $lang['bf_context_reports']		= 'Reports';
 $lang['bf_context_settings'] = 'Definições';
-$lang['bf_context_developer'] = 'Developer';
+$lang['bf_context_developer'] = 'Desenvolvedor';
 
 //--------------------------------------------------------------------
 // Activities
