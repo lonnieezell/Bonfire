@@ -129,6 +129,8 @@ class Developer extends Admin_Controller
 			logit($msg . "\n" . $this->migrations->error, 'error');
 			$msg = '<h4 class="alert-heading">' . $msg . '</h4><br /><strong>' . $this->migrations->error . '</strong>';
 			Template::set_message($msg, 'error');
+
+			redirect(SITE_AREA .'/developer/migrations');
 		}//end if
 
 		Template::set_message('<h4 class="alert-heading">No version to migrate to.</h4>', 'error');
