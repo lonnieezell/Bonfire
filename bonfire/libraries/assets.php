@@ -387,7 +387,9 @@ class Assets
 
 		if (self::$ci->config->item('assets.css_minify') == TRUE)
 		{
-			$file_name .= '.min';
+			// since $file_name is passed to generate_file, we don't want to add .min to it here,
+			// but we need to add it to the href attribute below
+			$min .= '.min';
 		}
 
 		//Debugging issues with media being set to 1 on module_js
@@ -400,12 +402,13 @@ class Assets
 		$attr = array(
 			'rel'	=> 'stylesheet',
 			'type'	=> 'text/css',
-			'href'	=> base_url() .self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.$min.".css",
+			'href'	=> base_url() . self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name . $min . '.css',
 			'media'	=> $media
 		);
 
-		if (self::generate_file($files, $file_name, 'css')) {
-			$output .= '<link'. self::attributes($attr) ." />\n";
+		if (self::generate_file($files, $file_name, 'css'))
+		{
+			$output .= '<link' . self::attributes($attr) . " />\n";
 		}
 
 		return $output;
@@ -929,6 +932,7 @@ class Assets
 		}
 
 		$output = '';
+		$min	= '';
 
 		$theme = Template::get('active_theme');
 		$theme = empty($theme) ? Template::get('default_theme') : $theme;
@@ -957,9 +961,17 @@ class Assets
 
 		$file_name .= $type == 'module' ? '_mod' : '_combined';
 
+		if (self::$ci->config->item('assets.js_minify') == TRUE)
+		{
+			// since $file_name is passed to generate_file, we don't want to add .min to it here,
+			// but we need to add it to the URL below
+			$min = '.min';
+		}
+
 		// Create our shell opening
-		if (self::generate_file($files, $file_name, 'js')) {
-			$output .= base_url() .self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name.".js";
+		if (self::generate_file($files, $file_name, 'js'))
+		{
+			$output .= base_url() . self::$asset_base . '/' . self::$asset_cache_folder . '/' . $file_name . $min . '.js';
 		}
 
 		return $output;
@@ -1017,7 +1029,7 @@ class Assets
 	public static function clear_cache()
 	{
 		self::$ci->load->helper('file');
-		
+
 		$site_path = Template::get('site_path');
 		$cache_path = $site_path . self::$asset_base . '/' . self::$asset_cache_folder . '/';
 
@@ -1123,14 +1135,14 @@ class Assets
 		$cache_path = $site_path . self::$asset_base . '/' . self::$asset_cache_folder . '/';
 
 		// full file path - without the extension
-		$file_path = $cache_path.$file_name;
+		$file_path = $cache_path . $file_name;
 
-		if (self::$ci->config->item("assets.{$type}_minify"))
+		if (self::$ci->config->item('assets.' . $file_type . '_minify'))
 		{
 			$file_path .= '.min';
 		}
 
-		$file_path .= '.'.$file_type;
+		$file_path .= '.' . $file_type;
 
 		$modified_time	= 0;			// Holds the last modified date of all included files.
 		$actual_file_time = 0;		// The modified time of the combined file.
