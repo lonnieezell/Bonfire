@@ -90,7 +90,9 @@
 		</div>
 	</fieldset>
 
-	<?php if (isset($user) && has_permission('Bonfire.Roles.Manage') && has_permission('Permissions.'.$user->role_name.'.Manage') && isset($roles) ) :?>
+	<?php if (has_permission('Bonfire.Roles.Manage') &&
+	          (!isset($user) || (isset($user) && has_permission('Permissions.'.$user->role_name.'.Manage'))))
+	:?>
 		<fieldset>
 			<legend><?php echo lang('us_role'); ?></legend>
 
