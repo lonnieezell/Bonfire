@@ -1,54 +1,115 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Add_permission_descriptions extends Migration {
-	
-	public function up() 
+/**
+ * Add descriptions to the permissions
+ */
+class Migration_Add_permission_descriptions extends Migration
+{
+	/****************************************************************
+	 * Table Names
+	 */
+	/**
+	 * @var string Name of the Permissions table
+	 */
+	private $table = 'permissions';
+
+	/****************************************************************
+	 * Data for Insert
+	 */
+	/**
+	 * @var array Permissions data
+	 */
+	private $data = array(
+		array(
+			'description' => 'Allow users to login to the site',
+			'name' => 'Site.Signin.Allow',
+		),
+		array(
+			'description' => 'Allow users to login to the site when the site is offline',
+			'name' => 'Site.Signin.Offline',
+		),
+		array(
+			'description' => 'Allow users to view the Content Context',
+			'name' => 'Site.Content.View',
+		),
+		array(
+			'description' => 'Allow users to view the Reports Context',
+			'name' => 'Site.Reports.View',
+		),
+		array(
+			'description' => 'Allow users to view the Settings Context',
+			'name' => 'Site.Settings.View',
+		),
+		array(
+			'description' => 'Allow users to view the Developer Context',
+			'name' => 'Site.Developer.View',
+		),
+		array(
+			'description' => 'Allow users to manage the user Roles',
+			'name' => 'Bonfire.Roles.Manage',
+		),
+		array(
+			'description' => 'Allow users to delete user Roles',
+			'name' => 'Bonfire.Roles.Delete',
+		),
+		array(
+			'description' => 'Allow users to manage the site Users',
+			'name' => 'Bonfire.Users.Manage',
+		),
+		array(
+			'description' => 'Allow users access to the User Settings',
+			'name' => 'Bonfire.Users.View',
+		),
+		array(
+			'description' => 'Allow users to add new Users',
+			'name' => 'Bonfire.Users.Add',
+		),
+		array(
+			'description' => 'Allow users to manage the Database settings',
+			'name' => 'Bonfire.Database.Manage',
+		),
+		array(
+			'description' => 'Allow users access to the Emailer settings',
+			'name' => 'Bonfire.Emailer.View',
+		),
+		array(
+			'description' => 'Allow users to manage the Emailer settings',
+			'name' => 'Bonfire.Emailer.Manage',
+		),
+		array(
+			'description' => 'Allow users access to the Log details',
+			'name' => 'Bonfire.Logs.View',
+		),
+		array(
+			'description' => 'Allow users to manage the Log files',
+			'name' => 'Bonfire.Logs.Manage',
+		),
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
+	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-		
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to login to the site' WHERE `name` = 'Site.Signin.Allow';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to login to the site when the site is offline' WHERE `name` = 'Site.Signin.Offline';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to view the Content Context' WHERE `name` = 'Site.Content.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to view the Reports Context' WHERE `name` = 'Site.Reports.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to view the Settings Context' WHERE `name` = 'Site.Settings.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to view the Developer Context' WHERE `name` = 'Site.Developer.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to manage the user Roles' WHERE `name` = 'Bonfire.Roles.Manage';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to delete user Roles' WHERE `name` = 'Bonfire.Roles.Delete';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to manage the site Users' WHERE `name` = 'Bonfire.Users.Manage';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users access to the User Settings' WHERE `name` = 'Bonfire.Users.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to add new Users' WHERE `name` = 'Bonfire.Users.Add';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to manage the Database settings' WHERE `name` = 'Bonfire.Database.Manage';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users access to the Emailer settings' WHERE `name` = 'Bonfire.Emailer.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to manage the Emailer settings' WHERE `name` = 'Bonfire.Emailer.Manage';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users access to the Log details' WHERE `name` = 'Bonfire.Logs.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = 'Allow users to manage the Log files' WHERE `name` = 'Bonfire.Logs.Manage';");
-		
+		$this->db->update_batch($this->table, $this->data, 'name');
 	}
-	
-	//--------------------------------------------------------------------
-	
-	public function down() 
+
+	/**
+	 * Uninstall this migration
+	 */
+	public function down()
 	{
-		$prefix = $this->db->dbprefix;
-		
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Site.Signin.Allow';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Site.Signin.Offline';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Site.Content.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Site.Reports.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Site.Settings.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Site.Developer.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Bonfire.Roles.Manage';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Bonfire.Roles.Delete';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Bonfire.Users.Manage';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Bonfire.Users.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Bonfire.Users.Add';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Bonfire.Database.Manage';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Bonfire.Emailer.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Bonfire.Emailer.Manage';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Bonfire.Logs.View';");
-		$this->db->query("UPDATE {$prefix}permissions SET `description` = '' WHERE `name` = 'Bonfire.Logs.Manage';");
+		$update_data = array();
+		foreach ($this->data as $data)
+		{
+			$update_data[] = array(
+				'description' => '',
+				'name' => $data['name'],
+			);
+		}
+		$this->db->update_batch($this->table, $update_data, 'name');
 	}
-	
-	//--------------------------------------------------------------------
-	
 }

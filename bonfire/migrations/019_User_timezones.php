@@ -1,31 +1,45 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_User_timezones extends Migration {
-	
-	public function up() 
+/**
+ * Add timezone to the users table
+ */
+class Migration_User_timezones extends Migration
+{
+	/**
+	 * @var string The name of the table
+	 */
+	private $table = 'users';
+
+	/**
+	 * @var array The new field to add to the table
+	 */
+	private $field = array(
+		'timezone' => array(
+			'type'			=> 'char',
+			'constraint'	=> 4,
+			'default'		=> 'UM6',
+		),
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
+	public function up()
 	{
-		$this->load->dbforge();
-		
-		$field = array(
-			'timezone' => array(
-				'type'			=> 'char',
-				'constraint'	=> 4,
-				'default'		=> 'UM6'
-			)
-		);
-		
-		$this->dbforge->add_column('users', $field);
+		$this->dbforge->add_column($this->table, $this->field);
 	}
-	
-	//--------------------------------------------------------------------
-	
-	public function down() 
-	{ 
-		$this->load->dbforge();
-		
-		$this->dbforge->drop_column('users', 'timezone');
+
+	/**
+	 * Uninstall this migration
+	 */
+	public function down()
+	{
+		foreach ($this->field as $column_name => $column_def)
+		{
+			$this->dbforge->drop_column($this->table, $column_name);
+		}
 	}
-	
-	//--------------------------------------------------------------------
-	
 }

@@ -1,59 +1,96 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Add_role_delete_permissions extends Migration {
-	
-	public function up() 
+/**
+ * Add deleted field to roles
+ * Add Bonfire.Roles.Delete permission
+ */
+class Migration_Add_role_delete_permissions extends Migration
+{
+	/****************************************************************
+	 * Table Names
+	 */
+	/**
+	 * @var array The name of the roles table
+	 */
+	private $roles_table = 'roles';
+
+	/****************************************************************
+	 * Field Definitions
+	 */
+	/**
+	 * @var array Fields to be added to the roles table
+	 */
+	private $roles_fields = array(
+		'deleted'	=> array(
+			'type'			=> 'INT',
+			'constraint'	=> 1,
+			'default'		=> 0
+		),
+	);
+
+	/****************************************************************
+	 * Data for Insert
+	 */
+	/**
+	 * @var array Data to be inserted into the permissions table
+	 */
+	private $permissions_data = array(
+		array(
+			'name'			=> 'Bonfire.Roles.Delete',
+			'description'	=> '',
+			'status'		=> 'active'
+		),
+	);
+
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
+	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-		
 		// Add the new permission
 		$ci =& get_instance();
 		$ci->load->model('permissions/permission_model');
 		$ci->load->model('roles/role_permission_model');
-		
-		$pid = $ci->permission_model->insert(array(
-			'name'			=> 'Bonfire.Roles.Delete',
-			'description'	=> '',
-			'status'		=> 'active'
-		));
-		
+
+		$pid = $ci->permission_model->insert($this->permissions_data);
+
 		if ($pid)
 		{
 			// Add the permission to the admin role.
 			$ci->role_permission_model->create(1, $pid);
 		}
-		
+
 		// Add the deleted field to the roles table
-		$this->dbforge->add_column('roles', array(
-			'deleted'	=> array(
-				'type'			=> 'INT',
-				'constraint'	=> 1,
-				'default'		=> 0
-			)
-		));
+		$this->dbforge->add_column($this->roles_table, $this->roles_fields);
 	}
-	
-	//--------------------------------------------------------------------
-	
-	public function down() 
+
+	/**
+	 * Uninstall this migration
+	 */
+	public function down()
 	{
-		$prefix = $this->db->dbprefix;
-		
 		// Delete the permissions assigned to roles
 		$ci =& get_instance();
 		$ci->load->model('permissions/permission_model');
-		
-		$perm = $ci->permission_model->find_by('name', 'Bonfire.Roles.Delete');
-		
-		if ($perm)
+
+		foreach ($this->permissions_data as $data)
 		{
-			$ci->permission_model->delete($perm->permission_id);
+			$name = $data['name'];
+			$perm = $ci->permission_model->find_by('name', $name);
+			if ($perm)
+			{
+				$ci->permission_model->delete($perm->permission_id);
+			}
 		}
-		
+
 		// Remove the deleted column from roles
-		$this->dbforge->drop_column('roles', 'deleted');
+		foreach ($this->roles_fields as $column_name => $column_def)
+		{
+			$this->dbforge->drop_column($this->roles_table, $column_name);
+		}
 	}
-	
-	//--------------------------------------------------------------------
-	
 }

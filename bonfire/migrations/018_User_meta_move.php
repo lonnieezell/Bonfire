@@ -1,7 +1,38 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_User_meta_move extends Migration {
+/**
+ * Add the table for user_meta
+ * Move all current meta fields over to the new table
+ *
+ * Note: This migration does not attempt to restore the previous state of the database
+ * when uninstalling, despite attempting to take a backup in the installation
+ */
+class Migration_User_meta_move extends Migration
+{
+	/****************************************************************
+	 * Table names
+	 */
+	/**
+	 * @var string The name of the users table
+	 */
+	private $table = 'users';
 
+	/**
+	 * @var string The name of the users meta table
+	 */
+	private $meta_table = 'user_meta';
+
+	/**
+	 * @var string The name of the settings table
+	 */
+	private $settings_table = 'settings';
+
+	/****************************************************************
+	 * Field definitions
+	 */
+	/**
+	 * @var array The names of the core fields for the users table
+	 */
 	private $core_user_fields = array(
 		'id',
 		'role_id',
@@ -19,6 +50,9 @@ class Migration_User_meta_move extends Migration {
 		'reset_by'
 	);
 
+	/**
+	 * @var array Default fields to be copied into the Meta table from the Users
+	 */
 	private $default_fields = array(
 		'first_name',
 		'last_name',
@@ -30,25 +64,96 @@ class Migration_User_meta_move extends Migration {
 		'country_iso'
 	);
 
-	//--------------------------------------------------------------------
+	/**
+	 * @var array The fields for the Meta table
+	 */
+	private $meta_fields = array(
+		'meta_id'	=> array(
+			'type'			=> 'INT',
+			'constraint'	=> 20,
+			'unsigned'		=> true,
+			'auto_increment'	=> true
+		),
+		'user_id'	=> array(
+			'type'			=> 'INT',
+			'constraint'	=> 20,
+			'unsigned'		=> true,
+			'default'		=> 0
+		),
+		'meta_key'	=> array(
+			'type'			=> 'varchar',
+			'constraint'	=> 255,
+			'default'		=> ''
+		),
+		'meta_value' => array(
+			'type'		=> 'text',
+			'null'		=> true,
+		)
+	);
 
-	/*
-		Adding the table for user_meta and moving all current meta fields
-		over to the new table.
-	*/
+	/**
+	 * @var array New fields to be added to the users table
+	 */
+	private $user_new_fields = array(
+		'display_name'	=> array(
+			'type'			=> 'varchar',
+			'constraint'	=> 255,
+			'null'			=> true,
+			'default'		=> '',
+		),
+		'display_name_changed'	=> array(
+			'type'			=> 'date',
+			'null'			=> true,
+		),
+	);
+
+	/****************************************************************
+	 * Data to Insert
+	 */
+	/**
+	 * @var array Data to be inserted into the settings table
+	 */
+	private $settings_data = array(
+		array(
+			'name'		=> 'auth.allow_name_change',
+			'module'	=> 'core',
+			'value'		=> 1,
+		),
+		array(
+			'name'		=> 'auth.name_change_frequency',
+			'module'	=> 'core',
+			'value'		=> 1,
+		),
+		array(
+			'name'		=> 'auth.name_change_limit',
+			'module'	=> 'core',
+			'value'		=> 1,
+		),
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
 	public function up()
 	{
-		$this->load->dbforge();
-
-		$this->setup_module_meta();
+		if ( ! $this->db->table_exists($this->meta_table))
+		{
+			$this->dbforge->add_field($this->meta_fields);
+			$this->dbforge->add_key('meta_id', TRUE);
+			$this->dbforge->create_table($this->meta_table);
+		}
 
 		/*
 			Backup our users table
 
-			...assuming BFPATH is set.   It's not in the installer,
+			...assuming BFPATH is set. It's not in the installer,
 			but we don't actually want a backup for fresh installs
 		*/
-		if (defined('BFPATH'))
+		// Only MySQL supports backups currently
+		if (defined('BFPATH') && $this->db->dbdriver == 'mysql')
 		{
 			$filename = BFPATH .'/db/backups/backup_meta_users_table.txt';
 
@@ -62,23 +167,19 @@ class Migration_User_meta_move extends Migration {
 				'add_insert'	=> true
 			);
 
-			// MySQLi does not support backups currently
-			if ($this->db->dbdriver !== 'mysqli')
-			{
-				$backup =& $this->dbutil->backup($prefs);
+			$backup =& $this->dbutil->backup($prefs);
 
-				$this->load->helper('file');
-				write_file($filename, $backup);
-				
-				if (file_exists($filename))
-				{
-					log_message('info', 'Backup file successfully saved. It can be found at <a href="/'. $filename .'">'. $filename . '</a>.');
-				}
-				else
-				{
-					log_message('error', 'There was a problem saving the backup file.');
-					die('There was a problem saving the backup file.');
-				}
+			$this->load->helper('file');
+			write_file($filename, $backup);
+
+			if (file_exists($filename))
+			{
+				log_message('info', 'Backup file successfully saved. It can be found at <a href="/'. $filename .'">'. $filename . '</a>.');
+			}
+			else
+			{
+				log_message('error', 'There was a problem saving the backup file.');
+				die('There was a problem saving the backup file.');
 			}
 		}
 
@@ -88,177 +189,83 @@ class Migration_User_meta_move extends Migration {
 
 		// If there are users, loop through them and create meta entries
 		// then remove all 'non-core' columns as they will now be in the meta table.
-		if ($this->db->count_all_results('users'))
+		if ($this->db->count_all_results($this->table))
 		{
-			$query = $this->db->get('users');
+			$query = $this->db->get($this->table);
 			$rows = $query->result();
+			$meta_data = array();
 
 			foreach ($rows as $row)
 			{
 				foreach ($this->default_fields as $field)
 				{
 					// We don't want to store the field if it doesn't exist in the user profile.
-					if (!empty($row->$field))
+					if ( ! empty($row->$field))
 					{
-						$data = array(
-							'user_id'	=> $row->id,
+						$meta_data[] = array(
+							'user_id'		=> $row->id,
 							'meta_key'		=> $field,
-							'meta_value'	=> $row->$field
+							'meta_value'	=> $row->$field,
 						);
-
-						$this->db->insert('user_meta', $data);
-
-						unset($data);
 					}
 				}
-
-				// Set a default display name
-				//$this->user_model->update_display_name();
 			}
+			$query->free_result();
+
+			if ( ! empty($meta_data))
+			{
+				$this->db->insert_batch($this->meta_table, $meta_data);
+			}
+
+			unset($meta_data);
+			unset($rows);
 		}
 
-		/*
-			Drop existing columns from users table.
-		*/
-		$fields = $this->db->list_fields('users');
-
-		foreach($fields as $field)
+		// Drop existing columns from users table.
+		$fields = $this->db->list_fields($this->table);
+		foreach ($fields as $field)
 		{
-			if(!in_array($field, $this->core_user_fields)) {
-				$this->dbforge->drop_column('users', $field);
+			if ( ! in_array($field, $this->core_user_fields))
+			{
+				$this->dbforge->drop_column($this->table, $field);
 			}
 		}
 		unset($fields);
 
-		/*
-			Create display_name field in users table
-		*/
-		$field = array(
-			'display_name'	=> array(
-				'type'			=> 'varchar',
-				'constraint'	=> 255,
-				'null'			=> true,
-				'default'		=> ''
-			)
-		);
-		$this->dbforge->add_column('users', $field);
-
-		$field = array(
-			'display_name_changed'	=> array(
-				'type'			=> 'date',
-				'null'			=> true,
-			)
-		);
-		$this->dbforge->add_column('users', $field);
+		// Add new fields to users table
+		$this->dbforge->add_column($this->table, $this->user_new_fields);
 
 		// Add new settings
-		$this->db->insert('settings', array('name'=>'auth.allow_name_change', 'module' => 'core', 'value' => 1));
-		$this->db->insert('settings', array('name'=>'auth.name_change_frequency', 'module' => 'core', 'value' => 1));
-		$this->db->insert('settings', array('name'=>'auth.name_change_limit', 'module' => 'core', 'value' => 1));
+		$this->db->insert_batch($this->settings_table, $this->settings_data);
 	}
 
-	//--------------------------------------------------------------------
-
+	/**
+	 * Uninstall this migration
+	 * Note: this method does not fully support reverting to
+	 * anything near the previous state of the database
+	 */
 	public function down()
 	{
-		$this->load->dbforge();
-
-		$this->db->delete('settings', array('name'=>'auth.allow_name_change'));
-		$this->db->delete('settings', array('name'=>'auth.name_change_frequency'));
-		$this->db->delete('settings', array('name'=>'auth.name_change_limit'));
-
-		// Copy the information back over to the users table.
-
-		$this->remove_module_meta('User');
-	}
-
-	//--------------------------------------------------------------------
-
-	//--------------------------------------------------------------------
-	// !META FUNCTIONS
-	//--------------------------------------------------------------------
-	// These functions were taken from the meta_model to make
-	// creating and removing the meta information simpler.
-	//
-
-	/*
-		Method: setup_module_meta()
-
-		Sets up a new module to have custom field information usable.
-		This sets up 2 new tables:
-
-			'*_fields'	- Holds the fields and their display information.
-			'*_meta'	- Holds the actual custom data.
-
-		Parameters:
-			$module	- A string with the name of the module. This is the
-					  name that will be used for the table names.
-
-		Returns:
-			true/false
-	*/
-	public function setup_module_meta()
-	{
-		$this->load->dbforge();
-
-		// Meta table
-		if (!$this->db->table_exists('user_meta'))
+		// Delete the new settings
+		$settings_names = array();
+		foreach ($this->settings_data as $setting)
 		{
-			$fields = array(
-				'meta_id'	=> array(
-					'type'			=> 'INT',
-					'constraint'	=> 20,
-					'unsigned'		=> true,
-					'auto_increment'	=> true
-				),
-				'user_id'	=> array(
-					'type'			=> 'INT',
-					'constraint'	=> 20,
-					'unsigned'		=> true,
-					'default'		=> 0
-				),
-				'meta_key'	=> array(
-					'type'			=> 'varchar',
-					'constraint'	=> 255,
-					'default'		=> ''
-				),
-				'meta_value' => array(
-					'type'		=> 'text',
-					'null'		=> true,
-				)
-			);
-			$this->dbforge->add_field($fields);
-			$this->dbforge->add_key('meta_id', TRUE);
-
-			$this->dbforge->create_table('user_meta');
+			$settings_names[] = $setting['name'];
+		}
+		if ( ! empty($settings_names))
+		{
+			$this->db->where_in('name', $settings_names)
+				->delete($this->settings_table);
 		}
 
-		return true;
+		// Drop the new columns from the users table
+		foreach ($this->user_new_fields as $column_name => $column_def)
+		{
+			$this->dbforge->drop_column($this->table, $column_name);
+		}
+
+		// TODO: Copy the information back over to the users table.
+
+		$this->dbforge->drop_table($this->meta_table);
 	}
-
-	//--------------------------------------------------------------------
-
-	/*
-		Method: remove_module_meta()
-
-		Removes any meta/field tables from the database for a given module.
-		Intended to be used during migrations.
-
-		Parameters:
-			$module	- A string with the module name
-
-		Returns:
-			true/false
-	*/
-	public function remove_module_meta()
-	{
-		$this->load->dbforge();
-
-		$this->dbforge->drop_table('user_meta');
-
-		return true;
-	}
-
-	//--------------------------------------------------------------------
-
 }

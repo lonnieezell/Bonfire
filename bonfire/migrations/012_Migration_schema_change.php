@@ -1,81 +1,113 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Migration_schema_change extends Migration {
+/**
+ * This Migration file should not be used in an install situation
+ * because the migration table schema will already be setup correctly
+ * and the old table will not exist
+ */
+
+/**
+ * Update the Migration Schema (schema_version table)
+ */
+class Migration_Migration_schema_change extends Migration
+{
+	/****************************************************************
+	 * Table names
+	 */
+	/**
+	 * @var string The name of the Schema_version table
+	 */
+	private $table = 'schema_version';
 
 	/**
-	 * This Migration file should not be used in an install situation
-	 * because the migration table schema will already be setup correctly
+	 * @var string The name of the backup Schema_version table
+	 */
+	private $backup_table = 'schema_version_old';
+
+	/****************************************************************
+	 * Field definitions
+	 */
+	/**
+	 * @var array Fields for the new schema_version table
+	 */
+	private $fields = array(
+		'type' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 20,
+			'null' => FALSE,
+		),
+		'version' => array(
+			'type' => 'INT',
+			'constraint' => '4',
+			'default'    => 0,
+		),
+	);
+
+	/**
+	 * @var string Name of new key field to be added to the table
+	 */
+	private $new_key = 'type';
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
 	 */
 	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-
-		// get the current schema versions
-		$sql = "SELECT * FROM {$prefix}schema_version";
-		$schema_version_query = $this->db->query($sql);
-		$version_array = $schema_version_query->row_array();
-
 		// check if the table is in the old format
-		if (!isset($version_array['type']))
+		if ( ! $this->db->field_exists($this->new_key, $this->table))
 		{
 			// the table is in the old format
 
 			// backup the schema_version table
-			$this->dbforge->rename_table('schema_version', $prefix.'schema_version_old');
+			$this->dbforge->rename_table($this->table, $this->backup_table);
 
 			// modify the schema_version table
-			$fields = array(
-							'type' => array(
-								'type' => 'VARCHAR',
-								'constraint' => 20,
-								'null' => FALSE,
-							),
-							'version' => array(
-								'type' => 'INT',
-								'constraint' => '4',
-								'default'    => 0,
-							),
-					);
-			$this->dbforge->add_field($fields);
-			$this->dbforge->add_key('type', TRUE);
-			$this->dbforge->create_table('schema_version');
+			$this->dbforge->add_field($this->fields);
+			$this->dbforge->add_key($this->new_key, TRUE);
+			$this->dbforge->create_table($this->table);
 
 			// add records for each of the old permissions
+			$permission_records = array();
 			foreach ($version_array as $type => $version_num)
 			{
-				$type_field = $type == 'version' ? 'core' : str_replace('version', '', $type);
-
-				if ($type_field == 'core')
+				if ($type == 'version')
 				{
+					$type_field = 'core';
 					$version_num++;
 				}
+				else
+				{
+					$type_field = str_replace('version', '', $type);
+				}
 
-				$this->db->query("INSERT INTO {$prefix}schema_version VALUES ('{$type_field}', ".$version_num.");");
+				$permission_records[] = array(
+					'type' => $type_field,
+					'version' => $version_num,
+				);
+			}
+
+			if ( ! empty($permission_records))
+			{
+				$this->db->insert_batch($this->table, $permission_records);
 			}
 		}
 	}
 
-	//--------------------------------------------------------------------
-
 	/**
-	 * This Migration file should not be used in an install situation
-	 * because the migration table schema will already be setup correctly
-	 * and the old table won't exist
+	 * Install this migration
 	 */
 	public function down()
 	{
-		$prefix = $this->db->dbprefix;
-
 		// check if the old schema exists
-		if ($this->db->table_exists('schema_version_old')) {
+		if ($this->db->table_exists($this->backup_table))
+		{
 			// Reverse the schema_version table changes
-			$this->dbforge->drop_table('schema_version');
+			$this->dbforge->drop_table($this->table);
 
-			$this->dbforge->rename_table('schema_version_old', $prefix.'schema_version');
+			$this->dbforge->rename_table($this->backup_table, $this->table);
 		}
-
 	}
-
-	//--------------------------------------------------------------------
-
 }

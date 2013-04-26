@@ -1,54 +1,87 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Add view permissions for the Profiler
+ */
 class Migration_Permissions_for_profiler extends Migration
 {
-	//--------------------------------------------------------------------
+	/**
+	 * @var string The name of the permissions table
+	 */
+	private $table = 'permissions';
 
-	private $permission_array = array(
-					'Bonfire.Profiler.View' => 'To view the Console Profiler Bar.',
-					);
+	/**
+	 * @var string The name of the Role permissions table
+	 */
+	private $ref_table = 'role_permissions';
 
-	//--------------------------------------------------------------------
+	/**
+	 * @var array The permission to insert
+	 */
+	private $data = array(
+		array(
+			'name' => 'Bonfire.Profiler.View',
+			'description' => 'To view the Console Profiler Bar.',
+		),
+	);
 
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
 	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-
-
-		foreach ($this->permission_array as $name => $description)
+		$roles = array();
+		foreach ($this->data as $permission)
 		{
-			$this->db->query("INSERT INTO {$prefix}permissions(name, description) VALUES('".$name."', '".$description."')");
-			
-			$insert_id = $this->db->insert_id();
-			// gives administrators and developer roles full right to manage permissions		
-			$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(1,{$insert_id})");
-			$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(6,{$insert_id})");
+			$this->db->insert($this->table, $permission);
+			$permission_id = $this->db->insert_id();
 
-			unset($insert_id);
+			$roles[] = array(
+				'role_id' => 1,
+				'permission_id' => $permission_id,
+			);
+			$roles[] = array(
+				'role_id' => 6,
+				'permission_id' => $permission_id,
+			);
 		}
 
+		$this->db->insert_batch($this->ref_table, $roles);
 	}
 
-	//--------------------------------------------------------------------
-
+	/**
+	 * Uninstall this migration
+	 */
 	public function down()
 	{
-		$prefix = $this->db->dbprefix;
-
-		foreach ($this->permission_array as $name => $description)
+		$permission_names = array();
+		$permission_ids = array();
+		foreach ($this->data as $permission)
 		{
-			$query = $this->db->query("SELECT permission_id FROM {$prefix}permissions WHERE name = '".$name."'");
-			foreach ($query->result_array() as $row)
-			{
-				$permission_id = $row['permission_id'];
-				$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='$permission_id';");
-			}
-			//delete the role
-			$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = '".$name."')");
+			$permission_names[] = $permission['name'];
 		}
+		if ( ! empty($permission_names))
+		{
+			$query = $this->db->select('permission_id')
+				->where_in('name', $permission_names)
+				->get($this->table);
 
+			foreach ($query->result() as $row)
+			{
+				$permission_ids[] = $row->permission_id;
+			}
+
+			if ( ! empty($permission_ids))
+			{
+				$this->db->where_in('permission_id', $permission_ids)
+					->delete($this->ref_table);
+			}
+
+			$this->db->where_in('name', $permission_names)
+				->delete($this->table);
+		}
 	}
-
-	//--------------------------------------------------------------------
-
 }

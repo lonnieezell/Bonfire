@@ -1,383 +1,1930 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Version_02_upgrades extends Migration {
-	
-	public function up() 
+/**
+ * Add Bonfire.Emailer.View permission
+ * Add Countries and Activities tables
+ * Modify Users table (varchar/larger zipcode, remove zip_extra, add country and reset_by)
+ */
+class Migration_Version_02_upgrades extends Migration
+{
+	/****************************************************************
+	 * Table Names
+	 */
+	/**
+	 * @var string Name of the Permissions table
+	 */
+	private $permissions_table = 'permissions';
+
+	/**
+	 * @var string Name of the Users table
+	 */
+	private $users_table = 'users';
+
+	/**
+	 * @var string Name of the Countries table
+	 */
+	private $countries_table = 'countries';
+
+	/**
+	 * @var string Name of the Activities table
+	 */
+	private $activities_table = 'activities';
+
+	/****************************************************************
+	 * Field Definitions
+	 */
+	/**
+	 * @var array Fields to add to the Permissions table
+	 */
+	private $permissions_fields = array(
+		'Bonfire.Emailer.View' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+	);
+
+	/**
+	 * @var array Fields to change in the Users table
+	 */
+	private $users_fields = array(
+		'temp_password_hash' => array(
+			'name' => 'reset_hash',
+			'type' => 'VARCHAR',
+			'constraint' => 40,
+			'null' => true,
+		),
+		'zipcode' => array(
+			'name' => 'zipcode',
+			'type' => 'VARCHAR',
+			'constraint' => 20,
+			'null' => true,
+		),
+	);
+
+	/**
+	 * @var array The previous version of the fields being changed in the Users table (to revert $users_fields)
+	 */
+	private $users_fields_down = array(
+		'reset_hash' => array(
+			'name'	=> 'temp_password_hash',
+			'type'	=> 'VARCHAR',
+			'constraint'	=> 40
+		),
+		'zipcode' => array(
+			'name'			=> 'zipcode',
+			'type'			=> 'INT',
+			'constraint'	=> 7,
+			'null'			=> true
+		),
+	);
+
+	/**
+	 * @var array Fields to be added to the Users table
+	 */
+	private $users_new_fields = array(
+		'reset_by' => array(
+			'type' => 'INT',
+			'constraint' => 10,
+			'null' => true,
+		),
+		'country_iso' => array(
+			'type' => 'CHAR',
+			'constraint' => 2,
+			'default' => 'US',
+		),
+	);
+
+	/**
+	 * @var array Fields to be removed from the Users table
+	 */
+	private $users_drop_fields = array(
+		'zip_extra'	=> array(
+			'type'			=> 'INT',
+			'constraint'	=> 5,
+			'null'			=> true
+		),
+	);
+
+	/**
+	 * @var array Fields for the Countries table
+	 */
+	private $countries_fields = array(
+		'iso' => array(
+			'type' => 'CHAR',
+			'constraint' => 2,
+			'default' => 'US',
+		),
+		'name' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 80,
+		),
+		'printable_name' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 80,
+		),
+		'iso3' => array(
+			'type' => 'CHAR',
+			'constraint' => 3,
+		),
+		'numcode' => array(
+			'type' => 'SMALLINT',
+		),
+	);
+
+	/**
+	 * @var array Fields for the Activities table
+	 */
+	private $activities_fields = array(
+		'activity_id' => array(
+			'type' => 'BIGINT',
+			'constraint' => 20,
+			'auto_increment' => true,
+		),
+		'user_id' => array(
+			'type' => 'BIGINT',
+			'constraint' => 20,
+			'default' => 0,
+		),
+		'activity' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 255,
+		),
+		'module' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 255,
+		),
+		'created_on' => array(
+			'type' => 'DATETIME',
+		),
+	);
+
+	/****************************************************************
+	 * Data for Insert/Update
+	 */
+	/**
+	 * @var array Data used to update the Permissions table
+	 */
+	private $permissions_data = array(
+		'Bonfire.Emailer.View' => 1,
+	);
+
+	/**
+	 * @var array Data to be inserted into the Countries table
+	 */
+	private $countries_data = array(
+		array(
+			'iso' => 'AF',
+			'name' => 'AFGHANISTAN',
+			'printable_name' => 'Afghanistan',
+			'iso3' => 'AFG',
+			'numcode' => '004',
+		),
+		array(
+			'iso' => 'AL',
+			'name' => 'ALBANIA',
+			'printable_name' => 'Albania',
+			'iso3' => 'ALB',
+			'numcode' => '008',
+		),
+		array(
+			'iso' => 'DZ',
+			'name' => 'ALGERIA',
+			'printable_name' => 'Algeria',
+			'iso3' => 'DZA',
+			'numcode' => '012',
+		),
+		array(
+			'iso' => 'AS',
+			'name' => 'AMERICAN SAMOA',
+			'printable_name' => 'American Samoa',
+			'iso3' => 'ASM',
+			'numcode' => '016',
+		),
+		array(
+			'iso' => 'AD',
+			'name' => 'ANDORRA',
+			'printable_name' => 'Andorra',
+			'iso3' => 'AND',
+			'numcode' => '020',
+		),
+		array(
+			'iso' => 'AO',
+			'name' => 'ANGOLA',
+			'printable_name' => 'Angola',
+			'iso3' => 'AGO',
+			'numcode' => '024',
+		),
+		array(
+			'iso' => 'AI',
+			'name' => 'ANGUILLA',
+			'printable_name' => 'Anguilla',
+			'iso3' => 'AIA',
+			'numcode' => '660',
+		),
+		array(
+			'iso' => 'AQ',
+			'name' => 'ANTARCTICA',
+			'printable_name' => 'Antarctica',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'AG',
+			'name' => 'ANTIGUA AND BARBUDA',
+			'printable_name' => 'Antigua and Barbuda',
+			'iso3' => 'ATG',
+			'numcode' => '028',
+		),
+		array(
+			'iso' => 'AR',
+			'name' => 'ARGENTINA',
+			'printable_name' => 'Argentina',
+			'iso3' => 'ARG',
+			'numcode' => '032',
+		),
+		array(
+			'iso' => 'AM',
+			'name' => 'ARMENIA',
+			'printable_name' => 'Armenia',
+			'iso3' => 'ARM',
+			'numcode' => '051',
+		),
+		array(
+			'iso' => 'AW',
+			'name' => 'ARUBA',
+			'printable_name' => 'Aruba',
+			'iso3' => 'ABW',
+			'numcode' => '533',
+		),
+		array(
+			'iso' => 'AU',
+			'name' => 'AUSTRALIA',
+			'printable_name' => 'Australia',
+			'iso3' => 'AUS',
+			'numcode' => '036',
+		),
+		array(
+			'iso' => 'AT',
+			'name' => 'AUSTRIA',
+			'printable_name' => 'Austria',
+			'iso3' => 'AUT',
+			'numcode' => '040',
+		),
+		array(
+			'iso' => 'AZ',
+			'name' => 'AZERBAIJAN',
+			'printable_name' => 'Azerbaijan',
+			'iso3' => 'AZE',
+			'numcode' => '031',
+		),
+		array(
+			'iso' => 'BS',
+			'name' => 'BAHAMAS',
+			'printable_name' => 'Bahamas',
+			'iso3' => 'BHS',
+			'numcode' => '044',
+		),
+		array(
+			'iso' => 'BH',
+			'name' => 'BAHRAIN',
+			'printable_name' => 'Bahrain',
+			'iso3' => 'BHR',
+			'numcode' => '048',
+		),
+		array(
+			'iso' => 'BD',
+			'name' => 'BANGLADESH',
+			'printable_name' => 'Bangladesh',
+			'iso3' => 'BGD',
+			'numcode' => '050',
+		),
+		array(
+			'iso' => 'BB',
+			'name' => 'BARBADOS',
+			'printable_name' => 'Barbados',
+			'iso3' => 'BRB',
+			'numcode' => '052',
+		),
+		array(
+			'iso' => 'BY',
+			'name' => 'BELARUS',
+			'printable_name' => 'Belarus',
+			'iso3' => 'BLR',
+			'numcode' => '112',
+		),
+		array(
+			'iso' => 'BE',
+			'name' => 'BELGIUM',
+			'printable_name' => 'Belgium',
+			'iso3' => 'BEL',
+			'numcode' => '056',
+		),
+		array(
+			'iso' => 'BZ',
+			'name' => 'BELIZE',
+			'printable_name' => 'Belize',
+			'iso3' => 'BLZ',
+			'numcode' => '084',
+		),
+		array(
+			'iso' => 'BJ',
+			'name' => 'BENIN',
+			'printable_name' => 'Benin',
+			'iso3' => 'BEN',
+			'numcode' => '204',
+		),
+		array(
+			'iso' => 'BM',
+			'name' => 'BERMUDA',
+			'printable_name' => 'Bermuda',
+			'iso3' => 'BMU',
+			'numcode' => '060',
+		),
+		array(
+			'iso' => 'BT',
+			'name' => 'BHUTAN',
+			'printable_name' => 'Bhutan',
+			'iso3' => 'BTN',
+			'numcode' => '064',
+		),
+		array(
+			'iso' => 'BO',
+			'name' => 'BOLIVIA',
+			'printable_name' => 'Bolivia',
+			'iso3' => 'BOL',
+			'numcode' => '068',
+		),
+		array(
+			'iso' => 'BA',
+			'name' => 'BOSNIA AND HERZEGOVINA',
+			'printable_name' => 'Bosnia and Herzegovina',
+			'iso3' => 'BIH',
+			'numcode' => '070',
+		),
+		array(
+			'iso' => 'BW',
+			'name' => 'BOTSWANA',
+			'printable_name' => 'Botswana',
+			'iso3' => 'BWA',
+			'numcode' => '072',
+		),
+		array(
+			'iso' => 'BV',
+			'name' => 'BOUVET ISLAND',
+			'printable_name' => 'Bouvet Island',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'BR',
+			'name' => 'BRAZIL',
+			'printable_name' => 'Brazil',
+			'iso3' => 'BRA',
+			'numcode' => '076',
+		),
+		array(
+			'iso' => 'IO',
+			'name' => 'BRITISH INDIAN OCEAN TERRITORY',
+			'printable_name' => 'British Indian Ocean Territory',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'BN',
+			'name' => 'BRUNEI DARUSSALAM',
+			'printable_name' => 'Brunei Darussalam',
+			'iso3' => 'BRN',
+			'numcode' => '096',
+		),
+		array(
+			'iso' => 'BG',
+			'name' => 'BULGARIA',
+			'printable_name' => 'Bulgaria',
+			'iso3' => 'BGR',
+			'numcode' => '100',
+		),
+		array(
+			'iso' => 'BF',
+			'name' => 'BURKINA FASO',
+			'printable_name' => 'Burkina Faso',
+			'iso3' => 'BFA',
+			'numcode' => '854',
+		),
+		array(
+			'iso' => 'BI',
+			'name' => 'BURUNDI',
+			'printable_name' => 'Burundi',
+			'iso3' => 'BDI',
+			'numcode' => '108',
+		),
+		array(
+			'iso' => 'KH',
+			'name' => 'CAMBODIA',
+			'printable_name' => 'Cambodia',
+			'iso3' => 'KHM',
+			'numcode' => '116',
+		),
+		array(
+			'iso' => 'CM',
+			'name' => 'CAMEROON',
+			'printable_name' => 'Cameroon',
+			'iso3' => 'CMR',
+			'numcode' => '120',
+		),
+		array(
+			'iso' => 'CA',
+			'name' => 'CANADA',
+			'printable_name' => 'Canada',
+			'iso3' => 'CAN',
+			'numcode' => '124',
+		),
+		array(
+			'iso' => 'CV',
+			'name' => 'CAPE VERDE',
+			'printable_name' => 'Cape Verde',
+			'iso3' => 'CPV',
+			'numcode' => '132',
+		),
+		array(
+			'iso' => 'KY',
+			'name' => 'CAYMAN ISLANDS',
+			'printable_name' => 'Cayman Islands',
+			'iso3' => 'CYM',
+			'numcode' => '136',
+		),
+		array(
+			'iso' => 'CF',
+			'name' => 'CENTRAL AFRICAN REPUBLIC',
+			'printable_name' => 'Central African Republic',
+			'iso3' => 'CAF',
+			'numcode' => '140',
+		),
+		array(
+			'iso' => 'TD',
+			'name' => 'CHAD',
+			'printable_name' => 'Chad',
+			'iso3' => 'TCD',
+			'numcode' => '148',
+		),
+		array(
+			'iso' => 'CL',
+			'name' => 'CHILE',
+			'printable_name' => 'Chile',
+			'iso3' => 'CHL',
+			'numcode' => '152',
+		),
+		array(
+			'iso' => 'CN',
+			'name' => 'CHINA',
+			'printable_name' => 'China',
+			'iso3' => 'CHN',
+			'numcode' => '156',
+		),
+		array(
+			'iso' => 'CX',
+			'name' => 'CHRISTMAS ISLAND',
+			'printable_name' => 'Christmas Island',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'CC',
+			'name' => 'COCOS (KEELING) ISLANDS',
+			'printable_name' => 'Cocos (Keeling) Islands',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'CO',
+			'name' => 'COLOMBIA',
+			'printable_name' => 'Colombia',
+			'iso3' => 'COL',
+			'numcode' => '170',
+		),
+		array(
+			'iso' => 'KM',
+			'name' => 'COMOROS',
+			'printable_name' => 'Comoros',
+			'iso3' => 'COM',
+			'numcode' => '174',
+		),
+		array(
+			'iso' => 'CG',
+			'name' => 'CONGO',
+			'printable_name' => 'Congo',
+			'iso3' => 'COG',
+			'numcode' => '178',
+		),
+		array(
+			'iso' => 'CD',
+			'name' => 'CONGO, THE DEMOCRATIC REPUBLIC OF THE',
+			'printable_name' => 'Congo, the Democratic Republic of the',
+			'iso3' => 'COD',
+			'numcode' => '180',
+		),
+		array(
+			'iso' => 'CK',
+			'name' => 'COOK ISLANDS',
+			'printable_name' => 'Cook Islands',
+			'iso3' => 'COK',
+			'numcode' => '184',
+		),
+		array(
+			'iso' => 'CR',
+			'name' => 'COSTA RICA',
+			'printable_name' => 'Costa Rica',
+			'iso3' => 'CRI',
+			'numcode' => '188',
+		),
+		array(
+			'iso' => 'CI',
+			'name' => 'COTE D\'IVOIRE',
+			'printable_name' => 'Cote D\'Ivoire',
+			'iso3' => 'CIV',
+			'numcode' => '384',
+		),
+		array(
+			'iso' => 'HR',
+			'name' => 'CROATIA',
+			'printable_name' => 'Croatia',
+			'iso3' => 'HRV',
+			'numcode' => '191',
+		),
+		array(
+			'iso' => 'CU',
+			'name' => 'CUBA',
+			'printable_name' => 'Cuba',
+			'iso3' => 'CUB',
+			'numcode' => '192',
+		),
+		array(
+			'iso' => 'CY',
+			'name' => 'CYPRUS',
+			'printable_name' => 'Cyprus',
+			'iso3' => 'CYP',
+			'numcode' => '196',
+		),
+		array(
+			'iso' => 'CZ',
+			'name' => 'CZECH REPUBLIC',
+			'printable_name' => 'Czech Republic',
+			'iso3' => 'CZE',
+			'numcode' => '203',
+		),
+		array(
+			'iso' => 'DK',
+			'name' => 'DENMARK',
+			'printable_name' => 'Denmark',
+			'iso3' => 'DNK',
+			'numcode' => '208',
+		),
+		array(
+			'iso' => 'DJ',
+			'name' => 'DJIBOUTI',
+			'printable_name' => 'Djibouti',
+			'iso3' => 'DJI',
+			'numcode' => '262',
+		),
+		array(
+			'iso' => 'DM',
+			'name' => 'DOMINICA',
+			'printable_name' => 'Dominica',
+			'iso3' => 'DMA',
+			'numcode' => '212',
+		),
+		array(
+			'iso' => 'DO',
+			'name' => 'DOMINICAN REPUBLIC',
+			'printable_name' => 'Dominican Republic',
+			'iso3' => 'DOM',
+			'numcode' => '214',
+		),
+		array(
+			'iso' => 'EC',
+			'name' => 'ECUADOR',
+			'printable_name' => 'Ecuador',
+			'iso3' => 'ECU',
+			'numcode' => '218',
+		),
+		array(
+			'iso' => 'EG',
+			'name' => 'EGYPT',
+			'printable_name' => 'Egypt',
+			'iso3' => 'EGY',
+			'numcode' => '818',
+		),
+		array(
+			'iso' => 'SV',
+			'name' => 'EL SALVADOR',
+			'printable_name' => 'El Salvador',
+			'iso3' => 'SLV',
+			'numcode' => '222',
+		),
+		array(
+			'iso' => 'GQ',
+			'name' => 'EQUATORIAL GUINEA',
+			'printable_name' => 'Equatorial Guinea',
+			'iso3' => 'GNQ',
+			'numcode' => '226',
+		),
+		array(
+			'iso' => 'ER',
+			'name' => 'ERITREA',
+			'printable_name' => 'Eritrea',
+			'iso3' => 'ERI',
+			'numcode' => '232',
+		),
+		array(
+			'iso' => 'EE',
+			'name' => 'ESTONIA',
+			'printable_name' => 'Estonia',
+			'iso3' => 'EST',
+			'numcode' => '233',
+		),
+		array(
+			'iso' => 'ET',
+			'name' => 'ETHIOPIA',
+			'printable_name' => 'Ethiopia',
+			'iso3' => 'ETH',
+			'numcode' => '231',
+		),
+		array(
+			'iso' => 'FK',
+			'name' => 'FALKLAND ISLANDS (MALVINAS)',
+			'printable_name' => 'Falkland Islands (Malvinas)',
+			'iso3' => 'FLK',
+			'numcode' => '238',
+		),
+		array(
+			'iso' => 'FO',
+			'name' => 'FAROE ISLANDS',
+			'printable_name' => 'Faroe Islands',
+			'iso3' => 'FRO',
+			'numcode' => '234',
+		),
+		array(
+			'iso' => 'FJ',
+			'name' => 'FIJI',
+			'printable_name' => 'Fiji',
+			'iso3' => 'FJI',
+			'numcode' => '242',
+		),
+		array(
+			'iso' => 'FI',
+			'name' => 'FINLAND',
+			'printable_name' => 'Finland',
+			'iso3' => 'FIN',
+			'numcode' => '246',
+		),
+		array(
+			'iso' => 'FR',
+			'name' => 'FRANCE',
+			'printable_name' => 'France',
+			'iso3' => 'FRA',
+			'numcode' => '250',
+		),
+		array(
+			'iso' => 'GF',
+			'name' => 'FRENCH GUIANA',
+			'printable_name' => 'French Guiana',
+			'iso3' => 'GUF',
+			'numcode' => '254',
+		),
+		array(
+			'iso' => 'PF',
+			'name' => 'FRENCH POLYNESIA',
+			'printable_name' => 'French Polynesia',
+			'iso3' => 'PYF',
+			'numcode' => '258',
+		),
+		array(
+			'iso' => 'TF',
+			'name' => 'FRENCH SOUTHERN TERRITORIES',
+			'printable_name' => 'French Southern Territories',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'GA',
+			'name' => 'GABON',
+			'printable_name' => 'Gabon',
+			'iso3' => 'GAB',
+			'numcode' => '266',
+		),
+		array(
+			'iso' => 'GM',
+			'name' => 'GAMBIA',
+			'printable_name' => 'Gambia',
+			'iso3' => 'GMB',
+			'numcode' => '270',
+		),
+		array(
+			'iso' => 'GE',
+			'name' => 'GEORGIA',
+			'printable_name' => 'Georgia',
+			'iso3' => 'GEO',
+			'numcode' => '268',
+		),
+		array(
+			'iso' => 'DE',
+			'name' => 'GERMANY',
+			'printable_name' => 'Germany',
+			'iso3' => 'DEU',
+			'numcode' => '276',
+		),
+		array(
+			'iso' => 'GH',
+			'name' => 'GHANA',
+			'printable_name' => 'Ghana',
+			'iso3' => 'GHA',
+			'numcode' => '288',
+		),
+		array(
+			'iso' => 'GI',
+			'name' => 'GIBRALTAR',
+			'printable_name' => 'Gibraltar',
+			'iso3' => 'GIB',
+			'numcode' => '292',
+		),
+		array(
+			'iso' => 'GR',
+			'name' => 'GREECE',
+			'printable_name' => 'Greece',
+			'iso3' => 'GRC',
+			'numcode' => '300',
+		),
+		array(
+			'iso' => 'GL',
+			'name' => 'GREENLAND',
+			'printable_name' => 'Greenland',
+			'iso3' => 'GRL',
+			'numcode' => '304',
+		),
+		array(
+			'iso' => 'GD',
+			'name' => 'GRENADA',
+			'printable_name' => 'Grenada',
+			'iso3' => 'GRD',
+			'numcode' => '308',
+		),
+		array(
+			'iso' => 'GP',
+			'name' => 'GUADELOUPE',
+			'printable_name' => 'Guadeloupe',
+			'iso3' => 'GLP',
+			'numcode' => '312',
+		),
+		array(
+			'iso' => 'GU',
+			'name' => 'GUAM',
+			'printable_name' => 'Guam',
+			'iso3' => 'GUM',
+			'numcode' => '316',
+		),
+		array(
+			'iso' => 'GT',
+			'name' => 'GUATEMALA',
+			'printable_name' => 'Guatemala',
+			'iso3' => 'GTM',
+			'numcode' => '320',
+		),
+		array(
+			'iso' => 'GN',
+			'name' => 'GUINEA',
+			'printable_name' => 'Guinea',
+			'iso3' => 'GIN',
+			'numcode' => '324',
+		),
+		array(
+			'iso' => 'GW',
+			'name' => 'GUINEA-BISSAU',
+			'printable_name' => 'Guinea-Bissau',
+			'iso3' => 'GNB',
+			'numcode' => '624',
+		),
+		array(
+			'iso' => 'GY',
+			'name' => 'GUYANA',
+			'printable_name' => 'Guyana',
+			'iso3' => 'GUY',
+			'numcode' => '328',
+		),
+		array(
+			'iso' => 'HT',
+			'name' => 'HAITI',
+			'printable_name' => 'Haiti',
+			'iso3' => 'HTI',
+			'numcode' => '332',
+		),
+		array(
+			'iso' => 'HM',
+			'name' => 'HEARD ISLAND AND MCDONALD ISLANDS',
+			'printable_name' => 'Heard Island and Mcdonald Islands',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'VA',
+			'name' => 'HOLY SEE (VATICAN CITY STATE)',
+			'printable_name' => 'Holy See (Vatican City State)',
+			'iso3' => 'VAT',
+			'numcode' => '336',
+		),
+		array(
+			'iso' => 'HN',
+			'name' => 'HONDURAS',
+			'printable_name' => 'Honduras',
+			'iso3' => 'HND',
+			'numcode' => '340',
+		),
+		array(
+			'iso' => 'HK',
+			'name' => 'HONG KONG',
+			'printable_name' => 'Hong Kong',
+			'iso3' => 'HKG',
+			'numcode' => '344',
+		),
+		array(
+			'iso' => 'HU',
+			'name' => 'HUNGARY',
+			'printable_name' => 'Hungary',
+			'iso3' => 'HUN',
+			'numcode' => '348',
+		),
+		array(
+			'iso' => 'IS',
+			'name' => 'ICELAND',
+			'printable_name' => 'Iceland',
+			'iso3' => 'ISL',
+			'numcode' => '352',
+		),
+		array(
+			'iso' => 'IN',
+			'name' => 'INDIA',
+			'printable_name' => 'India',
+			'iso3' => 'IND',
+			'numcode' => '356',
+		),
+		array(
+			'iso' => 'ID',
+			'name' => 'INDONESIA',
+			'printable_name' => 'Indonesia',
+			'iso3' => 'IDN',
+			'numcode' => '360',
+		),
+		array(
+			'iso' => 'IR',
+			'name' => 'IRAN, ISLAMIC REPUBLIC OF',
+			'printable_name' => 'Iran, Islamic Republic of',
+			'iso3' => 'IRN',
+			'numcode' => '364',
+		),
+		array(
+			'iso' => 'IQ',
+			'name' => 'IRAQ',
+			'printable_name' => 'Iraq',
+			'iso3' => 'IRQ',
+			'numcode' => '368',
+		),
+		array(
+			'iso' => 'IE',
+			'name' => 'IRELAND',
+			'printable_name' => 'Ireland',
+			'iso3' => 'IRL',
+			'numcode' => '372',
+		),
+		array(
+			'iso' => 'IL',
+			'name' => 'ISRAEL',
+			'printable_name' => 'Israel',
+			'iso3' => 'ISR',
+			'numcode' => '376',
+		),
+		array(
+			'iso' => 'IT',
+			'name' => 'ITALY',
+			'printable_name' => 'Italy',
+			'iso3' => 'ITA',
+			'numcode' => '380',
+		),
+		array(
+			'iso' => 'JM',
+			'name' => 'JAMAICA',
+			'printable_name' => 'Jamaica',
+			'iso3' => 'JAM',
+			'numcode' => '388',
+		),
+		array(
+			'iso' => 'JP',
+			'name' => 'JAPAN',
+			'printable_name' => 'Japan',
+			'iso3' => 'JPN',
+			'numcode' => '392',
+		),
+		array(
+			'iso' => 'JO',
+			'name' => 'JORDAN',
+			'printable_name' => 'Jordan',
+			'iso3' => 'JOR',
+			'numcode' => '400',
+		),
+		array(
+			'iso' => 'KZ',
+			'name' => 'KAZAKHSTAN',
+			'printable_name' => 'Kazakhstan',
+			'iso3' => 'KAZ',
+			'numcode' => '398',
+		),
+		array(
+			'iso' => 'KE',
+			'name' => 'KENYA',
+			'printable_name' => 'Kenya',
+			'iso3' => 'KEN',
+			'numcode' => '404',
+		),
+		array(
+			'iso' => 'KI',
+			'name' => 'KIRIBATI',
+			'printable_name' => 'Kiribati',
+			'iso3' => 'KIR',
+			'numcode' => '296',
+		),
+		array(
+			'iso' => 'KP',
+			'name' => 'KOREA, DEMOCRATIC PEOPLE\'S REPUBLIC OF',
+			'printable_name' => 'Korea, Democratic People\'s Republic of',
+			'iso3' => 'PRK',
+			'numcode' => '408',
+		),
+		array(
+			'iso' => 'KR',
+			'name' => 'KOREA, REPUBLIC OF',
+			'printable_name' => 'Korea, Republic of',
+			'iso3' => 'KOR',
+			'numcode' => '410',
+		),
+		array(
+			'iso' => 'KW',
+			'name' => 'KUWAIT',
+			'printable_name' => 'Kuwait',
+			'iso3' => 'KWT',
+			'numcode' => '414',
+		),
+		array(
+			'iso' => 'KG',
+			'name' => 'KYRGYZSTAN',
+			'printable_name' => 'Kyrgyzstan',
+			'iso3' => 'KGZ',
+			'numcode' => '417',
+		),
+		array(
+			'iso' => 'LA',
+			'name' => 'LAO PEOPLE\'S DEMOCRATIC REPUBLIC',
+			'printable_name' => 'Lao People\'s Democratic Republic',
+			'iso3' => 'LAO',
+			'numcode' => '418',
+		),
+		array(
+			'iso' => 'LV',
+			'name' => 'LATVIA',
+			'printable_name' => 'Latvia',
+			'iso3' => 'LVA',
+			'numcode' => '428',
+		),
+		array(
+			'iso' => 'LB',
+			'name' => 'LEBANON',
+			'printable_name' => 'Lebanon',
+			'iso3' => 'LBN',
+			'numcode' => '422',
+		),
+		array(
+			'iso' => 'LS',
+			'name' => 'LESOTHO',
+			'printable_name' => 'Lesotho',
+			'iso3' => 'LSO',
+			'numcode' => '426',
+		),
+		array(
+			'iso' => 'LR',
+			'name' => 'LIBERIA',
+			'printable_name' => 'Liberia',
+			'iso3' => 'LBR',
+			'numcode' => '430',
+		),
+		array(
+			'iso' => 'LY',
+			'name' => 'LIBYAN ARAB JAMAHIRIYA',
+			'printable_name' => 'Libyan Arab Jamahiriya',
+			'iso3' => 'LBY',
+			'numcode' => '434',
+		),
+		array(
+			'iso' => 'LI',
+			'name' => 'LIECHTENSTEIN',
+			'printable_name' => 'Liechtenstein',
+			'iso3' => 'LIE',
+			'numcode' => '438',
+		),
+		array(
+			'iso' => 'LT',
+			'name' => 'LITHUANIA',
+			'printable_name' => 'Lithuania',
+			'iso3' => 'LTU',
+			'numcode' => '440',
+		),
+		array(
+			'iso' => 'LU',
+			'name' => 'LUXEMBOURG',
+			'printable_name' => 'Luxembourg',
+			'iso3' => 'LUX',
+			'numcode' => '442',
+		),
+		array(
+			'iso' => 'MO',
+			'name' => 'MACAO',
+			'printable_name' => 'Macao',
+			'iso3' => 'MAC',
+			'numcode' => '446',
+		),
+		array(
+			'iso' => 'MK',
+			'name' => 'MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF',
+			'printable_name' => 'Macedonia, the Former Yugoslav Republic of',
+			'iso3' => 'MKD',
+			'numcode' => '807',
+		),
+		array(
+			'iso' => 'MG',
+			'name' => 'MADAGASCAR',
+			'printable_name' => 'Madagascar',
+			'iso3' => 'MDG',
+			'numcode' => '450',
+		),
+		array(
+			'iso' => 'MW',
+			'name' => 'MALAWI',
+			'printable_name' => 'Malawi',
+			'iso3' => 'MWI',
+			'numcode' => '454',
+		),
+		array(
+			'iso' => 'MY',
+			'name' => 'MALAYSIA',
+			'printable_name' => 'Malaysia',
+			'iso3' => 'MYS',
+			'numcode' => '458',
+		),
+		array(
+			'iso' => 'MV',
+			'name' => 'MALDIVES',
+			'printable_name' => 'Maldives',
+			'iso3' => 'MDV',
+			'numcode' => '462',
+		),
+		array(
+			'iso' => 'ML',
+			'name' => 'MALI',
+			'printable_name' => 'Mali',
+			'iso3' => 'MLI',
+			'numcode' => '466',
+		),
+		array(
+			'iso' => 'MT',
+			'name' => 'MALTA',
+			'printable_name' => 'Malta',
+			'iso3' => 'MLT',
+			'numcode' => '470',
+		),
+		array(
+			'iso' => 'MH',
+			'name' => 'MARSHALL ISLANDS',
+			'printable_name' => 'Marshall Islands',
+			'iso3' => 'MHL',
+			'numcode' => '584',
+		),
+		array(
+			'iso' => 'MQ',
+			'name' => 'MARTINIQUE',
+			'printable_name' => 'Martinique',
+			'iso3' => 'MTQ',
+			'numcode' => '474',
+		),
+		array(
+			'iso' => 'MR',
+			'name' => 'MAURITANIA',
+			'printable_name' => 'Mauritania',
+			'iso3' => 'MRT',
+			'numcode' => '478',
+		),
+		array(
+			'iso' => 'MU',
+			'name' => 'MAURITIUS',
+			'printable_name' => 'Mauritius',
+			'iso3' => 'MUS',
+			'numcode' => '480',
+		),
+		array(
+			'iso' => 'YT',
+			'name' => 'MAYOTTE',
+			'printable_name' => 'Mayotte',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'MX',
+			'name' => 'MEXICO',
+			'printable_name' => 'Mexico',
+			'iso3' => 'MEX',
+			'numcode' => '484',
+		),
+		array(
+			'iso' => 'FM',
+			'name' => 'MICRONESIA, FEDERATED STATES OF',
+			'printable_name' => 'Micronesia, Federated States of',
+			'iso3' => 'FSM',
+			'numcode' => '583',
+		),
+		array(
+			'iso' => 'MD',
+			'name' => 'MOLDOVA, REPUBLIC OF',
+			'printable_name' => 'Moldova, Republic of',
+			'iso3' => 'MDA',
+			'numcode' => '498',
+		),
+		array(
+			'iso' => 'MC',
+			'name' => 'MONACO',
+			'printable_name' => 'Monaco',
+			'iso3' => 'MCO',
+			'numcode' => '492',
+		),
+		array(
+			'iso' => 'MN',
+			'name' => 'MONGOLIA',
+			'printable_name' => 'Mongolia',
+			'iso3' => 'MNG',
+			'numcode' => '496',
+		),
+		array(
+			'iso' => 'MS',
+			'name' => 'MONTSERRAT',
+			'printable_name' => 'Montserrat',
+			'iso3' => 'MSR',
+			'numcode' => '500',
+		),
+		array(
+			'iso' => 'MA',
+			'name' => 'MOROCCO',
+			'printable_name' => 'Morocco',
+			'iso3' => 'MAR',
+			'numcode' => '504',
+		),
+		array(
+			'iso' => 'MZ',
+			'name' => 'MOZAMBIQUE',
+			'printable_name' => 'Mozambique',
+			'iso3' => 'MOZ',
+			'numcode' => '508',
+		),
+		array(
+			'iso' => 'MM',
+			'name' => 'MYANMAR',
+			'printable_name' => 'Myanmar',
+			'iso3' => 'MMR',
+			'numcode' => '104',
+		),
+		array(
+			'iso' => 'NA',
+			'name' => 'NAMIBIA',
+			'printable_name' => 'Namibia',
+			'iso3' => 'NAM',
+			'numcode' => '516',
+		),
+		array(
+			'iso' => 'NR',
+			'name' => 'NAURU',
+			'printable_name' => 'Nauru',
+			'iso3' => 'NRU',
+			'numcode' => '520',
+		),
+		array(
+			'iso' => 'NP',
+			'name' => 'NEPAL',
+			'printable_name' => 'Nepal',
+			'iso3' => 'NPL',
+			'numcode' => '524',
+		),
+		array(
+			'iso' => 'NL',
+			'name' => 'NETHERLANDS',
+			'printable_name' => 'Netherlands',
+			'iso3' => 'NLD',
+			'numcode' => '528',
+		),
+		array(
+			'iso' => 'AN',
+			'name' => 'NETHERLANDS ANTILLES',
+			'printable_name' => 'Netherlands Antilles',
+			'iso3' => 'ANT',
+			'numcode' => '530',
+		),
+		array(
+			'iso' => 'NC',
+			'name' => 'NEW CALEDONIA',
+			'printable_name' => 'New Caledonia',
+			'iso3' => 'NCL',
+			'numcode' => '540',
+		),
+		array(
+			'iso' => 'NZ',
+			'name' => 'NEW ZEALAND',
+			'printable_name' => 'New Zealand',
+			'iso3' => 'NZL',
+			'numcode' => '554',
+		),
+		array(
+			'iso' => 'NI',
+			'name' => 'NICARAGUA',
+			'printable_name' => 'Nicaragua',
+			'iso3' => 'NIC',
+			'numcode' => '558',
+		),
+		array(
+			'iso' => 'NE',
+			'name' => 'NIGER',
+			'printable_name' => 'Niger',
+			'iso3' => 'NER',
+			'numcode' => '562',
+		),
+		array(
+			'iso' => 'NG',
+			'name' => 'NIGERIA',
+			'printable_name' => 'Nigeria',
+			'iso3' => 'NGA',
+			'numcode' => '566',
+		),
+		array(
+			'iso' => 'NU',
+			'name' => 'NIUE',
+			'printable_name' => 'Niue',
+			'iso3' => 'NIU',
+			'numcode' => '570',
+		),
+		array(
+			'iso' => 'NF',
+			'name' => 'NORFOLK ISLAND',
+			'printable_name' => 'Norfolk Island',
+			'iso3' => 'NFK',
+			'numcode' => '574',
+		),
+		array(
+			'iso' => 'MP',
+			'name' => 'NORTHERN MARIANA ISLANDS',
+			'printable_name' => 'Northern Mariana Islands',
+			'iso3' => 'MNP',
+			'numcode' => '580',
+		),
+		array(
+			'iso' => 'NO',
+			'name' => 'NORWAY',
+			'printable_name' => 'Norway',
+			'iso3' => 'NOR',
+			'numcode' => '578',
+		),
+		array(
+			'iso' => 'OM',
+			'name' => 'OMAN',
+			'printable_name' => 'Oman',
+			'iso3' => 'OMN',
+			'numcode' => '512',
+		),
+		array(
+			'iso' => 'PK',
+			'name' => 'PAKISTAN',
+			'printable_name' => 'Pakistan',
+			'iso3' => 'PAK',
+			'numcode' => '586',
+		),
+		array(
+			'iso' => 'PW',
+			'name' => 'PALAU',
+			'printable_name' => 'Palau',
+			'iso3' => 'PLW',
+			'numcode' => '585',
+		),
+		array(
+			'iso' => 'PS',
+			'name' => 'PALESTINIAN TERRITORY, OCCUPIED',
+			'printable_name' => 'Palestinian Territory, Occupied',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'PA',
+			'name' => 'PANAMA',
+			'printable_name' => 'Panama',
+			'iso3' => 'PAN',
+			'numcode' => '591',
+		),
+		array(
+			'iso' => 'PG',
+			'name' => 'PAPUA NEW GUINEA',
+			'printable_name' => 'Papua New Guinea',
+			'iso3' => 'PNG',
+			'numcode' => '598',
+		),
+		array(
+			'iso' => 'PY',
+			'name' => 'PARAGUAY',
+			'printable_name' => 'Paraguay',
+			'iso3' => 'PRY',
+			'numcode' => '600',
+		),
+		array(
+			'iso' => 'PE',
+			'name' => 'PERU',
+			'printable_name' => 'Peru',
+			'iso3' => 'PER',
+			'numcode' => '604',
+		),
+		array(
+			'iso' => 'PH',
+			'name' => 'PHILIPPINES',
+			'printable_name' => 'Philippines',
+			'iso3' => 'PHL',
+			'numcode' => '608',
+		),
+		array(
+			'iso' => 'PN',
+			'name' => 'PITCAIRN',
+			'printable_name' => 'Pitcairn',
+			'iso3' => 'PCN',
+			'numcode' => '612',
+		),
+		array(
+			'iso' => 'PL',
+			'name' => 'POLAND',
+			'printable_name' => 'Poland',
+			'iso3' => 'POL',
+			'numcode' => '616',
+		),
+		array(
+			'iso' => 'PT',
+			'name' => 'PORTUGAL',
+			'printable_name' => 'Portugal',
+			'iso3' => 'PRT',
+			'numcode' => '620',
+		),
+		array(
+			'iso' => 'PR',
+			'name' => 'PUERTO RICO',
+			'printable_name' => 'Puerto Rico',
+			'iso3' => 'PRI',
+			'numcode' => '630',
+		),
+		array(
+			'iso' => 'QA',
+			'name' => 'QATAR',
+			'printable_name' => 'Qatar',
+			'iso3' => 'QAT',
+			'numcode' => '634',
+		),
+		array(
+			'iso' => 'RE',
+			'name' => 'REUNION',
+			'printable_name' => 'Reunion',
+			'iso3' => 'REU',
+			'numcode' => '638',
+		),
+		array(
+			'iso' => 'RO',
+			'name' => 'ROMANIA',
+			'printable_name' => 'Romania',
+			'iso3' => 'ROM',
+			'numcode' => '642',
+		),
+		array(
+			'iso' => 'RU',
+			'name' => 'RUSSIAN FEDERATION',
+			'printable_name' => 'Russian Federation',
+			'iso3' => 'RUS',
+			'numcode' => '643',
+		),
+		array(
+			'iso' => 'RW',
+			'name' => 'RWANDA',
+			'printable_name' => 'Rwanda',
+			'iso3' => 'RWA',
+			'numcode' => '646',
+		),
+		array(
+			'iso' => 'SH',
+			'name' => 'SAINT HELENA',
+			'printable_name' => 'Saint Helena',
+			'iso3' => 'SHN',
+			'numcode' => '654',
+		),
+		array(
+			'iso' => 'KN',
+			'name' => 'SAINT KITTS AND NEVIS',
+			'printable_name' => 'Saint Kitts and Nevis',
+			'iso3' => 'KNA',
+			'numcode' => '659',
+		),
+		array(
+			'iso' => 'LC',
+			'name' => 'SAINT LUCIA',
+			'printable_name' => 'Saint Lucia',
+			'iso3' => 'LCA',
+			'numcode' => '662',
+		),
+		array(
+			'iso' => 'PM',
+			'name' => 'SAINT PIERRE AND MIQUELON',
+			'printable_name' => 'Saint Pierre and Miquelon',
+			'iso3' => 'SPM',
+			'numcode' => '666',
+		),
+		array(
+			'iso' => 'VC',
+			'name' => 'SAINT VINCENT AND THE GRENADINES',
+			'printable_name' => 'Saint Vincent and the Grenadines',
+			'iso3' => 'VCT',
+			'numcode' => '670',
+		),
+		array(
+			'iso' => 'WS',
+			'name' => 'SAMOA',
+			'printable_name' => 'Samoa',
+			'iso3' => 'WSM',
+			'numcode' => '882',
+		),
+		array(
+			'iso' => 'SM',
+			'name' => 'SAN MARINO',
+			'printable_name' => 'San Marino',
+			'iso3' => 'SMR',
+			'numcode' => '674',
+		),
+		array(
+			'iso' => 'ST',
+			'name' => 'SAO TOME AND PRINCIPE',
+			'printable_name' => 'Sao Tome and Principe',
+			'iso3' => 'STP',
+			'numcode' => '678',
+		),
+		array(
+			'iso' => 'SA',
+			'name' => 'SAUDI ARABIA',
+			'printable_name' => 'Saudi Arabia',
+			'iso3' => 'SAU',
+			'numcode' => '682',
+		),
+		array(
+			'iso' => 'SN',
+			'name' => 'SENEGAL',
+			'printable_name' => 'Senegal',
+			'iso3' => 'SEN',
+			'numcode' => '686',
+		),
+		array(
+			'iso' => 'CS',
+			'name' => 'SERBIA AND MONTENEGRO',
+			'printable_name' => 'Serbia and Montenegro',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'SC',
+			'name' => 'SEYCHELLES',
+			'printable_name' => 'Seychelles',
+			'iso3' => 'SYC',
+			'numcode' => '690',
+		),
+		array(
+			'iso' => 'SL',
+			'name' => 'SIERRA LEONE',
+			'printable_name' => 'Sierra Leone',
+			'iso3' => 'SLE',
+			'numcode' => '694',
+		),
+		array(
+			'iso' => 'SG',
+			'name' => 'SINGAPORE',
+			'printable_name' => 'Singapore',
+			'iso3' => 'SGP',
+			'numcode' => '702',
+		),
+		array(
+			'iso' => 'SK',
+			'name' => 'SLOVAKIA',
+			'printable_name' => 'Slovakia',
+			'iso3' => 'SVK',
+			'numcode' => '703',
+		),
+		array(
+			'iso' => 'SI',
+			'name' => 'SLOVENIA',
+			'printable_name' => 'Slovenia',
+			'iso3' => 'SVN',
+			'numcode' => '705',
+		),
+		array(
+			'iso' => 'SB',
+			'name' => 'SOLOMON ISLANDS',
+			'printable_name' => 'Solomon Islands',
+			'iso3' => 'SLB',
+			'numcode' => '090',
+		),
+		array(
+			'iso' => 'SO',
+			'name' => 'SOMALIA',
+			'printable_name' => 'Somalia',
+			'iso3' => 'SOM',
+			'numcode' => '706',
+		),
+		array(
+			'iso' => 'ZA',
+			'name' => 'SOUTH AFRICA',
+			'printable_name' => 'South Africa',
+			'iso3' => 'ZAF',
+			'numcode' => '710',
+		),
+		array(
+			'iso' => 'GS',
+			'name' => 'SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS',
+			'printable_name' => 'South Georgia and the South Sandwich Islands',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'ES',
+			'name' => 'SPAIN',
+			'printable_name' => 'Spain',
+			'iso3' => 'ESP',
+			'numcode' => '724',
+		),
+		array(
+			'iso' => 'LK',
+			'name' => 'SRI LANKA',
+			'printable_name' => 'Sri Lanka',
+			'iso3' => 'LKA',
+			'numcode' => '144',
+		),
+		array(
+			'iso' => 'SD',
+			'name' => 'SUDAN',
+			'printable_name' => 'Sudan',
+			'iso3' => 'SDN',
+			'numcode' => '736',
+		),
+		array(
+			'iso' => 'SR',
+			'name' => 'SURINAME',
+			'printable_name' => 'Suriname',
+			'iso3' => 'SUR',
+			'numcode' => '740',
+		),
+		array(
+			'iso' => 'SJ',
+			'name' => 'SVALBARD AND JAN MAYEN',
+			'printable_name' => 'Svalbard and Jan Mayen',
+			'iso3' => 'SJM',
+			'numcode' => '744',
+		),
+		array(
+			'iso' => 'SZ',
+			'name' => 'SWAZILAND',
+			'printable_name' => 'Swaziland',
+			'iso3' => 'SWZ',
+			'numcode' => '748',
+		),
+		array(
+			'iso' => 'SE',
+			'name' => 'SWEDEN',
+			'printable_name' => 'Sweden',
+			'iso3' => 'SWE',
+			'numcode' => '752',
+		),
+		array(
+			'iso' => 'CH',
+			'name' => 'SWITZERLAND',
+			'printable_name' => 'Switzerland',
+			'iso3' => 'CHE',
+			'numcode' => '756',
+		),
+		array(
+			'iso' => 'SY',
+			'name' => 'SYRIAN ARAB REPUBLIC',
+			'printable_name' => 'Syrian Arab Republic',
+			'iso3' => 'SYR',
+			'numcode' => '760',
+		),
+		array(
+			'iso' => 'TW',
+			'name' => 'TAIWAN, PROVINCE OF CHINA',
+			'printable_name' => 'Taiwan, Province of China',
+			'iso3' => 'TWN',
+			'numcode' => '158',
+		),
+		array(
+			'iso' => 'TJ',
+			'name' => 'TAJIKISTAN',
+			'printable_name' => 'Tajikistan',
+			'iso3' => 'TJK',
+			'numcode' => '762',
+		),
+		array(
+			'iso' => 'TZ',
+			'name' => 'TANZANIA, UNITED REPUBLIC OF',
+			'printable_name' => 'Tanzania, United Republic of',
+			'iso3' => 'TZA',
+			'numcode' => '834',
+		),
+		array(
+			'iso' => 'TH',
+			'name' => 'THAILAND',
+			'printable_name' => 'Thailand',
+			'iso3' => 'THA',
+			'numcode' => '764',
+		),
+		array(
+			'iso' => 'TL',
+			'name' => 'TIMOR-LESTE',
+			'printable_name' => 'Timor-Leste',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'TG',
+			'name' => 'TOGO',
+			'printable_name' => 'Togo',
+			'iso3' => 'TGO',
+			'numcode' => '768',
+		),
+		array(
+			'iso' => 'TK',
+			'name' => 'TOKELAU',
+			'printable_name' => 'Tokelau',
+			'iso3' => 'TKL',
+			'numcode' => '772',
+		),
+		array(
+			'iso' => 'TO',
+			'name' => 'TONGA',
+			'printable_name' => 'Tonga',
+			'iso3' => 'TON',
+			'numcode' => '776',
+		),
+		array(
+			'iso' => 'TT',
+			'name' => 'TRINIDAD AND TOBAGO',
+			'printable_name' => 'Trinidad and Tobago',
+			'iso3' => 'TTO',
+			'numcode' => '780',
+		),
+		array(
+			'iso' => 'TN',
+			'name' => 'TUNISIA',
+			'printable_name' => 'Tunisia',
+			'iso3' => 'TUN',
+			'numcode' => '788',
+		),
+		array(
+			'iso' => 'TR',
+			'name' => 'TURKEY',
+			'printable_name' => 'Turkey',
+			'iso3' => 'TUR',
+			'numcode' => '792',
+		),
+		array(
+			'iso' => 'TM',
+			'name' => 'TURKMENISTAN',
+			'printable_name' => 'Turkmenistan',
+			'iso3' => 'TKM',
+			'numcode' => '795',
+		),
+		array(
+			'iso' => 'TC',
+			'name' => 'TURKS AND CAICOS ISLANDS',
+			'printable_name' => 'Turks and Caicos Islands',
+			'iso3' => 'TCA',
+			'numcode' => '796',
+		),
+		array(
+			'iso' => 'TV',
+			'name' => 'TUVALU',
+			'printable_name' => 'Tuvalu',
+			'iso3' => 'TUV',
+			'numcode' => '798',
+		),
+		array(
+			'iso' => 'UG',
+			'name' => 'UGANDA',
+			'printable_name' => 'Uganda',
+			'iso3' => 'UGA',
+			'numcode' => '800',
+		),
+		array(
+			'iso' => 'UA',
+			'name' => 'UKRAINE',
+			'printable_name' => 'Ukraine',
+			'iso3' => 'UKR',
+			'numcode' => '804',
+		),
+		array(
+			'iso' => 'AE',
+			'name' => 'UNITED ARAB EMIRATES',
+			'printable_name' => 'United Arab Emirates',
+			'iso3' => 'ARE',
+			'numcode' => '784',
+		),
+		array(
+			'iso' => 'GB',
+			'name' => 'UNITED KINGDOM',
+			'printable_name' => 'United Kingdom',
+			'iso3' => 'GBR',
+			'numcode' => '826',
+		),
+		array(
+			'iso' => 'US',
+			'name' => 'UNITED STATES',
+			'printable_name' => 'United States',
+			'iso3' => 'USA',
+			'numcode' => '840',
+		),
+		array(
+			'iso' => 'UM',
+			'name' => 'UNITED STATES MINOR OUTLYING ISLANDS',
+			'printable_name' => 'United States Minor Outlying Islands',
+			'iso3' => NULL,
+			'numcode' => NULL,
+		),
+		array(
+			'iso' => 'UY',
+			'name' => 'URUGUAY',
+			'printable_name' => 'Uruguay',
+			'iso3' => 'URY',
+			'numcode' => '858',
+		),
+		array(
+			'iso' => 'UZ',
+			'name' => 'UZBEKISTAN',
+			'printable_name' => 'Uzbekistan',
+			'iso3' => 'UZB',
+			'numcode' => '860',
+		),
+		array(
+			'iso' => 'VU',
+			'name' => 'VANUATU',
+			'printable_name' => 'Vanuatu',
+			'iso3' => 'VUT',
+			'numcode' => '548',
+		),
+		array(
+			'iso' => 'VE',
+			'name' => 'VENEZUELA',
+			'printable_name' => 'Venezuela',
+			'iso3' => 'VEN',
+			'numcode' => '862',
+		),
+		array(
+			'iso' => 'VN',
+			'name' => 'VIET NAM',
+			'printable_name' => 'Viet Nam',
+			'iso3' => 'VNM',
+			'numcode' => '704',
+		),
+		array(
+			'iso' => 'VG',
+			'name' => 'VIRGIN ISLANDS, BRITISH',
+			'printable_name' => 'Virgin Islands, British',
+			'iso3' => 'VGB',
+			'numcode' => '092',
+		),
+		array(
+			'iso' => 'VI',
+			'name' => 'VIRGIN ISLANDS, U.S.',
+			'printable_name' => 'Virgin Islands, U.s.',
+			'iso3' => 'VIR',
+			'numcode' => '850',
+		),
+		array(
+			'iso' => 'WF',
+			'name' => 'WALLIS AND FUTUNA',
+			'printable_name' => 'Wallis and Futuna',
+			'iso3' => 'WLF',
+			'numcode' => '876',
+		),
+		array(
+			'iso' => 'EH',
+			'name' => 'WESTERN SAHARA',
+			'printable_name' => 'Western Sahara',
+			'iso3' => 'ESH',
+			'numcode' => '732',
+		),
+		array(
+			'iso' => 'YE',
+			'name' => 'YEMEN',
+			'printable_name' => 'Yemen',
+			'iso3' => 'YEM',
+			'numcode' => '887',
+		),
+		array(
+			'iso' => 'ZM',
+			'name' => 'ZAMBIA',
+			'printable_name' => 'Zambia',
+			'iso3' => 'ZMB',
+			'numcode' => '894',
+		),
+		array(
+			'iso' => 'ZW',
+			'name' => 'ZIMBABWE',
+			'printable_name' => 'Zimbabwe',
+			'iso3' => 'ZWE',
+			'numcode' => '716',
+		),
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
+	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-
 		// email Queue
-		$sql = "ALTER TABLE {$prefix}permissions
-				ADD COLUMN `Bonfire.Emailer.View` TINYINT(1) DEFAULT 0 NOT NULL";
-		$this->db->query($sql);	
-		
-		$this->db->query("UPDATE {$prefix}permissions SET `Bonfire.Emailer.View`=1 WHERE `role_id`=1");
-
-		
-		// Users table changes
-		$this->dbforge->modify_column('users', array(
-			'temp_password_hash' => array(
-				'name'	=> 'reset_hash',
-				'type'	=> 'VARCHAR',
-				'constraint'	=> 40,
-				'null'			=> true
-			)
-		));
-
-		$this->dbforge->add_column('users', array(
-			'reset_by'	=> array(
-				'type'			=> 'INT',
-				'constraint'	=> 10,
-				'null'			=> true
-			)
-		));
+		$this->dbforge->add_column($this->permissions_table, $this->permissions_fields);
+		$this->db->where('role_id', 1)->update($this->permissions_table, $this->permissions_data);
 
 		// Add countries table for our users.
 		// Source: http://27.org/isocountrylist/
-		$this->dbforge->add_field("iso CHAR(2) DEFAULT 'US' NOT NULL");
-		$this->dbforge->add_field("name VARCHAR(80) NOT NULL");
-		$this->dbforge->add_field("printable_name VARCHAR(80) NOT NULL");
-		$this->dbforge->add_field("iso3 CHAR(3)");
-		$this->dbforge->add_field("numcode SMALLINT");
+		$this->dbforge->add_field($this->countries_fields);
 		$this->dbforge->add_key('iso', true);
-		$this->dbforge->create_table('countries');
-		
-		// Add a country_iso field so that we can use with users.
-		$this->dbforge->add_column('users', array(
-			'country_iso'	=> array(
-				'type'			=> 'CHAR',
-				'constraint'	=> 2,
-				'default'		=> 'US'
-			)
-		));
-		
-		// Change zipcode back to string
-		$this->dbforge->modify_column('users', array(
-				'zipcode' => array(
-					'name'			=> 'zipcode',
-					'type'			=> 'VARCHAR',
-					'constraint'	=> 20,
-					'null'			=> true
-				)
-			));
-		
-		// Remove the zip_extra field
-		$this->dbforge->drop_column('users', 'zip_extra');
-		
+		$this->dbforge->create_table($this->countries_table);
+
 		// And... the countries themselves. (whew!)
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AF','AFGHANISTAN','Afghanistan','AFG','004');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AL','ALBANIA','Albania','ALB','008');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('DZ','ALGERIA','Algeria','DZA','012');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AS','AMERICAN SAMOA','American Samoa','ASM','016');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AD','ANDORRA','Andorra','AND','020');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AO','ANGOLA','Angola','AGO','024');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AI','ANGUILLA','Anguilla','AIA','660');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AQ','ANTARCTICA','Antarctica',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AG','ANTIGUA AND BARBUDA','Antigua and Barbuda','ATG','028');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AR','ARGENTINA','Argentina','ARG','032');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AM','ARMENIA','Armenia','ARM','051');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AW','ARUBA','Aruba','ABW','533');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AU','AUSTRALIA','Australia','AUS','036');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AT','AUSTRIA','Austria','AUT','040');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AZ','AZERBAIJAN','Azerbaijan','AZE','031');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BS','BAHAMAS','Bahamas','BHS','044');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BH','BAHRAIN','Bahrain','BHR','048');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BD','BANGLADESH','Bangladesh','BGD','050');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BB','BARBADOS','Barbados','BRB','052');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BY','BELARUS','Belarus','BLR','112');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BE','BELGIUM','Belgium','BEL','056');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BZ','BELIZE','Belize','BLZ','084');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BJ','BENIN','Benin','BEN','204');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BM','BERMUDA','Bermuda','BMU','060');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BT','BHUTAN','Bhutan','BTN','064');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BO','BOLIVIA','Bolivia','BOL','068');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BA','BOSNIA AND HERZEGOVINA','Bosnia and Herzegovina','BIH','070');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BW','BOTSWANA','Botswana','BWA','072');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BV','BOUVET ISLAND','Bouvet Island',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BR','BRAZIL','Brazil','BRA','076');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('IO','BRITISH INDIAN OCEAN TERRITORY','British Indian Ocean Territory',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BN','BRUNEI DARUSSALAM','Brunei Darussalam','BRN','096');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BG','BULGARIA','Bulgaria','BGR','100');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BF','BURKINA FASO','Burkina Faso','BFA','854');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('BI','BURUNDI','Burundi','BDI','108');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('KH','CAMBODIA','Cambodia','KHM','116');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CM','CAMEROON','Cameroon','CMR','120');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CA','CANADA','Canada','CAN','124');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CV','CAPE VERDE','Cape Verde','CPV','132');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('KY','CAYMAN ISLANDS','Cayman Islands','CYM','136');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CF','CENTRAL AFRICAN REPUBLIC','Central African Republic','CAF','140');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TD','CHAD','Chad','TCD','148');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CL','CHILE','Chile','CHL','152');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CN','CHINA','China','CHN','156');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CX','CHRISTMAS ISLAND','Christmas Island',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CC','COCOS (KEELING) ISLANDS','Cocos (Keeling) Islands',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CO','COLOMBIA','Colombia','COL','170');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('KM','COMOROS','Comoros','COM','174');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CG','CONGO','Congo','COG','178');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CD','CONGO, THE DEMOCRATIC REPUBLIC OF THE','Congo, the Democratic Republic of the','COD','180');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CK','COOK ISLANDS','Cook Islands','COK','184');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CR','COSTA RICA','Costa Rica','CRI','188');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CI','COTE D\'IVOIRE','Cote D\'Ivoire','CIV','384');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('HR','CROATIA','Croatia','HRV','191');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CU','CUBA','Cuba','CUB','192');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CY','CYPRUS','Cyprus','CYP','196');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CZ','CZECH REPUBLIC','Czech Republic','CZE','203');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('DK','DENMARK','Denmark','DNK','208');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('DJ','DJIBOUTI','Djibouti','DJI','262');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('DM','DOMINICA','Dominica','DMA','212');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('DO','DOMINICAN REPUBLIC','Dominican Republic','DOM','214');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('EC','ECUADOR','Ecuador','ECU','218');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('EG','EGYPT','Egypt','EGY','818');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SV','EL SALVADOR','El Salvador','SLV','222');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GQ','EQUATORIAL GUINEA','Equatorial Guinea','GNQ','226');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('ER','ERITREA','Eritrea','ERI','232');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('EE','ESTONIA','Estonia','EST','233');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('ET','ETHIOPIA','Ethiopia','ETH','231');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('FK','FALKLAND ISLANDS (MALVINAS)','Falkland Islands (Malvinas)','FLK','238');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('FO','FAROE ISLANDS','Faroe Islands','FRO','234');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('FJ','FIJI','Fiji','FJI','242');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('FI','FINLAND','Finland','FIN','246');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('FR','FRANCE','France','FRA','250');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GF','FRENCH GUIANA','French Guiana','GUF','254');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PF','FRENCH POLYNESIA','French Polynesia','PYF','258');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TF','FRENCH SOUTHERN TERRITORIES','French Southern Territories',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GA','GABON','Gabon','GAB','266');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GM','GAMBIA','Gambia','GMB','270');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GE','GEORGIA','Georgia','GEO','268');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('DE','GERMANY','Germany','DEU','276');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GH','GHANA','Ghana','GHA','288');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GI','GIBRALTAR','Gibraltar','GIB','292');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GR','GREECE','Greece','GRC','300');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GL','GREENLAND','Greenland','GRL','304');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GD','GRENADA','Grenada','GRD','308');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GP','GUADELOUPE','Guadeloupe','GLP','312');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GU','GUAM','Guam','GUM','316');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GT','GUATEMALA','Guatemala','GTM','320');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GN','GUINEA','Guinea','GIN','324');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GW','GUINEA-BISSAU','Guinea-Bissau','GNB','624');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GY','GUYANA','Guyana','GUY','328');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('HT','HAITI','Haiti','HTI','332');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('HM','HEARD ISLAND AND MCDONALD ISLANDS','Heard Island and Mcdonald Islands',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('VA','HOLY SEE (VATICAN CITY STATE)','Holy See (Vatican City State)','VAT','336');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('HN','HONDURAS','Honduras','HND','340');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('HK','HONG KONG','Hong Kong','HKG','344');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('HU','HUNGARY','Hungary','HUN','348');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('IS','ICELAND','Iceland','ISL','352');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('IN','INDIA','India','IND','356');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('ID','INDONESIA','Indonesia','IDN','360');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('IR','IRAN, ISLAMIC REPUBLIC OF','Iran, Islamic Republic of','IRN','364');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('IQ','IRAQ','Iraq','IRQ','368');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('IE','IRELAND','Ireland','IRL','372');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('IL','ISRAEL','Israel','ISR','376');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('IT','ITALY','Italy','ITA','380');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('JM','JAMAICA','Jamaica','JAM','388');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('JP','JAPAN','Japan','JPN','392');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('JO','JORDAN','Jordan','JOR','400');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('KZ','KAZAKHSTAN','Kazakhstan','KAZ','398');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('KE','KENYA','Kenya','KEN','404');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('KI','KIRIBATI','Kiribati','KIR','296');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('KP','KOREA, DEMOCRATIC PEOPLE\'S REPUBLIC OF','Korea, Democratic People\'s Republic of','PRK','408');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('KR','KOREA, REPUBLIC OF','Korea, Republic of','KOR','410');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('KW','KUWAIT','Kuwait','KWT','414');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('KG','KYRGYZSTAN','Kyrgyzstan','KGZ','417');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('LA','LAO PEOPLE\'S DEMOCRATIC REPUBLIC','Lao People\'s Democratic Republic','LAO','418');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('LV','LATVIA','Latvia','LVA','428');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('LB','LEBANON','Lebanon','LBN','422');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('LS','LESOTHO','Lesotho','LSO','426');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('LR','LIBERIA','Liberia','LBR','430');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('LY','LIBYAN ARAB JAMAHIRIYA','Libyan Arab Jamahiriya','LBY','434');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('LI','LIECHTENSTEIN','Liechtenstein','LIE','438');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('LT','LITHUANIA','Lithuania','LTU','440');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('LU','LUXEMBOURG','Luxembourg','LUX','442');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MO','MACAO','Macao','MAC','446');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MK','MACEDONIA, THE FORMER YUGOSLAV REPUBLIC OF','Macedonia, the Former Yugoslav Republic of','MKD','807');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MG','MADAGASCAR','Madagascar','MDG','450');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MW','MALAWI','Malawi','MWI','454');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MY','MALAYSIA','Malaysia','MYS','458');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MV','MALDIVES','Maldives','MDV','462');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('ML','MALI','Mali','MLI','466');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MT','MALTA','Malta','MLT','470');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MH','MARSHALL ISLANDS','Marshall Islands','MHL','584');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MQ','MARTINIQUE','Martinique','MTQ','474');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MR','MAURITANIA','Mauritania','MRT','478');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MU','MAURITIUS','Mauritius','MUS','480');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('YT','MAYOTTE','Mayotte',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MX','MEXICO','Mexico','MEX','484');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('FM','MICRONESIA, FEDERATED STATES OF','Micronesia, Federated States of','FSM','583');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MD','MOLDOVA, REPUBLIC OF','Moldova, Republic of','MDA','498');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MC','MONACO','Monaco','MCO','492');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MN','MONGOLIA','Mongolia','MNG','496');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MS','MONTSERRAT','Montserrat','MSR','500');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MA','MOROCCO','Morocco','MAR','504');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MZ','MOZAMBIQUE','Mozambique','MOZ','508');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MM','MYANMAR','Myanmar','MMR','104');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NA','NAMIBIA','Namibia','NAM','516');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NR','NAURU','Nauru','NRU','520');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NP','NEPAL','Nepal','NPL','524');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NL','NETHERLANDS','Netherlands','NLD','528');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AN','NETHERLANDS ANTILLES','Netherlands Antilles','ANT','530');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NC','NEW CALEDONIA','New Caledonia','NCL','540');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NZ','NEW ZEALAND','New Zealand','NZL','554');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NI','NICARAGUA','Nicaragua','NIC','558');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NE','NIGER','Niger','NER','562');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NG','NIGERIA','Nigeria','NGA','566');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NU','NIUE','Niue','NIU','570');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NF','NORFOLK ISLAND','Norfolk Island','NFK','574');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('MP','NORTHERN MARIANA ISLANDS','Northern Mariana Islands','MNP','580');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('NO','NORWAY','Norway','NOR','578');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('OM','OMAN','Oman','OMN','512');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PK','PAKISTAN','Pakistan','PAK','586');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PW','PALAU','Palau','PLW','585');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PS','PALESTINIAN TERRITORY, OCCUPIED','Palestinian Territory, Occupied',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PA','PANAMA','Panama','PAN','591');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PG','PAPUA NEW GUINEA','Papua New Guinea','PNG','598');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PY','PARAGUAY','Paraguay','PRY','600');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PE','PERU','Peru','PER','604');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PH','PHILIPPINES','Philippines','PHL','608');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PN','PITCAIRN','Pitcairn','PCN','612');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PL','POLAND','Poland','POL','616');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PT','PORTUGAL','Portugal','PRT','620');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PR','PUERTO RICO','Puerto Rico','PRI','630');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('QA','QATAR','Qatar','QAT','634');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('RE','REUNION','Reunion','REU','638');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('RO','ROMANIA','Romania','ROM','642');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('RU','RUSSIAN FEDERATION','Russian Federation','RUS','643');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('RW','RWANDA','Rwanda','RWA','646');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SH','SAINT HELENA','Saint Helena','SHN','654');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('KN','SAINT KITTS AND NEVIS','Saint Kitts and Nevis','KNA','659');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('LC','SAINT LUCIA','Saint Lucia','LCA','662');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('PM','SAINT PIERRE AND MIQUELON','Saint Pierre and Miquelon','SPM','666');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('VC','SAINT VINCENT AND THE GRENADINES','Saint Vincent and the Grenadines','VCT','670');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('WS','SAMOA','Samoa','WSM','882');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SM','SAN MARINO','San Marino','SMR','674');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('ST','SAO TOME AND PRINCIPE','Sao Tome and Principe','STP','678');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SA','SAUDI ARABIA','Saudi Arabia','SAU','682');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SN','SENEGAL','Senegal','SEN','686');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CS','SERBIA AND MONTENEGRO','Serbia and Montenegro',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SC','SEYCHELLES','Seychelles','SYC','690');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SL','SIERRA LEONE','Sierra Leone','SLE','694');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SG','SINGAPORE','Singapore','SGP','702');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SK','SLOVAKIA','Slovakia','SVK','703');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SI','SLOVENIA','Slovenia','SVN','705');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SB','SOLOMON ISLANDS','Solomon Islands','SLB','090');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SO','SOMALIA','Somalia','SOM','706');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('ZA','SOUTH AFRICA','South Africa','ZAF','710');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GS','SOUTH GEORGIA AND THE SOUTH SANDWICH ISLANDS','South Georgia and the South Sandwich Islands',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('ES','SPAIN','Spain','ESP','724');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('LK','SRI LANKA','Sri Lanka','LKA','144');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SD','SUDAN','Sudan','SDN','736');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SR','SURINAME','Suriname','SUR','740');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SJ','SVALBARD AND JAN MAYEN','Svalbard and Jan Mayen','SJM','744');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SZ','SWAZILAND','Swaziland','SWZ','748');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SE','SWEDEN','Sweden','SWE','752');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('CH','SWITZERLAND','Switzerland','CHE','756');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('SY','SYRIAN ARAB REPUBLIC','Syrian Arab Republic','SYR','760');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TW','TAIWAN, PROVINCE OF CHINA','Taiwan, Province of China','TWN','158');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TJ','TAJIKISTAN','Tajikistan','TJK','762');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TZ','TANZANIA, UNITED REPUBLIC OF','Tanzania, United Republic of','TZA','834');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TH','THAILAND','Thailand','THA','764');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TL','TIMOR-LESTE','Timor-Leste',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TG','TOGO','Togo','TGO','768');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TK','TOKELAU','Tokelau','TKL','772')");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TO','TONGA','Tonga','TON','776');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TT','TRINIDAD AND TOBAGO','Trinidad and Tobago','TTO','780');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TN','TUNISIA','Tunisia','TUN','788');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TR','TURKEY','Turkey','TUR','792');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TM','TURKMENISTAN','Turkmenistan','TKM','795');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TC','TURKS AND CAICOS ISLANDS','Turks and Caicos Islands','TCA','796');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('TV','TUVALU','Tuvalu','TUV','798');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('UG','UGANDA','Uganda','UGA','800');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('UA','UKRAINE','Ukraine','UKR','804');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('AE','UNITED ARAB EMIRATES','United Arab Emirates','ARE','784');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('GB','UNITED KINGDOM','United Kingdom','GBR','826');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('US','UNITED STATES','United States','USA','840');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('UM','UNITED STATES MINOR OUTLYING ISLANDS','United States Minor Outlying Islands',NULL,NULL);");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('UY','URUGUAY','Uruguay','URY','858');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('UZ','UZBEKISTAN','Uzbekistan','UZB','860');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('VU','VANUATU','Vanuatu','VUT','548');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('VE','VENEZUELA','Venezuela','VEN','862');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('VN','VIET NAM','Viet Nam','VNM','704');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('VG','VIRGIN ISLANDS, BRITISH','Virgin Islands, British','VGB','092');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('VI','VIRGIN ISLANDS, U.S.','Virgin Islands, U.s.','VIR','850');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('WF','WALLIS AND FUTUNA','Wallis and Futuna','WLF','876');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('EH','WESTERN SAHARA','Western Sahara','ESH','732');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('YE','YEMEN','Yemen','YEM','887');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('ZM','ZAMBIA','Zambia','ZMB','894');");
-		$this->db->query("INSERT INTO {$prefix}countries VALUES ('ZW','ZIMBABWE','Zimbabwe','ZWE','716');");
-		
+		$this->db->insert_batch($this->countries_table, $this->countries_data);
+
+		// Users table changes
+		$this->dbforge->modify_column($this->users_table, $this->users_fields);
+		$this->dbforge->add_column($this->users_table, $this->users_new_fields);
+		// Remove the zip_extra field
+		foreach ($this->users_drop_fields as $column_name => $column_def)
+		{
+			$this->dbforge->drop_column($this->users_table, $column_name);
+		}
+
 		// Activity Table
-		$this->dbforge->add_field('activity_id BIGINT(20) NOT NULL AUTO_INCREMENT');
-		$this->dbforge->add_field('user_id BIGINT(20) NOT NULL DEFAULT 0');
-		$this->dbforge->add_field('activity VARCHAR(255) NOT NULL');
-		$this->dbforge->add_field('module VARCHAR(255) NOT NULL');
-		$this->dbforge->add_field('created_on DATETIME NOT NULL');
+		$this->dbforge->add_field($this->activities_fields);
 		$this->dbforge->add_key('activity_id', true);
-		$this->dbforge->create_table('activities');
+		$this->dbforge->create_table($this->activities_table);
 	}
-	
-	//--------------------------------------------------------------------
-	
-	public function down() 
+
+	/**
+	 * Uninstall this migration
+	 */
+	public function down()
 	{
-		$prefix = $this->db->dbprefix;
-	
-		if ($this->db->field_exists('`Bonfire.Emailer.View`', 'permissions'))
+		// drop new columns on permissions table
+		foreach ($this->permissions_fields as $column_name => $column_def)
 		{
-			$this->db->query("ALTER TABLE `{$prefix}permissions` DROP COLUMN `Bonfire.Emailer.View`");
+			if ($this->db->field_exists($column_name, $this->permissions_table))
+			{
+				$this->dbforge->drop_column($this->permissions_table, $column_name);
+			}
 		}
-		
-		if ($this->db->field_exists('reset_hash', 'users'))
+
+		// revert users table changes
+		// drop added columns from users table
+		foreach ($this->users_new_fields as $column_name => $column_def)
 		{
-			$this->dbforge->modify_column('users', array(
-				'reset_hash' => array(
-					'name'	=> 'temp_password_hash',
-					'type'	=> 'VARCHAR',
-					'constraint'	=> 40
-				)
-			));
+			if ($this->db->field_exists($column_name, $this->users_table))
+			{
+				$this->dbforge->drop_column($this->users_table, $column_name);
+			}
 		}
-		
-		// Drop reset_by from users
-		if ($this->db->field_exists('reset_by', 'users'))
+
+		// revert modified columns on users table
+		$this->dbforge->modify_column($this->users_table, $this->users_fields_down);
+
+		// add dropped columns back to users table
+		$users_drop_field_names = array_keys($this->users_drop_fields);
+		if ( ! empty($users_drop_field_names))
 		{
-			$this->dbforge->drop_column('users', 'reset_by');
+			if ( ! $this->db->field_exists($users_drop_field_names[0], $this->users_table))
+			{
+				$this->dbforge->add_column($this->users_table, $this->users_drop_fields);
+			}
 		}
-		
-		// Drop country_iso from users
-		if ($this->db->field_exists('country_iso', 'users'))
-		{
-			$this->dbforge->drop_column('users', 'country_iso');
-		}
-		
+
 		// Drop our countries table
-		$this->dbforge->drop_table('countries');
-		
-		// Give us back our zip_extra column
-		if ($this->db->field_exists('zip_extra', 'users') == false)
-		{
-			$this->dbforge->add_column('users', array(
-				'zip_extra'	=> array(
-					'type'			=> 'INT',
-					'constraint'	=> 5,
-					'null'			=> true
-				)
-			));
-		}
-		
-		// Change zipcode back to int
-		$this->dbforge->modify_column('users', array(
-				'zipcode' => array(
-					'name'			=> 'zipcode',
-					'type'			=> 'INT',
-					'constraint'	=> 7,
-					'null'			=> true
-				)
-			));
-			
-		// Activity Table
-		$this->dbforge->drop_table('activities');
+		$this->dbforge->drop_table($this->countries_table);
+
+		// Drop Activities Table
+		$this->dbforge->drop_table($this->activities_table);
 	}
-	
-	//--------------------------------------------------------------------
-	
 }

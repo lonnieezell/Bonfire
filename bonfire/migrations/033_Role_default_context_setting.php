@@ -1,46 +1,57 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Add a new column to the roles table to create the default context field.
+ * Update existing roles with the default value as well.
+ */
 class Migration_Role_default_context_setting extends Migration
 {
+	/**
+	 * @var string The name of the roles table
+	 */
+	private $table = 'roles';
 
 	/**
-	 * Add a new column to the roles table to create the default context field. Update existing roles with the
-     * default value as well.
+	 * @var array The column to be added to the table
+	 */
+	private $fields = array(
+		'default_context'	=> array(
+			'type'			=> 'varchar',
+			'constraint'	=> 255,
+			'default'		=> 'content',
+			'after'         => 'login_destination'
+		),
+	);
+
+	/**
+	 * @var array Data to update the table
+	 */
+	private $data = array(
+		'default_context' => 'content',
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
 	 */
 	public function up()
 	{
-		$prefix = $this->db->dbprefix;
+        $this->dbforge->add_column($this->table, $this->fields);
 
-        $this->dbforge->add_column('roles', array(
-            'default_context'	=> array(
-                'type'			=> 'varchar',
-                'constraint'	=> 255,
-                'default'		=> 'content',
-                'after'         => 'login_destination'
-            )
-        ));
-        $update_roles = "
-			UPDATE `{$prefix}roles` SET `default_context` = 'content';";
-
-		if ($this->db->query($update_roles))
-		{
-			return TRUE;
-		}
-
+		$this->db->update($this->table, $this->data);
 	}
 
-	//--------------------------------------------------------------------
-
+	/**
+	 * Install this migration
+	 */
 	public function down()
 	{
-		$prefix = $this->db->dbprefix;
-
 		// remove the default_context column
-        $this->dbforge->drop_column("roles","default_context");
-
-
+		foreach ($this->fields as $column_name => $column_def)
+		{
+			$this->dbforge->drop_column($this->table, $column_name);
+		}
     }
-
-	//--------------------------------------------------------------------
-
 }

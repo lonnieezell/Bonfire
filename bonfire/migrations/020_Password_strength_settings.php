@@ -1,46 +1,68 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Add password strength options to the settings table
+ */
 class Migration_Password_strength_settings extends Migration
 {
+	/**
+	 * @var string The name of the settings table
+	 */
+	private $table = 'settings';
 
 	/**
-	 * Removing the '/' from the Role login_destination field in the DB so that
-	 * the user will be brought to the last requested url when they login
+	 * @var array The data to insert into the settings table
+	 */
+	private $data = array(
+		array(
+			'name'		=> 'auth.password_min_length',
+			'module'	=> 'core',
+			'value'		=> '8',
+		),
+		array(
+			'name'		=> 'auth.password_force_numbers',
+			'module'	=> 'core',
+			'value'		=> '0',
+		),
+		array(
+			'name'		=> 'auth.password_force_symbols',
+			'module'	=> 'core',
+			'value'		=> '0',
+		),
+		array(
+			'name'		=> 'auth.password_force_mixed_case',
+			'module'	=> 'core',
+			'value'		=> '0',
+		),
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
 	 */
 	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-
-		$default_settings = "
-			INSERT INTO `{$prefix}settings` (`name`, `module`, `value`) VALUES
-			 ('auth.password_min_length', 'core', '8'),
-			 ('auth.password_force_numbers','core',0),
-			 ('auth.password_force_symbols','core',0),
-			 ('auth.password_force_mixed_case','core',0);
-		";
-
-		if ($this->db->query($default_settings))
-		{
-			return TRUE;
-		}
-
+		$this->db->insert_batch($this->table, $this->data);
 	}
 
-	//--------------------------------------------------------------------
-
+	/**
+	 * Uninstall this migration
+	 */
 	public function down()
 	{
-		$prefix = $this->db->dbprefix;
+		$settings = array();
+		foreach ($this->data as $setting)
+		{
+			$settings[] = $setting['name'];
+		}
 
-		// remove the keys
-		$this->db->query("DELETE FROM {$prefix}settings WHERE (name = 'auth.password_min_length'
-			OR name ='auth.password_force_numbers'
-			OR name ='auth.password_force_symbols'
-			OR name ='auth.password_force_mixed_case'
-		)");
-
+		if ( ! empty($settings))
+		{
+			// remove the keys
+			$this->db->where_in('name', $settings)
+				->delete($this->table);
+		}
 	}
-
-	//--------------------------------------------------------------------
-
 }
