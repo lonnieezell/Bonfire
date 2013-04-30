@@ -28,6 +28,10 @@ $lang[\''.$module_name_lower.'_delete_record\']			= \'Delete this '.$module_name
 $lang[\''.$module_name_lower.'_delete_confirm\']			= \'Are you sure you want to delete this '.$module_name_lower.'?\';
 $lang[\''.$module_name_lower.'_edit_heading\']			= \'Edit '.$module_name.'\';
 
+// Create/Edit Buttons
+$lang[\''.$module_name_lower.'_action_edit\']				= \'Save '.$module_name.'\';
+$lang[\''.$module_name_lower.'_action_create\']				= \'Create '.$module_name.'\';
+
 // Activities
 $lang[\''.$module_name_lower.'_act_create_record\']			= \'Created record with ID\';
 $lang[\''.$module_name_lower.'_act_edit_record\']			= \'Updated record with ID\';
