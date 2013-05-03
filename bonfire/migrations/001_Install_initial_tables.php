@@ -145,76 +145,20 @@ class Migration_Install_initial_tables extends Migration
 			'type' => 'INT',
 			'constraint' => 11,
 		),
-		'Site.Signin.Allow' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Site.Content.View' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Site.Statistics.View' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Site.Appearance.View' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Site.Settings.View' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Site.Developer.View' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Bonfire.Roles.Manage' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Bonfire.Users.Manage' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Bonfire.Users.View' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Bonfire.Users.Add' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Bonfire.Database.Manage' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Bonfire.Emailer.Manage' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Bonfire.Logs.View' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-		'Bonfire.Logs.Manage' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
+		"`Site.Signin.Allow` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Site.Content.View` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Site.Statistics.View` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Site.Appearance.View` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Site.Settings.View` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Site.Developer.View` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Bonfire.Roles.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Bonfire.Users.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Bonfire.Users.View` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Bonfire.Users.Add` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Bonfire.Database.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Bonfire.Emailer.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Bonfire.Logs.View` tinyint(1) NOT NULL DEFAULT '0'",
+		"`Bonfire.Logs.Manage` tinyint(1) NOT NULL DEFAULT '0'",
 	);
 
 	/**
