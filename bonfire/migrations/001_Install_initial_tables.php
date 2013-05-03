@@ -129,10 +129,7 @@ class Migration_Install_initial_tables extends Migration
 			'type' => 'VARCHAR',
 			'constraint' => 50,
 		),
-		'time' => array(
-			'type' => 'TIMESTAMP',
-			'default' => 'CURRENT_TIMESTAMP', /* This will probably cause an error outside MySQL */
-		),
+		'time TIMESTAMP DEFAULT CURRENT_TIMESTAMP', /* This will probably cause an error outside MySQL and may not be cross-database compatible for reasons other than CURRENT_TIMESTAMP */
 	);
 
 	/**
