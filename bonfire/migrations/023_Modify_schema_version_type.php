@@ -1,49 +1,39 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-/**
- * Modify the size of the type field in the schema_version table
- */
-class Migration_Modify_schema_version_type extends Migration
-{
-	/**
-	 * @var string The name of the table
-	 */
-	private $table = 'schema_version';
-
-	/**
-	 * @var array The field to modify
-	 */
-	private $field = array(
-		'type' => array(
-			'type' => 'VARCHAR',
-			'constraint' => 40,
-			'null' => FALSE,
-		),
-	);
-
-	/**
-	 * @var int Old value for the type constraint
-	 */
-	private $old_constraint = 20;
-
-	/****************************************************************
-	 * Migration methods
-	 */
-	/**
-	 * Install this migration
-	 */
-	public function up()
+class Migration_Modify_schema_version_type extends Migration {
+	
+	public function up() 
 	{
-		$this->dbforge->modify_column($this->table, $this->field);
-	}
+		$prefix = $this->db->dbprefix;
 
-	/**
-	 * Uninstall this migration
-	 */
-	public function down()
-	{
-		$this->field['type']['constraint'] = $this->old_constraint;
-		
-		$this->dbforge->modify_column($this->table, $this->field);
+		$fields = array(
+			'type' => array(
+				'name' => 'type',
+				'type' => 'VARCHAR',
+				'constraint' => 40,
+				'null' => FALSE,
+			),
+		);
+		$this->dbforge->modify_column('schema_version', $fields);
 	}
+	
+	//--------------------------------------------------------------------
+	
+	public function down() 
+	{
+		$prefix = $this->db->dbprefix;
+
+		$fields = array(
+			'type' => array(
+				'name' => 'type',
+				'type' => 'VARCHAR',
+				'constraint' => 20,
+				'null' => FALSE,
+			),
+		);
+		$this->dbforge->modify_column('schema_version', $fields);
+	}
+	
+	//--------------------------------------------------------------------
+	
 }

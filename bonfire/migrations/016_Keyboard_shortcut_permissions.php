@@ -1,107 +1,55 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-/**
- * Add the keyboard shortcuts to the Settings
- * Add a permission to manage the UI settings
- */
-class Migration_Keyboard_shortcut_permissions extends Migration
-{
+class Migration_Keyboard_shortcut_permissions extends Migration {
+	
 	/**
-	 * @var string The name of the permissions table
+	 * Removing the '/' from the Role login_destination field in the DB so that 
+	 * the user will be brought to the last requested url when they login
 	 */
-	private $table = 'permissions';
-
-	/**
-	 * @var string The name of the role/permissions ref table
-	 */
-	private $ref_table = 'role_permissions';
-
-	/**
-	 * @var string The name of the settings table
-	 */
-	private $settings_table = 'settings';
-
-	/**
-	 * @var array The permission to add
-	 */
-	private $data = array(
-		'name'        => 'Bonfire.UI.Manage' ,
-		'description' => 'Manage the Bonfire UI settings'
-	);
-
-	/**
-	 * @var array The data to add to the ref table
-	 */
-	private $ref_data = array(
-		'role_id' => 1,
-		'permission_id' => 0,
-	);
-
-	/**
-	 * @var array The data to be added to the settings table
-	 */
-	private $settings_data = array(
-		'name' => 'ui.shortcut_keys',
-		'module' => 'core',
-		'value' => '',
-	);
-
-	/**
-	 * @var array The data to be added as the value in the settings data
-	 */
-	private $keys = array(
-		'form_save' => 'ctrl+s/⌘+s',
-		'goto_content' => 'alt+c',
-	);
-
-	/****************************************************************
-	 * Migration methods
-	 */
-	/**
-	 * Install this migration
-	 */
-	public function up()
+	public function up() 
 	{
-		// insert the new permission
-		$this->db->insert($this->table, $this->data);
-
-		// add the permission to the administrator role
-		$this->ref_data['permission_id'] = $this->db->insert_id();
-		$this->db->insert($this->ref_table, $this->ref_data);
+		$prefix = $this->db->dbprefix;
+		
+		$data = array(
+			'name'        => 'Bonfire.UI.Manage' ,
+			'description' => 'Manage the Bonfire UI settings' 
+		);
+		$this->db->insert("{$prefix}permissions", $data);
+		
+		$permission_id = $this->db->insert_id();
+		
+		// change the roles which don't have any specific login_destination set
+		$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(1, ".$permission_id.")");
 
 		// add the keys
-		$this->settings_data['value'] = serialize($this->keys);
-		$this->db->insert($this->settings_table, $this->settings_data);
+		$keys = array(
+			'form_save' => 'ctrl+s/⌘+s',
+			'goto_content' => 'alt+c',
+		);
+		$this->db->query("INSERT INTO {$prefix}settings VALUES('ui.shortcut_keys', 'core', '".serialize($keys)."')");
+
 	}
-
-	/**
-	 * Uninstall this migration
-	 */
-	public function down()
+	
+	//--------------------------------------------------------------------
+	
+	public function down() 
 	{
-		$query = $this->db->select('permission_id')
-			->where('name', $this->data['name'])
-			->get($this->table);
-
-		$permission_ids = array();
+		$prefix = $this->db->dbprefix;
+		
+		$query = $this->db->query("SELECT permission_id FROM {$prefix}permissions WHERE name = 'Bonfire.UI.Manage'");
 		foreach ($query->result_array() as $row)
 		{
-			$permission_ids[] = $row['permission_id'];
+			$permission_id = $row['permission_id'];
+			$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='$permission_id';");
 		}
-
-		// remove the permission from the roles
-		if ( ! empty($permission_ids))
-		{
-			$this->db->where_in('permission_id', $permission_ids)
-				->delete($this->ref_table);
-		}
-
-		//delete the permission
-		$this->db->where('name', $this->data['name'])
-			->delete($this->table);
-
+		//delete the role
+		$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Bonfire.UI.Manage')");
+		
 		// remove the keys
-		$this->db->where('name', $this->settings_data['name'])
-			->delete($this->settings_table);
+		$this->db->query("DELETE FROM {$prefix}settings WHERE (name = 'ui.shortcut_keys')");
+
 	}
+	
+	//--------------------------------------------------------------------
+	
 }

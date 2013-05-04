@@ -1,46 +1,31 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-/**
- * Add the login_destination field to the roles table
- */
-class Migration_Add_login_destination extends Migration
-{
-	/****************************************************************
-	 * Table Names
-	 */
-	private $roles_table = 'roles';
-
-	/****************************************************************
-	 * Field Definitions
-	 */
-	private $roles_fields = array(
-		'login_destination'	=> array(
-			'type'			=> 'VARCHAR',
-			'constraint'	=> 255,
-			'null'			=> false,
-			'default'		=> '/',
-		),
-	);
-
-	/****************************************************************
-	 * Migration methods
-	 */
-	/**
-	 * Install this migration
-	 */
-	public function up()
+class Migration_Add_login_destination extends Migration {
+	
+	public function up() 
 	{
-		$this->dbforge->add_column($this->roles_table, $this->roles_fields);
+		$prefix = $this->db->dbprefix;
+		
+		$this->dbforge->add_column('roles', array(
+				'login_destination'	=> array(
+					'type'			=> 'VARCHAR',
+					'constraint'	=> 255,
+					'null'			=> false,
+					'default'		=> '/'
+				)
+			)
+		);
 	}
-
-	/**
-	 * Uninstall this migration
-	 */
-	public function down()
+	
+	//--------------------------------------------------------------------
+	
+	public function down() 
 	{
-		foreach ($this->roles_fields as $column_name => $column_def)
-		{
-			$this->dbforge->drop_column($this->roles_table, $column_name);
-		}
+		$prefix = $this->db->dbprefix;
+
+		$this->dbforge->drop_column('roles', 'login_destination');
 	}
+	
+	//--------------------------------------------------------------------
+	
 }

@@ -1,241 +1,149 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-/**
- * Upgrade Permission system by:
- *	Making the name of the Permission a value in the table rather than a column
- *	Adding a Role/Permissions ref table
- */
-class Migration_Permission_system_upgrade extends Migration
-{
-	/****************************************************************
-	 * Table names
-	 */
-	private $permissions_table = 'permissions';
-	private $permissions_old_table = 'permissions_old';
-	private $role_permissions_table = 'role_permissions';
-
-	/****************************************************************
-	 * Field definitions
-	 */
-	/**
-	 * @var array New fields to add to the Permissions table
-	 */
-	private $permissions_fields = array(
-		'Site.Signin.Offline' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-	);
-
-	/**
-	 * @var array Fields to modify in the Permissions table
-	 */
-	private $permissions_modify_fields = array(
-		'Site.Statistics.View' => array(
-			'name' => 'Site.Reports.View',
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-	);
-
-	/**
-	 * @var array Fields to modify in the Permissions table during Uninstall
-	 */
-	private $permissions_modify_fields_down = array(
-		'Site.Reports.View' => array(
-			'name' => 'Site.Statistics.View',
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-	);
-
-	/**
-	 * @var array Fields to drop from the permissions table
-	 */
-	private $permissions_drop_fields = array(
-		'Site.Appearance.View' => array(
-			'type' => 'TINYINT',
-			'constraint' => 1,
-			'default' => 0,
-		),
-	);
-
-	/**
-	 * @var array Fields for the new Permissions table
-	 */
-	private $permissions_new_fields = array(
-		'permission_id' => array(
-			'type' => 'INT',
-			'constraint' => 11,
-			'null' => FALSE,
-			'auto_increment' => TRUE,
-		),
-		'name' => array(
-			'type' => 'VARCHAR',
-			'constraint' => 30,
-		),
-		'description' => array(
-			'type' =>'VARCHAR',
-			'constraint' => 100,
-		),
-		'status' => array(
-			'type' => 'ENUM',
-			'constraint' => "'active','inactive','deleted'",
-			'default' => 'active'
-		),
-	);
-
-	/**
-	 * @var array Fields for the role_permissions table
-	 */
-	private $role_permissions_fields = array(
-		'role_id' => array(
-			'type' => 'INT',
-			'constraint' => 11,
-		),
-		'permission_id' => array(
-			'type' => 'INT',
-			'constraint' => 11,
-		),
-	);
-
-	/****************************************************************
-	 * Data for Insert/Update
-	 */
-	/**
-	 * @var array Data to update the permissions table
-	 */
-	private $permissions_data = array(
-		'Site.Signin.Offline' => 1,
-	);
-
-	/****************************************************************
-	 * Migration methods
-	 */
-	/**
-	 * Install this migration
-	 */
-	public function up()
+class Migration_Permission_system_upgrade extends Migration {
+	
+	public function up() 
 	{
-		/* Take care of a few preliminaries before updating */
-		// Add new Site.Signin.Offline permission
-		$this->dbforge->add_column($this->permissions_table, $this->permissions_fields);
-		$this->db->where('role_id', 1)->update($this->permissions_table, $this->permissions_data);
+		$prefix = $this->db->dbprefix;
+		
+		/*
+			Take care of a few preliminaries before updating: 
+			
+			- Add new Site.Signin.Offline permission
+			- Rename Site.Statistics.View to Site.Reports.View
+			- Remove Site.Appearance.View
+			
+			Then the rest of the update script handles transferring them
+			to the new tables. 
+		*/
+		$sql = "ALTER TABLE {$prefix}permissions ADD `Site.Signin.Offline` TINYINT(1) DEFAULT 0 NOT NULL";
+		$this->db->query($sql);
+		$this->db->query("UPDATE {$prefix}permissions SET `Site.Signin.Offline`=1 WHERE `role_id`=1");
 
-		// Rename Site.Statistics.View to Site.Reports.View
-		$this->dbforge->modify_column($this->permissions_table, $this->permissions_modify_fields);
-
-		// Remove Site.Appearance.View
-		foreach ($this->permissions_drop_fields as $column_name => $column_def)
-		{
-			$this->dbforge->drop_column($this->permissions_table, $column_name);
-		}
-
-		/* Do the actual update. */
-		// get the field names in the current permissions table
+		$sql = "ALTER TABLE {$prefix}permissions CHANGE `Site.Statistics.View` `Site.Reports.View` TINYINT(1) DEFAULT 0 NOT NULL";
+		$this->db->query($sql);
+		
+		$sql = "ALTER TABLE {$prefix}permissions DROP COLUMN `Site.Appearance.View`";
+		$this->db->query($sql);
+		
+		/*
+			Do the actual update.
+		*/
+		// get the field names in the current bf_permissions table
 		$permissions_fields = $this->db->list_fields('permissions');
 
 		// get the current permissions assigned to each role
-		$permission_query = $this->db->get($this->permissions_table);
+		$sql = "SELECT * FROM {$prefix}permissions";
+		$permission_query = $this->db->query($sql);
 
 		$old_permissions_array = array();
 		foreach ($permission_query->result_array() as $row)
 		{
-			$old_permissions_array[$row['role_id']] = $row;
+			$role_id = $row['role_id'];
+			$old_permissions_array[$role_id] = $row;
 		}
 
 		// modify the permissions table
-		$this->dbforge->rename_table($this->permissions_table, $this->permissions_old_table);
-
-		$this->dbforge->add_field($this->permissions_new_fields);
+		$this->dbforge->rename_table('permissions', 'permissions_old');
+		
+		$fields = array(
+						'permission_id' => array(
+												'type' => 'INT',
+												'constraint' => 11, 
+												'null' => FALSE,
+												'auto_increment' => TRUE
+										  ),
+						'name' => array(
+												'type' => 'VARCHAR',
+												'constraint' => '30',
+										  ),
+						'description' => array(
+												'type' =>'VARCHAR',
+												'constraint' => '100',
+										  ),
+						'status' => array(
+												'type' => 'ENUM',
+												'constraint' => "'active','inactive','deleted'",
+												'default' => 'active'
+										  ),
+				);
+		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('permission_id', TRUE);
-		$this->dbforge->create_table($this->permissions_table);
-
+		$this->dbforge->create_table('permissions');
 		// add records for each of the old permissions
-		$old_permissions_records = array();
 		foreach ($permissions_fields as $field)
 		{
-			if ($field != 'role_id' && $field != 'permission_id')
+			if($field != 'role_id' && $field != 'permission_id')
 			{
-				$old_permissions_records[] = array(
-					'name' => $field,
-					'description' => '',
-				);
+				$this->db->insert('permissions', array(
+					'name'			=> $field,
+					'description'	=> ''
+				));
 			}
 		}
-		$old_permissions_records[] = array(
+		$this->db->insert('permissions', array(
 			'name' 			=> 'Permissions.Settings.View',
 			'description'	=> 'Allow access to view the Permissions menu unders Settings Context'
-		);
-		$old_permissions_records[] = array(
+		));
+		$this->db->insert('permissions', array(
 			'name'			=> 'Permissions.Settings.Manage',
 			'description'	=> 'Allow access to manage the Permissions in the system',
-		);
-		$this->db->insert_batch($this->permissions_table, $old_permissions_records);
-
-		// create the new role_permissions table
-		$this->dbforge->add_field($this->role_permissions_fields);
+		));
+		
+		// create the new bf_role_permissions table
+		$this->dbforge->add_field("role_id int(11) NOT NULL");
+		$this->dbforge->add_field("permission_id int(11) NOT NULL ");
 		$this->dbforge->add_key('role_id', TRUE);
 		$this->dbforge->add_key('permission_id', TRUE);
-		$this->dbforge->create_table($this->role_permissions_table);
-
-		// add records to allow access to the permissions by the roles - adding records to role_permissions
+		$this->dbforge->create_table('role_permissions');
+		
+		// add records to allow access to the permissions by the roles - adding records to bf_role_permissions
 		// get the current list of permissions
-		$new_permission_query = $this->db->get($this->permissions_table);
-		$role_permissions_records = array();
+		$sql = "SELECT * FROM {$prefix}permissions";
+		$new_permission_query = $this->db->query($sql);
 		// loop through the current permissions
 		foreach ($new_permission_query->result_array() as $permission_rec)
 		{
 			// loop through the old permissions
-			foreach ($old_permissions_array as $role_id => $role_permissions)
+			foreach($old_permissions_array as $role_id => $role_permissions)
 			{
 				// if the role had access to this permission then give it access again
-				if (isset($role_permissions[$permission_rec['name']]) && $role_permissions[$permission_rec['name']] == 1)
+				if(isset($role_permissions[$permission_rec['name']]) && $role_permissions[$permission_rec['name']] == 1)
 				{
-					$role_permissions_records[] = array(
-						'role_id' => $role_id,
-						'permission_id' => $permission_rec['permission_id'],
-					);
+					$this->db->query("INSERT INTO {$prefix}role_permissions VALUES ({$role_id},{$permission_rec['permission_id']});");
 				}
-
+				
 				// specific case for the administrator to get access to - Bonfire.Permissions.Manage
-				if ($role_id == 1 && $permission_rec['name'] == 'Bonfire.Permissions.Manage')
+				if($role_id == 1 AND $permission_rec['name'] == 'Bonfire.Permissions.Manage')
 				{
-					$role_permissions_records[] = array(
-						'role_id' => $role_id,
-						'permission_id' => $permission_rec['permission_id'],
-					);
+					$this->db->query("INSERT INTO {$prefix}role_permissions VALUES ({$role_id},{$permission_rec['permission_id']});");
 				}
 			}
-
-			// give the administrator access to the new "Permissions" permissions
-			if ($permission_rec['name'] == 'Permissions.Settings.View' || $permission_rec['name'] == 'Permissions.Settings.Manage')
+			
+			// give the administrator use access to the new "Permissions" permissions
+			if($permission_rec['name'] == 'Permissions.Settings.View' || $permission_rec['name'] == 'Permissions.Settings.Manage')
 			{
-				$role_permissions_records[] = array(
-					'role_id' => 1,
-					'permission_id' => $permission_rec['permission_id'],
-				);
+				$this->db->query("INSERT INTO {$prefix}role_permissions VALUES (1,{$permission_rec['permission_id']});");
 			}
+
 		}
 
-		$this->db->insert_batch($this->role_permissions_table, $role_permissions_records);
 	}
-
-	/**
-	 * Uninstall this migration
-	 */
-	public function down()
+	
+	//--------------------------------------------------------------------
+	
+	public function down() 
 	{
-		// Drop our tables
-		$this->dbforge->drop_table($this->permissions_table);
-		$this->dbforge->drop_table($this->role_permissions_table);
+		$prefix = $this->db->dbprefix;
+		
+		// Drop our countries table
+		$this->dbforge->drop_table('permissions');
+		$this->dbforge->drop_table('role_permissions');
+		
+		$this->dbforge->rename_table($prefix.'permissions_old', $prefix.'permissions');
 
-		// Rename the old permissions table
-		$this->dbforge->rename_table($this->permissions_old_table, $this->permissions_table);
-		// Rename Site.Reports.View to Site.Statistics.View
-		$this->dbforge->modify_column($this->permissions_table, $this->permissions_modify_fields_down);
 	}
+	
+	//--------------------------------------------------------------------
+	
 }

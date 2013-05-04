@@ -1,206 +1,91 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-/**
- * Add Permissions for the core modules
- * Remove/Rename old permissions
- */
 class Migration_Permissions_for_core_modules extends Migration
 {
-	/**
-	 * @var string The name of the Permissions table
-	 */
-	private $table = 'permissions';
 
-	/**
-	 * @var string The name of the Role Permissions table
-	 */
-	private $ref_table = 'role_permissions';
+	private $permission_array = array(
+					'Bonfire.Activities.View' => 'To view the Activities menu.',
+					'Bonfire.Database.View' => 'To view the Database menu.',
+					'Bonfire.Migrations.View' => 'To view the Migrations menu.',
+					'Bonfire.Modulebuilder.View' => 'To view the Modulebuilder menu.',
+					'Bonfire.Roles.View' => 'To view the Roles menu.',
+					'Bonfire.Sysinfo.View' => 'To view the System Information page.',
+					'Bonfire.Translate.Manage' => 'To manage the Language Translation.',
+					'Bonfire.Translate.View' => 'To view the Language Translate menu.',
+					'Bonfire.UI.View' => 'To view the UI/Keyboard Shortcut menu.',
+					'Bonfire.Update.Manage' => 'To manage the Bonfire Update.',
+					'Bonfire.Update.View' => 'To view the Developer Update menu.',
+				);
 
-	/**
-	 * @var array Core Module permissions to be added
-	 */
-	private $data = array(
-		array(
-			'name' => 'Bonfire.Activities.View',
-			'description' => 'To view the Activities menu.',
-		),
-		array(
-			'name' => 'Bonfire.Database.View',
-			'description' => 'To view the Database menu.',
-		),
-		array(
-			'name' => 'Bonfire.Migrations.View',
-			'description' => 'To view the Migrations menu.',
-		),
-		array(
-			'name' => 'Bonfire.Modulebuilder.View',
-			'description' => 'To view the Modulebuilder menu.',
-		),
-		array(
-			'name' => 'Bonfire.Roles.View',
-			'description' => 'To view the Roles menu.',
-		),
-		array(
-			'name' => 'Bonfire.Sysinfo.View',
-			'description' => 'To view the System Information page.',
-		),
-		array(
-			'name' => 'Bonfire.Translate.Manage',
-			'description' => 'To manage the Language Translation.',
-		),
-		array(
-			'name' => 'Bonfire.Translate.View',
-			'description' => 'To view the Language Translate menu.',
-		),
-		array(
-			'name' => 'Bonfire.UI.View',
-			'description' => 'To view the UI/Keyboard Shortcut menu.',
-		),
-		array(
-			'name' => 'Bonfire.Update.Manage',
-			'description' => 'To manage the Bonfire Update.',
-		),
-		array(
-			'name' => 'Bonfire.Update.View',
-			'description' => 'To view the Developer Update menu.',
-		),
-	);
 
-	/**
-	 * @var array The names of the permissions to be renamed
-	 */
-	private $old_permission_names = array(
-		'Permissions.Settings.Manage',
-		'Permissions.Settings.View',
-	);
-
-	/**
-	 * @var array The new names of the permissions to be renamed
-	 */
-	private $new_permission_names = array(
-		'Bonfire.Permissions.Manage',
-		'Bonfire.Permissions.View',
-	);
-
-	/**
-	 * @var array Permissions to remove
-	 */
-	private $remove_permissions = array(
-		array(
-			'name' => 'Permissions.Banned.Manage',
-			'description' => 'To manage the access control permissions for the Banned role.',
-		),
-		array(
-			'name' => 'Bonfire.Activities.Manage',
-			'description' => 'Allow users to access the Activities Reports.',
-		),
-	);
-
-	/****************************************************************
-	 * Migration methods
-	 */
-	/**
-	 * Install this migration
-	 */
 	public function up()
 	{
-		$permission_count = count($this->old_permission_names);
-		for ($x=0; $x < $permission_count; $x++)
+		$this->load->library('session');
+
+		$prefix = $this->db->dbprefix;
+
+		$query = $this->db->query("UPDATE {$prefix}permissions set name = 'Bonfire.Permissions.Manage' WHERE name = 'Permissions.Settings.Manage'");
+		$query = $this->db->query("UPDATE {$prefix}permissions set name = 'Bonfire.Permissions.View' WHERE name = 'Permissions.Settings.View'");
+
+		foreach ($this->permission_array as $name => $description)
 		{
-			$this->db->where('name', $this->old_permission_names[$x])
-				->update($this->table, array('name' => $this->new_permission_names[$x]));
+			$this->db->query("INSERT INTO {$prefix}permissions(name, description) VALUES('".$name."', '".$description."')");
+			// give current role (or administrators if fresh install) full right to manage permissions
+			$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(1,".$this->db->insert_id().")");
 		}
 
-		$permission_ids = array();
-		foreach ($this->data as $permission)
+		// remove an old permission
+		$query = $this->db->query("SELECT permission_id FROM {$prefix}permissions WHERE name = 'Permissions.Banned.Manage'");
+		foreach ($query->result_array() as $row)
 		{
-			$this->db->insert($this->table, $permission);
-			$permission_ids[] = array(
-				'role_id' => 1,
-				'permission_id' => $this->db->insert_id(),
-			);
+			$permission_id = $row['permission_id'];
+			$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='$permission_id';");
 		}
+		//delete the role
+		$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Permissions.Banned.Manage')");
 
-		if ( ! empty($permission_ids))
+		// remove Bonfire.Activities.Manage as is not used now
+		$query = $this->db->query("SELECT permission_id FROM {$prefix}permissions WHERE name = 'Bonfire.Activities.Manage'");
+		foreach ($query->result_array() as $row)
 		{
-			$this->db->insert_batch($this->ref_table, $permission_ids);
+			$permission_id = $row['permission_id'];
+			$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='$permission_id';");
 		}
+		//delete the role
+		$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Bonfire.Activities.Manage')");
 
-		// remove old permissions
-		$remove_ids = array();
-		$remove_names = array();
-		foreach ($this->remove_permissions as $permission)
-		{
-			$remove_names[] = $permission['name'];
-
-			$query = $this->db->select('permission_id')
-				->where('name', $permission['name'])
-				->get($this->table);
-			foreach ($query->result() as $row)
-			{
-				$remove_ids[] = $row->permission_id;
-			}
-		}
-
-		if ( ! empty($remove_ids))
-		{
-			// remove the permissions from the roles
-			$this->db->where_in('permission_id', $remove_ids)
-				->delete($this->ref_table);
-		}
-		if ( ! empty($remove_names))
-		{
-			// delete the permissions
-			$this->db->where_in('name', $remove_names)
-				->delete($this->table);
-		}
 	}
 
-	/**
-	 * Uninstall this migration
-	 */
+	//--------------------------------------------------------------------
+
 	public function down()
 	{
-		$permission_ids = array();
-		$permission_names = array();
-		foreach ($this->data as $permission)
+		$prefix = $this->db->dbprefix;
+
+		foreach ($this->permission_array as $name => $description)
 		{
-			$permission_names[] = $permission['name'];
-
-			$query = $this->db->select('permission_id')
-				->where('name', $permission['name'])
-				->get($this->table);
-
-			foreach ($query->result() as $row)
+			$query = $this->db->query("SELECT permission_id FROM {$prefix}permissions WHERE name = '".$name."'");
+			foreach ($query->result_array() as $row)
 			{
-				$permission_ids[] = $row->permission_id;
+				$permission_id = $row['permission_id'];
+				$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='$permission_id';");
 			}
+			//delete the role
+			$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = '".$name."')");
 		}
 
-		if ( ! empty($permission_ids))
-		{
-			$this->db->where_in('permission_id', $permission_ids)
-				->delete($this->ref_table);
-		}
-		if ( ! empty($permission_names))
-		{
-			$this->db->where_in('name', $permission_names)
-				->delete($this->table);
-		}
+		// add in the Banned permission
+		$this->db->query("INSERT INTO {$prefix}permissions(name, description) VALUES('Permissions.Banned.Manage', 'To manage the access control permissions for the Banned role.')");
+		// give current role (or administrators if fresh install) full right to manage permissions
+		$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(1,".$this->db->insert_id().")");
 
-		$ref_data = array();
-		foreach ($this->remove_permissions as $permission)
-		{
-			$this->db->insert($this->table, $permission);
-			$ref_data[] = array(
-				'role_id' => 1,
-				'permission_id' => $this->db->insert_id(),
-			);
-		}
+		// add in the Banned permission
+		$this->db->query("INSERT INTO {$prefix}permissions(name, description) VALUES('Bonfire.Activities.Manage', 'Allow users to access the Activities Reports.')");
+		// give current role (or administrators if fresh install) full right to manage permissions
+		$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(1,".$this->db->insert_id().")");
 
-		if ( ! empty($ref_data))
-		{
-			$this->db->insert_batch($this->ref_table, $ref_data);
-		}
 	}
+
+	//--------------------------------------------------------------------
+
 }

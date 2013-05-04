@@ -1,46 +1,35 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-/**
- * Add a mail type setting to the database
- */
-class Migration_Adding_mailtype_setting extends Migration
-{
-	/**
-	 * @var string The name of the table
-	 */
-	private $table = 'settings';
+class Migration_Adding_mailtype_setting extends Migration {
 
-	/**
-	 * @var array The data to insert into the table
-	 */
-	private $data = array(
-		'name' => 'mailtype',
-		'module' => 'email',
-		'value' => 'text',
-	);
-
-	/****************************************************************
-	 * Migration methods
-	 */
-	/**
-	 * Install this migration
-	 */
 	public function up()
 	{
-		$this->db->insert($this->table, $this->data);
-	}
+		$prefix = $this->db->dbprefix;
 
-	/**
-	 * Uninstall this migration
-	 */
-	public function down()
-	{
-		$delete_data = $this->data['name'];
+		$default_settings = "
+			INSERT INTO `{$prefix}settings` (`name`, `module`, `value`) VALUES
+			 ('mailtype', 'email', 'text');
+		";
 
-		if ( ! empty($delete_data))
+		if ($this->db->query($default_settings))
 		{
-			$this->db->where('name', $delete_data)
-				->delete($this->table);
+			return TRUE;
 		}
 	}
+
+	//--------------------------------------------------------------------
+
+	public function down()
+	{
+		$prefix = $this->db->dbprefix;
+
+		$default_settings = "
+			DELETE FROM `{$prefix}settings` WHERE `name` = 'mailtype';
+		";
+
+		$this->db->query($default_settings);
+	}
+
+	//--------------------------------------------------------------------
+
 }

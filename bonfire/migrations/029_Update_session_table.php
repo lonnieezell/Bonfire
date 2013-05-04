@@ -1,50 +1,46 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-/**
- * Updates Database Session table for CodeIgniter 2.1
- * see {@link http://codeigniter.com/user_guide/libraries/sessions.html}
- */
 class Migration_Update_session_table extends Migration
 {
-	/**
-	 * @var string The name of the table to be modified
-	 */
-	private $table = 'sessions';
+	//--------------------------------------------------------------------
 
 	/**
-	 * @var array Definition of fields to be modified
-	 */
-	private $fields = array(
-		'user_agent' => array(
-			'type' => 'VARCHAR',
-			'constraint' => 120,
-			'null' => FALSE,
-		),
-	);
-
-	/**
-	 * @var int Old value for user_agent's constraint
-	 */
-	private $old_constraint = 50;
-
-	/****************************************************************
-	 * Migration methods
-	 */
-	/**
-	 * Install this migration
+	 * Updates Database Session table for CodeIgniter 2.1
+	 * see {@link http://codeigniter.com/user_guide/libraries/sessions.html}
 	 */
 	public function up()
 	{
-		$this->dbforge->modify_column($this->table, $this->fields);
+		$prefix = $this->db->dbprefix;
+
+		$fields = array(
+			'user_agent' => array(
+				'type' => 'VARCHAR',
+				'constraint' => 120,
+				'null' => FALSE,
+			),
+		);
+
+		$this->dbforge->modify_column('sessions', $fields);
+
 	}
 
-	/**
-	 * Uninstall this migration
-	 */
+	//--------------------------------------------------------------------
+
 	public function down()
 	{
-		$this->fields['user_agent']['constraint'] = $this->old_constraint;
+		$prefix = $this->db->dbprefix;
 
-		$this->dbforge->modify_column($this->table, $this->fields);
+		$fields = array(
+			'user_agent' => array(
+				'type' => 'VARCHAR',
+				'constraint' => 50,
+				'null' => FALSE,
+			),
+		);
+
+		$this->dbforge->modify_column('sessions', $fields);
 	}
+
+	//--------------------------------------------------------------------
+
 }
