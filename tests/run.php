@@ -42,7 +42,7 @@ $only_folder = NULL;
 // Only File
 //
 // Will only have a value if the -f or --file flags were used on the CLI
-$only_file = NULL;
+$only_file = isset($_POST['test']) && !empty($_POST['test']) ? $_POST['test'] : null;
 
 //--------------------------------------------------------------------
 // END User Configurable Values
@@ -56,6 +56,14 @@ require_once SIMPLETEST . 'mock_objects.php';
 require_once SIMPLETEST . 'collector.php';
 require_once SIMPLETEST . 'web_tester.php';
 require_once TESTS_DIR . '_support/my_reporter.php';
+
+// Bypass any CSRF protection in order to avoid
+// modifying simpletest
+//
+if (isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" && isset($_COOKIE['ci_csrf_token']))
+{
+	$_POST['ci_csrf_token'] = $_COOKIE['ci_csrf_token'];
+}
 
 //Capture CodeIgniter output, discard and load system into $ci variable
 ob_start();
@@ -361,14 +369,6 @@ function discover_tests($start_folder=null, $ignore_onlys=false)
 
 
 
-
-// Bypass any CSRF protection in order to avoid
-// modifying simpletest
-if (isset($_SERVER["REQUEST_METHOD"]) && $_SERVER["REQUEST_METHOD"] == "POST" && isset($_COOKIE['ci_csrf_token']))
-{
-	$_POST['ci_csrf_token'] = $_COOKIE['ci_csrf_token'];
-}
-
 // Make sure we have plenty of time to run the tests.
 error_reporting(E_ALL ^ E_NOTICE);
 
@@ -453,6 +453,9 @@ $test_files = null;
 
 // TODO Revise to allow args from the CLI as folder/file names
 $only_folder = isset($only_folder) && !empty($only_folder) ? TESTS_DIR . $only_folder : null;
+
+$all_tests = discover_tests(TESTS_DIR, true);
+
 $test_files = discover_tests($only_folder);
 
 // Add the found test files to the suite to be tested.

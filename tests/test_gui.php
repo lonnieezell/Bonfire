@@ -62,36 +62,9 @@
 
 			<form action="<?php echo $form_url; ?>" method="post">
 				<select name="test">
-					<optgroup label="Libraries">
-						<?php foreach ($libraries as $value) { ?>
-							<option value="libraries/<?php echo $value ?>" <?php if ($value == $testName) { echo 'selected="selected"'; } ?>><?php echo $value; ?></option>
-						<?php } ?>
-					</optgroup>
-					<optgroup label="Controllers">
-						<?php foreach ($controllers as $value) { ?>
-							<option value="controllers/<?php echo $value ?>" <?php if ($value == $testName) { echo 'selected="selected"'; } ?>><?php echo $value; ?></option>
-						<?php } ?>
-					</optgroup>
-					<optgroup label="Models">
-						<?php foreach ($models as $value) { ?>
-							<option value="models/<?php echo $value ?>" <?php if ($value == $testName) { echo 'selected="selected"'; } ?>><?php echo $value; ?></option>
-						<?php } ?>
-					</optgroup>
-					<optgroup label="Helpers">
-						<?php foreach ($helpers as $value) { ?>
-							<option value="helpers/<?php echo $value ?>" <?php if ($value == $testName) { echo 'selected="selected"'; } ?>><?php echo $value; ?></option>
-						<?php } ?>
-					</optgroup>
-					<optgroup label="Views">
-						<?php foreach ($views as $value) { ?>
-							<option value="views/<?php echo $value ?>" <?php if ($value == $testName) { echo 'selected="selected"'; } ?>><?php echo $value; ?></option>
-						<?php } ?>
-					</optgroup>
-					<optgroup label="Bugs">
-						<?php foreach ($bugs as $value) { ?>
-							<option value="bugs/<?php echo $value ?>" <?php if ($value == $testName) { echo 'selected="selected"'; } ?>><?php echo $value; ?></option>
-						<?php } ?>
-					</optgroup>
+					<?php foreach ($all_tests as $file) :?>
+						<option value="<?php echo str_replace(TESTS_DIR, '', $file) ?>"><?php echo str_replace(TESTS_DIR, '', $file) ?></option>
+					<?php endforeach; ?>
 				</select>
 				<input type="submit" value="Run" />
 			</form>
