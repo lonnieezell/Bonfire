@@ -2,7 +2,7 @@
 
 class Trigger_model extends BF_Model {
 
-	protected $_table = 'records_table';
+	protected $table = 'records_table';
 
 	protected $set_created = true;
 	protected $set_modified = true;

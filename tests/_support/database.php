@@ -14,6 +14,7 @@ class MY_DB {
     public function select_sum() { }
     public function distinct() { }
     public function join() { }
+    public function get_where() { }
     public function where() { }
     public function or_where() { }
     public function where_in() { }
@@ -43,6 +44,9 @@ class MY_DB {
     public function count_all() { }
     public function truncate() { }
 
+    public function platform() { }
+    public function _error_message() { }
+
     /**
      * CI_DB_Result
      */
@@ -50,15 +54,19 @@ class MY_DB {
     public function result() { }
     public function row_array() { }
     public function result_array() { }
+    public function num_rows() { }
 }
 
 /*
 	Fake CI_Model for testing our models with...
  */
-class CI_Model {
+if (!class_exists('CI_Model'))
+{
+    class CI_Model {
 
-	public $db;
+    	public $db;
 
-	public function __construct() {	}
+    	public function __construct() {	}
 
+    }
 }
