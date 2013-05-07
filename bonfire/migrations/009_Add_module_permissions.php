@@ -1,40 +1,89 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Add_module_permissions extends Migration {
-	
-	public function up() 
+/**
+ * Add Bonfire.Modules.Add and Bonfire.Modules.Delete to the permissions
+ */
+class Migration_Add_module_permissions extends Migration
+{
+	/****************************************************************
+	 * Table names
+	 */
+	/**
+	 * @var string The name of the permissions table
+	 */
+	private $permissions_table = 'permissions';
+
+	/**
+	 * @var string The name of the role_permissions table
+	 */
+	private $role_permissions_table = 'role_permissions';
+
+	/****************************************************************
+	 * Data for Insert
+	 */
+	/**
+	 * @var array The permissions data to insert
+	 */
+	private $permissions_data = array(
+		array(
+			'name' => 'Bonfire.Modules.Add',
+			'description' => 'Allow creation of modules with the builder.',
+		),
+		array(
+			'name' => 'Bonfire.Modules.Delete',
+			'description' => 'Allow deletion of modules.',
+		),
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
+	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-		
 		$this->load->library('session');
-		
+
 		// add administrators to module permissions
 		$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
-				
-		$this->db->query("INSERT INTO {$prefix}permissions(name, description) VALUES('Bonfire.Modules.Add','Allow creation of modules with the builder.')");
-		$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(".$assign_role.",".$this->db->insert_id().")");
-		$this->db->query("INSERT INTO {$prefix}permissions(name, description) VALUES('Bonfire.Modules.Delete','Allow deletion of modules.')");
-		$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(".$assign_role.",".$this->db->insert_id().")");
-		
+
+		$role_data = array();
+		foreach ($this->permissions_data as $data)
+		{
+			$this->db->insert($this->permissions_table, $data);
+			$role_data[] = array(
+				'role_id' => $assign_role,
+				'permission_id' => $this->db->insert_id(),
+			);
+		}
+		$this->db->insert_batch($this->role_permissions_table, $role_data);
 	}
-	
-	//--------------------------------------------------------------------
-	
-	public function down() 
+
+	/**
+	 * Uninstall this migration
+	 */
+	public function down()
 	{
-		$prefix = $this->db->dbprefix;
-		
-		$query = $this->db->query("SELECT permission_id FROM {$prefix}permissions WHERE name = 'Bonfire.Modules.Add' OR name = 'Bonfire.Modules.Delete'");
+		$permission_names = array();
+		foreach ($this->permissions_data as $data)
+		{
+			$permission_names[] = $data['name'];
+		}
+
+		$query = $this->db->select('permission_id')
+			->where_in('name', $permission_names)
+			->get($this->permissions_table);
+
+		$permission_ids = array();
 		foreach ($query->result_array() as $row)
 		{
-			$permission_id = $row['permission_id'];
-			$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='$permission_id';");
+			$permission_ids[] = $row['permission_id'];
 		}
-				
-		$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Bonfire.Modules.Add')");
-		$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Bonfire.Modules.Delete')");
+		$this->db->where_in('permission_id', $permission_ids)
+			->delete($this->role_permissions_table);
+
+		$this->db->where_in('name', $permission_names)
+			->delete($this->permissions_table);
 	}
-	
-	//--------------------------------------------------------------------
-	
 }

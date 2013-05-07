@@ -2,32 +2,67 @@
 
 class Migration_Banning_users_fix extends Migration
 {
-	//--------------------------------------------------------------------
+	/**
+	 * @var string The name of the permissions table
+	 */
+	private $table = 'permissions';
 
-	private $permission_array = array(
-		array('name' => 'Site.Signin.Allow', 'description' => 'Allow users to login to the site', 'status' => 'active'),
+	/**
+	 * @var string The name of the Role permissions table
+	 */
+	private $ref_table = 'role_permissions';
+
+	/**
+	 * @var array Permissions to remove
+	 */
+	private $data = array(
+		array(
+			'name' => 'Site.Signin.Allow',
+			'description' => 'Allow users to login to the site',
+			'status' => 'active',
+		),
 	);
 
-	//--------------------------------------------------------------------
-
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
 	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-
-		foreach($this->permission_array as $permission_value)
+		$permission_ids = array();
+		$permission_names = array();
+		foreach ($this->data as $permission)
 		{
-			$query = $this->db->select('permission_id')->get_where("permissions", array('name' => $permission_value['name']));
-			foreach($query->result_array() as $row)
+			$permission_names[] = $permission['name'];
+		}
+
+		if ( ! empty($permission_names))
+		{
+			$query = $this->db->select('permission_id')
+				->where_in('name', $permission_names)
+				->get($this->table);
+
+			foreach ($query->result() as $row)
 			{
-				$permission_id = $row['permission_id'];
-				$this->db->delete("role_permissions", array('permission_id' => $permission_id));
+				$permission_ids[] = $row->permission_id;
 			}
-			$this->db->delete("permissions", array('name' => $permission_value['name']));
+
+			if ( ! empty($permission_ids))
+			{
+				$this->db->where_in('permission_id', $permission_ids)
+					->delete($this->ref_table);
+			}
+
+			$this->db->where_in('name', $permission_names)
+				->delete($this->table);
 		}
 	}
 
-	//--------------------------------------------------------------------
-
+	/**
+	 * Uninstall this migration
+	 */
 	public function down()
 	{
 		/*
@@ -41,17 +76,21 @@ class Migration_Banning_users_fix extends Migration
 		In general, downgrading in production would not be a good idea.
 		*/
 
-		$prefix = $this->db->dbprefix;
+		$role_permissions_data = array();
 
-		foreach ($this->permission_array as $permission_value)
+		foreach ($this->data as $permission)
 		{
-			$this->db->insert("permissions", $permission_value);
+			$this->db->insert($this->table, $permission);
 
-			$role_permissions_data = array('role_id' => '1', 'permission_id' => $this->db->insert_id(),);
-			$this->db->insert("role_permissions", $role_permissions_data);
+			$role_permissions_data[] = array(
+				'role_id' => '1',
+				'permission_id' => $this->db->insert_id(),
+			);
+		}
+
+		if ( ! empty($role_permissions_data))
+		{
+			$this->db->insert_batch($this->ref_table, $role_permissions_data);
 		}
 	}
-
-	//--------------------------------------------------------------------
-
 }

@@ -1,204 +1,953 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Install_initial_tables extends Migration {
-	
-	public function up() 
+/**
+ * Install the initial tables:
+ *	Email Queue
+ *	Login Attempts
+ *	Permissions
+ *	Roles
+ *	Sessions
+ *	States
+ *	Users
+ *	User Cookies
+ */
+class Migration_Install_initial_tables extends Migration
+{
+	/****************************************************************
+	 * Table Names
+	 */
+	/**
+	 * @var string The name of the Email Queue table
+	 */
+	private $email_table = 'email_queue';
+
+	/**
+	 * @var string The name of the Login Attempts table
+	 */
+	private $login_table = 'login_attempts';
+
+	/**
+	 * @var string The name of the Permissions table
+	 */
+	private $permissions_table = 'permissions';
+
+	/**
+	 * @var string The name of the Roles table
+	 */
+	private $roles_table = 'roles';
+
+	/**
+	 * @var string The name of the Sessions table
+	 */
+	private $sessions_table = 'sessions';
+
+	/**
+	 * @var string The name of the States table
+	 */
+	private $states_table = 'states';
+
+	/**
+	 * @var string The name of the Users table
+	 */
+	private $users_table = 'users';
+
+	/**
+	 * @var string The name of the User Cookies table
+	 */
+	private $cookies_table = 'user_cookies';
+
+	/****************************************************************
+	 * Field Definitions
+	 */
+	/**
+	 * @var array Fields for the Email table
+	 */
+	private $email_fields = array(
+		'id' => array(
+			'type' => 'INT',
+			'constraint' => 11,
+			'auto_increment' => TRUE,
+		),
+		'to_email' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 128,
+		),
+		'subject' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 255,
+		),
+		'message' => array(
+			'type' => 'TEXT',
+		),
+		'alt_message' => array(
+			'type' => 'TEXT',
+			'null' => true,
+		),
+		'max_attempts' => array(
+			'type' => 'INT',
+			'constraint' => 11,
+			'default' => 3,
+		),
+		'attempts' => array(
+			'type' => 'INT',
+			'constraint' => 11,
+			'default' => 0,
+		),
+		'success' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+		'date_published' => array(
+			'type' => 'DATETIME',
+			'null' => true,
+		),
+		'last_attempt' => array(
+			'type' => 'DATETIME',
+			'null' => true,
+		),
+		'date_sent' => array(
+			'type' => 'DATETIME',
+			'null' => true,
+		),
+	);
+
+	/**
+	 * @var array Fields for the Login table
+	 */
+	private $login_fields = array(
+		'id' => array(
+			'type' => 'BIGINT',
+			'constraint' => 20,
+			'auto_increment' => TRUE,
+		),
+		'ip_address' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 40,
+		),
+		'login' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 50,
+		),
+        /* This will probably cause an error outside MySQL and may not
+         * be cross-database compatible for reasons other than
+         * CURRENT_TIMESTAMP
+         */
+		'time TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
+	);
+
+	/**
+	 * @var array Fields for the Permissions table
+	 */
+	private $permission_fields = array(
+		'permission_id' => array(
+			'type' => 'INT',
+			'constraint' => 11,
+			'auto_increment' => TRUE,
+		),
+		'role_id' => array(
+			'type' => 'INT',
+			'constraint' => 11,
+		),
+		"`Site.Signin.Allow` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Site.Signin.Allow' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Site.Content.View` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Site.Content.View' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Site.Statistics.View` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Site.Statistics.View' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Site.Appearance.View` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Site.Appearance.View' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Site.Settings.View` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Site.Settings.View' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Site.Developer.View` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Site.Developer.View' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Bonfire.Roles.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Bonfire.Roles.Manage' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Bonfire.Users.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Bonfire.Users.Manage' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Bonfire.Users.View` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Bonfire.Users.View' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Bonfire.Users.Add` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Bonfire.Users.Add' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Bonfire.Database.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Bonfire.Database.Manage' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Bonfire.Emailer.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Bonfire.Emailer.Manage' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Bonfire.Logs.View` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Bonfire.Logs.View' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+		"`Bonfire.Logs.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+/*		'Bonfire.Logs.Manage' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+ */
+	);
+
+	/**
+	 * @var array Fields for the roles table
+	 */
+	private $roles_fields = array(
+		'role_id' => array(
+			'type' => 'INT',
+			'constraint' => 11,
+			'auto_increment' => TRUE,
+		),
+		'role_name' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 60,
+		),
+		'description' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 255,
+			'null' => true,
+		),
+		'default' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+		'can_delete' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 1,
+		),
+	);
+
+	/**
+	 * @var array Fields for the Sessions table
+	 */
+	private $sessions_fields = array(
+		'session_id' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 40,
+			'default' => '0',
+		),
+		'ip_address' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 16,
+			'default' => '0',
+		),
+		'user_agent' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 50,
+		),
+		'last_activity' => array(
+			'type' => 'INT',
+			'constraint' => 10,
+			'unsigned' => true,
+			'default' => 0,
+		),
+		'user_data' => array(
+			'type' => 'TEXT',
+		),
+	);
+
+	/**
+	 * @var array Fields for the States table
+	 */
+	private $states_fields = array(
+		'id' => array(
+			'type' => 'INT',
+			'constraint' => 11,
+			'auto_increment' => TRUE,
+		),
+		'name' => array(
+			'type' => 'CHAR',
+			'constraint' => 40,
+		),
+		'abbrev' => array(
+			'type' => 'CHAR',
+			'constraint' => 2,
+		),
+	);
+
+	/**
+	 * @var array Fields for the users table
+	 */
+	private $users_fields = array(
+		'id' => array(
+			'type' => 'BIGINT',
+			'constraint' => 20,
+			'unsigned' => true,
+			'auto_increment' => true,
+		),
+		'role_id' => array(
+			'type' => 'INT',
+			'constraint' => 11,
+			'default' => 4,
+		),
+		'first_name' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 20,
+			'null' => true,
+		),
+		'last_name' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 20,
+			'null' => true,
+		),
+		'email' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 120,
+		),
+		'username' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 30,
+			'default' => '',
+		),
+		'password_hash' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 40,
+		),
+		'temp_password_hash' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 40,
+			'null' => true,
+		),
+		'salt' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 7,
+		),
+		'last_login' => array(
+			'type' => 'DATETIME',
+			'default' => '0000-00-00 00:00:00',
+		),
+		'last_ip' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 40,
+			'default' => '',
+		),
+		'created_on' => array(
+			'type' => 'DATETIME',
+			'default' => '0000-00-00 00:00:00',
+		),
+		'street_1' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 255,
+			'null' => true,
+		),
+		'street_2' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 255,
+			'null' => true,
+		),
+		'city' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 40,
+			'null' => true,
+		),
+		'state_id' => array(
+			'type' => 'INT',
+			'constraint' => 11,
+			'null' => true,
+		),
+		'zipcode' => array(
+			'type' => 'INT',
+			'constraint' => 7,
+			'null' => true,
+		),
+		'zip_extra' => array(
+			'type' => 'INT',
+			'constraint' => 5,
+			'null' => true,
+		),
+		'country_id' => array(
+			'type' => 'INT',
+			'constraint' => 11,
+			'null' => true,
+		),
+		'deleted' => array(
+			'type' => 'TINYINT',
+			'constraint' => 1,
+			'default' => 0,
+		),
+	);
+
+	/**
+	 * @var array Fields for the Cookies table
+	 */
+	private $cookies_fields = array(
+		'user_id' => array(
+			'type' => 'BIGINT',
+			'constraint' => 20,
+		),
+		'token' => array(
+			'type' => 'VARCHAR',
+			'constraint' => 128,
+		),
+		'created_on' => array(
+			'type' => 'DATETIME',
+		),
+	);
+
+	/****************************************************************
+	 * Data to Insert
+	 */
+	/**
+	 * @var array Default Permissions
+	 */
+	private $permissions_data = array(
+		array(
+			'role_id' => 1,
+			'`Site.Signin.Allow`' => 1,
+			'`Site.Content.View`' => 1,
+			'`Site.Statistics.View`' => 1,
+			'`Site.Appearance.View`' => 1,
+			'`Site.Settings.View`' => 1,
+			'`Site.Developer.View`' => 1,
+			'`Bonfire.Roles.Manage`' => 1,
+			'`Bonfire.Users.Manage`' => 1,
+			'`Bonfire.Users.View`' => 1,
+			'`Bonfire.Users.Add`' => 1,
+			'`Bonfire.Database.Manage`' => 1,
+			'`Bonfire.Emailer.Manage`' => 1,
+			'`Bonfire.Logs.View`' => 1,
+			'`Bonfire.Logs.Manage`' => 1,
+		),
+		array(
+			'role_id' => 2,
+			'`Site.Signin.Allow`' => 1,
+			'`Site.Content.View`' => 1,
+			'`Site.Statistics.View`' => 1,
+			'`Site.Appearance.View`' => 1,
+			'`Site.Settings.View`' => 0,
+			'`Site.Developer.View`' => 0,
+			'`Bonfire.Roles.Manage`' => 0,
+			'`Bonfire.Users.Manage`' => 0,
+			'`Bonfire.Users.View`' => 0,
+			'`Bonfire.Users.Add`' => 0,
+			'`Bonfire.Database.Manage`' => 0,
+			'`Bonfire.Emailer.Manage`' => 0,
+			'`Bonfire.Logs.View`' => 0,
+			'`Bonfire.Logs.Manage`' => 0,
+		),
+		array(
+			'role_id' => 6,
+			'`Site.Signin.Allow`' => 1,
+			'`Site.Content.View`' => 1,
+			'`Site.Statistics.View`' => 1,
+			'`Site.Appearance.View`' => 1,
+			'`Site.Settings.View`' => 1,
+			'`Site.Developer.View`' => 1,
+			'`Bonfire.Roles.Manage`' => 1,
+			'`Bonfire.Users.Manage`' => 1,
+			'`Bonfire.Users.View`' => 1,
+			'`Bonfire.Users.Add`' => 1,
+			'`Bonfire.Database.Manage`' => 1,
+			'`Bonfire.Emailer.Manage`' => 1,
+			'`Bonfire.Logs.View`' => 1,
+			'`Bonfire.Logs.Manage`' => 1,
+		),
+		array(
+			'role_id' => 3,
+			'`Site.Signin.Allow`' => 0,
+			'`Site.Content.View`' => 0,
+			'`Site.Statistics.View`' => 0,
+			'`Site.Appearance.View`' => 0,
+			'`Site.Settings.View`' => 0,
+			'`Site.Developer.View`' => 0,
+			'`Bonfire.Roles.Manage`' => 0,
+			'`Bonfire.Users.Manage`' => 0,
+			'`Bonfire.Users.View`' => 0,
+			'`Bonfire.Users.Add`' => 0,
+			'`Bonfire.Database.Manage`' => 0,
+			'`Bonfire.Emailer.Manage`' => 0,
+			'`Bonfire.Logs.View`' => 0,
+			'`Bonfire.Logs.Manage`' => 0,
+		),
+		array(
+			'role_id' => 4,
+			'`Site.Signin.Allow`' => 1,
+			'`Site.Content.View`' => 0,
+			'`Site.Statistics.View`' => 0,
+			'`Site.Appearance.View`' => 0,
+			'`Site.Settings.View`' => 0,
+			'`Site.Developer.View`' => 0,
+			'`Bonfire.Roles.Manage`' => 0,
+			'`Bonfire.Users.Manage`' => 0,
+			'`Bonfire.Users.View`' => 0,
+			'`Bonfire.Users.Add`' => 0,
+			'`Bonfire.Database.Manage`' => 0,
+			'`Bonfire.Emailer.Manage`' => 0,
+			'`Bonfire.Logs.View`' => 0,
+			'`Bonfire.Logs.Manage`' => 0,
+		),
+	);
+
+	/**
+	 * @var array Default Roles
+	 */
+	private $roles_data = array(
+		array(
+			'role_name' => 'Administrator',
+			'description' => 'Has full control over every aspect of the site.',
+			'default' => 0,
+			'can_delete' => 0,
+		),
+		array(
+			'role_name' => 'Editor',
+			'description' => 'Can handle day-to-day management, but does not have full power.',
+			'default' => 0,
+			'can_delete' => 1,
+		),
+		array(
+			'role_name' => 'Banned',
+			'description' => 'Banned users are not allowed to sign into your site.',
+			'default' => 0,
+			'can_delete' => 0,
+		),
+		array(
+			'role_name' => 'User',
+			'description' => 'This is the default user with access to login.',
+			'default' => 1,
+			'can_delete' => 0,
+		),
+		array(
+			'role_name' => 'To Delete', /* because role_id is an auto-increment field */
+			'description' => 'N/A',
+			'default' => 0,
+			'can_delete' => 1,
+		),
+		array(
+			'role_name' => 'Developer',
+			'description' => 'Developers typically are the only ones that can access the developer tools. Otherwise identical to Administrators, at least until the site is handed off.',
+			'default' => 0,
+			'can_delete' => 1,
+		),
+	);
+
+	/**
+	 * @var array States name/abbreviation pairs
+	 */
+	private $states_data = array(
+		array(
+			'name' => 'Alaska',
+			'abbrev' => 'AK',
+		),
+		array(
+			'name' => 'Alabama',
+			'abbrev' => 'AL',
+		),
+		array(
+			'name' => 'American Samoa',
+			'abbrev' => 'AS',
+		),
+		array(
+			'name' => 'Arizona',
+			'abbrev' => 'AZ',
+		),
+		array(
+			'name' => 'Arkansas',
+			'abbrev' => 'AR',
+		),
+		array(
+			'name' => 'California',
+			'abbrev' => 'CA',
+		),
+		array(
+			'name' => 'Colorado',
+			'abbrev' => 'CO',
+		),
+		array(
+			'name' => 'Connecticut',
+			'abbrev' => 'CT',
+		),
+		array(
+			'name' => 'Delaware',
+			'abbrev' => 'DE',
+		),
+		array(
+			'name' => 'District of Columbia',
+			'abbrev' => 'DC',
+		),
+		array(
+			'name' => 'Florida',
+			'abbrev' => 'FL',
+		),
+		array(
+			'name' => 'Georgia',
+			'abbrev' => 'GA',
+		),
+		array(
+			'name' => 'Guam',
+			'abbrev' => 'GU',
+		),
+		array(
+			'name' => 'Hawaii',
+			'abbrev' => 'HI',
+		),
+		array(
+			'name' => 'Idaho',
+			'abbrev' => 'ID',
+		),
+		array(
+			'name' => 'Illinois',
+			'abbrev' => 'IL',
+		),
+		array(
+			'name' => 'Indiana',
+			'abbrev' => 'IN',
+		),
+		array(
+			'name' => 'Iowa',
+			'abbrev' => 'IA',
+		),
+		array(
+			'name' => 'Kansas',
+			'abbrev' => 'KS',
+		),
+		array(
+			'name' => 'Kentucky',
+			'abbrev' => 'KY',
+		),
+		array(
+			'name' => 'Louisiana',
+			'abbrev' => 'LA',
+		),
+		array(
+			'name' => 'Maine',
+			'abbrev' => 'ME',
+		),
+		array(
+			'name' => 'Marshall Islands',
+			'abbrev' => 'MH',
+		),
+		array(
+			'name' => 'Maryland',
+			'abbrev' => 'MD',
+		),
+		array(
+			'name' => 'Massachusetts',
+			'abbrev' => 'MA',
+		),
+		array(
+			'name' => 'Michigan',
+			'abbrev' => 'MI',
+		),
+		array(
+			'name' => 'Minnesota',
+			'abbrev' => 'MN',
+		),
+		array(
+			'name' => 'Mississippi',
+			'abbrev' => 'MS',
+		),
+		array(
+			'name' => 'Missouri',
+			'abbrev' => 'MO',
+		),
+		array(
+			'name' => 'Montana',
+			'abbrev' => 'MT',
+		),
+		array(
+			'name' => 'Nebraska',
+			'abbrev' => 'NE',
+		),
+		array(
+			'name' => 'Nevada',
+			'abbrev' => 'NV',
+		),
+		array(
+			'name' => 'New Hampshire',
+			'abbrev' => 'NH',
+		),
+		array(
+			'name' => 'New Jersey',
+			'abbrev' => 'NJ',
+		),
+		array(
+			'name' => 'New Mexico',
+			'abbrev' => 'NM',
+		),
+		array(
+			'name' => 'New York',
+			'abbrev' => 'NY',
+		),
+		array(
+			'name' => 'North Carolina',
+			'abbrev' => 'NC',
+		),
+		array(
+			'name' => 'North Dakota',
+			'abbrev' => 'ND',
+		),
+		array(
+			'name' => 'Northern Mariana Islands',
+			'abbrev' => 'MP',
+		),
+		array(
+			'name' => 'Ohio',
+			'abbrev' => 'OH',
+		),
+		array(
+			'name' => 'Oklahoma',
+			'abbrev' => 'OK',
+		),
+		array(
+			'name' => 'Oregon',
+			'abbrev' => 'OR',
+		),
+		array(
+			'name' => 'Palau',
+			'abbrev' => 'PW',
+		),
+		array(
+			'name' => 'Pennsylvania',
+			'abbrev' => 'PA',
+		),
+		array(
+			'name' => 'Puerto Rico',
+			'abbrev' => 'PR',
+		),
+		array(
+			'name' => 'Rhode Island',
+			'abbrev' => 'RI',
+		),
+		array(
+			'name' => 'South Carolina',
+			'abbrev' => 'SC',
+		),
+		array(
+			'name' => 'South Dakota',
+			'abbrev' => 'SD',
+		),
+		array(
+			'name' => 'Tennessee',
+			'abbrev' => 'TN',
+		),
+		array(
+			'name' => 'Texas',
+			'abbrev' => 'TX',
+		),
+		array(
+			'name' => 'Utah',
+			'abbrev' => 'UT',
+		),
+		array(
+			'name' => 'Vermont',
+			'abbrev' => 'VT',
+		),
+		array(
+			'name' => 'Virgin Islands',
+			'abbrev' => 'VI',
+		),
+		array(
+			'name' => 'Virginia',
+			'abbrev' => 'VA',
+		),
+		array(
+			'name' => 'Washington',
+			'abbrev' => 'WA',
+		),
+		array(
+			'name' => 'West Virginia',
+			'abbrev' => 'WV',
+		),
+		array(
+			'name' => 'Wisconsin',
+			'abbrev' => 'WI',
+		),
+		array(
+			'name' => 'Wyoming',
+			'abbrev' => 'WY',
+		),
+		array(
+			'name' => 'Armed Forces Africa',
+			'abbrev' => 'AE',
+		),
+		array(
+			'name' => 'Armed Forces Canada',
+			'abbrev' => 'AE',
+		),
+		array(
+			'name' => 'Armed Forces Europe',
+			'abbrev' => 'AE',
+		),
+		array(
+			'name' => 'Armed Forces Middle East',
+			'abbrev' => 'AE',
+		),
+		array(
+			'name' => 'Armed Forces Pacific',
+			'abbrev' => 'AP',
+		),
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
+	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-	
 		// Email Queue
-		$this->dbforge->add_field('`id` int(11) NOT NULL AUTO_INCREMENT');
-		$this->dbforge->add_field('`to_email` varchar(128) NOT NULL');
-		$this->dbforge->add_field('`subject` varchar(255) NOT NULL');
-		$this->dbforge->add_field('`message` text NOT NULL');
-		$this->dbforge->add_field('`alt_message` text');
-		$this->dbforge->add_field("`max_attempts` int(11) NOT NULL DEFAULT '3'");
-		$this->dbforge->add_field("`attempts` int(11) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`success` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`date_published` datetime DEFAULT NULL");
-		$this->dbforge->add_field("`last_attempt` datetime DEFAULT NULL");
-		$this->dbforge->add_field("`date_sent` datetime DEFAULT NULL");
-		$this->dbforge->add_key('id', true);
-		$this->dbforge->create_table('email_queue');
-	
+        if ( ! $this->db->table_exists($this->email_table))
+        {
+            $this->dbforge->add_field($this->email_fields);
+            $this->dbforge->add_key('id', true);
+            $this->dbforge->create_table($this->email_table);
+        }
+
 		// Login Attempts
-		$this->dbforge->add_field("`id` bigint(20) NOT NULL AUTO_INCREMENT");
-		$this->dbforge->add_field("`ip_address` varchar(40) NOT NULL");
-		$this->dbforge->add_field("`login` varchar(50) NOT NULL");
-		$this->dbforge->add_field("`time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP");
-		$this->dbforge->add_key('id', true);
-		$this->dbforge->create_table('login_attempts');
-		
+        if ( ! $this->db->table_exists($this->login_table))
+        {
+            $this->dbforge->add_field($this->login_fields);
+            $this->dbforge->add_key('id', true);
+            $this->dbforge->create_table($this->login_table);
+        }
+
 		// Permissions
-		$this->dbforge->add_field("`permission_id` int(11) NOT NULL AUTO_INCREMENT");
-		$this->dbforge->add_field("`role_id` int(11) NOT NULL");
-		$this->dbforge->add_field("`Site.Signin.Allow` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Site.Content.View` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Site.Statistics.View` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Site.Appearance.View` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Site.Settings.View` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Site.Developer.View` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Bonfire.Roles.Manage` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Bonfire.Users.Manage` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Bonfire.Users.View` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Bonfire.Users.Add` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Bonfire.Database.Manage` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Bonfire.Emailer.Manage` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Bonfire.Logs.View` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`Bonfire.Logs.Manage` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_key('permission_id', true);
-		$this->dbforge->add_key('role_id');
-		$this->dbforge->create_table('permissions');
-		
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(3, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
-		$this->db->query("INSERT INTO {$prefix}permissions VALUES(5, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
-		
+        if ( ! $this->db->table_exists($this->permissions_table))
+        {
+            $this->dbforge->add_field($this->permission_fields);
+            $this->dbforge->add_key('permission_id', true);
+            $this->dbforge->add_key('role_id');
+            $this->dbforge->create_table($this->permissions_table);
+
+//          $this->db->insert_batch($this->permissions_table, $this->permissions_data);
+            $prefix = $this->db->dbprefix;
+            $this->db->query("INSERT INTO {$prefix}permissions VALUES(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
+            $this->db->query("INSERT INTO {$prefix}permissions VALUES(2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+            $this->db->query("INSERT INTO {$prefix}permissions VALUES(3, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
+            $this->db->query("INSERT INTO {$prefix}permissions VALUES(4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+            $this->db->query("INSERT INTO {$prefix}permissions VALUES(5, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+        }
+
 		// Roles
-		$this->dbforge->add_field("`role_id` int(11) NOT NULL AUTO_INCREMENT");
-		$this->dbforge->add_field("`role_name` varchar(60) NOT NULL");
-		$this->dbforge->add_field("`description` varchar(255) DEFAULT NULL");
-		$this->dbforge->add_field("`default` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`can_delete` tinyint(1) NOT NULL DEFAULT '1'");
-		$this->dbforge->add_key('role_id', true);
-		$this->dbforge->create_table('roles');
-		
-		$this->db->query("INSERT INTO {$prefix}roles VALUES(1, 'Administrator', 'Has full control over every aspect of the site.', 0, 0)");
-		$this->db->query("INSERT INTO {$prefix}roles VALUES(2, 'Editor', 'Can handle day-to-day management, but does not have full power.', 0, 1)");
-		$this->db->query("INSERT INTO {$prefix}roles VALUES(3, 'Banned', 'Banned users are not allowed to sign into your site.', 0, 0)");
-		$this->db->query("INSERT INTO {$prefix}roles VALUES(4, 'User', 'This is the default user with access to login.', 1, 0)");
-		$this->db->query("INSERT INTO {$prefix}roles VALUES(6, 'Developer', 'Developers typically are the only ones that can access the developer tools. Otherwise identical to Administrators, at least until the site is handed off.', 0, 1)");
-		
+        if ( ! $this->db->table_exists($this->roles_table))
+        {
+            $this->dbforge->add_field($this->roles_fields);
+            $this->dbforge->add_key('role_id', true);
+            $this->dbforge->create_table($this->roles_table);
+
+            $this->db->insert_batch($this->roles_table, $this->roles_data);
+            $this->db->where('role_id', 5)->delete($this->roles_table);
+        }
+
 		// Sessions
-		$this->dbforge->add_field("`session_id` varchar(40) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`ip_address` varchar(16) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`user_agent` varchar(50) NOT NULL");
-		$this->dbforge->add_field("`last_activity` int(10) unsigned NOT NULL DEFAULT '0'");
-		$this->dbforge->add_field("`user_data` text");
-		$this->dbforge->add_key('session_id', true);
-		$this->dbforge->create_table('sessions');
-		
+        if ( ! $this->db->table_exists($this->sessions_table))
+        {
+            $this->dbforge->add_field($this->sessions_fields);
+            $this->dbforge->add_key('session_id', true);
+            $this->dbforge->create_table($this->sessions_table);
+        }
+
 		// States
-		$this->dbforge->add_field("`id` int(11) NOT NULL AUTO_INCREMENT");
-		$this->dbforge->add_field("`name` char(40) NOT NULL");
-		$this->dbforge->add_field("`abbrev` char(2) NOT NULL");
-		$this->dbforge->add_key('id', true);
-		$this->dbforge->create_table('states');
-		
-		$this->db->query("INSERT INTO {$prefix}states VALUES(1, 'Alaska', 'AK')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(2, 'Alabama', 'AL')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(3, 'American Samoa', 'AS')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(4, 'Arizona', 'AZ')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(5, 'Arkansas', 'AR')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(6, 'California', 'CA')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(7, 'Colorado', 'CO')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(8, 'Connecticut', 'CT')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(9, 'Delaware', 'DE')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(10, 'District of Columbia', 'DC')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(12, 'Florida', 'FL')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(13, 'Georgia', 'GA')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(14, 'Guam', 'GU')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(15, 'Hawaii', 'HI')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(16, 'Idaho', 'ID')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(17, 'Illinois', 'IL')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(18, 'Indiana', 'IN')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(19, 'Iowa', 'IA')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(20, 'Kansas', 'KS')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(21, 'Kentucky', 'KY')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(22, 'Louisiana', 'LA')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(23, 'Maine', 'ME')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(24, 'Marshall Islands', 'MH')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(25, 'Maryland', 'MD')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(26, 'Massachusetts', 'MA')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(27, 'Michigan', 'MI')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(28, 'Minnesota', 'MN')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(29, 'Mississippi', 'MS')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(30, 'Missouri', 'MO')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(31, 'Montana', 'MT')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(32, 'Nebraska', 'NE')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(33, 'Nevada', 'NV')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(34, 'New Hampshire', 'NH')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(35, 'New Jersey', 'NJ')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(36, 'New Mexico', 'NM')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(37, 'New York', 'NY')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(38, 'North Carolina', 'NC')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(39, 'North Dakota', 'ND')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(40, 'Northern Mariana Islands', 'MP')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(41, 'Ohio', 'OH')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(42, 'Oklahoma', 'OK')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(43, 'Oregon', 'OR')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(44, 'Palau', 'PW')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(45, 'Pennsylvania', 'PA')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(46, 'Puerto Rico', 'PR')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(47, 'Rhode Island', 'RI')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(48, 'South Carolina', 'SC')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(49, 'South Dakota', 'SD')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(50, 'Tennessee', 'TN')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(51, 'Texas', 'TX')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(52, 'Utah', 'UT')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(53, 'Vermont', 'VT')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(54, 'Virgin Islands', 'VI')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(55, 'Virginia', 'VA')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(56, 'Washington', 'WA')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(57, 'West Virginia', 'WV')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(58, 'Wisconsin', 'WI')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(59, 'Wyoming', 'WY')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(60, 'Armed Forces Africa', 'AE')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(62, 'Armed Forces Canada', 'AE')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(63, 'Armed Forces Europe', 'AE')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(64, 'Armed Forces Middle East', 'AE')");
-		$this->db->query("INSERT INTO {$prefix}states VALUES(65, 'Armed Forces Pacific', 'AP')");
-		
+        if ( ! $this->db->table_exists($this->states_table))
+        {
+            $this->dbforge->add_field($this->states_fields);
+            $this->dbforge->add_key('id', true);
+            $this->dbforge->create_table($this->states_table);
+
+            $this->db->insert_batch($this->states_table, $this->states_data);
+        }
+
 		// Users
-		$this->dbforge->add_field("`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT");
-		$this->dbforge->add_field("`role_id` int(11) NOT NULL DEFAULT '4'");
-		$this->dbforge->add_field("`first_name` varchar(20) DEFAULT NULL");
-		$this->dbforge->add_field("`last_name` varchar(20) DEFAULT NULL");
-		$this->dbforge->add_field("`email` varchar(120) NOT NULL");
-		$this->dbforge->add_field("`username` varchar(30) NOT NULL DEFAULT ''");
-		$this->dbforge->add_field("`password_hash` varchar(40) NOT NULL");
-		$this->dbforge->add_field("`temp_password_hash` varchar(40) DEFAULT NULL");
-		$this->dbforge->add_field("`salt` varchar(7) NOT NULL");
-		$this->dbforge->add_field("`last_login` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'");
-		$this->dbforge->add_field("`last_ip` varchar(40) NOT NULL DEFAULT ''");
-		$this->dbforge->add_field("`created_on` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'");
-		$this->dbforge->add_field("`street_1` varchar(255) DEFAULT NULL");
-		$this->dbforge->add_field("`street_2` varchar(255) DEFAULT NULL");
-		$this->dbforge->add_field("`city` varchar(40) DEFAULT NULL");
-		$this->dbforge->add_field("`state_id` int(11) DEFAULT NULL");
-		$this->dbforge->add_field("`zipcode` int(7) DEFAULT NULL");
-		$this->dbforge->add_field("`zip_extra` int(5) DEFAULT NULL");
-		$this->dbforge->add_field("`country_id` int(11) DEFAULT NULL");
-		$this->dbforge->add_field("`deleted` tinyint(1) NOT NULL DEFAULT '0'");
-		$this->dbforge->add_key('id', true);
-		$this->dbforge->add_key('email');
-		$this->dbforge->create_table('users');
-		
+        if ( ! $this->db->table_exists($this->users_table))
+        {
+            $this->dbforge->add_field($this->users_fields);
+            $this->dbforge->add_key('id', true);
+            $this->dbforge->add_key('email');
+            $this->dbforge->create_table($this->users_table);
+        }
+
 		// User Cookies
-		$this->dbforge->add_field("`user_id` bigint(20) NOT NULL");
-		$this->dbforge->add_field("`token` varchar(128) NOT NULL");
-		$this->dbforge->add_field("`created_on` datetime NOT NULL");
-		$this->dbforge->add_key('token');
-		$this->dbforge->create_table('user_cookies');
+        if ( ! $this->db->table_exists($this->cookies_table))
+        {
+            $this->dbforge->add_field($this->cookies_fields);
+            $this->dbforge->add_key('token');
+            $this->dbforge->create_table($this->cookies_table);
+        }
 	}
-	
-	//--------------------------------------------------------------------
-	
-	public function down() 
+
+	/**
+	 * Uninstall this migration
+	 */
+	public function down()
 	{
-		$this->dbforge->drop_table('email_queue');
-		$this->dbforge->drop_table('login_attempts');
-		$this->dbforge->drop_table('permissions');
-		$this->dbforge->drop_table('roles');
-		$this->dbforge->drop_table('schema_version');
-		$this->dbforge->drop_table('sessions');
-		$this->dbforge->drop_table('states');
-		$this->dbforge->drop_table('users');
-		$this->dbforge->drop_table('user_cookies');
+		$this->dbforge->drop_table($this->email_table);
+		$this->dbforge->drop_table($this->login_table);
+		$this->dbforge->drop_table($this->permissions_table);
+		$this->dbforge->drop_table($this->roles_table);
+
+		// Since we didn't add this table in this migration,
+		// check to see if it exists before removing it
+		if ($this->db->table_exists('schema_version'))
+		{
+			$this->dbforge->drop_table('schema_version');
+		}
+
+		$this->dbforge->drop_table($this->sessions_table);
+		$this->dbforge->drop_table($this->states_table);
+		$this->dbforge->drop_table($this->users_table);
+		$this->dbforge->drop_table($this->cookies_table);
 	}
-	
-	//--------------------------------------------------------------------
-	
 }
