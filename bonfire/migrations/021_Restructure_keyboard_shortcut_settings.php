@@ -1,13 +1,39 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Restructure_keyboard_shortcut_settings extends Migration {
+/**
+ * Change the structure of keyboard shortcut settings in the database
+ */
+class Migration_Restructure_keyboard_shortcut_settings extends Migration
+{
+	/**
+	 * @var string The name of the settings table
+	 */
+	private $table = 'settings';
 
+	/**
+	 * @var array The data we are replacing in the settings table
+	 */
+	private $field = array(
+		'name' => 'ui.shortcut_keys',
+	);
+
+	/**
+	 * @var array The data we are adding to the settings table
+	 */
+	private $new_field = array(
+		'module' => 'core.ui',
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
 	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-
 		// get the current keyboard shortcuts
-		$query = $this->db->get_where('settings',array('name' =>'ui.shortcut_keys'));
+		$query = $this->db->where($this->field)->get($this->table);
 
 		if ($query->num_rows() > 0)
 		{
@@ -20,7 +46,7 @@ class Migration_Restructure_keyboard_shortcut_settings extends Migration {
 			{
 				$new_keys[] = array(
 					'name'   => $name,
-					'module' => 'core.ui',
+					'module' => $this->new_field['module'],
 					'value'  => $shortcut,
 				);
 			}
@@ -29,29 +55,27 @@ class Migration_Restructure_keyboard_shortcut_settings extends Migration {
 			if (count($new_keys))
 			{
 				// insert the new keys into the db
-				if ($this->db->insert_batch('settings', $new_keys))
+				if ($this->db->insert_batch($this->table, $new_keys))
 				{
 					// delete the old entry
-					$this->db->delete('settings',array('name' =>'ui.shortcut_keys'));
+					$this->db->where($this->field)->delete($this->table);
 				}
-
 			}
 		}
 	}
 
-	//--------------------------------------------------------------------
-
+	/**
+	 * Uninstall this migration
+	 */
 	public function down()
 	{
-		$prefix = $this->db->dbprefix;
-
 		// THIS MAY NOT WORK
-		// depending on the number of shortcuts you have now the size of the "value" field
-		// in the settings table might now be big enough to store all of your shortcuts
+		// depending on the number of shortcuts you have the size of the "value" field
+		// in the settings table might not be big enough to store all of your shortcuts
 		// in one setting record and could give an sql error
 
 		// get the current keyboard shortcuts
-		$query = $this->db->get_where('settings',array('module' =>'core.ui'));
+		$query = $this->db->where($this->new_field)->get($this->table);
 
 		if ($query->num_rows() > 0)
 		{
@@ -66,22 +90,17 @@ class Migration_Restructure_keyboard_shortcut_settings extends Migration {
 			if (count($new_keys))
 			{
 				$rec = array(
-					'name'   => 'ui.shortcut_keys',
+					'name'   => $this->field['name'],
 					'module' => 'core',
 					'value'  => serialize($new_keys),
 				);
 				// insert the new keys into the db
-				if ($this->db->insert('settings', $rec))
+				if ($this->db->insert($this->table, $rec))
 				{
 					// delete the old entry
-					$this->db->delete('settings',array('module' =>'core.ui'));
+					$this->db->where($this->new_field)->delete($this->table);
 				}
-
 			}
 		}
-
 	}
-
-	//--------------------------------------------------------------------
-
 }

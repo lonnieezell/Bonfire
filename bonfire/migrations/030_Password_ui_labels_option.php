@@ -1,37 +1,42 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Add the show password labels option to the settings table
+ */
 class Migration_Password_ui_labels_option extends Migration
 {
+	/**
+	 * @var string The name of the settings table
+	 */
+	private $table = 'settings';
 
 	/**
-	 * Removing the '/' from the Role login_destination field in the DB so that
-	 * the user will be brought to the last requested url when they login
+	 * @var array The data to insert
+	 */
+	private $data = array(
+		'name' => 'auth.password_show_labels',
+		'module' => 'core',
+		'value' => 0,
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
 	 */
 	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-
-		$default_settings = "
-			INSERT INTO `{$prefix}settings` (`name`, `module`, `value`) VALUES('auth.password_show_labels','core',0);";
-
-		if ($this->db->query($default_settings))
-		{
-			return TRUE;
-		}
-
+		$this->db->insert($this->table, $this->data);
 	}
 
-	//--------------------------------------------------------------------
-
+	/**
+	 * Uninstall this migration
+	 */
 	public function down()
 	{
-		$prefix = $this->db->dbprefix;
-
-		// remove the keys
-		$this->db->query("DELETE FROM {$prefix}settings WHERE (name = name ='auth.password_show_labels')");
-
+		// remove the setting
+		$this->db->where('name', $this->data['name'])
+			->delete($this->table);
 	}
-
-	//--------------------------------------------------------------------
-
 }

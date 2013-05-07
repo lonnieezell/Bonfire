@@ -1,49 +1,98 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_Permission_to_manage_settings extends Migration {
-	
-	public function up() 
+/**
+ * Add Permissions for the Settings Context
+ */
+class Migration_Permission_to_manage_settings extends Migration
+{
+	/**
+	 * @var string Name of the Permissions table
+	 */
+	private $table = 'permissions';
+
+	/**
+	 * @var string Name of the Role permissions table
+	 */
+	private $ref_table = 'role_permissions';
+
+	/**
+	 * @var array New permissions
+	 */
+	private $data = array(
+		array(
+			'name' => 'Bonfire.Settings.View',
+			'description' => 'To view the site settings page.',
+		),
+		array(
+			'name' => 'Bonfire.Settings.Manage',
+			'description' => 'To manage the site settings.',
+		),
+	);
+
+	/**
+	 * @var array Structure of the role data
+	 */
+	private $role_data = array(
+		'role_id' => 1,
+		'permission_id' => 0,
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
+	public function up()
 	{
-		$this->load->library('session');
-	
-		$prefix = $this->db->dbprefix;
+		// add the permissions and store the permission_id values
+		$roles = array();
+		foreach ($this->data as $data)
+		{
+			$this->db->insert($this->table, $data);
+			$this->role_data['permission_id'] = $this->db->insert_id();
+			$roles[] = $this->role_data;
+		}
 
-		$this->db->query("INSERT INTO {$prefix}permissions(name, description) VALUES('Bonfire.Settings.View', 'To view the site settings page.')");
-		// give current role (or administrators if fresh install) full right to manage permissions
-		$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(1,".$this->db->insert_id().")");
-
-		// add the permission
-		$this->db->query("INSERT INTO {$prefix}permissions(name, description) VALUES('Bonfire.Settings.Manage', 'To manage the site settings.')");
-		// give current role (or administrators if fresh install) full right to manage permissions
-		$this->db->query("INSERT INTO {$prefix}role_permissions VALUES(1,".$this->db->insert_id().")");
+		// add the permission to the admin
+		if ( ! empty($roles))
+		{
+			$this->db->insert_batch($this->ref_table, $roles);
+		}
 	}
-	
-	//--------------------------------------------------------------------
-	
-	public function down() 
+
+	/**
+	 * Uninstall this migration
+	 */
+	public function down()
 	{
-		$prefix = $this->db->dbprefix;
-		
-		$query = $this->db->query("SELECT permission_id FROM {$prefix}permissions WHERE name = 'Site.Settings.View'");
-		foreach ($query->result_array() as $row)
-		{
-			$permission_id = $row['permission_id'];
-			$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='$permission_id';");
-		}
-		//delete the role
-		$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Site.Settings.View')");
+		$permission_names = array();
+		$permission_ids = array();
 
-		$query = $this->db->query("SELECT permission_id FROM {$prefix}permissions WHERE name = 'Site.Settings.Manage'");
-		foreach ($query->result_array() as $row)
+		foreach ($this->data as $permission)
 		{
-			$permission_id = $row['permission_id'];
-			$this->db->query("DELETE FROM {$prefix}role_permissions WHERE permission_id='$permission_id';");
+			$permission_names[] = $permission['name'];
 		}
-		//delete the role
-		$this->db->query("DELETE FROM {$prefix}permissions WHERE (name = 'Site.Settings.Manage')");
 
+		if ( ! empty($permission_names))
+		{
+			$query = $this->db->select('permission_id')
+				->where_in('name', $permission_names)
+				->get($this->table);
+
+			foreach ($query->result() as $row)
+			{
+				$permission_ids[] = $row->permission_id;
+			}
+
+			if ( ! empty($permission_ids))
+			{
+				$this->db->where_in('permission_id', $permission_ids)
+					->delete($this->ref_table);
+			}
+
+			$this->db->where_in('name', $permission_names)
+				->delete($this->table);
+		}
 	}
-	
-	//--------------------------------------------------------------------
-	
 }

@@ -1,45 +1,79 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class Migration_User_language extends Migration {
+/**
+ * Add the user's language to the users table
+ * Add available languages to the settings table
+ */
+class Migration_User_language extends Migration
+{
+	/**
+	 * @var string The name of the users table
+	 */
+	private $table = 'users';
 
+	/**
+	 * @var string The name of the settings table
+	 */
+	private $settings_table = 'settings';
+
+	/**
+	 * @var array The field to add to the users table
+	 */
+	private $field = array(
+		'language' => array(
+			'type'			=> 'varchar',
+			'constraint'	=> 20,
+			'default'		=> 'english'
+		)
+	);
+
+	/**
+	 * @var array The field to add to the settings table
+	 */
+	private $settings_field = array(
+		'name'		=> 'site.languages',
+		'module'	=> 'core',
+		'value'		=> '',
+	);
+
+	/**
+	 * @var array The languages available for the site, will be
+	 * 				serialized and inserted into the settings field
+	 */
+	private $languages = array(
+		'english',
+		'portuguese',
+		'persian',
+	);
+
+	/****************************************************************
+	 * Migration methods
+	 */
+	/**
+	 * Install this migration
+	 */
 	public function up()
 	{
-		$prefix = $this->db->dbprefix;
-		$this->load->dbforge();
+		// Add the language field to the users table
+		$this->dbforge->add_column($this->table, $this->field);
 
-		$field = array(
-			'language' => array(
-				'type'			=> 'varchar',
-				'constraint'	=> 20,
-				'default'		=> 'english'
-			)
-		);
-
-		$this->dbforge->add_column('users', $field);
-
-		$languages = serialize(array('english', 'portuguese', 'persian'));
-		$language_setting = "
-			INSERT INTO `{$prefix}settings` (`name`, `module`, `value`) VALUES
-			 ('site.languages', 'core', '".$languages."');
-		";
-
-		$this->db->query($language_setting);
-
+		// Add the site languages to the settings table
+		$this->settings_field['value'] = serialize($this->languages);
+		$this->db->insert($this->settings_table, $this->settings_field);
 	}
 
-	//--------------------------------------------------------------------
-
+	/**
+	 * Uninstall this migration
+	 */
 	public function down()
 	{
-		$prefix = $this->db->dbprefix;
-		$this->load->dbforge();
+		// Drop the language field from the users table
+		foreach ($this->field as $column_name => $column_def)
+		{
+			$this->dbforge->drop_column($this->table, $column_name);
+		}
 
-		$this->dbforge->drop_column('users', 'language');
-
-		$this->db->where('name', 'site.languages')->delete('settings');;
+		$this->db->where('name', $this->settings_field['name'])->delete($this->settings_table);
 
 	}
-
-	//--------------------------------------------------------------------
-
 }
