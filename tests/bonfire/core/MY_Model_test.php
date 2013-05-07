@@ -181,4 +181,135 @@ class MY_Model_test extends CI_UnitTestCase {
     }
 
     //--------------------------------------------------------------------
+
+    public function test_delete_without_soft_deletes()
+    {
+        $this->model->db->expectOnce('delete', array('records_table', array('id' => 1)));
+        $this->model->db->returns('delete', TRUE);
+
+        $this->assertTrue( $this->model->soft_delete(false)->delete(1) );
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_delete_with_soft_deletes()
+    {
+        $this->model->db->expectOnce('where', array('id', 1));
+        $this->model->db->expectOnce('update', array('records_table', array('deleted' => 1)));
+        $this->model->db->returns('update', TRUE);
+
+        $this->assertTrue( $this->model->soft_delete(true)->delete(1) );
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_delete_where_without_soft_deletes()
+    {
+        $this->model->db->expectOnce('where', array('userid', 5));
+        $this->model->db->expectOnce('delete', array('records_table'));
+        $this->model->db->returns('affected_rows', 1);
+        $this->model->db->returns('delete', TRUE);
+
+        $this->assertTrue( $this->model->soft_delete(false)->delete_where( array('userid' => 5) ) );
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_delete_where_with_soft_deletes()
+    {
+        $this->model->db->expectOnce('where', array('userid', 5));
+        $this->model->db->expectOnce('update', array('records_table', array('deleted' => 1)));
+        $this->model->db->returns('affected_rows', 1);
+        $this->model->db->returns('update', TRUE);
+
+        $this->assertTrue( $this->model->soft_delete()->delete_where( array('userid' => 5) ) );
+    }
+
+    //--------------------------------------------------------------------
+
+    //--------------------------------------------------------------------
+    // Utility Methods
+    //--------------------------------------------------------------------
+
+    public function test_count_all()
+    {
+        $this->model->db->expectOnce('count_all_results', array('records_table'));
+        $this->model->db->returns('count_all_results', 5);
+
+        $this->assertEqual( $this->model->count_all(), 5 );
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_count_by()
+    {
+        $this->model->db->expectOnce('where', array('column', 'value'));
+        $this->model->db->expectOnce('count_all_results', array('records_table'));
+        $this->model->db->returns('count_all_results', 5);
+
+        $this->assertEqual( $this->model->count_by('column', 'value'), 5 );
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_get_field()
+    {
+        $data = new stdClass();
+        $data->field = 'value';
+
+        $this->model->db->expectOnce('select', array('field'));
+        $this->model->db->expectOnce('where', array('id', 1));
+        $this->model->db->expectOnce('get', array('records_table'));
+        $this->model->db->returns('get', $this->model->db);
+        $this->model->db->returns('num_rows', 1);
+        $this->model->db->returns('row', $data);
+
+        $this->assertEqual( $this->model->get_field(1, 'field'), 'value' );
+    }
+
+    //--------------------------------------------------------------------
+
+
+    //--------------------------------------------------------------------
+    // Chainable Utility Methods
+    //--------------------------------------------------------------------
+
+    public function test_where()
+    {
+        $this->model->db->expectOnce('where', array('field', 'value'));
+        $return = $this->model->where('field', 'value');
+
+        $this->assertIsA($return, 'Record_model');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_limit()
+    {
+        $this->model->db->expectOnce('limit', array(10, 5));
+        $return = $this->model->limit(10, 5);
+        $this->assertIsA($return, 'Record_model');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_join()
+    {
+        $this->model->db->expectOnce('join', array('newTable', 'condition', 'type'));
+
+        $return = $this->model->join('newTable', 'condition', 'type');
+        $this->assertIsA($return, 'Record_model');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_order_by()
+    {
+        $this->model->db->expectOnce('order_by', array('field', 'order'));
+        $return = $this->model->order_by('field', 'order');
+        $this->assertIsA($return, 'Record_model');
+    }
+
+    //--------------------------------------------------------------------
+
 }

@@ -46,6 +46,7 @@ class MY_DB {
 
     public function platform() { }
     public function _error_message() { }
+    public function affected_rows() { }
 
     /**
      * CI_DB_Result

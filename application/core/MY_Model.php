@@ -632,39 +632,32 @@ class BF_Model extends CI_Model
 
 		$this->trigger('before_delete', $id);
 
-		if ($this->find($id) !== FALSE)
+		if ($this->soft_deletes === TRUE)
 		{
-			if ($this->soft_deletes === TRUE)
-			{
-				$data = array(
-					'deleted'	=> 1
-				);
+			$data = array(
+				'deleted'	=> 1
+			);
 
-				if ($this->log_user === TRUE && !array_key_exists($this->deleted_by_field, $data))
-				{
-					$data[$this->deleted_by_field] = $this->auth->user_id();
-				}
-
-				$this->db->where($this->key, $id);
-				$result = $this->db->update($this->table, $data);
-			}
-			else
+			if ($this->log_user === TRUE && !array_key_exists($this->deleted_by_field, $data))
 			{
-				$result = $this->db->delete($this->table, array($this->key => $id));
+				$data[$this->deleted_by_field] = $this->auth->user_id();
 			}
 
-			if ($result)
-			{
-				$this->trigger('after_delete', $result);
-				return TRUE;
-			}
-
-			$this->error = sprintf(lang('bf_model_db_error'), $this->get_db_error_message());
+			$this->db->where($this->key, $id);
+			$result = $this->db->update($this->table, $data);
 		}
 		else
 		{
-			$this->error = sprintf(lang('bf_model_db_error'), lang('bf_model_invalid_id'));
+			$result = $this->db->delete($this->table, array($this->key => $id));
 		}
+
+		if ($result)
+		{
+			$this->trigger('after_delete', $result);
+			return TRUE;
+		}
+
+		$this->error = sprintf(lang('bf_model_db_error'), $this->get_db_error_message());
 
 		return FALSE;
 
@@ -1019,6 +1012,31 @@ class BF_Model extends CI_Model
 	//--------------------------------------------------------------------
 
 	//--------------------------------------------------------------------
+	// Scope Methods
+	//--------------------------------------------------------------------
+
+	/**
+	 * Sets the value of the soft deletes flag.
+	 *
+	 * <code>
+	 *     $this->my_model->soft_delete(true)->delete($id);
+	 * </code>
+	 *
+	 * @param  boolean $val If TRUE, will temporarily use soft_deletes.
+	 *
+	 * @return BF_Model 	An instance of this class.
+	 */
+	public function soft_delete($val=TRUE)
+	{
+		$this->soft_deletes = (boolean)$val;
+
+		return $this;
+	}
+
+	//--------------------------------------------------------------------
+
+
+	//--------------------------------------------------------------------
 	// !OBSERVERS
 	//--------------------------------------------------------------------
 
@@ -1320,6 +1338,8 @@ class BF_Model extends CI_Model
 
 	/**
 	 * Sets whether soft deletes are used by the delete method.
+	 *
+	 * NOTE: This method is deprecated as of version 0.7.
 	 *
 	 * @param bool $soft
 	 *
