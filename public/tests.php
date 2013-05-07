@@ -1,0 +1,1 @@
+<?php include '../tests/unit_test.php';

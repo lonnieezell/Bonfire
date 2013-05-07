@@ -17,10 +17,10 @@ $cli_mode = setup_cli($argv); // Determines if running in cli mode
  * Configure your paths here:
  */
 define('MAIN_PATH', realpath(dirname(__FILE__)).'/');
-define('SIMPLETEST', MAIN_PATH .'tests/simpletest/'); // Directory of simpletest
-define('ROOT', MAIN_PATH); // Directory of codeigniter index.php
-define('TESTS_DIR', MAIN_PATH . 'tests/'); // Directory of your tests.
-define('APP_DIR', MAIN_PATH . 'bonfire/application/'); // CodeIgniter Application directory
+define('SIMPLETEST', MAIN_PATH .'simpletest/'); // Directory of simpletest
+define('ROOT', str_replace('tests/', 'public/', MAIN_PATH)); // Directory of codeigniter index.php
+define('TESTS_DIR', MAIN_PATH); // Directory of your tests.
+define('APP_DIR', str_replace('tests/', 'bonfire/application/', MAIN_PATH)); // CodeIgniter Application directory
 
 //do not use autorun as it output ugly report upon no test run
 require_once SIMPLETEST . 'unit_tester.php';
@@ -57,7 +57,7 @@ class CodeIgniterUnitTestCase extends UnitTestCase {
 	 */
 	public function assertEmpty($value, $message = '%s')
 	{
-		$dumper = &new SimpleDumper();
+		$dumper = new SimpleDumper();
 		$message = sprintf($message, '[' . $dumper->describeValue($value) . '] should be empty');
 		return $this->assertTrue(empty($value), $message);
 
@@ -74,7 +74,7 @@ class CodeIgniterUnitTestCase extends UnitTestCase {
 	 */
 	public function assertNotEmpty($value, $message = '%s')
 	{
-		$dumper = &new SimpleDumper();
+		$dumper = new SimpleDumper();
 		$message = sprintf($message, '[' . $dumper->describeValue($value) . '] should not be empty');
 		return $this->assertFalse(empty($value), $message);
 
@@ -161,20 +161,20 @@ elseif (isset($_POST['test'])) //single test
  */
 function setup_cli($argv)
 {
-	if (php_sapi_name() == 'cli') 
+	if (php_sapi_name() == 'cli')
 	{
-		if(isset($argv[1])) 
+		if(isset($argv[1]))
 		{
 			if(stripos($argv[1],'.php') !== false)
 			{
 				$_POST['test'] = $argv[1];
 			}
-			else 
+			else
 			{
 				$_POST[$argv[1]] = $argv[1];
 			}
 		}
-		else 
+		else
 		{
 			$_POST['all'] = 'all';
 		}

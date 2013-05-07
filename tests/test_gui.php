@@ -2,13 +2,14 @@
 <html>
 <head>
 <title>Bonfire Tests</title>
-<link rel="stylesheet" type="text/css" href="tests/unit_test.css" charset="utf-8">
-
+<style>
+	<?php include 'unit_test.css'; ?>
+</style>
 </head>
 <body>
 	<div id="header">
 		<h2>Bonfire Tests</h2>
-	
+
 		<div id="nav">
 			<form action="<?php echo $form_url; ?>" method="post">
 				<input type="hidden" name="all" value="1" />
@@ -38,7 +39,7 @@
 				<input type="hidden" name="bugs" value="1" />
 				<input type="submit" value="Bugs" />
 			</form>
-			
+
 			<?php
 			// RT Wolf's addition: HTML select the test you just ran in drop down list in case you want to rerun it.
 			// www.mind-manual.com
@@ -50,7 +51,7 @@
 				$testName = "";
 			}
 			?>
-			
+
 			<form action="<?php echo $form_url; ?>" method="post">
 				<select name="test">
 					<optgroup label="Libraries">
@@ -88,15 +89,15 @@
 			</form>
 		</div>
 	</div>
-		
-		
+
+
 	<div id="report">
 		<?php $test_suite->run(new MyReporter()); ?>
 	</div>
-	
+
 	<div id="footer">
 		Tests ran in <?php echo $elapse_time ?> seconds, using <?php echo memory_usage(); ?>
 	</div>
-		
+
 </body>
 </html>
