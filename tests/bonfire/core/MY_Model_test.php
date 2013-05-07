@@ -312,4 +312,104 @@ class MY_Model_test extends CI_UnitTestCase {
 
     //--------------------------------------------------------------------
 
+    //--------------------------------------------------------------------
+    // Trigger Tests
+    //--------------------------------------------------------------------
+    // These test the automatic functioning of the before_ and after_
+    // triggers in the insert and updates. WE do the test by testing for the
+    // addition of the created_on and modified_on fields into the data streams.
+    //
+
+    public function test_reset_model()
+    {
+        // This 'test' simply resets the model to use for the following tests.
+        $this->load_model = 'Trigger_model';
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_triggered_insert()
+    {
+        $this->model->db->expectOnce('insert', array('records_table', array('title' => 'MyTitle', 'created_on' => time()) ));
+        $this->model->db->expectOnce('insert_id');
+        $this->model->db->returns('insert', true);
+        $this->model->db->returns('insert_id', 5);
+
+        $data = array('title' => 'MyTitle');
+
+        $id = $this->model->insert($data);
+        $this->assertEqual($id, 5);
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_triggered_insert_batch()
+    {
+        $data = array(
+            array('title' => 'My Title'),
+            array('title' => 'Another Title')
+        );
+
+        $triggered_data = array(
+            array('created_on' => time(), 'title' => 'My Title'),
+            array('created_on' => time(), 'title' => 'Another Title')
+        );
+
+        $this->model->db->expectOnce('insert_batch', array( 'records_table', $triggered_data ));
+
+        $this->assertTrue($this->model->insert_batch($data));
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_triggered_update()
+    {
+        $triggered_data = array(
+            'column' => 'value',
+            'modified_on' => time()
+        );
+
+        $this->model->db->expectOnce('update', array( 'records_table', $triggered_data, array('id' => 5) ));
+        $this->model->db->returns('update', true);
+
+        $this->assertTrue($this->model->update(5, array('column' => 'value')));
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_triggered_update_batch()
+    {
+        $data = array(
+            array('title' => 'My Title'),
+            array('title' => 'Another Title')
+        );
+
+        $triggered_data = array(
+            array('title' => 'My Title', 'modified_on' => time()),
+            array('title' => 'Another Title', 'modified_on' => time())
+        );
+
+        $this->model->db->expectOnce('update_batch', array( 'records_table', $triggered_data, 'title' ));
+
+        $this->assertTrue($this->model->update_batch($data, 'title'));
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_triggered_update_where()
+    {
+        $triggered_data = array(
+            'column' => 'value',
+            'modified_on' => time()
+        );
+
+        $this->model->db->expectOnce('update', array( 'records_table', $triggered_data, array('id' => 5) ));
+        $this->model->db->returns('update', true);
+
+        $this->assertTrue($this->model->update_where('id', 5, array('column' => 'value')));
+    }
+
+    //--------------------------------------------------------------------
+
+
 }
