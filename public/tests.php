@@ -1,1 +1,1 @@
-<?php include '../tests/unit_test.php';
+<?php include '../tests/run.php';
