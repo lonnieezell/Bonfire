@@ -411,5 +411,32 @@ class MY_Model_test extends CI_UnitTestCase {
 
     //--------------------------------------------------------------------
 
+    //--------------------------------------------------------------------
+    // Protected Attributes
+    //--------------------------------------------------------------------
+
+    public function test_protected_reset_model()
+    {
+        // This 'test' simply resets the model to use for the
+        // following tests.
+        $this->load_model = 'Protected_attribute_model';
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_protected_insert()
+    {
+        $data = array('name' => 'MyName', 'title' => 'MyTitle');
+
+        $this->model->db->expectOnce('insert', array('records_table', array('title' => 'MyTitle')));
+        $this->model->db->returns('insert', true);
+        $this->model->db->expectOnce('insert_id');
+        $this->model->db->returns('insert_id', 5);
+
+        $id = $this->model->insert($data);
+        $this->assertEqual($id, 5);
+    }
+
+    //--------------------------------------------------------------------
 
 }

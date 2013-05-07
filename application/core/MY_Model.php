@@ -187,6 +187,11 @@ class BF_Model extends CI_Model
 	protected $before_delete	= array();
 	protected $after_delete		= array();
 
+	/**
+     * Protected, non-modifiable attributes
+     */
+    protected $protected_attributes = array();
+
 	//---------------------------------------------------------------
 
 	/**
@@ -210,6 +215,10 @@ class BF_Model extends CI_Model
 		{
 			$this->load->database();
 		}
+
+		// Always protect our attributes
+        array_unshift($this->before_insert, 'protect_attributes');
+        array_unshift($this->before_update, 'protect_attributes');
 
 		// Check our auto-set features and make sure they are part of
 		// our observer system.
@@ -1116,6 +1125,31 @@ class BF_Model extends CI_Model
 
 	//--------------------------------------------------------------------
 
+	/**
+     * Protect attributes by removing them from $row array. Useful for
+     * removing id, or submit buttons names if you simply throw your $_POST
+     * array at your model. :)
+     *
+     * @param object/array $row The value pair item to remove.
+     */
+    public function protect_attributes($row)
+    {
+        foreach ($this->protected_attributes as $attr)
+        {
+            if (is_object($row))
+            {
+                unset($row->$attr);
+            }
+            else
+            {
+                unset($row[$attr]);
+            }
+        }
+
+        return $row;
+    }
+
+    //--------------------------------------------------------------------
 
 	/**
 	 * A utility method that does some error checking and cleanup for other methods:
