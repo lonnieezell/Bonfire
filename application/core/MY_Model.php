@@ -246,8 +246,6 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
-		$this->set_selects();
-
 		$query = $this->db->get_where($this->table, array($this->table.'.'. $this->key => $id));
 
 		if ($query->num_rows())
@@ -292,8 +290,6 @@ class BF_Model extends CI_Model
 		}
 
 		$this->trigger('before_find');
-
-		$this->set_selects();
 
 		$this->db->from($this->table);
 
@@ -350,8 +346,6 @@ class BF_Model extends CI_Model
 			$this->db->where($field);
 		}
 
-		$this->set_selects();
-
 		return $this->find_all($return_type);
 
 	}//end find_all_by()
@@ -392,8 +386,6 @@ class BF_Model extends CI_Model
 		{
 			$this->db->where($field);
 		}
-
-		$this->set_selects();
 
 		$query = $this->db->get($this->table);
 
@@ -811,8 +803,6 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
-		$this->set_selects();
-
 		$this->db->where($field, $value);
 
 		return (int)$this->db->count_all_results($this->table);
@@ -915,70 +905,6 @@ class BF_Model extends CI_Model
 		return $this;
 
 	}//end where()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Sets the select portion of the query in a chainable format. The value
-	 * is stored for use in the find* methods so that child classes can
-	 * have more flexibility in joins and what is selected.
-	 *
-	 * @param string $selects A string representing the selection.
-	 * @param string $escape  A string representing the escape.
-	 *
-	 * @return BF_Model An instance of this class.
-	 */
-	public function select($selects=NULL, $escape=NULL)
-	{
-		if (!empty($selects))
-		{
-			$this->selects = $selects;
-		}
-		if ($escape === FALSE)
-		{
-			$this->escape = $escape;
-		}
-
-		return $this;
-
-	}//end select()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Sets the limit portion of the query in a chainable format.
-	 *
-	 * @param int $limit  An int showing the max results to return.
-	 * @param int $offset An in showing how far into the results to start returning info.
-	 *
-	 * @return BF_Model An instance of this class.
-	 */
-	public function limit($limit=0, $offset=0)
-	{
-		$this->db->limit($limit, $offset);
-
-		return $this;
-
-	}//end limit()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Generates the JOIN portion of the query.
-	 *
-	 * @param string $table A string containing the table name.
-	 * @param string $cond  A string with the join condiction.
-	 * @param string $type  A string containing the type of join - INNER, OUTER etc.
-	 *
-	 * @return BF_Model An instance of this class.
-	 */
-	public function join($table, $cond, $type = '')
-	{
-		$this->db->join($table, $cond, $type);
-
-		return $this;
-
-	}//end join()
 
 	//--------------------------------------------------------------------
 
@@ -1395,37 +1321,6 @@ class BF_Model extends CI_Model
 	//--------------------------------------------------------------------
 
 	/**
-	 * Takes the string in $this->selects, if not empty, and sets it
-	 * with the ActiveRecord db class. If $this->escape is FALSE it
-	 * will not try to protect your field or table names with backticks.
-	 *
-	 * Clears the string afterword to make sure it's clean for the next call.
-	 *
-	 * @access protected
-	 */
-	protected function set_selects()
-	{
-		if (!empty($this->selects) && $this->escape === FALSE)
-		{
-			$this->db->select($this->selects, FALSE);
-
-			// Clear it out for the next process.
-			$this->selects = NULL;
-			$this->escape = NULL;
-		}
-		elseif (!empty($this->selects))
-		{
-			$this->db->select($this->selects);
-
-			// Clear it out for the next process.
-			$this->selects = NULL;
-		}
-
-	}//end set_selects()
-
-	//--------------------------------------------------------------------
-
-	/**
 	 * Logs an error to the Console (if loaded) and to the log files.
 	 *
 	 * @param string $message The string to write to the logs.
@@ -1452,6 +1347,44 @@ class BF_Model extends CI_Model
 	}//end logit()
 
 	//--------------------------------------------------------------------
+
+	//--------------------------------------------------------------------
+    // CI Database  Wrappers
+    //--------------------------------------------------------------------
+    // To allow for more expressive syntax, we provide wrapper functions
+    // for most of the query builder methods here.
+    //
+    // This allows for calls such as:
+    //      $result = $this->model->select('...')
+    //                            ->where('...')
+    //                            ->having('...')
+    //                            ->get();
+    //
+
+    public function select ($select = '*', $escape = NULL) { $this->db->select($select, $escape); return $this; }
+    public function select_max ($select = '', $alias = '') { $this->db->select_max($select, $alias); return $this; }
+    public function select_min ($select = '', $alias = '') { $this->db->select_min($select, $alias); return $this; }
+    public function select_avg ($select = '', $alias = '') { $this->db->select_avg($select, $alias); return $this; }
+    public function select_sum ($select = '', $alias = '') { $this->db->select_sum($select, $alias); return $this; }
+    public function distinct ($val=TRUE) { $this->db->distinct($val); return $this; }
+    public function from ($from) { $this->db->from($from); return $this; }
+    public function join($table, $cond, $type = '') { $this->db->join($table, $cond, $type); return $this; }
+    //public function where($key, $value = NULL, $escape = TRUE) { $this->db->where($key, $value, $escape); return $this; }
+    public function or_where($key, $value = NULL, $escape = TRUE) { $this->db->or_where($key, $value, $escape); return $this; }
+    public function where_in($key = NULL, $values = NULL) { $this->db->where_in($key, $values); return $this; }
+    public function or_where_in($key = NULL, $values = NULL) { $this->db->or_where_in($key, $values); return $this; }
+    public function where_not_in($key = NULL, $values = NULL) { $this->db->where_not_in($key, $values); return $this; }
+    public function or_where_not_in($key = NULL, $values = NULL) { $this->db->or_where_not_in($key, $values); return $this; }
+    public function like($field, $match = '', $side = 'both') { $this->db->like($field, $match, $side); return $this; }
+    public function not_like($field, $match = '', $side = 'both') { $this->db->not_like($field, $match, $side); return $this; }
+    public function or_like($field, $match = '', $side = 'both') { $this->db->or_like($field, $match, $side); return $this; }
+    public function or_not_like($field, $match = '', $side = 'both') { $this->db->or_not_like($field, $match, $side); return $this; }
+    public function group_by($by) { $this->db->group_by($by); return $this; }
+    public function having($key, $value = '', $escape = TRUE) { $this->db->having($key, $value, $escape); return $this; }
+    public function or_having($key, $value = '', $escape = TRUE) { $this->db->or_having($key, $value, $escape); return $this; }
+    public function limit($value, $offset = '') { $this->db->limit($value, $offset); return $this; }
+    public function offset($offset) { $this->db->offset($offset); return $this; }
+    public function set($key, $value = '', $escape = TRUE) { $this->db->set($key, $value, $escape); return $this; }
 
 }//end BF_model
 

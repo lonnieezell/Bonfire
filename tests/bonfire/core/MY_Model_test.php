@@ -284,25 +284,6 @@ class MY_Model_test extends CI_UnitTestCase {
 
     //--------------------------------------------------------------------
 
-    public function test_limit()
-    {
-        $this->model->db->expectOnce('limit', array(10, 5));
-        $return = $this->model->limit(10, 5);
-        $this->assertIsA($return, 'Record_model');
-    }
-
-    //--------------------------------------------------------------------
-
-    public function test_join()
-    {
-        $this->model->db->expectOnce('join', array('newTable', 'condition', 'type'));
-
-        $return = $this->model->join('newTable', 'condition', 'type');
-        $this->assertIsA($return, 'Record_model');
-    }
-
-    //--------------------------------------------------------------------
-
     public function test_order_by()
     {
         $this->model->db->expectOnce('order_by', array('field', 'order'));
@@ -435,6 +416,204 @@ class MY_Model_test extends CI_UnitTestCase {
 
         $id = $this->model->insert($data);
         $this->assertEqual($id, 5);
+    }
+
+    //--------------------------------------------------------------------
+
+    //--------------------------------------------------------------------
+    // Database Wrapper Tests
+    //--------------------------------------------------------------------
+    // Since these are simply wrapping features within the database class,
+    // we only need to test if they are actually called as tehy should be.
+
+    public function test_select()
+    {
+        $this->model->db->expectOnce('select', array('one, two, three', TRUE));
+        $this->model->select('one, two, three', TRUE);
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_select_max()
+    {
+        $this->model->db->expectOnce('select_max', array('select', 'alias'));
+        $this->model->select_max('select', 'alias');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_select_min()
+    {
+        $this->model->db->expectOnce('select_min', array('select', 'alias'));
+        $this->model->select_min('select', 'alias');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_select_avg()
+    {
+        $this->model->db->expectOnce('select_avg', array('select', 'alias'));
+        $this->model->select_avg('select', 'alias');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_select_sum()
+    {
+        $this->model->db->expectOnce('select_sum', array('select', 'alias'));
+        $this->model->select_sum('select', 'alias');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_distinct()
+    {
+        $this->model->db->expectOnce('distinct', array(FALSE));
+        $this->model->distinct(FALSE);
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_from()
+    {
+        $this->model->db->expectOnce('from', array('me'));
+        $this->model->from('me');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_join()
+    {
+        $this->model->db->expectOnce('join', array('table', 'condition', 'type'));
+        $this->model->join('table', 'condition', 'type');
+    }
+
+    //--------------------------------------------------------------------
+/*
+    public function test_where()
+    {
+        $this->model->db->expectOnce('where', array('key', 'value', FALSE));
+        $this->model->where('key', 'value', FALSE);
+    }
+
+    //--------------------------------------------------------------------
+*/
+    public function test_or_where()
+    {
+        $this->model->db->expectOnce('or_where', array('key', 'value', FALSE));
+        $this->model->or_where('key', 'value', FALSE);
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_where_in()
+    {
+        $this->model->db->expectOnce('where_in', array('key', 'values'));
+        $this->model->where_in('key', 'values');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_or_where_in()
+    {
+        $this->model->db->expectOnce('or_where_in', array('key', 'values'));
+        $this->model->or_where_in('key', 'values');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_where_not_in()
+    {
+        $this->model->db->expectOnce('where_not_in', array('key', 'values'));
+        $this->model->where_not_in('key', 'values');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_or_where_not_in()
+    {
+        $this->model->db->expectOnce('or_where_not_in', array('key', 'values'));
+        $this->model->or_where_not_in('key', 'values');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_like()
+    {
+        $this->model->db->expectOnce('like', array('field', 'match', 'left'));
+        $this->model->like('field', 'match', 'left');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_or_like()
+    {
+        $this->model->db->expectOnce('or_like', array('field', 'match', 'left'));
+        $this->model->or_like('field', 'match', 'left');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_not_like()
+    {
+        $this->model->db->expectOnce('not_like', array('field', 'match', 'left'));
+        $this->model->not_like('field', 'match', 'left');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_or_not_like()
+    {
+        $this->model->db->expectOnce('or_not_like', array('field', 'match', 'left'));
+        $this->model->or_not_like('field', 'match', 'left');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_group_by()
+    {
+        $this->model->db->expectOnce('group_by', array('by'));
+        $this->model->group_by('by');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_having()
+    {
+        $this->model->db->expectOnce('having', array('key', 'value', FALSE));
+        $this->model->having('key', 'value', FALSE);
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_or_having()
+    {
+        $this->model->db->expectOnce('or_having', array('key', 'value', FALSE));
+        $this->model->or_having('key', 'value', FALSE);
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_limit()
+    {
+        $this->model->db->expectOnce('limit', array('value', 'offset'));
+        $this->model->limit('value', 'offset');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_offset()
+    {
+        $this->model->db->expectOnce('offset', array('offset'));
+        $this->model->offset('offset');
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_set()
+    {
+        $this->model->db->expectOnce('set', array('key', 'value', FALSE));
+        $this->model->set('key', 'value', FALSE);
     }
 
     //--------------------------------------------------------------------
