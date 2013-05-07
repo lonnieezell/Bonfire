@@ -157,9 +157,6 @@ $lang['bf_form_label_required'] = '<span class="required">*</span>';
 // MY_Model
 //--------------------------------------------------------------------
 $lang['bf_model_db_error']		= 'خطای پایگاه داده: %s';
-$lang['bf_model_no_data']		= 'چیزی یافت نشد.';
-$lang['bf_model_invalid_id']	= 'ID ارسال شده نا معتبر می باشد.';
-$lang['bf_model_no_table']		= 'جدول پایگاه داده صحیح نمی باشد.';
 $lang['bf_model_fetch_error']	= 'اطلاعات کافی جهت واکشی فیلد موجود نیست.';
 $lang['bf_model_count_error']	= 'اطلاعات کافی جهت شمارش نتایج موجود نمی باشد.';
 $lang['bf_model_unique_error']	= 'اطلاعات کافی جهت بررسی یکتا بودن موجود نمی باشد.';

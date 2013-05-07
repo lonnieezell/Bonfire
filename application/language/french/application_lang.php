@@ -155,9 +155,6 @@ $lang['bf_form_label_required'] = '<span class="required">*</span>';
 // MY_Model
 //--------------------------------------------------------------------
 $lang['bf_model_db_error']		= 'Erreur DB : %s';
-$lang['bf_model_no_data']		= 'Pas de données disponibles.';
-$lang['bf_model_invalid_id']	= 'Invalid ID passed to model.';
-$lang['bf_model_no_table']		= 'Le Model à une table de base donnée non spécifié.';
 $lang['bf_model_fetch_error']	= 'Pas assez d\'informations pour rechercher le champs.';
 $lang['bf_model_count_error']	= 'Pas assez d\'informations pour compter les résultats.';
 $lang['bf_model_unique_error']	= 'Pas assez d\'informations pour vérifier l\'unicité.';

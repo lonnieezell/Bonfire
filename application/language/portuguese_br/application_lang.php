@@ -155,9 +155,6 @@ $lang['bf_required_note'] = 'Campos obrigatórios em <strong>negrito</strong>.';
 // MY_Model
 //--------------------------------------------------------------------
 // $lang['bf_model_db_error']		= 'DB Error: %s';
-$lang['bf_model_no_data'] = 'Sem dados para mostrar.';
-$lang['bf_model_invalid_id'] = 'ID inválido passado ao modelo.';
-$lang['bf_model_no_table'] = 'Modelo sem tabela da BD especificada.';
 $lang['bf_model_fetch_error'] = 'Informação insuficiente para fetch.';
 $lang['bf_model_count_error'] = 'Informação insuficiente para count results.';
 $lang['bf_model_unique_error'] = 'Informação insuficiente para check uniqueness.';

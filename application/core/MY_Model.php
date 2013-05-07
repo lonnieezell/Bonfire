@@ -241,11 +241,6 @@ class BF_Model extends CI_Model
 	{
 		$this->trigger('before_find');
 
-		if ($this->_function_check($id) === FALSE)
-		{
-			return FALSE;
-		}
-
 		$query = $this->db->get_where($this->table, array($this->table.'.'. $this->key => $id));
 
 		if ($query->num_rows())
@@ -284,10 +279,6 @@ class BF_Model extends CI_Model
 	 */
 	public function find_all($return_type = 0)
 	{
-		if ($this->_function_check() === FALSE)
-		{
-			return FALSE;
-		}
 
 		$this->trigger('before_find');
 
@@ -420,11 +411,6 @@ class BF_Model extends CI_Model
 	 */
 	public function insert($data=NULL)
 	{
-		if ($this->_function_check(FALSE, $data) === FALSE)
-		{
-			return FALSE;
-		}
-
 		$data = $this->trigger('before_insert', $data);
 
 		if ($this->set_created === TRUE && $this->log_user === TRUE && !array_key_exists($this->created_by_field, $data))
@@ -461,11 +447,6 @@ class BF_Model extends CI_Model
 	 */
 	public function insert_batch($data=NULL)
 	{
-		if ($this->_function_check(FALSE, $data) === FALSE)
-		{
-			return FALSE;
-		}
-
 		$set = array();
 
 		// Add the created field
@@ -516,24 +497,10 @@ class BF_Model extends CI_Model
 	public function update($where=NULL, $data=NULL)
 	{
 
-		if (is_array($where))
+		if (!is_array($where))
 		{
-			if ($this->_function_check(FALSE, $data) === FALSE)
-			{
-				return FALSE;
-			}
-		}
-		// If $where is not an array, it should be the primary key value of the row to update
-		else
-		{
-			if ($this->_function_check($where, $data) === FALSE)
-			{
-				return FALSE;
-			}
-
 			$where = array($this->key => $where);
 		}
-
 
 		$data = $this->trigger('before_update', $data);
 
@@ -626,11 +593,6 @@ class BF_Model extends CI_Model
 	 */
 	public function delete($id=NULL)
 	{
-		if ($this->_function_check($id) === FALSE)
-		{
-			return FALSE;
-		}
-
 		$this->trigger('before_delete', $id);
 
 		if ($this->soft_deletes === TRUE)
@@ -681,13 +643,6 @@ class BF_Model extends CI_Model
 	 */
 	public function delete_where($where=NULL)
 	{
-		if (empty($where))
-		{
-			$this->error = lang('bf_model_no_data');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_no_data'));
-			return FALSE;
-		}
-
 		$where = $this->trigger('before_delete', $where);
 
 		if (is_array($where))
@@ -1076,58 +1031,6 @@ class BF_Model extends CI_Model
     }
 
     //--------------------------------------------------------------------
-
-	/**
-	 * A utility method that does some error checking and cleanup for other methods:
-	 *
-	 * * Makes sure that a table has been set at $this->table.
-	 * * If passed in, will make sure that $id is of the valid type.
-	 * * If passed in, will verify the $data is not empty.
-	 *
-	 * @param mixed      $id   The primary_key value to match against.
-	 * @param array|bool $data Array of data
-	 *
-	 * @access protected
-	 *
-	 * @return bool
-	 */
-	protected function _function_check($id=FALSE, &$data=FALSE)
-	{
-		// Does the model have a table set?
-		if (empty($this->table))
-		{
-			$this->error = lang('bf_model_no_table');
-			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_no_table'), 'error');
-			return FALSE;
-		}
-
-		// Check the ID, but only if it's a non-FALSE value
-		if ($id !== FALSE)
-		{
-			if (empty($id) || $id == 0)
-			{
-				$this->error = lang('bf_model_invalid_id');
-				$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_invalid_id'));
-				return FALSE;
-			}
-		}
-
-		// Check the data
-		if ($data !== FALSE)
-		{
-			if (!is_array($data) || count($data) == 0)
-			{
-				$this->error = lang('bf_model_no_data');
-				$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_no_data'));
-				return FALSE;
-			}
-		}
-
-		return TRUE;
-
-	}//end _function_check()
-
-    //---------------------------------------------------------------
 
 	/**
 	 * A utility function to allow child models to use the type of

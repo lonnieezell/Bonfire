@@ -8,10 +8,10 @@
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in
 	all copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -111,9 +111,6 @@ $lang['bf_show_profiler']		= 'Show Profiler?';
 //--------------------------------------------------------------------
 // MY_Model
 //--------------------------------------------------------------------
-$lang['bf_model_no_data']		= 'Sem dados para mostrar.';
-$lang['bf_model_invalid_id']	= 'IID inválido passado ao modelo.';
-$lang['bf_model_no_table']		= 'Modelo sem tabela da BD especificada.';
 $lang['bf_model_fetch_error']	= 'Informação insucificente para fetch.';
 $lang['bf_model_count_error']	= 'Informação insucificente para count results.';
 $lang['bf_model_unique_error']	= 'Informação insucificente para check uniqueness.';
