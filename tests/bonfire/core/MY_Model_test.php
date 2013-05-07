@@ -421,6 +421,100 @@ class MY_Model_test extends CI_UnitTestCase {
     //--------------------------------------------------------------------
 
     //--------------------------------------------------------------------
+    // Output Types Tests (array, json)
+    //--------------------------------------------------------------------
+
+    public function test_find_as_json()
+    {
+        $data = new stdClass();
+        $data->title = 'Mytitle';
+
+        $this->model->db->returns('get_where', $this->model->db);
+        $this->model->db->returns('num_rows', 1);
+        $this->model->db->returns('row', $data);
+
+        $obj = $this->model->as_json()->find(1);
+        $this->assertEqual($obj, json_encode($data));
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_find_by_as_json()
+    {
+        $data = new stdClass();
+        $data->title = 'Mytitle';
+
+        $this->model->db->returns('get', $this->model->db);
+        $this->model->db->returns('row', $data);
+        $this->model->db->returns('num_rows', 1);
+
+        $obj = $this->model->as_json()->find_by('column', 'value');
+        $this->assertEqual($obj, json_encode($data));
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_find_all_as_json()
+    {
+        $data = new stdClass();
+        $data->title = 'Mytitle';
+
+        $this->model->db->returns('get', $this->model->db);
+        $this->model->db->returns('result', $data);
+        $this->model->db->returns('num_rows', 1);
+
+        $obj = $this->model->as_json()->find_all();
+        $this->assertEqual($obj, json_encode($data));
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_find_as_array()
+    {
+        $data = new stdClass();
+        $data->title = 'Mytitle';
+
+        $this->model->db->returns('get_where', $this->model->db);
+        $this->model->db->returns('row_array', array('title'=>'Mytitle'));
+        $this->model->db->returns('num_rows', 1);
+
+        $obj = $this->model->as_array()->find(1);
+        $this->assertEqual($obj, (array)$data);
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_find_by_as_array()
+    {
+        $data = new stdClass();
+        $data->title = 'Mytitle';
+
+        $this->model->db->returns('get', $this->model->db);
+        $this->model->db->returns('row_array', array('title'=>'Mytitle'));
+        $this->model->db->returns('num_rows', 1);
+
+        $obj = $this->model->as_array()->find_by('column', 'value');
+        $this->assertEqual($obj, (array)$data);
+    }
+
+    //--------------------------------------------------------------------
+
+    public function test_find_all_as_array()
+    {
+        $data = new stdClass();
+        $data->title = 'Mytitle';
+
+        $this->model->db->returns('get', $this->model->db);
+        $this->model->db->returns('result_array', array('title'=>'Mytitle'));
+        $this->model->db->returns('num_rows', 1);
+
+        $obj = $this->model->as_array()->find_all();
+        $this->assertEqual($obj, (array)$data);
+    }
+
+    //--------------------------------------------------------------------
+
+    //--------------------------------------------------------------------
     // Database Wrapper Tests
     //--------------------------------------------------------------------
     // Since these are simply wrapping features within the database class,

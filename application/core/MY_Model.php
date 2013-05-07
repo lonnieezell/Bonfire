@@ -192,6 +192,15 @@ class BF_Model extends CI_Model
      */
     protected $protected_attributes = array();
 
+    /**
+     * By default, we return items as objects. You can change this for the
+     * entire class by setting this value to 'array' instead of 'object'.
+     * Alternatively, you can do it on a per-instance basis using the
+     * 'as_array()' and 'as_object()' methods.
+     */
+    protected $return_type      = 'object';
+    protected $temp_return_type = NULL;
+
 	//---------------------------------------------------------------
 
 	/**
@@ -233,34 +242,33 @@ class BF_Model extends CI_Model
 	 * Searches for a single row in the database.
 	 *
 	 * @param string $id The primary key of the record to search for.
-	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return mixed An object/array representing the db row, or FALSE.
 	 */
-	public function find($id='', $return_type = 0)
+	public function find($id='', $return_type = null)
 	{
 		$this->trigger('before_find');
 
 		$query = $this->db->get_where($this->table, array($this->table.'.'. $this->key => $id));
 
-		if ($query->num_rows())
+		if (!$query->num_rows())
 		{
-			if($return_type == 0)
-			{
-				$return = $query->row();
-			}
-			else
-			{
-				$return = $query->row_array();
-			}
-
-			$return = $this->trigger('after_find', $return);
-
-			return $return;
+			return FALSE;
 		}
 
-		return FALSE;
+		$return = $query->{$this->_return_type()}();
 
+		$return = $this->trigger('after_find', $return);
+
+		if ($this->temp_return_type == 'json')
+        {
+            $return = json_encode($return);
+        }
+
+        // Reset our return type
+        $this->temp_return_type = $this->return_type;
+
+		return $return;
 	}//end find()
 
 	//---------------------------------------------------------------
@@ -286,24 +294,30 @@ class BF_Model extends CI_Model
 
 		$query = $this->db->get();
 
-		if (!empty($query) && $query->num_rows() > 0)
+		if (!$query->num_rows())
 		{
-			if($return_type == 0)
-			{
-				$return = $query->result();
-			}
-			else
-			{
-				$return = $query->result_array();
-			}
-
-			$return = $this->trigger('after_find', $return);
-
-			return $return;
+			return FALSE;
 		}
 
-		return FALSE;
+		$return = $query->{$this->_return_type(true)}();
 
+		if (is_array($return))
+		{
+			foreach ($return as $key => &$row)
+			{
+				$row = $this->trigger('after_find', $row, ($key == count($rows) - 1));
+			}
+		}
+
+		if ($this->temp_return_type == 'json')
+        {
+            $return = json_encode($return);
+        }
+
+        // Reset our return type
+        $this->temp_return_type = $this->return_type;
+
+		return $return;
 	}//end find_all()
 
 	//---------------------------------------------------------------
@@ -314,11 +328,10 @@ class BF_Model extends CI_Model
 	 * @param mixed  $field The table field to search in.
 	 * @param mixed  $value The value that field should be.
 	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
-	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return bool|mixed An array of objects representing the results, or FALSE on failure or empty set.
 	 */
-	public function find_all_by($field=NULL, $value=NULL, $type='and', $return_type = 0)
+	public function find_all_by($field=NULL, $value=NULL, $type='and')
 	{
 		if (empty($field)) return FALSE;
 
@@ -337,7 +350,7 @@ class BF_Model extends CI_Model
 			$this->db->where($field);
 		}
 
-		return $this->find_all($return_type);
+		return $this->find_all();
 
 	}//end find_all_by()
 
@@ -349,11 +362,10 @@ class BF_Model extends CI_Model
 	 * @param string $field Either a string or an array of fields to match against. If an array is passed it, the $value parameter is ignored since the array is expected to have key/value pairs in it.
 	 * @param string $value The value to match on the $field. Only used when $field is a string.
 	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
-	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return bool|mixed An object representing the first result returned.
 	 */
-	public function find_by($field='', $value='', $type='and', $return_type = 0)
+	public function find_by($field='', $value='', $type='and')
 	{
 		if (empty($field) || (!is_array($field) && empty($value)))
 		{
@@ -380,24 +392,24 @@ class BF_Model extends CI_Model
 
 		$query = $this->db->get($this->table);
 
-		if ($query && $query->num_rows() > 0)
+		if (!$query->num_rows())
 		{
-			if($return_type == 0)
-			{
-				$return = $query->row();
-			}
-			else
-			{
-				$return = $query->row_result();
-			}
-
-			$return = $this->trigger('after_find', $return);
-
-			return $return;
+			return FALSE;
 		}
 
-		return FALSE;
+		$return = $query->{$this->_return_type()}();
 
+		$return = $this->trigger('after_find', $return);
+
+		if ($this->temp_return_type == 'json')
+        {
+            $return = json_encode($return);
+        }
+
+		// Reset our return type
+        $this->temp_return_type = $this->return_type;
+
+        return $return;
 	}//end find_by()
 
 	//---------------------------------------------------------------
@@ -925,6 +937,41 @@ class BF_Model extends CI_Model
 
 	//--------------------------------------------------------------------
 
+	/**
+     * Temporarily sets our return type to an array.
+     */
+    public function as_array()
+    {
+        $this->temp_return_type = 'array';
+
+        return $this;
+    }
+
+    //--------------------------------------------------------------------
+
+    /**
+     * Temporarily sets our return type to an object.
+     */
+    public function as_object()
+    {
+        $this->temp_return_type = 'object';
+
+        return $this;
+    }
+
+    //--------------------------------------------------------------------
+
+    /**
+     * Temporarily sets our object return to a json object.
+     */
+    public function as_json()
+    {
+        $this->temp_return_type = 'json';
+
+        return $this;
+    }
+
+    //--------------------------------------------------------------------
 
 	//--------------------------------------------------------------------
 	// !OBSERVERS
@@ -1069,6 +1116,20 @@ class BF_Model extends CI_Model
 	}//end set_date()
 
 	//--------------------------------------------------------------------
+
+	/**
+     * Return the method name for the current return type
+     */
+    protected function _return_type($multi = FALSE)
+    {
+        $method = ($multi) ? 'result' : 'row';
+
+        // If our type is either 'array' or 'json', we'll simply use the array version
+        // of the function, since the database library doesn't support json.
+        return $this->temp_return_type == 'array' ? $method . '_array' : $method;
+    }
+
+    //--------------------------------------------------------------------
 
 	/**
 	 * Allows you to retrieve error messages from the database
