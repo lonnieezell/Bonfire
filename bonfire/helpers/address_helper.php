@@ -93,11 +93,11 @@ if ( ! function_exists('country_select'))
 
 		if (!is_array($countries) OR empty($countries))
 		{
-			return;
+			return lang('us_no_countries');
 		}
 
 		$class  = ( !empty($class) && $class[1] != '' ) ? ' class="' . $class . '" ' : '';
-		
+
 		$output  = '<select name="'. $select_name .'" id="' . $select_name . '" ' . $class . ' >';
 		$output .= '<option value="">&nbsp;</option>' . PHP_EOL;
 		foreach ($countries as $country_iso => $country)
