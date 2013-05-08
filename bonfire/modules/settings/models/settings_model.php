@@ -98,7 +98,7 @@ class Settings_model extends BF_Model
 	 *
 	 * @return array
 	 */
-	public function find_all_by($field=NULL, $value=NULL)
+	public function find_all_by($field=NULL, $value=NULL, $type='and')
 	{
 		if (empty($field)) return FALSE;
 
