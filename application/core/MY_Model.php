@@ -287,7 +287,6 @@ class BF_Model extends CI_Model
 	 */
 	public function find_all($return_type = 0)
 	{
-
 		$this->trigger('before_find');
 
 		$this->db->from($this->table);
@@ -305,7 +304,7 @@ class BF_Model extends CI_Model
 		{
 			foreach ($return as $key => &$row)
 			{
-				$row = $this->trigger('after_find', $row, ($key == count($rows) - 1));
+				$row = $this->trigger('after_find', $row, ($key == count($return) - 1));
 			}
 		}
 
