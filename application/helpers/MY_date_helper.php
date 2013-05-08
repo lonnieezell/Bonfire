@@ -48,11 +48,11 @@ if ( ! function_exists('relative_time'))
 		$difference = time() - $timestamp;
 
 		$periods = array("moment", "min", "hour", "day", "week",
-		"month", "years", "decade");
+		"month", "year", "decade");
 
-		$lengths = array("60","60","24","7","4.35","12","10");
+		$lengths = array("60","60","24","7","4.35","12","10", "10");
 
-		if ($difference > 0)
+		if ($difference >= 0)
 		{
 			// this was in the past
 			$ending = "ago";
