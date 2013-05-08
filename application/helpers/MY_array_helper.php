@@ -79,6 +79,8 @@ if ( ! function_exists('array_index_by_key'))
 				}
 			}
 		}//end foreach
+
+		return FALSE;
 	}//end array_index_by_key()
 }
 
@@ -106,6 +108,5 @@ if (!function_exists('array_multi_sort_by_column'))
 		}
 
 		array_multisort($sort_col, $dir, $arr);
-
 	}//end array_multi_sort_by_column()
 }
