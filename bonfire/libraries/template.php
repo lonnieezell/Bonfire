@@ -170,6 +170,13 @@ class Template
 	 */
 	protected static $orig_view_path;
 
+	/**
+	 * If TRUE, we won't use Session-related functions.
+	 * This is helpful during unit testing.
+	 *
+	 * @var boolean
+	 */
+	public static $ignore_session = FALSE;
 
 	/**
 	 * An instance of the CI super object.
@@ -709,7 +716,7 @@ class Template
 	{
 		if (!empty($message))
 		{
-			if (isset(self::$ci->session))
+			if (isset(self::$ci->session) && !self::$ignore_session)
 			{
 				self::$ci->session->set_flashdata('message', $type.'::'.$message);
 			}
@@ -771,7 +778,7 @@ class Template
 
 		// Clear our session data so we don't get extra messages.
 		// (This was a very rare occurence, but clearing should resolve the problem.
-		if (class_exists('CI_Session'))
+		if (class_exists('CI_Session') && !self::$ignore_session)
 		{
 			self::$ci->session->set_flashdata('message', '');
 		}
