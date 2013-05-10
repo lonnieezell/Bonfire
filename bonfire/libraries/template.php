@@ -855,6 +855,11 @@ EOF;
 	{
 		if (empty($view))	return '';
 
+		if (empty($data))
+		{
+			$data = self::$data;
+		}
+
 		// If no active theme is present, use the default theme.
 		$theme = empty(self::$active_theme) ? self::$default_theme : self::$active_theme;
 
@@ -890,32 +895,6 @@ EOF;
 						self::$ci->load->library('parser');
 					}
 
-//					$output = self::$ci->load->_ci_load(array('_ci_path' => $view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));
-
-					if (count($data) > 0)
-					{
-						$data = array_merge((array)$data,self::$ci->load->_ci_cached_vars);
-
-						$temp = array();
-						foreach($data as $key => $value)
-						{
-							if (count($value) > 0)
-							{
-								$value = (array) $value;
-							}
-							$temp[$key] = $value;
-						}
-						$data = array();
-
-						$data = $temp;
-						unset($temp);
-					}
-					else
-					{
-						$data = self::$ci->load->_ci_cached_vars;
-					}
-
-					//$output = self::$ci->load->view($view, $data, TRUE);
 					$output = self::$ci->parser->parse($view, $data, TRUE);
 				}
 				else
