@@ -217,7 +217,7 @@ class Template
 	public static function init()
 	{
 		// If the application config file hasn't been loaded, do it now
-		if (!self::$ci->config->item('template.theme_paths'))
+		if ( ! self::$ci->config->item('template.theme_paths'))
 		{
 			self::$ci->config->load('application');
 		}
@@ -309,7 +309,7 @@ class Template
 
 		if (self::$debug) { echo 'Current View = '. self::$current_view; }
 
-		self::load_view(self::$current_view, NULL, self::$ci->router->class .'/'. self::$ci->router->method, FALSE, $output);
+		self::load_view(self::$current_view, NULL, self::$ci->router->class . '/' . self::$ci->router->method, FALSE, $output);
 
 		Events::trigger('after_page_render', $output);
 
@@ -338,7 +338,7 @@ class Template
 	 */
 	public static function set_block($block_name='', $view_name='')
 	{
-		if (!empty($block_name))
+		if ( ! empty($block_name))
 		{
 			self::$blocks[$block_name] = $view_name;
 		}
@@ -423,7 +423,7 @@ class Template
 	 */
 	public static function add_theme_path($path=NULL)
 	{
-		if (empty($path) || !is_string($path))
+		if (empty($path) || ! is_string($path))
 		{
 			return FALSE;
 		}
@@ -468,7 +468,7 @@ class Template
 	 */
 	public static function remove_theme_path($path=NULL)
 	{
-		if (empty($path) || !is_string($path))
+		if (empty($path) || ! is_string($path))
 		{
 			return;
 		}
@@ -496,7 +496,7 @@ class Template
 	 */
 	public static function set_theme($theme=NULL, $default_theme=NULL)
 	{
-		if (empty($theme) || !is_string($theme))
+		if (empty($theme) || ! is_string($theme))
 		{
 			return;
 		}
@@ -532,7 +532,7 @@ class Template
 	 */
 	public static function set_default_theme($theme=NULL)
 	{
-		if (empty($theme) || !is_string($theme))
+		if (empty($theme) || ! is_string($theme))
 		{
 			return;
 		}
@@ -580,7 +580,7 @@ class Template
 		$url = base_url();
 
 		// Add theme path
-		$url .= self::$theme_paths[0] .'/';
+		$url .= self::$theme_paths[0] . '/';
 
 		// Add theme
 		$url .= empty(self::$active_theme) ? self::$default_theme : self::$active_theme;
@@ -608,7 +608,7 @@ class Template
 	 */
 	public static function set_view($view=NULL)
 	{
-		if (empty($view) || !is_string($view))
+		if (empty($view) || ! is_string($view))
 		{
 			return;
 		}
@@ -622,6 +622,10 @@ class Template
 	/**
 	 * Makes it easy to save information to be rendered within the views.
 	 *
+	 * This should probably be updated to clarify the intended functionality
+	 * when an array is passed into $var_name and $value is '' (and maybe
+	 * change the $value=='' to empty($value)?).
+	 *
 	 * @param string $var_name The name of the variable to set
 	 * @param mixed  $value    The value to set it to.
 	 *
@@ -631,7 +635,7 @@ class Template
 	{
 		// Added by dkenzik
 		// 20101001
-		// Easier migration when $data is scaterred all over your project
+		// Easier migration when $data is scattered all over your project
 		//
 		if(is_array($var_name) && $value=='')
 		{
@@ -714,11 +718,11 @@ class Template
 	 */
 	public static function set_message($message='', $type='info')
 	{
-		if (!empty($message))
+		if ( ! empty($message))
 		{
-			if (isset(self::$ci->session) && !self::$ignore_session)
+			if (isset(self::$ci->session) && ! self::$ignore_session)
 			{
-				self::$ci->session->set_flashdata('message', $type.'::'.$message);
+				self::$ci->session->set_flashdata('message', $type . '::' . $message);
 			}
 
 			self::$message = array('type'=>$type, 'message'=>$message);
@@ -749,7 +753,7 @@ class Template
 		{
 			$message = self::$ci->session->flashdata('message');
 
-			if (!empty($message))
+			if ( ! empty($message))
 			{
 				// Split out our message parts
 				$temp_message = explode('::', $message);
@@ -778,7 +782,7 @@ class Template
 
 		// Clear our session data so we don't get extra messages.
 		// (This was a very rare occurence, but clearing should resolve the problem.
-		if (class_exists('CI_Session') && !self::$ignore_session)
+		if (class_exists('CI_Session') && ! self::$ignore_session)
 		{
 			self::$ci->session->set_flashdata('message', '');
 		}
@@ -807,7 +811,7 @@ class Template
 			$url = site_url($url);
 		}
 
-		if (!self::$ci->input->is_ajax_request())
+		if ( ! self::$ci->input->is_ajax_request())
 		{
 			header("Location: ".$url);
 
@@ -855,33 +859,20 @@ EOF;
 	{
 		if (empty($view))	return '';
 
-		if (empty($data))
-		{
-			$data = self::$data;
-		}
-
-		// If no active theme is present, use the default theme.
-		$theme = empty(self::$active_theme) ? self::$default_theme : self::$active_theme;
-
 		if ($is_themed)
 		{
-			// First check for the overriden file...
-			$output = self::find_file($override, $data, $theme);
+			$output = '';
+
+			// First check for the overridden file...
+			if ( ! empty($override))
+			{
+				$output = self::find_file($override, $data);
+			}
 
 			// If we didn't find it, try the standard view
 			if (empty($output))
 			{
-				$output = self::find_file($view, $data, $theme);
-			}
-
-			if (self::$parse_views === TRUE)
-			{
-				if (!class_exists('CI_Parser'))
-				{
-					self::$ci->load->library('parser');
-				}
-
-				$output = self::$ci->parser->parse($output, $data, TRUE, FALSE);
+				$output = self::find_file($view, $data);
 			}
 		}
 
@@ -889,22 +880,45 @@ EOF;
 		else
 		{
 			// First check within our themes...
-			$output = self::find_file($view, $data, $theme);
+			$output = self::find_file($view, $data);
 
 			// if $output is empty, no view was overriden, so go for the default
 			if (empty($output))
 			{
 				self::$ci->load->_ci_view_path = self::$orig_view_path;
 
-
 				if (self::$parse_views === TRUE)
 				{
 
-					if (!class_exists('CI_Parser'))
+					if ( ! class_exists('CI_Parser'))
 					{
 						self::$ci->load->library('parser');
 					}
 
+//					$output = self::$ci->load->_ci_load(array('_ci_path' => $view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));
+
+					if (count($data) > 0)
+					{
+						$temp_data = array_merge((array)$data, self::$ci->load->_ci_cached_vars);
+
+						$data = array();
+						foreach ($temp_data as $key => $value)
+						{
+							if (count($value) > 0)
+							{
+								$value = (array) $value;
+							}
+							$data[$key] = $value;
+						}
+
+						unset($temp_data);
+					}
+					else
+					{
+						$data = self::$ci->load->_ci_cached_vars;
+					}
+
+					//$output = self::$ci->load->view($view, $data, TRUE);
 					$output = self::$ci->parser->parse($view, $data, TRUE);
 				}
 				else
@@ -914,11 +928,6 @@ EOF;
 			}
 			self::$ci->load->_ci_view_path = self::$orig_view_path;
 		}//end if
-
-		// Put our ci view path back to normal
-		//self::$ci->load->_ci_view_path = self::$orig_view_path;
-		unset($theme, $orig_view_path);
-
 	}//end load_view()
 
 	//--------------------------------------------------------------------
@@ -945,63 +954,95 @@ EOF;
 			return FALSE;
 		}
 
-		$output = '';		// Stores the final output
-		$view_path = '';	// Used to store the location of the file.
-
-		if (!empty($data))
+		if ( ! empty($data))
 		{
 			$data = (array)$data;
 		}
 
+		$output = '';		// Stores the final output
+		$view_path = '';	// Used to store the location of the file.
+		$active_theme_set = ! empty(self::$active_theme);	// Is the active theme set?
+		$view_file = $view . '.php';	// filename for the view
+
+		/*
+		 * In most cases, self::$theme_paths will only include one location, but when it
+		 * does not, the last will take precedence for the search. Previously the loop
+		 * just replaced the $view_path with any files found in later paths. Instead,
+		 * we will just reverse the $theme_paths array and break the loop when we find
+		 * the file.
+		 */
+		$theme_locations = array_reverse(self::$theme_paths);
+
 		// If there are multiple theme locations, we need to search through all of them.
-		foreach (self::$theme_paths as $path)
+		foreach ($theme_locations as $path)
 		{
+			$site_theme_path = self::$site_path . $path . '/';
+
 			/*
 				First, check the active theme
 			*/
-			if (self::$debug) { echo "[Find File] Looking for view in active theme: <b>". self::$site_path . $path .'/'. self::$active_theme . $view .'.php</b><br/>'; }
+			$active_theme_path = $site_theme_path . self::$active_theme;
+			if (self::$debug) { echo '[Find File] Looking for view in active theme: <b>' . $active_theme_path . $view_file . '</b><br/>'; }
 
-			if (!empty(self::$active_theme) && is_file(self::$site_path . $path .'/'. self::$active_theme . $view .'.php'))
+			if ($active_theme_set && is_file($active_theme_path . $view_file))
 			{
-				if (self::$debug) { echo 'Found <b>'. $view .'</b> in Active Theme.<br/>'; }
-				$view_path = self::$site_path . $path .'/'. self::$active_theme;
+				if (self::$debug) { echo 'Found <b>' . $view . '</b> in Active Theme.<br/>'; }
+				$view_path = $active_theme_path;
+
+				// If we found the view, we should exit the loop
+				break;
 			}
 
 			/*
-				If not in the active theme, then try the default theme
+				If not in the active theme, try the default theme.
+				As long as we break the loop whenever the $view_path is set,
+				we should not need to check empty($view_path) here
 			*/
-			if (self::$debug) { echo "[Find File] Looking for view in default theme: <b>". self::$site_path . $path .'/'. self::$default_theme . $view .'.php</b><br/>'; }
-			if (empty($view_path) && is_file(self::$site_path . $path .'/'. self::$default_theme . $view .'.php'))
-			{
-				if (self::$debug) { echo 'Found <b>'. $view .'</b> in Default Theme.<br/>'; }
+			$default_theme_path = $site_theme_path . self::$default_theme;
+			if (self::$debug) { echo '[Find File] Looking for view in default theme: <b>' . $default_theme_path . $view_file . '</b><br/>'; }
 
-				$view_path = self::$site_path . $path .'/'. self::$default_theme;
+			if (is_file($default_theme_path . $view_file))
+			{
+				if (self::$debug) { echo 'Found <b>' . $view . '</b> in Default Theme.<br/>'; }
+
+				$view_path = $default_theme_path;
+
+				// If we found the view, we should exit the loop
+				break;
 			}
 		}
 
-		// If the view was found, it's path is stored in the $view_path var. So parse or render it
+		// If the view was found, its path is stored in the $view_path var. So parse or render it
 		// based on user settings.
-		if (!empty($view_path))
+		if ( ! empty($view_path))
 		{
 			$view_path = str_replace('//', '/', $view_path);
 
 			// Set CI's view path to point to the right location.
 			//self::$ci->load->_ci_view_path = $view_path;
 
-			if (self::$debug) { echo '[Find File] Rendering file at: '. $view_path . $view .'.php<br/><br/>'; }
+			if (self::$debug) { echo '[Find File] Rendering file at: '. $view_path . $view_file .'<br/><br/>'; }
 
 			// Grab the output of the view.
 			if (self::$parse_views === TRUE)
 			{
-
-				$data = array_merge((array)$data,self::$ci->load->_ci_cached_vars);
-				$output = self::$ci->load->_ci_load(array('_ci_path' => $view_path . $view .'.php', '_ci_vars' => $data, '_ci_return' => TRUE));
+				$data = array_merge((array)$data, self::$ci->load->_ci_cached_vars);
+				$output = self::$ci->load->_ci_load(array(
+					'_ci_path' => $view_path . $view_file,
+					'_ci_vars' => $data,
+					'_ci_return' => TRUE,
+				));
 
 				//Parser dies on looping, better then before but not fixed.
 				//$output = self::$ci->parser->parse($view_path.$view, $data, TRUE, TRUE);
-			} else
+			}
+			else
 			{
-				$output = self::$ci->load->_ci_load(array('_ci_path' => $view_path . $view .'.php', '_ci_vars' => $data, '_ci_return' => TRUE));
+				$output = self::$ci->load->_ci_load(array(
+					'_ci_path' => $view_path . $view_file,
+					'_ci_vars' => $data,
+					'_ci_return' => TRUE,
+				));
 			}
 
 			// Put CI's view path back to the original
@@ -1044,15 +1085,14 @@ function theme_view($view=NULL, $data=NULL, $ignore_mobile=FALSE)
 
 	$output ='';
 
-	// If we're allowed, try to load the mobile version
-	// of the file.
-	if (!$ignore_mobile)
+	// If we're allowed, try to load the mobile version of the file.
+	if ( ! $ignore_mobile)
 	{
 		$ci->load->library('user_agent');
 
 		if ($ci->agent->is_mobile())
 		{
-			Template::load_view('mobile_'. $view, $data, NULL, TRUE, $output);
+			Template::load_view('mobile_' . $view, $data, NULL, TRUE, $output);
 		}
 	}
 
@@ -1118,7 +1158,7 @@ function check_method($item, $class_only=FALSE)
 
 	$items = array();
 
-	if (!is_array($item))
+	if ( ! is_array($item))
 	{
 		$items[] = $item;
 	}
@@ -1156,7 +1196,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 
 	$output = '';
 
-	if (!class_exists('CI_URI'))
+	if ( ! class_exists('CI_URI'))
 	{
 		$ci->load->library('uri');
 	}
@@ -1164,20 +1204,20 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 
 	if ( $ci->config->item('template.breadcrumb_symbol') == '' )
 	{
-		$seperator = '/';
+		$separator = '/';
 	}
 	else
 	{
-		$seperator = $ci->config->item('template.breadcrumb_symbol');
+		$separator = $ci->config->item('template.breadcrumb_symbol');
 	}
 
 	if ($wrap === TRUE)
 	{
-		$seperator = '<span class="divider">' . $seperator . '</span>' . PHP_EOL;
+		$separator = '<span class="divider">' . $separator . '</span>' . PHP_EOL;
 	}
 
 
-	if (empty($my_segments) || !is_array($my_segments))
+	if (empty($my_segments) || ! is_array($my_segments))
 	{
 		$segments = $ci->uri->segment_array();
 		$total    = $ci->uri->total_segments();
@@ -1188,9 +1228,8 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 		$total    = count($my_segments);
 	}
 
-	$in_admin = (bool) (is_array($segments) && in_array(SITE_AREA, $segments));
-
-	if ( $in_admin == TRUE )
+	// Are we in the admin section of the site?
+	if (is_array($segments) && in_array(SITE_AREA, $segments))
 	{
 		$home_link = site_url(SITE_AREA);
 	}
@@ -1202,22 +1241,22 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 	if ($wrap === TRUE)
 	{
 		$output  = '<ul class="breadcrumb">' . PHP_EOL;
-		$output .= '<li><a href="'.$home_link.'"><i class="icon-home">&nbsp;</i></a> '.$seperator.'</li>' . PHP_EOL;
+		$output .= '<li><a href="'.$home_link.'"><i class="icon-home">&nbsp;</i></a> '.$separator.'</li>' . PHP_EOL;
 	}
 	else
 	{
-		$output  = '<a href="'.$home_link.'">home</a> '.$seperator;
+		$output  = '<a href="'.$home_link.'">home</a> '.$separator;
 	}
 
 	$url = '';
 	$count = 0;
 
 	// URI BASED BREADCRUMB
-	if (empty($my_segments) || !is_array($my_segments))
+	if (empty($my_segments) || ! is_array($my_segments))
 	{
 		foreach ($segments as $segment)
 		{
-			$url .= '/'. $segment;
+			$url .= '/' . $segment;
 			$count += 1;
 
 			if ($count == $total)
@@ -1235,11 +1274,11 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 			{
 				if ($wrap === TRUE)
 				{
-					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($segment))) .'</a>' . $seperator . '</li>' . PHP_EOL;
+					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($segment))) .'</a>' . $separator . '</li>' . PHP_EOL;
 				}
 				else
 				{
-					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($segment))) .'</a>' . $seperator . PHP_EOL;
+					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($segment))) .'</a>' . $separator . PHP_EOL;
 				}
 			}
 		}
@@ -1269,11 +1308,11 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 
 				if ($wrap === TRUE)
 				{
-					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($title))) .'</a>' . $seperator . '</li>' . PHP_EOL;
+					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($title))) .'</a>' . $separator . '</li>' . PHP_EOL;
 				}
 				else
 				{
-					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($title))) .'</a>' . $seperator . PHP_EOL;
+					$output .= '<a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($title))) .'</a>' . $separator . PHP_EOL;
 				}
 
 			}
@@ -1285,7 +1324,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 		$output .= PHP_EOL . '</ul>' . PHP_EOL;
 	}
 
-	unset($in_admin, $seperator, $url, $wrap);
+	unset($separator, $url, $wrap);
 
 	if ($echo === TRUE)
 	{
