@@ -69,7 +69,6 @@ class MY_Parser extends CI_Parser
             $parseString = $this->ci->load->view($template, $data, TRUE);
         }
 
-
         Lex_Autoloader::register();
 
         $parser = new Lex_Parser();

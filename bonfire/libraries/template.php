@@ -873,6 +873,16 @@ EOF;
 			{
 				$output = self::find_file($view, $data, $theme);
 			}
+
+			if (self::$parse_views === TRUE)
+			{
+				if (!class_exists('CI_Parser'))
+				{
+					self::$ci->load->library('parser');
+				}
+
+				$output = self::$ci->parser->parse($output, $data, TRUE, FALSE);
+			}
 		}
 
 		// Just a normal view (possibly from a module, though.)
