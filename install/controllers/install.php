@@ -72,10 +72,10 @@ class Install extends CI_Controller {
 		'application/config/application.php',
 		'application/config/database.php',
 	);
-	
+
 	/**
 	 * Array of supported database engines.
-	 * 
+	 *
 	 * @access	private
 	 * @var		array
 	 */
@@ -113,13 +113,13 @@ class Install extends CI_Controller {
 
 	//--------------------------------------------------------------------
 
-	/** 
+	/**
 	 *	Index Method
 	 *
 	 * @access	public
 	 * @return	void
 	 */
-	 
+
 	public function index()
 	{
 		if ($this->installer_lib->is_installed())
@@ -129,31 +129,31 @@ class Install extends CI_Controller {
 		else
 		{
 			$data = new stdClass();
-			
+
 			// PHP Version Check
-			$data->php_min_version	= '5.2';
+			$data->php_min_version	= '5.3';
 			$data->php_acceptable	= $this->installer_lib->php_acceptable($data->php_min_version);
 			$data->php_version		= $this->installer_lib->php_version;
-			
-			// Curl Enabled? 
+
+			// Curl Enabled?
 			$data->curl_enabled		= $this->installer_lib->cURL_enabled();
-			
+
 			// Files/Folders writeable?
 			$data->folders			= $this->installer_lib->check_folders($this->writeable_folders);
 			$data->files			= $this->installer_lib->check_files($this->writeable_files);
-			
+
 			// If everything is good... go ahead with install
 			$data->step_passed = $data->php_acceptable == true && !in_array(false, $data->folders) && !in_array(false, $data->files);
 			$this->session->set_userdata('step1_done', true);
-		
+
 			$this->load->view('install/req_check', $data);
 		}
 	}
-	
+
 	//--------------------------------------------------------------------
-	
+
 	/**
-	 * Grabs the database setup information from the user and 
+	 * Grabs the database setup information from the user and
 	 * attempts to install the database schema and migrations.
 	 *
 	 * @access	public
@@ -162,17 +162,17 @@ class Install extends CI_Controller {
 	public function database()
 	{
 		$data = new stdClass();
-		
+
 		if ($this->input->post('install_db'))
 		{
 			$this->form_validation->set_rules('environment', lang('in_environment'), 'required|trim');
-			$this->form_validation->set_rules('driver', lang('in_db_driver'), 'required|trim');	
-			$this->form_validation->set_rules('port', lang('in_port'), 'required|trim|numeric');	
+			$this->form_validation->set_rules('driver', lang('in_db_driver'), 'required|trim');
+			$this->form_validation->set_rules('port', lang('in_port'), 'required|trim|numeric');
 			$this->form_validation->set_rules('hostname', lang('in_host'), 'required|trim');
 			$this->form_validation->set_rules('username', lang('bf_username'), 'required|trim');
 			$this->form_validation->set_rules('database', lang('in_database'), 'required|trim');
 			$this->form_validation->set_rules('db_prefix', lang('in_prefix'), 'trim|callback_test_db_connection');
-			
+
 			if ($this->form_validation->run() !== false)
 			{
 				// Save the values to the session for later.
@@ -186,12 +186,12 @@ class Install extends CI_Controller {
 					'database'	=> $this->input->post('database'),
 					'db_prefix'	=> $this->input->post('db_prefix')
 				));
-				
+
 				$this->session->set_userdata('step2_done', true);
 				redirect('install/account');
 			}
 		}
-		
+
 		// Supported DB Drivers
 		$data->drivers = $this->supported_dbs;
 
@@ -202,39 +202,39 @@ class Install extends CI_Controller {
 
 	/**
 	 *	Test our database connection. This is a callback used with form_validation.
-	 * 
+	 *
 	 * @access	public
 	 * @return	boolean
 	 */
-	public function test_db_connection() 
+	public function test_db_connection()
 	{
-		// Database drivers avialable? 
+		// Database drivers avialable?
 		if (!$this->installer_lib->db_available())
 		{
 			$this->form_validation->set_message('test_db_connection', lang('in_db_not_available'));
 			return false;
 		}
-		
-		// Can we connect to it? 
+
+		// Can we connect to it?
 		if (!$this->installer_lib->test_db_connection())
 		{
 			$this->form_validation->set_message('test_db_connection', lang('in_db_no_connect'));
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	//--------------------------------------------------------------------
 
 	/**
-	 *	Retrieves the user's account information and validates it. 
+	 *	Retrieves the user's account information and validates it.
 	 *
 	 * @access	public
 	 * @return	void
 	 */
 	public function account()
-	{	
+	{
 		if ($this->input->post('submit'))
 		{
 			$this->form_validation->set_rules('site_title', lang('in_site_title'), 'required|trim|min_length[1]');
@@ -253,9 +253,9 @@ class Install extends CI_Controller {
 					'user_password'	=> $this->input->post('password'),
 					'user_email'	=> $this->input->post('email')
 				));
-				
+
 				$this->session->set_userdata('step3_done', true);
-				
+
 				// Redirect to the actual installer
 				redirect('install/do_install');
 			}
@@ -269,20 +269,20 @@ class Install extends CI_Controller {
 	/**
 	 *	Do the actual installation...
 	 */
-	public function do_install() 
+	public function do_install()
 	{
 		$data = new stdClass();
 
 		$ready = true;
 
-		// database info in session? 
+		// database info in session?
 		if (!$this->session->userdata('hostname'))
 		{
 			$ready = false;
 			$data->reason = lang('in_db_no_session');
 		}
 
-		// account info in session? 
+		// account info in session?
 		if (!$this->session->userdata('user_username'))
 		{
 			$ready = false;
@@ -309,11 +309,11 @@ class Install extends CI_Controller {
 	}
 
 	//--------------------------------------------------------------------
-	
+
 	/**
 	 *	We're done!
 	 */
-	public function complete() 
+	public function complete()
 	{
 		if (!$this->session->userdata('installed'))
 		{
@@ -322,10 +322,10 @@ class Install extends CI_Controller {
 
 		$this->load->view('install/complete');
 	}
-	
+
 	//--------------------------------------------------------------------
 
-	public function rename_folder() 
+	public function rename_folder()
 	{
 		if ($_SERVER['REQUEST_METHOD'] != 'POST')
 		{
@@ -333,46 +333,46 @@ class Install extends CI_Controller {
 		}
 
 		$folder = FCPATH;
-	
+
 		// This should always have the /install in it, but
 		// better safe than sorry.
 		if (strpos($folder, 'install') === false)
 		{
 			$folder .= '/install/';
 		}
-		
+
 		$new_folder = preg_replace('{install/$}', 'install_bak', $folder);
-	
+
 		rename($folder, $new_folder);
-		
+
 		$url = installed_url();
 		redirect($url);
 	}
-	
+
 	//--------------------------------------------------------------------
 
 	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
-	
+
 	/**
-	 * Sets the language and loads the corresponding language files. 
+	 * Sets the language and loads the corresponding language files.
 	 * For now, this method is very simple, and needs to be expanded
 	 * so that we can support multiple languages in the installation.
-	 * 
+	 *
 	 * @access	private
 	 * @author	lonnieezell
 	 * @since	0.7-dev
 	 * @return	void
 	 */
-	private function set_language() 
+	private function set_language()
 	{
 		// Load our install language strings
 		$this->lang->load('install');
-	
+
 		// Load some application-wide, generic, language labels.
 		$this->lang->load('application');
 	}
-	
+
 	//--------------------------------------------------------------------
 }
