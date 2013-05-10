@@ -281,17 +281,13 @@ class BF_Model extends CI_Model
 	 * Active Record functions before calling this function, or
 	 * through method chaining with the where() method of this class.
 	 *
-	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
-	 *
 	 * @return mixed An array of objects/arrays representing the results, or FALSE on failure or empty set.
 	 */
-	public function find_all($return_type = 0)
+	public function find_all()
 	{
 		$this->trigger('before_find');
 
-		$this->db->from($this->table);
-
-		$query = $this->db->get();
+		$query = $this->db->get($this->table);
 
 		if (!$query->num_rows())
 		{

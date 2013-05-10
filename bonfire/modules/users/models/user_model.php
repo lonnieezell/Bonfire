@@ -154,11 +154,6 @@ class User_model extends BF_Model
 	 */
 	public function insert($data=array())
 	{
-		if (!$this->_function_check(FALSE, $data))
-		{
-			return FALSE;
-		}
-
 		// Display Name
 		if (!isset($data['display_name']) || $data['display_name'] === '')
 		{
@@ -227,11 +222,13 @@ class User_model extends BF_Model
 	 */
 	public function update($id=null, $data=array())
 	{
-		if ($id)
+		if (empty($id))
 		{
-			$trigger_data = array('user_id'=>$id, 'data'=>$data);
-			Events::trigger('before_user_update', $trigger_data);
+			return NULL;
 		}
+
+		$trigger_data = array('user_id'=>$id, 'data'=>$data);
+		Events::trigger('before_user_update', $trigger_data);
 
 		if (isset($data['password']) && $data['password'] !== '')
 		{
@@ -276,11 +273,11 @@ class User_model extends BF_Model
 
 
 	/**
-	 * Returns the number of users that belong to each role.
+	 * For all users with the matching role, set them to the default role instead.
 	 *
 	 * @access public
 	 *
-	 * @return bool|array An array of objects representing the number in each role.
+	 * @return bool
 	 */
 	public function set_to_default_role($current_role)
 	{
