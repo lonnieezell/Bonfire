@@ -64,9 +64,12 @@ class Settings extends Admin_Controller
 	 */
 	public function index()
 	{
+		$this->load->config('extended_settings');
+		$extended_settings = config_item('extended_settings_fields');
+
 		if (isset($_POST['save']))
 		{
-			if ($this->save_settings())
+			if ($this->save_settings($extended_settings))
 			{
 				Template::set_message(lang('settings_saved_success'), 'success');
 				redirect(SITE_AREA .'/settings');
@@ -80,6 +83,7 @@ class Settings extends Admin_Controller
 		// Read our current settings
 		$settings = $this->settings_lib->find_all();
 		Template::set('settings', $settings);
+		Template::set('extended_settings', $extended_settings);
 
 		// Get the possible languages
 		$this->load->helper('translate/languages');
@@ -104,9 +108,11 @@ class Settings extends Admin_Controller
 	 *
 	 * @access private
 	 *
+	 * @param array	$extended_settings	An optional array of settings from the extended_settings config file
+	 *
 	 * @return bool
 	 */
-	private function save_settings()
+	private function save_settings($extended_settings=array())
 	{
 		$this->form_validation->set_rules('title', 'lang:bf_site_name', 'required|trim');
 		$this->form_validation->set_rules('system_email', 'lang:bf_site_email', 'required|trim|valid_email');
@@ -117,6 +123,20 @@ class Settings extends Admin_Controller
 		$this->form_validation->set_rules('password_force_mixed_case', 'lang:bf_password_force_mixed_case', 'trim|numeric');
 		$this->form_validation->set_rules('password_show_labels', 'lang:bf_password_show_labels', 'trim|numeric');
 		$this->form_validation->set_rules('languages[]', 'lang:bf_language', 'required|trim|is_array');
+
+		// setup the validation rules for any extended settings
+		$extended_data = array();
+		foreach ($extended_settings as $field)
+		{
+			if ( empty($field['permission'])
+				|| $field['permission'] === FALSE
+				|| ( ! empty($field['permission']) && has_permission($field['permission']) )
+				)
+			{
+				$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
+				$extended_data['ext.' . $field['name']] = $this->input->post($field['name']);
+			}
+		}
 
 		if ($this->form_validation->run() === FALSE)
 		{
@@ -166,9 +186,50 @@ class Settings extends Admin_Controller
 		// save the settings to the DB
 		$updated = $this->settings_model->update_batch($data, 'name');
 
+		// if the update was successful and we have extended settings to save,
+		if ($updated && ! empty($extended_data))
+		{
+			// go ahead and save them
+			$updated = $this->save_extended_settings($extended_data);
+		}
+
 		return $updated;
 
 	}//end save_settings()
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Save the extended settings
+	 *
+	 * @access private
+	 *
+	 * @param	array	$extended_data	An array of settings to save
+	 *
+	 * @return	mixed/bool	TRUE or an inserted id if all settings saved successfully, else FALSE
+	 */
+	private function save_extended_settings($extended_data)
+	{
+		if ( ! is_array($extended_data)
+			|| empty($extended_data)
+			|| ! count($extended_data)
+			)
+		{
+			return FALSE;
+		}
+
+		$setting = FALSE;
+		foreach ($extended_data as $key => $value)
+		{
+			$setting = $this->settings_lib->set($key, $value);
+			if ($setting === FALSE)
+			{
+				return FALSE;
+			}
+		}
+
+		return $setting;
+	}// end save_extended_settings()
 
 	//--------------------------------------------------------------------
 }//end Settings()

@@ -10,9 +10,11 @@ $lang['settings_error_success']     = 'There was an error saving your settings.'
 $lang['set_tab_settings']			= 'Main Settings';
 $lang['set_tab_security']			= 'Security Settings';
 $lang['set_tab_developer']			= 'Developer Settings';
+$lang['set_tab_extended']			= 'Extended Settings';
 
 $lang['set_option_password']		= 'Password Options';
 $lang['set_option_developer']		= 'Developer Options';
+$lang['set_option_extended']		= 'Extended Settings';
 
 $lang['set_password_iterations']	= 'Password Stretching';
 $lang['set_force_reset']			= 'Force Password Resets';
