@@ -859,6 +859,11 @@ EOF;
 	{
 		if (empty($view))	return '';
 
+		if (empty($data))
+        {
+            $data = self::$data;
+        }
+
 		if ($is_themed)
 		{
 			$output = '';
@@ -874,6 +879,17 @@ EOF;
 			{
 				$output = self::find_file($view, $data);
 			}
+
+			// Should it be parsed?
+			if (self::$parse_views === TRUE)
+            {
+                if (!class_exists('CI_Parser'))
+                {
+                    self::$ci->load->library('parser');
+                }
+
+                $output = self::$ci->parser->parse($output, $data, TRUE, FALSE);
+            }
 		}
 
 		// Just a normal view (possibly from a module, though.)
@@ -895,30 +911,6 @@ EOF;
 						self::$ci->load->library('parser');
 					}
 
-//					$output = self::$ci->load->_ci_load(array('_ci_path' => $view.'.php','_ci_vars' => $data,'_ci_return' => TRUE));
-
-					if (count($data) > 0)
-					{
-						$temp_data = array_merge((array)$data, self::$ci->load->_ci_cached_vars);
-
-						$data = array();
-						foreach ($temp_data as $key => $value)
-						{
-							if (count($value) > 0)
-							{
-								$value = (array) $value;
-							}
-							$data[$key] = $value;
-						}
-
-						unset($temp_data);
-					}
-					else
-					{
-						$data = self::$ci->load->_ci_cached_vars;
-					}
-
-					//$output = self::$ci->load->view($view, $data, TRUE);
 					$output = self::$ci->parser->parse($view, $data, TRUE);
 				}
 				else
