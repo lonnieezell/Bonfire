@@ -221,6 +221,12 @@ class Migration_User_meta_move extends Migration
 			unset($rows);
 		}
 
+		// $this->db->list_fields uses $this->result_id, which may be
+		// incorrect due to insert_batch() or free_result() above,
+		// so we run a quick query against the correct table to fix
+		// the result_id
+		$this->db->get_where($this->table, array('id' => 0));
+
 		// Drop existing columns from users table.
 		$fields = $this->db->list_fields($this->table);
 		foreach ($fields as $field)
