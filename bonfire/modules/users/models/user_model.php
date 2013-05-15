@@ -323,12 +323,20 @@ class User_model extends BF_Model
 	{
 		if (empty($this->selects))
 		{
-			$this->select($this->table .'.*, role_name');
+			$this->select($this->table . '.*, role_name');
 		}
 
 		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table . '.role_id', 'left');
 
-		return parent::find($id, $return_type);
+		if ($return_type == 0)
+		{
+			parent::as_object();
+		}
+		else
+		{
+			parent::as_array();
+		}
+		return parent::find($id);
 
 	}//end find()
 
@@ -352,7 +360,15 @@ class User_model extends BF_Model
 
 		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table . '.role_id', 'left');
 
-		return parent::find_all($return_type);
+		if ($return_type == 0)
+		{
+			parent::as_object();
+		}
+		else
+		{
+			parent::as_array();
+		}
+		return parent::find_all();
 
 	}//end find_all()
 
@@ -381,7 +397,15 @@ class User_model extends BF_Model
 
 		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table . '.role_id', 'left');
 
-		return parent::find_by($field, $value, $type, $return_type);
+		if ($return_type == 0)
+		{
+			parent::as_object();
+		}
+		else
+		{
+			parent::as_array();
+		}
+		return parent::find_by($field, $value, $type);
 
 	}//end find_by()
 
@@ -780,7 +804,6 @@ class User_model extends BF_Model
 		$user_id = $result->id;
 
 		$active = ($leave_inactive === FALSE) ? 1 : 0;
-
 		if ($this->update($user_id, array('activate_hash' => '','active' => $active)))
 		{
 			return $user_id;

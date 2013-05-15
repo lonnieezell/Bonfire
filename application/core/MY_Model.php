@@ -37,6 +37,7 @@ class BF_Model extends CI_Model
 	 * Stores custom errors that can be used in UI error reporting.
 	 *
 	 * @var string
+	 * @access public
 	 */
 	public $error 		= '';
 
@@ -88,40 +89,36 @@ class BF_Model extends CI_Model
 	 */
 	protected $set_modified = TRUE;
 
-	/*
-		Var: $log_user
-		If TRUE, will log user id for 'created_by', 'modified_by' and 'deleted_by'.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * If TRUE, will log user id for 'created_by', 'modified_by', and 'deleted_by'
+	 *
+	 * @var bool
+	 * @access protected
+	 */
 	protected $log_user = FALSE;
 
-	/*
-		Var: $created_by_field
-		Field name to use to the created by column in the DB table.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Field name to use as the created by column in the DB table
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $created_by_field = 'created_by';
 
-	/*
-		Var: $modified_by_field
-		Field name to use to the modified by column in the DB table.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Field name to use as the modified by column in the DB table
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $modified_by_field = 'modified_by';
 
-	/*
-		Var: $deleted_by_field
-		Field name to use for the deleted by column in the DB table.
-
-		Access:
-			Protected
-	*/
+	/**
+	 * Field name to use as the deleted by column in the DB table
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $deleted_by_field = 'deleted_by';
 
 	/**
@@ -150,21 +147,20 @@ class BF_Model extends CI_Model
 	 */
 	protected $selects = '';
 
-	/*
-	Var: $escape
-	If FALSE, the select() method will not try to protect your field or table names with backticks.
-	This is useful if you need a compound select statement.
-
-	Access:
-		Protected
-	*/
+	/**
+	 * If FALSE, the select() method will not try to protect your field or table names with backticks.
+	 * This is useful if you need a compound select statement.
+	 *
+	 * @var bool
+	 * @access protected
+	 */
 	protected $escape = TRUE;
-
 
 	/**
 	 * DB Connection details (string or array)
 	 *
 	 * @var mixed
+	 * @access protected
 	 */
 	protected $db_con = '';
 
@@ -177,18 +173,97 @@ class BF_Model extends CI_Model
 	 * <code>
 	 *	$before_insert = array('set_created', 'validate_fields');
 	 * </code>
+	 *
+	 * $before_insert contains the names of callback functions within the extending model
+	 * which will be called before the insert method.
+	 *
+	 * @var array
+	 * @access protected
 	 */
 	protected $before_insert	= array();
+
+	/**
+	 * Contains the names of callback functions within the extending model which will
+	 * be called after the insert method
+	 *
+	 * @see $before_insert
+	 *
+	 * @var array
+	 * @access protected
+	 */
 	protected $after_insert		= array();
+
+	/**
+	 * Contains the names of callback functions within the extending model which will
+	 * be called before the update method
+	 *
+	 * @see $before_insert
+	 *
+	 * @var array
+	 * @access protected
+	 */
 	protected $before_update	= array();
+
+	/**
+	 * Contains the names of callback functions within the extending model which will
+	 * be called after the update method
+	 *
+	 * @see $before_insert
+	 *
+	 * @var array
+	 * @access protected
+	 */
 	protected $after_update		= array();
+
+	/**
+	 * Contains the names of callback functions within the extending model which will
+	 * be called before the find method
+	 *
+	 * @see $before_insert
+	 *
+	 * @var array
+	 * @access protected
+	 */
 	protected $before_find		= array();
+
+	/**
+	 * Contains the names of callback functions within the extending model which will
+	 * be called after the find method
+	 *
+	 * @see $before_insert
+	 *
+	 * @var array
+	 * @access protected
+	 */
 	protected $after_find		= array();
+
+	/**
+	 * Contains the names of callback functions within the extending model which will
+	 * be called before the delete method
+	 *
+	 * @see $before_insert
+	 *
+	 * @var array
+	 * @access protected
+	 */
 	protected $before_delete	= array();
+
+	/**
+	 * Contains the names of callback functions within the extending model which will
+	 * be called after the delete method
+	 *
+	 * @see $before_insert
+	 *
+	 * @var array
+	 * @access protected
+	 */
 	protected $after_delete		= array();
 
 	/**
      * Protected, non-modifiable attributes
+     *
+     * @var array
+     * @access protected
      */
     protected $protected_attributes = array();
 
@@ -197,15 +272,28 @@ class BF_Model extends CI_Model
      * entire class by setting this value to 'array' instead of 'object'.
      * Alternatively, you can do it on a per-instance basis using the
      * 'as_array()' and 'as_object()' methods.
+     *
+     * @var string
+     * @access protected
      */
     protected $return_type      = 'object';
-    protected $temp_return_type = NULL;
-
-	//---------------------------------------------------------------
 
 	/**
-	 * Setup the DB connection if it doesn't exist
+	 * Holds the return type temporarily when using the
+	 * as_array() and as_object() methods
 	 *
+	 * @var string
+	 * @access protected
+	 */
+    protected $temp_return_type = NULL;
+
+	/**
+	 * BF_Model's constructor
+	 *
+	 * Setup the DB connection if it doesn't exist,
+	 * setup the before_insert and before_update events
+	 *
+	 * @return void
 	 */
 	public function __construct()
 	{
@@ -245,13 +333,13 @@ class BF_Model extends CI_Model
 	 *
 	 * @return mixed An object/array representing the db row, or FALSE.
 	 */
-	public function find($id='', $return_type = null)
+	public function find($id='')
 	{
 		$this->trigger('before_find');
 
 		$query = $this->db->get_where($this->table, array($this->table.'.'. $this->key => $id));
 
-		if (!$query->num_rows())
+		if ( ! $query->num_rows())
 		{
 			return FALSE;
 		}
@@ -328,7 +416,10 @@ class BF_Model extends CI_Model
 	 */
 	public function find_all_by($field=NULL, $value=NULL, $type='and')
 	{
-		if (empty($field)) return FALSE;
+		if (empty($field))
+		{
+			return FALSE;
+		}
 
 		// Setup our field/value check
 		if ( ! is_array($field))
@@ -362,7 +453,7 @@ class BF_Model extends CI_Model
 	 */
 	public function find_by($field='', $value='', $type='and')
 	{
-		if (empty($field) || (!is_array($field) && empty($value)))
+		if (empty($field) || ( ! is_array($field) && empty($value)))
 		{
 			$this->error = lang('bf_model_find_error');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_find_error'));
@@ -387,7 +478,7 @@ class BF_Model extends CI_Model
 
 		$query = $this->db->get($this->table);
 
-		if (!$query->num_rows())
+		if ( ! $query->num_rows())
 		{
 			return FALSE;
 		}
@@ -467,16 +558,15 @@ class BF_Model extends CI_Model
 			$set[$this->created_by_field] = $this->auth->user_id();
 		}
 
-		if(!empty($set))
+		if ( ! empty($set))
 		{
-			foreach($data as $key => &$record)
+			foreach ($data as $key => &$record)
 			{
 				$record = $this->trigger('before_insert', $record);
 
 				$data[$key] = array_merge($set,$data[$key]);
 			}
 		}
-
 
 		// Insert it
 		$status = $this->db->insert_batch($this->table, $data);
@@ -503,8 +593,7 @@ class BF_Model extends CI_Model
 	 */
 	public function update($where=NULL, $data=NULL)
 	{
-
-		if (!is_array($where))
+		if ( ! is_array($where))
 		{
 			$where = array($this->key => $where);
 		}
@@ -560,7 +649,7 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
-		if (!is_null($data))
+		if ( ! is_null($data))
 		{
 			// Add the modified field
 			if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
@@ -602,23 +691,25 @@ class BF_Model extends CI_Model
 	{
 		$this->trigger('before_delete', $id);
 
+		// set the where clause to be used in the update/delete below
+		$this->db->where($this->key, $id);
+
 		if ($this->soft_deletes === TRUE)
 		{
 			$data = array(
-				'deleted'	=> 1
+				'deleted' => 1,
 			);
 
-			if ($this->log_user === TRUE && !array_key_exists($this->deleted_by_field, $data))
+			if ($this->log_user === TRUE)
 			{
 				$data[$this->deleted_by_field] = $this->auth->user_id();
 			}
 
-			$this->db->where($this->key, $id);
 			$result = $this->db->update($this->table, $data);
 		}
 		else
 		{
-			$result = $this->db->delete($this->table, array($this->key => $id));
+			$result = $this->db->delete($this->table);
 		}
 
 		if ($result)
@@ -641,7 +732,7 @@ class BF_Model extends CI_Model
 	 * TRUE, it will attempt to set a field 'deleted' on the current
 	 * record to '1', to allow the data to remain in the database.
 	 *
-	 * @param array $data key/value pairs accepts an associative array or a string
+	 * @param mixed/array $data key/value pairs accepts an associative array or a string
 	 *
 	 * @example 1) array( 'key' => 'value', 'key2' => 'value2' )
 	 * @example 2) ' (`key` = "value" AND `key2` = "value2") '
@@ -652,31 +743,21 @@ class BF_Model extends CI_Model
 	{
 		$where = $this->trigger('before_delete', $where);
 
-		if (is_array($where))
-		{
-			foreach($where as $field => $value)
-			{
-				$this->db->where($field,$value);
-			}
-		}
-		else
-		{
-			$this->db->where($where);
-		}
+		// set the where clause to be used in the update/delete below
+		$this->db->where($where);
 
 		if ($this->soft_deletes === TRUE)
 		{
+			$data = array(
+				'deleted' => 1,
+			);
+
 			if ($this->log_user === TRUE)
 			{
-				$this->db->update($this->table, array(
-					'deleted' => 1,
-					$this->deleted_by_field => $this->auth->user_id(),
-				));
+				$data[$this->deleted_by_field] = $this->auth->user_id();
 			}
-			else
-			{
-				$this->db->update($this->table, array('deleted' => 1));
-			}
+
+			$this->db->update($this->table, $data);
 		}
 		else
 		{
@@ -738,6 +819,12 @@ class BF_Model extends CI_Model
 	/**
 	 * Returns the number of rows in the table.
 	 *
+	 * @internal This is potentially confusing given that count_all()
+	 * and count_all_results() are different methods on $this->db,
+	 * with the difference being that count_all_results() is
+	 * modified by previous use of where(), like(), etc., while
+	 * count_all() is not
+	 *
 	 * @return int
 	 */
 	public function count_all()
@@ -783,16 +870,16 @@ class BF_Model extends CI_Model
 	 */
 	public function get_field($id=NULL, $field='')
 	{
-		if (empty($id) || $id === 0 || empty($field))
+		if (empty($id) || empty($field))
 		{
 			$this->error = lang('bf_model_fetch_error');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. lang('bf_model_fetch_error'));
 			return FALSE;
 		}
 
-		$this->db->select($field);
-		$this->db->where($this->key, $id);
-		$query = $this->db->get($this->table);
+		$query = $this->db->select($field)
+			->where($this->key, $id)
+			->get($this->table);
 
 		if ($query && $query->num_rows() > 0)
 		{
@@ -852,7 +939,7 @@ class BF_Model extends CI_Model
 	 */
 	public function where($field=NULL, $value=NULL)
 	{
-		if (!empty($field))
+		if ( ! empty($field))
 		{
 			if (is_string($field))
 			{
@@ -880,14 +967,14 @@ class BF_Model extends CI_Model
 	 *     'field2' => 'desc'
 	 * );
 	 *
-	 * @param string $field The field to order the results by.
+	 * @param mixed  $field The field to order the results by, or an array of field/order pairs.
 	 * @param string $order Which direction to order the results ('asc' or 'desc')
 	 *
 	 * @return BF_Model An instance of this class.
 	 */
 	public function order_by($field=NULL, $order='asc')
 	{
-		if (!empty($field))
+		if ( ! empty($field))
 		{
 			if (is_string($field))
 			{
@@ -982,7 +1069,7 @@ class BF_Model extends CI_Model
 	 */
 	public function created_on($row)
 	{
-		if (!array_key_exists($this->created_field, $row))
+		if ( ! array_key_exists($this->created_field, $row))
 		{
 			$row[$this->created_field] = $this->set_date();
 		}
@@ -1002,7 +1089,7 @@ class BF_Model extends CI_Model
 	 */
 	public function modified_on($row)
 	{
-		if (!array_key_exists($this->modified_field, $row))
+		if ( ! array_key_exists($this->modified_field, $row))
 		{
 			$row[$this->modified_field] = $this->set_date();
 		}
@@ -1027,7 +1114,7 @@ class BF_Model extends CI_Model
 	 */
 	public function trigger($event, $data=false)
 	{
-		if (!isset($this->$event) || !is_array($this->$event))
+		if ( ! isset($this->$event) || ! is_array($this->$event))
 		{
 			return $data;
 		}
@@ -1093,19 +1180,18 @@ class BF_Model extends CI_Model
 	 */
 	protected function set_date($user_date=NULL)
 	{
-		$curr_date = !empty($user_date) ? $user_date : time();
+		$curr_date = empty($user_date) ? time() : $user_date;
 
 		switch ($this->date_format)
 		{
 			case 'int':
 				return $curr_date;
-				break;
+
 			case 'datetime':
 				return date('Y-m-d H:i:s', $curr_date);
-				break;
+
 			case 'date':
 				return date( 'Y-m-d', $curr_date);
-				break;
 		}
 
 	}//end set_date()
@@ -1117,7 +1203,7 @@ class BF_Model extends CI_Model
      */
     protected function _return_type($multi = FALSE)
     {
-        $method = ($multi) ? 'result' : 'row';
+        $method = $multi ? 'result' : 'row';
 
         // If our type is either 'array' or 'json', we'll simply use the array version
         // of the function, since the database library doesn't support json.
@@ -1242,14 +1328,18 @@ class BF_Model extends CI_Model
 	 */
 	public function set_modified($modified=TRUE)
 	{
-		if ($modified !== TRUE && $modified !== FALSE)
+		// micro-optimization note: comparison to TRUE and FALSE is faster
+		// than is_bool(), because it's a function call
+		// === FALSE || === TRUE is faster than !== TRUE && !== FALSE
+		// because === TRUE will only be compared for values other than FALSE
+		if ($modified === FALSE || $modified === TRUE)
 		{
-			return FALSE;
+			$this->set_modified = $modified;
+
+			return TRUE;
 		}
 
-		$this->set_modified = $modified;
-
-		return TRUE;
+		return FALSE;
 
 	}//end set_modified()
 
@@ -1258,7 +1348,7 @@ class BF_Model extends CI_Model
 	/**
 	 * Sets whether soft deletes are used by the delete method.
 	 *
-	 * NOTE: This method is deprecated as of version 0.7.
+	 * @deprecated This method is deprecated as of version 0.7.
 	 *
 	 * @param bool $soft
 	 *
@@ -1266,14 +1356,14 @@ class BF_Model extends CI_Model
 	 */
 	public function set_soft_deletes($soft=TRUE)
 	{
-		if ($soft !== TRUE && $soft !== FALSE)
+		if ($modified === FALSE || $modified === TRUE)
 		{
-			return FALSE;
+			$this->soft_deletes = $soft;
+
+			return TRUE;
 		}
 
-		$this->soft_deletes = $soft;
-
-		return TRUE;
+		return FALSE;
 
 	}//end set_soft_deletes()
 
