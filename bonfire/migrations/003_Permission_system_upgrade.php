@@ -151,11 +151,11 @@ class Migration_Permission_system_upgrade extends Migration
         }
 
 		/* Do the actual update. */
-		// get the field names in the current permissions table
-		$permissions_fields = $this->db->list_fields('permissions');
-
 		// get the current permissions assigned to each role
 		$permission_query = $this->db->get($this->permissions_table);
+
+		// get the field names in the current permissions table
+		$permissions_fields = $permission_query->list_fields();
 
 		$old_permissions_array = array();
 		foreach ($permission_query->result_array() as $row)
