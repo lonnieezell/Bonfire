@@ -1,6 +1,6 @@
 <?php
 
-require (TESTS_DIR .'_support/database.php');
+require_once (TESTS_DIR .'_support/database.php');
 //require (APPPATH .'core/MY_Model.php');
 
 class MY_Model_test extends CI_UnitTestCase {
