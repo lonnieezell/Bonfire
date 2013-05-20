@@ -17,7 +17,7 @@ class Migration_Modify_schema_version_type extends Migration
 		'type' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 40,
-			'null' => FALSE,
+			'null' => false,
 		),
 	);
 
@@ -43,7 +43,7 @@ class Migration_Modify_schema_version_type extends Migration
 	public function down()
 	{
 		$this->field['type']['constraint'] = $this->old_constraint;
-		
+
 		$this->dbforge->modify_column($this->table, $this->field);
 	}
 }

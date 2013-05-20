@@ -47,7 +47,7 @@ class Migration_User_meta_move extends Migration
 		'deleted',
 		'banned',
 		'ban_message',
-		'reset_by'
+		'reset_by',
 	);
 
 	/**
@@ -61,7 +61,7 @@ class Migration_User_meta_move extends Migration
 		'city',
 		'zipcode',
 		'state_code',
-		'country_iso'
+		'country_iso',
 	);
 
 	/**
@@ -69,25 +69,28 @@ class Migration_User_meta_move extends Migration
 	 */
 	private $meta_fields = array(
 		'meta_id'	=> array(
-			'type'			=> 'INT',
-			'constraint'	=> 20,
-			'unsigned'		=> true,
-			'auto_increment'	=> true
+			'type'				=> 'INT',
+			'constraint'		=> 20,
+			'unsigned'			=> true,
+			'auto_increment'	=> true,
+			'null'				=> false,
 		),
 		'user_id'	=> array(
-			'type'			=> 'INT',
-			'constraint'	=> 20,
-			'unsigned'		=> true,
-			'default'		=> 0
+			'type'				=> 'INT',
+			'constraint'		=> 20,
+			'unsigned'			=> true,
+			'default'			=> 0,
+			'null'				=> false,
 		),
 		'meta_key'	=> array(
-			'type'			=> 'varchar',
-			'constraint'	=> 255,
-			'default'		=> ''
+			'type'				=> 'varchar',
+			'constraint'		=> 255,
+			'default'			=> '',
+			'null'				=> false,
 		),
 		'meta_value' => array(
-			'type'		=> 'text',
-			'null'		=> true,
+			'type'				=> 'text',
+			'null'				=> true,
 		)
 	);
 
@@ -98,8 +101,8 @@ class Migration_User_meta_move extends Migration
 		'display_name'	=> array(
 			'type'			=> 'varchar',
 			'constraint'	=> 255,
-			'null'			=> true,
 			'default'		=> '',
+			'null'			=> true,
 		),
 		'display_name_changed'	=> array(
 			'type'			=> 'date',
@@ -155,16 +158,16 @@ class Migration_User_meta_move extends Migration
 		// Only MySQL supports backups currently
 		if (defined('BFPATH') && $this->db->dbdriver == 'mysql')
 		{
-			$filename = BFPATH .'/db/backups/backup_meta_users_table.txt';
+			$filename = BFPATH . '/db/backups/backup_meta_users_table.txt';
 
 			$this->load->dbutil();
 
 			$prefs = array(
-				'tables'		=> $this->db->dbprefix .'users',
+				'tables'		=> $this->db->dbprefix . 'users',
 				'format'		=> 'txt',
 				'filename'		=> $filename,
 				'add_drop'		=> true,
-				'add_insert'	=> true
+				'add_insert'	=> true,
 			);
 
 			$backup =& $this->dbutil->backup($prefs);
@@ -217,15 +220,17 @@ class Migration_User_meta_move extends Migration
 				$this->db->insert_batch($this->meta_table, $meta_data);
 			}
 
-			unset($meta_data);
-			unset($rows);
+			unset($meta_data, $rows);
 		}
 
-		// run a quick query against the users table, then use the query to get the field list
-		$user_query = $this->db->get_where($this->table, array('id' => 0));
-		$fields = $user_query->list_fields();
+		// $this->db->list_fields uses $this->result_id, which may be
+		// incorrect due to insert_batch() or free_result() above,
+		// so we run a quick query against the correct table to fix
+		// the result_id
+		$query = $this->db->get_where($this->table, array('id' => 0));
 
 		// Drop existing columns from users table.
+		$fields = $query->list_fields();
 		foreach ($fields as $field)
 		{
 			if ( ! in_array($field, $this->core_user_fields))
@@ -234,6 +239,7 @@ class Migration_User_meta_move extends Migration
 			}
 		}
 		unset($fields);
+		$query->free_result();
 
 		// Add new fields to users table
 		$this->dbforge->add_column($this->table, $this->user_new_fields);

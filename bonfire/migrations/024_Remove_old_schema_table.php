@@ -18,14 +18,14 @@ class Migration_Remove_old_schema_table extends Migration
 		'version' => array(
 			'type' => 'int',
 			'constraint' => 4,
-			'null' => FALSE,
 			'default' => 0,
+			'null' => false,
 		),
 		'app_version' => array(
 			'type' => 'int',
 			'constraint' => 4,
-			'null' => FALSE,
 			'default' => 0,
+			'null' => false,
 		),
 	);
 

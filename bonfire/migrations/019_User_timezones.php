@@ -18,6 +18,7 @@ class Migration_User_timezones extends Migration
 			'type'			=> 'char',
 			'constraint'	=> 4,
 			'default'		=> 'UM6',
+			'null'			=> false,
 		),
 	);
 

@@ -34,8 +34,8 @@ class Migration_Country_state_upgrade extends Migration
 		'state_code' => array(
 			'type'			=> 'CHAR',
 			'constraint'	=> 4,
-			'null'			=> TRUE,
-			'default'		=> NULL
+			'default'		=> NULL,
+			'null'			=> true,
 		),
 	);
 
@@ -46,12 +46,12 @@ class Migration_Country_state_upgrade extends Migration
 		'country_id' => array(
 			'type'			=> 'INT',
 			'constraint'	=> 11,
-			'null'			=> TRUE
+			'null'			=> true,
 		),
 		'state_id' => array(
 			'type'			=> 'INT',
 			'constraint'	=> 11,
-			'null'			=> TRUE
+			'null'			=> true,
 		),
 	);
 
@@ -62,15 +62,18 @@ class Migration_Country_state_upgrade extends Migration
 		'id' => array(
 			'type' => 'INT',
 			'constraint' => 11,
-			'auto_increment' => TRUE,
+			'auto_increment' => true,
+			'null' => false,
 		),
 		'name' => array(
 			'type' => 'CHAR',
 			'constraint' => 40,
+			'null' => false,
 		),
 		'abbrev' => array(
 			'type' => 'CHAR',
 			'constraint' => 2,
+			'null' => false,
 		),
 	);
 

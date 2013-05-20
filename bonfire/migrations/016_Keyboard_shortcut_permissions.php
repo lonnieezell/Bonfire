@@ -30,14 +30,6 @@ class Migration_Keyboard_shortcut_permissions extends Migration
 	);
 
 	/**
-	 * @var array The data to add to the ref table
-	 */
-	private $ref_data = array(
-		'role_id' => 1,
-		'permission_id' => 0,
-	);
-
-	/**
 	 * @var array The data to be added to the settings table
 	 */
 	private $settings_data = array(
@@ -54,6 +46,11 @@ class Migration_Keyboard_shortcut_permissions extends Migration
 		'goto_content' => 'alt+c',
 	);
 
+	/**
+	 * @var int The role_id of the Administrator role
+	 */
+	private $admin_role_id = 1;
+
 	/****************************************************************
 	 * Migration methods
 	 */
@@ -66,8 +63,11 @@ class Migration_Keyboard_shortcut_permissions extends Migration
 		$this->db->insert($this->table, $this->data);
 
 		// add the permission to the administrator role
-		$this->ref_data['permission_id'] = $this->db->insert_id();
-		$this->db->insert($this->ref_table, $this->ref_data);
+		$ref_data = array(
+			'role_id' => $this->admin_role_id,
+			'permission_id' => $this->db->insert_id(),
+		);
+		$this->db->insert($this->ref_table, $ref_data);
 
 		// add the keys
 		$this->settings_data['value'] = serialize($this->keys);

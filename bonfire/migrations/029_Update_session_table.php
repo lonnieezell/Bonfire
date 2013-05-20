@@ -18,7 +18,7 @@ class Migration_Update_session_table extends Migration
 		'user_agent' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 120,
-			'null' => FALSE,
+			'null' => false,
 		),
 	);
 
@@ -35,6 +35,7 @@ class Migration_Update_session_table extends Migration
 	 */
 	public function up()
 	{
+		// change the length of the 'user_agent' column in the sessions table
 		$this->dbforge->modify_column($this->table, $this->fields);
 	}
 

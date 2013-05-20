@@ -35,6 +35,11 @@ class Migration_Add_module_permissions extends Migration
 		),
 	);
 
+	/**
+	 * @var int The role_id of the Administrator role
+	 */
+	private $admin_role_id = 1;
+
 	/****************************************************************
 	 * Migration methods
 	 */
@@ -46,7 +51,7 @@ class Migration_Add_module_permissions extends Migration
 		$this->load->library('session');
 
 		// add administrators to module permissions
-		$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
+		$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : $this->admin_role_id;
 
 		$role_data = array();
 		foreach ($this->permissions_data as $data)

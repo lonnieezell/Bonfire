@@ -66,18 +66,22 @@ class Migration_Install_initial_tables extends Migration
 		'id' => array(
 			'type' => 'INT',
 			'constraint' => 11,
-			'auto_increment' => TRUE,
+			'auto_increment' => true,
+            'null' => false,
 		),
 		'to_email' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 128,
+            'null' => false,
 		),
 		'subject' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 255,
+            'null' => false,
 		),
 		'message' => array(
 			'type' => 'TEXT',
+            'null' => false,
 		),
 		'alt_message' => array(
 			'type' => 'TEXT',
@@ -87,16 +91,19 @@ class Migration_Install_initial_tables extends Migration
 			'type' => 'INT',
 			'constraint' => 11,
 			'default' => 3,
+            'null' => false,
 		),
 		'attempts' => array(
 			'type' => 'INT',
 			'constraint' => 11,
 			'default' => 0,
+            'null' => false,
 		),
 		'success' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
 		'date_published' => array(
 			'type' => 'DATETIME',
@@ -119,15 +126,18 @@ class Migration_Install_initial_tables extends Migration
 		'id' => array(
 			'type' => 'BIGINT',
 			'constraint' => 20,
-			'auto_increment' => TRUE,
+			'auto_increment' => true,
+            'null' => false,
 		),
 		'ip_address' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 40,
+            'null' => false,
 		),
 		'login' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 50,
+            'null' => false,
 		),
         /* This will probably cause an error outside MySQL and may not
          * be cross-database compatible for reasons other than
@@ -143,110 +153,112 @@ class Migration_Install_initial_tables extends Migration
 		'permission_id' => array(
 			'type' => 'INT',
 			'constraint' => 11,
-			'auto_increment' => TRUE,
+			'auto_increment' => true,
+            'null' => false,
 		),
 		'role_id' => array(
 			'type' => 'INT',
 			'constraint' => 11,
+            'null' => false,
 		),
-		"`Site.Signin.Allow` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Site.Signin.Allow' => array(
+//		"`Site.Signin.Allow` tinyint(1) NOT NULL DEFAULT '0'",
+		'Site_Signin_Allow' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Site.Content.View` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Site.Content.View' => array(
+//		"`Site.Content.View` tinyint(1) NOT NULL DEFAULT '0'",
+		'Site_Content_View' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Site.Statistics.View` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Site.Statistics.View' => array(
+//		"`Site.Statistics.View` tinyint(1) NOT NULL DEFAULT '0'",
+		'Site_Statistics_View' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Site.Appearance.View` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Site.Appearance.View' => array(
+//		"`Site.Appearance.View` tinyint(1) NOT NULL DEFAULT '0'",
+		'Site_Appearance_View' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Site.Settings.View` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Site.Settings.View' => array(
+//		"`Site.Settings.View` tinyint(1) NOT NULL DEFAULT '0'",
+		'Site_Settings_View' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Site.Developer.View` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Site.Developer.View' => array(
+//		"`Site.Developer.View` tinyint(1) NOT NULL DEFAULT '0'",
+		'Site_Developer_View' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Bonfire.Roles.Manage` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Bonfire.Roles.Manage' => array(
+//		"`Bonfire.Roles.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+		'Bonfire_Roles_Manage' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Bonfire.Users.Manage` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Bonfire.Users.Manage' => array(
+//		"`Bonfire.Users.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+		'Bonfire_Users_Manage' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Bonfire.Users.View` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Bonfire.Users.View' => array(
+//		"`Bonfire.Users.View` tinyint(1) NOT NULL DEFAULT '0'",
+		'Bonfire_Users_View' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Bonfire.Users.Add` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Bonfire.Users.Add' => array(
+//		"`Bonfire.Users.Add` tinyint(1) NOT NULL DEFAULT '0'",
+		'Bonfire_Users_Add' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Bonfire.Database.Manage` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Bonfire.Database.Manage' => array(
+//		"`Bonfire.Database.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+		'Bonfire_Database_Manage' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Bonfire.Emailer.Manage` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Bonfire.Emailer.Manage' => array(
+//		"`Bonfire.Emailer.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+		'Bonfire_Emailer_Manage' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Bonfire.Logs.View` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Bonfire.Logs.View' => array(
+//		"`Bonfire.Logs.View` tinyint(1) NOT NULL DEFAULT '0'",
+		'Bonfire_Logs_View' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
-		"`Bonfire.Logs.Manage` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Bonfire.Logs.Manage' => array(
+//		"`Bonfire.Logs.Manage` tinyint(1) NOT NULL DEFAULT '0'",
+		'Bonfire_Logs_Manage' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
 	);
 
 	/**
@@ -256,11 +268,13 @@ class Migration_Install_initial_tables extends Migration
 		'role_id' => array(
 			'type' => 'INT',
 			'constraint' => 11,
-			'auto_increment' => TRUE,
+			'auto_increment' => true,
+            'null' => false,
 		),
 		'role_name' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 60,
+            'null' => false,
 		),
 		'description' => array(
 			'type' => 'VARCHAR',
@@ -271,11 +285,13 @@ class Migration_Install_initial_tables extends Migration
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
 		'can_delete' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 1,
+            'null' => false,
 		),
 	);
 
@@ -287,24 +303,29 @@ class Migration_Install_initial_tables extends Migration
 			'type' => 'VARCHAR',
 			'constraint' => 40,
 			'default' => '0',
+            'null' => false,
 		),
 		'ip_address' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 16,
 			'default' => '0',
+            'null' => false,
 		),
 		'user_agent' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 50,
+            'null' => false,
 		),
 		'last_activity' => array(
 			'type' => 'INT',
 			'constraint' => 10,
 			'unsigned' => true,
 			'default' => 0,
+            'null' => false,
 		),
 		'user_data' => array(
 			'type' => 'TEXT',
+            'null' => false,
 		),
 	);
 
@@ -315,15 +336,18 @@ class Migration_Install_initial_tables extends Migration
 		'id' => array(
 			'type' => 'INT',
 			'constraint' => 11,
-			'auto_increment' => TRUE,
+			'auto_increment' => true,
+            'null' => false,
 		),
 		'name' => array(
 			'type' => 'CHAR',
 			'constraint' => 40,
+            'null' => false,
 		),
 		'abbrev' => array(
 			'type' => 'CHAR',
 			'constraint' => 2,
+            'null' => false,
 		),
 	);
 
@@ -336,11 +360,13 @@ class Migration_Install_initial_tables extends Migration
 			'constraint' => 20,
 			'unsigned' => true,
 			'auto_increment' => true,
+            'null' => false,
 		),
 		'role_id' => array(
 			'type' => 'INT',
 			'constraint' => 11,
 			'default' => 4,
+            'null' => false,
 		),
 		'first_name' => array(
 			'type' => 'VARCHAR',
@@ -355,15 +381,18 @@ class Migration_Install_initial_tables extends Migration
 		'email' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 120,
+            'null' => false,
 		),
 		'username' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 30,
 			'default' => '',
+            'null' => false,
 		),
 		'password_hash' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 40,
+            'null' => false,
 		),
 		'temp_password_hash' => array(
 			'type' => 'VARCHAR',
@@ -373,19 +402,23 @@ class Migration_Install_initial_tables extends Migration
 		'salt' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 7,
+            'null' => false,
 		),
 		'last_login' => array(
 			'type' => 'DATETIME',
 			'default' => '0000-00-00 00:00:00',
+            'null' => false,
 		),
 		'last_ip' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 40,
 			'default' => '',
+            'null' => false,
 		),
 		'created_on' => array(
 			'type' => 'DATETIME',
 			'default' => '0000-00-00 00:00:00',
+            'null' => false,
 		),
 		'street_1' => array(
 			'type' => 'VARCHAR',
@@ -426,6 +459,7 @@ class Migration_Install_initial_tables extends Migration
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
 	);
 
@@ -436,13 +470,16 @@ class Migration_Install_initial_tables extends Migration
 		'user_id' => array(
 			'type' => 'BIGINT',
 			'constraint' => 20,
+            'null' => false,
 		),
 		'token' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 128,
+            'null' => false,
 		),
 		'created_on' => array(
 			'type' => 'DATETIME',
+            'null' => false,
 		),
 	);
 
@@ -453,90 +490,95 @@ class Migration_Install_initial_tables extends Migration
 	 * @var array Default Permissions
 	 */
 	private $permissions_data = array(
+        // Administrator
 		array(
 			'role_id' => 1,
-			'`Site.Signin.Allow`' => 1,
-			'`Site.Content.View`' => 1,
-			'`Site.Statistics.View`' => 1,
-			'`Site.Appearance.View`' => 1,
-			'`Site.Settings.View`' => 1,
-			'`Site.Developer.View`' => 1,
-			'`Bonfire.Roles.Manage`' => 1,
-			'`Bonfire.Users.Manage`' => 1,
-			'`Bonfire.Users.View`' => 1,
-			'`Bonfire.Users.Add`' => 1,
-			'`Bonfire.Database.Manage`' => 1,
-			'`Bonfire.Emailer.Manage`' => 1,
-			'`Bonfire.Logs.View`' => 1,
-			'`Bonfire.Logs.Manage`' => 1,
+			'Site_Signin_Allow' => 1,
+			'Site_Content_View' => 1,
+			'Site_Statistics_View' => 1,
+			'Site_Appearance_View' => 1,
+			'Site_Settings_View' => 1,
+			'Site_Developer_View' => 1,
+			'Bonfire_Roles_Manage' => 1,
+			'Bonfire_Users_Manage' => 1,
+			'Bonfire_Users_View' => 1,
+			'Bonfire_Users_Add' => 1,
+			'Bonfire_Database_Manage' => 1,
+			'Bonfire_Emailer_Manage' => 1,
+			'Bonfire_Logs_View' => 1,
+			'Bonfire_Logs_Manage' => 1,
 		),
+        // Editor
 		array(
 			'role_id' => 2,
-			'`Site.Signin.Allow`' => 1,
-			'`Site.Content.View`' => 1,
-			'`Site.Statistics.View`' => 1,
-			'`Site.Appearance.View`' => 1,
-			'`Site.Settings.View`' => 0,
-			'`Site.Developer.View`' => 0,
-			'`Bonfire.Roles.Manage`' => 0,
-			'`Bonfire.Users.Manage`' => 0,
-			'`Bonfire.Users.View`' => 0,
-			'`Bonfire.Users.Add`' => 0,
-			'`Bonfire.Database.Manage`' => 0,
-			'`Bonfire.Emailer.Manage`' => 0,
-			'`Bonfire.Logs.View`' => 0,
-			'`Bonfire.Logs.Manage`' => 0,
+			'Site_Signin_Allow' => 1,
+			'Site_Content_View' => 1,
+			'Site_Statistics_View' => 1,
+			'Site_Appearance_View' => 1,
+			'Site_Settings_View' => 0,
+			'Site_Developer_View' => 0,
+			'Bonfire_Roles_Manage' => 0,
+			'Bonfire_Users_Manage' => 0,
+			'Bonfire_Users_View' => 0,
+			'Bonfire_Users_Add' => 0,
+			'Bonfire_Database_Manage' => 0,
+			'Bonfire_Emailer_Manage' => 0,
+			'Bonfire_Logs_View' => 0,
+			'Bonfire_Logs_Manage' => 0,
 		),
+        // Developer
 		array(
 			'role_id' => 6,
-			'`Site.Signin.Allow`' => 1,
-			'`Site.Content.View`' => 1,
-			'`Site.Statistics.View`' => 1,
-			'`Site.Appearance.View`' => 1,
-			'`Site.Settings.View`' => 1,
-			'`Site.Developer.View`' => 1,
-			'`Bonfire.Roles.Manage`' => 1,
-			'`Bonfire.Users.Manage`' => 1,
-			'`Bonfire.Users.View`' => 1,
-			'`Bonfire.Users.Add`' => 1,
-			'`Bonfire.Database.Manage`' => 1,
-			'`Bonfire.Emailer.Manage`' => 1,
-			'`Bonfire.Logs.View`' => 1,
-			'`Bonfire.Logs.Manage`' => 1,
+			'Site_Signin_Allow' => 1,
+			'Site_Content_View' => 1,
+			'Site_Statistics_View' => 1,
+			'Site_Appearance_View' => 1,
+			'Site_Settings_View' => 1,
+			'Site_Developer_View' => 1,
+			'Bonfire_Roles_Manage' => 1,
+			'Bonfire_Users_Manage' => 1,
+			'Bonfire_Users_View' => 1,
+			'Bonfire_Users_Add' => 1,
+			'Bonfire_Database_Manage' => 1,
+			'Bonfire_Emailer_Manage' => 1,
+			'Bonfire_Logs_View' => 1,
+			'Bonfire_Logs_Manage' => 1,
 		),
+        // Banned
 		array(
 			'role_id' => 3,
-			'`Site.Signin.Allow`' => 0,
-			'`Site.Content.View`' => 0,
-			'`Site.Statistics.View`' => 0,
-			'`Site.Appearance.View`' => 0,
-			'`Site.Settings.View`' => 0,
-			'`Site.Developer.View`' => 0,
-			'`Bonfire.Roles.Manage`' => 0,
-			'`Bonfire.Users.Manage`' => 0,
-			'`Bonfire.Users.View`' => 0,
-			'`Bonfire.Users.Add`' => 0,
-			'`Bonfire.Database.Manage`' => 0,
-			'`Bonfire.Emailer.Manage`' => 0,
-			'`Bonfire.Logs.View`' => 0,
-			'`Bonfire.Logs.Manage`' => 0,
+			'Site_Signin_Allow' => 0,
+			'Site_Content_View' => 0,
+			'Site_Statistics_View' => 0,
+			'Site_Appearance_View' => 0,
+			'Site_Settings_View' => 0,
+			'Site_Developer_View' => 0,
+			'Bonfire_Roles_Manage' => 0,
+			'Bonfire_Users_Manage' => 0,
+			'Bonfire_Users_View' => 0,
+			'Bonfire_Users_Add' => 0,
+			'Bonfire_Database_Manage' => 0,
+			'Bonfire_Emailer_Manage' => 0,
+			'Bonfire_Logs_View' => 0,
+			'Bonfire_Logs_Manage' => 0,
 		),
+        // User
 		array(
 			'role_id' => 4,
-			'`Site.Signin.Allow`' => 1,
-			'`Site.Content.View`' => 0,
-			'`Site.Statistics.View`' => 0,
-			'`Site.Appearance.View`' => 0,
-			'`Site.Settings.View`' => 0,
-			'`Site.Developer.View`' => 0,
-			'`Bonfire.Roles.Manage`' => 0,
-			'`Bonfire.Users.Manage`' => 0,
-			'`Bonfire.Users.View`' => 0,
-			'`Bonfire.Users.Add`' => 0,
-			'`Bonfire.Database.Manage`' => 0,
-			'`Bonfire.Emailer.Manage`' => 0,
-			'`Bonfire.Logs.View`' => 0,
-			'`Bonfire.Logs.Manage`' => 0,
+			'Site_Signin_Allow' => 1,
+			'Site_Content_View' => 0,
+			'Site_Statistics_View' => 0,
+			'Site_Appearance_View' => 0,
+			'Site_Settings_View' => 0,
+			'Site_Developer_View' => 0,
+			'Bonfire_Roles_Manage' => 0,
+			'Bonfire_Users_Manage' => 0,
+			'Bonfire_Users_View' => 0,
+			'Bonfire_Users_Add' => 0,
+			'Bonfire_Database_Manage' => 0,
+			'Bonfire_Emailer_Manage' => 0,
+			'Bonfire_Logs_View' => 0,
+			'Bonfire_Logs_Manage' => 0,
 		),
 	);
 
@@ -872,13 +914,14 @@ class Migration_Install_initial_tables extends Migration
             $this->dbforge->add_key('role_id');
             $this->dbforge->create_table($this->permissions_table);
 
-//          $this->db->insert_batch($this->permissions_table, $this->permissions_data);
-            $prefix = $this->db->dbprefix;
+            $this->db->insert_batch($this->permissions_table, $this->permissions_data);
+/*            $prefix = $this->db->dbprefix;
             $this->db->query("INSERT INTO {$prefix}permissions VALUES(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
             $this->db->query("INSERT INTO {$prefix}permissions VALUES(2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
             $this->db->query("INSERT INTO {$prefix}permissions VALUES(3, 6, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)");
             $this->db->query("INSERT INTO {$prefix}permissions VALUES(4, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
             $this->db->query("INSERT INTO {$prefix}permissions VALUES(5, 4, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)");
+ */
         }
 
 		// Roles

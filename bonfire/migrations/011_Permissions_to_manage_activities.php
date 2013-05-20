@@ -35,6 +35,7 @@ class Migration_Permissions_to_manage_activities extends Migration
 			'type' => 'TINYINT',
 			'constraint' => 12,
 			'default' => 0,
+			'null' => false,
 		),
 	);
 
@@ -83,6 +84,11 @@ class Migration_Permissions_to_manage_activities extends Migration
 		),
 	);
 
+	/**
+	 * @var int The role_id of the Administrator role
+	 */
+	private $admin_role_id = 1;
+
 	/****************************************************************
 	 * Migration methods
 	 */
@@ -99,7 +105,7 @@ class Migration_Permissions_to_manage_activities extends Migration
 		$this->db->insert_batch($this->permissions_table, $this->permissions_data);
 
 		// give current role (or administrators if fresh install) full right to manage permissions
-		$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
+		$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : $this->admin_role_id;
 
 		$permission_names = array();
 		foreach ($this->permissions_data as $permission)

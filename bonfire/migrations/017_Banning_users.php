@@ -24,6 +24,7 @@ class Migration_banning_users extends Migration
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+			'null' => false,
 		),
 		'ban_message' => array(
 			'type' => 'VARCHAR',

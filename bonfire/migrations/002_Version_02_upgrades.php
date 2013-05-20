@@ -37,13 +37,13 @@ class Migration_Version_02_upgrades extends Migration
 	 * @var array Fields to add to the Permissions table
 	 */
 	private $permissions_fields = array(
-		"`Bonfire.Emailer.View` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Bonfire.Emailer.View' => array(
+//		"`Bonfire.Emailer.View` tinyint(1) NOT NULL DEFAULT '0'",
+		'Bonfire_Emailer_View' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
 	);
 
 	/**
@@ -72,6 +72,7 @@ class Migration_Version_02_upgrades extends Migration
 			'name' => 'temp_password_hash',
 			'type' => 'VARCHAR',
 			'constraint' => 40,
+            'null' => false,
 		),
 		'zipcode' => array(
 			'name' => 'zipcode',
@@ -94,6 +95,7 @@ class Migration_Version_02_upgrades extends Migration
 			'type' => 'CHAR',
 			'constraint' => 2,
 			'default' => 'US',
+            'null' => false,
 		),
 	);
 
@@ -147,22 +149,27 @@ class Migration_Version_02_upgrades extends Migration
 			'type' => 'BIGINT',
 			'constraint' => 20,
 			'auto_increment' => true,
+            'null' => false,
 		),
 		'user_id' => array(
 			'type' => 'BIGINT',
 			'constraint' => 20,
 			'default' => 0,
+            'null' => false,
 		),
 		'activity' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 255,
+            'null' => false,
 		),
 		'module' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 255,
+            'null' => false,
 		),
 		'created_on' => array(
 			'type' => 'DATETIME',
+            'null' => false,
 		),
 	);
 
@@ -173,7 +180,7 @@ class Migration_Version_02_upgrades extends Migration
 	 * @var array Data used to update the Permissions table
 	 */
 	private $permissions_data = array(
-		'Bonfire.Emailer.View' => 1,
+		'Bonfire_Emailer_View' => 1,
 	);
 
 	/**
@@ -1855,6 +1862,11 @@ class Migration_Version_02_upgrades extends Migration
 		),
 	);
 
+	/**
+	 * @var int The role_id of the Administrator role
+	 */
+	private $admin_role_id = 1;
+
 	/****************************************************************
 	 * Migration methods
 	 */
@@ -1864,13 +1876,16 @@ class Migration_Version_02_upgrades extends Migration
 	public function up()
 	{
 		// Email Queue Permissions
-		if ( ! $this->db->field_exists('Bonfire.Emailer.View', $this->permissions_table))
+		if ( ! $this->db->field_exists('Bonfire_Emailer_View', $this->permissions_table))
 		{
 			$this->dbforge->add_column($this->permissions_table, $this->permissions_fields);
+
+			$this->db->where('role_id', $this->admin_role_id)
+				->update($this->permissions_table, $this->permissions_data);
+/*			$prefix = $this->db->dbprefix;
+			$this->db->query("UPDATE {$prefix}permissions SET `Bonfire.Emailer.View`=1 WHERE `role_id`=1");
+ */
 		}
-		//$this->db->where('role_id', 1)->update($this->permissions_table, $this->permissions_data);
-		$prefix = $this->db->dbprefix;
-		$this->db->query("UPDATE {$prefix}permissions SET `Bonfire.Emailer.View`=1 WHERE `role_id`=1");
 
 		// Add countries table for our users.
 		// Source: http://27.org/isocountrylist/
@@ -1879,10 +1894,10 @@ class Migration_Version_02_upgrades extends Migration
 			$this->dbforge->add_field($this->countries_fields);
 			$this->dbforge->add_key('iso', true);
 			$this->dbforge->create_table($this->countries_table);
-		}
 
-		// And... the countries themselves. (whew!)
-		$this->db->insert_batch($this->countries_table, $this->countries_data);
+			// And... the countries themselves. (whew!)
+			$this->db->insert_batch($this->countries_table, $this->countries_data);
+		}
 
 		// Users table changes
 		if ($this->db->field_exists('temp_password_hash', $this->users_table))

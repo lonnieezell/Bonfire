@@ -17,8 +17,8 @@ class Migration_Add_login_destination extends Migration
 		'login_destination'	=> array(
 			'type'			=> 'VARCHAR',
 			'constraint'	=> 255,
-			'null'			=> false,
 			'default'		=> '/',
+			'null'			=> false,
 		),
 	);
 

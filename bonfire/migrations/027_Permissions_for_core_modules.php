@@ -96,6 +96,11 @@ class Migration_Permissions_for_core_modules extends Migration
 		),
 	);
 
+	/**
+	 * @var int The role_id of the Administrator role
+	 */
+	private $admin_role_id = 1;
+
 	/****************************************************************
 	 * Migration methods
 	 */
@@ -104,6 +109,7 @@ class Migration_Permissions_for_core_modules extends Migration
 	 */
 	public function up()
 	{
+		// Rename some permissions
 		$permission_count = count($this->old_permission_names);
 		for ($x=0; $x < $permission_count; $x++)
 		{
@@ -111,16 +117,20 @@ class Migration_Permissions_for_core_modules extends Migration
 				->update($this->table, array('name' => $this->new_permission_names[$x]));
 		}
 
+		// Add new permissions
 		$permission_ids = array();
 		foreach ($this->data as $permission)
 		{
 			$this->db->insert($this->table, $permission);
+
+			// Collect the permission_ids and prepare to add them to the admin role
 			$permission_ids[] = array(
-				'role_id' => 1,
+				'role_id' => $this->admin_role_id,
 				'permission_id' => $this->db->insert_id(),
 			);
 		}
 
+		// Add the new permissions to the admin role
 		if ( ! empty($permission_ids))
 		{
 			$this->db->insert_batch($this->ref_table, $permission_ids);
@@ -133,6 +143,7 @@ class Migration_Permissions_for_core_modules extends Migration
 		{
 			$remove_names[] = $permission['name'];
 
+			// get the permission_ids to remove
 			$query = $this->db->select('permission_id')
 				->where('name', $permission['name'])
 				->get($this->table);
@@ -193,7 +204,7 @@ class Migration_Permissions_for_core_modules extends Migration
 		{
 			$this->db->insert($this->table, $permission);
 			$ref_data[] = array(
-				'role_id' => 1,
+				'role_id' => $this->admin_role_id,
 				'permission_id' => $this->db->insert_id(),
 			);
 		}

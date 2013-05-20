@@ -25,6 +25,16 @@ class Migration_Permissions_for_profiler extends Migration
 		),
 	);
 
+	/**
+	 * @var int The role_id of the Administrator role
+	 */
+	private $admin_role_id = 1;
+
+	/**
+	 * @var int The role_id of the Developer role
+	 */
+	private $developer_role_id = 6;
+
 	/****************************************************************
 	 * Migration methods
 	 */
@@ -39,12 +49,15 @@ class Migration_Permissions_for_profiler extends Migration
 			$this->db->insert($this->table, $permission);
 			$permission_id = $this->db->insert_id();
 
+			// setup the permission to be added to the admin role
 			$roles[] = array(
-				'role_id' => 1,
+				'role_id' => $this->admin_role_id,
 				'permission_id' => $permission_id,
 			);
+
+			// setup the permission to be added to the developer role
 			$roles[] = array(
-				'role_id' => 6,
+				'role_id' => $this->developer_role_id,
 				'permission_id' => $permission_id,
 			);
 		}

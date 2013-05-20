@@ -21,24 +21,25 @@ class Migration_Permission_system_upgrade extends Migration
 	 * @var array New fields to add to the Permissions table
 	 */
 	private $permissions_fields = array(
-		"`Site.Signin.Offline` tinyint(1) NOT NULL DEFAULT '0'",
-/*		'Site.Signin.Offline' => array(
+//		"`Site.Signin.Offline` tinyint(1) NOT NULL DEFAULT '0'",
+		'Site_Signin_Offline' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
- */
 	);
 
 	/**
 	 * @var array Fields to modify in the Permissions table
 	 */
 	private $permissions_modify_fields = array(
-		'Site.Statistics.View' => array(
-			'name' => 'Site.Reports.View',
+		'Site_Statistics_View' => array(
+			'name' => 'Site_Reports_View',
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
 	);
 
@@ -46,11 +47,12 @@ class Migration_Permission_system_upgrade extends Migration
 	 * @var array Fields to modify in the Permissions table during Uninstall
 	 */
 	private $permissions_modify_fields_down = array(
-		'Site.Reports.View' => array(
-			'name' => 'Site.Statistics.View',
+		'Site_Reports_View' => array(
+			'name' => 'Site_Statistics_View',
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
 	);
 
@@ -58,10 +60,11 @@ class Migration_Permission_system_upgrade extends Migration
 	 * @var array Fields to drop from the permissions table
 	 */
 	private $permissions_drop_fields = array(
-		'Site.Appearance.View' => array(
+		'Site_Appearance_View' => array(
 			'type' => 'TINYINT',
 			'constraint' => 1,
 			'default' => 0,
+            'null' => false,
 		),
 	);
 
@@ -72,21 +75,24 @@ class Migration_Permission_system_upgrade extends Migration
 		'permission_id' => array(
 			'type' => 'INT',
 			'constraint' => 11,
-			'null' => FALSE,
-			'auto_increment' => TRUE,
+			'auto_increment' => true,
+			'null' => false,
 		),
 		'name' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 30,
+			'null' => false,
 		),
 		'description' => array(
 			'type' =>'VARCHAR',
 			'constraint' => 100,
+			'null' => false,
 		),
 		'status' => array(
 			'type' => 'ENUM',
 			'constraint' => "'active','inactive','deleted'",
-			'default' => 'active'
+			'default' => 'active',
+			'null' => false,
 		),
 	);
 
@@ -97,10 +103,12 @@ class Migration_Permission_system_upgrade extends Migration
 		'role_id' => array(
 			'type' => 'INT',
 			'constraint' => 11,
+			'null' => false,
 		),
 		'permission_id' => array(
 			'type' => 'INT',
 			'constraint' => 11,
+			'null' => false,
 		),
 	);
 
@@ -111,8 +119,13 @@ class Migration_Permission_system_upgrade extends Migration
 	 * @var array Data to update the permissions table
 	 */
 	private $permissions_data = array(
-		'Site.Signin.Offline' => 1,
+		'Site_Signin_Offline' => 1,
 	);
+
+	/**
+	 * @var int The role_id of the Administrator role
+	 */
+	private $admin_role_id = 1;
 
 	/****************************************************************
 	 * Migration methods
@@ -123,31 +136,33 @@ class Migration_Permission_system_upgrade extends Migration
 	public function up()
 	{
 		/* Take care of a few preliminaries before updating */
-		// Add new Site.Signin.Offline permission
-        if ( ! $this->db->field_exists('Site.Signin.Offline', $this->permissions_table))
+		// Add new Site_Signin_Offline permission
+        if ( ! $this->db->field_exists('Site_Signin_Offline', $this->permissions_table))
         {
             $this->dbforge->add_column($this->permissions_table, $this->permissions_fields);
-        }
-//		$this->db->where('role_id', 1)->update($this->permissions_table, $this->permissions_data);
-		$prefix = $this->db->dbprefix;
-		$this->db->query("UPDATE {$prefix}permissions SET `Site.Signin.Offline`=1 WHERE `role_id`=1");
 
-		// Rename Site.Statistics.View to Site.Reports.View
-        if ($this->db->field_exists('Site.Statistics.View', $this->permissions_table))
+    		$this->db->where('role_id', $this->admin_role_id)
+                ->update($this->permissions_table, $this->permissions_data);
+/*		    $prefix = $this->db->dbprefix;
+            $this->db->query("UPDATE {$prefix}permissions SET `Site.Signin.Offline`=1 WHERE `role_id`=1");
+*/
+        }
+
+		// Rename Site_Statistics_View to Site_Reports_View
+        if ($this->db->field_exists('Site_Statistics_View', $this->permissions_table))
         {
-//		    $this->dbforge->modify_column($this->permissions_table, $this->permissions_modify_fields);
-            $this->db->query("ALTER TABLE {$prefix}permissions CHANGE `Site.Statistics.View` `Site.Reports.View` TINYINT(1) DEFAULT 0 NOT NULL");
+		    $this->dbforge->modify_column($this->permissions_table, $this->permissions_modify_fields);
+//            $this->db->query("ALTER TABLE {$prefix}permissions CHANGE `Site.Statistics.View` `Site.Reports.View` TINYINT(1) DEFAULT 0 NOT NULL");
         }
 
 		// Remove Site.Appearance.View
-        if ($this->db->field_exists('Site.Appearance.View', $this->permissions_table))
+        if ($this->db->field_exists('Site_Appearance_View', $this->permissions_table))
         {
-/*		    foreach ($this->permissions_drop_fields as $column_name => $column_def)
+		    foreach ($this->permissions_drop_fields as $column_name => $column_def)
             {
             	$this->dbforge->drop_column($this->permissions_table, $column_name);
             }
- */
-            $this->db->query("ALTER TABLE {$prefix}permissions DROP COLUMN `Site.Appearance.View`");
+//            $this->db->query("ALTER TABLE {$prefix}permissions DROP COLUMN `Site.Appearance.View`");
         }
 
 		/* Do the actual update. */
@@ -166,6 +181,7 @@ class Migration_Permission_system_upgrade extends Migration
 		// modify the permissions table
 		$this->dbforge->rename_table($this->permissions_table, $this->permissions_old_table);
 
+        // create the new permissions table
 		$this->dbforge->add_field($this->permissions_new_fields);
 		$this->dbforge->add_key('permission_id', TRUE);
 		$this->dbforge->create_table($this->permissions_table);
@@ -174,14 +190,19 @@ class Migration_Permission_system_upgrade extends Migration
 		$old_permissions_records = array();
 		foreach ($permissions_fields as $field)
 		{
+            // if this is not the role_id or permission_id field,
+            // replace underscores with '.' to generate the permission names
 			if ($field != 'role_id' && $field != 'permission_id')
 			{
+                $permission_name = str_replace('_', '.', $field);
 				$old_permissions_records[] = array(
-					'name' => $field,
+					'name' => $permission_name,
 					'description' => '',
 				);
 			}
 		}
+
+        // Add permissions to access permissions settings
 		$old_permissions_records[] = array(
 			'name' 			=> 'Permissions.Settings.View',
 			'description'	=> 'Allow access to view the Permissions menu unders Settings Context'
@@ -202,23 +223,17 @@ class Migration_Permission_system_upgrade extends Migration
 		// get the current list of permissions
 		$new_permission_query = $this->db->get($this->permissions_table);
 		$role_permissions_records = array();
+
 		// loop through the current permissions
 		foreach ($new_permission_query->result_array() as $permission_rec)
 		{
+            $old_permission_name = str_replace('.', '_', $permission_rec['name']);
+
 			// loop through the old permissions
 			foreach ($old_permissions_array as $role_id => $role_permissions)
 			{
 				// if the role had access to this permission then give it access again
-				if (isset($role_permissions[$permission_rec['name']]) && $role_permissions[$permission_rec['name']] == 1)
-				{
-					$role_permissions_records[] = array(
-						'role_id' => $role_id,
-						'permission_id' => $permission_rec['permission_id'],
-					);
-				}
-
-				// specific case for the administrator to get access to - Bonfire.Permissions.Manage
-				if ($role_id == 1 && $permission_rec['name'] == 'Bonfire.Permissions.Manage')
+				if (isset($role_permissions[$old_permission_name]) && $role_permissions[$old_permission_name] == 1)
 				{
 					$role_permissions_records[] = array(
 						'role_id' => $role_id,
@@ -228,10 +243,13 @@ class Migration_Permission_system_upgrade extends Migration
 			}
 
 			// give the administrator access to the new "Permissions" permissions
-			if ($permission_rec['name'] == 'Permissions.Settings.View' || $permission_rec['name'] == 'Permissions.Settings.Manage')
+			if ($permission_rec['name'] == 'Permissions.Settings.View'
+                || $permission_rec['name'] == 'Permissions.Settings.Manage'
+                || $permission_rec['name'] == 'Bonfire.Permissions.Manage'
+                )
 			{
 				$role_permissions_records[] = array(
-					'role_id' => 1,
+					'role_id' => $this->admin_role_id,
 					'permission_id' => $permission_rec['permission_id'],
 				);
 			}
@@ -251,7 +269,7 @@ class Migration_Permission_system_upgrade extends Migration
 
 		// Rename the old permissions table
 		$this->dbforge->rename_table($this->permissions_old_table, $this->permissions_table);
-		// Rename Site.Reports.View to Site.Statistics.View
+		// Rename Site_Reports_View to Site_Statistics_View
 		$this->dbforge->modify_column($this->permissions_table, $this->permissions_modify_fields_down);
 	}
 }

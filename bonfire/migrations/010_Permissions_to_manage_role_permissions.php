@@ -33,6 +33,7 @@ class Migration_Permissions_to_manage_role_permissions extends Migration
 		'name' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 255,
+			'null' => false,
 		),
 	);
 
@@ -43,8 +44,14 @@ class Migration_Permissions_to_manage_role_permissions extends Migration
 		'name' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 30,
+			'null' => false,
 		),
 	);
+
+	/**
+	 * @var int The role_id of the Administrator role
+	 */
+	private $admin_role_id = 1;
 
 	/****************************************************************
 	 * Migration methods
@@ -63,7 +70,8 @@ class Migration_Permissions_to_manage_role_permissions extends Migration
 		$role_permissions_data = array();
 		if (isset($roles) && is_array($roles) && count($roles))
 		{
-			$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : 1;
+			// give the new permissions to the current role (or administrators if fresh install)
+			$assign_role = $this->session->userdata('role_id') ? $this->session->userdata('role_id') : $this->admin_role_id;
 			foreach ($roles as $role)
 			{
 				// add the permission

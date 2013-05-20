@@ -34,12 +34,13 @@ class Migration_Migration_schema_change extends Migration
 		'type' => array(
 			'type' => 'VARCHAR',
 			'constraint' => 20,
-			'null' => FALSE,
+			'null' => false,
 		),
 		'version' => array(
 			'type' => 'INT',
 			'constraint' => '4',
-			'default'    => 0,
+			'default' => 0,
+			'null' => false,
 		),
 	);
 

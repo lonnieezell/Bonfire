@@ -24,7 +24,8 @@ class Migration_Add_role_delete_permissions extends Migration
 		'deleted'	=> array(
 			'type'			=> 'INT',
 			'constraint'	=> 1,
-			'default'		=> 0
+			'default'		=> 0,
+			'null'			=> false,
 		),
 	);
 
@@ -41,6 +42,10 @@ class Migration_Add_role_delete_permissions extends Migration
 		'status'		=> 'active',
 	);
 
+	/**
+	 * @var int The role_id of the Administrator role
+	 */
+	private $admin_role_id = 1;
 
 	/****************************************************************
 	 * Migration methods
@@ -60,7 +65,7 @@ class Migration_Add_role_delete_permissions extends Migration
 		if ($pid)
 		{
 			// Add the permission to the admin role.
-			$ci->role_permission_model->create(1, $pid);
+			$ci->role_permission_model->create($this->admin_role_id, $pid);
 		}
 
 		// Add the deleted field to the roles table

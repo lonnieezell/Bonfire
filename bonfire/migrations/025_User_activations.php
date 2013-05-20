@@ -23,11 +23,13 @@ class Migration_User_activations extends Migration
 			'type'			=> 'tinyint',
 			'constraint'	=> 1,
 			'default'		=> '0',
+			'null'			=> false,
 		),
 		'activate_hash' => array(
 			'type'			=> 'VARCHAR',
 			'constraint'	=> 40,
 			'default'		=> '',
+			'null'			=> false,
 		),
 	);
 
@@ -55,10 +57,13 @@ class Migration_User_activations extends Migration
 	 */
 	public function up()
 	{
+		// add fields to the users table
         $this->dbforge->add_column($this->table, $this->fields);
 
+		// set all of the users active
 		$this->db->update($this->table, $this->data);
 
+		// insert the auth.user_activation_method setting into the settings table
 		$this->db->insert($this->settings_table, $this->settings_data);
 	}
 
@@ -67,11 +72,13 @@ class Migration_User_activations extends Migration
 	 */
 	public function down()
 	{
+		// remove the new fields from the users table
 		foreach ($this->fields as $column_name => $column_def)
 		{
 			$this->dbforge->drop_column($this->table, $column_name);
 		}
 
+		// delete the new setting from the settings table
 		$this->db->where('name', $this->settings_data['name'])
 			->delete($this->settings_table);
 	}
