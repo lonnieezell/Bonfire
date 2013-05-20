@@ -19,8 +19,8 @@
 			<label class="control-label" for="mailtype"><?php echo lang('em_email_type'); ?></label>
 			<div class="controls">
 				<select name="mailtype" id="mailtype">
-					<option <?php echo set_select('mailtype', 'text', $mailtype == 'text'); ?>>Text</option>
-					<option value="html" <?php set_select('mailtype', 'html', $mailtype == 'html'); ?>>HTML</option>
+					<option value="text" <?php echo set_select('mailtype', 'text', $mailtype == 'text'); ?>>Text</option>
+					<option value="html" <?php echo set_select('mailtype', 'html', $mailtype == 'html'); ?>>HTML</option>
 				</select>
 			</div>
 		</div>
