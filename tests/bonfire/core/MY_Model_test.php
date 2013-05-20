@@ -1,6 +1,6 @@
 <?php
 
-require_once (TESTS_DIR .'_support/database.php');
+require_once(TESTS_DIR . '_support/database.php');
 //require (APPPATH .'core/MY_Model.php');
 
 class MY_Model_test extends CI_UnitTestCase {
@@ -184,7 +184,8 @@ class MY_Model_test extends CI_UnitTestCase {
 
     public function test_delete_without_soft_deletes()
     {
-        $this->model->db->expectOnce('delete', array('records_table', array('id' => 1)));
+        $this->model->db->expectOnce('where', array('id', 1));
+        $this->model->db->expectOnce('delete', array('records_table'));
         $this->model->db->returns('delete', TRUE);
 
         $this->assertTrue( $this->model->soft_delete(false)->delete(1) );
@@ -205,7 +206,7 @@ class MY_Model_test extends CI_UnitTestCase {
 
     public function test_delete_where_without_soft_deletes()
     {
-        $this->model->db->expectOnce('where', array('userid', 5));
+        $this->model->db->expectOnce('where', array(array('userid' => 5)));
         $this->model->db->expectOnce('delete', array('records_table'));
         $this->model->db->returns('affected_rows', 1);
         $this->model->db->returns('delete', TRUE);
@@ -217,7 +218,7 @@ class MY_Model_test extends CI_UnitTestCase {
 
     public function test_delete_where_with_soft_deletes()
     {
-        $this->model->db->expectOnce('where', array('userid', 5));
+        $this->model->db->expectOnce('where', array(array('userid' => 5)));
         $this->model->db->expectOnce('update', array('records_table', array('deleted' => 1)));
         $this->model->db->returns('affected_rows', 1);
         $this->model->db->returns('update', TRUE);
