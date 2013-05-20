@@ -180,7 +180,7 @@ class Users extends Front_Controller
 
 						$pass_code = random_string('alnum', 40);
 
-						$hash = do_hash($pass_code . $user->salt . $_POST['email']);
+						$hash = do_hash($pass_code . $_POST['email']);
 
 						// Save the hash to the db so we can confirm it later.
 						$this->user_model->update_where('email', $_POST['email'], array('reset_hash' => $hash, 'reset_by' => strtotime("+24 hours") ));
