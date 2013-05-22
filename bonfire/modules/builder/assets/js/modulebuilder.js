@@ -1,32 +1,100 @@
 /**
- * @type Object Global bonfire object to hold options
+ * @type {Object} Global object to hold properties/methods used by Bonfire
  */
 var bonfire = bonfire || {};
+/**
+ * @type {Object} Holds properties/methods specific to Builder
+ */
 bonfire.builder = {
+	/**
+	 * @type {Object} Holds the class names for the open/close icons used on the page's legends
+	 */
 	legendIcon: {
+		/** @type {String} The class name for the open icon */
 		open: 'icon-plus',
+		/** @type {String} The class name for the close icon */
 		close: 'icon-minus'
 	},
+	/**
+	 * @type {Object} Defines the animation options used when opening/closing sections of the page
+	 * @link http://api.jquery.com/animate/
+	 */
 	animation: {
+		/** @type {String} A string indicating which easing function to use for the transition */
 		easing: 'swing',
+		/** @type {Number|String} A string or number determining how long the animation will run */
 		duration: 400
+	},
+	/**
+	 * @type {Object} Holds the default values used to create the table name from the module name
+	 */
+	prepTableDefaults: {
+		/** @type {String} The value to prepare for use as the table name */
+		valueToPrep: '',
+		/** @type {Boolean} Determines whether the function sets the table name (using tableNameSelector) in addition to returning the string */
+		setTableName: true,
+		/** @type {String} The selector for the field containing the name of the module */
+		moduleNameSelector: '#module_name',
+		/** @type {String} The selector for the field containing the name of the table */
+		tableNameSelector: '#table_name',
+		/** @type {String} The value to replace unwanted values in the module name, such as spaces */
+		tableNameReplacement: '_',
+		/** @type {String} The Regular Expression used to replace unwanted values in the module name */
+		tableNameRegEx: /[^A-Za-z0-9\\s]/g
+	},
+	/**
+	 * Prepares the module name to be used as a database table name
+	 *
+	 * @param   {Object} prepOptions Contains optional settings
+	 * 			used to convert the module name into a suitable
+	 * 			database table name
+	 *
+	 * @returns {String} The name to be used for the table
+	 */
+	prepTableName: function(prepOptions) {
+		/** @type {Object} Settings object to hold the combination of defaults and options passed in the function argument */
+		var prepSettings = $.extend({}, bonfire.builder.prepTableDefaults, prepOptions),
+		/** @type {String} The value we are preparing to use as the table name */
+			tableName = prepSettings.valueToPrep,
+		/** @type {Object} If called as an event handler, we'll store the event data here */
+			event;
+
+		// If the function is used as an event handler, our normal options may be
+		// passed in prepOptions.data instead of prepOptions itself, so we need to
+		// make sure we are still retrieving our options
+		if (prepOptions && prepOptions.data) {
+			event = prepOptions;
+			prepOptions = prepOptions.data;
+		}
+		prepSettings = $.extend({}, bonfire.builder.prepTableDefaults, prepOptions);
+
+		if ('' == tableName) {
+			tableName = $(prepSettings.moduleNameSelector).val();
+		}
+		tableName = tableName.replace(prepSettings.tableNameRegEx, prepSettings.tableNameReplacement).toLowerCase();
+
+		if (prepSettings.setTableName === true) {
+			$(prepSettings.tableNameSelector).val(tableName);
+		}
+		return tableName;
 	}
 };
 /**
  * Toggles the visibility of the advanced table properties
  * when the Create Module Table checkbox is checked.
- * Also copies the name of the module as the lowercase name of
- * the table, with underscores replacing spaces.
+ * Also sets the name of the table as the lowercase name of
+ * the module, with underscores replacing spaces, if the table
+ * name is not already set.
  *
- * @returns void
+ * @returns {void}
  */
 function show_table_props() {
 	/**
-	 * @type String The name of the database table, based on user entry or the module name
+	 * @type {String} The name of the database table, based on user entry or the module name
 	 */
 	var tblName,
 		/**
-		 * @type Object The animation options passed to show/hide methods
+		 * @type {Object} The animation options passed to show/hide methods
 		 */
 		anim = bonfire.builder.animation;
 
@@ -38,9 +106,9 @@ function show_table_props() {
 		$('#all_fields').show(anim);
 
 		$('#primary_key_field').val('' == $('#primary_key_field').val() ? 'id' : $('#primary_key_field').val());
+
 		tblName = ( ( $('#table_name').val() == '' ) ? $('#module_name').val() : $('#table_name').val() );
-		tblName = tblName.replace(/[^A-Za-z0-9\\s]/g, "_").toLowerCase();
-		$('#table_name').val( tblName );
+		tblName = bonfire.builder.prepTableName({valueToPrep: tblName, setTableName: true});
 	} else if ($('#db_exists').is(':checked')) {
 		$('#db_details').show(anim);
 		$('#db_details .mb_advanced').show(anim);
@@ -49,8 +117,7 @@ function show_table_props() {
 		$('#all_fields').hide(anim);
 
 		tblName = ( ( $('#table_name').val() == '' ) ? $('#module_name').val() : $('#table_name').val() );
-		tblName = tblName.replace(/[^A-Za-z0-9\\s]/g, "_").toLowerCase();
-		$('#table_name').val( tblName );
+		tblName = bonfire.builder.prepTableName({valueToPrep: tblName, setTableName: true});
 
 		if ($('#view_field_label1').val() != undefined && $('#view_field_label1').val() != '') {
 			$('.mb_new_table').show(anim);
@@ -247,3 +314,8 @@ $('.faded input').on('blur', function() {
 	$(this).closest('.faded').removeClass('faded-focus');
 });
 $('.faded input:focus').closest('.faded').addClass('faded-focus');
+
+/*
+ * Update the table name when changing the module name
+ */
+$('#module_name').on('click focus blur', {valueToPrep: '', setTableName: true}, bonfire.builder.prepTableName);
