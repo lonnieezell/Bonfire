@@ -39,6 +39,9 @@ class Home extends Front_Controller
 	 */
 	public function index()
 	{
+		$this->load->library('users/auth');
+		$this->set_current_user();
+
 		Template::render();
 	}//end index()
 
