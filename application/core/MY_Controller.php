@@ -75,26 +75,7 @@ class Base_Controller extends MX_Controller
 		// Load Activity Model Since it's used everywhere.
 		$this->load->model('activities/Activity_model', 'activity_model');
 
-		// Auth setup
-		$this->load->model('users/User_model', 'user_model');
-		$this->load->library('users/auth');
-
-		// Load our current logged in user for convenience
-		if ($this->auth->is_logged_in())
-		{
-			$this->current_user = clone $this->auth->user();
-
-			$this->current_user->user_img = gravatar_link($this->current_user->email, 22, $this->current_user->email, "{$this->current_user->email} Profile");
-
-			// if the user has a language setting then use it
-			if (isset($this->current_user->language))
-			{
-				$this->config->set_item('language', $this->current_user->language);
-			}
-		}
-
-		// Make the current user available in the views
-		Template::set('current_user', $this->current_user);
+		$this->set_current_user();
 
 		// load the application lang file here so that the users language is known
 		$this->lang->load('application');
@@ -152,6 +133,43 @@ class Base_Controller extends MX_Controller
 
 	//--------------------------------------------------------------------
 
+	/**
+	 * If the Auth lib is loaded, it will set the current user, since users
+	 * will never be needed if the Auth library is not loaded. By not requiring
+	 * this to be executed and loaded for every command, we can speed up calls
+	 * that don't need users at all, or rely on a different type of auth, like
+	 * an API or cronjob.
+	 */
+	protected function set_current_user()
+	{
+		if (class_exists('Auth') && isset($this->auth))
+		{
+			// Load our current logged in user for convenience
+			if ($this->auth->is_logged_in())
+			{
+				$this->current_user = clone $this->auth->user();
+
+				$this->current_user->user_img = gravatar_link($this->current_user->email, 22, $this->current_user->email, "{$this->current_user->email} Profile");
+
+				// if the user has a language setting then use it
+				if (isset($this->current_user->language))
+				{
+					$this->config->set_item('language', $this->current_user->language);
+				}
+			}
+
+			// Make the current user available in the views
+			if (!class_exists('Template'))
+			{
+				$this->load->library('Template');
+			}
+			Template::set('current_user', $this->current_user);
+		}
+	}
+
+	//--------------------------------------------------------------------
+
+
 }//end Base_Controller
 
 
@@ -186,8 +204,6 @@ class Front_Controller extends Base_Controller
 
 		$this->load->library('template');
 		$this->load->library('assets');
-
-		Template::set_theme($this->config->item('default_theme'));
 
 		Events::trigger('after_front_controller');
 	}//end __construct()
