@@ -186,7 +186,7 @@ $config['directory_trigger']	= 'd'; // experimental not currently in use
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 2;
+$config['log_threshold'] = 0;
 
 /*
 |--------------------------------------------------------------------------
@@ -230,7 +230,7 @@ $config['cache_path'] = APPPATH .'cache/';
 | MUST set an encryption key.  See the user guide for info.
 |
 */
-$config['encryption_key'] = "592c4449ba50008c2f15a250ca3d803e";
+$config['encryption_key'] = "1c59bbcd325abcc1879c6012c5e6ecbc";
 
 /*
 |--------------------------------------------------------------------------
