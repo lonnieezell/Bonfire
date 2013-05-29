@@ -98,12 +98,25 @@ class Settings_model extends BF_Model
 	 *
 	 * @return array
 	 */
-	public function find_all_by($field=NULL, $value=NULL)
+
+	public function find_all_by($field=NULL, $value=NULL, $type='and')
 	{
 		if (empty($field)) return FALSE;
 
 		// Setup our field/value check
-		$this->db->where($field, $value);
+		if ( ! is_array($field))
+		{
+			$field = array($field => $value);
+		}
+
+		if ($type == 'or')
+		{
+			$this->db->or_where($field);
+		}
+		else
+		{
+			$this->db->where($field);
+		}
 
 		$results = $this->find_all();
 
