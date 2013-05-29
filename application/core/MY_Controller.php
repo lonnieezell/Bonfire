@@ -142,7 +142,7 @@ class Base_Controller extends MX_Controller
 	 */
 	protected function set_current_user()
 	{
-		if (class_exists('Auth') && isset($this->auth))
+		if (class_exists('Auth'))
 		{
 			// Load our current logged in user for convenience
 			if ($this->auth->is_logged_in())
@@ -205,6 +205,8 @@ class Front_Controller extends Base_Controller
 		$this->load->library('template');
 		$this->load->library('assets');
 
+		$this->set_current_user();
+
 		Events::trigger('after_front_controller');
 	}//end __construct()
 
@@ -240,16 +242,18 @@ class Authenticated_Controller extends Base_Controller
 	{
 		parent::__construct();
 
+		$this->load->library('users/auth');
+
 		// Make sure we're logged in.
 		$this->auth->restrict();
+
+		$this->set_current_user();
 
 		// Load additional libraries
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('', '');
 		$this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
-
-		Template::set_theme($this->config->item('default_theme'));
 	}//end construct()
 
 	//--------------------------------------------------------------------

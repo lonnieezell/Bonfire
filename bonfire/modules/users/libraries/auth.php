@@ -106,6 +106,7 @@ class Auth
 		// We need the users language file for this to work
 		// from other modules.
 		$this->ci->lang->load('users/users');
+		$this->ci->load->model('users/user_model');
 
 		$this->ci->load->library('session');
 
@@ -374,6 +375,7 @@ class Auth
 		// If user isn't logged in, don't need to check permissions
 		if ($this->is_logged_in() === FALSE)
 		{
+			$this->ci->load->library('Template');
 			Template::set_message($this->ci->lang->line('us_must_login'), 'error');
 			Template::redirect('login');
 		}
