@@ -69,6 +69,7 @@ class Events
 		{
 			$ci =& get_instance();
 			$ci->load->helper('config_file');
+			$ci->load->helper('application');
 		}
 
 

@@ -295,8 +295,6 @@ class Admin_Controller extends Authenticated_Controller
 	{
 		parent::__construct();
 
-		$this->load->helper('application');
-
 		$this->load->library('template');
 		$this->load->library('assets');
 		$this->load->library('ui/contexts');
