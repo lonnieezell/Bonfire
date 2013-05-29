@@ -99,7 +99,7 @@ class Base_Controller extends MX_Controller
 		// Development niceties...
 		else if (ENVIRONMENT == 'development')
 		{
-			if ($this->settings_lib->item('site.show_front_profiler') AND has_permission('Bonfire.Profiler.View'))
+			if ($this->settings_lib->item('site.show_front_profiler'))
 			{
 				// Profiler bar?
 				if ( ! $this->input->is_cli_request() AND ! $this->input->is_ajax_request())
