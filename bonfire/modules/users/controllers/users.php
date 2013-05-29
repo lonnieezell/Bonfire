@@ -44,12 +44,7 @@ class Users extends Front_Controller
 		$this->load->helper('form');
 		$this->load->library('form_validation');
 
-		if (!class_exists('User_model'))
-		{
-			$this->load->model('users/User_model', 'user_model');
-		}
-
-		$this->load->database();
+		$this->load->model('users/user_model');
 
 		$this->load->library('users/auth');
 
