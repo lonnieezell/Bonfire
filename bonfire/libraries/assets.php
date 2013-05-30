@@ -886,7 +886,7 @@ class Assets
 		$src = self::combine_js($scripts, 'module');
 
 		$attr = array(
-			'src'	=> $src,
+			'src'	=> $src .'?_dt='.time(),
 			'type'	=> 'text/javascript',
 		);
 
