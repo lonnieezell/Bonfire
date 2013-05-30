@@ -233,6 +233,7 @@ class Users extends Front_Controller
 	{
 		// Make sure we're logged in.
 		$this->auth->restrict();
+		$this->set_current_user();
 
 		$this->load->helper('date');
 
