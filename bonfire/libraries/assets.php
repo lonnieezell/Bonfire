@@ -1364,7 +1364,11 @@ class Assets
 			$file = str_replace($type, '', $file);
 
 			// If it contains an external URL, we're all done here.
-			if (strpos((string)$file, $http_protocol, 0) !== FALSE)
+			if (strpos((string)$file, $http_protocol . ':') !== FALSE	// Absolute URL with current protocol, which should be more likely
+					|| strpos((string)$file, '//') === 0				// Protocol-relative URL
+					|| strpos((string)$file, 'https:') !== FALSE		// We should assume $http_protocol is most likely 'http', so check 'https' next
+					|| strpos((string)$file, 'http:') !== FALSE			// Finally, check 'http' in case $http_protocol is 'https'
+			   )
 			{
 				$new_files[] = !empty($media) ? array('file' => $file, 'media' => $media) : $file;
 				continue;
