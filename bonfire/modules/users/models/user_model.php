@@ -315,11 +315,10 @@ class User_model extends BF_Model
 	 * @access public
 	 *
 	 * @param int $id An INT with the user's ID.
-	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return bool|object An object with the user's information.
 	 */
-	public function find($id=null, $return_type=0)
+	public function find($id=null)
 	{
 		if (empty($this->selects))
 		{
@@ -328,14 +327,6 @@ class User_model extends BF_Model
 
 		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table . '.role_id', 'left');
 
-		if ($return_type == 0)
-		{
-			parent::as_object();
-		}
-		else
-		{
-			parent::as_array();
-		}
 		return parent::find($id);
 
 	}//end find()
@@ -347,11 +338,9 @@ class User_model extends BF_Model
 	 *
 	 * @access public
 	 *
-	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
-	 *
 	 * @return bool An array of objects with each user's information.
 	 */
-	public function find_all($return_type=0)
+	public function find_all()
 	{
 		if (empty($this->selects))
 		{
@@ -360,14 +349,6 @@ class User_model extends BF_Model
 
 		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table . '.role_id', 'left');
 
-		if ($return_type == 0)
-		{
-			parent::as_object();
-		}
-		else
-		{
-			parent::as_array();
-		}
 		return parent::find_all();
 
 	}//end find_all()
@@ -384,11 +365,10 @@ class User_model extends BF_Model
 	 * @param string $field A string with the field to match.
 	 * @param string $value A string with the value to search for.
 	 * @param string $type  The type of where clause to create. Either 'and' or 'or'.
-	 * @param int $return_type Choose the type of return type. 0 - Object, 1 - Array
 	 *
 	 * @return bool|object An object with the user's info, or FALSE on failure.
 	 */
-	public function find_by($field=null, $value=null, $type='and', $return_type = 0)
+	public function find_by($field=null, $value=null, $type='and')
 	{
 		if (empty($this->selects))
 		{
@@ -397,14 +377,6 @@ class User_model extends BF_Model
 
 		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table . '.role_id', 'left');
 
-		if ($return_type == 0)
-		{
-			parent::as_object();
-		}
-		else
-		{
-			parent::as_array();
-		}
 		return parent::find_by($field, $value, $type);
 
 	}//end find_by()
