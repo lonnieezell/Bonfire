@@ -6,12 +6,11 @@
 ?>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
 
 	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 	<fieldset>
 		<legend><?php echo lang('permissions_details') ?></legend>
-	
+
 		<div class="control-group <?php echo form_has_error('name') ? 'error' : ''; ?>">
 			<label for="name" class="control-label"><?php echo lang('permissions_name') ?></label>
 	    	<div class="controls">
@@ -19,7 +18,7 @@
 	    	    <span class="help-inline"><?php echo form_error('name'); ?></span>
 			</div>
 		</div>
-	
+
 		<div class="control-group <?php echo form_has_error('description') ? 'error' : ''; ?>">
 			<label for="description" class="control-label"><?php echo lang('permissions_description') ?></label>
 	        <div class="controls">
@@ -27,7 +26,7 @@
 		        <span class="help-inline"><?php echo form_error('description'); ?></span>
 			</div>
 		</div>
-	
+
 		<div class="control-group">
 			<label for="status" class="control-label"><?php echo lang('permissions_status') ?></label>
 			<div class="controls">
@@ -39,7 +38,7 @@
 		</div>
 
 		<div class="form-actions">
-			<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('permissions_save');?>" /> or 
+			<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('permissions_save');?>" /> or
 			<?php echo anchor(SITE_AREA .'/settings/permissions', lang('bf_action_cancel')); ?>
 		</div>
 

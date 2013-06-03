@@ -1,8 +1,7 @@
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
-	
+
 	<p class="intro"><?php e(lang('permissions_intro')) ?></p>
-	
+
 	<?php echo form_open($this->uri->uri_string()); ?>
 
 		<table class="table table-striped">

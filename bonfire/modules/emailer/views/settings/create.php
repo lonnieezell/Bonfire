@@ -9,8 +9,7 @@
 <div class="admin-box">
 
 	<?php echo form_open($this->uri->uri_string()) ;?>
-	<h3><?php echo lang('em_create_setting'); ?></h3>
-	
+
 	<table class="table table-stripped">
 		<tbody>
 			<tr>
@@ -19,14 +18,14 @@
 			</tr>
 			<tr>
 				<td>Content:</td>
-				<td><textarea name="email_content" id="email_content" rows="15" style="width:90%;"><?php 
+				<td><textarea name="email_content" id="email_content" rows="15" style="width:90%;"><?php
 					if(isset($email_content)){e($email_content);}
 				?></textarea>
 				</td>
 			</tr>
 		</tbody>
 	</table>
-	
+
 	<h3><?php echo lang('bf_users') ?></h3>
 	<table class="table table-striped">
 		<thead>
@@ -45,8 +44,8 @@
 			<tr>
 				<td colspan="7">
 					<?php echo lang('bf_with_selected') ?>
-					<input type="submit" name="create" class="btn btn-primary" value="<?php echo lang('em_create_email') ?>">
-					<?php echo anchor(SITE_AREA .'/settings/emailer/queue', lang('em_create_email_cancel'), 'class="btn btn-warning"'); ?>
+					<input type="submit" name="create" class="btn btn-primary" value="<?php echo lang('em_create_email') ?>"> <?php echo lang('bf_or') ?>
+					<?php echo anchor(SITE_AREA .'/settings/emailer/queue', lang('bf_action_cancel')); ?>
 				</td>
 			</tr>
 		</tfoot>
@@ -57,7 +56,7 @@
 			<?php foreach ($users as $user) : ?>
 			<tr>
 				<td>
-					<input type="checkbox" name="checked[]" value="<?php echo $user->id ?>" 
+					<input type="checkbox" name="checked[]" value="<?php echo $user->id ?>"
 					<?php if (isset($checked) && (is_array($checked)) && (count($checked)) && (in_array($user->id, $checked))) : ?>
 						checked="checked"
 					<?php endif; ?>

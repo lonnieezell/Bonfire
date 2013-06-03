@@ -1,7 +1,6 @@
 <p class="intro"><?php echo lang('mig_intro'); ?></p>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
 
 	<ul class="nav nav-tabs">
 		<li class="active">
@@ -43,7 +42,7 @@
 					</p>
 
 					<div class="form-actions">
-						<input type="submit" name="migrate" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
+						<input type="submit" name="migrate" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
 					</div>
 					<?php else: ?>
 						<div class="alert alert-warning fade in">
@@ -139,7 +138,7 @@
 					</div>
 
 					<div class="form-actions">
-						<input type="submit" name="migrate" class="btn btn-primary" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
+						<input type="submit" name="migrate" class="btn btn-primary" value="<?php echo lang('mig_migrate_button'); ?>" /> or <?php echo anchor(SITE_AREA .'/developer/migrations', lang('bf_action_cancel')); ?>
 					</div>
 					<?php else: ?>
 						<p><?php echo lang('mig_no_migrations') ?></p>

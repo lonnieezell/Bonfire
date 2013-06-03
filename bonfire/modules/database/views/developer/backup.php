@@ -1,5 +1,4 @@
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
 
 	<?php echo form_open(SITE_AREA .'/developer/database/backup', 'class="form-horizontal"'); ?>
 

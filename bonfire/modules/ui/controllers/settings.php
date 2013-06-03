@@ -103,6 +103,7 @@ class Settings extends Admin_Controller
 		$settings = $this->settings_lib->find_all_by('module', 'core.ui');
 		Template::set('settings', $settings);
 
+		Template::set('toolbar_title', lang('ui_shortcuts'));
 		Template::render();
 
 	}//end index()

@@ -1,6 +1,5 @@
 <?php if (isset($role_counts) && is_array($role_counts) && count($role_counts)) : ?>
 <div class="admin-box">
-	<h3><?php echo lang('role_manage') ?></h3>
 
 	<p class="intro"><?php e(lang('role_intro')) ?></p>
 

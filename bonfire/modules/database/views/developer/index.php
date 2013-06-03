@@ -1,5 +1,4 @@
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
 
 <?php if (isset($tables) && is_array($tables) && count($tables) > 0) : ?>
 	<?php echo form_open(SITE_AREA .'/developer/database/', array('style' => 'padding: 0')) ?>

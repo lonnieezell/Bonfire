@@ -1,16 +1,15 @@
 <p class="intro">Creates and sets up a new Context.</p>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
-	
+
 	<?php if (validation_errors()) :?>
 	<div class="alert alert-error">
 		<?php echo validation_errors(); ?>
 	</div>
 	<?php endif; ?>
-	
+
 	<?php echo form_open(current_url(), 'class="form-horizontal"'); ?>
-	
+
 		<div class="control-group">
 			<label for="context_name" class="control-label">Context Name</label>
 			<div class="controls">
@@ -18,9 +17,9 @@
 				<p class="help-inline">Cannot contain spaces.</p>
 			</div>
 		</div>
-		
+
 		<?php if (isset($roles) && is_array($roles) && count($roles)) :?>
-		
+
 			<div class="control-group">
 				<label class="control-label" id="roles_label">Allow for Roles:</label>
 				<div class="controls" aria-labelledby="roles_label" role="group">
@@ -31,7 +30,7 @@
 				<?php endforeach; ?>
 				</div>
 			</div>
-		
+
 		<?php endif; ?>
 		<!-- TODO Add this in later.
 		<div class="control-group">
@@ -46,6 +45,6 @@
 			<input type="submit" name="build" class="btn btn-primary" value="Create It" /> or
 			<a href="<?php echo site_url(SITE_AREA .'/developer/builder') ?>"><?php e(lang('bf_action_cancel')) ?></a>
 		</div>
-	
+
 	<?php echo form_close(); ?>
 </div>

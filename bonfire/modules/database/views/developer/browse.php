@@ -11,7 +11,6 @@
 	<p><?php echo e(lang('db_total_results')); ?>: <?php echo count($rows); ?></p>
 
 	<div class="admin-box">
-		<h3><?php echo $toolbar_title ?></h3>
 
 		<table class="table table-striped">
 			<thead>

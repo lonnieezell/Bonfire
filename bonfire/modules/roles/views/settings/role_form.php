@@ -6,7 +6,6 @@
 <?php endif; ?>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?> <?php e(isset($role) ? ': '. $role->role_name : ''); ?></h3>
 
 	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 

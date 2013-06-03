@@ -1,5 +1,4 @@
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
 
 <?php if (isset($backups) && is_array($backups) && count($backups) > 0) : ?>
 	<?php echo form_open($this->uri->uri_string(), array('style' => 'padding: 0')); ?>

@@ -161,8 +161,8 @@ $lang['us_account_activated']		= 'User account activation.';
 $lang['us_account_deactivated']		= 'User account deactivation.';
 $lang['us_account_activated_admin']	= 'Administrative account activation.';
 $lang['us_account_deactivated_admin']	= 'Administrative account deactivation.';
-$lang['us_active']					= 'Active.';
-$lang['us_inactive']				= 'Inactive.';
+$lang['us_active']					= 'Active';
+$lang['us_inactive']				= 'Inactive';
 //email subjects
 $lang['us_email_subj_activate']		= 'Activate Your membership';
 $lang['us_email_subj_pending']		= 'Registration Complete. Activation Pending.';

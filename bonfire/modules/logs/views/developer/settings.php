@@ -7,8 +7,6 @@
 
 <div class="admin-box">
 
-	<h3><?php echo $toolbar_title ?></h3>
-
 	<?php echo form_open(site_url(SITE_AREA .'/developer/logs/enable'), 'class="form-horizontal"'); ?>
 
 	<fieldset>

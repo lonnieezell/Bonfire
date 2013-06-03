@@ -44,7 +44,6 @@ a.mb_show_advanced_rules:hover {
 <?php endif; ?>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
 
 <?php if($field_total>0): ?>
 	<?php echo form_open(SITE_AREA."/developer/builder/create_module/".$field_total, array('id'=>"module_form",'class'=>"form-horizontal")); ?>

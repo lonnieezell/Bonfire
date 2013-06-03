@@ -163,10 +163,12 @@ class Settings extends Admin_Controller
 			}
 		}
 
-		Template::set('role', $this->role_model->find($id));
+		$role = $this->role_model->find($id);
+		Template::set('role', $role);
         Template::set('contexts', list_contexts(true));
 
-        Template::set('toolbar_title', 'Edit Role');
+        $title = lang('bf_action_edit') . ' '. lang('matrix_role');
+        Template::set('toolbar_title', isset($role->role_name) ? $title .': '. $role->role_name : $title);
 		Template::set_view('settings/role_form');
 		Template::render();
 

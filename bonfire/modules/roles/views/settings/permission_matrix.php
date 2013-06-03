@@ -5,12 +5,11 @@
 </script>
 
 <div id="permission_table_result" class="alert alert-info fade in">
-	<a class="close" data-dismiss="alert">&times;</a>		
+	<a class="close" data-dismiss="alert">&times;</a>
 	<?php echo lang('matrix_note');?>
 </div>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
 
 	<table class="table table-striped" id="permission_table">
 		<thead>
@@ -25,11 +24,11 @@
 				<?php endforeach; ?>
 			</tr>
 		</thead>
-	
+
 		<tbody>
 		<?php foreach($matrix_permissions as $matrix_perm ) : ?>
 			<?php $matrix_perm = (array)$matrix_perm; ?>
-			
+
 			<?php if (has_permission($matrix_perm['name']) || $current_user->role_id == 1): //Admin?>
 			<tr title="<?php echo $matrix_perm['name']; ?>">
 				<td><?php echo $matrix_perm['name']; ?></td>
@@ -46,7 +45,7 @@
 				<?php endfor; ?>
 			</tr>
 			<?php endif; ?>
-			
+
 		<?php endforeach; ?>
 		</tbody>
 	</table>

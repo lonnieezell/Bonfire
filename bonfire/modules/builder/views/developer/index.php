@@ -5,7 +5,6 @@
 <?php endif;?>
 
 <div class="admin-box">
-	<h3><?php echo lang('mb_exist_modules') ?></h3>
 
 <?php if (isset($modules) && is_array($modules) && count($modules)) : ?>
 

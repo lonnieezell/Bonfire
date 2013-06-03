@@ -13,7 +13,7 @@ if ($validation_errors) :
 endif;
 ?>
 <div class="admin-box">
-	<h3><?php echo $toolbar_title; ?></h3>
+
 	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
 		<div class="tabbable">
 			<ul class="nav nav-tabs">

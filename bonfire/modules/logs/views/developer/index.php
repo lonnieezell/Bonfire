@@ -8,7 +8,7 @@
 <?php if (isset($logs) && is_array($logs) && count($logs) && count($logs) > 1) : ?>
 
 <div class="admin-box">
-	<h3><?php echo $toolbar_title ?></h3>
+
 	<?php echo form_open(); ?>
 
 	<table class="table table-striped">
