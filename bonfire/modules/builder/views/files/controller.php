@@ -18,7 +18,11 @@ $primary_key_field = set_value("primary_key_field");
 $mb_class_wrapper =<<<END
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class {$controller_name} extends {extend_class} {
+/**
+ * {$controller_name} controller
+ */
+class {$controller_name} extends {extend_class}
+{
 
 	//--------------------------------------------------------------------
 
@@ -30,47 +34,57 @@ END;
 //--------------------------------------------------------------------
 
 $mb_constructor = "
+	/**
+	 * Constructor
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
 
 		{restrict}";
-if ($db_required != '') {
+
+if ($db_required != '')
+{
 	$mb_constructor .= "
-		\$this->load->model('".$module_name_lower."_model', null, true);";
+		\$this->load->model('" . $module_name_lower . "_model', null, true);";
 }
 
 $mb_constructor .= "
-		\$this->lang->load('".$module_name_lower."');
+		\$this->lang->load('" . $module_name_lower . "');
 		{constructor_extras}";
 
 // check that it is an admin area controller before adding the sub_nav
 if ($controller_name != $module_name_lower)
 {
 	$mb_constructor .= "
-		Template::set_block('sub_nav', '".$controller_name_lower."/_sub_nav');";
+		Template::set_block('sub_nav', '" . $controller_name_lower . "/_sub_nav');";
 }
 
-$mb_constructor .= "
+$mb_constructor .= '
+
+		Assets::add_module_js(\'' . $module_name_lower . '\', \'' . $module_name_lower . '.js\');
 	}
 
 	//--------------------------------------------------------------------
 
-
-";
+';
 
 //--------------------------------------------------------------------
 
-$mb_index = "
-	/*
-		Method: index()
-
-		Displays a list of form data.
-	*/
+$mb_index = '
+	/**
+	 * Displays a list of form data.
+	 *
+	 * @return void
+	 */
 	public function index()
 	{
-";
-if ($db_required != '') {
+';
+
+if ($db_required != '')
+{
 	$mb_index .= "
 		// Deleting anything?
 		if (isset(\$_POST['delete']))
@@ -108,21 +122,22 @@ $mb_index .= "
 
 	//--------------------------------------------------------------------
 
-
 ";
 
 //--------------------------------------------------------------------
 
 $mb_index_front = "
-	/*
-		Method: index()
-
-		Displays a list of form data.
-	*/
+	/**
+	 * Displays a list of form data.
+	 *
+	 * @return void
+	 */
 	public function index()
 	{
 ";
-if ($db_required != '') {
+
+if ($db_required != '')
+{
 	$mb_index_front .= "
 		\$records = \$this->".$module_name_lower."_model->find_all();
 
@@ -135,22 +150,23 @@ $mb_index_front .= "
 
 	//--------------------------------------------------------------------
 
-
 ";
 
 //--------------------------------------------------------------------
 
 $mb_create = "
-	/*
-		Method: create()
-
-		Creates a ".$module_name." object.
-	*/
+	/**
+	 * Creates a " . $module_name . " object.
+	 *
+	 * @return void
+	 */
 	public function create()
 	{
 		\$this->auth->restrict('{create_permission}');
 ";
-if ($db_required != '') {
+
+if ($db_required != '')
+{
 	$mb_create .= "
 		if (isset(\$_POST['save']))
 		{
@@ -178,17 +194,16 @@ $mb_create .= "
 
 	//--------------------------------------------------------------------
 
-
 ";
 
 //--------------------------------------------------------------------
 
 $mb_edit = "
-	/*
-		Method: edit()
-
-		Allows editing of ".$module_name." data.
-	*/
+	/**
+	 * Allows editing of " . $module_name . " data.
+	 *
+	 * @return void
+	 */
 	public function edit()
 	{
 		\$id = \$this->uri->segment(5);
@@ -199,7 +214,9 @@ $mb_edit = "
 			redirect(SITE_AREA .'/".$controller_name."/".$module_name_lower."');
 		}
 ";
-if ($db_required != '') {
+
+if ($db_required != '')
+{
 	$mb_edit .= "
 		if (isset(\$_POST['save']))
 		{
@@ -218,7 +235,8 @@ if ($db_required != '') {
 			}
 		}";
 
-	if (in_array('delete', $action_names)) {
+	if (in_array('delete', $action_names))
+	{
 		$mb_edit .= "
 		else if (isset(\$_POST['delete']))
 		{
@@ -232,7 +250,8 @@ if ($db_required != '') {
 				Template::set_message(lang('".$module_name_lower."_delete_success'), 'success');
 
 				redirect(SITE_AREA .'/".$controller_name."/".$module_name_lower."');
-			} else
+			}
+			else
 			{
 				Template::set_message(lang('".$module_name_lower."_delete_failure') . \$this->".$module_name_lower."_model->error, 'error');
 			}
@@ -244,14 +263,11 @@ if ($db_required != '') {
 }
 
 $mb_edit .= "
-		Assets::add_module_js('".$module_name_lower."', '".$module_name_lower.".js');
-
 		Template::set('toolbar_title', lang('".$module_name_lower."_edit') . ' ".$module_name."');
 		Template::render();
 	}
 
 	//--------------------------------------------------------------------
-
 
 ";
 
@@ -262,22 +278,18 @@ $mb_save =<<<END
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 
-	/*
-		Method: save_{$module_name_lower}()
-
-		Does the actual validation and saving of form data.
-
-		Parameters:
-			\$type	- Either "insert" or "update"
-			\$id		- The ID of the record to update. Not needed for inserts.
-
-		Returns:
-			An INT id for successful inserts. If updating, returns TRUE on success.
-			Otherwise, returns FALSE.
-	*/
+	/**
+	 * Summary
+	 *
+	 * @param String \$type Either "insert" or "update"
+	 * @param Int	 \$id	The ID of the record to update, ignored on inserts
+	 *
+	 * @return Mixed    An INT id for successful inserts, TRUE for successful updates, else FALSE
+	 */
 	private function save_{$module_name_lower}(\$type='insert', \$id=0)
 	{
-		if (\$type == 'update') {
+		if (\$type == 'update')
+		{
 			\$_POST['{$primary_key_field}'] = \$id;
 		}
 
@@ -298,12 +310,13 @@ $mb_save =<<<END
 			if (is_numeric(\$id))
 			{
 				\$return = \$id;
-			} else
+			}
+			else
 			{
 				\$return = FALSE;
 			}
 		}
-		else if (\$type == 'update')
+		elseif (\$type == 'update')
 		{
 			\$return = \$this->{$module_name_lower}_model->update(\$id, \$data);
 		}
@@ -312,7 +325,6 @@ $mb_save =<<<END
 	}
 
 	//--------------------------------------------------------------------
-
 
 END;
 
@@ -326,22 +338,25 @@ $body = $mb_constructor;
 if ($controller_name == $module_name_lower)
 {
 	$body = str_replace('{restrict}', '$this->load->library(\'form_validation\');', $body);
-} else
+}
+else
 {
 	$body = str_replace('{restrict}', '$this->auth->restrict(\''.preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.View\');', $body);
 }
-$extras = '';
 
+$extras = '';
 $date_included = FALSE;
 $datetime_included = FALSE;
 $textarea_included = FALSE;
-for($counter=1; $field_total >= $counter; $counter++)
+
+for ($counter = 1; $field_total >= $counter; $counter++)
 {
 	$db_field_type = set_value("db_field_type$counter");
 	$view_datepicker = '';
+
 	if ($db_field_type != NULL)
 	{
-		if ($db_field_type == 'DATE' AND $date_included === FALSE)
+		if ($db_field_type == 'DATE' && $date_included === FALSE)
 		{
 			$extras .= '
 			Assets::add_css(\'flick/jquery-ui-1.8.13.custom.css\');
@@ -365,20 +380,23 @@ for($counter=1; $field_total >= $counter; $counter++)
 		}
 		elseif (($db_field_type == 'TEXT' || $db_field_type == 'MEDIUMTEXT' || $db_field_type == 'LONGTEXT')
 			&& $textarea_included === FALSE
-			&& !empty($textarea_editor)
+			&& ! empty($textarea_editor)
 		)
 		{
 			// if a date field hasn't been included already then add in the jquery ui files
-			if ($textarea_editor == 'ckeditor') {
+			if ($textarea_editor == 'ckeditor')
+			{
 				$extras .= '
 			Assets::add_js(Template::theme_url(\'js/editors/ckeditor/ckeditor.js\'));';
 			}
-			elseif ($textarea_editor == 'xinha') {
+			elseif ($textarea_editor == 'xinha')
+			{
 				$extras .= '
 			Assets::add_js(Template::theme_url(\'js/editors/xinha_conf.js\'));
 			Assets::add_js(Template::theme_url(\'js/editors/xinha/XinhaCore.js\'));';
 			}
-			elseif ($textarea_editor == 'markitup') {
+			elseif ($textarea_editor == 'markitup')
+			{
 				$extras .= '
 			Assets::add_css(Template::theme_url(\'js/editors/markitup/skins/markitup/style.css\'));
 			Assets::add_css(Template::theme_url(\'js/editors/markitup/sets/default/style.css\'));
@@ -386,11 +404,13 @@ for($counter=1; $field_total >= $counter; $counter++)
 			Assets::add_js(Template::theme_url(\'js/editors/markitup/jquery.markitup.js\'));
 			Assets::add_js(Template::theme_url(\'js/editors/markitup/sets/default/set.js\'));';
 			}
-			elseif ($textarea_editor == 'tinymce') {
+			elseif ($textarea_editor == 'tinymce')
+			{
 				$extras .= '
 			Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce.js\'));
 			Assets::add_js(Template::theme_url(\'js/editors/tiny_mce/tiny_mce_init.js\'));';
 			}
+
 			$textarea_included = TRUE;
 		}
 	}
@@ -410,7 +430,8 @@ if ( is_array($action_names) AND in_array('index', $action_names))
 	{
 		$body .= $mb_index_front;
 	}
-	else {
+	else
+	{
 		$body .= $mb_index;
 	}
 }
@@ -436,9 +457,7 @@ if ($controller_name != $module_name_lower)
 	if (in_array('edit', $action_names))
 	{
 		$body .= $mb_edit;
-
 		$body = str_replace('{edit_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Edit', $body);
-
 		$body = str_replace('{delete_permission}', preg_replace("/[ -]/", "_", ucfirst($module_name)).'.'.ucfirst($controller_name).'.Delete', $body);
 	}
 
@@ -455,12 +474,11 @@ if ($controller_name != $module_name_lower)
 		$data = array();';
 
 	$last_field = 0;
-	for($counter=1; $field_total >= $counter; $counter++)
+	for ($counter = 1; $field_total >= $counter; $counter++)
 	{
 		// only build on fields that have data entered.
 
 		// Due to the required if rule if the first field is set the the others must be
-
 		if (set_value("view_field_label$counter") == NULL)
 		{
 			continue; 	// move onto next iteration of the loop
@@ -481,25 +499,27 @@ if ($controller_name != $module_name_lower)
 		{
 				$field_name = set_value("view_field_name$counter");
 		}
+
 		$form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
 		$rules .= '
 		$this->form_validation->set_rules(\''.$form_name.'\',\''.set_value("view_field_label$counter").'\',\'';
 
-	// setup the data array for saving to the db
-	// set defaults for certain field types
-	switch (set_value("db_field_type$counter"))
-	{
-		case 'DATE':
-			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00\';';
-			break;
-		case 'DATETIME':
-			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00 00:00:00\';';
-			break;
-		default:
-			$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\');';
-			break;
-	}
+		// setup the data array for saving to the db
+		// set defaults for certain field types
+		switch (set_value("db_field_type$counter"))
+		{
+			case 'DATE':
+				$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00\';';
+				break;
 
+			case 'DATETIME':
+				$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\') ? $this->input->post(\''.$form_name.'\') : \'0000-00-00 00:00:00\';';
+				break;
+
+			default:
+				$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\');';
+				break;
+		}
 
 		// set a friendly variable name
 		$validation_rules = $this->input->post('validation_rules'.$counter);
@@ -510,18 +530,20 @@ if ($controller_name != $module_name_lower)
 		if (is_array($validation_rules))
 		{
 			// add rules such as trim|required
-			foreach($validation_rules as $key => $value)
+			foreach ($validation_rules as $key => $value)
 			{
 				if ($rule_counter > 0)
 				{
 					$rules .= '|';
 				}
 
-				if ($value == 'unique')	{
+				if ($value == 'unique')
+				{
 					$prefix = $this->db->dbprefix;
 					$rules .= $value.'['.$prefix.$table_name.'.'.$field_name.','.$prefix.$table_name.'.'.$primary_key_field.']';
 				}
-				else {
+				else
+				{
 					$rules .= $value;
 				}
 				$rule_counter++;
@@ -537,15 +559,19 @@ if ($controller_name != $module_name_lower)
 				$rules .= '|';
 			}
 
-			if ($db_field_type == 'DECIMAL' || $db_field_type == 'FLOAT')	{
+			if ($db_field_type == 'DECIMAL' || $db_field_type == 'FLOAT' || $db_field_type == 'DOUBLE')
+			{
 				list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
 				$max = $len;
-				if (isset($decimal) && $decimal != 0) {
+
+				if (isset($decimal) && $decimal != 0)
+				{
 					$max = $len + 1;		// Add 1 to allow for the
 				}
 				$rules .= 'max_length['.$max.']';
 			}
-			else {
+			else
+			{
 				$rules .= 'max_length['.set_value("db_field_length_value$counter").']';
 			}
 		}
@@ -568,11 +594,11 @@ $controller = str_replace('{class_content}', $body, $mb_class_wrapper);
 if ($controller_name == $module_name_lower)
 {
 	$controller = str_replace('{extend_class}', 'Front_Controller', $controller);
-} else
+}
+else
 {
 	$controller = str_replace('{extend_class}', 'Admin_Controller', $controller);
 }
-
 
 // Echo out the final controller
 
@@ -581,5 +607,3 @@ echo $controller;
 // Clean up memory
 
 unset($body, $mb_class_wrapper, $mb_constructor, $mb_index, $mb_create, $mb_edit, $mb_delete, $mb_save, $controller);
-
-?>

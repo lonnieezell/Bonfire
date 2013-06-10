@@ -178,7 +178,7 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 			{
 				$maxlength = 'maxlength="' . set_value("db_field_length_value$counter") . '"';
 
-				if (set_value("db_field_type$counter") == 'DECIMAL' || set_value("db_field_type$counter") == 'FLOAT')
+				if (set_value("db_field_type$counter") == 'DECIMAL' || set_value("db_field_type$counter") == 'FLOAT' || set_value("db_field_type$counter") == 'DOUBLE')
 				{
 					list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
 					$max = $len;
@@ -231,7 +231,8 @@ if ($action_name != 'create')
 $view .= PHP_EOL . '
 			<div class="form-actions">
 				<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang(\''.$module_name_lower.'_action_'.$action_name.'\'); ?>" '.$on_click.' />
-				or <?php echo anchor(SITE_AREA .\'/' . $controller_name . '/' . $module_name_lower . '\', lang(\'' . $module_name_lower . '_cancel\'), \'class="btn btn-warning"\'); ?>
+				<?php echo lang(\'bf_or\'); ?>
+				<?php echo anchor(SITE_AREA .\'/' . $controller_name . '/' . $module_name_lower . '\', lang(\'' . $module_name_lower . '_cancel\'), \'class="btn btn-warning"\'); ?>
 				' . $delete . '
 			</div>
 		</fieldset>

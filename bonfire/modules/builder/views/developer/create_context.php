@@ -1,12 +1,18 @@
+<?php
+
+$validation_errors = validation_errors();
+$cancel = anchor(site_url(SITE_AREA . '/developer/builder'), '<span class="icon-white icon-ban-circle"></span>&nbsp;' . htmlspecialchars(lang('bf_action_cancel')), array('class' => 'btn btn-warning'));
+
+?>
 <p class="intro">Creates and sets up a new Context.</p>
 
 <div class="admin-box">
 
-	<?php if (validation_errors()) :?>
+<?php if ($validation_errors) :?>
 	<div class="alert alert-error">
-		<?php echo validation_errors(); ?>
+		<?php echo $validation_errors; ?>
 	</div>
-	<?php endif; ?>
+<?php endif; ?>
 
 	<?php echo form_open(current_url(), 'class="form-horizontal"'); ?>
 
@@ -19,20 +25,19 @@
 		</div>
 
 		<?php if (isset($roles) && is_array($roles) && count($roles)) :?>
-
-			<div class="control-group">
-				<label class="control-label" id="roles_label">Allow for Roles:</label>
-				<div class="controls" aria-labelledby="roles_label" role="group">
-				<?php foreach ($roles as $role) : ?>
-					<label class="checkbox">
-						<input type="checkbox" name="roles[]" value="<?php echo $role->role_id ?>" <?php echo set_checkbox('roles[]', $role->role_id) ?> /> <?php echo $role->role_name; ?>
-					</label>
-				<?php endforeach; ?>
-				</div>
+		<div class="control-group">
+			<label class="control-label" id="roles_label">Allow for Roles:</label>
+			<div class="controls" aria-labelledby="roles_label" role="group">
+			<?php foreach ($roles as $role) : ?>
+				<label class="checkbox">
+					<input type="checkbox" name="roles[]" value="<?php echo $role->role_id ?>" <?php echo set_checkbox('roles[]', $role->role_id) ?> /> <?php echo $role->role_name; ?>
+				</label>
+			<?php endforeach; ?>
 			</div>
-
+		</div>
 		<?php endif; ?>
-		<!-- TODO Add this in later.
+
+		<?php /* TODO: Add this in later.
 		<div class="control-group">
 			<div class="controls">
 				<label class="checkbox">
@@ -40,10 +45,11 @@
 				</label>
 			</div>
 		</div>
-		-->
+		*/ ?>
+
 		<div class="form-actions">
-			<input type="submit" name="build" class="btn btn-primary" value="Create It" /> or
-			<a href="<?php echo site_url(SITE_AREA .'/developer/builder') ?>"><?php e(lang('bf_action_cancel')) ?></a>
+			<input type="submit" name="build" class="btn btn-primary" value="Create It" />
+			<?php echo $cancel; ?>
 		</div>
 
 	<?php echo form_close(); ?>

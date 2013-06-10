@@ -44,16 +44,19 @@ class Developer extends Admin_Controller {
         parent::__construct();
 
         $this->auth->restrict('Site.Developer.View');
+
         $this->load->library('modulebuilder');
         $this->load->config('modulebuilder');
-        $this->lang->load('builder');
         $this->load->helper('file');
-        $this->load->dbforge();
+
+        $this->lang->load('builder');
 
         $this->options = $this->config->item('modulebuilder');
 
         Template::set_block('sub_nav', 'developer/_sub_nav');
         Template::set_block('sidebar', 'developer/sidebar');
+
+        Assets::add_module_js('builder', 'modulebuilder.js');
 
     }//end __construct
 
@@ -76,7 +79,7 @@ class Developer extends Admin_Controller {
         {
             $configs[$module] = module_config($module);
 
-            if (!isset($configs[$module]['name']))
+            if ( ! isset($configs[$module]['name']))
             {
                 $configs[$module]['name'] = ucwords($module);
             }
@@ -88,6 +91,7 @@ class Developer extends Admin_Controller {
         ksort($configs);
         Template::set('modules', $configs);
         Template::set('toolbar_title', 'Manage Modules');
+
         Template::render('two_left');
 
     }//end index()
@@ -121,9 +125,7 @@ class Developer extends Admin_Controller {
 
     		if ($this->form_validation->run() !== false)
     		{
-    			/*
-    				Validated!
-    			*/
+    			// Validated!
 	    		$name		= $this->input->post('context_name');
 		    	$for_roles	= $this->input->post('roles');
 		    	$migrate	= $this->input->post('migrate') == 'on' ? true : false;
@@ -133,7 +135,7 @@ class Developer extends Admin_Controller {
 		    	if (Contexts::create_context($name, $for_roles, $migrate))
 		    	{
 		    		Template::set_message('Context succesfully created.', 'success');
-			    	redirect(SITE_AREA .'/developer/builder');
+			    	redirect(SITE_AREA . '/developer/builder');
 		    	}
 		    	else
 		    	{
@@ -143,6 +145,7 @@ class Developer extends Admin_Controller {
     	}
 
     	Template::set('toolbar_title', lang('mb_create_a_context'));
+
     	Template::render();
     }
 
@@ -161,12 +164,9 @@ class Developer extends Admin_Controller {
      */
     public function create_module($fields = 0)
     {
-        Assets::add_module_js('builder', 'modulebuilder.js');
-
         $this->auth->restrict('Bonfire.Modules.Add');
 
         $hide_form = false;
-
         $this->field_total = $fields;
 
         // validation hasn't been passed
@@ -182,6 +182,7 @@ class Developer extends Admin_Controller {
             {
                 Template::set('form_error', FALSE);
             }
+
             $query = $this->db->select('role_id,role_name')->where('deleted', 0)->order_by('role_name')->get('roles');
             Template::set('roles', $query->result_array());
             Template::set('form_action_options', $this->options['form_action_options']);
@@ -189,30 +190,32 @@ class Developer extends Admin_Controller {
             Template::set('validation_limits', $this->options['validation_limits']);
             Template::set('field_numbers', range(0,20));
             Template::set('field_total', $this->field_total);
+
             Template::set_view('developer/modulebuilder_form');
 
         }
-        elseif($this->input->post('module_db') == 'existing' && $this->field_total == 0)
+        elseif ($this->input->post('module_db') == 'existing' && $this->field_total == 0)
         {
             // if the user has specified the table including the prefix then remove the prefix
             $_POST['table_name'] = preg_replace("/^".$this->db->dbprefix."/", "", $this->input->post('table_name'));
-
 
             // read the fields from the specified db table and pass them back into the form
             $table_fields = $this->table_info($this->input->post('table_name'));
 
             $num_fields = 0;
 
-            if (is_array($table_fields)) {
+            if (is_array($table_fields))
+			{
                 $num_fields = count($table_fields);
             }
-
             Template::set('field_total', $this->field_total);
-            if ($num_fields != 0) {
+
+            if ($num_fields != 0)
+			{
                 Template::set('field_total', $num_fields - 1); // discount the first field as it is the primary key
             }
 
-            if (!empty($_POST) && $num_fields == 0)
+            if ( ! empty($_POST) && $num_fields == 0)
             {
                 Template::set('form_error', TRUE);
                 log_message('error', "ModuleBuilder: The specified table name does not exist");
@@ -224,12 +227,14 @@ class Developer extends Admin_Controller {
             }
 
             $query = $this->db->select('role_id,role_name')->order_by('role_name')->get('roles');
+
             Template::set('roles', $query->result_array());
             Template::set('existing_table_fields', $table_fields);
             Template::set('form_action_options', $this->options['form_action_options']);
             Template::set('validation_rules', $this->options['validation_rules']);
             Template::set('validation_limits', $this->options['validation_limits']);
-            Template::set('field_numbers', range(0,20));
+            Template::set('field_numbers', range(0, 20));
+
             Template::set_view('developer/modulebuilder_form');
 
         }
@@ -242,13 +247,12 @@ class Developer extends Admin_Controller {
            $this->activity_model->log_activity((integer) $this->current_user->id, lang('mb_act_create').': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
 
             Template::set_view('developer/output');
+
         }//end if
 
         // check that the modules folder is writeable
         Template::set('writeable', $this->_check_writeable());
-
         Template::set('error', array());
-
         Template::set('toolbar_title', 'Module Builder');
 
         Template::render();
@@ -268,53 +272,51 @@ class Developer extends Admin_Controller {
     {
         $module_name = $this->input->post('module');
 
-        if (!empty($module_name))
+        if ( ! empty($module_name))
         {
             $this->auth->restrict('Bonfire.Modules.Delete');
-
-            $prefix = $this->db->dbprefix;
 
             $this->db->trans_begin();
 
             // check if there is a model to drop (non-table modules will have no model)
-            $model_name = $module_name."_model";
-            if (module_file_path($module_name,'models',$model_name.'.php'))
+            $model_name = $module_name . '_model';
+            if (module_file_path($module_name, 'models', $model_name . '.php'))
             {
                 // drop the table
-                $this->load->model($module_name.'/'.$model_name,'mt');
+                $this->load->model($module_name . '/' . $model_name, 'mt');
                 $this->dbforge->drop_table($this->mt->get_table());
             }
 
             // get any permission ids
-			$this->db->select('permission_id')->like('name', "{$module_name}.", 'after');
-
-			$query = $this->db->get('permissions');
+			$query = $this->db->select('permission_id')
+				->like('name', $module_name . '.', 'after')
+				->get('permissions');
 
             if ($query->num_rows() > 0)
             {
-                foreach($query->result_array() as $row)
+                foreach ($query->result_array() as $row)
                 {
                     // undo any permissions that exist
-                    $this->db->where('permission_id',$row['permission_id']);
-                    $this->db->delete('permissions');
+                    $this->db->where('permission_id', $row['permission_id'])
+						->delete('permissions');
 
-                    // and fron the roles as well.
-                    $this->db->where('permission_id',$row['permission_id']);
-                    $this->db->delete('role_permissions');
+                    // and from the roles as well.
+                    $this->db->where('permission_id', $row['permission_id'])
+							->delete('role_permissions');
                 }
             }
 
             // drop the schema - old Migration schema method
             $module_name_lower = preg_replace("/[ -]/", "_", strtolower($module_name));
-            if ($this->db->field_exists( $module_name_lower . '_version', 'schema_version'))
+            if ($this->db->field_exists($module_name_lower . '_version', 'schema_version'))
             {
                 $this->dbforge->drop_column('schema_version', $module_name_lower . '_version');
             }
+
             // drop the Migration record - new Migration schema method
-            $module_name_lower = preg_replace("/[ -]/", "_", strtolower($module_name));
             if ($this->db->field_exists('version', 'schema_version'))
             {
-                $this->db->delete('schema_version', array('type' => $module_name_lower.'_'));
+                $this->db->delete('schema_version', array('type' => $module_name_lower . '_'));
             }
 
             if ($this->db->trans_status() === FALSE)
@@ -343,7 +345,7 @@ class Developer extends Admin_Controller {
             }//end if
         }//end if
 
-        redirect(SITE_AREA .'/developer/builder');
+        redirect(SITE_AREA . '/developer/builder');
 
     }//end delete()
 
@@ -399,7 +401,7 @@ class Developer extends Admin_Controller {
                 $this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");
             }
 
-            for($counter=1; $field_total >= $counter; $counter++)
+            for ($counter = 1; $field_total >= $counter; $counter++)
             {
                 if ($counter != 1) // better to do it this way round as this statement will be fullfilled more than the one below
                 {
@@ -413,10 +415,11 @@ class Developer extends Admin_Controller {
 
                 $name_required = '';
                 $label = $this->input->post("view_field_label$counter");
-                if( !empty($label) )
+                if ( ! empty($label))
                 {
                     $name_required = 'required|';
                 }
+
                 $this->form_validation->set_rules("view_field_name$counter","Name $counter","trim|".$name_required."callback__no_match[$counter]|xss_clean");
                 $this->form_validation->set_rules("view_field_type$counter","Field Type $counter","trim|required|xss_clean|alpha");
                 $this->form_validation->set_rules("db_field_type$counter","DB Field Type $counter","trim|xss_clean|alpha");
@@ -433,12 +436,13 @@ class Developer extends Admin_Controller {
 					'YEAR',
 				);
 
-                $db_len_required = '';
                 $field_type = $this->input->post("db_field_type$counter");
-                if( !empty($label) && !in_array($field_type, $no_length) && !in_array($field_type, $optional_length))
+                $db_len_required = '';
+                if ( ! empty($label) && ! in_array($field_type, $no_length) && ! in_array($field_type, $optional_length))
                 {
                     $db_len_required = 'required|';
                 }
+
                 $this->form_validation->set_rules("db_field_length_value$counter","DB Field Length $counter","trim|".$db_len_required."xss_clean");
                 $this->form_validation->set_rules('validation_rules'.$counter.'[]',"Validation Rules $counter",'trim|xss_clean');
             }
@@ -467,59 +471,56 @@ class Developer extends Admin_Controller {
         // check that the table exists in this database
         if ($this->db->table_exists($table_name))
         {
+			$fields = $this->db->field_data($table_name);
 
-			// TODO: Replace SHOW COLUMNS FROM with field_data($table_name) ?
-            $query_string = "SHOW COLUMNS FROM ".$this->db->dbprefix.$table_name;
-            if($query = $this->db->query($query_string))
-            {
+			// We have a title - Edit it
+			foreach ($fields as $field)
+			{
+				$field_array = array();
 
-                // We have a title - Edit it
-                foreach($query->result_array() as $field)
-                {
-                    $field_array = array();
+				$field_array['name'] = $field->name;
 
-                    $field_array['name'] = $field['Field'];
+				$type = '';
+				if (strpos($field->type, "("))
+				{
+					list($type, $max_length) = explode("--", str_replace("(", "--", str_replace(")", "", $field->type)));
+				}
+				else
+				{
+					$type = $field->type;
+				}
 
-                    $type = '';
-                    if(strpos($field['Type'], "("))
-                    {
-                        list($type, $max_length) = explode("--", str_replace("(", "--", str_replace(")", "", $field['Type'])));
-                    }
-                    else
-                    {
-                        $type = $field['Type'];
-                    }
+				$field_array['type'] = strtoupper($type);
 
-                    $field_array['type'] = strtoupper($type);
+				//TODO: check $field->max_length ?
+				$values = '';
+				if (is_numeric($max_length))
+				{
+					$max_length = $max_length;
+				}
+				else
+				{
+					$values = $max_length;
+					$max_length = 1;
+				}
 
-                    $values = '';
-                    if(is_numeric($max_length))
-                    {
-                        $max_length = $max_length;
-                    }
-                    else
-                    {
-                        $values = $max_length;
-                        $max_length = 1;
-                    }
+				$field_array['max_length'] = $max_length;
+				$field_array['values'] = $values;
 
-                    $field_array['max_length'] = $max_length;
-                    $field_array['values'] = $values;
+				$primary_key = 0;
+				if ($field->primary_key == 1)
+				{
+					$primary_key = 1;
+				}
+				$field_array['primary_key'] = $primary_key;
 
-                    $primary_key = 0;
-                    if($field['Key'] == "PRI") {
-                        $primary_key = 1;
-                    }
-                    $field_array['primary_key'] = $primary_key;
+				$field_array['default'] = $field->default;
 
-                    $field_array['default'] = $field['Default'];
+				$fields[] = $field_array;
+			} // end foreach
 
-                    $fields[] = $field_array;
-                } // end foreach
+			return $fields;
 
-                return $fields;
-
-            }//end if
         }//end if
 
         return FALSE;
@@ -527,80 +528,79 @@ class Developer extends Admin_Controller {
     }//end table_info()
 
 
-    //--------------------------------------------------------------------
+	//--------------------------------------------------------------------
 
-    /**
-     * Handles the heavy-lifting of building a module from ther user's specs.
-     *
-     * @access private
-     *
-     * @param int $field_total The number of fields to add to the table
-     *
-     * @return void
-     */
-    private function build_module($field_total=0)
-    {
-        $module_name        = $this->input->post('module_name');
-        $table_name         = strtolower(preg_replace("/[ -]/", "_", $this->input->post('table_name')));
-        $contexts           = $this->input->post('contexts');
-        $action_names       = $this->input->post('form_action');
-        $module_description = $this->input->post('module_description');
-        $role_id            = $this->input->post('role_id');
+	/**
+	 * Handles the heavy-lifting of building a module from ther user's specs.
+	 *
+	 * @access private
+	 *
+	 * @param int $field_total The number of fields to add to the table
+	 *
+	 * @return void
+	 */
+	private function build_module($field_total=0)
+	{
+		$module_name			= $this->input->post('module_name');
+		$table_name				= strtolower(preg_replace("/[ -]/", "_", $this->input->post('table_name')));
+		$contexts				= $this->input->post('contexts');
+		$action_names			= $this->input->post('form_action');
+		$module_description		= $this->input->post('module_description');
+		$role_id				= $this->input->post('role_id');
+		$db_required			= $this->input->post('module_db');
+		$table_as_field_prefix	= (bool) $this->input->post('table_as_field_prefix');
+		$primary_key_field		= $this->input->post('primary_key_field');
+		$form_error_delimiters	= explode(',', $this->input->post('form_error_delimiters'));
 
-        $db_required = $this->input->post('module_db');
+		if ($primary_key_field == '')
+		{
+			$primary_key_field = $this->options['primary_key_field'];
+		}
 
-		$table_as_field_prefix = (bool) $this->input->post('table_as_field_prefix');
-
-        $primary_key_field = $this->input->post('primary_key_field');
-        if( $primary_key_field == '')
-        {
-            $primary_key_field = $this->options['primary_key_field'];
-        }
-
-        $form_error_delimiters = explode(',', $this->input->post('form_error_delimiters'));
-        if( !is_array($form_error_delimiters) OR count($form_error_delimiters) != 2)
-        {
-            $form_error_delimiters = $this->options['$form_error_delimiters'];
-        }
+		if ( ! is_array($form_error_delimiters) OR count($form_error_delimiters) != 2)
+		{
+			$form_error_delimiters = $this->options['$form_error_delimiters'];
+		}
 
 		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix);
 
-        // make the variables available to the view file
-        $data['module_name']        = $module_name;
-        $data['module_name_lower']  = strtolower(preg_replace("/[ -]/", "_", $module_name));
-        $data['controller_name']    = preg_replace("/[ -]/", "_", $module_name);
-        $data['table_name']         = empty($table_name) ? strtolower(preg_replace("/[ -]/", "_", $module_name)) : $table_name;
-        $data = $data + $file_data;
+		// make the variables available to the view file
+		$data['module_name']		= $module_name;
+		$data['module_name_lower']	= strtolower(preg_replace("/[ -]/", "_", $module_name));
+		$data['controller_name']	= preg_replace("/[ -]/", "_", $module_name);
+		$data['table_name']			= empty($table_name) ? strtolower(preg_replace("/[ -]/", "_", $module_name)) : $table_name;
 
-        // Allow for the Old method - update the schema first to prevent errors in duplicate column names due to Migrations.php caching db columns
-        if (!$this->db->field_exists('version', 'schema_version'))
-        {
-            $this->load->dbforge();
-            $this->dbforge->add_column('schema_version', array(
-                    $data['module_name_lower'] . '_version' => array(
-                    'type'          => 'INT',
-                    'constraint'    => 4,
-                    'null'          => true,
-                    'default'       => 0
-                )
-            ));
-        }
+		$data = $data + $file_data;
 
-        // load the migrations library
-        $this->load->library('migrations/Migrations');
-        // run the migration install routine
-        if ($this->migrations->install($data['module_name_lower'] . '_'))
-        {
-            $data['mb_migration_result'] = 'mb_out_tables_success';
-        }
-        else
-        {
-            $data['mb_migration_result'] = 'mb_out_tables_error';
-        }
+		// Allow for the Old method - update the schema first to prevent errors in duplicate column names due to Migrations.php caching db columns
+		if ( ! $this->db->field_exists('version', 'schema_version'))
+		{
+			$this->dbforge->add_column('schema_version', array(
+				$data['module_name_lower'] . '_version' => array(
+					'type'			=> 'INT',
+					'constraint'	=> 4,
+					'null'			=> true,
+					'default'		=> 0,
+				),
+			));
+		}
 
-        Template::set($data);
+		// load the migrations library
+		$this->load->library('migrations/Migrations');
 
-    }//end build_module()
+		// run the migration install routine
+		if ($this->migrations->install($data['module_name_lower'] . '_'))
+		{
+			$data['mb_migration_result'] = 'mb_out_tables_success';
+		}
+		else
+		{
+			$data['mb_migration_result'] = 'mb_out_tables_error';
+		}
+
+		Template::set($data);
+
+	}//end build_module()
 
     //--------------------------------------------------------------------
 
@@ -620,7 +620,7 @@ class Developer extends Admin_Controller {
      */
     public function _no_match($str, $fieldno)
     {
-        for($counter=1; $this->field_total >= $counter; $counter++)
+        for ($counter = 1; $this->field_total >= $counter; $counter++)
         {
             // nothing has been entered into this field so we don't need to check
             // or the field being checked is the same as the field we are checking from
@@ -640,7 +640,6 @@ class Developer extends Admin_Controller {
     }
 
     //--------------------------------------------------------------------
-
 
     /**
      * Check that the Modules folder is writeable
@@ -667,7 +666,7 @@ class Developer extends Admin_Controller {
      */
     public function _modulename_check($str)
     {
-        if (!preg_match("/^([A-Za-z \-]+)$/", $str))
+        if ( ! preg_match("/^([A-Za-z \-]+)$/", $str))
         {
             $this->form_validation->set_message('_modulename_check', 'The %s field is not valid');
             return FALSE;
