@@ -15,32 +15,31 @@
 class Authenticated_Controller extends Base_Controller
 {
 
-    //--------------------------------------------------------------------
+	//--------------------------------------------------------------------
 
-    /**
-     * Class constructor setup login restriction and load various libraries
-     *
-     */
-    public function __construct()
-    {
-        parent::__construct();
+	/**
+	 * Class constructor setup login restriction and load various libraries
+	 *
+	 */
+	public function __construct()
+	{
+		// Load the Auth library before the parent constructor to ensure
+		// the current user's settings are honored by the parent
+		$this->load->library('users/auth');
 
-        $this->load->library('users/auth');
+		parent::__construct();
 
-        // Make sure we're logged in.
-        $this->auth->restrict();
+		// Make sure we're logged in.
+		$this->auth->restrict();
 
-        $this->set_current_user();
+		// Load additional libraries
+		$this->load->helper('form');
+		$this->load->library('form_validation');
+		$this->form_validation->set_error_delimiters('', '');
+		$this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
+	}//end construct()
 
-        // Load additional libraries
-        $this->load->helper('form');
-        $this->load->library('form_validation');
-        $this->form_validation->set_error_delimiters('', '');
-        $this->form_validation->CI =& $this;    // Hack to make it work properly with HMVC
-    }//end construct()
-
-    //--------------------------------------------------------------------
-
+	//--------------------------------------------------------------------
 
 }
 
