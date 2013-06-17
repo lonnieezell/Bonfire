@@ -89,7 +89,7 @@ echo form_open();
 				<td class="column-check"><input type="checkbox" name="checked[]" value="<?php echo $user->id; ?>" /></td>
 				<td class='id'><?php echo $user->id; ?></td>
 				<td><?php
-					echo anchor(site_url(SITE_AREA . '/settings/users/edit/' . $user->id, $user->username));
+					echo anchor(site_url(SITE_AREA . '/settings/users/edit/' . $user->id), $user->username);
 
 					if ($user->banned) :
 					?>
