@@ -886,7 +886,7 @@ class Assets
 		$src = self::combine_js($scripts, 'module');
 
 		$attr = array(
-			'src'	=> $src .'?_dt='.time(),
+			'src'	=> $src . '?_dt=' . time(),
 			'type'	=> 'text/javascript',
 		);
 
@@ -1030,10 +1030,11 @@ class Assets
 	 *
 	 * @param string $image       The name of the image file
 	 * @param array  $extra_attrs An of key/value pairs that are attributes that should be added to the tag, such as height, width, class, etc.
+	 * @param bool	 $suppress_eol Optionally suppresses the newline after the img tag
 	 *
 	 * @return string A string containing the image tag.
 	 */
-	public static function image($image=null, $extra_attrs=array())
+	public static function image($image=null, $extra_attrs=array(), $suppress_eol=false)
 	{
 		if (empty($image))
 		{
@@ -1049,7 +1050,9 @@ class Assets
 
 		$attrs = array_merge($attrs, $extra_attrs);
 
-		return '<img'. self::attributes($attrs) ." />\n";
+		$return = '<img' . self::attributes($attrs) . ' />';
+
+		return ($suppress_eol ? $return : $return . PHP_EOL);
 
 	}//end image()
 
