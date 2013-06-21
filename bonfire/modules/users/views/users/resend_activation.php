@@ -3,23 +3,14 @@
 </div>
 
 <?php if (validation_errors()) { ?>
-<div class="row-fluid">
-	<div class="span8 offset2">
-		<div class="alert alert-error fade in">
-		  <a data-dismiss="alert" class="close">&times;</a>
-			<?php echo validation_errors(); ?>
-		</div>
+	<div class="alert alert-error fade in">
+		<?php echo validation_errors(); ?>
 	</div>
-</div>
 <?php } else { ?>
 
-<div class="row-fluid">
-	<div class="span8 offset2">
-		<div class="well shallow-well">
-			<?php echo lang('us_activate_resend_note'); ?>
-		</div>
+	<div class="well shallow-well">
+		<?php echo lang('us_activate_resend_note'); ?>
 	</div>
-</div>
 <?php } ?>
 <div class="row-fluid">
 	<div class="span8 offset2">

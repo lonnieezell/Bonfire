@@ -1,26 +1,16 @@
-		<div class="page-header">
-				<h1>Reset Your Password</h1>
-		</div>
+	<div class="page-header">
+		<h1>Reset Your Password</h1>
+	</div>
 
-		<div class="row-fluid">
-			<div class="span12">
-				<div class="alert alert-info fade in">
-						<a data-dismiss="alert" class="close">&times;</a>
-						<h4 class="alert-heading"><?php echo lang('us_reset_password_note'); ?></h4>
-				</div>
-			</div>
-		</div>
+	<div class="alert alert-info fade in">
+		<h4 class="alert-heading"><?php echo lang('us_reset_password_note'); ?></h4>
+	</div>
 
 
 <?php if (validation_errors()) : ?>
-		<div class="row-fluid">
-			<div class="span12">
-				<div class="alert alert-error fade in">
-						<a data-dismiss="alert" class="close">&times;</a>
-					<?php echo validation_errors(); ?>
-				</div>
-			</div>
-		</div>
+	<div class="alert alert-error fade in">
+		<?php echo validation_errors(); ?>
+	</div>
 <?php endif; ?>
 
 <div class="row-fluid">

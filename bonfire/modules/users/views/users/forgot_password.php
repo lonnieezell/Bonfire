@@ -3,23 +3,13 @@
 </div>
 
 <?php if (validation_errors()) : ?>
-<div class="row-fluid">
-	<div class="span12">
-		<div class="alert alert-error fade in">
-		  <a data-dismiss="alert" class="close">&times;</a>
-			<?php echo validation_errors(); ?>
-		</div>
+	<div class="alert alert-error fade in">
+		<?php echo validation_errors(); ?>
 	</div>
-</div>
 <?php endif; ?>
 
-<div class="row-fluid">
-	<div class="span12">
-		<div class="alert alert-info fade in">
-		  <a data-dismiss="alert" class="close">&times;</a>
-			<?php echo lang('us_reset_note'); ?>
-		</div>
-	</div>
+<div class="alert alert-info fade in">
+	<?php echo lang('us_reset_note'); ?>
 </div>
 
 <div class="row-fluid">

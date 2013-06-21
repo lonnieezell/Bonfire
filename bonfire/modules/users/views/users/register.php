@@ -1,27 +1,17 @@
 <section id="register">
 	<div class="page-header">
-		<h1><?php echo lang('us_login'); ?></h1>
+		<h1><?php echo lang('us_sign_up'); ?></h1>
 	</div>
 
 <?php if (validation_errors()) : ?>
-		<div class="row-fluid">
-			<div class="span12">
-				<div class="alert alert-error fade in">
-						<a data-dismiss="alert" class="close">&times;</a>
-					<?php echo validation_errors(); ?>
-				</div>
-			</div>
-		</div>
+	<div class="alert alert-error fade in">
+		<?php echo validation_errors(); ?>
+	</div>
 <?php endif; ?>
 
-<div class="row-fluid">
-	<div class="span10 offset2">
-		<div class="alert alert-info fade in">
-		  <a data-dismiss="alert" class="close">&times;</a>
-			<h4 class="alert-heading"><?php echo lang('bf_required_note'); ?></h4>
-			<?php if (isset($password_hints) ) echo $password_hints; ?>
-		</div>
-	</div>
+<div class="alert alert-info fade in">
+	<h4 class="alert-heading"><?php echo lang('bf_required_note'); ?></h4>
+	<?php if (isset($password_hints) ) echo $password_hints; ?>
 </div>
 
 <div class="row-fluid">

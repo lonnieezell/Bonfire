@@ -7,8 +7,7 @@
 <?php if (validation_errors()) : ?>
 <div class="row-fluid">
 	<div class="span8 offset2">
-		<div class="alert alert-error fade in">
-		  <a data-dismiss="alert" class="close">&times;</a>
+		<div class="alert alert-error">
 			<?php echo validation_errors(); ?>
 		</div>
 	</div>
@@ -16,26 +15,18 @@
 <?php endif; ?>
 
 <?php if (isset($user) && $user->role_name == 'Banned') : ?>
-<div class="row-fluid">
-	<div class="span8 offset2">
-		<div data-dismiss="alert" class="alert alert-error fade in">
-		  <a data-dismiss="alert" class="close">&times;</a>
-			<?php echo lang('us_banned_admin_note'); ?>
-		</div>
+
+	<div data-dismiss="alert" class="alert alert-error">
+		<?php echo lang('us_banned_admin_note'); ?>
 	</div>
-</div>
+
 <?php endif; ?>
 
-<div class="row-fluid">
-	<div class="span8 offset2">
-		<div class="alert alert-info fade in">
-		  <a data-dismiss="alert" class="close">&times;</a>
-			<h4 class="alert-heading"><?php echo lang('bf_required_note'); ?></h4>
-			<?php if (isset($password_hints)):?>
-				<?php echo $password_hints; ?>
-			<?php endif;?>
-		</div>
-	</div>
+<div class="alert alert-info">
+	<h4 class="alert-heading"><?php echo lang('bf_required_note'); ?></h4>
+	<?php if (isset($password_hints)):?>
+		<?php echo $password_hints; ?>
+	<?php endif;?>
 </div>
 
 <div class="row-fluid">
@@ -123,7 +114,7 @@
 	<!-- Start of Form Actions -->
 	<div class="form-actions">
 		<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('bf_action_save') .' '. lang('bf_user') ?> " /> <?php echo lang('bf_or') ?>
-		<?php echo anchor('/', '<i class="icon-refresh icon-white">&nbsp;</i>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-warning"'); ?>
+		<?php echo anchor('/', lang('bf_action_cancel')); ?>
 	</div>
 	<!-- End of Form Actions -->
 
