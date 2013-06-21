@@ -1,11 +1,13 @@
-<?php echo theme_view('parts/_header'); ?>
+<?php echo theme_view('_header'); ?>
 
-<div class="container body narrow-body"> <!-- Start of Main Container -->
+<div class="container"> <!-- Start of Main Container -->
 
-<?php
+    <?php echo theme_view('_sitenav'); ?>
 
-	echo Template::message();
-	echo isset($content) ? $content : Template::yield();
-?>
+    <?php
 
-<?php echo theme_view('parts/_footer'); ?>
+        echo Template::message();
+        echo isset($content) ? $content : Template::yield();
+    ?>
+
+<?php echo theme_view('_footer'); ?>
