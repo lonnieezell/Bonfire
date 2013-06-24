@@ -76,11 +76,14 @@ class Docs extends Base_Controller {
 
             foreach ($map as $file)
             {
-                $title = str_replace('.md', '', $file);
-                $title = str_replace('_', ' ', $title);
-                $title = ucwords($title);
+                if (strpos($file, 'index') === false)
+                {
+                    $title = str_replace('.md', '', $file);
+                    $title = str_replace('_', ' ', $title);
+                    $title = ucwords($title);
 
-                $toc[ strtolower(config_item('docs.bf_title')) .'/'. $file ] = $title;
+                    $toc[ strtolower(config_item('docs.bf_title')) .'/'. $file ] = $title;
+                }
             }
         }
 
@@ -105,9 +108,23 @@ class Docs extends Base_Controller {
         // Is this core, app, or module?
         $type = array_shift($segments);
 
+        if (empty($type)) $type = 'application';
+
         // for now, assume we are using Markdown files as the only
         // allowed format. With an extension of '.md'
-        $file = implode('/', $segments) . '.md';
+        if (count($segments))
+        {
+            $file = implode('/', $segments) . '.md';
+        }
+        else
+        {
+            $file = 'index.md';
+
+            if (!is_file(APPPATH .'docs/'. $file))
+            {
+                $type = 'bonfire';
+            }
+        }
 
         switch ($type)
         {
@@ -115,6 +132,7 @@ class Docs extends Base_Controller {
                 $content = file_get_contents(BFPATH .'docs/'. $file);
                 break;
             case 'application':
+                $content = file_get_contents(APPPATH .'docs/'. $file);
                 break;
             default:
                 // Assume it's a module
