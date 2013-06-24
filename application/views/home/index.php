@@ -1,7 +1,7 @@
 <div class="jumbotron" text-align="center">
 	<h1>Welcome to Bonfire</h1>
 
-	<p class="lead">Kickstart your CodeIgniter applications and save yourself 100's of hours of development time.<br/>That means you make more money.</p>
+	<p class="lead">Kickstart your CodeIgniter applications and save yourself 100s of hours of development time.<br/>That means you make more money.</p>
 
 	<?php if (isset($current_user->email)) : ?>
 		<a href="<?php echo SITE_AREA ?>" class="btn btn-large btn-success">Go to the Admin area</a>
@@ -10,7 +10,6 @@
 	<?php endif;?>
 </div>
 
-
 <hr />
 
 <div class="row-fluid">
@@ -18,7 +17,7 @@
 	<div class="span6">
 		<h4>A Solid Base</h4>
 
-		<p>Bonfire is based on <a href="http://ellislab.com/codeigniter" target="_blank">CodeIgniter <?php echo CI_VERSION; ?></a>, a proven PHP framework. In order to make the best use of it, you should be comfortable with CodeIgniter and it's <a href="http://ellislab.com/codeigniter/user-guide/" target="_blank">documentation</a> first.</p>
+		<p>Bonfire is based on <a href="http://ellislab.com/codeigniter" target="_blank">CodeIgniter <?php echo CI_VERSION; ?></a>, a proven PHP framework. In order to make the best use of it, you should be comfortable with CodeIgniter and its <a href="http://ellislab.com/codeigniter/user-guide/" target="_blank">documentation</a> first.</p>
 
 		<p>We use Twitter's <a href="">Bootstrap</a> front-end framework and <a href="http://jquery.com/">jQuery</a> as the basis of the CSS and Javascript.</p>
 	</div>
@@ -45,12 +44,3 @@
 	</div>
 
 </div>
-
-<!--
-<p>If you're new to Bonfire, but familiar with <a href="http://www.codeigniter.com" target="_blank">CodeIgniter</a>, then you should be up an running within the system in no time.</p>
-
-<p>If you're new to CodeIgniter, make sure you read through and understand the latest <a href="http://codeigniter.com/user_guide/" target="_blank">CodeIgniter User Guide</a> before diving into Bonfire. Your headaches will thank you.</p>
-
-
-<p>If you are new to Bonfire, you should start by reading the <?php echo anchor('http://cibonfire.com/learn', 'docs', 'target="_blank"') ?>.</p>
--->
