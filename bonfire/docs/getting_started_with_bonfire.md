@@ -66,7 +66,7 @@ Installation is a simple process mainly composed of uploading your files and run
 Upload all of the files/folders from your package to your web server or development environment.  The web root should point to the main folder that contains the following files and folders:
 
 File/Folder     | Purpose
-----------------|-------------
+----------------|---------------
 assets/         | Holds your projects assets, like css, javascript and images.
 bonfire/        | Holds all of your application files, CodeIgniter, Modules and Themes.
 docs/           | Stores the latest built version of the documentation.
@@ -152,22 +152,21 @@ To make sure that your blog shows up in the admin area, we need to create a conf
 
 Create a new file in your new <tt>config</tt> folder, called <tt>config.php</tt>.
 
-```php
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $config['module_config'] = array(
-        'name'          => 'Blog',
-        'description'   => 'A Simple Blog Example',
-        'author'        => 'Your Name',
-        'homepage'      => 'http://...',
-        'version'       => '1.0.1',
-        'menu'          => array(
-            'context'   => 'path/to/view'
-        ),
-        'weights'       => array(
-            'context'   => 0
-        )
-    );
-```
+	<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+		$config['module_config'] = array(
+			'name'          => 'Blog',
+			'description'   => 'A Simple Blog Example',
+			'author'        => 'Your Name',
+			'homepage'      => 'http://...',
+			'version'       => '1.0.1',
+			'menu'          => array(
+				'context'   => 'path/to/view'
+			),
+			'weights'       => array(
+				'context'   => 0
+			)
+		);
+
 
 Not all of these settings will be used for the Blog module, but you should understand how they work.
 
@@ -191,38 +190,36 @@ In order to manage your blog, we will create a new entry under the Content menu 
 
 Create a new controller, <tt>blog/controllers/content.php</tt>. Each context uses a controller of the same name. In this case we want to create some actions for the Content Context, so we create a controller named <tt>content.php</tt>.
 
-```php
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    class Content extends Admin_Controller {
+	<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-        public function __construct()
-        {
-            parent::__construct();
+		class Content extends Admin_Controller
+		{
 
-            Template::set('toolbar_title', 'Manage Your Blog');
-        }
+			public function __construct()
+			{
+				parent::__construct();
 
-        //--------------------------------------------------------------------
+				Template::set('toolbar_title', 'Manage Your Blog');
+			}
 
-        public function index()
-        {
-            Template::render();
-        }
+			//--------------------------------------------------------------------
 
-        //--------------------------------------------------------------------
+			public function index()
+			{
+				Template::render();
+			}
 
-    }
-```
+			//--------------------------------------------------------------------
 
-Notice that the class is named the same as the Context, also, and it extends from <tt>Admin_Controller</tt>. The Admin_Controller is one of several controllers provided by Bonfire to take care of a few functions for you. In this case, the controller makes sure that we are logged in, sets up pagination defaults, sets the theme to the admin theme, and gets our form_validation library loaded and setup so that it works properly with HMVC.
+		}
+
+Notice that the class is named the same as the Context and it extends <tt>Admin_Controller</tt>. The Admin_Controller is one of several controllers provided by Bonfire to take care of a few functions for you. In this case, the controller makes sure that we are logged in, sets up pagination defaults, sets the theme to the admin theme, and gets our form_validation library loaded and setup so that it works properly with HMVC.
 
 In the <tt>__construct()</tt> method we are doing one thing currently, and that is to set the text that shows up in the sub-navigation bar just below the main menu in the admin area. We'll make more use of this bar in the future.
 
 The <tt>index()</tt> method is the method that will be called by default when you click on the <tt>Blog</tt> menu item. We use the Template library's <tt>render()</tt> method to display the view for this page. By default, this will look for a view in the module's views folder under the context name and method name. In this case, it would be searching for <tt>blog/views/content/index.php</tt>. Create that file now.
 
-```html+php
-<h1>Blog Index</h1>
-```
+	<h1>Blog Index</h1>
 
 We are keeping it simple just to make sure everything is in working order for now.
 
@@ -236,9 +233,9 @@ To add a link to the <tt>blog</tt> in the Content dropdown menu, you first need 
 4. Enter <tt>Allow users to view the Blog Content Context</tt> in the Description field.
 5. Click the <tt>Save Permission</tt> Button.
 6. Navigate to your admin area => Settings menu => Roles.
-7. Click <tt>Administrator<tt> in the table.
-8. Locate <tt>Blog<tt> under the Permissions header.
-9. Check the <tt>View<tt> box inline with <tt>Content<tt>.
+7. Click <tt>Administrator</tt> in the table.
+8. Locate <tt>Blog</tt> under the Permissions header.
+9. Check the <tt>View</tt> box inline with <tt>Content</tt>.
 
 You should now be able to see the <tt>blog</tt> link in the content's dropdown menu.
 
@@ -248,21 +245,21 @@ In order to view any posts, we will need to create a model that interacts with t
 
 Create a new model file at <tt>blog/models/post_model.php</tt>.
 
-```php
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Post_model extends MY_Model {
+	<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-    protected $table        = 'posts';
-    protected $key          = 'post_id';
-    protected $set_created  = true;
-    protected $set_modified = true;
-    protected $soft_deletes = true;
-    protected $date_format  = 'datetime';
+	class Post_model extends MY_Model
+	{
 
-    //---------------------------------------------------------------
+		protected $table        = 'posts';
+		protected $key          = 'post_id';
+		protected $set_created  = true;
+		protected $set_modified = true;
+		protected $soft_deletes = true;
+		protected $date_format  = 'datetime';
 
-}
-```
+		//---------------------------------------------------------------
+
+	}
 
 This is everything needed to get some pretty flexible CRUD setup and running for your post model.
 
@@ -286,16 +283,14 @@ With the settings above, our post_model will:
 
 Since the post_model will be used in nearly every method in our content controller, we will autoload it in the controller's <tt>__construct()</tt> method.
 
-```php
-public function __construct()
-{
-    parent::__construct();
+	public function __construct()
+	{
+		parent::__construct();
 
-    $this->load->model('post_model');
+		$this->load->model('post_model');
 
-    Template::set('toolbar_title', 'Manage Your Blog');
-}
-```
+		Template::set('toolbar_title', 'Manage Your Blog');
+	}
 
 ### 5.5 Migrations
 
@@ -305,39 +300,40 @@ Migrations are simply a set of commands that are run to make changes to the data
 
 Create a new file at <tt>blog/migrations/001_Initial_tables.php</tt>.
 
-```php
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Migration_Initial_tables extends Migration {
+	<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-    public function up()
-    {
-        $this->load->dbforge();
+	class Migration_Initial_tables extends Migration
+	{
 
-        $this->dbforge->add_field('post_id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT');
-        $this->dbforge->add_field('title VARCHAR(255) NOT NULL');
-        $this->dbforge->add_field('slug VARCHAR(255) NOT NULL');
-        $this->dbforge->add_field('body TEXT NULL');
-        $this->dbforge->add_field('created_on DATETIME NOT NULL');
-        $this->dbforge->add_field('modified_on DATETIME NULL');
-        $this->dbforge->add_field('deleted TINYINT(1) NOT NULL DEFAULT 0');
-        $this->dbforge->add_key('post_id', TRUE);
+		public function up()
+		{
+			$this->load->dbforge();
 
-        $this->dbforge->create_table('posts');
-    }
+			$this->dbforge->add_field('post_id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT');
+			$this->dbforge->add_field('title VARCHAR(255) NOT NULL');
+			$this->dbforge->add_field('slug VARCHAR(255) NOT NULL');
+			$this->dbforge->add_field('body TEXT NULL');
+			$this->dbforge->add_field('created_on DATETIME NOT NULL');
+			$this->dbforge->add_field('modified_on DATETIME NULL');
+			$this->dbforge->add_field('deleted TINYINT(1) NOT NULL DEFAULT 0');
+			$this->dbforge->add_key('post_id', TRUE);
 
-    //--------------------------------------------------------------------
+			$this->dbforge->create_table('posts');
+		}
 
-    public function down()
-    {
-        $this->load->dbforge();
+		//--------------------------------------------------------------------
 
-        $this->dbforge->drop_table('posts');
-    }
+		public function down()
+		{
+			$this->load->dbforge();
 
-    //--------------------------------------------------------------------
+			$this->dbforge->drop_table('posts');
+		}
 
-}
-```
+		//--------------------------------------------------------------------
+
+	}
+
 
 The <tt>up()</tt> method is ran whenever this migration is 'installed'. The <tt>down()</tt> method is ran whenever the migration is 'un-installed'.
 
@@ -349,11 +345,9 @@ To install this migration, navigate to Developer / Database / Migrations. Click 
 
 It's now time to expand our blog's content index method to show us a list of all posts in the system. Add the following lines to the <tt>index()</tt> method of the <tt>content</tt> controller, before the <tt>Template::render()</tt> method.
 
-```php
-$posts = $this->post_model->where('deleted', 0)->find_all();
+	$posts = $this->post_model->where('deleted', 0)->find_all();
 
-Template::set('posts', $posts);
-```
+	Template::set('posts', $posts);
 
 This calls our <tt>post_model</tt>'s <tt>find_all()</tt> method to retrieve all posts in the system. However, we don't want any deleted posts, so we filter those out with the <tt>where()</tt> method.
 
@@ -361,59 +355,57 @@ We then use the Template class' <tt>set()</tt> method to make the data available
 
 Edit your index.php view file to reflect the following:
 
-```html+php
-<div class="admin-box">
-    <h3>Blog Posts</h3>
+	<div class="admin-box">
+		<h3>Blog Posts</h3>
 
-    <?php echo form_open(); ?>
+		<?php echo form_open(); ?>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th class="column-check"><input class="check-all" type="checkbox" /></th>
-                <th>Title</th>
-                <th style="width: 10em">Date</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <td colspan="3">
-                    With selected:
-                    <input type="submit" name="submit" class="btn" value="Delete">
-                </td>
-            </tr>
-        </tfoot>
-        <tbody>
-        <?php if (isset($posts) && is_array($posts)) :?>
-            <?php foreach ($posts as $post) : ?>
-            <tr>
-                <td><input type="checkbox" name="checked[]" value="<?php echo $post->post_id ?>" /></td>
-                <td>
-                    <a href="<?php echo site_url(SITE_AREA .'/content/blog/edit_post/'. $post->post_id) ?>">
-                        <?php e($post->title); ?>
-                    </a>
-                </td>
-                <td>
-                    <?php echo date('M j, Y g:ia'); ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <tr>
-                <td colspan="3">
-                    <br/>
-                    <div class="alert alert-warning">
-                        No Posts found.
-                    </div>
-                </td>
-            </tr>
-        <?php endif; ?>
-        </tbody>
-    </table>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th class="column-check"><input class="check-all" type="checkbox" /></th>
+						<th>Title</th>
+						<th style="width: 10em">Date</th>
+					</tr>
+				</thead>
+				<tfoot>
+					<tr>
+						<td colspan="3">
+							With selected:
+							<input type="submit" name="submit" class="btn" value="Delete">
+						</td>
+					</tr>
+				</tfoot>
+				<tbody>
+				<?php if (isset($posts) && is_array($posts)) :?>
+					<?php foreach ($posts as $post) : ?>
+					<tr>
+						<td><input type="checkbox" name="checked[]" value="<?php echo $post->post_id ?>" /></td>
+						<td>
+							<a href="<?php echo site_url(SITE_AREA .'/content/blog/edit_post/'. $post->post_id) ?>">
+								<?php e($post->title); ?>
+							</a>
+						</td>
+						<td>
+							<?php echo date('M j, Y g:ia'); ?>
+						</td>
+					</tr>
+					<?php endforeach; ?>
+				<?php else: ?>
+					<tr>
+						<td colspan="3">
+							<br/>
+							<div class="alert alert-warning">
+								No Posts found.
+							</div>
+						</td>
+					</tr>
+				<?php endif; ?>
+				</tbody>
+			</table>
 
-    <?php echo form_close(); ?>
-</div>
-```
+		<?php echo form_close(); ?>
+	</div>
 
 This creates a table that will list each blog post, if any exist. If they don't then a notice will be displayed.
 
@@ -425,32 +417,28 @@ Now we just need a way to create new posts. Let's start by creating a new sub-me
 
 First, we create a view file holds the menu itself. Create a new file at <tt>blog/views/content/sub_nav.php</tt>.
 
-```html+php
-<ul class="nav nav-pills">
-    <li <?php echo $this->uri->segment(4) == '' ? 'class="active"' : '' ?>>
-        <a href="<?php echo site_url(SITE_AREA .'/content/blog') ?>">Posts</a>
-    </li>
-    <li <?php echo $this->uri->segment(4) == 'create' ? 'class="active"' : '' ?>>
-        <a href="<?php echo site_url(SITE_AREA .'/content/blog/create') ?>">New Post</a>
-    </li>
-</ul>
-```
+	<ul class="nav nav-pills">
+		<li <?php echo $this->uri->segment(4) == '' ? 'class="active"' : '' ?>>
+			<a href="<?php echo site_url(SITE_AREA .'/content/blog') ?>">Posts</a>
+		</li>
+		<li <?php echo $this->uri->segment(4) == 'create' ? 'class="active"' : '' ?>>
+			<a href="<?php echo site_url(SITE_AREA .'/content/blog/create') ?>">New Post</a>
+		</li>
+	</ul>
 
 Each link in this list will take us to a method within our content controller. We also check the url to see if this is an active link or not.
 
 To make this menu show up, we need to add it to our content controller's <tt>__construct()</tt> method.
 
-```php
-public function __construct()
-    {
-        parent::__construct();
+	public function __construct()
+	{
+		parent::__construct();
 
-        $this->load->model('post_model');
+		$this->load->model('post_model');
 
-        Template::set('toolbar_title', 'Manage Your Blog');
-        Template::set_block('sub_nav', 'content/sub_nav');
-    }
-```
+		Template::set('toolbar_title', 'Manage Your Blog');
+		Template::set_block('sub_nav', 'content/sub_nav');
+	}
 
 Reload your page in the admin area, and you will see the new menu appear. Clicking on 'New Post' throws an error since we haven't created that method yet. We will do that next.
 
@@ -460,61 +448,57 @@ We will start things simple by just displaying the form to create a new post, th
 
 Create a new <tt>create()</tt> method in your content controller.
 
-```php
-public function create()
-{
-    Template::set('toolbar_title', 'Create New Post');
-    Template::set_view('content/post_form');
-    Template::render();
-}
-```
+	public function create()
+	{
+		Template::set('toolbar_title', 'Create New Post');
+		Template::set_view('content/post_form');
+		Template::render();
+	}
 
 This sets the <tt>toolbar_title</tt> of the page, says that we want to use the view named <tt>views/content/post_form.php</tt>, and renders the form.
 
 Now we need create the form itself. We're using a file called <tt>post_form</tt> because we want to be able to use the form for both the create and edit pages.
 
-```html+php
-<div class="admin-box">
-    <h3>New Post</h3>
+	<div class="admin-box">
+		<h3>New Post</h3>
 
-    <?php echo form_open(current_url(), 'class="form-horizontal"'); ?>
+		<?php echo form_open(current_url(), 'class="form-horizontal"'); ?>
 
-    <div class="control-group <?php if (form_error('title')) echo 'error'; ?>">
-        <label for="title">Title</label>
-        <div class="controls">
-            <input type="text" name="title" class="input-xxlarge" value="<?php echo isset($post) ? $post->title : set_value('title'); ?>" />
-            <?php if (form_error('title')) echo '<span class="help-inline">'. form_error('title') .'</span>'; ?>
-        </div>
-    </div>
+			<div class="control-group <?php if (form_error('title')) echo 'error'; ?>">
+				<label for="title">Title</label>
+				<div class="controls">
+					<input type="text" name="title" class="input-xxlarge" value="<?php echo isset($post) ? $post->title : set_value('title'); ?>" />
+					<?php if (form_error('title')) echo '<span class="help-inline">'. form_error('title') .'</span>'; ?>
+				</div>
+			</div>
 
-    <div class="control-group <?php if (form_error('slug')) echo 'error'; ?>">
-        <label for="slug">Slug</label>
-        <div class="controls">
-            <div class="input-prepend">
-                <span class="add-on"><?php echo site_url() .'blog/' ?></span>
-                <input type="text" name="slug" class="input-xlarge" value="<?php echo isset($post) ? $post->slug : set_value('slug'); ?>" />
-            </div>
-            <?php if (form_error('slug')) echo '<span class="help-inline">'. form_error('slug') .'</span>'; ?>
-            <p class="help-block">The unique URL that this post can be viewed at.</p>
-        </div>
-    </div>
+			<div class="control-group <?php if (form_error('slug')) echo 'error'; ?>">
+				<label for="slug">Slug</label>
+				<div class="controls">
+					<div class="input-prepend">
+						<span class="add-on"><?php echo site_url() .'blog/' ?></span>
+						<input type="text" name="slug" class="input-xlarge" value="<?php echo isset($post) ? $post->slug : set_value('slug'); ?>" />
+					</div>
+					<?php if (form_error('slug')) echo '<span class="help-inline">'. form_error('slug') .'</span>'; ?>
+					<p class="help-block">The unique URL that this post can be viewed at.</p>
+				</div>
+			</div>
 
-    <div class="control-group <?php if (form_error('body')) echo 'error'; ?>">
-        <label for="body">Content</label>
-        <div class="controls">
-            <?php if (form_error('body')) echo '<span class="help-inline">'. form_error('body') .'</span>'; ?>
-            <textarea name="body" class="input-xxlarge" rows="15"><?php echo isset($post) ? $post->body : set_value('body') ?></textarea>
-        </div>
-    </div>
+			<div class="control-group <?php if (form_error('body')) echo 'error'; ?>">
+				<label for="body">Content</label>
+				<div class="controls">
+					<?php if (form_error('body')) echo '<span class="help-inline">'. form_error('body') .'</span>'; ?>
+					<textarea name="body" class="input-xxlarge" rows="15"><?php echo isset($post) ? $post->body : set_value('body') ?></textarea>
+				</div>
+			</div>
 
-    <div class="form-actions">
-        <input type="submit" name="submit" class="btn btn-primary" value="Save Post" />
-        or <a href="<?php echo site_url(SITE_AREA .'/content/blog') ?>">Cancel</a>
-    </div>
+			<div class="form-actions">
+				<input type="submit" name="submit" class="btn btn-primary" value="Save Post" />
+				or <a href="<?php echo site_url(SITE_AREA .'/content/blog') ?>">Cancel</a>
+			</div>
 
-    <?php echo form_close(); ?>
-</div>
-```
+		<?php echo form_close(); ?>
+	</div>
 
 Most of this is straight-forward. I do want to point out that for the values, we are checking whether a <tt>$post</tt> value is set or not, and then uses the form helper's <tt>set_value()</tt> method to set the value in the case of errors on the form.
 
@@ -524,60 +508,54 @@ We also use the form_validation library's <tt>form_error()</tt> function to setu
 
 Now, let's actually make it functional. In your content controller, add the following method:
 
-```php
-private function save_post($type='insert', $id=null)
-{
-    $this->form_validation->set_rules('title', 'Title', 'required|trim|strip_tags|xss_clean');
-    $this->form_validation->set_rules('slug', 'Slug', 'trim|strip_tags|xss_clean');
-    $this->form_validation->set_rules('body', 'Body', 'required|trim|strip_tags|xss_clean');
+	private function save_post($type='insert', $id=null)
+	{
+		$this->form_validation->set_rules('title', 'Title', 'required|trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('slug', 'Slug', 'trim|strip_tags|xss_clean');
+		$this->form_validation->set_rules('body', 'Body', 'required|trim|strip_tags|xss_clean');
 
-    if ($this->form_validation->run() === false)
-    {
-        return false;
-    }
+		if ($this->form_validation->run() === false)
+		{
+			return false;
+		}
 
-    // Compile our post data to make sure nothing
-    // else gets through.
-    $data = array(
-        'title' => $this->input->post('title'),
-        'slug'  => $this->input->post('slug'),
-        'body'  => $this->input->post('body')
-    );
+		// Compile our post data to make sure nothing
+		// else gets through.
+		$data = array(
+			'title' => $this->input->post('title'),
+			'slug'  => $this->input->post('slug'),
+			'body'  => $this->input->post('body')
+		);
 
-    if ($type == 'insert')
-    {
-        $return = $this->post_model->insert($data);
-    }
-    else    // Update
-    {
-        $return = $this->post_model->update($id, $data);
-    }
+		if ($type == 'insert')
+		{
+			$return = $this->post_model->insert($data);
+		}
+		else    // Update
+		{
+			$return = $this->post_model->update($id, $data);
+		}
 
-    return $return;
-}
-
-//--------------------------------------------------------------------
-```
+		return $return;
+	}
 
 And then modify the <tt>create()</tt> method to look like:
 
-```php
-public function create()
-{
-    if ($this->input->post('submit'))
-    {
-        if ($this->save_post())
-        {
-            Template::set_message('You post was successfully saved.', 'success');
-            redirect(SITE_AREA .'/content/blog');
-        }
-    }
+	public function create()
+	{
+		if ($this->input->post('submit'))
+		{
+			if ($this->save_post())
+			{
+				Template::set_message('You post was successfully saved.', 'success');
+				redirect(SITE_AREA .'/content/blog');
+			}
+		}
 
-    Template::set('toolbar_title', 'Create New Post');
-    Template::set_view('content/post_form');
-    Template::render();
-}
-```
+		Template::set('toolbar_title', 'Create New Post');
+		Template::set_view('content/post_form');
+		Template::render();
+	}
 
 What we've done here is to create a single method that can handle both creating and updating of a single post, <tt>save_post()</tt>. This method runs any form validation on the inputs and then saves the post. In the <tt>create()</tt> method we check to see if the form was submitted and tries saving it, if so. On a successful save, we're redirected back to the main posts listing.
 
@@ -585,25 +563,23 @@ What we've done here is to create a single method that can handle both creating 
 
 Editing our posts is very simple to do now. Simply add the following <tt>edit_post()</tt> method to your controller and you're up and running:
 
-```php
-public function edit_post($id=null)
-{
-    if ($this->input->post('submit'))
-    {
-        if ($this->save_post('update', $id))
-        {
-            Template::set_message('You post was successfully saved.', 'success');
-            redirect(SITE_AREA .'/content/blog');
-        }
-    }
+	public function edit_post($id=null)
+	{
+		if ($this->input->post('submit'))
+		{
+			if ($this->save_post('update', $id))
+			{
+				Template::set_message('You post was successfully saved.', 'success');
+				redirect(SITE_AREA .'/content/blog');
+			}
+		}
 
-    Template::set('post', $this->post_model->find($id));
+		Template::set('post', $this->post_model->find($id));
 
-    Template::set('toolbar_title', 'Edit Post');
-    Template::set_view('content/post_form');
-    Template::render();
-}
-```
+		Template::set('toolbar_title', 'Edit Post');
+		Template::set_view('content/post_form');
+		Template::render();
+	}
 
 ## 6 The Public Context
 
@@ -611,32 +587,32 @@ Now that we have basic administration pages in place, it's time to actually let 
 
 Create a new file, <tt>modules/blog/controllers/blog.php</tt>
 
-```php
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-class Blog extends Front_Controller {
+	<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-    public function __construct()
-    {
-        parent::__construct();
+	class Blog extends Front_Controller
+	{
 
-        $this->load->model('post_model');
-    }
+		public function __construct()
+		{
+			parent::__construct();
 
-    //--------------------------------------------------------------------
+			$this->load->model('post_model');
+		}
 
-    public function index()
-    {
-        $this->load->helper('typography');
+		//--------------------------------------------------------------------
 
-        Template::set('posts', $this->post_model->order_by('created_on', 'asc')->limit(5)->find_all());
+		public function index()
+		{
+			$this->load->helper('typography');
 
-        Template::render();
-    }
+			Template::set('posts', $this->post_model->order_by('created_on', 'asc')->limit(5)->find_all());
 
-    //--------------------------------------------------------------------
+			Template::render();
+		}
 
-}
-```
+		//--------------------------------------------------------------------
+
+	}
 
 This is just a typical CodeIgniter controller, which means that anything you can do in straight CodeIgniter, you can do here.
 
@@ -644,23 +620,21 @@ In this case, we're loading our model in the constructor, since we know that we'
 
 Then, it looks for a view file at <tt>blog/views/index.php</tt>. Create that file now.
 
-```html+php
-<?php if (isset($posts) && is_array($posts) && count($posts)) :?>
+	<?php if (isset($posts) && is_array($posts) && count($posts)) :?>
 
-    <?php foreach ($posts as $post) :?>
-    <div class="post">
-        <h2><?php e($post->title) ?></h2>
+		<?php foreach ($posts as $post) :?>
+		<div class="post">
+			<h2><?php e($post->title) ?></h2>
 
-        <?php echo auto_typography($post->body) ?>
-    </div>
-    <?php endforeach; ?>
+			<?php echo auto_typography($post->body) ?>
+		</div>
+		<?php endforeach; ?>
 
-<?php else : ?>
-    <div class="alert alert-info">
-        No Posts were found.
-    </div>
-<?php endif; ?>
-```
+	<?php else : ?>
+		<div class="alert alert-info">
+			No Posts were found.
+		</div>
+	<?php endif; ?>
 
 This is a very simple view, but should be enough to give you an understanding.
 
