@@ -91,6 +91,15 @@ ul.toc li a {
 ul.toc li a:hover { text-decoration: underline; }
 ul.toc li.active a { font-weight: bold; }
 
+ul.toc ul {
+    list-style-type: none;
+    padding-left: 0em;
+}
+ul.toc li.parent h4 {
+    font-weight: normal;
+    margin-top: 0.5em;
+}
+
 a:link, a:visited {
     color: #4183c4;
     text-decoration: none;

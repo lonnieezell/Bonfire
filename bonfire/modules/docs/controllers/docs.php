@@ -70,19 +70,31 @@ class Docs extends Base_Controller {
 
         if (is_dir($folder))
         {
-            $map = directory_map($folder);
-
-            if (!is_array($map)) return array();
-
-            foreach ($map as $file)
+            // If a file called _toc.ini file exists in the folder,
+            // we'll skip that and use it to build the links from.
+            if (is_file($folder .'/_toc.ini'))
             {
-                if (strpos($file, 'index') === false)
-                {
-                    $title = str_replace('.md', '', $file);
-                    $title = str_replace('_', ' ', $title);
-                    $title = ucwords($title);
+                $toc = parse_ini_file($folder .'/_toc.ini', true);
+            }
 
-                    $toc[ strtolower(config_item('docs.bf_title')) .'/'. $file ] = $title;
+            // If no toc file exists, build it from the
+            // files themselves.
+            else
+            {
+                $map = directory_map($folder);
+
+                if (!is_array($map)) return array();
+
+                foreach ($map as $file)
+                {
+                    if (strpos($file, 'index') === false)
+                    {
+                        $title = str_replace('.md', '', $file);
+                        $title = str_replace('_', ' ', $title);
+                        $title = ucwords($title);
+
+                        $toc[ strtolower(config_item('docs.bf_title')) .'/'. $file ] = $title;
+                    }
                 }
             }
         }

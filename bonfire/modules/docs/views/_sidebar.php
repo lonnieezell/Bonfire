@@ -11,7 +11,18 @@
 
         <ul class="toc">
         <?php foreach ($bf_docs as $file => $name) : ?>
-            <li><a href="<?php echo site_url('docs/'. str_replace('.md', '', $file)) ?>"><?php echo $name ?></a></li>
+            <?php if (is_array($name)) : ?>
+                <li class="parent"><h4><?php echo $file; ?></h4>
+                    <ul>
+                    <?php foreach ($name as $line => $namer) : ?>
+                        <li><a href="<?php echo site_url('docs/'. str_replace('.md', '', $line)) ?>"><?php echo $namer ?></a></li>
+                    <?php endforeach; ?>
+                    </li>
+                    </ul>
+                </li>
+            <?php else: ?>
+                <li><a href="<?php echo site_url('docs/'. str_replace('.md', '', $file)) ?>"><?php echo $name ?></a></li>
+            <?php endif; ?>
         <?php endforeach; ?>
         </ul>
     <?php endif; ?>
