@@ -141,10 +141,10 @@ class Docs extends Base_Controller {
         switch ($type)
         {
             case 'bonfire':
-                $content = file_get_contents(BFPATH .'docs/'. $file);
+                $content = is_file(BFPATH .'docs/'. $file) ? file_get_contents(BFPATH .'docs/'. $file) : '';
                 break;
             case 'application':
-                $content = file_get_contents(APPPATH .'docs/'. $file);
+                $content = is_file(APPPATH .'docs/'. $file) ? file_get_contents(APPPATH .'docs/'. $file) : '';
                 break;
             default:
                 // Assume it's a module
@@ -155,7 +155,7 @@ class Docs extends Base_Controller {
         $this->load->helper('markdown');
         $content = Markdown($content);
 
-        return $content;
+        return trim($content);
     }
 
     //--------------------------------------------------------------------
