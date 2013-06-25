@@ -30,6 +30,12 @@
     <!-- Module Specific Docs -->
     <?php if (isset($module_docs)) :?>
         <h3>Modules</h3>
+
+        <ul class="toc">
+        <?php foreach ($module_docs as $module => $mod_files) : ?>
+            <li><a href="<?php echo site_url('docs/'. $module) ?>"><?php echo ucwords(str_replace('_', ' ', $module)) ?></a></li>
+        <?php endforeach; ?>
+        </ul>
     <?php endif; ?>
 
 </div>
