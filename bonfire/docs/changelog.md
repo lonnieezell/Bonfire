@@ -49,6 +49,7 @@ Closes named issues:
 
 Additional changes:
 
+* $table in MY_Model changed to $_table to avoid potential conflict with the table library.
 * database backup - fix effect of yes/no dropdowns for languages other than English
 * database backup: .gzip doesn't work very well; use .gz instead
 * Template::redirect() - fix escaping of url [XSS?]
@@ -77,6 +78,8 @@ If you attempt to downgrade to 0.6.*, Bonfire will at best restore Site.Signin.A
 The comment recommending `IS_AJAX` as a security check has been removed.  `IS_AJAX` is not effective as a security check.  It may have happened to prevent CSRF on AJAX methods, but Bonfire now supports CodeIgniter CSRF protection (see upgrade notes for 0.6.1).  For other purposes, you may prefer to avoid the Bonfire-specific constant in favour of the standard CodeIgniter method `$this->input->is_ajax_request()`.
 
 Because the MY_Controller file no longer ships with Bonfire, you should make a backup of your current MY_Controller file, if you have made any changes. This file will be renamed to Base_Controller.php. Any changes you made should then be redistributed over the new Controller files in application/core.
+
+If you use the $table class var within any of your module's model files, you will need to change that reference to $_table.
 
 ## Released versions
 
