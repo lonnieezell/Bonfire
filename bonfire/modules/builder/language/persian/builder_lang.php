@@ -119,6 +119,7 @@ $lang['mb_form_is_natural_no_zero']	= 'طبيعي بدون صفر';
 $lang['mb_form_valid_ip']		= 'IP معتبر';
 $lang['mb_form_valid_base64']	= 'Base64 معتبر';
 $lang['mb_form_alpha_extra']	= 'حروف الفبا, خط زير, خط تيره, نقطه و خط فاصله.';
+$lang['mb_form_match_existing']	= 'Ensure this matches the existing fieldname!';
 
 // Activities
 $lang['mb_act_create']	= 'ايجاد افزونه';

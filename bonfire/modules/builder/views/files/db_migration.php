@@ -122,12 +122,13 @@ class Migration_Install_' . $table_name . ' extends Migration
 	// use soft deletes? Add deleted field.
 	if ($this->input->post('use_soft_deletes') == 'true')
 	{
-		$db_migration .= '
-		\'deleted\' => array(
-			\'type\' => \'TINYINT\',
-			\'constraint\' => 1,
-			\'default\' => \'0\',
-		),';
+		$delete_field = ($this->input->post('soft_delete_field')) ? $this->input->post('soft_delete_field') : 'deleted';
+		$db_migration .= "
+			'".$delete_field."' => array(
+				'type' => 'TINYINT',
+				'constraint' => 1,
+				'default' => '0',
+			),";
 	}
 
 	// use the created field? Add field and custom name if chosen.

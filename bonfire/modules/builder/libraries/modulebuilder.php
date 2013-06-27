@@ -181,7 +181,7 @@ class Modulebuilder
 
             // db based files - migrations
             if( $db_required == 'new') {
-                $content['db_migration'] =  $this->build_db_sql($field_total, $module_name, $primary_key_field, $table_name, $table_as_field_prefix);
+                $content['db_migration'] = $this->build_db_sql($field_total, $module_name, $primary_key_field, $table_name, $table_as_field_prefix);
             }
         }
 
@@ -205,18 +205,18 @@ class Modulebuilder
         else {
             // write failed
             $data['error'] = TRUE;
-            $data['error_msg'] = $write_status['error'];
+            $data['error_msg'] 	= $write_status['error'];
         }
 
         // make the variables available to the view file
-        $data['acl_migration'] = $content['acl_migration'];
-        $data['build_config'] = $content['config'];
-        $data['controllers'] = $content['controllers'];
-        $data['db_migration'] = $content['db_migration'];
-        $data['lang'] = $content['lang'];
-        $data['model'] = $content['model'];
-        $data['views'] = $content['views'];
-        $data['db_table'] = $table_name;
+        $data['acl_migration'] 	= $content['acl_migration'];
+        $data['build_config'] 	= $content['config'];
+        $data['controllers'] 	= $content['controllers'];
+        $data['db_migration'] 	= $content['db_migration'];
+        $data['lang'] 			= $content['lang'];
+        $data['model'] 			= $content['model'];
+        $data['views'] 			= $content['views'];
+        $data['db_table'] 		= $table_name;
 
         return $data;
 
@@ -398,17 +398,17 @@ class Modulebuilder
               return FALSE;
         }
 
-        $data['field_total'] = $field_total;
-        $data['module_name'] = $module_name;
-        $data['module_name_lower'] = preg_replace("/[ -]/", "_", strtolower($module_name));
-        $data['controller_name'] = $controller_name;
-        $data['action_name'] = $action_name;
-        $data['primary_key_field'] = $primary_key_field;
-        $data['action_label'] = $action_label;
-        $data['textarea_editor'] = $this->CI->input->post('textarea_editor');
-        $data['use_soft_deletes'] = $this->CI->input->post('use_soft_deletes');
-        $data['use_created'] = $this->CI->input->post('use_created');
-        $data['use_modified'] = $this->CI->input->post('use_modified');
+        $data['field_total'] 		= $field_total;
+        $data['module_name'] 		= $module_name;
+        $data['module_name_lower'] 	= preg_replace("/[ -]/", "_", strtolower($module_name));
+        $data['controller_name'] 	= $controller_name;
+        $data['action_name'] 		= $action_name;
+        $data['primary_key_field'] 	= $primary_key_field;
+        $data['action_label'] 		= $action_label;
+        $data['textarea_editor'] 	= $this->CI->input->post('textarea_editor');
+        $data['use_soft_deletes'] 	= $this->CI->input->post('use_soft_deletes');
+        $data['use_created'] 		= $this->CI->input->post('use_created');
+        $data['use_modified'] 		= $this->CI->input->post('use_modified');
 
         $id_val = '';
         if($action_name != 'insert' && $action_name != 'add') {

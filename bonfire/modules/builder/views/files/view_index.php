@@ -73,31 +73,25 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 					<th>' . set_value("view_field_label$counter") . '</th>';
 }
 
-if ($use_soft_deletes == 'true')
+// only add maintenance columns to view when module is creating a new db table
+// (columns should already be present and handled below when existing table is used)
+if($db_required == 'new')
 {
-	$headers .= '
-					<th><?php echo lang("' . $module_name_lower . '_column_deleted"); ?></th>';
-}
-
-if ($use_created == 'true')
-{
-	$headers .= '
-					<th><?php echo lang("' . $module_name_lower . '_column_created"); ?></th>';
-}
-
-if ($use_modified == 'true')
-{
-	$headers .= '
-					<th><?php echo lang("' . $module_name_lower . '_column_modified"); ?></th>';
-}
-
-if ($db_required == 'new' && $table_as_field_prefix === TRUE)
-{
-	$field_prefix = $module_name_lower . '_';
-}
-else
-{
-	$field_prefix = '';
+	if ($use_soft_deletes == 'true')
+	{
+		$headers .= '
+						<th>Deleted</th>';
+	}
+	if ($use_created == 'true')
+	{
+		$headers .= '
+						<th>Created</th>';
+	}
+	if ($use_modified == 'true')
+	{
+		$headers .= '
+						<th>Modified</th>';
+	}
 }
 
 $table_records = '';
@@ -106,7 +100,7 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 {
 	// only build on fields that have data entered.
 
-	//Due to the requiredif rule if the first field is set the the others must be
+	//Due to the requiredif rule if the first field is set then the others must be
 
 	if (set_value("view_field_name$counter") == NULL || set_value("view_field_name$counter") == $primary_key_field)
 	{
@@ -126,27 +120,55 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 	}
 	else
 	{
-		$table_records .= '
-					<td><?php e($record->' . $field_name . '); ?></td>';
+		$field_name = set_value("view_field_name$counter");
+	}
+
+	if ($counter == 1) {
+		$table_records .= "
+				<?php if (\$this->auth->has_permission('{edit_permission}')) : ?>
+				<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name.") ?></td>
+				<?php else: ?>
+				<td><?php e(\$record->".$field_name.") ?></td>
+				<?php endif; ?>
+			";
+	}
+	else {
+		// when building from existing table, modify output of the 'deleted' maintenance column
+		if  ($db_required == 'existing' && $field_name == $this->input->post("soft_delete_field"))
+		{
+			$table_records .= '
+					<td><?php echo $record->'.$field_name.' > 0 ? lang(\''.$module_name_lower.'_true\') : lang(\''.$module_name_lower.'_false\')?></td>';
+		}
+		else
+		{
+			$table_records .= '
+					<td><?php e($record->'.$field_name.') ?></td>';
+		}
 	}
 }
-if ($use_soft_deletes == 'true')
+
+// only add maintenance columns to view when module is creating a new db table
+// (columns should already be present and handled above when existing table is used)
+if($db_required == 'new')
 {
-	$table_records .= '
-					<td><?php echo $record->deleted > 0 ? lang(\'' . $module_name_lower . '_true\') : lang(\'' . $module_name_lower . '_false\'); ?></td>';
-	$field_total++;
-}
-if ($use_created == 'true')
-{
-	$table_records .= '
-					<td><?php e($record->' . set_value("created_field") . '); ?></td>';
-	$field_total++;
-}
-if ($use_modified == 'true')
-{
-	$table_records .= '
-					<td><?php e($record->' . set_value("modified_field") . '); ?></td>';
-	$field_total++;
+	if ($use_soft_deletes == 'true')
+	{
+		$table_records .= '
+					<td><?php echo $record->'.set_value("soft_delete_field").' > 0 ? lang(\''.$module_name_lower.'_true\') : lang(\''.$module_name_lower.'_false\')?></td>';
+		$field_total++;
+	}
+	if ($use_created == 'true')
+	{
+		$table_records .= '
+					<td><?php e($record->'.set_value("created_field").') ?></td>';
+		$field_total++;
+	}
+	if ($use_modified == 'true')
+	{
+		$table_records .= '
+					<td><?php e($record->'.set_value("modified_field").') ?></td>';
+		$field_total++;
+	}
 }
 
 $view = str_replace('{cols_total}', $field_total + 1 , $view);
