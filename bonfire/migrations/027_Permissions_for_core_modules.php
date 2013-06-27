@@ -9,7 +9,7 @@ class Migration_Permissions_for_core_modules extends Migration
 	/**
 	 * @var string The name of the Permissions table
 	 */
-	private $table = 'permissions';
+	private $_table = 'permissions';
 
 	/**
 	 * @var string The name of the Role Permissions table
@@ -114,14 +114,14 @@ class Migration_Permissions_for_core_modules extends Migration
 		for ($x=0; $x < $permission_count; $x++)
 		{
 			$this->db->where('name', $this->old_permission_names[$x])
-				->update($this->table, array('name' => $this->new_permission_names[$x]));
+				->update($this->_table, array('name' => $this->new_permission_names[$x]));
 		}
 
 		// Add new permissions
 		$permission_ids = array();
 		foreach ($this->data as $permission)
 		{
-			$this->db->insert($this->table, $permission);
+			$this->db->insert($this->_table, $permission);
 
 			// Collect the permission_ids and prepare to add them to the admin role
 			$permission_ids[] = array(
@@ -146,7 +146,7 @@ class Migration_Permissions_for_core_modules extends Migration
 			// get the permission_ids to remove
 			$query = $this->db->select('permission_id')
 				->where('name', $permission['name'])
-				->get($this->table);
+				->get($this->_table);
 			foreach ($query->result() as $row)
 			{
 				$remove_ids[] = $row->permission_id;
@@ -163,7 +163,7 @@ class Migration_Permissions_for_core_modules extends Migration
 		{
 			// delete the permissions
 			$this->db->where_in('name', $remove_names)
-				->delete($this->table);
+				->delete($this->_table);
 		}
 	}
 
@@ -180,7 +180,7 @@ class Migration_Permissions_for_core_modules extends Migration
 
 			$query = $this->db->select('permission_id')
 				->where('name', $permission['name'])
-				->get($this->table);
+				->get($this->_table);
 
 			foreach ($query->result() as $row)
 			{
@@ -196,13 +196,13 @@ class Migration_Permissions_for_core_modules extends Migration
 		if ( ! empty($permission_names))
 		{
 			$this->db->where_in('name', $permission_names)
-				->delete($this->table);
+				->delete($this->_table);
 		}
 
 		$ref_data = array();
 		foreach ($this->remove_permissions as $permission)
 		{
-			$this->db->insert($this->table, $permission);
+			$this->db->insert($this->_table, $permission);
 			$ref_data[] = array(
 				'role_id' => $this->admin_role_id,
 				'permission_id' => $this->db->insert_id(),

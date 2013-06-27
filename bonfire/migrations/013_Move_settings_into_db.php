@@ -9,7 +9,7 @@ class Migration_Move_settings_into_db extends Migration
 	/**
 	 * @var string Name of the Settings table
 	 */
-	private $table = 'settings';
+	private $_table = 'settings';
 
 	/**
 	 * @var array Fields for the Settings table
@@ -161,16 +161,16 @@ class Migration_Move_settings_into_db extends Migration
 	 */
 	public function up()
 	{
-		if ($this->db->table_exists($this->table))
+		if ($this->db->table_exists($this->_table))
 		{
-			$this->dbforge->drop_table($this->table);
+			$this->dbforge->drop_table($this->_table);
 		}
 
 		$this->dbforge->add_field($this->fields);
 		$this->dbforge->add_key('name', true);
-		$this->dbforge->create_table($this->table);
+		$this->dbforge->create_table($this->_table);
 
-		$this->db->insert_batch($this->table, $this->data);
+		$this->db->insert_batch($this->_table, $this->data);
 	}
 
 	/**
@@ -178,9 +178,9 @@ class Migration_Move_settings_into_db extends Migration
 	 */
 	public function down()
 	{
-		if ($this->db->table_exists($this->table))
+		if ($this->db->table_exists($this->_table))
 		{
-			$this->dbforge->drop_table($this->table);
+			$this->dbforge->drop_table($this->_table);
 		}
 	}
 }

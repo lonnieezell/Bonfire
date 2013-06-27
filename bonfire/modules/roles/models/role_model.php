@@ -38,7 +38,7 @@ class Role_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $table		= 'roles';
+	protected $_table		= 'roles';
 
 	/**
 	 * Name of the primary key
@@ -180,7 +180,7 @@ class Role_model extends BF_Model
 		if (isset($data['default']) && $data['default']  == 1)
 		{
 			$this->db->set('default', 0);
-			$this->db->update($this->table);
+			$this->db->update($this->_table);
 		}
 
 		return parent::update($id, $data);
@@ -305,7 +305,7 @@ class Role_model extends BF_Model
 	public function default_role_id()
 	{
 		$this->db->where('default', 1);
-		$query = $this->db->get($this->table);
+		$query = $this->db->get($this->_table);
 
 		if ($query->num_rows() == 1)
 		{

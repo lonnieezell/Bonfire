@@ -8,7 +8,7 @@ class Migration_Adding_mailtype_setting extends Migration
 	/**
 	 * @var string The name of the table
 	 */
-	private $table = 'settings';
+	private $_table = 'settings';
 
 	/**
 	 * @var array The data to insert into the table
@@ -27,7 +27,7 @@ class Migration_Adding_mailtype_setting extends Migration
 	 */
 	public function up()
 	{
-		$this->db->insert($this->table, $this->data);
+		$this->db->insert($this->_table, $this->data);
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Migration_Adding_mailtype_setting extends Migration
 		if ( ! empty($delete_data))
 		{
 			$this->db->where('name', $delete_data)
-				->delete($this->table);
+				->delete($this->_table);
 		}
 	}
 }

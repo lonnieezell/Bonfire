@@ -48,7 +48,7 @@ class Permission_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $table		= 'permissions';
+	protected $_table		= 'permissions';
 
 	/**
 	 * Name of the primary key
@@ -138,22 +138,22 @@ class Permission_model extends BF_Model
 	// --------------------------------------------------------------------
 
 	/**
-	 * Deletes a particular permission from the database by name. 
-	 * 
+	 * Deletes a particular permission from the database by name.
+	 *
 	 * @access public
-	 * 
+	 *
 	 * @param str	$name	The name of the permission to delete
 	 * @param bool	$purge	Whether to use soft delete or not.
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function delete_by_name($name=null, $purge=false) 
-	{	
+	public function delete_by_name($name=null, $purge=false)
+	{
 		$perm = $this->find_by('name', $name);
-		
+
 		return $this->delete($perm->permission_id, $purge);
 	}
-	
+
 	//--------------------------------------------------------------------
 
 	/**
@@ -182,13 +182,13 @@ class Permission_model extends BF_Model
 			{
 				// find the key(s) and perform the delete
 				$result = $this->permission_model->select($key)->find_all_by($id);
-				
+
 				if ($result)
 				{
 					foreach ($result as $permission_key)
 					{
 						$deleted = $this->role_permission_model->delete_for_permission($permission_key);
-						
+
 						if ($deleted === FALSE)
 						{
 							return $deleted;

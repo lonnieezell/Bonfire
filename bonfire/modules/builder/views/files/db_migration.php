@@ -36,7 +36,7 @@ class Migration_Install_' . $table_name . ' extends Migration
 	 *
 	 * @var String
 	 */
-	private $table = \'' . $table_name . '\';
+	private $_table = \'' . $table_name . '\';
 
 	/**
 	 * The table\'s fields
@@ -164,7 +164,7 @@ class Migration_Install_' . $table_name . ' extends Migration
 	{
 		$this->dbforge->add_field($this->fields);
 		$this->dbforge->add_key(\'' . $primary_key_field . '\', true);
-		$this->dbforge->create_table($this->table);
+		$this->dbforge->create_table($this->_table);
 	}
 
 	//--------------------------------------------------------------------
@@ -176,7 +176,7 @@ class Migration_Install_' . $table_name . ' extends Migration
 	 */
 	public function down()
 	{
-		$this->dbforge->drop_table($this->table);
+		$this->dbforge->drop_table($this->_table);
 	}
 
 	//--------------------------------------------------------------------

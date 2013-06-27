@@ -36,7 +36,7 @@ class Emailer_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'email_queue';
+	protected $_table = 'email_queue';
 
 	/**
 	 * Name of the primary key

@@ -8,7 +8,7 @@ class Migration_Permission_to_manage_settings extends Migration
 	/**
 	 * @var string Name of the Permissions table
 	 */
-	private $table = 'permissions';
+	private $_table = 'permissions';
 
 	/**
 	 * @var string Name of the Role permissions table
@@ -46,7 +46,7 @@ class Migration_Permission_to_manage_settings extends Migration
 		$roles = array();
 		foreach ($this->data as $data)
 		{
-			$this->db->insert($this->table, $data);
+			$this->db->insert($this->_table, $data);
 
 			// gather the permission_ids to add to the admin role
 			$roles[] = array(
@@ -80,7 +80,7 @@ class Migration_Permission_to_manage_settings extends Migration
 			// get the permission_id values
 			$query = $this->db->select('permission_id')
 				->where_in('name', $permission_names)
-				->get($this->table);
+				->get($this->_table);
 
 			foreach ($query->result() as $row)
 			{
@@ -96,7 +96,7 @@ class Migration_Permission_to_manage_settings extends Migration
 
 			// delete the permissions
 			$this->db->where_in('name', $permission_names)
-				->delete($this->table);
+				->delete($this->_table);
 		}
 	}
 }

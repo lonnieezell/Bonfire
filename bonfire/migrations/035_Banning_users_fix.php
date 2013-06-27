@@ -5,7 +5,7 @@ class Migration_Banning_users_fix extends Migration
 	/**
 	 * @var string The name of the permissions table
 	 */
-	private $table = 'permissions';
+	private $_table = 'permissions';
 
 	/**
 	 * @var string The name of the Role permissions table
@@ -42,7 +42,7 @@ class Migration_Banning_users_fix extends Migration
 		{
 			$query = $this->db->select('permission_id')
 				->where_in('name', $permission_names)
-				->get($this->table);
+				->get($this->_table);
 
 			foreach ($query->result() as $row)
 			{
@@ -56,7 +56,7 @@ class Migration_Banning_users_fix extends Migration
 			}
 
 			$this->db->where_in('name', $permission_names)
-				->delete($this->table);
+				->delete($this->_table);
 		}
 	}
 
@@ -80,7 +80,7 @@ class Migration_Banning_users_fix extends Migration
 
 		foreach ($this->data as $permission)
 		{
-			$this->db->insert($this->table, $permission);
+			$this->db->insert($this->_table, $permission);
 
 			$role_permissions_data[] = array(
 				'role_id' => '1',

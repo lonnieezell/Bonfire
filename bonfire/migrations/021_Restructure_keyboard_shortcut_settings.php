@@ -8,7 +8,7 @@ class Migration_Restructure_keyboard_shortcut_settings extends Migration
 	/**
 	 * @var string The name of the settings table
 	 */
-	private $table = 'settings';
+	private $_table = 'settings';
 
 	/**
 	 * @var array The data we are replacing in the settings table
@@ -33,7 +33,7 @@ class Migration_Restructure_keyboard_shortcut_settings extends Migration
 	public function up()
 	{
 		// get the current keyboard shortcuts
-		$query = $this->db->where($this->field)->get($this->table);
+		$query = $this->db->where($this->field)->get($this->_table);
 
 		if ($query->num_rows() > 0)
 		{
@@ -55,10 +55,10 @@ class Migration_Restructure_keyboard_shortcut_settings extends Migration
 			if (count($new_keys))
 			{
 				// insert the new keys into the db
-				if ($this->db->insert_batch($this->table, $new_keys))
+				if ($this->db->insert_batch($this->_table, $new_keys))
 				{
 					// delete the old entry
-					$this->db->where($this->field)->delete($this->table);
+					$this->db->where($this->field)->delete($this->_table);
 				}
 			}
 		}
@@ -75,7 +75,7 @@ class Migration_Restructure_keyboard_shortcut_settings extends Migration
 		// in one setting record and could give an sql error
 
 		// get the current keyboard shortcuts
-		$query = $this->db->where($this->new_field)->get($this->table);
+		$query = $this->db->where($this->new_field)->get($this->_table);
 
 		if ($query->num_rows() > 0)
 		{
@@ -95,10 +95,10 @@ class Migration_Restructure_keyboard_shortcut_settings extends Migration
 					'value'  => serialize($new_keys),
 				);
 				// insert the new keys into the db
-				if ($this->db->insert($this->table, $rec))
+				if ($this->db->insert($this->_table, $rec))
 				{
 					// delete the old entry
-					$this->db->where($this->new_field)->delete($this->table);
+					$this->db->where($this->new_field)->delete($this->_table);
 				}
 			}
 		}

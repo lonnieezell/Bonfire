@@ -38,7 +38,7 @@ class Activity_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $table = 'activities';
+	protected $_table = 'activities';
 
 	/**
 	 * Name of the primary key

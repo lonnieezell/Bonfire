@@ -8,7 +8,7 @@ class Migration_User_activations extends Migration
 	/**
 	 * @var string The name of the users table
 	 */
-	private $table = 'users';
+	private $_table = 'users';
 
 	/**
 	 * @var string The name of the settings table
@@ -58,10 +58,10 @@ class Migration_User_activations extends Migration
 	public function up()
 	{
 		// add fields to the users table
-        $this->dbforge->add_column($this->table, $this->fields);
+        $this->dbforge->add_column($this->_table, $this->fields);
 
 		// set all of the users active
-		$this->db->update($this->table, $this->data);
+		$this->db->update($this->_table, $this->data);
 
 		// insert the auth.user_activation_method setting into the settings table
 		$this->db->insert($this->settings_table, $this->settings_data);
@@ -75,7 +75,7 @@ class Migration_User_activations extends Migration
 		// remove the new fields from the users table
 		foreach ($this->fields as $column_name => $column_def)
 		{
-			$this->dbforge->drop_column($this->table, $column_name);
+			$this->dbforge->drop_column($this->_table, $column_name);
 		}
 
 		// delete the new setting from the settings table

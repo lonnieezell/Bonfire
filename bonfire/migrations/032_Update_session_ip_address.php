@@ -9,7 +9,7 @@ class Migration_Update_session_ip_address extends Migration
 	/**
 	 * @var string The name of the table to modify
 	 */
-	private $table = 'sessions';
+	private $_table = 'sessions';
 
 	/**
 	 * @var array Updated field definition
@@ -36,7 +36,7 @@ class Migration_Update_session_ip_address extends Migration
 	 */
 	public function up()
 	{
-		$this->dbforge->modify_column($this->table, $this->fields);
+		$this->dbforge->modify_column($this->_table, $this->fields);
 	}
 
 	/**
@@ -46,6 +46,6 @@ class Migration_Update_session_ip_address extends Migration
 	{
 		$this->fields['ip_address']['constraint'] = $this->old_constraint;
 
-		$this->dbforge->modify_column($this->table, $this->fields);
+		$this->dbforge->modify_column($this->_table, $this->fields);
 	}
 }

@@ -51,7 +51,7 @@ $acl_migrations .= '
 	 *
 	 * @var String
 	 */
-	private $table = \'permissions\';
+	private $_table = \'permissions\';
 
 	/**
 	 * The name of the role/permissions ref table
@@ -72,7 +72,7 @@ $acl_migrations .= '
 		$role_permissions_data = array();
 		foreach ($this->permission_values as $permission_value)
 		{
-			$this->db->insert($this->table, $permission_value);
+			$this->db->insert($this->_table, $permission_value);
 
 			$role_permissions_data[] = array(
 				\'role_id\' => \'' . $role_id . '\',
@@ -95,14 +95,14 @@ $acl_migrations .= '
 		foreach ($this->permission_values as $permission_value)
 		{
 			$query = $this->db->select(\'permission_id\')
-				->get_where($this->table, array(\'name\' => $permission_value[\'name\'],));
+				->get_where($this->_table, array(\'name\' => $permission_value[\'name\'],));
 
 			foreach ($query->result() as $row)
 			{
 				$this->db->delete($this->roles_table, array(\'permission_id\' => $row->permission_id));
 			}
 
-			$this->db->delete($this->table, array(\'name\' => $permission_value[\'name\']));
+			$this->db->delete($this->_table, array(\'name\' => $permission_value[\'name\']));
 		}
 	}
 

@@ -17,7 +17,7 @@ class Migration_Migration_schema_change extends Migration
 	/**
 	 * @var string The name of the Schema_version table
 	 */
-	private $table = 'schema_version';
+	private $_table = 'schema_version';
 
 	/**
 	 * @var string The name of the backup Schema_version table
@@ -58,17 +58,17 @@ class Migration_Migration_schema_change extends Migration
 	public function up()
 	{
 		// check if the table is in the old format
-		if ( ! $this->db->field_exists($this->new_key, $this->table))
+		if ( ! $this->db->field_exists($this->new_key, $this->_table))
 		{
 			// the table is in the old format
 
 			// backup the schema_version table
-			$this->dbforge->rename_table($this->table, $this->backup_table);
+			$this->dbforge->rename_table($this->_table, $this->backup_table);
 
 			// modify the schema_version table
 			$this->dbforge->add_field($this->fields);
 			$this->dbforge->add_key($this->new_key, TRUE);
-			$this->dbforge->create_table($this->table);
+			$this->dbforge->create_table($this->_table);
 
 			// add records for each of the old permissions
 			$permission_records = array();
@@ -92,7 +92,7 @@ class Migration_Migration_schema_change extends Migration
 
 			if ( ! empty($permission_records))
 			{
-				$this->db->insert_batch($this->table, $permission_records);
+				$this->db->insert_batch($this->_table, $permission_records);
 			}
 		}
 	}
@@ -106,9 +106,9 @@ class Migration_Migration_schema_change extends Migration
 		if ($this->db->table_exists($this->backup_table))
 		{
 			// Reverse the schema_version table changes
-			$this->dbforge->drop_table($this->table);
+			$this->dbforge->drop_table($this->_table);
 
-			$this->dbforge->rename_table($this->backup_table, $this->table);
+			$this->dbforge->rename_table($this->backup_table, $this->_table);
 		}
 	}
 }

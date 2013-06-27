@@ -8,7 +8,7 @@ class Migration_Permission_bonfire_roles_add extends Migration
 	/**
 	 * @var string The name of the permissions table
 	 */
-	private $table = 'permissions';
+	private $_table = 'permissions';
 
 	/**
 	 * @var string The name of the Role permissions table
@@ -42,7 +42,7 @@ class Migration_Permission_bonfire_roles_add extends Migration
 		$role_permissions_data = array();
 		foreach ($this->permission_array as $permission_value)
 		{
-			$this->db->insert($this->table, $permission_value);
+			$this->db->insert($this->_table, $permission_value);
 
 			// collect the permission_ids to add to the admin role
 			$role_permissions_data[] = array(
@@ -74,7 +74,7 @@ class Migration_Permission_bonfire_roles_add extends Migration
 		{
 			$query = $this->db->select('permission_id')
 				->where_in('name', $permission_names)
-				->get($this->table);
+				->get($this->_table);
 
 			foreach ($query->result() as $row)
 			{
@@ -88,7 +88,7 @@ class Migration_Permission_bonfire_roles_add extends Migration
 			}
 
 			$this->db->where_in('name', $permission_names)
-				->delete($this->table);
+				->delete($this->_table);
 		}
 	}
 }

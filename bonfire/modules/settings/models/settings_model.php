@@ -37,7 +37,7 @@ class Settings_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $table		= 'settings';
+	protected $_table		= 'settings';
 
 	/**
 	 * Name of the primary key
