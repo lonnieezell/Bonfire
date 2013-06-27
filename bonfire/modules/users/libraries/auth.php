@@ -690,7 +690,7 @@ class Auth
 		$this->ci->db->where(array('ip_address' => $this->ip_address, 'login' => $login));
 
 		// Purge obsolete login attempts
-		$this->ci->db->or_where('UNIX_TIMESTAMP(time) <', time() - $expires);
+		$this->ci->db->or_where('time <', date('Y-m-d H:i:s', time() - $expires));
 
 		$this->ci->db->delete('login_attempts');
 
