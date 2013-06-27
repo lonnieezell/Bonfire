@@ -2,7 +2,17 @@
 
 The Activities module provides a simple way to record activity from any module.
 
-### Initializing the Class
+### log_activity() helper function
+
+To log activities you can use the <tt>log_activity()</tt> helper function that will always be available. This helper function checks the value of the config item <tt>enable_activity_logging</tt> and, if enabled, will autoload the activity_model and log the activity. This allows you to quickly disable logging in your application without needing to rewrite portions of your code.
+
+The first parameter is the ID of the user the activity is being recorded about. The second parameter is the activity message that you would like logged. The third parameter is the name of the module. Any spaces should be converted to and underscore.
+
+    $status = 'just turned the lights out.';
+
+    log_activity( $user_id, $status, 'my_module');
+
+### Initializing the Model
 
 Like most other models in CodeIgniter, the Activities Model is initialized in your controller by using the <tt>$this->load->model</tt> function:
 

@@ -19,6 +19,7 @@ New Features:
 * Added get_filenames_by_extension() method to the file helper.
 * MY_Controller file no longer used as we have split each controller into their own class file in application/core. This allows the HMVC autoloader to find them for us, and frees up the MY_Controller file for end-user only use.
 * New front-end theme that is simply the latest Bootstrap theme with a couple of small minor tweaks.
+* log_activity helper function included in the application helper. This removes the need for autoloading the activity model and also allows logging of activities to be turned off.
 
 Closes named issues:
 
@@ -80,6 +81,8 @@ The comment recommending `IS_AJAX` as a security check has been removed.  `IS_AJ
 Because the MY_Controller file no longer ships with Bonfire, you should make a backup of your current MY_Controller file, if you have made any changes. This file will be renamed to Base_Controller.php. Any changes you made should then be redistributed over the new Controller files in application/core.
 
 If you use the $table class var within any of your module's model files, you will need to change that reference to $_table.
+
+If your module calls the activity_model for logging purposes, you will need to either switch the code to the new log_activity() helper method or load the acvitity_model explicitly.
 
 ## Released versions
 
