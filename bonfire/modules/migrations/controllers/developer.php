@@ -109,14 +109,14 @@ class Developer extends Admin_Controller
 				Template::set_message('<h4 class="alert-heading">Successfully uninstalled module\'s migrations.</h4>', 'success');
 
 				// Log the activity
-				$this->activity_model->log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' Uninstalled Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+				log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' Uninstalled Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 			}
 			else
 			{
 				Template::set_message('<h4 class="alert-heading">Successfully migrated database to version '. $result.'</h4>', 'success');
 
 				// Log the activity
-				$this->activity_model->log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' to Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+				log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' to Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 			}
 		}
 		else
@@ -158,7 +158,7 @@ class Developer extends Admin_Controller
 			$this->migrate_to($version, $module .'_');
 
 			// Log the activity
-			$this->activity_model->log_activity($this->current_user->id, 'Migrate module: ' . $module . ' Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+			log_activity($this->current_user->id, 'Migrate module: ' . $module . ' Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
 		}
 
 		redirect(SITE_AREA .'/developer/migrations');

@@ -89,6 +89,8 @@ if ( ! function_exists('gravatar_link'))
 	}
 }
 
+//--------------------------------------------------------------------
+
 if ( ! function_exists('logit'))
 {
 	/**
@@ -115,6 +117,10 @@ if ( ! function_exists('logit'))
 	}
 }
 
+//--------------------------------------------------------------------
+// Module Functions
+//--------------------------------------------------------------------
+
 if ( ! function_exists('module_folders'))
 {
 	/**
@@ -128,6 +134,8 @@ if ( ! function_exists('module_folders'))
 		return array_keys(modules::$locations);
 	}
 }
+
+//--------------------------------------------------------------------
 
 if ( ! function_exists('module_list'))
 {
@@ -179,6 +187,8 @@ if ( ! function_exists('module_list'))
 	}
 }
 
+//--------------------------------------------------------------------
+
 if ( ! function_exists('module_controller_exists'))
 {
 	/**
@@ -208,6 +218,8 @@ if ( ! function_exists('module_controller_exists'))
 		return false;
 	}
 }
+
+//--------------------------------------------------------------------
 
 if ( ! function_exists('module_file_path'))
 {
@@ -239,6 +251,8 @@ if ( ! function_exists('module_file_path'))
 	}
 }
 
+//--------------------------------------------------------------------
+
 if( ! function_exists('module_path'))
 {
 	/**
@@ -267,6 +281,8 @@ if( ! function_exists('module_path'))
 		}
 	}
 }
+
+//--------------------------------------------------------------------
 
 if ( ! function_exists('module_files'))
 {
@@ -338,6 +354,8 @@ if ( ! function_exists('module_files'))
 	}
 }
 
+//--------------------------------------------------------------------
+
 if ( ! function_exists('module_config'))
 {
 	/**
@@ -390,6 +408,9 @@ if ( ! function_exists('module_config'))
 	}
 }
 
+//--------------------------------------------------------------------
+// Misc. Helpers
+//--------------------------------------------------------------------
 
 if ( ! function_exists('dump'))
 {
@@ -428,6 +449,9 @@ if ( ! function_exists('dump'))
 		echo '</fieldset>' . PHP_EOL;
 	}
 }
+
+//--------------------------------------------------------------------
+
 if (!function_exists('e'))
 {
 	/*
@@ -637,3 +661,32 @@ if ( !function_exists('list_contexts') )
         return $contexts;
     }
 }
+
+//--------------------------------------------------------------------
+
+if (!function_exists('log_activity'))
+{
+	/**
+	 * Logs a new activity, if config item 'enable_activities' is true
+	 *
+	 * @access public
+	 *
+	 * @param int    $user_id  An int id of the user that performed the activity.
+	 * @param string $activity A string detailing the activity. Max length of 255 chars.
+	 * @param string $module   The name of the module that set the activity.
+	 *
+	 * @return bool An int with the ID of the new object, or FALSE on failure.
+	 */
+	function log_activity($user_id=null, $activity='', $module='any')
+	{
+		$ci =& get_instance();
+
+		if ($ci->config->item('enable_activity_logging') === TRUE)
+		{
+			$ci->load->model('activities/activity_model');
+			$ci->activity_model->log_activity($user_id, $activity, $module);
+		}
+	}
+}
+
+//--------------------------------------------------------------------

@@ -75,7 +75,7 @@ class Users extends Front_Controller
 				{
 
 					// Log the Activity
-					$this->activity_model->log_activity($this->auth->user_id(), lang('us_log_logged') . ': ' . $this->input->ip_address(), 'users');
+					log_activity($this->auth->user_id(), lang('us_log_logged') . ': ' . $this->input->ip_address(), 'users');
 
 					// Now redirect.  (If this ever changes to render something,
 					// note that auth->login() currently doesn't attempt to fix
@@ -132,7 +132,7 @@ class Users extends Front_Controller
 		if (isset($this->current_user->id))
 		{
 			// Login session is valid.  Log the Activity
-			$this->activity_model->log_activity($this->current_user->id, lang('us_log_logged_out') . ': ' . $this->input->ip_address(), 'users');
+			log_activity($this->current_user->id, lang('us_log_logged_out') . ': ' . $this->input->ip_address(), 'users');
 		}
 
 		// Always clear browser data (don't silently ignore user requests :).
@@ -271,7 +271,7 @@ class Users extends Front_Controller
 
 				$user = $this->user_model->find($user_id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit_profile') . ': ' . $log_name, 'users');
+				log_activity($this->current_user->id, lang('us_log_edit_profile') . ': ' . $log_name, 'users');
 
 				Template::set_message(lang('us_profile_updated_success'), 'success');
 
@@ -362,7 +362,7 @@ class Users extends Front_Controller
 					if ($this->user_model->update($this->input->post('user_id'), $data))
 					{
 						// Log the Activity
-						$this->activity_model->log_activity($this->input->post('user_id'), lang('us_log_reset') , 'users');
+						log_activity($this->input->post('user_id'), lang('us_log_reset') , 'users');
 
 						Template::set_message(lang('us_reset_password_success'), 'success');
 						Template::redirect('/login');
@@ -576,7 +576,7 @@ class Users extends Front_Controller
 
 					// Log the Activity
 
-					$this->activity_model->log_activity($user_id, lang('us_log_register'), 'users');
+					log_activity($user_id, lang('us_log_register'), 'users');
 					Template::redirect('login');
 				}
 				else

@@ -79,7 +79,7 @@ class Developer extends Admin_Controller
 				{
 					@unlink($this->config->item('log_path') . $file);
 					$activity_text = 'log file '.date('F j, Y', strtotime(str_replace('.php', '', str_replace('log-', '', $file))));
-					$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
+					log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
 				}
 
 				Template::set_message(sprintf(lang('log_deleted'), count($checked)), 'success');
@@ -95,7 +95,7 @@ class Developer extends Admin_Controller
 
 			// Log the activity
 			$activity_text = "all log files";
-			$this->activity_model->log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
+			log_activity($this->current_user->id, ucfirst($activity_text) . ' deleted from: ' . $this->input->ip_address(), 'logs');
 
 			Template::set_message("Successfully deleted " . $activity_text, 'success');
 		}
@@ -163,7 +163,7 @@ class Developer extends Admin_Controller
 			{
 
 				// Log the activity
-				$this->activity_model->log_activity( intval ( $this->current_user->id ), 'Log settings modified from: ' . $this->input->ip_address(), 'logs');
+				log_activity( intval ( $this->current_user->id ), 'Log settings modified from: ' . $this->input->ip_address(), 'logs');
 
 				Template::set_message('Log settings successfully saved.', 'success');
 			}

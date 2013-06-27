@@ -210,7 +210,7 @@ class Settings extends Admin_Controller
 			{
 				$user = $this->user_model->find($id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-				$this->activity_model->log_activity($this->current_user->id, sprintf(lang('us_log_create') ,$user->role_name) . ': '.$log_name, 'users');
+				log_activity($this->current_user->id, sprintf(lang('us_log_create') ,$user->role_name) . ': '.$log_name, 'users');
 
 				Template::set_message(lang('us_user_created_success'), 'success');
 				redirect(SITE_AREA .'/settings/users');
@@ -278,7 +278,7 @@ class Settings extends Admin_Controller
 			{
 				$user = $this->user_model->find_user_and_meta($user_id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-				$this->activity_model->log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
+				log_activity($this->current_user->id, lang('us_log_edit') .': '.$log_name, 'users');
 
 				Template::set_message(lang('us_user_update_success'), 'success');
 
@@ -387,7 +387,7 @@ class Settings extends Admin_Controller
 
 				$user = $this->user_model->find($id);
 				$log_name = (isset($user->display_name) && !empty($user->display_name)) ? $user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-				$this->activity_model->log_activity($this->current_user->id, lang('us_log_delete') . ': '.$log_name, 'users');
+				log_activity($this->current_user->id, lang('us_log_delete') . ': '.$log_name, 'users');
 				Template::set_message(lang('us_action_deleted'), 'success');
 			}
 			else
@@ -704,12 +704,9 @@ class Settings extends Admin_Controller
 
 			$user = $this->user_model->find($user_id);
 			$log_name = $this->settings_lib->item('auth.use_own_names') ? $this->current_user->username : ($this->settings_lib->item('auth.use_usernames') ? $user->username : $user->email);
-			if (!isset($this->activity_model))
-			{
-				$this->load->model('activities/activity_model');
-			}
 
-			$this->activity_model->log_activity($this->current_user->id, lang('us_log_status_change') . ': '.$log_name . ' : '.$type."ed", 'users');
+			log_activity($this->current_user->id, lang('us_log_status_change') . ': '.$log_name . ' : '.$type."ed", 'users');
+
 			if ($result)
 			{
 				$message = lang('us_active_status_changed');

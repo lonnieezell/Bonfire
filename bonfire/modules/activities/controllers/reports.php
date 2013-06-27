@@ -67,6 +67,8 @@ class Reports extends Admin_Controller
 		{
 			Template::set_block('sub_nav', 'reports/_sub_nav');
 		}
+
+		$this->load->model('activities/activity_model');
 	}//end __construct()
 
 	//--------------------------------------------------------------------

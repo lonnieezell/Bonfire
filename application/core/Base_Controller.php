@@ -72,9 +72,6 @@ class Base_Controller extends MX_Controller
 
 		parent::__construct();
 
-		// Load Activity Model Since it's used everywhere.
-		$this->load->model('activities/Activity_model', 'activity_model');
-
 		$this->set_current_user();
 
 		// load the application lang file here so that the users language is known

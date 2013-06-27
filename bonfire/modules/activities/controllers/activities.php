@@ -40,6 +40,8 @@ class Activities extends Admin_Controller
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->load->model('activities/activity_model');
 	}//end __construct()
 
 	//--------------------------------------------------------------------
