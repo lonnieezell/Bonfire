@@ -799,7 +799,7 @@ class Users extends Front_Controller
 
 						$pass_code = random_string('alnum', 40);
 
-						$activation_code = do_hash($pass_code . $user->salt . $_POST['email']);
+						$activation_code = do_hash($pass_code . $user->password_hash . $_POST['email']);
 
 						$site_title = $this->settings_lib->item('site.title');
 
