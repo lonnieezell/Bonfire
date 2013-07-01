@@ -50,7 +50,7 @@ Closes named issues:
 
 Additional changes:
 
-* $table in MY_Model changed to $_table to avoid potential conflict with the table library.
+* $table in MY_Model changed to $table_name to avoid potential conflict with the table library.
 * database backup - fix effect of yes/no dropdowns for languages other than English
 * database backup: .gzip doesn't work very well; use .gz instead
 * Template::redirect() - fix escaping of url [XSS?]
