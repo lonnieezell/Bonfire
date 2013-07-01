@@ -48,7 +48,7 @@ class Permission_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $table		= 'permissions';
+	protected $table_name	= 'permissions';
 
 	/**
 	 * Name of the primary key

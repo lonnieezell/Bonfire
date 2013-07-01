@@ -47,7 +47,7 @@ class BF_Model extends CI_Model {
 		Access:
 			Protected
 	*/
-	protected $_table 	= '';
+	protected $table_name	= '';
 
 	/*
 		Var: $key
@@ -152,7 +152,7 @@ class BF_Model extends CI_Model {
 
 		$this->set_selects();
 
-		$query = $this->db->get_where($this->_table, array($this->_table.'.'. $this->key => $id));
+		$query = $this->db->get_where($this->table_name, array($this->table_name . '.' . $this->key => $id));
 
 		if ($query->num_rows())
 		{
@@ -186,7 +186,7 @@ class BF_Model extends CI_Model {
 
 		$this->set_selects();
 
-		$this->db->from($this->_table);
+		$this->db->from($this->table_name);
 
 		$query = $this->db->get();
 
@@ -274,7 +274,7 @@ class BF_Model extends CI_Model {
 
 		$this->set_selects();
 
-		$query = $this->db->get($this->_table);
+		$query = $this->db->get($this->table_name);
 
 		if ($query && $query->num_rows() > 0)
 		{
@@ -311,7 +311,7 @@ class BF_Model extends CI_Model {
 		}
 
 		// Insert it
-		$status = $this->db->insert($this->_table, $data);
+		$status = $this->db->insert($this->table_name, $data);
 
 		if ($status != FALSE)
 		{
@@ -353,7 +353,7 @@ class BF_Model extends CI_Model {
 		}
 
 		$this->db->where($this->key, $id);
-		if ($this->db->update($this->_table, $data))
+		if ($this->db->update($this->table_name, $data))
 		{
 			return true;
 		}
@@ -386,7 +386,7 @@ class BF_Model extends CI_Model {
 			return false;
 		}
 
-		return $this->db->update($this->_table, $data, array($field => $value));
+		return $this->db->update($this->table_name, $data, array($field => $value));
 	}
 
 	//--------------------------------------------------------------------
@@ -415,11 +415,11 @@ class BF_Model extends CI_Model {
 		if ($this->soft_deletes === TRUE)
 		{
 			$this->db->where($this->key, $id);
-			$result = $this->db->update($this->_table, array('deleted' => 1));
+			$result = $this->db->update($this->table_name, array('deleted' => 1));
 		}
 		else
 		{
-			$result = $this->db->delete($this->_table, array($this->key => $id));
+			$result = $this->db->delete($this->table_name, array($this->key => $id));
 		}
 
 		if ($result)
@@ -475,11 +475,11 @@ class BF_Model extends CI_Model {
 
 		if ($this->soft_deletes === TRUE)
 		{
-			$this->db->update($this->_table, array('deleted' => 1));
+			$this->db->update($this->table_name, array('deleted' => 1));
 		}
 		else
 		{
-			$this->db->delete($this->_table);
+			$this->db->delete($this->table_name);
 		}
 
 		$result = $this->db->affected_rows();
@@ -522,7 +522,7 @@ class BF_Model extends CI_Model {
 		}
 
 		$this->db->where($field, $value);
-		$query = $this->db->get($this->_table);
+		$query = $this->db->get($this->table_name);
 
 		if ($query && $query->num_rows() == 0)
 		{
@@ -544,7 +544,7 @@ class BF_Model extends CI_Model {
 	*/
 	public function count_all()
 	{
-		return $this->db->count_all($this->_table);
+		return $this->db->count_all($this->table_name);
 	}
 
 	//---------------------------------------------------------------
@@ -574,7 +574,7 @@ class BF_Model extends CI_Model {
 
 		$this->db->where($field, $value);
 
-		return (int)$this->db->count_all_results($this->_table);
+		return (int)$this->db->count_all_results($this->table_name);
 	}
 
 	//---------------------------------------------------------------
@@ -602,7 +602,7 @@ class BF_Model extends CI_Model {
 
 		$this->db->select($field);
 		$this->db->where($this->key, $id);
-		$query = $this->db->get($this->_table);
+		$query = $this->db->get($this->table_name);
 
 		if ($query && $query->num_rows() > 0)
 		{
@@ -747,14 +747,14 @@ class BF_Model extends CI_Model {
 
 		A utility method that does some error checking and cleanup for other methods:
 
-		- Makes sure that a table has been set at $this->_table.
+		- Makes sure that a table has been set at $this->table_name.
 		- If passed in, will make sure that $id is of the valid type.
 		- If passed in, will verify the $data is not empty.
 	*/
 	protected function _function_check($id=FALSE, &$data=FALSE)
 	{
 		// Does the model have a table set?
-		if (empty($this->_table))
+		if (empty($this->table_name))
 		{
 			$this->error = $this->lang->line('bf_model_no_table');
 			$this->logit('['. get_class($this) .': '. __METHOD__ .'] '. $this->lang->line('bf_model_no_table'), 'error');
@@ -881,7 +881,7 @@ class BF_Model extends CI_Model {
 	*/
 	public function set_table($table='')
 	{
-		$this->_table = $table;
+		$this->table_name = $table;
 	}
 
 	//--------------------------------------------------------------------
@@ -895,11 +895,11 @@ class BF_Model extends CI_Model {
 			none
 
 		Returns:
-			string $this->_table (current model table name)
+			string $this->table_name (current model table name)
 	*/
 	public function get_table()
 	{
-		return $this->_table;
+		return $this->table_name;
 	}
 
 	//--------------------------------------------------------------------

@@ -48,7 +48,7 @@ class Role_permission_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $_table		= 'role_permissions';
+	protected $table_name	= 'role_permissions';
 
 	/**
 	 * Name of the primary key
@@ -156,7 +156,7 @@ class Role_permission_model extends BF_Model
 			return FALSE;
 		}
 
-		$this->db->delete($this->_table, array('role_id' => $role_id, 'permission_id' => $permission_id));
+		$this->db->delete($this->table_name, array('role_id' => $role_id, 'permission_id' => $permission_id));
 
 		$result = $this->db->affected_rows();
 
@@ -189,7 +189,7 @@ class Role_permission_model extends BF_Model
 			return FALSE;
 		}
 
-		$this->db->delete($this->_table, array('role_id' => $role_id));
+		$this->db->delete($this->table_name, array('role_id' => $role_id));
 
 		$result = $this->db->affected_rows();
 
@@ -223,7 +223,7 @@ class Role_permission_model extends BF_Model
 			return FALSE;
 		}
 
-		$this->db->delete($this->_table, array('permission_id' => $permission_id));
+		$this->db->delete($this->table_name, array('permission_id' => $permission_id));
 
 		$result = $this->db->affected_rows();
 
