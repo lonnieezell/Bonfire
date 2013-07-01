@@ -16,20 +16,20 @@ To get started with a new model, you can use the following skeleton file:
 
 
 
-    class X_model extends BF_Model {
+    class X_model extends BF_Model
+	{
+        protected $table_name	= '';
+        protected $key			= 'id';
+        protected $soft_deletes	= FALSE;
+        protected $date_format	= 'datetime';
+        protected $log_user		= FALSE;
 
-        protected $table    = '';
-        protected $key      = 'id';
-        protected $soft_deletes = FALSE;
-        protected $date_format  = 'datetime';
-        protected $log_user     = FALSE;
+        protected $set_created	= TRUE;
+        protected $created_field	= 'created_on';
+        protected $created_by_field	= 'created_by';
 
-        protected $set_created  = TRUE;
-        protected $created_field    = 'created_on';
-        protected $created_by_field = 'created_by';
-
-        protected $set_modified     = FALSE;
-        protected $modified_field   = 'modified_on';
+        protected $set_modified		= FALSE;
+        protected $modified_field	= 'modified_on';
         protected $modified_by_field = 'modified_by';
 
         // Observers
@@ -52,9 +52,9 @@ This is the bare minimum needed to take advantage of BF_Model's built-in functio
 BF_Model supports quite a few ways to customize how your class works with the database.
 
 
-### <tt>$table</tt>
+### <tt>$table_name</tt>
 
-The var <tt>$table</tt> should be set to the name of the table in your database. If you database is set to use a prefix (Bonfire defaults to a <tt>bf_</tt> prefix), you should leave the prefix off. So a table named <tt>bf_users</tt> should be entered as <tt>users</tt>.
+The var <tt>$table_name</tt> should be set to the name of the table in your database. If you database is set to use a prefix (Bonfire defaults to a <tt>bf_</tt> prefix), you should leave the prefix off. So a table named <tt>bf_users</tt> should be entered as <tt>users</tt>.
 
 
 ### <tt>$key</tt>

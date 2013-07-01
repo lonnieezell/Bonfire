@@ -200,7 +200,7 @@ class Developer extends Admin_Controller {
             $_POST['table_name'] = preg_replace("/^".$this->db->dbprefix."/", "", $this->input->post('table_name'));
 
             // read the fields from the specified db table and pass them back into the form
-            $table_fields = $this->_table_info($this->input->post('table_name'));
+            $table_fields = $this->table_info($this->input->post('table_name'));
 
             $num_fields = 0;
 

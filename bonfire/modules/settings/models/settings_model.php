@@ -37,7 +37,7 @@ class Settings_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $_table		= 'settings';
+	protected $table_name	= 'settings';
 
 	/**
 	 * Name of the primary key
@@ -95,10 +95,10 @@ class Settings_model extends BF_Model
 	 *
 	 * @param string $field The table field to search in.
 	 * @param string $value The value that field should be.
+	 * @param string $type	The type of where clause to use, either 'and' or 'or'
 	 *
 	 * @return array
 	 */
-
 	public function find_all_by($field=NULL, $value=NULL, $type='and')
 	{
 		if (empty($field)) return FALSE;

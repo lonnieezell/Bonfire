@@ -38,7 +38,7 @@ class Role_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $_table		= 'roles';
+	protected $table_name	= 'roles';
 
 	/**
 	 * Name of the primary key
@@ -95,7 +95,7 @@ class Role_model extends BF_Model
 	{
 		parent::__construct();
 
-		if (!class_exists('Permission_model'))
+		if ( ! class_exists('Permission_model'))
 		{
 			$this->load->model('permissions/permission_model');
 		}
@@ -115,7 +115,7 @@ class Role_model extends BF_Model
 	 */
 	public function find($id=NULL)
 	{
-		if (empty($id) || !is_integer($id))
+		if (empty($id) || ! is_integer($id))
 		{
 			return FALSE;
 		}
@@ -180,7 +180,7 @@ class Role_model extends BF_Model
 		if (isset($data['default']) && $data['default']  == 1)
 		{
 			$this->db->set('default', 0);
-			$this->db->update($this->_table);
+			$this->db->update($this->table_name);
 		}
 
 		return parent::update($id, $data);
@@ -254,37 +254,37 @@ class Role_model extends BF_Model
 		if ($deleted === TRUE)
 		{
 			// Now update the users to the default role
-			if (!class_exists('User_model'))
+			if ( ! class_exists('User_model'))
 			{
 				$this->load->model('users/User_model','user_model');
 			}
 
 			$this->user_model->set_to_default_role($id);
 
-			// now delete the role_permissions for this permission
+			// now delete the role_permissions for this role
 			$this->role_permission_model->delete_for_role($id);
 
 			// now delete the manage permission for this role
-			$prefix = $this->db->dbprefix;
+			$permission_name = 'Permissions.' . ucwords($role->role_name) . '.Manage';
 
-			if (!class_exists('Permission_model'))
+			if ( ! class_exists('Permission_model'))
 			{
 				$this->load->model('permissions/permission_model');
 			}
 
-			$perm = $this->permission_model->find_by('name','Permissions.'.ucwords($role->role_name).'.Manage');
+			$perm = $this->permission_model->find_by('name', $permission_name);
 			if ($perm)
 			{
 				// remove the role_permissions for this permission
 				$this->db->delete('role_permissions', array('permission_id' => $perm->permission_id));
 
-				if ($deleted === TRUE && $purge === TRUE)
+				if ($purge === TRUE)
 				{
-					$this->db->delete('permissions', array('name' => 'Permissions.' . ucwords($role->role_name) . '.Manage'));
+					$this->db->delete('permissions', array('name' => $permission_name));
 				}
 				else
 				{
-					$this->db->update('permissions', array('status' => 'inactive'), array('name' => 'Permissions.' . ucwords($role->role_name) . '.Manage'));
+					$this->db->update('permissions', array('status' => 'inactive'), array('name' => $permission_name));
 				}
 			}
 		}//end if
@@ -333,7 +333,7 @@ class Role_model extends BF_Model
 	 */
 	public function get_role_permissions(&$role)
 	{
-		if (!is_object($role))
+		if ( ! is_object($role))
 		{
 			return;
 		}
@@ -344,14 +344,14 @@ class Role_model extends BF_Model
 		$permissions = $this->permission_model->find_all_by('status','active');
 
 		// Permissions
-		foreach($permissions as $key => $permission)
+		foreach ($permissions as $key => $permission)
 		{
 			$permission_array[$permission->name] = $permission;
 		}
 
 		$role->permissions = $permission_array;
 
-		if (!class_exists('Role_permission_model'))
+		if ( ! class_exists('Role_permission_model'))
 		{
 			$this->load->model('roles/role_permission_model');
 		}
@@ -362,7 +362,7 @@ class Role_model extends BF_Model
 
 		if (is_array($role_permissions) && count($role_permissions))
 		{
-			foreach($role_permissions as $key => $permission)
+			foreach ($role_permissions as $key => $permission)
 			{
 				$permission_array[$permission->permission_id] = 1;
 			}

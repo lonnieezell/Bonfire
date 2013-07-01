@@ -80,17 +80,17 @@ if($db_required == 'new')
 	if ($use_soft_deletes == 'true')
 	{
 		$headers .= '
-						<th>Deleted</th>';
+					<th><?php echo lang("' . $module_name_lower . '_column_deleted"); ?></th>';
 	}
 	if ($use_created == 'true')
 	{
 		$headers .= '
-						<th>Created</th>';
+					<th><?php echo lang("' . $module_name_lower . '_column_created"); ?></th>';
 	}
 	if ($use_modified == 'true')
 	{
 		$headers .= '
-						<th>Modified</th>';
+					<th><?php echo lang("' . $module_name_lower . '_column_modified"); ?></th>';
 	}
 }
 
@@ -126,9 +126,9 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 	if ($counter == 1) {
 		$table_records .= "
 				<?php if (\$this->auth->has_permission('{edit_permission}')) : ?>
-				<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name.") ?></td>
+					<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name.") ?></td>
 				<?php else: ?>
-				<td><?php e(\$record->".$field_name.") ?></td>
+					<td><?php e(\$record->".$field_name.") ?></td>
 				<?php endif; ?>
 			";
 	}

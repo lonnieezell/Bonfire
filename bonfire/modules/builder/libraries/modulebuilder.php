@@ -205,7 +205,7 @@ class Modulebuilder
         else {
             // write failed
             $data['error'] = TRUE;
-            $data['error_msg'] 	= $write_status['error'];
+            $data['error_msg'] = $write_status['error'];
         }
 
         // make the variables available to the view file

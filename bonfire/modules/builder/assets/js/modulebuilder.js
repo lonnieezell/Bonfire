@@ -99,43 +99,41 @@ function show_table_props() {
 		anim = bonfire.builder.animation;
 
 	if ($('#db_create').is(':checked')) {
-		$('#db_details').show(0);
-		$('#db_details .mb_advanced').hide();
-		$('.match-existing-notes').hide();
-		$('.mb_new_table').show(0);
-		$('#field_numbers').show(0);
-		$('#all_fields').show(0);
+		$('#db_details').show(anim);
+		$('#db_details .mb_advanced').hide(anim);
+		$('.match-existing-notes').hide(anim);
+		$('.mb_new_table').show(anim);
+		$('#field_numbers').show(anim);
+		$('#all_fields').show(anim);
+
 		$('#primary_key_field').val('' == $('#primary_key_field').val() ? 'id' : $('#primary_key_field').val());
 
 		tblName = ( ( $('#table_name').val() == '' ) ? $('#module_name').val() : $('#table_name').val() );
 		tblName = bonfire.builder.prepTableName({valueToPrep: tblName, setTableName: true});
 	} else if ($('#db_exists').is(':checked')) {
-		$('#db_details').show(0);
-		$('#db_details .mb_advanced').show();
-		$('.match-existing-notes').show();
-		$('.mb_new_table').hide(0);
-		$('#field_numbers').hide(0);
-		$('#all_fields').hide(0);
-		var tbl_name = ( ( $('#table_name').val() == '' ) ? $('#module_name').val() : $('#table_name').val() );
-		tbl_name = tbl_name.replace(/[^A-Za-z0-9\\s]/g, "_").toLowerCase();
-		$('#table_name').val( tbl_name );
+		$('#db_details').show(anim);
+		$('#db_details .mb_advanced').show(anim);
+		$('.match-existing-notes').show(anim);
+		$('.mb_new_table').hide(anim);
+		$('#field_numbers').hide(anim);
+		$('#all_fields').hide(anim);
 
-		if ($('#view_field_label1').val() != undefined && $('#view_field_label1').val() != '')
-		{
-			$('.mb_new_table').show(0);
-			$('#db_details .notification').hide(0);
-			$('#field_numbers').hide(0);
-			$('#all_fields').show(0);
-		}
-		else
-		{
+		tblName = ( ( $('#table_name').val() == '' ) ? $('#module_name').val() : $('#table_name').val() );
+		tblName = bonfire.builder.prepTableName({valueToPrep: tblName, setTableName: true});
+
+		if ($('#view_field_label1').val() != undefined && $('#view_field_label1').val() != '') {
+			$('.mb_new_table').show(anim);
+			$('#db_details .notification').hide(anim);
+			$('#field_numbers').hide(anim);
+			$('#all_fields').show(anim);
+		} else {
 			$('#primary_key_field').val('');
 			$('#all_fields').empty();
 		}
 	} else {
-		$('#db_details').hide(0);
-		$('#all_fields').hide(0);
-		$('.match-existing-notes').hide();
+		$('#db_details').hide(anim);
+		$('#all_fields').hide(anim);
+		$('.match-existing-notes').hide(anim);
 	}
 }
 

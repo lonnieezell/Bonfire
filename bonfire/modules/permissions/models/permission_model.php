@@ -48,7 +48,7 @@ class Permission_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $_table		= 'permissions';
+	protected $table_name		= 'permissions';
 
 	/**
 	 * Name of the primary key
@@ -125,7 +125,7 @@ class Permission_model extends BF_Model
 		$deleted = parent::delete($id);
 
 		// if the delete was successful then delete the role_permissions for this permission_id
-		if( TRUE === $deleted )
+		if (TRUE === $deleted)
 		{
 			// now delete the role_permissions for this permission
 			$this->role_permission_model->delete_for_permission($id);

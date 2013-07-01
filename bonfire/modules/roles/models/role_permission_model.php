@@ -48,7 +48,7 @@ class Role_permission_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $_table		= 'role_permissions';
+	protected $table_name	= 'role_permissions';
 
 	/**
 	 * Name of the primary key
@@ -289,7 +289,7 @@ class Role_permission_model extends BF_Model
 		$role	= $this->role_model->where('deleted', 0)->find_by('role_name', $role_name);
 		$perm	= $this->permission_model->find_by('name', $permission_name);
 
-		if (!$role || !$perm)
+		if ( ! $role || ! $perm)
 		{
 			return false;
 		}

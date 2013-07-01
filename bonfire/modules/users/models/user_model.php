@@ -36,7 +36,7 @@ class User_model extends BF_Model
 	 *
 	 * @var string
 	 */
-	protected $_table = 'users';
+	protected $table_name = 'users';
 
 	/**
 	 * Name of the user meta table
@@ -233,7 +233,7 @@ class User_model extends BF_Model
 		if (isset($data['password']) && $data['password'] !== '')
 		{
 			// Load the password hash library
-			if (!class_exists('PasswordHash'))
+			if ( ! class_exists('PasswordHash'))
 			{
 				require(dirname(__FILE__) .'/../libraries/PasswordHash.php');
 			}
@@ -295,7 +295,7 @@ class User_model extends BF_Model
 		$data['role_id'] = $this->role_model->default_role_id();
 
 		$query = $this->db->where('role_id', $current_role)
-				->update($this->_table, $data);
+				->update($this->table_name, $data);
 
 		if ($query)
 		{
@@ -322,10 +322,10 @@ class User_model extends BF_Model
 	{
 		if (empty($this->selects))
 		{
-			$this->select($this->_table . '.*, role_name');
+			$this->select($this->table_name . '.*, role_name');
 		}
 
-		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->_table . '.role_id', 'left');
+		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table_name . '.role_id', 'left');
 
 		return parent::find($id);
 
@@ -344,10 +344,10 @@ class User_model extends BF_Model
 	{
 		if (empty($this->selects))
 		{
-			$this->select($this->_table .'.*, role_name');
+			$this->select($this->table_name . '.*, role_name');
 		}
 
-		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->_table . '.role_id', 'left');
+		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table_name . '.role_id', 'left');
 
 		return parent::find_all();
 
@@ -372,10 +372,10 @@ class User_model extends BF_Model
 	{
 		if (empty($this->selects))
 		{
-			$this->select($this->_table .'.*, role_name');
+			$this->select($this->table_name . '.*, role_name');
 		}
 
-		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->_table . '.role_id', 'left');
+		$this->db->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table_name . '.role_id', 'left');
 
 		return parent::find_by($field, $value, $type);
 
@@ -396,9 +396,9 @@ class User_model extends BF_Model
 				$this->roles_table . '.role_name',
 				'count(1) as count',
 			))
-			->from($this->_table)
-			->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->_table . '.role_id', 'left')
-			->group_by($this->_table . '.role_id');
+			->from($this->table_name)
+			->join($this->roles_table, $this->roles_table . '.role_id = ' . $this->table_name . '.role_id', 'left')
+			->group_by($this->table_name . '.role_id');
 
 		$query = $this->db->get();
 
@@ -427,14 +427,14 @@ class User_model extends BF_Model
 		if ($get_deleted)
 		{
 			// Get only the deleted users
-			$this->db->where($this->_table . '.deleted !=', 0);
+			$this->db->where($this->table_name . '.deleted !=', 0);
 		}
 		else
 		{
-			$this->db->where($this->_table . '.deleted', 0);
+			$this->db->where($this->table_name . '.deleted', 0);
 		}
 
-		return $this->db->count_all_results($this->_table);
+		return $this->db->count_all_results($this->table_name);
 
 	}//end count_all()
 
@@ -479,7 +479,7 @@ class User_model extends BF_Model
 			$this->db->where('id', $user_id);
 		}
 
-		return $this->db->set('force_password_reset', 1)->update($this->_table);
+		return $this->db->set('force_password_reset', 1)->update($this->table_name);
 	}
 
 	//--------------------------------------------------------------------
@@ -763,7 +763,7 @@ class User_model extends BF_Model
 
 		$query = $this->db->select('id')
 		                  ->where('activate_hash', $code)
-		                  ->get($this->_table);
+		                  ->get($this->table_name);
 
 		if ($query->num_rows() !== 1)
 		{
@@ -805,7 +805,7 @@ class User_model extends BF_Model
 			$activate_hash = do_hash(random_string('alnum', 40) . time());
 		}
 
-		$this->db->update($this->_table, array('active'=>0,'activate_hash' => $activate_hash), array('id' => $user_id));
+		$this->db->update($this->table_name, array('active'=>0,'activate_hash' => $activate_hash), array('id' => $user_id));
 
 		if ($this->db->affected_rows() != 1)
 		{
@@ -838,7 +838,7 @@ class User_model extends BF_Model
 		$query = $this->db->select('id')
                	      ->where('id', $user_id)
                	      ->limit(1)
-               	      ->get($this->_table);
+               	      ->get($this->table_name);
 
 		if ($query->num_rows() !== 1)
 		{

@@ -57,13 +57,10 @@ class Reports extends Admin_Controller
 		Assets::add_css( array ( Template::theme_url('css/datatable.css') ) ) ;
 		Assets::add_css( array ( Template::theme_url('css/bootstrap-dataTables.css') ) ) ;
 
-
-		//Assets::add_module_css ('activities', 'datatables.css');
-
-
 		if (has_permission('Activities.User.View')
 				|| has_permission('Activities.Module.View')
-				|| has_permission('Activities.Date.View'))
+				|| has_permission('Activities.Date.View')
+			)
 		{
 			Template::set_block('sub_nav', 'reports/_sub_nav');
 		}
@@ -286,8 +283,8 @@ class Reports extends Admin_Controller
 		$affected = $this->activity_model->delete_where($delete);
 		if (is_numeric($affected))
 		{
-			Template::set_message(sprintf(lang('activity_deleted'),$affected),'success');
-			$this->activity_model->log_activity($this->auth->user_id(), 'deleted '.$affected.' activities', 'activities');
+			Template::set_message(sprintf(lang('activity_deleted'), $affected), 'success');
+			$this->activity_model->log_activity($this->auth->user_id(), 'deleted ' . $affected . ' activities', 'activities');
 		}
 		else if (isset($affected))
 		{

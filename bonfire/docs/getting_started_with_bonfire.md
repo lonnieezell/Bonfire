@@ -250,7 +250,7 @@ Create a new model file at <tt>blog/models/post_model.php</tt>.
 	class Post_model extends MY_Model
 	{
 
-		protected $table        = 'posts';
+		protected $table_name	= 'posts';
 		protected $key          = 'post_id';
 		protected $set_created  = true;
 		protected $set_modified = true;
@@ -263,7 +263,7 @@ Create a new model file at <tt>blog/models/post_model.php</tt>.
 
 This is everything needed to get some pretty flexible CRUD setup and running for your post model.
 
-**$table** is the name of the database table that the data is stored in.
+**$table_name** is the name of the database table that the data is stored in.
 
 **$key** is the name of the primary key the table uses.
 
