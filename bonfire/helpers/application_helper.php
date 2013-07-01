@@ -57,11 +57,11 @@ if ( ! function_exists('gravatar_link'))
 		$rating = 'PG';
 
 		// If email null, means we don't want gravatar.com HTTP request
-		if ( $email ) {
+		if ($email)
+		{
 
 			// Check if HTTP or HTTPS Request should be used
-
-			if(isset($_SERVER['HTTPS'])){ $http_protocol = "https://secure.";} else { $http_protocol = "http://www.";}
+			$http_protocol = ! empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https://secure.' : 'http://www.';
 
 			// URL for Gravatar
 			$gravatarURL =  $http_protocol . "gravatar.com/avatar/%s?s=%s&amp;r=%s&amp;d=%s";
@@ -82,10 +82,10 @@ if ( ! function_exists('gravatar_link'))
 		$alt = html_escape($alt);
 		$title = html_escape($title);
 
-		$id = ($id !== NULL) ? ' id="' .$id .'" ' : ' ';
-		$class = ($class !== NULL) ? ' class="' .$class .'"' : ' ';
+		$id = ($id !== NULL) ? ' id="' . $id .'" ' : ' ';
+		$class = ($class !== NULL) ? ' class="' . $class . '"' : ' ';
 
-		return '<img src="'. $avatarURL .'" width="'.	$size .'" height="'. $size . '" alt="'. $alt .'" title="'. $title .'" ' . $class . $id. ' />';
+		return '<img src="' . $avatarURL . '" width="' . $size . '" height="' . $size . '" alt="' . $alt . '" title="' . $title . '" ' . $class . $id . ' />';
 	}
 }
 
@@ -148,7 +148,7 @@ if ( ! function_exists('module_list'))
 	 */
 	function module_list($exclude_core=false)
 	{
-		if (!function_exists('directory_map'))
+		if ( ! function_exists('directory_map'))
 		{
 			$ci =& get_instance();
 			$ci->load->helper('directory');
@@ -166,7 +166,10 @@ if ( ! function_exists('module_list'))
 			}
 
 			$dirs = directory_map($folder, 1);
-			if (!is_array($dirs)) $dirs = array();
+			if ( ! is_array($dirs))
+			{
+				$dirs = array();
+			}
 
 			$map = array_merge($map, $dirs);
 		}
@@ -174,7 +177,7 @@ if ( ! function_exists('module_list'))
 		// Clean out any html or php files
 		if ($count = count($map))
 		{
-			for ($i=0; $i < $count; $i++)
+			for ($i = 0; $i < $count; $i++)
 			{
 				if (strpos($map[$i], '.html') !== false || strpos($map[$i], '.php') !== false)
 				{
@@ -209,7 +212,7 @@ if ( ! function_exists('module_controller_exists'))
 		// Look in all module paths
 		foreach (module_folders() as $folder)
 		{
-			if (is_file($folder . $module .'/controllers/'. $controller .'.php'))
+			if (is_file($folder . $module . '/controllers/' . $controller . '.php'))
 			{
 				return true;
 			}
@@ -269,13 +272,13 @@ if( ! function_exists('module_path'))
 		{
 			if (is_dir($module_folder . $module))
 			{
-				if (!empty($folder) && is_dir($module_folder . $module .'/'. $folder))
+				if ( ! empty($folder) && is_dir($module_folder . $module . '/' . $folder))
 				{
-					return $module_folder . $module .'/'. $folder;
+					return $module_folder . $module . '/' . $folder;
 				}
 				else
 				{
-					return $module_folder . $module .'/';
+					return $module_folder . $module . '/';
 				}
 			}
 		}
@@ -297,7 +300,7 @@ if ( ! function_exists('module_files'))
 	 */
 	function module_files($module_name=null, $module_folder=null, $exclude_core=false)
 	{
-		if (!function_exists('directory_map'))
+		if ( ! function_exists('directory_map'))
 		{
 			$ci =& get_instance();
 			$ci->load->helper('directory');
@@ -313,7 +316,7 @@ if ( ! function_exists('module_files'))
 				continue;
 			}
 
-			if (!empty($module_name) && is_dir($path . $module_name))
+			if ( ! empty($module_name) && is_dir($path . $module_name))
 			{
 				$path = $path . $module_name;
 				$modules[$module_name] = directory_map($path);
@@ -325,7 +328,7 @@ if ( ! function_exists('module_files'))
 
 			// If the element is not an array, we know that it's a file,
 			// so we ignore it, otherwise it is assumbed to be a module.
-			if (!is_array($modules) || !count($modules))
+			if ( ! is_array($modules) || ! count($modules))
 			{
 				continue;
 			}
@@ -335,14 +338,14 @@ if ( ! function_exists('module_files'))
 				if (is_array($values))
 				{
 					// Add just the specified folder for this module
-					if (!empty($module_folder) && isset($values[$module_folder]) && count($values[$module_folder]))
+					if ( ! empty($module_folder) && isset($values[$module_folder]) && count($values[$module_folder]))
 					{
 						$files[$mod_name] = array(
-							$module_folder	=> $values[$module_folder]
+							$module_folder	=> $values[$module_folder],
 						);
 					}
 					// Add the entire module
-					else if (empty($module_folder))
+					elseif (empty($module_folder))
 					{
 						$files[$mod_name] = $values;
 					}
@@ -398,7 +401,7 @@ if ( ! function_exists('module_config'))
 			{
 				$config_param =$config['module_config'];
 			}
-			else if ($return_full === true && isset($config) && is_array($config))
+			elseif ($return_full === true && isset($config) && is_array($config))
 			{
 				$config_param = $config;
 			}
@@ -427,13 +430,14 @@ if ( ! function_exists('dump'))
 		$arguments = func_get_args();
 		$total_arguments = count($arguments);
 
-		echo '<fieldset style="background: #fefefe !important; border:2px red solid; padding:5px">';
-	    echo '<legend style="background:lightgrey; padding:5px;">'.$callee['file'].' @ line: '.$callee['line'].'</legend><pre>';
+		echo '<fieldset style="background:#fefefe !important; border:2px red solid; padding:5px">' . PHP_EOL .
+			'<legend style="background:lightgrey; padding:5px;">' . $callee['file'] . ' @ line: ' . $callee['line'] . '</legend>' . PHP_EOL .
+			'<pre>';
 
 	    $i = 0;
 	    foreach ($arguments as $argument)
 	    {
-			echo '<br/><strong>Debug #'.(++$i).' of '.$total_arguments.'</strong>: ';
+			echo '<br/><strong>Debug #' . (++$i) . ' of ' . $total_arguments . '</strong>: ';
 
 			if ( (is_array($argument) || is_object($argument)) && count($argument))
 			{
@@ -445,23 +449,25 @@ if ( ! function_exists('dump'))
 			}
 		}
 
-		echo '</pre>' . PHP_EOL;
-		echo '</fieldset>' . PHP_EOL;
+		echo '</pre>' . PHP_EOL .
+			'</fieldset>' . PHP_EOL;
 	}
 }
 
 //--------------------------------------------------------------------
 
-if (!function_exists('e'))
+if ( ! function_exists('e'))
 {
-	/*
-		Function: e()
-
-		A convenience function to make sure your output is safe to display.
-		Helps to defeat XSS attacks by running the text through htmlspecialchars().
-
-		Should be used anywhere you are displaying user-submitted text.
-	*/
+	/**
+	 * A convenience function to make sure your output is safe to display.
+	 * Helps to defeat XSS attacks by running the text through htmlspecialchars().
+	 *
+	 * Should be used anywhere you are displaying user-submitted text.
+	 *
+	 * @param String $str The text to process and output
+	 *
+	 * @return void
+	 */
 	function e($str)
 	{
 		echo htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
@@ -470,22 +476,23 @@ if (!function_exists('e'))
 
 //--------------------------------------------------------------------
 
-if (!function_exists('js_escape'))
+if ( ! function_exists('js_escape'))
 {
-	/*
-		Function: js_escape()
-
-		Like html_escape() for javascript string literals.
-
-		Inside attributes like onclick, you need to use
-		html_escape() *as well*.  Inside script tags,
-		html_excape() would do the wrong thing, and
-		js_escape is enough on it's own.
-
-		Useful for confirm() or alert() - but of course not
-		document.write() or similar, so take care.
-	*/
-
+	/**
+	 * Like html_escape() for JavaScript string literals.
+	 *
+	 * Inside attributes like onclick, you need to use
+	 * html_escape() *as well*. Inside script tags,
+	 * html_escape() would do the wrong thing, and
+	 * js_escape is enough on it's own.
+	 *
+	 * Useful for confirm() or alert() - but of course not
+	 * document.write() or similar, so take care.
+	 *
+	 * @param String $str The string to process
+	 *
+	 * @return String    The escaped string
+	 */
 	function js_escape($str)
 	{
 		/*
@@ -508,7 +515,7 @@ if (!function_exists('js_escape'))
 
 //--------------------------------------------------------------------
 
-if (!function_exists('array_implode'))
+if ( ! function_exists('array_implode'))
 {
 	/**
 	 * Implode an array with the key and value pair giving a glue,
@@ -548,7 +555,7 @@ if (!function_exists('array_implode'))
 }
 //--------------------------------------------------------------------
 
-if ( !function_exists('obj_value') )
+if ( ! function_exists('obj_value'))
 {
 	/**
 	 *
@@ -572,12 +579,14 @@ if ( !function_exists('obj_value') )
 						return 'checked="checked"';
 					}
 					break;
+
 				case 'select':
 					if ($obj->$key == $value)
 					{
 						return 'selected="selected"';
 					}
 					break;
+
 				case 'text':
 				default:
 					return $obj->$key;
@@ -590,7 +599,7 @@ if ( !function_exists('obj_value') )
 }
 //--------------------------------------------------------------------
 
-if ( !function_exists('iif') )
+if ( ! function_exists('iif'))
 {
 	/**
 	* If then Else Statement wrapped in one function, If $expression = true then $returntrue else $returnfalse
@@ -614,57 +623,62 @@ if ( !function_exists('iif') )
 		}
 	}//end iif()
 }
+
 //--------------------------------------------------------------------
 
-if ( !function_exists('list_contexts') )
+if ( ! function_exists('list_contexts'))
 {
     /**
-     * 	Returns a list of the contexts specified for the application. The options $landing_page_filter
-     * can be applied to force return of contexts that have a landing page (index.php) available.
+     * Returns a list of the contexts specified for the application.
+     * The optional $landing_page_filter can be applied to force return
+     * of contexts that have a landing page (index.php) available.
      *
-     *	@param	$landing_page_filter	Boolean		TRUE to filter FALSE for all
-     *	@return 						array	The context values array
+     * @param	$landing_page_filter	Boolean	TRUE to filter FALSE for all
+     *
+     * @return	Array	The context values array
      */
     function list_contexts($landing_page_filter = false)
     {
         $ci = &get_instance();
 
         $contexts = $ci->config->item('contexts');
-        if (empty($contexts) || !is_array($contexts) || !count($contexts))
+        if (empty($contexts) || ! is_array($contexts) || ! count($contexts))
         {
             return false;
         }
 
         // Ensure settings context exists
-        if (!in_array('settings', $contexts))
+        if ( ! in_array('settings', $contexts))
         {
             array_push($contexts, 'settings');
         }
 
         // Ensure developer context exists
-        if (!in_array('developer', $contexts))
+        if ( ! in_array('developer', $contexts))
         {
             array_push($contexts, 'developer');
         }
+
         // Optional removal of contexts without landing pages
         if ($landing_page_filter === true)
         {
             while ($context = current($contexts))
             {
-                if (!file_exists(realpath(VIEWPATH).DIRECTORY_SEPARATOR.SITE_AREA.DIRECTORY_SEPARATOR.$context.DIRECTORY_SEPARATOR.'index.php'))
+                if ( ! file_exists(realpath(VIEWPATH) . DIRECTORY_SEPARATOR . SITE_AREA . DIRECTORY_SEPARATOR . $context . DIRECTORY_SEPARATOR . 'index.php'))
                 {
                     array_splice($contexts, key($contexts), 1);
                 }
                 next($contexts);
             }
         }
+
         return $contexts;
     }
 }
 
 //--------------------------------------------------------------------
 
-if (!function_exists('log_activity'))
+if ( ! function_exists('log_activity'))
 {
 	/**
 	 * Logs a new activity, if config item 'enable_activities' is true

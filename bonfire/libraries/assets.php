@@ -778,15 +778,8 @@ class Assets
 		// Or generate individual links
 		else
 		{
-			//Check for HTTPS or HTTP connection
-			if (isset($_SERVER['HTTPS']))
-			{
-				$http_protocol = 'https';
-			}
-			else
-			{
-				$http_protocol = 'http';
-			}
+			// Check for HTTPS or HTTP connection
+			$http_protocol = ! empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
 
 			foreach ($scripts as $script)
 			{
@@ -1336,15 +1329,8 @@ class Assets
 			print_r($files);
 		}
 
-		//Check for HTTPS or HTTP connection
-		if (isset($_SERVER['HTTPS']))
-		{
-			$http_protocol = 'https';
-		}
-		else
-		{
-			$http_protocol = 'http';
-		}
+		// Check for HTTPS or HTTP connection
+		$http_protocol = ! empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
 
 		$rtl = self::$rtl_postfix;
 		$rtl_set = lang('bf_language_direction') == $rtl;
