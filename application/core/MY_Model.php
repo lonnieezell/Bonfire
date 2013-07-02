@@ -47,7 +47,7 @@ class BF_Model extends CI_Model
 	 * @var string
 	 * @access protected
 	 */
-	protected $_table 	= '';
+	protected $table_name 	= '';
 
 	/**
 	 * The primary key of the table. Used as the 'id' throughout.
@@ -337,7 +337,7 @@ class BF_Model extends CI_Model
 	{
 		$this->trigger('before_find');
 
-		$query = $this->db->get_where($this->_table, array($this->_table.'.'. $this->key => $id));
+		$query = $this->db->get_where($this->table_name, array($this->table_name . '.' . $this->key => $id));
 
 		if ( ! $query->num_rows())
 		{
@@ -375,7 +375,7 @@ class BF_Model extends CI_Model
 	{
 		$this->trigger('before_find');
 
-		$query = $this->db->get($this->_table);
+		$query = $this->db->get($this->table_name);
 
 		if (!$query->num_rows())
 		{
@@ -476,7 +476,7 @@ class BF_Model extends CI_Model
 			$this->db->where($field);
 		}
 
-		$query = $this->db->get($this->_table);
+		$query = $this->db->get($this->table_name);
 
 		if ( ! $query->num_rows())
 		{
@@ -517,7 +517,7 @@ class BF_Model extends CI_Model
 		}
 
 		// Insert it
-		$status = $this->db->insert($this->_table, $data);
+		$status = $this->db->insert($this->table_name, $data);
 
 		if ($status != FALSE)
 		{
@@ -569,7 +569,7 @@ class BF_Model extends CI_Model
 		}
 
 		// Insert it
-		$status = $this->db->insert_batch($this->_table, $data);
+		$status = $this->db->insert_batch($this->table_name, $data);
 
 		if ($status === FALSE)
 		{
@@ -606,7 +606,7 @@ class BF_Model extends CI_Model
 			$data[$this->modified_by_field] = $this->auth->user_id();
 		}
 
-		if ($result = $this->db->update($this->_table, $data, $where))
+		if ($result = $this->db->update($this->table_name, $data, $where))
 		{
 			$this->trigger('after_update', array($data, $result));
 			return TRUE;
@@ -664,7 +664,7 @@ class BF_Model extends CI_Model
 				}
 			}
 
-			$result = $this->db->update_batch($this->_table, $data, $index);
+			$result = $this->db->update_batch($this->table_name, $data, $index);
 			if (empty($result))
 			{
 				return TRUE;
@@ -705,11 +705,11 @@ class BF_Model extends CI_Model
 				$data[$this->deleted_by_field] = $this->auth->user_id();
 			}
 
-			$result = $this->db->update($this->_table, $data);
+			$result = $this->db->update($this->table_name, $data);
 		}
 		else
 		{
-			$result = $this->db->delete($this->_table);
+			$result = $this->db->delete($this->table_name);
 		}
 
 		if ($result)
@@ -757,11 +757,11 @@ class BF_Model extends CI_Model
 				$data[$this->deleted_by_field] = $this->auth->user_id();
 			}
 
-			$this->db->update($this->_table, $data);
+			$this->db->update($this->table_name, $data);
 		}
 		else
 		{
-			$this->db->delete($this->_table);
+			$this->db->delete($this->table_name);
 		}
 
 		$result = $this->db->affected_rows();
@@ -803,7 +803,7 @@ class BF_Model extends CI_Model
 		}
 
 		$this->db->where($field, $value);
-		$query = $this->db->get($this->_table);
+		$query = $this->db->get($this->table_name);
 
 		if ($query && $query->num_rows() == 0)
 		{
@@ -829,7 +829,7 @@ class BF_Model extends CI_Model
 	 */
 	public function count_all()
 	{
-		return $this->db->count_all_results($this->_table);
+		return $this->db->count_all_results($this->table_name);
 
 	}//end count_all()
 
@@ -854,7 +854,7 @@ class BF_Model extends CI_Model
 
 		$this->db->where($field, $value);
 
-		return (int)$this->db->count_all_results($this->_table);
+		return (int)$this->db->count_all_results($this->table_name);
 
 	}//end count_by()
 
@@ -879,7 +879,7 @@ class BF_Model extends CI_Model
 
 		$query = $this->db->select($field)
 			->where($this->key, $id)
-			->get($this->_table);
+			->get($this->table_name);
 
 		if ($query && $query->num_rows() > 0)
 		{
@@ -913,7 +913,7 @@ class BF_Model extends CI_Model
 			$value = $args[0];
 		}
 
-		$query = $this->db->select(array($key, $value))->get($this->_table);
+		$query = $this->db->select(array($key, $value))->get($this->table_name);
 
 		$options = array();
 		foreach ($query->result() as $row)
@@ -1265,7 +1265,7 @@ class BF_Model extends CI_Model
 	 */
 	public function set_table($table='')
 	{
-		$this->_table = $table;
+		$this->table_name = $table;
 
 	}//end set_table()
 
@@ -1274,11 +1274,11 @@ class BF_Model extends CI_Model
 	/**
 	 * Allows you to get the table name
 	 *
-	 * @return string $this->_table (current model table name)
+	 * @return string $this->table_name (current model table name)
 	 */
 	public function get_table()
 	{
-		return $this->_table;
+		return $this->table_name;
 
 	}//end get_table()
 
