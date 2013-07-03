@@ -155,9 +155,9 @@ class User_model extends BF_Model
 	public function insert($data=array())
 	{
 		// Display Name
-		if (!isset($data['display_name']) || $data['display_name'] === '')
+		if (empty($data['display_name']))
 		{
-			if ($this->settings_lib->item('auth.use_usernames') == 1 && !empty($data['username']))
+			if ($this->settings_lib->item('auth.use_usernames') == 1 && ! empty($data['username']))
 			{
 				$data['display_name'] = $data['username'];
 			}
@@ -167,30 +167,23 @@ class User_model extends BF_Model
 			}
 		}
 
-		// Load the password hash library
-		if (!class_exists('PasswordHash'))
-		{
-			require(dirname(__FILE__) .'/../libraries/PasswordHash.php');
-		}
-		$hasher = new PasswordHash($this->settings_lib->item('password_iterations'), false);
+		$password = $this->auth->hash_password($data['password']);
 
-		$password = $hasher->HashPassword($data['password']);
-
-		if (strlen($password) < 20)
+		if (empty($password) || empty($password['hash']))
 		{
 			return false;
 		}
 
-		unset($data['password'], $hasher);
+		$data['password_hash']			= $password['hash'];
+		$data['password_iterations']	= $password['iterations'];
 
-		$data['password_hash'] = $password;
-		$data['password_iterations'] = $this->settings_lib->item('password_iterations');
+		unset($data['password'], $password);
 
 		// What's the default role?
-		if (!isset($data['role_id']))
+		if ( ! isset($data['role_id']))
 		{
 			// We better have a guardian here
-			if (!class_exists('Role_model'))
+			if ( ! class_exists('Role_model'))
 			{
 				$this->load->model('roles/Role_model','role_model');
 			}
@@ -230,26 +223,19 @@ class User_model extends BF_Model
 		$trigger_data = array('user_id'=>$id, 'data'=>$data);
 		Events::trigger('before_user_update', $trigger_data);
 
-		if (isset($data['password']) && $data['password'] !== '')
+		if ( ! empty($data['password']))
 		{
-			// Load the password hash library
-			if ( ! class_exists('PasswordHash'))
-			{
-				require(dirname(__FILE__) .'/../libraries/PasswordHash.php');
-			}
-			$hasher = new PasswordHash($this->settings_lib->item('password_iterations'), false);
+			$password = $this->auth->hash_password($data['password']);
 
-			$password = $hasher->HashPassword($data['password']);
-
-			if (strlen($password) < 20)
+			if (empty($password) || empty($password['hash']))
 			{
 				return false;
 			}
 
-			unset($data['password'], $hasher);
+			$data['password_hash']			= $password['hash'];
+			$data['password_iterations']	= $password['iterations'];
 
-			$data['password_hash'] = $password;
-			$data['password_iterations'] = $this->settings_lib->item('password_iterations');
+			unset($data['password'], $password);
 		}
 
 		// Handle the country
@@ -263,7 +249,7 @@ class User_model extends BF_Model
 
 		if ($return)
 		{
-			$trigger_data = array('user_id'=>$id, 'data'=>$data);
+			$trigger_data = array('user_id' => $id, 'data' => $data);
 			Events::trigger('after_user_update', $trigger_data);
 		}
 
@@ -490,32 +476,32 @@ class User_model extends BF_Model
 	//--------------------------------------------------------------------
 
 	/**
-	 * Generates a new salt and password hash for the given password.
+	 * Generates a new password hash for the given password.
 	 *
 	 * @access public
 	 *
 	 * @param string $old The password to hash.
+	 * @param int	 $iterations	The number of iterations to use in generating the hash
 	 *
-	 * @return array An array with the hashed password and new salt.
+	 * @return array An array with the hashed password and the number of iterations, or false
 	 */
-	public function hash_password($old='')
+	public function hash_password($old='', $iterations=0)
 	{
-		if (!function_exists('do_hash'))
+		$password = $this->auth->hash_password($old, $iterations);
+
+		if (empty($password) || empty($password['hash']))
 		{
-			$this->load->helper('security');
+			return false;
 		}
 
-		$salt = $this->generate_salt();
-		$pass = do_hash($salt . $old);
-
-		return array($pass, $salt);
+		return array($password['hash'], $password['iterations']);
 
 	}//end hash_password()
 
 	//--------------------------------------------------------------------
 
 	/**
-	 * Create a salt to be used for the passwords
+	 * Create a salt (no longer used for passwords)
 	 *
 	 * @access private
 	 *
@@ -523,7 +509,7 @@ class User_model extends BF_Model
 	 */
 	private function generate_salt()
 	{
-		if (!function_exists('random_string'))
+		if ( ! function_exists('random_string'))
 		{
 			$this->load->helper('string');
 		}

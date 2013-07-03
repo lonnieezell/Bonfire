@@ -159,7 +159,7 @@ class Auth
 		}
 
 		// check to see if a value of FALSE came back, meaning that the username or email or password doesn't exist.
-		if($user == FALSE)
+		if ($user == FALSE)
 		{
 			Template::set_message(lang('us_bad_email_pass'), 'error');
 			return FALSE;
@@ -208,15 +208,8 @@ class Auth
 			redirect('/users/reset_password');
 		}
 
-		// Load the password hash library
-		if (!class_exists('PasswordHash'))
-		{
-			require(dirname(__FILE__) .'/PasswordHash.php');
-		}
-		$hasher = new PasswordHash($user->password_iterations, false);
-
 		// Try password
-		if ($hasher->CheckPassword($password, $user->password_hash))
+		if ($this->check_password($password, $user->password_hash))
 		{
 			// check if the account has been banned.
 			if ($user->banned)
@@ -381,12 +374,12 @@ class Auth
 		}
 
 		// Check to see if the user has the proper permissions
-		if (!empty($permission) && !$this->has_permission($permission))
+		if ( ! empty($permission) && ! $this->has_permission($permission))
 		{
 			// set message telling them no permission THEN redirect
 			Template::set_message( lang('us_no_permission'), 'attention');
 
-			if (! $uri)
+			if ( ! $uri)
 			{
 				$uri = $this->ci->session->userdata('previous_page');
 
@@ -422,7 +415,7 @@ class Auth
 	 */
 	public function user_id()
 	{
-		if (!$this->is_logged_in())
+		if ( ! $this->is_logged_in())
 		{
 			return FALSE;
 		}
@@ -443,7 +436,7 @@ class Auth
 	 */
 	public function identity()
 	{
-		if (!$this->is_logged_in())
+		if ( ! $this->is_logged_in())
 		{
 			return FALSE;
 		}
@@ -461,7 +454,7 @@ class Auth
 	 */
 	public function role_id()
 	{
-		if (!$this->is_logged_in())
+		if ( ! $this->is_logged_in())
 		{
 			return FALSE;
 		}
@@ -553,9 +546,9 @@ class Auth
 	 */
 	private function load_permissions()
 	{
-		if (!isset($this->permissions)) {
+		if ( ! isset($this->permissions))
+		{
 			$this->ci->load->model('permissions/permission_model');
-			$this->ci->load->model('roles/role_permission_model');
 
 			$perms = $this->ci->permission_model->find_all();
 
@@ -580,10 +573,10 @@ class Auth
 	 */
 	private function load_role_permissions($role_id=NULL)
 	{
-		$role_id = !is_null($role_id) ? $role_id : $this->role_id();
+		$role_id = ! is_null($role_id) ? $role_id : $this->role_id();
 
-		if (!isset($this->role_permissions[$role_id])) {
-			$this->ci->load->model('permissions/permission_model');
+		if ( ! isset($this->role_permissions[$role_id]))
+		{
 			$this->ci->load->model('roles/role_permission_model');
 
 			$role_perms = $this->ci->role_permission_model->find_for_role($role_id);
@@ -615,7 +608,7 @@ class Auth
 	 */
 	public function role_name_by_id($role_id)
 	{
-		if (!is_numeric($role_id))
+		if ( ! is_numeric($role_id))
 		{
 			return '';
 		}
@@ -629,7 +622,7 @@ class Auth
 		}
 		else
 		{
-			if (! class_exists('Role_model'))
+			if ( ! class_exists('Role_model'))
 			{
 				$this->ci->load->model('roles/role_model');
 			}
@@ -653,6 +646,76 @@ class Auth
 
 	//--------------------------------------------------------------------
 
+	/*
+	 * Passwords
+	 */
+
+	/**
+	 * Hash a password
+	 *
+	 * @param String $pass		The password to hash
+	 * @param Int $iterations	The number of iterations used in hashing the password
+	 *
+	 * @return Array			An associative array containing the hashed password and number of iterations
+	 */
+	public function hash_password($pass, $iterations=0)
+	{
+		// The shortest valid hash phpass can currently return is 20 characters,
+		// which would only happen with CRYPT_EXT_DES
+		$min_hash_len = 20;
+
+		if (empty($iterations) || ! is_numeric($iterations) || $iterations <= 0)
+		{
+			$iterations = $this->ci->settings_lib->item('password_iterations');
+		}
+
+		// Load the password hash library
+		if ( ! class_exists('PasswordHash'))
+		{
+			require(dirname(__FILE__) . '/../libraries/PasswordHash.php');
+		}
+
+		$hasher = new PasswordHash($iterations, false);
+		$password = $hasher->HashPassword($pass);
+
+		unset($hasher);
+
+		if (strlen($password) < $min_hash_len)
+		{
+			return false;
+		}
+
+		return array('hash' => $password, 'iterations' => $iterations);
+
+	}
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Check the supplied password against the supplied hash
+	 *
+	 * @param String $password The password to check
+	 * @param String $hash     The hash
+	 *
+	 * @return Bool    true if the password and hash match, else false
+	 */
+	public function check_password($password, $hash)
+	{
+		// Load the password hash library
+		if ( ! class_exists('PasswordHash'))
+		{
+			require(dirname(__FILE__) .'/PasswordHash.php');
+		}
+
+		// Try password
+		$hasher = new PasswordHash($user->password_iterations, false);
+		$return = $hasher->CheckPassword($password, $hash);
+
+		unset($hasher);
+
+		return $return;
+
+	}
 
 	//--------------------------------------------------------------------
 	// !LOGIN ATTEMPTS
@@ -709,9 +772,13 @@ class Auth
 	{
 		$this->ci->db->select('1', FALSE);
 		$this->ci->db->where('ip_address', $this->ip_address);
-		if (strlen($login) > 0) $this->ci->db->or_where('login', $login);
+		if (strlen($login) > 0)
+		{
+			$this->ci->db->or_where('login', $login);
+		}
 
 		$query = $this->ci->db->get('login_attempts');
+
 		return $query->num_rows();
 
 	}//end num_login_attempts()
@@ -738,7 +805,10 @@ class Auth
 
 		$cookie = get_cookie('autologin', TRUE);
 
-		if (!$cookie) {	return;	}
+		if ( ! $cookie)
+		{
+			return;
+		}
 
 		// We have a cookie, so split it into user_id and token
 		list($user_id, $test_token) = explode('~', $cookie);
@@ -754,13 +824,16 @@ class Auth
 
 			// If a session doesn't exist, we need to refresh our autologin token
 			// and get the session started.
-			if (!$this->ci->session->userdata('user_id'))
+			if ( ! $this->ci->session->userdata('user_id'))
 			{
 				// Grab the current user info for the session
 				$this->ci->load->model('users/User_model', 'user_model');
 				$user = $this->ci->user_model->select('id, username, email, password_hash, users.role_id')->find($user_id);
 
-				if (!$user) { return; }
+				if ( ! $user)
+				{
+					return;
+				}
 
 				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, TRUE, $test_token, $user->username);
 			}
@@ -892,9 +965,8 @@ class Auth
 	 */
 	private function setup_session($user_id, $username, $password_hash, $email, $role_id, $remember=FALSE, $old_token=NULL,$user_name='')
 	{
-
 		// What are we using as login identity?
-		//Should I use _identity_login() and move bellow code?
+		// Should I use _identity_login() and move below code?
 
 		// If "both", defaults to email, unless we display usernames globally
 		if (($this->ci->settings_lib->item('auth.login_type') ==  'both'))
@@ -968,7 +1040,7 @@ class Auth
 
 //--------------------------------------------------------------------
 
-if (!function_exists('has_permission'))
+if ( ! function_exists('has_permission'))
 {
 	/**
 	 * A convenient shorthand for checking user permissions.
@@ -991,7 +1063,7 @@ if (!function_exists('has_permission'))
 
 //--------------------------------------------------------------------
 
-if (!function_exists('permission_exists'))
+if ( ! function_exists('permission_exists'))
 {
 	/**
 	 * Checks to see whether a permission is in the system or not.
@@ -1013,7 +1085,7 @@ if (!function_exists('permission_exists'))
 
 //--------------------------------------------------------------------
 
-if (!function_exists('abbrev_name'))
+if ( ! function_exists('abbrev_name'))
 {
 	/**
 	 * Retrieves first and last name from given string.
@@ -1028,7 +1100,8 @@ if (!function_exists('abbrev_name'))
 	{
 		if (is_string($name))
 		{
-			list( $fname, $lname ) = explode( ' ', $name, 2 );
+			list($fname, $lname) = explode(' ', $name, 2);
+
 			if (is_null($lname)) // Meaning only one name was entered...
 			{
 				$lastname = ' ';
@@ -1044,10 +1117,8 @@ if (!function_exists('abbrev_name'))
 
 		}
 
-		/*
-			TODO: Consider an optional parameter for picking custom var session.
-				Making it auth private, and using auth custom var
-		*/
+		// TODO: Consider an optional parameter for picking custom var session.
+		// Making it auth private, and using auth custom var
 
 		return $name;
 
