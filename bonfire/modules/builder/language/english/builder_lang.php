@@ -8,10 +8,10 @@
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in
 	all copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -38,7 +38,7 @@ $lang['mb_table_author']		= 'Author';
 $lang['mb_table_description']	= 'Description';
 
 // OUTPUT page
-$lang['mb_out_success']	= 'The module creation was successful! Below you will find the list of Controller, Model, Language, Migration and View files that were created during this process. Model and SQL files will be included if you selected the "Generate Migration" option and a Javascript file if it was required during creation.';
+$lang['mb_out_success']			= 'The module creation was successful! Below you will find the list of Controller, Model, Language, Migration and View files that were created during this process. Model and SQL files will be included if you selected the "Generate Migration" option and a Javascript file if it was required during creation.';
 $lang['mb_out_success_note']	= 'NOTE: Please add extra user input validation as you require.  This code is to be used as a starting point only.';
 $lang['mb_out_tables_success']	= 'The database tables were automatically installed for you. You can verify or uninstall, if you wish, from the %s section.';
 $lang['mb_out_tables_error']	= 'The database tables were <strong>NOT</strong> automatically installed for you. You still need to go to the %s section and migrate your database table(s) before you can work with them.';
@@ -60,18 +60,16 @@ $lang['mb_new_module']			= 'New Module';
 $lang['mb_exist_modules']		= 'Existing Modules';
 
 // FORM page
-$lang['mb_form_note'] = '<p><b>Fill out the fields you would like in your module (an "id" field is created automatically).  If you want to create the SQL for a DB table check the "Create Module Table" box.</b></p><p>This form will generate a full CodeIgniter module (model, controller and views) and, if you choose, database Migration file(s).</p>';
+$lang['mb_form_note']			= '<p><b>Fill out the fields you would like in your module (an "id" field is created automatically).  If you want to create the SQL for a DB table check the "Create Module Table" box.</b></p><p>This form will generate a full CodeIgniter module (model, controller and views) and, if you choose, database Migration file(s).</p>';
+$lang['mb_table_note']			= '<p>Your table will be created with at least one field, the primary key field that will be used as a unique identifier and as an index. If you required additional fields, click the number you require to add them to this form.</p>';
+$lang['mb_field_note']			= '<p><b>NOTE : FOR ALL FIELDS</b><br />If DB field type is "enum" or "set", please enter the values using this format: \'a\',\'b\',\'c\'...<br />If you ever need to put a backslash ("\\") or a single quote ("\'") amongst those values, precede it with a backslash (for example \'\\\\xyz\' or \'a\\\'b\').</p>';
 
-$lang['mb_table_note'] = '<p>Your table will be created with at least one field, the primary key field that will be used as a unique identifier and as an index. If you required additional fields, click the number you require to add them to this form.</p>';
-
-$lang['mb_field_note'] = '<p><b>NOTE : FOR ALL FIELDS</b><br />If DB field type is "enum" or "set", please enter the values using this format: \'a\',\'b\',\'c\'...<br />If you ever need to put a backslash ("\\") or a single quote ("\'") amongst those values, precede it with a backslash (for example \'\\\\xyz\' or \'a\\\'b\').</p>';
-	
 $lang['mb_form_errors']			= 'Please correct the errors below.';
 $lang['mb_form_mod_details']	= 'Module Details';
 $lang['mb_form_mod_name']		= 'Module Name';
 $lang['mb_form_mod_name_ph']	= 'Forums, Blog, ToDo';
 $lang['mb_form_mod_desc']		= 'Module Description';
-$lang['mb_form_mod_desc_ph']	= 'A list of todo items';
+$lang['mb_form_mod_desc_ph']	= 'Your module description';
 $lang['mb_form_contexts']		= 'Contexts Required';
 $lang['mb_form_public']			= 'Public';
 $lang['mb_form_table_details']	= 'Table Details';
@@ -84,14 +82,16 @@ $lang['mb_form_soft_deletes']	= 'Use "Soft" Deletes?';
 $lang['mb_form_use_created']	= 'Use "Created" field?';
 $lang['mb_form_use_modified']	= 'Use "Modified" field?';
 $lang['mb_form_created_field']	= '"Created" field name?';
+$lang['mb_form_created_field_ph']	= 'created_on';
 $lang['mb_form_modified_field']	= '"Modified" field name?';
+$lang['mb_form_modified_field_ph']	= 'modified_on';
 $lang['mb_form_generate']		= 'Create Module Table';
 $lang['mb_form_role_id']		= 'Give Role Full Access';
 $lang['mb_form_fieldnum']		= 'Additional table fields';
 $lang['mb_form_field_details']	= 'Field details';
 $lang['mb_form_table_name']		= 'Table Name';
 $lang['mb_form_table_name_ph']	= 'Lowercase, no spaces';
-$lang['mb_form_table_as_field_prefix']		= 'Use table name as field prefix';
+$lang['mb_form_table_as_field_prefix']	= 'Use table name as field prefix';
 $lang['mb_form_label']			= 'Label';
 $lang['mb_form_label_ph']		= 'The name that will be used on webpages';
 $lang['mb_form_fieldname']		= 'Name (no spaces)';
@@ -101,7 +101,7 @@ $lang['mb_form_length']			= 'Maximum Length <b>-or-</b> Values';
 $lang['mb_form_length_ph']		= '30, 255, 1000, etc...';
 $lang['mb_form_dbtype']			= 'Database Type';
 $lang['mb_form_rules']			= 'Validation Rules';
-$lang['mb_form_rules_limits']	= 'Input Limitations'; 
+$lang['mb_form_rules_limits']	= 'Input Limitations';
 $lang['mb_form_required']		= 'Required';
 $lang['mb_form_unique']			= 'Unique';
 $lang['mb_form_trim']			= 'Trim';
@@ -121,10 +121,14 @@ $lang['mb_form_valid_ip']		= 'Valid IP';
 $lang['mb_form_valid_base64']	= 'Valid Base64';
 $lang['mb_form_alpha_extra']	= 'AlphaNumerics, underscore, dash, periods and spaces.';
 $lang['mb_form_match_existing']	= 'Ensure this matches the existing fieldname!';
+$lang['mb_form_module_db_no']	= 'None';
+$lang['mb_form_module_db_create']	= 'Create New Table';
+$lang['mb_form_module_db_exists']	= 'Build from Existing Table';
+$lang['mb_form_build']			= 'Build the Module';
 
 // Activities
-$lang['mb_act_create']	= 'Created Module';
-$lang['mb_act_delete']	= 'Deleted Module';
+$lang['mb_act_create']			= 'Created Module';
+$lang['mb_act_delete']			= 'Deleted Module';
 
 $lang['mb_create_a_context']	= 'Create A Context';
 $lang['mb_tools']				= 'Tools';

@@ -12,6 +12,8 @@ $textarea_editors = array(
 	'markitup' => 'MarkitUp!',
 );
 
+$session_error = $this->session->flashdata('error');
+
 ?>
 <style>
 .faded {
@@ -38,9 +40,6 @@ a.mb_show_advanced_rules:hover {
 fieldset {
 	margin-top: 0;
 }
-admin-box > fieldset > legend {
-	margin-top: 0;
-}
 </style>
 <p class="intro">
 	<?php e(lang('mb_create_note')); ?>
@@ -57,35 +56,32 @@ admin-box > fieldset > legend {
 <?php
 endif;
 
-if ($this->session->flashdata('error')):
+if ($session_error):
 ?>
 <div class="top_error">
-	<?php echo $this->session->flashdata('error')?>
+	<?php echo $session_error; ?>
 </div>
 <?php endif; ?>
 <div class="admin-box">
+	<?php echo form_open(current_url() . ($field_total > 0 ? ('/' . $field_total) : ''), array('id' => "module_form", 'class' => "form-horizontal")); ?>
+		<div>
+			<!-- Module Details -->
+			<fieldset id="module_details">
+				<legend><?php echo lang('mb_form_mod_details'); ?></legend>
 
-	<h3><?php echo $toolbar_title ?></h3>
-
-<?php echo form_open(current_url().(($field_total>0)?('/'.$field_total):''), array('id'=>"module_form",'class'=>"form-horizontal")); ?>
-	<div>
-		<!-- Module Details -->
-		<fieldset id="module_details">
-			<legend><?php echo lang('mb_form_mod_details'); ?></legend>
-
-			<div class="control-group <?php echo form_has_error('module_name') ? 'error' : ''; ?>">
-				<label for="module_name" class="control-label block"><?php echo lang('mb_form_mod_name'); ?></label>
-				<div class="controls">
-					<input name="module_name" id="module_name" type="text" value="<?php echo set_value("module_name"); ?>" placeholder="<?php echo lang('mb_form_mod_name_ph'); ?>" />
-					<span class="help-inline"><?php echo form_error('module_name'); ?></span>
-					<div><a href="#" class="mb_show_advanced small"><?php echo lang('mb_form_show_advanced'); ?></a></div>
-
+				<div class="control-group<?php echo form_has_error('module_name') ? ' error' : ''; ?>">
+					<label for="module_name" class="control-label block"><?php echo lang('mb_form_mod_name'); ?></label>
+					<div class="controls">
+						<input name="module_name" id="module_name" type="text" value="<?php echo set_value("module_name"); ?>" placeholder="<?php echo lang('mb_form_mod_name_ph'); ?>" />
+						<span class="help-inline"><?php echo form_error('module_name'); ?></span>
+						<div><a href="#" class="mb_show_advanced small"><?php echo lang('mb_form_show_advanced'); ?></a></div>
+					</div>
 				</div>
 
-				<div class="control-group mb_advanced <?php echo form_has_error('module_description') ? 'error' : ''; ?>">
+				<div class="control-group mb_advanced<?php echo form_has_error('module_description') ? ' error' : ''; ?>">
 					<label for="module_description" class="control-label block"><?php echo lang('mb_form_mod_desc'); ?></label>
 					<div class="controls">
-						<input name="module_description" id="module_description" type="text" value="<?php echo set_value("module_description",'Your module description'); ?>" placeholder="<?php echo lang('mb_form_mod_desc_ph'); ?>" />
+						<input name="module_description" id="module_description" type="text" value="<?php echo set_value("module_description", lang('mb_form_mod_desc_ph')); ?>" placeholder="<?php echo lang('mb_form_mod_desc_ph'); ?>" />
 						<span class="help-inline"><?php echo form_error('module_description'); ?></span>
 					</div>
 				</div>
@@ -107,7 +103,7 @@ if ($this->session->flashdata('error')):
 					</div>
 				</div>
 
-				<div class="control-group mb_advanced">
+				<div class="control-group mb_advanced<?php echo form_has_error('form_action') ? ' error' : ''; ?>">
 					<?php echo form_error("form_action"); ?>
 					<label class="control-label" id="form_action_label"><?php echo lang('mb_form_actions'); ?></label>
 					<div class="controls" aria-labelledby="form_action_label" role="group">
@@ -143,13 +139,16 @@ if ($this->session->flashdata('error')):
 				<div class="control-group">
 					<div class="controls">
 						<label class="inline radio" for="db_no">
-							<input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox('module_db', '', TRUE); ?> class="radio" /> None
+							<input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox('module_db', '', TRUE); ?> class="radio" />
+							<?php echo lang('mb_form_module_db_no'); ?>
 						</label>
 						<label class="inline radio" for="db_create">
-							<input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox('module_db', 'new'); ?> class="radio" /> Create New Table
+							<input name="module_db" id="db_create" type="radio" value="new" <?php echo set_checkbox('module_db', 'new'); ?> class="radio" />
+							<?php echo lang('mb_form_module_db_create'); ?>
 						</label>
 						<label class="inline radio" for="db_exists">
-							<input name="module_db" id="db_exists" type="radio" value="existing" <?php echo set_checkbox('module_db', 'existing'); ?> class="radio" /> Build from Existing Table
+							<input name="module_db" id="db_exists" type="radio" value="existing" <?php echo set_checkbox('module_db', 'existing'); ?> class="radio" />
+							<?php echo lang('mb_form_module_db_exists'); ?>
 						</label>
 					</div>
 				</div>
@@ -172,21 +171,6 @@ if ($this->session->flashdata('error')):
 					</div>
 				</div>
 
-			<div class="control-group mb_advanced">
-				<label for="use_soft_deletes" class="control-label block"><?php echo lang('mb_form_soft_deletes'); ?></label>
-				<div class="controls">
-					<?php
-						$truefalse = array('false' => 'False', 'true' => 'True');
-					?>
-					<select name="use_soft_deletes" id="use_soft_deletes">
-						<?php foreach($truefalse as $val => $label):?>
-						<option value="<?php echo $val?>"><?php echo $label?></option>
-						<?php endforeach;?>
-					</select>
-					<input type="hidden" name="soft_delete_field" id="soft_delete_field" value="deleted" />
-
-				</div>
-
 				<div class="control-group mb_advanced<?php echo form_has_error('form_error_delimiters') ? ' error' : ''; ?>">
 					<label for="form_error_delimiters" class="control-label block"><?php echo lang('mb_form_err_delims'); ?></label>
 					<div class="controls">
@@ -195,39 +179,34 @@ if ($this->session->flashdata('error')):
 					</div>
 				</div>
 
-			<div class="control-group mb_advanced <?php echo form_has_error('created_field') ? 'error' : ''; ?>">
-				<label for="created_field" class="control-label block"><?php echo lang('mb_form_created_field'); ?></label>
-				<div class="controls">
-					<input name="created_field" id="created_field" type="text" value="<?php echo set_value("created_field", "created_on"); ?>" />
-					<span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
-					<span class="help-inline"><?php echo form_error('created_field'); ?></span>
-
-				</div>
-
 				<div class="control-group mb_advanced">
 					<label for="use_soft_deletes" class="control-label block"><?php echo lang('mb_form_soft_deletes'); ?></label>
 					<div class="controls">
 						<select name="use_soft_deletes" id="use_soft_deletes">
-							<?php foreach ($truefalse as $val => $label) : ?>
-							<option value="<?php echo $val; ?>"><?php echo $label; ?></option>
+							<?php foreach($truefalse as $val => $label):?>
+							<option value="<?php echo $val?>"><?php echo $label?></option>
+							<?php endforeach;?>
+						</select>
+						<input type="hidden" name="soft_delete_field" id="soft_delete_field" value="deleted" />
+					</div>
+				</div>
+
+				<div class="control-group mb_advanced">
+					<label for="use_created" class="control-label block"><?php echo lang('mb_form_use_created'); ?></label>
+					<div class="controls">
+						<select name="use_created" id="use_created">
+							<?php foreach($truefalse as $val => $label):?>
+							<option value="<?php echo $val?>"><?php echo $label?></option>
 							<?php endforeach;?>
 						</select>
 					</div>
 				</div>
 
-			<div class="control-group mb_advanced <?php echo form_has_error('modified_field') ? 'error' : ''; ?>">
-				<label for="modified_field" class="control-label block"><?php echo lang('mb_form_modified_field'); ?></label>
-				<div class="controls">
-					<input name="modified_field" id="modified_field" type="text" value="<?php echo set_value("modified_field", "modified_on"); ?>" />
-					<span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
-					<span class="help-inline"><?php echo form_error('modified_field'); ?></span>
-
-				</div>
-
 				<div class="control-group mb_advanced<?php echo form_has_error('created_field') ? ' error' : ''; ?>">
 					<label for="created_field" class="control-label block"><?php echo lang('mb_form_created_field'); ?></label>
 					<div class="controls">
-						<input name="created_field" id="created_field" type="text" value="<?php echo set_value("created_field", "created_on"); ?>" />
+						<input name="created_field" id="created_field" type="text" value="<?php echo set_value("created_field", lang('mb_form_created_field_ph')); ?>" />
+						<span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
 						<span class="help-inline"><?php echo form_error('created_field'); ?></span>
 					</div>
 				</div>
@@ -246,7 +225,8 @@ if ($this->session->flashdata('error')):
 				<div class="control-group mb_advanced<?php echo form_has_error('modified_field') ? ' error' : ''; ?>">
 					<label for="modified_field" class="control-label block"><?php echo lang('mb_form_modified_field'); ?></label>
 					<div class="controls">
-						<input name="modified_field" id="modified_field" type="text" value="<?php echo set_value("modified_field", "modified_on"); ?>" />
+						<input name="modified_field" id="modified_field" type="text" value="<?php echo set_value("modified_field", lang('mb_form_modified_field_ph')); ?>" />
+						<span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
 						<span class="help-inline"><?php echo form_error('modified_field'); ?></span>
 					</div>
 				</div>
@@ -449,7 +429,7 @@ if ($this->session->flashdata('error')):
 		<div class="form-actions">
 			<?php
 			if ($writeable):
-				echo form_submit('build', 'Build the Module', 'class="btn btn-primary"');
+				echo form_submit('build', lang('mb_form_build'), 'class="btn btn-primary"');
 			endif;
 			?>
 		</div>
