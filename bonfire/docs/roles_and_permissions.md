@@ -1,12 +1,13 @@
 # Roles and Permissions
 
-Bonfire uses a  Role-Based Access Control (RBAC) system for it's authentication and authorization system. This provides enough granularity and flexibility for most situations, though may not be suitable for every website.
+Bonfire uses a  Role-Based Access Control (RBAC) system for its authentication and authorization system. This provides enough granularity and flexibility for most situations, though may not be suitable for every website.
 
 <ul>
     <li><a href="#stock">Stock Roles</a></li>
     <li><a href="#new_roles">Creating New Roles</a></li>
     <li><a href="#permissions">Permissions</a></li>
     <li><a href="#access">Restricting Access</a></li>
+	<li><a href="#passwords">Passwords</a></li>
 </ul>
 
 <a name="stock"></a>
@@ -148,7 +149,7 @@ The <tt>has_permission()</tt> method allows you to check if the current logged-i
 
 
 
-    if (!has_permission('Bonfire.Users.Manage'))
+    if ( ! has_permission('Bonfire.Users.Manage'))
     {
         . . .
     }
@@ -166,3 +167,27 @@ This function allows you to quickly check whether a permission exists in the dat
     {
         . . .
     }
+
+
+<a name="passwords"></a>
+## Passwords
+
+While passwords are generally managed through the users module, the auth library includes a couple of basic functions for password management.
+
+### <tt>check_password()</tt>
+
+The <tt>check_password()</tt> method allows you to verify that a given password matches a password hash.
+
+	if ($this->auth->check_password('password to check', 'HashedPassword'))
+	{
+		// The passwords match
+		...
+	}
+
+### <tt>hash_password()</tt>
+
+The <tt>hash_password()</tt> method allows you to hash a password with an optional number of iterations (if not supplied, the site's password_iterations setting will be used). This should not be used to check a password, since hashing the same password again won't match a stored hash.
+
+	$password = $this->auth->hash_password('password');
+	$hash = $password['hash'];
+	$iterations_used = $password['iterations'];
