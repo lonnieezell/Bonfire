@@ -1,29 +1,5 @@
 <?php
 
-//--------------------------------------------------------------------
-// Install Check
-//--------------------------------------------------------------------
-// Check to see if we've been isntalled yet. We can assume that we have 
-// been installed if one of 2 conditions is met: 
-//
-// 		1. The '/install' folder does not exist
-//		2. The file '/install/installed.txt' does exist.
-// 
-// This allows the user to remove the install folder completely from the
-// public path for security, or to simply create a new little text file
-// for when we're developing on it, but want to easily install later on.
-//
-if (is_dir('./install') && !file_exists('./install/installed.txt'))
-{
-	// Auto $base_url copied from codeigniter/core/Config.php
-	$base_url = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https' : 'http';
-	$base_url .= '://'. $_SERVER['HTTP_HOST'];
-	$base_url .= str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
-
-	header("Location: {$base_url}install/index.php");
-	exit;
-}
-
 /*
  *---------------------------------------------------------------
  * APPLICATION ENVIRONMENT

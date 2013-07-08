@@ -9,7 +9,7 @@
         <?php endif; ?>
     </ul>
 
-    <h3 class="muted"><?php e($this->settings_lib->item('site.title')); ?></h3>
+    <h3 class="muted"><?php if (class_exists('CI_Session')) e($this->settings_lib->item('site.title')); ?></h3>
 </div>
 
 <hr />

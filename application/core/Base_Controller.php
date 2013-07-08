@@ -72,6 +72,13 @@ class Base_Controller extends MX_Controller
 
 		parent::__construct();
 
+		// Since we don't want to autoload libraries in the
+		// standard CI way to make things work for uninstalled apps,
+		// autoload our few libs here.
+		$this->load->library('database');
+		$this->load->library('events');
+		$this->load->library('settings/settings_lib');
+
 		$this->set_current_user();
 
 		// load the application lang file here so that the users language is known

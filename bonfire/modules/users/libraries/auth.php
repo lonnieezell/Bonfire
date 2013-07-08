@@ -796,6 +796,8 @@ class Auth
 	 */
 	private function autologin()
 	{
+		$this->ci->load->library('settings/settings_lib');
+
 		if ($this->ci->settings_lib->item('auth.allow_remember') == FALSE)
 		{
 			return;

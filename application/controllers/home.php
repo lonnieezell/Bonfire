@@ -28,7 +28,7 @@
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
  *
  */
-class Home extends Front_Controller
+class Home extends MX_Controller
 {
 
 
@@ -39,8 +39,14 @@ class Home extends Front_Controller
 	 */
 	public function index()
 	{
-		$this->load->library('users/auth');
-		$this->set_current_user();
+		//$this->load->library('users/auth');
+		//$this->set_current_user();
+
+		$this->load->library('template');
+		$this->load->library('assets');
+		$this->load->library('events');
+		$this->load->helper('application');
+		$this->lang->load('application');
 
 		Template::render();
 	}//end index()
