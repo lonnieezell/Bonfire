@@ -105,7 +105,7 @@ Now get busy and add or edit code. You're on your branch now, so you can write w
 
 Bonfire follows a simple set of [Coding Conventions](coding_conventions.html) which are summarized here, but are given a more complete treatment in their own guide.
 
-* Spaces, not tabs.
+* Spaces, not tabs, are preferred.
 * No trailing whitespace. Blank lines should not have any space.
 * Prefer && / || over AND / OR.
 * Always use brackets for foreach, if else, etc.
