@@ -101,16 +101,16 @@ class Developer extends Admin_Controller
 		}
 
 		// Load the Log Files
-		$logs = array_reverse(get_filenames($this->config->item('log_path')));
+		$logs = get_filenames($this->config->item('log_path'));
+        arsort($logs);
 
 		// Pagination
 		$this->load->library('pagination');
 
 		$offset = $this->uri->segment(5) ? $this->uri->segment(5) : 0;
-		//$limit = $this->limit;
 		$limit = 10;
 
-		$this->pager['base_url'] = site_url(SITE_AREA .'/developer/logs/index');
+		$this->pager['base_url'] = site_url(SITE_AREA . '/developer/logs/index');
 		$this->pager['total_rows'] = count($logs);
 		$this->pager['per_page'] = $limit;
 		$this->pager['uri_segment']	= 5;
