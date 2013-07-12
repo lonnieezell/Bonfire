@@ -73,9 +73,11 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 					<th>' . set_value("view_field_label$counter") . '</th>';
 }
 
+$field_prefix = '';
+
 // only add maintenance columns to view when module is creating a new db table
 // (columns should already be present and handled below when existing table is used)
-if($db_required == 'new')
+if ($db_required == 'new')
 {
 	if ($use_soft_deletes == 'true')
 	{
@@ -92,6 +94,10 @@ if($db_required == 'new')
 		$headers .= '
 					<th><?php echo lang("' . $module_name_lower . '_column_modified"); ?></th>';
 	}
+    if ($table_as_field_prefix === TRUE)
+    {
+        $field_prefix = $module_name_lower . '_';
+    }
 }
 
 $table_records = '';
