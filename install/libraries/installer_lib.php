@@ -304,7 +304,7 @@ class Installer_lib {
 			// from the main folder.
 			if (strpos($folder, 'public/') === 0)
 			{
-				$realpath = preg_replace('{^public/}', $this->FCPATH, $folder);
+				$realpath = $this->FCPATH . preg_replace('{^public/}', '', $folder);
 			}
 			else
 			{
@@ -340,7 +340,7 @@ class Installer_lib {
 			// from the main folder.
 			if (strpos($file, 'public/') === 0)
 			{
-				$realpath = preg_replace('{^public/}', $this->FCPATH, $file);
+				$realpath = $this->FCPATH . preg_replace('{^public/}', '', $file);
 			}
 			else
 			{
