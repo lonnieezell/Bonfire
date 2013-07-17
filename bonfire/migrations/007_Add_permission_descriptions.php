@@ -11,7 +11,7 @@ class Migration_Add_permission_descriptions extends Migration
 	/**
 	 * @var string Name of the Permissions table
 	 */
-	private $_table = 'permissions';
+	private $table_name = 'permissions';
 
 	/****************************************************************
 	 * Data for Insert
@@ -94,7 +94,7 @@ class Migration_Add_permission_descriptions extends Migration
 	 */
 	public function up()
 	{
-		$this->db->update_batch($this->_table, $this->data, 'name');
+		$this->db->update_batch($this->table_name, $this->data, 'name');
 	}
 
 	/**
@@ -110,6 +110,6 @@ class Migration_Add_permission_descriptions extends Migration
 				'name' => $data['name'],
 			);
 		}
-		$this->db->update_batch($this->_table, $update_data, 'name');
+		$this->db->update_batch($this->table_name, $update_data, 'name');
 	}
 }

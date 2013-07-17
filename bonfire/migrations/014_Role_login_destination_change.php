@@ -9,7 +9,7 @@ class Migration_Role_login_destination_change extends Migration
 	/**
 	 * @var string The name of the table to update
 	 */
-	private $_table = 'roles';
+	private $table_name = 'roles';
 
 	/**
 	 * @var string The name of the field to update
@@ -36,7 +36,7 @@ class Migration_Role_login_destination_change extends Migration
 	{
 		// change the roles which don't have any specific login_destination set
 		$this->db->where($this->field, $this->old_val)
-			->update($this->_table, array($this->field => $this->new_val));
+			->update($this->table_name, array($this->field => $this->new_val));
 	}
 
 	/**
@@ -46,6 +46,6 @@ class Migration_Role_login_destination_change extends Migration
 	{
 		// change the roles which don't have any specific login_destination set
 		$this->db->where($this->field, $this->new_val)
-			->update($this->_table, array($this->field => $this->old_val));
+			->update($this->table_name, array($this->field => $this->old_val));
 	}
 }

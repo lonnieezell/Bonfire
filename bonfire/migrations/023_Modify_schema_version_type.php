@@ -8,7 +8,7 @@ class Migration_Modify_schema_version_type extends Migration
 	/**
 	 * @var string The name of the table
 	 */
-	private $_table = 'schema_version';
+	private $table_name = 'schema_version';
 
 	/**
 	 * @var array The field to modify
@@ -34,7 +34,7 @@ class Migration_Modify_schema_version_type extends Migration
 	 */
 	public function up()
 	{
-		$this->dbforge->modify_column($this->_table, $this->field);
+		$this->dbforge->modify_column($this->table_name, $this->field);
 	}
 
 	/**
@@ -44,6 +44,6 @@ class Migration_Modify_schema_version_type extends Migration
 	{
 		$this->field['type']['constraint'] = $this->old_constraint;
 
-		$this->dbforge->modify_column($this->_table, $this->field);
+		$this->dbforge->modify_column($this->table_name, $this->field);
 	}
 }
