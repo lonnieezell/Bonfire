@@ -11,7 +11,7 @@ class Migration_Remove_old_permissions_table extends Migration
 	/**
 	 * @var string Table to remove
 	 */
-	private $_table = 'permissions_old';
+	private $table_name = 'permissions_old';
 
 	/****************************************************************
 	 * Field definitions
@@ -230,7 +230,7 @@ class Migration_Remove_old_permissions_table extends Migration
 	 */
 	public function up()
 	{
-		$this->dbforge->drop_table($this->_table);
+		$this->dbforge->drop_table($this->table_name);
 	}
 
 	/**
@@ -242,8 +242,8 @@ class Migration_Remove_old_permissions_table extends Migration
 		$this->dbforge->add_field($this->fields);
 		$this->dbforge->add_key('permission_id', true);
 		$this->dbforge->add_key('role_id');
-		$this->dbforge->create_table($this->_table);
+		$this->dbforge->create_table($this->table_name);
 
-		$this->db->insert_batch($this->_table, $this->data);
+		$this->db->insert_batch($this->table_name, $this->data);
 	}
 }

@@ -9,7 +9,7 @@ class Migration_Update_session_table extends Migration
 	/**
 	 * @var string The name of the table to be modified
 	 */
-	private $_table = 'sessions';
+	private $table_name = 'sessions';
 
 	/**
 	 * @var array Definition of fields to be modified
@@ -36,7 +36,7 @@ class Migration_Update_session_table extends Migration
 	public function up()
 	{
 		// change the length of the 'user_agent' column in the sessions table
-		$this->dbforge->modify_column($this->_table, $this->fields);
+		$this->dbforge->modify_column($this->table_name, $this->fields);
 	}
 
 	/**
@@ -46,6 +46,6 @@ class Migration_Update_session_table extends Migration
 	{
 		$this->fields['user_agent']['constraint'] = $this->old_constraint;
 
-		$this->dbforge->modify_column($this->_table, $this->fields);
+		$this->dbforge->modify_column($this->table_name, $this->fields);
 	}
 }

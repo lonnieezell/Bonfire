@@ -80,7 +80,7 @@ The comment recommending `IS_AJAX` as a security check has been removed.  `IS_AJ
 
 Because the MY_Controller file no longer ships with Bonfire, you should make a backup of your current MY_Controller file, if you have made any changes. This file will be renamed to Base_Controller.php. Any changes you made should then be redistributed over the new Controller files in application/core.
 
-If you use the $table class var within any of your module's model files, you will need to change that reference to $_table.
+If you use the $table class var within any of your module's model files, you will need to change that reference to $table_name.
 
 If your module calls the activity_model for logging purposes, you will need to either switch the code to the new log_activity() helper method or load the acvitity_model explicitly.
 

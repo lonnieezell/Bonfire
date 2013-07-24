@@ -708,7 +708,7 @@ class Auth
 		}
 
 		// Try password
-		$hasher = new PasswordHash($user->password_iterations, false);
+		$hasher = new PasswordHash(-1, false);
 		$return = $hasher->CheckPassword($password, $hash);
 
 		unset($hasher);

@@ -305,7 +305,7 @@ class Role_model extends BF_Model
 	public function default_role_id()
 	{
 		$this->db->where('default', 1);
-		$query = $this->db->get($this->_table);
+		$query = $this->db->get($this->table_name);
 
 		if ($query->num_rows() == 1)
 		{

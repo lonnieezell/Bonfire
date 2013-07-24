@@ -9,7 +9,7 @@ class Migration_User_language extends Migration
 	/**
 	 * @var string The name of the users table
 	 */
-	private $_table = 'users';
+	private $table_name = 'users';
 
 	/**
 	 * @var string The name of the settings table
@@ -56,7 +56,7 @@ class Migration_User_language extends Migration
 	public function up()
 	{
 		// Add the language field to the users table
-		$this->dbforge->add_column($this->_table, $this->field);
+		$this->dbforge->add_column($this->table_name, $this->field);
 
 		// Add the site languages to the settings table
 		$this->settings_field['value'] = serialize($this->languages);
@@ -71,7 +71,7 @@ class Migration_User_language extends Migration
 		// Drop the language field from the users table
 		foreach ($this->field as $column_name => $column_def)
 		{
-			$this->dbforge->drop_column($this->_table, $column_name);
+			$this->dbforge->drop_column($this->table_name, $column_name);
 		}
 
 		$this->db->where('name', $this->settings_field['name'])->delete($this->settings_table);

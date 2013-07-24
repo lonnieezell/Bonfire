@@ -8,7 +8,7 @@ class Migration_Password_ui_labels_option extends Migration
 	/**
 	 * @var string The name of the settings table
 	 */
-	private $_table = 'settings';
+	private $table_name = 'settings';
 
 	/**
 	 * @var array The data to insert
@@ -27,7 +27,7 @@ class Migration_Password_ui_labels_option extends Migration
 	 */
 	public function up()
 	{
-		$this->db->insert($this->_table, $this->data);
+		$this->db->insert($this->table_name, $this->data);
 	}
 
 	/**
@@ -37,6 +37,6 @@ class Migration_Password_ui_labels_option extends Migration
 	{
 		// remove the setting
 		$this->db->where('name', $this->data['name'])
-			->delete($this->_table);
+			->delete($this->table_name);
 	}
 }

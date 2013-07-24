@@ -15,7 +15,7 @@ class Migration_User_meta_move extends Migration
 	/**
 	 * @var string The name of the users table
 	 */
-	private $_table = 'users';
+	private $table_name = 'users';
 
 	/**
 	 * @var string The name of the users meta table
@@ -192,9 +192,9 @@ class Migration_User_meta_move extends Migration
 
 		// If there are users, loop through them and create meta entries
 		// then remove all 'non-core' columns as they will now be in the meta table.
-		if ($this->db->count_all_results($this->_table))
+		if ($this->db->count_all_results($this->table_name))
 		{
-			$query = $this->db->get($this->_table);
+			$query = $this->db->get($this->table_name);
 			$rows = $query->result();
 			$meta_data = array();
 
@@ -227,7 +227,7 @@ class Migration_User_meta_move extends Migration
 		// incorrect due to insert_batch() or free_result() above,
 		// so we run a quick query against the correct table to fix
 		// the result_id
-		$query = $this->db->get_where($this->_table, array('id' => 0));
+		$query = $this->db->get_where($this->table_name, array('id' => 0));
 
 		// Drop existing columns from users table.
 		$fields = $query->list_fields();
@@ -235,14 +235,14 @@ class Migration_User_meta_move extends Migration
 		{
 			if ( ! in_array($field, $this->core_user_fields))
 			{
-				$this->dbforge->drop_column($this->_table, $field);
+				$this->dbforge->drop_column($this->table_name, $field);
 			}
 		}
 		unset($fields);
 		$query->free_result();
 
 		// Add new fields to users table
-		$this->dbforge->add_column($this->_table, $this->user_new_fields);
+		$this->dbforge->add_column($this->table_name, $this->user_new_fields);
 
 		// Add new settings
 		$this->db->insert_batch($this->settings_table, $this->settings_data);
@@ -270,7 +270,7 @@ class Migration_User_meta_move extends Migration
 		// Drop the new columns from the users table
 		foreach ($this->user_new_fields as $column_name => $column_def)
 		{
-			$this->dbforge->drop_column($this->_table, $column_name);
+			$this->dbforge->drop_column($this->table_name, $column_name);
 		}
 
 		// TODO: Copy the information back over to the users table.

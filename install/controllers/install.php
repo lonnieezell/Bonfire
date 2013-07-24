@@ -291,18 +291,8 @@ class Install extends CI_Controller {
 			$this->security->csrf_show_error();
 		}
 
-		$folder = FCPATH;
-
-		// This should always have the /install in it, but
-		// better safe than sorry.
-		if (strpos($folder, 'install') === false)
-		{
-			$folder .= '/install/';
-		}
-
-		$new_folder = preg_replace('{install/$}', 'install_bak', $folder);
-
-		rename($folder, $new_folder);
+		rename($this->installer_lib->FCPATH .'install',
+		       $this->installer_lib->FCPATH .'install_bak');
 
 		$url = installed_url();
 		redirect($url);

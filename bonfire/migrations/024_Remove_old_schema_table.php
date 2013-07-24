@@ -9,7 +9,7 @@ class Migration_Remove_old_schema_table extends Migration
 	/**
 	 * @var string The name of the table
 	 */
-	private $_table = 'schema_version_old';
+	private $table_name = 'schema_version_old';
 
 	/**
 	 * @var array Fields used to rebuild the table in down()
@@ -45,7 +45,7 @@ class Migration_Remove_old_schema_table extends Migration
 	 */
 	public function up()
 	{
-		$this->dbforge->drop_table($this->_table);
+		$this->dbforge->drop_table($this->table_name);
 	}
 
 	/**
@@ -54,8 +54,8 @@ class Migration_Remove_old_schema_table extends Migration
 	public function down()
 	{
 		$this->dbforge->add_field($this->fields);
-		$this->dbforge->create_table($this->_table);
+		$this->dbforge->create_table($this->table_name);
 
-		$this->db->insert($this->_table, $this->data);
+		$this->db->insert($this->table_name, $this->data);
 	}
 }

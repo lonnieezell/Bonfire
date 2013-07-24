@@ -8,7 +8,7 @@ class Migration_User_timezones extends Migration
 	/**
 	 * @var string The name of the table
 	 */
-	private $_table = 'users';
+	private $table_name = 'users';
 
 	/**
 	 * @var array The new field to add to the table
@@ -30,7 +30,7 @@ class Migration_User_timezones extends Migration
 	 */
 	public function up()
 	{
-		$this->dbforge->add_column($this->_table, $this->field);
+		$this->dbforge->add_column($this->table_name, $this->field);
 	}
 
 	/**
@@ -40,7 +40,7 @@ class Migration_User_timezones extends Migration
 	{
 		foreach ($this->field as $column_name => $column_def)
 		{
-			$this->dbforge->drop_column($this->_table, $column_name);
+			$this->dbforge->drop_column($this->table_name, $column_name);
 		}
 	}
 }
