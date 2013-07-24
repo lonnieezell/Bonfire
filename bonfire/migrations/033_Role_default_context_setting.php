@@ -9,7 +9,7 @@ class Migration_Role_default_context_setting extends Migration
 	/**
 	 * @var string The name of the roles table
 	 */
-	private $_table = 'roles';
+	private $table_name = 'roles';
 
 	/**
 	 * @var array The column to be added to the table
@@ -38,9 +38,9 @@ class Migration_Role_default_context_setting extends Migration
 	 */
 	public function up()
 	{
-        $this->dbforge->add_column($this->_table, $this->fields);
+        $this->dbforge->add_column($this->table_name, $this->fields);
 
-		$this->db->update($this->_table, $this->data);
+		$this->db->update($this->table_name, $this->data);
 	}
 
 	/**
@@ -51,7 +51,7 @@ class Migration_Role_default_context_setting extends Migration
 		// remove the default_context column
 		foreach ($this->fields as $column_name => $column_def)
 		{
-			$this->dbforge->drop_column($this->_table, $column_name);
+			$this->dbforge->drop_column($this->table_name, $column_name);
 		}
     }
 }

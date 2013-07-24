@@ -9,7 +9,7 @@ class Migration_Keyboard_shortcut_permissions extends Migration
 	/**
 	 * @var string The name of the permissions table
 	 */
-	private $_table = 'permissions';
+	private $table_name = 'permissions';
 
 	/**
 	 * @var string The name of the role/permissions ref table
@@ -60,7 +60,7 @@ class Migration_Keyboard_shortcut_permissions extends Migration
 	public function up()
 	{
 		// insert the new permission
-		$this->db->insert($this->_table, $this->data);
+		$this->db->insert($this->table_name, $this->data);
 
 		// add the permission to the administrator role
 		$ref_data = array(
@@ -81,7 +81,7 @@ class Migration_Keyboard_shortcut_permissions extends Migration
 	{
 		$query = $this->db->select('permission_id')
 			->where('name', $this->data['name'])
-			->get($this->_table);
+			->get($this->table_name);
 
 		$permission_ids = array();
 		foreach ($query->result_array() as $row)
@@ -98,7 +98,7 @@ class Migration_Keyboard_shortcut_permissions extends Migration
 
 		//delete the permission
 		$this->db->where('name', $this->data['name'])
-			->delete($this->_table);
+			->delete($this->table_name);
 
 		// remove the keys
 		$this->db->where('name', $this->settings_data['name'])

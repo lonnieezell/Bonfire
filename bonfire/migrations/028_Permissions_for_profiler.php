@@ -8,7 +8,7 @@ class Migration_Permissions_for_profiler extends Migration
 	/**
 	 * @var string The name of the permissions table
 	 */
-	private $_table = 'permissions';
+	private $table_name = 'permissions';
 
 	/**
 	 * @var string The name of the Role permissions table
@@ -46,7 +46,7 @@ class Migration_Permissions_for_profiler extends Migration
 		$roles = array();
 		foreach ($this->data as $permission)
 		{
-			$this->db->insert($this->_table, $permission);
+			$this->db->insert($this->table_name, $permission);
 			$permission_id = $this->db->insert_id();
 
 			// setup the permission to be added to the admin role
@@ -80,7 +80,7 @@ class Migration_Permissions_for_profiler extends Migration
 		{
 			$query = $this->db->select('permission_id')
 				->where_in('name', $permission_names)
-				->get($this->_table);
+				->get($this->table_name);
 
 			foreach ($query->result() as $row)
 			{
@@ -94,7 +94,7 @@ class Migration_Permissions_for_profiler extends Migration
 			}
 
 			$this->db->where_in('name', $permission_names)
-				->delete($this->_table);
+				->delete($this->table_name);
 		}
 	}
 }

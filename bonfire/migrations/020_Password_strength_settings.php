@@ -8,7 +8,7 @@ class Migration_Password_strength_settings extends Migration
 	/**
 	 * @var string The name of the settings table
 	 */
-	private $_table = 'settings';
+	private $table_name = 'settings';
 
 	/**
 	 * @var array The data to insert into the settings table
@@ -44,7 +44,7 @@ class Migration_Password_strength_settings extends Migration
 	 */
 	public function up()
 	{
-		$this->db->insert_batch($this->_table, $this->data);
+		$this->db->insert_batch($this->table_name, $this->data);
 	}
 
 	/**
@@ -62,7 +62,7 @@ class Migration_Password_strength_settings extends Migration
 		{
 			// remove the keys
 			$this->db->where_in('name', $settings)
-				->delete($this->_table);
+				->delete($this->table_name);
 		}
 	}
 }
