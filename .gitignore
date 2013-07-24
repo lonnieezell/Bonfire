@@ -30,6 +30,7 @@ public/assets/cache/*
 application/config/development/*
 application/config/testing/*
 application/config/production/*
+application/config/installed.txt
 
 # but leave the config folders there
 !application/config/development/index.html
