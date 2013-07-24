@@ -1,6 +1,19 @@
+<style>
+    .good, .bad {
+        color: white;
+        padding: 3px 6px;
+        margin-bottom: 2px;
+        display: inline-block;
+    }
+    .good { background: green; }
+    .bad { background: red; }
+</style>
+
+<?php echo lang('in_intro'); ?>
+
 <div class="well">
 
-    <table>
+    <table style="width: 50%;">
         <tbody>
             <!-- PHP Version -->
             <tr>
@@ -35,3 +48,7 @@
     </table>
 
 </div>
+
+<p style="text-align: right">
+    <a href="<?php echo site_url('install/do_install') ?>" class="btn btn-primary btn-large">Next</a>
+</p>

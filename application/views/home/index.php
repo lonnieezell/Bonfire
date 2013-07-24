@@ -12,12 +12,6 @@
 
 <hr />
 
-<?php if (defined('BF_DID_INSTALL')) : ?>
-
-	<?php $this->load->view('home/install_status'); ?>
-
-<?php endif; ?>
-
 <div class="row-fluid">
 
 	<div class="span6">
