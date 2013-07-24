@@ -158,7 +158,7 @@ class Migration_User_meta_move extends Migration
 		// Only MySQL supports backups currently
 		if (defined('BFPATH') && $this->db->dbdriver == 'mysql')
 		{
-			$filename = BFPATH . '/db/backups/backup_meta_users_table.txt';
+			$filename = APPPATH . '/db/backups/backup_meta_users_table.txt';
 
 			$this->load->dbutil();
 

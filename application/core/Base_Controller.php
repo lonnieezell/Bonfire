@@ -71,12 +71,13 @@ class Base_Controller extends MX_Controller
 		parent::__construct();
 
 		$this->load->library('events');
-		Events::trigger('before_controller', get_class($this));
 
 		// Since we don't want to autoload libraries in the
 		// standard CI way to make things work for uninstalled apps,
 		// autoload our few libs here.
 		$this->load->library('settings/settings_lib');
+
+		Events::trigger('before_controller', get_class($this));
 
 		$this->set_current_user();
 

@@ -21,6 +21,9 @@
 	THE SOFTWARE.
 */
 
+$lang['in_need_db_settings']		= 'Unable to locate proper database settings. Please verify settings and reload the page.';
+$lang['in_need_database']			= 'The Database does not seem to exist. Please create the database and reload the page.';
+
 $lang['in_intro']					= '<h2>Welcome to Bonfire</h2><p>Please verify the system requirements below, then click "Next" to get started.</p>';
 $lang['in_not_writeable_heading']	= 'Files/Folders Not Writeable';
 

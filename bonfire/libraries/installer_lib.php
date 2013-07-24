@@ -19,12 +19,50 @@ class Installer_lib {
 		Boolean that says whether we should check
 		for updates.
 	*/
-	private	$curl_update = 1;
+	private	$curl_update = 0;
 
-	/* Paths for the real Bonfire installation */
-	public	$FCPATH;
-	public	$APPPATH;
-	public	$BFPATH;
+	/*
+		Status flags to see how the install check
+		went from outside controllers.
+	 */
+	public $db_settings_exist 	= NULL;
+	public $db_exists 			= NULL;
+
+	/**
+	 * An array of folders the installer checks to make
+	 * sure they can be written to.
+	 *
+	 * @access	private
+	 * @var		array
+	 */
+	private $writeable_folders = array(
+		'application/cache',
+		'application/logs',
+		'application/config',
+		'application/archives',
+		'application/db/backups',
+		'public/assets/cache',
+	);
+
+	/**
+	 * An array of files the installer checks to make
+	 * sure they can be written to.
+	 *
+	 * @access	private
+	 * @var 	array
+	 */
+	private $writeable_files = array(
+		'application/config/application.php',
+		'application/config/database.php',
+	);
+
+	/**
+	 * Array of supported database engines.
+	 *
+	 * @access	private
+	 * @var		array
+	 */
+	private $supported_dbs = array('mysql', 'mysqli');
 
 	//--------------------------------------------------------------------
 
@@ -33,10 +71,6 @@ class Installer_lib {
 		$this->ci =& get_instance();
 
 		$this->curl_update = $this->cURL_enabled();
-
-		$this->FCPATH = realpath(FCPATH . '..') . '/';
-		$this->APPPATH = INSTALLPATH . 'application/';
-		$this->BFPATH = INSTALLPATH . 'bonfire/';
 	}
 
 	//--------------------------------------------------------------------
@@ -227,26 +261,39 @@ class Installer_lib {
 	{
 		// First check - Does a 'install/installed.txt' file exist? If so,
 		// then we've likely already installed.
-		if (is_file(FCPATH . 'installed.txt'))
+		if (is_file(APPPATH . 'config/installed.txt'))
 		{
 			return true;
 		}
 
 		// Does the database config exist?
 		// If not, then we definitely haven't installed yet.
-		if (!is_file($this->APPPATH . 'config/development/database.php'))
+		if (!is_file(APPPATH . 'config/development/database.php'))
 		{
 			return false;
 		}
 
-		require($this->APPPATH . '/config/development/database.php');
+		require(APPPATH . '/config/development/database.php');
 
 		// If the $db['default'] doesn't exist then we can't
 		// load our database.
 		if (!isset($db) || !isset($db['default']))
 		{
+			$this->db_settings_exist = FALSE;
 			return false;
 		}
+
+		$this->db_settings_exist = TRUE;
+
+		// Just to be safe, also make sure that the database name
+		// is actually specified.
+		if (empty($db['default']['database']))
+		{
+			$this->db_exists = FALSE;
+			return false;
+		}
+
+		$this->db_exists = TRUE;
 
 		$this->ci->load->database($db['default']);
 
@@ -263,6 +310,8 @@ class Installer_lib {
 		{
 			return false;
 		}
+
+		define('BF_INSTALLED', true);
 
 		return true;
 	}
@@ -290,8 +339,13 @@ class Installer_lib {
 	 * @access	public
 	 * @return	array
 	 */
-	public function check_folders($folders)
+	public function check_folders($folders=null)
 	{
+		if (is_null($folders))
+		{
+			$folders = $this->writeable_folders;
+		}
+
 		$data = array();
 
 		// Load the file helper
@@ -304,11 +358,11 @@ class Installer_lib {
 			// from the main folder.
 			if (strpos($folder, 'public/') === 0)
 			{
-				$realpath = preg_replace('{^public/}', $this->FCPATH, $folder);
+				$realpath = preg_replace('{^public/}', FCPATH, $folder);
 			}
 			else
 			{
-				$realpath = INSTALLPATH . $folder;
+				$realpath = str_replace('application/', '', APPPATH) . $folder;
 			}
 
 			$data[$folder] = is_really_writable($realpath);
@@ -326,8 +380,13 @@ class Installer_lib {
 	 * @access	public
 	 * @return	array
 	 */
-	public function check_files($files)
+	public function check_files($files=null)
 	{
+		if (is_null($files))
+		{
+			$files = $this->writeable_files;
+		}
+
 		$data = array();
 
 		// Load the file helper
@@ -340,43 +399,17 @@ class Installer_lib {
 			// from the main folder.
 			if (strpos($file, 'public/') === 0)
 			{
-				$realpath = preg_replace('{^public/}', $this->FCPATH, $file);
+				$realpath = preg_replace('{^public/}', FCPATH, $file);
 			}
 			else
 			{
-				$realpath = INSTALLPATH . $file;
+				$realpath = str_replace('application/', '', APPPATH) . $file;
 			}
 
 			$data[$file] = is_really_writable($realpath);
 		}
 
 		return $data;
-	}
-
-    //--------------------------------------------------------------------
-
-    /*
-		Method: hash_password()
-
-		Generates a new salt and password hash for the given password.
-
-		Parameters:
-			$old	- The password to hash.
-
-		Returns:
-			An array with the hashed password and new salt.
-	*/
-	public function hash_password($old='')
-	{
-		if (!function_exists('do_hash'))
-		{
-			$this->ci->load->helper('security');
-		}
-
-		$salt = $this->generate_salt();
-		$pass = do_hash($salt . $old);
-
-		return array($pass, $salt);
 	}
 
 	//--------------------------------------------------------------------
@@ -390,63 +423,21 @@ class Installer_lib {
 	 */
 	public function setup()
 	{
-		$environment = $this->ci->session->userdata('environment');
-
 		/*
-			1. Save our database configuration
-		*/
-		$hostname	= $this->ci->session->userdata('hostname');
-		$db_user	= $this->ci->session->userdata('username');
-		$db_pass	= $this->ci->session->userdata('password');
-		$database	= $this->ci->session->userdata('database');
-		$driver		= $this->ci->session->userdata('driver');
-		$prefix		= $this->ci->session->userdata('db_prefix');
-		$port		= $this->ci->session->userdata('port');
-
-		$db_debug	= $environment == 'production' ? FALSE : TRUE;
-
-		$this->ci->load->helper('config_file');
-
-		$db_data = array(
-			'hostname'	=> $hostname,
-			'port'		=> $port,
-			'username'	=> $db_user,
-			'password'	=> $db_pass,
-			'database'	=> $database,
-			'dbdriver'	=> $driver,
-			'dbprefix'	=> $prefix,
-			'db_debug'	=> $db_debug
-		);
-
-		// Write main database config file.
-		if (write_db_config( array('main' => $db_data), $this->APPPATH ) === false)
-		{
-			$str = lang('in_db_config_error');
-			return str_replace('{file}', 'config/database.php', $str);
-		}
-
-		// Write environment database config file.
-		if (copy($this->APPPATH . '/config/database.php', $this->APPPATH . "/config/" . $environment ."/database.php") === false)
-		{
-			$str = lang('in_db_config_error');
-			return str_replace('{file}', "config/$environment/database.php", $str);
-		}
-
-
-		/*
-			2. Install default info into our database.
+			Install default info into our database.
 
 			This happens by running the app, core and module-specific migrations.
 		*/
 
 		// use the entered Database settings to connect before calling the Migrations
-		$this->ci->load->database($db_data);
+		$this->ci->load->database();
 
 		//
 		// Now install the database tables.
 		//
-		$this->ci->load->library('Migrations', array('migrations_path' => $this->BFPATH .'migrations'));
+		$this->ci->load->library('Migrations', array('migrations_path' => BFPATH .'migrations'));
 
+		// Core Migrations - this is all that is needed for Bonfire install.
 		if (!$this->ci->migrations->install())
 		{
 			return $this->ci->migrations->error;
@@ -457,10 +448,10 @@ class Installer_lib {
 		*/
 
 		$settings = array(
-			'site.title'	=> $this->ci->session->userdata('site_title'),
-			'site.system_email'	=> $this->ci->session->userdata('user_email'),
-			'updates.do_check' => $this->curl_update,
-			'updates.bleeding_edge' => $this->curl_update
+			'site.title'	=> 'My Bonfire',
+			'site.system_email'	=> 'admin@mybonfire.com',
+			'updates.do_check' => 0,
+			'updates.bleeding_edge' => 0
 		);
 
 		foreach	($settings as $key => $value)
@@ -475,7 +466,7 @@ class Installer_lib {
 		}
 
 		// update the emailer sender_email
-		$setting_rec = array('name' => 'sender_email', 'module' => 'email', 'value' => $this->ci->session->userdata('user_email'));
+		$setting_rec = array('name' => 'sender_email', 'module' => 'email', 'value' => '');
 
 		$this->ci->db->where('name', 'sender_email');
 		if ($this->ci->db->update('settings', $setting_rec) == false)
@@ -488,18 +479,18 @@ class Installer_lib {
 		//
 		$data = array(
 			'role_id'	=> 1,
-			'email'		=> $this->ci->session->userdata('user_email'),
-			'username'	=> $this->ci->session->userdata('user_username'),
+			'email'		=> 'admin@mybonfire.com',
+			'username'	=> 'admin',
 			'active'    => 1,
 		);
 
 		// As of 0.7, we've switched to using phpass for password encryption...
-		require ($this->BFPATH .'modules/users/libraries/PasswordHash.php' );
+		require (BFPATH .'modules/users/libraries/PasswordHash.php' );
 
 		$iterations	= $this->ci->config->item('password_iterations');
 		$hasher = new PasswordHash($iterations, false);
 
-		$password = $hasher->HashPassword($this->ci->session->userdata('user_password'));
+		$password = $hasher->HashPassword('password');
 
 		$data['password_hash'] = $password;
 		$data['password_iterations'] = $iterations;
@@ -518,7 +509,8 @@ class Installer_lib {
 
 		$config_array = array('encryption_key' => $key);
 
-		write_config('config', $config_array, '', $this->APPPATH);
+		$this->ci->load->helper('config_file');
+		write_config('config', $config_array, '', APPPATH);
 
 		/*
 			Run custom migrations last.  In particular this comes after
@@ -543,7 +535,7 @@ class Installer_lib {
 		// Write a file to /public/install/installed.txt as a simpler
 		// check whether it's installed, so developing doesn't require
 		// us to remove the install folder.
-		$filename = FCPATH .'installed.txt';
+		$filename = APPPATH .'config/installed.txt';
 
 		$msg = 'Installed On: '. date('r') ."\n";
 		$this->ci->load->helper('file');

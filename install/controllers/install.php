@@ -40,47 +40,6 @@ class Install extends CI_Controller {
 
 	protected $errors = '';
 
-	/**
-	 * An array of folders the installer checks to make
-	 * sure they can be written to.
-	 *
-	 * @access	private
-	 * @var		array
-	 */
-	private $writeable_folders = array(
-		'application/cache',
-		'application/logs',
-		'application/config',
-		'application/config/development',
-		'application/config/testing',
-		'application/config/production',
-		'application/archives',
-		'application/archives/config',
-		'application/db/backups',
-		'public/assets/cache',
-		'public/install'
-	);
-
-	/**
-	 * An array of files the installer checks to make
-	 * sure they can be written to.
-	 *
-	 * @access	private
-	 * @var 	array
-	 */
-	private $writeable_files = array(
-		'application/config/application.php',
-		'application/config/database.php',
-	);
-
-	/**
-	 * Array of supported database engines.
-	 *
-	 * @access	private
-	 * @var		array
-	 */
-	private $supported_dbs = array('mysql', 'mysqli');
-
 	//--------------------------------------------------------------------
 
 	/**
