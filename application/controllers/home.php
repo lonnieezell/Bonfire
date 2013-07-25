@@ -28,8 +28,20 @@
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
  *
  */
-class Home extends Front_Controller
+class Home extends CI_Controller
 {
+	public function __construct()
+	{
+		parent::__construct();
+
+		$this->load->library('Template');
+		$this->load->library('Assets');
+		$this->load->helper('application');
+		$this->lang->load('application');
+		$this->load->library('events');
+	}
+
+	//--------------------------------------------------------------------
 
 	/**
 	 * Displays the homepage of the Bonfire app

@@ -19,11 +19,12 @@ class Install extends CI_Controller {
 
     public function index()
     {
+        $this->lang->load('install');
         $this->load->library('installer_lib');
 
-        if ($this->installer_lib->is_installed())
+        if (!$this->installer_lib->is_installed())
         {
-            $this->do_install();
+            //$this->do_install();
 
             $data = array();
 
