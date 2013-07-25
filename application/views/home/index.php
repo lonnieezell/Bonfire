@@ -4,7 +4,7 @@
 	<p class="lead">Kickstart your CodeIgniter applications and save yourself 100s of hours of development time.<br/>That means you make more money.</p>
 
 	<?php if (isset($current_user->email)) : ?>
-		<a href="<?php echo SITE_AREA ?>" class="btn btn-large btn-success">Go to the Admin area</a>
+		<a href="<?php echo site_url(SITE_AREA) ?>" class="btn btn-large btn-success">Go to the Admin area</a>
 	<?php else :?>
 		<a href="<?php echo site_url('login'); ?>" class="btn btn-large btn-primary"><?php echo lang('bf_action_login'); ?></a>
 	<?php endif;?>
