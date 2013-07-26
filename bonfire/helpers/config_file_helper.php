@@ -53,7 +53,7 @@ if ( ! function_exists('read_config'))
 		if ($module)
 		{
 			$file_details = Modules::find($file, $module, '');
-			
+
 			if (!empty($file_details) && !empty($file_details[0]))
 			{
 				$file = implode("", $file_details);
@@ -79,7 +79,7 @@ if ( ! function_exists('read_config'))
 			}
 			show_error('The configuration file '.$file.EXT.' does not exist.');
 		}
-		
+
 		include($file.EXT);
 
 		if ( ! isset($config) OR ! is_array($config))
@@ -125,7 +125,7 @@ if ( ! function_exists('write_config'))
 		if ($module)
 		{
 			$file_details = Modules::find($config_file, $module, '');
-			
+
 			if (!empty($file_details) && !empty($file_details[0]))
 			{
 				$config_file = implode("", $file_details);
@@ -188,7 +188,7 @@ if ( ! function_exists('write_config'))
 
 		// Backup the file for safety
 		$source = $config_file.EXT;
-		$dest = $module == '' ? $apppath . 'archives/config/'.$file.EXT.'.bak' : $config_file.EXT.'.bak';
+		$dest = $module == '' ? $apppath .'archives/'. $file .EXT .'.bak' : $config_file .EXT .'.bak';
 
 		if ($empty === FALSE) copy($source, $dest);
 
