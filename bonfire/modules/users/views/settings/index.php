@@ -26,7 +26,7 @@ th.status { width: 10em; }
 	<li<?php echo $filter_type == 'banned' ? ' class="active"' : ''; ?>><?php echo anchor($index_url . 'banned/', lang('us_tab_banned')); ?></li>
 	<li<?php echo $filter_type == 'deleted' ? ' class="active"' : ''; ?>><?php echo anchor($index_url . 'deleted/', lang('us_tab_deleted')); ?></li>
 	<li class="<?php echo $filter_type == 'role_id' ? 'active ' : ''; ?>dropdown">
-		<a href="#" class="drodown-toggle" data-toggle="dropdown">
+		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 			<?php
 			echo lang('us_tab_roles');
 			echo isset($filter_role) ? ": $filter_role" : '';
