@@ -127,18 +127,7 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 	else
 	{
 		$field_name = set_value("view_field_name$counter");
-	}
 
-	if ($counter == 1) {
-		$table_records .= "
-				<?php if (\$this->auth->has_permission('{edit_permission}')) : ?>
-					<td><?php echo anchor(SITE_AREA .'/".$controller_name."/".$module_name_lower."/edit/'. \$record->".$primary_key_field.", {$pencil_icon} \$record->".$field_name.") ?></td>
-				<?php else: ?>
-					<td><?php e(\$record->".$field_name.") ?></td>
-				<?php endif; ?>
-			";
-	}
-	else {
 		// when building from existing table, modify output of the 'deleted' maintenance column
 		if  ($db_required == 'existing' && $field_name == $this->input->post("soft_delete_field"))
 		{
@@ -151,6 +140,7 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 					<td><?php e($record->'.$field_name.') ?></td>';
 		}
 	}
+	
 }
 
 // only add maintenance columns to view when module is creating a new db table
