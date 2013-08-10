@@ -467,7 +467,7 @@ class Developer extends Admin_Controller {
      */
     private function table_info($table_name)
     {
-        $fields = array();
+        $newfields = array();
 
         // check that the table exists in this database
         if ($this->db->table_exists($table_name))
@@ -493,15 +493,14 @@ class Developer extends Admin_Controller {
 
 				$field_array['type'] = strtoupper($type);
 
-				//TODO: check $field->max_length ?
 				$values = '';
-				if (is_numeric($max_length))
+				if (is_numeric($field->max_length))
 				{
-					$max_length = $max_length;
+					$max_length = ($field->max_length==null)?1:$field->max_length;
 				}
 				else
 				{
-					$values = $max_length;
+					$values = $field->max_length;
 					$max_length = 1;
 				}
 
@@ -517,10 +516,10 @@ class Developer extends Admin_Controller {
 
 				$field_array['default'] = $field->default;
 
-				$fields[] = $field_array;
+				$newfields[] = $field_array;
 			} // end foreach
 
-			return $fields;
+			return $newfields;
 
         }//end if
 
