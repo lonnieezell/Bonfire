@@ -64,6 +64,7 @@ class Install extends CI_Controller {
     {
         $this->load->library('installer_lib');
         $this->lang->load('install');
+        $this->load->helper('file');
 
         // Does the database table even exist?
         if ($this->installer_lib->db_settings_exist === FALSE)
@@ -77,6 +78,10 @@ class Install extends CI_Controller {
         if ($this->installer_lib->setup())
         {
             define('BF_DID_INSTALL', true);
+            // Replace intro page with /public redirect
+            $intro_page = '../index.php';
+            $redirect = "<?php header('location:". site_url() ."'); ?>";
+            write_file($intro_page, $redirect, 'w');
         }
 
         Template::render();
