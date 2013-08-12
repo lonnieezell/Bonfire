@@ -91,7 +91,7 @@ if (!function_exists('list_lang_files'))
 
 				if (in_array($module, $custom_modules))
 				{
-					$files = find_lang_files(realpath(APPPATH .'../modules/'. $path) .'/');
+					$files = find_lang_files(realpath(APPPATH .'/modules/'. $path) .'/');
 					$type = 'custom';
 
 				}
