@@ -284,6 +284,7 @@ class Developer extends Admin_Controller {
             {
                 // drop the table
                 $this->load->model($module_name . '/' . $model_name, 'mt');
+                $this->load->dbforge();
                 $this->dbforge->drop_table($this->mt->get_table());
             }
 
