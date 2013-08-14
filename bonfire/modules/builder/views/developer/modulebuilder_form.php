@@ -13,6 +13,7 @@ $textarea_editors = array(
 );
 
 $session_error = $this->session->flashdata('error');
+$validation_errors = validation_errors();
 
 ?>
 <style>
@@ -46,12 +47,22 @@ fieldset {
 </p>
 <div class="alert alert-info fade in">
 	<a class="close" data-dismiss="alert">&times;</a>
+    <h4 class="alert-heading"><?php echo lang('mb_form_errors'); ?></h4>
 	<?php echo lang('mb_form_note'); ?>
 </div>
 <?php if ( ! $writeable) : ?>
 <div class="alert alert-error fade in">
 	<a class="close" data-dismiss="alert">&times;</a>
 	<p><?php echo lang('mb_not_writeable_note'); ?></p>
+</div>
+<?php
+endif;
+
+if ($validation_errors) :
+?>
+<div class="alert alert-error fade in">
+    <a data-dismiss="alert" class="close">&times;</a>
+    <?php echo $validation_errors; ?>
 </div>
 <?php
 endif;
