@@ -90,6 +90,8 @@ class Role_model extends BF_Model
 	/**
 	 * Class constructor. Will load the permission_model, if it's not
 	 * already loaded.
+	 *
+	 * @return void
 	 */
 	public function __construct()
 	{
@@ -111,7 +113,7 @@ class Role_model extends BF_Model
 	 *
 	 * @param int $id An int that matches the role_id of the role in question.
 	 *
-	 * @return array An array of information about the role, along with a sub-array that contains the role's applicable permissions.
+	 * @return mixed|array An array of information about the role, along with a sub-array that contains the role's applicable permissions, or FALSE
 	 */
 	public function find($id=NULL)
 	{
@@ -142,7 +144,7 @@ class Role_model extends BF_Model
 	 *
 	 * @param string $name A string with the name of the role.
 	 *
-	 * @return object An object with the role and it's permissions.
+	 * @return object An object with the role and its permissions, or FALSE
 	 */
 	public function find_by_name($name=NULL)
 	{
@@ -171,7 +173,7 @@ class Role_model extends BF_Model
 	 * @param int   $id   An int, being the role_id
 	 * @param array $data An array of key/value pairs to update the db with.
 	 *
-	 * @return bool TRUE/FALSE
+	 * @return bool TRUE on successful update, else FALSE
 	 */
 	public function update($id=NULL, $data=NULL)
 	{
@@ -194,11 +196,11 @@ class Role_model extends BF_Model
 	 *
 	 * @param int $role_id The role to verify.
 	 *
-	 * @return bool TRUE/FALSE
+	 * @return bool TRUE if the role can be deleted, else FALSE
 	 */
 	public function can_delete_role($role_id=0)
 	{
-		$this->db->select('role_id, can_delete');
+		$this->db->select('can_delete');
 		$delete_role = parent::find($role_id);
 
 		if ($delete_role->can_delete == 1)
@@ -226,12 +228,6 @@ class Role_model extends BF_Model
 	 */
 	function delete($id=0, $purge=FALSE)
 	{
-		if ($purge === TRUE)
-		{
-			// temporarily set the soft_deletes to TRUE.
-			$this->soft_deletes = FALSE;
-		}
-
 		// We might not be allowed to delete this role.
 		if ($this->can_delete_role($id) == FALSE)
 		{
@@ -243,6 +239,12 @@ class Role_model extends BF_Model
 		{
 			$this->error = 'The default role can not be deleted.';
 			return FALSE;
+		}
+
+		if ($purge === TRUE)
+		{
+			// temporarily set the soft_deletes to TRUE.
+			$this->soft_deletes = FALSE;
 		}
 
 		// get the name for management deletion later

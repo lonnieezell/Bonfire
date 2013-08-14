@@ -115,9 +115,9 @@ class Permission_model extends BF_Model
 	 *
 	 * @access public
 	 *
-	 * @param int  $id    Permission ID
+	 * @param int  $id    Permission ID to delete
 	 *
-	 * @return bool TRUE/FALSE
+	 * @return bool TRUE if the permission was deleted successfully, else FALSE
 	 */
 	function delete($id=0)
 	{
@@ -127,7 +127,6 @@ class Permission_model extends BF_Model
 		// if the delete was successful then delete the role_permissions for this permission_id
 		if (TRUE === $deleted)
 		{
-			// now delete the role_permissions for this permission
 			$this->role_permission_model->delete_for_permission($id);
 		}
 
@@ -145,7 +144,7 @@ class Permission_model extends BF_Model
 	 * @param str	$name	The name of the permission to delete
 	 * @param bool	$purge	Whether to use soft delete or not.
 	 *
-	 * @return bool TRUE/FALSE
+	 * @return bool TRUE if the permission was deleted successfully, else FALSE
 	 */
 	public function delete_by_name($name=null, $purge=false)
 	{
@@ -165,7 +164,7 @@ class Permission_model extends BF_Model
 	 * @param int   $id   The primary_key value of the row to update.
 	 * @param array $data An array of key/value pairs to update.
 	 *
-	 * @return bool TRUE/FALSE
+	 * @return bool TRUE if the permission was updated, else FALSE
 	 */
 	function update($id, $data)
 	{
@@ -196,17 +195,11 @@ class Permission_model extends BF_Model
 					}
 				}
 			}
-			// if we have the key
+			// if $id is an array, we have the key,
+			// otherwise, $id is the key
 			else
 			{
-				if ($id_is_array)
-				{
-					$id_key = $id[$key];
-				}
-				else
-				{
-					$id_key = $id;
-				}
+				$id_key = $id_is_array ? $id[$key] : $id;
 
 				$updated = $this->role_permission_model->delete_for_permission($id_key);
 			}
@@ -219,13 +212,13 @@ class Permission_model extends BF_Model
 	// --------------------------------------------------------------------
 
 	/**
-	 * Checks to see whether a permission is in the system or not.
+	 * Checks to see whether a permission is in the system
 	 *
 	 * @access public
 	 *
-	 * @param string $permission The name of the permission to check for.
+	 * @param string $permission The name of the permission to check
 	 *
-	 * @return bool TUE/FALSE
+	 * @return bool TRUE if the permission was found, NULL if no permission was passed, else FALSE
 	 */
 	public function permission_exists($permission=null)
 	{

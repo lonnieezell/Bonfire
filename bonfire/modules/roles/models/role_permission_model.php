@@ -121,16 +121,49 @@ class Role_permission_model extends BF_Model
 			return FALSE;
 		}
 
-		$data['role_id'] = $role_id;
-		$data['permission_id'] = $permission_id;
+		$data = array(
+			'role_id' => $role_id,
+			'permission_id' => $permission_id,
+		);
 
-		$id = parent::insert($data);
-
-		return $id;
-
+		return $this->insert($data);
 	}//end create()
 
 	//--------------------------------------------------------------------
+
+	/**
+	 * Removes permission record(s) from the role permissions table.
+	 *
+	 * @param int $role_id       ID of the role
+	 * @param int $permission_id ID of the permission
+	 *
+	 * @return bool TRUE/FALSE
+	 */
+	private function delete_for($role_id, $permission_id)
+	{
+		$where = array();
+
+		if ( ! empty($role_id))
+		{
+			$where['role_id'] = $role_id;
+		}
+
+		if ( ! empty($permission_id))
+		{
+			$where['permission_id'] = $permission_id;
+		}
+
+		$this->db->delete($this->table_name, $where);
+
+		if ($result = $this->db->affected_rows())
+		{
+			return TRUE;
+		}
+
+		$this->error = 'DB Error: ' . $this->get_db_error_message();
+
+		return FALSE;
+	}
 
 	/**
 	 * Removes a permission record from the role permissions table.
@@ -156,18 +189,7 @@ class Role_permission_model extends BF_Model
 			return FALSE;
 		}
 
-		$this->db->delete($this->table_name, array('role_id' => $role_id, 'permission_id' => $permission_id));
-
-		$result = $this->db->affected_rows();
-
-		if ($result)
-		{
-			return TRUE;
-		}
-
-		$this->error = 'DB Error: ' . $this->get_db_error_message();
-
-		return FALSE;
+		return $this->delete_for($role_id, $permission_id);
 
 	}//end delete()
 
@@ -189,18 +211,7 @@ class Role_permission_model extends BF_Model
 			return FALSE;
 		}
 
-		$this->db->delete($this->table_name, array('role_id' => $role_id));
-
-		$result = $this->db->affected_rows();
-
-		if ($result)
-		{
-			return TRUE;
-		}
-
-		$this->error = 'DB Error: ' . $this->get_db_error_message();
-
-		return FALSE;
+		return $this->delete_for($role_id, NULL);
 
 	}//end delete_for_role()
 
@@ -223,18 +234,7 @@ class Role_permission_model extends BF_Model
 			return FALSE;
 		}
 
-		$this->db->delete($this->table_name, array('permission_id' => $permission_id));
-
-		$result = $this->db->affected_rows();
-
-		if ($result)
-		{
-			return TRUE;
-		}
-
-		$this->error = 'DB Error: ' . $this->get_db_error_message();
-
-		return FALSE;
+		return $this->delete_for(NULL, $permission_id);
 
 	}//end delete_for_permission()
 
@@ -246,11 +246,11 @@ class Role_permission_model extends BF_Model
 	 * @param int   $role_id     The int id of the target role.
 	 * @param array $permissions A simple array with the values being equal to the name of the permission to set. All other permissions are set to 0.
 	 *
-	 * @return void
+	 * @return mixed	FALSE on empty or non-numeric $role_id, else void
 	 */
-	public function set_for_role($role_id=NULL, $permissions = array())
+	public function set_for_role($role_id=NULL, $permissions=array())
 	{
-		if (empty($role_id) || !is_numeric($role_id))
+		if (empty($role_id) || ! is_numeric($role_id))
 		{
 			return FALSE;
 		}
@@ -263,11 +263,13 @@ class Role_permission_model extends BF_Model
 		}
 
 		// set the permissions
+		$permission_data = array();
 		foreach( $permissions as $key => $permission_id)
 		{
-			$data = array('role_id' => $role_id, 'permission_id' => $permission_id);
-			$id = parent::insert($data);
+			$permission_data[] = array('role_id' => $role_id, 'permission_id' => $permission_id);
 		}
+
+		$this->insert_batch($permission_data);
 
 	}//end set_for_role()
 
@@ -281,6 +283,8 @@ class Role_permission_model extends BF_Model
 	 *
 	 * @param	str	$role_name			The name of the role
 	 * @param	str	$permission_name	The name of the permission to assign.
+	 *
+	 * @return mixed The inserted id or FALSE on error
 	 */
 	public function assign_to_role($role_name=null, $permission_name=null)
 	{
@@ -310,8 +314,7 @@ class Role_permission_model extends BF_Model
 	 */
 	public function find_for_role($role_id=NULL)
 	{
-		parent::select('permission_id');
-		return parent::find_all_by('role_id', $role_id);
+		return $this->select('permission_id')->where('role_id', $role_id)->find_all();
 
 	}//end find_for_role()
 
@@ -326,7 +329,7 @@ class Role_permission_model extends BF_Model
 	 */
 	function find_all_role_permissions()
 	{
-		return $this->role_permission_model->find_all();
+		return $this->find_all();
 
 	}//end find_all_role_permissions()
 
@@ -341,6 +344,8 @@ class Role_permission_model extends BF_Model
 	 */
 	function find_all_roles()
 	{
+		$this->load->model('roles/role_model');
+
 		return $this->role_model->find_all();
 
 	}//end find_all_roles()
@@ -359,7 +364,7 @@ class Role_permission_model extends BF_Model
 	 */
 	function create_role_permissions($role_id, $permission_id)
 	{
-		return $this->role_permission_model->create($role_id, $permission_id);
+		return $this->create($role_id, $permission_id);
 
 	}//end create_role_permissions()
 
@@ -375,7 +380,7 @@ class Role_permission_model extends BF_Model
 	 */
 	function delete_role_permissions($role_id, $permission_id)
 	{
-		return $this->role_permission_model->delete($role_id, $permission_id);
+		return $this->delete($role_id, $permission_id);
 
 	}//end delete_role_permissions()
 

@@ -44,6 +44,10 @@ class Template
 	 */
 	public static $debug = false;
 
+    /**
+     * @var string Prefix added to debug messages in the log
+     */
+    protected static $log_prefix = '[Template] ';
 
 	/**
 	 * Stores the name of the active theme (folder) with a trailing slash.
@@ -229,10 +233,7 @@ class Template
 		self::$default_theme 	= self::$ci->config->item('template.default_theme');
 		self::$parse_views		= self::$ci->config->item('template.parse_views');
 
-		// Store our orig view path, so we can reset it
-		//self::$orig_view_path = self::$ci->load->_ci_view_path;
-
-		log_message('debug', 'Template library loaded');
+        self::debug_message('Template library loaded');
 
 	}//end init()
 
@@ -307,8 +308,7 @@ class Template
 	{
 		$output = '';
 
-		if (self::$debug) { echo 'Current View = '. self::$current_view; }
-
+        self::debug_message('Current View = '. self::$current_view);
 		self::load_view(self::$current_view, NULL, self::$ci->router->class . '/' . self::$ci->router->method, FALSE, $output);
 
 		Events::trigger('after_page_render', $output);
@@ -371,33 +371,25 @@ class Template
 	{
 		if (empty($block_name))
 		{
-			logit('[Template] No block name provided.');
+			self::debug_message('No block name provided.');
 			return;
 		}
 
-		if (empty($block_name) && empty($default_view))
+		// If a block has been set previously use it; otherwise, use the default view.
+		$block_view_name = isset(self::$blocks[$block_name]) ? self::$blocks[$block_name] : $default_view;
+
+		if (empty($block_view_name) && empty($default_view))
 		{
-			logit('[Template] No default block provided for `' . $block_name . '`');
+			self::debug_message('No default block provided for `' . $block_name . '`');
 			return;
 		}
 
-		// If a block has been set previously use that
-		if (isset(self::$blocks[$block_name]))
-		{
-			$block_name = self::$blocks[$block_name];
-		}
-		// Otherwise, use the default view.
-		else
-		{
-			$block_name = $default_view;
-		}
+        self::debug_message("Looking for block: <b>{$block_view_name}</b>.");
 
-		if (self::$debug) { echo "Looking for block: <b>{$block_name}</b>."; }
+		self::load_view($block_view_name, $data, FALSE, $themed, $output);
 
-		self::load_view($block_name, $data, FALSE, $themed, $output);
-
-		$block_data = array('block'=>$block_name, 'output'=>$output);
-		Events::trigger('after_block_render', $block_data );
+		$block_data = array('block' => $block_view_name, 'output' => $output);
+		Events::trigger('after_block_render', $block_data);
 
 		echo $output;
 
@@ -448,7 +440,7 @@ class Template
 		}
 		else
 		{
-			logit("[Template] Cannot add theme folder: $path does not exist");
+			self::debug_message("Cannot add theme folder: $path does not exist");
 			return FALSE;
 		}
 
@@ -510,11 +502,10 @@ class Template
 		self::$active_theme = $theme;
 
 		// Default theme?
-		if (!empty($default_theme) && is_string($default_theme))
-		{
+		if ( ! empty($default_theme) && is_string($default_theme))
+        {
 			self::set_default_theme($default_theme);
 		}
-
 	}//end set_theme()
 
 	//--------------------------------------------------------------------
@@ -974,12 +965,12 @@ EOF;
 				First, check the active theme
 			*/
 			$active_theme_path = $site_theme_path . self::$active_theme;
-			if (self::$debug) { echo '[Find File] Looking for view in active theme: <b>' . $active_theme_path . $view_file . '</b><br/>'; }
+            self::debug_message('[Find File] Looking for view in active theme: <b>' . $active_theme_path . $view_file . '</b><br/>');
 
 			if ($active_theme_set && is_file($active_theme_path . $view_file))
 			{
-				if (self::$debug) { echo 'Found <b>' . $view . '</b> in Active Theme.<br/>'; }
 				$view_path = $active_theme_path;
+                self::debug_message('Found <b>' . $view . '</b> in Active Theme.<br/>');
 
 				// If we found the view, we should exit the loop
 				break;
@@ -991,13 +982,12 @@ EOF;
 				we should not need to check empty($view_path) here
 			*/
 			$default_theme_path = $site_theme_path . self::$default_theme;
-			if (self::$debug) { echo '[Find File] Looking for view in default theme: <b>' . $default_theme_path . $view_file . '</b><br/>'; }
+            self::debug_message('[Find File] Looking for view in default theme: <b>' . $default_theme_path . $view_file . '</b><br/>');
 
 			if (is_file($default_theme_path . $view_file))
 			{
-				if (self::$debug) { echo 'Found <b>' . $view . '</b> in Default Theme.<br/>'; }
-
 				$view_path = $default_theme_path;
+				self::debug_message('Found <b>' . $view . '</b> in Default Theme.<br/>');
 
 				// If we found the view, we should exit the loop
 				break;
@@ -1009,11 +999,7 @@ EOF;
 		if ( ! empty($view_path))
 		{
 			$view_path = str_replace('//', '/', $view_path);
-
-			// Set CI's view path to point to the right location.
-			//self::$ci->load->_ci_view_path = $view_path;
-
-			if (self::$debug) { echo '[Find File] Rendering file at: '. $view_path . $view_file .'<br/><br/>'; }
+			self::debug_message('[Find File] Rendering file at: '. $view_path . $view_file .'<br/><br/>');
 
 			// Grab the output of the view.
 			if (self::$parse_views === TRUE)
@@ -1024,9 +1010,6 @@ EOF;
 					'_ci_vars' => $data,
 					'_ci_return' => TRUE,
 				));
-
-				//Parser dies on looping, better then before but not fixed.
-				//$output = self::$ci->parser->parse($view_path.$view, $data, TRUE, TRUE);
 			}
 			else
 			{
@@ -1036,14 +1019,23 @@ EOF;
 					'_ci_return' => TRUE,
 				));
 			}
-
-			// Put CI's view path back to the original
-			//self::$ci->load->_ci_view_path = self::$orig_view_path;
 		}//end if
 
 		return $output;
 
 	}//end find_file()
+
+    //---------------------------------------------------------------
+
+    protected static function debug_message($message)
+    {
+        if (self::$debug)
+        {
+            echo $message;
+        }
+
+        logit(self::$log_prefix . $message);
+    }
 
 	//--------------------------------------------------------------------
 

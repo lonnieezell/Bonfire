@@ -185,6 +185,8 @@ class Developer extends Admin_Controller
 			return false;
 		}
 
+		ksort($modules);
+
 		// Sort Module Migrations in Reverse Order instead of Randomness.
 		foreach ($modules as &$mod)
 		{
