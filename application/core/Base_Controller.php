@@ -89,7 +89,14 @@ class Base_Controller extends MX_Controller
 		*/
 		if (ENVIRONMENT == 'production')
 		{
+			// Saving Queries can vastly increase the memory usage, depending
+			// on your database usage.
 		    $this->db->save_queries = FALSE;
+
+		    // With debugging information turned off, we can at times
+		    // continue on after db errors. Also turns off display
+		    // of any DB errors so we don't give any info to hackers.
+		    $this->db->db_debug 	= FALSE;
 
 		    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 		}
@@ -97,6 +104,10 @@ class Base_Controller extends MX_Controller
 		// Testing niceties...
 		else if (ENVIRONMENT == 'testing')
 		{
+			// Saving Queries can vastly increase the memory usage, depending
+			// on your database usage.
+			$this->db->save_queries = FALSE;
+
 			$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 		}
 
