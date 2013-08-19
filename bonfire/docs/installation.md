@@ -1,21 +1,23 @@
 ## Installing Bonfire
 
-Bonfire has a simple installation script that is designed to help you, the developer, get up and running with a minimum of fuss.  It is not designed to be used for an end product that you distribute.  Installation is a simple process mainly composed of uploading your files and running through a quick 2-step install.
+Bonfire has a simple installation script that is designed to help you, the developer, get up and running with a minimum of fuss.  It is not designed to be used for an end product that you distribute.  Installation is a simple process mainly composed of uploading your files and letting Bonfire install your database schema for you.
 
 ### Upload Your Files
 
-Upload all of the files/folders from your package to your web server or development environment.  The web root should point to the main folder that contains:
+Upload all of the files/folders from your package to your web server or development environment.  The web root should point to the /public folder:
 
-    /assets
+    /application
     /bonfire
-    /docs
-    index.php
+    /public          // Web Root in here...
+    /tests
+
+By keeping the majority of your application files outside of your web root, your security is increased because the files and folders are not accessible directly through the browser. While CodeIgniter comes with default htaccess files in many of the sensitive folders, configuration issues can happen that accidentally allow your php files to be served up as text files, allowing potential hackers to gain too much information about your system. Moving the files removes this possibility. It also makes sniffing the folder structure from a browser, a common first step in hacking a site, much more difficult since the files are not there in the first place.
 
 ### Configuration
 
-If you do not have mod_rewrite installed on your server, change the Index File to include <tt>index.php</tt>.
+Before accessing your website, you will need to enter the credentials for your database, else a database error will be thrown when you try to access your site. Enter the details for your site in <tt>application/config/database.php</tt>.
 
-    $config['index_page'] = 'index.php';
+If you are using multiple environments (production, testing, and development), you should create a folder matching the environment name inside your config folder. Then copy the existing database.php config file into that folder and setting the details for you environment there. 
 
 
 ### Write Permissions
@@ -38,22 +40,19 @@ Also, make sure the following file has write permissions:
 
 ### The Install Script
 
-To start the installation process, head to <tt>http://yoursite.com/install</tt>.
+Now head to your site. Since it has not been installed you will see a small greeting screen that checks your PHP version, and the various files and folders to ensure they are writable. If everything looks good here, click the button and your database will be installed for you. 
 
-You should be greeted by a Welcome screen that asks you for **Your Database information**.  Enter the connection details for your database and then click **Test DB**.
+### Logging In
 
-If all goes well, it should direct you to Step 2 (the final step), where you just need to enter your:
+During the installation process, a default admin user has been created for you. You can log in with the following credentials: 
 
-- Site Title - The name of your site, as it will appear in the browser’s title bar or tab.
-- Username   - Choose a username to log into the site with (if the site is setup that way).
-- Password   - Type a password and confirm it.
-- Your Email - This will be the address that you use to log in with, as well as the address used to send system emails from.  This can be changed later to be able to use separate addresses for login and system emails.
+* email: admin@mybonfire.com
+* username: admin
+* password: password
+
+The first thing you should do when logging in the first time is to modify your profile and change your email address and password to be something unique. 
 
 By default, Bonfire is setup to use emails to login with, and not use usernames at all.  This can be easily configured on the main settings screen.
-
-Assuming that everything proceeds without a hitch, you will be redirected to the login screen.  Enter the email and password you just used, and you will be sent to the admin dashboard where you can start building your app.
-
-
 
 ## Troubleshooting Your Install
 
