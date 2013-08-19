@@ -43,7 +43,11 @@ To get started with a new model, you can use the following skeleton file:
         protected $after_delete     = array();
 
         protected $return_type      = 'object';
-        protected $protected_attributes = array();
+        protected $protected_attributes   = array();
+
+        protected $validate               = array();
+        protected $insert_validate_rules  = NULL;
+        protected $skip_validation        = false;
     }
 
 
@@ -557,3 +561,45 @@ To observe an event and have your methods called you simply add the method name 
     }
 
 Each observing method must accept a single parameter. Depending on the event triggered, this might be a single INT, or an array of values, etc. Check the function to verify what the payload being passed along is for the event you’re observing.
+
+## Validating Data
+
+The model should contain all of the validation rules for your data so that it is always kept in a single place with the model that represents it. Bonfire's models provide a simple way to automatically have your data validated during inserts and updates.
+
+### Basic Validation
+
+The <tt>$validate</tt> variable can take an array of data that follows the same format as CodeIgniter's [Form Validation Library](http://ellislab.com/codeigniter/user-guide/libraries/form_validation.html#validationrulesasarray). 
+
+    protected $validate = array(
+        array(
+            'field' => 'username',
+            'label' => 'Username',
+            'rules' => 'trim|strip_tags|min_length[4]|xss_clean'
+        ),
+        array(
+            'field' => 'password',
+            'label' => 'Password',
+            'rules' => 'trim|min_length[8]'
+        )
+    );
+
+During an insert or update, the data passed in is automatically validated using the form_validaiton library. If the validation doesn't pass successfully, the insert/update method will return a value of FALSE and the form_validation_ library will function as expected, providing errors through <tt>validation_errors</tt> and <tt>form_error</tt>.
+
+### Insert Rules Customization
+
+Often, you will have certain rules that are slightly different during object creation than you will during an update. Frequently, this is as simple as having a field required during inserts, but not during updates. You can handle this by adding any additional rules for inserts in the <tt>$insert_validate_rules</tt> class variable. 
+
+    protected $insert_validate_rules = array(
+       'password'   => 'required|matches[pass_confirm]'
+    );
+
+Unlike, the $validate array, the $insert_validate_rule array consists of the field name as the key, and the additional rules as the value. Theses rules are added at the end of the normal rules string before being passed to the form_validation library.
+
+### Skipping Validation
+
+If you need to turn off validation for any reason (like performance durin a large CSV import) you can use the <tt>skip_validation()</tt> method, passing either TRUE or FALSE to the skip or not skip the validation process. This stays in effect as long as the model is loaded but will reset the next time the model is loaded in memory. Typically the next page request. 
+
+    $this->user_model->skip_validation(true);
+
+    $this->user_model->skip_validation(true)->insert($data);
+
