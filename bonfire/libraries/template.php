@@ -233,7 +233,7 @@ class Template
 		self::$default_theme 	= self::$ci->config->item('template.default_theme');
 		self::$parse_views		= self::$ci->config->item('template.parse_views');
 
-        self::debug_message('Template library loaded');
+        log_message('debug', 'Template library loaded');
 
 	}//end init()
 
@@ -309,6 +309,7 @@ class Template
 		$output = '';
 
         self::debug_message('Current View = '. self::$current_view);
+
 		self::load_view(self::$current_view, NULL, self::$ci->router->class . '/' . self::$ci->router->method, FALSE, $output);
 
 		Events::trigger('after_page_render', $output);
@@ -1027,14 +1028,34 @@ EOF;
 
     //---------------------------------------------------------------
 
-    protected static function debug_message($message)
+	/**
+	 * Usefull debugging script to echo out message to the Console
+	 * (if loaded) and to the log files.
+	 *
+	 * By default it will only log the messages if self::$debug == TRUE,
+	 * but this behaviour can be modified by passing $force as TRUE.
+	 *
+	 * @param  string  $message The message to log
+	 * @param  boolean $force   If FALSE, will respect self::$debug setting.
+	 *                          If TRUE, will force the message to be logged.
+	 */
+    protected static function debug_message($message, $force=false)
     {
+    	// Only log the message if we're in debug mode, so we don't
+    	// clutter up people's applications.
         if (self::$debug)
         {
             echo $message;
+            logit(self::$log_prefix . $message);
+            return;
         }
 
-        logit(self::$log_prefix . $message);
+        // If $debug is off but we want to force the message
+        // then we'll deal with it here.
+        if ($force)
+        {
+        	logit(self::$log_prefix . $message);
+        }
     }
 
 	//--------------------------------------------------------------------
