@@ -34,9 +34,9 @@ class Home extends CI_Controller
 	{
 		parent::__construct();
 
+		$this->load->helper('application');
 		$this->load->library('Template');
 		$this->load->library('Assets');
-		$this->load->helper('application');
 		$this->lang->load('application');
 		$this->load->library('events');
 	}
@@ -90,6 +90,10 @@ class Home extends CI_Controller
 				{
 					$this->config->set_item('language', $this->current_user->language);
 				}
+			}
+			else
+			{
+				$this->current_user = null;
 			}
 
 			// Make the current user available in the views
