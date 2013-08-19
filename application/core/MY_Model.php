@@ -287,6 +287,27 @@ class BF_Model extends CI_Model
 	 */
     protected $temp_return_type = NULL;
 
+    /**
+     * An array of validation rules. This needs to be the same format
+     * as validation rules passed to the Form_validation library.
+     */
+    protected $validate = array();
+
+    /**
+     * Optionally skip the validation. Used in conjunction with
+     * skip_validation() to skip data validation for any future calls.
+     */
+    protected $skip_validation = FALSE;
+
+    /*
+        If TRUE, inserts will return the last_insert_id. However,
+        this can potentially slow down large imports drastically
+        so you can turn it off with the return_insert_id(false) method.
+     */
+    protected $return_insert_id = true;
+
+    //--------------------------------------------------------------------
+
 	/**
 	 * BF_Model's constructor
 	 *
@@ -509,6 +530,11 @@ class BF_Model extends CI_Model
 	 */
 	public function insert($data=NULL)
 	{
+		if ($this->skip_validation === FALSE)
+		{
+		    $data = $this->validate($data, 'insert');
+		}
+
 		$data = $this->trigger('before_insert', $data);
 
 		if ($this->set_created === TRUE && $this->log_user === TRUE && !array_key_exists($this->created_by_field, $data))
@@ -593,6 +619,11 @@ class BF_Model extends CI_Model
 	 */
 	public function update($where=NULL, $data=NULL)
 	{
+		if ($this->skip_validation === FALSE)
+		{
+		    $data = $this->validate($data);
+		}
+
 		if ( ! is_array($where))
 		{
 			$where = array($this->key => $where);
@@ -1131,6 +1162,89 @@ class BF_Model extends CI_Model
 		}
 
 		return $data;
+	}
+
+	//--------------------------------------------------------------------
+
+	/**
+	 * Validates the data passed into it based upon the form_validation rules
+	 * setup in the $this->validate property.
+	 *
+	 * If $type == 'insert', any additional rules in the class var $insert_validate_rules
+	 * for that field will be added to the rules.
+	 *
+	 * @param  array $data      An array of validation rules
+	 * @param  string $type     Either 'update' or 'insert'.
+	 * @return array/bool       The original data or FALSE
+	 */
+	public function validate($data, $type='update')
+	{
+	    if($this->skip_validation)
+	    {
+	        return $data;
+	    }
+
+	    if(!empty($this->validate))
+	    {
+	        foreach($data as $key => $val)
+	        {
+	            $_POST[$key] = $val;
+	        }
+
+	        $this->load->library('form_validation');
+
+	        if (is_array($this->validate))
+	        {
+	            // Any insert additions?
+	            if ($type == 'insert'
+	                && is_array($this->insert_validate_rules)
+	                && !empty($this->insert_validate_rules))
+	            {
+	                foreach ($this->validate as &$row)
+	                {
+	                    if (isset($this->insert_validate_rules[$row['field']]))
+	                    {
+	                        $row ['rules'] .= '|'. $this->insert_validate_rules[$row['field']];
+	                    }
+	                }
+	            }
+
+	            $this->form_validation->set_rules($this->validate);
+
+	            if ($this->form_validation->run() === TRUE)
+	            {
+	                return $data;
+	            }
+	            else
+	            {
+	                return FALSE;
+	            }
+	        }
+	        else
+	        {
+	            if ($this->form_validation->run($this->validate) === TRUE)
+	            {
+	                return $data;
+	            }
+	            else
+	            {
+	                return FALSE;
+	            }
+	        }
+	    }
+	    else
+	    {
+	        return $data;
+	    }
+	}
+
+	//--------------------------------------------------------------------
+
+	public function skip_validation($skip=TRUE)
+	{
+	    $this->skip_validation = $skip;
+
+	    return $this;
 	}
 
 	//--------------------------------------------------------------------
