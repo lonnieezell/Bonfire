@@ -247,12 +247,12 @@ There may be situations where you need to only change the default theme that is 
 <a name="yield"></a>
 ### Understanding Yield
 
-In your theme's layout files, you can specify where the controller's views are set to display by using the <tt>Template::yield()</tt> method.
+In your theme's layout files, you can specify where the controller's views are set to display by using the <tt>Template::yieldContent()</tt> method.
 
 
     <?php echo Template::block('header') ?>
 
-        <?php echo Template::yield() ?>
+        <?php echo Template::yieldContent() ?>
 
     <?php echo Template::block('header') ?>
 

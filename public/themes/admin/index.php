@@ -7,7 +7,7 @@
 	<div class="container-fluid">
 	        <?php echo Template::message(); ?>
 	
-	        <?php echo isset($content) ? $content : Template::yield(); ?>
+	        <?php echo isset($content) ? $content : Template::yieldContent(); ?>
 	</div>
 </div>
 
