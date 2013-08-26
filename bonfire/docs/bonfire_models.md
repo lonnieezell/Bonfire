@@ -45,9 +45,9 @@ To get started with a new model, you can use the following skeleton file:
         protected $return_type      = 'object';
         protected $protected_attributes   = array();
 
-        protected $validate               = array();
-        protected $insert_validate_rules  = NULL;
-        protected $skip_validation        = false;
+        protected $validation_rules         = array();
+        protected $insert_validation_rules  = array();
+        protected $skip_validation          = false;
     }
 
 
@@ -568,9 +568,9 @@ The model should contain all of the validation rules for your data so that it is
 
 ### Basic Validation
 
-The <tt>$validate</tt> variable can take an array of data that follows the same format as CodeIgniter's [Form Validation Library](http://ellislab.com/codeigniter/user-guide/libraries/form_validation.html#validationrulesasarray). 
+The <tt>$validation_rules</tt> variable can take an array of data that follows the same format as CodeIgniter's [Form Validation Library](http://ellislab.com/codeigniter/user-guide/libraries/form_validation.html#validationrulesasarray).
 
-    protected $validate = array(
+    protected $validation_rules = array(
         array(
             'field' => 'username',
             'label' => 'Username',
@@ -587,19 +587,28 @@ During an insert or update, the data passed in is automatically validated using 
 
 ### Insert Rules Customization
 
-Often, you will have certain rules that are slightly different during object creation than you will during an update. Frequently, this is as simple as having a field required during inserts, but not during updates. You can handle this by adding any additional rules for inserts in the <tt>$insert_validate_rules</tt> class variable. 
+Often, you will have certain rules that are slightly different during object creation than you will during an update. Frequently, this is as simple as having a field required during inserts, but not during updates. You can handle this by adding any additional rules for inserts in the <tt>$insert_validation_rules</tt> class variable.
 
-    protected $insert_validate_rules = array(
+    protected $insert_validation_rules = array(
        'password'   => 'required|matches[pass_confirm]'
     );
 
-Unlike, the $validate array, the $insert_validate_rule array consists of the field name as the key, and the additional rules as the value. Theses rules are added at the end of the normal rules string before being passed to the form_validation library.
+Unlike, the $validation_rules array, the $insert_validation_rules array consists of the field name as the key, and the additional rules as the value. Theses rules are added at the end of the normal rules string before being passed to the form_validation library.
 
 ### Skipping Validation
 
-If you need to turn off validation for any reason (like performance durin a large CSV import) you can use the <tt>skip_validation()</tt> method, passing either TRUE or FALSE to the skip or not skip the validation process. This stays in effect as long as the model is loaded but will reset the next time the model is loaded in memory. Typically the next page request. 
+If you need to turn off validation for any reason (like performance durin a large CSV import) you can use the <tt>skip_validation()</tt> method, passing either TRUE or FALSE to the skip or not skip the validation process. This stays in effect as long as the model is loaded but will reset the next time the model is loaded in memory. Typically the next page request.
 
     $this->user_model->skip_validation(true);
 
     $this->user_model->skip_validation(true)->insert($data);
 
+### Traditional validation using the Model's validation rules
+
+If you wish to perform validation in the Controller (or another Model), you can retrieve the validation rules from the Model using the <tt>get_validation_rules()</tt> method, passing either 'update' or 'insert' to determine whether the <tt>$insert_validation_rules</tt> are added (you will probably want to disable the model's validation when calling the <tt>insert()</tt>/<tt>update()</tt> methods using the <tt>skip_validation()</tt> method or the model's <tt>skip_validation</tt> property). The rules may then be passed to CI's Form Validation library to perform validation:
+
+    $this->form_validation->set_rules($this->example_model->get_validation_rules('update'));
+
+    if ($this->form_validation->run() === false) {
+        return false;
+    }
