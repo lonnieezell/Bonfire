@@ -6,7 +6,7 @@
 
     <?php
         echo Template::message();
-        echo isset($content) ? $content : Template::yield();
+        echo isset($content) ? $content : Template::yieldContent();
     ?>
 
 <?php echo theme_view('_footer'); ?>
