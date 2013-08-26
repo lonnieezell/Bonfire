@@ -4,7 +4,7 @@
 <div class="container"> <!-- Start of Main Container -->
 
     <?php
-        echo isset($content) ? $content : Template::yieldContent();
+        echo isset($content) ? $content : Template::content();
     ?>
 
 <?php echo theme_view('_footer', array('show' => false)); ?>

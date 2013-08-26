@@ -16,7 +16,7 @@
 
     <div class="main">
         <div class="inner">
-            <?php echo Template::yieldContent(); ?>
+            <?php echo Template::content(); ?>
         </div>
     </div>
 

@@ -19,7 +19,7 @@ Assets::add_js(array(
 		<div class="span10">
 			<?php echo Template::message(); ?>
 
-			<?php echo isset($content) ? $content : Template::yieldContent(); ?>
+			<?php echo isset($content) ? $content : Template::content(); ?>
 
 		</div>
 	</div>

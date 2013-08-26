@@ -1,1 +1,1 @@
-<?php echo isset($content) ? $content : Template::yieldContent(); ?>
+<?php echo isset($content) ? $content : Template::content(); ?>
