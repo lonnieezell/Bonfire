@@ -1,1 +1,1 @@
-<?php echo Template::yield(); ?>
+<?php echo Template::content(); ?>

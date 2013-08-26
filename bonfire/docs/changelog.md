@@ -67,6 +67,7 @@ Additional changes:
 * ctrl+s should not perform dangerous actions like deleting tables, because the user might have intended to invoke a harmless browser shortcut
 * tentatively standardized on `isset($_POST['save'])` when testing submit buttons.  It's not too ugly, especially when you understand the pitfalls of the alternatives.
 * $return_type removed from the user_model functions: find, find_all, and find_by. Use as_array() instead.
+* Template::yield() changed to Template::content() due to the addition of generators in PHP 5.5.
 
 #### Upgrade notes
 
@@ -83,6 +84,8 @@ Because the MY_Controller file no longer ships with Bonfire, you should make a b
 If you use the $table class var within any of your module's model files, you will need to change that reference to $table_name.
 
 If your module calls the activity_model for logging purposes, you will need to either switch the code to the new log_activity() helper method or load the acvitity_model explicitly.
+
+All templates that use the current Template::yield() function must be updated to Template::content() due to the addition of generators in PHP 5.5.
 
 ## Released versions
 

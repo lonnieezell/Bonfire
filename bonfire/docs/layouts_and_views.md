@@ -244,15 +244,15 @@ There may be situations where you need to only change the default theme that is 
     Template::set_default_theme('my_other_theme');
 
 
-<a name="yield"></a>
-### Understanding Yield
+<a name="template-content"></a>
+### Understanding Template Content
 
-In your theme's layout files, you can specify where the controller's views are set to display by using the <tt>Template::yield()</tt> method.
+In your theme's layout files, you can specify where the controller's views are set to display by using the <tt>Template::content()</tt> method.
 
 
     <?php echo Template::block('header') ?>
 
-        <?php echo Template::yield() ?>
+        <?php echo Template::content() ?>
 
     <?php echo Template::block('header') ?>
 
