@@ -96,7 +96,7 @@ class Template
 	/**
 	 * If TRUE, CodeIgniter's Template Parser will be used to
 	 * parse the view. If FALSE, the view is displayed with
-	 * no parsing. Used by the yield() and block()
+	 * no parsing. Used by the content() and block()
 	 *
 	 * @access public
 	 * @static
@@ -304,7 +304,7 @@ class Template
 	 *
 	 * @return string A string containing the output of the render process.
 	 */
-	public static function yield()
+	public static function content()
 	{
 		$output = '';
 
@@ -316,7 +316,7 @@ class Template
 
 		return $output;
 
-	}//end yield()
+	}//end content()
 
 	//--------------------------------------------------------------------
 

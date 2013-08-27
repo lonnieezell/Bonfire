@@ -1402,6 +1402,10 @@ class CI_DB_active_record extends CI_DB_driver {
 				{
 					$index_set = TRUE;
 				}
+				else
+				{
+					$not[] = $k2.'-'.$v2;
+				}
 
 				if ($escape === FALSE)
 				{

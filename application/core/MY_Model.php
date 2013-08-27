@@ -291,7 +291,12 @@ class BF_Model extends CI_Model
      * An array of validation rules. This needs to be the same format
      * as validation rules passed to the Form_validation library.
      */
-    protected $validate = array();
+    protected $validation_rules = array();
+
+    /**
+     * @var Array Additional Validation rules only used on insert
+     */
+    protected $insert_validation_rules = array();
 
     /**
      * Optionally skip the validation. Used in conjunction with
@@ -1166,76 +1171,87 @@ class BF_Model extends CI_Model
 
 	//--------------------------------------------------------------------
 
+    /**
+     * Get the validation rules for the model
+     *
+     * @param String $type Either 'update' or 'insert', appends rules set in $insert_validation_rules on insert
+     *
+     * @return array    The validation rules for the model or an empty array
+     */
+    public function get_validation_rules($type='update')
+    {
+        if (empty($this->validation_rules) || ! is_array($this->validation_rules)) {
+            return array();
+        }
+
+        // use a temp variable so we aren't potentially using the insert rules
+        // on a subsequent update, or re-adding the insert rules when they've
+        // already been added
+        $temp_validation_rules = $this->validation_rules;
+
+        // Any insert additions?
+        if ($type == 'insert'
+            && is_array($this->insert_validation_rules)
+            && ! empty($this->insert_validation_rules))
+        {
+            foreach ($this->insert_validation_rules as $field_name => $rule)
+            {
+                if (isset($temp_validation_rules[$field_name]))
+                {
+                    if (empty($temp_validation_rules[$field_name]['rules']))
+                    {
+                        $temp_validation_rules[$field_name]['rules'] = $rule;
+                    }
+                    else
+                    {
+                        $temp_validation_rules[$field_name]['rules'] .= '|' . $rule;
+                    }
+                }
+            }
+        }
+
+        return $temp_validation_rules;
+    }
+
+	//--------------------------------------------------------------------
+
 	/**
 	 * Validates the data passed into it based upon the form_validation rules
-	 * setup in the $this->validate property.
+	 * setup in the $this->validation_rules property.
 	 *
-	 * If $type == 'insert', any additional rules in the class var $insert_validate_rules
+	 * If $type == 'insert', any additional rules in the class var $insert_validation_rules
 	 * for that field will be added to the rules.
 	 *
-	 * @param  array $data      An array of validation rules
+	 * @param  array $data      An array of data to validate
 	 * @param  string $type     Either 'update' or 'insert'.
 	 * @return array/bool       The original data or FALSE
 	 */
 	public function validate($data, $type='update')
 	{
-	    if($this->skip_validation)
+	    if ($this->skip_validation)
 	    {
 	        return $data;
 	    }
 
-	    if(!empty($this->validate))
-	    {
-	        foreach($data as $key => $val)
+        $current_validation_rules = $this->get_validation_rules($type);
+
+        if ( ! empty($current_validation_rules)) {
+	        foreach ($data as $key => $val)
 	        {
 	            $_POST[$key] = $val;
 	        }
 
 	        $this->load->library('form_validation');
 
-	        if (is_array($this->validate))
-	        {
-	            // Any insert additions?
-	            if ($type == 'insert'
-	                && is_array($this->insert_validate_rules)
-	                && !empty($this->insert_validate_rules))
-	            {
-	                foreach ($this->validate as &$row)
-	                {
-	                    if (isset($this->insert_validate_rules[$row['field']]))
-	                    {
-	                        $row ['rules'] .= '|'. $this->insert_validate_rules[$row['field']];
-	                    }
-	                }
-	            }
+            $this->form_validation->set_rules($current_validation_rules);
 
-	            $this->form_validation->set_rules($this->validate);
+            if ($this->form_validation->run($current_validation_rules) !== true)
+            {
+                return false;
+            }
+        }
 
-	            if ($this->form_validation->run() === TRUE)
-	            {
-	                return $data;
-	            }
-	            else
-	            {
-	                return FALSE;
-	            }
-	        }
-	        else
-	        {
-	            if ($this->form_validation->run($this->validate) === TRUE)
-	            {
-	                return $data;
-	            }
-	            else
-	            {
-	                return FALSE;
-	            }
-	        }
-	    }
-	    else
-	    {
-	        return $data;
-	    }
+        return $data;
 	}
 
 	//--------------------------------------------------------------------
