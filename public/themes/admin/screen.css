@@ -217,11 +217,7 @@ Toolbar Profile
 .toolbar-profile-info a {
 	display: block;
 	padding: 3px 20px;
-	clear: both;
-	font-weight: normal;
-	line-height: 20px;
 	color: #333333;
-	white-space: nowrap;
 }
 
 .toolbar-profile-info p {
