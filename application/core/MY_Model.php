@@ -259,6 +259,21 @@ class BF_Model extends CI_Model
 	 */
 	protected $after_delete		= array();
 
+    /**
+     * Contains the names of callback functions within the extending model which
+     * will be called if $validation_rules is empty (or not an array) when
+     * requested via the get_validation_rules() method.
+     *
+     * Note: These methods should not add $insert_validation_rules, as they are
+     * added to the $validation_rules after these functions return.
+     *
+	 * @see $before_insert
+	 *
+     * @var array
+	 * @access protected
+     */
+    protected $empty_validation_rules = array();
+
 	/**
      * Protected, non-modifiable attributes
      *
@@ -1174,20 +1189,34 @@ class BF_Model extends CI_Model
     /**
      * Get the validation rules for the model
      *
+     * @uses $empty_validation_rules Observer to generate validation rules if they are empty
+     *
      * @param String $type Either 'update' or 'insert', appends rules set in $insert_validation_rules on insert
      *
      * @return array    The validation rules for the model or an empty array
      */
     public function get_validation_rules($type='update')
     {
-        if (empty($this->validation_rules) || ! is_array($this->validation_rules)) {
-            return array();
-        }
-
-        // use a temp variable so we aren't potentially using the insert rules
-        // on a subsequent update, or re-adding the insert rules when they've
-        // already been added
         $temp_validation_rules = $this->validation_rules;
+
+        /*
+         * When $validation_rules is empty (or not an array), try to generate
+         * them by triggering the $empty_validation_rules observer
+         *
+         * If the observer returns a non-empty array, set $validation_rules so
+         * they aren't re-generated for this instance of the model
+         */
+
+        if (empty($temp_validation_rules) || ! is_array($temp_validation_rules))
+        {
+            $temp_validation_rules = $this->trigger('empty_validation_rules', $temp_validation_rules);
+            if (empty($temp_validation_rules) || ! is_array($temp_validation_rules))
+            {
+                return array();
+            }
+
+            $this->validation_rules = $temp_validation_rules;
+        }
 
         // Any insert additions?
         if ($type == 'insert'
