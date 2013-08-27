@@ -73,6 +73,14 @@ class BF_Model extends CI_Model
 	 */
 	protected $modified_field = 'modified_on';
 
+    /**
+     * Field name to use for the deleted column in the DB table if $soft_deletes is enabled
+     *
+     * @var string
+     * @access protected
+     */
+    protected $deleted_field = 'deleted';
+
 	/**
 	 * Whether or not to auto-fill a 'created_on' field on inserts.
 	 *
@@ -731,7 +739,7 @@ class BF_Model extends CI_Model
 
 	/**
 	 * Performs a delete on the record specified. If $this->soft_deletes is TRUE,
-	 * it will attempt to set a field 'deleted' on the current record
+	 * it will attempt to set $this->deleted_field on the current record
 	 * to '1', to allow the data to remain in the database.
 	 *
 	 * @param mixed $id The primary_key value to match against.
@@ -748,7 +756,7 @@ class BF_Model extends CI_Model
 		if ($this->soft_deletes === TRUE)
 		{
 			$data = array(
-				'deleted' => 1,
+				$this->deleted_field => 1,
 			);
 
 			if ($this->log_user === TRUE)
@@ -780,7 +788,7 @@ class BF_Model extends CI_Model
 	/**
 	 * Performs a delete using any field/value pair(s) as the 'where'
 	 * portion of your delete statement. If $this->soft_deletes is
-	 * TRUE, it will attempt to set a field 'deleted' on the current
+	 * TRUE, it will attempt to set $this->deleted_field on the current
 	 * record to '1', to allow the data to remain in the database.
 	 *
 	 * @param mixed/array $data key/value pairs accepts an associative array or a string
@@ -800,7 +808,7 @@ class BF_Model extends CI_Model
 		if ($this->soft_deletes === TRUE)
 		{
 			$data = array(
-				'deleted' => 1,
+				$this->deleted_field => 1,
 			);
 
 			if ($this->log_user === TRUE)
@@ -1453,6 +1461,22 @@ class BF_Model extends CI_Model
 		return $this->key;
 
 	}//end get_key()
+
+	//--------------------------------------------------------------------
+
+    /**
+     * Get the name of the deleted field
+     *
+     * @return String    The name of the field if soft_deletes is enabled, else an empty string
+     */
+    public function get_deleted_field()
+    {
+        if ($this->soft_deletes) {
+            return $this->deleted_field;
+        }
+
+        return '';
+    }
 
 	//--------------------------------------------------------------------
 

@@ -32,6 +32,9 @@ To get started with a new model, you can use the following skeleton file:
         protected $modified_field	= 'modified_on';
         protected $modified_by_field = 'modified_by';
 
+        protected $deleted_field    = 'deleted';
+        protected $deleted_by_field = 'deleted_by';
+
         // Observers
         protected $before_insert    = array();
         protected $after_insert     = array();
@@ -71,6 +74,7 @@ The var <tt>$key</tt> should be the name of the primary key for your table. BF_M
 Bonfire uses the concept of *soft deletes* that will set a flag that an item has been deleted instead of actually deleting the item. This allows you to later restore the user in case the deletion was accidental, or to keep a permanent record of any sensitive information, like transaction records.
 
 To use soft_deletes, your table must have a <tt>deleted</tt> field that is a **TINYINT (1)**. A value of <tt>0</tt> means the record has not been deleted, while a value of <tt>1</tt> shows that the item has been deleted.
+The name of the <tt>deleted</tt> field may be modified by setting <tt>$deleted_field</tt>.
 
 If <tt>$soft_deletes == TRUE</tt>, Bonfire will automatically update the record to set <tt>deleted</tt> to a value of <tt>1</tt>.
 
@@ -93,11 +97,13 @@ While ‘int’ seems to be one of the most common amongst PHP developers, datet
 Bonfire can automatically set your created on dates and times for you, in the format specified through <tt>$date_format</tt>. To use this, your table must have a <tt>created_on</tt> field of the proper type.
 
 If <tt>$set_created == TRUE</tt>, Bonfire will set the <tt>created_on</tt> field value for you at the time of an <tt>insert()</tt> call.
+The name of the <tt>created_on</tt> field may be modified by setting <tt>$created_field</tt>.
 
 
 ### <tt>$set_modified</tt>
 
 Bonfire can automatically set your modified on dates and times for you, in the format specified through <tt>$date_format</tt>. To use this, your table must have a <tt>modified_on</tt> field of the proper type.
+The name of the <tt>modified_on</tt> field may be modified by setting <tt>$modified_field</tt>.
 
 If <tt>$set_created == TRUE</tt>, Bonfire will set the <tt>created_on</tt> field value for you at the time of an <tt>insert()</tt> call.
 
