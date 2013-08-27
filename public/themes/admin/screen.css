@@ -158,6 +158,7 @@ a.brand {
 }
 
 .subnav .nav > li > a {
+	margin: .1px;
 	padding-top: 11px;
 	padding-bottom: 11px;
 	font-size: 13px;
