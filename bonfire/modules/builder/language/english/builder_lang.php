@@ -31,6 +31,7 @@ $lang['mb_generic_description']	= 'Your Description here.';
 $lang['mb_installed_head']		= 'Installed Application Modules';
 $lang['mb_module']				= 'Module';
 $lang['mb_no_modules']			= 'No Modules Installed.';
+$lang['mb_toolbar_title_index'] = 'Manage Modules';
 
 $lang['mb_table_name']			= 'Name';
 $lang['mb_table_version']		= 'Version';
@@ -74,6 +75,10 @@ $lang['mb_form_contexts']		= 'Contexts Required';
 $lang['mb_form_public']			= 'Public';
 $lang['mb_form_table_details']	= 'Table Details';
 $lang['mb_form_actions']		= 'Controller Actions';
+$lang['mb_form_actions_index']  = 'List';
+$lang['mb_form_actions_create'] = 'Create';
+$lang['mb_form_actions_edit']   = 'Edit';
+$lang['mb_form_actions_delete'] = 'Delete';
 $lang['mb_form_primarykey']		= 'Primary Key';
 $lang['mb_form_delims']			= 'Form Input Delimiters';
 $lang['mb_form_err_delims']		= 'Form Error Delimiters';
@@ -81,9 +86,9 @@ $lang['mb_form_text_ed']		= 'Textarea Editor';
 $lang['mb_form_soft_deletes']	= 'Use "Soft" Deletes?';
 $lang['mb_form_use_created']	= 'Use "Created" field?';
 $lang['mb_form_use_modified']	= 'Use "Modified" field?';
-$lang['mb_form_created_field']	= '"Created" field name?';
+$lang['mb_form_created_field']	= '"Created" field name';
 $lang['mb_form_created_field_ph']	= 'created_on';
-$lang['mb_form_modified_field']	= '"Modified" field name?';
+$lang['mb_form_modified_field']	= '"Modified" field name';
 $lang['mb_form_modified_field_ph']	= 'modified_on';
 $lang['mb_form_generate']		= 'Create Module Table';
 $lang['mb_form_role_id']		= 'Give Role Full Access';
@@ -94,8 +99,9 @@ $lang['mb_form_table_name_ph']	= 'Lowercase, no spaces';
 $lang['mb_form_table_as_field_prefix']	= 'Use table name as field prefix';
 $lang['mb_form_label']			= 'Label';
 $lang['mb_form_label_ph']		= 'The name that will be used on webpages';
-$lang['mb_form_fieldname']		= 'Name (no spaces)';
-$lang['mb_form_fieldname_ph']	= 'The field name for the database. Lowercase is best.';
+$lang['mb_form_fieldname']		= 'Name';
+$lang['mb_form_fieldname_ph']	= 'The field name for the database.';
+$lang['mb_form_fieldname_help'] = 'Lowercase is best. No spaces';
 $lang['mb_form_type']			= 'Webpage Input Type';
 $lang['mb_form_length']			= 'Maximum Length <b>-or-</b> Values';
 $lang['mb_form_length_ph']		= '30, 255, 1000, etc...';
@@ -116,7 +122,7 @@ $lang['mb_form_show_more']		= '...toggle more rules...';
 $lang['mb_form_integer']		= 'Integers';
 $lang['mb_form_is_decimal']		= 'Decimal Numbers';
 $lang['mb_form_is_natural']		= 'Natural Numbers';
-$lang['mb_form_is_natural_no_zero']	= 'Natural, no zeroes';
+$lang['mb_form_is_natural_no_zero'] = 'Natural, no zeroes';
 $lang['mb_form_valid_ip']		= 'Valid IP';
 $lang['mb_form_valid_base64']	= 'Valid Base64';
 $lang['mb_form_alpha_extra']	= 'AlphaNumerics, underscore, dash, periods and spaces.';
@@ -130,6 +136,7 @@ $lang['mb_form_build']			= 'Build the Module';
 $lang['mb_act_create']			= 'Created Module';
 $lang['mb_act_delete']			= 'Deleted Module';
 
+// Create Context
 $lang['mb_create_a_context']	= 'Create A Context';
 $lang['mb_tools']				= 'Tools';
 $lang['mb_mod_builder']			= 'Module Builder';
@@ -137,3 +144,36 @@ $lang['mb_new_context']			= 'New Context';
 $lang['mb_no_context_name']		= 'Invalid Context name.';
 $lang['mb_cant_write_config']	= 'Unable to write to config file.';
 $lang['mb_context_exists']		= 'Context already exists in application config file.';
+$lang['mb_context_name']        = 'Context Name';
+$lang['mb_context_name_help']   = 'Cannot contain spaces.';
+$lang['mb_context_create_success']  = 'Context successfully created.';
+$lang['mb_context_create_error']    = 'Error creating Context: ';
+$lang['mb_context_create_intro']    = 'Creates and sets up a new Context.';
+$lang['mb_roles_label']         = 'Allow for Roles:';
+$lang['mb_context_migrate']     = 'Create an Application Migration?';
+$lang['mb_context_submit']      = 'Create It';
+
+// Create Module
+$lang['mb_module_table_not_exist']  = 'The specified table name does not exist';
+$lang['mb_toolbar_title_create'] = 'Module Builder';
+
+// Delete Module
+$lang['mb_delete_trans_false']  = 'We could not delete this module.';
+$lang['mb_delete_success']      = 'The module and associated database entries were successfully deleted.';
+$lang['mb_delete_success_db_only']  = ' HOWEVER, the module folder and files were not removed. They must be removed manually.';
+
+// Validate Form
+$lang['mb_contexts_content']    = 'Contexts :: Content';
+$lang['mb_contexts_developer']  = 'Contexts :: Developer';
+$lang['mb_contexts_public']     = 'Contexts :: Public';
+$lang['mb_contexts_reports']    = 'Contexts :: Reports';
+$lang['mb_contexts_settings']   = 'Contexts :: Settings';
+$lang['mb_module_db']           = 'Module Table';
+$lang['mb_form_action_create']  = 'Form Actions :: Create';
+$lang['mb_form_action_delete']  = 'Form Actions :: Delete';
+$lang['mb_form_action_edit']    = 'Form Actions :: Edit';
+$lang['mb_form_action_view']    = 'Form Actions :: List';
+$lang['mb_soft_delete_field']   = '"Soft" Delete field name';
+$lang['mb_soft_delete_field_ph']    = 'deleted';
+$lang['mb_validation_no_match'] = '%s %ss (%s & %s) must be unique!';
+$lang['mb_modulename_check']    = 'The %s field is not valid';

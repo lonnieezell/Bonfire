@@ -4,13 +4,17 @@ $truefalse = array(
 	'false' => 'False',
 	'true' => 'True',
 );
+
+// textarea_editor seems to have been removed...
+/*
 $textarea_editors = array(
-	'' => 'None',
-	'ckeditor' => 'CKEditor',
-	'xinha' => 'Xinha',
-	'tinymce' => 'TinyMCE',
-	'markitup' => 'MarkitUp!',
+	''          => 'None',
+	'ckeditor'  => 'CKEditor',
+	'xinha'     => 'Xinha',
+	'tinymce'   => 'TinyMCE',
+	'markitup'  => 'MarkitUp!',
 );
+ */
 
 $session_error = $this->session->flashdata('error');
 $validation_errors = validation_errors();
@@ -41,13 +45,15 @@ a.mb_show_advanced_rules:hover {
 fieldset {
 	margin-top: 0;
 }
+.alert span.error {
+    display: block;
+}
 </style>
 <p class="intro">
 	<?php e(lang('mb_create_note')); ?>
 </p>
 <div class="alert alert-info fade in">
 	<a class="close" data-dismiss="alert">&times;</a>
-    <h4 class="alert-heading"><?php echo lang('mb_form_errors'); ?></h4>
 	<?php echo lang('mb_form_note'); ?>
 </div>
 <?php if ( ! $writeable) : ?>
@@ -62,6 +68,7 @@ if ($validation_errors) :
 ?>
 <div class="alert alert-error fade in">
     <a data-dismiss="alert" class="close">&times;</a>
+    <h4 class="alert-heading"><?php echo lang('mb_form_errors'); ?></h4>
     <?php echo $validation_errors; ?>
 </div>
 <?php
@@ -148,7 +155,8 @@ if ($session_error):
 				</div>
 
 				<div class="control-group">
-					<div class="controls">
+                    <label class='control-label' for='mb_module_db'><?php echo lang('mb_module_db'); ?></label>
+					<div class="controls" id='mb_module_db'>
 						<label class="inline radio" for="db_no">
 							<input name="module_db" id="db_no" type="radio" value="" <?php echo set_checkbox('module_db', '', TRUE); ?> class="radio" />
 							<?php echo lang('mb_form_module_db_no'); ?>
@@ -194,11 +202,11 @@ if ($session_error):
 					<label for="use_soft_deletes" class="control-label block"><?php echo lang('mb_form_soft_deletes'); ?></label>
 					<div class="controls">
 						<select name="use_soft_deletes" id="use_soft_deletes">
-							<?php foreach($truefalse as $val => $label):?>
-							<option value="<?php echo $val?>"><?php echo $label?></option>
+							<?php foreach ($truefalse as $val => $label) : ?>
+							<option value="<?php echo $val; ?>"><?php echo $label; ?></option>
 							<?php endforeach;?>
 						</select>
-						<input type="hidden" name="soft_delete_field" id="soft_delete_field" value="deleted" />
+						<input type="hidden" name="soft_delete_field" id="soft_delete_field" value="<?php echo lang('mb_soft_delete_field_ph'); ?>" />
 					</div>
 				</div>
 
@@ -206,8 +214,8 @@ if ($session_error):
 					<label for="use_created" class="control-label block"><?php echo lang('mb_form_use_created'); ?></label>
 					<div class="controls">
 						<select name="use_created" id="use_created">
-							<?php foreach($truefalse as $val => $label):?>
-							<option value="<?php echo $val?>"><?php echo $label?></option>
+							<?php foreach ($truefalse as $val => $label) : ?>
+							<option value="<?php echo $val; ?>"><?php echo $label; ?></option>
 							<?php endforeach;?>
 						</select>
 					</div>
@@ -341,7 +349,10 @@ if ($session_error):
 						<label class="control-label" for="view_field_name<?php echo $count; ?>"><?php echo lang('mb_form_fieldname'); ?></label>
 						<div class="controls">
 							<input name="view_field_name<?php echo $count; ?>" id="view_field_name<?php echo $count; ?>" type="text" value="<?php echo set_value("view_field_name{$count}", isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['name'] : ''); ?>" maxlength="30" placeholder="<?php echo lang('mb_form_fieldname_ph'); ?>" />
-							<span class="help-inline"><?php echo form_error("view_field_name{$count}"); ?></span>
+							<span class="help-inline"><?php
+                                echo form_has_error("view_field_name{$count}") ? form_error("view_field_name{$count}") . '<br />' : '';
+                                echo lang('mb_form_fieldname_help');
+                            ?></span>
 						</div>
 					</div>
 
@@ -422,17 +433,7 @@ if ($session_error):
 							<?php endforeach; ?>
 						</div>
 					</div>
-<?php /*
-					<div class="control-group mb_advanced">
-						<label><?php echo lang('mb_form_rules_limits'); ?></label>
-						<div class="controls">
-							<?php echo lang('mb_form_rules_limit_note'); ?>
-							<?php foreach ($validation_limits as $validation_limit) : ?>
-								<span class="faded"><input name="validation_rules<?php echo $count; ?>[]" id="validation_rules_<?php echo $validation_limit; ?><?php echo $count; ?>" type="radio" value="<?php echo $validation_limit; ?>" <?php echo set_radio('validation_rules'.$count.'[]', $validation_limit); ?> /> <?php echo lang('mb_form_'.$validation_limit); ?></span>
-							<?php endforeach; ?>
-						</div>
-					</div>
-*/ ?>
+
 				</fieldset>
 			</div>
 		<?php endfor; ?>

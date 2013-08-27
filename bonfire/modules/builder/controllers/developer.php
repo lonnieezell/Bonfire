@@ -53,6 +53,12 @@ class Developer extends Admin_Controller {
 
         $this->options = $this->config->item('modulebuilder');
 
+        if (isset($this->options['form_error_delimiters'])
+            && is_array($this->options['form_error_delimiters'])
+            && count($this->options['form_error_delimiters']) == 2) {
+            $this->form_validation->set_error_delimiters($this->options['form_error_delimiters'][0], $this->options['form_error_delimiters'][1]);
+        }
+
         Template::set_block('sub_nav', 'developer/_sub_nav');
         Template::set_block('sidebar', 'developer/sidebar');
 
@@ -90,7 +96,7 @@ class Developer extends Admin_Controller {
 
         ksort($configs);
         Template::set('modules', $configs);
-        Template::set('toolbar_title', 'Manage Modules');
+        Template::set('toolbar_title', lang('mb_toolbar_title_index'));
 
         Template::render('two_left');
 
@@ -121,7 +127,7 @@ class Developer extends Admin_Controller {
     	// Form submittal?
     	if (isset($_POST['build']))
     	{
-    		$this->form_validation->set_rules('context_name', 'Context Name', 'required|trim|alpha_numeric|xss_clean');
+    		$this->form_validation->set_rules('context_name', 'lang:mb_context_name', 'required|trim|alpha_numeric|xss_clean');
 
     		if ($this->form_validation->run() !== false)
     		{
@@ -134,12 +140,12 @@ class Developer extends Admin_Controller {
 		    	$this->load->library('ui/contexts');
 		    	if (Contexts::create_context($name, $for_roles, $migrate))
 		    	{
-		    		Template::set_message('Context succesfully created.', 'success');
+		    		Template::set_message(lang('mb_context_create_success'), 'success');
 			    	redirect(SITE_AREA . '/developer/builder');
 		    	}
 		    	else
 		    	{
-			    	Template::set_message('Error creating Context: '. Contexts::errors(), 'error');
+			    	Template::set_message(lang('mb_context_create_error') . Contexts::errors(), 'error');
 		    	}
 		    }
     	}
@@ -183,7 +189,10 @@ class Developer extends Admin_Controller {
                 Template::set('form_error', FALSE);
             }
 
-            $query = $this->db->select('role_id,role_name')->where('deleted', 0)->order_by('role_name')->get('roles');
+            $query = $this->db->select('role_id,role_name')
+                              ->where('deleted', 0)
+                              ->order_by('role_name')
+                              ->get('roles');
             Template::set('roles', $query->result_array());
             Template::set('form_action_options', $this->options['form_action_options']);
             Template::set('validation_rules', $this->options['validation_rules']);
@@ -218,15 +227,20 @@ class Developer extends Admin_Controller {
             if ( ! empty($_POST) && $num_fields == 0)
             {
                 Template::set('form_error', TRUE);
-                log_message('error', "ModuleBuilder: The specified table name does not exist");
-                Template::set('error_message', 'The specified table name does not exist');
+
+                $error_message = lang('mb_module_table_not_exist');
+                log_message('error', 'ModuleBuilder: ' . $error_message);
+                Template::set('error_message', $error_message);
+                unset($error_message);
             }
             else
             {
                 Template::set('form_error', FALSE);
             }
 
-            $query = $this->db->select('role_id,role_name')->order_by('role_name')->get('roles');
+            $query = $this->db->select('role_id,role_name')
+                              ->order_by('role_name')
+                              ->get('roles');
 
             Template::set('roles', $query->result_array());
             Template::set('existing_table_fields', $table_fields);
@@ -253,7 +267,7 @@ class Developer extends Admin_Controller {
         // check that the modules folder is writeable
         Template::set('writeable', $this->_check_writeable());
         Template::set('error', array());
-        Template::set('toolbar_title', 'Module Builder');
+        Template::set('toolbar_title', lang('mb_toolbar_title_create'));
 
         Template::render();
 
@@ -323,7 +337,7 @@ class Developer extends Admin_Controller {
             if ($this->db->trans_status() === FALSE)
             {
                 $this->db->trans_rollback();
-                Template::set_message('We could not delete this module.', $this->db->error, 'error');
+                Template::set_message(lang('mb_delete_trans_false'), $this->db->error, 'error');
             }
             else
             {
@@ -337,11 +351,11 @@ class Developer extends Admin_Controller {
                     // Log the activity
                     log_activity((integer) $this->current_user->id, lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'builder');
 
-                    Template::set_message('The module and associated database entries were successfully deleted.', 'success');
+                    Template::set_message(lang('mb_delete_success'), 'success');
                 }
                 else
                 {
-                    Template::set_message('The module and associated database entries were successfully deleted, HOWEVER, the module folder and files were not removed. They must be removed manually.', 'info');
+                    Template::set_message(lang('mb_delete_success') . lang('mb_delete_success_db_only'), 'info');
                 }
             }//end if
         }//end if
@@ -367,52 +381,62 @@ class Developer extends Admin_Controller {
      */
     private function validate_form($field_total=0)
     {
-        $this->form_validation->set_rules("contexts_content",'Contexts :: Content',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("contexts_developer",'Contexts :: Developer',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("contexts_public",'Contexts :: Public',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("contexts_reports",'Contexts :: Reports',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("contexts_settings",'Contexts :: Settings',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("module_db",'Create Module Table',"trim|xss_clean|alpha");
-        $this->form_validation->set_rules("form_action_create",'Form Actions :: View',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("form_action_delete",'Form Actions :: View',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("form_action_edit",'Form Actions :: View',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("form_action_view",'Form Actions :: List',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("form_error_delimiters",'Form Error Delimiters',"required|trim|xss_clean");
-        $this->form_validation->set_rules("module_description",'Module Description',"trim|required|xss_clean");
-        $this->form_validation->set_rules("module_name",'Module Name',"trim|required|xss_clean|callback__modulename_check");
-        $this->form_validation->set_rules("role_id",'Give Role Full Access',"trim|xss_clean|is_numeric");
+        $this->form_validation->set_rules("contexts_content",'lang:mb_contexts_content',"trim|xss_clean|is_numeric");
+        $this->form_validation->set_rules("contexts_developer",'lang:mb_contexts_developer',"trim|xss_clean|is_numeric");
+        $this->form_validation->set_rules("contexts_public",'lang:mb_contexts_public',"trim|xss_clean|is_numeric");
+        $this->form_validation->set_rules("contexts_reports",'lang:mb_contexts_reports',"trim|xss_clean|is_numeric");
+        $this->form_validation->set_rules("contexts_settings",'lang:mb_contexts_settings',"trim|xss_clean|is_numeric");
+        $this->form_validation->set_rules("module_db",'lang:mb_module_db',"trim|xss_clean|alpha");
+        $this->form_validation->set_rules("form_action_create",'lang:mb_form_action_create',"trim|xss_clean|is_numeric");
+        $this->form_validation->set_rules("form_action_delete",'lang:mb_form_action_delete',"trim|xss_clean|is_numeric");
+        $this->form_validation->set_rules("form_action_edit",'lang:mb_form_action_edit',"trim|xss_clean|is_numeric");
+        $this->form_validation->set_rules("form_action_view",'lang:mb_form_action_view',"trim|xss_clean|is_numeric");
+        $this->form_validation->set_rules("form_error_delimiters",'lang:mb_form_err_delims',"required|trim|xss_clean");
+        $this->form_validation->set_rules("module_description",'lang:mb_form_mod_desc',"trim|required|xss_clean");
+        $this->form_validation->set_rules("module_name",'lang:mb_form_mod_name',"trim|required|xss_clean|callback__modulename_check");
+        $this->form_validation->set_rules("role_id",'lang:mb_form_role_id',"trim|xss_clean|is_numeric");
 
         // no point doing all this checking if we don't want a table
         if ($this->input->post('module_db'))
         {
-            $this->form_validation->set_rules("table_name",'Table Name',"trim|required|xss_clean|alpha_dash");
+            $this->form_validation->set_rules("table_name",'lang:mb_form_table_name',"trim|required|xss_clean|alpha_dash");
 
             if ($this->input->post('module_db') == 'new')
             {
-                $this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");
-                $this->form_validation->set_rules("textarea_editor",'Textarea Editor',"trim|xss_clean|alpha_dash");
-                $this->form_validation->set_rules("use_soft_deletes",'Soft Deletes',"trim|xss_clean|alpha");
-                $this->form_validation->set_rules("soft_delete_field",'Soft Deletes Fieldname',"trim|xss_clean|alpha");
-                $this->form_validation->set_rules("use_created",'Use Created Field',"trim|xss_clean|alpha");
-                $this->form_validation->set_rules("created_field",'Created Field Name',"trim|xss_clean|alpha_dash");
-                $this->form_validation->set_rules("use_modified",'Use Modified Field',"trim|xss_clean|alpha");
-                $this->form_validation->set_rules("modified_field",'Modified Field Name',"trim|xss_clean|alpha_dash");
+                $this->form_validation->set_rules("primary_key_field",'lang:mb_form_primarykey',"required|trim|xss_clean|alpha_dash");
+                // textarea_editor seems to be gone...
+                $this->form_validation->set_rules("textarea_editor",'lang:mb_form_text_ed',"trim|xss_clean|alpha_dash");
+                $this->form_validation->set_rules("use_soft_deletes",'lang:mb_form_soft_deletes',"trim|xss_clean|alpha");
+                $this->form_validation->set_rules("soft_delete_field",'lang:mb_soft_delete_field',"trim|xss_clean|alpha");
+                $this->form_validation->set_rules("use_created",'lang:mb_form_use_created',"trim|xss_clean|alpha");
+                $this->form_validation->set_rules("created_field",'lang:mb_form_created_field',"trim|xss_clean|alpha_dash");
+                $this->form_validation->set_rules("use_modified",'lang:mb_form_use_modified',"trim|xss_clean|alpha");
+                $this->form_validation->set_rules("modified_field",'lang:mb_form_modified_field',"trim|xss_clean|alpha_dash");
             }
             elseif ($this->input->post('module_db') == 'existing' && $field_total > 0)
             {
-                $this->form_validation->set_rules("primary_key_field",'Primary Key Field',"required|trim|xss_clean|alpha_dash");
+                $this->form_validation->set_rules("primary_key_field",'lang:mb_form_primarykey',"required|trim|xss_clean|alpha_dash");
             }
+
+            // No need to retrieve this on every iteration of the loop
+            $lang_field_details = lang('mb_form_field_details') . ' ';
 
             for ($counter = 1; $field_total >= $counter; $counter++)
             {
+                $field_details_label = $lang_field_details . $counter . ' :: ';
+
+                // We don't define the validation labels with 'lang:' in this
+                // loop because we don't want to create language entries for
+                // every possible $counter value
+
                 if ($counter != 1) // better to do it this way round as this statement will be fullfilled more than the one below
                 {
-                    $this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|xss_clean|alpha_extra');
+                    $this->form_validation->set_rules("view_field_label$counter", $field_details_label . lang('mb_form_label'), 'trim|xss_clean|alpha_extra');
                 }
                 else
                 {
                     // the first field always needs to be required i.e. we need to have at least one field in our form
-                    $this->form_validation->set_rules("view_field_label$counter","Label $counter",'trim|required|xss_clean|alpha_extra');
+                    $this->form_validation->set_rules("view_field_label$counter", $field_details_label . lang('mb_form_label'),'trim|required|xss_clean|alpha_extra');
                 }
 
                 $name_required = '';
@@ -422,9 +446,9 @@ class Developer extends Admin_Controller {
                     $name_required = 'required|';
                 }
 
-                $this->form_validation->set_rules("view_field_name$counter","Name $counter","trim|".$name_required."callback__no_match[$counter]|xss_clean");
-                $this->form_validation->set_rules("view_field_type$counter","Field Type $counter","trim|required|xss_clean|alpha");
-                $this->form_validation->set_rules("db_field_type$counter","DB Field Type $counter","trim|xss_clean|alpha");
+                $this->form_validation->set_rules("view_field_name$counter", $field_details_label . lang('mb_form_fieldname'), "trim|".$name_required."callback__no_match[$counter]|xss_clean");
+                $this->form_validation->set_rules("view_field_type$counter", $field_details_label . lang('mb_form_type'), "trim|required|xss_clean|alpha");
+                $this->form_validation->set_rules("db_field_type$counter", $field_details_label . lang('mb_form_dbtype'), "trim|xss_clean|alpha");
 
                 // make sure that the length field is required if the DB Field type requires a length
 				$no_length = array(
@@ -445,8 +469,8 @@ class Developer extends Admin_Controller {
                     $db_len_required = 'required|';
                 }
 
-                $this->form_validation->set_rules("db_field_length_value$counter","DB Field Length $counter","trim|".$db_len_required."xss_clean");
-                $this->form_validation->set_rules('validation_rules'.$counter.'[]',"Validation Rules $counter",'trim|xss_clean');
+                $this->form_validation->set_rules("db_field_length_value$counter", $field_details_label . lang('mb_form_length'), "trim|".$db_len_required."xss_clean");
+                $this->form_validation->set_rules('validation_rules'.$counter.'[]', $field_details_label . lang('mb_form_rules'), 'trim|xss_clean');
             }
         }//end if
 
@@ -483,6 +507,7 @@ class Developer extends Admin_Controller {
 				$field_array['name'] = $field->name;
 
 				$type = '';
+                $max_length = null;
 				if (strpos($field->type, "("))
 				{
 					list($type, $max_length) = explode("--", str_replace("(", "--", str_replace(")", "", $field->type)));
@@ -497,25 +522,20 @@ class Developer extends Admin_Controller {
 				$values = '';
 				if (is_numeric($field->max_length))
 				{
-					$max_length = ($field->max_length==null)?1:$field->max_length;
+					$max_length = $field->max_length;
 				}
 				else
 				{
 					$values = $field->max_length;
-					$max_length = 1;
 				}
+                $max_length = $max_length == null ? 1 : $max_length;
 
-				$field_array['max_length'] = $max_length;
-				$field_array['values'] = $values;
+				$primary_key = $field->primary_key == 1 ? 1 : 0;
 
-				$primary_key = 0;
-				if ($field->primary_key == 1)
-				{
-					$primary_key = 1;
-				}
+				$field_array['max_length']  = $max_length;
+				$field_array['values']      = $values;
 				$field_array['primary_key'] = $primary_key;
-
-				$field_array['default'] = $field->default;
+				$field_array['default']     = $field->default;
 
 				$newfields[] = $field_array;
 			} // end foreach
@@ -632,7 +652,7 @@ class Developer extends Admin_Controller {
 
             if ($str == $_POST["view_field_name{$counter}"])
             {
-                $this->form_validation->set_message('_no_match', "Field names ($fieldno & $counter) must be unique!");
+                $this->form_validation->set_message('_no_match', sprintf(lang('mb_validation_no_match'), lang('mb_form_field_details'), lang('mb_form_fieldname'), $fieldno, $counter));
                 return FALSE;
             }
         }
@@ -669,7 +689,7 @@ class Developer extends Admin_Controller {
     {
         if ( ! preg_match("/^([A-Za-z \-]+)$/", $str))
         {
-            $this->form_validation->set_message('_modulename_check', 'The %s field is not valid');
+            $this->form_validation->set_message('_modulename_check', lang('mb_modulename_check'));
             return FALSE;
         }
         else
