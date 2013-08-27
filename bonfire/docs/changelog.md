@@ -4,7 +4,7 @@
 
 * Minimum PHP version changed to 5.3
 * Updated CodeIgniter to version 2.1.4
-* Updated Bootstrap to version 2.1.1
+* Updated Bootstrap to version 2.3.2
 * Updated .htaccess sections taken from html5boilerplate, supporting the new Apache 2.4.
 * Updated jwerty to version 0.3.1 (seems to fix issue where creating a shortcut for '&' kills keyboard input on all admin pages)
 
