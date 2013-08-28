@@ -71,7 +71,7 @@ Changes are made directly within this wiki so please double-check all edits for 
 
 If you are unsure of the documentation changes, you can create an issue in the Bonfire [issues tracker](https://github.com/ci-bonfire/Bonfire/issues?sort=created&direction=desc&state=open) on GitHub.
 
-When working with documentation, please take into account the [API Documentation Guidelines](api_documentation_guidelines.html) and the [Coding Guidelines](coding_guidelines.html).
+When working with documentation, please take into account the [API Documentation Guidelines](api_documentation_guidelines.html) and the [Coding Conventions](coding_conventions).
 
 <a name="bonfire-code"></a>
 ## Contributing to the Bonfire Code
@@ -103,7 +103,7 @@ Now get busy and add or edit code. You're on your branch now, so you can write w
 <a name="follow-conventions"></a>
 ### Follow the Coding Conventions
 
-Bonfire follows a simple set of [Coding Conventions](coding_conventions.html) which are summarized here, but are given a more complete treatment in their own guide.
+Bonfire follows a simple set of [Coding Conventions](coding_conventions) which are summarized here, but are given a more complete treatment in their own guide.
 
 * Spaces, not tabs, are preferred.
 * No trailing whitespace. Blank lines should not have any space.
