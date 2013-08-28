@@ -158,7 +158,7 @@ a.brand {
 }
 
 .subnav .nav > li > a {
-	margin: 0;
+	margin: .1px;
 	padding-top: 11px;
 	padding-bottom: 11px;
 	font-size: 13px;
@@ -212,6 +212,12 @@ Toolbar Profile
 
 .toolbar-profile .inner {
 	width: 300px;
+}
+
+.toolbar-profile-info a {
+	display: block;
+	padding: 3px 20px;
+	color: #333333;
 }
 
 .toolbar-profile-info p {
