@@ -435,9 +435,10 @@ class BF_Model extends CI_Model
 
 		if (is_array($return))
 		{
+            $last_record = count($return) - 1;
 			foreach ($return as $key => &$row)
 			{
-				$row = $this->trigger('after_find', $row, ($key == count($return) - 1));
+				$row = $this->trigger('after_find', $row, ($key == $last_record));
 			}
 		}
 
