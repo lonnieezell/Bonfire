@@ -1,9 +1,9 @@
 <div class="row">
 
-	<?php if (has_permission('Activities.Own.View')): ?>
+	<?php logit($modules);if (has_permission('Activities.Own.View')): ?>
 	<div class="column size1of4 media-box">
 		<a href="<?php echo site_url(SITE_AREA .'/reports/activities/activity_own') ?>">
-			<img src="<?php echo Template::theme_url('images/activity-user.png') ?>" />
+			<img src="{{ Template:theme_url url='images/activity-user.png' }}" />
 		</a>
 
 		<p><b><?php echo lang('activity_own'); ?></b><br/>
@@ -58,8 +58,8 @@
 		<!-- Active Modules -->
 		<div class="admin-box">
 			<h3><?php echo lang('activity_top_modules'); ?></h3>
-			<?php if (isset($top_modules) && is_array($top_modules) && count($top_modules)) : ?>
 
+			{{ if top_modules }}
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -68,29 +68,28 @@
 						</tr>
 					</thead>
 					<tbody>
-					<?php foreach ($top_modules as $top_module) : ?>
+					{{ top_modules }}
 						<tr>
 							<td>
-								<strong><?php echo ucwords($top_module->module); ?></strong>
+								<strong>{{ module }}</strong>
 							</td>
-							<td><?php echo $top_module->activity_count; ?></td>
+							<td>{{ activity_count }}</td>
 						</tr>
-					<?php endforeach; ?>
+					 {{ /top_modules }}
 					</tbody>
 				</table>
-
-			<?php else : ?>
+			{{ else }}
 				<?php echo lang('activity_no_top_modules'); ?>
-			<?php endif; ?>
-		</div>
+			{{ endif }}
 
+		</div>
 	</div>
 
 	<div class="column size1of2 last-column">
 		<div class="admin-box">
 			<!-- Active Users -->
 			<h3><?php echo lang('activity_top_users'); ?></h3>
-			<?php if (isset($top_users) && is_array($top_users) && count($top_users)) : ?>
+			{{ if top_users }}
 
 				<table class="table table-striped">
 					<thead>
@@ -100,18 +99,18 @@
 						</tr>
 					</thead>
 					<tbody>
-					<?php foreach ($top_users as $top_user) : ?>
+					{{ top_users }}
 						<tr>
-							<td><strong><?php e($top_user->username == '' ? 'Not found':$top_user->username); ?></strong></td>
-							<td><?php echo $top_user->activity_count; ?></td>
+							<td><strong>{{ if username == '' }}Not found {{ else }}{{ username }}{{ endif }}</strong></td>
+							<td>{{ activity_count }}</td>
 						</tr>
-				<?php endforeach; ?>
+				 	{{ /top_users }}
 					</tbody>
 				</table>
 
-			<?php else : ?>
+			{{ else  }}
 				<?php echo lang('activity_no_top_users'); ?>
-			<?php endif; ?>
+			{{ endif }}
 		</div>
 	</div>
 </div>
@@ -133,7 +132,7 @@
 						<label for="activity_own_select">
 							<?php echo lang('activity_delete_own_note'); ?>
 							<select name="which" id="activity_own_select">
-								<option value="<?php echo $current_user->id; ?>"><?php e($current_user->username); ?></option>
+								<option value="{{ current_user.id }}">{{ current_user.username }}</option>
 							</select>
 						</label>
 					</div>
@@ -157,9 +156,9 @@
 							<?php echo lang('activity_delete_user_note'); ?>
 							<select name="which" id="activity_user_select">
 								<option value="all"><?php echo lang('activity_all_users'); ?></option>
-							<?php foreach ($users as $au) : ?>
-								<option value="<?php echo $au->id; ?>"><?php e($au->username); ?></option>
-							<?php endforeach; ?>
+							{{ users }}
+								<option value="{{ id }}">{{ username }}</option>
+							{{ /users }}
 							</select>
 						</label>
 					</div>
@@ -185,9 +184,9 @@
 							<select name="which" id="activity_module_select">
 								<option value="all"><?php echo lang('activity_all_modules'); ?></option>
 								<option value="core"><?php echo lang('activity_core'); ?></option>
-							<?php foreach ($modules as $mod) : ?>
-								<option value="<?php echo $mod; ?>"><?php echo $mod; ?></option>
-							<?php endforeach; ?>
+							{{ modules }}
+								<option value="{{ module }}">{{ module }}</option>
+							{{ /modules }}
 							</select>
 						</label>
 					</div>
@@ -211,9 +210,9 @@
 							<?php echo lang('activity_delete_date_note'); ?>
 							<select name="which" id="activity_date_select">
 								<option value="all"><?php echo lang('activity_all_dates'); ?></option>
-							<?php foreach ($activities as $activity) : ?>
-								<option value="<?php echo $activity->activity_id; ?>"><?php echo $activity->created_on; ?></option>
-							<?php endforeach; ?>
+							{{ activities }}
+								<option value="{{ activity_id }}">{{ created_on }}</option>
+							{{ /activities }}
 							</select>
 						</label>
 					</div>

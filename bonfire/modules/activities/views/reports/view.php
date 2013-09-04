@@ -28,12 +28,12 @@
 
 	<h2><?php echo sprintf(lang('activity_view'),($vars['view_which'] == ucwords(lang('activity_date')) ? $vars['view_which'] . ' before' : $vars['view_which']),$vars['name']); ?></h2>
 
-	<?php if (!isset($activity_content) || empty($activity_content)) : ?>
+	{{ if not activity_content }}
 	<div class="alert alert-error fade in">
 		<a class="close" data-dismiss="alert">&times;</a>
 		<h4 class="alert-heading"><?php echo lang('activity_not_found'); ?></h4>
 	</div>
-	<?php else : ?>
+	{{ else }}
 
 	<div id="user_activities">
 		<table class="table table-striped table-bordered" id="flex_table">
@@ -49,17 +49,17 @@
 			<tfoot></tfoot>
 
 			<tbody>
-				<?php foreach ($activity_content as $activity) : ?>
+				{{ activity_content }}
 				<tr>
-					<td><i class="icon-user">&nbsp;</i>&nbsp;<?php e($activity->username); ?></td>
-					<td><?php echo $activity->activity; ?></td>
-					<td><?php echo $activity->module; ?></td>
-					<td><?php echo date('M j, Y g:i A', strtotime($activity->created)); ?></td>
+					<td><i class="icon-user">&nbsp;</i>&nbsp;{{ username }}</td>
+					<td>{{ activity }}</td>
+					<td>{{ module }}</td>
+					<td><?php // echo date('M j, Y g:i A', strtotime($activity->created); ?>{{ created }}</td>
 				</tr>
-				<?php endforeach; ?>
+				 {{ /activity_content }}
 			</tbody>
 		</table>
 	</div>
 
 	<?php echo $this->pagination->create_links(); ?>
-	<?php endif; ?>
+	{{ endif }}
