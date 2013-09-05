@@ -265,3 +265,17 @@ $lang['bf_profiler_box_benchmarks']	= 'Benchmarks';
 $lang['bf_profiler_box_queries']	= 'Queries';
 $lang['bf_profiler_box_session']	= 'Session User Data';
 $lang['bf_profiler_box_files']		= 'Files';
+
+//--------------------------------------------------------------------
+// Form Validation
+//--------------------------------------------------------------------
+$lang['bf_form_unique'] 			= 'The value in &quot;%s&quot; is already being used.';
+$lang['bf_form_alpha_extra']		= 'The %s field may only contain alpha-numeric characters, spaces, periods, underscores, and dashes.';
+$lang['bf_form_matches_pattern']	= 'The %s field does not match the required pattern.';
+$lang['bf_form_valid_password']		= 'The %s field must be at least {min_length} characters long.';
+$lang['bf_form_valid_password_nums']	= '%s must contain at least 1 number.';
+$lang['bf_form_valid_password_syms']	= '%s must contain at least 1 punctuation mark.';
+$lang['bf_form_valid_password_mixed_1']	= '%s must contain at least 1 uppercase characters.';
+$lang['bf_form_valid_password_mixed_2']	= '%s must contain at least 1 lowercase characters.';
+$lang['bf_form_allowed_types']			= '%s must contain one of the allowed selections.';
+$lang['bf_form_one_of']					= '%s must contain one of the available selections.';

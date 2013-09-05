@@ -125,7 +125,7 @@ class MY_Form_validation extends CI_Form_validation
 	 */
 	function unique($value, $params)
 	{
-		$this->CI->form_validation->set_message('unique', 'The value in &quot;%s&quot; is already being used.');
+		$this->CI->form_validation->set_message('unique', lang('bf_form_unique'));
 
 		// allow for more than 1 parameter
 		$fields = explode(",", $params);
@@ -182,7 +182,7 @@ class MY_Form_validation extends CI_Form_validation
 	 */
 	function alpha_extra($str)
 	{
-		$this->CI->form_validation->set_message('alpha_extra', 'The %s field may only contain alpha-numeric characters, spaces, periods, underscores, and dashes.');
+		$this->CI->form_validation->set_message('alpha_extra', lang('bf_form_alpha_extra'));
 		return ( ! preg_match("/^([\.\s-a-z0-9_-])+$/i", $str)) ? FALSE : TRUE;
 
 	}//end alpha_extra()
@@ -206,7 +206,7 @@ class MY_Form_validation extends CI_Form_validation
 			return TRUE;
 		}
 
-		$this->CI->form_validation->set_message('matches_pattern', 'The %s field does not match the required pattern.');
+		$this->CI->form_validation->set_message('matches_pattern', lang('bf_form_matches_pattern'));
 
 		return FALSE;
 
@@ -257,7 +257,7 @@ class MY_Form_validation extends CI_Form_validation
 		// Check length
 		if (strlen($str) < $min_length)
 		{
-			$this->CI->form_validation->set_message('valid_password', 'The %s field must be at least '. $min_length .' characters long');
+			$this->CI->form_validation->set_message('valid_password', str_replace('{min_length}', $min_length, lang('bf_form_valid_password') ) );
 			return FALSE;
 		}
 
@@ -266,7 +266,7 @@ class MY_Form_validation extends CI_Form_validation
 		{
 			if (0 === preg_match('/[0-9]/', $str))
 			{
-				$this->CI->form_validation->set_message('valid_password', '%s must contain at least 1 number.');
+				$this->CI->form_validation->set_message('valid_password', lang('bf_form_valid_password_nums'));
 				return FALSE;
 			}
 		}
@@ -276,7 +276,7 @@ class MY_Form_validation extends CI_Form_validation
 		{
 			if (0 === preg_match('/[!@#$%^&*()._]/', $str))
 			{
-				$this->CI->form_validation->set_message('valid_password', '%s must contain at least 1 punctuation mark.');
+				$this->CI->form_validation->set_message('valid_password', lang('bf_form_valid_password_syms'));
 				return FALSE;
 			}
 		}
@@ -286,13 +286,13 @@ class MY_Form_validation extends CI_Form_validation
 		{
 			if (0 === preg_match('/[A-Z]/', $str))
 			{
-				$this->CI->form_validation->set_message('valid_password', '%s must contain at least 1 uppercase characters.');
+				$this->CI->form_validation->set_message('valid_password', lang('bf_form_valid_password_mixed_1'));
 				return FALSE;
 			}
 
 			if (0 === preg_match('/[a-z]/', $str))
 			{
-				$this->CI->form_validation->set_message('valid_password', '%s must contain at least 1 lowercase characters.');
+				$this->CI->form_validation->set_message('valid_password', lang('bf_form_valid_password_mixed_2'));
 				return FALSE;
 			}
 		}
@@ -328,7 +328,7 @@ class MY_Form_validation extends CI_Form_validation
 
 		if (!in_array($filetype, $type))
 		{
-			$this->CI->form_validation->set_message('allowed_types', '%s must contain one of the allowed selections.');
+			$this->CI->form_validation->set_message('allowed_types', lang('bf_form_allowed_types'));
 			return FALSE;
 		}
 
@@ -363,7 +363,7 @@ class MY_Form_validation extends CI_Form_validation
 
 		if (!in_array($str, $possible_values))
 		{
-			$this->CI->form_validation->set_message('one_of', '%s must contain one of the available selections.');
+			$this->CI->form_validation->set_message('one_of', lang('bf_form_one_of'));
 			return FALSE;
 		}
 
