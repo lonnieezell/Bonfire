@@ -68,7 +68,13 @@ class Activities extends Admin_Controller
 		$this->load->helper('date');
 		$activities = $this->activity_model->order_by('created_on', 'desc')->limit($limit,0)->find_by_module($module);
 
-		$this->load->view('activity_list', array('activities' => $activities));
+		$identity = $this->settings_lib->item('auth.login_type') == 'email';
+
+		array_walk($activities, function(&$n){
+			$n->created_on = relative_time(strtotime($n->created_on));
+		});
+
+		$this->load->view('activity_list', array('activities' => $activities, 'identity' => $identity));
 	}//end activity_list()
 
 	//--------------------------------------------------------------------

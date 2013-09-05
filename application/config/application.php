@@ -153,7 +153,7 @@ $config['template.admin_theme'] = 'admin';
 | If FALSE, views will be considered PHP views only.
 |
 */
-$config['template.parse_views']		= FALSE;
+$config['template.parse_views']		= TRUE;
 
 /*
 |--------------------------------------------------------------------

@@ -99,10 +99,14 @@ class Reports extends Admin_Controller
 					->order_by('activity_count','DESC')
 					->limit(5)
 					->get($this->activity_model->get_table());
-			Template::set('top_users', $query->result());
 
+			//Fix for usage on Lex Parser
+			$module_list = module_list();
+			array_walk($module_list,function(&$n){$n = array('module'=>$n);});
+
+			Template::set('top_users', $query->result());
 			Template::set('users', $this->user_model->where('users.deleted', 0)->find_all());
-			Template::set('modules', module_list());
+			Template::set('modules', $module_list);
 			Template::set('activities', $this->activity_model->find_all());
 			Template::render();
 		}

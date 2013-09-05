@@ -1,21 +1,15 @@
 <h3><?php echo lang('us_access_logs'); ?></h3>
 
-<?php if (isset($activities) && is_array($activities) && count($activities)) : ?>
-
+{{ if activities }}
 	<ul class="clean">
-	<?php foreach ($activities as $activity) : ?>
-
-		<?php
-			$identity = $this->settings_lib->item('auth.login_type') == 'email' ? $activity->email : $activity->username;
-		?>
-
+	{{ activities }}
 		<li>
-			<span class="small"><?php echo relative_time(strtotime($activity->created_on)) ?></span>
+			<span class="small">{{created_on}}</span>
 			<br/>
-			<b><?php e($identity) ?></b> <?php echo $activity->activity ?>
+			<b>{{ if identity }} {{ email }} {{ else }} {{ username }} {{ endif }}</b> {{ activity }}
 		</li>
-	<?php endforeach; ?>
+	 {{ /activities }}
 	</ul>
-<?php else : ?>
+{{ else }}
 	<?php echo lang('us_no_access_message'); ?>
-<?php endif; ?>
+{{ endif }}
