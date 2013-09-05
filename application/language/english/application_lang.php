@@ -191,6 +191,8 @@ $lang['bf_keyboard_shortcuts_edit']	= 'Update the keyboard shortcuts';
 $lang['bf_question_mark']		= '?';
 $lang['bf_language_direction']	= 'ltr';
 $lang['log_intro']				= 'These are your log messages';
+$lang['bf_name']				= 'Name';
+$lang['bf_status']				= 'Status';
 
 //--------------------------------------------------------------------
 // Login

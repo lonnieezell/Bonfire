@@ -8,10 +8,10 @@
 	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 	copies of the Software, and to permit persons to whom the Software is
 	furnished to do so, subject to the following conditions:
-	
+
 	The above copyright notice and this permission notice shall be included in
 	all copies or substantial portions of the Software.
-	
+
 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -37,6 +37,12 @@ $lang['em_timeout_secs']		= 'Timeout (seconds)';
 $lang['em_email_type']			= 'Email Type';
 $lang['em_save_settings']		= 'Save Settings';
 $lang['em_test_settings']		= 'Test Email Settings';
+$lang['em_sendmail_path']		= 'Sendmail Path';
+$lang['em_smtp_address']		= 'SMTP Server Address';
+$lang['em_smtp_username']		= 'SMTP Username';
+$lang['em_smtp_password']		= 'SMTP Password';
+$lang['em_smtp_port']			= 'SMTP Port';
+$lang['em_smtp_timeout']		= 'SMTP timeout';
 
 $lang['em_template_note']		= 'Emails are sent in HTML format. They can be customized by editing the header and footer, below.';
 $lang['em_header']				= 'Header';
@@ -65,6 +71,8 @@ $lang['em_attempts']			= 'Attempts';
 $lang['em_id']					= 'ID';
 $lang['em_to']					= 'To';
 $lang['em_subject']				= 'Subject';
+$lang['em_email_subject']		= 'Email Subject';
+$lang['em_email_content']		= 'Email Content';
 
 $lang['em_missing_data']		= 'One or more required fields are missing.';
 $lang['em_no_debug']			= 'Email was queued. No debug data is available.';

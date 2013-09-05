@@ -64,20 +64,20 @@ class Settings extends Admin_Controller
 
 		if (isset($_POST['save']))
 		{
-			$this->form_validation->set_rules('sender_email', 'System Email', 'required|trim|valid_email|max_length[120]');
-			$this->form_validation->set_rules('protocol', 'Email Server', 'trim');
+			$this->form_validation->set_rules('sender_email', 'lang:em_system_email', 'required|trim|valid_email|max_length[120]');
+			$this->form_validation->set_rules('protocol', 'lang:em_email_server', 'trim');
 
 			if ($this->input->post('protocol') == 'sendmail')
 			{
-				$this->form_validation->set_rules('mailpath', 'Sendmail Path', 'required|trim');
+				$this->form_validation->set_rules('mailpath', 'lang:em_sendmail_path', 'required|trim');
 			}
 			elseif ($this->input->post('protocol') == 'smtp')
 			{
-				$this->form_validation->set_rules('smtp_host', 'SMTP Server Address', 'required|trim');
-				$this->form_validation->set_rules('smtp_user', 'SMTP Username', 'trim');
-				$this->form_validation->set_rules('smtp_pass', 'SMTP Password', 'trim|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,20}]');
-				$this->form_validation->set_rules('smtp_port', 'SMTP Port', 'trim|numeric');
-				$this->form_validation->set_rules('smtp_timeout', 'SMTP timeout', 'trim|numeric');
+				$this->form_validation->set_rules('smtp_host', 'lang:em_smtp_address', 'required|trim');
+				$this->form_validation->set_rules('smtp_user', 'lang:em_smtp_username', 'trim');
+				$this->form_validation->set_rules('smtp_pass', 'lang:em_smtp_password', 'trim|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,20}]');
+				$this->form_validation->set_rules('smtp_port', 'lang:em_smtp_port', 'trim|numeric');
+				$this->form_validation->set_rules('smtp_timeout', 'lang:em_smtp_timeout', 'trim|numeric');
 			}
 
 			if ($this->form_validation->run() !== FALSE)
@@ -347,9 +347,9 @@ class Settings extends Admin_Controller
 		if (isset($_POST['create']))
 		{
 			// validate subject, content and recipients
-			$this->form_validation->set_rules('email_subject', 'Email Subject', 'required|trim|min_length[1]|max_length[255]');
-			$this->form_validation->set_rules('email_content', 'Email Content', 'required|trim|min_length[1]');
-			$this->form_validation->set_rules('checked','Users', 'required');
+			$this->form_validation->set_rules('email_subject', 'lang:em_email_subject', 'required|trim|min_length[1]|max_length[255]');
+			$this->form_validation->set_rules('email_content', 'lang:em_email_content', 'required|trim|min_length[1]');
+			$this->form_validation->set_rules('checked', 'lang:bf_users', 'required');
 
 			if ($this->form_validation->run() === FALSE)
 			{
