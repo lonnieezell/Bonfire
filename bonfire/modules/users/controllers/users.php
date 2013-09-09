@@ -46,7 +46,7 @@ class Users extends Front_Controller
 
 		$this->load->model('users/user_model');
 
-		$this->load->library('users/auth');
+		$this->load->driver('auth');
 
 		$this->lang->load('users');
 
@@ -71,11 +71,11 @@ class Users extends Front_Controller
 				$remember = $this->input->post('remember_me') == '1' ? TRUE : FALSE;
 
 				// Try to login
-				if ($this->auth->login($this->input->post('login'), $this->input->post('password'), $remember) === TRUE)
+				if ($this->auth->login(array('login' => $this->input->post('login'), 'password' => $this->input->post('password')), $remember) === TRUE)
 				{
-
+					$this->session->set_userdata('user_id_test',$this->auth->user());
 					// Log the Activity
-					log_activity($this->auth->user_id(), lang('us_log_logged') . ': ' . $this->input->ip_address(), 'users');
+					log_activity($this->auth->user()->id, lang('us_log_logged') . ': ' . $this->input->ip_address(), 'users');
 
 					// Now redirect.  (If this ever changes to render something,
 					// note that auth->login() currently doesn't attempt to fix

@@ -96,9 +96,9 @@ Permissions can be assigned to roles through the <tt>Edit Role</tt> screen. Alte
 <a name="access"></a>
 ## Restricting Access
 
-The <tt>Auth</tt> library provides several useful methods to restrict access, or check access, from any place in your application. If not already loaded, you can load the Auth library with the following code:
+The <tt>Auth</tt> driver library provides several useful methods to restrict access, or check access, from any place in your application. If not already loaded, you can load the Auth driver library with the following code:
 
-    $this->load->library('users/auth');
+    $this->load->driver('auth');
 
 
 
