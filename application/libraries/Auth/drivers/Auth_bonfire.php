@@ -296,8 +296,6 @@ class Auth_bonfire extends CI_Driver
             return $this->user;
         }
 
-        $this->user = FALSE;
-
         // Is there any session data we can use?
         if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
         {
@@ -312,21 +310,17 @@ class Auth_bonfire extends CI_Driver
                 // Ensure user_token is still equivalent to the SHA1 of the user_id and password_hash
                 if (do_hash($this->ci->session->userdata('user_id') . $user->password_hash) === $this->ci->session->userdata('user_token'))
                 {
+                    $user->id = (int) $user->id;
+                    $user->role_id = (int) $user->role_id;
                     $this->user = $user;
+                    return $user;
                 }
             }
         }//end if
-
-        if ($this->user !== FALSE)
-        {
-            $this->user->id = (int) $this->user->id;
-            $this->user->role_id = (int) $this->user->role_id;
-        }
-
-        return $this->user;
+        
+        return FALSE;
 
     }//end user()
-
 
     //--------------------------------------------------------------------
 

@@ -26,10 +26,9 @@
 // Authentication
 //--------------------------------------------------------------------
 //
-	// Include the prefix here
-    $config['auth.allowed_drivers'] = array('auth_bonfire');
+	// Use only the name of the class (without prefix)
+    $config['auth.allowed_drivers'] = array('bonfire');
 
-    // Use only the name of the class (without prefix)
     $config['auth.default_driver']  = 'bonfire';
 
 //--------------------------------------------------------------------
