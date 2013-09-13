@@ -57,7 +57,7 @@ class Home extends CI_Controller
 			redirect( site_url('install') );
 		}
 
-		$this->load->library('users/auth');
+		$this->load->driver('auth');
 		$this->set_current_user();
 
 		Template::render();
