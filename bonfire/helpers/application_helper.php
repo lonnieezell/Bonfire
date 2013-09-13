@@ -412,6 +412,32 @@ if ( ! function_exists('module_config'))
 }
 
 //--------------------------------------------------------------------
+
+if ( ! function_exists('module_exists'))
+{
+	/**
+	 * Checks to see if a module exists in any of the module
+	 * locations.
+	 *
+	 * @param  string $module_name The name of module to check for.
+	 * @return boolean
+	 */
+	function module_exists($module_name)
+	{
+		$module_folders = module_folders();
+		foreach ($module_folders as $folder)
+		{
+			if (is_dir($folder .'/'. $module_name))
+			{
+				return TRUE;
+			}
+		}
+
+		return FALSE;
+	}
+}
+
+//--------------------------------------------------------------------
 // Misc. Helpers
 //--------------------------------------------------------------------
 
@@ -681,7 +707,11 @@ if ( ! function_exists('list_contexts'))
 if ( ! function_exists('log_activity'))
 {
 	/**
-	 * Logs a new activity, if config item 'enable_activities' is true
+	 * Logs a new activity, if config item 'enable_activities' is true.
+	 *
+	 * This method checks that the module exists (or at least, the module folder)
+	 * so that this function can be used in base code and even allow the Activities
+	 * module to be removed.
 	 *
 	 * @access public
 	 *
@@ -693,13 +723,20 @@ if ( ! function_exists('log_activity'))
 	 */
 	function log_activity($user_id=null, $activity='', $module='any')
 	{
+		if ( ! module_exists('activities'))
+		{
+			return;
+		}
+
 		$ci =& get_instance();
 
-		if ($ci->config->item('enable_activity_logging') === TRUE)
+		if ($ci->config->item('enable_activity_logging') !== TRUE)
 		{
-			$ci->load->model('activities/activity_model');
-			$ci->activity_model->log_activity($user_id, $activity, $module);
+			return;
 		}
+
+		$ci->load->model('activities/activity_model');
+		$ci->activity_model->log_activity($user_id, $activity, $module);
 	}
 }
 
