@@ -18,7 +18,7 @@
 /**
  * Auth Library
  *
- * Provides authentication functions for logging users 
+ * Provides authentication functions for logging users
  * in/out and managing login attempts.
  *
  * Security and ease-of-use are the two primary goals of the Auth system in Bonfire.
@@ -32,7 +32,7 @@
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
  *
  */
-class Auth_bonfire extends CI_Driver 
+class Auth_bonfire extends CI_Driver
 {
     /**
      * The url to redirect to on successful login.
@@ -62,24 +62,6 @@ class Auth_bonfire extends CI_Driver
     private $ip_address;
 
     /**
-     * Stores the name of all existing permissions
-     *
-     * @access private
-     *
-     * @var array
-     */
-    private $permissions = NULL;
-
-    /**
-     * Stores permissions by role so we don't have to scour the database more than once.
-     *
-     * @access private
-     *
-     * @var array
-     */
-    private $role_permissions = array();
-
-    /**
      * A pointer to the CodeIgniter instance.
      *
      * @access private
@@ -102,15 +84,7 @@ class Auth_bonfire extends CI_Driver
 
         $this->ip_address = $this->ci->input->ip_address();
 
-        // We need the users language file for this to work
-        // from other modules.
-        $this->ci->lang->load('users/users');
-        $this->ci->load->model('users/user_model');
-
         $this->ci->load->library('session');
-
-        // Try to log the user in from session/cookie data
-        $this->autologin();
 
         log_message('debug', 'Auth Bonfire initialized.');
 
@@ -222,24 +196,14 @@ class Auth_bonfire extends CI_Driver
             // We've successfully validated the login, so setup the session
             $this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', $user->username);
 
-            // Save the login info
-            $data = array(
-                'last_login'            => date('Y-m-d H:i:s', time()),
-                'last_ip'               => $this->ip_address,
-            );
-            $this->ci->user_model->update($user->id, $data);
-
             // Clear the cached result of user() (and hence is_logged_in(), user_id() etc).
             // Doesn't fix `$this->current_user` in controller (for this page load)...
             unset($this->user);
 
-            $trigger_data = array('user_id'=>$user->id, 'role_id'=>$user->role_id);
-            Events::trigger('after_login', $trigger_data );
-
             // Save our redirect location
             $this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '';
 
-            return TRUE;
+            return $user;
         }
 
         // Bad password
@@ -263,158 +227,14 @@ class Auth_bonfire extends CI_Driver
      */
     public function logout()
     {
-        $data = array(
-            'user_id'   => $this->user_id(),
-            'role_id'   => $this->role_id()
-        );
-
-        Events::trigger('before_logout', $data);
-
         // Destroy the autologin information
         $this->delete_autologin();
-
-        // Destroy the session
-        $this->ci->session->sess_destroy();
-
     }//end logout()
 
     //--------------------------------------------------------------------
 
-    /**
-     * Checks the session for the required info, then verifies against the database.
-     *
-     * @access public
-     *
-     * @return object (or a false value)
-     */
-    public function user()
-    {
-        // If we've already checked this session,
-        // return that.
-        if (isset($this->user))
-        {
-            return $this->user;
-        }
-
-        // Is there any session data we can use?
-        if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
-        {
-            // Grab the user account
-            $user = $this->ci->user_model->find($this->ci->session->userdata('user_id'));
-
-            if ($user !== FALSE)
-            {
-                // load do_hash()
-                $this->ci->load->helper('security');
-
-                // Ensure user_token is still equivalent to the SHA1 of the user_id and password_hash
-                if (do_hash($this->ci->session->userdata('user_id') . $user->password_hash) === $this->ci->session->userdata('user_token'))
-                {
-                    $user->id = (int) $user->id;
-                    $user->role_id = (int) $user->role_id;
-                    $this->user = $user;
-                    return $user;
-                }
-            }
-        }//end if
-        
-        return FALSE;
-
-    }//end user()
-
-    //--------------------------------------------------------------------
-
-    /**
-     * Checks the session for the required info, then verifies against the database.
-     *
-     * @access public
-     *
-     * @return bool
-     */
-    public function is_logged_in()
-    {
-        return (bool) $this->user();
-
-    }//end is_logged_in()
-
-    //--------------------------------------------------------------------
-
-    /**
-     * Checks that a user is logged in (and, optionally of the correct role)
-     * and, if not, send them to the login screen.
-     *
-     * If no permission is checked, will simply verify that the user is logged in.
-     * If a permission is passed in to the first parameter, will check the user's role
-     * and verify that role has the appropriate permission.
-     *
-     * @access public
-     *
-     * @param string $permission (Optional) A string representing the permission to check for.
-     * @param string $uri        (Optional) A string representing an URI to redirect, if FALSE
-     *
-     * @return bool TRUE if the user has the appropriate access permissions. Redirect to the previous page if the user doesn't have permissions. Redirect '/login' page if the user is not logged in.
-     */
-    public function restrict($permission=NULL, $uri=NULL)
-    {
-        // If user isn't logged in, don't need to check permissions
-        if ($this->is_logged_in() === FALSE)
-        {
-            $this->ci->load->library('Template');
-            Template::set_message($this->ci->lang->line('us_must_login'), 'error');
-            Template::redirect('login');
-        }
-
-        // Check to see if the user has the proper permissions
-        if ( ! empty($permission) && ! $this->has_permission($permission))
-        {
-            // set message telling them no permission THEN redirect
-            Template::set_message( lang('us_no_permission'), 'attention');
-
-            if ( ! $uri)
-            {
-                $uri = $this->ci->session->userdata('previous_page');
-
-                // If previous page was the same (e.g. user pressed F5),
-                // but permission has been removed, then redirecting
-                // to it will cause an infinite loop.
-                if ($uri == current_url())
-                {
-                    $uri = site_url();
-                }
-            }
-            Template::redirect($uri);
-        }
-
-        return TRUE;
-
-    }//end restrict()
-
-    //--------------------------------------------------------------------
-
-
-
     //--------------------------------------------------------------------
     // !UTILITY METHODS
-    //--------------------------------------------------------------------
-
-    /**
-     * Retrieves the user_id from the current session.
-     *
-     * @access public
-     *
-     * @return int
-     */
-    public function user_id()
-    {
-        if ( ! $this->is_logged_in())
-        {
-            return FALSE;
-        }
-        
-        return $this->user()->id;
-
-    }//end user_id()
-
     //--------------------------------------------------------------------
 
     /**
@@ -435,205 +255,6 @@ class Auth_bonfire extends CI_Driver
         return $this->ci->session->userdata('identity');
 
     }//end identity()
-
-    //--------------------------------------------------------------------
-
-    /**
-     * Retrieves the role_id from the current session.
-     *
-     * @return int The user's role_id.
-     */
-    public function role_id()
-    {
-        if ( ! $this->is_logged_in())
-        {
-            return FALSE;
-        }
-
-        return $this->user()->role_id;
-
-    }//end role_id()
-
-    //--------------------------------------------------------------------
-
-    /**
-     * Verifies that the user is logged in and has the appropriate access permissions.
-     *
-     * @access public
-     *
-     * @param string $permission A string with the permission to check for, ie 'Site.Signin.Allow'
-     * @param int    $role_id    The id of the role to check the permission against. If role_id is not passed into the method, then it assumes it to be the current user's role_id.
-     * @param bool   $override   Whether or not access is granted if this permission doesn't exist in the database
-     *
-     * @return bool TRUE/FALSE
-     */
-    public function has_permission($permission, $role_id=NULL, $override = FALSE)
-    {
-        // move permission to lowercase for easier checking.
-        $permission = strtolower($permission);
-
-        // If no role is being provided, assume it's for the current
-        // logged in user.
-        if (empty($role_id))
-        {
-            $role_id = $this->role_id();
-        }
-
-        $this->load_permissions();
-        $this->load_role_permissions($role_id);
-
-        // did we pass?
-        if (isset($this->permissions[$permission]))
-        {
-            $permission_id = $this->permissions[$permission];
-
-            if (isset($this->role_permissions[$role_id][$permission_id]))
-            {
-                return TRUE;
-            }
-        }
-        elseif ($override)
-        {
-            return TRUE;
-        }
-
-        return FALSE;
-
-
-    }//end has_permission()
-
-    //--------------------------------------------------------------------
-
-    /**
-     * Checks to see whether a permission is in the system or not.
-     *
-     * @access public
-     *
-     * @param string $permission The name of the permission to check for. NOT case sensitive.
-     *
-     * @return bool TRUE/FALSE
-     */
-    public function permission_exists($permission)
-    {
-        // move permission to lowercase for easier checking.
-        $permission = strtolower($permission);
-
-        $this->load_permissions();
-
-        return isset($this->permissions[$permission]);
-
-    }//end permission_exists()
-
-    //--------------------------------------------------------------------
-
-    /**
-     * Load the permission names from the database
-     *
-     * @access public
-     *
-     * @param int $role_id An INT with the role id to grab permissions for.
-     *
-     * @return void
-     */
-    private function load_permissions()
-    {
-        if ( ! isset($this->permissions))
-        {
-            $this->ci->load->model('permissions/permission_model');
-
-            $perms = $this->ci->permission_model->find_all();
-
-            $this->permissions = array();
-
-            foreach ($perms as $perm)
-            {
-                $this->permissions[strtolower($perm->name)] = $perm->permission_id;
-            }
-        }
-
-    }//end load_permissions()
-
-    /**
-     * Load the role permissions from the database
-     *
-     * @access public
-     *
-     * @param int $role_id An INT with the role id to grab permissions for.
-     *
-     * @return void
-     */
-    private function load_role_permissions($role_id=NULL)
-    {
-        $role_id = ! is_null($role_id) ? $role_id : $this->role_id();
-
-        if ( ! isset($this->role_permissions[$role_id]))
-        {
-            $this->ci->load->model('roles/role_permission_model');
-
-            $role_perms = $this->ci->role_permission_model->find_for_role($role_id);
-
-            $this->role_permissions[$role_id] = array();
-
-            if (is_array($role_perms))
-            {
-                foreach($role_perms as $permission)
-                {
-                    $this->role_permissions[$role_id][$permission->permission_id] = TRUE;
-                }
-            }
-        }
-
-    }//end load_role_permissions()
-
-    //--------------------------------------------------------------------
-
-
-    /**
-     * Retrieves the role_name for the requested role.
-     *
-     * @access public
-     *
-     * @param int $role_id An int representing the role_id.
-     *
-     * @return string A string with the name of the matched role.
-     */
-    public function role_name_by_id($role_id)
-    {
-        if ( ! is_numeric($role_id))
-        {
-            return '';
-        }
-
-        $roles = array();
-
-        // If we already stored the role names, use those...
-        if (isset($this->role_names))
-        {
-            $roles = $this->role_names;
-        }
-        else
-        {
-            if ( ! class_exists('Role_model'))
-            {
-                $this->ci->load->model('roles/role_model');
-            }
-            $results = $this->ci->role_model->select('role_id, role_name')->find_all();
-
-            foreach ($results as $role)
-            {
-                $roles[$role->role_id] = $role->role_name;
-            }
-        }
-
-        // Try to return the role name
-        if (isset($roles[$role_id]))
-        {
-            return $roles[$role_id];
-        }
-
-        return '';
-
-    }//end role_name_by_id()
 
     //--------------------------------------------------------------------
 
@@ -787,7 +408,7 @@ class Auth_bonfire extends CI_Driver
      *
      * @return void
      */
-    protected function autologin()
+    public function autologin()
     {
         $this->ci->load->library('settings/settings_lib');
 
@@ -814,24 +435,23 @@ class Auth_bonfire extends CI_Driver
 
         if ($query->num_rows() == 1)
         {
-            // Save logged in status to save on db access later.
-            $this->logged_in = TRUE;
+            // Grab the current user info for the session
+            $this->ci->load->model('users/User_model', 'user_model');
+            $user = $this->ci->user_model->select('id, username, email, password_hash, users.role_id')->find($user_id);
 
             // If a session doesn't exist, we need to refresh our autologin token
             // and get the session started.
             if ( ! $this->ci->session->userdata('user_id'))
             {
-                // Grab the current user info for the session
-                $this->ci->load->model('users/User_model', 'user_model');
-                $user = $this->ci->user_model->select('id, username, email, password_hash, users.role_id')->find($user_id);
-
                 if ( ! $user)
                 {
-                    return;
+                    return NULL;
                 }
 
                 $this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, TRUE, $test_token, $user->username);
             }
+
+            return $user;
         }
 
     }//end autologin()
