@@ -161,7 +161,7 @@ if ( ! function_exists('user_time'))
 		if ( ! $timezone)
 		{
 			$CI =& get_instance();
-			$CI->load->library('users/auth');
+			$CI->load->driver('auth');
 			if ($CI->auth->is_logged_in())
 			{
 				$current_user = $CI->user_model->find($CI->auth->user_id());

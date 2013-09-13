@@ -45,7 +45,7 @@ class Install extends CI_Controller {
         }
         else
         {
-            $this->load->library('users/auth');
+            $this->load->driver('auth');
             $this->load->library('settings/settings_lib');
         }
 
