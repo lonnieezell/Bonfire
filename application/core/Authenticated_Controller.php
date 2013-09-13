@@ -23,9 +23,9 @@ class Authenticated_Controller extends Base_Controller
 	 */
 	public function __construct()
 	{
-		// Load the Auth library before the parent constructor to ensure
+		// Load the Auth Driver library before the parent constructor to ensure
 		// the current user's settings are honored by the parent
-		$this->load->library('users/auth');
+		$this->load->driver('auth');
 
 		parent::__construct();
 

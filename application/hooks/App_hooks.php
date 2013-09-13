@@ -132,7 +132,7 @@ class App_hooks
 		{
 			if (!class_exists('Auth'))
 			{
-				$this->ci->load->library('users/auth');
+				$this->ci->load->driver('auth');
 			}
 
 			if (!$this->ci->auth->has_permission('Site.Signin.Offline'))
