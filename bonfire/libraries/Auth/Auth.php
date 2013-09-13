@@ -474,7 +474,7 @@ class Auth extends CI_Driver_Library {
             return FALSE;
         }
 
-        return $this->user()->id;
+        return (int)$this->user()->id;
 
     }//end user_id()
 
