@@ -47,6 +47,15 @@ class Auth extends CI_Driver_Library {
     protected $valid_drivers = array();
 
     /**
+     * Stores the logged in user after the first test to improve performance.
+     *
+     * @access private
+     *
+     * @var object
+     */
+    private $user;
+
+    /**
      * Stores the name of all existing permissions
      *
      * @var array
@@ -116,7 +125,9 @@ class Auth extends CI_Driver_Library {
 
         if ($user)
         {
-            $this->user = $user;
+            // Clear the cached result of user() (and hence is_logged_in(), user_id() etc).
+            // Doesn't fix `$this->current_user` in controller (for this page load)...
+            unset($this->user);
 
             // Save the login info
             $data = array(
@@ -179,7 +190,13 @@ class Auth extends CI_Driver_Library {
     {
         if (empty($this->user))
         {
-            return NULL;
+            // try and retrieve a user session
+            $user = $this->{$this->_driver}->retrieve_session();
+
+            if($user)
+            {
+                $this->user = $user;
+            }
         }
 
         return $this->user;

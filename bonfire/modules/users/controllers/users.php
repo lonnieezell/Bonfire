@@ -128,10 +128,10 @@ class Users extends Front_Controller
 	 */
 	public function logout()
 	{
-		if (isset($this->current_user->id))
+		if (isset($this->auth->user()->id))
 		{
 			// Login session is valid.  Log the Activity
-			log_activity($this->current_user->id, lang('us_log_logged_out') . ': ' . $this->input->ip_address(), 'users');
+			log_activity($this->auth->user_id(), lang('us_log_logged_out') . ': ' . $this->input->ip_address(), 'users');
 		}
 
 		// Always clear browser data (don't silently ignore user requests :).
