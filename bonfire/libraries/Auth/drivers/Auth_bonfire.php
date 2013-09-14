@@ -44,15 +44,6 @@ class Auth_bonfire extends CI_Driver
     public $login_destination = '';
 
     /**
-     * Stores the logged in user after the first test to improve performance.
-     *
-     * @access private
-     *
-     * @var object
-     */
-    private $user;
-
-    /**
      * Stores the ip_address of the current user for performance reasons.
      *
      * @access private
@@ -111,7 +102,7 @@ class Auth_bonfire extends CI_Driver
             return FALSE;
         }
 
-        $this->ci->load->model('users/User_model', 'user_model');
+        $this->ci->load->model('users/user_model');
 
         // Grab the user from the db
         $selects = 'id, email, username, users.role_id, users.deleted, users.active, banned, ban_message, password_hash, password_iterations, force_password_reset';
@@ -195,10 +186,6 @@ class Auth_bonfire extends CI_Driver
 
             // We've successfully validated the login, so setup the session
             $this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', $user->username);
-
-            // Clear the cached result of user() (and hence is_logged_in(), user_id() etc).
-            // Doesn't fix `$this->current_user` in controller (for this page load)...
-            unset($this->user);
 
             // Save our redirect location
             $this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '';
@@ -436,7 +423,7 @@ class Auth_bonfire extends CI_Driver
         if ($query->num_rows() == 1)
         {
             // Grab the current user info for the session
-            $this->ci->load->model('users/User_model', 'user_model');
+            $this->ci->load->model('users/user_model');
             $user = $this->ci->user_model->select('id, username, email, password_hash, users.role_id')->find($user_id);
 
             // If a session doesn't exist, we need to refresh our autologin token
@@ -632,6 +619,32 @@ class Auth_bonfire extends CI_Driver
     }//end setup_session
 
     //--------------------------------------------------------------------
+
+    public function retrieve_session()
+    {
+        // Is there any session data we can use?
+        if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
+        {
+            // Grab the user account
+            $this->ci->load->model('users/user_model');
+            $user = $this->ci->user_model->find($this->ci->session->userdata('user_id'));
+
+            if ($user !== FALSE)
+            {
+                // load do_hash()
+                $this->ci->load->helper('security');
+
+                // Ensure user_token is still equivalent to the SHA1 of the user_id and password_hash
+                if (do_hash($this->ci->session->userdata('user_id') . $user->password_hash) === $this->ci->session->userdata('user_token'))
+                {
+                    return $user;
+                }
+            }
+        }//end if
+        
+        return FALSE;
+
+    }//end retrieve_session
 
     /**
      * Returns the identity to be used upon user registration.
