@@ -1,5 +1,8 @@
-<?php echo modules::run('update/update/update_check'); ?>
+<?php echo modules::run('update/update/update_check');
 
+$dateFormat = 'g:i a';
+
+?>
 <div class="admin-box">
 
 	<table class="table table-striped">
@@ -20,26 +23,11 @@
 			</tr>
 			<tr>
 				<td>Server Time</td>
-				<td>
-				<?php
-
-			        $thetimeis = getdate(time());
-			            $thehour = $thetimeis['hours'];
-			            $theminute = $thetimeis['minutes'];
-			        if($thehour > 12){
-			            $thehour = $thehour - 12;
-			            $dn = "pm";
-			        }else{
-			            $dn = "am";
-			        }
-
-					echo "$thehour:$theminute $dn";
-				?>
-				</td>
+				<td><?php echo date($dateFormat); ?></td>
 			</tr>
 			<tr>
 				<td>Local Time</td>
-				<td><?php echo date('h:i a'); ?></td>
+				<td><?php echo user_time(time(), false, $dateFormat); ?></td>
 			</tr>
 			<tr>
 				<td>Database Name</td>

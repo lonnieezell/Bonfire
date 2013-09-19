@@ -62,6 +62,7 @@ class Developer extends Admin_Controller
 	 */
 	public function index()
 	{
+        $this->load->helper('date');
 		Template::render();
 
 	}//end index()
