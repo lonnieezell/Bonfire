@@ -164,8 +164,7 @@ if ( ! function_exists('user_time'))
 			$CI->load->library('users/auth');
 			if ($CI->auth->is_logged_in())
 			{
-				$current_user = $CI->user_model->find($CI->auth->user_id());
-				$timezone = standard_timezone($current_user->timezone);
+				$timezone = standard_timezone($CI->auth->user()->timezone);
 			}
 		}
 
