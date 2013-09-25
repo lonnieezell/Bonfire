@@ -22,6 +22,11 @@
 	THE SOFTWARE.
 */
 
+/**
+ * Used to set the default timezone for the user registration page
+ */
+$config['site.default_user_timezone'] = 'UM8';
+
 //--------------------------------------------------------------------
 // !BACKUPS
 //--------------------------------------------------------------------
