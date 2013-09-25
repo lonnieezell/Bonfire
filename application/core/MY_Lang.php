@@ -53,6 +53,11 @@ class MY_Lang extends MX_Lang {
 	 */
 	public function load($langfile = '', $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '', $module = '')
 	{
+		if (is_array($langfile)) {
+			foreach($langfile as $_lang) $this->load($_lang);
+			return $return ? $this->language : TRUE;
+        }
+
 		// This check ignores $idiom, matching CI behaviour
 		// (though we don't do the buggy add_suffix dance at this point).
 		if (in_array($langfile . '_lang.php', $this->is_loaded, TRUE))
@@ -130,7 +135,7 @@ class MY_Lang extends MX_Lang {
 
 		if (empty($lang))
 		{
-			// This code copied from CI Lang.  Obviously this means 
+			// This code copied from CI Lang.  Obviously this means
 			// passing $add_suffix=FALSE doesn't work for module files
 			// (above); the resulting behaviour matches MX_Lang.
 			$langfile = str_replace('.php', '', $langfile);
