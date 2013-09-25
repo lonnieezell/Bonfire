@@ -2,7 +2,7 @@
 
 $errorClass = empty($errorClass) ? ' error' : $errorClass;
 $controlClass = empty($controlClass) ? 'span4' : $controlClass;
-$registerClass = check_method('register') ? ' required' : '';
+$registerClass = $this->router->fetch_method() == 'register' ?  ' required' : '';
 
 $defaultLanguage = isset($user->language) ? $user->language : strtolower(settings_item('language'));
 $defaultTimezone = isset($current_user) ? $current_user->timezone : strtoupper(settings_item('site.default_user_timezone'));
@@ -54,7 +54,7 @@ if (isset($languages) && is_array($languages) && count($languages)) :
 <?php
     else :
 ?>
-<div class="control-group<?php iif(form_error('language'), $errorClass); ?>">
+<div class="control-group<?php echo iif(form_error('language'), $errorClass); ?>">
     <label class="control-label required" for="language"><?php echo lang('bf_language'); ?></label>
     <div class="controls">
         <select name="language" id="language" class="chzn-select <?php echo $controlClass; ?>">
@@ -71,7 +71,7 @@ if (isset($languages) && is_array($languages) && count($languages)) :
     endif;
 endif;
 ?>
-<div class="control-group<?php iif(form_error('timezone'), $errorClass); ?>">
+<div class="control-group<?php echo iif(form_error('timezone'), $errorClass); ?>">
     <label class="control-label required" for="timezones"><?php echo lang('bf_timezone'); ?></label>
     <div class="controls">
         <?php echo timezone_menu(set_value('timezones', isset($user) ? $user->timezone : $defaultTimezone), $controlClass); ?>
