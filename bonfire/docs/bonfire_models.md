@@ -45,12 +45,15 @@ To get started with a new model, you can use the following skeleton file:
         protected $before_delete    = array();
         protected $after_delete     = array();
 
+        protected $return_insert_id = true;
         protected $return_type      = 'object';
-        protected $protected_attributes   = array();
+        protected $protected_attributes = array();
+        protected $field_info           = array();
 
         protected $validation_rules         = array();
         protected $insert_validation_rules  = array();
         protected $skip_validation          = false;
+        protected $empty_validation_rules   = array();
     }
 
 
@@ -118,6 +121,10 @@ If <tt>$set_created == TRUE</tt>, Bonfire will set the <tt>created_on</tt> field
 
 The name of the fields to store the user id in can be set by changing the <tt>created_by_field</tt>, <tt>modified_by_field</tt> and <tt>deleted_by_field</tt> values. They default to <tt>created_by</tt>, <tt>modified_by</tt> and <tt>deleted_by</tt>, respectively.
 
+### <tt>$deleted_field</tt> & <tt>$deleted_by_field</tt>
+
+<tt>deleted_field</tt> and <tt>deleted_by_field</tt> specify the name of the fields used to determine whether a row has been deleted (when <tt>$soft_deletes</tt> == true) and the user which deleted the row (when <tt>$log_user</tt> == true).
+
 ### <tt>$escape</tt>
 
 When FALSE, the <tt>select()</tt> method will not try to protect your field names with backticks. This is useful if you need a compound statement.
@@ -141,6 +148,25 @@ This is simply a list of keys that will always be removed from the data arrays p
 
     protected $protected_attributes = array( 'submit', 'id' );
 
+### <tt>$field_info</tt>
+
+This is an array of field definitions which may be used (in combination with <tt>prep_data()</tt>) to define the model's interaction with the database. If <tt>field_info</tt> is empty, the model will query the database to fill this array when using <tt>get_field_info()</tt>. The <tt>field_info</tt> array could also be used by a controller to help map post data to the fields in the model. See CodeIgniter's <tt>$this->db->field_data()</tt> [http://ellislab.com/codeigniter/user-guide/database/fields.html](http://ellislab.com/codeigniter/user-guide/database/fields.html)
+
+The field definition should be as follows:
+
+    $field_info = array(
+        array(
+            'name'          => 'id',
+            'type'          => 'int',
+            'primary_key'   => 1,
+        ),
+        array(
+            'name'          => 'field_1_name',
+            'type'          => 'varchar',
+            'default'       => '',
+            'max_length'    => 255,
+        ),
+    );
 
 ## Provided Methods
 
@@ -408,6 +434,14 @@ A convenience method to return only a single field of the specified row. The fir
 
 
 Returns the value of the row's field, or FALSE.
+
+### <tt>get_field_info()</tt>
+
+Returns the <tt>$field_info</tt> array, attempting to populate it from the database if empty.
+
+### <tt>get_created_field()</tt>, <tt>get_modified_field()</tt>, <tt>get_deleted_field()</tt>, <tt>get_created_by_field()</tt>, <tt>get_modified_by_field()</tt>, & <tt>get_deleted_by_field()</tt>
+
+Returns the names of the respective fields, or an empty string if the fields are not used by the model (based on the values of <tt>set_created</tt>, <tt>set_modified</tt>, <tt>soft_deletes</tt>, and <tt>log_user</tt>).
 
 ## Return Types
 

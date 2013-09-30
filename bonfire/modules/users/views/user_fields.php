@@ -1,8 +1,11 @@
 <?php /* /bonfire/modules/users/views/user_fields.php */
 
-$errorClass = empty($errorClass) ? ' error' : $errorClass;
-$controlClass = empty($controlClass) ? 'span4' : $controlClass;
-$registerClass = $this->router->fetch_method() == 'register' ?  ' required' : '';
+$currentMethod = $this->router->fetch_method();
+
+$errorClass     = empty($errorClass) ? ' error' : $errorClass;
+$controlClass   = empty($controlClass) ? 'span4' : $controlClass;
+$registerClass  = $currentMethod == 'register' ? ' required' : '';
+$editSettings   = $currentMethod == 'edit';
 
 $defaultLanguage = isset($user->language) ? $user->language : strtolower(settings_item('language'));
 $defaultTimezone = isset($current_user) ? $current_user->timezone : strtoupper(settings_item('site.default_user_timezone'));
@@ -46,7 +49,17 @@ $defaultTimezone = isset($current_user) ? $current_user->timezone : strtoupper(s
         <span class="help-inline"><?php echo form_error('pass_confirm'); ?></span>
     </div>
 </div>
-<?php
+<?php if ($editSettings) : ?>
+<div class="control-group<?php echo iif(form_error('force_password_reset'), $errorClass); ?>">
+    <div class="controls">
+        <label class="checkbox" for="force_password_reset">
+            <input type="checkbox" id="force_password_reset" name="force_password_reset" value="1" <?php echo set_checkbox('force_password_reset', empty($user->force_password_reset)); ?> />
+            <?php echo lang('us_force_password_reset'); ?>
+        </label>
+    </div>
+</div>
+<?php endif;
+
 if (isset($languages) && is_array($languages) && count($languages)) :
     if(count($languages) == 1):
 ?>

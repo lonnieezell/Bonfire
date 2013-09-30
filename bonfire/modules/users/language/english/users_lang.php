@@ -205,3 +205,5 @@ $lang['us_tab_roles']				= 'By Role';
 $lang['us_forced_password_reset_note']	= 'Due to security reasons, you must choose a new password for your account.';
 
 $lang['us_back_to']					= 'Back to ';
+$lang['us_no_account']              = 'No account?';
+$lang['us_force_password_reset']    = 'Force password reset on next login';

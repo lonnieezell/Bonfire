@@ -83,6 +83,100 @@ class User_model extends BF_Model
 	 */
 	protected $set_modified = FALSE;
 
+    /**
+     * @var Bool Optionally skip the validation.
+     */
+    protected $skip_validation = TRUE;
+
+    /**
+     * @var Array Validation rules
+     */
+    protected $validation_rules = array(
+        array(
+            'field' => 'password',
+            'label' => 'lang:bf_password',
+            'rules' => 'min_length[8]|max_length[120]|valid_password|matches[pass_confirm]',
+        ),
+        array(
+            'field' => 'pass_confirm',
+            'label' => 'lang:bf_password_confirm',
+            'rules' => '',
+        ),
+        array(
+            'field' => 'display_name',
+            'label' => 'lang:bf_display_name',
+            'rules' => 'trim|max_length[255]',
+        ),
+        array(
+            'field' => 'language',
+            'label' => 'lang:bf_language',
+            'rules' => 'required|trim',
+        ),
+        array(
+            'field' => 'timezones',
+            'label' => 'lang:bf_timezone',
+            'rules' => 'required|trim|max_length[4]',
+        ),
+        array(
+            'field' => 'username',
+            'label' => 'lang:bf_username',
+            'rules' => 'trim|max_length[30]',
+        ),
+        array(
+            'field' => 'email',
+            'label' => 'lang:bf_email',
+            'rules' => 'required|trim|valid_email|max_length[120]',
+        ),
+        array(
+            'field' => 'role_id',
+            'label' => 'lang:us_role',
+            'rules' => 'trim|max_length[2]|is_numeric',
+        ),
+    );
+
+    /**
+     * @var Array Additional Validation rules only used on insert
+     */
+    protected $insert_validation_rules = array(
+        array(
+            'field' => 'password',
+            'label' => 'lang:bf_password',
+            'rules' => 'required',
+        ),
+        array(
+            'field' => 'pass_confirm',
+            'label' => 'lang:bf_password_confirm',
+            'rules' => 'required',
+        ),
+    );
+
+    /**
+     * @var array Metadata for the model's database fields
+     */
+    protected $field_info = array(
+        array('name' => 'id', 'primary_key' => 1),
+        array('name' => 'created_on'),
+        array('name' => 'deleted'),
+        array('name' => 'role_id'),
+        array('name' => 'email'),
+        array('name' => 'username'),
+        array('name' => 'password_hash'),
+        array('name' => 'reset_hash'),
+        array('name' => 'last_login'),
+        array('name' => 'last_ip'),
+        array('name' => 'banned'),
+        array('name' => 'ban_message'),
+        array('name' => 'reset_by'),
+        array('name' => 'display_name'),
+        array('name' => 'display_name_changed'),
+        array('name' => 'timezone'),
+        array('name' => 'language'),
+        array('name' => 'active'),
+        array('name' => 'activate_hash'),
+        array('name' => 'password_iterations'),
+        array('name' => 'force_password_reset'),
+    );
+
 	//--------------------------------------------------------------------
 
 	/**
@@ -95,6 +189,44 @@ class User_model extends BF_Model
 		parent::__construct();
 
 	}//end __construct()
+
+	//--------------------------------------------------------------------
+
+    /**
+     * Extracts the model's fields (except the key and those handled by
+     * Observers) from the $post_data and returns an array of name => value pairs
+     *
+     * @param Array $post_data The post data, usually $this->input->post() when called from the controller
+     *
+     * @return Array    An array of name => value pairs containing the data for the model's fields
+     */
+    public function prep_data($post_data)
+    {
+        $data = parent::prep_data($post_data);
+
+        if ( ! empty($post_data['timezones'])) {
+            $data['timezone'] = $post_data['timezones'];
+        }
+        if ( ! empty($post_data['password'])) {
+            $data['password'] = $post_data['password'];
+        }
+        if ($data['display_name'] === '') {
+            unset($data['display_name']);
+        }
+        if (isset($post_data['restore']) && $post_data['restore']) {
+            $data['deleted'] = 0;
+        }
+        if (isset($post_data['unban']) && $post_data['unban']) {
+            $data['banned'] = 0;
+        }
+		if (isset($post_data['activate']) && $post_data['activate']) {
+			$data['active'] = 1;
+		} elseif (isset($post_data['deactivate']) && $post_data['deactivate']) {
+			$data['active'] = 0;
+		}
+
+        return $data;
+    }
 
 	//--------------------------------------------------------------------
 

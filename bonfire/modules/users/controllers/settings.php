@@ -500,129 +500,67 @@ class Settings extends Admin_Controller
 	 */
 	private function save_user($type='insert', $id=0, $meta_fields=array(), $cur_role_name = '')
 	{
+        $this->form_validation->set_rules($this->user_model->get_validation_rules($type));
 
-		if ($type == 'insert')
-		{
-			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|unique[users.email]|valid_email|max_length[120]');
-			$this->form_validation->set_rules('password', 'lang:bf_password', 'required|min_length[8]|max_length[120]|valid_password');
-			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', 'required|matches[password]');
-		}
-		else
-		{
-			$_POST['id'] = $id;
-			$this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|unique[users.email,users.id]|valid_email|max_length[120]');
-			$this->form_validation->set_rules('password', 'lang:bf_password', 'min_length[8]|max_length[120]|valid_password|matches[pass_confirm]');
-			$this->form_validation->set_rules('pass_confirm', 'lang:bf_password_confirm', '');
-		}
-
+        $extra_unique_rule = '';
 		$username_required = '';
-		if ($this->settings_lib->item('auth.login_type') == 'username' ||
-		    $this->settings_lib->item('auth.use_usernames'))
-		{
+
+        if ($type != 'insert') {
+			$_POST['id'] = $id;
+    		$extra_unique_rule = ',users.id';
+		}
+
+		if ($this->settings_lib->item('auth.login_type') == 'username'
+            || $this->settings_lib->item('auth.use_usernames')
+           ) {
 			$username_required = 'required|';
 		}
-		$extra_unique_rule = $type == 'update' ? ',users.id' : '';
 
-		$this->form_validation->set_rules('username', 'lang:bf_username', $username_required . 'trim|max_length[30]|unique[users.username'.$extra_unique_rule.']');
+		$this->form_validation->set_rules('username', 'lang:bf_username', $username_required . 'trim|max_length[30]|unique[users.username' . $extra_unique_rule . ']');
+        $this->form_validation->set_rules('email', 'lang:bf_email', 'required|trim|valid_email|max_length[120]|unique[users.email' . $extra_unique_rule . ']');
 
-
-		$this->form_validation->set_rules('display_name', 'lang:bf_display_name', 'trim|max_length[255]');
-
-		$this->form_validation->set_rules('language', 'lang:bf_language', 'required|trim');
-		$this->form_validation->set_rules('timezones', 'lang:bf_timezone', 'required|trim|max_length[4]');
-
-		if (has_permission('Bonfire.Roles.Manage') && has_permission('Permissions.'.$cur_role_name.'.Manage'))
-		{
+		if (has_permission('Bonfire.Roles.Manage')
+            && has_permission('Permissions.' . $cur_role_name . '.Manage')
+           ) {
 			$this->form_validation->set_rules('role_id', 'lang:us_role', 'required|trim|max_length[2]|is_numeric');
 		}
 
 		$meta_data = array();
-
-		foreach ($meta_fields as $field)
-		{
-			if (!isset($field['admin_only']) || $field['admin_only'] === FALSE
-				|| (isset($field['admin_only']) && $field['admin_only'] === TRUE
-					&& isset($this->current_user) && $this->current_user->role_id == 1))
-			{
+		foreach ($meta_fields as $field) {
+			if ( ! isset($field['admin_only']) || $field['admin_only'] === false
+				|| (isset($field['admin_only']) && $field['admin_only'] === true
+					&& isset($this->current_user) && $this->current_user->role_id == 1
+                   )
+               ) {
 				$this->form_validation->set_rules($field['name'], $field['label'], $field['rules']);
-
 				$meta_data[$field['name']] = $this->input->post($field['name']);
 			}
 		}
 
-		if ($this->form_validation->run($this) === FALSE)
-		{
-			return FALSE;
+		if ($this->form_validation->run() === false) {
+			return false;
 		}
 
 		// Compile our core user elements to save.
-		$data = array(
-			'email'		=> $this->input->post('email'),
-			'username'	=> $this->input->post('username'),
-			'language'	=> $this->input->post('language'),
-			'timezone'	=> $this->input->post('timezones'),
-		);
+        $data = $this->user_model->prep_data($this->input->post());
 
-		// If empty, the password will be left unchanged.
-		if ($this->input->post('password') !== '')
-		{
-			$data['password'] = $this->input->post('password');
-		}
-
-		if ($this->input->post('display_name') !== '')
-		{
-			$data['display_name'] = $this->input->post('display_name');
-		}
-
-		// Optional field
-		if ($this->input->post('role_id'))
-		{
-			$data['role_id'] = $this->input->post('role_id');
-		}
-
-		// Optional actions
-		if ($this->input->post('restore'))
-		{
-			$data['deleted'] = 0;
-		}
-
-		if ($this->input->post('unban'))
-		{
-			$data['banned'] = 0;
-		}
-
-		// Activation
-		if ($this->input->post('activate'))
-		{
-			$data['active'] = 1;
-		}
-		else if ($this->input->post('deactivate'))
-		{
-			$data['active'] = 0;
-		}
-
-		if ($type == 'insert')
-		{
+		if ($type == 'insert') {
 			$activation_method = $this->settings_lib->item('auth.user_activation_method');
 
 			// No activation method
-			if ($activation_method == 0)
-			{
+			if ($activation_method == 0) {
 				// Activate the user automatically
 				$data['active'] = 1;
 			}
 
 			$return = $this->user_model->insert($data);
 			$id = $return;
-		}
-		else	// Update
-		{
+		} else {	// Update
 			$return = $this->user_model->update($id, $data);
 		}
 
 		// Save any meta data for this user
-		if (count($meta_data))
-		{
+		if (count($meta_data)) {
 			$this->user_model->save_meta_for($id, $meta_data);
 		}
 

@@ -473,7 +473,7 @@ class Users extends Front_Controller
 				}
 			}
 
-			if ($this->form_validation->run($this) !== FALSE)
+			if ($this->form_validation->run() !== FALSE)
 			{
 				// Time to save the user...
 				$data = array(
@@ -674,7 +674,7 @@ class Users extends Front_Controller
 		}
 
 
-		if ($this->form_validation->run($this) === FALSE)
+		if ($this->form_validation->run() === FALSE)
 		{
 			return FALSE;
 		}
