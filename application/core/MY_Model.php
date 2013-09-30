@@ -313,6 +313,8 @@ class BF_Model extends CI_Model
     /**
      * An array of validation rules. This needs to be the same format
      * as validation rules passed to the Form_validation library.
+     *
+     * @see http://ellislab.com/codeigniter/user-guide/libraries/form_validation.html#validationrulesasarray
      */
     protected $validation_rules = array();
 
@@ -327,10 +329,12 @@ class BF_Model extends CI_Model
      */
     protected $skip_validation = FALSE;
 
-    /*
-        If TRUE, inserts will return the last_insert_id. However,
-        this can potentially slow down large imports drastically
-        so you can turn it off with the return_insert_id(false) method.
+    /**
+     * If TRUE, inserts will return the last_insert_id. However, this can
+     * potentially slow down large imports drastically, so you can turn it off
+     * with the return_insert_id(false) method.
+     *
+     * This will also disable after_insert, since the observer receives the last_insert_id
      */
     protected $return_insert_id = true;
 
@@ -557,35 +561,35 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool|mixed Either the $id of the row inserted, or FALSE on failure.
 	 */
-	public function insert($data=NULL)
+	public function insert($data=null)
 	{
-		if ($this->skip_validation === FALSE)
-		{
+		if ($this->skip_validation === false) {
 		    $data = $this->validate($data, 'insert');
+            if ($data === false) {
+                return false;
+            }
 		}
 
 		$data = $this->trigger('before_insert', $data);
 
-		if ($this->set_created === TRUE && $this->log_user === TRUE && !array_key_exists($this->created_by_field, $data))
-		{
+		if ($this->set_created === true && $this->log_user === true
+            && ! array_key_exists($this->created_by_field, $data)
+           ) {
 			$data[$this->created_by_field] = $this->auth->user_id();
 		}
 
 		// Insert it
 		$status = $this->db->insert($this->table_name, $data);
 
-		if ($status != FALSE)
-		{
-			$id = $this->db->insert_id();
-
-			$id = $this->trigger('after_insert', $id);
-			return $id;
-		}
-		else
-		{
+		if ($status == false) {
 			$this->error = $this->get_db_error_message();
-			return FALSE;
-		}
+        } elseif ($this->return_insert_id) {
+            $id = $this->db->insert_id();
+
+            $status = $this->trigger('after_insert', $id);
+        }
+
+        return $status;
 
 	}//end insert()
 
@@ -597,42 +601,47 @@ class BF_Model extends CI_Model
 	 * @param array $data an array of key/value pairs to insert.
 	 *
 	 * @return bool|mixed Either the $id of the row inserted, or FALSE on failure.
+	 *
+	 * @todo Check the code before the section marked "Insert it".
+	 * 'before_insert' should trigger the 'created_on' method, so we either
+	 * shouldn't set $this->created_field in $set, or we should merge $set
+	 * before we trigger 'before_insert'.
+	 * Additionally, shouldn't the merge be:
+	 *  $data[$key] = array_merge($set, $record)
+	 *  or
+	 *  $record = array_merge($set, $record)
+	 * ?
 	 */
-	public function insert_batch($data=NULL)
+	public function insert_batch($data=null)
 	{
 		$set = array();
 
 		// Add the created field
-		if ($this->set_created === TRUE )
-		{
+		if ($this->set_created === true) {
 			$set[$this->created_field] = $this->set_date();
 		}
 
-		if ($this->set_created === TRUE && $this->log_user === TRUE)
-		{
+		if ($this->set_created === true && $this->log_user === true) {
 			$set[$this->created_by_field] = $this->auth->user_id();
 		}
 
-		if ( ! empty($set))
-		{
-			foreach ($data as $key => &$record)
-			{
+		if ( ! empty($set)) {
+			foreach ($data as $key => &$record) {
 				$record = $this->trigger('before_insert', $record);
 
-				$data[$key] = array_merge($set,$data[$key]);
+				$data[$key] = array_merge($set, $data[$key]);
 			}
 		}
 
 		// Insert it
 		$status = $this->db->insert_batch($this->table_name, $data);
 
-		if ($status === FALSE)
-		{
+		if ($status === false) {
 			$this->error = $this->get_db_error_message();
-			return FALSE;
+			return false;
 		}
 
-		return TRUE;
+		return true;
 
 	}//end insert_batch()
 
@@ -704,32 +713,29 @@ class BF_Model extends CI_Model
 	 */
 	public function update_batch($data = NULL, $index = NULL)
 	{
-		if (is_null($index))
+		if (is_null($index) || is_null($data))
 		{
 			return FALSE;
 		}
 
-		if ( ! is_null($data))
-		{
-			// Add the modified field
-			if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
-			{
-				foreach ($data as $key => $record)
-				{
-					$data[$key][$this->modified_field] = $this->set_date();
-					if ($this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data[$key]))
-					{
-						$data[$key][$this->modified_by_field] = $this->auth->user_id();
-					}
-				}
-			}
+        // Add the modified field
+        if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
+        {
+            foreach ($data as $key => $record)
+            {
+                $data[$key][$this->modified_field] = $this->set_date();
+                if ($this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data[$key]))
+                {
+                    $data[$key][$this->modified_by_field] = $this->auth->user_id();
+                }
+            }
+        }
 
-			$result = $this->db->update_batch($this->table_name, $data, $index);
-			if (empty($result))
-			{
-				return TRUE;
-			}
-		}
+        $result = $this->db->update_batch($this->table_name, $data, $index);
+        if (empty($result))
+        {
+            return TRUE;
+        }
 
 		return FALSE;
 
@@ -959,7 +965,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return array The options for the dropdown.
 	 */
-	function format_dropdown()
+	public function format_dropdown()
 	{
 		$args = & func_get_args();
 
@@ -1005,7 +1011,7 @@ class BF_Model extends CI_Model
 			{
 				$this->db->where($field, $value);
 			}
-			else if (is_array($field))
+			elseif (is_array($field))
 			{
 				$this->db->where($field);
 			}
@@ -1040,7 +1046,7 @@ class BF_Model extends CI_Model
 			{
 				$this->db->order_by($field, $order);
 			}
-			else if (is_array($field))
+			elseif (is_array($field))
 			{
 				foreach ($field as $f => $o)
 				{
@@ -1113,7 +1119,37 @@ class BF_Model extends CI_Model
         return $this;
     }
 
-    //--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+
+    /**
+     * Sets the value of the return_insert_id flag
+     *
+     * @param Bool $return (optional) whether insert will return the ID
+     *
+     * @return Object    returns $this to allow method chaining
+     */
+	public function return_insert_id($return=true)
+	{
+	    $this->return_insert_id = (bool)$return;
+
+	    return $this;
+	}
+
+	//--------------------------------------------------------------------
+
+    /**
+     * Sets the value of the skip_validation flag
+     *
+     * @param Bool $skip (optional) whether to skip validation in the model
+     *
+     * @return Object    returns $this to allow method chaining
+     */
+	public function skip_validation($skip=true)
+	{
+	    $this->skip_validation = $skip;
+
+	    return $this;
+	}
 
 	//--------------------------------------------------------------------
 	// !OBSERVERS
@@ -1230,20 +1266,45 @@ class BF_Model extends CI_Model
         // Any insert additions?
         if ($type == 'insert'
             && is_array($this->insert_validation_rules)
-            && ! empty($this->insert_validation_rules))
-        {
-            foreach ($this->insert_validation_rules as $field_name => $rule)
-            {
-                if (isset($temp_validation_rules[$field_name]))
-                {
-                    if (empty($temp_validation_rules[$field_name]['rules']))
-                    {
-                        $temp_validation_rules[$field_name]['rules'] = $rule;
+            && ! empty($this->insert_validation_rules)
+           ) {
+            // Get the index for each field in the validation rules
+            $fieldIndexes = array();
+            foreach ($temp_validation_rules as $key => $validation_rule) {
+                $fieldIndexes[$validation_rule['field']] = $key;
+            }
+
+            foreach ($this->insert_validation_rules as $key => $rule) {
+                if (is_array($rule)) {
+                    $insert_rule = $rule;
+                } else {
+                    // if $key isn't a field name and $insert_rule isn't an
+                    // array, we probably can't do anything useful, so skip it
+                    if (is_numeric($key)) {
+                        continue;
                     }
-                    else
-                    {
-                        $temp_validation_rules[$field_name]['rules'] .= '|' . $rule;
+
+                    $insert_rule = array(
+                        'field' => $key,
+                        'rules' => $rule,
+                    );
+                }
+
+                /*
+                 * if the field is already in the validation rules,
+                 * we update the validation rule to merge the insert rule
+                 * (or replace an empty rule)
+                 */
+                if (isset($fieldIndexes[$insert_rule['field']])) {
+                    $fieldKey = $fieldIndexes[$insert_rule['field']];
+                    if (empty($temp_validation_rules[$fieldKey]['rules'])) {
+                        $temp_validation_rules[$fieldKey]['rules'] = $insert_rule['rules'];
+                    } else {
+                        $temp_validation_rules[$fieldKey]['rules'] .= '|' . $insert_rule['rules'];
                     }
+                } else {
+                    // Otherwise we add the insert rule to the validation rules
+                    $temp_validation_rules[] = $insert_rule;
                 }
             }
         }
@@ -1266,39 +1327,40 @@ class BF_Model extends CI_Model
 	 */
 	public function validate($data, $type='update')
 	{
-	    if ($this->skip_validation)
-	    {
+	    if ($this->skip_validation) {
 	        return $data;
 	    }
 
         $current_validation_rules = $this->get_validation_rules($type);
 
-        if ( ! empty($current_validation_rules)) {
-	        foreach ($data as $key => $val)
-	        {
-	            $_POST[$key] = $val;
-	        }
+        if (empty($current_validation_rules)) {
+            return $data;
+        }
 
-	        $this->load->library('form_validation');
+        foreach ($data as $key => $val) {
+            $_POST[$key] = $val;
+        }
 
+        $this->load->library('form_validation');
+
+        /*
+         * $current_validation_rules can be an array of rules, which we pass
+         * to set_rules(), or a string that is passed to run(), which will
+         * attempt to load the rules from a config file (run() will ignore
+         * the input otherwise)
+         */
+        if (is_array($current_validation_rules)) {
             $this->form_validation->set_rules($current_validation_rules);
+            $valid = $this->form_validation->run();
+        } else {
+            $valid = $this->form_validation->run($current_validation_rules);
+        }
 
-            if ($this->form_validation->run($current_validation_rules) !== true)
-            {
-                return false;
-            }
+        if ($valid !== true) {
+            return false;
         }
 
         return $data;
-	}
-
-	//--------------------------------------------------------------------
-
-	public function skip_validation($skip=TRUE)
-	{
-	    $this->skip_validation = $skip;
-
-	    return $this;
 	}
 
 	//--------------------------------------------------------------------
