@@ -190,7 +190,7 @@ If you need to do additional processing, join tables, etc than you can do that i
         }
     }
 
-
+## Selecting Data
 ### <tt>find()</tt>
 
 The <tt>find()</tt> method is used to locate a single record based on it's <tt>id</tt>.
@@ -269,7 +269,7 @@ Any of the standard options available to a CodeIgniter <tt>where()</tt> method m
 
 Returns an array of objects where each object holds the results of a single record.
 
-
+## Inserting Data
 ### <tt>insert()</tt>
 
 Creates a new record. Will set the <tt>created_on</tt> field if the model is setup to allow that. The first parameter should be an associative array of field/values to insert.
@@ -310,7 +310,7 @@ Allows for inserting more than one record at a time. Works just like CodeIgniter
 
 
 
-
+## Updating Data
 ### <tt>update()</tt>
 
 Updates an existing record in the database by ID. Will set the correct time for the <tt>modified_on</tt> field, if the model requires it.
@@ -367,7 +367,7 @@ The first parameter is an array of values. The second parameter is the where key
 
 
 
-
+## Deleting Data
 ### <tt>delete()</tt>
 
 Deletes a single record from the database. If <tt>$soft_deletes</tt> are on, then will just set the <tt>deleted</tt> field to <tt>1</tt>. Otherwise, will permanently delete the record from the database.
@@ -397,7 +397,7 @@ The first parameter accepts an array of key/value pairs to form the ‘where’ 
 
 
 
-
+## Utility Methods
 ### <tt>is_unique()</tt>
 
 Checks to see if a given field/value combination would be unique in the table.
@@ -435,13 +435,80 @@ A convenience method to return only a single field of the specified row. The fir
 
 Returns the value of the row's field, or FALSE.
 
+### <tt>get_created_field()</tt>, <tt>get_modified_field()</tt>, <tt>get_deleted_field()</tt>, <tt>get_created_by_field()</tt>, <tt>get_modified_by_field()</tt>, & <tt>get_deleted_by_field()</tt>
+
+Returns the names of the respective fields, or an empty string if the fields are not used by the model (based on the values of <tt>set_created</tt>, <tt>set_modified</tt>, <tt>soft_deletes</tt>, and <tt>log_user</tt>).
+
 ### <tt>get_field_info()</tt>
 
 Returns the <tt>$field_info</tt> array, attempting to populate it from the database if empty.
 
-### <tt>get_created_field()</tt>, <tt>get_modified_field()</tt>, <tt>get_deleted_field()</tt>, <tt>get_created_by_field()</tt>, <tt>get_modified_by_field()</tt>, & <tt>get_deleted_by_field()</tt>
+### <tt>prep_data()</tt>
 
-Returns the names of the respective fields, or an empty string if the fields are not used by the model (based on the values of <tt>set_created</tt>, <tt>set_modified</tt>, <tt>soft_deletes</tt>, and <tt>log_user</tt>).
+Intended to be called by a controller and/or extended in the model, <tt>prep_data</tt> processes an array of field/value pairs (can be the result of <tt>$this->input->post()</tt>) and attempts to setup a <tt>$data</tt> array suitable for use in the model's <tt>insert</tt>/<tt>update</tt> methods. The output array will not include the model's <tt>key</tt>, <tt>created_on</tt>, <tt>created_by</tt>, <tt>modified_on</tt>, <tt>modified_by</tt>, <tt>deleted</tt>, or <tt>deleted_by</tt> fields, or fields indicated as the primary key in the model's <tt>field_info</tt> array.
+
+For example, the user_model extends prep_data to map field names from the view that don't match the tables in the database and ensure fields that should not be set are not set:
+
+
+    public function prep_data($post_data)
+    {
+        $data = parent::prep_data($post_data);
+
+        if ( ! empty($post_data['timezones'])) {
+            $data['timezone'] = $post_data['timezones'];
+        }
+        if ( ! empty($post_data['password'])) {
+            $data['password'] = $post_data['password'];
+        }
+        if ($data['display_name'] === '') {
+            unset($data['display_name']);
+        }
+        if (isset($post_data['restore']) && $post_data['restore']) {
+            $data['deleted'] = 0;
+        }
+        if (isset($post_data['unban']) && $post_data['unban']) {
+            $data['banned'] = 0;
+        }
+		if (isset($post_data['activate']) && $post_data['activate']) {
+			$data['active'] = 1;
+		} elseif (isset($post_data['deactivate']) && $post_data['deactivate']) {
+			$data['active'] = 0;
+		}
+
+        return $data;
+    }
+
+
+The User Settings controller then uses the model's <tt>prep_data</tt> method to process the post data before inserting/updating the user:
+
+
+	private function save_user($type='insert', $id=0, $meta_fields=array(), $cur_role_name = '')
+	{
+        /* ... Omitting validation setup and gathering of user_meta data ... */
+
+		// Compile our core user elements to save.
+        $data = $this->user_model->prep_data($this->input->post());
+
+		if ($type == 'insert') {
+			$activation_method = $this->settings_lib->item('auth.user_activation_method');
+
+			// No activation method
+			if ($activation_method == 0) {
+				// Activate the user automatically
+				$data['active'] = 1;
+			}
+
+			$return = $this->user_model->insert($data);
+			$id = $return;
+		} else {	// Update
+			$return = $this->user_model->update($id, $data);
+		}
+
+        /* ... Omitting saving user_meta data and event trigger ... */
+
+		return $return;
+
+	}//end save_user()
 
 ## Return Types
 
