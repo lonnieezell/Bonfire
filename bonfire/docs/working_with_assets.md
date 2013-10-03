@@ -246,11 +246,15 @@ If you prefer to set a specific height and width, in pixels, for the image, you 
 
     <a href="http://mysite.com/images?height=60&width=100">My Thumbnail</a>
 
+You can also simply pass a <tt>width</tt> or <tt>height</tt> params to intelligently resize the image. Whichever param is passed will determine which is the "master" param. ex. If <tt>height</tt> is passed, the image will resize to a height of 60 and whatever width maintains aspect-ratio.
 
-By default, Bonfire will scale your image to fit within the new image size. To crop the image instead, pass along a <tt>crop=yes</tt> parameter.
+    <a href="http://mysite.com/images?height=60">
+    
+
+By default, Bonfire will scale your image to fit within the new image size. To resize the image and disregard aspect-ratio, pass along a <tt>ratio=no</tt> parameter.
 
 
-    <a href="http://mysite.com/images?size=80&crop=yes">My Thumbnail</a>
+    <a href="http://mysite.com/images?size=80&ratio=no">My Thumbnail</a>
 
 
 Bonfire will look for the images within the <tt>assets/images</tt> folder in your web root. If you need to pull files from a different folder, you can use the <tt>assets</tt> parameter and pass in a folder relative to the webroot.

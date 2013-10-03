@@ -77,7 +77,7 @@ class Images extends Base_Controller {
 		$size	= $this->input->get('size');
 		$height	= $this->input->get('height');
 		$width	= $this->input->get('width');
-		$crop	= $this->input->get('crop');
+		$ratio	= $this->input->get('ratio');
 		$force	= $this->input->get('force');
 
 		$ext = pathinfo($file, PATHINFO_EXTENSION);
@@ -92,7 +92,7 @@ class Images extends Base_Controller {
 		{
 			$height = (int)$size;
 			$width	= (int)$size;
-			$crop 	= 'no';
+			$ratio 	= 'no';
 		}
 
 		// For now, simply return the file....
@@ -112,7 +112,7 @@ class Images extends Base_Controller {
 				'source_image'		=> $img_file,
 				'new_image'			=> $new_file,
 				'create_thumb'		=> false,
-				'maintain_ratio'	=> $crop == 'no' ? false : true,
+				'maintain_ratio'	=> $ratio == 'no' ? false : true,
 				'master_dim'		=> !empty($width) ? 'width' : 'height', 
 				'width'				=> !empty($width) ? $width : $height,
 				'height'			=> !empty($height) ? $height : $width,
