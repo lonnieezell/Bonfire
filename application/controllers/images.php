@@ -92,6 +92,7 @@ class Images extends Base_Controller {
 		{
 			$height = (int)$size;
 			$width	= (int)$size;
+			$crop 	= 'no';
 		}
 
 		// For now, simply return the file....
@@ -111,9 +112,10 @@ class Images extends Base_Controller {
 				'source_image'		=> $img_file,
 				'new_image'			=> $new_file,
 				'create_thumb'		=> false,
-				'maintain_ratio'	=> $crop == 'yes' ? true : false,
-				'width'				=> $width,
-				'height'			=> $height,
+				'maintain_ratio'	=> $crop == 'no' ? false : true,
+				'master_dim'		=> !empty($width) ? 'width' : 'height', 
+				'width'				=> !empty($width) ? $width : $height,
+				'height'			=> !empty($height) ? $height : $width,
 			);
 
 			$this->load->library('image_lib', $config);
