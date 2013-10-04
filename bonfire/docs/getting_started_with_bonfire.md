@@ -10,7 +10,7 @@ Bonfire is intended to provide a kickstart for new web applications built in Cod
 * [Tutorials at the CodeIgniter Wiki](http://codeigniter.com/wiki/Category:Help::Tutorials)
 
 <a name="whatisit"></a>
-## 2 What is Bonfire?
+## What is Bonfire?
 
 Bonfire is a framework for your web application, built on top of the CodeIgniter PHP Framework. It is not a CMS, but a starting point for new projects that require ready-made tools like:
 

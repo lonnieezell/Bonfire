@@ -290,7 +290,7 @@ This creates a table that will list each blog post, if any exist. If they don't 
 
 Most of this should be self-explanatory, but there is one new function nestled in there, <tt>e()</tt>. This method is a convenience method that you should consider using wherever you are displaying user-entered data. It simply echos out the string, using the <tt>htmlentities()</tt> function to help protect against XSS and CSRF attacks.
 
-### 5.7 Module Sub-Menus
+### Module Sub-Menus
 
 Now we just need a way to create new posts. Let's start by creating a new sub-menu that allows us to access other pages. This is not intended for long menus, but to provide a short list of major areas within your module. You will see this used throughout Bonfire, and it appears on the right side of the page, just under the main menu. This is the same bar that holds your <tt>$toolbar_title</tt>.
 
@@ -321,7 +321,7 @@ To make this menu show up, we need to add it to our content controller's <tt>__c
 
 Reload your page in the admin area, and you will see the new menu appear. Clicking on 'New Post' throws an error since we haven't created that method yet. We will do that next.
 
-### 5.8 Create A Post
+### Create A Post
 
 We will start things simple by just displaying the form to create a new post, then deal with saving the post later.
 
@@ -439,7 +439,7 @@ Now then modify the controller's <tt>create()</tt> method to actually save the d
     }
 
 
-### 5.9 Editing Posts
+### Editing Posts
 
 Editing our posts is very simple to do now. Simply add the following <tt>edit_post()</tt> method to your controller and you're up and running:
 
@@ -467,7 +467,7 @@ Editing our posts is very simple to do now. Simply add the following <tt>edit_po
         Template::render();
     }
 
-## 6 The Public Context
+## The Public Context
 
 Now that we have basic administration pages in place, it's time to actually let the users view your awesome blog posts. This requires that we create a new controller, in the same blog module, called <tt>blog</tt>. This will handle what we call your <em>Public Context</em> and is simply a front-facing controller that will directly map to the URI. In this case, you can view this controller at <tt>http://yoursite.com/blog</tt>.
 
