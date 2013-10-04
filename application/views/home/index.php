@@ -8,6 +8,8 @@
 	<?php else :?>
 		<a href="<?php echo site_url('login'); ?>" class="btn btn-large btn-primary"><?php echo lang('bf_action_login'); ?></a>
 	<?php endif;?>
+
+	<br/><br/><a href="<?php echo site_url('/docs') ?>" class="btn btn-large btn-info">Browse the Docs</a>
 </div>
 
 <hr />
