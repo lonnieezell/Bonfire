@@ -8,6 +8,6 @@ To get started, follow along with one of these guides:
 
 New to Bonfire? This guide will help you to understand the basics of the system. 
 
-### [Using the Module Builder](bonfire/using_module_builder)
+### [Using the Module Builder](builder)
 
 Learn how to create your apps even faster by letting Bonfire build the skeleton code for  you.
