@@ -1,9 +1,13 @@
-<?php if (isset($content) && !empty($content)) : ?>
-    <div class="page">
-        <?php echo $content; ?>
-    </div>
-<?php else: ?>
-    <div class="alert">
-        Unable to find the docs you were looking for.
-    </div>
-<?php endif; ?>
+<?php
+
+if (empty($content)) {
+    $divClass = 'alert';
+    $content = lang('docs_not_found');
+} else {
+    $divClass = 'page';
+}
+
+?>
+<div class="<?php echo $divClass; ?>">
+    <?php echo $content; ?>
+</div>
