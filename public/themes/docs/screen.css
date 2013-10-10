@@ -1,3 +1,4 @@
+/* reset */
 article, aside, details, figcaption, figure, footer,header,hgroup,main, nav, section, summary { display: block; }
 audio, canvas, video { display: inline-block; }
 audio:not([controls]) { display: none; height: 0; }
@@ -40,13 +41,20 @@ table { border-collapse: collapse; border-spacing: 0; }
 // Basic Styles
 //--------------------------------------------------------------------*/
 
-html,body { height: 100%; }
+html, body {
+	height: 100%;
+}
 body {
     background-color: #efefef;
     color: #333;
 }
-h1, h2, h3, h4, h5 { line-height: 1.5; margin: 0; }
-ul, ol, dl { line-height: 1.7; }
+h1, h2, h3, h4, h5 {
+	line-height: 1.5em;
+	margin: 0;
+}
+ul, ol, dl {
+	line-height: 1.7em;
+}
 
 .main {
     position: absolute;
@@ -81,25 +89,32 @@ ul.toc {
     margin-top: 0;
 }
 ul.toc li a {
-    line-height: 1.4;
+    line-height: 1.4em;
     color: #666;
     font-weight: lighter;
     font-size: 90%;
     text-decoration: none;
     display: block;
 }
-ul.toc li a:hover { text-decoration: underline; }
-ul.toc li.active a { font-weight: bold; }
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+ul.toc li.active a {
+	font-weight: bold;
+}
 
 ul.toc ul {
     list-style-type: none;
     padding-left: 0em;
 }
-ul.toc li.parent h4 {
-    font-weight: normal;
+ul.toc li.parent {
     margin-top: 0.5em;
 }
-
+ul.toc li.parent h4,
+ul.toc li.parent h4 a {
+    font-weight: normal;
+	font-size: 100%;
+}
 a:link, a:visited {
     color: #4183c4;
     text-decoration: none;
