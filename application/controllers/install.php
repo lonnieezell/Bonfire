@@ -83,4 +83,53 @@ class Install extends CI_Controller {
     }
 
     //--------------------------------------------------------------------
+
+    /**
+     * Sends anonymous stastics back to cibonfire.com. These are only used
+     * for seeing environments we should be targeting for development.
+     *
+     * @return [type] [description]
+     */
+    public function statistics()
+    {
+        $this->load->library('installer_lib');
+        $db = $this->load->database('default', true);
+
+        $data = array(
+            'bonfire_version'   => BONFIRE_VERSION,
+            'php_version'       => phpversion(),
+            'server'            => $this->input->server('SERVER_SOFTWARE'),
+            'dbdriver'          => $db->dbdriver,
+            'dbserver'          => @mysql_get_server_info($db->conn_id),
+            'dbclient'          => preg_replace('/[^0-9\.]/','', mysql_get_client_info()),
+            'curl'              => $this->installer_lib->cURL_enabled(),
+            'server_hash'       => md5($this->input->server('SERVER_NAME').$this->input->server('SERVER_ADDR').$this->input->server('SERVER_SIGNATURE'))
+        );
+
+        $data_string = '';
+
+        foreach($data as $key=>$value)
+        {
+            $data_string .= $key.'='.$value.'&';
+        }
+        rtrim($data_string, '&');
+
+        $url = 'http://bfwebnew.dev/stats/collect';
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, count($data));
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data_string);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+
+        $result = curl_exec($ch);
+
+        curl_close($ch);
+
+        die(var_dump($result));
+    }
+
+    //--------------------------------------------------------------------
+
 }
