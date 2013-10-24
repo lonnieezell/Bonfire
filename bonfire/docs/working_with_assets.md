@@ -6,10 +6,10 @@ Assets files can be stored in an application-wide repository, in your theme, or 
 
 Assets can be located in one of several locations:
 
-- /bonfire/modules/my_module/assets
-- /bonfire/themes/active_theme/assets
-- /bonfire/themes/default_theme/assets
-- /assets
+    /bonfire/modules/my_module/assets
+    /bonfire/themes/active_theme/assets
+    /bonfire/themes/default_theme/assets
+    /assets
 
 
 Whenever you use one of the asset rendering methods, like <tt>css()</tt>, <tt>js()</tt>, and <tt>image()</tt>, it will search in each of those folders (as well as a folder named by the asset type under those folders, ie. 'css') in the order listed above. Note that it only looks within the module if it was added via <tt>add_module_css()</tt> or <tt>add_module_js()</tt>.

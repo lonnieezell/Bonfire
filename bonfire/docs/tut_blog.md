@@ -23,7 +23,7 @@ Within the <tt>application/modules</tt> folder, create a new folder named <tt>bl
                 models/
                 views/
 
-Not every module will require every folder, but these are the basic folders every module can use. 
+Not every module will require every folder, but these are the basic folders every module can use.
 
 ### Basic Configuration
 
@@ -31,20 +31,22 @@ To make sure that your blog shows up in the admin area, we need to create a conf
 
 Create a new file in your new <tt>config</tt> folder, called <tt>config.php</tt>.
 
-    <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-        $config['module_config'] = array(
-            'name'          => 'Blog',
-            'description'   => 'A Simple Blog Example',
-            'author'        => 'Your Name',
-            'homepage'      => 'http://...',
-            'version'       => '1.0.1',
-            'menu'          => array(
-                'context'   => 'path/to/view'
-            ),
-            'weights'       => array(
-                'context'   => 0
-            )
-        );
+```
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+    $config['module_config'] = array(
+        'name'          => 'Blog',
+        'description'   => 'A Simple Blog Example',
+        'author'        => 'Your Name',
+        'homepage'      => 'http://...',
+        'version'       => '1.0.1',
+        'menu'          => array(
+            'context'   => 'path/to/view'
+        ),
+        'weights'       => array(
+            'context'   => 0
+        )
+    );
+```
 
 
 Not all of these settings will be used for the Blog module, but you should understand how they work.
@@ -71,52 +73,51 @@ Migrations are simply a set of commands that are run to make changes to the data
 
 Create a new file at <tt>blog/migrations/001_Initial_tables.php</tt>.
 
-    <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+```php
+class Migration_Initial_tables extends Migration
+{
 
-    class Migration_Initial_tables extends Migration
+    public function up()
     {
+        $this->load->dbforge();
 
-        public function up()
-        {
-            $this->load->dbforge();
+        $this->dbforge->add_field('post_id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT');
+        $this->dbforge->add_field('title VARCHAR(255) NOT NULL');
+        $this->dbforge->add_field('slug VARCHAR(255) NOT NULL');
+        $this->dbforge->add_field('body TEXT NULL');
+        $this->dbforge->add_field('created_on DATETIME NOT NULL');
+        $this->dbforge->add_field('modified_on DATETIME NULL');
+        $this->dbforge->add_field('deleted TINYINT(1) NOT NULL DEFAULT 0');
+        $this->dbforge->add_key('post_id', TRUE);
 
-            $this->dbforge->add_field('post_id BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT');
-            $this->dbforge->add_field('title VARCHAR(255) NOT NULL');
-            $this->dbforge->add_field('slug VARCHAR(255) NOT NULL');
-            $this->dbforge->add_field('body TEXT NULL');
-            $this->dbforge->add_field('created_on DATETIME NOT NULL');
-            $this->dbforge->add_field('modified_on DATETIME NULL');
-            $this->dbforge->add_field('deleted TINYINT(1) NOT NULL DEFAULT 0');
-            $this->dbforge->add_key('post_id', TRUE);
+        $this->dbforge->create_table('posts');
 
-            $this->dbforge->create_table('posts');
+        // Create the Permissions
+        $this->load->model('permission_model');
+        $this->permission_model->insert(array(
+            'name'          => 'Bonfire.Blog.View',
+            'description'   => 'To view the blog menu.',
+            'status'        => 'active'
+        ));
 
-            // Create the Permissions
-            $this->load->model('permission_model');
-            $this->permission_model->insert(array(
-                'name'          => 'Bonfire.Blog.View',
-                'description'   => 'To view the blog menu.',
-                'status'        => 'active'
-            ));
-
-            // Assign them to the admin role
-            $this->load->model('role_permission_model');
-            $this->role_permission_model->assign_to_role('Administrator', 'Bonfire.Blog.View');
-        }
-
-        //--------------------------------------------------------------------
-
-        public function down()
-        {
-            $this->load->dbforge();
-
-            $this->dbforge->drop_table('posts');
-        }
-
-        //--------------------------------------------------------------------
-
+        // Assign them to the admin role
+        $this->load->model('role_permission_model');
+        $this->role_permission_model->assign_to_role('Administrator', 'Bonfire.Blog.View');
     }
 
+    //--------------------------------------------------------------------
+
+    public function down()
+    {
+        $this->load->dbforge();
+
+        $this->dbforge->drop_table('posts');
+    }
+
+    //--------------------------------------------------------------------
+
+}
+```
 
 The <tt>up()</tt> method is ran whenever this migration is 'installed'. The <tt>down()</tt> method is ran whenever the migration is 'un-installed'.
 
@@ -130,28 +131,28 @@ In order to manage your blog, we will create a new entry under the Content menu 
 
 Create a new controller, <tt>blog/controllers/content.php</tt>. Each context uses a controller of the same name. In this case we want to create some actions for the Content Context, so we create a controller named <tt>content.php</tt>.
 
-    <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+```php
+    class Content extends Admin_Controller
+    {
 
-        class Content extends Admin_Controller
+        public function __construct()
         {
+            parent::__construct();
 
-            public function __construct()
-            {
-                parent::__construct();
-
-                Template::set('toolbar_title', 'Manage Your Blog');
-            }
-
-            //--------------------------------------------------------------------
-
-            public function index()
-            {
-                Template::render();
-            }
-
-            //--------------------------------------------------------------------
-
+            Template::set('toolbar_title', 'Manage Your Blog');
         }
+
+        //--------------------------------------------------------------------
+
+        public function index()
+        {
+            Template::render();
+        }
+
+        //--------------------------------------------------------------------
+
+    }
+```
 
 Notice that the class is named the same as the Context and it extends <tt>Admin_Controller</tt>. The Admin_Controller is one of several controllers provided by Bonfire to take care of a few functions for you. In this case, the controller makes sure that we are logged in, sets up pagination defaults, sets the theme to the admin theme, and gets our form_validation library loaded and setup so that it works properly with HMVC.
 
@@ -159,7 +160,10 @@ In the <tt>__construct()</tt> method we are doing one thing currently, and that 
 
 The <tt>index()</tt> method is the method that will be called by default when you click on the <tt>Blog</tt> menu item. We use the Template library's <tt>render()</tt> method to display the view for this page. By default, this will look for a view in the module's views folder under the context name and method name. In this case, it would be searching for <tt>blog/views/content/index.php</tt>. Create that file now.
 
+
+```
     <h1>Blog Index</h1>
+```
 
 We are keeping it simple just to make sure everything is in working order for now.
 
@@ -171,8 +175,7 @@ In order to view any posts, we will need to create a model that interacts with t
 
 Create a new model file at <tt>blog/models/post_model.php</tt>.
 
-    <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+```php
     class Post_model extends MY_Model
     {
 
@@ -186,6 +189,7 @@ Create a new model file at <tt>blog/models/post_model.php</tt>.
         //---------------------------------------------------------------
 
     }
+```
 
 This is everything needed to get some pretty flexible CRUD setup and running for your post model. There are a lot more options available in the full [model file](bonfire_models) but this is all we need for now.
 
@@ -209,6 +213,7 @@ With the settings above, our post_model will:
 
 Since the post_model will be used in nearly every method in our content controller, we will autoload it in the controller's <tt>__construct()</tt> method.
 
+```php
     public function __construct()
     {
         parent::__construct();
@@ -217,16 +222,18 @@ Since the post_model will be used in nearly every method in our content controll
 
         Template::set('toolbar_title', 'Manage Your Blog');
     }
-
+```
 
 
 ### Listing Posts in Admin
 
 It's now time to expand our blog's content index method to show us a list of all posts in the system. Add the following lines to the <tt>index()</tt> method of the <tt>content</tt> controller, before the <tt>Template::render()</tt> method.
 
+```php
     $posts = $this->post_model->where('deleted', 0)->find_all();
 
     Template::set('posts', $posts);
+```
 
 This calls our <tt>post_model</tt>'s <tt>find_all()</tt> method to retrieve all posts in the system. However, we don't want any deleted posts, so we filter those out with the <tt>where()</tt> method.
 
@@ -234,6 +241,7 @@ We then use the Template class' <tt>set()</tt> method to make the data available
 
 Edit your index.php view file to reflect the following:
 
+```
     <div class="admin-box">
         <h3>Blog Posts</h3>
 
@@ -285,6 +293,7 @@ Edit your index.php view file to reflect the following:
 
         <?php echo form_close(); ?>
     </div>
+```
 
 This creates a table that will list each blog post, if any exist. If they don't then a notice will be displayed.
 
@@ -296,6 +305,7 @@ Now we just need a way to create new posts. Let's start by creating a new sub-me
 
 First, we create a view file holds the menu itself. Create a new file at <tt>blog/views/content/sub_nav.php</tt>.
 
+```php
     <ul class="nav nav-pills">
         <li <?php echo $this->uri->segment(4) == '' ? 'class="active"' : '' ?>>
             <a href="<?php echo site_url(SITE_AREA .'/content/blog') ?>">Posts</a>
@@ -304,11 +314,13 @@ First, we create a view file holds the menu itself. Create a new file at <tt>blo
             <a href="<?php echo site_url(SITE_AREA .'/content/blog/create') ?>">New Post</a>
         </li>
     </ul>
+```
 
 Each link in this list will take us to a method within our content controller. We also check the url to see if this is an active link or not.
 
 To make this menu show up, we need to add it to our content controller's <tt>__construct()</tt> method.
 
+```php
     public function __construct()
     {
         parent::__construct();
@@ -318,6 +330,7 @@ To make this menu show up, we need to add it to our content controller's <tt>__c
         Template::set('toolbar_title', 'Manage Your Blog');
         Template::set_block('sub_nav', 'content/sub_nav');
     }
+```
 
 Reload your page in the admin area, and you will see the new menu appear. Clicking on 'New Post' throws an error since we haven't created that method yet. We will do that next.
 
@@ -327,17 +340,20 @@ We will start things simple by just displaying the form to create a new post, th
 
 Create a new <tt>create()</tt> method in your content controller.
 
+```php
     public function create()
     {
         Template::set('toolbar_title', 'Create New Post');
         Template::set_view('content/post_form');
         Template::render();
     }
+```
 
 This sets the <tt>toolbar_title</tt> of the page, says that we want to use the view named <tt>views/content/post_form.php</tt>, and renders the form.
 
 Now we need create the form itself. We're using a file called <tt>post_form</tt> because we want to be able to use the form for both the create and edit pages.
 
+```
     <div class="admin-box">
         <h3>New Post</h3>
 
@@ -378,6 +394,7 @@ Now we need create the form itself. We're using a file called <tt>post_form</tt>
 
         <?php echo form_close(); ?>
     </div>
+```
 
 Most of this is straight-forward. I do want to point out that for the values, we are checking whether a <tt>$post</tt> value is set or not, and then uses the form helper's <tt>set_value()</tt> method to set the value in the case of errors on the form.
 
@@ -385,8 +402,9 @@ We also use the form_validation library's <tt>form_error()</tt> function to setu
 
 <b>Saving the Post</b>
 
-Now, let's actually make it functional. In your post_model, we need to let it know what validation rules to use during both inserts or updates. Add the following class variable to the post_model: 
+Now, let's actually make it functional. In your post_model, we need to let it know what validation rules to use during both inserts or updates. Add the following class variable to the post_model:
 
+```
     protected $validation_rules = array(
         array(
             'field' => 'title',
@@ -404,18 +422,22 @@ Now, let's actually make it functional. In your post_model, we need to let it kn
             'rules' => 'trim|strip_tags|xss_clean'
         )
     );
+```
 
 These rules follow the same format as the [form validation library](http://ellislab.com/codeigniter/user-guide/libraries/form_validation.html#validationrulesasarray). The one thing to be aware of is that these rules are used for both inserts and updates. This can cause a problem with required fields on inserts. We'll add the <tt>insert_validation_rules</tt> class variable to the pose_model to provide any additional rules we want applied during an insert only.
 
+```php
     protected $insert_validation_rules = array(
         'title' => 'required',
         'body'  => 'required'
     );
+```
 
 Now, whenever you do an insert or an update, the data is run through the form validation library. If it fails validation, the model will return FALSE and your controller can respond accordingly.
 
 Now then modify the controller's <tt>create()</tt> method to actually save the data:
 
+```php
     public function create()
     {
         if ($this->input->post('submit'))
@@ -437,12 +459,13 @@ Now then modify the controller's <tt>create()</tt> method to actually save the d
         Template::set_view('content/post_form');
         Template::render();
     }
-
+```
 
 ### Editing Posts
 
 Editing our posts is very simple to do now. Simply add the following <tt>edit_post()</tt> method to your controller and you're up and running:
 
+```php
     public function edit_post($id=null)
     {
         if ($this->input->post('submit'))
@@ -466,6 +489,7 @@ Editing our posts is very simple to do now. Simply add the following <tt>edit_po
         Template::set_view('content/post_form');
         Template::render();
     }
+```
 
 ## The Public Context
 
@@ -473,8 +497,7 @@ Now that we have basic administration pages in place, it's time to actually let 
 
 Create a new file, <tt>modules/blog/controllers/blog.php</tt>
 
-    <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
+```php
     class Blog extends Front_Controller
     {
 
@@ -503,6 +526,7 @@ Create a new file, <tt>modules/blog/controllers/blog.php</tt>
         //--------------------------------------------------------------------
 
     }
+```
 
 This is just a typical CodeIgniter controller, which means that anything you can do in straight CodeIgniter, you can do here.
 
@@ -510,8 +534,7 @@ In this case, we're loading our model in the constructor, since we know that we'
 
 Then, it looks for a view file at <tt>blog/views/index.php</tt>. Create that file now.
 
-    <?php if (isset($posts) && is_array($posts) && count($posts)) :?>
-
+```php
         <?php foreach ($posts as $post) :?>
         <div class="post">
             <h2><?php e($post->title) ?></h2>
@@ -525,6 +548,7 @@ Then, it looks for a view file at <tt>blog/views/index.php</tt>. Create that fil
             No Posts were found.
         </div>
     <?php endif; ?>
+```
 
 This is a very simple view, but should be enough to give you an understanding.
 

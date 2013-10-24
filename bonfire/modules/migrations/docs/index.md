@@ -79,7 +79,7 @@ The file is a standard PHP class, that must follow three simple rules:
 <a name="skeleton"></a>
 ### A Skeleton Migration
 
-
+```php
     class Migration_Install_initial_tables extends Migration {
 
       function up() {
@@ -94,7 +94,7 @@ The file is a standard PHP class, that must follow three simple rules:
 
       //--------------------------------------------------------------------
     }
-
+```
 
 <a name="running"></a>
 ## Running Migrations

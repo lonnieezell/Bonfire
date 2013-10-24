@@ -346,7 +346,7 @@ Updates a single record in the database by a key/value pair. Will set the correc
 
 Updates multiple records with a single method call.
 
-
+```php
   $data = array(
      array(
         'title' => 'My title' ,
@@ -361,7 +361,7 @@ Updates multiple records with a single method call.
   );
 
   $this->model->update_batch($data, 'title');
-
+```
 
 The first parameter is an array of values. The second parameter is the where key.
 
