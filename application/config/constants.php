@@ -47,6 +47,15 @@ define('BONFIRE_VERSION', 'v0.7-dev');
 define('SITE_AREA', 'admin');
 
 /*
+	The 'LOGIN_URL' constant allows changing of the url where the login page is accessible
+	(asides from the controller-based 'users/login'). This may be helpful for reducing brute force
+	login attacks, as the login URL can be changed to something obscure, and the controller-based
+	'users/login' can be redirected to 403/4 in routes.php.
+*/
+define('LOGIN_URL', 'login');
+
+
+/*
 	The 'IS_AJAX' constant allows for a quick simple test as to whether the
 	current request was made with XHR.
 */

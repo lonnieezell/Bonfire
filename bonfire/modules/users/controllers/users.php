@@ -342,7 +342,7 @@ class Users extends Front_Controller
 			if (empty($code) || empty($email))
 			{
 				Template::set_message(lang('us_reset_invalid_email'), 'error');
-				Template::redirect('/login');
+				Template::redirect(LOGIN_URL);
 			}
 
 			// Handle the form
@@ -365,7 +365,7 @@ class Users extends Front_Controller
 						log_activity($this->input->post('user_id'), lang('us_log_reset') , 'users');
 
 						Template::set_message(lang('us_reset_password_success'), 'success');
-						Template::redirect('/login');
+						Template::redirect(LOGIN_URL);
 					}
 					else
 					{
@@ -387,7 +387,7 @@ class Users extends Front_Controller
 			if (!is_object($user))
 			{
 				Template::set_message( lang('us_reset_invalid_email'), 'error');
-				Template::redirect('/login');
+				Template::redirect(LOGIN_URL);
 			}
 
             $settings = $this->settings_lib->find_all();
@@ -577,7 +577,7 @@ class Users extends Front_Controller
 					// Log the Activity
 
 					log_activity($user_id, lang('us_log_register'), 'users');
-					Template::redirect('login');
+					Template::redirect(LOGIN_URL);
 				}
 				else
 				{
@@ -743,7 +743,7 @@ class Users extends Front_Controller
 
 						$email_message_data = array(
 							'title' => $site_title,
-							'link'  => site_url('login')
+							'link'  => site_url(LOGIN_URL)
 						);
 						$data = array
 						(

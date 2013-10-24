@@ -361,7 +361,7 @@ class Auth
 	 * @param string $permission (Optional) A string representing the permission to check for.
 	 * @param string $uri        (Optional) A string representing an URI to redirect, if FALSE
 	 *
-	 * @return bool TRUE if the user has the appropriate access permissions. Redirect to the previous page if the user doesn't have permissions. Redirect '/login' page if the user is not logged in.
+	 * @return bool TRUE if the user has the appropriate access permissions. Redirect to the previous page if the user doesn't have permissions. Redirect to LOGIN_AREA page if the user is not logged in.
 	 */
 	public function restrict($permission=NULL, $uri=NULL)
 	{
@@ -370,7 +370,7 @@ class Auth
 		{
 			$this->ci->load->library('Template');
 			Template::set_message($this->ci->lang->line('us_must_login'), 'error');
-			Template::redirect('login');
+			Template::redirect(LOGIN_URL);
 		}
 
 		// Check to see if the user has the proper permissions
