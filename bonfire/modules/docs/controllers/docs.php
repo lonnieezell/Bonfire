@@ -204,8 +204,8 @@ class Docs extends Base_Controller {
         }
 
         // Parse the file
-        $this->load->helper('markdown');
-        $content = Markdown($content);
+        $this->load->helper('markdown_extended');
+        $content = MarkdownExtended($content);
 
         return trim($content);
     }

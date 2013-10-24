@@ -45,7 +45,7 @@ html, body {
 	height: 100%;
 }
 body {
-    background-color: #efefef;
+    background-color: #aab9c6;
     color: #333;
 }
 h1, h2, h3, h4, h5 {
@@ -56,19 +56,21 @@ ul, ol, dl {
 	line-height: 1.7em;
 }
 
+
 .main {
     position: absolute;
     top: 0;
     left: 0;
-    margin-left: 30%;
+    margin-left: 25%;
     height: 100%;
-    width: 70%;
+    width: 75%;
     background-color: #fff;
     border-left: 1px solid #c0c0c0;
     overflow-y: auto;
 }
 .main .inner {
     padding: 30px 20px;
+    max-width: 50em;
 }
 
 .sidebar {
@@ -76,7 +78,7 @@ ul, ol, dl {
     top: 0;
     left: 0;
     height: 100%;
-    width: 30%;
+    width: 25%;
 }
 .sidebar .inner {
     padding: 20px;
@@ -116,7 +118,7 @@ ul.toc li.parent h4 a {
 	font-size: 100%;
 }
 a:link, a:visited {
-    color: #4183c4;
+    color: #7795b4;
     text-decoration: none;
 }
 a:hover { text-decoration: underline; }
@@ -154,15 +156,6 @@ a:hover { text-decoration: underline; }
     cursor: text;
     position: relative;
 }
-.page pre {
-    background: #f8f8f8;
-    border: 1px solid #ddd;
-    font-size: 13px;
-    line-height: 19px;
-    overflow: auto;
-    padding: 10px 6px;
-    border-radius: 3px;
-}
 tt {
     background: #f8f8f8;
     border: 1px solid #ddd;
@@ -191,3 +184,54 @@ tt {
 .page table th { font-weight: bold; }
 .page table tr:nth-child(2n) {
     background-color: #f8f8f8
+}
+
+code,
+pre {
+  padding: 0 3px 2px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-size: 12px;
+  color: #333333;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+code {
+  padding: 2px 4px;
+  color: #d14;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  white-space: nowrap;
+}
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 20px;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre;
+  white-space: pre-wrap;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+pre.prettyprint {
+  margin-bottom: 20px;
+}
+pre code {
+  padding: 0;
+  color: inherit;
+  white-space: pre;
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: 0;
+}
+.pre-scrollable {
+  max-height: 340px;
+  overflow-y: scroll;
+}
