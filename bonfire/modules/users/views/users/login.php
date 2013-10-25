@@ -21,7 +21,7 @@
 	</div>
 	<?php endif; ?>
 
-	<?php echo form_open('login', array('autocomplete' => 'off')); ?>
+	<?php echo form_open(LOGIN_URL, array('autocomplete' => 'off')); ?>
 
 		<div class="control-group <?php echo iif( form_error('login') , 'error') ;?>">
 			<div class="controls">

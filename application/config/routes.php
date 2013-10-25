@@ -42,7 +42,7 @@ $route['default_controller'] = "home";
 $route['404_override'] = '';
 
 // Authentication
-$route['login']					= 'users/login';
+$route[LOGIN_URL]					= 'users/login';
 $route['register']				= 'users/register';
 $route['logout']				= 'users/logout';
 $route['forgot_password']		= 'users/forgot_password';
