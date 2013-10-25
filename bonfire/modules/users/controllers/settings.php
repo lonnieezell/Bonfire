@@ -333,7 +333,7 @@ class Settings extends Admin_Controller
 			// Resets are in place, so log the user out
 			$this->auth->logout();
 
-			Template::redirect('/login');
+			Template::redirect(LOGIN_URL);
 		}
 		else
 		{
