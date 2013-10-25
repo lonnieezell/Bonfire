@@ -173,7 +173,7 @@ if ($db_required != '')
 			if (\$insert_id = \$this->save_".$module_name_lower."())
 			{
 				// Log the activity
-				log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_create_record').': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
+				log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_create_record') .': '. \$insert_id .' : '. \$this->input->ip_address(), '".$module_name_lower."');
 
 				Template::set_message(lang('".$module_name_lower."_create_success'), 'success');
 				redirect(SITE_AREA .'/".$controller_name."/".$module_name_lower."');
@@ -225,7 +225,7 @@ if ($db_required != '')
 			if (\$this->save_".$module_name_lower."('update', \$id))
 			{
 				// Log the activity
-				log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_edit_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
+				log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_edit_record') .': '. \$id .' : '. \$this->input->ip_address(), '".$module_name_lower."');
 
 				Template::set_message(lang('".$module_name_lower."_edit_success'), 'success');
 			}
@@ -245,7 +245,7 @@ if ($db_required != '')
 			if (\$this->".$module_name_lower."_model->delete(\$id))
 			{
 				// Log the activity
-				log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_delete_record').': ' . \$id . ' : ' . \$this->input->ip_address(), '".$module_name_lower."');
+				log_activity(\$this->current_user->id, lang('".$module_name_lower."_act_delete_record') .': '. \$id .' : '. \$this->input->ip_address(), '".$module_name_lower."');
 
 				Template::set_message(lang('".$module_name_lower."_delete_success'), 'success');
 
@@ -263,7 +263,7 @@ if ($db_required != '')
 }
 
 $mb_edit .= "
-		Template::set('toolbar_title', lang('".$module_name_lower."_edit') . ' ".$module_name."');
+		Template::set('toolbar_title', lang('".$module_name_lower."_edit') .' ".$module_name."');
 		Template::render();
 	}
 
@@ -291,13 +291,6 @@ $mb_save =<<<END
 		if (\$type == 'update')
 		{
 			\$_POST['{$primary_key_field}'] = \$id;
-		}
-
-		{validation_rules}
-
-		if (\$this->form_validation->run() === FALSE)
-		{
-			return FALSE;
 		}
 
 		// make sure we only pass in the fields we want
@@ -469,11 +462,9 @@ if ($controller_name != $module_name_lower)
 		$body .= $mb_save;
 	}
 
-	$rules = '';
 	$save_data_array = '
 		$data = array();';
 
-	$last_field = 0;
 	for ($counter = 1; $field_total >= $counter; $counter++)
 	{
 		// only build on fields that have data entered.
@@ -501,8 +492,7 @@ if ($controller_name != $module_name_lower)
 		}
 
 		$form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
-		$rules .= '
-		$this->form_validation->set_rules(\''.$form_name.'\',\''.set_value("view_field_label$counter").'\',\'';
+
 
 		// setup the data array for saving to the db
 		// set defaults for certain field types
@@ -520,66 +510,8 @@ if ($controller_name != $module_name_lower)
 				$save_data_array .= "\n\t\t".'$data[\''.$field_name.'\']        = $this->input->post(\''.$form_name.'\');';
 				break;
 		}
-
-		// set a friendly variable name
-		$validation_rules = $this->input->post('validation_rules'.$counter);
-
-		// rules have been selected for this fieldset
-		$rule_counter = 0;
-
-		if (is_array($validation_rules))
-		{
-			// add rules such as trim|required
-			foreach ($validation_rules as $key => $value)
-			{
-				if ($rule_counter > 0)
-				{
-					$rules .= '|';
-				}
-
-				if ($value == 'unique')
-				{
-					$prefix = $this->db->dbprefix;
-					$rules .= $value.'['.$prefix.$table_name.'.'.$field_name.','.$prefix.$table_name.'.'.$primary_key_field.']';
-				}
-				else
-				{
-					$rules .= $value;
-				}
-				$rule_counter++;
-			}
-		}
-
-		$db_field_type = set_value("db_field_type".$counter);
-
-		if ($db_field_type != 'ENUM' && $db_field_type != 'SET' && set_value("db_field_length_value$counter") != NULL)
-		{
-			if ($rule_counter > 0)
-			{
-				$rules .= '|';
-			}
-
-			if ($db_field_type == 'DECIMAL' || $db_field_type == 'FLOAT' || $db_field_type == 'DOUBLE')
-			{
-				list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
-				$max = $len;
-
-				if (isset($decimal) && $decimal != 0)
-				{
-					$max = $len + 1;		// Add 1 to allow for the
-				}
-				$rules .= 'max_length['.$max.']';
-			}
-			else
-			{
-				$rules .= 'max_length['.set_value("db_field_length_value$counter").']';
-			}
-		}
-
-		$rules .= "');";
 	}
 
-	$body = str_replace('{validation_rules}', $rules, $body);
 	$body = str_replace('{save_data_array}', $save_data_array, $body);
 
 	unset($rules);
