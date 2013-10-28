@@ -43,7 +43,7 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 
 	$field_label = set_value("view_field_label$counter");
 	$form_name  = $module_name_lower . '_' . set_value("view_field_name$counter");
-	$field_name = $db_required == 'new' ? $form_name : set_value("view_field_name$counter");
+	$field_name = set_value("view_field_name$counter");
 	$field_type = set_value("view_field_type$counter");
 
 	$validation_rules = $this->input->post('validation_rules'.$counter);
