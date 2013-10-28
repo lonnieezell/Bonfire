@@ -1,6 +1,9 @@
 ## Under development
 
-### develop branch - 0.7-dev
+
+## Released versions
+
+### 0.7.0
 
 * Minimum PHP version changed to 5.3
 * Updated CodeIgniter to version 2.1.4
@@ -89,7 +92,6 @@ If your module calls the activity_model for logging purposes, you will need to e
 
 All templates that use the current Template::yield() function must be updated to Template::content() due to the addition of generators in PHP 5.5.
 
-## Released versions
 
 ### 0.6.1
 
