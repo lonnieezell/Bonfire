@@ -258,7 +258,8 @@ class Users extends Front_Controller
 					if ((!isset($field['admin_only']) || $field['admin_only'] === FALSE
 						|| (isset($field['admin_only']) && $field['admin_only'] === TRUE
 							&& isset($this->current_user) && $this->current_user->role_id == 1))
-						&& (!isset($field['frontend']) || $field['frontend'] === TRUE))
+						&& (!isset($field['frontend']) || $field['frontend'] === TRUE)
+						&& $this->input->post($field['name']) !== FALSE)
 					{
 						$meta_data[$field['name']] = $this->input->post($field['name']);
 					}
