@@ -20,6 +20,8 @@ New Features:
 * MY_Controller file no longer used as we have split each controller into their own class file in application/core. This allows the HMVC autoloader to find them for us, and frees up the MY_Controller file for end-user only use.
 * New front-end theme that is simply the latest Bootstrap theme with a couple of small minor tweaks.
 * log_activity helper function included in the application helper. This removes the need for autoloading the activity model and also allows logging of activities to be turned off.
+* New constants LOGIN_URL and REGISTER_URL are used in place throughout the site to make it easy to change the login and registration URLs.
+* New docs system that provides basic methods for packaging documentation with your modules and application using Markdown formatted text files.
 
 Closes named issues:
 
