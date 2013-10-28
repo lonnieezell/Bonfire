@@ -807,7 +807,7 @@ class BF_Model extends CI_Model
 
 		if ($result)
 		{
-			$this->trigger('after_delete', $result);
+			$this->trigger('after_delete', $id);
 			return TRUE;
 		}
 

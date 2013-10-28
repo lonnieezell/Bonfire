@@ -4,12 +4,27 @@ Keeping with the MVC spirit, Bonfire uses Models to allow you interact with your
 
 BF_Model acts as a middleman layer to between your models and CodeIgniter's standard Model class, working hand-in-hand with ActiveRecord query builder. If you don't need any special queries, your can have a working model in just a handful of lines.
 
+**Sections**
+
+* [Skeleton File](#skeleton)
+* [Selecting Data](#selecting)
+* [Inserting Data](#inserting)
+* [Updating Data](#updating)
+* [Deleting Data](#deleting)
+* [Utility Methods](#utility)
+* [Return Types](#returns)
+* [Chainable Methods](#chainable)
+* [Exending the Model](#extending)
+* [Observers](#observers)
+* [Data Validation](#validation)
+
 ### Is it an ORM?
 
 BF_Model is not an ORM. While ORM's have their place, Bonfire does not ship with one included.
 
 
 
+<a name="skeleton"></a>
 ## A Skeleton Model
 
 To get started with a new model, you can use the following skeleton file:
@@ -190,6 +205,7 @@ If you need to do additional processing, join tables, etc than you can do that i
         }
     }
 
+<a name="selecting"></a>
 ## Selecting Data
 ### <tt>find()</tt>
 
@@ -269,6 +285,7 @@ Any of the standard options available to a CodeIgniter <tt>where()</tt> method m
 
 Returns an array of objects where each object holds the results of a single record.
 
+<a name="inserting"></a>
 ## Inserting Data
 ### <tt>insert()</tt>
 
@@ -309,7 +326,7 @@ Allows for inserting more than one record at a time. Works just like CodeIgniter
     $this->db->insert_batch('mytable', $data);
 
 
-
+<a name="updating"></a>
 ## Updating Data
 ### <tt>update()</tt>
 
@@ -366,7 +383,7 @@ Updates multiple records with a single method call.
 The first parameter is an array of values. The second parameter is the where key.
 
 
-
+<a name="deleting"></a>
 ## Deleting Data
 ### <tt>delete()</tt>
 
@@ -396,7 +413,7 @@ The first parameter accepts an array of key/value pairs to form the ‘where’ 
     $this->model->delete($wheres);
 
 
-
+<a name="utility"></a>
 ## Utility Methods
 ### <tt>is_unique()</tt>
 
@@ -510,6 +527,8 @@ The User Settings controller then uses the model's <tt>prep_data</tt> method to 
 
 	}//end save_user()
 
+
+<a name="returns"></a>
 ## Return Types
 
 You can temporarily override the type of records returned by the model by using the folliwing commands. This allows you to use objects as a default since they consume less memory, but ask for the results as an array for a single method that you need the extra flexibilty arrays provide.
@@ -527,6 +546,7 @@ A chainable method that specifies the model should return the results as an obje
 A chainable method that specifies the model should return the results as a JSON object suitable for returning in AJAX methods. This overrides the models <tt>$result_type</tt> class variable.
 
 
+<a name="chainable"></a>
 ## Chainable Methods
 
 Thanks to CodeIgniter's [ActiveRecord](http://ellislab.com/codeigniter/user-guide/database/active_record.html) library, it is very simply to modify the BF_Model's methods. This can be done through either chainable methods or by extending methods.
@@ -597,6 +617,7 @@ You can also pass an array of field/value pairs as the first parameter. In this 
 
 
 
+<a name="extending"></a>
 ## Extending Methods
 
 While it is possible to modify the query via the chainable methods any time you need results in your controller, it is highly recommended to extend the model's methods to bring you the results you need. This keeps all of your changes to queries in a single place.
@@ -633,6 +654,7 @@ You can modify a query in your model for a single use by using CodeIgniter's Act
 
 
 
+<a name="observers"></a>
 ## Observers
 
 Observers provide a simple and convenient method for your models to change portions of the data at certain execution points within a model’s interaction. This can be very handy for adding in the created_on time before inserting a record, or deleting related records in other tables whenever a user is deleted.
@@ -670,6 +692,22 @@ To observe an event and have your methods called you simply add the method name 
 
 Each observing method must accept a single parameter. Depending on the event triggered, this might be a single INT, or an array of values, etc. Check the function to verify what the payload being passed along is for the event you’re observing.
 
+The following table lists what data should be expected during each observer. Note that the *_batch or *_many may exhibit slightly different behaviour. You should familiarize yourself with code for each if you need special triggers for these situations.
+
+Trigger                 | Type          | Description
+------------------------|---------------|-------------------------------------------------
+before_insert           | array         | The values to be inserted in the new record
+after_insert            | mixed         | The primary_key of the row just inserted.
+before_update           | array         | The values to be updated. Does NOT include the primary key.
+after_update            | array         | The data that was inserted (including any modifications made in before_udpate).
+before_find             | mixed         | The primary_key of the row to find.
+after_find              | array/object  | The found object/array (depends on the specified return type for that model)
+before_delete           | mixed         | The primary_key of the row to be deleted.
+after_delete            | mixed         | The primary_key of the row that was just deleted.
+empty_validation_rules  | array         | An array of temporary validation rules.
+
+
+<a name="validation"></a>
 ## Validating Data
 
 The model should contain all of the validation rules for your data so that it is always kept in a single place with the model that represents it. Bonfire's models provide a simple way to automatically have your data validated during inserts and updates.
