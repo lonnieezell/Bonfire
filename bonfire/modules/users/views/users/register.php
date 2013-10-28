@@ -27,7 +27,7 @@ p.already-registered {
     </div>
     <div class="row-fluid">
         <div class="span12">
-            <?php echo form_open('register', array('class' => "form-horizontal", 'autocomplete' => 'off')); ?>
+            <?php echo form_open( site_url(REGISTER_URL), array('class' => "form-horizontal", 'autocomplete' => 'off')); ?>
 				<?php Template::block('user_fields', 'user_fields', $fieldData); ?>
                 <?php
                 // Allow modules to render custom fields

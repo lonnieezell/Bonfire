@@ -582,7 +582,7 @@ class Users extends Front_Controller
 				else
 				{
 					Template::set_message(lang('us_registration_fail'), 'error');
-					redirect('/register');
+					redirect(REGISTER_URL);
 				}//end if
 			}//end if
 		}//end if

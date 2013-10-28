@@ -48,7 +48,7 @@ class App_hooks
 	 *
 	 * @var array
 	 */
-	private $ignore_pages = array('/users/login', '/users/logout', '/users/register', '/users/forgot_password', '/users/activate', '/users/resend_activation', '/images');
+	private $ignore_pages = array(LOGIN_URL, '/users/logout', REGISTER_URL, '/users/forgot_password', '/users/activate', '/users/resend_activation', '/images');
 
 	//--------------------------------------------------------------------
 

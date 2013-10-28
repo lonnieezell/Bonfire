@@ -67,7 +67,7 @@
 
 	<p style="text-align: center">
 		<?php if ( $site_open ) : ?>
-			<?php echo anchor('/register', lang('us_sign_up')); ?>
+			<?php echo anchor(REGISTER_URL, lang('us_sign_up')); ?>
 		<?php endif; ?>
 
 		<br/><?php echo anchor('/forgot_password', lang('us_forgot_your_password')); ?>

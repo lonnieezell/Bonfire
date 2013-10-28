@@ -1,3 +1,5 @@
+# Changing Constants for Better Security
+
 ## Site Area
 
 The <tt>SITE_AREA</tt> is the location of your admin interface within your website. By default, all of Bonfire’s Contexts are available by visiting <tt>http://example.com/admin/</tt>.  In this case the Site Area is admin.  It is the URL that all of your contexts are made available under.
@@ -28,3 +30,23 @@ When you need to create a link within your modules to an admin page you should u
 
 
     <a href="<?php echo site_url(SITE_AREA .'/my_link') ?>">My Link</a>
+
+
+## User Login &amp; Registration
+
+To help protect your site from script-related brute-force attacks you can globally change the <tt>login</tt> and <tt>register</tt> URLs to something unique on your site. This primarily keeps spammers from doing a simple Google and located a Bonfire-specific string on your website, collecting the URL, and spamming user registrations or logins onto your site or attempting brute-force logins. It is not a foolproof method of security, by any means, but can keep your site free from the script-kiddies and link spammers.
+
+The <tt>config/constants.php</tt> file defines a constant that is used throughout the system's core modules and themes. Changing the destination of these defines will also change the URL used throughout the system.
+
+    define('LOGIN_URL', 'login');
+    define('REGISTER_URL', 'register');
+
+### When No Public Login is Needed
+
+If your site does not require public login, only admin login, you can take the following steps to tighten up security a little bit more.
+
+1. Change LOGIN_URL to equal SITE_AREA .'/login' to bring the login page into the admin area.
+2. Change SITE_AREA to a different value (not the default /admin)
+3. Make sure that user registration is disabled. Uncheck 'Allow User Registrations' within Settings. Edit routes.php to a) remove /register and b) block users/register.
+4. Check your site theme and remove any login links.
+
