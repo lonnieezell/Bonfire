@@ -77,6 +77,9 @@ class Install extends CI_Controller {
         if ($this->installer_lib->setup())
         {
             define('BF_DID_INSTALL', true);
+
+            // Log anonymous statistics
+            $this->statistics();
         }
 
         Template::render();
@@ -114,7 +117,7 @@ class Install extends CI_Controller {
         }
         rtrim($data_string, '&');
 
-        $url = 'http://bfwebnew.dev/stats/collect';
+        $url = 'http://cibonfire.com/stats/collect';
 
         $ch = curl_init();
 
@@ -127,7 +130,7 @@ class Install extends CI_Controller {
 
         curl_close($ch);
 
-        die(var_dump($result));
+        //die(var_dump($result));
     }
 
     //--------------------------------------------------------------------
