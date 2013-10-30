@@ -660,16 +660,14 @@ if ( ! function_exists('list_contexts'))
         }
 
         // Optional removal of contexts without landing pages
-        if ($landing_page_filter === true)
-        {
-            while ($context = current($contexts))
-            {
-                if ( ! file_exists(realpath(VIEWPATH) . DIRECTORY_SEPARATOR . SITE_AREA . DIRECTORY_SEPARATOR . $context . DIRECTORY_SEPARATOR . 'index.php'))
-                {
-                    array_splice($contexts, key($contexts), 1);
+        if ($landing_page_filter === true) {
+            $returnContexts = array();
+            foreach ($contexts as $context) {
+                if (file_exists(realpath(VIEWPATH) . DIRECTORY_SEPARATOR . SITE_AREA . DIRECTORY_SEPARATOR . $context . DIRECTORY_SEPARATOR . 'index.php')) {
+                    array_push($returnContexts, $context);
                 }
-                next($contexts);
             }
+            $contexts = $returnContexts;
         }
 
         return $contexts;
