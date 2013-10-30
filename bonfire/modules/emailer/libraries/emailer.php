@@ -139,7 +139,7 @@ class Emailer
 			return FALSE;
 		}
 
-		// Wrap the $message in the email template.
+		// Wrap the $message in the email template, or strip HTML
 		$mailtype = settings_item('mailtype');
 		$templated = $message;
 		if ($mailtype == 'html')
@@ -147,7 +147,9 @@ class Emailer
 			$templated  = $this->ci->load->view('emailer/email/_header', null, TRUE);
 			$templated .= $message;
 			$templated .= $this->ci->load->view('emailer/email/_footer', null, TRUE);
-		}
+		} else {
+            $templated = htmlspecialchars_decode(strip_tags($message));
+        }
 
 		// Should we put it in the queue?
 		if ($queue_override === TRUE || ($queue_override !== FALSE && $this->queue_emails == TRUE))
