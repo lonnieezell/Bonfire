@@ -36,7 +36,7 @@ To get started with a new model, you can use the following skeleton file:
         protected $table_name	= '';
         protected $key			= 'id';
         protected $soft_deletes	= FALSE;
-        protected $date_format	= 'datetime';
+        protected $date_format	= 'int';
         protected $log_user		= FALSE;
 
         protected $set_created	= TRUE;
@@ -103,7 +103,7 @@ If <tt>$soft_deletes == FALSE</tt>, the record will be permanently deleted from 
 
 Determines the type of field that is used to store created and modified dates. The possible values are:
 
-- ‘int’ - A Unix integer timestamp.
+- ‘int’ - A Unix integer timestamp. (This is the default)
 - ‘datetime’ Is a MySQL Datetime field. ( YYYY-MM-DD HH:MM:SS )
 - ‘date’ is a MySQL Date field. ( YYYY-MM-DD )
 
