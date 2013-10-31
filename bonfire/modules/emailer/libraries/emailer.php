@@ -148,7 +148,7 @@ class Emailer
 			$templated .= $message;
 			$templated .= $this->ci->load->view('emailer/email/_footer', null, TRUE);
 		} else {
-            $templated = htmlspecialchars_decode(strip_tags($message));
+            $templated = html_entity_decode(strip_tags($message), ENT_QUOTES | ENT_HTML5, 'UTF-8');
         }
 
 		// Should we put it in the queue?
