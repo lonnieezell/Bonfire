@@ -39,7 +39,7 @@ class user_model_test extends CI_UnitTestCase {
 
     public function test_insert_returns_false_with_no_data()
     {
-        $this->assertTrue($this->model->insert() === FALSE);
+        $this->assertFalse($this->model->insert());
     }
 
     //--------------------------------------------------------------------
@@ -50,7 +50,7 @@ class user_model_test extends CI_UnitTestCase {
             'password' => 'abc'
         );
 
-        $this->assertTrue($this->model->insert($data) === FALSE);
+        $this->assertFalse($this->model->insert($data));
     }
 
     //--------------------------------------------------------------------
@@ -61,7 +61,7 @@ class user_model_test extends CI_UnitTestCase {
             'email' => 'abc'
         );
 
-        $this->assertTrue($this->model->insert($data) === FALSE);
+        $this->assertFalse($this->model->insert($data));
     }
 
     //--------------------------------------------------------------------
@@ -73,7 +73,7 @@ class user_model_test extends CI_UnitTestCase {
             'username'  => 'abc'
         );
 
-        $this->assertTrue($this->model->insert($data) === FALSE);
+        $this->assertFalse($this->model->insert($data));
     }
 
     //--------------------------------------------------------------------
