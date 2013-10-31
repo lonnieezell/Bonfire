@@ -261,6 +261,8 @@ class MY_Model_test extends CI_UnitTestCase {
         $this->model->db->expectOnce('select', array('field'));
         $this->model->db->expectOnce('where', array('id', 1));
         $this->model->db->expectOnce('get', array('records_table'));
+        $this->model->db->returns('select', $this->model->db);
+        $this->model->db->returns('where', $this->model->db);
         $this->model->db->returns('get', $this->model->db);
         $this->model->db->returns('num_rows', 1);
         $this->model->db->returns('row', $data);
