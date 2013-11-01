@@ -33,7 +33,7 @@
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
  *
  */
-class Base_Controller extends MX_Controller
+class Base_Controller extends CI_Controller
 {
 
 
