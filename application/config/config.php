@@ -1,11 +1,5 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-/* define the module locations and offset */
-$config['modules_locations'] = array(
-	realpath(APPPATH) . '/modules/' => '../../application/modules/',
-	realpath(APPPATH .'../bonfire/modules') .'/' => '../../bonfire/modules/',
-);
-
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
