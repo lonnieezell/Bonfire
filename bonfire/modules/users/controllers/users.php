@@ -105,7 +105,7 @@ class Users extends Front_Controller
 				}//end if
 			}//end if
 
-			Template::set_view('users/users/login');
+			// Template::set_view('users/login');
 			Template::set('page_title', 'Login');
 			Template::render('login');
 		}

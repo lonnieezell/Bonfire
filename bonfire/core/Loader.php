@@ -371,14 +371,15 @@ class CI_Loader {
      */
     public function view($view, $vars = array(), $return = FALSE)
     {
+
 		// Detect module
 		if (list($module, $class) = $this->detect_module($view))
 		{
 			// Module already loaded
-			if (in_array($module, $this->_ci_modules))
-			{
-				return $this->_view($view, $vars, $return);
-			}
+			// if (in_array($module, $this->_ci_modules))
+			// {
+			// 	return $this->_view($view, $vars, $return);
+			// }
 
 			// Add module
 			$this->add_module($module);
@@ -725,6 +726,7 @@ class CI_Loader {
 		foreach ($config->item('modules_locations') as $location)
 		{
 			$path = $location . rtrim($module, '/') . '/';
+
 			if (is_dir($path))
 			{
 				return $path;
@@ -1381,6 +1383,7 @@ class CI_Loader {
 
 			foreach ($this->_ci_view_paths as $view_file => $cascade)
 			{
+
                 // Check with the path added in.
 				if (file_exists($view_file.$_ci_file))
 				{
