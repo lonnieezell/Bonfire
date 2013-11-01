@@ -384,6 +384,13 @@ class CI_Loader {
 			// Add module
 			$this->add_module($module);
 
+            // If the module name is the first part of it,
+            // strip it so it displays properly.
+            if ( ! empty($module) && strpos($view, $module) === 0)
+            {
+                $view = str_replace($module .'/', '', $view);
+            }
+
 			// Let parent do the heavy work
 			$void = $this->_view($view, $vars, $return);
 
@@ -1400,6 +1407,8 @@ class CI_Loader {
                     $file_exists = TRUE;
                     break;
                 }
+
+                // check without the first segment
 
 				if ( ! $cascade)
 				{
