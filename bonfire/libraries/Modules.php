@@ -57,4 +57,15 @@ class Modules {
 
     //--------------------------------------------------------------------
 
+    public function run($module)
+    {
+        // Get our arguments so we can send them along.
+        $args = func_get_args();
+
+        // Use our built-in load method to handle this.
+        get_instance()->load->controller($module, $args);
+    }
+
+    //--------------------------------------------------------------------
+
 }
