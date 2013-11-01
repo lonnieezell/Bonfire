@@ -46,17 +46,16 @@ if ( ! function_exists('read_config'))
 	function read_config($file, $fail_gracefully = TRUE, $module = '', $module_only = FALSE)
 	{
 		$file = ($file == '') ? 'config' : str_replace(EXT, '', $file);
-		$file = 'config/'.$file;
 
 		// Look in module first
 		$found = FALSE;
 		if ($module)
 		{
-			$file_details = Modules::find($file, $module, '');
+			$file_details = module_file_path($module, 'config', $file.'.php');
 
-			if (!empty($file_details) && !empty($file_details[0]))
+			if (!empty($file_details))
 			{
-				$file = implode("", $file_details);
+				$file = $file_details;
 				$found = TRUE;
 			}
 		}
@@ -64,6 +63,8 @@ if ( ! function_exists('read_config'))
 		// Fall back to application directory
 		if (! $found)
 		{
+			$file = 'config/'.$file;
+
 			if (! $module_only)
 			{
 				$file = APPPATH.$file;

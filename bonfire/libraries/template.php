@@ -1006,19 +1006,11 @@ EOF;
 			if (self::$parse_views === TRUE)
 			{
 				$data = array_merge((array)$data, self::$ci->load->_ci_cached_vars);
-				$output = self::$ci->load->_ci_load(array(
-					'_ci_path' => $view_path . $view_file,
-					'_ci_vars' => $data,
-					'_ci_return' => TRUE,
-				));
+				$output = self::$ci->load->view($view_path . $view_file, $data, true);
 			}
 			else
 			{
-				$output = self::$ci->load->_ci_load(array(
-					'_ci_path' => $view_path . $view_file,
-					'_ci_vars' => $data,
-					'_ci_return' => TRUE,
-				));
+				$output = self::$ci->load->view($view_path . $view_file, $data, true);
 			}
 		}//end if
 

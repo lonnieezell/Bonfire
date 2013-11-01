@@ -133,8 +133,9 @@ if ( ! function_exists('load_class'))
 		$name = FALSE;
 
 		// Look for the class first in the local application/libraries folder
+		// then in Bonfire's bonfire/libraries folder
 		// then in the native system/libraries folder
-		foreach (array(APPPATH, BASEPATH) as $path)
+		foreach (array(APPPATH, BFPATH, BASEPATH) as $path)
 		{
 			if (file_exists($path.$directory.'/'.$class.'.php'))
 			{
@@ -146,6 +147,19 @@ if ( ! function_exists('load_class'))
 				}
 
 				break;
+			}
+		}
+
+		// Search in the Bonfire folder first for class extensions
+		// Note that these classes will have a BF_ prefix, instead of the subclass_prefix (MY_)
+		// to allow for graceful extending of child classes in the application.
+		if (file_exists(BFPATH.$directory.'/BF_'.$class.'.php'))
+		{
+			$name = 'BF_'. $class;
+
+			if (class_exists($name) === FALSE)
+			{
+				require(BFPATH.$directory.'/BF_'.$class.'.php');
 			}
 		}
 
@@ -514,16 +528,16 @@ if ( ! function_exists('remove_invisible_characters'))
 	function remove_invisible_characters($str, $url_encoded = TRUE)
 	{
 		$non_displayables = array();
-		
+
 		// every control character except newline (dec 10)
 		// carriage return (dec 13), and horizontal tab (dec 09)
-		
+
 		if ($url_encoded)
 		{
 			$non_displayables[] = '/%0[0-8bcef]/';	// url encoded 00-08, 11, 12, 14, 15
 			$non_displayables[] = '/%1[0-9a-f]/';	// url encoded 16-31
 		}
-		
+
 		$non_displayables[] = '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S';	// 00-08, 11, 12, 14-31, 127
 
 		do

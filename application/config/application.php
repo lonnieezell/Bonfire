@@ -28,6 +28,18 @@
 $config['site.default_user_timezone'] = 'UM8';
 
 //--------------------------------------------------------------------
+// Module Locations
+//--------------------------------------------------------------------
+// These paths are checked in the order listed whenever a module is
+// attempting to be located, whether it's loading a library, helper,
+// or routes file.
+//
+$config['modules_locations'] = array(
+	APPPATH .'modules/', 		// application/modules
+	BFPATH .'modules/'			// bonfire/modules
+);
+
+//--------------------------------------------------------------------
 // !BACKUPS
 //--------------------------------------------------------------------
 //

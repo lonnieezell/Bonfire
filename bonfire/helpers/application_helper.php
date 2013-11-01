@@ -131,7 +131,7 @@ if ( ! function_exists('module_folders'))
 	 */
 	function module_folders()
 	{
-		return array_keys(modules::$locations);
+		return config_item('modules_locations');
 	}
 }
 
