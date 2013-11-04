@@ -47,7 +47,7 @@ class Settings extends Admin_Controller
 
 		$this->lang->load('users');
 
-		Template::set_block('sub_nav', 'settings/_sub_nav');
+		Template::set_block('sub_nav', 'users/settings/_sub_nav');
 
 	}//end __construct()
 
@@ -227,7 +227,7 @@ class Settings extends Admin_Controller
 		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
 		Template::set('toolbar_title', lang('us_create_user'));
-		Template::set_view('settings/user_form');
+		Template::set_view('users/settings/user_form');
 		Template::render();
 
 	}//end create()
@@ -309,7 +309,7 @@ class Settings extends Admin_Controller
 
         Template::set('toolbar_title', lang('us_edit_user'));
 
-		Template::set_view('settings/user_form');
+		Template::set_view('users/settings/user_form');
 
 		Template::render();
 
