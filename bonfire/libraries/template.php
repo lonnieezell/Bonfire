@@ -389,9 +389,6 @@ class Template
 
 		self::load_view($block_view_name, $data, FALSE, $themed, $output);
 
-		$block_data = array('block' => $block_view_name, 'output' => $output);
-		Events::trigger('after_block_render', $block_data);
-
 		echo $output;
 
 	}//end block()
