@@ -31,25 +31,25 @@ class Modules {
         }
 
         /* autoload core classes */
-        if(is_file($location = APPPATH.'core/'.$class.EXT)) {
+        if (is_file($location = APPPATH.'core/'.$class.EXT)) {
             include_once $location;
             return;
         }
 
         /* autoload core classes */
-        if(is_file($location = BFPATH.'core/'.$class.EXT)) {
+        if (is_file($location = BFPATH.'core/'.$class.EXT)) {
             include_once $location;
             return;
         }
 
         /* autoload library classes */
-        if(is_file($location = APPPATH.'libraries/'.$class.EXT)) {
+        if (is_file($location = APPPATH.'libraries/'.$class.EXT)) {
             include_once $location;
             return;
         }
 
         /* autoload Bonfire library classes */
-        if(is_file($location = BFPATH.'libraries/'.$class.EXT)) {
+        if (is_file($location = BFPATH.'libraries/'.$class.EXT)) {
             include_once $location;
             return;
         }
