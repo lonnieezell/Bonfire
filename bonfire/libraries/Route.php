@@ -324,7 +324,7 @@ class Route {
         // Are we creating a home controller?
         if (isset($options['home']) && ! empty($options['home']))
         {
-            self::any($name, "{$name}/{$options['home']}");
+            self::any($name, "{$options['home']}");
         }
     }
 
