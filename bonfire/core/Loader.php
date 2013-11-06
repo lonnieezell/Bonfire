@@ -281,12 +281,12 @@ class CI_Loader {
 		// Detect module
 		if (list($module, $class) = Modules::find($library, $RTR->fetch_module(), 'libraries'))
 		{
-			array_unshift($this->_ci_library_paths, str_replace('libraries/', '', $module) );
+			$this->add_package_path( str_replace('libraries/', '', $module) );
 
 			// Let original do the heavy work
 			$void = $this->_library($class, $params, $object_name);
 
-			array_shift($this->_ci_library_paths);
+			$this->remove_package_path( str_replace('libaries', '', $module) );
 
 			return $void;
 		}
@@ -324,12 +324,12 @@ class CI_Loader {
 		// Detect module
 		if (list($module, $class) = Modules::find($model, $RTR->fetch_module(), 'models'))
 		{
-            array_unshift($this->_ci_model_paths, str_replace('models/', '', $module) );
+            $this->add_package_path( str_replace('models/', '', $module) );
 
 			// Let parent do the heavy work
 			$void = $this->_model($class, $name, $db_conn);
 
-			array_shift($this->_ci_model_paths);
+			$this->remove_package_path( str_replace('models/', '', $module) );
 
 			return $void;
 		}
@@ -381,23 +381,18 @@ class CI_Loader {
      */
     public function config($file = '', $use_sections = FALSE, $fail_gracefully = FALSE)
     {
-		// Detect module
-		if (list($module, $class) = $this->detect_module($file))
-		{
-			// Module already loaded
-			if (in_array($module, $this->_ci_modules))
-			{
-				return $this->_config($class, $use_sections, $fail_gracefully);
-			}
+        global $RTR;
 
-			// Add module
-			$this->add_module($module);
+		// Detect module
+		if (list($module, $class) = Modules::find($file, $RTR->fetch_module(), 'config'))
+		{
+			$this->add_package_path( str_replace('config/', '', $module) );
 
 			// Let parent do the heavy work
 			$void = $this->_config($class, $use_sections, $fail_gracefully);
 
 			// Remove module
-			$this->remove_module();
+			$this->remove_package_path(str_replace('config/', '', $module));
 
 			return $void;
 		}
@@ -428,23 +423,17 @@ class CI_Loader {
 			return;
 		}
 
-		// Detect module
-		if (list($module, $class) = $this->detect_module($helper))
-		{
-			// Module already loaded
-			if (in_array($module, $this->_ci_modules))
-			{
-				return $this->_helper($class);
-			}
+        global $RTR;
 
-			// Add module
-			$this->add_module($module);
+		// Detect module
+		if (list($module, $class) = Modules::find($helper, $RTR->fetch_module(), 'helpers'))
+		{
+            $this->add_package_path( str_replace('helpers/', '', $module) );
 
 			// Let parent do the heavy work
 			$void = $this->_helper($class);
 
-			// Remove module
-			$this->remove_module();
+			$this->remove_package_path( str_replace('helpers/', '', $module) );
 
 			return $void;
 		}
