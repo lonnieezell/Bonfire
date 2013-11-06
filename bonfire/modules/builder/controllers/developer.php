@@ -83,7 +83,7 @@ class Developer extends Admin_Controller {
 
         foreach ($modules as $module)
         {
-            $configs[$module] = module_config($module);
+            $configs[$module] = Modules::config($module);
 
             if ( ! isset($configs[$module]['name']))
             {
@@ -294,7 +294,7 @@ class Developer extends Admin_Controller {
 
             // check if there is a model to drop (non-table modules will have no model)
             $model_name = $module_name . '_model';
-            if (module_file_path($module_name, 'models', $model_name . '.php'))
+            if (Modules::file_path($module_name, 'models', $model_name . '.php'))
             {
                 // drop the table
                 $this->load->model($module_name . '/' . $model_name, 'mt');
@@ -344,9 +344,9 @@ class Developer extends Admin_Controller {
                 $this->db->trans_commit();
 
                 // database was successful in deleting everything. Now try to get rid of the files.
-                if (delete_files(module_path($module_name), true))
+                if (delete_files(Modules::path($module_name), true))
                 {
-                    @rmdir(module_path($module_name.'/'));
+                    @rmdir(Modules::path($module_name.'/'));
 
                     // Log the activity
                     log_activity((integer) $this->current_user->id, lang('mb_act_delete').': ' . $module_name . ' : ' . $this->input->ip_address(), 'builder');

@@ -120,12 +120,6 @@ class Events
 			return;
 		}
 
-		if (!function_exists('module_file_path'))
-		{
-			$ci =& get_instance();
-			$ci->load->helper('application');
-		}
-
 		$subscribers = self::$events[$event_name];
 
 		foreach ($subscribers as $subscriber)
@@ -135,7 +129,7 @@ class Events
 				$subscriber['filename'] .= '.php';
 			}
 
-			$file_path = module_file_path($subscriber['module'], $subscriber['filepath'], $subscriber['filename']);
+			$file_path = Modules::file_path($subscriber['module'], $subscriber['filepath'], $subscriber['filename']);
 
 			if (!file_exists($file_path))
 			{

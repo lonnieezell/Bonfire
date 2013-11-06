@@ -178,7 +178,7 @@ class Developer extends Admin_Controller
 	{
 		$mod_versions = array();
 
-		$modules = module_files(null, 'migrations');
+		$modules = Modules::files(null, 'migrations');
 
 		if ($modules === false)
 		{

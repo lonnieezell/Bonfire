@@ -83,7 +83,7 @@ class Developer extends Admin_Controller
 
 		foreach ($modules as $module)
 		{
-			$configs[$module] = module_config($module);
+			$configs[$module] = Modules::config($module);
 
 			if (!isset($configs[$module]['name']))
 			{

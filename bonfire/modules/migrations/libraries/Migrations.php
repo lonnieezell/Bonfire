@@ -227,7 +227,7 @@ class Migrations
 				$migrations_path = APPPATH .'db/migrations/';
 				break;
 			default:
-				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
+				$migrations_path = Modules::path(substr($type, 0, -1), 'migrations') .'/';
 				break;
 		}
 
@@ -477,7 +477,7 @@ class Migrations
 				$migrations_path = APPPATH .'db/migrations/';
 				break;
 			default:
-				$migrations_path = module_path(substr($type, 0, -1), 'migrations') .'/';
+				$migrations_path = Modules::path(substr($type, 0, -1), 'migrations') .'/';
 				break;
 		}
 

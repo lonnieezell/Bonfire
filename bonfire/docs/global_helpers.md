@@ -150,6 +150,7 @@ Looks within a module to see if a certain controller exists. The first parameter
 
 It returns either TRUE or FALSE.
 
+DEPRECATED in 0.7.1. Use Modules::controller_exists() instead.
 
     if (module_controller_exists('content', 'users')) { . . . }
 
@@ -162,6 +163,7 @@ Locates a file within a module and returns the path to that file. The first para
 
 It returns the full server path to the file, if found.
 
+DEPRECATED in 0.7.1. Use Modules::file_path() instead.
 
     $path = module_file_path('users', 'assets', 'js/users.js');
 
@@ -172,6 +174,7 @@ It returns the full server path to the file, if found.
 
 Returns the full server path to a module and, optionally, a folder within that module. The first parameter is the name of the module. The second parameter is the name of the folder.
 
+DEPRECATED in 0.7.1. Use Modules::path() instead.
 
     $path = module_path('users', 'assets');
 
@@ -184,6 +187,7 @@ Returns an associative array of files within one or more modules.
 
 The first parameter is the name of the module to restrict the search to. If left NULL, this will provide a list of all files within all of the modules. If a module name is specified, the search will be restricted to that module's files only.
 
+DEPRECATED in 0.7.1. Use Modules::files() instead.
 
     module_files('sysinfo');
 
@@ -253,3 +257,4 @@ The third parameter, when set to TRUE, will exclude the core modules from the li
 
 Returns the 'module_config' array from a module's <tt>config/config.php</tt> file. The <tt>module_config</tt> contains more information about a module, like the author, menu behavior, etc.
 
+DEPRECATED in 0.7.1. Use Modules::config() instead.

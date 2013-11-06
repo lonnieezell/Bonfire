@@ -2,6 +2,10 @@
 
 ### 0.7.1 - not released
 
+Additional Changes:
+
+* Deprecated the module_* functions in application_helper. They're in the Modules class now.
+
 Closes Issues:
 
 * #926 - Application helper iif issue

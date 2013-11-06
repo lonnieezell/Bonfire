@@ -405,9 +405,9 @@ class Contexts
 
 		foreach ($module_list as $module)
 		{
-			if (module_controller_exists($context, $module) === TRUE)
+			if (Modules::controller_exists($context, $module) === TRUE)
 			{
-				$mod_config = module_config($module);
+				$mod_config = Modules::config($module);
 
 				self::$actions[$module] = array(
 					'weight'		=> isset($mod_config['weights'][$context]) ? $mod_config['weights'][$context] : 0,

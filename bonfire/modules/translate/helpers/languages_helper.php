@@ -82,7 +82,7 @@ if (!function_exists('list_lang_files'))
 
 		foreach ($modules as $module)
 		{
-			$module_langs = module_files($module, 'language');
+			$module_langs = Modules::files($module, 'language');
 			$type = 'core';
 
 			if (isset($module_langs[$module]['language'][$language]))
@@ -177,7 +177,7 @@ if (!function_exists('load_lang_file'))
 		{
 			$module = str_replace('_lang.php', '', $filename);
 
-			$path = module_file_path($module, 'language', $language .'/'. $filename);
+			$path = Modules::file_path($module, 'language', $language .'/'. $filename);
 		}
 
 		// Load the actual array
@@ -228,13 +228,13 @@ if (!function_exists('save_lang_file'))
 		{
 			$module = str_replace('_lang.php', '', $filename);
 
-			$orig_path = module_file_path($module, 'language', 'english/'. $filename);
-			$path = module_file_path($module, 'language', $language .'/'. $filename);
+			$orig_path = Modules::file_path($module, 'language', 'english/'. $filename);
+			$path = Modules::file_path($module, 'language', $language .'/'. $filename);
 
 			// If it's empty still, just grab the module path
 			if (empty($path))
 			{
-				$path = module_path($module, 'language');
+				$path = Modules::path($module, 'language');
 			}
 		}
 

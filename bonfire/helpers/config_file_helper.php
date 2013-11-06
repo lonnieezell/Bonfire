@@ -51,7 +51,7 @@ if ( ! function_exists('read_config'))
 		$found = FALSE;
 		if ($module)
 		{
-			$file_details = module_file_path($module, 'config', $file.'.php');
+			$file_details = Modules::file_path($module, 'config', $file.'.php');
 
 			if (!empty($file_details))
 			{

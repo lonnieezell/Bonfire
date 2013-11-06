@@ -130,7 +130,7 @@ class Docs extends Base_Controller {
         $docs_modules = array();
 
         foreach (Modules::list_modules() as $module) {
-            $path = module_path($module) . '/' . $this->docsDir;
+            $path = Modules::path($module) . '/' . $this->docsDir;
             if (is_dir($path)) {
                 $docs_modules[$module] = $this->get_folder_files($path, $module);
             }
@@ -198,7 +198,7 @@ class Docs extends Base_Controller {
 
             case $this->docsTypeMod:
                 // Assume it's a module
-                $mod_path = module_path($module, $this->docsDir);
+                $mod_path = Modules::path($module, $this->docsDir);
                 $content = is_file($mod_path . '/' . $file) ? file_get_contents($mod_path . '/' . $file) : '';
                 break;
         }

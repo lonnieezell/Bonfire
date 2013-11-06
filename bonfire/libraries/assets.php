@@ -1371,19 +1371,19 @@ class Assets
 				$file_path_name = $file;
 
 				// try the /module/assets folder
-				$path = module_file_path($module, 'assets', $file_path_name . $type);
+				$path = Modules::file_path($module, 'assets', $file_path_name . $type);
 
 				// If path is empty, try the /module/assets/type folder
 				if (empty($path))
 				{
 					$file_path_name = $clean_type . '/' . $file;
-					$path = module_file_path($module, 'assets', $file_path_name . $type);
+					$path = Modules::file_path($module, 'assets', $file_path_name . $type);
 				}
 
 				// If we have a path and the language is right-to-left, try adding -rtl to the file name
 				if ( ! empty($path) && $rtl_set)
 				{
-					$path_rtl = module_file_path($module, 'assets', $file_path_name . '-' . $rtl . $type);
+					$path_rtl = Modules::file_path($module, 'assets', $file_path_name . '-' . $rtl . $type);
 					if ( ! empty($path_rtl))
 					{
 						$path = $path_rtl;

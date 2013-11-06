@@ -163,6 +163,8 @@ if ( ! function_exists('module_controller_exists'))
 	/**
 	 * Determines whether a controller exists for a module.
 	 *
+	 * DEPRECATED in 0.7.1. Use Modules::controller_exists() instead.
+	 *
 	 * @param $controller string The name of the controller to look for (without the .php)
 	 * @param $module string The name of module to look in.
 	 *
@@ -170,21 +172,7 @@ if ( ! function_exists('module_controller_exists'))
 	 */
 	function module_controller_exists($controller=null, $module=null)
 	{
-		if (empty($controller) || empty($module))
-		{
-			return false;
-		}
-
-		// Look in all module paths
-		foreach (Modules::folders() as $folder)
-		{
-			if (is_file($folder . $module . '/controllers/' . $controller . '.php'))
-			{
-				return true;
-			}
-		}
-
-		return false;
+		return Modules::controller_exists($controller, $module);
 	}
 }
 
@@ -195,6 +183,8 @@ if ( ! function_exists('module_file_path'))
 	/**
 	 * Finds the path to a module's file.
 	 *
+	 * DEPRECATED in 0.7.1. Use Modules::file_path() instead.
+	 *
 	 * @param $module string The name of the module to find.
 	 * @param $folder string The folder within the module to search for the file (ie. controllers).
 	 * @param $file string The name of the file to search for.
@@ -203,20 +193,7 @@ if ( ! function_exists('module_file_path'))
 	 */
 	function module_file_path($module=null, $folder=null, $file=null)
 	{
-		if (empty($module) || empty($folder) || empty($file))
-		{
-			return false;
-		}
-
-		foreach (Modules::folders() as $module_folder)
-		{
-			$test_file = $module_folder . $module .'/'. $folder .'/'. $file;
-
-			if (is_file($test_file))
-			{
-				return $test_file;
-			}
-		}
+		return Modules::file_path($module, $folder, $file);
 	}
 }
 
@@ -227,6 +204,8 @@ if( ! function_exists('module_path'))
 	/**
 	 * Returns the path to the module and it's specified folder.
 	 *
+	 * DEPRECATED in 0.7.1. Use Modules::file_path() instead.
+	 *
 	 * @param $module string The name of the module (must match the folder name)
 	 * @param $folder string The folder name to search for. (Optional)
 	 *
@@ -234,20 +213,7 @@ if( ! function_exists('module_path'))
 	 */
 	function module_path($module=null, $folder=null)
 	{
-		foreach (Modules::folders() as $module_folder)
-		{
-			if (is_dir($module_folder . $module))
-			{
-				if ( ! empty($folder) && is_dir($module_folder . $module . '/' . $folder))
-				{
-					return $module_folder . $module . '/' . $folder;
-				}
-				else
-				{
-					return $module_folder . $module . '/';
-				}
-			}
-		}
+		return Modules::path($module, $folder);
 	}
 }
 
@@ -266,60 +232,7 @@ if ( ! function_exists('module_files'))
 	 */
 	function module_files($module_name=null, $module_folder=null, $exclude_core=false)
 	{
-		if ( ! function_exists('directory_map'))
-		{
-			$ci =& get_instance();
-			$ci->load->helper('directory');
-		}
-
-		$files = array();
-
-		foreach (Modules::folders() as $path)
-		{
-			// If we're ignoring core modules and we find the core module folder... skip it.
-			if ($exclude_core === true && strpos($path, 'bonfire/modules') !== false)
-			{
-				continue;
-			}
-
-			if ( ! empty($module_name) && is_dir($path . $module_name))
-			{
-				$path = $path . $module_name;
-				$modules[$module_name] = directory_map($path);
-			}
-			else
-			{
-				$modules = directory_map($path);
-			}
-
-			// If the element is not an array, we know that it's a file,
-			// so we ignore it, otherwise it is assumbed to be a module.
-			if ( ! is_array($modules) || ! count($modules))
-			{
-				continue;
-			}
-
-			foreach ($modules as $mod_name => $values)
-			{
-				if (is_array($values))
-				{
-					// Add just the specified folder for this module
-					if ( ! empty($module_folder) && isset($values[$module_folder]) && count($values[$module_folder]))
-					{
-						$files[$mod_name] = array(
-							$module_folder	=> $values[$module_folder],
-						);
-					}
-					// Add the entire module
-					elseif (empty($module_folder))
-					{
-						$files[$mod_name] = $values;
-					}
-				}
-			}
-		}
-
-		return count($files) ? $files : false;
+		return Modules::files($module_name, $module_folder, $exclude_core);
 	}
 }
 
@@ -347,6 +260,8 @@ if ( ! function_exists('module_config'))
 	 * );
 	 * </code>
 	 *
+	 * DEPRECATED in 0.7.1. Use Modules::config() instead.
+	 *
 	 * @param $module_name string The name of the module.
 	 * @param $return_full boolean If true, will return the entire config array. If false, will return only the 'module_config' portion.
 	 *
@@ -354,26 +269,7 @@ if ( ! function_exists('module_config'))
 	 */
 	function module_config($module_name=null, $return_full=false)
 	{
-		$config_param = array();
-
-		$config_file = module_file_path($module_name, 'config', 'config.php');
-
-		if (file_exists($config_file))
-		{
-			include($config_file);
-
-			/* Check for the optional module_config and serialize if exists*/
-			if (isset($config['module_config']))
-			{
-				$config_param =$config['module_config'];
-			}
-			elseif ($return_full === true && isset($config) && is_array($config))
-			{
-				$config_param = $config;
-			}
-		}
-
-		return $config_param;
+		return Modules::config($module_name, $return_full);
 	}
 }
 
