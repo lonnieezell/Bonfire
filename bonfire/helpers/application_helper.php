@@ -613,14 +613,13 @@ if ( ! function_exists('iif'))
 	*/
 	function iif($expression, $returntrue, $returnfalse = '', $echo = false )
 	{
-		if ( $echo === false )
-		{
-			return ( $expression == 0 ) ? $returnfalse : $returntrue;
-		}
-		else
-		{
-			echo ( $expression == 0 ) ? $returnfalse : $returntrue;
-		}
+		$return = $expression ? $returntrue : $returnfalse;
+
+        if ( $echo === false ) {
+            return $return;
+        }
+
+        echo $return;
 	}//end iif()
 }
 

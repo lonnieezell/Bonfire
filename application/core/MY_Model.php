@@ -725,7 +725,8 @@ class BF_Model extends CI_Model
 	 */
 	public function update_where($field=NULL, $value=NULL, $data=NULL)
 	{
-		return $this->update(array($field => $value), $data);
+		$where = is_array($field) ? $field : array($field => $value);
+        	return $this->update($where, $data);
 	}//end update_where()
 
 	//---------------------------------------------------------------

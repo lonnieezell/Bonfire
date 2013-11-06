@@ -1,5 +1,13 @@
 ## Under development
 
+### 0.7.1 - not released
+
+Closes Issues:
+
+* #926 - Application helper iif issue
+* #922 - Type of MY_Model update_where() method
+* #919 - Incorrect documentation of date_format field in MY_Model
+* #917 - Problem when SITE_AREA is changed
 
 ## Released versions
 
