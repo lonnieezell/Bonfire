@@ -319,23 +319,17 @@ class CI_Loader {
 			return;
 		}
 
-		// Detect module
-		if (list($module, $class) = $this->detect_module($model))
-		{
-			// Module already loaded
-			if (in_array($module, $this->_ci_modules))
-			{
-				return $this->_model($class, $name, $db_conn);
-			}
+        global $RTR;
 
-			// Add module
-			$this->add_module($module);
+		// Detect module
+		if (list($module, $class) = Modules::find($model, $RTR->fetch_module(), 'models'))
+		{
+            array_unshift($this->_ci_model_paths, str_replace('models/', '', $module) );
 
 			// Let parent do the heavy work
 			$void = $this->_model($class, $name, $db_conn);
 
-			// Remove module
-			$this->remove_module();
+			array_shift($this->_ci_model_paths);
 
 			return $void;
 		}
