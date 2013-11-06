@@ -276,23 +276,17 @@ class CI_Loader {
 			return;
 		}
 
-		// Detect module
-		if (list($module, $class) = $this->detect_module($library))
-		{
-			// Module already loaded
-			if (in_array($module, $this->_ci_modules))
-			{
-				return $this->_library($class, $params, $object_name);
-			}
+        global $RTR;
 
-			// Add module
-			$this->add_module($module);
+		// Detect module
+		if (list($module, $class) = Modules::find($library, $RTR->fetch_module(), 'libraries'))
+		{
+			array_unshift($this->_ci_library_paths, str_replace('libraries/', '', $module) );
 
 			// Let original do the heavy work
 			$void = $this->_library($class, $params, $object_name);
 
-			// Remove module
-			$this->remove_module();
+			array_shift($this->_ci_library_paths);
 
 			return $void;
 		}
@@ -672,25 +666,13 @@ class CI_Loader {
 			$module = substr($class, 0, $first_slash);
 			$class = substr($class, $first_slash + 1);
 
-            // Grab the router's module. We will look first
-            // to see if the current module has this location.
-            // If it does, we use that, otherwise, use the
-            // parsed bits from the $class string.
-            $router_module =  get_instance()->router->fetch_module();
-
-            if ( ! empty($folder))
-            {
-                if ( ! empty($router_module) && $this->find_module($router_module, $folder . $module .'/'. $class .'.php'))
-                {
-                    return array($router_module, $module .'/'. $class);
-                }
-            }
-
 			// Check if module exists by itself.
 			if ($this->find_module($module))
 			{
 				return array($module, $class);
 			}
+
+            $router_module =  get_instance()->router->fetch_module();
 
             // If we're still here, try the router_module
             // without the sub_path.
@@ -793,16 +775,6 @@ class CI_Loader {
 	 */
 	public function _library($library = '', $params = NULL, $object_name = NULL)
 	{
-		if (is_array($library))
-		{
-			foreach ($library as $class)
-			{
-				$this->library($class, $params);
-			}
-
-			return;
-		}
-
 		if ($library == '' OR isset($this->_base_classes[$library]))
 		{
 			return FALSE;
