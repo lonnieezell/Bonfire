@@ -426,7 +426,7 @@ class CI_Loader {
         global $RTR;
 
 		// Detect module
-		if (list($module, $class) = Modules::find($helper, $RTR->fetch_module(), 'helpers'))
+		if (list($module, $class) = Modules::find($helper .'_helper', $RTR->fetch_module(), 'helpers'))
 		{
             $this->add_package_path( str_replace('helpers/', '', $module) );
 
