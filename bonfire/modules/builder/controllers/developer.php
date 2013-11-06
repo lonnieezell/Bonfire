@@ -78,7 +78,7 @@ class Developer extends Admin_Controller {
      */
     public function index()
     {
-        $modules = module_list(true);
+        $modules = Modules::list_modules(true);
         $configs = array();
 
         foreach ($modules as $module)

@@ -136,4 +136,69 @@ class Modules {
 
     //--------------------------------------------------------------------
 
+    /**
+     * Convenience method to return the locations where modules can be found.
+     *
+     * @return array The config settings array for modules_locations.
+     */
+    public function folders()
+    {
+        return config_item('modules_locations');
+    }
+
+    //--------------------------------------------------------------------
+
+    /**
+     * Returns a list of all modules in the system.
+     *
+     * @param bool $exclude_core Whether to exclude the Bonfire core modules or not
+     *
+     * @return array A list of all modules in the system.
+     */
+    public function list_modules($exclude_core=false)
+    {
+        if ( ! function_exists('directory_map'))
+        {
+            $ci =& get_instance();
+            $ci->load->helper('directory');
+        }
+
+        $map = array();
+
+        $folders = Modules::folders();
+        foreach ($folders as $folder)
+        {
+            // If we're excluding core modules and this module
+            // is in the core modules folder... ignore it.
+            if ($exclude_core && strpos($folder, 'bonfire/modules') !== false)
+            {
+                continue;
+            }
+
+            $dirs = directory_map($folder, 1);
+            if ( ! is_array($dirs))
+            {
+                $dirs = array();
+            }
+
+            $map = array_merge($map, $dirs);
+        }
+
+        // Clean out any html or php files
+        if ($count = count($map))
+        {
+            for ($i = 0; $i < $count; $i++)
+            {
+                if (strpos($map[$i], '.html') !== false || strpos($map[$i], '.php') !== false)
+                {
+                    unset($map[$i]);
+                }
+            }
+        }
+
+        return $map;
+    }
+
+    //--------------------------------------------------------------------
+
 }

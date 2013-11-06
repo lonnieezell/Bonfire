@@ -102,7 +102,7 @@ class Reports extends Admin_Controller
 			Template::set('top_users', $query->result());
 
 			Template::set('users', $this->user_model->where('users.deleted', 0)->find_all());
-			Template::set('modules', module_list());
+			Template::set('modules', Modules::list_modules());
 			Template::set('activities', $this->activity_model->find_all());
 			Template::render();
 		}
@@ -329,7 +329,7 @@ class Reports extends Admin_Controller
 		switch ($which)
 		{
 			case 'activity_module':
-				$modules = module_list();
+				$modules = Modules::list_modules();
 				foreach ($modules as $mod)
 				{
 					$options[$mod] = $mod;

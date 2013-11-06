@@ -104,6 +104,7 @@ If logging is enabled in your <tt>application/config/config.php</tt> file, then 
 
 Returns an array of the folders that modules are allowed to be stored in. These are set in <tt>application/config/config.php</tt>.
 
+DEPRECATED in version 0.7.1. Use Modules::folders() instead.
 
     print_r( module_folders() );
 
@@ -118,6 +119,7 @@ Returns an array of the folders that modules are allowed to be stored in. These 
 
 Returns a list of all modules in the system. If TRUE is passed as the only parameter, any Bonfire core modules will NOT be shown, only your custom modules. If FALSE is passed, both core and custom modules will be listed.
 
+DEPRECATED in 0.7.1. Use Modules::list_modules() instead.
 
     print_r( module_list() );
 

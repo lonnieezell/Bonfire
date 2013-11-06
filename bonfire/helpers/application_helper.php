@@ -127,6 +127,8 @@ if ( ! function_exists('module_folders'))
 	 * Returns an array of the folders that modules are allowed to be stored in.
 	 * These are set in *bonfire/application/third_party/MX/Modules.php*.
 	 *
+	 * DEPRECATED in 0.7.1. Use Modules::folders() instead.
+	 *
 	 * @return array The folders that modules are allowed to be stored in.
 	 */
 	function module_folders()
@@ -142,51 +144,15 @@ if ( ! function_exists('module_list'))
 	/**
 	 * Returns a list of all modules in the system.
 	 *
+	 * DEPRECATED in 0.7.1. Use Modules::list() instead.
+	 *
 	 * @param bool $exclude_core Whether to exclude the Bonfire core modules or not
 	 *
 	 * @return array A list of all modules in the system.
 	 */
 	function module_list($exclude_core=false)
 	{
-		if ( ! function_exists('directory_map'))
-		{
-			$ci =& get_instance();
-			$ci->load->helper('directory');
-		}
-
-		$map = array();
-
-		foreach (module_folders() as $folder)
-		{
-			// If we're excluding core modules and this module
-			// is in the core modules folder... ignore it.
-			if ($exclude_core && strpos($folder, 'bonfire/modules') !== false)
-			{
-				continue;
-			}
-
-			$dirs = directory_map($folder, 1);
-			if ( ! is_array($dirs))
-			{
-				$dirs = array();
-			}
-
-			$map = array_merge($map, $dirs);
-		}
-
-		// Clean out any html or php files
-		if ($count = count($map))
-		{
-			for ($i = 0; $i < $count; $i++)
-			{
-				if (strpos($map[$i], '.html') !== false || strpos($map[$i], '.php') !== false)
-				{
-					unset($map[$i]);
-				}
-			}
-		}
-
-		return $map;
+		return Modules::list_modules($exclude_core);
 	}
 }
 
@@ -210,7 +176,7 @@ if ( ! function_exists('module_controller_exists'))
 		}
 
 		// Look in all module paths
-		foreach (module_folders() as $folder)
+		foreach (Modules::folders() as $folder)
 		{
 			if (is_file($folder . $module . '/controllers/' . $controller . '.php'))
 			{
@@ -242,7 +208,7 @@ if ( ! function_exists('module_file_path'))
 			return false;
 		}
 
-		foreach (module_folders() as $module_folder)
+		foreach (Modules::folders() as $module_folder)
 		{
 			$test_file = $module_folder . $module .'/'. $folder .'/'. $file;
 
@@ -268,7 +234,7 @@ if( ! function_exists('module_path'))
 	 */
 	function module_path($module=null, $folder=null)
 	{
-		foreach (module_folders() as $module_folder)
+		foreach (Modules::folders() as $module_folder)
 		{
 			if (is_dir($module_folder . $module))
 			{
@@ -308,7 +274,7 @@ if ( ! function_exists('module_files'))
 
 		$files = array();
 
-		foreach (module_folders() as $path)
+		foreach (Modules::folders() as $path)
 		{
 			// If we're ignoring core modules and we find the core module folder... skip it.
 			if ($exclude_core === true && strpos($path, 'bonfire/modules') !== false)

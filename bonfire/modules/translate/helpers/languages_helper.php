@@ -77,8 +77,8 @@ if (!function_exists('list_lang_files'))
 		$lang_files['core'] = find_lang_files(APPPATH .'language/'. $language .'/');
 
 		// Module lang files
-		$modules = module_list();
-		$custom_modules = module_list(TRUE);
+		$modules = Modules::list_modules();
+		$custom_modules = Modules::list_modules(TRUE);
 
 		foreach ($modules as $module)
 		{

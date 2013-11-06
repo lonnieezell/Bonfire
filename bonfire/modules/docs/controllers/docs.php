@@ -129,7 +129,7 @@ class Docs extends Base_Controller {
     {
         $docs_modules = array();
 
-        foreach (module_list() as $module) {
+        foreach (Modules::list_modules() as $module) {
             $path = module_path($module) . '/' . $this->docsDir;
             if (is_dir($path)) {
                 $docs_modules[$module] = $this->get_folder_files($path, $module);
@@ -164,7 +164,7 @@ class Docs extends Base_Controller {
 
         // Is it a module?
         if ($type != $this->docsTypeApp && $type != $this->docsTypeBf) {
-            $modules = module_list();
+            $modules = Modules::list_modules();
             if (in_array($type, $modules)) {
                 $module = $type;
                 $type = $this->docsTypeMod;

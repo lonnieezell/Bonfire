@@ -76,7 +76,7 @@ class Events
 		self::$events = read_config('events', TRUE, NULL, FALSE);
 
         // merge other modules events
-        foreach(module_list(TRUE) as $module)
+        foreach(Modules::list_modules(TRUE) as $module)
         {
         	$module_events = read_config('events', TRUE, $module, TRUE);
 

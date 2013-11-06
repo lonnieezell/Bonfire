@@ -401,7 +401,7 @@ class Contexts
 	{
 		// Get a list of modules with a controller matching
 		// $context ('content', 'settings', 'reports', or 'developer')
-		$module_list = module_list();
+		$module_list = Modules::list_modules();
 
 		foreach ($module_list as $module)
 		{
