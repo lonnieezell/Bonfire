@@ -371,38 +371,14 @@ class CI_Loader {
      */
     public function view($view, $vars = array(), $return = FALSE)
     {
+        list($path, $_view) = Modules::find($view, get_instance()->router->fetch_module(), 'views');
 
-		// Detect module
-		if (list($module, $class) = $this->detect_module($view))
-		{
-			// Module already loaded
-			// if (in_array($module, $this->_ci_modules))
-			// {
-			// 	return $this->_view($view, $vars, $return);
-			// }
+        if ($path != FALSE) {
+            $this->_ci_view_paths = array($path => TRUE) + $this->_ci_view_paths;
+            $view = $_view;
+        }
 
-			// Add module
-			$this->add_module($module);
-
-            // If the module name is the first part of it,
-            // strip it so it displays properly.
-            if ( ! empty($module) && strpos($view, $module) === 0)
-            {
-                $view = str_replace($module .'/', '', $view);
-            }
-
-			// Let parent do the heavy work
-			$void = $this->_view($view, $vars, $return);
-
-			// Remove module
-			$this->remove_module();
-
-			return $void;
-		}
-		else
-		{
-			return $this->_view($view, $vars, $return);
-		}
+        return $this->_ci_load(array('_ci_view' => $view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
     }
 
     //--------------------------------------------------------------------
@@ -687,7 +663,7 @@ class CI_Loader {
      * @param	string
      * @return	array|boolean
      */
-    private function detect_module($class)
+    private function detect_module($class, $folder='')
     {
 		$class = str_replace('.php', '', trim($class, '/'));
 
@@ -696,21 +672,31 @@ class CI_Loader {
 			$module = substr($class, 0, $first_slash);
 			$class = substr($class, $first_slash + 1);
 
-			// Check if module exists
+            // Grab the router's module. We will look first
+            // to see if the current module has this location.
+            // If it does, we use that, otherwise, use the
+            // parsed bits from the $class string.
+            $router_module =  get_instance()->router->fetch_module();
+
+            if ( ! empty($folder))
+            {
+                if ( ! empty($router_module) && $this->find_module($router_module, $folder . $module .'/'. $class .'.php'))
+                {
+                    return array($router_module, $module .'/'. $class);
+                }
+            }
+
+			// Check if module exists by itself.
 			if ($this->find_module($module))
 			{
 				return array($module, $class);
 			}
-			else
-			{
-				// Use the routers' module... might make more sense
-				// to just do this anyway...
-				$router_module =  get_instance()->router->fetch_module();
 
-				if ($this->find_module($router_module))
-				{
-					return array($router_module, $module);
-				}
+            // If we're still here, try the router_module
+            // without the sub_path.
+			if ($this->find_module($router_module))
+			{
+				return array($router_module, $module);
 			}
 		}
 
@@ -721,11 +707,16 @@ class CI_Loader {
 
 	/**
 	* Searches a given module name. Returns the path if found, FALSE otherwise
-	*
-	* @param string $module
+    *
+    * If a sub_path is provided, will look in the module for that specific location.
+    * If the location exists it returns TRUE, otherwise false. Good for verifying
+    * that a folder or file exists at that location.
+    *
+	* @param string $module    The name of the module to search for.
+    * @param strign $sub_path  The name of the folder/file combo to search for.
 	* @return string|boolean
 	*/
-	public function find_module($module)
+	public function find_module($module, $sub_path='')
 	{
 		$config = & $this->_ci_get_component('config');
 
@@ -734,7 +725,7 @@ class CI_Loader {
 		{
 			$path = $location . rtrim($module, '/') . '/';
 
-			if (is_dir($path))
+			if (file_exists($path . $sub_path))
 			{
 				return $path;
 			}
@@ -1003,29 +994,6 @@ class CI_Loader {
 		$class = 'CI_DB_'.$CI->db->dbdriver.'_forge';
 
 		$CI->dbforge = new $class();
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Load View
-	 *
-	 * This function is used to load a "view" file.  It has three parameters:
-	 *
-	 * 1. The name of the "view" file to be included.
-	 * 2. An associative array of data to be extracted for use in the view.
-	 * 3. TRUE/FALSE - whether to return the data or load it.  In
-	 * some cases it's advantageous to be able to return data so that
-	 * a developer can process it in some way.
-	 *
-	 * @param	string
-	 * @param	array
-	 * @param	bool
-	 * @return	void
-	 */
-	public function _view($view, $vars = array(), $return = FALSE)
-	{
-		return $this->_ci_load(array('_ci_view' => $view, '_ci_vars' => $this->_ci_object_to_array($vars), '_ci_return' => $return));
 	}
 
 	// --------------------------------------------------------------------

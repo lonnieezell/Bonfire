@@ -68,4 +68,72 @@ class Modules {
 
     //--------------------------------------------------------------------
 
+    /**
+     * Scans the module directories for a specific file.
+     *
+     *
+     * @param  string $file   The name of the file to find.
+     * @param  string $module the name of the module or modules to look in for the file.
+     * @param  string $base   The path within the module to look for the file.
+     * @return array          [ {full_path_to_file}, {file} ] or FALSE
+     */
+    public function find($file, $module, $base)
+    {
+        // Find our actual file name. It will always be the last element.
+        $segments   = explode('/', $file);
+
+        $file       = array_pop($segments);
+        $file_ext   = (pathinfo($file, PATHINFO_EXTENSION)) ? $file : $file.EXT;
+
+        // Put the pieces back so that we have our path.
+        $path = implode('/', $segments) .'/';
+
+        $base = rtrim($base, '/') .'/';
+
+        // We need to look in any possible module locations
+        // based on the string segments.
+        $modules = array();
+        if ( ! empty($module)) $modules[$module] = $path;
+
+        // Collect the modules from our segments
+        if ( ! empty($segments))
+        {
+            $modules[array_shift($segments)] = ltrim( implode('/', $segments) .'/', '/' );
+        }
+
+        // Try to find our file/module combo.
+        $locations = config_item('modules_locations');
+
+        foreach ($locations as $location)
+        {
+            foreach ($modules as $module => $subpath)
+            {
+                // Combine our elements to make an actual path to the file
+                $full_path = $location . $module .'/'. $base . $subpath;
+
+                // If it starts with a '/' assume it's a full path already.
+                if (substr($path, 0, 1) == '/')
+                {
+                    $full_path = $path;
+                }
+
+                // Libraries are a special consideration since they are
+                // frequently ucfirst.
+                if ($base == 'libraries/' && is_file($full_path . ucfirst($file_ext)))
+                {
+                    return array($full_path, ucfirst($file));
+                }
+
+                if (is_file($full_path . $file_ext))
+                {
+                    return array($full_path, $file);
+                }
+            }
+        }
+
+        return array(false, $file);
+    }
+
+    //--------------------------------------------------------------------
+
 }
