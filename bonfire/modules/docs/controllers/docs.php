@@ -68,8 +68,8 @@ class Docs extends Base_Controller {
 
         $data['docsDir'] = $this->docsDir;
         $data['docsExt'] = $this->docsExt;
-
-        return $this->load->view('_sidebar', $data, true);
+// die(var_dump($data));
+        return $this->load->view('docs/_sidebar', $data, true);
     }
 
     //--------------------------------------------------------------------
