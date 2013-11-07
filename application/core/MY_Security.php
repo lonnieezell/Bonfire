@@ -8,7 +8,7 @@ class MY_Security extends CI_Security {
 
             {module}/{controller}
      */
-    protected $ignored_controllers = array('stats/stats');
+    protected $ignored_controllers = array();
 
     //--------------------------------------------------------------------
 
