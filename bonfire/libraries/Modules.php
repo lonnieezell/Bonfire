@@ -17,6 +17,14 @@ spl_autoload_register('Modules::autoload');
 class Modules {
 
     /**
+     * Modules/routes cache
+     * @var array
+     */
+    private static $routes = array();
+
+    //--------------------------------------------------------------------
+
+    /**
      * Autoloader for core files and libraries.
      *
      * @param  string $class Class to autoload.
@@ -408,4 +416,5 @@ class Modules {
     }
 
     //--------------------------------------------------------------------
+
 }

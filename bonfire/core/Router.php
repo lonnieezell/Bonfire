@@ -373,7 +373,7 @@ class CI_Router {
 		{
 			foreach ($this->config->item('modules_locations') as $location)
 			{
-				if (is_file($file = $location . $module .'config/routes.php'))
+				if (is_file($file = $location . $module .'/config/routes.php'))
 				{
 					include ($file);
 
