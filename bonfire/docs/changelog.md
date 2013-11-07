@@ -8,6 +8,7 @@ Closes Issues:
 * #922 - Type of MY_Model update_where() method
 * #919 - Incorrect documentation of date_format field in MY_Model
 * #917 - Problem when SITE_AREA is changed
+* #612 - Modifying set created and set modified from models
 
 ## Released versions
 
