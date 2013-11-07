@@ -8,6 +8,9 @@ A few small changes have been made to the main <tt>index.php</tt> file that ship
 
 A new constant, <tt>BFPATH</tt>, is available that points to the root of Bonfire's specific code. By default this is <tt>/bonfire/</tt>.
 
+## CodeIgniter.php
+
+The controller loading section has been modified to check in /bonfire/controllers if a controller is not found in the application/controllers folder. This allows the installer controller (and potentially others) to remain tucked away with the rest of the Bonfire code.
 
 ## Common.php
 

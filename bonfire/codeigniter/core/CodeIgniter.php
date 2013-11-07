@@ -242,12 +242,28 @@
 	// Load the local application controller
 	// Note: The Router class automatically validates the controller path using the router->_validate_request().
 	// If this include fails it means that the default controller in the Routes.php file is not resolving to something valid.
-	if ( ! file_exists(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
+
+	$found = false;
+
+	// Check the application controllers
+	if (file_exists(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
+	{
+		$found = APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php';
+	}
+
+	if ( ! $found && file_exists(BFPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
+	{
+		$found = BFPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php';
+	}
+
+	// Check Bonfire's controllers.
+
+	if ( ! $found)
 	{
 		show_error('Unable to load your default controller. Please make sure the controller specified in your Routes.php file is valid.');
 	}
 
-	include(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php');
+	include( $found );
 
 	// Set a mark point for benchmarking
 	$BM->mark('loading_time:_base_classes_end');
