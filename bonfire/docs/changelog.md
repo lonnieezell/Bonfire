@@ -9,6 +9,7 @@ Closes Issues:
 * #919 - Incorrect documentation of date_format field in MY_Model
 * #917 - Problem when SITE_AREA is changed
 * #612 - Modifying set created and set modified from models
+* #637 - Bonfire admin topbar CSS breaks scrolling features (Firefox)
 
 ## Released versions
 
