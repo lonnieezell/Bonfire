@@ -567,7 +567,7 @@ class Installer_lib {
 	{
 		$mod_versions = array();
 
-		$modules = Modules::module_files(null, 'migrations');
+		$modules = Modules::files(null, 'migrations');
 
 		if ($modules === false)
 		{

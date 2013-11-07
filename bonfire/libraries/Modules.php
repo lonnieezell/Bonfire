@@ -85,7 +85,7 @@ class Modules {
      * @param  string $base   The path within the module to look for the file.
      * @return array          [ {full_path_to_file}, {file} ] or FALSE
      */
-    public function find($file, $module, $base)
+    public static function find($file, $module, $base)
     {
         // Find our actual file name. It will always be the last element.
         $segments   = explode('/', $file);
@@ -149,7 +149,7 @@ class Modules {
      *
      * @return array The config settings array for modules_locations.
      */
-    public function folders()
+    public static function folders()
     {
         return config_item('modules_locations');
     }
@@ -163,7 +163,7 @@ class Modules {
      *
      * @return array A list of all modules in the system.
      */
-    public function list_modules($exclude_core=false)
+    public static function list_modules($exclude_core=false)
     {
         if ( ! function_exists('directory_map'))
         {
@@ -217,7 +217,7 @@ class Modules {
      *
      * @return boolean
      */
-    public function controller_exists($controller=null, $module=null)
+    public static function controller_exists($controller=null, $module=null)
     {
         if (empty($controller) || empty($module))
         {
@@ -248,7 +248,7 @@ class Modules {
      *
      * @return string The full path to the file.
      */
-    public function file_path($module=null, $folder=null, $file=null)
+    public static function file_path($module=null, $folder=null, $file=null)
     {
         if (empty($module) || empty($folder) || empty($file))
         {
@@ -277,7 +277,7 @@ class Modules {
      *
      * @return string The path, relative to the front controller.
      */
-    function path($module=null, $folder=null)
+    public static function path($module=null, $folder=null)
     {
         foreach (Modules::folders() as $module_folder)
         {
@@ -306,7 +306,7 @@ class Modules {
      *
      * @return array An associative array, like: array('module_name' => array('folder' => array('file1', 'file2')))
      */
-    function module_files($module_name=null, $module_folder=null, $exclude_core=false)
+    public static function files($module_name=null, $module_folder=null, $exclude_core=false)
     {
         if ( ! function_exists('directory_map'))
         {
@@ -391,7 +391,7 @@ class Modules {
      *
      * @return array An array of config settings, or an empty array if empty/not found.
      */
-    function config($module_name=null, $return_full=false)
+    public static function config($module_name=null, $return_full=false)
     {
         $config_param = array();
 
