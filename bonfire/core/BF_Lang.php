@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
-class MY_Lang extends CI_Lang {
+class BF_Lang extends CI_Lang {
 
     /**
      * Load a language file
