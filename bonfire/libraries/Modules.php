@@ -117,10 +117,10 @@ class Modules {
             foreach ($modules as $module => $subpath)
             {
                 // Combine our elements to make an actual path to the file
-                $full_path = $location . $module .'/'. $base . $subpath;
+                $full_path = str_replace('//', '/', $location . $module .'/'. $base . $subpath);
 
                 // If it starts with a '/' assume it's a full path already.
-                if (substr($path, 0, 1) == '/')
+                if (substr($path, 0, 1) == '/' && strlen($path) > 1)
                 {
                     $full_path = $path;
                 }
@@ -131,7 +131,7 @@ class Modules {
                 {
                     return array($full_path, ucfirst($file));
                 }
-
+               // var_dump($full_path . $file_ext);
                 if (is_file($full_path . $file_ext))
                 {
                     return array($full_path, $file);
