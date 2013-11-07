@@ -48,6 +48,9 @@ class MY_DB {
     public function _error_message() { }
     public function affected_rows() { }
 
+    public function created_by() {}
+    public function modified_by() {}
+
     /**
      * CI_DB_Result
      */

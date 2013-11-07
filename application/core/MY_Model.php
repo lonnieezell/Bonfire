@@ -599,12 +599,6 @@ class BF_Model extends CI_Model
 
 		$data = $this->trigger('before_insert', $data);
 
-		if ($this->set_created === true && $this->log_user === true
-            && ! array_key_exists($this->created_by_field, $data)
-           ) {
-			$data[$this->created_by_field] = $this->auth->user_id();
-		}
-
 		// Insert it
 		$status = $this->db->insert($this->table_name, $data);
 
@@ -641,24 +635,9 @@ class BF_Model extends CI_Model
 	 */
 	public function insert_batch($data=null)
 	{
-		$set = array();
-
-		// Add the created field
-		if ($this->set_created === true) {
-			$set[$this->created_field] = $this->set_date();
-		}
-
-		if ($this->set_created === true && $this->log_user === true) {
-			$set[$this->created_by_field] = $this->auth->user_id();
-		}
-
-		if ( ! empty($set)) {
-			foreach ($data as $key => &$record) {
-				$record = $this->trigger('before_insert', $record);
-
-				$data[$key] = array_merge($set, $data[$key]);
-			}
-		}
+        array_walk($data, function(&$record, $key) {
+            $record = $this->trigger('before_insert', $record);
+        });
 
 		// Insert it
 		$status = $this->db->insert_batch($this->table_name, $data);
@@ -695,12 +674,6 @@ class BF_Model extends CI_Model
 		}
 
 		$data = $this->trigger('before_update', $data);
-
-		// Add the user id if using a modified_by field
-		if ($this->set_modified === TRUE && $this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data))
-		{
-			$data[$this->modified_by_field] = $this->auth->user_id();
-		}
 
 		if ($result = $this->db->update($this->table_name, $data, $where))
 		{
@@ -746,18 +719,10 @@ class BF_Model extends CI_Model
 			return FALSE;
 		}
 
-        // Add the modified field
-        if ($this->set_modified === TRUE && !array_key_exists($this->modified_field, $data))
-        {
-            foreach ($data as $key => $record)
-            {
-                $data[$key][$this->modified_field] = $this->set_date();
-                if ($this->log_user === TRUE && !array_key_exists($this->modified_by_field, $data[$key]))
-                {
-                    $data[$key][$this->modified_by_field] = $this->auth->user_id();
-                }
-            }
-        }
+        // Run the triggers on each row
+        array_walk($data, function(&$record, $key) {
+            $record = $this->trigger('before_update', $record);
+        });
 
         $result = $this->db->update_batch($this->table_name, $data, $index);
         if (empty($result))
@@ -1193,10 +1158,21 @@ class BF_Model extends CI_Model
 	 */
 	public function created_on($row)
 	{
+        // Make sure the set_created flag is not temporarily off.
+        if ( ! $this->set_created)
+        {
+            return $row;
+        }
+
 		if ( ! array_key_exists($this->created_field, $row))
 		{
 			$row[$this->created_field] = $this->set_date();
 		}
+
+        if ( ! array_key_exists($this->created_by_field, $row) && $this->log_user)
+        {
+            $row[$this->created_by_field] = $this->auth->user_id();
+        }
 
 		return $row;
 	} // end created_on()
@@ -1213,10 +1189,21 @@ class BF_Model extends CI_Model
 	 */
 	public function modified_on($row)
 	{
+        // Make sure the set_created flag is not temporarily off.
+        if ( ! $this->set_modified)
+        {
+            return $row;
+        }
+
 		if ( ! array_key_exists($this->modified_field, $row))
 		{
 			$row[$this->modified_field] = $this->set_date();
 		}
+
+        if ( ! array_key_exists($this->modified_by_field, $row) && $this->log_user)
+        {
+            $row[$this->modified_by_field] = $this->auth->user_id();
+        }
 
 		return $row;
 	}

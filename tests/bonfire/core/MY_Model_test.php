@@ -335,8 +335,8 @@ class MY_Model_test extends CI_UnitTestCase {
         );
 
         $triggered_data = array(
-            array('created_on' => time(), 'title' => 'My Title'),
-            array('created_on' => time(), 'title' => 'Another Title')
+            array('title' => 'My Title', 'created_on' => time()),
+            array('title' => 'Another Title', 'created_on' => time())
         );
 
         $this->model->db->expectOnce('insert_batch', array( 'records_table', $triggered_data ));
