@@ -504,7 +504,7 @@ if ( ! function_exists('form_multiselect'))
 		{
 			$extra .= ' multiple="multiple"';
 		}
-		
+
 		return form_dropdown($name, $options, $selected, $label, $extra);
 	}
 }

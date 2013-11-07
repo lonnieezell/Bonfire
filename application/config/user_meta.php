@@ -20,23 +20,6 @@
 //------------------------------------------------------------------------
 
 $config['user_meta_fields'] =  array(
-	array(
-		'name'   => 'street_name',
-		'label'   => lang('user_meta_street_name'),
-		'rules'   => 'trim|max_length[100]',
-		'frontend' => TRUE,
-		'form_detail' => array(
-			'type' => 'input',
-			'settings' => array(
-				'name'		=> 'street_name',
-				'id'		=> 'street_name',
-				'maxlength'	=> '100',
-				'class'		=> 'span6',
-//				'required'	=> TRUE,
-			),
-		),
-	),
-
 
 	array(
 		'name'   => 'state',
@@ -66,28 +49,6 @@ $config['user_meta_fields'] =  array(
 				'maxlength'	=> '100',
 				'class'		=> 'span6'
 			),
-		),
-	),
-
-	array(
-		'name'   => 'type',
-		'label'   => lang('user_meta_type'),
-		'rules'   => 'required',
-		'frontend' => FALSE,
-		'admin_only' => TRUE,
-		'form_detail' => array(
-			'type' => 'dropdown',
-			'settings' => array(
-				'name'		=> 'type',
-				'id'		=> 'type',
-				'class'		=> 'span6',
-			),
-			'options' =>  array(
-                  'small'  => 'Small Shirt',
-                  'med'    => 'Medium Shirt',
-                  'large'   => 'Large Shirt',
-                  'xlarge' => 'Extra Large Shirt',
-                ),
 		),
 	),
 );
