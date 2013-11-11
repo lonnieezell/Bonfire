@@ -300,7 +300,7 @@ class Users extends Front_Controller
 		Template::set('user', $user);
 		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
-		Template::set_view('users/users/profile');
+		Template::set_view('profile');
 		Template::render();
 
 	}//end profile()
