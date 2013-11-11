@@ -79,7 +79,7 @@ class Base_Controller extends CI_Controller
 
 		Events::trigger('before_controller', get_class($this));
 
-		$this->set_current_user();
+		// $this->set_current_user();
 
 		// load the application lang file here so that the users language is known
 		$this->lang->load('application');

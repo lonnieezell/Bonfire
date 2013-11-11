@@ -589,6 +589,14 @@ class CI_Loader {
 				include_once ($filepath);
 			}
 
+            // Check for a Bonfire controller
+            $filepath = BFPATH . 'controllers/' . $router->fetch_directory() . $class . '.php';
+
+            if (file_exists($filepath))
+            {
+                include_once ($filepath);
+            }
+
 			// Controller class not found, show 404
 			if (!class_exists($class))
 			{

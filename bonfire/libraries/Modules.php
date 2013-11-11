@@ -71,7 +71,7 @@ class Modules {
         $args = func_get_args();
 
         // Use our built-in load method to handle this.
-        get_instance()->load->controller($module, $args);
+        return get_instance()->load->controller($module, $args);
     }
 
     //--------------------------------------------------------------------
