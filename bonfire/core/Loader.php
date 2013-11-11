@@ -281,17 +281,6 @@ class CI_Loader {
 		// Detect module
 		if (list($module, $class) = Modules::find($library, $RTR->fetch_module(), 'libraries'))
 		{
-            // Try to load a BF_* version of the library, but only if it's not in a module.
-            // if (empty($module))
-            // {
-            //     $bf_file = realpath(BFPATH) .'/libraries/BF_'. ucfirst($class) .'.php';
-
-            //     if (is_file($bf_file))
-            //     {
-            //         include $bf_file;
-            //     }
-            // }
-
 			$this->add_package_path( str_replace('libraries/', '', $module) );
 
 			// Let original do the heavy work
@@ -1042,7 +1031,6 @@ class CI_Loader {
 				continue;
 			}
 
-			// Try to load a Bonfire specific helper (BF_helper)
 			$bf_helper = BFPATH.'helpers/BF_'.$helper.'.php';
 
 			$ext_helper = APPPATH.'helpers/'.config_item('subclass_prefix').$helper.'.php';
@@ -1057,7 +1045,11 @@ class CI_Loader {
 					show_error('Unable to load the requested file: helpers/'.$helper.'.php');
 				}
 
+                // Load the MY_* version of the helper.
 				include_once($ext_helper);
+
+                // Load the BF_version of the helper after the MY_* version
+                // so that any MY_ functions overload the BF_* versions.
 				if (file_exists($bf_helper))
 				{
 					include_once($bf_helper);
@@ -1068,6 +1060,13 @@ class CI_Loader {
 				log_message('debug', 'Helper loaded: '.$helper);
 				continue;
 			}
+
+            // If we're here then there wasn't a MY_* version, so
+            // try to load the BF_* version again.
+            if (file_exists($bf_helper))
+            {
+                include_once($bf_helper);
+            }
 
 			// Try to load the helper
 			foreach ($this->_ci_helper_paths as $path)
@@ -1508,6 +1507,7 @@ class CI_Loader {
 				}
 
 				include_once($baseclass);
+
 				include_once($subclass);
 				$this->_ci_loaded_files[] = $subclass;
 
@@ -1546,9 +1546,23 @@ class CI_Loader {
 					return;
 				}
 
+                $prefix = '';
+
+                // Load the codeigniter version of the file.
 				include_once($filepath);
-				$this->_ci_loaded_files[] = $filepath;
-				return $this->_ci_init_class($class, '', $params, $object_name);
+                $this->_ci_loaded_files[] = $filepath;
+
+                // Try to load a Bonfire version of the file too (BF_*)
+                $bfclass = BFPATH.'libraries/BF_'.$class.'.php';
+                if (file_exists($bfclass))
+                {
+                    include_once($bfclass);
+                    $this->_ci_loaded_files[] = $bfclass;
+                    $prefix = 'BF_';
+                }
+
+
+				return $this->_ci_init_class($class, $prefix, $params, $object_name);
 			}
 
 		} // END FOREACH
@@ -1631,6 +1645,10 @@ class CI_Loader {
 			{
 				$name = config_item('subclass_prefix').$class;
 			}
+            elseif (class_exists('BF_'. $class))
+            {
+                $name = 'BF_'. $class;
+            }
 			else
 			{
 				$name = $class;
