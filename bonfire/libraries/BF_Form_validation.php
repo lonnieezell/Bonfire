@@ -28,7 +28,7 @@
  * @link       http://guides.cibonfire.com/core/form_validation.html
  *
  */
-class MY_Form_validation extends CI_Form_validation
+class BF_Form_validation extends CI_Form_validation
 {
 
 
@@ -54,7 +54,6 @@ class MY_Form_validation extends CI_Form_validation
 		$_POST = (isset($_FILES) && is_array($_FILES) && count($_FILES) > 0) ? array_merge($_POST,$_FILES) : $_POST;
 
 		parent::__construct($config);
-
 	}//end __construct()
 
 	//--------------------------------------------------------------------
