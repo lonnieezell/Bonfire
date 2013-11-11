@@ -399,34 +399,6 @@ class BF_Form_validation extends CI_Form_validation
 
 }//end class
 
-//--------------------------------------------------------------------
-// Helper Functions for Form Validation LIbrary
-//--------------------------------------------------------------------
-
-	/**
-	 * Check if the form has an error
-	 *
-	 * @access public
-	 *
-	 * @param string $field Name of the field
-	 *
-	 * @return bool
-	 */
-	function form_has_error($field=null)
-	{
-
-		if (FALSE === ($OBJ =& _get_validation_object()))
-		{
-			return FALSE;
-		}
-
-		$return = $OBJ->has_error($field);
-
-		return $return;
-	}//end form_has_error()
-
-//--------------------------------------------------------------------
-
 
 /* Author :  http://net.tutsplus.com/tutorials/php/6-codeigniter-hacks-for-the-masters/ */
 /* End of file : ./libraries/MY_Form_validation.php */

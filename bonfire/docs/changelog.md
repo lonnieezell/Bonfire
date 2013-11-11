@@ -5,6 +5,7 @@
 Additional Changes:
 
 * Deprecated the module_* functions in application_helper. They're in the Modules class now.
+* Deprecated form_has_error() method since CI's form_error() does the same thing.
 
 Closes Issues:
 

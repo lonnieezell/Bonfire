@@ -511,3 +511,32 @@ if ( ! function_exists('form_multiselect'))
 
 //--------------------------------------------------------------------
 
+if ( ! function_exists('form_has_error'))
+{
+	/**
+	 * Check if the form has an error
+	 *
+	 * DEPRECATED as of 0.7.1 since form_error() in the main
+	 * form library does the same thing. Not sure how this got it, actually...
+	 *
+	 * @access public
+	 *
+	 * @param string $field Name of the field
+	 *
+	 * @return bool
+	 */
+	function form_has_error($field=null)
+	{
+
+		if (FALSE === ($OBJ =& _get_validation_object()))
+		{
+			return FALSE;
+		}
+
+		$return = $OBJ->has_error($field);
+
+		return $return;
+	}//end form_has_error()
+
+}
+//--------------------------------------------------------------------
