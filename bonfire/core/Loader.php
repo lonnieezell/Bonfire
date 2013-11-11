@@ -281,6 +281,17 @@ class CI_Loader {
 		// Detect module
 		if (list($module, $class) = Modules::find($library, $RTR->fetch_module(), 'libraries'))
 		{
+            // Try to load a BF_* version of the library, but only if it's not in a module.
+            // if (empty($module))
+            // {
+            //     $bf_file = realpath(BFPATH) .'/libraries/BF_'. ucfirst($class) .'.php';
+
+            //     if (is_file($bf_file))
+            //     {
+            //         include $bf_file;
+            //     }
+            // }
+
 			$this->add_package_path( str_replace('libraries/', '', $module) );
 
 			// Let original do the heavy work
