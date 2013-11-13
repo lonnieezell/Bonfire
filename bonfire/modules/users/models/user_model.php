@@ -173,7 +173,6 @@ class User_model extends BF_Model
         array('name' => 'language'),
         array('name' => 'active'),
         array('name' => 'activate_hash'),
-        array('name' => 'password_iterations'),
         array('name' => 'force_password_reset'),
     );
 
@@ -306,8 +305,7 @@ class User_model extends BF_Model
 			return false;
 		}
 
-		$data['password_hash']			= $password['hash'];
-		$data['password_iterations']	= $password['iterations'];
+		$data['password_hash'] = $password['hash'];
 
 		unset($data['password'], $password);
 
@@ -364,8 +362,7 @@ class User_model extends BF_Model
 				return false;
 			}
 
-			$data['password_hash']			= $password['hash'];
-			$data['password_iterations']	= $password['iterations'];
+			$data['password_hash'] = $password['hash'];
 
 			unset($data['password'], $password);
 		}

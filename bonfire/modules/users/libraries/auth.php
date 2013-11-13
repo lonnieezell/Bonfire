@@ -142,7 +142,7 @@ class Auth
 		$this->ci->load->model('users/User_model', 'user_model');
 
 		// Grab the user from the db
-		$selects = 'id, email, username, users.role_id, users.deleted, users.active, banned, ban_message, password_hash, password_iterations, force_password_reset';
+		$selects = 'id, email, username, users.role_id, users.deleted, users.active, banned, ban_message, password_hash, force_password_reset';
 
 		if ($this->ci->settings_lib->item('auth.do_login_redirect'))
 		{
