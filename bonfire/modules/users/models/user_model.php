@@ -95,7 +95,7 @@ class User_model extends BF_Model
         array(
             'field' => 'password',
             'label' => 'lang:bf_password',
-            'rules' => 'min_length[8]|max_length[120]|valid_password|matches[pass_confirm]',
+            'rules' => 'max_length[120]|valid_password|matches[pass_confirm]',
         ),
         array(
             'field' => 'pass_confirm',
