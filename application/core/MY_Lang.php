@@ -27,6 +27,13 @@
  */
 class MY_Lang extends MX_Lang {
 
+    /**
+     * @var String The fallback language used for un-translated lines.
+     * If you change this, you should ensure that all language files have been
+     * translated to the language indicated by the new value.
+     */
+    protected $fallback = 'english';
+
 	public function __construct()
 	{
 		log_message('debug', "Bonfire MY_Lang: Language Class Initialized");
@@ -78,9 +85,9 @@ class MY_Lang extends MX_Lang {
 			$module = CI::$APP->router->fetch_module();
 		}
 
-		$loaded = $this->__load($langfile, 'english', $add_suffix, $alt_path, $module);
+		$loaded = $this->__load($langfile, $this->fallback, $add_suffix, $alt_path, $module);
 
-		if ($idiom != 'english')
+		if ($idiom != $this->fallback)
 		{
 			$loaded_native = $this->__load($langfile, $idiom, $add_suffix, $alt_path, $module);
 			if ($loaded_native)
@@ -96,7 +103,8 @@ class MY_Lang extends MX_Lang {
 
 		if (empty($loaded))
 		{
-			show_error("Unable to load the requested language file '$langfile' for current language AND for fallback to English.");
+            $fallbackLang = ucwords($this->fallback);
+			show_error("Unable to load the requested language file '$langfile' for current language '$idiom' AND for fallback to '$fallbackLang'.");
 		}
 
 		if ($return)
@@ -213,7 +221,6 @@ class MY_Lang extends MX_Lang {
 
 		return $this->language[$line];
 	}
-}
-// END Language Class
+} // END Language Class
 
 /* End of file MY_Lang.php */
