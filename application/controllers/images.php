@@ -79,6 +79,7 @@ class Images extends Base_Controller {
 		$width	= $this->input->get('width');
 		$ratio	= $this->input->get('ratio');
 		$force	= $this->input->get('force');
+		$module = $this->input->get('module');
 
 		$ext = pathinfo($file, PATHINFO_EXTENSION);
 
@@ -94,7 +95,14 @@ class Images extends Base_Controller {
 			$width	= (int)$size;
 			$ratio 	= 'no';
 		}
-
+		
+		if (!empty($module))
+		{
+			$img_file = module_file_path($module, $assets, $file); 
+		} else {
+			$img_file = FCPATH . $assets .'/'. $file;
+		}
+		
 		// For now, simply return the file....
 		$img_file = FCPATH . $assets .'/'. $file;
 
