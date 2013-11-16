@@ -102,9 +102,6 @@ class Images extends Base_Controller {
 		} else {
 			$img_file = FCPATH . $assets .'/'. $file;
 		}
-		
-		// For now, simply return the file....
-		$img_file = FCPATH . $assets .'/'. $file;
 
 		if (!is_file($img_file))
 		{
