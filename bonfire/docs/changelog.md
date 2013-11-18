@@ -10,6 +10,7 @@ Closes Issues:
 * #917 - Problem when SITE_AREA is changed
 * #612 - Modifying set created and set modified from models
 * #637 - Bonfire admin topbar CSS breaks scrolling features (Firefox)
+* #932 - Resend Activation Link sends incorrect link, preventing user from activating account
 
 ## Released versions
 

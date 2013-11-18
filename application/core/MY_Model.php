@@ -1861,8 +1861,7 @@ class BF_Model extends CI_Model
  */
 
 class MY_Model extends BF_Model { }
-
-// END: Class MY_model
+// end MY_model
 
 /* End of file MY_Model.php */
 /* Location: ./application/core/MY_Model.php */
