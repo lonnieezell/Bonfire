@@ -493,7 +493,6 @@ class Installer_lib {
 		$password = $hasher->HashPassword('password');
 
 		$data['password_hash'] = $password;
-		$data['password_iterations'] = $iterations;
 		$data['created_on'] = date('Y-m-d H:i:s');
 		$data['display_name'] = $data['username'];
 
