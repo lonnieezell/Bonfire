@@ -158,7 +158,7 @@ When called with no parameters, the <tt>js()</tt> method will create links/inlin
 
 
 Might produce:
-
+```
 {% geshi "Javascript" use_classes %}
 <script src="http://bonfire.dev/assets/js/bootstrap.min.js" type="text/javascript" ></script>
 <script type="text/javascript">
