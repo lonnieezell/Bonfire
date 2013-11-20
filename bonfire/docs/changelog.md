@@ -2,6 +2,9 @@
 
 ### 0.7.1 - not released
 
+New Features:
+* Images controller can reference images from a module using the module=... parameter.
+
 Closes Issues:
 
 * #926 - Application helper iif issue
