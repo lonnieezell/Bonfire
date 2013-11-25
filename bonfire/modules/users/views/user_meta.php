@@ -1,3 +1,9 @@
+<?php
+
+$country_name = FALSE;
+$state_name = FALSE;
+
+?>
 		<?php foreach ($meta_fields as $field):?>
 			<?php if ((isset($field['admin_only']) && $field['admin_only'] === TRUE && isset($current_user) && $current_user->role_id == 1)
 						|| !isset($field['admin_only']) || $field['admin_only'] === FALSE): ?>
@@ -23,8 +29,9 @@
 				</div>
 
 
-			<?php elseif ($field['form_detail']['type'] == 'state_select' && is_callable('state_select')) : ?>
-
+			<?php elseif ($field['form_detail']['type'] == 'state_select' && is_callable('state_select')) :
+                $state_name = $field['name'];
+            ?>
 				<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
 						<label class="control-label" for="<?php echo $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
 						<div class="controls">
@@ -34,7 +41,9 @@
 						</div>
 					</div>
 
-				<?php elseif ($field['form_detail']['type'] == 'country_select' && is_callable('country_select')) : ?>
+            <?php elseif ($field['form_detail']['type'] == 'country_select' && is_callable('country_select')) :
+                $country_name = $field['name'];
+            ?>
 
 					<div class="control-group <?php echo iif( form_error('country') , 'error'); ?>">
 						<label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
@@ -56,6 +65,9 @@
 
 				endif;
 			endif;
-			?>
-			<?php endif;?>
-		<?php endforeach; ?>
+		endif;
+    endforeach;
+    if ( ! empty($country_name) && ! empty($state_name)) {
+        Assets::add_js($this->load->view('country_state_js', array('country_name' => $country_name, 'state_name' => $state_name), true), 'inline');
+    }
+?>
