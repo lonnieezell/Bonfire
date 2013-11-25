@@ -2,6 +2,8 @@
 
 $country_name = FALSE;
 $state_name = FALSE;
+$defaultCountry = 'US';
+$defaultState = '';
 
 ?>
 		<?php foreach ($meta_fields as $field):?>
@@ -31,25 +33,24 @@ $state_name = FALSE;
 
 			<?php elseif ($field['form_detail']['type'] == 'state_select' && is_callable('state_select')) :
                 $state_name = $field['name'];
+                $stateValue = isset($user->$field['name']) ? $user->$field['name'] : $defaultState;
             ?>
 				<div class="control-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
 						<label class="control-label" for="<?php echo $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
 						<div class="controls">
-
-							<?php echo state_select(set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : 'SC'), 'SC', 'US', $field['name'], 'span6 chzn-select'); ?>
-
+							<?php echo state_select(set_value($field['name'], $stateValue), $defaultState, $defaultCountry, $field['name'], 'span6 chzn-select'); ?>
 						</div>
 					</div>
 
             <?php elseif ($field['form_detail']['type'] == 'country_select' && is_callable('country_select')) :
                 $country_name = $field['name'];
+                $countryValue = isset($user->$field['name']) ? $user->$field['name'] : $defaultCountry;
             ?>
 
 					<div class="control-group <?php echo iif( form_error('country') , 'error'); ?>">
 						<label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
 						<div class="controls">
-							<?php echo country_select(set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : 'US'), 'US', 'country', 'span6 chzn-select'); ?>
-
+							<?php echo country_select(set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : $defaultCountry), $defaultCountry, 'country', 'span6 chzn-select'); ?>
 						</div>
 					</div>
 
@@ -68,6 +69,6 @@ $state_name = FALSE;
 		endif;
     endforeach;
     if ( ! empty($country_name) && ! empty($state_name)) {
-        Assets::add_js($this->load->view('country_state_js', array('country_name' => $country_name, 'state_name' => $state_name), true), 'inline');
+        Assets::add_js($this->load->view('country_state_js', array('country_name' => $country_name, 'state_name' => $state_name, 'state_value' => $stateValue, 'country_value' => $countryValue), true), 'inline');
     }
 ?>
