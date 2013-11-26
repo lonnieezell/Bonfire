@@ -102,12 +102,47 @@ class App_hooks
 	 */
 	public function save_requested()
 	{
-		if (!class_exists('CI_Session'))
+        // If the CI_Session class is not loaded, we might be called from
+        // a controller that doesn't extend any of Bonfire's controllers.
+        // In that case, we need to try to do this the old fashioned way
+        // and add it straight to the session.
+		if ( ! class_exists('CI_Session') && get_instance() === null)
 		{
-			$this->ci->load->library('session');
+            // Let's try to grab it from the REQUEST_URI since
+            // this will work in majority of cases.
+            $uri = isset($_SERVER['REQUEST_URI']) && ! empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
+
+            // Try to get the current URL through PATH INFO
+            if ( empty($uri) && isset($_SERVER['PATH_INFO']))
+            {
+                $path = (isset($_SERVER['PATH_INFO'])) ? $_SERVER['PATH_INFO'] : @getenv('PATH_INFO');
+                if (trim($path, '/') != '' && $path != "/".SELF)
+                {
+                    $uri = $path;
+                }
+            }
+
+            // Finally, let's try the query string.
+            if (empty($uri) && isset($_SERVER['QUERY_STRING']))
+            {
+                $path =  (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : @getenv('QUERY_STRING');
+                if (trim($path, '/') != '')
+                {
+                    $uri = $path;
+                }
+            }
+
+            $_SESSION['requested_page'] = $uri;
+            return;
 		}
 
-		if (!in_array($this->ci->uri->ruri_string(), $this->ignore_pages))
+        // If we can get an actual instance, then just load the session lib.
+        else if ( ! class_exists('CI_Session') && is_object( get_instance() ))
+        {
+            $this->load->library('session');
+        }
+
+		if ( ! in_array($this->ci->uri->ruri_string(), $this->ignore_pages))
 		{
 			$this->ci->session->set_userdata('requested_page', current_url());
 		}
@@ -128,6 +163,12 @@ class App_hooks
 	 */
 	public function check_site_status()
 	{
+        // If the settings lib is not available, try to load it.
+        if ( ! isset($this->ci->settings_lib))
+        {
+            $this->ci->load->library('settings/settings_lib');
+        }
+
 		if ($this->ci->settings_lib->item('site.status') == 0)
 		{
 			if (!class_exists('Auth'))
