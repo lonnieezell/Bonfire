@@ -635,9 +635,9 @@ class BF_Model extends CI_Model
 	 */
 	public function insert_batch($data=null)
 	{
-        array_walk($data, function(&$record, $key) {
+        foreach ($data as $key => &$record) {
             $record = $this->trigger('before_insert', $record);
-        });
+        }
 
 		// Insert it
 		$status = $this->db->insert_batch($this->table_name, $data);
@@ -720,9 +720,9 @@ class BF_Model extends CI_Model
 		}
 
         // Run the triggers on each row
-        array_walk($data, function(&$record, $key) {
+        foreach ($data as $key => &$record) {
             $record = $this->trigger('before_update', $record);
-        });
+        }
 
         $result = $this->db->update_batch($this->table_name, $data, $index);
         if (empty($result))
