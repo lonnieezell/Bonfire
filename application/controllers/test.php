@@ -4,10 +4,20 @@ class Test extends Base_Controller {
 
     public function index()
     {
-        $this->load->model('roles/role_model');
-        $role = $this->role_model->find(1);
+        $this->load->model('users/user_model');
 
-        die('<pre>'. print_r($role, true));
+        $data = array(
+            array(
+                'id'    => 5,
+                'username'  => 'jerk'
+            ),
+            array(
+                'id'    => 6,
+                'username'  => 'jerk'
+            )
+        );
+
+        $this->user_model->update_batch($data, 'id');
     }
 
     //--------------------------------------------------------------------

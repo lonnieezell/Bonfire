@@ -1,6 +1,20 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
+ * @license   http://cibonfire.com/docs/guides/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
+
+/**
  * MY_Model
  *
  * This simply extends BF_Model for backwards compatibility,
@@ -15,4 +29,9 @@
  *
  */
 
+
 class MY_Model extends BF_Model { }
+
+
+/* End of file MY_Model.php */
+/* Location: ./application/core/MY_Model.php */

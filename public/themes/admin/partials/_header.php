@@ -33,7 +33,7 @@
 		<p>Javascript is required to use Bonfire's admin.</p>
 	</noscript>
 
-		<div class="navbar navbar-fixed-top navbar-inverse" id="topbar" >
+		<div class="navbar navbar-static-top navbar-inverse" id="topbar" >
 			<div class="navbar-inner">
 				<div class="container-fluid">
 					<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -109,7 +109,7 @@
 
 	</div><!-- /topbar -->
 
- <div class="subnav navbar-fixed-top" >
+ <div class="subnav" >
 	<div class="container-fluid">
 
 		<?php if (isset($toolbar_title)) : ?>

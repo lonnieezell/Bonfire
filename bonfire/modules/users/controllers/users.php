@@ -505,78 +505,15 @@ class Users extends Front_Controller
 					// now add the meta is there is meta data
 					$this->user_model->save_meta_for($user_id, $meta_data);
 
-					/*
-					 * USER ACTIVATIONS ENHANCEMENT
-					 */
+					// User Activation
+					$activation = $this->user_model->set_activation($user_id);
+                    $message = $activation['message'];
+                    $error = $activation['error'];
 
-					// Prepare user messaging vars
-					$subject = '';
-					$email_mess = '';
-					$message = lang('us_email_thank_you');
-					$type = 'success';
-					$site_title = $this->settings_lib->item('site.title');
-					$error = false;
-
-					switch ($activation_method)
-					{
-						case 0:
-							// No activation required. Activate the user and send confirmation email
-							$subject 		=  str_replace('[SITE_TITLE]',$this->settings_lib->item('site.title'),lang('us_account_reg_complete'));
-							$email_mess 	= $this->load->view('_emails/activated', array('title'=>$site_title,'link' => site_url()), true);
-							$message 		.= lang('us_account_active_login');
-							break;
-						case 1:
-							// Email Activiation.
-							// Create the link to activate membership
-							// Run the account deactivate to assure everything is set correctly
-							$activation_code = $this->user_model->deactivate($user_id);
-							$activate_link   = site_url('activate/'. $user_id);
-							$subject         =  lang('us_email_subj_activate');
-
-							$email_message_data = array(
-								'title' => $site_title,
-								'code'  => $activation_code,
-								'link'  => $activate_link
-							);
-							$email_mess = $this->load->view('_emails/activate', $email_message_data, true);
-							$message   .= lang('us_check_activate_email');
-							break;
-						case 2:
-							// Admin Activation
-							// Clear hash but leave user inactive
-							$subject    =  lang('us_email_subj_pending');
-							$email_mess = $this->load->view('_emails/pending', array('title'=>$site_title), true);
-							$message   .= lang('us_admin_approval_pending');
-							break;
-					}//end switch
-
-					// Now send the email
-					$this->load->library('emailer/emailer');
-					$data = array(
-						'to'		=> $_POST['email'],
-						'subject'	=> $subject,
-						'message'	=> $email_mess
-					);
-
-					if (!$this->emailer->send($data))
-					{
-						$message .= lang('us_err_no_email'). $this->emailer->error;
-						$error    = true;
-					}
-
-					if ($error)
-					{
-						$type = 'error';
-					}
-					else
-					{
-						$type = 'success';
-					}
-
+                    $type = $error ? 'error' : 'success';
 					Template::set_message($message, $type);
 
 					// Log the Activity
-
 					log_activity($user_id, lang('us_log_register'), 'users');
 					Template::redirect(LOGIN_URL);
 				}
@@ -795,45 +732,12 @@ class Users extends Front_Controller
 
 					if ($user !== FALSE)
 					{
-						// User exists, so create a temp password.
-						$this->load->helpers(array('string', 'security'));
+                        $activation = $this->user_model->set_activation($user->id);
+                        $message = $activation['message'];
+                        $error = $activation['error'];
 
-						$pass_code = random_string('alnum', 40);
-
-						$activation_code = do_hash($pass_code . $user->password_hash . $_POST['email']);
-
-						$site_title = $this->settings_lib->item('site.title');
-
-						// Save the hash to the db so we can confirm it later.
-						$this->user_model->update_where('email', $_POST['email'], array('activate_hash' => $activation_code ));
-
-						// Create the link to reset the password
-						$activate_link = site_url('activate/'. str_replace('@', ':', $_POST['email']) .'/'. $activation_code);
-
-						// Now send the email
-						$this->load->library('emailer/emailer');
-
-						$email_message_data = array(
-							'title' => $site_title,
-							'code'  => $activation_code,
-							'link'  => $activate_link
-						);
-
-						$data = array
-						(
-							'to'		=> $_POST['email'],
-							'subject'	=> 'Activation Code',
-							'message'	=> $this->load->view('_emails/activate', $email_message_data, TRUE)
-						);
-						$this->emailer->enable_debug(true);
-						if ($this->emailer->send($data))
-						{
-							Template::set_message(lang('us_check_activate_email'), 'success');
-						}
-						else
-						{
-							Template::set_message(lang('us_err_no_email').$this->emailer->error.", ".$this->emailer->debug_message, 'error');
-						}
+                        $type = $error ? 'error' : 'success';
+                        Template::set_message($message, $type);
 					}
 					else
 					{

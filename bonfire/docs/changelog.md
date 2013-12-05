@@ -7,12 +7,19 @@ Additional Changes:
 * Deprecated the module_* functions in application_helper. They're in the Modules class now.
 * Deprecated form_has_error() method since CI's form_error() does the same thing.
 
+New Features:
+* Images controller can reference images from a module using the module=... parameter.
+
+
 Closes Issues:
 
 * #926 - Application helper iif issue
 * #922 - Type of MY_Model update_where() method
 * #919 - Incorrect documentation of date_format field in MY_Model
 * #917 - Problem when SITE_AREA is changed
+* #612 - Modifying set created and set modified from models
+* #637 - Bonfire admin topbar CSS breaks scrolling features (Firefox)
+* #932 - Resend Activation Link sends incorrect link, preventing user from activating account
 
 ## Released versions
 

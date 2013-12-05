@@ -231,7 +231,7 @@ A convenience method that combines the <tt>where()</tt> and <tt>find()</tt> meth
 This method can also be called with only a single associative array as the first parameter. This allows you set multiple criteria to search by.
 
 
-    $user = $this->user_model->find( array('email'=>'darth@theempire.com', 'deleted'=>0) );
+    $user = $this->user_model->find_by( array('email'=>'darth@theempire.com', 'deleted'=>0) );
 
     # SQL: SELECT * FROM `bf_users` WHERE email='darth@theempire.com' AND deleted='0'
 
@@ -239,7 +239,7 @@ This method can also be called with only a single associative array as the first
 This defaults to combining all criteria as "AND" but can be modified by passing the the type into the third parameter:
 
 
-    $user = $this->user_model->find( array('email'=>'darth@theempire.com', 'deleted'=>0), null, 'OR' );
+    $user = $this->user_model->find_by( array('email'=>'darth@theempire.com', 'deleted'=>0), null, 'OR' );
 
     # SQL: SELECT * FROM `bf_users` WHERE email='darth@theempire.com' OR deleted='0'
 

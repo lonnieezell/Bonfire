@@ -95,7 +95,7 @@ class User_model extends BF_Model
         array(
             'field' => 'password',
             'label' => 'lang:bf_password',
-            'rules' => 'min_length[8]|max_length[120]|valid_password|matches[pass_confirm]',
+            'rules' => 'max_length[120]|valid_password|matches[pass_confirm]',
         ),
         array(
             'field' => 'pass_confirm',
@@ -173,7 +173,6 @@ class User_model extends BF_Model
         array('name' => 'language'),
         array('name' => 'active'),
         array('name' => 'activate_hash'),
-        array('name' => 'password_iterations'),
         array('name' => 'force_password_reset'),
     );
 
@@ -306,8 +305,7 @@ class User_model extends BF_Model
 			return false;
 		}
 
-		$data['password_hash']			= $password['hash'];
-		$data['password_iterations']	= $password['iterations'];
+		$data['password_hash'] = $password['hash'];
 
 		unset($data['password'], $password);
 
@@ -364,8 +362,7 @@ class User_model extends BF_Model
 				return false;
 			}
 
-			$data['password_hash']			= $password['hash'];
-			$data['password_iterations']	= $password['iterations'];
+			$data['password_hash'] = $password['hash'];
 
 			unset($data['password'], $password);
 		}
@@ -1008,6 +1005,90 @@ class User_model extends BF_Model
 		}
 
 	}//end admin_deactivation()
+
+	//--------------------------------------------------------------------
+
+    /**
+     * Configure activation for the given user based on current user_activation_method
+     *
+     * @param Number $user_id User's ID
+     *
+     * @return Array    An array containing a 'message' (String) and 'error' (Boolean, true if an error occurred sending the activation email)
+     */
+    public function set_activation($user_id)
+    {
+        // User activation method
+		$activation_method = $this->settings_lib->item('auth.user_activation_method');
+
+        // Prepare user messaging vars
+        $emailMsgData   = array();
+        $emailView      = '';
+        $subject        = '';
+        $email_mess     = '';
+        $message        = lang('us_email_thank_you');
+        $type           = 'success';
+        $site_title     = $this->settings_lib->item('site.title');
+        $error          = false;
+
+        switch ($activation_method) {
+            case 0:
+                // No activation required. Activate the user and send confirmation email
+                $subject 	=  str_replace('[SITE_TITLE]', $this->settings_lib->item('site.title'), lang('us_account_reg_complete'));
+                $emailView  = '_emails/activated';
+                $message 	.= lang('us_account_active_login');
+
+                $emailMsgData = array(
+                    'title' => $site_title,
+                    'link'  => site_url(),
+                );
+                break;
+
+            case 1:
+                // Email Activiation.
+                // Run the account deactivate to assure everything is set correctly
+                $activation_code    = $this->deactivate($user_id);
+                // Create the link to activate membership
+                $activate_link      = site_url('activate/' . $user_id);
+                $subject            =  lang('us_email_subj_activate');
+                $emailView          = '_emails/activate';
+                $message            .= lang('us_check_activate_email');
+
+                $emailMsgData = array(
+                    'title' => $site_title,
+                    'code'  => $activation_code,
+                    'link'  => $activate_link
+                );
+                break;
+
+            case 2:
+                // Admin Activation
+                $subject    =  lang('us_email_subj_pending');
+                $emailView  = '_emails/pending';
+                $message    .= lang('us_admin_approval_pending');
+
+                $emailMsgData = array(
+                    'title' => $site_title,
+                );
+                break;
+        }//end switch
+
+        $email_mess = $this->load->view($emailView, $emailMsgData, true);
+
+        // Now send the email
+        $this->load->library('emailer/emailer');
+        $data = array(
+            'to'		=> $this->find($user_id)->email,
+            'subject'	=> $subject,
+            'message'	=> $email_mess,
+        );
+
+        if ( ! $this->emailer->send($data)) {
+            $message    .= lang('us_err_no_email') . $this->emailer->error;
+            $error      = true;
+        }
+
+        return array('message' => $message, 'error' => $error);
+    }
 
 	//--------------------------------------------------------------------
 
