@@ -273,11 +273,27 @@ class Docs extends Base_Controller {
             // Grab our href value.
             $href = $link->attributes()->href;
 
+            // If the href is null, it's problaby
+            // a named anchor with no content.
             if ( ! $href)
             {
-                $link->href="";
+                // Make sure it has an href, else the XML
+                // will not close this tag correctly.
+                $link['href'] = ' ';
+
+                // We need something in here so that the XML will be
+                // built correctly at the end.
+                $link->title='';
                 continue;
             }
+
+            // If the href starts with #, then attach the current_url to it
+            if (substr_compare($href, '#', 0, 1) === 0)
+            {
+                $link['href'] = current_url() . $href;
+                continue;
+            }
+
 
             // If it's a full local path, get rid of it.
             if (strpos($href, site_url()) === 0)
