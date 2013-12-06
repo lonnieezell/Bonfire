@@ -97,8 +97,10 @@ class Docs extends Base_Controller {
 
         $data['docsDir'] = $this->docsDir;
         $data['docsExt'] = $this->docsExt;
-// die(var_dump($data));
-        return $this->load->view('docs/_sidebar', $data, true);
+
+        $sidebar = $this->load->view('docs/_sidebar', $data, true);
+
+        return $this->post_process($sidebar);
     }
 
     //--------------------------------------------------------------------
@@ -273,7 +275,14 @@ class Docs extends Base_Controller {
 
             if ( ! $href)
             {
+                $link->href="";
                 continue;
+            }
+
+            // If it's a full local path, get rid of it.
+            if (strpos($href, site_url()) === 0)
+            {
+                $href = str_replace(site_url() .'/', '', $href);
             }
 
             // Strip out some unnecessary items, just in case they're there.
