@@ -163,6 +163,12 @@ class App_hooks
 	 */
 	public function check_site_status()
 	{
+        // If we're not yet installed, don't do anything.
+        if ( ! file_exists(APPPATH .'config/installed.txt'))
+        {
+            return null;
+        }
+
         // If the settings lib is not available, try to load it.
         if ( ! isset($this->ci->settings_lib))
         {
