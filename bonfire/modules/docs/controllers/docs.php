@@ -5,8 +5,10 @@ class Docs extends Base_Controller {
     protected $docsDir = 'docs';
     protected $docsExt = '.md';
     protected $docsTypeApp  = 'application';
-    protected $docsTypeBf   = 'bonfire';
+    protected $docsTypeBf   = 'developer';
     protected $docsTypeMod  = 'module';
+
+    protected $docsGroup    = null;
 
     //--------------------------------------------------------------------
 
@@ -19,6 +21,19 @@ class Docs extends Base_Controller {
 
         $this->load->config('docs');
         $this->lang->load('docs');
+
+        // Was a doc group provided?
+        $this->docsGroup = $this->uri->segment(2);
+        if ( ! $this->docsGroup)
+        {
+            redirect('docs/'. config_item('docs.default_group'));
+        }
+
+        // Are we allowed to show developer docs in this environment?
+        if ( ! config_item('docs.always_show_developer_docs') && $this->docsGroup == 'developer' && ENVIRONMENT != 'develop')
+        {
+            redirect('docs/application');
+        }
 
         Template::set_theme(config_item('docs.theme'), 'docs');
     }
@@ -33,13 +48,21 @@ class Docs extends Base_Controller {
     public function index()
     {
         $data = array();
+
+        $content = $this->read_page($this->uri->segment_array());
+        $content = $this->post_process($content);
+
         $data['sidebar'] = $this->build_sidebar();
-        $data['content'] = $this->read_page($this->uri->segment_array());
+        $data['content'] = $content;
 
         Template::set($data);
         Template::render();
     }
 
+    //--------------------------------------------------------------------
+
+    //--------------------------------------------------------------------
+    // Private Methods
     //--------------------------------------------------------------------
 
     /**
@@ -58,10 +81,16 @@ class Docs extends Base_Controller {
         $this->load->helper('file');
 
         // Application Specific Docs?
-        $data['app_docs'] = $this->get_folder_files(APPPATH . $this->docsDir, $this->docsTypeApp);
+        if ($this->docsGroup == 'application')
+        {
+            $data['docs'] = $this->get_folder_files(APPPATH . $this->docsDir, $this->docsTypeApp);
+        }
 
-        // Bonfire Specific Docs?
-        $data['bf_docs'] = $this->get_folder_files(BFPATH . $this->docsDir, $this->docsTypeBf);
+        // Developer Specific Docs?
+        else if ($this->docsGroup == 'developer')
+        {
+            $data['docs'] = $this->get_folder_files(BFPATH . $this->docsDir, $this->docsTypeBf);
+        }
 
         // Modules with Docs?
         $data['module_docs'] = $this->get_module_docs();
@@ -152,48 +181,58 @@ class Docs extends Base_Controller {
         $defaultType = $this->docsTypeApp;
 
         // Strip the 'controller name
-        if ($segments[1] == $this->router->fetch_class()) {
+        if ($segments[1] == $this->router->fetch_class())
+        {
             array_shift($segments);
         }
 
         // Is this core, app, or module?
         $type = array_shift($segments);
-        if (empty($type)) {
+        if (empty($type))
+        {
             $type = $defaultType;
         }
 
         // Is it a module?
-        if ($type != $this->docsTypeApp && $type != $this->docsTypeBf) {
+        if ($type != $this->docsTypeApp && $type != $this->docsTypeBf)
+        {
             $modules = Modules::list_modules();
-            if (in_array($type, $modules)) {
+
+            if (in_array($type, $modules))
+            {
                 $module = $type;
                 $type = $this->docsTypeMod;
-            } else {
+            }
+            else
+            {
                 $type = $defaultType;
             }
         }
 
         // for now, assume we are using Markdown files as the only
         // allowed format. With an extension of '.md'
-        if (count($segments)) {
+        if (count($segments))
+        {
             $file = implode('/', $segments) . $this->docsExt;
-        } else {
+        }
+        else
+        {
             $file = 'index' . $this->docsExt;
 
-            if ($type != $this->docsTypeMod
-                && ! is_file(APPPATH . $this->docsDir . '/' . $file)
-               ) {
+            if ($type != $this->docsTypeMod && ! is_file(APPPATH . $this->docsDir . '/' . $file))
+            {
                 $type = $this->docsTypeBf;
             }
         }
 
-        switch ($type) {
+        switch ($type)
+        {
             case $this->docsTypeBf:
-                $content = is_file(BFPATH . $this->docsDir . '/' . $file) ? file_get_contents(BFPATH . $this->docsDir . '/' . $file) : '';
+                $content = is_file(BFPATH . $this->docsDir .'/'. $file) ? file_get_contents(BFPATH . $this->docsDir .'/'. $file) : '';
                 break;
 
             case $this->docsTypeApp:
-                $content = is_file(APPPATH . $this->docsDir . '/' . $file) ? file_get_contents(APPPATH . $this->docsDir . '/' . $file) : '';
+                $content = is_file(APPPATH . $this->docsDir  .'/'. $file) ? file_get_contents(APPPATH . $this->docsDir .'/'. $file) : '';
                 break;
 
             case $this->docsTypeMod:
@@ -208,6 +247,73 @@ class Docs extends Base_Controller {
         $content = MarkdownExtended($content);
 
         return trim($content);
+    }
+
+    //--------------------------------------------------------------------
+
+    /**
+     * Performs a few housekeeping options on a page, like rewriting
+     * urls to full url's, not relative, ensuring they link correctly, etc.
+     *
+     * @param $content
+     *
+     * @return string   The post-processed HTML.
+     */
+    private function post_process($content)
+    {
+        $xml = new SimpleXMLElement('<?xml version="1.0" standalone="yes"?><div>'. $content .'</div>');
+
+        /*
+         * Rewrite our URL's
+         */
+        foreach ($xml->xpath('//a') as $link)
+        {
+            // Grab our href value.
+            $href = $link->attributes()->href;
+
+            if ( ! $href)
+            {
+                continue;
+            }
+
+            // Strip out some unnecessary items, just in case they're there.
+            // This includes 'bonfire/' in case it was missed during the conversion.
+            if (substr($href, 0, strlen('docs/')) == 'docs/') {
+                $href = substr($href, strlen('docs/'));
+            }
+
+            if (substr($href, 0, strlen('bonfire/')) == 'bonfire/') {
+                $href = substr($href, strlen('bonfire/'));
+            }
+
+            // If another 'group' is not already defined at the head of the link
+            // then add the current group to it.
+            if ( strpos($href, $this->docsTypeApp) !== 0 &&
+                 strpos($href, $this->docsTypeBf)  !== 0 &&
+                 strpos($href, 'http')             !== 0)
+            {
+                $href = $this->docsGroup .'/'. $href;
+            }
+
+            // Convert to full site_url
+            if (strpos($href, 'http') !== 0)
+            {
+                $href = site_url('docs/'. $href);
+            }
+
+            // Save the corrected href
+            $link['href'] = $href;
+        }
+
+        $content = $xml->asXML();
+        $content = trim( str_replace('<?xml version="1.0" standalone="yes"?>', '', $content) );
+
+        /*
+         * Clean up and style our tables
+         */
+        $content = str_replace('<table>', '<table class="table table-hover">', $content);
+
+        return $content;
     }
 
     //--------------------------------------------------------------------
