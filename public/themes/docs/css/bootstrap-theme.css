@@ -485,3 +485,26 @@
     margin: 1em 0 0.25em 0;
     font-size: 0.85em;
 }
+.page { padding-left: 20px; }
+.page h1,
+.page h2 {
+    margin-left: -25px;
+    font-weight: lighter;
+}
+.page h3 { font-weight: normal; }
+.page h3,
+.page h4 {
+    margin-top: 1.5em;
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+.page h1 {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 7px;
+    margin-top: 0;
+    margin-bottom: 0em;
+    font-weight: normal;
+}
+.page h2 {
+    margin-top: 1.5em;
+}
