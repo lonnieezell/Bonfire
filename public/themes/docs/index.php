@@ -41,7 +41,6 @@
                     <li <?php echo check_segment(2, 'developer') ?>>
                         <a href="<?php echo site_url('docs/developer'); ?>">Developer</a>
                     </li>
-                    <li><a href="#">Modules</a></li>
                 </ul>
 
                 <!-- Search Form -->
