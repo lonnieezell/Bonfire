@@ -288,7 +288,7 @@ class Docs extends Base_Controller {
             }
 
             // If the href starts with #, then attach the current_url to it
-            if (substr_compare($href, '#', 0, 1) === 0)
+            if ( $href != '' && substr_compare($href, '#', 0, 1) === 0)
             {
                 $link['href'] = current_url() . $href;
                 continue;
