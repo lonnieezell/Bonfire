@@ -489,14 +489,14 @@
 .page h1,
 .page h2 {
     margin-left: -25px;
-    font-weight: lighter;
+    font-weight: normal;
 }
-.page h3 { font-weight: normal; }
+.page h3 { font-weight: lighter }
 .page h3,
 .page h4 {
     margin-top: 1.5em;
     margin-bottom: 0;
-    line-height: 1.5;
+    line-height: 2;
 }
 .page h1 {
     border-bottom: 1px solid #ddd;
@@ -507,4 +507,8 @@
 }
 .page h2 {
     margin-top: 1.5em;
+}
+
+.page h1+p {
+    margin-top: 1em;
 }
