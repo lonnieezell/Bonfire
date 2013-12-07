@@ -1,4 +1,4 @@
-## Welcome to your App!
+# Welcome to your App!
 
 This section will let you learn to use the application and the modules it uses.
 

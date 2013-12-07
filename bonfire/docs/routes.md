@@ -16,15 +16,15 @@ To make building REST-based routing simpler and more consistent, you can use the
 
     Route::resources('controller_name');
 
-This function will automatically create RESTful resources for the common HTTP verbs. In this example, <tt>controller_name</tt> is the name of the controller you want to map the resources to. If you controller is named <tt>photos</tt>, you would call it like:
+This function will automatically create RESTful resources for the common HTTP verbs. In this example, `controller_name` is the name of the controller you want to map the resources to. If you controller is named `photos`, you would call it like:
 
     Route::resources('photos');
 
-If the <tt>photos</tt> controller is part of the <tt>Gallery</tt> module, then you would route it like:
+If the `photos` controller is part of the `Gallery` module, then you would route it like:
 
     Route::resources('gallery/photos');
 
-This would map the resources to the <tt>Photos</tt> controller, like:
+This would map the resources to the `Photos` controller, like:
 
 HTTP Verb   |  Path             |  action   |  used_for
 ------------|-------------------|-----------|----------------
@@ -52,28 +52,27 @@ These routes will then only be available when the corresponding HTTP verb is use
 
 ### Customizing Resourceful Routes
 
-While the standard naming convention provided by the <tt>resources</tt> Route method will often serve you well, you may find that you need to customize the route
-to easily control where your URL's route to.
+While the standard naming convention provided by the `resources` Route method will often serve you well, you may find that you need to customize the route to easily control where your URL's route to.
 
 #### Specifying a controller to use
 
-You can pass an array of options into the <tt>resources</tt> method as the second parameter. By specifying a <tt>controller</tt> key, you will tell the router to replace all instances of the original route with the defined controller, like:
+You can pass an array of options into the `resources` method as the second parameter. By specifying a `controller` key, you will tell the router to replace all instances of the original route with the defined controller, like:
 
     Route::resources('photos', array('controller' => 'images'));
 
-Will recognize incoming paths beginning with <tt>/photos</tt> but will route to the <tt>images</tt> controller:
+Will recognize incoming paths beginning with `/photos` but will route to the `images` controller:
 
 #### Specifying the module to use
 
-You can also specify a module to use in the options array by passing a <tt>module</tt> key. This is helpful when the module and controller share different names.
+You can also specify a module to use in the options array by passing a `module` key. This is helpful when the module and controller share different names.
 
     Route::resources('photos', array('module' => 'gallery', 'controller' => 'images'));
 
-Will recognize incoming paths beginning with <tt>/photos</tt> but will route to the <tt>gallery/images</tt> module and controller.
+Will recognize incoming paths beginning with `/photos` but will route to the `gallery/images` module and controller.
 
 #### Constraining the {id} format
 
-By default, the {id} used in the routing allows any letter, lower- or upper-case, any digit (0-9), a dash (-) and an underscore(_). If you need to restrict the {id} to another format, you may use the <tt>constraint</tt> option to pass a new, valid, format string:
+By default, the {id} used in the routing allows any letter, lower- or upper-case, any digit (0-9), a dash (-) and an underscore(_). If you need to restrict the {id} to another format, you may use the `constraint` option to pass a new, valid, format string:
 
     Route::resources('photos', array('constraint' => '(:num)'));
 
@@ -92,7 +91,7 @@ By default, the resulting parameters in the $to portion of the route will start 
 
 ## Blocking Routes
 
-You might find times where you need to block access to one or more routes. For example, you might have relocated the default user login page so that script-kiddies couldn't find your page by assuming it's a Bonfire site and would be at a normal location. In this case, you would want to block any access to /users/login, which would normally work just fine. In this case you can use the <tt>block()</tt> method to block as many routes as you'd like.
+You might find times where you need to block access to one or more routes. For example, you might have relocated the default user login page so that script-kiddies couldn't find your page by assuming it's a Bonfire site and would be at a normal location. In this case, you would want to block any access to /users/login, which would normally work just fine. In this case you can use the `block()` method to block as many routes as you'd like.
 
     Route::block('users/login', 'photos/(:num)');
 
@@ -135,7 +134,7 @@ You can save routes with a name associated with them that makes it much easier a
 
 Contexts provide a way for modules to assign controllers to an area of the site based on the name of the controller. This can be used for making a /developer area of the site that all modules can create functionality into.
 
-This can be better explained with an example. We want to provide a collection of tools available under the /developer URL of our site. We have a number of modules, like a database manager, a code builder, etc, that all need to have easy access to that area. Instead of creating routes for each module, we'll just create a general set of routes that will take any controller named 'developer.php' in any of our modules, and route it to <tt>developer/{module_name}/{method}</tt>.
+This can be better explained with an example. We want to provide a collection of tools available under the /developer URL of our site. We have a number of modules, like a database manager, a code builder, etc, that all need to have easy access to that area. Instead of creating routes for each module, we'll just create a general set of routes that will take any controller named 'developer.php' in any of our modules, and route it to `developer/{module_name}/{method}`.
 
     Route::context('developer');
 
