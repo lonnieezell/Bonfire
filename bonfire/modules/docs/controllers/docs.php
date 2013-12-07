@@ -177,6 +177,8 @@ class Docs extends Base_Controller {
      * Does the actual work of reading in and parsing the help file.
      *
      * @param  array  $segments The uri_segments array.
+     *
+     * @return string
      */
     private function read_page($segments=array())
     {
@@ -266,14 +268,14 @@ class Docs extends Base_Controller {
         $xml = new SimpleXMLElement('<?xml version="1.0" standalone="yes"?><div>'. $content .'</div>');
 
         /*
-         * Rewrite our URL's
+         * Rewrite our URLs
          */
         foreach ($xml->xpath('//a') as $link)
         {
             // Grab our href value.
             $href = $link->attributes()->href;
 
-            // If the href is null, it's problaby
+            // If the href is null, it's probably
             // a named anchor with no content.
             if ( ! $href)
             {
