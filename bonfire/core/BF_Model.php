@@ -1448,10 +1448,10 @@ class BF_Model extends CI_Model
 				return $curr_date;
 
 			case 'datetime':
-				return date('Y-m-d H:i:s', $curr_date);
+				return (strtolower($this->config->item('time_reference')) == 'gmt' ? gmdate('Y-m-d H:i:s', $curr_date) : date('Y-m-d H:i:s', $curr_date));
 
 			case 'date':
-				return date( 'Y-m-d', $curr_date);
+				return (strtolower($this->config->item('time_reference')) == 'gmt' ? gmdate('Y-m-d', $curr_date) : date('Y-m-d', $curr_date));
 		}
 
 	}//end set_date()
