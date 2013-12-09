@@ -322,7 +322,7 @@ class CI_Loader {
         global $RTR;
 
 		// Detect module
-		if (list($module, $class) = Modules::find($model, $RTR->fetch_module(), 'models'))
+		if (list($module, $class) = Modules::find(strtolower($model), $RTR->fetch_module(), 'models'))
 		{
             $this->add_package_path( str_replace('models/', '', $module) );
 
