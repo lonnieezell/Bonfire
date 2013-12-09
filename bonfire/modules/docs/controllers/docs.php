@@ -114,10 +114,11 @@ class Docs extends Base_Controller {
      * @param  String $folder The path to the folder to retrieve
      * @param  String $type   The type of documentation being retrieved
      *                        ('application', 'bonfire', or the name of the module)
+     * @param  Array  $ignoredFolders   A list of sub-folders we should ignore.
      *
      * @return Array  An associative array @see parse_ini_file for format details
      */
-    private function get_folder_files($folder, $type)
+    private function get_folder_files($folder, $type, $ignoredFolders = array())
     {
         $tocFile = '/_toc.ini';
         $toc = array();
@@ -140,20 +141,37 @@ class Docs extends Base_Controller {
                     return array();
                 }
 
-                foreach ($map as $file)
+                foreach ($map as $folder => $files)
                 {
-                    if (in_array($file, $this->ignoreFiles))
+                    // Is this a folder that should be ignored?
+                    if (is_array($folder) && is_dir($folder) && in_array($folder, $ignoredFolders))
                     {
+                        var_dump('Found one!');
                         continue;
                     }
 
-                    if (strpos($file, 'index') === false)
+                    // If $files isn't an array, just a string, then
+                    // make it one so that we can deal with all situations cleanly.
+                    if ( ! is_array($files))
                     {
-                        $title = str_replace($this->docsExt, '', $file);
-                        $title = str_replace('_', ' ', $title);
-                        $title = ucwords($title);
+                        $files = array($files);
+                    }
 
-                        $toc[strtolower($type) . '/' . $file] = $title;
+                    foreach ($files as $file)
+                    {
+                        if (in_array($file, $this->ignoreFiles))
+                        {
+                            continue;
+                        }
+
+                        if (strpos($file, 'index') === false)
+                        {
+                            $title = str_replace($this->docsExt, '', $file);
+                            $title = str_replace('_', ' ', $title);
+                            $title = ucwords($title);
+
+                            $toc[strtolower($type) . '/' . $file] = $title;
+                        }
                     }
                 }
             }
@@ -172,10 +190,27 @@ class Docs extends Base_Controller {
     {
         $docs_modules = array();
 
-        foreach (Modules::list_modules() as $module) {
+        foreach (Modules::list_modules() as $module)
+        {
+            $ignored_folders = array();
+
             $path = Modules::path($module) . '/' . $this->docsDir;
+
+            // If we're grabbing developer docs, add the folder to the path.
+            if ($this->docsGroup == $this->docsTypeBf)
+            {
+                $path .= '/'. $this->docsTypeBf;
+            }
+
+            // For Application docs, we need to ignore the 'developers' folder.
+            else
+            {
+                $ignored_folders[] = $this->docsTypeBf;
+            }
+
+
             if (is_dir($path)) {
-                $docs_modules[$module] = $this->get_folder_files($path, $module);
+                $docs_modules[$module] = $this->get_folder_files($path, $module, $ignored_folders);
             }
         }
 
