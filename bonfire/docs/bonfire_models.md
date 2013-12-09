@@ -410,7 +410,7 @@ The first parameter accepts an array of key/value pairs to form the ‘where’ 
         ‘active’    => 0,
         ‘last_login’ => ‘< ‘. time()
     );
-    $this->model->delete($wheres);
+    $this->model->delete_where($wheres);
 
 
 <a name="utility"></a>
