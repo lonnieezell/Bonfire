@@ -682,12 +682,14 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool TRUE/FALSE
 	 */
-	public function update($where=NULL, $data=NULL)
-	{
-		if ($this->skip_validation === FALSE)
-		{
-		    $data = $this->validate($data);
-		}
+    public function update($where=null, $data=null)
+    {
+        if ($this->skip_validation === false) {
+            $data = $this->validate($data);
+            if ($data === false) {
+                return false;
+            }
+        }
 
 		if ( ! is_array($where))
 		{
@@ -726,7 +728,7 @@ class BF_Model extends CI_Model
 	public function update_where($field=NULL, $value=NULL, $data=NULL)
 	{
 		$where = is_array($field) ? $field : array($field => $value);
-        	return $this->update($where, $data);
+        return $this->update($where, $data);
 	}//end update_where()
 
 	//---------------------------------------------------------------
@@ -1856,10 +1858,5 @@ class BF_Model extends CI_Model
 
 }//end BF_model
 
-//--------------------------------------------------------------------
-
-
-// END: Class MY_model
-
-/* End of file MY_Model.php */
-/* Location: ./application/core/MY_Model.php */
+/* End of file BF_Model.php */
+/* Location: ./bonfire/core/BF_Model.php */
