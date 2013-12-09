@@ -10,6 +10,8 @@ class Docs extends Base_Controller {
 
     protected $docsGroup    = null;
 
+    protected $ignoreFiles  = array('_404.md');
+
     //--------------------------------------------------------------------
 
     public function __construct()
@@ -120,7 +122,8 @@ class Docs extends Base_Controller {
         $tocFile = '/_toc.ini';
         $toc = array();
 
-        if (is_dir($folder)) {
+        if (is_dir($folder))
+        {
 
             // If a file called _toc.ini file exists in the folder,
             // we'll skip that and use it to build the links from.
@@ -128,15 +131,24 @@ class Docs extends Base_Controller {
                 $toc = parse_ini_file($folder . $tocFile, true);
             }
             // If no toc file exists, build it from the files themselves.
-            else {
+            else
+            {
                 $map = directory_map($folder);
 
-                if ( ! is_array($map)) {
+                if ( ! is_array($map))
+                {
                     return array();
                 }
 
-                foreach ($map as $file) {
-                    if (strpos($file, 'index') === false) {
+                foreach ($map as $file)
+                {
+                    if (in_array($file, $this->ignoreFiles))
+                    {
+                        continue;
+                    }
+
+                    if (strpos($file, 'index') === false)
+                    {
                         $title = str_replace($this->docsExt, '', $file);
                         $title = str_replace('_', ' ', $title);
                         $title = ucwords($title);
