@@ -12,7 +12,12 @@ New Features:
 
 
 Closes Issues:
-
+* #941 - Model set_date when time_reference is set to GMT
+* #940 - Model update() throws error in modified_on() when validation fails and set_modified is enabled.
+* #947 - Remove PHP short tag from view for PHP 5.3 support
+* #939, 627 - sync user_meta state/country selects
+* #849 - No need to save password_iterations in the user table
+* #928 - min_length[8] validation called regardless of minimum length setting for password
 * #926 - Application helper iif issue
 * #922 - Type of MY_Model update_where() method
 * #919 - Incorrect documentation of date_format field in MY_Model
