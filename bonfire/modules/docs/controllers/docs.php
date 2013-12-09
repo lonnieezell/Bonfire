@@ -182,6 +182,8 @@ class Docs extends Base_Controller {
      */
     private function read_page($segments=array())
     {
+        $content = null;
+
         $defaultType = $this->docsTypeApp;
 
         // Strip the 'controller name
@@ -198,20 +200,20 @@ class Docs extends Base_Controller {
         }
 
         // Is it a module?
-        if ($type != $this->docsTypeApp && $type != $this->docsTypeBf)
-        {
-            $modules = Modules::list_modules();
-
-            if (in_array($type, $modules))
-            {
-                $module = $type;
-                $type = $this->docsTypeMod;
-            }
-            else
-            {
-                $type = $defaultType;
-            }
-        }
+//        if ($type != $this->docsTypeApp && $type != $this->docsTypeBf)
+//        {
+//            $modules = Modules::list_modules();
+//
+//            if (in_array($type, $modules))
+//            {
+//                $module = $type;
+//                $type = $this->docsTypeMod;
+//            }
+//            else
+//            {
+//                $type = $defaultType;
+//            }
+//        }
 
         // for now, assume we are using Markdown files as the only
         // allowed format. With an extension of '.md'
@@ -229,6 +231,7 @@ class Docs extends Base_Controller {
             }
         }
 
+        // first try to load from Activities or Bonfire.
         switch ($type)
         {
             case $this->docsTypeBf:
@@ -244,6 +247,22 @@ class Docs extends Base_Controller {
                 $mod_path = Modules::path($module, $this->docsDir);
                 $content = is_file($mod_path . '/' . $file) ? file_get_contents($mod_path . '/' . $file) : '';
                 break;
+        }
+
+        // If the file wasn't found there, we will try to find a
+        // module with the content.
+        if (empty($content))
+        {
+            $module = array_shift($segments);
+
+            // This time, we'll try it based on the name of the segment brought in
+            // and an index.md file.
+            list($full_path, $file) = Modules::find('index.md', $module, $this->docsDir);
+
+            if ( $full_path )
+            {
+                $content = file_get_contents($full_path . $file);
+            }
         }
 
         // Parse the file
