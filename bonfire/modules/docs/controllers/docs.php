@@ -269,6 +269,13 @@ class Docs extends Base_Controller {
             }
         }
 
+        // If the content is still empty, load the application/docs/404 file
+        // so that we have a customizable not found file.
+        if (empty($content))
+        {
+            $content = is_file(APPPATH . $this->docsDir  .'/_404.md') ? file_get_contents(APPPATH . $this->docsDir .'/_404.md') : '';
+        }
+
         // Parse the file
         $this->load->helper('markdown_extended');
         $content = MarkdownExtended($content);
