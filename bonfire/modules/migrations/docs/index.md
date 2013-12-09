@@ -1,3 +1,5 @@
+# Migrations
+
 ## What are Migrations?
 
 Migrations are simple files that hold the commands to apply and remove changes to your database. This allows you and your team to easily keep track of changes made for each new module. They may create tables, modify tables or fields, etc. But they are not limited to just changing the schema. You could use them to fix bad data in the database or populate new fields.
@@ -43,7 +45,7 @@ Module-level migrations are stored in *modules/my_module/migrations*.
 
 A clean install has migrations enabled by default.  However, it is recommended when you move to production to disable migrations for security.
 
-To disable migrations, edit the following line in *application/core modules/migrations/config/migrations.php* to be <tt>false</tt>.
+To disable migrations, edit the following line in *application/core modules/migrations/config/migrations.php* to be `false`.
 
     $config['migrations_enabled'] = true;
 
@@ -51,7 +53,7 @@ To disable migrations, edit the following line in *application/core modules/migr
 <a name="anatomy"></a>
 ## Anatomy of a Migration
 
-A migration is a subclass of <tt>Migration</tt> that implements two methods: up (perform the required transformations) and down (revert them). Within each migration you can use any of the methods that CodeIgniter provides, like the [dbutils](http://codeigniter.com/user_guide/database/utilities.html) and [dbforge](http://codeigniter.com/user_guide/database/forge.html) classes.
+A migration is a subclass of `Migration` that implements two methods: up (perform the required transformations) and down (revert them). Within each migration you can use any of the methods that CodeIgniter provides, like the [dbutils](http://codeigniter.com/user_guide/database/utilities.html) and [dbforge](http://codeigniter.com/user_guide/database/forge.html) classes.
 
 
 <a name="creating"></a>
@@ -60,7 +62,7 @@ A migration is a subclass of <tt>Migration</tt> that implements two methods: up 
 <a name="filename"></a>
 ### File Name
 
-Migration files MUST be numbered sequentially.  The rest of the file name is up to you, but it is recommended that the name describe what actually happens in the file.  Like <tt>Install_initial_tables</tt>, <tt>Permissions_upgrade</tt>, etc.  It must end with the *.php* extension.
+Migration files MUST be numbered sequentially.  The rest of the file name is up to you, but it is recommended that the name describe what actually happens in the file.  Like `Install_initial_tables`, `Permissions_upgrade`, etc.  It must end with the *.php* extension.
 
     001_Install_initial_tables.php
     002_Version_02_upgrades.php
@@ -71,9 +73,9 @@ Migration files MUST be numbered sequentially.  The rest of the file name is up 
 
 The file is a standard PHP class, that must follow three simple rules:
 
-* The class must be named the same as the file, except the number is replaced by Migration.  For a file named<tt>001_Install_initial_tables.php</tt>, the class would be named <tt>Migration_Install_initial_tables</tt>.  The name is case-sensitive.
-* The class MUST extend the <tt>Migration</tt> class
-* The class MUST include two methods: <tt>up()</tt> and <tt>down()</tt>.  As the names imply, the <tt>up()</tt> method is ran whenever you are migrating up to that version.  The <tt>down()</tt> method is ran whenever uninstalling that migration.
+* The class must be named the same as the file, except the number is replaced by Migration.  For a file named`001_Install_initial_tables.php`, the class would be named `Migration_Install_initial_tables`.  The name is case-sensitive.
+* The class MUST extend the `Migration` class
+* The class MUST include two methods: `up()` and `down()`.  As the names imply, the `up()` method is ran whenever you are migrating up to that version.  The `down()` method is ran whenever uninstalling that migration.
 
 
 <a name="skeleton"></a>
@@ -103,14 +105,14 @@ Migrations can be run, both up and down, in the Bonfire admin pages. You can fin
 
 ### Auto-Running Migrations
 
-Migrations can be set to auto-run when discovered by changing a couple of lines in the <tt>application/config/config.php</tt> file. At the bottom of the file you'll find the following lines.
+Migrations can be set to auto-run when discovered by changing a couple of lines in the `application/config/config.php` file. At the bottom of the file you'll find the following lines.
 
     $config['migrate.auto_core']  = TRUE;
     $config['migrate.auto_app']   = FALSE;
 
 
-<tt>migrate.auto_core</tt>, when set to TRUE, will run a check for new migrations for Bonfire Core on every page load.
+`migrate.auto_core`, when set to TRUE, will run a check for new migrations for Bonfire Core on every page load.
 
-<tt>migrate.auto_app</tt>, when set to TRUE, will run a check for new migrations for your application-specific migrations on every page load.
+`migrate.auto_app`, when set to TRUE, will run a check for new migrations for your application-specific migrations on every page load.
 
 These are very handy to have set to TRUE in both Development and Staging/Test environments, but will slow your site down some since they check on every page load. It is recommended that Production environments set both of these to FALSE and run your migrations manually or as part of an update script.
