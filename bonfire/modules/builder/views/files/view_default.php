@@ -222,7 +222,7 @@ if ($action_name != 'create')
 
 	$delete = '
 			<?php if ($this->auth->has_permission(\'' . $delete_permission . '\')) : ?>
-				or
+				<?php echo lang(\'bf_or\'); ?>
 				<button type="submit" name="delete" class="btn btn-danger" id="delete-me" onclick="return confirm(\'<?php e(js_escape(lang(\''.$module_name_lower.'_delete_confirm\'))); ?>\'); ">
 					<span class="icon-trash icon-white"></span>&nbsp;<?php echo lang(\'' . $module_name_lower . '_delete_record\'); ?>
 				</button>

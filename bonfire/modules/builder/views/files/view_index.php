@@ -71,8 +71,9 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 		continue; 	// move onto next iteration of the loop
 	}
 	$label = set_value("view_field_label$counter");
+	$name = set_value("view_field_name$counter");
 	$headers .= '
-					<th>' . lang("{$module_name_lower}_field_{$label}") . '</th>';
+					<th><?php echo lang("' . $module_name_lower . '_field_'.$name.'"); ?></th>';
 }
 
 $field_prefix = '';
