@@ -61,6 +61,9 @@ for ($counter = 1; $field_total >= $counter; $counter++)
     continue;   // move onto next iteration of the loop
   }
 
+  $field_label = set_value("view_field_label$counter");
+  $field_name  = set_value("view_field_name$counter");
+
   $lang .= '$lang[\''.$module_name_lower.'_field_'.$field_name.'\'] = \''.$field_label.'\';
 ';
 }

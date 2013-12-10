@@ -179,7 +179,7 @@ class Modulebuilder
         $content['config'] = $this->build_config($module_name, $module_description);
 
         // build the lang file
-        $content['lang'] = $this->build_lang($module_name, $module_file_name);
+        $content['lang'] = $this->build_lang($field_total, $module_name, $module_file_name);
 
         // build the permissions migration file
         $content['acl_migration'] = $this->build_acl_sql($field_total, $module_name, $contexts, $action_names, $role_id, $table_name);
@@ -338,13 +338,13 @@ class Modulebuilder
                 }
                 elseif ($type == 'lang') {
                     $ext = 'php';
-                    foreach ($value as $language) {
+                    foreach ($value as $lang_name => $lang_file_contents) {
                         $file_name = $module_name."_lang";
-                        $path = $this->options['output_path']."{$module_name}/language/".$language;
+                        $path = $this->options['output_path']."{$module_name}/language/".$lang_name;
 
-                        if ( ! write_file($path."/{$file_name}." . $ext, $value))
+                        if ( ! write_file($path."/{$file_name}." . $ext, $lang_file_contents))
                         {
-                            log_message('error', "failed to write language file $path/{$file_name}/");
+                            log_message('error', "failed to write language file $path/{$lang_name}/{$file_name}.{$ext}");
                             $ret_val['status'] = FALSE;
                             $ret_val['error'] = $error_msg. " " .$path;
                             break;
@@ -559,7 +559,7 @@ class Modulebuilder
      *
      * @return string A string containing the content of the language file
      */
-    private function build_lang($module_name, $module_name_lower)
+    private function build_lang($field_total, $module_name, $module_name_lower)
     {
         $data['module_name'] = $module_name;
         $data['module_name_lower'] = $module_name_lower;
@@ -567,7 +567,9 @@ class Modulebuilder
         $lang = array();
 
         foreach ($this->languages_available as $language_file) {
-            $lang[] = $this->CI->load->view('files/languages/'.$language_file, $data, TRUE);
+            $data['field_total'] = $field_total;
+
+            $lang[$language_file] = $this->CI->load->view('files/languages/'.$language_file, $data, TRUE);
         }
 
         return $lang;
