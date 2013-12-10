@@ -110,7 +110,7 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 	$rules .= '
 		array(
 			"field"		=> "'. $form_name .'",
-			"label"		=> "'. set_value("view_field_label$counter") .'",
+			"label"		=> "lang:'. set_value("view_field_name$counter") .'",
 			"rules"		=> "';
 
 	// set a friendly variable name
