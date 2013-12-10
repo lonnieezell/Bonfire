@@ -79,6 +79,8 @@ class Docs extends Base_Controller {
      */
     public function search ()
     {
+        $this->benchmark->mark('search_start');
+
         $this->load->library('docs/docsearch');
 
         $terms = $this->input->post('search_terms');
@@ -93,6 +95,9 @@ class Docs extends Base_Controller {
             $results = $this->docsearch->search($terms, $search_folders);
             Template::set('results', $results);
         }
+
+        $this->benchmark->mark('search_end');
+        Template::set('search_time', $this->benchmark->elapsed_time('search_start', 'search_end'));
 
         Template::set('search_terms', $terms);
         //Template::set_view('search');

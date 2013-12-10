@@ -528,3 +528,7 @@
     font-weight: bolder;
     color: #000;
 }
+.search-result .result-url {
+    margin-bottom: 0;
+    color: green;
+}

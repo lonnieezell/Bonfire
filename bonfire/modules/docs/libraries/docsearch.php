@@ -160,9 +160,14 @@ class docSearch {
                         continue;
                     }
 
+                    $result_url = '/docs/'. str_replace('docs', '', $folder) . str_replace('.md', '', $file);
+                    $result_url = str_replace(BFPATH, 'developer/', $result_url);
+                    $result_url = str_replace(APPPATH, 'application/', $result_url);
+
                     $results[] = array(
                         'title'     => $this->extract_title($excerpt, $file),
                         'file'      => $folder .'/'. $file,
+                        'url'       =>  $result_url,
                         'extract'   => $this->build_extract($excerpt, $term, $term_html, $match[0][0], $match[0][1])
                     );
 

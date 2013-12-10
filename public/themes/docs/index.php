@@ -36,19 +36,19 @@
             <div class="collapse navbar-collapse" id="main-nav-collapse">
                 <ul class="nav navbar-nav navbar-left">
                     <li <?php echo check_segment(2, 'application') ?>>
-                        <a href="<?php echo site_url('docs/application'); ?>">Application</a>
+                        <a href="<?php echo site_url('docs/application'); ?>"><?php echo lang('docs_title_application') ?></a>
                     </li>
                     <li <?php echo check_segment(2, 'developer') ?>>
-                        <a href="<?php echo site_url('docs/developer'); ?>">Developer</a>
+                        <a href="<?php echo site_url('docs/developer'); ?>"><?php echo lang('docs_title_bonfire') ?></a>
                     </li>
                 </ul>
 
                 <!-- Search Form -->
                 <?php echo form_open( site_url('docs/search'), 'class="navbar-form navbar-right"' ); ?>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="search_terms" placeholder="Search for..."/>
+                        <input type="text" class="form-control" name="search_terms" placeholder="<?php echo lang('docs_search_for') ?>"/>
                     </div>
-                    <input type="submit" name="submit" class="btn btn-default" value="Search">
+                    <input type="submit" name="submit" class="btn btn-default" value="<?php echo lang('docs_search') ?>">
                 </form>
             </div>
 

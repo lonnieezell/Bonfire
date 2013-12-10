@@ -1,14 +1,22 @@
 <h1><?php echo lang('docs_search_results') ?></h1>
 
-<p>Keyword: <?php echo $search_terms;  ?></p>
+<div class="well">
+    <?php echo form_open( current_url(), 'class="form-inline"'); ?>
+        <input type="text" name="search_terms" class="form-control" style="width: 85%" value="<?php echo set_value('search_terms', $search_terms) ?>" />
+        <input type="submit" name="submit" class="btn btn-primary" value="<?php echo lang('docs_search'); ?>"/>
+    <?php echo form_close(); ?>
+</div>
+
+<p><?php echo count($results) ?> results found in <?php echo $search_time ?> seconds.</p>
 
 <?php if (isset($results) && is_array($results) && count($results)) : ?>
 
     <?php foreach ($results as $result) : ?>
     <div class="search-result">
         <p class="result-header">
-            <a href="#"><?php echo $result['title'] ?></a>
+            <a href="<?php echo site_url($result['url']) ?>"><?php echo $result['title'] ?></a>
         </p>
+        <p class="result-url"><?php echo $result['url'] ?></p>
         <p class="result-excerpt">
             <?php echo $result['extract']; ?>
         </p>
@@ -17,6 +25,8 @@
 
 <?php else: ?>
 
-<?php endif; ?>
+    <div class="alert alert-info">
+        <?php echo sprintf(lang('docs_no_results'), $search_terms); ?>
+    </div>
 
-<pre><?php print_r($results); ?></pre>
+<?php endif; ?>
