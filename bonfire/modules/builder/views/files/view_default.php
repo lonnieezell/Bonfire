@@ -8,7 +8,9 @@ if ($validation_errors) :
 ?>
 <div class="alert alert-block alert-error fade in">
 	<a class="close" data-dismiss="alert">&times;</a>
-	<h4 class="alert-heading">Please fix the following errors:</h4>
+	<h4 class="alert-heading">
+		<?php echo lang("'.$module_name_lower.'_errors_message"); ?>
+	</h4>
 	<?php echo $validation_errors; ?>
 </div>
 <?php
