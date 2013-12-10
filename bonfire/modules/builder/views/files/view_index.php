@@ -10,7 +10,9 @@ $view =<<<END
 
 ?>
 <div class="admin-box">
-	<h3>{$module_name}</h3>
+	<h3>
+		<?php echo lang("{$module_name_lower}_area_title"); ?>
+	</h3>
 	<?php echo form_open(\$this->uri->uri_string()); ?>
 		<table class="table table-striped">
 			<thead>
@@ -49,7 +51,7 @@ $view =<<<END
 				else:
 				?>
 				<tr>
-					<td colspan="<?php echo \$num_columns; ?>">No records found that match your selection.</td>
+					<td colspan="<?php echo \$num_columns; ?>"><?php echo lang("{$module_name_lower}_records_empty"); ?></td>
 				</tr>
 				<?php endif; ?>
 			</tbody>
@@ -68,9 +70,10 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 	{
 		continue; 	// move onto next iteration of the loop
 	}
-
+	$label = set_value("view_field_label$counter");
+	$name = set_value("view_field_name$counter");
 	$headers .= '
-					<th>' . set_value("view_field_label$counter") . '</th>';
+					<th><?php echo lang("' . $module_name_lower . '_field_'.$name.'"); ?></th>';
 }
 
 $field_prefix = '';
@@ -101,7 +104,7 @@ if ($db_required == 'new')
 }
 
 $table_records = '';
-$pencil_icon   = "'<span class=\"icon-pencil\"></span>' . ";
+$pencil_icon   = "'<span class=\"icon-pencil\"></span> ' . ";
 for ($counter = 1; $field_total >= $counter; $counter++)
 {
 	// only build on fields that have data entered.
