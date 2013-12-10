@@ -120,6 +120,10 @@ $lang['mb_form_valid_ip'] = 'Válido IP';
 $lang['mb_form_valid_base64'] = 'Base64 Válido';
 $lang['mb_form_alpha_extra'] = 'AlphaNuméricos, sublinhado, traço, períodos e espaços.';
 $lang['mb_form_match_existing']	= 'Certifique-se de preencher com o nome do campo existente!';
+$lang['mb_form_module_db_no']	= 'Nenhuma';
+$lang['mb_form_module_db_create']	= 'Criar Nova Tabela';
+$lang['mb_form_module_db_exists']	= 'Construir a partir de Tabela Existente';
+$lang['mb_form_build']			= 'Criar módulo';
 
 // Activities
 $lang['mb_act_create'] = 'Modulo Criado';
