@@ -199,7 +199,9 @@ class docSearch {
         $start_offset = $start_offset - $buffer;
         if ($start_offset < 0) $start_offset = 0;
 
-        $extract = character_limiter($excerpt, $this->excerpt_length);
+        $extract = substr($excerpt, $start_offset);
+
+        $extract = character_limiter($extract, $this->excerpt_length);
 
         $extract = strip_tags( MarkdownExtended($extract) );
 
