@@ -567,7 +567,7 @@ class Modulebuilder
         $lang = array();
 
         foreach ($this->languages_available as $language_file) {
-            $lang[] = $this->CI->load->view('files/lang/'.$language_file, $data, TRUE);
+            $lang[] = $this->CI->load->view('files/languages/'.$language_file, $data, TRUE);
         }
 
         return $lang;
