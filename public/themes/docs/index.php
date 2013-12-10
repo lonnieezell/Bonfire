@@ -44,11 +44,11 @@
                 </ul>
 
                 <!-- Search Form -->
-                <form class="navbar-form navbar-right" action="..." method="post">
+                <?php echo form_open( site_url('docs/search'), 'class="navbar-form navbar-right"' ); ?>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="query" placeholder="Search for..."/>
+                        <input type="text" class="form-control" name="search_terms" placeholder="Search for..."/>
                     </div>
-                    <button type="submit" class="btn btn-default">Search</button>
+                    <input type="submit" name="submit" class="btn btn-default" value="Search">
                 </form>
             </div>
 
@@ -62,7 +62,9 @@
 
             <div class="col-md-3 sidebar">
                 <div class="inner">
-                    <?php echo $sidebar; ?>
+                    <?php if (isset($sidebar)) : ?>
+                        <?php echo $sidebar; ?>
+                    <?php endif; ?>
                 </div>
             </div>
 

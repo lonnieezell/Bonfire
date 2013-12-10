@@ -24,20 +24,31 @@ class Docs extends Base_Controller {
         $this->load->config('docs');
         $this->lang->load('docs');
 
-        // Was a doc group provided?
         $this->docsGroup = $this->uri->segment(2);
-        if ( ! $this->docsGroup)
-        {
-            redirect('docs/'. config_item('docs.default_group'));
-        }
 
-        // Are we allowed to show developer docs in this environment?
-        if ( ! config_item('docs.always_show_developer_docs') && $this->docsGroup == 'developer' && ENVIRONMENT != 'develop')
+        // Make sure we can still get to the search method.
+        if ($this->docsGroup == 'search')
         {
-            redirect('docs/application');
+           $this->docsGroup = false;
+        }
+        else
+        {
+            // Was a doc group provided?
+            if ( ! $this->docsGroup)
+            {
+                redirect('docs/'. config_item('docs.default_group'));
+            }
+
+            // Are we allowed to show developer docs in this environment?
+            if ( ! config_item('docs.always_show_developer_docs') && $this->docsGroup == 'developer' && ENVIRONMENT != 'develop')
+            {
+                redirect('docs/application');
+            }
         }
 
         Template::set_theme(config_item('docs.theme'), 'docs');
+
+        $this->load->helper('form');
     }
 
     //--------------------------------------------------------------------
@@ -62,6 +73,34 @@ class Docs extends Base_Controller {
     }
 
     //--------------------------------------------------------------------
+
+    /**
+     * Displays search results and handles the search itself.
+     */
+    public function search ()
+    {
+        $this->load->library('docs/docsearch');
+
+        $terms = $this->input->post('search_terms');
+
+        if ($terms)
+        {
+            $search_folders = array(
+                APPPATH . $this->docsDir,
+                BFPATH  . $this->docsDir,
+            );
+
+            $results = $this->docsearch->search($terms, $search_folders);
+            Template::set('results', $results);
+        }
+
+        Template::set('search_terms', $terms);
+        //Template::set_view('search');
+        Template::render();
+    }
+
+    //--------------------------------------------------------------------
+
 
     //--------------------------------------------------------------------
     // Private Methods

@@ -512,3 +512,19 @@
 .page h1+p {
     margin-top: 1em;
 }
+
+/*
+    Search Results
+*/
+.search-result {
+    margin-bottom: 2em;
+    color: rgb(68, 68, 68);
+}
+.search-result .result-header {
+    font-size: 1.5em;
+    margin-bottom: 0;
+}
+.search-result .term-hilight {
+    font-weight: bolder;
+    color: #000;
+}
