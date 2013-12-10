@@ -12,6 +12,8 @@ New Features:
 
 
 Closes Issues:
+* #679 - Assets::js() returns nothing if string is passed as first parameter
+* #952 - Documentation of BF_Model's handling of validation 'label' parameter
 * #948 - Add function strtolower in libraries: Module will be better.
 * #941 - Model set_date when time_reference is set to GMT
 * #940 - Model update() throws error in modified_on() when validation fails and set_modified is enabled.
