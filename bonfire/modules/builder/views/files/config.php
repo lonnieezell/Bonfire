@@ -8,8 +8,8 @@ $build_config .= PHP_EOL . '
 // $module_description_translate = lang("'.$module_name_lower.'_module_description");
 
 $config[\'module_config\'] = array(
-	\'description\'	=> '.$module_description.',
-	\'name\'		=> '.$module_name.',
+	\'description\'	=> \''.$module_description.'\',
+	\'name\'		=> \''.$module_name.'\',
 	\'version\'		=> \'0.0.1\',
 	\'author\'		=> \'' . $username . '\'
 );';
