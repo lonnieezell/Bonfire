@@ -724,10 +724,12 @@ The <tt>$validation_rules</tt> variable can take an array of data that follows t
         ),
         array(
             'field' => 'password',
-            'label' => 'Password',
+            'label' => 'lang:bf_password',
             'rules' => 'trim|min_length[8]'
         )
     );
+
+Note: the value of the <tt>label</tt> can be retrieved from a language file by prefixing the name of the entry in the language file with 'lang:', as in the example for the password field, above.
 
 During an insert or update, the data passed in is automatically validated using the form_validaiton library. If the validation doesn't pass successfully, the insert/update method will return a value of FALSE and the form_validation_ library will function as expected, providing errors through <tt>validation_errors</tt> and <tt>form_error</tt>.
 
