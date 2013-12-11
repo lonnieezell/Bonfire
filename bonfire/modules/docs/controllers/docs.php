@@ -185,12 +185,11 @@ class Docs extends Base_Controller {
                     return array();
                 }
 
-                foreach ($map as $folder => $files)
+                foreach ($map as $new_folder => $files)
                 {
                     // Is this a folder that should be ignored?
-                    if (is_array($folder) && is_dir($folder) && in_array($folder, $ignoredFolders))
+                    if (is_string($new_folder) && in_array($new_folder, $ignoredFolders))
                     {
-                        var_dump('Found one!');
                         continue;
                     }
 
@@ -208,6 +207,7 @@ class Docs extends Base_Controller {
                             continue;
                         }
 
+                        // Our file isn't the index, so let's build out a title
                         if (strpos($file, 'index') === false)
                         {
                             $title = str_replace($this->docsExt, '', $file);
@@ -215,6 +215,11 @@ class Docs extends Base_Controller {
                             $title = ucwords($title);
 
                             $toc[strtolower($type) . '/' . $file] = $title;
+                        }
+                        //
+                        else
+                        {
+                            $toc[$this->docsGroup .'/'. strtolower($type)] = $type;
                         }
                     }
                 }
@@ -238,7 +243,7 @@ class Docs extends Base_Controller {
         {
             $ignored_folders = array();
 
-            $path = Modules::path($module) . '/' . $this->docsDir;
+            $path = Modules::path($module) . $this->docsDir;
 
             // If we're grabbing developer docs, add the folder to the path.
             if ($this->docsGroup == $this->docsTypeBf)
@@ -253,8 +258,14 @@ class Docs extends Base_Controller {
             }
 
 
-            if (is_dir($path)) {
-                $docs_modules[$module] = $this->get_folder_files($path, $module, $ignored_folders);
+            if (is_dir($path))
+            {
+                $files = $this->get_folder_files($path, $module, $ignored_folders);
+
+                if (is_array($files) && count($files))
+                {
+                    $docs_modules[$module] = $files;
+                }
             }
         }
 
@@ -333,11 +344,11 @@ class Docs extends Base_Controller {
                 $content = is_file(APPPATH . $this->docsDir  .'/'. $file) ? file_get_contents(APPPATH . $this->docsDir .'/'. $file) : '';
                 break;
 
-            case $this->docsTypeMod:
-                // Assume it's a module
-                $mod_path = Modules::path($module, $this->docsDir);
-                $content = is_file($mod_path . '/' . $file) ? file_get_contents($mod_path . '/' . $file) : '';
-                break;
+//            case $this->docsTypeMod:
+//                // Assume it's a module
+//                $mod_path = Modules::path($module, $this->docsDir);
+//                $content = is_file($mod_path . '/' . $file) ? file_get_contents($mod_path . '/' . $file) : '';
+//                break;
         }
 
         // If the file wasn't found there, we will try to find a

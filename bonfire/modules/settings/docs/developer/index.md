@@ -1,4 +1,4 @@
-## Site Settings
+# Site Settings
 
 **Sections**
 
