@@ -279,7 +279,9 @@ class CI_Loader {
         global $RTR;
 
 		// Detect module
-		if (list($module, $class) = Modules::find($library, $RTR->fetch_module(), 'libraries'))
+        list($module, $class) = Modules::find($library, $RTR->fetch_module(), 'libraries');
+
+		if ( $module)
 		{
 			$this->add_package_path( str_replace('libraries/', '', $module) );
 
@@ -1195,7 +1197,7 @@ class CI_Loader {
 		// and typically identically named to the library
 		if ( ! strpos($library, '/'))
 		{
-			$library = ucfirst($library).'/'.$library;
+			$library = ucfirst($library).'/'. ucfirst($library);
 		}
 
 		return $this->library($library, $params, $object_name);
