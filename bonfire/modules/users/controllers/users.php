@@ -208,7 +208,7 @@ class Users extends Front_Controller
 				}//end if
 			}//end if
 
-			Template::set_view('users/users/forgot_password');
+			Template::set_view('users/forgot_password');
 			Template::set('page_title', 'Password Reset');
 			Template::render();
 		}
@@ -400,7 +400,7 @@ class Users extends Front_Controller
             // If we're here, then it is a valid request....
 			Template::set('user', $user);
 
-			Template::set_view('users/users/reset_password');
+			Template::set_view('users/reset_password');
 			Template::render();
 		}
 		else
@@ -537,7 +537,7 @@ class Users extends Front_Controller
 
 		Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
 
-		Template::set_view('users/users/register');
+		Template::set_view('users/register');
 		Template::set('page_title', 'Register');
 		Template::render();
 
@@ -706,7 +706,7 @@ class Users extends Front_Controller
 					}
 				}
 			}
-			Template::set_view('users/users/activate');
+			Template::set_view('users/activate');
 			Template::set('page_title', 'Account Activation');
 			Template::render();
 		}
@@ -745,7 +745,7 @@ class Users extends Front_Controller
 					}
 				}
 			}
-			Template::set_view('users/users/resend_activation');
+			Template::set_view('users/resend_activation');
 			Template::set('page_title', 'Activate Account');
 			Template::render();
 		}
