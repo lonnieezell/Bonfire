@@ -13,6 +13,7 @@ New Features:
 
 Closes Issues:
 * #948 - Add function strtolower in libraries: Module will be better.
+* #946 - Unable to load class cache.
 * #941 - Model set_date when time_reference is set to GMT
 * #940 - Model update() throws error in modified_on() when validation fails and set_modified is enabled.
 * #947 - Remove PHP short tag from view for PHP 5.3 support
