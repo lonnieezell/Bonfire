@@ -2,7 +2,9 @@
 
 $view =<<<END
 <div>
-	<h1 class="page-header">{$module_name}</h1>
+	<h1 class="page-header">
+		<?php echo lang("{$module_name_lower}_area_title"); ?>
+	</h1>
 </div>
 
 <br />
@@ -59,17 +61,23 @@ for($counter=1; $field_total >= $counter; $counter++)
 if ($use_soft_deletes == 'true')
 {
 	$headers .= '
-		<th>Deleted</th>';
+		<th>
+			<?php echo lang("'.$module_name_lower.'_column_deleted"); ?>
+		</th>';
 }
 if ($use_created == 'true')
 {
 	$headers .= '
-		<th>Created</th>';
+		<th>
+			<?php echo lang("'.$module_name_lower.'_column_created"); ?>
+		</th>';
 }
 if ($use_modified == 'true')
 {
 	$headers .= '
-		<th>Modified</th>';
+		<th>
+			<?php echo lang("'.$module_name_lower.'_column_modified"); ?>
+		</th>';
 }
 
 $view = str_replace('{table_header}', $headers, $view);

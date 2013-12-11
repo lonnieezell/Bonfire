@@ -676,8 +676,7 @@ class Assets
 		{
 			if ($type == 'external_scripts')
 			{
-				self::external_js((string)$script);
-				return;
+				return self::external_js((string)$script);
 			}
 			else
 			{
