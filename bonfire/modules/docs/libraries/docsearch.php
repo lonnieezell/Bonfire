@@ -66,6 +66,14 @@ class docSearch {
     
     //--------------------------------------------------------------------
 
+    /**
+     * The entry point for performing a search of the documentation.
+     *
+     * @param null $terms
+     * @param array $folders
+     *
+     * @return array|null
+     */
     public function search ($terms=null, $folders=array())
     {
         if (empty($terms) || empty($folders))
@@ -90,8 +98,10 @@ class docSearch {
     /**
      * Searches a single directory worth of files.
      *
-     * @param $terms
+     * @param $term
      * @param $folder
+     *
+     * @return array The results.
      */
     private function search_folder ($term, $folder)
     {
@@ -168,7 +178,7 @@ class docSearch {
                         'title'     => $this->extract_title($excerpt, $file),
                         'file'      => $folder .'/'. $file,
                         'url'       =>  $result_url,
-                        'extract'   => $this->build_extract($excerpt, $term, $term_html, $match[0][0], $match[0][1])
+                        'extract'   => $this->build_extract($excerpt, $term, $match[0][0])
                     );
 
                     $file_count++;
@@ -186,12 +196,11 @@ class docSearch {
      *
      * @param $excerpt
      * @param $term
-     * @param $term_html
      * @param $match_string
-     * @param $match_offset
+     *
      * @return string
      */
-    private function build_extract ($excerpt, $term, $term_html, $match_string, $match_offset)
+    private function build_extract ($excerpt, $term, $match_string)
     {
         // Find the character positions within the string that our match was found at.
         // That way we'll know from what positions before and after this we want to grab it in.
@@ -206,9 +215,9 @@ class docSearch {
 
         $extract = substr($excerpt, $start_offset);
 
-        $extract = character_limiter($extract, $this->excerpt_length);
-
         $extract = strip_tags( MarkdownExtended($extract) );
+
+        $extract = character_limiter($extract, $this->excerpt_length);
 
         // Wrap the search term in a span we can style.
         $extract = str_ireplace($term, '<span class="term-hilight">'. $term .'</span>', $extract);

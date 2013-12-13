@@ -7,7 +7,7 @@
     <?php echo form_close(); ?>
 </div>
 
-<p><?php echo count($results) ?> results found in <?php echo $search_time ?> seconds.</p>
+<p><?php echo isset($results) && isset($results) ? count($results) : 0; ?> results found in <?php echo $search_time ?> seconds.</p>
 
 <?php if (isset($results) && is_array($results) && count($results)) : ?>
 

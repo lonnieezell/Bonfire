@@ -113,7 +113,6 @@ class Docs extends Base_Controller {
         Template::set('search_time', $this->benchmark->elapsed_time('search_start', 'search_end'));
 
         Template::set('search_terms', $terms);
-        //Template::set_view('search');
         Template::render();
     }
 
