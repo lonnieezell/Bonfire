@@ -12,6 +12,7 @@ Additional Changes:
 * Separated all Bonfire code from your Application's code
 * Most bonfire specific code now uses a BF_ prefix instead of the MY_ prefix your application would use..
 * The module_* methods in the application_helper file have been moved to the Modules class. The application_helper methods are still there but are considered deprecated.
+* Many improvements to the Protugeuse language handling.
 
 New Features:
 * Images controller can reference images from a module using the module=... parameter.
@@ -20,6 +21,7 @@ New Features:
 
 
 Closes Issues:
+* # 958 - ENVIRONMENT config files are being ignored.
 * #954 - Assets::js() returns nothing if string is passed as first parameter
 * #952 - Documentation of BF_Model's handling of validation 'label' parameter
 * #948 - Add function strtolower in libraries: Module will be better.
