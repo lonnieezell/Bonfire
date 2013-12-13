@@ -226,7 +226,7 @@ class Docs extends Base_Controller {
                             $title = str_replace('_', ' ', $title);
                             $title = ucwords($title);
 
-                            $toc[strtolower($type) . '/' . $file] = $title;
+                            $toc[$this->docsGroup . '/' . strtolower($type) . '/' . $file] = $title;
                         }
                         //
                         else
@@ -371,7 +371,7 @@ class Docs extends Base_Controller {
 
             // Developer docs for modules should be found under
             // the '{module}/docs/developer' path.
-            $addPath = $type == $this->docsTypeBf ? '/'. $this->docsTypeBf .'/' : '';
+            $addPath = $type == $this->docsTypeBf ? '/'. $this->docsTypeBf .'/' : '/';
 
             // This time, we'll try it based on the name of the segment brought in
             // and an index.md file.
