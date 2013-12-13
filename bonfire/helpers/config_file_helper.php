@@ -65,11 +65,11 @@ if ( ! function_exists('read_config'))
 		{
 			if (! $module_only)
 			{
+				$check_locations = array();
+
 				if (defined('ENVIRONMENT'))
 				{
-					$check_locations = array(
-						APPPATH.'config/'.ENVIRONMENT.'/'.$file,
-					);
+					$check_locations[] = APPPATH.'config/'.ENVIRONMENT.'/'.$file;
 				}
 
 				$check_locations[] = APPPATH.'config/'.$file;
