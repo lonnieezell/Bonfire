@@ -39,7 +39,19 @@ $install_url = 'http' . ((empty($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS
             <ol>
                 <li>Create your database manually</li>
                 <li>Edit your <strong>application/config/database.php</strong> file accordingly</li>
+                <li>Also, you may want to rename 1.htaccess to .htaccess if you wish to use mod_rewrite. =D</li>
             </ol>
+            <div class="alert alert-error">
+                <h3>Oops!</h3>
+                Your Web Root should be set to the <strong>public</strong> folder,but it's <strong>not</strong>. It's pointing to the <strong>Bonfire Root</strong> folder.<br><br>
+
+                See below how your site should be set up on Apache:
+<pre>&lt;VirtualHost *:80&gt;
+    DocumentRoot "[...]/htdocs/Bonfire_Root/public"
+    ServerName Bonfire.Root
+    ServerAlias Bonfire.Root.local
+&lt;/VirtualHost&gt;</pre>
+            </div>
             <p><em>Please Note:</em> Since this is a developmental release there <em>will</em> be bugs. If you uncover any please <a href="https://github.com/ci-bonfire/Bonfire/wiki/Issue-Tracking-and-Pull-Requests">read this</a> before submitting your detailed bug report <a href="https://github.com/ci-bonfire/Bonfire/issues">here</a>.</p>
             <p>If you feel like you can contribute either by <a href="https://trello.com/b/I54dfqR4/bonfire-roadmap">adding features</a> or <a href="https://github.com/ci-bonfire/Bonfire/issues?state=open">fixing issues</a> please fork <a href="https://github.com/ci-bonfire/Bonfire">the repo</a>, start your work in a new branch, and submit pull requests for review.</p>
             <p><em>"Let's make this the best kick-start to any CodeIgniter project."</em> ~ The CI-Bonfire Team</p>
