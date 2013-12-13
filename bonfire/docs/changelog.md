@@ -16,6 +16,7 @@ Additional Changes:
 New Features:
 * Images controller can reference images from a module using the module=... parameter.
 * Template class now provides a `check_segment` method in addition to check_class and check_method.
+* Brand new documentation system that allows splitting your user and dev-related docs, and searching docs.
 
 
 Closes Issues:
