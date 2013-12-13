@@ -35,12 +35,17 @@
 
             <div class="collapse navbar-collapse" id="main-nav-collapse">
                 <ul class="nav navbar-nav navbar-left">
+                    <?php if (config_item('docs.show_app_docs')) :?>
                     <li <?php echo check_segment(2, 'application') ?>>
                         <a href="<?php echo site_url('docs/application'); ?>"><?php echo lang('docs_title_application') ?></a>
                     </li>
+                    <?php endif; ?>
+
+                    <?php if (config_item('docs.show_dev_docs')) : ?>
                     <li <?php echo check_segment(2, 'developer') ?>>
                         <a href="<?php echo site_url('docs/developer'); ?>"><?php echo lang('docs_title_bonfire') ?></a>
                     </li>
+                    <?php endif; ?>
                 </ul>
 
                 <!-- Search Form -->
@@ -57,6 +62,8 @@
 
     <!-- Content Area -->
     <div class="container">
+
+        <?php echo Template::message(); ?>
 
         <div class="row">
 

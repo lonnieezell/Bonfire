@@ -12,4 +12,9 @@ $config['docs.default_group'] = 'developer';
  * Should we display the developer docs in environments other than
  * the develop environment?
  */
-$config['docs.always_show_developer_docs'] = true;
+$config['docs.show_dev_docs']   = true;
+
+/*
+ * If TRUE, the 'application' specific documentation will be shown.
+ */
+$config['docs.show_app_docs']   = true;

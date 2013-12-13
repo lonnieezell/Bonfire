@@ -40,9 +40,15 @@ class Docs extends Base_Controller {
             }
 
             // Are we allowed to show developer docs in this environment?
-            if ( ! config_item('docs.always_show_developer_docs') && $this->docsGroup == 'developer' && ENVIRONMENT != 'develop')
+            if ( ! config_item('docs.show_dev_docs') && $this->docsGroup == 'developer' && ENVIRONMENT != 'develop')
             {
-                redirect('docs/application');
+                if (config_item('docs.show_app_docs'))
+                {
+                    Template::set_message('Unable to load developer documentation.', 'warning');
+                    redirect('docs/application');
+                }
+
+                show_error('Unable to load the docs you requested.');
             }
         }
 
@@ -87,10 +93,17 @@ class Docs extends Base_Controller {
 
         if ($terms)
         {
-            $search_folders = array(
-                APPPATH . $this->docsDir,
-                BFPATH  . $this->docsDir,
-            );
+            $search_folders = array();
+
+            if (config_item('docs.show_app_docs'))
+            {
+                $search_folders[] = APPPATH . $this->docsDir;
+            }
+
+            if (config_item('docs.show_dev_docs'))
+            {
+                $search_folders[] = BFPATH . $this->docsDir;
+            }
 
             $results = $this->docsearch->search($terms, $search_folders);
             Template::set('results', $results);
