@@ -1,8 +1,4 @@
-<?php
-
-$install_url = 'http' . ((empty($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) == 'off')?'':'s') . '://' . $_SERVER['SERVER_NAME'] . '/public/';
-
-?><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
@@ -55,9 +51,6 @@ $install_url = 'http' . ((empty($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS
             <p><em>Please Note:</em> Since this is a developmental release there <em>will</em> be bugs. If you uncover any please <a href="https://github.com/ci-bonfire/Bonfire/wiki/Issue-Tracking-and-Pull-Requests">read this</a> before submitting your detailed bug report <a href="https://github.com/ci-bonfire/Bonfire/issues">here</a>.</p>
             <p>If you feel like you can contribute either by <a href="https://trello.com/b/I54dfqR4/bonfire-roadmap">adding features</a> or <a href="https://github.com/ci-bonfire/Bonfire/issues?state=open">fixing issues</a> please fork <a href="https://github.com/ci-bonfire/Bonfire">the repo</a>, start your work in a new branch, and submit pull requests for review.</p>
             <p><em>"Let's make this the best kick-start to any CodeIgniter project."</em> ~ The CI-Bonfire Team</p>
-            <div class="continue">
-                <a class="btn btn-primary" href="<?php echo $install_url; ?>">Continue &raquo;</a>
-            </div>
         </div>
         <!-- Grab Google CDN's jQuery, with a protocol relative URL; fall back to local if offline -->
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
