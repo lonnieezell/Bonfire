@@ -63,12 +63,26 @@ if ( ! function_exists('read_config'))
 		// Fall back to application directory
 		if (! $found)
 		{
-			$file = 'config/'.$file;
-
 			if (! $module_only)
 			{
-				$file = APPPATH.$file;
-				$found = file_exists($file.EXT);
+				if (defined('ENVIRONMENT'))
+				{
+					$check_locations = array(
+						APPPATH.'config/'.ENVIRONMENT.'/'.$file,
+					);
+				}
+
+				$check_locations[] = APPPATH.'config/'.$file;
+
+				foreach ($check_locations as $location)
+				{
+					if (file_exists($location.EXT))
+					{
+						$file = $location;
+						$found = TRUE;
+						break;
+					}
+				}
 			}
 		}
 
