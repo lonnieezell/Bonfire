@@ -34,3 +34,28 @@ The filename must include in it's "path" the area the documentation came from, e
 
     application/my_page = My New Documentation Package
     my_module/my_page   = My New Module Docs
+    
+## Configuring Documentation
+
+The docs system allows you to do some simple customization that allows you to integrate it into the needs of your application easily. The system uses 2 groups 'application' and 'developer' to separate your application specific documentation from Bonfire's core documentation.
+
+All documentation config settings can be found in the module's config file at `bonfire/modules/docs/config/docs.php`. 
+
+### Setting Theme
+
+To specify a theme to be used only for the documentation, set the `docs.theme` setting. This allows you to completely customize the how the information looks and is displayed to match your branding, ad needs, etc.
+
+    $config['docs.theme'] = 'docs';
+    
+### Landing Page
+
+You can customize the group that is shown if someone simply browses to `/docs`. 
+
+    $config['docs.default_group'] = 'developer';
+
+### Which Groups Show?
+
+You can allow only application or only developer documentation and hide the other.
+
+    $config['docs.show_dev_docs']   = true;
+    $config['docs.show_app_docs']   = true;
