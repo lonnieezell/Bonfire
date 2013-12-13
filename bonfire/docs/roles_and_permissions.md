@@ -35,14 +35,14 @@ This is the default role that anyone registering to the site is given. As such, 
 <a name="new_roles"></a>
 ## Creating New Roles
 
-New roles are easily created within the admin panel by navigating to <tt>Settings / Roles</tt> and then selecting <tt>New Role</tt> in the navigation bar. The elements of the form are:
+New roles are easily created within the admin panel by navigating to `Settings / Roles` and then selecting `New Role` in the navigation bar. The elements of the form are:
 
 * **Role Name** - The name of the role as you want it to appear to users. It should be one word, with no spaces, though you can use underscores in their place.
 * **Description** - This field is primarily used on the Roles overview page, but can be used by yourself throughout your template when needed.
-* **Login Destination** - This is the relative path that a user is directed to when they login. For example, you can force all admins to be directed to the main admin page by setting this value to <tt>/admin</tt>. Alternatively, you could have Users be directed to their own dashboard or account management page by entering the appropriate relative URL here.
-* **Default Admin Context** - When a user logs into the admin area, this allows you to set the context they are directed to, like <tt>/admin/content</tt> The Settings and Developer contexts are unavailable for selection here.
+* **Login Destination** - This is the relative path that a user is directed to when they login. For example, you can force all admins to be directed to the main admin page by setting this value to `/admin`. Alternatively, you could have Users be directed to their own dashboard or account management page by entering the appropriate relative URL here.
+* **Default Admin Context** - When a user logs into the admin area, this allows you to set the context they are directed to, like `/admin/content` The Settings and Developer contexts are unavailable for selection here.
 * **Default Role** - The role assigned to new users when they register at the site. By selecting it here, it will be removed from any other role that currently has it.
-* **Removable?** - Allows you to provide access to roles other than the Admistrator, while not giving them the power to delete certain roles, keeping them safe from accidents or malicious actions. If this is set to 'Yes', then anyone with the <tt>Bonfire.Roles.Delete</tt> permission can delete this role.
+* **Removable?** - Allows you to provide access to roles other than the Admistrator, while not giving them the power to delete certain roles, keeping them safe from accidents or malicious actions. If this is set to 'Yes', then anyone with the `Bonfire.Roles.Delete` permission can delete this role.
 
 When you first create a role, no permissions will be shown. You can go back and edit the permissions available to the role by selecting the Role from the Role overview page, or by editing through the Permission Matrix.
 
@@ -89,23 +89,23 @@ Each permission has the following three properties...
 <a name="assigning_perms"></a>
 ### Assigning Permissions
 
-Permissions can be assigned to roles through the <tt>Edit Role</tt> screen. Alternatively, they can be assigned to all roles at once by viewing the <tt>Permission Matrix</tt>, available from both the Roles and Permissions screen.
+Permissions can be assigned to roles through the `Edit Role` screen. Alternatively, they can be assigned to all roles at once by viewing the `Permission Matrix`, available from both the Roles and Permissions screen.
 
 
 
 <a name="access"></a>
 ## Restricting Access
 
-The <tt>Auth</tt> library provides several useful methods to restrict access, or check access, from any place in your application. If not already loaded, you can load the Auth library with the following code:
+The `Auth` library provides several useful methods to restrict access, or check access, from any place in your application. If not already loaded, you can load the Auth library with the following code:
 
     $this->load->library('users/auth');
 
 
 
 <a name="restrict"></a>
-### <tt>restrict()</tt>
+### `restrict()`
 
-The <tt>restrict()</tt> method can be used to protect an entire method or even class. If used without any parameters, it will simply verify that the user is logged in. If they are not, it will redirect them to the login page.
+The `restrict()` method can be used to protect an entire method or even class. If used without any parameters, it will simply verify that the user is logged in. If they are not, it will redirect them to the login page.
 
 
     $this->auth->restrict();
@@ -125,9 +125,9 @@ If a user does not have the required permission granted to them, they will be di
 
 
 <a name="is_logged_in"></a>
-### <tt>is_logged_in()</tt>
+### `is_logged_in()`
 
-You can check if a user is logged in with the <tt>is_logged_in()</tt> method. This can be used in your own controller and libraries, as well as in your views to display different information to logged in and logged out users.
+You can check if a user is logged in with the `is_logged_in()` method. This can be used in your own controller and libraries, as well as in your views to display different information to logged in and logged out users.
 
 
     if ($this->auth->is_logged_in())
@@ -143,9 +143,9 @@ You can check if a user is logged in with the <tt>is_logged_in()</tt> method. Th
 Note that the first time in a session that this function is called, it will verify their identity stored in the session matches their hashed password information in the database. It then sets a flag that can be used for later checks to increase performance, while still maintaining a high level of security.
 
 <a name="has_permission"></a>
-### <tt>has_permission()</tt>
+### `has_permission()`
 
-The <tt>has_permission()</tt> method allows you to check if the current logged-in user has a specified permission. You pass the name of the permission to check in as the first parameter.
+The `has_permission()` method allows you to check if the current logged-in user has a specified permission. You pass the name of the permission to check in as the first parameter.
 
 
 
@@ -158,7 +158,7 @@ The <tt>has_permission()</tt> method allows you to check if the current logged-i
 
 
 <a name="permission_exists"></a>
-### <tt>permission_exists()</tt>
+### `permission_exists()`
 
 This function allows you to quickly check whether a permission exists in the databse or not. Simply pass in the permission name to check as the first parameter.
 
@@ -174,9 +174,9 @@ This function allows you to quickly check whether a permission exists in the dat
 
 While passwords are generally managed through the users module, the auth library includes a couple of basic functions for password management.
 
-### <tt>check_password()</tt>
+### `check_password()`
 
-The <tt>check_password()</tt> method allows you to verify that a given password matches a password hash.
+The `check_password()` method allows you to verify that a given password matches a password hash.
 
 	if ($this->auth->check_password('password to check', 'HashedPassword'))
 	{
@@ -184,9 +184,9 @@ The <tt>check_password()</tt> method allows you to verify that a given password 
 		...
 	}
 
-### <tt>hash_password()</tt>
+### `hash_password()`
 
-The <tt>hash_password()</tt> method allows you to hash a password with an optional number of iterations (if not supplied, the site's password_iterations setting will be used). This should not be used to check a password, since hashing the same password again won't match a stored hash.
+The `hash_password()` method allows you to hash a password with an optional number of iterations (if not supplied, the site's password_iterations setting will be used). This should not be used to check a password, since hashing the same password again won't match a stored hash.
 
 	$password = $this->auth->hash_password('password');
 	$hash = $password['hash'];

@@ -56,10 +56,28 @@ ul, ol, dl {
 	line-height: 1.7em;
 }
 
+/*
+    Header
+*/
+.header {
+    background: #222;
+    height: 40px;
+    color: #ccc;
+}
+.header h1 {
+    color: #fff;
+    font-weight: normal;
+    height: 24px;
+    line-height: 40px;
+}
+
+/*
+    Content Area
+*/
 
 .main {
     position: absolute;
-    top: 0;
+    top: 40px;
     left: 0;
     margin-left: 25%;
     height: 100%;
@@ -73,6 +91,9 @@ ul, ol, dl {
     max-width: 50em;
 }
 
+/*
+    Sidebar
+*/
 .sidebar {
     position: absolute;
     top: 0;
@@ -83,6 +104,10 @@ ul, ol, dl {
 .sidebar .inner {
     padding: 20px;
 }
+
+/*
+    Table of Contents
+*/
 
 ul.toc {
     list-style-type: none;
@@ -238,3 +263,4 @@ pre code {
   max-height: 340px;
   overflow-y: scroll;
 }
+

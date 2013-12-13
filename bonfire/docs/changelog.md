@@ -1,3 +1,5 @@
+# Change Log
+
 ## Under development
 
 ### 0.7.1 - not released
@@ -6,9 +8,14 @@ Additional Changes:
 
 * Deprecated the module_* functions in application_helper. They're in the Modules class now.
 * Deprecated form_has_error() method since CI's form_error() does the same thing.
+* Docs system is much more robust now, including link fixing, separating application/developer docs in the UI, a basic search system, and more.
+* Separated all Bonfire code from your Application's code
+* Most bonfire specific code now uses a BF_ prefix instead of the MY_ prefix your application would use..
+* The module_* methods in the application_helper file have been moved to the Modules class. The application_helper methods are still there but are considered deprecated.
 
 New Features:
 * Images controller can reference images from a module using the module=... parameter.
+* Template class now provides a `check_segment` method in addition to check_class and check_method.
 
 
 Closes Issues:
@@ -319,8 +326,8 @@ Additions:
 - Emailer class now has a way to test your email settings.
 - Emailer class has allows you to view the unsent emails in your queue under Statistics / Emailer.
 - Updated email class to wrap the $message in the email template by default.
-- A new <Unit Testing> framework has been started. Currently supports Unit Testing only. Web/Functional Testing coming later.
-- A new <System Events> feature has been added.
+- A new `Unit Testing` framework has been started. Currently supports Unit Testing only. Web/Functional Testing coming later.
+- A new `System Events` feature has been added.
 - A logit() function was added to the application helper to provide a simple interface to log to both the Console and the log file.
 - Added new Activities module to allow other modules a core utility for tracking user activity. Was incorporated into the Users module.
 - Added a new Module Builder module that helps create skeleton code for new modules.

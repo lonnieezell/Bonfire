@@ -1,4 +1,4 @@
-## What Are Contexts?
+# Contexts
 
 A Context is an area of similar responsibility within the code and/or UI.  They appear as top-level navigation objects within the main menu, and should all cover a similar topic, or theme. The following are all good candidates for Contexts:
 
@@ -14,7 +14,7 @@ Role-Specific   | A single role might have access to a set of tools that no one 
 <a name="controllers"></a>
 ## Context Controllers
 
-Contexts map directly to controllers of the same name in your module. If you are creating a controller to handle your Settings Context for your module, the controller should be named <tt>content.php</tt> and the class should be named <tt>Content</tt>.
+Contexts map directly to controllers of the same name in your module. If you are creating a controller to handle your Settings Context for your module, the controller should be named `content.php` and the class should be named `Content`.
 
 
     class Content extends Admin_Controller {
@@ -24,7 +24,7 @@ Contexts map directly to controllers of the same name in your module. If you are
 <a name="views"></a>
 ## Context Views
 
-All views for your contexts should be stored within the views folder of your module, under a sub-folder named after the context. Continuing our example, the view for the index method would exist at <tt>my_module/views/content/index.php</tt>.
+All views for your contexts should be stored within the views folder of your module, under a sub-folder named after the context. Continuing our example, the view for the index method would exist at `my_module/views/content/index.php`.
 
 
 <a name="public"></a>

@@ -1,4 +1,4 @@
-## Site Structure
+# Site Structure
 
 Bonfire's site is structured with three goals in mind:
 
@@ -114,7 +114,7 @@ In some situations, you may prefer a more traditional folder structure that has 
     tests/
     themes/
 
-After you've moved the files, you need to edit the main <tt>index.php</tt> file to let CodeIgniter know where to find the application and system folders.
+After you've moved the files, you need to edit the main `index.php` file to let CodeIgniter know where to find the application and system folders.
 
     $path = '.'
 

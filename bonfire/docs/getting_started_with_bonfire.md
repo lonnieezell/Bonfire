@@ -9,7 +9,6 @@ Bonfire is intended to provide a kickstart for new web applications built in Cod
 * [CodeIgniter From Scratch Series - at NetTuts](http://net.tutsplus.com/sessions/codeigniter-from-scratch/)
 * [Tutorials at the CodeIgniter Wiki](http://codeigniter.com/wiki/Category:Help::Tutorials)
 
-<a name="whatisit"></a>
 ## What is Bonfire?
 
 Bonfire is a framework for your web application, built on top of the CodeIgniter PHP Framework. It is not a CMS, but a starting point for new projects that require ready-made tools like:
@@ -21,7 +20,6 @@ Bonfire is a framework for your web application, built on top of the CodeIgniter
 * Simple Email queue to keep your ISP happy.
 * and more...
 
-<a name="components"></a>
 ### Bonfire Components
 
 Bonfire ships with a number of individual components that are described below. Don't get hung up on the details of of each component for now. Many of these will be described in more detail below.
@@ -56,7 +54,6 @@ This library provides a simple way to log user activities, such as 'JohnDoe dele
 Easily store application-wide settings in the database, allowing your users to change settings simply and easily.
 
 
-<a name="newproject"></a>
 ## Creating A New Bonfire Project
 
 The best way to use this guide is to follow along, step-by-step, entering the code at each step. Everything you need to make this project work is included in this tutorial.
@@ -64,10 +61,8 @@ The best way to use this guide is to follow along, step-by-step, entering the co
 During this tutorial we will create a (simple) blog module that will have you mastering your way around Bonfire in no time.
 
 
-<a name="navigating"></a>
 ## Navigating Bonfire
 
-<a name="contexts"></a>
 ### Contexts
 
 Once you log into the admin portion of Bonfire, you will find a menu with 4 categories across the top: Content, Reports, Settings, and Developer. These four categories are what Bonfire calls **Contexts**.
@@ -78,7 +73,6 @@ You can create as many custom contexts as you want, and even remove the Content 
 
 Contexts don't have to be visible to everyone who uses your admin area, though. They can be hidden individually per user role.
 
-<a name="modules"></a>
 ### Modules
 
 Bonfire is primarily a collection of modules that handle all of the various parts. This makes it easy to create your own modules that can be reused and passed around with a minimum of work.

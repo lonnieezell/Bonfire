@@ -11,7 +11,7 @@ The first step is to get the folder structure created and make sure the settings
 
 ### Folder Structure
 
-Within the <tt>application/modules</tt> folder, create a new folder named <tt>blog</tt>, and create the following subfolders: assets, config, controllers, migrations, models, views. When you're done your module should look like:
+Within the `application/modules` folder, create a new folder named `blog`, and create the following subfolders: assets, config, controllers, migrations, models, views. When you're done your module should look like:
 
     bonfire/
         modules/
@@ -29,7 +29,7 @@ Not every module will require every folder, but these are the basic folders ever
 
 To make sure that your blog shows up in the admin area, we need to create a config file that holds various settings that let Bonfire know about your module. The config file is not required, but allows more control over how your module appears throughout the system.
 
-Create a new file in your new <tt>config</tt> folder, called <tt>config.php</tt>.
+Create a new file in your new `config` folder, called `config.php`.
 
 ```
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
@@ -71,7 +71,7 @@ To allow for simple versioning of your database we will use Bonfire's migrations
 
 Migrations are simply a set of commands that are run to make changes to the database or remove changes. They are stored in the module's migrations folder, using sequentially numbered files.
 
-Create a new file at <tt>blog/migrations/001_Initial_tables.php</tt>.
+Create a new file at `blog/migrations/001_Initial_tables.php`.
 
 ```php
 class Migration_Initial_tables extends Migration
@@ -119,17 +119,17 @@ class Migration_Initial_tables extends Migration
 }
 ```
 
-The <tt>up()</tt> method is ran whenever this migration is 'installed'. The <tt>down()</tt> method is ran whenever the migration is 'un-installed'.
+The `up()` method is ran whenever this migration is 'installed'. The `down()` method is ran whenever the migration is 'un-installed'.
 
-We use CodeIgniter's <tt>dbforge</tt> class here to create the table, but you could use the <tt>database</tt> class to run raw queries, if you wanted to. We also load up the <tt>permissions_model</tt> and <tt>role_permission_model</tt> and create a new permission, <tt>Bonfire.Blog.View</tt> and assigns the Admin role that permission so you can actually see the blog page in the Content menu.
+We use CodeIgniter's `dbforge` class here to create the table, but you could use the `database` class to run raw queries, if you wanted to. We also load up the `permissions_model` and `role_permission_model` and create a new permission, `Bonfire.Blog.View` and assigns the Admin role that permission so you can actually see the blog page in the Content menu.
 
-To install this migration, navigate to Developer / Database / Migrations. Click on the Modules tab. You will see your Blog module shows up there. Select the <tt>001_Initial_tables.php</tt> from the dropdown, and click 'Migrate Module'. Your <tt>up()</tt> method will run, installing the posts table into your database. Until we create the controller, though, it will not show up in the menu.
+To install this migration, navigate to Developer / Database / Migrations. Click on the Modules tab. You will see your Blog module shows up there. Select the `001_Initial_tables.php` from the dropdown, and click 'Migrate Module'. Your `up()` method will run, installing the posts table into your database. Until we create the controller, though, it will not show up in the menu.
 
 ### Content Context
 
 In order to manage your blog, we will create a new entry under the Content menu that takes us to all of the blog management features. To get started we will need one controller and one view.
 
-Create a new controller, <tt>blog/controllers/content.php</tt>. Each context uses a controller of the same name. In this case we want to create some actions for the Content Context, so we create a controller named <tt>content.php</tt>.
+Create a new controller, `blog/controllers/content.php`. Each context uses a controller of the same name. In this case we want to create some actions for the Content Context, so we create a controller named `content.php`.
 
 ```php
     class Content extends Admin_Controller
@@ -154,11 +154,11 @@ Create a new controller, <tt>blog/controllers/content.php</tt>. Each context use
     }
 ```
 
-Notice that the class is named the same as the Context and it extends <tt>Admin_Controller</tt>. The Admin_Controller is one of several controllers provided by Bonfire to take care of a few functions for you. In this case, the controller makes sure that we are logged in, sets up pagination defaults, sets the theme to the admin theme, and gets our form_validation library loaded and setup so that it works properly with HMVC.
+Notice that the class is named the same as the Context and it extends `Admin_Controller`. The Admin_Controller is one of several controllers provided by Bonfire to take care of a few functions for you. In this case, the controller makes sure that we are logged in, sets up pagination defaults, sets the theme to the admin theme, and gets our form_validation library loaded and setup so that it works properly with HMVC.
 
-In the <tt>__construct()</tt> method we are doing one thing currently, and that is to set the text that shows up in the sub-navigation bar just below the main menu in the admin area. We'll make more use of this bar in the future.
+In the `__construct()` method we are doing one thing currently, and that is to set the text that shows up in the sub-navigation bar just below the main menu in the admin area. We'll make more use of this bar in the future.
 
-The <tt>index()</tt> method is the method that will be called by default when you click on the <tt>Blog</tt> menu item. We use the Template library's <tt>render()</tt> method to display the view for this page. By default, this will look for a view in the module's views folder under the context name and method name. In this case, it would be searching for <tt>blog/views/content/index.php</tt>. Create that file now.
+The `index()` method is the method that will be called by default when you click on the `Blog` menu item. We use the Template library's `render()` method to display the view for this page. By default, this will look for a view in the module's views folder under the context name and method name. In this case, it would be searching for `blog/views/content/index.php`. Create that file now.
 
 
 ```
@@ -171,9 +171,9 @@ Save the files, then navigate to **http://yoursite.com/admin/content/blog** to v
 
 ### The Blog Model
 
-In order to view any posts, we will need to create a model that interacts with the database for us. Thanks to Bonfire's <tt>MY_Model</tt> base class, this is a very simple task.
+In order to view any posts, we will need to create a model that interacts with the database for us. Thanks to Bonfire's `MY_Model` base class, this is a very simple task.
 
-Create a new model file at <tt>blog/models/post_model.php</tt>.
+Create a new model file at `blog/models/post_model.php`.
 
 ```php
     class Post_model extends MY_Model
@@ -197,21 +197,21 @@ This is everything needed to get some pretty flexible CRUD setup and running for
 
 **$key** is the name of the primary key the table uses.
 
-**$set_created** tells the system whether it should automatically store the date the object was created. In order for this to work, you must have a <tt>created_on</tt> datetime field in your table.
+**$set_created** tells the system whether it should automatically store the date the object was created. In order for this to work, you must have a `created_on` datetime field in your table.
 
-**$set_modified** tells the system whether it should automatically store the date the object was last modified. In order for this to work, you must have a <tt>modified_on</tt> datetime field in your table.
+**$set_modified** tells the system whether it should automatically store the date the object was last modified. In order for this to work, you must have a `modified_on` datetime field in your table.
 
-**$soft_deletes** tells the system whether a delete function should permanently delete the row (a 'hard' delete), or simply set a deleted flag in the table. This requires that you have a <tt>deleted</tt> tinyint(1) field in your table.
+**$soft_deletes** tells the system whether a delete function should permanently delete the row (a 'hard' delete), or simply set a deleted flag in the table. This requires that you have a `deleted` tinyint(1) field in your table.
 
 With the settings above, our post_model will:
 
-* Store our data in the <tt>posts</tt> table in our database.
-* Each row will have a primary key called <tt>post_id</tt>.
-* Store the date the row was created in the <tt>created_on</tt> field.
-* Store the date the row was last modified in the <tt>modified_on</tt> field.
-* Set the <tt>deleted</tt> field to 1 when a row is deleted, instead of permanently removing it.
+* Store our data in the `posts` table in our database.
+* Each row will have a primary key called `post_id`.
+* Store the date the row was created in the `created_on` field.
+* Store the date the row was last modified in the `modified_on` field.
+* Set the `deleted` field to 1 when a row is deleted, instead of permanently removing it.
 
-Since the post_model will be used in nearly every method in our content controller, we will autoload it in the controller's <tt>__construct()</tt> method.
+Since the post_model will be used in nearly every method in our content controller, we will autoload it in the controller's `__construct()` method.
 
 ```php
     public function __construct()
@@ -227,7 +227,7 @@ Since the post_model will be used in nearly every method in our content controll
 
 ### Listing Posts in Admin
 
-It's now time to expand our blog's content index method to show us a list of all posts in the system. Add the following lines to the <tt>index()</tt> method of the <tt>content</tt> controller, before the <tt>Template::render()</tt> method.
+It's now time to expand our blog's content index method to show us a list of all posts in the system. Add the following lines to the `index()` method of the `content` controller, before the `Template::render()` method.
 
 ```php
     $posts = $this->post_model->where('deleted', 0)->find_all();
@@ -235,9 +235,9 @@ It's now time to expand our blog's content index method to show us a list of all
     Template::set('posts', $posts);
 ```
 
-This calls our <tt>post_model</tt>'s <tt>find_all()</tt> method to retrieve all posts in the system. However, we don't want any deleted posts, so we filter those out with the <tt>where()</tt> method.
+This calls our `post_model`'s `find_all()` method to retrieve all posts in the system. However, we don't want any deleted posts, so we filter those out with the `where()` method.
 
-We then use the Template class' <tt>set()</tt> method to make the data available to our view. In the view, this can be accessed as the <tt>$posts</tt> variable.
+We then use the Template class' `set()` method to make the data available to our view. In the view, this can be accessed as the `$posts` variable.
 
 Edit your index.php view file to reflect the following:
 
@@ -297,13 +297,13 @@ Edit your index.php view file to reflect the following:
 
 This creates a table that will list each blog post, if any exist. If they don't then a notice will be displayed.
 
-Most of this should be self-explanatory, but there is one new function nestled in there, <tt>e()</tt>. This method is a convenience method that you should consider using wherever you are displaying user-entered data. It simply echos out the string, using the <tt>htmlentities()</tt> function to help protect against XSS and CSRF attacks.
+Most of this should be self-explanatory, but there is one new function nestled in there, `e()`. This method is a convenience method that you should consider using wherever you are displaying user-entered data. It simply echos out the string, using the `htmlentities()` function to help protect against XSS and CSRF attacks.
 
 ### Module Sub-Menus
 
-Now we just need a way to create new posts. Let's start by creating a new sub-menu that allows us to access other pages. This is not intended for long menus, but to provide a short list of major areas within your module. You will see this used throughout Bonfire, and it appears on the right side of the page, just under the main menu. This is the same bar that holds your <tt>$toolbar_title</tt>.
+Now we just need a way to create new posts. Let's start by creating a new sub-menu that allows us to access other pages. This is not intended for long menus, but to provide a short list of major areas within your module. You will see this used throughout Bonfire, and it appears on the right side of the page, just under the main menu. This is the same bar that holds your `$toolbar_title`.
 
-First, we create a view file holds the menu itself. Create a new file at <tt>blog/views/content/sub_nav.php</tt>.
+First, we create a view file holds the menu itself. Create a new file at `blog/views/content/sub_nav.php`.
 
 ```php
     <ul class="nav nav-pills">
@@ -318,7 +318,7 @@ First, we create a view file holds the menu itself. Create a new file at <tt>blo
 
 Each link in this list will take us to a method within our content controller. We also check the url to see if this is an active link or not.
 
-To make this menu show up, we need to add it to our content controller's <tt>__construct()</tt> method.
+To make this menu show up, we need to add it to our content controller's `__construct()` method.
 
 ```php
     public function __construct()
@@ -338,7 +338,7 @@ Reload your page in the admin area, and you will see the new menu appear. Clicki
 
 We will start things simple by just displaying the form to create a new post, then deal with saving the post later.
 
-Create a new <tt>create()</tt> method in your content controller.
+Create a new `create()` method in your content controller.
 
 ```php
     public function create()
@@ -349,9 +349,9 @@ Create a new <tt>create()</tt> method in your content controller.
     }
 ```
 
-This sets the <tt>toolbar_title</tt> of the page, says that we want to use the view named <tt>views/content/post_form.php</tt>, and renders the form.
+This sets the `toolbar_title` of the page, says that we want to use the view named `views/content/post_form.php`, and renders the form.
 
-Now we need create the form itself. We're using a file called <tt>post_form</tt> because we want to be able to use the form for both the create and edit pages.
+Now we need create the form itself. We're using a file called `post_form` because we want to be able to use the form for both the create and edit pages.
 
 ```
     <div class="admin-box">
@@ -396,9 +396,9 @@ Now we need create the form itself. We're using a file called <tt>post_form</tt>
     </div>
 ```
 
-Most of this is straight-forward. I do want to point out that for the values, we are checking whether a <tt>$post</tt> value is set or not, and then uses the form helper's <tt>set_value()</tt> method to set the value in the case of errors on the form.
+Most of this is straight-forward. I do want to point out that for the values, we are checking whether a `$post` value is set or not, and then uses the form helper's `set_value()` method to set the value in the case of errors on the form.
 
-We also use the form_validation library's <tt>form_error()</tt> function to setup individual errors for each field.
+We also use the form_validation library's `form_error()` function to setup individual errors for each field.
 
 <b>Saving the Post</b>
 
@@ -424,7 +424,7 @@ Now, let's actually make it functional. In your post_model, we need to let it kn
     );
 ```
 
-These rules follow the same format as the [form validation library](http://ellislab.com/codeigniter/user-guide/libraries/form_validation.html#validationrulesasarray). The one thing to be aware of is that these rules are used for both inserts and updates. This can cause a problem with required fields on inserts. We'll add the <tt>insert_validation_rules</tt> class variable to the pose_model to provide any additional rules we want applied during an insert only.
+These rules follow the same format as the [form validation library](http://ellislab.com/codeigniter/user-guide/libraries/form_validation.html#validationrulesasarray). The one thing to be aware of is that these rules are used for both inserts and updates. This can cause a problem with required fields on inserts. We'll add the `insert_validation_rules` class variable to the pose_model to provide any additional rules we want applied during an insert only.
 
 ```php
     protected $insert_validation_rules = array(
@@ -435,7 +435,7 @@ These rules follow the same format as the [form validation library](http://ellis
 
 Now, whenever you do an insert or an update, the data is run through the form validation library. If it fails validation, the model will return FALSE and your controller can respond accordingly.
 
-Now then modify the controller's <tt>create()</tt> method to actually save the data:
+Now then modify the controller's `create()` method to actually save the data:
 
 ```php
     public function create()
@@ -463,7 +463,7 @@ Now then modify the controller's <tt>create()</tt> method to actually save the d
 
 ### Editing Posts
 
-Editing our posts is very simple to do now. Simply add the following <tt>edit_post()</tt> method to your controller and you're up and running:
+Editing our posts is very simple to do now. Simply add the following `edit_post()` method to your controller and you're up and running:
 
 ```php
     public function edit_post($id=null)
@@ -493,9 +493,9 @@ Editing our posts is very simple to do now. Simply add the following <tt>edit_po
 
 ## The Public Context
 
-Now that we have basic administration pages in place, it's time to actually let the users view your awesome blog posts. This requires that we create a new controller, in the same blog module, called <tt>blog</tt>. This will handle what we call your <em>Public Context</em> and is simply a front-facing controller that will directly map to the URI. In this case, you can view this controller at <tt>http://yoursite.com/blog</tt>.
+Now that we have basic administration pages in place, it's time to actually let the users view your awesome blog posts. This requires that we create a new controller, in the same blog module, called `blog`. This will handle what we call your <em>Public Context</em> and is simply a front-facing controller that will directly map to the URI. In this case, you can view this controller at `http://yoursite.com/blog`.
 
-Create a new file, <tt>modules/blog/controllers/blog.php</tt>
+Create a new file, `modules/blog/controllers/blog.php`
 
 ```php
     class Blog extends Front_Controller
@@ -532,7 +532,7 @@ This is just a typical CodeIgniter controller, which means that anything you can
 
 In this case, we're loading our model in the constructor, since we know that we'll be using it in every method. Then we create an index method to list the 5 most recent posts.
 
-Then, it looks for a view file at <tt>blog/views/index.php</tt>. Create that file now.
+Then, it looks for a view file at `blog/views/index.php`. Create that file now.
 
 ```php
         <?php foreach ($posts as $post) :?>
@@ -552,7 +552,7 @@ Then, it looks for a view file at <tt>blog/views/index.php</tt>. Create that fil
 
 This is a very simple view, but should be enough to give you an understanding.
 
-Navigate to <tt>http://yoursite.com/index.php/blog</tt> and you should see the 5 most recent blog posts for you.
+Navigate to `http://yoursite.com/index.php/blog` and you should see the 5 most recent blog posts for you.
 
 ## Conclusion
 
