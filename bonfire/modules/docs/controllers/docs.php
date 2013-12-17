@@ -369,13 +369,16 @@ class Docs extends Base_Controller {
         {
             $module = array_shift($segments);
 
+            // If anything's left on $segments, it's probably a filename
+            $fileName = count($segments) ? array_shift($segments) : 'index';
+            $fileName .= '.md';
+
             // Developer docs for modules should be found under
             // the '{module}/docs/developer' path.
             $addPath = $type == $this->docsTypeBf ? '/'. $this->docsTypeBf .'/' : '/';
 
             // This time, we'll try it based on the name of the segment brought in
-            // and an index.md file.
-            list($full_path, $file) = Modules::find('index.md', $module, $this->docsDir . $addPath);
+            list($full_path, $file) = Modules::find($fileName, $module, $this->docsDir . $addPath);
 
             if ( $full_path )
             {
