@@ -22,13 +22,12 @@ Views in Bonfire are the same views that are available within stock CodeIgniter.
 Wherever you would have used CodeIgniter's `$this->load->view()` previously, you should use `Template::render()` instead. It displays a view, wrapped within your themed layout files, checks if it's an AJAX or mobile request, and handles it all without you having to do much. At its simplest, all you have to do to display a fully-themed page from within your controller is:
 
 
-    class Blog extends Front_Controller {
-
+    class Blog extends Front_Controller
+    {
         public function index()
         {
             Template::render();
         }
-
     }
 
 
@@ -40,41 +39,40 @@ Bonfire's template system favors certain conventions in order to keep your proje
 All public context views (those front-facing pages) will be found in your module's `/view` folder. All other contexts (content, settings, etc) should have a folder matching the context name, and the view would be inside of that folder.
 
 
-    /*
-        Public Context
-
-        View would be found at:
-            module_name/
-                views/
-                    index.php
-    */
-    class Blog extends Front_Controller {
-
+    /**
+     * Public Context for Blog Module
+     *
+     * View would be found at:
+     *  module_name/
+     *      views/
+     *          index.php
+     */
+    class Blog extends Front_Controller
+    {
         public function index()
         {
             Template::render();
         }
-
     }
 
 
-    /*
-        Settings Context
-
-        View would be found at:
-            module_name/
-                views/
-                    settings/
-                        index.php
-    */
-    class Settings extends Admin_Controller {
-
+    /**
+     * Settings Context
+     *
+     * View would be found at:
+     *  module_name/
+     *      views/
+     *          settings/
+     *              index.php
+     */
+    class Settings extends Admin_Controller
+    {
         public function index()
         {
             Template::render();
         }
-
     }
+
 
 <a name="render-view"></a>
 ### Rendering an Arbitrary View
@@ -82,14 +80,13 @@ All public context views (those front-facing pages) will be found in your module
 Sometimes you will need to use a different view than what Bonfire defaults to, such as when you want to share a form between your `create` and `edit` methods. This can be handled by using the `set_view()` method of the Template library. The only parameter is the name of the view file to display. The view name is relative to the module's view folder.
 
 
-    class Settings extends Admin_Controller {
-
+    class Settings extends Admin_Controller
+    {
         public function create()
         {
             Template::set_view('settings/post_form');
             Template::render();
         }
-
     }
 
 
@@ -114,20 +111,20 @@ By default, this method will check to see if the user is viewing this from a mob
 
 
     /*
-        Would look for a file called: mobile_recent_posts
-        in the active theme folder.
-    */
+     * Would look for a file called: mobile_recent_posts
+     * in the active theme folder.
+     */
     echo theme_view('recent_posts');
 
 
-If you want to ignore the mobile version (like when they have said they want to view the full site anyway) you may pass `TRUE` in as the third parameter.
+If you want to ignore the mobile version (like when they have said they want to view the full site anyway) you may pass `true` in as the third parameter.
 
 
     /*
-        Would look for a file called: recent_posts
-        in the active theme folder, even if they
-        were viewing on a mobile device.
-    */
+     * Would look for a file called: recent_posts
+     * in the active theme folder, even if they
+     * were viewing on a mobile device.
+     */
     echo theme_view('recent_posts', null, true);
 
 
@@ -136,7 +133,7 @@ If you want to ignore the mobile version (like when they have said they want to 
 
 Bonfire assumes that you are using PHP as your template language. However, you can still use CodeIgniter's built-in `parser` library to display your views instead of letting it parse straight PHP. This can be turned on and off with the Template library's `parse_views()` method.
 
-    Template::parse_views(TRUE);
+    Template::parse_views(true);
 
 
 Once this command has been called, all views from this point on would use the parser.
@@ -175,25 +172,23 @@ When your page is displaying a view in response to an AJAX call Bonfire will ign
 
 If a page requires a different layout than the default ones, say to display a two-column layout, you can easily choose a different layout to use with the `render()` method.
 
-    class Blog extends Front_Controller {
-
+    class Blog extends Front_Controller
+    {
         public function index()
         {
             Template::render('two_column');
         }
-
     }
 
 You can also set a layout to be used by an entire controller by directly tapping into the Template library's class variables.
 
 
-    class Blog extends Front_Controller {
-
+    class Blog extends Front_Controller
+    {
         public function __construct()
         {
             Template::layout = 'two_column';
         }
-
     }
 
 
@@ -202,23 +197,21 @@ This is best used when you want this controller to use a layout that is shared w
 <a name="controllers"></a>
 ### Controller-Based Layouts
 
-If you have a controller that needs it's own layout all you need to do is to create a new layout in your theme folder with the same name as your controller.
+If you have a controller that needs its own layout all you need to do is to create a new layout in your theme folder with the same name as your controller.
 
 
-    /*
-        Uses the blog layout file at:
-
-            themes/
-                my_theme/
-                    blog.php
-    */
-    class Blog extends Front_Controller {
-
+    /**
+     * Uses the blog layout file at:
+     *  themes/
+     *      my_theme/
+     *          blog.php
+     */
+    class Blog extends Front_Controller
+    {
         public function index()
         {
             Template::render();
         }
-
     }
 
 <a name="parent-child"></a>
@@ -252,11 +245,11 @@ There may be situations where you need to only change the default theme that is 
 In your theme's layout files, you can specify where the controller's views are set to display by using the `Template::content()` method.
 
 
-    <?php echo Template::block('header') ?>
+    <?php Template::block('header'); ?>
 
-        <?php echo Template::content() ?>
+        <?php echo Template::content(); ?>
 
-    <?php echo Template::block('header') ?>
+    <?php Template::block('footer'); ?>
 
 
 <a name="blocks"></a>
@@ -275,7 +268,7 @@ If you need to pass a specific set of data to the block's view, you can pass an 
 
     Template::block('block_name', 'default_view', $data);
 
-Sometimes you will want to keep all of the various files that can be used in this block within your theme. In this case, you can pass TRUE as the fourth parameter. Instead of looking within your module's view folder, it will look within the theme folder.
+Sometimes you will want to keep all of the various files that can be used in this block within your theme. In this case, you can pass `true` as the fourth parameter. Instead of looking within your module's view folder, it will look within the theme folder.
 
 
     Template::block('block_name', 'default_view', $data, true);
@@ -296,18 +289,19 @@ The Template library contains several other, smaller, functions and methods that
 <a name="data"></a>
 ### View Data
 
-Instead of using a $data array to pass content to your view, or using `$this->load->vars()`, you can use `Template::set_data()` to make the data usable within the view. This should follow the same format that you are used to using, namely being an array of key/value pairs.
+Instead of using a $data array to pass content to your view, or using `$this->load->vars()`, you can use `Template::set()` to make the data usable within the view. This should follow the same format that you are used to using, namely being an array of key/value pairs.
 
 
     // Instead of...
     $data = array(
-        'title' => 'Page title'
+        'title' => 'Page title',
     );
     $this->load->view('index', $data);
 
     // You should use...
-    Template::set_view('title', 'Page title');
+    Template::set('title', 'Page title');
     Template::render();
+
 
 In order to make the transition from a familiar CodeIgniter practice to Bonfire simpler, you can pass an array in as the only parameter.
 
@@ -389,16 +383,16 @@ The template library contains two functions to ease working with navigation item
 The `check_class()` function checks the passed in url segments against the controller that is running. The first parameter is the name of the class to check against. If you wanted to highlight the Blog link in your main application and your controller was named 'blog' you could use:
 
 
-    <a href="/blog" <?php echo check_class('blog') ?>>Blog</a>
+    <a href="/blog" <?php echo check_class('blog'); ?>>Blog</a>
 
     // Outputs:
     <a href="/blog" class="active">Blog</a>
 
 
-If you already have other classes applied to the link and just want the word `active` output, you can pass TRUE as the second parameter.
+If you already have other classes applied to the link and just want the word `active` output, you can pass `true` as the second parameter.
 
 
-    <a href="/blog" class="dropdown <?php echo check_class('blog', TRUE) ?>">Blog</a>
+    <a href="/blog" class="dropdown <?php echo check_class('blog', true); ?>">Blog</a>
 
     // Outputs:
     <a href="/blog" class="dropdown active">Blog</a>
@@ -410,17 +404,17 @@ Check method works the same as `check_class()` but compares it to the active met
 
 **`check_segment()`**
 
-Check_segment is used in much the same way as the previous two methods, but is more generic, and, often, more flexible. The first parameter is the URI segment to check. The second parameter is the value to compare the segment to. 
+Check_segment is used in much the same way as the previous two methods, but is more generic, and, often, more flexible. The first parameter is the URI segment to check. The second parameter is the value to compare the segment to.
 
-	<a href="/blog" <?php echo check_segment(1, 'blog') ?>>Blog</a>
+	<a href="/blog" <?php echo check_segment(1, 'blog'); ?>>Blog</a>
 
     // Outputs (assuming current URL is /blog)
     <a href="/blog" class="active">Blog</a>
 
-If you already have other classes applied to the link and just want the word `active` output, you can pass TRUE as the third parameter.
+If you already have other classes applied to the link and just want the word `active` output, you can pass `true` as the third parameter.
 
 
-    <a href="/blog" class="dropdown <?php echo check_class(1, 'blog', TRUE) ?>">Blog</a>
+    <a href="/blog" class="dropdown <?php echo check_class(1, 'blog', true); ?>">Blog</a>
 
     // Outputs:
     <a href="/blog" class="dropdown active">Blog</a>
