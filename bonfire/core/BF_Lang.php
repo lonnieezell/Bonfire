@@ -3,6 +3,13 @@
 class BF_Lang extends CI_Lang {
 
     /**
+     * @var String The fallback language used for un-translated lines.
+     * If you change this, you should ensure that all language files have been
+     * translated to the language indicated by the new value.
+     */
+    protected $fallback = 'english';
+
+    /**
      * Load a language file
      *
      * Bonfire modifies this to attempt to find language files within modules, also.
@@ -13,21 +20,29 @@ class BF_Lang extends CI_Lang {
      * @param   bool    return loaded array of translations
      * @param   bool    add suffix to $langfile
      * @param   string  alternative path to look for language file
+     *
+     ************
+     * The $module parameter has been deprecated (since 0.7.1)
+     * @param   string  the name of the module in which the language file may be located
+     *
      * @return  mixed
      */
-    function load($langfile = '', $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '')
+    function load($langfile = '', $idiom = '', $return = false, $add_suffix = true, $alt_path = '', $module='')
     {
+		if (is_array($langfile)) {
+			foreach($langfile as $_lang) $this->load($_lang);
+			return $return ? $this->language : true;
+        }
+
         $langfile = str_replace('.php', '', $langfile);
 
-        if ($add_suffix == TRUE)
-        {
+        if ($add_suffix == true) {
             $langfile = str_replace('_lang.', '', $langfile).'_lang';
         }
 
         $langfile .= '.php';
 
-        if (in_array($langfile, $this->is_loaded, TRUE))
-        {
+        if (in_array($langfile, $this->is_loaded, true)) {
             return;
         }
 
@@ -35,57 +50,58 @@ class BF_Lang extends CI_Lang {
         $matches = explode('/', $langfile);
         $module = '';
 
-        if (strpos($matches[0], '.php') === false)
-        {
+        if (strpos($matches[0], '.php') === false) {
             $module = $matches[0];
-            $orig_langfile = $langfile;
-            $langfile = str_replace($module .'/', '', $langfile);
+            // $orig_langfile = $langfile;
+            $langfile = str_replace($module . '/', '', $langfile);
         }
 
         unset($matches);
 
         $config =& get_config();
 
-        if ($idiom == '')
-        {
-            $deft_lang = ( ! isset($config['language'])) ? 'english' : $config['language'];
-            $idiom = ($deft_lang == '') ? 'english' : $deft_lang;
+        if ($idiom == '') {
+            $deft_lang = isset($config['language']) ? $config['language'] : $this->fallback;
+            $idiom = ($deft_lang == '') ? $this->fallback : $deft_lang;
+        }
+
+        $lang = array();
+        if ($idiom != $this->fallback) {
+            $lang = $this->load($langfile, $this->fallback, true, $add_suffix, $alt_path, $module);
         }
 
         // Determine where the language file is and load it
-        if ($alt_path != '' && file_exists($alt_path.'language/'.$idiom.'/'.$langfile))
-        {
-            include($alt_path.'language/'.$idiom.'/'.$langfile);
-        }
-        else
-        {
-            $found = FALSE;
+        $langfilePath = "language/{$idiom}/{$langfile}";
+        if ($alt_path != '' && file_exists($alt_path . $langfilePath)) {
+            include($alt_path . $langfilePath);
+        } else {
+            $found = false;
+            $ci =& get_instance();
 
-            foreach (get_instance()->load->get_package_paths(TRUE) as $package_path)
-            {
-                if (file_exists($package_path. 'language/'.$idiom.'/'.$langfile))
-                {
-                    include($package_path. 'language/'.$idiom.'/'.$langfile);
-                    $found = TRUE;
+            if ($module != '') {
+                $ci->load->add_module($module);
+            }
+
+            foreach ($ci->load->get_package_paths(true) as $package_path) {
+                if (file_exists($package_path . $langfilePath)) {
+                    include($package_path . $langfilePath);
+                    $found = true;
                     break;
                 }
             }
 
-            if ($found !== TRUE)
-            {
-                show_error('Unable to load the requested language file: language/'.$idiom.'/'.$langfile);
+            if ($found !== true) {
+                show_error("Unable to load the requested language file: {$langfilePath}");
             }
         }
 
 
-        if ( ! isset($lang))
-        {
-            log_message('error', 'Language file contains no data: language/'.$idiom.'/'.$langfile);
+        if (empty($lang)) {
+            log_message('error', "Language file contains no data: {$langfilePath}");
             return;
         }
 
-        if ($return == TRUE)
-        {
+        if ($return == true) {
             return $lang;
         }
 
@@ -93,8 +109,8 @@ class BF_Lang extends CI_Lang {
         $this->language = array_merge($this->language, $lang);
         unset($lang);
 
-        log_message('debug', 'Language file loaded: language/'.$idiom.'/'.$langfile);
-        return TRUE;
+        log_message('debug', "Language file loaded: {$langfilePath}");
+        return true;
     }
 
     // --------------------------------------------------------------------
