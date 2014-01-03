@@ -29,6 +29,7 @@ class BF_Lang extends CI_Lang {
      */
     function load($langfile = '', $idiom = '', $return = false, $add_suffix = true, $alt_path = '', $module='')
     {
+        $orig_langfile = $langfile;
 		if (is_array($langfile)) {
 			foreach($langfile as $_lang) $this->load($_lang);
 			return $return ? $this->language : true;
@@ -52,7 +53,6 @@ class BF_Lang extends CI_Lang {
 
         if (strpos($matches[0], '.php') === false) {
             $module = $matches[0];
-            // $orig_langfile = $langfile;
             $langfile = str_replace($module . '/', '', $langfile);
         }
 
@@ -67,7 +67,7 @@ class BF_Lang extends CI_Lang {
 
         $lang = array();
         if ($idiom != $this->fallback) {
-            $lang = $this->load($langfile, $this->fallback, true, $add_suffix, $alt_path, $module);
+            $lang = $this->load($orig_langfile, $this->fallback, true, $add_suffix, $alt_path, $module);
         }
 
         // Determine where the language file is and load it
