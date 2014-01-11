@@ -35,6 +35,15 @@ class Admin_Controller extends Authenticated_Controller
         $this->load->library('assets');
         $this->load->library('ui/contexts');
 
+        // Get our menus setup and ready to use.
+        $menu_data = array(
+            'menu_path'         => APPPATH .'menus/',
+            'module_folders'    => config_item('modules_locations'),
+            'contexts'          => config_item('contexts')
+        );
+        $this->load->library('menus', $menu_data);
+        unset($menu_data);
+
         // Pagination config
         $this->pager = array(
             'full_tag_open'     => '<div class="pagination pagination-right"><ul>',

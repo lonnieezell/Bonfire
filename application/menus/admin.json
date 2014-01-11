@@ -1,0 +1,20 @@
+{
+    "title": "Admin",
+    "items": [
+        {
+            "title": "Content",
+            "context": "content"
+        },
+        {
+            "title": "Reports",
+            "context": "reports"
+        },
+        {
+            "title": "Settings",
+            "menu": "settings"
+        },
+        {
+            "menu": "developer"
+        }
+    ]
+}

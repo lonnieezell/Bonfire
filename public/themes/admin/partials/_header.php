@@ -100,7 +100,8 @@
 							</div>
 						</div>
 
-						<?php echo Contexts::render_menu('text', 'normal'); ?>
+                        <?php echo $this->menus->display('admin'); ?>
+						<?php //echo Contexts::render_menu('text', 'normal'); ?>
 					</div> <!-- END OF nav-collapse -->
 
 			</div><!-- /container -->
