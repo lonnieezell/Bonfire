@@ -11,10 +11,11 @@
         },
         {
             "title": "Settings",
-            "menu": "settings"
+            "menu": "settings_menu"
         },
         {
-            "menu": "developer"
+            "title": "Developer",
+            "context": "developer"
         }
     ]
 }
