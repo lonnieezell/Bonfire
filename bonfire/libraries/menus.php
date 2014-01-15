@@ -121,22 +121,27 @@ class Menus {
      * visibility and permissions, set active elements, etc.
      *
      * @param  string $menu     The results of a readMenu() call.
+     * @param  string $prefix   A string to prepend to the URL
      *
      * @return array            The complete structure of the menu.
      */
-    public function buildMenu($menu)
+    public function buildMenu($menu, $prefix=null)
     {
         if (is_string($menu))
         {
             $menu = $this->readMenu($menu);
         }
 
+        // Does the menu have a prefix that we should
+        // add to each URL?
+        $prefix = isset($menu['prefix']) ? $menu['prefix'] : $prefix;
+
         /*
             Items
          */
         if (isset($menu['items']))
         {
-            $menu['items'] = $this->constructItems($menu['items']);
+            $menu['items'] = $this->constructItems($menu['items'], $prefix);
         }
 
         /*
@@ -148,7 +153,7 @@ class Menus {
          */
         if (isset($menu['context']))
         {
-            $menu['items'] = $this->constructContext($menu['context']);
+            $menu['items'] = $this->constructContext($menu['context'], $prefix);
         }
 
         return $menu;
@@ -160,11 +165,12 @@ class Menus {
      * Builds out the items array. Handles all of the various form of
      * items, such as menus, contexts, and even regular old items.
      *
-     * @param  array $items The 'items' array from a menu.
+     * @param  array    $items  The 'items' array from a menu.
+     * @param  string   $prefix A string to prepend to the URL generated.
      *
      * @return array        The built-out items.
      */
-    public function constructItems($items)
+    public function constructItems($items, $prefix=null)
     {
         $structure = array();
 
@@ -175,7 +181,7 @@ class Menus {
             // Parse any route we might have.
             if (isset($item['route']))
             {
-                $item['route'] = $this->parseRoute($item['route']);
+                $item['route'] = $this->parseRoute($item['route'], $prefix);
             }
 
             /*
@@ -187,7 +193,7 @@ class Menus {
              */
             if (isset($item['menu']) && ! empty($item['menu']))
             {
-                $temp = $this->buildMenu($item['menu']);
+                $temp = $this->buildMenu($item['menu'], $prefix);
 
                 $slug = isset($temp['slug']) ? $temp['slug'] : url_title($temp['title'], '_', true);
 
@@ -200,7 +206,7 @@ class Menus {
              */
             else if (isset($item['context']) && ! empty($item['context']))
             {
-                $temp = $this->constructContext($item['context']);
+                $temp = $this->constructContext($item['context'], $prefix);
 
                 $structure[] = array(
                     'items' => $temp,
@@ -229,7 +235,7 @@ class Menus {
 
                 if ( isset($structure[$slug]['items']) )
                 {
-                    $structure[$slug]['items'] = $this->constructItems($structure[$slug]['items']);
+                    $structure[$slug]['items'] = $this->constructItems($structure[$slug]['items'], $prefix);
                 }
             }
 
@@ -244,13 +250,19 @@ class Menus {
     /**
      * Parses an item's route string to expand any special tags to the URI.
      *
-     * @param  string $route The route to parse.
+     * @param   string  $route  The route to parse.
+     * @param   string  $prefix Prepended to the URL during generation
      *
      * @return string        The expanded route.
      */
-    public function parseRoute($route)
+    public function parseRoute($route, $prefix=null)
     {
-        $route = str_ireplace('{area}', SITE_AREA, $route);
+        if ( ! empty($prefix))
+        {
+            $route = $prefix . $route;
+        }
+
+        $route = str_ireplace('{area}', rtrim(SITE_AREA, '/') .'/', $route);
 
         return $route;
     }
@@ -283,11 +295,12 @@ class Menus {
      * Builds an array of menu items based on the Contexts that are found
      * within the system and all modules.
      *
-     * @param  string $context_name The name of the context to build a menu for.
+     * @param   string  $context_name The name of the context to build a menu for.
+     * @param   string  $prefix Prepends the URL. Will be passed to child menus.
      *
      * @return array                The constructed menu items array.
      */
-    public function constructContext($context_name)
+    public function constructContext($context_name, $prefix)
     {
         $structure = array();
 
@@ -304,7 +317,7 @@ class Menus {
         // Is this a valid context?
         if ( ! in_array($context_name, $this->contexts) )
         {
-            return array();
+            return $structure;
         }
 
         // Build out our menu items based on the context
@@ -312,7 +325,7 @@ class Menus {
 
         foreach ($modules as $module_name => $module_folder)
         {
-            $item = $this->constructContextItem($context_name, $module_name, $module_folder);
+            $item = $this->constructContextItem($context_name, $module_name, $module_folder, $prefix);
 
             if ( empty($item) || (is_array($item) && ! count($item)) )
             {
@@ -334,10 +347,11 @@ class Menus {
      * @param  string $context       The name of the context to render.
      * @param  string $module        The name of the module (as defined in the filesystem)
      * @param  string $module_folder The path to the module folder.
+     * @param  string $prefix        To be prepended to the generated URL's.
      *
      * @return array                The built out item.
      */
-    public function constructContextItem($context, $module, $module_folder)
+    public function constructContextItem($context, $module, $module_folder, $prefix)
     {
         $item = array();
 
@@ -348,6 +362,10 @@ class Menus {
             return $menu;
         }
 
+        // Make sure to pass along our prefix, if the menu doesn't
+        // override it.
+        $prefix = isset($menu['prefix']) ? $menu['prefix'] : $prefix;
+
         // Build some default values.
         $name = str_replace('_', ' ', $module);
         $name = $this->parseName( ucwords($name) );
@@ -357,7 +375,7 @@ class Menus {
         $weight = 50;
 
         $item['title']  = $name;
-        $item['route']  = $this->parseRoute($route);
+        $item['route']  = $this->parseRoute($route, $prefix);
         $item['weight'] = $weight;
 
         return $item;
@@ -392,16 +410,16 @@ class Menus {
             foreach ($map as $module)
             {
                 // Must be a folder to contain modules.
-                if ( ! is_dir($folder . $module))
-                {
-                    continue;
-                }
-
-                // Must have a controllers folder.
-                if ( ! is_dir($folder . $module .'/controllers'))
-                {
-                    continue;
-                }
+//                if ( ! is_dir($folder . $module))
+//                {
+//                    continue;
+//                }
+//
+//                // Must have a controllers folder.
+//                if ( ! is_dir($folder . $module .'/controllers'))
+//                {
+//                    continue;
+//                }
 
                 // Must have a controller name matching our context
                 if ( ! is_file($folder . $module ."/controllers/{$context}.php"))

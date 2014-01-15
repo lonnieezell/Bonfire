@@ -1,5 +1,6 @@
 {
     "title": "Admin",
+    "prefix": "{area}",
     "items": [
         {
             "title": "Content",
