@@ -3,19 +3,18 @@
     "prefix": "{area}",
     "items": [
         {
-            "title": "Content",
+            "title": "lang:bf_context_content",
             "context": "content"
         },
         {
-            "title": "Reports",
+            "title": "lang:bf_context_reports",
             "context": "reports"
         },
         {
-            "title": "Settings",
             "menu": "settings_menu"
         },
         {
-            "title": "Developer",
+            "title": "bf_context_developer",
             "context": "developer"
         }
     ]

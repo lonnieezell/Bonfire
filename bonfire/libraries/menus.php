@@ -163,7 +163,7 @@ class Menus {
 
     /**
      * Builds out the items array. Handles all of the various form of
-     * items, such as menus, contexts, and even regular old items.
+     * items, such as menus, contexl, and even regular old items.
      *
      * @param  array    $items  The 'items' array from a menu.
      * @param  string   $prefix A string to prepend to the URL generated.
@@ -480,7 +480,7 @@ class Menus {
                 $html .= $this->tag_open ."\n";
             }
 
-            $html .= anchor($route, $item['title'], $attrs) ."\n";
+            $html .= anchor($route, $this->parseName($item['title']), $attrs) ."\n";
         }
 
         // Any child menu items?
