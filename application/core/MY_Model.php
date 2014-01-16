@@ -687,6 +687,9 @@ class BF_Model extends CI_Model
 		if ($this->skip_validation === FALSE)
 		{
 		    $data = $this->validate($data);
+		    if ($data === false) {
+                	return false;
+            		}
 		}
 
 		if ( ! is_array($where))
