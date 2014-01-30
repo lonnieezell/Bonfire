@@ -21,15 +21,14 @@
  * This code is originally based on Ollie Rattue's http://formigniter.org/ project
  *
  * @package    Bonfire
- * @subpackage Modules_ModuleBuilder
+ * @subpackage Modules_Builder
  * @category   Libraries
  * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/guides/core_modules/modulebuilder.html
+ * @link       http://cibonfire.com/docs/builder
  *
  */
 class Modulebuilder
 {
-
     /**
      * A pointer to the CodeIgniter instance.
      *

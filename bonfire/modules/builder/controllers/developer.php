@@ -168,109 +168,86 @@ class Developer extends Admin_Controller {
      *
      * @return void
      */
-    public function create_module($fields = 0)
+    public function create_module($fields=0)
     {
         $this->auth->restrict('Bonfire.Modules.Add');
 
         $hide_form = false;
         $this->field_total = $fields;
 
-        // validation hasn't been passed
-        if ($this->validate_form($this->field_total) == FALSE)
-        {
-            Template::set('field_total', $this->field_total);
-
-            if (isset($_POST['build']))
-            {
-                Template::set('form_error', TRUE);
-            }
-            else
-            {
-                Template::set('form_error', FALSE);
-            }
-
+        // Validation failed
+        if ($this->validate_form($this->field_total) == false) {
             $query = $this->db->select('role_id,role_name')
                               ->where('deleted', 0)
                               ->order_by('role_name')
                               ->get('roles');
-            Template::set('roles', $query->result_array());
-            Template::set('form_action_options', $this->options['form_action_options']);
-            Template::set('validation_rules', $this->options['validation_rules']);
-            Template::set('validation_limits', $this->options['validation_limits']);
+
             Template::set('field_numbers', range(0,20));
             Template::set('field_total', $this->field_total);
+            Template::set('form_action_options', $this->options['form_action_options']);
+            Template::set('form_error', isset($_POST['build']));
+            Template::set('roles', $query->result_array());
+            Template::set('validation_limits', $this->options['validation_limits']);
+            Template::set('validation_rules', $this->options['validation_rules']);
 
             Template::set_view('developer/modulebuilder_form');
-
         }
-        elseif ($this->input->post('module_db') == 'existing' && $this->field_total == 0)
-        {
-            // if the user has specified the table including the prefix then remove the prefix
+        // Validation Passed, Use existing DB, need to detect the fields
+        elseif ($this->input->post('module_db') == 'existing' && $this->field_total == 0) {
+            // If the table name includes the prefix, remove the prefix
             $_POST['table_name'] = preg_replace("/^".$this->db->dbprefix."/", "", $this->input->post('table_name'));
-
-            // read the fields from the specified db table and pass them back into the form
-            $table_fields = $this->table_info($this->input->post('table_name'));
-
             $num_fields = 0;
 
-            if (is_array($table_fields))
-			{
+            // Read the fields from the db table and pass them back to the form
+            $table_fields = $this->table_info($this->input->post('table_name'));
+            if (is_array($table_fields)) {
                 $num_fields = count($table_fields);
             }
-            Template::set('field_total', $this->field_total);
 
-            if ($num_fields != 0)
-			{
-                Template::set('field_total', $num_fields - 1); // discount the first field as it is the primary key
+            if ($num_fields > 0) {
+                // While $num_fields includes the primary key, field_total doesn't
+                Template::set('field_total', $num_fields - 1);
+            } else {
+                Template::set('field_total', $this->field_total);
             }
 
-            if ( ! empty($_POST) && $num_fields == 0)
-            {
-                Template::set('form_error', TRUE);
+            if ( ! empty($_POST) && $num_fields == 0) {
+                Template::set('form_error', true);
 
                 $error_message = lang('mb_module_table_not_exist');
-                log_message('error', 'ModuleBuilder: ' . $error_message);
+                log_message('error', "ModuleBuilder: {$error_message}");
                 Template::set('error_message', $error_message);
                 unset($error_message);
-            }
-            else
-            {
-                Template::set('form_error', FALSE);
+            } else {
+                Template::set('form_error', false);
             }
 
             $query = $this->db->select('role_id,role_name')
                               ->order_by('role_name')
                               ->get('roles');
 
-            Template::set('roles', $query->result_array());
             Template::set('existing_table_fields', $table_fields);
-            Template::set('form_action_options', $this->options['form_action_options']);
-            Template::set('validation_rules', $this->options['validation_rules']);
-            Template::set('validation_limits', $this->options['validation_limits']);
             Template::set('field_numbers', range(0, 20));
+            Template::set('form_action_options', $this->options['form_action_options']);
+            Template::set('roles', $query->result_array());
+            Template::set('validation_limits', $this->options['validation_limits']);
+            Template::set('validation_rules', $this->options['validation_rules']);
 
             Template::set_view('developer/modulebuilder_form');
-
         }
-        else
-        {
-            // passed validation proceed to second page
+        // Validation passed and ready to proceed
+        else {
             $this->build_module($this->field_total);
-
-            // Log the activity
-           log_activity((integer) $this->current_user->id, lang('mb_act_create').': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
+            log_activity((integer) $this->current_user->id, lang('mb_act_create') . ': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
 
             Template::set_view('developer/output');
+        }
 
-        }//end if
-
-        // check that the modules folder is writeable
-        Template::set('writeable', $this->_check_writeable());
         Template::set('error', array());
         Template::set('toolbar_title', lang('mb_toolbar_title_create'));
+        Template::set('writeable', $this->_check_writeable());
 
         Template::render();
-
     }//end create
 
     //--------------------------------------------------------------------
