@@ -1,7 +1,7 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class BF_Lang extends CI_Lang {
-
+class BF_Lang extends CI_Lang
+{
     /**
      * @var String The fallback language used for un-translated lines.
      * If you change this, you should ensure that all language files have been
@@ -38,7 +38,7 @@ class BF_Lang extends CI_Lang {
         $langfile = str_replace('.php', '', $langfile);
 
         if ($add_suffix == true) {
-            $langfile = str_replace('_lang.', '', $langfile).'_lang';
+            $langfile = str_replace('_lang', '', $langfile).'_lang';
         }
 
         $langfile .= '.php';
@@ -90,7 +90,8 @@ class BF_Lang extends CI_Lang {
                 }
             }
 
-            if ($found !== true) {
+            // Check whether $lang is empty, as the fallback may have been loaded
+            if ($found !== true && empty($lang)) {
                 show_error("Unable to load the requested language file: {$langfilePath}");
             }
         }
@@ -112,6 +113,4 @@ class BF_Lang extends CI_Lang {
         log_message('debug', "Language file loaded: {$langfilePath}");
         return true;
     }
-
-    // --------------------------------------------------------------------
 }
