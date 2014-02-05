@@ -65,7 +65,7 @@ class Events
 	 */
 	public static function init()
 	{
-		if (!function_exists('read_config'))
+		if ( ! function_exists('read_config'))
 		{
 			$ci =& get_instance();
 			$ci->load->helper('config_file');
