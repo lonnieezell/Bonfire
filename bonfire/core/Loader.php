@@ -42,8 +42,8 @@
  * @category	Loader
  * @link		http://codeigniter.com/user_guide/libraries/loader.html
  */
-class CI_Loader {
-
+class CI_Loader
+{
 	// All these are set automatically. Don't mess with them.
 	/**
 	 * Nesting level of the output buffering mechanism
@@ -239,13 +239,11 @@ class CI_Loader {
     {
 		// No valid module detected, add current module to uri
 		list($module) = $this->detect_module($uri);
-		if (!isset($module))
-		{
+		if ( ! isset($module)) {
 			$router = & $this->_ci_get_component('router');
-			if ($router->module)
-			{
-				$module = $router->module;
-				$uri = $module . '/' . $uri;
+			if ($router->fetch_module()) {
+				$module = $router->fetch_module();
+				$uri = "{$module}/{$uri}";
 			}
 		}
 
@@ -456,37 +454,29 @@ class CI_Loader {
      */
     public function language($file = array(), $lang = '')
     {
-		if (is_array($file))
-		{
-			foreach ($file as $langfile)
-			{
+		if (is_array($file)) {
+			foreach ($file as $langfile) {
 				$this->language($langfile, $lang);
 			}
 			return;
 		}
 
 		// Detect module
-		if (list($module, $class) = $this->detect_module($file))
-		{
+		if (list($module, $class) = $this->detect_module($file)) {
 			// Module already loaded
-			if (in_array($module, $this->_ci_modules))
-			{
-				return parent::language($class, $lang);
+			if (in_array($module, $this->_ci_modules)) {
+				return $this->_language($class, $lang);
 			}
 
 			// Add module
 			$this->add_module($module);
-
-			// Let parent do the heavy work
-			$void = parent::language($class, $lang);
+			$void = $this->_language($class, $lang);
 
 			// Remove module
-			$this->remove_module();
+			$this->remove_module($module);
 
 			return $void;
-		}
-		else
-		{
+		} else {
 			return $this->_language($file, $lang);
 		}
     }
@@ -654,28 +644,26 @@ class CI_Loader {
     {
 		$class = str_replace('.php', '', trim($class, '/'));
 
-		if (($first_slash = strpos($class, '/')) !== FALSE)
-		{
+		if (($first_slash = strpos($class, '/')) === false) {
+            $module = $class;
+        } else {
 			$module = substr($class, 0, $first_slash);
 			$class = substr($class, $first_slash + 1);
+        }
 
-			// Check if module exists by itself.
-			if ($this->find_module($module))
-			{
-				return array($module, $class);
-			}
+        // Check whether module exists by itself.
+        if ($this->find_module($module)) {
+            return array($module, $class);
+        }
 
-            $router_module =  get_instance()->router->fetch_module();
+        $router_module = get_instance()->router->fetch_module();
 
-            // If we're still here, try the router_module
-            // without the sub_path.
-			if ($this->find_module($router_module))
-			{
-				return array($router_module, $module);
-			}
-		}
+        // Try the $router_module
+        if ($this->find_module($router_module)) {
+            return array($router_module, $module);
+        }
 
-		return FALSE;
+		return false;
     }
 
     //--------------------------------------------------------------------
@@ -693,6 +681,7 @@ class CI_Loader {
 	*/
 	public function find_module($module, $sub_path='')
 	{
+/*
 		$config = & $this->_ci_get_component('config');
 
 		// Check all locations for this module
@@ -707,6 +696,8 @@ class CI_Loader {
 		}
 
 		return FALSE;
+ */
+        return Modules::path($module, $sub_path);
 	}
 
     //--------------------------------------------------------------------
