@@ -6,6 +6,10 @@
 
 Additional Changes:
 
+* Replaced Assets::$asset_base, Assets::$asset_cache_folder, and Assets::$asset_folders with a single Assets::$directories array (these were not deprecated because they were private properties). Allow a config item ('assets.directories') to set the value of the new property, but if it is not set the library will attempt to use the old config items ('assets.base_folder', 'assets.cache_folder', and 'assets.asset_folders').
+* Added closures to hold the functions for CSS/JS minification, which should facilitate swapping out the libraries that perform these functions in the future.
+* Deprecated Assets::set_globals(), Assets::$external_scripts, Assets::$inline_scripts, and Assets::$module_scripts. Replaced by Assets::setGlobals() and Assets::$scripts['external']/Assets::$scripts['inline']/Assets::$scripts['module']
+* Partial Russian translation
 * Deprecated the module_* functions in application_helper. They're in the Modules class now.
 * Deprecated form_has_error() method since CI's form_error() does the same thing.
 * Docs system is much more robust now, including link fixing, separating application/developer docs in the UI, a basic search system, and more.
@@ -22,6 +26,10 @@ New Features:
 
 
 Closes Issues:
+* #983 - Assets::js() creates invalid path when base_url is set to a directory
+* #982 - MY_Security renamed to BF_Security
+* #975 - BF_Model->update(): check validation result before continuing with update
+* #968 - Error loading language file in languages other than English
 * #965 - State input no longer required in extended settings
 * #964 - Fixed documentation of Template::set()
 * #962 - Updated docs system doesn't load module docs for application or module docs named something other than index
