@@ -404,10 +404,12 @@ class Contexts
 	{
 		// Get a list of modules with a controller matching
 		// $context ('content', 'settings', 'reports', or 'developer')
-		$module_list = module_list();
+		$module_list = Modules::list_modules();
 
-		foreach ($module_list as $module) {
-			if (Modules::controller_exists($context, $module) === true) {
+		foreach ($module_list as $module)
+        {
+			if (Modules::controller_exists($context, $module) === true)
+            {
 				$mod_config = Modules::config($module);
 
 				self::$actions[$module] = array(
@@ -588,18 +590,23 @@ class Contexts
         $childClass     = self::$child_class;
         $search = array('{submenu_class}', '{url}', '{display}', '{child_class}', '{view}');
 
-		foreach (self::$menu as $topic_name => $topic) {
+		foreach (self::$menu as $topic_name => $topic)
+        {
 			// If there is more than one item in the topic, we need to build
 			// out a menu based on the multiple items.
-			if (count($topic) > 1) {
+			if (count($topic) > 1)
+            {
                 $subMenu = '';
-				foreach ($topic as $module => $vals) {
+				foreach ($topic as $module => $vals)
+                {
 					// If it has no sub-menu, add it like normal
-					if (empty($vals['menu_view'])) {
+					if (empty($vals['menu_view']))
+                    {
 						$subMenu .= self::build_item($module, $vals['title'], $vals['display_name'], $context, $vals['menu_view']);
 					}
 					// Otherwise, echo out the sub-menu only
-					else {
+					else
+                    {
 						$view = self::$ci->load->view($vals['menu_view'], null, true);
 						// To maintain backwards compatility, strip out any <ul> tags
 						$subMenu .= str_ireplace(array('<ul>', '</ul>'), array('', ''), $view);
@@ -615,7 +622,14 @@ class Contexts
                 );
                 $list .= str_replace($search, $replace, self::$templateSubMenu);
 			} else {
-				foreach ($topic as $module => $vals) {
+				foreach ($topic as $module => $vals)
+                {
+                    // Handle localization of the display name, if needed.
+                    if (strpos($vals['display_name'], 'lang:') === 0)
+                    {
+                        $vals['display_name'] = config_item( str_replace('lang:', '', $vals['display_name']) );
+                    }
+
 					$list .= self::build_item($module, $vals['title'], $vals['display_name'], $context, $vals['menu_view']);
 				}
 			}
