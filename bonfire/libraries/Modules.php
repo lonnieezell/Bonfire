@@ -172,9 +172,9 @@ class Modules
         }
 
         $map = array();
-        $folders = Modules::folders();
-        foreach ($folders as $folder) {
-            // If excluding core modules and this is a core module, skip it
+
+        foreach (Modules::folders() as $folder) {
+            // If excluding core modules, skip the core module folder
             if ($exclude_core && strpos($folder, self::$bfModulesDir) !== false) {
                 continue;
             }
@@ -291,22 +291,26 @@ class Modules
         }
 
         $files = array();
+
         foreach (Modules::folders() as $path) {
-            // If we're ignoring core modules and we find the core module folder... skip it.
-            if ($exclude_core === true && strpos($path, 'bonfire/modules') !== false) {
+            // If excluding core modules, skip the core module folder
+            if ($exclude_core && strpos($folder, self::$bfModulesDir) !== false) {
                 continue;
             }
 
-            if ( ! empty($module_name) && is_dir($path . $module_name)) {
-                $path = $path . $module_name;
-                $modules[$module_name] = directory_map($path);
-            } else {
+            // Only map the whole modules directory if $module_name isn't passed
+            if (empty($module_name)) {
                 $modules = directory_map($path);
             }
+            // Only map the $module_name directory if it exists
+            elseif (is_dir($path . $module_name)) {
+                $path = $path . $module_name;
+                $modules[$module_name] = directory_map($path);
+            }
 
-            // If the element is not an array, we know that it's a file,
-            // so we ignore it, otherwise it is assumbed to be a module.
-            if ( ! is_array($modules) || ! count($modules)) {
+            // If the element is not an array, it's a file, so ignore it.
+            // Otherwise it is assumed to be a module.
+            if (empty($modules) || ! is_array($modules)) {
                 continue;
             }
 
