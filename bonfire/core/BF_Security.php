@@ -21,7 +21,7 @@ class BF_Security extends CI_Security
     {
         parent::__construct();
 
-        $this->ignored_controllers = $this->config->item('csrf_ignored_controllers');
+        $this->ignored_controllers = config_item('csrf_ignored_controllers');
     }
 
     //--------------------------------------------------------------------

@@ -23,7 +23,7 @@ New Features:
 * Images controller can reference images from a module using the module=... parameter.
 * Template class now provides a `check_segment` method in addition to check_class and check_method.
 * Brand new documentation system that allows splitting your user and dev-related docs, and searching docs.
-* CSRF protection can be bypassed for individual controllers by setting `csrf_ignored_controllers` setting in the application config file.
+* CSRF protection can be bypassed for individual controllers by setting `csrf_ignored_controllers` setting in the site's main index file.
 
 
 Closes Issues:
