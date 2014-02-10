@@ -1002,7 +1002,7 @@ EOF;
 			// Grab the output of the view.
 			if (self::$parse_views === TRUE)
 			{
-				$data = array_merge((array)$data, self::$ci->load->_ci_cached_vars);
+				$data = array_merge((array)$data, self::$ci->load->get_vars());
 				$output = self::$ci->load->view($view_path . $view_file, $data, true);
 			}
 			else

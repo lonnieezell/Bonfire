@@ -1015,6 +1015,20 @@ class CI_Loader
 
 	// --------------------------------------------------------------------
 
+    /**
+     * Returns all of the currently cached vars since _ci_cached_vars is
+     * now a protected var.
+     *
+     * @return array
+     */
+    public function get_vars ()
+    {
+        return $this->_ci_cached_vars;
+    }
+
+    //--------------------------------------------------------------------
+
+
 	/**
 	 * Load Helper
 	 *
