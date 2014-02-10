@@ -23,6 +23,7 @@ New Features:
 * Images controller can reference images from a module using the module=... parameter.
 * Template class now provides a `check_segment` method in addition to check_class and check_method.
 * Brand new documentation system that allows splitting your user and dev-related docs, and searching docs.
+* CSRF protection can be bypassed for individual controllers by setting `csrf_ignored_controllers` setting in the application config file.
 
 
 Closes Issues:
@@ -30,6 +31,7 @@ Closes Issues:
 * #982 - MY_Security renamed to BF_Security
 * #975 - BF_Model->update(): check validation result before continuing with update
 * #968 - Error loading language file in languages other than English
+* #967 - Should make the CSRF ignore list configurable.
 * #965 - State input no longer required in extended settings
 * #964 - Fixed documentation of Template::set()
 * #962 - Updated docs system doesn't load module docs for application or module docs named something other than index

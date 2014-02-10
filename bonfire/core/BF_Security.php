@@ -20,6 +20,8 @@ class BF_Security extends CI_Security
     public function __construct()
     {
         parent::__construct();
+
+        $this->ignored_controllers = $this->config->item('csrf_ignored_controllers');
     }
 
     //--------------------------------------------------------------------
@@ -50,7 +52,10 @@ class BF_Security extends CI_Security
 
         $module = $RTR->fetch_module();
         $controller = $RTR->fetch_class();
-        $bypass = in_array("{$module}/{$controller}", $this->ignored_controllers);
+
+        $path = empty($module) ? $controller : $module .'/'. $controller;
+
+        $bypass = in_array($path, $this->ignored_controllers);
 
         if ($bypass) {
             return $this;
