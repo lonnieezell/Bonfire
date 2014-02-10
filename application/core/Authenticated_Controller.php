@@ -15,6 +15,8 @@
 class Authenticated_Controller extends Base_Controller
 {
 
+    protected $require_authentication   = true;
+
 	//--------------------------------------------------------------------
 
 	/**
@@ -24,15 +26,6 @@ class Authenticated_Controller extends Base_Controller
 	public function __construct()
 	{
 		parent::__construct();
-
-		// Load the Auth library before the parent constructor to ensure
-		// the current user's settings are honored by the parent
-		$this->load->library('users/auth');
-
-		// Make sure we're logged in.
-		$this->auth->restrict();
-
-		$this->set_current_user();
 
 		// Load additional libraries
 		$this->load->helper('form');

@@ -31,6 +31,7 @@ By default, Bonfire's Base_Controller provides the following features for any of
 * Loads the cache drivers. For development environments, we simply harness the 'dummy' driver which always returns FALSE. Production and test environments default to APC caching with a file-based backup, if that's not available.
 * Gets the `activity model` loaded and ready.
 * Loads the `application language` file.
+* If the child class sets `$requires_authentication` to TRUE, will ensure that the user is logged in, set the `$current_user` variable, and ensure that the user's chosen language is set.
 
 <a name="front"></a>
 ### Front_Controller
