@@ -404,11 +404,9 @@ class Contexts
 	{
 		// Get a list of modules with a controller matching
 		// $context ('content', 'settings', 'reports', or 'developer')
-		$module_list = Modules::list_modules();
-
-		foreach ($module_list as $module)
+		foreach (Modules::list_modules() as $module)
         {
-			if (Modules::controller_exists($context, $module) === true)
+			if (Modules::controller_exists($context, $module))
             {
 				$mod_config = Modules::config($module);
 
@@ -423,8 +421,6 @@ class Contexts
 				self::$actions[$module]['menu_topic'] = isset($mod_config['menu_topic']) ? $mod_config['menu_topic'] : self::$actions[$module]['display_name'];
 			}
 		}
-
-		unset($module_list);
 
 		// Do we have any actions?
 		if ( ! count(self::$actions)) {
@@ -584,10 +580,10 @@ class Contexts
 	 *
 	 * @return string HTML for the sub menu
 	 */
-	public static function build_sub_menu($context, $ignore_ul=false)
+	public static function build_sub_menu($context, $ignore_ul = false)
 	{
-		$list           = '';
-        $childClass     = self::$child_class;
+		$list       = '';
+        $childClass = self::$child_class;
         $search = array('{submenu_class}', '{url}', '{display}', '{child_class}', '{view}');
 
 		foreach (self::$menu as $topic_name => $topic)
@@ -627,7 +623,7 @@ class Contexts
                     // Handle localization of the display name, if needed.
                     if (strpos($vals['display_name'], 'lang:') === 0)
                     {
-                        $vals['display_name'] = config_item( str_replace('lang:', '', $vals['display_name']) );
+                        $vals['display_name'] = lang(str_replace('lang:', '', $vals['display_name']));
                     }
 
 					$list .= self::build_item($module, $vals['title'], $vals['display_name'], $context, $vals['menu_view']);
