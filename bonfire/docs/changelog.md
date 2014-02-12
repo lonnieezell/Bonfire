@@ -1,18 +1,53 @@
+# Change Log
+
 ## Under development
 
 ### 0.7.1 - not released
 
 Additional Changes:
 
+* Replaced Assets::$asset_base, Assets::$asset_cache_folder, and Assets::$asset_folders with a single Assets::$directories array (these were not deprecated because they were private properties). Allow a config item ('assets.directories') to set the value of the new property, but if it is not set the library will attempt to use the old config items ('assets.base_folder', 'assets.cache_folder', and 'assets.asset_folders').
+* Added closures to hold the functions for CSS/JS minification, which should facilitate swapping out the libraries that perform these functions in the future.
+* Deprecated Assets::set_globals(), Assets::$external_scripts, Assets::$inline_scripts, and Assets::$module_scripts. Replaced by Assets::setGlobals() and Assets::$scripts['external']/Assets::$scripts['inline']/Assets::$scripts['module']
+* Partial Russian translation
 * Deprecated the module_* functions in application_helper. They're in the Modules class now.
 * Deprecated form_has_error() method since CI's form_error() does the same thing.
+* Docs system is much more robust now, including link fixing, separating application/developer docs in the UI, a basic search system, and more.
+* Separated all Bonfire code from your Application's code
+* Most bonfire specific code now uses a BF_ prefix instead of the MY_ prefix your application would use..
+* The module_* methods in the application_helper file have been moved to the Modules class. The application_helper methods are still there but are considered deprecated.
+* Many improvements to the Brazilian Portugeuse language handling.
+* Improved support for translations in the Builder.
 
 New Features:
 * Images controller can reference images from a module using the module=... parameter.
+* Template class now provides a `check_segment` method in addition to check_class and check_method.
+* Brand new documentation system that allows splitting your user and dev-related docs, and searching docs.
+* CSRF protection can be bypassed for individual controllers by setting `csrf_ignored_controllers` setting in the site's main index file.
 
 
 Closes Issues:
-
+* #983 - Assets::js() creates invalid path when base_url is set to a directory
+* #982 - MY_Security renamed to BF_Security
+* #975 - BF_Model->update(): check validation result before continuing with update
+* #968 - Error loading language file in languages other than English
+* #967 - Should make the CSRF ignore list configurable.
+* #965 - State input no longer required in extended settings
+* #964 - Fixed documentation of Template::set()
+* #962 - Updated docs system doesn't load module docs for application or module docs named something other than index
+* #958 - ENVIRONMENT config files are being ignored.
+* #957 - Documentation of required server configuration on display of root index.php
+* #955 - Fixed the path of the User Modules' views
+* #954 - Assets::js() returns nothing if string is passed as first parameter
+* #952 - Documentation of BF_Model's handling of validation 'label' parameter
+* #948 - Add function strtolower in libraries: Module will be better.
+* #946 - Unable to load class cache.
+* #941 - Model set_date when time_reference is set to GMT
+* #940 - Model update() throws error in modified_on() when validation fails and set_modified is enabled.
+* #947 - Remove PHP short tag from view for PHP 5.3 support
+* #939, 627 - sync user_meta state/country selects
+* #849 - No need to save password_iterations in the user table
+* #928 - min_length[8] validation called regardless of minimum length setting for password
 * #926 - Application helper iif issue
 * #922 - Type of MY_Model update_where() method
 * #919 - Incorrect documentation of date_format field in MY_Model
@@ -310,8 +345,8 @@ Additions:
 - Emailer class now has a way to test your email settings.
 - Emailer class has allows you to view the unsent emails in your queue under Statistics / Emailer.
 - Updated email class to wrap the $message in the email template by default.
-- A new <Unit Testing> framework has been started. Currently supports Unit Testing only. Web/Functional Testing coming later.
-- A new <System Events> feature has been added.
+- A new `Unit Testing` framework has been started. Currently supports Unit Testing only. Web/Functional Testing coming later.
+- A new `System Events` feature has been added.
 - A logit() function was added to the application helper to provide a simple interface to log to both the Console and the log file.
 - Added new Activities module to allow other modules a core utility for tracking user activity. Was incorporated into the Users module.
 - Added a new Module Builder module that helps create skeleton code for new modules.

@@ -1,0 +1,24 @@
+{
+    "name": "ci-bonfire/bonfire",
+    "description": "Kickstart your CodeIgniter-based web application development.",
+    "version": "0.7.1-dev",
+    "type": "project",
+    "homepage": "http://cibonfire.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lonnie Ezell",
+            "email": "lonnieje@gmail.com",
+            "homepage": "lonnieezell.com",
+            "role": "Project Starter and Lead"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/ci-bonfire/Bonfire/issues",
+        "forum": "http://forums.cibonfire.com/",
+        "source": "https://github.com/ci-bonfire/Bonfire"
+    },
+    "require": {
+        "php": ">5.3.0"
+    }
+}

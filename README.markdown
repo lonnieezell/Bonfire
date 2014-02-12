@@ -50,7 +50,7 @@ We strive to make Bonfire a solid base to work with.  In doing so your Bug Repor
 The Bonfire Team is made up from developers around the world interested in making Bonfire a better kickstart for your [CodeIgniter](http://codeigniter.com) projects.
 
 - [Lonnie Ezell](http://lonnieezell.com) - Lead Developer
-- [Sean Downey](https://github.com/seandowney)
-- [Shawn Crigger](https://github.com/svizion)
-- [Alan Jenkins](https://github.com/sourcejedi)
 - [Mat Whitney](https://github.com/mwhitneysdsu)
+- [Alan Jenkins](https://github.com/sourcejedi)
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ci-bonfire/bonfire/trend.png)](https://bitdeli.com/free "Bitdeli Badge")

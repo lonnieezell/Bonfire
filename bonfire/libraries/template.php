@@ -1002,7 +1002,7 @@ EOF;
 			// Grab the output of the view.
 			if (self::$parse_views === TRUE)
 			{
-				$data = array_merge((array)$data, self::$ci->load->_ci_cached_vars);
+				$data = array_merge((array)$data, self::$ci->load->get_vars());
 				$output = self::$ci->load->view($view_path . $view_file, $data, true);
 			}
 			else
@@ -1169,6 +1169,26 @@ function check_method($item, $class_only=FALSE)
 	return '';
 
 }//end check_method()
+
+//--------------------------------------------------------------------
+
+/**
+ * Checks the $item against the value of the specified URI segment
+ * as determined by $this->uri->segment().
+ *
+ * @param   int     $segment_num    The segment to check the value against.
+ * @param   string  $item           The value to check against the segment
+ * @param   bool    $class_only     If TRUE, will only return 'active'. If FALSE, will return 'class="active"'.
+ */
+function check_segment($segment_num, $item, $class_only=FALSE)
+{
+    if (get_instance()->uri->segment($segment_num) == $item)
+    {
+        return $class_only ? 'active' : 'class="active"';
+    }
+
+    return '';
+}
 
 //--------------------------------------------------------------------
 

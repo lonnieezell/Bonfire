@@ -2,8 +2,8 @@
 require_once('markdown_helper.php');
 define( 'MARKDOWNEXTRAEXTENDED_VERSION',  "0.3" );
 
-function MarkdownExtended($text, $default_claases = array()){
-  $parser = new MarkdownExtraExtended_Parser($default_claases);
+function MarkdownExtended($text, $default_classes = array()){
+  $parser = new MarkdownExtraExtended_Parser($default_classes);
   return $parser->transform($text);
 }
 

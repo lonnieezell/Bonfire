@@ -21,15 +21,14 @@
  * This code is originally based on Ollie Rattue's http://formigniter.org/ project
  *
  * @package    Bonfire
- * @subpackage Modules_ModuleBuilder
+ * @subpackage Modules_Builder
  * @category   Libraries
  * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/guides/core_modules/modulebuilder.html
+ * @link       http://cibonfire.com/docs/builder
  *
  */
 class Modulebuilder
 {
-
     /**
      * A pointer to the CodeIgniter instance.
      *
@@ -70,6 +69,15 @@ class Modulebuilder
      * @var array
      */
     private $files = array();
+
+    /**
+     * Array of language files to be used for the modules built
+     *
+     * @access  private
+     * 
+     * @var array
+     */
+    private $languages_available = array('english', 'portuguese_br');
 
 
     //--------------------------------------------------------------------
@@ -170,7 +178,7 @@ class Modulebuilder
         $content['config'] = $this->build_config($module_name, $module_description);
 
         // build the lang file
-        $content['lang'] = $this->build_lang($module_name, $module_file_name);
+        $content['lang'] = $this->build_lang($field_total, $module_name, $module_file_name);
 
         // build the permissions migration file
         $content['acl_migration'] = $this->build_acl_sql($field_total, $module_name, $contexts, $action_names, $role_id, $table_name);
@@ -262,9 +270,13 @@ class Modulebuilder
             @mkdir($this->options['output_path']."{$module_name}/config/",0777);
             @mkdir($this->options['output_path']."{$module_name}/controllers/",0777);
             @mkdir($this->options['output_path']."{$module_name}/views/",0777);
-            @mkdir($this->options['output_path']."{$module_name}/language/",0777);
-            @mkdir($this->options['output_path']."{$module_name}/language/english/",0777);
             @mkdir($this->options['output_path']."{$module_name}/migrations/",0777);
+
+            // Outputting Languages
+            @mkdir($this->options['output_path']."{$module_name}/language/",0777);
+            foreach ($this->languages_available as $language_folder) {
+                @mkdir($this->options['output_path']."{$module_name}/language/{$language_folder}/",0777);
+            }
 
             // create the models folder if the db is required
             if ($db_required != '')
@@ -323,6 +335,21 @@ class Modulebuilder
                         }
                     }//end foreach
                 }
+                elseif ($type == 'lang') {
+                    $ext = 'php';
+                    foreach ($value as $lang_name => $lang_file_contents) {
+                        $file_name = $module_name."_lang";
+                        $path = $this->options['output_path']."{$module_name}/language/".$lang_name;
+
+                        if ( ! write_file($path."/{$file_name}." . $ext, $lang_file_contents))
+                        {
+                            log_message('error', "failed to write language file $path/{$lang_name}/{$file_name}.{$ext}");
+                            $ret_val['status'] = FALSE;
+                            $ret_val['error'] = $error_msg. " " .$path;
+                            break;
+                        }
+                    }
+                }
                 else {
                     // check if the content is blank
                     if($value != '') {
@@ -341,10 +368,6 @@ class Modulebuilder
                                 break;
                             case 'model':
                                 $file_name .= "_model";
-                                break;
-                            case 'lang':
-                                $file_name .= "_lang";
-                                $path = $this->options['output_path']."{$module_name}/language/english";
                                 break;
                             case 'config':
                                 $file_name = "config";
@@ -535,11 +558,18 @@ class Modulebuilder
      *
      * @return string A string containing the content of the language file
      */
-    private function build_lang($module_name, $module_name_lower)
+    private function build_lang($field_total, $module_name, $module_name_lower)
     {
         $data['module_name'] = $module_name;
         $data['module_name_lower'] = $module_name_lower;
-        $lang = $this->CI->load->view('files/lang', $data, TRUE);
+
+        $lang = array();
+
+        foreach ($this->languages_available as $language_file) {
+            $data['field_total'] = $field_total;
+
+            $lang[$language_file] = $this->CI->load->view('files/languages/'.$language_file, $data, TRUE);
+        }
 
         return $lang;
 

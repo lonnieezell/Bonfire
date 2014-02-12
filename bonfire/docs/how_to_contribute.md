@@ -1,3 +1,5 @@
+# How to Contribute 
+
 ## Reporting an Issue
 
 Bonfire uses [GitHub Issue Tracking](https://github.com/ci-bonfire/Bonfire/issues) to track issues (primarily bugs and new code contributions). If you find a bug in Bonfire, this is the place to start. You will need a (free) [GitHub](http://github.com) account in order to help out.

@@ -72,7 +72,7 @@ class Settings extends Admin_Controller
 			if ($this->save_settings($extended_settings))
 			{
 				Template::set_message(lang('settings_saved_success'), 'success');
-				redirect(SITE_AREA .'/settings');
+				redirect(SITE_AREA .'/settings/settings');
 			}
 			else
 			{

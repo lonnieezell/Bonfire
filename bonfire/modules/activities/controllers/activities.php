@@ -29,9 +29,6 @@
  */
 class Activities extends Admin_Controller
 {
-
-	//--------------------------------------------------------------------
-
 	/**
 	 * Constructor
 	 *
@@ -42,9 +39,7 @@ class Activities extends Admin_Controller
 		parent::__construct();
 
 		$this->load->model('activities/activity_model');
-	}//end __construct()
-
-	//--------------------------------------------------------------------
+	}
 
 	//--------------------------------------------------------------------
 	// HMVC METHODS
@@ -58,20 +53,19 @@ class Activities extends Admin_Controller
 	 *
 	 * @return string Displays the activities
 	 */
-	public function activity_list($module=null, $limit=25)
+	public function activity_list($module = null, $limit = 25)
 	{
-		if (empty($module))
-		{
+        $this->auth->restrict('Activities.Module.View');
+
+		if (empty($module)) {
 			logit('No module provided to `activity_list`.');
 			return;
 		}
-		$this->load->helper('date');
-		$activities = $this->activity_model->order_by('created_on', 'desc')->limit($limit,0)->find_by_module($module);
+
+		$activities = $this->activity_model->order_by('created_on', 'desc')
+                           ->limit($limit, 0)
+                           ->find_by_module($module);
 
 		$this->load->view('activity_list', array('activities' => $activities));
-	}//end activity_list()
-
-	//--------------------------------------------------------------------
-
-
-}//end class
+	}
+}
