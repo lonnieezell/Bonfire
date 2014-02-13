@@ -114,6 +114,7 @@ class Emailer
 	 *     'subject' => '',	// string
 	 *     'message' => '',	// string
 	 *     'alt_message' => ''	// optional (text alt to html email)
+	 *     'attachments' => array('FILENAME_1','FILENAME_2' ) // optional
 	 * );
 	 *
 	 * @access public
@@ -131,6 +132,7 @@ class Emailer
 		$subject = isset($data['subject']) ? $data['subject'] : FALSE;
 		$message = isset($data['message']) ? $data['message'] : FALSE;
 		$alt_message = isset($data['alt_message']) ? $data['alt_message'] : FALSE;
+		$attachments = isset($data['attachments']) ? $data['attachments'] : FALSE;
 
 		// If we don't have everything, return FALSE.
 		if ($to == FALSE || $subject == FALSE || $message == FALSE)
@@ -147,19 +149,21 @@ class Emailer
 			$templated  = $this->ci->load->view('emailer/email/_header', null, TRUE);
 			$templated .= $message;
 			$templated .= $this->ci->load->view('emailer/email/_footer', null, TRUE);
-		} else {
-            $templated = html_entity_decode(strip_tags($message), ENT_QUOTES | ENT_HTML5, 'UTF-8');
-        }
+		}
+                else 
+                {
+                        $templated = html_entity_decode(strip_tags($message), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                }
 
 		// Should we put it in the queue?
 		if ($queue_override === TRUE || ($queue_override !== FALSE && $this->queue_emails == TRUE))
 		{
-			return $this->queue_email($to, $from, $subject, $templated, $alt_message);
+			return $this->queue_email($to, $from, $subject, $templated, $alt_message, $attachments);
 		}
 		// Otherwise, we're sending it right now.
 		else
 		{
-			return $this->send_email($to, $from, $subject, $templated, $alt_message);
+			return $this->send_email($to, $from, $subject, $templated, $alt_message, $attachments);
 		}
 
 	}//end send()
@@ -176,10 +180,11 @@ class Emailer
 	 * @param string $subject     The subject line of the email
 	 * @param string $message     The text to be inserted into the template for HTML emails.
 	 * @param string $alt_message An optional, text-only version of the message to be sent with HTML emails.
+          * @param array  $attachments An optional array, the array contains the location of the to be attached files.
 	 *
 	 * @return bool TRUE/FALSE	Whether it was successful or not.
 	 */
-	private function queue_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE)
+	private function queue_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE, $attachments = FALSE)
 	{
 		$this->ci->db->set('to_email', $to);
 		$this->ci->db->set('subject', $subject);
@@ -189,6 +194,15 @@ class Emailer
 		{
 			$this->ci->db->set('alt_message', $alt_message);
 		}
+                
+                if(is_array($attachments))
+                {
+                    foreach ($attachments as $attachment)
+                    {
+                        $csv_of_file_locations .= $attachment . ',';
+                    }
+                    $this->ci->db->set('csv_attachment', $csv_of_file_locations);
+                }
 
 		if ($this->debug)
 		{
@@ -210,15 +224,17 @@ class Emailer
 	 * @param string $subject     The subject line of the email
 	 * @param string $message     The text to be inserted into the template for HTML emails.
 	 * @param string $alt_message An optional, text-only version of the message to be sent with HTML emails.
+	 * @param array  $attachments An optional array, the array contains the location of the to be attached files.
 	 *
 	 * @return bool TRUE/FALSE	Whether it was successful or not.
 	 */
-	private function send_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE)
+	private function send_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE, $attachments = FALSE)
 	{
 		$this->ci->load->library('email');
 		$this->ci->load->model('settings/settings_model', 'settings_model');
 		$this->ci->email->initialize($this->ci->settings_model->select('name,value')->find_all_by('module', 'email'));
 
+                $this->ci->email->clear(TRUE);
 		$this->ci->email->set_newline("\r\n");
 		$this->ci->email->to($to);
 		$this->ci->email->from($from, settings_item('site.title'));
@@ -229,6 +245,14 @@ class Emailer
 		{
 			$this->ci->email->set_alt_message($alt_message);
 		}
+                
+                if(is_array($attachments))
+                {
+                    foreach ($attachments as $attachment)
+                    {
+                        $this->ci->email->attach($attachment);
+                    }
+                }
 
 		if ((defined('ENVIRONMENT') && ENVIRONMENT == 'development') && $this->ci->config->item('emailer.write_to_file') === TRUE) {
 			if (!function_exists('write_file')) {
@@ -293,7 +317,7 @@ class Emailer
 		{
 			echo '.';
 
-			$this->ci->email->clear();
+			$this->ci->email->clear(TRUE);
 			$this->ci->email->initialize($config_settings);
 
 			$this->ci->email->from(settings_item('sender_email'), settings_item('site.title'));
@@ -306,6 +330,14 @@ class Emailer
 			if ($email->alt_message)
 			{
 				$this->ci->email->set_alt_message($email->alt_message);
+			}
+                        if ($email->csv_attachment)
+			{
+                            $attachments = str_getcsv($email->csv_attachment);
+                            foreach ($attachments as $attachment)
+                            {
+                                $this->ci->email->attach($attachment);
+                            }
 			}
 
 			$prefix = $this->ci->db->dbprefix;
