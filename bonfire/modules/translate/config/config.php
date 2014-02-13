@@ -2,5 +2,6 @@
 
 $config['module_config'] = array(
 	'description'	=> 'Allows users to create translations for any language.',
-	'author'		=> 'Bonfire Team'
+	'author'		=> 'Bonfire Team',
+    'name'          => 'lang:translate'
 );

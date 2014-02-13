@@ -2,5 +2,6 @@
 
 $config['module_config'] = array(
 	'description'	=> 'Provides Role-Based Access Control for users.',
-	'author'		=> 'Bonfire Team'
+	'author'		=> 'Bonfire Team',
+    'name'          => 'lang:roles'
 );

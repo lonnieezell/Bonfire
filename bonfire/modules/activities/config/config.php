@@ -3,5 +3,5 @@
 $config['module_config'] = array(
 	'description'	=> 'Allows other modules to store user activity information.',
 	'author'		=> 'Bonfire Team',
-	'name'			=> 'Activities'
+	'name'			=> 'lang:activities'
 );

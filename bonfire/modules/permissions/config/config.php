@@ -2,5 +2,6 @@
 
 $config['module_config'] = array(
 	'description'	=> 'Manages the Permissions available to the Roles.',
-	'author'		=> 'Bonfire Team'
+	'author'		=> 'Bonfire Team',
+    'name'          => 'lang:permissions'
 );

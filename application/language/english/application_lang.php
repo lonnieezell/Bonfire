@@ -281,3 +281,22 @@ $lang['bf_form_valid_password_mixed_1']	= '%s must contain at least 1 uppercase 
 $lang['bf_form_valid_password_mixed_2']	= '%s must contain at least 1 lowercase characters.';
 $lang['bf_form_allowed_types']			= '%s must contain one of the allowed selections.';
 $lang['bf_form_one_of']					= '%s must contain one of the available selections.';
+
+
+//--------------------------------------------------------------------
+// Menu Strings - feel free to add your own custom modules here
+// if you want to localize your menus
+//--------------------------------------------------------------------
+
+$lang['activities']         = 'Activities';
+$lang['code_builder']       = 'Code Builder';
+$lang['db_tools']           = 'Database Tools';
+$lang['email_queue']        = 'Email Queue';
+$lang['template']           = 'Template';
+$lang['queue']              = 'Queue';
+$lang['logs']               = 'Logs';
+$lang['permissions']        = 'Permissions';
+$lang['roles']              = 'Roles';
+$lang['sysinfo']            = 'System Information';
+$lang['translate']          = 'Translate';
+$lang['kb_shortcuts']       = 'Keyboard Shortcuts';
