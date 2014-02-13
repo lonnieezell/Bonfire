@@ -4,6 +4,7 @@ $config['module_config'] = array(
 	'description'	=> 'Helps maintain database versioning.',
 	'author'		=> 'Bonfire Team',
 	'menu_topic'	=> array(
-		'developer' => 'lang:db_tools',
-	)
+		'developer' => 'lang:bf_menu_db_tools',
+	),
+    'name'          => 'lang:bf_menu_migrations',
 );

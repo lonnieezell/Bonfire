@@ -7,6 +7,6 @@ $config['module_config'] = array(
 	'author'		=> 'Bonfire Team',
 	'description'	=> 'Provides tools for working with your database(s).',
 	'menu_topic'	=> array(
-		'developer' => 'lang:db_tools',
+		'developer' => 'lang:bf_menu_db_tools',
 	),
 );
