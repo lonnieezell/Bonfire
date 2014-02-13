@@ -592,6 +592,16 @@ class BF_Model extends CI_Model
 
 		$data = $this->trigger('before_insert', $data);
 
+ 		// Auto fill 'created_on' field
+        if ($this->set_created && (empty($data[$this->created_field]) || $data[$this->created_field] == "0000-00-00 00:00:00")) {
+            $data[$this->created_field] = $this->set_date();
+        }
+        
+        // Auto fill 'modified_on' with created
+        if ($this->set_modified && (empty($data[$this->modified_field]) || $data[$this->modified_field] == "0000-00-00 00:00:00")){
+            $data[$this->modified_field] = $this->set_date();
+        }
+
 		if ($this->set_created === true && $this->log_user === true
             && ! array_key_exists($this->created_by_field, $data)
            ) {
@@ -634,10 +644,15 @@ class BF_Model extends CI_Model
 	{
 		$set = array();
 
-		// Add the created field
-		if ($this->set_created === true) {
-			$set[$this->created_field] = $this->set_date();
-		}
+		// Auto fill 'created_on' field
+        if ($this->set_created && (empty($set[$this->created_field]) || $set[$this->created_field] =="0000-00-00 00:00:00")) {
+            $set[$this->created_field] = $this->set_date();
+        }
+        
+        // Auto fill 'modified_on' with created
+        if ($this->set_modified && (empty($set[$this->modified_field]) || $set[$this->modified_field] =="0000-00-00 00:00:00")){
+            $set[$this->modified_field] = $this->set_date();
+        }
 
 		if ($this->set_created === true && $this->log_user === true) {
 			$set[$this->created_by_field] = $this->auth->user_id();
@@ -688,6 +703,16 @@ class BF_Model extends CI_Model
 
 		$data = $this->trigger('before_update', $data);
 
+		// Do not replace created_on date
+        if (array_key_exists($this->created_field, $data)){
+            unset($data[$this->created_field]);
+        }
+        
+         // Auto fill 'modified_on' field
+        if ($this->set_modified && (empty($set[$this->modified_field]) || $set[$this->modified_field] =="0000-00-00 00:00:00")){
+            $data[$this->modified_field] = $this->set_date();
+        }
+
 		// Add the user id if using a modified_by field
 		if ($this->set_modified === true && $this->log_user === true
             && ! array_key_exists($this->modified_by_field, $data)
@@ -736,6 +761,13 @@ class BF_Model extends CI_Model
 		if (is_null($index) || is_null($data)) {
 			return false;
 		}
+		
+		// Do not replace created fields
+        if (array_key_exists($this->created_field, $data)){
+            foreach ($data as $key => $record) {
+                unset($data[$key][$this->created_field]);
+            }
+        }
 
         // Add the modified field
         if ($this->set_modified === true && ! array_key_exists($this->modified_field, $data)) {
