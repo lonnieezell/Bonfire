@@ -278,6 +278,7 @@ $lang['bf_menu_migrations']     = 'Migrations';
 $lang['bf_menu_permissions']    = 'Permissions';
 $lang['bf_menu_queue']          = 'Queue';
 $lang['bf_menu_roles']          = 'Roles';
+$lang['bf_menu_settings']       = 'Settings';
 $lang['bf_menu_sysinfo']        = 'System Information';
 $lang['bf_menu_template']       = 'Template';
 $lang['bf_menu_translate']      = 'Translate';
