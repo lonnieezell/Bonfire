@@ -1,0 +1,40 @@
+/* Index/List */
+.builder.well {
+	padding: 8px 0;
+}
+/* Module Builder */
+.module-builder .faded {
+	opacity: .60;
+}
+.module-builder .faded:hover,
+.module-builder .faded.faded-focus,
+.module-builder .mb_show_advanced:focus,
+.module-builder .mb_show_advanced:hover,
+.module-builder .mb_show_advanced_rules:focus,
+.module-builder .mb_show_advanced_rules:hover {
+	opacity: 1;
+	color: black;
+}
+.module-builder a.mb_show_advanced_rules:hover {
+	text-decoration: none;
+}
+.module-builder legend {
+	cursor: pointer;
+}
+.module-builder .mb_advanced {
+	display: none;
+}
+.module-builder fieldset {
+	margin-top: 0;
+}
+.module-builder .alert span.error {
+    display: block;
+}
+.module-builder .alert.mb_new_table,
+.module-builder #field1_details .alert {
+    width: 90%;
+    margin: 5px auto;
+}
+.module-builder #field_numbers .controls {
+    padding-top: 5px;
+}
