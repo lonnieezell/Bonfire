@@ -175,7 +175,7 @@ class Base_Controller extends CI_Controller
 	 */
 	protected function set_current_user()
 	{
-		if (class_exists('Auth'))
+		if (class_exists('Auth') && isset($this->auth))
 		{
 			// Load our current logged in user for convenience
 			if ($this->auth->is_logged_in())

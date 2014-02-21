@@ -594,6 +594,14 @@ class CI_Loader
 
 		if (!array_key_exists(strtolower($class), $this->_ci_controllers))
 		{
+            $routerDir = $router->fetch_directory();
+            $filepath = "{$routerDir}{$class}.php";
+
+            if (file_exists($filepath))
+            {
+                include_once($filepath);
+            }
+
 			// Determine filepath
 			$filepath = APPPATH . 'controllers/' . $router->fetch_directory() . $class . '.php';
 
