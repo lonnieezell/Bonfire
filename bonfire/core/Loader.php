@@ -221,6 +221,28 @@ class CI_Loader
 
 	// --------------------------------------------------------------------
 
+    //--------------------------------------------------------------------
+    // Sparks Integration
+    //--------------------------------------------------------------------
+
+    /**
+     * Provides a convenience method that lets us use the provided
+     * official Sparks loader in a nice convenient way.
+     *
+     * @param       $spark
+     * @param array $autoload
+     */
+    public function spark ($spark, $autoload=array())
+    {
+        require_once (APPPATH .'third_party/Sparks_Loader.php');
+
+        $loader = new Sparks_Loader();
+        $loader->spark($spark, $autoload);
+    }
+    
+    //--------------------------------------------------------------------
+    
+    
 	//--------------------------------------------------------------------
 	// HMVC Methods
 	//--------------------------------------------------------------------
