@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
@@ -6,24 +6,20 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  */
-
-// ------------------------------------------------------------------------
 
 /**
  * Contexts Library
  *
  * Provides helper methods for displaying Context Navigation.
  *
- * @package    Bonfire\Core\Modules\Libraries\Modules_Ui
- * @category   Libraries
+ * @package    Bonfire\Core\Modules\UI\Libraries\Contexts
  * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/guides/contexts.html
- *
+ * @link       http://cibonfire.com/docs/bonfire/contexts
  */
 class Contexts
 {
@@ -586,28 +582,28 @@ class Contexts
         $childClass = self::$child_class;
         $search = array('{submenu_class}', '{url}', '{display}', '{child_class}', '{view}');
 
-		foreach (self::$menu as $topic_name => $topic)
-        {
+		foreach (self::$menu as $topic_name => $topic) {
 			// If there is more than one item in the topic, we need to build
 			// out a menu based on the multiple items.
-			if (count($topic) > 1)
-            {
+			if (count($topic) > 1) {
                 $subMenu = '';
-				foreach ($topic as $module => $vals)
-                {
+				foreach ($topic as $module => $vals) {
 					// If it has no sub-menu, add it like normal
-					if (empty($vals['menu_view']))
-                    {
+					if (empty($vals['menu_view'])) {
 						$subMenu .= self::build_item($module, $vals['title'], $vals['display_name'], $context, $vals['menu_view']);
 					}
 					// Otherwise, echo out the sub-menu only
-					else
-                    {
+					else {
 						$view = self::$ci->load->view($vals['menu_view'], null, true);
 						// To maintain backwards compatility, strip out any <ul> tags
 						$subMenu .= str_ireplace(array('<ul>', '</ul>'), array('', ''), $view);
 					}
 				}
+
+                // Handle localization of the topic name, if needed.
+                if (strpos($topic_name, 'lang:') === 0) {
+                    $topic_name = lang(str_replace('lang:', '', $topic_name));
+                }
 
                 $replace = array(
                     self::$submenu_class,
@@ -618,14 +614,7 @@ class Contexts
                 );
                 $list .= str_replace($search, $replace, self::$templateSubMenu);
 			} else {
-				foreach ($topic as $module => $vals)
-                {
-                    // Handle localization of the display name, if needed.
-                    if (strpos($vals['display_name'], 'lang:') === 0)
-                    {
-                        $vals['display_name'] = lang(str_replace('lang:', '', $vals['display_name']));
-                    }
-
+				foreach ($topic as $module => $vals) {
 					$list .= self::build_item($module, $vals['title'], $vals['display_name'], $context, $vals['menu_view']);
 				}
 			}
@@ -659,6 +648,11 @@ class Contexts
 	 */
 	private static function build_item($module, $title, $display_name, $context, $menu_view='')
 	{
+        // Handle localization of the display name, if needed.
+        if (strpos($display_name, 'lang:') === 0) {
+            $display_name = lang(str_replace('lang:', '', $display_name));
+        }
+
         $displayName = ucwords(str_replace('_', '', $display_name));
 
 		if (empty($menu_view)) {

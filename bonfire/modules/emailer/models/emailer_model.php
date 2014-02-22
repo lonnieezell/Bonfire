@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
@@ -6,81 +6,51 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
  * Emailer Model
  *
- * @package    Bonfire
- * @subpackage Modules_Emailer
- * @category   Model
+ * @package    Bonfire\Modules\Emailer\Models\Emailer_model
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- *
+ * @link       http://cibonfire.com/docs/guides
  */
 class Emailer_model extends BF_Model
 {
-
-
 	/**
-	 * Name of the table
-	 *
-	 * @access protected
-	 *
-	 * @var string
+	 * @var string Name of the table
 	 */
 	protected $table_name = 'email_queue';
 
 	/**
-	 * Name of the primary key
-	 *
-	 * @access protected
-	 *
-	 * @var string
+	 * @var string Name of the primary key
 	 */
 	protected $key = 'id';
 
 	/**
-	 * Use soft deletes or not
-	 *
-	 * @access protected
-	 *
-	 * @var bool
+	 * @var bool Whether to use soft deletes
 	 */
-	protected $soft_deletes = FALSE;
+	protected $soft_deletes = false;
 
 	/**
-	 * The date format to use
-	 *
-	 * @access protected
-	 *
-	 * @var string
+	 * @var string The date format to use
 	 */
 	protected $date_format = 'datetime';
 
 	/**
-	 * Set the created time automatically on a new record
-	 *
-	 * @access protected
-	 *
-	 * @var bool
+	 * @var bool Set the created time automatically on a new record (if true)
 	 */
-	protected $set_created = FALSE;
+	protected $set_created = false;
 
 	/**
-	 * Set the modified time automatically on editing a record
-	 *
-	 * @access protected
-	 *
-	 * @var bool
+	 * @var bool Set the modified time automatically on editing a record (if true)
 	 */
-	protected $set_modified = FALSE;
+	protected $set_modified = false;
 
-}//end class
+}
+/* End of file emailer_model.php */

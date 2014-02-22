@@ -78,6 +78,13 @@ class Base_Controller extends CI_Controller
 	{
 		parent::__construct();
 
+        // Most likely, the requested page is saved in the $_SESSION here,
+        // so we need to grab that out and make it available to CI's session.
+        if (isset($_SESSION['requested_page']) && class_exists('CI_Session'))
+        {
+            $this->session->set_userdata( array('requested_page' => $_SESSION['requested_page']) );
+        }
+
 		$this->load->library('events');
 
 		// Since we don't want to autoload libraries in the
@@ -168,7 +175,7 @@ class Base_Controller extends CI_Controller
 	 */
 	protected function set_current_user()
 	{
-		if (class_exists('Auth'))
+		if (class_exists('Auth') && isset($this->auth))
 		{
 			// Load our current logged in user for convenience
 			if ($this->auth->is_logged_in())

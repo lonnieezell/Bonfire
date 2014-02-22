@@ -1,25 +1,14 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
+/**
+ * Builder Language File (English)
+ *
+ * @package     Bonfire\Modules\Builder\Language\English
+ * @author      Bonfire Dev Team
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
 
 // INDEX page
 $lang['mb_delete_confirm']		= 'Really delete this module and all of its files?';
@@ -177,3 +166,4 @@ $lang['mb_soft_delete_field']   = '"Soft" Delete field name';
 $lang['mb_soft_delete_field_ph']    = 'deleted';
 $lang['mb_validation_no_match'] = '%s %ss (%s & %s) must be unique!';
 $lang['mb_modulename_check']    = 'The %s field is not valid';
+$lang['mb_modulename_check_class_exists']   = 'The %s field is not valid: the module name matches the name of an existing class.';

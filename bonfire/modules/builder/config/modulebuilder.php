@@ -1,30 +1,47 @@
 <?php
 
-/*
- * Output path of the modules
+/**
+ * The path to the folder in which modules will be built
  */
-$config[ 'modulebuilder' ]['output_path'] = APPPATH."/modules/";
-/*
- * form actions which will appear in the list
- */
-$config[ 'modulebuilder' ][ 'form_action_options' ] = array('index' => 'List',
-														'create' => 'Create',
-														'edit' => 'Edit',
-														'delete' => 'Delete');
+$config['modulebuilder']['output_path'] = APPPATH . '/modules/';
 
-
-/*
- * valiation rules which will appear
+/**
+ * Form actions to appear in the module builder's "Controller Actions" list
  */
-$config[ 'modulebuilder' ][ 'validation_rules' ] = array('required', 'unique', 'trim');
-$config[ 'modulebuilder' ][ 'validation_limits' ] = array('alpha', 'is_numeric', 'alpha_numeric', 'alpha_dash', 'valid_email', 'integer', 'is_decimal', 'is_natural', 'is_natural_no_zero','valid_ip','valid_base64','alpha_extra');
+$config['modulebuilder']['form_action_options'] = array(
+    'index'  => 'List',
+    'create' => 'Create',
+    'edit'   => 'Edit',
+    'delete' => 'Delete',
+);
 
-/*
- * default primary key field
+/**
+ * Rules to display under "Validation Rules" in each field's details/options
  */
-$config[ 'modulebuilder' ][ 'primary_key_field' ] = 'id';
+$config['modulebuilder']['validation_rules'] = array(
+    'required',
+    'unique',
+    'trim',
+);
 
-/*
- * default form error delimiters
+/**
+ * Items to display under "Input Limitations" in each field's details/options
  */
-$config[ 'modulebuilder' ][ 'form_error_delimiters' ] = array('<span class="error">', '</span>');
+$config['modulebuilder']['validation_limits'] = array(
+    'alpha',                'is_numeric',           'alpha_numeric',
+    'alpha_dash',           'valid_email',          'integer',
+    'is_decimal',           'is_natural',           'is_natural_no_zero',
+    'valid_ip',             'valid_base64',         'alpha_extra',
+);
+
+/**
+ * Default primary key field
+ */
+$config['modulebuilder']['primary_key_field'] = 'id';
+
+/**
+ * Default form error delimiters
+ */
+$config['modulebuilder']['form_error_delimiters'] = array(
+    '<span class="error">', '</span>'
+);
