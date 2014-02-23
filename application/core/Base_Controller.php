@@ -192,8 +192,8 @@ class Base_Controller extends CI_Controller
 
                 // Reload our application and users language files since
                 // they will have already loaded as English at this point
-                $this->lang->force_reload()->load('application');
-                $this->lang->force_reload()->load('users/users');
+                $this->lang->force_reload()->load('application', $this->current_user->language);
+                $this->lang->force_reload()->load('users/users', $this->current_user->language);
 			}
 
 			// Make the current user available in the views
