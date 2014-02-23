@@ -10,11 +10,6 @@ class BF_Lang extends CI_Lang
     protected $fallback = 'english';
 
     /**
-     * @var bool If language files should be forced to reload.
-     */
-    protected $force_reload = false;
-
-    /**
      * Load a language file
      *
      * Bonfire modifies this to attempt to find language files within modules, also.
@@ -57,12 +52,9 @@ class BF_Lang extends CI_Lang
         $langfile .= '.php';
 
         // If the file has already been loaded, get out of here.
-        if (in_array($langfile, $this->is_loaded, true) && ! $this->force_reload) {
+        if (in_array($langfile, $this->is_loaded, true)) {
             return;
         }
-
-        // Clear it so it's off next time around.
-        $this->force_reload = false;
 
         // Is there a possible module?
         $matches = explode('/', $langfile);
@@ -77,6 +69,17 @@ class BF_Lang extends CI_Lang
         unset($matches);
 
         $config =& get_config();
+        $ci =& get_instance();
+
+        // Check the session to see if we have a language var stored there.
+        // This is done by the auth library and the Base_Controller.
+        if (empty($idiom) && class_exists('CI_Session') && isset($ci->session))
+        {
+            if ( ! $idiom = $ci->session->userdata('language'))
+            {
+                $idiom = '';
+            }
+        }
 
         // Choose a default language.
         // Config file version gets the override.
@@ -144,21 +147,6 @@ class BF_Lang extends CI_Lang
 
         log_message('debug', "Language file loaded: {$langfilePath} ({$idiom})");
         return true;
-    }
-
-    //--------------------------------------------------------------------
-
-    /**
-     * Forces the system to reload language files even when they wouldn't normally.
-     *
-     * @param bool $force
-     * @return $this
-     */
-    public function force_reload ($force=true)
-    {
-        $this->force_reload = $force;
-
-        return $this;
     }
 
     //--------------------------------------------------------------------
