@@ -53,6 +53,7 @@ class Developer extends Admin_Controller
 		$this->langs = list_languages();
 
 		Assets::add_module_js('translate', 'translate.js');
+		Assets::add_module_css('translate', 'translate.css');
 
 		Template::set_block('sub_nav', 'developer/_sub_nav');
 	}
@@ -65,8 +66,12 @@ class Developer extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	public function index($transLang = 'english')
+	public function index($transLang = '')
 	{
+		if (empty($transLang)) {
+			$config =& get_config();
+			$transLang = ( ! isset($config['language'])) ? 'english' : $config['language'];
+		}
 		// Selecting a different language?
 		if (isset($_POST['select_lang'])) {
 			$transLang = $this->input->post('trans_lang') == 'other' ? $this->input->post('new_lang') : $this->input->post('trans_lang');
@@ -100,19 +105,74 @@ class Developer extends Admin_Controller
 	 */
 	public function edit($transLang = '', $langFile = '')
 	{
+		$config =& get_config();
+		$origLang = ( ! isset($config['language'])) ? 'english' : $config['language'];
 		if ($langFile) {
-            // Save the file...
-            if (isset($_POST['save'])) {
-                if (save_lang_file($langFile, $transLang, $_POST['lang'])) {
-                    Template::set_message(lang('tr_save_success'), 'success');
-                    redirect(SITE_AREA . "/developer/translate/index/{$transLang}");
-                }
+			// Translate
+			if (isset($_POST['translate']) && is_array($_POST['checked'])) {
+				/* begin translate */
+				$orig = load_lang_file($langFile, $origLang);
+				$new = $orig;
+				if ($transLang) {
+					$this->load->library('translate_lib');
+					$new  = load_lang_file($langFile, $transLang);
+					$this->load->config('langcodes');
+					$codes = $config['translate']['codes']['google'];
+				}
+				if (isset($_POST['lang'])) 
+					foreach ($_POST['lang'] as $key=>$val) {
+							$new[$key]=$val;
+					}
+				if ($transLang) {
+					$transLangCode = isset($codes[$transLang])?$codes[$transLang]:'';
+					$errcnt=0; $cnt=0; $chkd=array();
+					foreach ($_POST['checked'] as $key) {
+						$new[$key]='* '.$new[$key];
+						$val = '';
+						if ($transLangCode)
+							$val=$this->translate_lib->setLang('en', $transLangCode)
+								->translate($orig[$key]);
+						if ($val) {
+							$new[$key]=$val;
+							$cnt+=1;
+						}
+						else {
+							$errcnt+=1;
+							$chkd[]=$key;
+						}
+						if ($errcnt>=5 && $cnt==0) break;
+					}
+					if ($errcnt==0)
+						Template::set_message($cnt.' '.lang('tr_translate_success'), 'success');
+					else if ($cnt>0)
+						Template::set_message($cnt.' '.sprintf(lang('tr_translate_part_success'),$errcnt), 'info');
+					else
+						Template::set_message(lang('tr_translate_failed'), 'error');
+				}
+				Template::set('chkd', $chkd);
+				Template::set('orig', $orig);
+				Template::set('new', $new);
+				Template::set('lang_file', $langFile);
+					
+				Template::set('orig_lang', $origLang);
+				Template::set('trans_lang', $transLang);
+				Template::set('toolbar_title', "{$langFile}: " . sprintf(lang('tr_translate_title'), ucfirst($transLang)));
+				Template::render();
+				return;
+				/* end translate */
+			}
+			// Save the file...
+			else if (isset($_POST['save'])) {
+				if (save_lang_file($langFile, $transLang, $_POST['lang'])) {
+					Template::set_message(lang('tr_save_success'), 'success');
+					redirect(SITE_AREA . "/developer/translate/index/{$transLang}");
+				}
 
-                Template::set_message(lang('tr_save_fail'), 'error');
-            }
-
-    		// Get the lang file
-			$orig = load_lang_file($langFile, 'english');
+				Template::set_message(lang('tr_save_fail'), 'error');
+			}
+			
+			// Get the lang file
+			$orig = load_lang_file($langFile, $origLang);
 			$new  = load_lang_file($langFile, $transLang);
 
 			Template::set('orig', $orig);
@@ -120,6 +180,8 @@ class Developer extends Admin_Controller
 			Template::set('lang_file', $langFile);
 		}
 
+		Template::set('chkd', array()); 
+		Template::set('orig_lang', $origLang);
 		Template::set('trans_lang', $transLang);
 		Template::set('toolbar_title', "{$langFile}: " . sprintf(lang('tr_translate_title'), ucfirst($transLang)));
 		Template::render();
@@ -133,8 +195,8 @@ class Developer extends Admin_Controller
 	public function export()
 	{
 		if (isset($_POST['export'])) {
-            $this->do_export($this->input->post('export_lang'), $this->input->post('include_core'), $this->input->post('include_custom'));
-            die();
+			$this->do_export($this->input->post('export_lang'), $this->input->post('include_core'), $this->input->post('include_custom'));
+			die();
 		}
 
 		Template::set('languages', $this->langs);
@@ -168,21 +230,22 @@ class Developer extends Admin_Controller
 		// Make the zip file
 		$this->load->library('zip');
 		foreach ($all_lang_files as $key => $file) {
-            if (is_numeric($key) && $includeCore) {
-                $content = load_lang_file($file, $language);
-                $this->zip->add_data($file, save_lang_file($file, $language, $content, true));
-            } elseif (($key == 'core' && $includeCore)
-                      || ($key == 'custom' && $includeCustom)
-            ) {
-                foreach ($file as $f) {
-                    $content = load_lang_file($f, $language);
-                    $this->zip->add_data($f, save_lang_file($f, $language, $content, true));
-                }
-            }
-        }
+			if (is_numeric($key) && $includeCore) {
+				$content = load_lang_file($file, $language);
+				$this->zip->add_data($file, save_lang_file($file, $language, $content, true));
+			} elseif (($key == 'core' && $includeCore)
+					  || ($key == 'custom' && $includeCustom)
+			) {
+				foreach ($file as $f) {
+					$content = load_lang_file($f, $language);
+					$this->zip->add_data($f, save_lang_file($f, $language, $content, true));
+				}
+			}
+		}
 
 		$this->zip->download("bonfire_{$language}_files.zip");
-        die();
+		die();
 	}
 }
 /* /bonfire/modules/translate/controllers/developer.php */
+?>

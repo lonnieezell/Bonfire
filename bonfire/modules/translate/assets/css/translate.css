@@ -1,0 +1,29 @@
+﻿/* index */
+.well form { margin: 0; }
+.admin-box a { line-height: 32px; }
+.admin-box h3 {
+	line-height: 40px;
+	border-bottom: 1px solid #e5e5e5;
+	margin: 10px 0 5px;
+	}
+.subhead {
+	font-size: 10pt;
+	font-weight: bold;
+	line-height: 20px;
+	color: #777;
+	padding: 10px;
+	vertical-align: middle;
+	text-rendering: optimizelegibility;
+}
+/* edit */
+form .controls { margin-left: 43% !important; }
+form label { width: 40% !important; }
+form .form-actions { padding-left: 43% !important; }
+.form-horizontal .control-group {
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+.entries > div { border-top: 1px solid #dddddd; }
+.entries > div:nth-child(odd) {background-color:#f7f7f7;}
+.gobottom {margin-right: 2px;}
+.gotop {margin: 5px 2px;}
