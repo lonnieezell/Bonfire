@@ -1,6 +1,5 @@
 <div class="well">
 	<?php echo form_open(current_url(), 'class="form-inline"'); ?>
-		<input type="hidden" name="new_lang" id="new_lang" value="" />
 		<label for='trans_lang'><?php e(lang('tr_current_lang')); ?></label>
 		<select name="trans_lang" id="trans_lang">
 			<?php foreach ($languages as $lang) : ?>
@@ -8,6 +7,10 @@
 			<?php endforeach; ?>
 			<option value="other"><?php e(lang('tr_other')); ?></option>
 		</select>
+        <div id='new_lang_field' style='display: none;'>
+            <label for='new_lang'><?php e(lang('tr_new_lang')); ?></label>
+            <input type="text" name="new_lang" id="new_lang" value="<?php echo set_value('new_lang'); ?>" />
+        </div>
 		<input type="submit" name="select_lang" class="btn btn-small btn-primary" value="<?php e(lang('tr_select_lang')); ?>" />
 	<?php echo form_close(); ?>
 </div>

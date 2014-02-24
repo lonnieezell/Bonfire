@@ -28,3 +28,5 @@ $lang['tr_include_mods']	= 'Include Custom Modules';
 $lang['tr_translate_success']		= 'selected language entries were successfully translated.';
 $lang['tr_translate_part_success']	= 'selected language entries were successfully translated but %s failed.';
 $lang['tr_translate_failed']		= 'The selected language entries were not translated. See the error log for details.';
+
+$lang['tr_new_lang']        = 'New Language';
