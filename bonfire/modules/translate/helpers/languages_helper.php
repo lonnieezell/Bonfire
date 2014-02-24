@@ -134,8 +134,9 @@ if ( ! function_exists('load_lang_file')) {
 			return null;
 		}
 
-		// Is it the application_lang or datatable_lang file?
-		if ($filename == 'application_lang.php' || $filename == 'datatable_lang.php') {
+		// Is it a application lang file? Use the English folder to determine.
+        $arFiles = scandir(APPPATH. "language/english/"); 
+		if ($filename=='application_lang.php' || in_array($filename, $arFiles)) {
 			$path = APPPATH . "language/{$language}/{$filename}";
 		}
 		// Look in modules
@@ -174,8 +175,9 @@ if ( ! function_exists('save_lang_file')) {
 			return false;
 		}
 
-		// Is it the application_lang or datatable_lang file?
-		if ($filename == 'application_lang.php' || $filename == 'datatable_lang.php') {
+		// Is it a application lang file? Use the English folder to determine.
+        $arFiles = scandir(APPPATH. "language/english/"); 
+		if ($filename=='application_lang.php' || in_array($filename, $arFiles)) {
 			$orig_path = APPPATH . "language/english/{$filename}";
 			$path = APPPATH . "language/{$language}/{$filename}";
 		}
