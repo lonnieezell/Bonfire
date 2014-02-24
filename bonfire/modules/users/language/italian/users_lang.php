@@ -21,6 +21,16 @@
 	THE SOFTWARE.
 */
 
+/**
+ * Users Language File (Italian)
+ *
+ * @package     Bonfire\Modules\Users\Language\Italian
+ * @author      Lorenzo Sanzari (ulisse73@quipo.it)
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
+
 $lang['us_account_deleted'] = 'Sfortunatamente il tuo account è stato rimosso. Esso non è stato già distrutto definitivamente e <strong>può ancora</strong> essere ripristinato. Contatta l\'amministratore su %s.';
 
 $lang['us_bad_email_pass'] = 'Email o password non corretta.';

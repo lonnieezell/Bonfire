@@ -21,6 +21,16 @@
 	THE SOFTWARE.
 */
 
+/**
+ * Database Language File (Italian)
+ *
+ * @package     Bonfire\Modules\Database\Language\Italian
+ * @author      Lorenzo Sanzari (ulisse73@quipo.it)
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
+
 $lang['db_maintenance'] = 'Manutenzione';
 $lang['db_backups'] = 'Backups';
 

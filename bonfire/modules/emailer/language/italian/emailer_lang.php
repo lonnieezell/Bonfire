@@ -21,6 +21,16 @@
 	THE SOFTWARE.
 */
 
+/**
+ * Emailer Language File (Italian)
+ *
+ * @package     Bonfire\Modules\Database\Emailer\Italian
+ * @author      Lorenzo Sanzari (ulisse73@quipo.it)
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
+
 $lang['em_template'] = 'Modello';
 $lang['em_email_template'] = 'Modello Email';
 $lang['em_emailer_queue'] = 'Coda Email';

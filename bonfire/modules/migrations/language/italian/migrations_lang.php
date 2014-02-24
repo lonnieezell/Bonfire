@@ -1,5 +1,15 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Migrations Language File (Italian)
+ *
+ * @package     Bonfire\Modules\Database\Migrations\Italian
+ * @author      Lorenzo Sanzari (ulisse73@quipo.it)
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
+
 $lang['mig_intro'] = 'Le migrations ti aiutano a tenere aggiornato e allineato il tuo database tra servers development e production tramite un modo agevole di gestire il &lsquo;controllo di versione&rsquo; del tuo database.';
 $lang['mig_not_enabled'] = 'Le Migrations non sono abilitate.';
 $lang['mig_installed_version'] = 'Versione installata: <b>%d</b>';

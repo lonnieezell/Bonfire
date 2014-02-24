@@ -1,5 +1,15 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Sysinfo Language File (Italian)
+ *
+ * @package     Bonfire\Modules\Sysinfo\Language\Italian
+ * @author      Lorenzo Sanzari (ulisse73@quipo.it)
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
+
 $lang['si_system_info'] = 'Informazioni di sistema';
 $lang['si_system'] = 'Sistema';
 $lang['si_modules'] = 'Moduli';

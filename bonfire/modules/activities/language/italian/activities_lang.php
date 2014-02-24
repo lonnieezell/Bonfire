@@ -21,6 +21,16 @@
 	THE SOFTWARE.
 */
 
+/**
+ * Activities Language File (Italian)
+ *
+ * @package     Bonfire\Modules\Activities\Language\Italian
+ * @author      Lorenzo Sanzari (ulisse73@quipo.it)
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
+
 $lang['activity_home'] = 'Home';
 $lang['activity_title'] = 'Attività sito';
 $lang['activity_own'] = 'Il tuo';

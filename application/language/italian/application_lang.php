@@ -14,12 +14,12 @@
  */
 
 /**
- * Application language file (English)
+ * Application language file (Italian)
  *
  * Localization strings used by Bonfire
  *
- * @package    Bonfire\Application\Language\English
- * @author     Bonfire Dev Team
+ * @package    Bonfire\Application\Language\Italian
+ * @author     Lorenzo Sanzari (ulisse73@quipo.it)
  * @link       http://cibonfire.com/docs/guides
  */
 

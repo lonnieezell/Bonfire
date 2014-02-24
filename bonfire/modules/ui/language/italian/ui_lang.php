@@ -21,6 +21,16 @@
 	THE SOFTWARE.
 */
 
+/**
+ * Ui Language File (Italian)
+ *
+ * @package     Bonfire\Modules\Database\Ui\Italian
+ * @author      Lorenzo Sanzari (ulisse73@quipo.it)
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
+
 $lang['ui_keyboard_shortcuts'] = 'Le scorciatoie da tastiera sono configurate nell\'applicazione. Le scorciatoie attualmente disponibili sono:';
 $lang['ui_add_shortcut'] = 'Aggiungi scorciatoia';
 $lang['ui_remove_shortcut'] = 'Rimuovi';

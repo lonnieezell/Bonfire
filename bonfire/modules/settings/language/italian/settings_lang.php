@@ -1,5 +1,15 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Settings Language File (Italian)
+ *
+ * @package     Bonfire\Modules\Database\Settings\Italian
+ * @author      Lorenzo Sanzari (ulisse73@quipo.it)
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
+
 $lang['set_allow_name_change_note'] = 'Consenti agli utenti di cambiare il loro username pubblico dopo la registrazione?';
 $lang['set_name_change_frequency'] = 'Cambia ogni';
 $lang['set_days'] = 'giorni';

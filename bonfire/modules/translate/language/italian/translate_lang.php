@@ -1,5 +1,15 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Translate Language File (Italian)
+ *
+ * @package     Bonfire\Modules\Translate\Language\Italian
+ * @author      Lorenzo Sanzari (ulisse73@quipo.it)
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
+
 $lang['tr_translate_title'] = 'Traduci in %s';
 $lang['tr_no_modules'] = 'Nessun modulo trovato con files lingua.';
 $lang['tr_no_core'] = 'Nessun file lingua trovato per il core.';

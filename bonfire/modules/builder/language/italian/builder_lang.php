@@ -1,10 +1,10 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
- * Builder Language File (English)
+ * Builder Language File (Italian)
  *
- * @package     Bonfire\Modules\Builder\Language\English
- * @author      Bonfire Dev Team
+ * @package     Bonfire\Modules\Builder\Language\Italian
+ * @author      Lorenzo Sanzari (ulisse73@quipo.it)
  * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
  * @license     http://opensource.org/licenses/MIT
  * @link        http://cibonfire.com/docs/builder

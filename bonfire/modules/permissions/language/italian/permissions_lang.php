@@ -14,13 +14,15 @@
  * @filesource
  */
 
+
 /**
- * Permissions Language File
+ * Permissions Language File (Italian)
  *
- * @package    Bonfire\Modules\Permissions\Language\English
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/bonfire/roles_and_permissions
- *
+ * @package     Bonfire\Modules\Database\Permissions\Italian
+ * @author      Lorenzo Sanzari (ulisse73@quipo.it)
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
  */
 
 $lang['permissions_active'] = 'attivo';
