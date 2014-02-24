@@ -1,33 +1,32 @@
-<?php
-
-if (!defined('BASEPATH'))
-    exit('No direct script access allowed');
-/*
-  Copyright (c) 2011 Lonnie Ezell
-
-  Permission is hereby granted, free of charge, to any person obtaining a copy
-  of this software and associated documentation files (the "Software"), to deal
-  in the Software without restriction, including without limitation the rights
-  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-  copies of the Software, and to permit persons to whom the Software is
-  furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-  THE SOFTWARE.
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
  */
+
+/**
+ * Application language file (English)
+ *
+ * Localization strings used by Bonfire
+ *
+ * @package    Bonfire\Application\Language\English
+ * @author     Bonfire Dev Team
+ * @link       http://cibonfire.com/docs/guides
+ */
+
 
 //--------------------------------------------------------------------
 // ! GENERAL SETTINGS
 //--------------------------------------------------------------------
-
 $lang['bf_site_name'] = 'Nome sito';
 $lang['bf_site_email'] = 'Email sito';
 $lang['bf_site_email_help'] = 'L\'email di default dalla quale saranno inviate le emails di sistema.';
@@ -45,7 +44,6 @@ $lang['bf_language_help'] = 'Scegli le lingue disponibili per l\'utente.';
 //--------------------------------------------------------------------
 // ! AUTH SETTINGS
 //--------------------------------------------------------------------
-
 $lang['bf_security'] = 'Sicurezza';
 $lang['bf_login_type'] = 'Tipo login';
 $lang['bf_login_type_email'] = 'Solo email';
@@ -67,7 +65,6 @@ $lang['bf_display_name'] = 'Nome mostrato';
 //--------------------------------------------------------------------
 // ! CRUD SETTINGS
 //--------------------------------------------------------------------
-
 $lang['bf_home_page'] = 'Home page';
 $lang['bf_pages'] = 'Pagine';
 $lang['bf_enable_rte'] = 'Abilita RTE per le pagine?';
@@ -98,7 +95,6 @@ $lang['bf_action_ban'] = 'Blocca';
 //--------------------------------------------------------------------
 // ! SETTINGS LIB
 //--------------------------------------------------------------------
-
 $lang['bf_do_check'] = 'Verifica aggiornamenti?';
 $lang['bf_do_check_edge'] = 'Deve essere abilitato per vedere anche gli aggiornamenti importanti.';
 
@@ -140,7 +136,6 @@ $lang['bf_password_iterations_note'] = 'Valori più alti incrementano la sicurez
 //--------------------------------------------------------------------
 // ! USER/PROFILE
 //--------------------------------------------------------------------
-
 $lang['bf_user'] = 'Utente';
 $lang['bf_users'] = 'Utenti';
 $lang['bf_description'] = 'Descrizione';
@@ -150,7 +145,6 @@ $lang['bf_user_settings'] = 'Profilo personale';
 //--------------------------------------------------------------------
 // !
 //--------------------------------------------------------------------
-
 $lang['bf_both'] = 'entrambi';
 $lang['bf_go_back'] = 'Indietro';
 $lang['bf_new'] = 'Nuovo';
@@ -158,7 +152,7 @@ $lang['bf_required_note'] = 'I campi richiesti sono in <b>grassetto</b>.';
 $lang['bf_form_label_required'] = '<span class="required">*</span>';
 
 //--------------------------------------------------------------------
-// MY_Model
+// BF_Model
 //--------------------------------------------------------------------
 $lang['bf_model_db_error'] = 'Errore database: %s';
 $lang['bf_model_no_data'] = 'Nessun dato disponibile.';
@@ -177,7 +171,6 @@ $lang['bf_context_content'] = 'Contenuto';
 $lang['bf_context_reports'] = 'Reports';
 $lang['bf_context_settings'] = 'Impostazioni';
 $lang['bf_context_developer'] = 'Sviluppatore';
-$lang['bf_context_strumenti'] = 'Strumenti';
 
 //--------------------------------------------------------------------
 // Activities
@@ -194,7 +187,6 @@ $lang['bf_keyboard_shortcuts_edit'] = 'Aggiorna le scorciatoie da tastiera';
 //--------------------------------------------------------------------
 $lang['bf_question_mark'] = '?';
 $lang['bf_language_direction'] = 'ltr';
-$lang['log_intro'] = 'Questi sono i tuoi messaggi di log';
 $lang['bf_name'] = 'Nome';
 $lang['bf_status'] = 'Stato';
 
@@ -216,15 +208,6 @@ $lang['bf_password_min_length_help'] = 'La password deve essere lunga almeno %s 
 $lang['bf_password_length'] = 'Lunghezza password';
 
 //--------------------------------------------------------------------
-// User Meta examples
-//--------------------------------------------------------------------
-
-$lang['user_meta_street_name'] = 'Nome strada';
-$lang['user_meta_type'] = 'Tipo';
-$lang['user_meta_country'] = 'Nazione';
-$lang['user_meta_state'] = 'Stato';
-
-//--------------------------------------------------------------------
 // Activation
 //--------------------------------------------------------------------
 $lang['bf_activate_method'] = 'Metodo di attivazione';
@@ -241,16 +224,6 @@ $lang['bf_reg_activate_none'] = 'Per favore accedi per iniziare ad usare il sito
 $lang['bf_user_not_active'] = 'L\'account utente non è attivo.';
 $lang['bf_login_activate_title'] = 'Hai bisogno di attivare il tuo account utente?';
 $lang['bf_login_activate_email'] = '<b>Hai un codice di attivazione da inserire per attivare la tua iscrizione?</b> Inseriscilo nella pagina [ACCOUNT_ACTIVATE_URL].<br /><br /> <b>Hai ancora bisogno del tuo codice?</b> Richiedilo ancora alla pagina [ACTIVATE_RESEND_URL].';
-
-//--------------------------------------------------------------------
-// Migrations lib
-//--------------------------------------------------------------------
-$lang['no_migrations_found'] = 'Nessun file di migrazione trovato.';
-$lang['multiple_migrations_version'] = 'Diverse versioni di migrazioni: %d';
-$lang['multiple_migrations_name'] = 'Diversi nomi di migrazioni: %s';
-$lang['migration_class_doesnt_exist'] = 'La classe migrazione non esiste: %s';
-$lang['wrong_migration_interface'] = 'Interfaccia di migrazione difettosa: %s';
-$lang['invalid_migration_filename'] = 'Nome file di migrazione scorretto: %s - %s';
 
 //--------------------------------------------------------------------
 // Profiler Template
@@ -285,3 +258,52 @@ $lang['bf_form_valid_password_mixed_1'] = '%s deve contenere almeno 1 carattere 
 $lang['bf_form_valid_password_mixed_2'] = '%s deve contenere almeno 1 carattere minuscolo.';
 $lang['bf_form_allowed_types'] = '%s deve contenere almeno una delle selezioni consentite.';
 $lang['bf_form_one_of'] = '%s deve contenere almeno una delle selezioni disponibili.';
+
+//--------------------------------------------------------------------
+// Menu Strings - feel free to add your own custom modules here
+// if you want to localize your menus
+//--------------------------------------------------------------------
+$lang['bf_menu_activities'] = 'Attività';
+$lang['bf_menu_code_builder'] = 'Generatore di codice';
+$lang['bf_menu_db_tools'] = 'Strumenti database';
+$lang['bf_menu_db_maintenance'] = 'Manutenzione';
+$lang['bf_menu_db_backup'] = 'Backups';
+$lang['bf_menu_emailer'] = 'Coda email';
+$lang['bf_menu_email_settings'] = 'Impostazioni';
+$lang['bf_menu_email_template'] = 'Template';
+$lang['bf_menu_email_queue'] = 'Coda view';
+$lang['bf_menu_kb_shortcuts'] = 'Scorciatoie tastiera';
+$lang['bf_menu_logs'] = 'Logs';
+$lang['bf_menu_migrations'] = 'Migrazioni';
+$lang['bf_menu_permissions'] = 'Permessi';
+$lang['bf_menu_queue'] = 'Coda';
+$lang['bf_menu_roles'] = 'Ruoli';
+$lang['bf_menu_settings'] = 'Impostazioni';
+$lang['bf_menu_sysinfo'] = 'Informazioni di sistema';
+$lang['bf_menu_template'] = 'Template';
+$lang['bf_menu_translate'] = 'Traduci';
+$lang['bf_menu_users'] = 'Utenti';
+
+//--------------------------------------------------------------------
+// Anything that doesn't follow the 'bf_*' convention:
+//--------------------------------------------------------------------
+$lang['log_intro'] = 'Questi sono i tuoi messaggi di log';
+
+//--------------------------------------------------------------------
+// User Meta examples
+//--------------------------------------------------------------------
+
+$lang['user_meta_street_name'] = 'Nome strada';
+$lang['user_meta_type'] = 'Tipo';
+$lang['user_meta_country'] = 'Nazione';
+$lang['user_meta_state'] = 'Stato';
+
+//--------------------------------------------------------------------
+// Migrations lib
+//--------------------------------------------------------------------
+$lang['no_migrations_found'] = 'Nessun file di migrazione trovato.';
+$lang['multiple_migrations_version'] = 'Diverse versioni di migrazioni: %d';
+$lang['multiple_migrations_name'] = 'Diversi nomi di migrazioni: %s';
+$lang['migration_class_doesnt_exist'] = 'La classe migrazione non esiste: %s';
+$lang['wrong_migration_interface'] = 'Interfaccia di migrazione difettosa: %s';
+$lang['invalid_migration_filename'] = 'Nome file di migrazione scorretto: %s - %s';
