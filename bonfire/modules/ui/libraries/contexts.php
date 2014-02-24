@@ -23,7 +23,7 @@
  */
 class Contexts
 {
-    /**
+    /*
      * Templates and related strings for building the context menus
      */
     protected static $templateContextNav    = "<ul class='{class}'{extra}>\n{menu}</ul>\n";
@@ -39,113 +39,57 @@ class Contexts
     protected static $templateContextNavMobileClass     = 'mobile_nav';
 
 	/**
-	 * Stores the available menu actions.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var array
+	 * @var array Stores the available menu actions.
 	 */
 	protected static $actions = array();
 
 	/**
-	 * Stores the organized menu actions.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var array
+	 * @var array Stores the organized menu actions.
 	 */
-	protected static $menu	= array();
+	protected static $menu = array();
 
 	/**
-	 * The class name to attach to the outer ul tag.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+	 * @var string The class name to attach to the outer ul tag.
 	 */
-	protected static $outer_class	= 'nav';
+	protected static $outer_class = 'nav';
 
 	/**
-	 * The id to apply to the outer ul tag.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+	 * @var string The id to apply to the outer ul tag.
 	 */
-	protected static $outer_id	= null;
+	protected static $outer_id = null;
 
 	/**
-	 * The class to attach to li tags with children
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+	 * @var string The class to attach to li tags with children
 	 */
-	protected static $parent_class	= 'dropdown';
+	protected static $parent_class = 'dropdown';
 
 	/**
-	 * The class to apply to li tags within ul tags inside.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+	 * @var string The class to apply to li tags within ul tags inside.
 	 */
 	protected static $submenu_class	= 'dropdown-submenu';
 
 	/**
-	 * The class to apply to ul tags within li tags.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+	 * @var string The class to apply to ul tags within li tags.
 	 */
-	protected static $child_class	= 'dropdown-menu';
+	protected static $child_class = 'dropdown-menu';
 
 	/**
-	 * Pointer to the CodeIgniter instance.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+	 * @var object Pointer to the CodeIgniter instance.
 	 */
 	protected static $ci;
 
 	/**
-	 * Admin Area to Link to or other Context.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+	 * @var string Admin Area to Link to or other Context.
 	 */
 	protected static $site_area = SITE_AREA;
 
 	/**
-	 * Stores the context menus config.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var array
+	 * @var array The context menus configuration
 	 */
 	protected static $contexts = array();
 
 	/**
-	 * Stores errors created during the
-	 * Context creation.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var array
+	 * @var array Any errors which occurred during the Context creation.
 	 */
 	protected static $errors = array();
 
@@ -160,16 +104,10 @@ class Contexts
 	{
 		self::$ci =& get_instance();
 		self::init();
-
-	}//end __construct()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Loads application helper
-	 *
-	 * @access protected
-	 * @static
 	 *
 	 * @return void
 	 */
@@ -181,14 +119,10 @@ class Contexts
 
 		self::$contexts = self::$ci->config->item('contexts');
 		log_message('debug', 'UI/Contexts library loaded');
-	}//end init()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Sets the contexts array
-	 *
-	 * @static
 	 *
 	 * @param  array  Array of Context Menus to Display normally stored in application config.
 	 * @param  string Area to link to defaults to SITE_AREA or Admin area.
@@ -204,58 +138,39 @@ class Contexts
 		self::$contexts  = $contexts;
 		self::$site_area = $site_area;
 
-		unset($contexts, $site_area);
-
 		log_message('debug', 'UI/Contexts set_contexts has been called.');
-	}//end set_contexts()
-
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Returns the context array just in case it is needed later.
-	 *
-	 * @static
 	 *
 	 * @return array
 	 */
 	public static function get_contexts()
 	{
 		return self::$contexts;
-	}//end get_contexts()
-
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Returns a string of any errors during the create context process.
-	 *
-	 * @access	public
-	 * @static
 	 *
 	 * @param	string	$open	A string to place at the beginning of every error.
 	 * @param	string	$close	A string to place at the close of every error.
 	 *
 	 * @return 	string
 	 */
-	public static function errors($open='<li>', $close='</li>')
+	public static function errors($open= '<li>', $close= '</li>')
 	{
 		$out = '';
-
 		foreach (self::$errors as $error) {
-			$out .= $open . $error . $close . "\n";
+			$out .= "{$open}{$error}{$close}\n";
 		}
 
 		return $out;
 	}
 
-	//--------------------------------------------------------------------
-
 	/**
 	 * Renders a list-based menu (with submenus) for each context.
-	 *
-	 * @access public
-	 * @static
 	 *
 	 * @param string $mode           What to display in the top menu. Either 'icon', 'text', or 'both'.
 	 * @param string $order_by       Determines the sort order of the elements. Valid options are 'normal', 'reverse', 'asc', 'desc'.
@@ -264,14 +179,13 @@ class Contexts
 	 *
 	 * @return string A string with the built navigation.
 	 */
-	public static function render_menu($mode='text', $order_by='normal', $top_level_only=false, $benchmark=false)
+	public static function render_menu($mode = 'text', $order_by = 'normal', $top_level_only = false, $benchmark = false)
 	{
         if ($benchmark) {
             self::$ci->benchmark->mark('render_menu_start');
         }
 
 		$contexts = self::$contexts;
-
 		if (empty($contexts) || ! is_array($contexts) || ! count($contexts)) {
 			die(lang('bf_no_contexts'));
 		}
@@ -301,7 +215,9 @@ class Contexts
 				break;
 
 			case 'normal':
+                // no break
 			case 'default':
+                // no break
             default:
 				break;
 		}
@@ -322,17 +238,23 @@ class Contexts
         $search = array('{parent_class}', '{url}', '{id}', '{current_class}', '{title}', '{extra}', '{text}', '{content}');
 
         $menu = '';
-		// Build out our navigation.
+		// Build out the navigation.
 		foreach ($contexts as $context) {
             $viewPermission = 'Site.' . ucfirst($context) . '.View';
-			if (has_permission($viewPermission) || ! permission_exists($viewPermission)) {
-				$url        = $siteAreaUrl . $context;
-				$class      = check_class($context, true);
-				$id         = 'tb_' . $context;
-                $title      = lang('bf_context_' . $context);
-                $icon       = $mode == 'text' ? '' : Template::theme_url('images/context_' . $context . '.png');
+			if (has_permission($viewPermission)
+                || ! permission_exists($viewPermission)
+               ) {
+				$url    = $siteAreaUrl . $context;
+				$class  = check_class($context, true);
+				$id     = "tb_{$context}";
+                $title  = lang("bf_context_{$context}");
+                $icon   = $mode == 'text' ? '' : Template::theme_url("images/context_{$context}.png");
 
-                $navTitle = str_replace(array('{title}', '{image}'), array($title, $icon), $template);
+                $navTitle = str_replace(
+                    array('{title}', '{image}'),
+                    array($title, $icon),
+                    $template
+                );
 
                 $replace = array(
                     $parentClass . ' ' . $class,
@@ -350,25 +272,24 @@ class Contexts
 		}
 
         $extra = trim(self::$outer_id) == '' ? '' : ' id="' . self::$outer_id . '"';
-        $nav = str_replace(array('{class}', '{extra}', '{menu}'), array(self::$outer_class, $extra, $menu), self::$templateContextNav);
+        $nav = str_replace(
+            array('{class}', '{extra}', '{menu}'),
+            array(self::$outer_class, $extra, $menu),
+            self::$templateContextNav
+        );
 
         if ($benchmark) {
     		self::$ci->benchmark->mark('render_menu_end');
         }
 
 		return $nav;
-	}//end render_menu()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
-	 * Creates a series of divs that each contain a <ul> of links within
+	 * Create a series of divs, each of which contain a <ul> of links within
 	 * that context. This is intended for the tab-style mobile navigation.
 	 *
-	 * @access public
-	 * @static
-	 *
-	 * @return string A string with the navigation lists.
+	 * @return string The navigation lists.
 	 */
 	public static function render_mobile_navs()
 	{
@@ -376,19 +297,18 @@ class Contexts
 		foreach (self::$contexts as $context) {
             $contextNav = self::context_nav($context, '', true);
             $currentId  = " id='{$context}_menu'";
-            $out .= str_replace(array('{class}', '{extra}', '{menu}'), array(self::$templateContextNavMobileClass, $currentId, $contextNav), self::$templateContextNav);
+            $out .= str_replace(
+                array('{class}', '{extra}', '{menu}'),
+                array(self::$templateContextNavMobileClass, $currentId, $contextNav),
+                self::$templateContextNav
+            );
 		}
 
 		return $out;
-	}//end render_mobile_navs()
-
-	//--------------------------------------------------------------------
-
+	}
 
 	/**
-	 * Builds the main navigation menu for each context.
-	 *
-	 * @access public
+	 * Build the main navigation menu for each context.
 	 *
 	 * @param string $context   The context to build the nav for.
 	 * @param string $class     The class to use on the nav
@@ -396,14 +316,12 @@ class Contexts
 	 *
 	 * @return string The HTML necessary to display the menu.
 	 */
-	public static function context_nav($context=null, $class='dropdown-menu', $ignore_ul=false)
+	public static function context_nav($context = null, $class = 'dropdown-menu', $ignore_ul = false)
 	{
 		// Get a list of modules with a controller matching
 		// $context ('content', 'settings', 'reports', or 'developer')
-		foreach (Modules::list_modules() as $module)
-        {
-			if (Modules::controller_exists($context, $module))
-            {
+		foreach (Modules::list_modules() as $module) {
+			if (Modules::controller_exists($context, $module)) {
 				$mod_config = Modules::config($module);
 
 				self::$actions[$module] = array(
@@ -413,23 +331,30 @@ class Contexts
 					'menus'			=> isset($mod_config['menus']) ? $mod_config['menus'] : false,
 				);
 
-                // This is outside the array because the else portion uses the 'display_name' value,
+                // This is outside the array because the else portion uses the
+                // 'display_name' value,
 				self::$actions[$module]['menu_topic'] = isset($mod_config['menu_topic']) ? $mod_config['menu_topic'] : self::$actions[$module]['display_name'];
 			}
 		}
 
-		// Do we have any actions?
+		// Are there any actions?
 		if ( ! count(self::$actions)) {
-            return str_replace(array('{class}', '{extra}', '{menu}'), array($class, '', ''), self::$templateContextNav);
+            return str_replace(
+                array('{class}', '{extra}', '{menu}'),
+                array($class, '', ''),
+                self::$templateContextNav
+            );
 		}
 
-		// Order our actions by their weight, then alphabetically
+		// Order the actions by weight, then alphabetically
 		self::sort_actions();
 
-		// Build up our menu array
+		// Build up the menu array
         $ucContext = ucfirst($context);
 		foreach (self::$actions as $module => $config) {
-			if (has_permission('Bonfire.' . ucfirst($module) . '.View') || has_permission(ucfirst($module) . '.' . $ucContext . '.View')) {
+			if (has_permission('Bonfire.' . ucfirst($module) . '.View')
+                || has_permission(ucfirst($module) . '.' . $ucContext . '.View')
+               ) {
 				// Drop-down menus?
 				$menu_view = $config['menus'] && isset($config['menus'][$context]) ? $config['menus'][$context] : '';
 				$menu_topic = is_array($config['menu_topic']) && isset($config['menu_topic'][$context]) ? $config['menu_topic'][$context] : $config['display_name'];
@@ -444,14 +369,10 @@ class Contexts
 		}
 
 		$menu = self::build_sub_menu($context, $ignore_ul);
-
 		self::$actions = array();
 
 		return $menu;
-
-	}//end context_nav()
-
-	//--------------------------------------------------------------------
+	}
 
 	//--------------------------------------------------------------------
 	// !BUILDER METHODS
@@ -462,29 +383,27 @@ class Contexts
 	 * creating permissions, assigning them to certain roles, and
 	 * even creating an application migration for the permissions.
 	 *
-	 * @access public
-	 * @static
-	 *
 	 * @param	string	$name	The name of the context to create.
 	 * @param	array	$roles	The names or id's of the roles to give permissions to view.
 	 * @param	bool	$migrate	If TRUE, will create an app migration file.
 	 *
 	 * @return 	bool
 	 */
-	public static function create_context($name='', $roles=array(), $migrate=false)
+	public static function create_context($name = '', $roles = array(), $migrate = false)
 	{
 		if (empty($name)) {
 			self::$errors = lang('ui_no_context_name');
 			return false;
 		}
 
-		// 1. Try to write it to the config file so that it will show in the menu no matter what.
+		// 1. Try to write to the config file so it will show in the menu no
+        // matter what.
 		self::$ci->load->helper('config_file');
 
 		$contexts = self::$contexts;
         $lowerName = strtolower($name);
 
-		// If it already exists, we don't need to do anything!
+		// If it isn't in the list of contexts, add it
 		if ( ! in_array($lowerName, $contexts)) {
 			array_unshift($contexts, $lowerName);
 
@@ -494,30 +413,33 @@ class Contexts
 			}
 		}
 
-        // 2. Create our permissions
+        // 2. Language File
+        if ( ! function_exists('addLanguageLine')) {
+            self::$ci->load->helper('translate/languages');
+            $temp = addLanguageLine('application_lang.php', array("bf_context_{$lowerName}" => $name), 'english');
+        }
+
+        // 3. Create the relevant permissions
 		$cname = 'Site.' . ucfirst($name) . '.View';
 
-		// First - create the actual permission
+		// 3.1. create the actual permission
 		self::$ci->load->model('permissions/permission_model');
-
-		if ( ! self::$ci->permission_model->permission_exists($cname)) {
+		if (self::$ci->permission_model->permission_exists($cname)) {
+			$pid = self::$ci->permission_model->find_by('name', $cname)->permission_id;
+		} else {
 			$pid = self::$ci->permission_model->insert(array(
 				'name'			=> $cname,
 				'description'	=> 'Allow user to view the ' . ucwords($name) . ' Context.',
 			));
-		} else {
-			$pid = self::$ci->permission_model->find_by('name', $cname)->permission_id;
-			$exists = true;
 		}
 
-		// Do we have any roles to apply this to?
-		// If we don't we can quit since there won't be anything to migrate.
+		// Are there any roles to apply this to? If not, quit, since there will
+        // be nothing to migrate
 		if (count($roles) == 0) {
 			return true;
 		}
 
 		self::$ci->load->model('roles/role_permission_model');
-
 		foreach ($roles as $role) {
 			// Assign By Id
 			if (is_numeric($role)) {
@@ -530,11 +452,8 @@ class Contexts
 			}
 		}
 
-		// If we made it here, we were successful!
 		return true;
 	}
-
-	//--------------------------------------------------------------------
 
 	//--------------------------------------------------------------------
 	// !UTILITY METHODS

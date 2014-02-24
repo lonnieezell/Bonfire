@@ -23,6 +23,27 @@
  * @link       http://cibonfire.com/docs/guides
  */
 
+if ( ! function_exists('addLanguageLine')) {
+    /**
+     * Add one or more lines to an existing language file
+     *
+     * @param string $filename The name of the file to update
+     * @param array $line     An array of key/value pairs containing the language entries to update/add and the values to set them to
+     * @param string $language The language of the file to update
+     *
+     * @return bool    true on successful update, else false
+     */
+    function addLanguageLine($filename, $line, $language = 'english')
+    {
+        $orig = load_lang_file($filename, $language);
+        foreach ($line as $key => $val) {
+            $orig[$key] = $val;
+        }
+
+        return save_lang_file($filename, $language, $orig, false, true);
+    }
+}
+
 if ( ! function_exists('list_languages')) {
 	/**
      * List existing languages in the system
@@ -166,10 +187,11 @@ if ( ! function_exists('save_lang_file')) {
 	 * @param string $language The language to retrieve.
 	 * @param array  $settings An array of the language settings
 	 * @param bool   $return   TRUE to return the contents or FALSE to write to file
+	 * @param bool   $allowNewValues if true, new values can be added to the file
 	 *
 	 * @return mixed A string when the $return setting is true
 	 */
-	function save_lang_file($filename = null, $language = 'english', $settings = null, $return = false)
+	function save_lang_file($filename = null, $language = 'english', $settings = null, $return = false, $allowNewValues = false)
 	{
 		if (empty($filename) || ! is_array($settings)) {
 			return false;
@@ -212,17 +234,24 @@ if ( ! function_exists('save_lang_file')) {
 
 		// Save the file.
 		foreach ($settings as $name => $val) {
+			if ($val !== '') {
+				$val = '\'' . addcslashes($val, '\'\\') . '\'';
+            }
 			// Use strrpos() instead of strpos() so we don't lose data when
             // people have put duplicate keys in the english files
 			$start = strrpos($contents, '$lang[\'' . $name . '\']');
 			if ($start === false) {
 				// Tried to add non-existent value?
-				return false;
+                if ($allowNewValues && $val !== '') {
+                    $contents .= "\n\$lang['{$name}'] = {$val};";
+                    continue;
+                } else {
+                    return false;
+                }
 			}
 			$end = strpos($contents, "\n", $start) + strlen("\n");
 
 			if ($val !== '') {
-				$val = '\'' . addcslashes($val, '\'\\') . '\'';
 				$replace = '$lang[\'' . $name . '\'] = ' . $val . ";\n";
 			} else {
 				$replace = '// ' . substr($contents, $start, $end-$start);
