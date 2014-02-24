@@ -1,6 +1,6 @@
 <?php
 
-$build_config = '<?php if ( ! defined(\'BASEPATH\')) exit(\'No direct script access allowed\');';
+$build_config = '<?php defined(\'BASEPATH\') || exit(\'No direct script access allowed\');';
 
 
 $build_config .= PHP_EOL . '

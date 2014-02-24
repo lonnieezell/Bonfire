@@ -1,5 +1,5 @@
 <?php
-$model = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allowed\');
+$model = '<?php defined(\'BASEPATH\') || exit(\'No direct script access allowed\');
 
 class '.ucfirst($controller_name).'_model extends BF_Model {
 

@@ -99,8 +99,8 @@ class Developer extends Admin_Controller
         // Sort the module list (by the name of each module's folder)
         ksort($configs);
 
-        // Check that the modules folder is writeable
-        Template::set('writeable', $this->_check_writeable());
+        // Check that the modules folder is writable
+        Template::set('writable', $this->checkWritable());
         Template::set('modules', $configs);
         Template::set('toolbar_title', lang('mb_toolbar_title_index'));
 
@@ -247,7 +247,7 @@ class Developer extends Admin_Controller
 
         Template::set('error', array());
         Template::set('toolbar_title', lang('mb_toolbar_title_create'));
-        Template::set('writeable', $this->_check_writeable());
+        Template::set('writable', $this->checkWritable());
 
         Template::render();
     }
@@ -596,7 +596,9 @@ class Developer extends Admin_Controller
     }
 
     /**
-     * Check that the Modules folder is writeable
+     * Check that the Modules folder is writable
+     *
+     * @deprecated since 0.7.1 use checkWritable() instead
      *
      * @todo This method was marked private in the DocBlock but is public, need
      * to make sure it can be made private, then update the modifier in the
@@ -606,7 +608,17 @@ class Developer extends Admin_Controller
      */
     public function _check_writeable()
     {
-        return is_writeable($this->options['output_path']);
+        return $this->checkWritable();
+    }
+
+    /**
+     * Verify that the Modules folder is writable
+     *
+     * @return bool    true if the folder is writable, else false
+     */
+    private function checkWritable()
+    {
+        return is_writable($this->options['output_path']);
     }
 
     /**

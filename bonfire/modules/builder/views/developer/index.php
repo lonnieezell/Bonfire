@@ -1,6 +1,6 @@
-<?php if ( ! $writeable) : ?>
+<?php if ( ! $writable) : ?>
 <div class="alert alert-error">
-	<p><?php echo lang('mb_not_writeable_note'); ?></p>
+	<p><?php echo lang('mb_not_writable_note'); ?></p>
 </div>
 <?php endif;?>
 <div class="admin-box">

@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
 $view =<<<END
 <div>
@@ -10,7 +10,7 @@ $view =<<<END
 <br />
 
 <?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
-				
+
 	<table class="table table-striped table-bordered">
 		<thead>
 			<tr>
@@ -18,12 +18,12 @@ $view =<<<END
 			</tr>
 		</thead>
 		<tbody>
-		
+
 		<?php foreach (\$records as \$record) : ?>
 			<?php \$record = (array)\$record;?>
 			<tr>
 			<?php foreach(\$record as \$field => \$value) : ?>
-				
+
 				<?php if (\$field != '{$primary_key_field}') : ?>
 					<td>
 						<?php if (\$field == 'deleted'): ?>
@@ -33,7 +33,7 @@ $view =<<<END
 						<?php endif ?>
 					</td>
 				<?php endif; ?>
-				
+
 			<?php endforeach; ?>
 
 			</tr>
@@ -46,7 +46,7 @@ END;
 $headers = '';
 for($counter=1; $field_total >= $counter; $counter++)
 {
-	// only build on fields that have data entered. 
+	// only build on fields that have data entered.
 
 	//Due to the required if rule if the first field is set the the others must be
 

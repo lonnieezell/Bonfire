@@ -38,11 +38,11 @@ $validation_errors = validation_errors();
     //--------------------------------------------------------------------------
     // Begin Error Messages section
     //--------------------------------------------------------------------------
-    if ( ! $writeable) :
+    if ( ! $writable) :
     ?>
     <div class="alert alert-error fade in">
         <a class="close" data-dismiss="alert">&times;</a>
-        <p><?php echo lang('mb_not_writeable_note'); ?></p>
+        <p><?php echo lang('mb_not_writable_note'); ?></p>
     </div>
     <?php
     endif;
@@ -461,7 +461,7 @@ $validation_errors = validation_errors();
             </div><!-- /#all_fields -->
             <fieldset class="form-actions">
                 <?php
-                if ($writeable):
+                if ($writable):
                     echo form_submit('build', lang('mb_form_build'), 'class="btn btn-primary"');
                 endif;
                 ?>

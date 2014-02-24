@@ -27,7 +27,7 @@ else
 	$module_name_lower = $module_name_lower . '_';
 }
 
-$db_migration = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allowed\');
+$db_migration = '<?php defined(\'BASEPATH\') || exit(\'No direct script access allowed\');
 
 class Migration_Install_' . $table_name . ' extends Migration
 {

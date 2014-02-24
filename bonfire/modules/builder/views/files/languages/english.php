@@ -1,6 +1,6 @@
 <?php
 
-$lang = '<?php if ( ! defined(\'BASEPATH\')) exit(\'No direct script access allowed\');';
+$lang = '<?php defined(\'BASEPATH\') || exit(\'No direct script access allowed\');';
 
 $lang .= PHP_EOL . '
 $lang[\''.$module_name_lower.'_manage\']      = \'Manage '.$module_name.'\';

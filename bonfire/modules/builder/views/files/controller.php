@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
 /*
 	Define the various parts of the class here as variables with
@@ -16,7 +16,7 @@ $primary_key_field = set_value("primary_key_field");
 //--------------------------------------------------------------------
 
 $mb_class_wrapper =<<<END
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * {$controller_name} controller

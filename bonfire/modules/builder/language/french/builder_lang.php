@@ -1,31 +1,20 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
+/**
+ * Builder Language File (French)
+ *
+ * @package     Bonfire\Modules\Builder\Language\French
+ * @author      Bonfire Dev Team
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
 
 // INDEX page
 $lang['mb_create_button']		= 'Créer un Module';
 $lang['mb_create_link']			= 'Créer un nouveau module';
 $lang['mb_create_note']			= 'Utilisez notre assistant pour créer votre prochain module. Nous faisons tout le travail lourd en générant tous les contrôleurs, modèles, vues et les fichiers de langue dont vous aurez besoin.';
-$lang['mb_not_writeable_note']	= 'Erreur: Le répertoire application/modules n\'est pas accessible en écriture donc les modules ne peuvent pas êtres écrits sur le serveur. Merci de vous assurez que le répertoire est accessible en écriture et rafraîchissez cette page.';
+$lang['mb_not_writable_note']	= 'Erreur: Le répertoire application/modules n\'est pas accessible en écriture donc les modules ne peuvent pas êtres écrits sur le serveur. Merci de vous assurez que le répertoire est accessible en écriture et rafraîchissez cette page.';
 $lang['mb_generic_description']	= 'Votre description ici.';
 $lang['mb_installed_head']		= 'Module de l\'application installés';
 $lang['mb_module']				= 'Module';
@@ -64,7 +53,7 @@ $lang['mb_form_note'] = '<p><b>Remplissez les champs que vous souhaitez dans vot
 $lang['mb_table_note'] = '<p>Votre table sera créée avec au moins un champ, le champ clé primaire qui sera utilisé comme identifiant unique et comme un index. Si vous avez besoin de champ supplémentaire, cliquez sur le nombre de champs dont vous aurez besoin afin de les ajouter à ce formulaire.</p>';
 
 $lang['mb_field_note'] = '<p><b>NOTE : POUR TOUS LES CHAMPS</b><br />Si le champs de la BDD est "enum" ou "set", merci d\'entrer la valeur en utilisant ce format : \'a\',\'b\',\'c\'...<br />Si jamais vous avez besoin de mettre une barre oblique ("\\") ou un simple apostrophe ("\'") parmsi ces valeurs, faites précéder d\'une barre oblique inverse (par exemple \'\\\\xyz\' ou \'a\\\'b\').</p>';
-	
+
 $lang['mb_form_errors']			= 'Merci de corriger les erreurs ci-dessous.';
 $lang['mb_form_mod_details']	= 'Détails du Module ';
 $lang['mb_form_mod_name']		= 'Nom du Module';
@@ -100,7 +89,7 @@ $lang['mb_form_length']			= 'Maximum Length <b>-or-</b> Values';
 $lang['mb_form_length_ph']		= '30, 255, 1000, etc...';
 $lang['mb_form_dbtype']			= 'Database Type';
 $lang['mb_form_rules']			= 'Validation Rules';
-$lang['mb_form_rules_limits']	= 'Input Limitations'; 
+$lang['mb_form_rules_limits']	= 'Input Limitations';
 $lang['mb_form_required']		= 'Required';
 $lang['mb_form_unique']			= 'Unique';
 $lang['mb_form_trim']			= 'Trim';

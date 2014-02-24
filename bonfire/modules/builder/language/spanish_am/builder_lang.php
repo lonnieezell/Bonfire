@@ -1,32 +1,21 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
+/**
+ * Builder Language File (American Spanish)
+ *
+ * @package     Bonfire\Modules\Builder\Language\Spanish_am
+ * @author      Bonfire Dev Team
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
 
 // INDEX page
 $lang['mb_actions']				= 'Acciones';
 $lang['mb_create_button']		= 'Crear módulo';
 $lang['mb_create_link']			= 'Crear un nuevo módulo';
 $lang['mb_create_note']			= 'Utiliza nuestro asistente wizbang para crear tu próximo módulo. Hacemos todo el trabajo pesado por ti mediante la generación de controladores, módelos, vistas y archivos de idioma.';
-$lang['mb_not_writeable_note']	= 'Error: la carpeta application/modules no tiene permisos de escritura por lo que no podrá crear un módulo en el servidor. Por favor asigne los permisos de escritura a la carpeta y actualiza esta página.';
+$lang['mb_not_writable_note']	= 'Error: la carpeta application/modules no tiene permisos de escritura por lo que no podrá crear un módulo en el servidor. Por favor asigne los permisos de escritura a la carpeta y actualiza esta página.';
 $lang['mb_delete']				= 'Eliminar';
 $lang['mb_generic_description']	= 'Su descripción aquí.';
 $lang['mb_installed_head']		= 'Módulos de aplicación instaldos';
@@ -66,7 +55,7 @@ $lang['mb_form_note'] 			= '<p><b>Llene todos los campos que le gustaría tener 
 $lang['mb_table_note'] 			= '<p>Su tabla se creará con al menos un campo: de clave primaria que será usado como identificador único y como un índice. Si requiere campos adicionales, haga clic en el número que necesita para agregarlos a este formulario.</p>';
 
 $lang['mb_field_note'] 			= '<p><b>NOTA : PARA TODOS LOS CAMPOS</b><br />Si su campo para la tabla es de tipo "enum" o "set", por favor ingrese los valores usando este formato: \'a\',\'b\',\'c\'...<br />Si alguna vez necesita poner una barra invertida ("\") o una sola comilla ("\'") entre esos valores, precedalos con una barra invertida (por ejemplo \'\\xyz\' or \'a\\\'b\').</p>';
-	
+
 $lang['mb_form_errors']			= 'Por favor corrija los siguientes errores.';
 $lang['mb_form_mod_details']	= 'Detalles del módulo';
 $lang['mb_form_mod_name']		= 'Nombre del módulo';
@@ -102,7 +91,7 @@ $lang['mb_form_length']			= 'longitud máxima <b>-o-</b> Valores';
 $lang['mb_form_length_ph']		= '30, 255, 1000, etc...';
 $lang['mb_form_dbtype']			= 'Tipo de datos';
 $lang['mb_form_rules']			= 'Reglas de validación';
-$lang['mb_form_rules_limits']	= 'Reglas adicionales'; 
+$lang['mb_form_rules_limits']	= 'Reglas adicionales';
 $lang['mb_form_required']		= 'Requerido';
 $lang['mb_form_unique']			= 'Unico';
 $lang['mb_form_trim']			= 'Trim';

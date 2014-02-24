@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
 $view =<<<END
 <?php
@@ -143,7 +143,7 @@ for ($counter = 1; $field_total >= $counter; $counter++)
 					<td><?php e($record->'.$field_name.') ?></td>';
 		}
 	}
-	
+
 }
 
 // only add maintenance columns to view when module is creating a new db table
