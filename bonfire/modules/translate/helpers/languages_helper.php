@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
@@ -135,8 +135,8 @@ if ( ! function_exists('load_lang_file')) {
 		}
 
 		// Is it a application lang file? Use the English folder to determine.
-        $arFiles = scandir(APPPATH. "language/english/"); 
-		if ($filename=='application_lang.php' || in_array($filename, $arFiles)) {
+        $arFiles = scandir(APPPATH . "language/english/");
+		if ($filename == 'application_lang.php' || in_array($filename, $arFiles)) {
 			$path = APPPATH . "language/{$language}/{$filename}";
 		}
 		// Look in modules
@@ -176,8 +176,8 @@ if ( ! function_exists('save_lang_file')) {
 		}
 
 		// Is it a application lang file? Use the English folder to determine.
-        $arFiles = scandir(APPPATH. "language/english/"); 
-		if ($filename=='application_lang.php' || in_array($filename, $arFiles)) {
+        $arFiles = scandir(APPPATH . "language/english/");
+		if ($filename == 'application_lang.php' || in_array($filename, $arFiles)) {
 			$orig_path = APPPATH . "language/english/{$filename}";
 			$path = APPPATH . "language/{$language}/{$filename}";
 		}
@@ -238,7 +238,7 @@ if ( ! function_exists('save_lang_file')) {
 
 		// Make sure the file still has the php opening header in it...
 		if (strpos($contents, '<?php') === false) {
-			$contents = '<?php if ( ! defined(\'BASEPATH\')) exit(\'No direct script access allowed\');' . "\n\n" . $contents;
+			$contents = "<?php defined('BASEPATH') || exit('No direct script access allowed');\n\n{$contents}";
 		}
 
         if ($return) {

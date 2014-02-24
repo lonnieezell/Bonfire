@@ -1,4 +1,4 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
@@ -106,63 +106,13 @@ class Developer extends Admin_Controller
 	public function edit($transLang = '', $langFile = '')
 	{
 		$config =& get_config();
-		$origLang = ( ! isset($config['language'])) ? 'english' : $config['language'];
+		$origLang = isset($config['language']) ? $config['language'] : 'english';
+        $chkd = array();
+
 		if ($langFile) {
-			// Translate
-			if (isset($_POST['translate']) && is_array($_POST['checked'])) {
-				/* begin translate */
-				$orig = load_lang_file($langFile, $origLang);
-				$new = $orig;
-				if ($transLang) {
-					$this->load->library('translate_lib');
-					$new  = load_lang_file($langFile, $transLang);
-					$this->load->config('langcodes');
-					$codes = $config['translate']['codes']['google'];
-				}
-				if (isset($_POST['lang'])) 
-					foreach ($_POST['lang'] as $key=>$val) {
-							$new[$key]=$val;
-					}
-				if ($transLang) {
-					$transLangCode = isset($codes[$transLang])?$codes[$transLang]:'';
-					$errcnt=0; $cnt=0; $chkd=array();
-					foreach ($_POST['checked'] as $key) {
-						$new[$key]='* '.$new[$key];
-						$val = '';
-						if ($transLangCode)
-							$val=$this->translate_lib->setLang('en', $transLangCode)
-								->translate($orig[$key]);
-						if ($val) {
-							$new[$key]=$val;
-							$cnt+=1;
-						}
-						else {
-							$errcnt+=1;
-							$chkd[]=$key;
-						}
-						if ($errcnt>=5 && $cnt==0) break;
-					}
-					if ($errcnt==0)
-						Template::set_message($cnt.' '.lang('tr_translate_success'), 'success');
-					else if ($cnt>0)
-						Template::set_message($cnt.' '.sprintf(lang('tr_translate_part_success'),$errcnt), 'info');
-					else
-						Template::set_message(lang('tr_translate_failed'), 'error');
-				}
-				Template::set('chkd', $chkd);
-				Template::set('orig', $orig);
-				Template::set('new', $new);
-				Template::set('lang_file', $langFile);
-					
-				Template::set('orig_lang', $origLang);
-				Template::set('trans_lang', $transLang);
-				Template::set('toolbar_title', "{$langFile}: " . sprintf(lang('tr_translate_title'), ucfirst($transLang)));
-				Template::render();
-				return;
-				/* end translate */
-			}
 			// Save the file...
-			else if (isset($_POST['save'])) {
+			if (isset($_POST['save'])) {
+                // If the file saves successfully, redirect to the index
 				if (save_lang_file($langFile, $transLang, $_POST['lang'])) {
 					Template::set_message(lang('tr_save_success'), 'success');
 					redirect(SITE_AREA . "/developer/translate/index/{$transLang}");
@@ -170,17 +120,68 @@ class Developer extends Admin_Controller
 
 				Template::set_message(lang('tr_save_fail'), 'error');
 			}
-			
+
 			// Get the lang file
-			$orig = load_lang_file($langFile, $origLang);
-			$new  = load_lang_file($langFile, $transLang);
+            $orig = load_lang_file($langFile, $origLang);
+            $new = $transLang ? load_lang_file($langFile, $transLang) : $orig;
+
+            // Translate
+			if (isset($_POST['translate']) && is_array($_POST['checked'])) {
+				if (isset($_POST['lang'])) {
+					foreach ($_POST['lang'] as $key => $val) {
+                        $new[$key] = $val;
+					}
+                }
+
+				if ($transLang) {
+					$this->load->config('langcodes');
+					$codes = $config['translate']['codes']['google'];
+					$transLangCode = isset($codes[$transLang]) ? $codes[$transLang] : '';
+                    $origLangCode  = isset($codes[$origLang]) ? $codes[$origLang] : 'en';
+
+					$errcnt = 0;
+                    $cnt = 0;
+					$this->load->library('translate_lib');
+
+                    // Attempt to translate each of the selected values
+					foreach ($_POST['checked'] as $key) {
+						$new[$key] = '* ' . $new[$key];
+						$val = '';
+						if ($transLangCode) {
+							$val = $this->translate_lib->setLang($origLangCode, $transLangCode)
+                                                       ->translate($orig[$key]);
+                        }
+						if ($val) {
+							$new[$key] = $val;
+							$cnt++;
+						} else {
+							$errcnt++;
+							$chkd[] = $key;
+						}
+
+                        // Give up if 5 errors occur without any successful
+                        // attempts, as this may imply network or other issues
+						if ($errcnt >= 5 && $cnt == 0) {
+                            break;
+                        }
+					}
+
+					if ($errcnt == 0) {
+						Template::set_message($cnt . ' ' . lang('tr_translate_success'), 'success');
+					} elseif ($cnt > 0) {
+						Template::set_message($cnt . ' ' . sprintf(lang('tr_translate_part_success'), $errcnt), 'info');
+					} else {
+						Template::set_message(lang('tr_translate_failed'), 'error');
+					}
+				}
+			}
 
 			Template::set('orig', $orig);
 			Template::set('new', $new);
 			Template::set('lang_file', $langFile);
 		}
 
-		Template::set('chkd', array()); 
+		Template::set('chkd', $chkd);
 		Template::set('orig_lang', $origLang);
 		Template::set('trans_lang', $transLang);
 		Template::set('toolbar_title', "{$langFile}: " . sprintf(lang('tr_translate_title'), ucfirst($transLang)));
@@ -248,4 +249,3 @@ class Developer extends Admin_Controller
 	}
 }
 /* /bonfire/modules/translate/controllers/developer.php */
-?>

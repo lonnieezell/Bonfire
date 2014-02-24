@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
 $lang['tr_translate_title'] = 'Traduire à % s';
 $lang['tr_no_modules'] = 'Pas Modules trouvés avec les fichiers de langue .';

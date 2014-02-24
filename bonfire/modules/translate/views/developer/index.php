@@ -1,4 +1,3 @@
-
 <div class="well">
 	<?php echo form_open(current_url(), 'class="form-inline"'); ?>
 		<input type="hidden" name="new_lang" id="new_lang" value="" />
@@ -15,44 +14,62 @@
 <!-- Core -->
 <div class="admin-box">
 	<h3><?php echo lang('tr_core').' <span class="subhead">'.count($lang_files).' '.lang('bf_files').'</span>'; ?></h3>
-	<div class="row-fluid">
-			<?php
-			$linkUrl = site_url(SITE_AREA . "/developer/translate/edit/{$trans_lang}");
-			$cnt=1; $brk=round(count($lang_files)/3); 
-			foreach ($lang_files as $file) :
-				if ($cnt==1) echo '<div class="span4">';
-				$cnt+=1; ?>
-				<div><a href='<?php echo "{$linkUrl}/{$file}"; ?>'><?php e($file); ?></a></div>            
-			<?php
-				if ($cnt>$brk) {
-					echo '</div>';
-					$cnt=1;
-				}
-			?>
-			<?php endforeach; ?>
+    <?php
+    $linkUrl = site_url(SITE_AREA . "/developer/translate/edit/{$trans_lang}");
+    $cnt = 1;
+    $brk = 3;
+    foreach ($lang_files as $file) :
+        if ($cnt == 1) :
+    ?>
+    <div class="row-fluid">
+        <?php
+        endif;
+        $cnt++;
+        ?>
+		<a class='span4' href='<?php echo "{$linkUrl}/{$file}"; ?>'><?php e($file); ?></a>
+		<?php
+        if ($cnt > $brk) :
+        ?>
+    </div>
+    <?php
+            $cnt = 1;
+        endif;
+    endforeach;
+    if ($cnt != 1) :
+    ?>
 	</div>
+<?php endif; ?>
 </div>
 <!-- Modules -->
 <div class="admin-box">
 	<h3><?php echo lang('tr_modules').((isset($modules) && is_array($modules))?' <span class="subhead">'.count($modules).' '.lang('bf_files').'</span>':''); ?></h3>
-	<?php if (isset($modules) && is_array($modules) && count($modules)) :  ?>
-	<div class="row-fluid">
-			<?php
-			$linkUrl = site_url(SITE_AREA . "/developer/translate/edit/{$trans_lang}");
-			$cnt=1; $brk=round(count($modules)/3); 
-			foreach ($modules as $file) :
-				if ($cnt==1) echo '<div class="span4">';
-				$cnt+=1; ?>
-				<div><a href="<?php echo "{$linkUrl}/{$file}"; ?>"><?php e($file); ?></a></div>
-			<?php
-				if ($cnt>$brk) {
-					echo '</div>';
-					$cnt=1;
-				}
-			?>
-		<?php endforeach; ?>
-	</div>
-	<?php else : ?>
+	<?php
+    if (isset($modules) && is_array($modules) && count($modules)) :
+        $linkUrl = site_url(SITE_AREA . "/developer/translate/edit/{$trans_lang}");
+        $cnt = 1;
+        $brk = 3;
+        foreach ($modules as $file) :
+            if ($cnt == 1) :
+    ?>
+    <div class="row-fluid">
+        <?php
+            endif;
+            $cnt++;
+        ?>
+        <a class='span4' href="<?php echo "{$linkUrl}/{$file}"; ?>"><?php e($file); ?></a>
+        <?php if ($cnt > $brk) : ?>
+    </div>
+    <?php
+                $cnt = 1;
+            endif;
+        endforeach;
+        if ($cnt != 1) :
+        ?>
+    </div>
+	<?php
+        endif;
+    else :
+    ?>
 	<div class="alert alert-info fade in">
 		<a class="close" data-dismiss="alert">&times;</a>
 		<?php echo lang('tr_no_modules'); ?>
