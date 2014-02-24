@@ -29,6 +29,7 @@ New Features:
 
 
 Closes Issues:
+* #709 - Language entriy is now created when creating a new context
 * #983 - Assets::js() creates invalid path when base_url is set to a directory
 * #982 - MY_Security renamed to BF_Security
 * #975 - BF_Model->update(): check validation result before continuing with update
