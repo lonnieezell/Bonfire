@@ -141,6 +141,8 @@ $lang['bf_users']				= 'Users';
 $lang['bf_description']			= 'Description';
 $lang['bf_email']				= 'Email';
 $lang['bf_user_settings']		= 'My Profile';
+$lang['bf_select_state'] 		= 'Select State';
+$lang['bf_select_no_state'] 	= 'No State Available';
 
 //--------------------------------------------------------------------
 // !
