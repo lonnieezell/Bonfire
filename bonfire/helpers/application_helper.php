@@ -127,13 +127,13 @@ if ( ! function_exists('module_folders'))
 	 * Returns an array of the folders that modules are allowed to be stored in.
 	 * These are set in *bonfire/application/third_party/MX/Modules.php*.
 	 *
-	 * DEPRECATED in 0.7.1. Use Modules::folders() instead.
+	 * @deprecated since 0.7.1 Use Modules::folders() instead.
 	 *
 	 * @return array The folders that modules are allowed to be stored in.
 	 */
 	function module_folders()
 	{
-		return config_item('modules_locations');
+		return Modules::folders();
 	}
 }
 
@@ -144,7 +144,7 @@ if ( ! function_exists('module_list'))
 	/**
 	 * Returns a list of all modules in the system.
 	 *
-	 * DEPRECATED in 0.7.1. Use Modules::list() instead.
+	 * @deprecated since 0.7.1 Use Modules::list_modules() instead
 	 *
 	 * @param bool $exclude_core Whether to exclude the Bonfire core modules or not
 	 *
@@ -152,8 +152,8 @@ if ( ! function_exists('module_list'))
 	 */
 	function module_list($exclude_core=false)
 	{
-		return Modules::list_modules($exclude_core);
-	}
+        return Modules::list_modules($exclude_core);
+    }
 }
 
 //--------------------------------------------------------------------
@@ -163,7 +163,7 @@ if ( ! function_exists('module_controller_exists'))
 	/**
 	 * Determines whether a controller exists for a module.
 	 *
-	 * DEPRECATED in 0.7.1. Use Modules::controller_exists() instead.
+	 * @deprecated since 0.7.1 Use Modules::controller_exists() instead.
 	 *
 	 * @param $controller string The name of the controller to look for (without the .php)
 	 * @param $module string The name of module to look in.
@@ -172,7 +172,7 @@ if ( ! function_exists('module_controller_exists'))
 	 */
 	function module_controller_exists($controller=null, $module=null)
 	{
-		return Modules::controller_exists($controller, $module);
+        return Modules::controller_exists($controller, $module);
 	}
 }
 
@@ -183,7 +183,7 @@ if ( ! function_exists('module_file_path'))
 	/**
 	 * Finds the path to a module's file.
 	 *
-	 * DEPRECATED in 0.7.1. Use Modules::file_path() instead.
+	 * @deprecated since 0.7.1 Use Modules::file_path() instead.
 	 *
 	 * @param $module string The name of the module to find.
 	 * @param $folder string The folder within the module to search for the file (ie. controllers).
@@ -193,7 +193,7 @@ if ( ! function_exists('module_file_path'))
 	 */
 	function module_file_path($module=null, $folder=null, $file=null)
 	{
-		return Modules::file_path($module, $folder, $file);
+        return Modules::file_path($module, $folder, $file);
 	}
 }
 
@@ -204,7 +204,7 @@ if( ! function_exists('module_path'))
 	/**
 	 * Returns the path to the module and it's specified folder.
 	 *
-	 * DEPRECATED in 0.7.1. Use Modules::file_path() instead.
+	 * @deprecated since 0.7.1 Use Modules::path() instead.
 	 *
 	 * @param $module string The name of the module (must match the folder name)
 	 * @param $folder string The folder name to search for. (Optional)
@@ -213,7 +213,7 @@ if( ! function_exists('module_path'))
 	 */
 	function module_path($module=null, $folder=null)
 	{
-		return Modules::path($module, $folder);
+        return Modules::path($module, $folder);
 	}
 }
 
@@ -224,6 +224,8 @@ if ( ! function_exists('module_files'))
 	/**
 	 * Returns an associative array of files within one or more modules.
 	 *
+	 * @deprecated since 0.7.1 Use Modules::files() instead.
+	 *
 	 * @param $module_name string If not NULL, will return only files from that module.
 	 * @param $module_folder string If not NULL, will return only files within that folder of each module (ie 'views')
 	 * @param $exclude_core boolean Whether we should ignore all core modules.
@@ -232,7 +234,7 @@ if ( ! function_exists('module_files'))
 	 */
 	function module_files($module_name=null, $module_folder=null, $exclude_core=false)
 	{
-		return Modules::files($module_name, $module_folder, $exclude_core);
+        return Modules::files($module_name, $module_folder, $exclude_core);
 	}
 }
 
@@ -244,6 +246,8 @@ if ( ! function_exists('module_config'))
 	 * Returns the 'module_config' array from a modules config/config.php
 	 * file. The 'module_config' contains more information about a module,
 	 * and even provide enhanced features within the UI. All fields are optional
+	 *
+	 * @deprecated since 0.7.1 Use Modules::config() instead.
 	 *
 	 * @author Liam Rutherford (http://www.liamr.com)
 	 *
@@ -260,8 +264,6 @@ if ( ! function_exists('module_config'))
 	 * );
 	 * </code>
 	 *
-	 * DEPRECATED in 0.7.1. Use Modules::config() instead.
-	 *
 	 * @param $module_name string The name of the module.
 	 * @param $return_full boolean If true, will return the entire config array. If false, will return only the 'module_config' portion.
 	 *
@@ -269,7 +271,7 @@ if ( ! function_exists('module_config'))
 	 */
 	function module_config($module_name=null, $return_full=false)
 	{
-		return Modules::config($module_name, $return_full);
+        return Modules::config($module_name, $return_full);
 	}
 }
 

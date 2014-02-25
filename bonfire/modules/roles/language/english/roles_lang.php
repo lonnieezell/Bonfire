@@ -1,25 +1,27 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
+/**
+ * Roles Language File
+ *
+ * @package    Bonfire\Modules\Roles\Language\English
+ * @author     Bonfire Dev Team
+ * @link       http://cibonfire.com/docs/bonfire/roles_and_permissions
+ *
+ */
 
 $lang['role_intro']					= 'Roles allow you to define the abilities that a user can have.';
 $lang['role_manage']				= 'Manage User Roles';
@@ -62,3 +64,11 @@ $lang['matrix_insert_fail']			= 'There was a problem adding the permission for t
 $lang['matrix_delete_success']		= 'Permission removed from the role.';
 $lang['matrix_delete_fail']			= 'There was a problem deleting the permission for the role: ';
 $lang['matrix_auth_fail']			= 'Authentication: You do not have the ability to manage the access control for this role.';
+
+$lang['role_create_success']        = 'The role was successfully created.';
+$lang['role_create_error']          = 'There was a problem creating the role: ';
+$lang['role_delete_success']        = 'The role was successfully deleted.';
+$lang['role_delete_error']          = 'The role could not be deleted: ';
+$lang['role_edit_success']          = 'The role was successfully saved.';
+$lang['role_edit_error']            = 'There was a problem saving the role: ';
+$lang['role_invalid_id']            = 'Invalid Role ID.';

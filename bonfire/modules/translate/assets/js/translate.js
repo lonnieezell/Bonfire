@@ -47,6 +47,22 @@ $(document).ready(function(e){
 			// Apparently Safari needs this instead
 			return message;
 		});
+
+		/* Check All Feature */
+		$(".check-all-entries").click(function () {
+			$("div.entries input[type=checkbox]").attr('checked', $(this).is(':checked'));
+		});
+
+		$("button.gobottom").click(function (e) {
+			e.preventDefault();
+			$("html, body").animate({ scrollTop: $(document).height() }, 1000);
+		});
+
+		$("button.gotop").click(function (e) {
+			e.preventDefault();
+			$("html, body").animate({ scrollTop: 0 }, 1000);
+		});
+
 	}
 
 })

@@ -168,6 +168,24 @@
  */
 	// $assign_to_config['name_of_config_item'] = 'value of config item';
 
+        //--------------------------------------------------------------------
+        // CSRF ByPASS
+        //--------------------------------------------------------------------
+        //
+        // By default, Bonfire ships with CSRF protection set to ON for all
+        // forms in the system. We also highly encourage it's use for security
+        // reasons in your own applications. On rare occasions, you may need
+        // to bypass the CSRF protection for a controller, such as within
+        // an API where the request is coming from an external controller and
+        // no CSRF token would be available.
+        //
+        // The controllers currently must either be in the root controllers
+        // folder(NOT in a subfolder), or in a module.
+        //
+        // Example:
+        //      array( 'users', 'activities/activity')
+        //
+        $assign_to_config['csrf_ignored_controllers'] = array();
 
 
 // --------------------------------------------------------------------

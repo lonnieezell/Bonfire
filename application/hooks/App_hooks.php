@@ -102,6 +102,8 @@ class App_hooks
 	 */
 	public function save_requested()
 	{
+        global $RTR;
+
         // If the CI_Session class is not loaded, we might be called from
         // a controller that doesn't extend any of Bonfire's controllers.
         // In that case, we need to try to do this the old fashioned way
@@ -132,7 +134,24 @@ class App_hooks
                 }
             }
 
-            $_SESSION['requested_page'] = $uri;
+            // We need to weed out any of our ignored routes. Since these are done
+            // on the RAW routes, we'll grab the values from the defined routes and
+            // see if we can find them there.
+            $ruri = array_key_exists(trim($uri, '/ '), $RTR->routes) ? $RTR->routes[ trim($uri, '/ ') ] : rtrim($uri, '/ ');
+            $ruri = '/'. ltrim($ruri, '/');
+
+            // If it's not a page we're ignoring, then we'll
+            // save it into the session here since $this->session is not available.
+            // We'll grab it out in our Base_Controller, but any controllers
+            // extending from CI_Controller will need to grab the value themselves
+            // from $_SESSION.
+            if ( ! in_array($ruri, $this->ignore_pages))
+            {
+                $uri = $_SERVER['HTTP_HOST'] . $uri;
+                $uri = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 'https://' : 'http://') . $uri;
+
+                $_SESSION['requested_page'] = $uri;
+            }
             return;
 		}
 

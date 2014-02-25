@@ -30,7 +30,6 @@
  */
 class Activity_model extends BF_Model
 {
-
 	/**
 	 * Name of the table
 	 *
@@ -56,7 +55,7 @@ class Activity_model extends BF_Model
 	 *
 	 * @var bool
 	 */
-	protected $soft_deletes = TRUE;
+	protected $soft_deletes = true;
 
 	/**
 	 * The date format to use
@@ -74,7 +73,7 @@ class Activity_model extends BF_Model
 	 *
 	 * @var bool
 	 */
-	protected $set_created = TRUE;
+	protected $set_created = true;
 
 	/**
 	 * Set the modified time automatically on editing a record
@@ -83,7 +82,7 @@ class Activity_model extends BF_Model
 	 *
 	 * @var bool
 	 */
-	protected $set_modified = FALSE;
+	protected $set_modified = false;
 
 	//--------------------------------------------------------------------
 
@@ -98,28 +97,80 @@ class Activity_model extends BF_Model
 	 */
 	public function find_by_module($modules=array())
 	{
-		if (empty($modules))
-		{
+		if (empty($modules)) {
 			logit('No module name given to `find_by_module`.');
-			return FALSE;
+			return false;
 		}
 
-		if (!is_array($modules))
-		{
+		if ( ! is_array($modules)) {
 			$modules = array($modules);
 		}
 
-		$this->db->where_in('module', $modules);
-		$this->db->where('activities.deleted', 0);
-
-		$this->db->select('activity_id, activities.user_id, activity, module, activities.created_on, display_name, username, email, last_login');
-		$this->db->join('users', 'activities.user_id = users.id', 'left');
+		$this->db->select(array(
+                            'activity_id',
+                            "{$this->table_name}.user_id",
+                            'activity',
+                            'module',
+                            "{$this->table_name}.{$this->created_field}",
+                            'display_name',
+                            'username',
+                            'email',
+                            'last_login',
+                         ))
+                 ->where_in('module', $modules)
+                 ->where("{$this->table_name}.{$this->deleted_field}", 0)
+                 ->join('users', "{$this->table_name}.user_id = users.id", 'left');
 
 		return $this->find_all();
+	}
 
-	}//end find_by_module()
+    /**
+     * Find the top modules
+     *
+     * @param Number $limit The number of modules to return
+     *
+     * @return Array    An array of results
+     */
+    public function findTopModules($limit = 5)
+    {
+        return $this->select(array(
+                                'module',
+                                'COUNT(module) AS activity_count',
+                            ))
+                    ->group_by('module')
+                    ->where("{$this->table_name}.{$this->deleted_field}", 0)
+                    ->limit($limit)
+                    ->order_by('activity_count', 'desc')
+                    ->find_all();
+    }
 
-	//--------------------------------------------------------------------
+    /**
+     * Find the top users
+     *
+     * @param Number $limit The number of users to return
+     *
+     * @return Array    An array of results
+     */
+    public function findTopUsers($limit = 5)
+    {
+        if ( ! class_exists('user_model')) {
+            $this->load->model('users/user_model');
+        }
+        $usersTable = $this->user_model->get_table();
+        $usersKey = $this->user_model->get_key();
+
+        return $this->select(array(
+                                'username',
+                                'user_id',
+                                'COUNT(user_id) AS activity_count',
+                            ))
+                    ->where("{$this->table_name}.{$this->deleted_field}", 0)
+                    ->join($usersTable, "{$this->table_name}.user_id = {$usersTable}.{$usersKey}", 'left')
+                    ->group_by('user_id')
+                    ->order_by('activity_count', 'desc')
+                    ->limit($limit)
+                    ->find_all();
+    }
 
 	/**
 	 * Logs a new activity.
@@ -134,26 +185,20 @@ class Activity_model extends BF_Model
 	 */
 	public function log_activity($user_id=null, $activity='', $module='any')
 	{
-		if (empty($user_id) || !is_integer($user_id) || $user_id == 0 )
-		{
-			Template::set_message('You must provide a numeric user id to log activity.','error');
-			return FALSE;
-		}
-		else if (empty($activity))
-		{
-			Template::set_message('Not enough information provided to insert activity.','error');
-			return FALSE;
+		if (empty($user_id) || ! is_integer($user_id)) {
+			Template::set_message('You must provide a numeric user id to log activity.', 'error');
+			return false;
 		}
 
-		$data = array(
+        if (empty($activity)) {
+			Template::set_message('Not enough information provided to insert activity.', 'error');
+			return false;
+		}
+
+		return $this->insert(array(
 			'user_id'	=> $user_id,
 			'activity'	=> $activity,
 			'module'	=> $module
-		);
-
-		return parent::insert($data);
-	}//end log_activity()
-
-	//--------------------------------------------------------------------
-
+		));
+	}
 }//end class

@@ -60,6 +60,14 @@ class Base_Controller extends CI_Controller
 	 */
 	protected $current_user = NULL;
 
+    /**
+     * If TRUE, this class requires the user to be logged in
+     * before accessing any method.
+     *
+     * @var bool
+     */
+    protected $require_authentication   = false;
+
 	//--------------------------------------------------------------------
 
 	/**
@@ -70,6 +78,13 @@ class Base_Controller extends CI_Controller
 	{
 		parent::__construct();
 
+        // Most likely, the requested page is saved in the $_SESSION here,
+        // so we need to grab that out and make it available to CI's session.
+        if (isset($_SESSION['requested_page']) && class_exists('CI_Session'))
+        {
+            $this->session->set_userdata( array('requested_page' => $_SESSION['requested_page']) );
+        }
+
 		$this->load->library('events');
 
 		// Since we don't want to autoload libraries in the
@@ -79,7 +94,10 @@ class Base_Controller extends CI_Controller
 
 		Events::trigger('before_controller', get_class($this));
 
-		// $this->set_current_user();
+        if ($this->require_authentication === true)
+        {
+            $this->authenticate();
+        }
 
 		// load the application lang file here so that the users language is known
 		$this->lang->load('application');
@@ -157,7 +175,7 @@ class Base_Controller extends CI_Controller
 	 */
 	protected function set_current_user()
 	{
-		if (class_exists('Auth'))
+		if (class_exists('Auth') && isset($this->auth))
 		{
 			// Load our current logged in user for convenience
 			if ($this->auth->is_logged_in())
@@ -170,6 +188,7 @@ class Base_Controller extends CI_Controller
 				if (isset($this->current_user->language))
 				{
 					$this->config->set_item('language', $this->current_user->language);
+                    $this->session->set_userdata('language', $this->current_user->language);
 				}
 			}
 
@@ -184,6 +203,26 @@ class Base_Controller extends CI_Controller
 
 	//--------------------------------------------------------------------
 
+    /**
+     * Performs the authentication of a class. At this point, simply
+     * ensures that a user is logged in. Any additional authentication
+     * will need to be done during the child classes.
+     *
+     * By having the authenticaiton handled here, we can call it in the
+     * Base_Controller's __construct() method and ensure that our user's
+     * chosen languages are used.
+     */
+    protected function authenticate()
+    {
+        // Load the Auth library before the parent constructor to ensure
+        // the current user's settings are honored by the parent
+        $this->load->library('users/auth');
+
+        // Make sure we're logged in.
+        $this->auth->restrict();
+
+        $this->set_current_user();
+    }
 
 }//end Base_Controller
 
