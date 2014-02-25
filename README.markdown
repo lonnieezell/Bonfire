@@ -53,4 +53,4 @@ The Bonfire Team is made up from developers around the world interested in makin
 - [Mat Whitney](https://github.com/mwhitneysdsu)
 - [Alan Jenkins](https://github.com/sourcejedi)
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ci-bonfire/bonfire/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ci-bonfire/bonfire/trend.png)](https://bitdeli.com/free "Bitdeli Badge").
