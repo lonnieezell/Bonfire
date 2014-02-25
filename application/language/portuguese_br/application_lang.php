@@ -140,6 +140,8 @@ $lang['bf_users'] = 'Usuários';
 $lang['bf_description'] = 'Descrição';
 $lang['bf_email'] = 'Email';
 $lang['bf_user_settings'] = 'Meu perfil';
+$lang['bf_select_state'] = 'Selecione o Estado';
+$lang['bf_select_no_state'] = 'Nenhum estado disponível';
 
 //--------------------------------------------------------------------
 // !

@@ -7,7 +7,7 @@ var addressStates = <?php echo json_encode(config_item('address.states')); ?>,
         var selectedCountry = $(countrySelect).val(),
             selectedOption = '<?php echo $state_value; ?>',
             selectedStates,
-            options = '<option value="">Select State</option>';
+            options = '<option value=""><?php echo lang('bf_select_state')?></option>';
 
         if (typeof addressStates[selectedCountry] != 'undefined') {
             selectedStates = addressStates[selectedCountry];
@@ -19,7 +19,7 @@ var addressStates = <?php echo json_encode(config_item('address.states')); ?>,
                 options += '>' + selectedStates[i] + '</option>';
             }
         } else {
-            options = '<option value="-">No State Available</option>';
+            options = '<option value="-"><?php echo lang('bf_select_no_state')?></option>';
         }
 
         $('#<?php echo $state_name; ?>').html(options);
