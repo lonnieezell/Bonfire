@@ -38,3 +38,39 @@
 .module-builder #field_numbers .controls {
     padding-top: 5px;
 }
+
+/* Styles modified by Lorenzo Sanzari (ulisse73@quipo.it) */
+
+.faded {
+	opacity: .60;
+}
+.faded:hover,
+.faded.faded-focus,
+.mb_show_advanced:focus,
+.mb_show_advanced:hover,
+.mb_show_advanced_rules:focus,
+.mb_show_advanced_rules:hover {
+	opacity: 1;
+	color: black;
+}
+a.mb_show_advanced_rules:hover {
+	text-decoration: none;
+}
+.body legend {
+	cursor: pointer;
+}
+.mb_advanced {
+	display: none;
+}
+fieldset {
+	margin-top: 0;
+}
+.alert span.error {
+    display: block;
+}
+a.mb_show_advanced,a.mb_show_advanced_rules{
+    color: #f00;
+    font-weight: bold;
+    font-size: 1em;
+}
+

@@ -21,16 +21,6 @@
 	THE SOFTWARE.
 */
 
-/**
- * Activities Language File (Italian)
- *
- * @package     Bonfire\Modules\Activities\Language\Italian
- * @author      Lorenzo Sanzari (ulisse73@quipo.it)
- * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license     http://opensource.org/licenses/MIT
- * @link        http://cibonfire.com/docs/builder
- */
-
 $lang['activity_home'] = 'Home';
 $lang['activity_title'] = 'Attività sito';
 $lang['activity_own'] = 'Il tuo';
@@ -49,7 +39,7 @@ $lang['activity_all_dates'] = 'In qualsiasi momento';
 $lang['activity_filter'] = 'Filtro';
 $lang['activity_filter_head'] = 'Filtra attività';
 $lang['activity_filter_note'] = 'Mostra attività %s selezionate %s';
-$lang['activity_view'] = 'Visualizza %s <b>$s</b>';
+$lang['activity_view'] = 'Visualizza %s <b>%s</b>';
 $lang['activity_delete_own_confirm'] = 'Sei sicuro di voler cancellare i tuoi log di attività?';
 $lang['activity_delete_user_confirm'] = 'Sei sicuro di voler cancellare i log di per l\'utente specificato?';
 $lang['activity_delete_module_confirm'] = 'Sei sicuro di voler cancellare i log di per il modulo specificato?';
@@ -71,7 +61,7 @@ $lang['activity_delete_confirm'] = 'Sei sicuro?';
 $lang['activity_delete_warning'] = 'Questo cancellerà il log attività registrato precedentemente.';
 $lang['activity_restricted'] = 'Autorizzazione richiesta. Spiacenti, non hai i permessi necessari per eseguire questo compito.';
 $lang['activity_nothing'] = 'Nessun record trovato. Niente da eliminare.';
-$lang['activity_deleted'] = '$d records cancellati.';
+$lang['activity_deleted'] = '%d records cancellati.';
 $lang['activity_top_modules'] = 'Top 5 Moduli attivi';
 $lang['activity_top_users'] = 'Top 5 Utenti attivi';
 $lang['activity_no_top_modules'] = 'Nessuna attività trovata per il modulo.';

@@ -259,6 +259,7 @@ class Developer extends Admin_Controller
      */
     public function delete()
     {
+	
         // If there's no module to delete, redirect
         $module_name = $this->input->post('module');
         if (empty($module_name)) {
@@ -293,8 +294,8 @@ class Developer extends Admin_Controller
 
         // Undo any permissions that exist, from the roles as well
         if ( ! empty($permissionIds)) {
-            foreach ($permissionIds as $permissionId) {
-                $this->permission_model->delete($permissionId);
+            foreach ($permissionIds as $obj) {
+                $this->permission_model->delete($obj->permission_id);
             }
         }
 

@@ -74,10 +74,10 @@ class Modulebuilder
      * Array of language files to be used for the modules built
      *
      * @access  private
-     * 
+     *
      * @var array
      */
-    private $languages_available = array('english', 'portuguese_br');
+    private $languages_available = array('english', 'portuguese_br','italian');
 
 
     //--------------------------------------------------------------------
@@ -147,6 +147,15 @@ class Modulebuilder
 
         // build the files
         $module_file_name = strtolower(preg_replace("/[ -]/", "_", $module_name));
+	/**
+	 * Connector controller building (if ElRte/ElFinder editor is used)
+	 *
+	 * @author Lorenzo Sanzari (ulisse73@quipo.it)
+	 */
+	$texteditor = $this->CI->input->post('textarea_editor');
+	if($texteditor == 'elrte') $content['controllers']['connector'] = $this->CI->load->view('files/connector_controller', NULL, TRUE);
+	////////////////////////////////////////////////////////////////////////////////
+
         foreach( $contexts as $key => $context_name) {
             // controller
             $public_context = FALSE;
