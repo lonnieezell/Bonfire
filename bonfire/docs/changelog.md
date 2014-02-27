@@ -18,6 +18,7 @@ Additional Changes:
 * The module_* methods in the application_helper file have been moved to the Modules class. The application_helper methods are still there but are considered deprecated.
 * Many improvements to the Brazilian Portugeuse language handling.
 * Improved support for translations in the Builder.
+* Removed Settings related to the previously removed Updates module
 
 
 New Features:
@@ -29,7 +30,7 @@ New Features:
 
 
 Closes Issues:
-* #709 - Language entriy is now created when creating a new context
+* #709 - Language entry is now created when creating a new context
 * #983 - Assets::js() creates invalid path when base_url is set to a directory
 * #982 - MY_Security renamed to BF_Security
 * #975 - BF_Model->update(): check validation result before continuing with update

@@ -95,12 +95,6 @@ $lang['bf_action_ban'] = 'Blocca';
 //--------------------------------------------------------------------
 // ! SETTINGS LIB
 //--------------------------------------------------------------------
-$lang['bf_do_check'] = 'Verifica aggiornamenti?';
-$lang['bf_do_check_edge'] = 'Deve essere abilitato per vedere anche gli aggiornamenti importanti.';
-
-$lang['bf_update_show_edge'] = 'Vedi aggiornamenti importanti?';
-$lang['bf_update_info_edge'] = 'Lasciare deselezionata per controllare solo aggiornamenti taggati come nuovi. Verificare eventuali nuovi commit al repository ufficiale.';
-
 $lang['bf_ext_profile_show'] = 'Gli accounts utente hanno un profilo esteso?';
 $lang['bf_ext_profile_info'] = 'Seleziona "Profili estesi" per avere la disponibilità di meta-dati aggiuntivi nel profilo (WIP), omettendo alcuni campi bonfire di default (ad esempio: indirizzo).';
 

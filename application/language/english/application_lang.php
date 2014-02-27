@@ -95,12 +95,6 @@ $lang['bf_action_ban']			= 'Ban';
 //--------------------------------------------------------------------
 // ! SETTINGS LIB
 //--------------------------------------------------------------------
-$lang['bf_do_check']			= 'Check for updates?';
-$lang['bf_do_check_edge']		= 'Must be enabled to see bleeding edge updates as well.';
-
-$lang['bf_update_show_edge']	= 'View bleeding edge updates?';
-$lang['bf_update_info_edge']	= 'Leave unchecked to only check for new tagged updates. Check to see any new commits to the official repository.';
-
 $lang['bf_ext_profile_show']	= 'Does User accounts have extended profile?';
 $lang['bf_ext_profile_info']	= 'Check "Extended Profiles" to have extra profile meta-data available option(wip), omiting some default bonfire fields (eg: address).';
 
