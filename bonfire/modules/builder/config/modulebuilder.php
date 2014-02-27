@@ -45,3 +45,9 @@ $config['modulebuilder']['primary_key_field'] = 'id';
 $config['modulebuilder']['form_error_delimiters'] = array(
     '<span class="error">', '</span>'
 );
+
+$config['modulebuilder']['languages_available'] = array(
+    'english',
+    'portuguese_br',
+    'spanish_am',
+);

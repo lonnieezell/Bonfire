@@ -70,6 +70,12 @@ class Modulebuilder
         $this->CI = &get_instance();
         $this->CI->load->config('modulebuilder');
         $this->options = $this->CI->config->item('modulebuilder');
+        if ( ! empty($this->options['languages_available'])
+            && is_array($this->options['languages_available'])
+           ) {
+            $this->languages_available = $this->options['languages_available'];
+        }
+
         $this->files = array(
             'model'      => 'myform_model',
             'view'       => 'myform_view',
