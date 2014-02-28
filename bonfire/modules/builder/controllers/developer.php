@@ -58,12 +58,6 @@ class Developer extends Admin_Controller
             $this->form_validation->set_error_delimiters($this->options['form_error_delimiters'][0], $this->options['form_error_delimiters'][1]);
         }
 
-        // @todo load file helper only where it is used
-        $this->load->helper('file');
-
-        // @todo load modulebuilder library only where it is used
-        $this->load->library('modulebuilder');
-
         Assets::add_module_css('builder', 'builder.css');
         Assets::add_module_js('builder', 'modulebuilder.js');
 
@@ -172,75 +166,39 @@ class Developer extends Admin_Controller
 
         // Validation failed
         if ($this->validate_form($this->field_total) == false) {
-            $this->load->model('roles/role_model');
-        	$this->role_model->select(array(
-                                        'role_id',
-                                        'role_name',
-                                     ))
-                             ->where('deleted', 0)
-                             ->order_by('role_name');
-
-            Template::set('field_numbers', range(0, 20));
-            Template::set('field_total', $this->field_total);
-            Template::set('form_action_options', $this->options['form_action_options']);
-            Template::set('form_error', isset($_POST['build']));
-            Template::set('roles', $this->role_model->as_array()->find_all());
-            Template::set('validation_limits', $this->options['validation_limits']);
-            Template::set('validation_rules', $this->options['validation_rules']);
-
-            Template::set_view('developer/modulebuilder_form');
+            // Display the modulebuilder_form
+            $this->prepareModuleForm($this->field_total, isset($_POST['build']));
         }
         // Validation Passed, Use existing DB, need to detect the fields
         elseif ($this->input->post('module_db') == 'existing' && $this->field_total == 0) {
             // If the table name includes the prefix, remove the prefix
             $_POST['table_name'] = preg_replace("/^".$this->db->dbprefix."/", "", $this->input->post('table_name'));
-            $num_fields = 0;
 
             // Read the fields from the db table and pass them back to the form
             $table_fields = $this->table_info($this->input->post('table_name'));
-            if (is_array($table_fields)) {
-                $num_fields = count($table_fields);
-            }
+            $num_fields   = is_array($table_fields) ? count($table_fields) : 0;
 
-            if ($num_fields > 0) {
-                // $num_fields includes the primary key, field_total doesn't
-                Template::set('field_total', $num_fields - 1);
-            } else {
-                Template::set('field_total', $this->field_total);
-            }
+            // $num_fields includes the primary key, field_total doesn't
+            $fieldTotal = $num_fields > 0 ? $num_fields - 1 : $this->field_total;
+            $formError  = false;
 
+            // If the table wasn't found, log/set an error message
             if ( ! empty($_POST) && $num_fields == 0) {
-                Template::set('form_error', true);
-
+                $formError = true;
                 $error_message = lang('mb_module_table_not_exist');
                 log_message('error', "ModuleBuilder: {$error_message}");
                 Template::set('error_message', $error_message);
-                unset($error_message);
-            } else {
-                Template::set('form_error', false);
             }
 
-            $this->load->model('roles/role_model');
-        	$this->role_model->select(array(
-                                        'role_id',
-                                        'role_name',
-                                     ))
-                             ->where('deleted', 0)
-                             ->order_by('role_name');
-
             Template::set('existing_table_fields', $table_fields);
-            Template::set('field_numbers', range(0, 20));
-            Template::set('form_action_options', $this->options['form_action_options']);
-            Template::set('roles', $this->role_model->as_array()->find_all());
-            Template::set('validation_limits', $this->options['validation_limits']);
-            Template::set('validation_rules', $this->options['validation_rules']);
 
-            Template::set_view('developer/modulebuilder_form');
+            // Display the modulebuilder_form
+            $this->prepareModuleForm($fieldTotal, $formError);
         }
         // Validation passed and ready to proceed
         else {
             $this->build_module($this->field_total);
-            log_activity((integer) $this->current_user->id, lang('mb_act_create') . ': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
+            log_activity((int) $this->current_user->id, lang('mb_act_create') . ': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
 
             Template::set_view('developer/output');
         }
@@ -267,43 +225,82 @@ class Developer extends Admin_Controller
 
         $this->auth->restrict('Bonfire.Modules.Delete');
 
+        // Remove the module's data and permissions from the database
+        if ($this->deleteModuleData($module_name) === false) {
+            // Something went wrong while trying to delete the data
+            Template::set_message(lang('mb_delete_trans_false'), $this->db->error, 'error');
+
+            redirect(SITE_AREA . '/developer/builder');
+        }
+
+        // Data deleted successfully, now try to remove the files.
+        $this->load->helper('file');
+        if (delete_files(Modules::path($module_name), true)) {
+            @rmdir(Modules::path("{$module_name}/"));
+
+            log_activity((int) $this->auth->user_id(), lang('mb_act_delete') . ": {$module_name} : " . $this->input->ip_address(), 'builder');
+            Template::set_message(lang('mb_delete_success'), 'success');
+        } else {
+            // Database removal succeeded, but the files may still be present
+            Template::set_message(lang('mb_delete_success') . lang('mb_delete_success_db_only'), 'info');
+        }
+
+        redirect(SITE_AREA . '/developer/builder');
+    }
+
+    //--------------------------------------------------------------------
+    // !PRIVATE METHODS
+    //--------------------------------------------------------------------
+
+    /**
+     * Delete the data for a module
+     *
+     * Removes migration information, permissions based on the name of the
+     * module, and any tables returned by the module's model's get_table()
+     * method.
+     *
+     * @todo Use the migration library instead of doing everything directly.
+     *
+     * @param string $moduleName The name of the module
+     *
+     * @return bool    true if the data is removed, false on error
+     */
+    private function deleteModuleData($moduleName)
+    {
         $this->load->dbforge();
         $this->db->trans_begin();
 
-        // Drop the schema - old Migration schema method
-        $module_name_lower = preg_replace("/[ -]/", "_", strtolower($module_name));
-        if ($this->db->field_exists($module_name_lower . '_version', 'schema_version')) {
-            $this->dbforge->drop_column('schema_version', $module_name_lower . '_version');
+        // Drop the migration record - old Migration schema method
+        $moduleNameLower = preg_replace("/[ -]/", "_", strtolower($moduleName));
+        if ($this->db->field_exists("{$moduleNameLower}_version", 'schema_version')) {
+            $this->dbforge->drop_column('schema_version', "{$moduleNameLower}_version");
         }
 
         // Drop the Migration record - new Migration schema method
         if ($this->db->field_exists('version', 'schema_version')) {
-            $this->db->delete('schema_version', array('type' => $module_name_lower . '_'));
+            $this->db->delete('schema_version', array('type' => $moduleNameLower . '_'));
         }
-
-        // Do this after the migrations since a properly-built module will drop
-        // its permissions and the tables for its model(s) in the migrations
 
         // Get any permission ids
         $this->load->model('permissions/permission_model');
         $permissionKey = $this->permission_model->get_key();
         $permissionIds = $this->permission_model->select($permissionKey)
-                                                ->like('name', $module_name . '.', 'after')
+                                                ->like('name', $moduleName . '.', 'after')
                                                 ->find_all();
 
         // Undo any permissions that exist, from the roles as well
         if ( ! empty($permissionIds)) {
-            foreach ($permissionIds as $obj) {
-                $this->permission_model->delete($obj->permission_id);
+            foreach ($permissionIds as $row) {
+                $this->permission_model->delete($row->permission_id);
             }
         }
 
         // Check whether there is a model to drop (a model should have a table
         // which may require dropping)
-        $model_name = $module_name . '_model';
-        if (Modules::file_path($module_name, 'models', $model_name . '.php')) {
+        $modelName = "{$moduleName}_model";
+        if (Modules::file_path($moduleName, 'models', "{$modelName}.php")) {
             // Drop the table
-            $this->load->model($module_name . '/' . $model_name, 'mt');
+            $this->load->model("{$moduleName}/{$modelName}", 'mt');
             $mtTableName = $this->mt->get_table();
 
             // If the model has a table and it exists in the database, drop it
@@ -315,30 +312,87 @@ class Developer extends Admin_Controller
         // Complete the database transaction or roll it back
         if ($this->db->trans_status() === false) {
             $this->db->trans_rollback();
-            Template::set_message(lang('mb_delete_trans_false'), $this->db->error, 'error');
-        } else {
-            $this->db->trans_commit();
-
-            // Database was successful in deleting everything. Now try to get rid of the files.
-            $this->load->helper('file');
-            if (delete_files(Modules::path($module_name), true)) {
-                @rmdir(Modules::path($module_name.'/'));
-
-                log_activity((integer) $this->current_user->id, lang('mb_act_delete') . ": {$module_name} : " . $this->input->ip_address(), 'builder');
-                Template::set_message(lang('mb_delete_success'), 'success');
-            }
-            // Database removal succeeded, but the files may still be present
-            else {
-                Template::set_message(lang('mb_delete_success') . lang('mb_delete_success_db_only'), 'info');
-            }
+            return false;
         }
 
-        redirect(SITE_AREA . '/developer/builder');
+        $this->db->trans_commit();
+        return true;
     }
 
-    //--------------------------------------------------------------------
-    // !PRIVATE METHODS
-    //--------------------------------------------------------------------
+    /**
+     * Prepare the variables used for the modulebuilder_form and set the view
+     *
+     * @todo Allow configuration of defaultRoleWithFullAccess
+     *
+     * @todo Ideally the field type variables would be set at a higher level for
+     * consistent use throughout the builder
+     *
+     * @param int $fieldTotal The number of fields to add to the table
+     * @param bool $formError Set to true if an error has occurred on the form
+     *
+     * @return void
+     */
+    private function prepareModuleForm($fieldTotal, $formError)
+    {
+        $this->load->model('roles/role_model');
+        $this->role_model->select(array(
+                                    'role_id',
+                                    'role_name',
+                                 ))
+                         ->where('deleted', 0)
+                         ->order_by('role_name');
+
+        $boolFieldTypes = array('BIT', 'BOOL', 'TINYINT');
+        $listFieldTypes = array('ENUM', 'SET');
+        $textFieldTypes = array('TINYTEXT', 'MEDIUMTEXT', 'TEXT', 'LONGTEXT');
+
+        Template::set('boolFieldTypes', $boolFieldTypes);
+        Template::set('db_field_types', array(
+            'VARCHAR' 	 => 'VARCHAR',      'BIGINT' 	 => 'BIGINT',
+            'BINARY' 	 => 'BINARY',       'BIT' 		 => 'BIT',
+            'BLOB' 		 => 'BLOB',         'BOOL' 		 => 'BOOL',
+            'CHAR' 		 => 'CHAR',         'DATE' 		 => 'DATE',
+            'DATETIME' 	 => 'DATETIME',     'DECIMAL' 	 => 'DECIMAL',
+            'DOUBLE' 	 => 'DOUBLE',       'ENUM' 		 => 'ENUM',
+            'FLOAT' 	 => 'FLOAT',        'INT' 		 => 'INT',
+            'LONGBLOB' 	 => 'LONGBLOB',     'LONGTEXT' 	 => 'LONGTEXT',
+            'MEDIUMBLOB' => 'MEDIUMBLOB',   'MEDIUMINT'  => 'MEDIUMINT',
+            'MEDIUMTEXT' => 'MEDIUMTEXT',   'SET' 		 => 'SET',
+            'SMALLINT' 	 => 'SMALLINT',     'TEXT' 		 => 'TEXT',
+            'TIME' 		 => 'TIME',         'TIMESTAMP'  => 'TIMESTAMP',
+            'TINYBLOB' 	 => 'TINYBLOB',     'TINYINT' 	 => 'TINYINT',
+            'TINYTEXT' 	 => 'TINYTEXT',     'VARBINARY'  => 'VARBINARY',
+            'YEAR' 		 => 'YEAR',
+        ));
+        Template::set('defaultRoleWithFullAccess', $this->auth->role_id());
+        Template::set('field_numbers', range(0, 20));
+        Template::set('field_total', $fieldTotal);
+        Template::set('form_action_options', $this->options['form_action_options']);
+        Template::set('form_error', $formError);
+        Template::set('listFieldTypes', $listFieldTypes);
+        Template::set('roles', $this->role_model->as_array()->find_all());
+        Template::set('textarea_editors', array(
+            ''         => 'None',
+            'ckeditor' => 'CKEditor',
+            'xinha'    => 'Xinha',
+            'tinymce'  => 'TinyMCE',
+            'markitup' => 'MarkitUp!',
+        ));
+        Template::set('textFieldTypes', $textFieldTypes);
+        Template::set('truefalse', array(
+            'false' => 'False',
+            'true' => 'True',
+        ));
+        Template::set('validation_limits', $this->options['validation_limits']);
+        Template::set('validation_rules', $this->options['validation_rules']);
+        Template::set('view_field_types', array(
+            'input' 	=> 'INPUT',         'checkbox' 	=> 'CHECKBOX',
+            'password' 	=> 'PASSWORD',      'radio' 	=> 'RADIO',
+            'select' 	=> 'SELECT',        'textarea' 	=> 'TEXTAREA',
+        ));
+
+        Template::set_view('developer/modulebuilder_form');
+    }
 
     /**
      * Validate the modulebuilder form.
@@ -372,7 +426,7 @@ class Developer extends Admin_Controller
             if ($this->input->post('module_db') == 'new') {
                 $this->form_validation->set_rules("primary_key_field",'lang:mb_form_primarykey',"required|trim|xss_clean|alpha_dash");
                 $this->form_validation->set_rules("use_soft_deletes",'lang:mb_form_soft_deletes',"trim|xss_clean|alpha");
-                $this->form_validation->set_rules("soft_delete_field",'lang:mb_soft_delete_field',"trim|xss_clean|alpha");
+                $this->form_validation->set_rules("soft_delete_field",'lang:mb_soft_delete_field',"trim|xss_clean|alpha_dash");
                 $this->form_validation->set_rules("use_created",'lang:mb_form_use_created',"trim|xss_clean|alpha");
                 $this->form_validation->set_rules("created_field",'lang:mb_form_created_field',"trim|xss_clean|alpha_dash");
                 $this->form_validation->set_rules("use_modified",'lang:mb_form_use_modified',"trim|xss_clean|alpha");
@@ -504,7 +558,7 @@ class Developer extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	private function build_module($field_total=0)
+	private function build_module($field_total = 0)
 	{
 		$module_name			= $this->input->post('module_name');
 		$table_name				= strtolower(preg_replace("/[ -]/", "_", $this->input->post('table_name')));
@@ -532,9 +586,9 @@ class Developer extends Admin_Controller
 
 		// Make the variables available to the view file
 		$data['module_name']		= $module_name;
-		$data['module_name_lower']	= strtolower(preg_replace("/[ -]/", "_", $module_name));
 		$data['controller_name']	= preg_replace("/[ -]/", "_", $module_name);
-		$data['table_name']			= empty($table_name) ? strtolower(preg_replace("/[ -]/", "_", $module_name)) : $table_name;
+		$data['module_name_lower']  = strtolower($data['controller_name']);
+		$data['table_name']			= empty($table_name) ? $data['module_name_lower'] : $table_name;
 
 		$data = $data + $file_data;
 
@@ -546,7 +600,7 @@ class Developer extends Admin_Controller
 			$this->dbforge->add_column('schema_version', array(
 				$data['module_name_lower'] . '_version' => array(
 					'type'			=> 'INT',
-					'constraint'	=> 4,
+					'constraint'    => 4,
 					'null'			=> true,
 					'default'		=> 0,
 				),
@@ -565,6 +619,36 @@ class Developer extends Admin_Controller
 
 		Template::set($data);
 	}
+
+    /**
+     * Check that the Modules folder is writable
+     *
+     * @deprecated since 0.7.1 use checkWritable() instead
+     *
+     * @todo This method was marked private in the DocBlock but is public, since
+     * it is now deprecated, just need to ensure it is not used elsewhere before
+     * it is deleted.
+     *
+     * @return  bool
+     */
+    public function _check_writeable()
+    {
+        return $this->checkWritable();
+    }
+
+    /**
+     * Verify that the Modules folder is writable
+     *
+     * @return bool    true if the folder is writable, else false
+     */
+    private function checkWritable()
+    {
+        return is_writable($this->options['output_path']);
+    }
+
+    //--------------------------------------------------------------------------
+    // Form validation callbacks
+    //--------------------------------------------------------------------------
 
     /**
      * Custom Form Validation Callback Rule
@@ -593,32 +677,6 @@ class Developer extends Admin_Controller
             }
         }
         return true;
-    }
-
-    /**
-     * Check that the Modules folder is writable
-     *
-     * @deprecated since 0.7.1 use checkWritable() instead
-     *
-     * @todo This method was marked private in the DocBlock but is public, need
-     * to make sure it can be made private, then update the modifier in the
-     * method definition
-     *
-     * @return  bool
-     */
-    public function _check_writeable()
-    {
-        return $this->checkWritable();
-    }
-
-    /**
-     * Verify that the Modules folder is writable
-     *
-     * @return bool    true if the folder is writable, else false
-     */
-    private function checkWritable()
-    {
-        return is_writable($this->options['output_path']);
     }
 
     /**

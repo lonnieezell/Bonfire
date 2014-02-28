@@ -1,27 +1,5 @@
 <?php
 
-$truefalse = array(
-	'false' => 'False',
-	'true' => 'True',
-);
-
-// textarea_editor seems to have been removed...
-/*
-$textarea_editors = array(
-	''          => 'None',
-	'ckeditor'  => 'CKEditor',
-	'xinha'     => 'Xinha',
-	'tinymce'   => 'TinyMCE',
-	'markitup'  => 'MarkitUp!',
-);
- */
-
-/*
- * @todo Set $defaultRoleWithFullAccess from the controller and allow
- * configuration of this value
- */
-$defaultRoleWithFullAccess = $this->auth->role_id();
-
 $session_error = $this->session->flashdata('error');
 $validation_errors = validation_errors();
 
@@ -217,6 +195,16 @@ $validation_errors = validation_errors();
                     </div>
                 </div>
                 <div class="control-group mb_advanced">
+                    <label for="log_user" class="control-label block"><?php echo lang('mb_form_log_user'); ?></label>
+                    <div class="controls">
+                        <select name="log_user" id="log_user">
+                            <?php foreach ($truefalse as $val => $label) : ?>
+                            <option value="<?php echo $val; ?>"><?php echo $label; ?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group mb_advanced">
                     <label for="use_soft_deletes" class="control-label block"><?php echo lang('mb_form_soft_deletes'); ?></label>
                     <div class="controls">
                         <select name="use_soft_deletes" id="use_soft_deletes">
@@ -224,7 +212,22 @@ $validation_errors = validation_errors();
                             <option value="<?php echo $val; ?>"><?php echo $label; ?></option>
                             <?php endforeach;?>
                         </select>
-                        <input type="hidden" name="soft_delete_field" id="soft_delete_field" value="<?php echo lang('mb_soft_delete_field_ph'); ?>" />
+                    </div>
+                </div>
+                <div class="control-group mb_advanced<?php echo form_error('soft_delete_field') ? ' error' : ''; ?>">
+                    <label for="soft_delete_field" class="control-label block"><?php echo lang('mb_soft_delete_field'); ?></label>
+                    <div class="controls">
+                        <input name="soft_delete_field" id="soft_delete_field" type="text" value="<?php echo set_value('soft_delete_field', lang('mb_soft_delete_field_ph')); ?>" />
+                        <span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
+                        <span class="help-inline"><?php echo form_error('soft_delete_field'); ?></span>
+                    </div>
+                </div>
+                <div class="control-group mb_advanced<?php echo form_error('deleted_by_field') ? ' error' : ''; ?>">
+                    <label for="deleted_by_field" class="control-label block"><?php echo lang('mb_deleted_by_field'); ?></label>
+                    <div class="controls">
+                        <input name="deleted_by_field" id="deleted_by_field" type="text" value="<?php echo set_value('deleted_by_field', lang('mb_deleted_by_field_ph')); ?>" />
+                        <span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
+                        <span class="help-inline"><?php echo form_error('deleted_by_field'); ?></span>
                     </div>
                 </div>
                 <div class="control-group mb_advanced">
@@ -240,9 +243,17 @@ $validation_errors = validation_errors();
                 <div class="control-group mb_advanced<?php echo form_error('created_field') ? ' error' : ''; ?>">
                     <label for="created_field" class="control-label block"><?php echo lang('mb_form_created_field'); ?></label>
                     <div class="controls">
-                        <input name="created_field" id="created_field" type="text" value="<?php echo set_value("created_field", lang('mb_form_created_field_ph')); ?>" />
+                        <input name="created_field" id="created_field" type="text" value="<?php echo set_value('created_field', lang('mb_form_created_field_ph')); ?>" />
                         <span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
                         <span class="help-inline"><?php echo form_error('created_field'); ?></span>
+                    </div>
+                </div>
+                <div class="control-group mb_advanced<?php echo form_error('created_by_field') ? ' error' : ''; ?>">
+                    <label for="created_by_field" class="control-label block"><?php echo lang('mb_form_created_by_field'); ?></label>
+                    <div class="controls">
+                        <input name="created_by_field" id="created_by_field" type="text" value="<?php echo set_value('created_by_field', lang('mb_form_created_by_field_ph')); ?>" />
+                        <span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
+                        <span class="help-inline"><?php echo form_error('created_by_field'); ?></span>
                     </div>
                 </div>
                 <div class="control-group mb_advanced">
@@ -258,9 +269,17 @@ $validation_errors = validation_errors();
                 <div class="control-group mb_advanced<?php echo form_error('modified_field') ? ' error' : ''; ?>">
                     <label for="modified_field" class="control-label block"><?php echo lang('mb_form_modified_field'); ?></label>
                     <div class="controls">
-                        <input name="modified_field" id="modified_field" type="text" value="<?php echo set_value("modified_field", lang('mb_form_modified_field_ph')); ?>" />
+                        <input name="modified_field" id="modified_field" type="text" value="<?php echo set_value('modified_field', lang('mb_form_modified_field_ph')); ?>" />
                         <span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
                         <span class="help-inline"><?php echo form_error('modified_field'); ?></span>
+                    </div>
+                </div>
+                <div class="control-group mb_advanced<?php echo form_error('modified_by_field') ? ' error' : ''; ?>">
+                    <label for="modified_by_field" class="control-label block"><?php echo lang('mb_form_modified_by_field'); ?></label>
+                    <div class="controls">
+                        <input name="modified_by_field" id="modified_by_field" type="text" value="<?php echo set_value('modified_by_field', lang('mb_form_modified_by_field_ph')); ?>" />
+                        <span class="help-inline match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
+                        <span class="help-inline"><?php echo form_error('modified_by_field'); ?></span>
                     </div>
                 </div>
                 <?php
@@ -301,48 +320,6 @@ $validation_errors = validation_errors();
             ?>
             <div id="all_fields">
                 <?php
-                // Set the arrays outside the loop
-                $view_field_types = array(
-                    'input' 	=> 'INPUT',
-                    'checkbox' 	=> 'CHECKBOX',
-                    'password' 	=> 'PASSWORD',
-                    'radio' 	=> 'RADIO',
-                    'select' 	=> 'SELECT',
-                    'textarea' 	=> 'TEXTAREA',
-                );
-
-                $db_field_types = array(
-                    'VARCHAR' 		=> 'VARCHAR',
-                    'BIGINT' 		=> 'BIGINT',
-                    'BINARY' 		=> 'BINARY',
-                    'BIT' 			=> 'BIT',
-                    'BLOB' 			=> 'BLOB',
-                    'BOOL' 			=> 'BOOL',
-                    'CHAR' 			=> 'CHAR',
-                    'DATE' 			=> 'DATE',
-                    'DATETIME' 		=> 'DATETIME',
-                    'DECIMAL' 		=> 'DECIMAL',
-                    'DOUBLE' 		=> 'DOUBLE',
-                    'ENUM' 			=> 'ENUM',
-                    'FLOAT' 		=> 'FLOAT',
-                    'INT' 			=> 'INT',
-                    'LONGBLOB' 		=> 'LONGBLOB',
-                    'LONGTEXT' 		=> 'LONGTEXT',
-                    'MEDIUMBLOB' 	=> 'MEDIUMBLOB',
-                    'MEDIUMINT' 	=> 'MEDIUMINT',
-                    'MEDIUMTEXT' 	=> 'MEDIUMTEXT',
-                    'SET' 			=> 'SET',
-                    'SMALLINT' 		=> 'SMALLINT',
-                    'TEXT' 			=> 'TEXT',
-                    'TIME' 			=> 'TIME',
-                    'TIMESTAMP' 	=> 'TIMESTAMP',
-                    'TINYBLOB' 		=> 'TINYBLOB',
-                    'TINYINT' 		=> 'TINYINT',
-                    'TINYTEXT' 		=> 'TINYTEXT',
-                    'VARBINARY' 	=> 'VARBINARY',
-                    'YEAR' 			=> 'YEAR',
-                );
-
                 // Loop to build fields
                 for ($count = 1; $count <= $field_total; $count++) :
                     $viewFieldLabel = "view_field_label{$count}";
@@ -380,24 +357,13 @@ $validation_errors = validation_errors();
                     </div>
                     <?php
                     $default_field_type = 'INPUT';
-
                     if (isset($existing_table_fields[$count])) {
-                        switch ($existing_table_fields[$count]['type']) {
-                            case 'TEXT':
-                                $default_field_type = 'textarea';
-                                break;
-
-                            case 'ENUM':
-                            case 'SET':
-                                $default_field_type = 'select';
-                                break;
-
-                            case 'TINYINT':
-                                $default_field_type = 'checkbox';
-                                break;
-
-                            default:
-                                break;
+                        if (in_array($existing_table_fields[$count]['type'], $textFieldTypes)) {
+                            $default_field_type = 'textarea';
+                        } elseif (in_array($existing_table_fields[$count]['type'], $listFieldTypes)) {
+                            $default_field_type = 'select';
+                        } elseif (in_array($existing_table_fields[$count]['type'], $boolFieldTypes)) {
+                            $default_field_type = 'checkbox';
                         }
                     }
 
@@ -406,11 +372,9 @@ $validation_errors = validation_errors();
 
                     $default_max_len = '';
                     if (isset($existing_table_fields[$count])
-                        && $existing_table_fields[$count]['type'] != 'TEXT'
-                        && $existing_table_fields[$count]['type'] != 'MEDIUMTEXT'
-                        && $existing_table_fields[$count]['type'] != 'LONGTEXT'
+                        && ! in_array($existing_table_fields[$count]['type'], $textFieldTypes)
                        ) {
-                        $default_max_len = ($existing_table_fields[$count]['type'] == 'ENUM' || $existing_table_fields[$count]['type'] == 'SET') ? $existing_table_fields[$count]['values'] : $existing_table_fields[$count]['max_length'];
+                        $default_max_len = in_array($existing_table_fields[$count]['type'], $listFieldTypes) ? $existing_table_fields[$count]['values'] : $existing_table_fields[$count]['max_length'];
                     }
                     ?>
                     <div class="control-group <?php echo form_error($dbFieldLength) ? 'error' : ''; ?>">

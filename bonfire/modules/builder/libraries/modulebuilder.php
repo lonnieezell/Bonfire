@@ -497,6 +497,19 @@ class Modulebuilder
         $data['primary_key_field']  = $primary_key_field;
         $data['table_name']         = $table_name;
 
+        $data['created_field']  = $this->CI->input->post('created_field') ?: 'created_on';
+        $data['delete_field']   = $this->CI->input->post('soft_delete_field') ?: 'deleted';
+        $data['modified_field'] = $this->CI->input->post('modified_field') ?: 'modified_on';
+
+        $data['created_by_field']   = $this->CI->input->post('created_by_field') ?: 'created_by';
+        $data['deleted_by_field']   = $this->CI->input->post('deleted_by_field') ?: 'deleted_by';
+        $data['modified_by_field']  = $this->CI->input->post('modified_by_field') ?: 'modified_by';
+
+        $data['logUser']        = $this->CI->input->post('log_user') ?: 'false';
+        $data['useCreated']     = $this->CI->input->post('use_created') ?: 'false';
+        $data['useModified']    = $this->CI->input->post('use_modified') ?: 'false';
+        $data['useSoftDeletes'] = $this->CI->input->post('use_soft_deletes') ?: 'false';
+
         return $this->CI->load->view('files/model', $data, true);
     }
 
@@ -589,6 +602,41 @@ class Modulebuilder
 
         $data['module_name']        = preg_replace("/[ -]/", "_", $module_name);
         $data['module_name_lower']  = strtolower($data['module_name']);
+
+        $data['created_field']  = $this->CI->input->post('created_field') ?: 'created_on';
+        $data['delete_field']   = $this->CI->input->post('soft_delete_field') ?: 'deleted';
+        $data['modified_field'] = $this->CI->input->post('modified_field') ?: 'modified_on';
+
+        $data['created_by_field']   = $this->CI->input->post('created_by_field') ?: 'created_by';
+        $data['deleted_by_field']   = $this->CI->input->post('deleted_by_field') ?: 'deleted_by';
+        $data['modified_by_field']  = $this->CI->input->post('modified_by_field') ?: 'modified_by';
+
+        $data['logUser']        = $this->CI->input->post('log_user') == 'true';
+        $data['useCreated']     = $this->CI->input->post('use_created') == 'true';
+        $data['useModified']    = $this->CI->input->post('use_modified') == 'true';
+        $data['useSoftDeletes'] = $this->CI->input->post('use_soft_deletes') == 'true';
+
+        $data['listFieldTypes'] = array('ENUM', 'SET');
+
+        // There are no doubt more types where a value/length isn't possible
+        // - needs investigating
+        $data['no_length'] = array(
+            'TEXT', 'TINYTEXT', 'MEDIUMTEXT', 'LONGTEXT',
+            'BLOB', 'TINYBLOB', 'MEDIUMBLOB', 'LONGBLOB',
+            'BOOL',
+            'DATE', 'DATETIME', 'TIME', 'TIMESTAMP',
+        );
+
+        // Types where a value/length is optional, will not output a constraint
+        // if the field is empty
+        $data['optional_length'] = array(
+            'INT', 'TINYINT', 'MEDIUMINT', 'BIGINT',
+            'YEAR',
+        );
+
+        $data['decimal_types'] = array(
+            'DECIMAL', 'DOUBLE', 'FLOAT',
+        );
 
         return $this->CI->load->view('files/db_migration', $data, true);
     }
