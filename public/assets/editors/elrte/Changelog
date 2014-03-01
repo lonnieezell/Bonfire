@@ -1,0 +1,131 @@
+2011-06-22  Troex Nevelin  <troex@fury.scancode.ru>
+
+	* elRTE (1.3):
+		- [feature] jQuery 1.6.1, jQuery UI 1.8.13
+		- [feature] file manager callback now used to insert link
+		- [feature] EOL in panels, next panel is started on new line
+		- [feature] better XHTML support
+		- [feature] ID attribute in class/style dialog
+		- [feature] .elrte('destroy') method to completely remove elRTE
+		- [bugfix] JavaScript code cut
+		- [bugfix] &nbsp; instead space in Opera 11+
+		- [bugfix] correctly return empty editor contents
+		- [bugfix] background image cut
+		- [bugfix] link dialog tabs "Popup" and "Even"
+		- [bugfix] image dialog size not detected in Safari 5
+		- [bugfix] image dialog broken with jQuery 1.6+
+		- [bugfix] image dialog case not preserved in title and alt attributes
+		- [bugfix] CSS fixes for Drupal 7
+		- [bugfix] colorpicker hide in IE7
+		- [translation] Catalan, Maria Consuelo Bravo <consolbravo@gmail.com>
+		- [translation] Danish, Steen Rabol <steen.rabol@gmail.com>
+		- [translation] German, Daniel Holzmann <d@velopment.at>
+		- [translation] Croatian, Guerilla Team <info@guerilla.com.hr>
+		- [translation] Slovak, Lubos Voros <lubos@simpledevelopment.sk>
+		- [translation] Vietnamese, babycntt
+
+
+2010-12-12  Troex Nevelin  <troex@fury.scancode.ru>
+
+	* elRTE (1.2):
+		- [feature] jQuery 1.4.4, jQuery UI 1.8.7
+		- [feature] iframe handle in code
+		- [feature] move images with drag & drop
+		- [feature] text nodes allowed
+		- [feature] structured mode highlighted
+		- [feature] width support in options
+		- [feature] compressed CSS
+		- [feature] source moved to github
+		- [feature] more usage examples, docs updated
+		- [bugfix] text cut on paste (better paste support)
+		- [bugfix] <br> between paragraphs
+		- [bugfix] Vimeo embed code
+		- [bugfix] anchor cannot be moved
+		- [bugfix] IE cannot init on empty node
+		- [bugfix] IE table problem
+		- [bugfix] IE link error
+		- [bugfix] IE context menu
+		- [bugfix] IE <hr>
+		- [bugfix] <meta http-equiv...> in body
+		- [translation] Brazillian Portuguese, Jairo Moreno <master.zion@gmail.com>
+		- [translation] Korean, DominicKesler <DominicKesler@gmail.com>
+		- [translation] Simplified Chinese, Lee Chenhwa <leechenhwa@gmail.com> 
+		- [translation] Thai, Anusuk Sangubon <jaideejung007@gmail.com>, http://www.thzaa.com
+		- [translation] Turkish, Özgür Çakırca <dijitalartist@gmail.com>
+
+
+2010-09-20  Troex Nevelin  <troex@fury.scancode.ru>
+
+	* elRTE (1.1):
+		- [feature] TAB now key inserts '\t' instead switch to next element in source view
+		- [feature] completed RTL support
+		- [feature] pagebreak button added
+		- [feature] smileys button added
+		- [bugfix] textarea uses ID instead NAME on post
+		- [bugfix] clean selected area on paste
+		- [bugfix] fullscreen mode in Firefox
+		- [bugfix] Google Maps insertion
+		- [bugfix] new Vimeo embed code
+		- [translation] French, Francois Mazerolle <fmaz008@gmail.com>
+		- [translation] Hungarian, Viktor Tamas <tamas.viktor@totalstudio.hu>
+		- [translation] Dutch, Kurt Aerts http://ilabsolutions.net/
+		- [translation] Polish, Andrzej Borowicz http://borowicz.info/
+		- [translation] Traditional Chinese, Tad <tad0616@gmail.com>
+		- [translation] Arabic, tawfek daghistani <tawfekov@gmail.com>
+		- [translation] Persian (Farsi), Saleh soozanchi <info@soozanchi.ir>
+		- [translation] Italian, Ugo Punzolo <sadraczerouno@gmail.com>
+		- [translation] Czech, Michal Marek <mich.marek@gmail.com>
+
+
+2010-08-25  Troex Nevelin  <troex@fury.scancode.ru>
+
+	* elRTE (1.0):
+		- [feature] update jQuery to 1.4.2 and UI to 1.8.4
+		- [feature] new filter, fixes #134, #140, #152
+		- [feature] added RTL/LTR button #111
+		- [feature] better placeholders (youtube, google maps, etc...)
+		- [feature] user-defined replacements
+		- [feature] better icons from famfamfam.org
+		- [bugfix] remove needless el-select param before post #155
+		- [bugfix] table cell properties #156
+		- [bugfix] textarea not posted without name #189
+		- [translation] Latvian, Uldis Plotiņš <uldis.plotins@gmail.com>
+		- [translation] Spanish, Ricardo Obregón <robregonm@gmail.com>
+		- [translation] Japanese, Tomoaki Yoshida <info@yoshida-studio.jp> http://yoshida-studio.jp/rakugakis/
+
+
+2010-03-29  Dmitry Levashov  <dio@std42.ru>
+
+	* elRTE (1.0rc4):
+		- [feature] better display image margin attributes
+		- [feature] new button "CSS" for class and style set
+		- [bugfix] better XHTML support
+		- [bugfix] more unused tags/attributes cleanup and replace
+		- [bugfix] restore selection after undo/redo
+		- [bugfix] links add/remove problem
+		- [bugfix] IE source window height
+		- [bugfix] embed flash problem
+
+
+2010-03-15  Troex Nevelin  <troex@fury.scancode.ru>
+
+	* elRTE (1.0rc3):
+		- [feature] Add Flash button
+		- [bugfix] no more conflict with mootools
+		- [bugfix] text alignment fix
+		- [bugfix] partly fixes block selection
+		- [bugfix] insert new row in table now works
+		- [bugfix] fixed undo/redo
+		- [bugfix] enter/shift+enter fixed in Safari
+		- [bugfix] jquery plugin now contains new commands (open, close, updateSource, val)
+
+
+2009-11-09  Dmitry Levashov  <dio@std42.ru>
+
+	* elRTE (1.0rc2):
+		- [bugfix] links and images urls converts to lower case
+		- [bugfix] link to anchor not work
+		- [bugfix] new table do not save margins
+		- [bugfix] invalid selection after insert node in Safari
+		- [bugfix] dialog windows under fullscreen editor
+
