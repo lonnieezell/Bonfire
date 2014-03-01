@@ -126,6 +126,12 @@ class Modulebuilder
         // Build the files
         $module_file_name = strtolower(preg_replace("/[ -]/", "_", $module_name));
 
+	//Connector controller building (if ElRte/ElFinder editor is used) /////////////
+	$texteditor = $this->CI->input->post('textarea_editor');
+	if($texteditor == 'elrte') $content['controllers']['connector'] = $this->CI->load->view('files/connector_controller', NULL, TRUE);
+	////////////////////////////////////////////////////////////////////////////////
+
+
         // Each context has a controller and a set of views
         foreach ($contexts as $key => $context_name) {
             // Controller
