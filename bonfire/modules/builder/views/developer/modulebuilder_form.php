@@ -3,6 +3,7 @@
 $session_error = $this->session->flashdata('error');
 $validation_errors = validation_errors();
 
+
 // Wrapped the whole page in a div.module-builder so module-level CSS won't mess
 // up other pages
 ?>
@@ -140,6 +141,18 @@ $validation_errors = validation_errors();
                         </select>
                      </div>
                 </div>
+
+		<div class="control-group mb_advanced">
+			<label class="control-label" for="textarea_editor"><?php echo lang('mb_form_text_ed'); ?></label>
+			<div class="controls">
+				<select name="textarea_editor" id="textarea_editor">
+					<?php foreach ($textarea_editors as $key=>$name):?>
+					<option value="<?php echo $key; ?>"><?php e($name); ?></option>
+					<?php endforeach;?>
+				</select>
+			 </div>
+		</div>
+
                 <?php
                 //--------------------------------------------------------------
                 // End of Module Details - Advanced Options
