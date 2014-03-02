@@ -158,7 +158,7 @@ form {
 	padding-right: 18px;
 }
 table tr td:first-child,
-table tr th:first-child: {
+table tr th:first-child {
 	padding-right: 0;
 }
 p {
