@@ -1,0 +1,110 @@
+        _   _____    _______   ______ 
+       | | |  __ \  |__   __| |  ____|
+  ___  | | | |__) |    | |    | |__   
+ / _ \ | | |  _  /     | |    |  __|  
+|  __/ | | | | \ \     | |    | |____ 
+ \___| |_| |_|  \_\    |_|    |______|
+
+
+
+Description
+===========
+
+Homepage: http://elrte.org
+E-mail:   dev@std42.ru
+
+elRTE is an open-source WYSIWYG HTML-editor written in JavaScript using
+jQuery UI. It features rich text editing, options for changing its appearance,
+style and many more. You can use it in any commercial or non-commercial
+projects. Main goal of the editor - simplify work with text and formating
+(HTML) on sites, blogs, forums and other online services.
+
+
+Usage
+=====
+
+ * Rich text editing, change its appearance and style
+ * Insert and manage various HTML elements with formatting (images, tables,
+   lists and etc.)
+ * View and edit HTML-code
+
+
+Features
+========
+
+ * Advanced work with CSS
+   - Setting indentation (margins, paddings) for images and table cells
+     (seperate for each direction)
+   - Controlling border properties (width, style, color) with convenient dialogs
+   - Writing element properties as CSS-style always when possible
+ * Lightweight, fast and easy to integrate
+ * Interface appearance is configured from one CSS file
+ * No templates used
+ * i18n. The editor can be easily localized into any language. More than 20
+   languages already included, check js/i18n directory
+ * Designed to work with elFinder (http://elrte.org/elfinder), but also can be
+   used with any other file manager
+ * Flexible for extensions
+ * Community supported
+
+
+Requirements
+============
+
+Modern browser. elRTE has been tested in Firefox 3.5+, Internet Explorer 7 & 8,
+Safari 5, Opera 10 and Chrome 6+
+
+
+Documentation
+=============
+
+http://elrte.org/redmine/projects/elrte/wiki
+
+
+Authors
+=======
+
+Chief developer: Dmitry "dio" Levashov <dio@std42.ru>
+Developer, tech support: Troex Nevelin <troex@fury.scancode.ru>
+Design: Valentin Razumnih
+RTL Support: Tawfek Daghistani <tawfekov@gmail.com>
+
+
+We hope our tools will be helpful for you.
+
+
+License:
+========
+
+elRTE is issued under a 3-clauses BSD license.
+elRTE uses and comes with jQuery and jQuery-UI witch are issued under
+MIT and GPL licenses.
+
+
+This software is available under a 3 clauses BSD license:
+
+Copyright (c) 2009-2011, Studio 42 Ltd.
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * Neither the name of the Studio 42 Ltd. nor the
+      names of its contributors may be used to endorse or promote products
+      derived from this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY Studio 42 Ltd. ''AS IS'' AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL Studio 42 Ltd. BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+

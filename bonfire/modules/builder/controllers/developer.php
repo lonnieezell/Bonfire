@@ -374,6 +374,7 @@ class Developer extends Admin_Controller
         Template::set('textarea_editors', array(
             ''         => 'None',
             'ckeditor' => 'CKEditor',
+	    'elrte'    => 'ElRte with ElFinder',
             'xinha'    => 'Xinha',
             'tinymce'  => 'TinyMCE',
             'markitup' => 'MarkitUp!',
@@ -389,6 +390,7 @@ class Developer extends Admin_Controller
             'input' 	=> 'INPUT',         'checkbox' 	=> 'CHECKBOX',
             'password' 	=> 'PASSWORD',      'radio' 	=> 'RADIO',
             'select' 	=> 'SELECT',        'textarea' 	=> 'TEXTAREA',
+	    'wysiwyg' 	=> 'VISUAL EDITOR (for db types: TEXT, MEDIUMTEXT, LONGTEXT)'
         ));
 
         Template::set_view('developer/modulebuilder_form');

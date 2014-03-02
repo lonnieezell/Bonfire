@@ -126,6 +126,12 @@ class Modulebuilder
         // Build the files
         $module_file_name = strtolower(preg_replace("/[ -]/", "_", $module_name));
 
+	//Connector controller building (if ElRte/ElFinder editor is used) /////////////
+	$texteditor = $this->CI->input->post('textarea_editor');
+	if($texteditor == 'elrte') $content['controllers']['connector'] = $this->CI->load->view('files/connector_controller', array('module_name_lower' => strtolower ($module_name)), TRUE);
+	////////////////////////////////////////////////////////////////////////////////
+
+
         // Each context has a controller and a set of views
         foreach ($contexts as $key => $context_name) {
             // Controller
@@ -175,7 +181,7 @@ class Modulebuilder
         // Did everything build correctly?
         if ($content['acl_migration'] == false || $content['config'] == false
             || $content['controllers'] == false || $content['views'] == false
-            || ($db_required != '' && (
+            || ($db_required != 'existing' && (
                 $content['model'] == false || $content['db_migration'] == false
            ))) {
             log_message('error', "The form was not built. There was an error with one of the build_() functions. Probably caused by total fields variable not being set");
