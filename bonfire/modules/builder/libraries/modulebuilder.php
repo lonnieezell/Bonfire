@@ -181,7 +181,7 @@ class Modulebuilder
         // Did everything build correctly?
         if ($content['acl_migration'] == false || $content['config'] == false
             || $content['controllers'] == false || $content['views'] == false
-            || ($db_required != '' && (
+            || ($db_required != 'existing' && (
                 $content['model'] == false || $content['db_migration'] == false
            ))) {
             log_message('error', "The form was not built. There was an error with one of the build_() functions. Probably caused by total fields variable not being set");
