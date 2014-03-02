@@ -23,6 +23,8 @@ class connector extends Admin_Controller {
      */
     public function __construct() {
 	parent::__construct();
+
+	\$this->module_config = Modules::config('{$module_name_lower}');
     }
 
 
@@ -36,7 +38,7 @@ class connector extends Admin_Controller {
     */
     public function index() {
 
-	\$user_dir = \$_SERVER['DOCUMENT_ROOT'] . '/my_uploads_folder/' . \$this->current_user->id . '/';
+	\$user_dir = \$_SERVER['DOCUMENT_ROOT'] . \$this->module_config['uploaded_dir_path'] . "/" . \$this->current_user->id . '/';
 
 	if (!is_dir(\$user_dir)) {
 	    @mkdir(\$user_dir, 0777);
@@ -49,7 +51,7 @@ class connector extends Admin_Controller {
 		array(
 		    'driver' => 'LocalFileSystem', // driver for accessing file system (REQUIRED)
 		    'path' => \$user_dir, // path to files, set as you want (REQUIRED)
-		    'URL' => '/../my_uploads_folder/' . \$this->current_user->id . '/', // URL to files, set as you want (REQUIRED)
+		    'URL' => \$this->module_config['uploaded_dir_path'] . "/" . \$this->current_user->id . '/', // URL to files, set as you want (REQUIRED)
 		    'accessControl' => 'access', // disable and hide dot starting files (OPTIONAL)
 		    'alias' => ucfirst(\$this->current_user->username) . ' Home',
 		    'tmbPath' => '.thumbs', // directory name for image thumbnails. Set to "" to avoid thumbnails generation
