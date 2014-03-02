@@ -128,7 +128,7 @@ class Modulebuilder
 
 	//Connector controller building (if ElRte/ElFinder editor is used) /////////////
 	$texteditor = $this->CI->input->post('textarea_editor');
-	if($texteditor == 'elrte') $content['controllers']['connector'] = $this->CI->load->view('files/connector_controller', NULL, TRUE);
+	if($texteditor == 'elrte') $content['controllers']['connector'] = $this->CI->load->view('files/connector_controller', array('module_name_lower' => strtolower ($module_name)), TRUE);
 	////////////////////////////////////////////////////////////////////////////////
 
 
