@@ -346,6 +346,7 @@ class Developer extends Admin_Controller
         $listFieldTypes = array('ENUM', 'SET');
         $textFieldTypes = array('TINYTEXT', 'MEDIUMTEXT', 'TEXT', 'LONGTEXT');
 
+        Template::set('availableContexts', config_item('contexts'));
         Template::set('boolFieldTypes', $boolFieldTypes);
         Template::set('db_field_types', array(
             'VARCHAR' 	 => 'VARCHAR',      'BIGINT' 	 => 'BIGINT',

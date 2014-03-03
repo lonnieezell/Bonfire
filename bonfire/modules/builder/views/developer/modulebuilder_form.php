@@ -93,12 +93,8 @@ $validation_errors = validation_errors();
                             <?php echo lang('mb_form_public'); ?>
                         </label>
                         <?php
-                        /*
-                         * @todo Pass the list of contexts from the controller
-                         * instead of using config_item() here
-                         */
                         // Build the checkboxes for each available Context
-                        foreach (config_item('contexts') as $context) :
+                        foreach ($availableContexts as $context) :
                         ?>
                         <label class="checkbox" for="contexts_<?php echo $context; ?>">
                             <input name="contexts[]" id="contexts_<?php echo $context; ?>" type="checkbox" value="<?php echo $context; ?>" checked="checked" />
