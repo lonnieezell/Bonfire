@@ -175,22 +175,21 @@ class Modulebuilder
         // Did everything build correctly?
         if ($content['acl_migration'] == false || $content['config'] == false
             || $content['controllers'] == false || $content['views'] == false
-            || ($db_required != '' && (
-                $content['model'] == false || $content['db_migration'] == false
-           ))) {
-            log_message('error', "The form was not built. There was an error with one of the build_() functions. Probably caused by total fields variable not being set");
-            $this->CI->session->set_flashdata('error', 'Wow! There was a problem igniting your form. It would be great if you could let me know what happened. Thanks.');
-            redirect();
-        }
+            || ($db_required != '' && $content['model'] == false)
+            || ($db_required == 'new' && $content['db_migration'] == false)
+           ) {
+            $data['error']  = true;
+            $data['error_msg'] = "The form was not built. There was an error with one of the build_() functions. Probably caused by total fields variable not being set";
+        } else {
+            // Write the files to disk
+            $write_status = $this->_write_files($module_file_name, $content, $table_name, $db_required);
 
-        // Write the files to disk
-        $write_status = $this->_write_files($module_file_name, $content, $table_name, $db_required);
-
-        $data['error'] = false;
-        if ( ! $write_status['status']) {
-            // Write failed
-            $data['error']      = true;
-            $data['error_msg']  = $write_status['error'];
+            $data['error'] = false;
+            if ( ! $write_status['status']) {
+                // Write failed
+                $data['error']      = true;
+                $data['error_msg']  = $write_status['error'];
+            }
         }
 
         // Make the variables available to the view file
