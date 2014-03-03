@@ -1,4 +1,5 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+
 /**
  * Bonfire
  *
@@ -6,141 +7,112 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
  * Base Controller
  *
- * This controller provides a controller that your controllers can extend
- * from. This allows any tasks that need to be performed sitewide to be
- * done in one place.
+ * A controller that your controllers can extend.
  *
- * Since it extends from MX_Controller, any controller in the system
- * can be used in the HMVC style, using modules::run(). See the docs
- * at: https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home
- * for more detail on the HMVC code used in Bonfire.
+ * This allows any tasks that need to be performed sitewide to be done in one 
  *
- * @package    Bonfire\Core\Controllers
- * @category   Controllers
+ * @package    Bonfire\Core\Controllers\Base_Controller
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- *
+ * @link       http://cibonfire.com/docs/bonfire/bonfire_controllers
  */
 class Base_Controller extends CI_Controller
 {
-
-
 	/**
-	 * Stores the previously viewed page's complete URL.
-	 *
-	 * @var string
+	 * @var string Stores the previously viewed page's complete URL.
 	 */
 	protected $previous_page;
 
 	/**
-	 * Stores the page requested. This will sometimes be
-	 * different than the previous page if a redirect happened
-	 * in the controller.
+	 * @var string Stores the page requested. 
 	 *
-	 * @var string
+	 * This will sometimes be different than the previous page if a redirect 
+	 * happened in the controller.
 	 */
 	protected $requested_page;
 
 	/**
-	 * Stores the current user's details, if they've logged in.
-	 *
-	 * @var object
+	 * @var object Stores the current user's details, if they've logged in.
 	 */
-	protected $current_user = NULL;
+	protected $current_user = null;
 
     /**
-     * If TRUE, this class requires the user to be logged in
-     * before accessing any method.
-     *
-     * @var bool
+     * @var bool If TRUE, this class requires the user to be logged in before
+	 * accessing any method.
      */
-    protected $require_authentication   = false;
+    protected $require_authentication = false;
 
 	//--------------------------------------------------------------------
 
 	/**
 	 * Class constructor
 	 *
+	 * @return void
 	 */
 	public function __construct()
 	{
 		parent::__construct();
 
-        // Most likely, the requested page is saved in the $_SESSION here,
-        // so we need to grab that out and make it available to CI's session.
-        if (isset($_SESSION['requested_page']) && class_exists('CI_Session'))
-        {
-            $this->session->set_userdata( array('requested_page' => $_SESSION['requested_page']) );
+        // Most likely, the requested page is saved in the $_SESSION here, so, 
+		// grab it and make it available to CI's session.
+        if (isset($_SESSION['requested_page']) && class_exists('CI_Session')) {
+            $this->session->set_userdata(array('requested_page' => $_SESSION['requested_page']));
         }
 
 		$this->load->library('events');
 
-		// Since we don't want to autoload libraries in the
-		// standard CI way to make things work for uninstalled apps,
-		// autoload our few libs here.
+		// To make things work for uninstalled apps, don't autoload libraries 
+		// in the standard CI way, autoload the libraries here.
 		$this->load->library('settings/settings_lib');
 
 		Events::trigger('before_controller', get_class($this));
 
-        if ($this->require_authentication === true)
-        {
+        if ($this->require_authentication === true) {
             $this->authenticate();
         }
 
-		// load the application lang file here so that the users language is known
+		// Load the lang file here, after the user's language is known
 		$this->lang->load('application');
 
-		/*
-			Performance optimizations for production environments.
-		*/
-		if (ENVIRONMENT == 'production')
-		{
-			// Saving Queries can vastly increase the memory usage, depending
-			// on your database usage.
-		    $this->db->save_queries = FALSE;
+		
+		// Performance optimizations for production environments.
+		if (ENVIRONMENT == 'production') {
+			// Saving queries can vastly increase the memory usage
+		    $this->db->save_queries = false;
 
-		    // With debugging information turned off, we can at times
-		    // continue on after db errors. Also turns off display
-		    // of any DB errors so we don't give any info to hackers.
-		    $this->db->db_debug 	= FALSE;
+		    // With debugging information turned off, at times it is possible to
+		    // continue on after db errors. Also turns off display of any DB
+		    // errors to reduce info available to hackers.
+		    $this->db->db_debug = false;
 
 		    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 		}
-
 		// Testing niceties...
-		else if (ENVIRONMENT == 'testing')
-		{
-			// Saving Queries can vastly increase the memory usage, depending
-			// on your database usage.
-			$this->db->save_queries = FALSE;
+		elseif (ENVIRONMENT == 'testing') {
+			// Saving Queries can vastly increase the memory usage
+			$this->db->save_queries = false;
 
 			$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
 		}
-
 		// Development niceties...
-		else if (ENVIRONMENT == 'development')
-		{
-			if ($this->settings_lib->item('site.show_front_profiler'))
-			{
-				// Profiler bar?
-				if ( ! $this->input->is_cli_request() AND ! $this->input->is_ajax_request())
-				{
+		else {
+			// Profiler bar?
+			if ($this->settings_lib->item('site.show_front_profiler')) {
+				if ( ! $this->input->is_cli_request()
+					&& ! $this->input->is_ajax_request()
+				   ) {
 					$this->load->library('Console');
-					$this->output->enable_profiler(TRUE);
+					$this->output->enable_profiler(true);
 				}
-
 			}
 
 			$this->load->driver('cache', array('adapter' => 'dummy'));
@@ -223,9 +195,6 @@ class Base_Controller extends CI_Controller
 
         $this->set_current_user();
     }
-
-}//end Base_Controller
-
-
+}
 /* End of file Base_Controller.php */
 /* Location: ./application/core/Base_Controller.php */

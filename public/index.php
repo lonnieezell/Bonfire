@@ -5,9 +5,9 @@
  * APPLICATION ENVIRONMENT
  *---------------------------------------------------------------
  *
- * You can load different configurations depending on your
- * current environment. Setting the environment also influences
- * things like logging and error reporting.
+ * You can load different configurations depending on your current environment.
+ * Setting the environment also influences things like logging and error
+ * reporting.
  *
  * This can be set to anything, but default usage is:
  *
@@ -18,7 +18,7 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-	define('ENVIRONMENT', 'development');
+define('ENVIRONMENT', 'development');
 
 /*
  *---------------------------------------------------------------
@@ -28,40 +28,50 @@
  * Different environments will require different levels of error reporting.
  * By default development will show errors but testing and live will hide them.
  */
+switch (ENVIRONMENT) {
+    case 'development':
+        error_reporting(E_ALL);
+        if ( ! ini_get('display_errors')) {
+            ini_set('display_errors', 1);
+        }
+        break;
 
-	switch (ENVIRONMENT)
-	{
-		case 'development':
-			error_reporting(E_ALL);
-			if (!ini_get('display_errors'))
-			{
-				ini_set('display_errors', 1);
-			}
-			break;
+    case 'testing':
+        // no break;
+    case 'production':
+        error_reporting(0);
+        break;
 
-		case 'testing':
-		case 'production':
-			error_reporting(0);
-			break;
-
-		default:
-			exit('The application environment is not set correctly.');
-	}
+    default:
+        exit('The application environment is not set correctly.');
+}
 
 /*
-|---------------------------------------------------------------
-| DEFAULT INI SETTINGS
-|---------------------------------------------------------------
-|
-| Necessary settings for a higher compatibility. Inspired by PyroCMS code.
-|
-*/
-	// PHP 5.3 requires this
-	if(ini_get('date.timezone') == '')
-	{
-		date_default_timezone_set('GMT');
-	}
-
+ *---------------------------------------------------------------
+ * DEFAULT INI SETTINGS
+ *---------------------------------------------------------------
+ *
+ * Necessary setting for PHP 5.3+ compatibility.
+ *
+ * Note: This now defaults to UTC instead of GMT if te date.timezone value is
+ * not set (PHP 5.4+), but on PHP 5.3 it may use the TZ environment variable or
+ * attempt to guess the timezone from the host operating system. It is
+ * recommended to set date.timezone to avoid this, or you can replace
+ * @date_default_timezone_get() below with 'UTC' or 'GMT', as desired.
+ *
+ * Inspired by PyroCMS and Composer code.
+ * @link https://www.pyrocms.com/ PyroCMS
+ * @link http://getcomposer.org/ Composer
+ */
+if (ini_get('date.timezone') == ''
+    && function_exists('date_default_timezone_set')
+   ) {
+    if (function_exists('date_default_timezone_get')) {
+        date_default_timezone_set(@date_default_timezone_get());
+    } else {
+        date_default_timezone_set('GMT');
+    }
+}
 
 /*
  *---------------------------------------------------------------
@@ -71,10 +81,8 @@
  * Simply change the first "path" variable, and the individual paths
  * will be set accordingly.
  */
-	$path = "..";
-
-
-	$bonfire_path = "${path}/bonfire";
+$path = "..";
+$bonfire_path = "${path}/bonfire";
 
 /*
  *---------------------------------------------------------------
@@ -86,7 +94,7 @@
  * as this file.
  *
  */
-	$system_path = "${path}/bonfire/codeigniter";
+$system_path = "${path}/bonfire/codeigniter";
 
 /*
  *---------------------------------------------------------------
@@ -102,7 +110,7 @@
  * NO TRAILING SLASH!
  *
  */
-	$application_folder = "${path}/application";
+$application_folder = "${path}/application";
 
 /*
  *---------------------------------------------------------------
@@ -118,7 +126,7 @@
  * NO TRAILING SLASH!
  *
  */
-	$view_folder = '';
+$view_folder = '';
 
 /*
  * --------------------------------------------------------------------
@@ -140,15 +148,15 @@
  * Un-comment the $routing array below to use this feature
  *
  */
-	// The directory name, relative to the "controllers" folder.  Leave blank
-	// if your controller is not in a sub-folder within the "controllers" folder
-	// $routing['directory'] = '';
+// The directory name, relative to the "controllers" folder.  Leave blank
+// if your controller is not in a sub-folder within the "controllers" folder
+// $routing['directory'] = '';
 
-	// The controller class file name.  Example:  Mycontroller.php
-	// $routing['controller'] = '';
+// The controller class file name.  Example:  Mycontroller.php
+// $routing['controller'] = '';
 
-	// The controller function you wish to be called.
-	// $routing['function']	= '';
+// The controller function you wish to be called.
+// $routing['function']	= '';
 
 
 /*
@@ -166,33 +174,31 @@
  * Un-comment the $assign_to_config array below to use this feature
  *
  */
-	// $assign_to_config['name_of_config_item'] = 'value of config item';
+// $assign_to_config['name_of_config_item'] = 'value of config item';
 
-        //--------------------------------------------------------------------
-        // CSRF ByPASS
-        //--------------------------------------------------------------------
-        //
-        // By default, Bonfire ships with CSRF protection set to ON for all
-        // forms in the system. We also highly encourage it's use for security
-        // reasons in your own applications. On rare occasions, you may need
-        // to bypass the CSRF protection for a controller, such as within
-        // an API where the request is coming from an external controller and
-        // no CSRF token would be available.
-        //
-        // The controllers currently must either be in the root controllers
-        // folder(NOT in a subfolder), or in a module.
-        //
-        // Example:
-        //      array( 'users', 'activities/activity')
-        //
-        $assign_to_config['csrf_ignored_controllers'] = array();
+//--------------------------------------------------------------------
+// CSRF ByPASS
+//--------------------------------------------------------------------
+//
+// By default, Bonfire ships with CSRF protection set to ON for all
+// forms in the system. We also highly encourage it's use for security
+// reasons in your own applications. On rare occasions, you may need
+// to bypass the CSRF protection for a controller, such as within
+// an API where the request is coming from an external controller and
+// no CSRF token would be available.
+//
+// The controllers currently must either be in the root controllers
+// folder(NOT in a subfolder), or in a module.
+//
+// Example:
+//      array( 'users', 'activities/activity')
+//
+$assign_to_config['csrf_ignored_controllers'] = array();
 
 
 // --------------------------------------------------------------------
 // END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
 // --------------------------------------------------------------------
-
-
 
 
 /*
@@ -201,80 +207,68 @@
  * ---------------------------------------------------------------
  */
 
-	// Set the current directory correctly for CLI requests
-	if (defined('STDIN'))
-	{
-		chdir(dirname(__FILE__));
-	}
+// Set the current directory correctly for CLI requests
+if (defined('STDIN')) {
+    chdir(dirname(__FILE__));
+}
 
-	if (realpath($system_path) !== FALSE)
-	{
-		$system_path = realpath($system_path).'/';
-	}
+if (realpath($system_path) !== false) {
+    $system_path = realpath($system_path) . '/';
+}
 
-	// ensure there's a trailing slash
-	$system_path = rtrim($system_path, '/').'/';
+// Ensure there's a trailing slash
+$system_path = rtrim($system_path, '/') . '/';
 
-	// Is the system path correct?
-	if ( ! is_dir($system_path))
-	{
-		exit("Your system folder path does not appear to be set correctly. Please open the following file and correct this: ".pathinfo(__FILE__, PATHINFO_BASENAME));
-	}
+// Is the system path correct?
+if ( ! is_dir($system_path)) {
+    exit("Your system folder path does not appear to be set correctly. Please open the following file and correct this: " . pathinfo(__FILE__, PATHINFO_BASENAME));
+}
 
 /*
  * -------------------------------------------------------------------
  *  Now that we know the path, set the main path constants
  * -------------------------------------------------------------------
  */
-	// The name of THIS file
-	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
+// The name of THIS file
+define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
 
-	// The PHP file extension
-	// this global constant is deprecated.
-	define('EXT', '.php');
+// The PHP file extension
+// this global constant is deprecated.
+define('EXT', '.php');
 
-	// Path to the system folder
-	define('BASEPATH', str_replace("\\", "/", $system_path));
+// Path to the system folder
+define('BASEPATH', str_replace("\\", "/", $system_path));
 
-	// Path to the front controller (this file)
-	define('FCPATH', str_replace(SELF, '', __FILE__));
+// Path to the front controller (this file)
+define('FCPATH', str_replace(SELF, '', __FILE__));
 
-	// Name of the "system folder"
-	define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
+// Name of the "system folder"
+define('SYSDIR', trim(strrchr(trim(BASEPATH, '/'), '/'), '/'));
 
-	// Bonfire Path
-	define('BFPATH', $bonfire_path.'/');
+// Bonfire Path
+define('BFPATH', $bonfire_path . '/');
 
-	// The path to the "application" folder
-	if (is_dir($application_folder))
-	{
-		define('APPPATH', $application_folder.'/');
-	}
-	else
-	{
-		if ( ! is_dir(BASEPATH.$application_folder.'/'))
-		{
-			exit("Your application folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
-		}
+// The path to the "application" folder
+if (is_dir($application_folder)) {
+    define('APPPATH', $application_folder . '/');
+} else {
+    if ( ! is_dir(BASEPATH . $application_folder . '/')) {
+        exit("Your application folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
+    }
 
-		define('APPPATH', BASEPATH.$application_folder.'/');
-	}
+    define('APPPATH', BASEPATH . $application_folder . '/');
+}
 
-	// The path to the "views" folder
-	if (is_dir($view_folder))
-	{
-		define ('VIEWPATH', $view_folder .'/');
-	}
-	else
-	{
-		if ( ! is_dir(APPPATH.'views/'))
-		{
-			exit("Your view folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
-		}
+// The path to the "views" folder
+if (is_dir($view_folder)) {
+    define('VIEWPATH', $view_folder . '/');
+} else {
+    if ( ! is_dir(APPPATH . 'views/')) {
+        exit("Your view folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
+    }
 
-		define ('VIEWPATH', APPPATH.'views/' );
-	}
-
+    define('VIEWPATH', APPPATH . 'views/');
+}
 
 /*
  * --------------------------------------------------------------------
@@ -284,7 +278,7 @@
  * And away we go...
  *
  */
-require_once BASEPATH.'core/CodeIgniter.php';
+require_once(BASEPATH . 'core/CodeIgniter.php');
 
 /* End of file index.php */
 /* Location: ./index.php */
