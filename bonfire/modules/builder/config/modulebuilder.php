@@ -50,4 +50,5 @@ $config['modulebuilder']['languages_available'] = array(
     'english',
     'portuguese_br',
     'spanish_am',
+	'italian',
 );

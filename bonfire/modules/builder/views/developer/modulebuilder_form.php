@@ -195,6 +195,16 @@ $validation_errors = validation_errors();
                     </div>
                 </div>
                 <div class="control-group mb_advanced">
+                    <label for="use_pagination" class="control-label block"><?php echo lang('mb_form_use_pagination'); ?></label>
+                    <div class="controls">
+                        <select name="use_pagination" id="use_pagination">
+                            <?php foreach ($truefalse as $val => $label) : ?>
+                            <option value="<?php echo $val; ?>"><?php echo $label; ?></option>
+                            <?php endforeach;?>
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group mb_advanced">
                     <label for="log_user" class="control-label block"><?php echo lang('mb_form_log_user'); ?></label>
                     <div class="controls">
                         <select name="log_user" id="log_user">

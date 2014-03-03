@@ -372,11 +372,12 @@ class Developer extends Admin_Controller
         Template::set('listFieldTypes', $listFieldTypes);
         Template::set('roles', $this->role_model->as_array()->find_all());
         Template::set('textarea_editors', array(
-            ''         => 'None',
-            'ckeditor' => 'CKEditor',
-            'xinha'    => 'Xinha',
-            'tinymce'  => 'TinyMCE',
-            'markitup' => 'MarkitUp!',
+            ''          => 'None',
+            'ckeditor'  => 'CKEditor',
+            'elrte'     => 'ElRte with ElFinder',
+            'markitup'  => 'MarkitUp!',
+            'tinymce'   => 'TinyMCE',
+            'xinha'     => 'Xinha',
         ));
         Template::set('textFieldTypes', $textFieldTypes);
         Template::set('truefalse', array(
