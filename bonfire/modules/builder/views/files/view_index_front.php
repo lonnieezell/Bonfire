@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
 
 $pager = '';
-if ($this->input->post('use_pagination')) {
+if ($this->input->post('use_pagination') == 'true') {
     $pager = "
     echo \$this->pagination->create_links();";
 }
