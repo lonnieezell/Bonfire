@@ -37,8 +37,18 @@ $validation_errors = validation_errors();
 
     if ($session_error):
     ?>
-    <div class="top_error">
+    <div class="alert alert-error fade in">
+        <a data-dismiss="alert" class="close">&times;</a>
         <?php echo $session_error; ?>
+    </div>
+    <?php
+    endif;
+
+    if (isset($error_message)) :
+    ?>
+    <div class="alert alert-error fade in">
+        <a data-dismiss="alert" class="close">&times;</a>
+        <?php echo $error_message; ?>
     </div>
     <?php
     endif;

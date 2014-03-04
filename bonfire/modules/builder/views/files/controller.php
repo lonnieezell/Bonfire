@@ -1,32 +1,11 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
 
-/*
- * Define the various parts of the class here as variables with {placeholders}
- * for variable data. Below, replace the parts as needed.
- *
- * This should make modifying the way the class is built much easier.
- */
-
 $controller_name_lower = strtolower($controller_name);
 $primary_key_field = set_value("primary_key_field");
 
-//--------------------------------------------------------------------
-// !CLASS PARTS
-//--------------------------------------------------------------------
-
-$mb_class_wrapper =<<<END
-<?php defined('BASEPATH') || exit('No direct script access allowed');
-
-/**
- * {$controller_name} controller
- */
-class {$controller_name} extends {extend_class}
-{
-{class_content}
-}
-END;
-
-//--------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// Constructor
+//------------------------------------------------------------------------------
 
 $mb_constructor = "
 	/**
@@ -60,7 +39,9 @@ $mb_constructor .= "
 		Assets::add_module_js('{$module_name_lower}', '{$module_name_lower}.js');
 	}";
 
-//--------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// Index
+//------------------------------------------------------------------------------
 
 $mb_index = "
 
@@ -128,7 +109,9 @@ $mb_index .= "
 		Template::render();
 	}";
 
-//--------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// Index (Public Controller)
+//------------------------------------------------------------------------------
 
 $mb_index_front = "
 
@@ -174,7 +157,9 @@ $mb_index_front .= "
 		Template::render();
 	}";
 
-//--------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// Create
+//------------------------------------------------------------------------------
 
 $mb_create = "
 
@@ -209,7 +194,9 @@ $mb_create .= "
 		Template::render();
 	}";
 
-//--------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// Edit
+//------------------------------------------------------------------------------
 
 $mb_edit = "
 
@@ -265,9 +252,11 @@ $mb_edit .= "
 		Template::render();
 	}";
 
-//--------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// Save
+//------------------------------------------------------------------------------
 
-$mb_save =<<<END
+$mb_save = "
 
 	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
@@ -276,7 +265,7 @@ $mb_save =<<<END
 	/**
 	 * Summary
 	 *
-	 * @param String \$type Either "insert" or "update"
+	 * @param String \$type Either 'insert' or 'update'
 	 * @param Int	 \$id	The ID of the record to update, ignored on inserts
 	 *
 	 * @return Mixed    An INT id for successful inserts, TRUE for successful updates, else FALSE
@@ -302,8 +291,7 @@ $mb_save =<<<END
 		}
 
 		return \$return;
-	}
-END;
+	}";
 
 //--------------------------------------------------------------------
 // !BUILD THE CLASS
@@ -312,7 +300,7 @@ END;
 // Constructor
 $body = $mb_constructor;
 
-if ($controller_name == $module_name_lower) {
+if ($controller_name_lower == $module_name_lower) {
 	$body = str_replace('{restrict}', '$this->load->library(\'form_validation\');', $body);
 } else {
 	$body = str_replace('{restrict}', '$this->auth->restrict(\'' . preg_replace("/[ -]/", "_", ucfirst($module_name)) . '.' . ucfirst($controller_name) . '.View\');', $body);
@@ -453,15 +441,15 @@ if ($controller_name_lower != $module_name_lower) {
 	$body = str_replace('{save_data_array}', $save_data_array, $body);
 }
 
-//--------------------------------------------------------------------
 
-// Wrap the class content into the actual class
-$controller = str_replace('{class_content}', $body, $mb_class_wrapper);
-if ($controller_name_lower == $module_name_lower) {
-	$controller = str_replace('{extend_class}', 'Front_Controller', $controller);
-} else {
-	$controller = str_replace('{extend_class}', 'Admin_Controller', $controller);
-}
+$baseClass = $controller_name_lower == $module_name_lower ? 'Front_Controller' : 'Admin_Controller';
 
-// Echo out the final controller
-echo $controller;
+echo "<?php defined('BASEPATH') || exit('No direct script access allowed');
+
+/**
+ * {$controller_name} controller
+ */
+class {$controller_name} extends {$baseClass}
+{
+{$body}
+}";

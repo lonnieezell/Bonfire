@@ -543,7 +543,7 @@ class Developer extends Admin_Controller
             $newfields[] = array(
                 'name'          => isset($field->name) ? $field->name : '',
                 'type'          => strtoupper($type),
-                'max_length'    => $max_length == null ? 1 : $max_length,
+                'max_length'    => $max_length == null ? '' : $max_length,
                 'values'        => $values,
                 'primary_key'   => isset($field->primary_key) && $field->primary_key == 1 ? 1 : 0,
                 'default'       => isset($field->default) ? $field->default : null,
