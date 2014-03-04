@@ -257,7 +257,7 @@ if ($db_required != '') {
 	}
 
 	$mb_edit .= "
-		Template::set('{$module_name_lower}', \$this->{$module_name_lower}_model->find(\$id));";
+		Template::set('{$module_name_lower}', \$this->{$module_name_lower}_model->as_array()->find(\$id));";
 }
 
 $mb_edit .= "
