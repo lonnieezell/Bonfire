@@ -145,6 +145,11 @@ if ($db_required != '') {
         \$this->{$module_name_lower}_model->limit(\$limit, \$offset);";
     }
 
+    if ($useSoftDeletes) {
+        $mb_index_front .= "
+        \$this->{$module_name_lower}_model->where(\$this->{$module_name_lower}_model->get_deleted_field(), 0);
+        ";
+    }
 	$mb_index_front .= "
 		\$records = \$this->{$module_name_lower}_model->find_all();
 
@@ -295,6 +300,7 @@ $mb_save = "
 // !BUILD THE CLASS
 //--------------------------------------------------------------------
 
+//--------------------------------------------------------------------
 // Constructor
 $body = $mb_constructor;
 
@@ -366,7 +372,6 @@ $body = str_replace('{constructor_extras}', $extras, $body);
 unset($extras);
 
 //--------------------------------------------------------------------
-
 // Index Method
 if ( is_array($action_names) && in_array('index', $action_names)) {
 	// Check whether this is the front controller

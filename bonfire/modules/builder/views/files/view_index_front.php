@@ -19,10 +19,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 
 $hiddenFields = "array('{$primary_key_field}',";
 if ($use_soft_deletes) {
-	$headers .= '
-            <th>
-                <?php echo lang("'.$module_name_lower.'_column_deleted"); ?>
-            </th>';
+    $hiddenFields .= "'{$soft_delete_field}',";
     if ($logUser) {
         $hiddenFields .= "'{$deleted_by_field}',";
     }

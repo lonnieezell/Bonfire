@@ -181,7 +181,7 @@ class Modulebuilder
                 $public_context = true;
             }
             $data['controller_name'] = $context_name;
-            $content['controllers'][$context_name] = $this->build_controller($field_total, $module_name, $context_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name, $table_as_field_prefix);
+            $content['controllers'][$context_name] = $this->buildController($data);
 
             // Views
             if ($public_context === true) {
@@ -300,6 +300,29 @@ class Modulebuilder
     // PRIVATE METHODS
     //--------------------------------------------------------------------
 
+    /**
+     * Generate the content of a controller file
+     *
+     * @param array $data The data required to build the controller
+     *  int    'field_total'           The number of fields to add to the table
+     *  string 'module_name'           The name given to the module
+     *  string 'controller_name'       The name of the controller class
+     *  array  'action_names'          An array of the controller actions (methods) required
+     *  string 'primary_key_field'     The name of the primary key
+     *  string 'db_required'           The database requirement setting (new, existing or none)
+     *  array  'form_error_delimiters' An array with the html delimiters for error messages
+     *  string 'table_name'            The name of the table in the database
+     *
+     * @return string|bool The content of the controller file or false on error
+     */
+    private function buildController($data)
+    {
+        if (is_null($data['field_total'])) {
+            return false;
+        }
+
+        return $this->CI->load->view('files/controller', $data, true);
+    }
 
     /**
      * Generate the content for a view file
@@ -521,42 +544,6 @@ class Modulebuilder
         }
 
         return $ret_val;
-    }
-
-    /**
-     * Generate the content of a controller file
-     *
-     * @param int    $field_total           The number of fields to add to the table
-     * @param string $module_name           The name given to the module
-     * @param string $controller_name       The name of the controller class
-     * @param array  $action_names          An array of the controller actions (methods) required
-     * @param string $primary_key_field     The name of the primary key
-     * @param string $db_required           The database requirement setting (new, existing or none)
-     * @param array  $form_error_delimiters An array with the html delimiters for error messages
-     * @param string $table_name            The name of the table in the database
-     *
-     * @return string|bool The content of the controller file or false on error
-     */
-    private function build_controller($field_total, $module_name, $controller_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name, $table_as_field_prefix)
-    {
-        if (is_null($field_total)) {
-            return false;
-        }
-
-        $data['field_total'] = $field_total;
-        $data['module_name'] = $module_name;
-        $data['table_name'] = $table_name;
-        $data['module_name_lower'] = preg_replace("/[ -]/", "_", strtolower($module_name));
-        $data['controller_name'] = $controller_name;
-        $data['action_names'] = $action_names;
-        $data['primary_key_field'] = $primary_key_field;
-        $data['db_required'] = $db_required;
-        $data['form_error_delimiters'] = $form_error_delimiters;
-        $data['textarea_editor'] = $this->CI->input->post('textarea_editor');
-        $data['table_as_field_prefix'] = $table_as_field_prefix;
-        $data['usePagination']  = $this->CI->input->post('use_pagination') == 1;
-
-        return $this->CI->load->view('files/controller', $data, true);
     }
 
     /**
