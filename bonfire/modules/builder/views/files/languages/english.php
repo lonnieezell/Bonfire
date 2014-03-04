@@ -45,6 +45,9 @@ $lang[\''.$module_name_lower.'_errors_message\']    = \'Please fix the following
 $lang[\''.$module_name_lower.'_column_created\']  = \'Created\';
 $lang[\''.$module_name_lower.'_column_deleted\']  = \'Deleted\';
 $lang[\''.$module_name_lower.'_column_modified\'] = \'Modified\';
+$lang[\'' . $module_name_lower . '_column_deleted_by\'] = \'Deleted By\';
+$lang[\'' . $module_name_lower . '_column_created_by\'] = \'Created By\';
+$lang[\'' . $module_name_lower . '_column_modified_by\'] = \'Modified By\';
 
 // Module Details
 $lang[\''.$module_name_lower.'_module_name\'] = \''.$module_name.'\';

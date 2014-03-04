@@ -7,40 +7,54 @@ if ($this->input->post('use_pagination') == 'true') {
 }
 
 $headers = '';
-for ($counter=1; $field_total >= $counter; $counter++) {
+for ($counter = 1; $field_total >= $counter; $counter++) {
 	// Only build on fields that have data entered.
 	if (set_value("view_field_label$counter") == null) {
 		continue; 	// move onto next iteration of the loop
 	}
 
 	$headers .= '
-		<th>'. set_value("view_field_label$counter").'</th>';
+            <th>'. set_value("view_field_label$counter").'</th>';
 }
 
-if ($use_soft_deletes == 'true') {
+$hiddenFields = "array('{$primary_key_field}',";
+if ($use_soft_deletes) {
 	$headers .= '
-		<th>
-			<?php echo lang("'.$module_name_lower.'_column_deleted"); ?>
-		</th>';
+            <th>
+                <?php echo lang("'.$module_name_lower.'_column_deleted"); ?>
+            </th>';
+    if ($logUser) {
+        $hiddenFields .= "'{$deleted_by_field}',";
+    }
 }
-if ($use_created == 'true') {
+if ($use_created) {
 	$headers .= '
-		<th>
-			<?php echo lang("'.$module_name_lower.'_column_created"); ?>
-		</th>';
+            <th>
+                <?php echo lang("'.$module_name_lower.'_column_created"); ?>
+            </th>';
+    if ($logUser) {
+        $hiddenFields .= "'{$created_by_field}',";
+    }
 }
-if ($use_modified == 'true') {
+if ($use_modified) {
 	$headers .= '
-		<th>
-			<?php echo lang("'.$module_name_lower.'_column_modified"); ?>
-		</th>';
+            <th>
+                <?php echo lang("'.$module_name_lower.'_column_modified"); ?>
+            </th>';
+    if ($logUser) {
+        $hiddenFields .= "'{$modified_by_field}',";
+    }
 }
 
-echo "<div>
-	<h1 class='page-header'>
-		<?php echo lang('{$module_name_lower}_area_title'); ?>
-	</h1>
-</div>
+$hiddenFields .= ")";
+
+echo "<?php
+
+\$hiddenFields = {$hiddenFields};
+?>
+<h1 class='page-header'>
+    <?php echo lang('{$module_name_lower}_area_title'); ?>
+</h1>
 <?php if (isset(\$records) && is_array(\$records) && count(\$records)) : ?>
 <table class='table table-striped table-bordered'>
     <thead>
@@ -51,12 +65,11 @@ echo "<div>
     <tbody>
         <?php
         foreach (\$records as \$record) :
-            \$record = (array)\$record;
         ?>
         <tr>
             <?php
             foreach(\$record as \$field => \$value) :
-                if (\$field != '{$primary_key_field}') :
+                if ( ! in_array(\$field, \$hiddenFields)) :
             ?>
             <td>
                 <?php

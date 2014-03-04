@@ -52,9 +52,7 @@ $mb_index = "
 	 */
 	public function index(";
 
-$usePagination = false;
-if ($this->input->post('use_pagination') == 'true') {
-    $usePagination = true;
+if ($usePagination) {
     $mb_index .= "\$offset = 0";
 }
 

@@ -427,12 +427,12 @@ class Developer extends Admin_Controller
             // If it's a new table, extra validation is required
             if ($this->input->post('module_db') == 'new') {
                 $this->form_validation->set_rules("primary_key_field",'lang:mb_form_primarykey',"required|trim|xss_clean|alpha_dash");
-                $this->form_validation->set_rules("use_soft_deletes",'lang:mb_form_soft_deletes',"trim|xss_clean|alpha");
                 $this->form_validation->set_rules("soft_delete_field",'lang:mb_soft_delete_field',"trim|xss_clean|alpha_dash");
-                $this->form_validation->set_rules("use_created",'lang:mb_form_use_created',"trim|xss_clean|alpha");
                 $this->form_validation->set_rules("created_field",'lang:mb_form_created_field',"trim|xss_clean|alpha_dash");
-                $this->form_validation->set_rules("use_modified",'lang:mb_form_use_modified',"trim|xss_clean|alpha");
                 $this->form_validation->set_rules("modified_field",'lang:mb_form_modified_field',"trim|xss_clean|alpha_dash");
+                $this->form_validation->set_rules('deleted_by_field', 'lang:mb_deleted_by_field', 'trim|xss_clean|alpha_dash');
+                $this->form_validation->set_rules('created_by_field', 'lang:mb_form_created_by_field', 'trim|xss_clean|alpha_dash');
+                $this->form_validation->set_rules('modified_by_field', 'lang:mb_form_modified_by_field', 'trim|xss_clean|alpha_dash');
                 // textarea_editor seems to be gone...
                 //$this->form_validation->set_rules("textarea_editor",'lang:mb_form_text_ed',"trim|xss_clean|alpha_dash");
             }
@@ -562,16 +562,32 @@ class Developer extends Admin_Controller
 	 */
 	private function build_module($field_total = 0)
 	{
-		$module_name			= $this->input->post('module_name');
-		$table_name				= strtolower(preg_replace("/[ -]/", "_", $this->input->post('table_name')));
-		$contexts				= $this->input->post('contexts');
 		$action_names			= $this->input->post('form_action');
-		$module_description		= $this->input->post('module_description');
-		$role_id				= $this->input->post('role_id');
+		$contexts				= $this->input->post('contexts');
 		$db_required			= $this->input->post('module_db');
-		$table_as_field_prefix	= (bool) $this->input->post('table_as_field_prefix');
-		$primary_key_field		= $this->input->post('primary_key_field');
 		$form_error_delimiters	= explode(',', $this->input->post('form_error_delimiters'));
+		$module_description		= $this->input->post('module_description');
+		$module_name			= $this->input->post('module_name');
+		$primary_key_field		= $this->input->post('primary_key_field');
+		$role_id				= $this->input->post('role_id');
+		$table_name				= strtolower(preg_replace("/[ -]/", "_", $this->input->post('table_name')));
+		$table_as_field_prefix	= (bool) $this->input->post('table_as_field_prefix');
+
+        $logUser        = $this->input->post('log_user') == 1;
+        $useCreated     = $this->input->post('use_created') == 1;
+        $useModified    = $this->input->post('use_modified') == 1;
+        $usePagination  = $this->input->post('use_pagination') == 1;
+        $useSoftDeletes = $this->input->post('use_soft_deletes') == 1;
+
+        $created_field      = $this->input->post('created_field') ?: 'created_on';
+        $created_by_field   = $this->input->post('created_by_field') ?: 'created_by';
+        $soft_delete_field  = $this->input->post('soft_delete_field') ?: 'deleted';
+        $deleted_by_field   = $this->input->post('deleted_by_field') ?: 'deleted_by';
+        $modified_field     = $this->input->post('modified_field') ?: 'modified_on';
+        $modified_by_field  = $this->input->post('modified_by_field') ?: 'modified_by';
+
+        $textarea_editor = $this->input->post('textarea_editor');
+
 
 		if ($primary_key_field == '') {
 			$primary_key_field = $this->options['primary_key_field'];
@@ -583,14 +599,43 @@ class Developer extends Admin_Controller
 			$form_error_delimiters = $this->options['$form_error_delimiters'];
 		}
 
+        $controller_name = preg_replace("/[ -]/", "_", $module_name);
+        $module_name_lower = strtolower($controller_name);
+
         $this->load->library('modulebuilder');
-		$file_data = $this->modulebuilder->build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix);
+		$file_data = $this->modulebuilder->buildFiles(array(
+            'action_names'          => $action_names,
+            'contexts'              => $contexts,
+            'controller_name'       => $controller_name,
+            'created_by_field'      => $created_by_field,
+            'created_field'         => $created_field,
+            'db_required'           => $db_required,
+            'deleted_by_field'      => $deleted_by_field,
+            'field_total'           => $field_total,
+            'form_error_delimiters' => $form_error_delimiters,
+            'logUser'               => $logUser,
+            'modified_by_field'     => $modified_by_field,
+            'modified_field'        => $modified_field,
+            'module_description'    => $module_description,
+            'module_name'           => $module_name,
+            'module_name_lower'     => $module_name_lower,
+            'primary_key_field'     => $primary_key_field,
+            'role_id'               => $role_id,
+            'soft_delete_field'     => $soft_delete_field,
+            'table_as_field_prefix' => $table_as_field_prefix,
+            'table_name'            => $table_name,
+            'textarea_editor'       => $textarea_editor,
+            'useCreated'            => $useCreated,
+            'useModified'           => $useModified,
+            'usePagination'         => $usePagination,
+            'useSoftDeletes'        => $useSoftDeletes,
+        ));
 
 		// Make the variables available to the view file
 		$data['module_name']		= $module_name;
-		$data['controller_name']	= preg_replace("/[ -]/", "_", $module_name);
-		$data['module_name_lower']  = strtolower($data['controller_name']);
-		$data['table_name']			= empty($table_name) ? $data['module_name_lower'] : $table_name;
+		$data['controller_name']	= $controller_name;
+		$data['module_name_lower']  = $module_name_lower;
+		$data['table_name']			= empty($table_name) ? $module_name_lower : $table_name;
 
 		$data = $data + $file_data;
 

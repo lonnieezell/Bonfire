@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
 
 $pager = '';
-if ($this->input->post('use_pagination') == 'true') {
+if ($this->input->post('use_pagination') == 1) {
     $pager = "
     echo \$this->pagination->create_links();";
 }
@@ -24,15 +24,15 @@ $field_prefix = '';
 // Only add maintenance columns to the view when module is creating a new db table
 // (columns should already be present and handled below when existing table is used)
 if ($db_required == 'new') {
-	if ($use_soft_deletes == 'true') {
+	if ($use_soft_deletes) {
 		$headers .= "
 					<th><?php echo lang('{$module_name_lower}_column_deleted'); ?></th>";
 	}
-	if ($use_created == 'true') {
+	if ($use_created) {
 		$headers .= "
 					<th><?php echo lang('{$module_name_lower}_column_created'); ?></th>";
 	}
-	if ($use_modified == 'true') {
+	if ($use_modified) {
 		$headers .= "
 					<th><?php echo lang('{$module_name_lower}_column_modified'); ?></th>";
 	}

@@ -87,22 +87,68 @@ class Modulebuilder
     /**
      * Generate the files required for the module
      *
-     * @param int    $field_total           The number of fields to add to the table
-     * @param string $module_name           The name given to the module
-     * @param array  $contexts              An array of contexts selected
-     * @param array  $action_names          An array of the controller actions (methods) required
-     * @param string $primary_key_field     The name of the primary key
-     * @param string $db_required           The database requirement setting (new, existing or none)
-     * @param array  $form_error_delimiters An array with the html delimiters for error messages
-     * @param string $module_description    A description for the module which appears in the config file
-     * @param int    $role_id               The id of the role which receives full access to the module
-     * @param string $table_name            The name of the table in the database
-     * @param int    $table_as_field_prefix Use table name as field prefix
+     * @param array $data The data required to build the module
+     *  int    'field_total'           The number of fields to add to the table
+     *  string 'module_name'           The name given to the module
+     *  array  'contexts'              An array of contexts selected
+     *  array  'action_names'          An array of the controller actions (methods) required
+     *  string 'primary_key_field'     The name of the primary key
+     *  string 'db_required'           The database requirement setting (new, existing or none)
+     *  array  'form_error_delimiters' An array with the html delimiters for error messages
+     *  string 'module_description'    A description for the module which appears in the config file
+     *  int    'role_id'               The id of the role which receives full access to the module
+     *  string 'table_name'            The name of the table in the database
+     *  int    'table_as_field_prefix' Use table name as field prefix
      *
      * @return array An array with the content for the generated files
      */
-    public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix)
+    public function buildFiles($data)
     {
+        $action_names           = $data['action_names'];
+        $contexts               = $data['contexts'];
+        $db_required            = $data['db_required'];
+        $field_total            = $data['field_total'];
+        $form_error_delimiters  = $data['form_error_delimiters'];
+        $module_description     = $data['module_description'];
+        $module_name            = $data['module_name'];
+        $primary_key_field      = $data['primary_key_field'];
+        $role_id                = $data['role_id'];
+        $table_as_field_prefix  = $data['table_as_field_prefix'];
+        $table_name             = $data['table_name'];
+
+        $controller_name        = isset($data['controller_name']) ? $data['controller_name'] : preg_replace("/[ -]/", "_", $module_name);
+        $module_name_lower      = isset($data['module_name_lower']) ? $data['module_name_lower'] : strtolower($controller_name);
+
+        $logUser                = isset($data['logUser']) ? $data['logUser'] : false;
+        $useCreated             = isset($data['useCreated']) ? $data['useCreated'] : false;
+        $useModified            = isset($data['useModified']) ? $data['useModified'] : false;
+        $usePagination          = isset($data['usePagination']) ? $data['usePagination'] : false;
+        $useSoftDeletes         = isset($data['useSoftDeletes']) ? $data['useSoftDeletes'] : false;
+
+        $created_field          = isset($data['created_field']) ? $data['created_field'] : 'created_on';
+        $created_by_field       = isset($data['created_by_field']) ? $data['created_by_field'] : 'created_by';
+        $soft_delete_field      = isset($data['soft_delete_field']) ? $data['soft_delete_field'] : 'deleted';
+        $deleted_by_field       = isset($data['deleted_by_field']) ? $data['deleted_by_field'] : 'deleted_by';
+        $modified_field         = isset($data['modified_field']) ? $data['modified_field'] : 'modified_on';
+        $modified_by_field      = isset($data['modified_by_field']) ? $data['modified_by_field'] : 'modified_by';
+
+        $textarea_editor        = isset($data['textarea_editor']) ? $data['textarea_editor'] : '';
+
+        $data['controller_name'] = $controller_name;
+        $data['module_name_lower'] = $module_name_lower;
+        $data['logUser'] = $logUser;
+        $data['useCreated'] = $useCreated;
+        $data['useModified'] = $useModified;
+        $data['usePagination'] = $usePagination;
+        $data['useSoftDeletes'] = $useSoftDeletes;
+        $data['created_field'] = $created_field;
+        $data['created_by_field'] = $created_by_field;
+        $data['soft_delete_field'] = $soft_delete_field;
+        $data['deleted_by_field'] = $deleted_by_field;
+        $data['modified_field'] = $modified_field;
+        $data['modified_by_field'] = $modified_by_field;
+        $data['textarea_editor'] = $textarea_editor;
+
         $this->CI->load->helper('inflector');
         $this->files = array(
             'model'     => singular($module_name) . '_model',
@@ -124,7 +170,7 @@ class Modulebuilder
         $field_total = empty($field_total) && $db_required != '' ? 1 : $field_total;
 
         // Build the files
-        $module_file_name = strtolower(preg_replace("/[ -]/", "_", $module_name));
+        $module_file_name = $module_name_lower;
 
         // Each context has a controller and a set of views
         foreach ($contexts as $key => $context_name) {
@@ -134,21 +180,30 @@ class Modulebuilder
                 $context_name   = $module_file_name;
                 $public_context = true;
             }
+            $data['controller_name'] = $context_name;
             $content['controllers'][$context_name] = $this->build_controller($field_total, $module_name, $context_name, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $table_name, $table_as_field_prefix);
 
             // Views
             if ($public_context === true) {
                 // Only build this view in the Public context
-                $content['views'][$context_name]['index'] = $this->build_view($field_total, $module_name, $context_name, 'index_front', 'Index', $primary_key_field, $table_as_field_prefix);
+                $data['action_name'] = 'index_front';
+                $data['action_label'] = 'Index';
+                $content['views'][$context_name]['index'] = $this->buildView($data);
             } else {
                 // Only build these views for the Admin contexts
                 foreach ($action_names as $key => $action_name) {
                     if ($action_name != 'delete' ) {
-                        $content['views'][$context_name][$action_name] = $this->build_view($field_total, $module_name, $context_name, $action_name, $this->options['form_action_options'][$action_name], $primary_key_field);
+                        $data['action_name'] = $action_name;
+                        $data['action_label'] = $this->options['form_action_options'][$action_name];
+                        $content['views'][$context_name][$action_name] = $this->buildView($data);
                     }
                 }
-                $content['views'][$context_name]['js'] = $this->build_view($field_total, $module_name, $context_name, 'js', $this->options['form_action_options'][$action_name], $primary_key_field);
-                $content['views'][$context_name]['_sub_nav'] = $this->build_view($field_total, $module_name, $context_name, 'sub_nav', $this->options['form_action_options'][$action_name], $primary_key_field);
+                $data['action_name'] = 'js';
+                $data['action_label'] = $this->options['form_action_options'][$action_name];
+                $content['views'][$context_name]['js'] = $this->buildView($data);
+
+                $data['action_name'] = 'sub_nav';
+                $content['views'][$context_name]['_sub_nav'] = $this->buildView($data);
             }
         }
 
@@ -205,9 +260,98 @@ class Modulebuilder
         return $data;
     }
 
+    /**
+     * Generate the files required for the module
+     *
+     * @deprecated since 0.7.1
+     *
+     * @param int    $field_total           The number of fields to add to the table
+     * @param string $module_name           The name given to the module
+     * @param array  $contexts              An array of contexts selected
+     * @param array  $action_names          An array of the controller actions (methods) required
+     * @param string $primary_key_field     The name of the primary key
+     * @param string $db_required           The database requirement setting (new, existing or none)
+     * @param array  $form_error_delimiters An array with the html delimiters for error messages
+     * @param string $module_description    A description for the module which appears in the config file
+     * @param int    $role_id               The id of the role which receives full access to the module
+     * @param string $table_name            The name of the table in the database
+     * @param int    $table_as_field_prefix Use table name as field prefix
+     *
+     * @return array An array with the content for the generated files
+     */
+    public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix)
+    {
+        return $this->buildFiles(array(
+            'field_total'            => $field_total,
+            'module_name'            => $module_name,
+            'contexts'               => $contexts,
+            'action_names'           => $action_names,
+            'primary_key_field'      => $primary_key_field,
+            'db_required'            => $db_required,
+            'form_error_delimiters'  => $form_error_delimiters,
+            'module_description'     => $module_description,
+            'role_id'                => $role_id,
+            'table_name'             => $table_name,
+            'table_as_field_prefix'  => $table_as_field_prefix
+        ));
+    }
+
     //--------------------------------------------------------------------
     // PRIVATE METHODS
     //--------------------------------------------------------------------
+
+
+    /**
+     * Generate the content for a view file
+     *
+     * @param array $data   The data required to build the view
+     *  int    'field_total'        The number of fields to add to the table
+     *  string 'module_name'        The name given to the module
+     *  string 'controller_name'    The controller class name
+     *  string 'action_name'        The controller method which will use the view
+     *  string 'action_label'       The value used on the submit button
+     *  string 'primary_key_field'  The name of the primary key
+     *
+     * @return string|bool The content of the view file or false on error
+     */
+    private function buildView($data)
+    {
+        if ($data['field_total'] == null) {
+              return false;
+        }
+        $data['use_created'] 	  = $data['useCreated'];
+        $data['use_modified'] 	  = $data['useModified'];
+        $data['use_soft_deletes'] = $data['useSoftDeletes'];
+
+        $action_label = $data['action_label'];
+        $action_name  = $data['action_name'];
+        $data['id_val'] = $action_name != 'insert' && $action_name != 'add' ? '$id' : '';
+
+        switch ($action_name) {
+            case 'list':
+                $view_name = 'index';
+                break;
+
+            case 'index':
+                // no break
+            case 'index_front':
+                // no break
+            case 'delete':
+                // no break
+            case 'js':
+                // no break
+            case 'sub_nav':
+                // no break
+                $view_name = $action_name;
+                break;
+
+            default:
+                $view_name = 'default';
+                break;
+        }
+
+        return $this->CI->load->view("files/view_{$view_name}", $data, true);
+    }
 
     /**
      * Write the files for the module to the server
@@ -380,65 +524,6 @@ class Modulebuilder
     }
 
     /**
-     * Generate the content for a view file
-     *
-     * @param int    $field_total           The number of fields to add to the table
-     * @param string $module_name           The name given to the module
-     * @param string $controller_name       The name of the controller class
-     * @param string $action_name           The name of the controller method which will use the view
-     * @param string $action_label          The value used on the submit button
-     * @param string $primary_key_field     The name of the primary key
-     *
-     * @return string|bool The content of the view file or false on error
-     */
-    private function build_view($field_total, $module_name, $controller_name, $action_name, $action_label, $primary_key_field)
-    {
-        if ($field_total == null) {
-              return false;
-        }
-
-        $data['field_total'] 		= $field_total;
-        $data['module_name'] 		= $module_name;
-        $data['controller_name'] 	= $controller_name;
-        $data['action_name'] 		= $action_name;
-        $data['primary_key_field'] 	= $primary_key_field;
-        $data['action_label'] 		= $action_label;
-
-        $data['textarea_editor'] 	= $this->CI->input->post('textarea_editor');
-        $data['use_soft_deletes'] 	= $this->CI->input->post('use_soft_deletes');
-        $data['use_created'] 		= $this->CI->input->post('use_created');
-        $data['use_modified'] 		= $this->CI->input->post('use_modified');
-
-        $data['module_name_lower'] 	= preg_replace("/[ -]/", "_", strtolower($module_name));
-        $data['id_val']             = $action_name != 'insert' && $action_name != 'add' ? '$id' : '';
-
-        switch ($action_name) {
-            case 'list':
-                $view_name = 'index';
-                break;
-
-            case 'index':
-                // no break
-            case 'index_front':
-                // no break
-            case 'delete':
-                // no break
-            case 'js':
-                // no break
-            case 'sub_nav':
-                // no break
-                $view_name = $action_name;
-                break;
-
-            default:
-                $view_name = 'default';
-                break;
-        }
-
-        return $this->CI->load->view("files/view_{$view_name}", $data, true);
-    }
-
-    /**
      * Generate the content of a controller file
      *
      * @param int    $field_total           The number of fields to add to the table
@@ -469,6 +554,7 @@ class Modulebuilder
         $data['form_error_delimiters'] = $form_error_delimiters;
         $data['textarea_editor'] = $this->CI->input->post('textarea_editor');
         $data['table_as_field_prefix'] = $table_as_field_prefix;
+        $data['usePagination']  = $this->CI->input->post('use_pagination') == 1;
 
         return $this->CI->load->view('files/controller', $data, true);
     }
@@ -504,10 +590,10 @@ class Modulebuilder
         $data['deleted_by_field']   = $this->CI->input->post('deleted_by_field') ?: 'deleted_by';
         $data['modified_by_field']  = $this->CI->input->post('modified_by_field') ?: 'modified_by';
 
-        $data['logUser']        = $this->CI->input->post('log_user') ?: 'false';
-        $data['useCreated']     = $this->CI->input->post('use_created') ?: 'false';
-        $data['useModified']    = $this->CI->input->post('use_modified') ?: 'false';
-        $data['useSoftDeletes'] = $this->CI->input->post('use_soft_deletes') ?: 'false';
+        $data['logUser']        = $this->CI->input->post('log_user') == 1;
+        $data['useCreated']     = $this->CI->input->post('use_created') == 1;
+        $data['useModified']    = $this->CI->input->post('use_modified') == 1;
+        $data['useSoftDeletes'] = $this->CI->input->post('use_soft_deletes') == 1;
 
         return $this->CI->load->view('files/model', $data, true);
     }
@@ -610,10 +696,10 @@ class Modulebuilder
         $data['deleted_by_field']   = $this->CI->input->post('deleted_by_field') ?: 'deleted_by';
         $data['modified_by_field']  = $this->CI->input->post('modified_by_field') ?: 'modified_by';
 
-        $data['logUser']        = $this->CI->input->post('log_user') == 'true';
-        $data['useCreated']     = $this->CI->input->post('use_created') == 'true';
-        $data['useModified']    = $this->CI->input->post('use_modified') == 'true';
-        $data['useSoftDeletes'] = $this->CI->input->post('use_soft_deletes') == 'true';
+        $data['logUser']        = $this->CI->input->post('log_user') == 1;
+        $data['useCreated']     = $this->CI->input->post('use_created') == 1;
+        $data['useModified']    = $this->CI->input->post('use_modified') == 1;
+        $data['useSoftDeletes'] = $this->CI->input->post('use_soft_deletes') == 1;
 
         $data['listFieldTypes'] = array('ENUM', 'SET');
 

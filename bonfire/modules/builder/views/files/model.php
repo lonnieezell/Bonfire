@@ -1,40 +1,45 @@
 <?php
 $ucControllerName = ucfirst($controller_name);
 
+$logUserString = $logUser ? 'true' : 'false';
+$useCreatedString = $useCreated ? 'true' : 'false';
+$useModifiedString = $useModified ? 'true' : 'false';
+$useSoftDeletesString = $useSoftDeletes ? 'true' : 'false';
+
 $fields = "protected \$table_name	= '{$table_name}';
 	protected \$key			= '{$primary_key_field}';
 	protected \$date_format	= 'datetime';
 
-	protected \$log_user 	= {$logUser};
-	protected \$set_created	= {$useCreated};
-	protected \$set_modified = {$useModified};
-	protected \$soft_deletes	= {$useSoftDeletes};
+	protected \$log_user 	= {$logUserString};
+	protected \$set_created	= {$useCreatedString};
+	protected \$set_modified = {$useModifiedString};
+	protected \$soft_deletes	= {$useSoftDeletesString};
 ";
 
 // Use the created field? Add field and custom name if chosen.
-if ($useCreated == 'true') {
+if ($useCreated) {
     $fields .= "
 	protected \$created_field     = '{$created_field}';";
-    if ($logUser == 'true') {
+    if ($logUser) {
         $fields .= "
     protected \$created_by_field  = '{$created_by_field}';";
     }
 }
 
 // Use the modified field? Add field and custom name if chosen.
-if ($useModified == 'true') {
+if ($useModified) {
     $fields .= "
 	protected \$modified_field    = '{$modified_field}';";
-    if ($logUser == 'true') {
+    if ($logUser) {
         $fields .= "
     protected \$modified_by_field = '{$modified_by_field}';";
     }
 }
 
-if ($useSoftDeletes == 'true') {
+if ($useSoftDeletes) {
     $fields .= "
     protected \$deleted_field     = '{$delete_field}';";
-    if ($logUser == 'true') {
+    if ($logUser) {
         $fields .= "
     protected \$deleted_by_field  = '{$deleted_by_field}';";
     }
