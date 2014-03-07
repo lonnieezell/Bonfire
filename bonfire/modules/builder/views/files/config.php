@@ -1,17 +1,16 @@
 <?php
 
-$build_config = '<?php defined(\'BASEPATH\') || exit(\'No direct script access allowed\');';
-
-
-$build_config .= PHP_EOL . '
-// $module_name_translate = lang("'.$module_name_lower.'_module_name");
-// $module_description_translate = lang("'.$module_name_lower.'_module_description");
-
-$config[\'module_config\'] = array(
-	\'description\'	=> \''.$module_description.'\',
-	\'name\'		=> \''.$module_name.'\',
-	\'version\'		=> \'0.0.1\',
-	\'author\'		=> \'' . $username . '\'
-);';
-
-echo $build_config;
+echo "<?php defined('BASEPATH') || exit('No direct script access allowed');" .
+PHP_EOL . "
+\$config['module_config'] = array(
+	'description'	=> '{$module_description}',
+	'name'		    => '{$module_name}',
+     /*
+      * Replace the 'name' entry above with this entry and create the entry in
+      * the application_lang file for localization/translation support in the
+      * menu
+     'name'          => 'lang:bf_menu_{$module_name_lower}',
+      */
+	'version'		=> '0.0.1',
+	'author'		=> '{$username}',
+);";

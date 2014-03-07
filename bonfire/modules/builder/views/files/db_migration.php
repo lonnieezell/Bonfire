@@ -1,10 +1,10 @@
 <?php
 
-$fieldPrefix = $table_as_field_prefix ? $module_name_lower . '_' : '';
+$fieldPrefix = $table_as_field_prefix ? "{$module_name_lower}_" : '';
 
 $migrationFields = "
 		'{$primary_key_field}' => array(
-			'type' => 'INT',
+			'type'       => 'INT',
 			'constraint' => 11,
 			'auto_increment' => true,
 		),";
@@ -14,22 +14,24 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
         continue; 	// move onto next iteration of the loop
     }
 
+    $dbFieldType = set_value("db_field_type$counter");
+
     $migrationFields .= "
         '{$fieldPrefix}" . set_value("view_field_name$counter") . "' => array(
-            'type' => '" . addcslashes(set_value("db_field_type$counter"), "'") . "',";
+            'type'       => '" . addcslashes($dbFieldType, "'") . "',";
 
-    if ( ! in_array(set_value("db_field_type$counter"), $no_length)) {
+    if ( ! in_array($dbFieldType, $no_length)) {
         $escaped_constraint_val = $this->input->post("db_field_length_value$counter");
 
         // ENUM or SET
-        if (in_array(set_value("db_field_type$counter"), $listFieldTypes)) {
+        if (in_array($dbFieldType, $listTypes)) {
             $escaped_constraint_val = "'" . addcslashes($this->input->post("db_field_length_value$counter"), "'") . "'";
-        } elseif (in_array(set_value("db_field_type$counter"), $decimal_types)) {
+        } elseif (in_array($dbFieldType, $realNumberTypes)) {
             $escaped_constraint_val = "'{$escaped_constraint_val}'";
         }
 
         // Optional length and the constraint is empty, but not 0
-        if (in_array(set_value("db_field_type$counter"), $optional_length)
+        if (in_array($dbFieldType, $optional_length)
             && empty($escaped_constraint_val) && ! is_numeric($escaped_constraint_val)
            ) {
             $constraint = '';
@@ -48,22 +50,22 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
     $validation_rules = $this->input->post("validation_rules{$counter}");
     if (is_array($validation_rules) && in_array('required', $validation_rules)) {
         $migrationFields .= "
-            'null' => false,";
+            'null'       => false,";
     } else {
         $migrationFields .= "
-            'null' => true,";
+            'null'       => true,";
     }
 
     // Set defaults for certain field types
-    switch (set_value("db_field_type$counter")) {
+    switch ($dbFieldType) {
         case 'DATE':
             $migrationFields .= "
-            'default' => '0000-00-00',";
+            'default'    => '0000-00-00',";
             break;
 
         case 'DATETIME':
             $migrationFields .= "
-            'default' => '0000-00-00 00:00:00',";
+            'default'    => '0000-00-00 00:00:00',";
             break;
 
         default:
@@ -77,7 +79,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 // Use soft deletes? Add deleted field.
 if ($useSoftDeletes) {
     $migrationFields .= "
-        '{$delete_field}' => array(
+        '{$soft_delete_field}' => array(
             'type'       => 'TINYINT',
             'constraint' => 1,
             'default'    => '0',
@@ -96,8 +98,8 @@ if ($useSoftDeletes) {
 if ($useCreated) {
     $migrationFields .= "
         '{$created_field}' => array(
-            'type' => 'datetime',
-            'default' => '0000-00-00 00:00:00',
+            'type'       => 'datetime',
+            'default'    => '0000-00-00 00:00:00',
         ),";
     if ($logUser) {
         $migrationFields .= "
@@ -113,8 +115,8 @@ if ($useCreated) {
 if ($useModified) {
     $migrationFields .= "
         '{$modified_field}' => array(
-            'type' => 'datetime',
-            'default' => '0000-00-00 00:00:00',
+            'type'       => 'datetime',
+            'default'    => '0000-00-00 00:00:00',
         ),";
     if ($logUser) {
         $migrationFields .= "

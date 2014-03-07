@@ -1,5 +1,5 @@
 <?php
-$ucControllerName = ucfirst($controller_name);
+$ucModuleName = ucfirst($module_name_lower);
 
 $logUserString = $logUser ? 'true' : 'false';
 $useCreatedString = $useCreated ? 'true' : 'false';
@@ -38,7 +38,7 @@ if ($useModified) {
 
 if ($useSoftDeletes) {
     $fields .= "
-    protected \$deleted_field     = '{$delete_field}';";
+    protected \$deleted_field     = '{$soft_delete_field}';";
     if ($logUser) {
         $fields .= "
     protected \$deleted_by_field  = '{$deleted_by_field}';";
@@ -50,16 +50,11 @@ if ($useSoftDeletes) {
 //--------------------------------------------------------------------
 
 $rules = '';
-
-$last_field = 0;
 for ($counter = 1; $field_total >= $counter; $counter++) {
 	// Only build on fields that have data entered.
 	if (set_value("view_field_label$counter") == null) {
 		continue;
 	}
-
-	// Set this variable as it will be used to place the comma after the last item to build the insert db array
-	$last_field = $counter;
 
 	if ($db_required == 'new' && $table_as_field_prefix === true) {
 		$field_name = "{$module_name_lower}_" . set_value("view_field_name$counter");
@@ -96,12 +91,10 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 
 	$db_field_type = set_value("db_field_type{$counter}");
 
-	if ($db_field_type != 'ENUM' && $db_field_type != 'SET'
+	if ( ! in_array($db_field_type, $listTypes)
         && set_value("db_field_length_value$counter") != null
        ) {
-		if ($db_field_type == 'DECIMAL' || $db_field_type == 'FLOAT'
-            || $db_field_type == 'DOUBLE'
-           ) {
+		if (in_array($db_field_type, $realNumberTypes)) {
 			list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
 			$max = $len;
 
@@ -134,7 +127,7 @@ if ( ! empty($rules)) {
 
 echo "<?php defined('BASEPATH') || exit('No direct script access allowed');
 
-class {$ucControllerName}_model extends BF_Model
+class {$ucModuleName}_model extends BF_Model
 {
     {$fields}
 

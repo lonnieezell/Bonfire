@@ -146,13 +146,11 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
             // no break;
 		default:
             $type = $field_type == 'input' ? 'text' : 'password';
+			$db_field_type = set_value("db_field_type$counter");
 			if (set_value("db_field_length_value$counter") != null) {
 				$maxlength = 'maxlength="' . set_value("db_field_length_value$counter") . '"';
 
-				if (set_value("db_field_type$counter") == 'DECIMAL'
-                    || set_value("db_field_type$counter") == 'FLOAT'
-                    || set_value("db_field_type$counter") == 'DOUBLE'
-                   ) {
+				if (in_array($db_field_type, $realNumberTypes)) {
 					list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
 					$max = $len;
 					if (isset($decimal) && $decimal != 0) {
@@ -161,7 +159,6 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 					$maxlength = 'maxlength="' . $max . '"';
 				}
 			}
-			$db_field_type = set_value("db_field_type$counter");
 
 			$view .= PHP_EOL . "
 			<div class=\"control-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">

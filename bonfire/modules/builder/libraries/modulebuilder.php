@@ -42,6 +42,53 @@ class Modulebuilder
      */
     public $field_numbers = array(6, 10, 20, 40);
 
+    protected $databaseTypes = array(
+        'BIGINT'        => array('numeric', 'integer'),
+        'BINARY'        => array('binary'),
+        'BIT'           => array('numeric', 'integer', 'bit'),
+        'BLOB'          => array('binary', 'object'),
+        'BOOL'          => array('numeric', 'integer', 'boolean'),
+        'BOOLEAN'       => array('numeric', 'integer', 'boolean'),
+        'CHAR'          => array('string'),
+        'DATE'          => array('date'),
+        'DATETIME'      => array('date', 'time'),
+        'DEC'           => array('numeric', 'real'),
+        'DECIMAL'       => array('numeric', 'real'),
+        'DOUBLE'        => array('numeric', 'real'),
+        'ENUM'          => array('string', 'list'),
+        'FLOAT'         => array('numeric', 'real'),
+        'INT'           => array('numeric', 'integer'),
+        'INTEGER'       => array('numeric', 'integer'),
+        'LONGBLOB'      => array('binary', 'object'),
+        'LONGTEXT'      => array('string', 'object'),
+        'MEDIUMBLOB'    => array('binary', 'object'),
+        'MEDIUMINT'     => array('numeric', 'integer'),
+        'MEDIUMTEXT'    => array('string', 'object'),
+        'NUMERIC'       => array('numeric', 'real'),
+        'REAL'          => array('numeric', 'real'),
+        'SET'           => array('string', 'list'),
+        'SMALLINT'      => array('numeric', 'integer'),
+        'TIME'          => array('time'),
+        'TIMESTAMP'     => array('date', 'time'),
+        'TINYBLOB'      => array('binary', 'object'),
+        'TINYINT'       => array('numeric', 'integer'),
+        'TINYTEXT'      => array('string', 'object'),
+        'TEXT'          => array('string', 'object'),
+        'VARBINARY'     => array('binary'),
+        'VARCHAR'       => array('string'),
+        'YEAR'          => array('year', 'integer'),
+    );
+
+    protected $booleanTypes = array();
+    protected $dateTypes = array();
+    protected $integerTypes = array();
+    protected $listTypes = array();
+    protected $objectTypes = array();
+    protected $realNumberTypes = array();
+    protected $stringTypes = array();
+    protected $textTypes = array();
+    protected $timeTypes = array();
+
     /**
      * @var int Total number of fields being used in this module
      */
@@ -70,11 +117,58 @@ class Modulebuilder
         $this->CI = &get_instance();
         $this->CI->load->config('modulebuilder');
         $this->options = $this->CI->config->item('modulebuilder');
+
         if ( ! empty($this->options['languages_available'])
             && is_array($this->options['languages_available'])
            ) {
             $this->languages_available = $this->options['languages_available'];
         }
+
+        if ( ! empty($this->options['database_types'])) {
+            $this->databaseTypes = $this->options['database_types'];
+        }
+
+        foreach ($this->databaseTypes as $key => $dataTypes) {
+            foreach ($dataTypes as $typeVal) {
+                // The order below is based on the number of occurrences of each
+                // type in the default set of values, from highest to lowest
+                switch ($typeVal) {
+                    case 'integer':
+                        $this->integerTypes[] = $key;
+                        break;
+
+                    case 'string':
+                        $this->stringTypes[] = $key;
+                        break;
+
+                    case 'object':
+                        $this->objectTypes[] = $key;
+                        break;
+
+                    case 'real':
+                        $this->realNumberTypes[] = $key;
+                        break;
+
+                    case 'date':
+                        $this->dateTypes[] = $key;
+                        break;
+
+                    case 'time':
+                        $this->timeTypes[] = $key;
+                        break;
+
+                    case 'boolean':
+                        $this->booleanTypes[] = $key;
+                        break;
+
+                    case 'list':
+                        $this->listTypes[] = $key;
+                        break;
+                }
+            }
+        }
+
+        $this->textTypes = array_intersect($this->objectTypes, $this->stringTypes);
 
         $this->files = array(
             'model'      => 'myform_model',
@@ -134,6 +228,16 @@ class Modulebuilder
 
         $textarea_editor        = isset($data['textarea_editor']) ? $data['textarea_editor'] : '';
 
+        // Used by buildConfig()
+        $current_user = $this->CI->user_model->find($this->CI->auth->user_id());
+
+        // Used by buildController()
+        $data['textTypes']          = $this->textTypes;
+
+        // Used by buildModel() and buildDbSQL()
+        $data['realNumberTypes']    = $this->realNumberTypes; // also buildView()
+        $data['listTypes']          = $this->listTypes;
+
         $data['controller_name'] = $controller_name;
         $data['module_name_lower'] = $module_name_lower;
         $data['logUser'] = $logUser;
@@ -148,6 +252,7 @@ class Modulebuilder
         $data['modified_field'] = $modified_field;
         $data['modified_by_field'] = $modified_by_field;
         $data['textarea_editor'] = $textarea_editor;
+        $data['username'] = $current_user->username;
 
         $this->CI->load->helper('inflector');
         $this->files = array(
@@ -208,22 +313,22 @@ class Modulebuilder
         }
 
         // Build the config file
-        $content['config'] = $this->build_config($module_name, $module_description);
+        $content['config'] = $this->buildConfig($data);
 
         // Build the lang file
         $content['lang'] = $this->build_lang($field_total, $module_name, $module_file_name);
 
         // Build the permissions migration file
-        $content['acl_migration'] = $this->build_acl_sql($field_total, $module_name, $contexts, $action_names, $role_id, $table_name);
+        $content['acl_migration'] = $this->buildAclSql($data);
 
         // If the DB is required and there are fields, build a model and migration
         if ($field_total && $db_required != '') {
            // Build the model file
-            $content['model'] = $this->build_model($field_total, $module_file_name, $action_names, $primary_key_field, $table_name);
+            $content['model'] = $this->buildModel($data);
 
             // DB migration
             if ($db_required == 'new') {
-                $content['db_migration'] = $this->build_db_sql($field_total, $module_name, $primary_key_field, $table_name, $table_as_field_prefix);
+                $content['db_migration'] = $this->buildDbSql($data);
             }
         }
 
@@ -296,9 +401,92 @@ class Modulebuilder
         ));
     }
 
+    public function getBooleanTypes()
+    {
+        return $this->booleanTypes;
+    }
+
+    public function getDatabaseTypes()
+    {
+        return $this->databaseTypes;
+    }
+
+    public function getDateTypes()
+    {
+        return $this->dateTypes;
+    }
+
+    public function getIntegerTypes()
+    {
+        return $this->integerTypes;
+    }
+
+    public function getListTypes()
+    {
+        return $this->listTypes;
+    }
+
+    public function getObjectTypes()
+    {
+        return $this->objectTypes;
+    }
+
+    public function getRealNumberTypes()
+    {
+        return $this->realNumberTypes;
+    }
+
+    public function getStringTypes()
+    {
+        return $this->stringTypes;
+    }
+
+    public function getTextTypes()
+    {
+        return $this->textTypes;
+    }
+
+    public function getTimeTypes()
+    {
+        return $this->timeTypes;
+    }
+
     //--------------------------------------------------------------------
     // PRIVATE METHODS
     //--------------------------------------------------------------------
+
+    /**
+     * Generate the ACL (permissions) migration file
+     *
+     * @param array $data The data required to build the permissions migration
+     *  int    'field_total'  The number of fields to add to the table
+     *  string 'module_name'  The name given to the module
+     *  array  'contexts'     An array of contexts selected
+     *  array  'action_names' An array of the controller actions (methods) required
+     *  int    'role_id'      The id of the role which receives full access to the module
+     *
+     * @return string A string containing the content of the permission migration file
+     */
+    private function buildAclSql($data)
+    {
+        return $this->CI->load->view('files/acl_migration', $data, true);
+    }
+
+    /**
+     * Generate the content of the module config file
+     *
+     * @param array $data The data used to generate the config file's content
+     *  string 'module_name'        The name given to the module
+     *  string 'module_description' The description text for the module
+     *  string 'username'           The user name for the current user
+     *  string 'module_name_lower'  Cleaned/lowercase version of module_name
+     *
+     * @return string A string containing the content of the config file
+     */
+    private function buildConfig($data)
+    {
+        return $this->CI->load->view('files/config', $data, true);
+    }
 
     /**
      * Generate the content of a controller file
@@ -325,6 +513,64 @@ class Modulebuilder
     }
 
     /**
+     * Generate the module migration file which creates the database table
+     *
+     * @param array $data The data required to build the migration
+     *  int    'field_total'       The number of fields to add to the table
+     *  string 'module_name'       The name given to the module
+     *  string 'primary_key_field' The name of the primary key
+     *  string 'table_name'        The name of the table in the database
+     *  bool   'table_as_field_prefix'  Whether the table name is used as a
+     *  prefix for field names
+     *
+     * @return string A string containing the content of the database migration file
+     */
+    private function buildDbSql($data)
+    {
+        $field_total = $data['field_total'];
+        if (is_null($field_total)) {
+            return false;
+        }
+
+        // There are no doubt more types where a value/length isn't possible
+        // - needs investigating
+        $data['no_length'] = array_merge(
+            $this->objectTypes,
+            $this->booleanTypes,
+            $this->dateTypes,
+            $this->timeTypes
+        );
+
+        // Types where a value/length is optional, will not output a constraint
+        // if the field is empty
+        $data['optional_length'] = array_diff($this->integerTypes, $this->booleanTypes);
+
+        return $this->CI->load->view('files/db_migration', $data, true);
+    }
+
+    /**
+     * Generate the content of a model file
+     *
+     * @param array $data The data to use when building the model:
+     *  int    'field_total'       The number of fields to add to the table
+     *  string 'module_name_lower' The name given to the module
+     *  array  'action_names'      An array of the controller actions (methods) required
+     *  string 'primary_key_field' The name of the primary key
+     *  string 'table_name'        The name of the table in the database
+     *
+     * @return string|bool The content of the model file or false on error
+     */
+    private function buildModel($data)
+    {
+        $field_total = $data['field_total'];
+        if (is_null($field_total)) {
+            return false;
+        }
+
+        return $this->CI->load->view('files/model', $data, true);
+    }
+
+    /**
      * Generate the content for a view file
      *
      * @param array $data   The data required to build the view
@@ -342,9 +588,6 @@ class Modulebuilder
         if ($data['field_total'] == null) {
               return false;
         }
-        $data['use_created'] 	  = $data['useCreated'];
-        $data['use_modified'] 	  = $data['useModified'];
-        $data['use_soft_deletes'] = $data['useSoftDeletes'];
 
         $action_label = $data['action_label'];
         $action_name  = $data['action_name'];
@@ -473,7 +716,9 @@ class Modulebuilder
                         }
 
                         $viewPath = $this->options['output_path'] . $path;
-                        @mkdir($viewPath, DIR_WRITE_MODE);
+                        if ( ! is_dir($viewPath)) {
+                            @mkdir($viewPath, DIR_WRITE_MODE);
+                        }
                         if ( ! write_file("{$viewPath}/{$file_name}", $value)) {
                             $errorMessage = "failed to write file {$viewPath}/{$file_name}";
                             log_message('error', $errorMessage);
@@ -547,45 +792,6 @@ class Modulebuilder
     }
 
     /**
-     * Generate the content of a model file
-     *
-     * @param int    $field_total       The number of fields to add to the table
-     * @param string $module_file_name  The name given to the module
-     * @param array  $action_names      An array of the controller actions (methods) required
-     * @param string $primary_key_field The name of the primary key
-     * @param string $table_name        The name of the table in the database
-     *
-     * @return string|bool The content of the model file or false on error
-     */
-    private function build_model($field_total, $module_file_name, $action_names, $primary_key_field, $table_name)
-    {
-        if ($field_total == null) {
-            return false;
-        }
-
-        $data['field_total']        = $field_total;
-        $data['controller_name']    = $module_file_name;
-        $data['action_names']       = $action_names;
-        $data['primary_key_field']  = $primary_key_field;
-        $data['table_name']         = $table_name;
-
-        $data['created_field']  = $this->CI->input->post('created_field') ?: 'created_on';
-        $data['delete_field']   = $this->CI->input->post('soft_delete_field') ?: 'deleted';
-        $data['modified_field'] = $this->CI->input->post('modified_field') ?: 'modified_on';
-
-        $data['created_by_field']   = $this->CI->input->post('created_by_field') ?: 'created_by';
-        $data['deleted_by_field']   = $this->CI->input->post('deleted_by_field') ?: 'deleted_by';
-        $data['modified_by_field']  = $this->CI->input->post('modified_by_field') ?: 'modified_by';
-
-        $data['logUser']        = $this->CI->input->post('log_user') == 1;
-        $data['useCreated']     = $this->CI->input->post('use_created') == 1;
-        $data['useModified']    = $this->CI->input->post('use_modified') == 1;
-        $data['useSoftDeletes'] = $this->CI->input->post('use_soft_deletes') == 1;
-
-        return $this->CI->load->view('files/model', $data, true);
-    }
-
-    /**
      * Generate the content of a language file
      *
      * @param string $module_name       The name given to the module
@@ -605,112 +811,6 @@ class Modulebuilder
         }
 
         return $lang;
-    }
-
-    /**
-     * Generate the content of the module config file
-     *
-     * @param string $module_name        The name given to the module
-     * @param string $module_description The description text for the module
-     *
-     * @return string A string containing the content of the config file
-     */
-    private function build_config($module_name, $module_description)
-    {
-        $data['module_name'] = $module_name;
-        $data['module_description'] = $module_description;
-
-        // Load our current logged in user so we can access it anywhere.
-        $current_user = $this->CI->user_model->find($this->CI->auth->user_id());
-        $data['username'] = $current_user->username;
-
-        return $this->CI->load->view('files/config', $data, true);
-    }
-
-    /**
-     * Generate the ACL (permissions) migration file
-     *
-     * @param int    $field_total  The number of fields to add to the table
-     * @param string $module_name  The name given to the module
-     * @param array  $contexts     An array of contexts selected
-     * @param array  $action_names An array of the controller actions (methods) required
-     * @param int    $role_id      The id of the role which receives full access to the module
-     *
-     * @return string A string containing the content of the permission migration file
-     */
-    private function build_acl_sql($field_total, $module_name, $contexts, $action_names, $role_id)
-    {
-        $data['action_names']   = $action_names;
-        $data['contexts']       = $contexts;
-        $data['field_total']    = $field_total;
-        $data['role_id']        = $role_id;
-
-        $data['module_name']        = preg_replace("/[ -]/", "_", $module_name);
-        $data['module_name_lower']  = strtolower($data['module_name']);
-
-        return $this->CI->load->view('files/acl_migration', $data, true);
-    }
-
-    /**
-     * Generate the module migration file which creates the database table
-     *
-     * @param int    $field_total       The number of fields to add to the table
-     * @param string $module_name       The name given to the module
-     * @param string $primary_key_field The name of the primary key
-     * @param string $table_name        The name of the table in the database
-     *
-     * @return string A string containing the content of the database migration file
-     */
-    private function build_db_sql($field_total, $module_name, $primary_key_field, $table_name, $table_as_field_prefix)
-    {
-        if ($field_total == null) {
-            return false;
-        }
-
-        $data['field_total']            = $field_total;
-        $data['primary_key_field']      = $primary_key_field;
-        $data['table_as_field_prefix']  = $table_as_field_prefix;
-        $data['table_name']             = $table_name;
-
-        $data['module_name']        = preg_replace("/[ -]/", "_", $module_name);
-        $data['module_name_lower']  = strtolower($data['module_name']);
-
-        $data['created_field']  = $this->CI->input->post('created_field') ?: 'created_on';
-        $data['delete_field']   = $this->CI->input->post('soft_delete_field') ?: 'deleted';
-        $data['modified_field'] = $this->CI->input->post('modified_field') ?: 'modified_on';
-
-        $data['created_by_field']   = $this->CI->input->post('created_by_field') ?: 'created_by';
-        $data['deleted_by_field']   = $this->CI->input->post('deleted_by_field') ?: 'deleted_by';
-        $data['modified_by_field']  = $this->CI->input->post('modified_by_field') ?: 'modified_by';
-
-        $data['logUser']        = $this->CI->input->post('log_user') == 1;
-        $data['useCreated']     = $this->CI->input->post('use_created') == 1;
-        $data['useModified']    = $this->CI->input->post('use_modified') == 1;
-        $data['useSoftDeletes'] = $this->CI->input->post('use_soft_deletes') == 1;
-
-        $data['listFieldTypes'] = array('ENUM', 'SET');
-
-        // There are no doubt more types where a value/length isn't possible
-        // - needs investigating
-        $data['no_length'] = array(
-            'TEXT', 'TINYTEXT', 'MEDIUMTEXT', 'LONGTEXT',
-            'BLOB', 'TINYBLOB', 'MEDIUMBLOB', 'LONGBLOB',
-            'BOOL',
-            'DATE', 'DATETIME', 'TIME', 'TIMESTAMP',
-        );
-
-        // Types where a value/length is optional, will not output a constraint
-        // if the field is empty
-        $data['optional_length'] = array(
-            'INT', 'TINYINT', 'MEDIUMINT', 'BIGINT',
-            'YEAR',
-        );
-
-        $data['decimal_types'] = array(
-            'DECIMAL', 'DOUBLE', 'FLOAT',
-        );
-
-        return $this->CI->load->view('files/db_migration', $data, true);
     }
 
     /**

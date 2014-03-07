@@ -9,7 +9,7 @@
  * $role_id
  */
 
-$ucModuleName = ucfirst($module_name);
+$ucModuleName = ucfirst($module_name_lower);
 $action_status = 'active';
 $permissionValues = '';
 

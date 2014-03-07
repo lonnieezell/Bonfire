@@ -342,29 +342,18 @@ class Developer extends Admin_Controller
                          ->where('deleted', 0)
                          ->order_by('role_name');
 
-        $boolFieldTypes = array('BIT', 'BOOL', 'TINYINT');
-        $listFieldTypes = array('ENUM', 'SET');
-        $textFieldTypes = array('TINYTEXT', 'MEDIUMTEXT', 'TEXT', 'LONGTEXT');
+        $this->load->library('modulebuilder');
+        $boolFieldTypes = array_merge($this->modulebuilder->getBooleanTypes(), array('BIT', 'BOOL', 'TINYINT'));
+        $listFieldTypes = $this->modulebuilder->getListTypes();
+        $textFieldTypes = $this->modulebuilder->getTextTypes();
+        $dbFieldTypes = array();
+        foreach (array_keys($this->modulebuilder->getDatabaseTypes()) as $key) {
+            $dbFieldTypes[$key] = $key;
+        }
 
         Template::set('availableContexts', config_item('contexts'));
         Template::set('boolFieldTypes', $boolFieldTypes);
-        Template::set('db_field_types', array(
-            'VARCHAR' 	 => 'VARCHAR',      'BIGINT' 	 => 'BIGINT',
-            'BINARY' 	 => 'BINARY',       'BIT' 		 => 'BIT',
-            'BLOB' 		 => 'BLOB',         'BOOL' 		 => 'BOOL',
-            'CHAR' 		 => 'CHAR',         'DATE' 		 => 'DATE',
-            'DATETIME' 	 => 'DATETIME',     'DECIMAL' 	 => 'DECIMAL',
-            'DOUBLE' 	 => 'DOUBLE',       'ENUM' 		 => 'ENUM',
-            'FLOAT' 	 => 'FLOAT',        'INT' 		 => 'INT',
-            'LONGBLOB' 	 => 'LONGBLOB',     'LONGTEXT' 	 => 'LONGTEXT',
-            'MEDIUMBLOB' => 'MEDIUMBLOB',   'MEDIUMINT'  => 'MEDIUMINT',
-            'MEDIUMTEXT' => 'MEDIUMTEXT',   'SET' 		 => 'SET',
-            'SMALLINT' 	 => 'SMALLINT',     'TEXT' 		 => 'TEXT',
-            'TIME' 		 => 'TIME',         'TIMESTAMP'  => 'TIMESTAMP',
-            'TINYBLOB' 	 => 'TINYBLOB',     'TINYINT' 	 => 'TINYINT',
-            'TINYTEXT' 	 => 'TINYTEXT',     'VARBINARY'  => 'VARBINARY',
-            'YEAR' 		 => 'YEAR',
-        ));
+        Template::set('db_field_types', $dbFieldTypes);
         Template::set('defaultRoleWithFullAccess', $this->auth->role_id());
         Template::set('field_numbers', range(0, 20));
         Template::set('field_total', $fieldTotal);
@@ -444,17 +433,20 @@ class Developer extends Admin_Controller
             // No need to do any of the below on every iteration of the loop
             $lang_field_details = lang('mb_form_field_details') . ' ';
 
+            $this->load->library('modulebuilder');
+
             // Make sure the length field is required if the DB Field type
             // requires a length
-            $no_length = array(
-                'TEXT', 'TINYTEXT', 'MEDIUMTEXT', 'LONGTEXT',
-                'BLOB', 'TINYBLOB', 'MEDIUMBLOB', 'LONGBLOB',
-                'BOOL',
-                'DATE', 'DATETIME', 'TIME', 'TIMESTAMP',
+            $no_length = array_merge(
+                $this->modulebuilder->getObjectTypes(),
+                $this->modulebuilder->getBooleanTypes(),
+                $this->modulebuilder->getDateTypes(),
+                $this->modulebuilder->getTimeTypes()
             );
-            $optional_length = array(
-                'INT', 'TINYINT', 'MEDIUMINT', 'BIGINT',
-                'YEAR',
+
+            $optional_length = array_diff(
+                $this->modulebuilder->getIntegerTypes(),
+                $this->modulebuilder->getBooleanTypes()
             );
 
             for ($counter = 1; $field_total >= $counter; $counter++) {
@@ -587,7 +579,6 @@ class Developer extends Admin_Controller
         $modified_by_field  = $this->input->post('modified_by_field') ?: 'modified_by';
 
         $textarea_editor = $this->input->post('textarea_editor');
-
 
 		if ($primary_key_field == '') {
 			$primary_key_field = $this->options['primary_key_field'];

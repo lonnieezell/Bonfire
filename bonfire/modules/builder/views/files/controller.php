@@ -4,73 +4,52 @@ $controller_name_lower = strtolower($controller_name);
 $primary_key_field = set_value("primary_key_field");
 
 //------------------------------------------------------------------------------
-// Constructor
-//------------------------------------------------------------------------------
-
-$mb_constructor = "
-	/**
-	 * Constructor
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
-
-		{restrict}";
-
-if ($db_required != '') {
-	$mb_constructor .= "
-		\$this->load->model('{$module_name_lower}_model', null, true);";
-}
-
-$mb_constructor .= "
-		\$this->lang->load('{$module_name_lower}');
-		{constructor_extras}";
-
-// Check that this is an admin area controller before adding the sub_nav
-if ($controller_name_lower != $module_name_lower) {
-	$mb_constructor .= "
-		Template::set_block('sub_nav', '{$controller_name_lower}/_sub_nav');";
-}
-
-$mb_constructor .= "
-
-		Assets::add_module_js('{$module_name_lower}', '{$module_name_lower}.js');
-	}";
-
-//------------------------------------------------------------------------------
 // Index
 //------------------------------------------------------------------------------
 
-$mb_index = "
-
-	/**
-	 * Displays a list of form data.
-	 *
-	 * @return void
-	 */
-	public function index(";
-
-if ($usePagination) {
-    $mb_index .= "\$offset = 0";
-}
-
-$mb_index .= ")
-	{
-";
+$indexArgs = '';
+$indexDelete = '';
+$indexPaginationUri = '';
+$indexPagination = '';
+$indexFind = '';
+$indexToolbarTitle = '';
 
 if ($db_required != '') {
-	$mb_index .= "
-		// Deleting anything?
+    // Public controller
+    if ($controller_name_lower == $module_name_lower) {
+        // Setup paging
+        if ($usePagination) {
+            $indexPaginationUri = "\$pagerUriSegment = 3;
+        \$pagerBaseUrl = site_url('{$module_name_lower}/index') . '/';";
+        }
+
+        // Filter out soft deletes
+        if ($useSoftDeletes) {
+            $indexFind = "
+
+        // Don't display soft-deleted records
+        \$this->{$module_name_lower}_model->where(\$this->{$module_name_lower}_model->get_deleted_field(), 0);";
+        }
+    }
+    // Admin controllers
+    else {
+        $indexDelete = "// Deleting anything?
 		if (isset(\$_POST['delete'])) {
+            \$this->auth->restrict(\$this->permissionDelete);
 			\$checked = \$this->input->post('checked');
 			if (is_array(\$checked) && count(\$checked)) {
-				\$result = false;
-				foreach (\$checked as \$pid) {
-					\$result = \$this->{$module_name_lower}_model->delete(\$pid);
-				}
 
+                // If any of the deletions fail, set the result to false, so
+                // failure message is set if any of the attempts fail, not just
+                // the last attempt
+
+				\$result = true;
+				foreach (\$checked as \$pid) {
+					\$deleted = \$this->{$module_name_lower}_model->delete(\$pid);
+                    if (\$deleted == false) {
+                        \$result = false;
+                    }
+				}
 				if (\$result) {
 					Template::set_message(count(\$checked) . ' ' . lang('{$module_name_lower}_delete_success'), 'success');
 				} else {
@@ -79,11 +58,20 @@ if ($db_required != '') {
 			}
 		}";
 
+        // Setup paging
+        if ($usePagination) {
+            $indexPaginationUri = "\$pagerUriSegment = 5;
+        \$pagerBaseUrl = site_url(SITE_AREA . '/{$controller_name_lower}/{$module_name_lower}/index') . '/';";
+        }
+    }
+
+    // All controllers
+
+    // Finish setup of paging
     if ($usePagination) {
-        $mb_index .= "
+        $indexArgs = "\$offset = 0";
+        $indexPagination = "
         \$limit  = \$this->settings_lib->item('site.list_limit') ?: 15;
-        \$pagerBaseUrl = site_url(SITE_AREA . '/{$controller_name_lower}/{$module_name_lower}/index') . '/';
-        \$pagerUriSegment = 5;
 
         \$this->load->library('pagination');
         \$pager['base_url']    = \$pagerBaseUrl;
@@ -95,89 +83,31 @@ if ($db_required != '') {
         \$this->{$module_name_lower}_model->limit(\$limit, \$offset);";
     }
 
-	$mb_index .= "
-
+    // Result of find_all() will be filtered based on paging, if used, as well
+    // as where clause to filter out soft-deleted fields in public index
+    $indexFind .= "
 		\$records = \$this->{$module_name_lower}_model->find_all();
 
 		Template::set('records', \$records);";
 }
 
-$mb_index .= "
-		Template::set('toolbar_title', 'Manage {$module_name}');
-		Template::render();
-	}";
-
-//------------------------------------------------------------------------------
-// Index (Public Controller)
-//------------------------------------------------------------------------------
-
-$mb_index_front = "
-
-	/**
-	 * Displays a list of form data.
-	 *
-	 * @return void
-	 */
-	public function index(";
-
-    if ($usePagination) {
-        $mb_index_front .= "\$offset = 0";
-    }
-
-$mb_index_front .= ")
-	{
-";
-
-if ($db_required != '') {
-    if ($usePagination) {
-        $mb_index_front .= "
-        \$limit  = \$this->settings_lib->item('site.list_limit') ?: 15;
-        \$pagerBaseUrl = site_url('{$module_name_lower}/index') . '/';
-        \$pagerUriSegment = 3;
-
-        \$this->load->library('pagination');
-        \$pager['base_url']    = \$pagerBaseUrl;
-        \$pager['total_rows']  = \$this->{$module_name_lower}_model->count_all();
-        \$pager['per_page']    = \$limit;
-        \$pager['uri_segment'] = \$pagerUriSegment;
-
-        \$this->pagination->initialize(\$pager);
-        \$this->{$module_name_lower}_model->limit(\$limit, \$offset);";
-    }
-
-    if ($useSoftDeletes) {
-        $mb_index_front .= "
-        \$this->{$module_name_lower}_model->where(\$this->{$module_name_lower}_model->get_deleted_field(), 0);
-        ";
-    }
-	$mb_index_front .= "
-		\$records = \$this->{$module_name_lower}_model->find_all();
-
-		Template::set('records', \$records);";
+// If this is not the front controller, setup the toolbar title
+if ($controller_name_lower != $module_name_lower) {
+    $indexToolbarTitle = "
+    Template::set('toolbar_title', lang('{$module_name_lower}_manage'));";
 }
-
-$mb_index_front .= "
-		Template::render();
-	}";
 
 //------------------------------------------------------------------------------
 // Create
 //------------------------------------------------------------------------------
 
-$mb_create = "
-
-	/**
-	 * Creates a {$module_name} object.
-	 *
-	 * @return void
-	 */
-	public function create()
-	{
-		\$this->auth->restrict('{create_permission}');
-";
+$createSave = '';
+$editSave = '';
+$editDelete = '';
+$editFind = '';
 
 if ($db_required != '') {
-	$mb_create .= "
+    $createSave = "
 		if (isset(\$_POST['save'])) {
 			if (\$insert_id = \$this->save_{$module_name_lower}()) {
 				log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_create_record') . ': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
@@ -188,12 +118,51 @@ if ($db_required != '') {
 
 			Template::set_message(lang('{$module_name_lower}_create_failure') . \$this->{$module_name_lower}_model->error, 'error');
 		}";
+
+    $editFind = "
+        Template::set('{$module_name_lower}', \$this->{$module_name_lower}_model->find(\$id));";
+
+    $editSave = "
+		if (isset(\$_POST['save'])) {
+			\$this->auth->restrict(\$this->permissionEdit);
+
+			if (\$this->save_{$module_name_lower}('update', \$id)) {
+				log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_edit_record') . ': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				Template::set_message(lang('{$module_name_lower}_edit_success'), 'success');
+			} else {
+				Template::set_message(lang('{$module_name_lower}_edit_failure') . \$this->{$module_name_lower}_model->error, 'error');
+			}
+		}";
+
+	if (in_array('delete', $action_names)) {
+        $editDelete = "
+		elseif (isset(\$_POST['delete'])) {
+			\$this->auth->restrict(\$this->permissionDelete);
+
+			if (\$this->{$module_name_lower}_model->delete(\$id)) {
+				log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_delete_record') . ': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				Template::set_message(lang('{$module_name_lower}_delete_success'), 'success');
+
+				redirect(SITE_AREA . '/{$controller_name}/{$module_name_lower}');
+			}
+            Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'error');
+		}";
+	}
 }
 
-$mb_create .= "
-		Assets::add_module_js('{$module_name_lower}', '{$module_name_lower}.js');
+$mb_create = "
+    /**
+	 * Create a {$module_name} object.
+	 *
+	 * @return void
+	 */
+	public function create()
+	{
+		\$this->auth->restrict(\$this->permissionCreate);
+        {$createSave}
 
-		Template::set('toolbar_title', lang('{$module_name_lower}_create') . ' {$module_name}');
+		Template::set('toolbar_title', lang('{$module_name_lower}_action_create'));
+
 		Template::render();
 	}";
 
@@ -202,7 +171,6 @@ $mb_create .= "
 //------------------------------------------------------------------------------
 
 $mb_edit = "
-
 	/**
 	 * Allows editing of {$module_name} data.
 	 *
@@ -216,42 +184,11 @@ $mb_edit = "
 
 			redirect(SITE_AREA . '/{$controller_name}/{$module_name_lower}');
 		}
-";
+        {$editSave}
+        {$editDelete}
+        {$editFind}
 
-if ($db_required != '') {
-	$mb_edit .= "
-		if (isset(\$_POST['save'])) {
-			\$this->auth->restrict('{edit_permission}');
-
-			if (\$this->save_{$module_name_lower}('update', \$id)) {
-				log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_edit_record') . ': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
-				Template::set_message(lang('{$module_name_lower}_edit_success'), 'success');
-			} else {
-				Template::set_message(lang('{$module_name_lower}_edit_failure') . \$this->{$module_name_lower}_model->error, 'error');
-			}
-		}";
-
-	if (in_array('delete', $action_names)) {
-		$mb_edit .= "
-		elseif (isset(\$_POST['delete'])) {
-			\$this->auth->restrict('{delete_permission}');
-
-			if (\$this->{$module_name_lower}_model->delete(\$id)) {
-				log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_delete_record') . ': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
-				Template::set_message(lang('{$module_name_lower}_delete_success'), 'success');
-
-				redirect(SITE_AREA . '/{$controller_name}/{$module_name_lower}');
-			}
-            Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'error');
-		}";
-	}
-
-	$mb_edit .= "
-		Template::set('{$module_name_lower}', \$this->{$module_name_lower}_model->find(\$id));";
-}
-
-$mb_edit .= "
-		Template::set('toolbar_title', lang('{$module_name_lower}_edit') .' {$module_name}');
+		Template::set('toolbar_title', lang('{$module_name_lower}_edit_heading'));
 		Template::render();
 	}";
 
@@ -297,23 +234,16 @@ $mb_save = "
 	}";
 
 //--------------------------------------------------------------------
-// !BUILD THE CLASS
-//--------------------------------------------------------------------
-
-//--------------------------------------------------------------------
 // Constructor
-$body = $mb_constructor;
-
-if ($controller_name_lower == $module_name_lower) {
-	$body = str_replace('{restrict}', '$this->load->library(\'form_validation\');', $body);
-} else {
-	$body = str_replace('{restrict}', '$this->auth->restrict(\'' . preg_replace("/[ -]/", "_", ucfirst($module_name)) . '.' . ucfirst($controller_name) . '.View\');', $body);
-}
-
-$extras = '';
+//--------------------------------------------------------------------
+$constructorExtras = '';
 $date_included     = false;
 $datetime_included = false;
 $textarea_included = false;
+
+$jQueryUI = "
+			Assets::add_css('flick/jquery-ui-1.8.13.custom.css');
+			Assets::add_js('jquery-ui-1.8.13.min.js');";
 
 for ($counter = 1; $field_total >= $counter; $counter++) {
 	$db_field_type = set_value("db_field_type$counter");
@@ -321,46 +251,41 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 
 	if ($db_field_type != null) {
 		if ($db_field_type == 'DATE' && $date_included === false) {
-			$extras .= "
-			Assets::add_css('flick/jquery-ui-1.8.13.custom.css');
-			Assets::add_js('jquery-ui-1.8.13.min.js');";
+			$constructorExtras .= $jQueryUI;
 			$date_included = true;
 		} elseif ($db_field_type == 'DATETIME' && $datetime_included === false) {
 			// If a date field hasn't been included already then add in the jquery ui files
 			if ($date_included === false) {
-				$extras .= "
-			Assets::add_css('flick/jquery-ui-1.8.13.custom.css');
-			Assets::add_js('jquery-ui-1.8.13.min.js');";
+				$constructorExtras .= $jQueryUI;
+                $date_included = true;
 			}
 
-			$extras .= "
+			$constructorExtras .= "
 			Assets::add_css('jquery-ui-timepicker.css');
 			Assets::add_js('jquery-ui-timepicker-addon.js');";
-
-			$date_included     = true;
 			$datetime_included = true;
-		} elseif (($db_field_type == 'TEXT' || $db_field_type == 'MEDIUMTEXT' || $db_field_type == 'LONGTEXT' || $db_field_type == 'TINYTEXT')
+		} elseif (in_array($db_field_type, $textTypes)
 			&& $textarea_included === false
 			&& ! empty($textarea_editor)
 		) {
 			if ($textarea_editor == 'ckeditor') {
-				$extras .= "
+				$constructorExtras .= "
 			Assets::add_js(Template::theme_url('js/editors/ckeditor/ckeditor.js'));";
-			} elseif ($textarea_editor == 'xinha') {
-				$extras .= "
-			Assets::add_js(Template::theme_url('js/editors/xinha_conf.js'));
-			Assets::add_js(Template::theme_url('js/editors/xinha/XinhaCore.js'));";
 			} elseif ($textarea_editor == 'markitup') {
-				$extras .= "
+				$constructorExtras .= "
 			Assets::add_css(Template::theme_url('js/editors/markitup/skins/markitup/style.css'));
 			Assets::add_css(Template::theme_url('js/editors/markitup/sets/default/style.css'));
 
 			Assets::add_js(Template::theme_url('js/editors/markitup/jquery.markitup.js'));
 			Assets::add_js(Template::theme_url('js/editors/markitup/sets/default/set.js'));";
 			} elseif ($textarea_editor == 'tinymce') {
-				$extras .= "
+				$constructorExtras .= "
 			Assets::add_js(Template::theme_url('js/editors/tiny_mce/tiny_mce.js'));
 			Assets::add_js(Template::theme_url('js/editors/tiny_mce/tiny_mce_init.js'));";
+			} elseif ($textarea_editor == 'xinha') {
+				$constructorExtras .= "
+			Assets::add_js(Template::theme_url('js/editors/xinha_conf.js'));
+			Assets::add_js(Template::theme_url('js/editors/xinha/XinhaCore.js'));";
 			}
 
 			$textarea_included = true;
@@ -368,19 +293,26 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 	}
 }
 
-$body = str_replace('{constructor_extras}', $extras, $body);
-unset($extras);
+$constructorRestrict = '';
+$subNav = '';
+$loadModel = '';
+$baseClass = 'Front_Controller';
 
-//--------------------------------------------------------------------
-// Index Method
-if ( is_array($action_names) && in_array('index', $action_names)) {
-	// Check whether this is the front controller
-	if ($controller_name_lower == $module_name_lower) {
-		$body .= $mb_index_front;
-	} else {
-		$body .= $mb_index;
-	}
+// Is this an admin area controller?
+if ($controller_name_lower != $module_name_lower) {
+    $baseClass = 'Admin_Controller';
+    $constructorRestrict = "
+        \$this->auth->restrict(\$this->permissionView);";
+	$subNav = "
+		Template::set_block('sub_nav', '{$controller_name_lower}/_sub_nav');";
 }
+
+if ($db_required != '') {
+    $loadModel = "
+		\$this->load->model('{$module_name_lower}/{$module_name_lower}_model');";
+}
+
+$body = '';
 
 //--------------------------------------------------------------------
 // Check whether this is the front controller
@@ -444,8 +376,14 @@ if ($controller_name_lower != $module_name_lower) {
 	$body = str_replace('{save_data_array}', $save_data_array, $body);
 }
 
+//--------------------------------------------------------------------
+// !BUILD THE CLASS
+//--------------------------------------------------------------------
 
-$baseClass = $controller_name_lower == $module_name_lower ? 'Front_Controller' : 'Admin_Controller';
+
+$permissionModuleName = ucfirst($module_name_lower);
+$permissionControllerName = ucfirst($controller_name);
+$controller_name = ucwords($controller_name);
 
 echo "<?php defined('BASEPATH') || exit('No direct script access allowed');
 
@@ -454,5 +392,41 @@ echo "<?php defined('BASEPATH') || exit('No direct script access allowed');
  */
 class {$controller_name} extends {$baseClass}
 {
-{$body}
+    protected \$permissionCreate = '{$permissionModuleName}.{$permissionControllerName}.Create';
+    protected \$permissionDelete = '{$permissionModuleName}.{$permissionControllerName}.Delete';
+    protected \$permissionEdit   = '{$permissionModuleName}.{$permissionControllerName}.Edit';
+    protected \$permissionView   = '{$permissionModuleName}.{$permissionControllerName}.View';
+
+    /**
+	 * Constructor
+	 *
+	 * @return void
+	 */
+	public function __construct()
+	{
+		parent::__construct();
+		{$constructorRestrict}{$loadModel}
+        \$this->lang->load('{$module_name_lower}');
+		{$constructorExtras}
+        {$subNav}
+
+		Assets::add_module_js('{$module_name_lower}', '{$module_name_lower}.js');
+	}
+
+	/**
+	 * Display a list of {$module_name} data.
+	 *
+	 * @return void
+	 */
+	public function index({$indexArgs})
+	{
+        {$indexDelete}
+        {$indexPaginationUri}
+        {$indexPagination}
+        {$indexFind}
+        {$indexToolbarTitle}
+
+		Template::render();
+	}
+    {$body}
 }";

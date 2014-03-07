@@ -18,13 +18,13 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 }
 
 $hiddenFields = "array('{$primary_key_field}',";
-if ($use_soft_deletes) {
+if ($useSoftDeletes) {
     $hiddenFields .= "'{$soft_delete_field}',";
     if ($logUser) {
         $hiddenFields .= "'{$deleted_by_field}',";
     }
 }
-if ($use_created) {
+if ($useCreated) {
 	$headers .= '
             <th>
                 <?php echo lang("'.$module_name_lower.'_column_created"); ?>
@@ -33,7 +33,7 @@ if ($use_created) {
         $hiddenFields .= "'{$created_by_field}',";
     }
 }
-if ($use_modified) {
+if ($useModified) {
 	$headers .= '
             <th>
                 <?php echo lang("'.$module_name_lower.'_column_modified"); ?>
