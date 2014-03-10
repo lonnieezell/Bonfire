@@ -91,18 +91,14 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 
 	$db_field_type = set_value("db_field_type{$counter}");
 
-	if ( ! in_array($db_field_type, $listTypes)
-        && set_value("db_field_length_value$counter") != null
-       ) {
+    $max = set_value("db_field_length_value$counter");
+	if ( ! in_array($db_field_type, $listTypes) && $max != null) {
 		if (in_array($db_field_type, $realNumberTypes)) {
-			list($len, $decimal) = explode(",", set_value("db_field_length_value$counter"));
-			$max = $len;
-
-			if (isset($decimal) && $decimal != 0) {
-				$max = $len + 1; // Add 1 to allow for the decimal point
-			}
-		} else {
-			$max = set_value("db_field_length_value$counter");
+			$len = explode(',', $max);
+			$max = $len[0];
+            if ( ! empty($len[1])) {
+                $max++; // Add 1 to allow for the decimal point
+            }
 		}
 
         $tempRules[] = "max_length[{$max}]";

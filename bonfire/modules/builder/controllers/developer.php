@@ -689,6 +689,28 @@ class Developer extends Admin_Controller
     //--------------------------------------------------------------------------
 
     /**
+     * Form validation callback for the module name
+     *
+     * @param string $str String to check
+     *
+     * @return  bool
+     */
+    public function _modulename_check($str)
+    {
+        if ( ! preg_match("/^([A-Za-z \-]+)$/", $str)) {
+            $this->form_validation->set_message('_modulename_check', lang('mb_modulename_check'));
+            return false;
+        }
+
+        if (class_exists($str)) {
+            $this->form_validation->set_message('_modulename_check', lang('mb_modulename_check_class_exists'));
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Custom Form Validation Callback Rule
      *
      * Checks that one field doesn't match all the others.
@@ -714,28 +736,6 @@ class Developer extends Admin_Controller
                 return false;
             }
         }
-        return true;
-    }
-
-    /**
-     * Check the module name is valid
-     *
-     * @param string $str String to check
-     *
-     * @return  bool
-     */
-    public function _modulename_check($str)
-    {
-        if ( ! preg_match("/^([A-Za-z \-]+)$/", $str)) {
-            $this->form_validation->set_message('_modulename_check', lang('mb_modulename_check'));
-            return false;
-        }
-
-        if (class_exists($str)) {
-            $this->form_validation->set_message('_modulename_check', lang('mb_modulename_check_class_exists'));
-            return false;
-        }
-
         return true;
     }
 }
