@@ -244,16 +244,19 @@ $lang['bf_profiler_box_files']		= 'Files';
 //--------------------------------------------------------------------
 // Form Validation
 //--------------------------------------------------------------------
-$lang['bf_form_unique'] 			= 'The value in &quot;%s&quot; is already being used.';
+$lang['bf_form_allowed_types']		= '%s must contain one of the allowed selections.';
+$lang['bf_form_allowed_types_none']	= 'Configuration Error: No valid types available for the %s field.';
 $lang['bf_form_alpha_extra']		= 'The %s field may only contain alpha-numeric characters, spaces, periods, underscores, and dashes.';
 $lang['bf_form_matches_pattern']	= 'The %s field does not match the required pattern.';
+$lang['bf_form_max_file_size']      = 'The file in %s field must not exceed {max_size}';
+$lang['bf_form_one_of']				= '%s must contain one of the available selections.';
+$lang['bf_form_one_of_none']        = 'Configuration Error: No valid values available for the %s field.';
+$lang['bf_form_unique'] 			= 'The value in &quot;%s&quot; is already being used.';
 $lang['bf_form_valid_password']		= 'The %s field must be at least {min_length} characters long.';
 $lang['bf_form_valid_password_nums']	= '%s must contain at least 1 number.';
 $lang['bf_form_valid_password_syms']	= '%s must contain at least 1 punctuation mark.';
 $lang['bf_form_valid_password_mixed_1']	= '%s must contain at least 1 uppercase characters.';
 $lang['bf_form_valid_password_mixed_2']	= '%s must contain at least 1 lowercase characters.';
-$lang['bf_form_allowed_types']			= '%s must contain one of the allowed selections.';
-$lang['bf_form_one_of']					= '%s must contain one of the available selections.';
 
 //--------------------------------------------------------------------
 // Menu Strings - feel free to add your own custom modules here
