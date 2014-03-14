@@ -1,69 +1,62 @@
 <div class="admin-box">
-<h3><span style="font-weight: normal">Viewing:</span> <?php echo $log_file_pretty; ?></h3>
-
-<?php if (!isset($log_content) || empty($log_content)) : ?>
+    <h3><span><?php echo lang('logs_viewing'); ?></span> <?php echo $log_file_pretty; ?></h3>
+    <?php if (empty($log_content)) : ?>
 	<div class="alert alert-warning fade in">
 		<a class="close" data-dismiss="alert">&times;</a>
-		<?php echo lang('log_not_found'); ?>
+		<?php echo lang('logs_not_found'); ?>
 	</div>
-<?php else : ?>
-
-	<br/>
-
-	<p>View &nbsp;&nbsp;
-		<select id="filter">
-			<option value="all"><?php echo lang('log_show_all_entries'); ?></option>
-			<option value="error"><?php echo lang('log_show_errors'); ?></option>
-		</select>
-	</p>
-
+    <?php else : ?>
+    <span class='form-horizontal'>
+        <div class='control-group'>
+            <label for='filter' class='control-label'><?php echo lang('logs_filter_label'); ?></label>
+            <div class='controls'>
+                <select id="filter">
+                    <option value="all"><?php echo lang('logs_show_all_entries'); ?></option>
+                    <option value="error"><?php echo lang('logs_show_errors'); ?></option>
+                </select>
+            </div>
+        </div>
+    </span>
 	<div id="log">
-		<?php foreach ($log_content as $row) : ?>
 		<?php
-		// Log files start with PHP guard header
-		// (apparently we don't trust .htaccess)
-		if (strpos($row, '<?php') === 0)
-		{
-			continue;
-		}
+        foreach ($log_content as $row) :
+            // Log files start with PHP guard header
+            if (strpos($row, '<?php') === 0) {
+                continue;
+            }
 
-		$class = '';
+            // Log files usually contain an empty row after the guard header,
+            // and any whitespace around the entry doesn't need to be output
+            $row = trim($row);
+            if (empty($row)) {
+                continue;
+            }
 
-		if (strpos($row, 'ERROR') !== false)
-		{
-			$class="alert-error";
-		} else
-			if (strpos($row, 'DEBUG') !== false)
-			{
-				$class="alert-warning";
-			}
+            $class = 'log-entry';
+            if (strpos($row, 'ERROR') !== false) {
+                $class .= ' alert-error';
+            } elseif (strpos($row, 'DEBUG') !== false) {
+                $class .= ' alert-warning';
+            }
 		?>
-		<div style="border-bottom: 1px solid #999; padding: 5px 18px; color: #222;" <?php echo 'class="'. $class .'"' ?>>
-			<?php e($row); ?>
-		</div>
+		<div class="<?php echo $class; ?>"><?php e($row); ?></div>
 		<?php endforeach; ?>
 	</div>
-
-	<?php if (has_permission('Bonfire.Logs.Manage')) : ?>
-	<!-- Purge? -->
-	<div class="admin-box">
-		<h3><?php echo lang('log_delete1_button') ?></h3>
-		<br/>
-
-		<?php echo form_open(SITE_AREA .'/developer/logs'); ?>
-		<div class="alert alert-warning fade in">
-			<a class="close" data-dismiss="alert">&times;</a>
-			<?php echo sprintf(lang('log_delete1_note'),$log_file_pretty); ?>
-		</div>
-
-		<div class="form-actions">
-			<input type="hidden" name="checked[]" value="<?php e($log_file); ?>" />
-
-			<button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('log_delete_confirm'))) ?>')"><i class="icon-trash icon-white">&nbsp;</i>&nbsp;<?php echo lang('log_delete1_button'); ?></button>
-		</div>
-		<?php echo form_close(); ?>
-	</div>
-	<?php endif; ?>
-
-<?php endif; ?>
-</div><!--/admin-box-->
+</div>
+<?php if (has_permission('Bonfire.Logs.Manage')) : ?>
+<div class="admin-box">
+    <h3><?php echo lang('logs_delete1_button') ?></h3>
+    <?php echo form_open(site_url(SITE_AREA . '/developer/logs'), array('class' => 'form-horizontal')); ?>
+        <div class="alert alert-warning fade in">
+            <a class="close" data-dismiss="alert">&times;</a>
+            <?php echo sprintf(lang('logs_delete1_note'), $log_file_pretty); ?>
+        </div>
+        <fieldset class="form-actions">
+            <input type="hidden" name="checked[]" value="<?php e($log_file); ?>" />
+            <button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('logs_delete_confirm'))) ?>')"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('logs_delete1_button'); ?></button>
+        </fieldset>
+    <?php echo form_close(); ?>
+</div>
+<?php
+    endif;
+endif;

@@ -1,0 +1,18 @@
+.logs th.date {
+	width: 15em;
+}
+.logs td.date a {
+	font-weight: bold;
+}
+#log_threshold {
+	width: auto;
+	max-width: none;
+}
+.admin-box > h3 > span {
+	font-weight: normal;
+}
+#log .log-entry {
+	border-bottom: 1px solid #999;
+	padding: 5px 18px;
+	color: #222;
+}
