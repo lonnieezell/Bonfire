@@ -1,104 +1,83 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
  * Activities
  *
- * Provides a simple and consistent way to record and display user-related activities
- * in both core- and custom-modules.
+ * Provides a simple and consistent way to record and display user-related
+ * activities in both core and custom modules.
  *
- * @package    Bonfire
- * @subpackage Modules_Activities
- * @category   Models
+ * @package    Bonfire\Modules\Activities\Models\Activity_model
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
+ * @link       http://cibonfire.com/docs/activities
  *
  */
 class Activity_model extends BF_Model
 {
 	/**
-	 * Name of the table
-	 *
-	 * @access protected
-	 *
-	 * @var string
+	 * @var string Name of the table
 	 */
 	protected $table_name = 'activities';
 
 	/**
-	 * Name of the primary key
-	 *
-	 * @access protected
-	 *
-	 * @var string
+	 * @var string Name of the primary key
 	 */
 	protected $key = 'activity_id';
 
 	/**
-	 * Use soft deletes or not
-	 *
-	 * @access protected
-	 *
-	 * @var bool
+	 * @var bool Whether to use soft deletes
 	 */
 	protected $soft_deletes = true;
 
 	/**
-	 * The date format to use
-	 *
-	 * @access protected
-	 *
-	 * @var string
+	 * @var string The date format to use
 	 */
 	protected $date_format = 'datetime';
 
 	/**
-	 * Set the created time automatically on a new record
-	 *
-	 * @access protected
-	 *
-	 * @var bool
+	 * @var bool Set the created time automatically on a new record
 	 */
 	protected $set_created = true;
 
 	/**
-	 * Set the modified time automatically on editing a record
-	 *
-	 * @access protected
-	 *
-	 * @var bool
+	 * @var bool Set the modified time automatically on editing a record
 	 */
 	protected $set_modified = false;
 
 	//--------------------------------------------------------------------
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->lang->load('activities/activities');
+    }
+
 	/**
-	 * Returns all activities created by one or more modules.
+	 * Return all activities created by one or more modules.
 	 *
-	 * @access public
+	 * @param string[]|string $modules Module name(s)
 	 *
-	 * @param array $modules Either a string or an array of module names.
-	 *
-	 * @return bool/array An array of activity objects.
+	 * @return bool/array An array of activity objects, or false
 	 */
-	public function find_by_module($modules=array())
+	public function find_by_module($modules = array())
 	{
 		if (empty($modules)) {
-			logit('No module name given to `find_by_module`.');
+			$this->error = lang('activities_model_no_module');
 			return false;
 		}
 
@@ -106,22 +85,27 @@ class Activity_model extends BF_Model
 			$modules = array($modules);
 		}
 
-		$this->db->select(array(
-                            'activity_id',
-                            "{$this->table_name}.user_id",
-                            'activity',
-                            'module',
-                            "{$this->table_name}.{$this->created_field}",
-                            'display_name',
-                            'username',
-                            'email',
-                            'last_login',
-                         ))
-                 ->where_in('module', $modules)
-                 ->where("{$this->table_name}.{$this->deleted_field}", 0)
-                 ->join('users', "{$this->table_name}.user_id = users.id", 'left');
+        if ( ! class_exists('user_model')) {
+            $this->load->model('users/user_model');
+        }
+        $usersTable = $this->user_model->get_table();
+        $usersKey   = $this->user_model->get_key();
 
-		return $this->find_all();
+		return $this->select(array(
+                                'activity_id',
+                                "{$this->table_name}.user_id",
+                                'activity',
+                                'module',
+                                "{$this->table_name}.{$this->created_field}",
+                                'display_name',
+                                'username',
+                                'email',
+                                'last_login',
+                            ))
+                    ->where_in('module', $modules)
+                    ->where("{$this->table_name}.{$this->deleted_field}", 0)
+                    ->join($usersTable, "{$this->table_name}.user_id = {$usersTable}.{$usersKey}", 'left')
+                    ->find_all();
 	}
 
     /**
@@ -157,7 +141,7 @@ class Activity_model extends BF_Model
             $this->load->model('users/user_model');
         }
         $usersTable = $this->user_model->get_table();
-        $usersKey = $this->user_model->get_key();
+        $usersKey   = $this->user_model->get_key();
 
         return $this->select(array(
                                 'username',
@@ -173,9 +157,7 @@ class Activity_model extends BF_Model
     }
 
 	/**
-	 * Logs a new activity.
-	 *
-	 * @access public
+	 * Log an activity.
 	 *
 	 * @param int    $user_id  An int id of the user that performed the activity.
 	 * @param string $activity A string detailing the activity. Max length of 255 chars.
@@ -183,15 +165,15 @@ class Activity_model extends BF_Model
 	 *
 	 * @return bool An int with the ID of the new object, or FALSE on failure.
 	 */
-	public function log_activity($user_id=null, $activity='', $module='any')
+	public function log_activity($user_id = null, $activity = '', $module = 'any')
 	{
 		if (empty($user_id) || ! is_integer($user_id)) {
-			Template::set_message('You must provide a numeric user id to log activity.', 'error');
+            $this->error = lang('activities_log_no_user_id');
 			return false;
 		}
 
         if (empty($activity)) {
-			Template::set_message('Not enough information provided to insert activity.', 'error');
+            $this->error = lang('activities_log_no_activity');
 			return false;
 		}
 
@@ -201,4 +183,5 @@ class Activity_model extends BF_Model
 			'module'	=> $module
 		));
 	}
-}//end class
+}
+/* end /activities/models/activity_model.php */
