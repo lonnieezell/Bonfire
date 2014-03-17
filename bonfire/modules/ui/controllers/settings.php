@@ -22,7 +22,7 @@
  *
  * @package    Bonfire\Modules\UI\Controllers\Settings
  * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs
+ * @link       http://cibonfire.com/docs/bonfire/keyboard_shortcuts
  */
 class Settings extends Admin_Controller
 {
@@ -39,7 +39,7 @@ class Settings extends Admin_Controller
 		$this->auth->restrict('Bonfire.UI.Manage');
 		$this->lang->load('ui');
 
-		Template::set('toolbar_title', 'UI Settings');
+		Template::set('toolbar_title', lang('ui_default_title'));
 	}
 
 	/**
@@ -67,11 +67,9 @@ class Settings extends Admin_Controller
 		} elseif (isset($_POST['save'])) {
 			if ($this->save_settings()) {
 				Template::set_message(lang('ui_shortcut_save_success'), 'success');
-
-				redirect(uri_string());
-			}
-
-            Template::set_message(lang('ui_shortcut_save_error'), 'error');
+			} else {
+                Template::set_message(lang('ui_shortcut_save_error'), 'error');
+            }
 		}
 
 		// Read available shortcuts from the application config
@@ -93,9 +91,8 @@ class Settings extends Admin_Controller
 	 */
 	private function add()
 	{
-		$this->form_validation->set_rules('new_action', lang('ui_actions'), 'required');
-		$this->form_validation->set_rules('new_shortcut', lang('ui_shortcuts'), 'required|callback__validate_shortcuts');
-
+		$this->form_validation->set_rules('new_action', 'lang:ui_actions', 'required');
+		$this->form_validation->set_rules('new_shortcut', 'lang:ui_shortcuts', 'required|callback__validate_shortcuts');
 		if ($this->form_validation->run() === false) {
 			return false;
 		}
@@ -105,6 +102,7 @@ class Settings extends Admin_Controller
 
 		// Read available shortcuts from the application config
 		$available_actions = config_item('ui.current_shortcuts');
+
 		if (array_key_exists($action, $available_actions)) {
 			return $this->save_settings(array($action => $shortcut));
 		}
@@ -119,7 +117,7 @@ class Settings extends Admin_Controller
 	 */
 	private function remove()
 	{
-		$this->form_validation->set_rules('remove_shortcut[]', lang('ui_actions'), 'required|is_array');
+		$this->form_validation->set_rules('remove_shortcut[]', 'lang:ui_actions', 'required|is_array');
 		if ($this->form_validation->run() === false) {
 			return false;
 		}
@@ -128,6 +126,7 @@ class Settings extends Admin_Controller
 
 		// Read the current settings
 		$available_actions = $this->settings_lib->find_all_by('module', 'core.ui');
+
 		if (array_key_exists($action, $available_actions)) {
 			return $this->settings_lib->delete($action, 'core.ui');
 		}
@@ -149,12 +148,12 @@ class Settings extends Admin_Controller
 			// Read available shortcuts from the application config
 			$available_actions = config_item('ui.current_shortcuts');
 
-			// We can't use an array like the remove buttons do
-			// because the text inputs need set_value().
+            // The text inputs need set_value(), so an array can't be used the
+            // way the remove buttons use them.
 			// set_value("shortcut[$action]") is not supported
 			foreach ($available_actions as $action => $shortcut) {
 				if (isset($_POST["shortcut_$action"])) {
-					$this->form_validation->set_rules("shortcut_$action", lang('ui_shortcuts'), 'required|callback__validate_shortcuts');
+					$this->form_validation->set_rules("shortcut_$action", 'lang:ui_shortcuts', 'required|callback__validate_shortcuts');
 					$settings[$action] = $this->input->post("shortcut_$action");
 				}
 			}
@@ -170,7 +169,7 @@ class Settings extends Admin_Controller
 			}
 		}
 
-		log_activity($this->current_user->id, lang('bf_act_settings_saved') . ': ' . $this->input->ip_address(), 'ui');
+		log_activity($this->auth->user_id(), lang('bf_act_settings_saved') . ': ' . $this->input->ip_address(), 'ui');
 
 		return $updated;
 	}
