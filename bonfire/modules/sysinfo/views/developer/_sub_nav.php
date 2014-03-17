@@ -1,12 +1,17 @@
+<?php
+
+$checkSegment = $this->uri->segment(4);
+$baseUrl = site_url(SITE_AREA . '/developer/sysinfo');
+
+?>
 <ul class="nav nav-pills">
-	<li <?php echo $this->uri->segment(4) == '' ? 'class="active"' : '' ?>>
-		<a href="<?php echo site_url(SITE_AREA .'/developer/sysinfo') ?>"><?php echo lang('si_system'); ?></a>
+	<li<?php echo $checkSegment == '' ? ' class="active"' : ''; ?>>
+		<a href="<?php echo $baseUrl; ?>"><?php echo lang('sysinfo_system'); ?></a>
 	</li>
-	<li <?php echo $this->uri->segment(4) == 'modules' ? 'class="active"' : '' ?>>
-		<a href="<?php echo site_url(SITE_AREA .'/developer/sysinfo/modules') ?>"><?php echo lang('si_modules'); ?></a>
+	<li<?php echo $checkSegment == 'modules' ? ' class="active"' : ''; ?>>
+		<a href='<?php echo "{$baseUrl}/modules"; ?>'><?php echo lang('sysinfo_modules'); ?></a>
 	</li>
-	<li <?php echo $this->uri->segment(4) == 'php_info' ? 'class="active"' : '' ?>>
-		<a href="<?php echo site_url(SITE_AREA .'/developer/sysinfo/php_info') ?>"><?php echo lang('si_php'); ?></a>
+	<li<?php echo $checkSegment == 'php_info' ? ' class="active"' : ''; ?>>
+		<a href='<?php echo "{$baseUrl}/php_info"; ?>'><?php echo lang('sysinfo_php'); ?></a>
 	</li>
 </ul>
-
