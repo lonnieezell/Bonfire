@@ -34,24 +34,19 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
 	<noscript>
 		<p>Javascript is required to use Bonfire's admin.</p>
 	</noscript>
-    <div class="navbar navbar-static-top navbar-inverse" id="topbar" >
+    <div class="nav navbar-static-top navbar-inverse" id="topbar" >
         <div class="navbar-inner">
-            <div class="container-fluid">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
+            <div class="container">
                 <?php
-                echo anchor('/', html_escape($this->settings_lib->item('site.title')), 'class="brand"');
+                echo anchor('/', html_escape($this->settings_lib->item('site.title')), 'class="navbar-brand"');
                 if (isset($shortcut_data) && is_array($shortcut_data['shortcuts'])
                     && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])
                    ) :
                 ?>
                 <!-- Shortcut Menu -->
-                <div class="nav pull-right" id="shortcuts">
+                <div class="navbar-nav pull-right" id="shortcuts">
                     <div class="btn-group">
-                        <a class="dropdown-toggle light btn" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png'); ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts" /></a>
+                        <a class="dropdown-toggle light btn btn-default" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png'); ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts" /></a>
                         <ul class="dropdown-menu pull-right toolbar-keys">
                             <li>
                                 <div class="inner keys">
@@ -68,9 +63,9 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
 					</div>
                 </div>
                 <?php endif;?>
-                <div class="nav-collapse in collapse">
+                <div class="navbar-collapse collapse">
                     <!-- User Menu -->
-                    <div class="nav pull-right" id="user-menu">
+                    <div class="navbar-nav pull-right" id="user-menu">
                         <div class="btn-group">
                             <a href="<?php echo site_url(SITE_AREA . '/settings/users/edit'); ?>" id="tb_email" class="btn dark" title="<?php echo lang('bf_user_settings'); ?>">
                                 <?php
@@ -81,7 +76,7 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
                             <?php
                             /* Change **light** to **dark** to match colors */
                             ?>
-                            <a class="btn dropdown-toggle light" data-toggle="dropdown" href="#"><span class="caret"></span></a>
+                            <a class="btn btn-default dropdown-toggle light" data-toggle="dropdown" href="#"><span class="caret"></span></a>
                             <ul class="dropdown-menu pull-right toolbar-profile">
                                 <li>
                                     <div class="inner">
@@ -109,7 +104,7 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
 		</div><!-- /.navbar-inner -->
 	</div><!-- /.navbar -->
     <div class="subnav" >
-       <div class="container-fluid">
+       <div class="container">
            <?php if (isset($toolbar_title)) : ?>
             <h1><?php echo $toolbar_title; ?></h1>
            <?php endif; ?>

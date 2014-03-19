@@ -10,6 +10,12 @@
     font-size: 21px;
     padding: 14px 24px;
 }
+
+.navbar-nav .dropdown {
+    min-width: 80px;
+    padding-top: 10px;
+}
+
 #login {
     max-width: 300px;
     padding: 19px 29px 14px 29px;

@@ -34,7 +34,7 @@
 	<div id="header">
 		<h2>Bonfire Tests</h2>
 
-		<div id="nav">
+		<div id="navbar-nav">
 			<form action="<?php echo $form_url; ?>" method="post">
 				<input type="hidden" name="all" value="1" />
 				<input type="submit" value="Run All" />

@@ -1255,7 +1255,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 	if ($wrap === TRUE)
 	{
 		$output  = '<ul class="breadcrumb">' . PHP_EOL;
-		$output .= '<li><a href="'.$home_link.'"><i class="icon-home">&nbsp;</i></a> '.$separator.'</li>' . PHP_EOL;
+		$output .= '<li><a href="'.$home_link.'"><i class="glyphicon glyphglyphicon glyphicon-home">&nbsp;</i></a> '.$separator.'</li>' . PHP_EOL;
 	}
 	else
 	{

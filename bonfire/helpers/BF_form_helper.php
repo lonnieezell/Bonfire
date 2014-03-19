@@ -94,7 +94,7 @@ if ( ! function_exists('_form_common'))
 
 		$output = <<<EOL
 
-<div class="control-group {$error}">
+<div class="form-group {$error}">
 	<label class="control-label" for="{$defaults['name']}">{$label}</label>
 	<div class="controls">
 		 <input {$output} {$extra} />
@@ -469,7 +469,7 @@ if ( ! function_exists('form_dropdown'))
 
 		$output = <<<EOL
 
-<div class="control-group {$error}">
+<div class="form-group {$error}">
 	<label class="control-label" for="{$data['id']}">{$label}</label>
 	<div class="controls">
 		 <select {$output} {$extra}>

@@ -18,7 +18,7 @@ $validation_errors = validation_errors();
     //--------------------------------------------------------------------------
     if ( ! $writable) :
     ?>
-    <div class="alert alert-error fade in">
+    <div class="alert alert-danger fade in">
         <a class="close" data-dismiss="alert">&times;</a>
         <p><?php echo lang('mb_not_writable_note'); ?></p>
     </div>
@@ -27,7 +27,7 @@ $validation_errors = validation_errors();
 
     if ($validation_errors) :
     ?>
-    <div class="alert alert-error fade in">
+    <div class="alert alert-danger fade in">
         <a data-dismiss="alert" class="close">&times;</a>
         <h4 class="alert-heading"><?php echo lang('mb_form_errors'); ?></h4>
         <?php echo $validation_errors; ?>
@@ -37,7 +37,7 @@ $validation_errors = validation_errors();
 
     if ($session_error):
     ?>
-    <div class="alert alert-error fade in">
+    <div class="alert alert-danger fade in">
         <a data-dismiss="alert" class="close">&times;</a>
         <?php echo $session_error; ?>
     </div>
@@ -46,7 +46,7 @@ $validation_errors = validation_errors();
 
     if (isset($error_message)) :
     ?>
-    <div class="alert alert-error fade in">
+    <div class="alert alert-danger fade in">
         <a data-dismiss="alert" class="close">&times;</a>
         <?php echo $error_message; ?>
     </div>
@@ -75,7 +75,7 @@ $validation_errors = validation_errors();
         ?>
             <fieldset id="module_details">
                 <legend><?php echo lang('mb_form_mod_details'); ?></legend>
-                <div class="control-group<?php echo form_error('module_name') ? ' error' : ''; ?>">
+                <div class="form-group<?php echo form_error('module_name') ? ' error' : ''; ?>">
                     <label for="module_name" class="control-label block"><?php echo lang('mb_form_mod_name'); ?></label>
                     <div class="controls">
                         <input name="module_name" id="module_name" type="text" value="<?php echo set_value("module_name"); ?>" placeholder="<?php echo lang('mb_form_mod_name_ph'); ?>" />
@@ -88,14 +88,14 @@ $validation_errors = validation_errors();
                 // Module Details - Advanced Options
                 //--------------------------------------------------------------
                 ?>
-                <div class="control-group mb_advanced<?php echo form_error('module_description') ? ' error' : ''; ?>">
+                <div class="form-group mb_advanced<?php echo form_error('module_description') ? ' error' : ''; ?>">
                     <label for="module_description" class="control-label block"><?php echo lang('mb_form_mod_desc'); ?></label>
                     <div class="controls">
                         <input name="module_description" id="module_description" type="text" value="<?php echo set_value("module_description", lang('mb_form_mod_desc_ph')); ?>" placeholder="<?php echo lang('mb_form_mod_desc_ph'); ?>" />
                         <span class="help-inline"><?php echo form_error('module_description'); ?></span>
                     </div>
                 </div>
-                <div class="control-group mb_advanced">
+                <div class="form-group mb_advanced">
                     <label class="control-label block" id="contexts_label"><?php echo lang('mb_form_contexts'); ?></label>
                     <div class="controls" aria-labelledby="contexts_label" role="group">
                         <label class="checkbox" for="contexts_public">
@@ -113,7 +113,7 @@ $validation_errors = validation_errors();
                         <?php endforeach; ?>
                     </div>
                 </div>
-                <div class="control-group mb_advanced<?php echo form_error('form_action') ? ' error' : ''; ?>">
+                <div class="form-group mb_advanced<?php echo form_error('form_action') ? ' error' : ''; ?>">
                     <?php echo form_error("form_action"); ?>
                     <label class="control-label" id="form_action_label"><?php echo lang('mb_form_actions'); ?></label>
                     <div class="controls" aria-labelledby="form_action_label" role="group">
@@ -136,7 +136,7 @@ $validation_errors = validation_errors();
                         <?php endforeach;?>
                     </div>
                 </div>
-                <div class="control-group mb_advanced">
+                <div class="form-group mb_advanced">
                     <label class="control-label" for="role_id"><?php echo lang('mb_form_role_id'); ?></label>
                     <div class="controls">
                         <select name="role_id" id="role_id">
@@ -151,7 +151,7 @@ $validation_errors = validation_errors();
                 // End of Module Details - Advanced Options
                 //--------------------------------------------------------------
                 ?>
-                <div class="control-group">
+                <div class="form-group">
                     <label class='control-label' for='mb_module_db'><?php echo lang('mb_module_db'); ?></label>
                     <div class="controls" id='mb_module_db'>
                         <label class="inline radio" for="db_no">
@@ -176,7 +176,7 @@ $validation_errors = validation_errors();
             ?>
             <fieldset id="db_details">
                 <legend><?php echo lang('mb_form_table_details'); ?></legend>
-                <div class="control-group">
+                <div class="form-group">
                     <div class="controls">
                         <a href="#" class="mb_show_advanced small"><?php echo lang('mb_form_show_advanced'); ?></a>
                     </div>
@@ -186,21 +186,21 @@ $validation_errors = validation_errors();
                 // Table Details - Advanced Options
                 //--------------------------------------------------------------
                 ?>
-                <div class="control-group mb_advanced<?php echo form_error('table_name') ? ' error' : ''; ?>">
+                <div class="form-group mb_advanced<?php echo form_error('table_name') ? ' error' : ''; ?>">
                     <label for="table_name" class="control-label block"><?php echo lang('mb_form_table_name'); ?></label>
                     <div class="controls">
                         <input name="table_name" id="table_name" type="text" value="<?php echo set_value('table_name'); ?>" placeholder="<?php echo lang('mb_form_table_name_ph'); ?>" />
                         <span class="help-inline"><?php echo form_error('table_name'); ?></span>
                     </div>
                 </div>
-                <div class="control-group mb_advanced<?php echo form_error('form_error_delimiters') ? ' error' : ''; ?>">
+                <div class="form-group mb_advanced<?php echo form_error('form_error_delimiters') ? ' error' : ''; ?>">
                     <label for="form_error_delimiters" class="control-label block"><?php echo lang('mb_form_err_delims'); ?></label>
                     <div class="controls">
                         <input name="form_error_delimiters" id="form_error_delimiters" type="text" value="<?php echo set_value("form_error_delimiters", "<span class='error'>,</span>"); ?>" />
                         <span class="help-inline"><?php echo form_error('form_error_delimiters'); ?></span>
                     </div>
                 </div>
-                <div class="control-group mb_advanced">
+                <div class="form-group mb_advanced">
                     <div class="controls">
                         <label for="use_pagination" class="checkbox">
                             <input type='checkbox' name="use_pagination" id="use_pagination" value="1" <?php echo set_checkbox('use_pagination', 1); ?> />
@@ -208,7 +208,7 @@ $validation_errors = validation_errors();
                         </label>
                     </div>
                 </div>
-                <div class="control-group mb_advanced">
+                <div class="form-group mb_advanced">
                     <div class="controls">
                         <label for="log_user" class="checkbox">
                             <input type='checkbox' name="log_user" id="log_user" value='1' <?php echo set_checkbox('log_user', 1); ?> />
@@ -216,7 +216,7 @@ $validation_errors = validation_errors();
                         </label>
                     </div>
                 </div>
-                <div class="control-group mb_advanced">
+                <div class="form-group mb_advanced">
                     <div class="controls">
                         <label for="use_soft_deletes" class="checkbox">
                             <input type='checkbox' name="use_soft_deletes" id="use_soft_deletes" value='1' <?php echo set_checkbox('use_soft_deletes', 1); ?> />
@@ -224,7 +224,7 @@ $validation_errors = validation_errors();
                         </label>
                     </div>
                 </div>
-                <div class="control-group mb_advanced<?php echo form_error('soft_delete_field') ? ' error' : ''; ?>">
+                <div class="form-group mb_advanced<?php echo form_error('soft_delete_field') ? ' error' : ''; ?>">
                     <label for="soft_delete_field" class="control-label block"><?php echo lang('mb_soft_delete_field'); ?></label>
                     <div class="controls">
                         <input name="soft_delete_field" id="soft_delete_field" type="text" value="<?php echo set_value('soft_delete_field', lang('mb_soft_delete_field_ph')); ?>" />
@@ -232,7 +232,7 @@ $validation_errors = validation_errors();
                         <span class="help-inline"><?php echo form_error('soft_delete_field'); ?></span>
                     </div>
                 </div>
-                <div class="control-group mb_advanced<?php echo form_error('deleted_by_field') ? ' error' : ''; ?>">
+                <div class="form-group mb_advanced<?php echo form_error('deleted_by_field') ? ' error' : ''; ?>">
                     <label for="deleted_by_field" class="control-label block"><?php echo lang('mb_deleted_by_field'); ?></label>
                     <div class="controls">
                         <input name="deleted_by_field" id="deleted_by_field" type="text" value="<?php echo set_value('deleted_by_field', lang('mb_deleted_by_field_ph')); ?>" />
@@ -240,7 +240,7 @@ $validation_errors = validation_errors();
                         <span class="help-inline"><?php echo form_error('deleted_by_field'); ?></span>
                     </div>
                 </div>
-                <div class="control-group mb_advanced">
+                <div class="form-group mb_advanced">
                     <div class="controls">
                         <label for="use_created" class="checkbox">
                             <input type='checkbox' name="use_created" id="use_created" value='1' <?php echo set_checkbox('use_created', 1); ?> />
@@ -248,7 +248,7 @@ $validation_errors = validation_errors();
                         </label>
                     </div>
                 </div>
-                <div class="control-group mb_advanced<?php echo form_error('created_field') ? ' error' : ''; ?>">
+                <div class="form-group mb_advanced<?php echo form_error('created_field') ? ' error' : ''; ?>">
                     <label for="created_field" class="control-label block"><?php echo lang('mb_form_created_field'); ?></label>
                     <div class="controls">
                         <input name="created_field" id="created_field" type="text" value="<?php echo set_value('created_field', lang('mb_form_created_field_ph')); ?>" />
@@ -256,7 +256,7 @@ $validation_errors = validation_errors();
                         <span class="help-inline"><?php echo form_error('created_field'); ?></span>
                     </div>
                 </div>
-                <div class="control-group mb_advanced<?php echo form_error('created_by_field') ? ' error' : ''; ?>">
+                <div class="form-group mb_advanced<?php echo form_error('created_by_field') ? ' error' : ''; ?>">
                     <label for="created_by_field" class="control-label block"><?php echo lang('mb_form_created_by_field'); ?></label>
                     <div class="controls">
                         <input name="created_by_field" id="created_by_field" type="text" value="<?php echo set_value('created_by_field', lang('mb_form_created_by_field_ph')); ?>" />
@@ -264,7 +264,7 @@ $validation_errors = validation_errors();
                         <span class="help-inline"><?php echo form_error('created_by_field'); ?></span>
                     </div>
                 </div>
-                <div class="control-group mb_advanced">
+                <div class="form-group mb_advanced">
                     <div class="controls">
                         <label for="use_modified" class="checkbox">
                             <input type='checkbox' name="use_modified" id="use_modified" value='1' <?php echo set_checkbox('use_modified', 1); ?> />
@@ -272,7 +272,7 @@ $validation_errors = validation_errors();
                         </label>
                     </div>
                 </div>
-                <div class="control-group mb_advanced<?php echo form_error('modified_field') ? ' error' : ''; ?>">
+                <div class="form-group mb_advanced<?php echo form_error('modified_field') ? ' error' : ''; ?>">
                     <label for="modified_field" class="control-label block"><?php echo lang('mb_form_modified_field'); ?></label>
                     <div class="controls">
                         <input name="modified_field" id="modified_field" type="text" value="<?php echo set_value('modified_field', lang('mb_form_modified_field_ph')); ?>" />
@@ -280,7 +280,7 @@ $validation_errors = validation_errors();
                         <span class="help-inline"><?php echo form_error('modified_field'); ?></span>
                     </div>
                 </div>
-                <div class="control-group mb_advanced<?php echo form_error('modified_by_field') ? ' error' : ''; ?>">
+                <div class="form-group mb_advanced<?php echo form_error('modified_by_field') ? ' error' : ''; ?>">
                     <label for="modified_by_field" class="control-label block"><?php echo lang('mb_form_modified_by_field'); ?></label>
                     <div class="controls">
                         <input name="modified_by_field" id="modified_by_field" type="text" value="<?php echo set_value('modified_by_field', lang('mb_form_modified_by_field_ph')); ?>" />
@@ -297,14 +297,14 @@ $validation_errors = validation_errors();
                     <a class="close" data-dismiss="alert">&times;</a>
                     <?php echo lang('mb_table_note'); ?>
                 </div>
-                <div class="control-group mb_new_table<?php echo form_error('primary_key_field') ? ' error' : ''; ?>">
+                <div class="form-group mb_new_table<?php echo form_error('primary_key_field') ? ' error' : ''; ?>">
                     <label for="primary_key_field" class="control-label block"><?php echo lang('mb_form_primarykey'); ?></label>
                     <div class="controls">
                         <input name="primary_key_field" id="primary_key_field" type="text" value="<?php echo set_value("primary_key_field", (isset($existing_table_fields[0]) && $existing_table_fields[0]['primary_key']) ? $existing_table_fields[0]['name'] : 'id'); ?>" />
                         <span class="help-inline"><?php echo form_error('primary_key_field'); ?></span>
                     </div>
                 </div>
-                <div id="field_numbers" class="control-group">
+                <div id="field_numbers" class="form-group">
                     <label class="control-label"><?php echo lang('mb_form_fieldnum'); ?></label>
                     <div class="controls">
                         <?php
@@ -344,14 +344,14 @@ $validation_errors = validation_errors();
                         <?php echo lang('mb_field_note'); ?>
                     </div>
                     <?php endif; ?>
-                    <div class="control-group<?php echo form_error($viewFieldLabel) ? ' error' : ''; ?>">
+                    <div class="form-group<?php echo form_error($viewFieldLabel) ? ' error' : ''; ?>">
                         <label class="control-label" for="<?php echo $viewFieldLabel; ?>"><?php echo lang('mb_form_label'); ?></label>
                         <div class="controls">
                             <input name="<?php echo $viewFieldLabel; ?>" id="<?php echo $viewFieldLabel; ?>" type="text" value="<?php echo set_value($viewFieldLabel, isset($existing_table_fields[$count]) ? ucwords(str_replace('_', ' ', $existing_table_fields[$count]['name'])) : ''); ?>" placeholder="<?php echo lang('mb_form_label_ph'); ?>" />
                             <span class="help-inline"><?php echo form_error($viewFieldLabel); ?></span>
                         </div>
                     </div>
-                    <div class="control-group<?php echo form_error($viewFieldName) ? ' error' : ''; ?>">
+                    <div class="form-group<?php echo form_error($viewFieldName) ? ' error' : ''; ?>">
                         <label class="control-label" for="<?php echo $viewFieldName; ?>"><?php echo lang('mb_form_fieldname'); ?></label>
                         <div class="controls">
                             <input name="<?php echo $viewFieldName; ?>" id="<?php echo $viewFieldName; ?>" type="text" value="<?php echo set_value($viewFieldName, isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['name'] : ''); ?>" maxlength="30" placeholder="<?php echo lang('mb_form_fieldname_ph'); ?>" />
@@ -383,14 +383,14 @@ $validation_errors = validation_errors();
                         $default_max_len = in_array($existing_table_fields[$count]['type'], $listFieldTypes) ? $existing_table_fields[$count]['values'] : $existing_table_fields[$count]['max_length'];
                     }
                     ?>
-                    <div class="control-group <?php echo form_error($dbFieldLength) ? 'error' : ''; ?>">
+                    <div class="form-group <?php echo form_error($dbFieldLength) ? 'error' : ''; ?>">
                         <label class="control-label" for="<?php echo $dbFieldLength; ?>"><?php echo lang('mb_form_length'); ?></label>
                         <div class="controls">
                             <input name="<?php echo $dbFieldLength; ?>" id="<?php echo $dbFieldLength; ?>" type="text" value="<?php echo set_value($dbFieldLength, $default_max_len); ?>" placeholder="<?php echo lang('mb_form_length_ph'); ?>" />
                             <span class="help-inline"><?php echo form_error($dbFieldLength); ?></span>
                         </div>
                     </div>
-                    <div class="control-group">
+                    <div class="form-group">
                         <label class="control-label" id="<?php echo $validationLbl; ?>"><?php echo lang('mb_form_rules'); ?></label>
                         <div class="controls" aria-labelledby="<?php echo $validationLbl; ?>" role="group">
                             <?php
@@ -409,7 +409,7 @@ $validation_errors = validation_errors();
                             <a class="small mb_show_advanced_rules" href="#"><em><?php echo lang('mb_form_show_more'); ?></em></a>
                         </div>
                     </div>
-                    <div class="control-group mb_advanced">
+                    <div class="form-group mb_advanced">
                         <label class="control-label" id="<?php echo $validLimitLbl; ?>"><?php echo lang('mb_form_rules_limits'); ?></label>
                         <div class="controls" aria-labelledby="<?php echo $validLimitLbl; ?>" role="group">
                             <?php

@@ -52,7 +52,7 @@ class Contexts
 	/**
 	 * @var string The class name to attach to the outer ul tag.
 	 */
-	protected static $outer_class = 'nav';
+	protected static $outer_class = 'navbar-nav';
 
 	/**
 	 * @var string The id to apply to the outer ul tag.

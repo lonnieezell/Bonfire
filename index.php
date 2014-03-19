@@ -37,7 +37,7 @@
                 <li>Edit your <strong>application/config/database.php</strong> file accordingly</li>
                 <li>Also, you may want to rename 1.htaccess to .htaccess if you wish to use mod_rewrite. =D</li>
             </ol>
-            <div class="alert alert-error">
+            <div class="alert alert-danger">
                 <h3>Oops!</h3>
                 Your Web Root should be set to the <strong>public</strong> folder,but it's <strong>not</strong>. It's pointing to the <strong>Bonfire Root</strong> folder.<br><br>
 

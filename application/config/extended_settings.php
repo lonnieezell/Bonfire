@@ -64,7 +64,7 @@ $config['extended_settings_fields'] = array(
 				'name'		=> 'state',
 				'id'		=> 'state',
 				'maxlength'	=> '2',
-				'class'		=> 'span1'
+				'class'		=> 'col-md-1'
 			),
 		),
 		'permission' => 'Site.Content.View',

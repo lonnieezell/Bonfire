@@ -5,7 +5,7 @@ $show_extended_settings = ! empty($extended_settings);
 
 if ($validation_errors) :
 ?>
-<div class="alert alert-block alert-error fade in">
+<div class="alert alert-block alert-danger fade in">
 	<a class="close" data-dismiss="alert">&times;</a>
 	<?php echo $validation_errors; ?>
 </div>
@@ -42,20 +42,20 @@ if ($validation_errors) :
 				<div class="tab-pane active" id="main-settings">
 					<fieldset>
 						<legend><?php echo lang('bf_site_information'); ?></legend>
-						<div class="control-group">
+						<div class="form-group">
 							<label class="control-label" for="title"><?php echo lang('bf_site_name'); ?></label>
 							<div class="controls">
 								<input type="text" name="title" id="title" class="span6" value="<?php echo set_value('site.title', isset($settings['site.title']) ? $settings['site.title'] : ''); ?>" />
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="form-group">
 							<label class="control-label" for="system_email"><?php echo lang('bf_site_email'); ?></label>
 							<div class="controls">
-								<input type="text" name="system_email" id="system_email" class="span4" value="<?php echo set_value('site.system_email', isset($settings['site.system_email']) ? $settings['site.system_email'] : ''); ?>" />
+								<input type="text" name="system_email" id="system_email" class="col-md-4" value="<?php echo set_value('site.system_email', isset($settings['site.system_email']) ? $settings['site.system_email'] : ''); ?>" />
 								<span class="help-inline"><?php echo lang('bf_site_email_help'); ?></span>
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="form-group">
 							<label class="control-label" for="status"><?php echo lang('bf_site_status'); ?></label>
 							<div class="controls">
 								<select name="status" id="status">
@@ -64,14 +64,14 @@ if ($validation_errors) :
 								</select>
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="form-group">
 							<label class="control-label" for="list_limit"><?php echo lang('bf_top_number'); ?></label>
 							<div class="controls">
-								<input type="text" name="list_limit" id="list_limit" value="<?php echo set_value('list_limit', isset($settings['site.list_limit']) ? $settings['site.list_limit'] : ''); ?>" class="span1" />
+								<input type="text" name="list_limit" id="list_limit" value="<?php echo set_value('list_limit', isset($settings['site.list_limit']) ? $settings['site.list_limit'] : ''); ?>" class="col-md-1" />
 								<span class="help-inline"><?php echo lang('bf_top_number_help'); ?></span>
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="form-group">
 							<label class="control-label" for="languages"><?php echo lang('bf_language'); ?></label>
 							<div class="controls">
 								<select name="languages[]" id="languages" multiple="multiple">
@@ -95,7 +95,7 @@ if ($validation_errors) :
 				<div class="tab-pane" id="security">
 					<fieldset>
 						<legend><?php echo lang('bf_security'); ?></legend>
-						<div class="control-group">
+						<div class="form-group">
 							<div class="controls">
 								<label class='checkbox' for="allow_register">
 									<input type="checkbox" name="allow_register" id="allow_register" value="1" <?php echo set_checkbox('auth.allow_register', 1, isset($settings['auth.allow_register']) && $settings['auth.allow_register'] == 1); ?> />
@@ -103,7 +103,7 @@ if ($validation_errors) :
 								</label>
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="form-group">
 							<label class="control-label" for="user_activation_method"><?php echo lang('bf_activate_method'); ?></label>
 							<div class="controls">
 								<select name="user_activation_method" id="user_activation_method">
@@ -113,7 +113,7 @@ if ($validation_errors) :
 								</select>
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="form-group">
 							<label class="control-label" for="login_type"><?php echo lang('bf_login_type') ?></label>
 							<div class="controls">
 								<select name="login_type" id="login_type">
@@ -123,7 +123,7 @@ if ($validation_errors) :
 								</select>
 							</div>
 						</div>
-                        <div class="control-group">
+                        <div class="form-group">
 							<label class="control-label" id="use_usernames_label"><?php echo lang('bf_use_usernames'); ?></label>
 							<div class="controls" aria-labelledby="use_usernames_label" role="group">
 								<label class="radio" for="use_username">
@@ -136,7 +136,7 @@ if ($validation_errors) :
 								</label>
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="form-group">
 							<label class="control-label" id='allow_name_change_label'><?php echo lang('bf_display_name'); ?></label>
 							<div class="controls" aria-labelledby='allow_name_change_label' role='group'>
 								<label class="checkbox" for="allow_name_change">
@@ -151,7 +151,7 @@ if ($validation_errors) :
 								</div>
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="form-group">
 							<div class="controls">
 								<label class="checkbox" for="allow_remember">
 									<input type="checkbox" name="allow_remember" id="allow_remember" value="1" <?php echo set_checkbox('auth.allow_remember', 1, isset($settings['auth.allow_remember']) && $settings['auth.allow_remember'] == 1); ?> />
@@ -159,7 +159,7 @@ if ($validation_errors) :
 								</label>
 							</div>
 						</div>
-						<div class="control-group" id="remember-length" style="<?php if ( ! $settings['auth.allow_remember']) { echo 'display: none'; } ?>">
+						<div class="form-group" id="remember-length" style="<?php if ( ! $settings['auth.allow_remember']) { echo 'display: none'; } ?>">
 							<label class="control-label" for="remember_length"><?php echo lang('bf_remember_time'); ?></label>
 							<div class="controls">
 								<select name="remember_length" id="remember_length">
@@ -170,14 +170,14 @@ if ($validation_errors) :
 								</select>
 							</div>
 						</div>
-						<div class="control-group" id="password-strength">
+						<div class="form-group" id="password-strength">
 							<label class="control-label" for="password_min_length"><?php echo lang('bf_password_strength'); ?></label>
 							<div class="controls">
-								<input type="text" name="password_min_length" id="password_min_length" value="<?php echo set_value('password_min_length', isset($settings['auth.password_min_length']) ? $settings['auth.password_min_length'] : ''); ?>" class="span1" />
+								<input type="text" name="password_min_length" id="password_min_length" value="<?php echo set_value('password_min_length', isset($settings['auth.password_min_length']) ? $settings['auth.password_min_length'] : ''); ?>" class="col-md-1" />
 								<span class="help-inline"><?php echo lang('bf_password_length_help'); ?></span>
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="form-group">
 							<label class="control-label" id='password_options_label'><?php echo lang('set_option_password'); ?></label>
 							<div class="controls" aria-labelledby='password_options_label' role='group'>
 								<label class="checkbox" for="password_force_numbers">
@@ -198,7 +198,7 @@ if ($validation_errors) :
 								</label>
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="form-group">
 							<label for="password_iterations" class="control-label"><?php echo lang('set_password_iterations'); ?></label>
 							<div class="controls">
 								<select name="password_iterations" id='password_iterations'>
@@ -211,7 +211,7 @@ if ($validation_errors) :
 								<span class="help-inline"><?php echo lang('bf_password_iterations_note'); ?></span>
 							</div>
 						</div>
-						<div class="control-group">
+						<div class="form-group">
 							<label class="control-label" for="force_pass_reset"><?php echo lang('set_force_reset'); ?></label>
 							<div class="controls">
 								<a href="<?php echo site_url(SITE_AREA . '/settings/users/force_password_reset_all'); ?>" class="btn btn-danger" onclick="return confirm('<?php echo lang('set_password_reset_confirm'); ?>');"><?php echo lang('set_reset'); ?></a>
@@ -225,7 +225,7 @@ if ($validation_errors) :
 				<div class="tab-pane" id="developer">
 					<fieldset>
 						<legend><?php echo lang('set_option_developer'); ?></legend>
-						<div class="control-group">
+						<div class="form-group">
 							<div class="controls">
 								<label class="checkbox" for="show_profiler">
 									<input type="checkbox" name="show_profiler" id="show_profiler" value="1" <?php echo set_checkbox('auth.use_extended_profile', 1, isset($settings['site.show_profiler']) && $settings['site.show_profiler'] == 1); ?> />
@@ -285,7 +285,7 @@ if ($validation_errors) :
 
                                 if ( ! empty($field_control)) :
                         ?>
-                        <div class="control-group<?php echo $form_error_class; ?>">
+                        <div class="form-group<?php echo $form_error_class; ?>">
                             <label class="control-label" for="<?php echo $field['name']; ?>"><?php echo $field['label']; ?></label>
                             <div class="controls">
                                 <?php echo $field_control; ?>

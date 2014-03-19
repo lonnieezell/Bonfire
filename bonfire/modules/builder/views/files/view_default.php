@@ -6,7 +6,7 @@ $validation_errors = validation_errors();
 
 if ($validation_errors) :
 ?>
-<div class="alert alert-block alert-error fade in">
+<div class="alert alert-block alert-danger fade in">
 	<a class="close" data-dismiss="alert">&times;</a>
 	<h4 class="alert-heading">
 		<?php echo lang("'.$module_name_lower.'_errors_message"); ?>
@@ -81,7 +81,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 			}
 
 			$view .= PHP_EOL . "
-			<div class=\"control-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
+			<div class=\"form-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
 				<?php echo form_label('{$field_label}'{$required}, '{$form_name}', array('class' => 'control-label') ); ?>
 				<div class='controls'>
 					<?php echo form_textarea(array('name' => '{$form_name}', 'id' => '{$form_name}', 'rows' => '5', 'cols' => '80', 'value' => set_value('$form_name', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''))); ?>
@@ -92,7 +92,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 
 		case 'radio':
 			$view .= PHP_EOL . "
-			<div class=\"control-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
+			<div class=\"form-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
 				<?php echo form_label('{$field_label}'{$required}, '', array('class' => 'control-label', 'id' => '{$form_name}_label') ); ?>
 				<div class='controls' aria-labelled-by='{$form_name}_label'>
 					<label class='radio' for='{$form_name}_option1'>
@@ -129,7 +129,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 
 		case 'checkbox':
 			$view .= PHP_EOL . "
-			<div class=\"control-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
+			<div class=\"form-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
 				<?php echo form_label('{$field_label}'{$required}, '{$form_name}', array('class' => 'control-label') ); ?>
 				<div class='controls'>
 					<label class='checkbox' for='{$form_name}'>
@@ -160,7 +160,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 			}
 
 			$view .= PHP_EOL . "
-			<div class=\"control-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
+			<div class=\"form-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
 				<?php echo form_label('{$field_label}'{$required}, '{$form_name}', array('class' => 'control-label') ); ?>
 				<div class='controls'>
 					<input id='{$form_name}' type='{$type}' name='{$form_name}' {$maxlength} value=\"<?php echo set_value('{$form_name}', isset(\${$module_name_lower}['{$field_name}']) ? \${$module_name_lower}['{$field_name}'] : ''); ?>\" />

@@ -50,5 +50,5 @@
 </div>
 
 <p style="text-align: right">
-    <a href="<?php echo site_url('install/do_install') ?>" class="btn btn-primary btn-large">Next</a>
+    <a href="<?php echo site_url('install/do_install') ?>" class="btn btn-primary btn-lg">Next</a>
 </p>

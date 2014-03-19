@@ -19,7 +19,7 @@ if (empty($error)) :
 </div>
 <?php
 else : ?>
-<div class="alert alert-error">
+<div class="alert alert-danger">
 	<button type='button' class='close' data-dismiss='alert'>&times;</button>
 	<p><?php echo $error; ?></p>
 </div>

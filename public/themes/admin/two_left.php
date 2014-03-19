@@ -11,12 +11,12 @@ Assets::add_js(array(
 echo theme_view('header');
 
 ?>
-<div class="container-fluid body">
-	<div class="row-fluid">
-		<div class="span2">
+<div class="container body">
+	<div class="row">
+		<div class="col-md-2">
 			<?php Template::block('sidebar'); ?>
 		</div>
-		<div class="span10">
+		<div class="col-md-10">
 			<?php
                 echo Template::message();
                 echo isset($content) ? $content : Template::content();

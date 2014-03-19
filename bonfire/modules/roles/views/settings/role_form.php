@@ -4,7 +4,7 @@ $validationErrors = validation_errors();
 
 if ($validationErrors) :
 ?>
-<div class="alert alert-error fade in">
+<div class="alert alert-danger fade in">
 	<a class="close" data-dismiss="alert">&times;</a>
 	<?php echo $validationErrors; ?>
 </div>
@@ -13,21 +13,21 @@ if ($validationErrors) :
 	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
         <fieldset>
             <legend><?php echo lang('role_details'); ?></legend>
-            <div class="control-group<?php echo form_error('role_name') ? ' error' : ''; ?>">
+            <div class="form-group<?php echo form_error('role_name') ? ' error' : ''; ?>">
                 <label class="control-label" for="role_name"><?php echo lang('role_name'); ?></label>
                 <div class="controls">
                     <input type="text" name="role_name" id="role_name" class="input-xlarge" value="<?php echo set_value('role_name', isset($role) ? $role->role_name : ''); ?>" />
                     <span class="help-inline"><?php echo form_error('role_name'); ?></span>
                 </div>
             </div>
-            <div class="description control-group<?php echo form_error('description') ? ' error' : ''; ?>">
+            <div class="description form-group<?php echo form_error('description') ? ' error' : ''; ?>">
                 <label class="control-label" for="description"><?php echo lang('bf_description'); ?></label>
                 <div class="controls">
                     <textarea name="description" id="description" rows="3" class="input-xlarge"><?php echo set_value('description', isset($role) ? $role->description : ''); ?></textarea>
                     <span class="help-inline"><?php echo form_error('description') ? form_error('description') : lang('role_max_desc_length'); ?></span>
                 </div>
             </div>
-            <div class="control-group<?php echo form_error('login_destination') ? ' error' : ''; ?>">
+            <div class="form-group<?php echo form_error('login_destination') ? ' error' : ''; ?>">
                 <label class="control-label" for="login_destination"><?php echo lang('role_login_destination'); ?></label>
                 <div class="controls">
                     <input type="text" name="login_destination" id="login_destination" class="input-xlarge" value="<?php echo set_value('login_destination', isset($role) ? $role->login_destination : ''); ?>" />
@@ -37,7 +37,7 @@ if ($validationErrors) :
                     ?></span>
                 </div>
             </div>
-            <div class="control-group">
+            <div class="form-group">
                 <label class="control-label" for="default_context"><?php echo lang('role_default_context'); ?></label>
                 <div class="controls">
                     <select name="default_context" id="default_context">
@@ -57,7 +57,7 @@ if ($validationErrors) :
                     ?></span>
                 </div>
             </div>
-            <div class="control-group<?php echo form_error('default') ? ' error' : ''; ?>">
+            <div class="form-group<?php echo form_error('default') ? ' error' : ''; ?>">
                 <label class="control-label" for="default"><?php echo lang('role_default_role'); ?></label>
                 <div class="controls">
                     <label class="checkbox" for="default">
@@ -66,7 +66,7 @@ if ($validationErrors) :
                     </label>
                 </div>
             </div>
-            <div class="control-group">
+            <div class="form-group">
                 <label class="control-label" id="can_delete_label"><?php echo lang('role_can_delete_role'); ?></label>
                 <div class="controls" aria-labelledby="can_delete_label" role="group">
                     <label class="radio" for="can_delete_yes">

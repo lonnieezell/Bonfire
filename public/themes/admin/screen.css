@@ -47,7 +47,7 @@ pre {
 	margin-top: 0;
 }
 /* Page Structure */
-.container-fluid,.fluid-container {
+.container,.fluid-container {
 	margin: 0 auto;
 	max-width: 1200px;
 }
@@ -63,13 +63,13 @@ pre {
 	min-height: 300px;
 	font-weight: lighter;
 }
-.navbar {
+.nav {
 	font-size: 10pt;
 }
 .nav .dropdown img {
 	display: none;
 }
-.navbar .dropdown img {
+.navbar-nav .dropdown img {
 	display: none;
 }
 .dropdown-menu > li > ul {
@@ -84,7 +84,7 @@ pre {
 .dropdown-menu > li:hover > ul {
 	display: block;
 }
-a.brand {
+a.navbar-brand {
 	width: 200px;
 	overflow: hidden;
 	white-space: nowrap;
@@ -116,11 +116,11 @@ a.brand {
 	font-size: 18px;
 	line-height: 16px;
 }
-.subnav .nav {
+.subnav .navbar-nav {
 	margin-bottom: 0;
 	margin-top: -36px;
 }
-.subnav .nav > li > a {
+.subnav .navbar-nav > li > a {
 	margin: .1px;
 	padding-top: 11px;
 	padding-bottom: 11px;
@@ -132,17 +132,17 @@ a.brand {
 	-moz-border-radius: 0;
 	border-radius: 0;
 }
-.subnav .nav > li:last-child > a {
+.subnav .navbar-nav > li:last-child > a {
 	border-right: none;
 }
-.subnav .nav > li > a:hover,
-.subnav .nav .active a,
-.subnav .nav a:hover,
-.subnav .nav .active a {
+.subnav .navbar-nav > li > a:hover,
+.subnav .navbar-nav .active a,
+.subnav .navbar-nav a:hover,
+.subnav .navbar-nav .active a {
 	background: transparent;
 	color: #333;
 }
-.subnav .nav .active a {
+.subnav .navbar-nav .active a {
 	background-color: #ddd;
 	border-right-color: #c5c5c5;
 	border-left: 0;
@@ -304,7 +304,7 @@ footer.footer {
 .admin-box tfoot {
 	line-height: 18px;
 }
-.admin-box .nav {
+.admin-box .navbar-nav {
 	margin-bottom: 3px;
 }
 .admin-box > p {
@@ -378,23 +378,23 @@ tfoot td {
 	line-height: 2.0;
 }
 /* Forms */
-.form-horizontal .control-group {
+.form-horizontal .form-group {
 	border-bottom: 1px solid #e5e5e5;
 	padding-bottom: 18px;
 	padding-top: 18px;
 	margin-bottom: 0;
 }
-.form-horizontal .control-group > label {
+.form-horizontal .form-group > label {
 	font-weight: bold;
 	width: 180px;
 }
-.form-horizontal .control-group .controls {
+.form-horizontal .form-group .controls {
 	margin-left: 200px;
 }
 .form-horizontal .form-actions {
 	padding-left: 200px;
 }
-.form-horizontal fieldset .control-group:last-child {
+.form-horizontal fieldset .form-group:last-child {
 	margin-bottom: 0;
 	border-bottom: 0;
 	padding-bottom: 36px;
@@ -472,7 +472,7 @@ input[type=radio] {
 		padding-top: 20px;
 		margin-top: -5px;
 	}
-	.navbar .btn-navbar {
+	.navbar-nav .navbar-btn {
 		display: inline;
 	}
 	#shortcuts {
@@ -510,12 +510,12 @@ input[type=radio] {
 		float: none;
 		margin-top: 36px;
 	}
-	.form-horizontal .control-group > label {
+	.form-horizontal .form-group > label {
 		display: block;
 		width: inherit;
 		margin-left: 20px;
 	}
-	.form-horizontal .control-group .controls {
+	.form-horizontal .form-group .controls {
 		margin-left: 20px;
 	}
 	.form-horizontal .form-actions {
