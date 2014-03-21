@@ -1,11 +1,14 @@
-<?php defined('BASEPATH') || exit('No direct script access allowed');
+<?php
 
 $pager = '';
-if ($this->input->post('use_pagination') == 'true') {
+if ($usePagination) {
     $pager = "
     echo \$this->pagination->create_links();";
 }
 
+//------------------------------------------------------------------------------
+// Setup the fields to be displayed in the view
+//------------------------------------------------------------------------------
 $headers = '';
 for ($counter = 1; $field_total >= $counter; $counter++) {
 	// Only build on fields that have data entered.
@@ -14,37 +17,36 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 	}
 
 	$headers .= '
-            <th>'. set_value("view_field_label$counter").'</th>';
+            <th>' . set_value("view_field_label$counter") . '</th>';
 }
 
 $hiddenFields = "array('{$primary_key_field}',";
 if ($useSoftDeletes) {
-    $hiddenFields .= "'{$soft_delete_field}',";
+    $hiddenFields .= " '{$soft_delete_field}',";
     if ($logUser) {
-        $hiddenFields .= "'{$deleted_by_field}',";
+        $hiddenFields .= " '{$deleted_by_field}',";
     }
 }
 if ($useCreated) {
-	$headers .= '
-            <th>
-                <?php echo lang("'.$module_name_lower.'_column_created"); ?>
-            </th>';
+	$headers .= "
+            <th><?php echo lang('{$module_name_lower}_column_created'); ?></th>";
     if ($logUser) {
-        $hiddenFields .= "'{$created_by_field}',";
+        $hiddenFields .= " '{$created_by_field}',";
     }
 }
 if ($useModified) {
-	$headers .= '
-            <th>
-                <?php echo lang("'.$module_name_lower.'_column_modified"); ?>
-            </th>';
+	$headers .= "
+            <th><?php echo lang('{$module_name_lower}_column_modified'); ?></th>";
     if ($logUser) {
-        $hiddenFields .= "'{$modified_by_field}',";
+        $hiddenFields .= " '{$modified_by_field}',";
     }
 }
 
 $hiddenFields .= ")";
 
+//------------------------------------------------------------------------------
+// Output the view
+//------------------------------------------------------------------------------
 echo "<?php
 
 \$hiddenFields = {$hiddenFields};
