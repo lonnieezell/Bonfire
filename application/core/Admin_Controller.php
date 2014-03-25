@@ -29,11 +29,9 @@ class Admin_Controller extends Authenticated_Controller
      */
     public function __construct()
     {
-        parent::__construct();
+        $this->autoload['libraries'][] = 'ui/contexts';
 
-        $this->load->library('template');
-        $this->load->library('assets');
-        $this->load->library('ui/contexts');
+        parent::__construct();
 
         // Pagination config
         $this->pager = array(
