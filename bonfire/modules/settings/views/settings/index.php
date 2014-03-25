@@ -45,7 +45,7 @@ if ($validation_errors) :
 						<div class="form-group">
 							<label class="control-label" for="title"><?php echo lang('bf_site_name'); ?></label>
 							<div class="controls">
-								<input type="text" name="title" id="title" class="span6" value="<?php echo set_value('site.title', isset($settings['site.title']) ? $settings['site.title'] : ''); ?>" />
+								<input type="text" name="title" id="title" class="col-md-6" value="<?php echo set_value('site.title', isset($settings['site.title']) ? $settings['site.title'] : ''); ?>" />
 							</div>
 						</div>
 						<div class="form-group">
@@ -267,14 +267,14 @@ if ($validation_errors) :
                                         $this->load->config('address');
                                         $this->load->helper('address');
                                     }
-                                    $field_control = state_select(isset($settings["ext.{$field['name']}"]) ? $settings["ext.{$field['name']}"] : 'CA', 'CA', 'US', $field['name'], 'span6 chzn-select');
+                                    $field_control = state_select(isset($settings["ext.{$field['name']}"]) ? $settings["ext.{$field['name']}"] : 'CA', 'CA', 'US', $field['name'], 'col-md-6 chzn-select');
                                 }
                                 elseif ($field['form_detail']['type'] == 'country_select') {
                                     if ( ! is_callable('country_select')) {
                                         $this->load->config('address');
                                         $this->load->helper('address');
                                     }
-                                    $field_control = country_select(set_value($field['name'], isset($settings["ext.{$field['name']}"]) ? $settings["ext.{$field['name']}"] : 'US'), 'US', $field['name'], 'span6 chzn-select');
+                                    $field_control = country_select(set_value($field['name'], isset($settings["ext.{$field['name']}"]) ? $settings["ext.{$field['name']}"] : 'US'), 'US', $field['name'], 'col-md-6 chzn-select');
                                 }
                                 else {
                                     $form_method = "form_{$field['form_detail']['type']}";

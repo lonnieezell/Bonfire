@@ -1,7 +1,7 @@
 <?php
 
 $errorClass = ' error';
-$controlClass = 'span6';
+$controlClass = ' col-md-6';
 $fieldData = array(
 	'errorClass'    => $errorClass,
 	'controlClass'  => $controlClass,
@@ -21,10 +21,8 @@ if (isset($password_hints) ) :
 	<?php echo $password_hints; ?>
 </div>
 <?php
-endif;
-
-echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="off"');
-?>
+endif; ?>
+<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="off"'); ?>
 	<fieldset>
 		<legend><?php echo lang('us_account_details') ?></legend>
 		<?php Template::block('user_fields', 'user_fields', $fieldData); ?>
@@ -38,8 +36,8 @@ echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="
 		<legend><?php echo lang('us_role'); ?></legend>
 		<div class="form-group">
 			<label for="role_id" class="control-label"><?php echo lang('us_role'); ?></label>
-			<div class="controls">
-				<select name="role_id" id="role_id" class="chzn-select <?php echo $controlClass; ?>">
+			<div class="controls <?php echo $controlClass; ?>">
+				<select name="role_id" id="role_id" class="chzn-select form-control">
 					<?php
 					if (isset($roles) && is_array($roles) && count($roles)) :
 						foreach ($roles as $role) :
@@ -87,7 +85,7 @@ echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="
 		}
 		?>
 		<div class="form-group">
-			<div class="controls">
+			<div class="col-md-6">
 				<label for="<?php echo $field; ?>">
 					<input type="checkbox" name="<?php echo $field; ?>" id="<?php echo $field; ?>" value="1" />
 					<?php echo lang('us_' . $field . '_note') ?>
@@ -96,7 +94,7 @@ echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="
 		</div>
 		<?php if ($user->deleted) : ?>
 		<div class="form-group">
-			<div class="controls">
+			<div class="col-md-6">
 				<label for="restore">
 					<input type="checkbox" name="restore" id="restore" value="1" />
 					<?php echo lang('us_restore_note'); ?>
@@ -105,7 +103,7 @@ echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="
 		</div>
 		<?php elseif ($user->banned) : ?>
 		<div class="form-group">
-			<div class="controls">
+			<div class="col-md-6">
 				<label for="unban">
 					<input type="checkbox" name="unban" id="unban" value="1" />
 					<?php echo lang('us_unban_note'); ?>
@@ -115,9 +113,12 @@ echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="
 		<?php endif; ?>
 	</fieldset>
 	<?php endif; ?>
-	<div class="form-actions">
+	<div class="clearfix"></div>
+		<div class="form-actions">
 		<input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('bf_action_save') . ' ' . lang('bf_user'); ?>" />
 		<?php echo lang('bf_or'); ?>
 		<?php echo anchor(SITE_AREA . '/settings/users', lang('bf_action_cancel')); ?>
-	</div>
+		</div>
+	
 <?php echo form_close(); ?>
+</div>

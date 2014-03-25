@@ -49,7 +49,7 @@ $config['extended_settings_fields'] = array(
 				'name'		=> 'street_name',
 				'id'		=> 'street_name',
 				'maxlength'	=> '100',
-				'class'		=> 'span6',
+				'class'		=> 'col-md-5',
 			),
 		),
 		'permission' => 'Site.Settings.View',
@@ -79,7 +79,7 @@ $config['extended_settings_fields'] = array(
 				'name'		=> 'country',
 				'id'		=> 'country',
 				'maxlength'	=> '100',
-				'class'		=> 'span6'
+				'class'		=> 'col-md-5'
 			),
 		),
 	),

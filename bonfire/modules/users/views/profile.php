@@ -2,7 +2,7 @@
 
 $validation_errors = validation_errors();
 $errorClass = ' error';
-$controlClass = 'span6';
+$controlClass = 'col-md-6';
 $fieldData = array(
     'errorClass'    => $errorClass,
     'controlClass'  => $controlClass,
@@ -36,6 +36,7 @@ $fieldData = array(
                 <!-- Start User Meta -->
                 <?php $this->load->view('users/user_meta', array('frontend_only' => true));?>
                 <!-- End of User Meta -->
+                <div class="clear"></div>
                 <div class="form-actions">
                     <input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('bf_action_save') . ' ' . lang('bf_user'); ?>" />
                     <?php echo lang('bf_or') . ' ' . anchor('/', lang('bf_action_cancel')); ?>

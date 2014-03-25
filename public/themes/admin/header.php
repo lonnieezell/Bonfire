@@ -34,17 +34,20 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
 	<noscript>
 		<p>Javascript is required to use Bonfire's admin.</p>
 	</noscript>
-    <div class="nav navbar-static-top navbar-inverse" id="topbar" >
-        <div class="navbar-inner">
-            <div class="container">
+    <div class="navbar navbar-static-top navbar-inverse" id="topbar" >
+            <div class="container"><div class="navbar-header">
                 <?php
                 echo anchor('/', html_escape($this->settings_lib->item('site.title')), 'class="navbar-brand"');
+                ?>
+                </div>
+                <?php
                 if (isset($shortcut_data) && is_array($shortcut_data['shortcuts'])
                     && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])
                    ) :
                 ?>
+ 
                 <!-- Shortcut Menu -->
-                <div class="navbar-nav pull-right" id="shortcuts">
+                <div class="nav navbar-nav pull-right" id="shortcuts">
                     <div class="btn-group">
                         <a class="dropdown-toggle light btn btn-default" data-toggle="dropdown" href="#"><img src="<?php echo Template::theme_url('images/keyboard-icon.png'); ?>" id="shortkeys_show" title="Keyboard Shortcuts" alt="Keyboard Shortcuts" /></a>
                         <ul class="dropdown-menu pull-right toolbar-keys">
@@ -65,7 +68,7 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
                 <?php endif;?>
                 <div class="navbar-collapse collapse">
                     <!-- User Menu -->
-                    <div class="navbar-nav pull-right" id="user-menu">
+                    <div class="nav navbar-nav pull-right" id="user-menu">
                         <div class="btn-group">
                             <a href="<?php echo site_url(SITE_AREA . '/settings/users/edit'); ?>" id="tb_email" class="btn dark" title="<?php echo lang('bf_user_settings'); ?>">
                                 <?php
@@ -83,7 +86,7 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
                                         <div class="toolbar-profile-img">
                                             <?php echo gravatar_link($current_user->email, 96, null, $userDisplayName); ?>
                                         </div>
-
+                                        
                                         <div class="toolbar-profile-info">
                                             <p><strong><?php echo $userDisplayName; ?></strong><br />
                                                 <?php e($current_user->email); ?>

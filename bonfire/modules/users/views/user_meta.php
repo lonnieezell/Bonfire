@@ -45,8 +45,8 @@ if ( ! empty($meta_fields)) :
 ?>
 <div class="form-group <?php echo iif( form_error($field['name']) , 'error'); ?>">
     <label class="control-label" for="<?php echo $field['name'] ?>"><?php echo lang('user_meta_state'); ?></label>
-    <div class="controls">
-        <?php echo state_select(set_value($field['name'], $stateValue), $defaultState, $defaultCountry, $field['name'], 'span6 chzn-select'); ?>
+    <div class="controls col-md-6">
+        <?php echo state_select(set_value($field['name'], $stateValue), $defaultState, $defaultCountry, $field['name'], 'form-control chzn-select'); ?>
     </div>
 </div>
 <?php
@@ -56,8 +56,8 @@ if ( ! empty($meta_fields)) :
 ?>
 <div class="form-group <?php echo iif( form_error('country') , 'error'); ?>">
     <label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
-    <div class="controls">
-        <?php echo country_select(set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : $defaultCountry), $defaultCountry, 'country', 'span6 chzn-select'); ?>
+    <div class="controls col-md-6">
+        <?php echo country_select(set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : $defaultCountry), $defaultCountry, 'country', 'form-control chzn-select'); ?>
     </div>
 </div>
 <?php

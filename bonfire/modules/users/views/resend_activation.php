@@ -20,7 +20,7 @@
 	<div class="form-group <?php echo iif( form_error('email') , 'error') ;?>">
 		<label class="control-label required" for="email"><?php echo lang('bf_email'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" name="email" id="email" value="<?php echo set_value('email') ?>" />
+			<input class="col-md-6" type="text" name="email" id="email" value="<?php echo set_value('email') ?>" />
 		</div>
 	</div>
 

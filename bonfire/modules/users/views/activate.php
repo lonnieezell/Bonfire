@@ -29,7 +29,7 @@
 	<div class="form-group <?php echo iif( form_error('code') , 'error') ;?>">
 		<label class="control-label required" for="code"><?php echo lang('us_activate_code'); ?></label>
 		<div class="controls">
-			<input class="span6" type="text" id="code" name="code" value="<?php echo set_value('code') ?>" />
+			<input class="col-md-6" type="text" id="code" name="code" value="<?php echo set_value('code') ?>" />
 		</div>
 	</div>
 

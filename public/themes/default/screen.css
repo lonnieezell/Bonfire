@@ -11,11 +11,6 @@
     padding: 14px 24px;
 }
 
-.navbar-nav .dropdown {
-    min-width: 80px;
-    padding-top: 10px;
-}
-
 #login {
     max-width: 300px;
     padding: 19px 29px 14px 29px;
@@ -34,3 +29,11 @@
     line-height: 40px;
     margin-bottom: 10px;
 }
+
+.form-group,
+.form-group label,
+.form-group input { float:left; display:inline;   }
+
+ .form-group { margin-right:5px }
+
+.form-group label { line-height:27px; }

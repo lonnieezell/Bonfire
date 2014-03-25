@@ -66,7 +66,10 @@ pre {
 .nav {
 	font-size: 10pt;
 }
-.nav .dropdown img {
+.navbar-static-top {
+	margin-bottom: 0;
+}
+.nav .dropdown img { 
 	display: none;
 }
 .navbar-nav .dropdown img {
@@ -92,6 +95,7 @@ a.navbar-brand {
 	-ms-text-overflow: ellipsis;
 	text-overflow: ellipsis;
 }
+#user-menu .btn-group, #shortcuts .btn-group { padding-top: 5px;}
 /* Subnav */
 .subnav {
 	width: 100%;
@@ -118,7 +122,7 @@ a.navbar-brand {
 }
 .subnav .navbar-nav {
 	margin-bottom: 0;
-	margin-top: -36px;
+	margin-top: -44px;
 }
 .subnav .navbar-nav > li > a {
 	margin: .1px;
@@ -380,9 +384,9 @@ tfoot td {
 /* Forms */
 .form-horizontal .form-group {
 	border-bottom: 1px solid #e5e5e5;
-	padding-bottom: 18px;
-	padding-top: 18px;
 	margin-bottom: 0;
+	padding-top: 4px;
+	padding-bottom: 5px;
 }
 .form-horizontal .form-group > label {
 	font-weight: bold;
@@ -509,6 +513,9 @@ input[type=radio] {
 		display: block;
 		float: none;
 		margin-top: 36px;
+	}
+	.form-horizontal .form-group {
+		border-bottom: 0;
 	}
 	.form-horizontal .form-group > label {
 		display: block;
