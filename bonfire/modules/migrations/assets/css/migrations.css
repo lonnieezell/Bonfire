@@ -1,0 +1,13 @@
+#mod-tab th.version {
+    width: 6em;
+}
+#mod-tab th.module-name {
+    vertical-align: bottom;
+}
+#mod-tab th.migrate {
+    text-align: center;
+}
+#mod-tab td.migrate {
+    width: 35em;
+    text-align: right;
+}

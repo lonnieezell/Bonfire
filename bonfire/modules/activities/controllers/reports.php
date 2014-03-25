@@ -1,4 +1,5 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+
 /**
  * Bonfire
  *
@@ -6,26 +7,21 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
  * Activities Reports Context
  *
- * Allows the administrator to view the activity logs.
+ * Allow the administrator to view the activity logs.
  *
- * @package    Bonfire
- * @subpackage Modules_Activities
- * @category   Controllers
+ * @package    Bonfire\Modules\Activities\Controllers\Reports
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- *
+ * @link       http://cibonfire.com/docs/activities
  */
 class Reports extends Admin_Controller
 {
@@ -54,7 +50,7 @@ class Reports extends Admin_Controller
 		$this->auth->restrict($this->permissionSiteReportsView);
 		$this->auth->restrict($this->permissionViewActivities);
 
-		$this->lang->load('activities');
+		$this->lang->load('activities/activities');
 		$this->lang->load('datatable');
 
         $this->load->model('activities/activity_model');
@@ -83,13 +79,11 @@ class Reports extends Admin_Controller
 			Template::set_block('sub_nav', 'reports/_sub_nav');
 		}
 
-		Template::set('toolbar_title', lang('activity_title'));
-	}//end __construct()
+		Template::set('toolbar_title', lang('activities_title'));
+	}
 
 	/**
-	 * Lists all log files and allows you to change the log_threshold.
-	 *
-	 * @access public
+	 * List all activity logs and allow the user to change the log threshold.
 	 *
 	 * @return void
 	 */
@@ -100,35 +94,33 @@ class Reports extends Admin_Controller
         Template::set('has_permission_view_user', $this->hasPermissionViewUser);
         Template::set('has_permission_view_own', $this->hasPermissionViewOwn);
 
-		if ($this->hasPermissionViewUser || $this->hasPermissionViewModule
+		if ($this->hasPermissionViewUser
+            || $this->hasPermissionViewModule
             || $this->hasPermissionViewDate
            ) {
-			// Get top 5 modules
 			Template::set('top_modules', $this->activity_model->findTopModules(5));
-
-			// Get top 5 users and usernames
             Template::set('top_users', $this->activity_model->findTopUsers(5));
-
-			Template::set('activities',
+			Template::set(
+                'activities',
                 $this->activity_model->where($this->activity_model->get_table() . '.' . $this->activity_model->get_deleted_field(), 0)
                                      ->find_all()
             );
-			Template::set('users',
+			Template::set(
+                'users',
                 $this->user_model->where($this->user_model->get_table() . '.' . $this->user_model->get_deleted_field(), 0)
                                  ->order_by('username', 'asc')
                                  ->find_all()
             );
 			Template::set('modules', Modules::list_modules());
+
 			Template::render();
 		} elseif ($this->hasPermissionViewOwn) {
 			$this->activity_own();
 		}
-	}//end index()
+	}
 
 	/**
-	 * Shows the activities for the specified user.
-	 *
-	 * @access public
+	 * Display the activities for the specified user.
 	 *
 	 * @return void
 	 */
@@ -142,25 +134,21 @@ class Reports extends Admin_Controller
 	}
 
 	/**
-	 * Shows the activities for the current user.
-	 *
-	 * @access public
+	 * Display the activities for the current user.
 	 *
 	 * @return void
 	 */
 	public function activity_own()
 	{
 		if ($this->hasPermissionViewOwn) {
-            return $this->_get_activity('activity_own', $this->current_user->id);
+            return $this->_get_activity('activity_own', $this->auth->user_id());
 		}
 
 		$this->activityRestricted();
 	}
 
 	/**
-	 * Shows the activities for the specified module.
-	 *
-	 * @access public
+	 * Display the activities for the specified module.
 	 *
 	 * @return void
 	 */
@@ -174,9 +162,7 @@ class Reports extends Admin_Controller
 	}
 
 	/**
-	 * Shows the activities before the specified date.
-	 *
-	 * @access public
+	 * Display the activities before the specified date.
 	 *
 	 * @return void
 	 */
@@ -190,18 +176,16 @@ class Reports extends Admin_Controller
 	}
 
 	/**
-	 * Deletes the entries in the activity log for the specified area.
-	 *
-	 * @access public
+	 * Delete the entries in the activity log for the specified area.
 	 *
 	 * @return void
 	 */
 	public function delete()
 	{
-		$action = $this->input->post("action");
-		$which  = $this->input->post("which");
-
-		$this->_delete_activity($action, $which);
+		$this->_delete_activity(
+            $this->input->post('action'),
+            $this->input->post('which')
+        );
 
 		redirect(SITE_AREA . '/reports/activities');
 	}
@@ -211,22 +195,20 @@ class Reports extends Admin_Controller
 	//--------------------------------------------------------------------
 
     /**
-     * Redirect the user and set an error message
+     * The user attempted to do something which he/she is not permitted to do.
      *
-     * @access private
+     * Set an error message and redirect the user
      *
      * @return void
      */
     private function activityRestricted()
     {
-        Template::set_message(lang('activity_restricted'), 'error');
+        Template::set_message(lang('activities_restricted'), 'error');
         redirect(SITE_AREA . '/reports/activities');
     }
 
 	/**
 	 * Delete the entries in the activity log for the specified area.
-	 *
-	 * @access private
 	 *
 	 * @param string $action The area we are in
 	 * @param string $which  A specific value to match, or "all"
@@ -238,23 +220,23 @@ class Reports extends Admin_Controller
         // This is before the permission check because the permission check
         // takes longer and depends on the value of $action
 		if (empty($action)) {
-			Template::set_message('Delete section not specified', 'error');
+			Template::set_message(lang('activities_delete_no_section'), 'error');
 			return;
 		}
 
 		// Check for permission to delete this
 		$permission = str_replace('activity_', '', $action);
 		if ( ! has_permission('Activities.' . ucfirst($permission) . '.Delete')) {
-			Template::set_message(lang('activity_restricted'), 'error');
+			Template::set_message(lang('activities_restricted'), 'error');
 			return;
 		}
 
 		if (empty($which)) {
-			Template::set_message('Delete value not specified', 'error');
+			Template::set_message(lang('activities_delete_no_value'), 'error');
 			return;
 		}
 
-		// Different delete where statement switch
+		// Change the where statement based on $action
 		switch ($action) {
 			case 'activity_date':
 				$value = 'activity_id';
@@ -269,37 +251,35 @@ class Reports extends Admin_Controller
     			break;
 		}
 
-		// Set a default delete then check if delete "all" was chosen
-        if ($value == 'activity_id') {
-            $this->activity_model->where("{$value} <", $which);
+        // Set the where clause for the delete
+        $deleteWhere = array();
+        if ($which == 'all') {
+            $deleteWhere["{$value} !="] = 'tsTyImbdOBOgwIqtb94N4Gr6ctatWVDnmYC3NfIfczzxPs0xZLNBnQs38dzBYn8';
+		} elseif ($value == 'activity_id') {
+            $deleteWhere["{$value} <"] = $which;
         } else {
-            $this->activity_model->where($value, $which);
+            $deleteWhere[$value] = $which;
         }
 
-		if ($which == 'all') {
-            $this->activity_model->where("{$value} !=", 'tsTyImbdOBOgwIqtb94N4Gr6ctatWVDnmYC3NfIfczzxPs0xZLNBnQs38dzBYn8');
-		}
-
-		// Check if they can delete their own stuff
+        // Check whether the user can delete his/her own activities
         if ( ! has_permission($this->permissionDeleteOwn)) {
             $this->activity_model->where('user_id !=', $this->auth->user_id());
         }
 
-        $affected = $this->activity_model->delete();
+        $affected = $this->activity_model->delete_where($deleteWhere);
+
 		if (is_numeric($affected)) {
-			Template::set_message(sprintf(lang('activity_deleted'), $affected), 'success');
-			$this->activity_model->log_activity($this->auth->user_id(), "deleted {$affected} activities", 'activities');
+			Template::set_message(sprintf(lang('activities_deleted'), $affected), 'success');
+			$this->activity_model->log_activity($this->auth->user_id(), sprintf(lang('activities_act_deleted'), $affected), 'activities');
 		} elseif (isset($affected)) {
-			Template::set_message(lang('activity_nothing'), 'attention');
+			Template::set_message(lang('activities_nothing'), 'attention');
 		} else {
-			Template::set_message('Error : ' . $this->activity_model->error, 'error');
+			Template::set_message(sprintf(lang('activities_delete_error'), $this->activity_model->error), 'error');
 		}
-	}//end _delete_activity()
+	}
 
 	/**
-	 * Gets all the activity based on parameters passed
-	 *
-	 * @access public
+	 * Get activity based on parameters passed
 	 *
 	 * @param string $which      Filter the activities by type
 	 * @param bool   $find_value Value to filter by
@@ -310,7 +290,7 @@ class Reports extends Admin_Controller
 	{
         $postedWhichSelect = $this->input->post("{$which}_select");
 
-		// Check if $find_value has anything in it
+		// Check whether $find_value has anything in it
 		if ($find_value === false) {
 			$find_value = $postedWhichSelect == '' ? $this->uri->segment(5) : $postedWhichSelect;
 		}
@@ -319,14 +299,17 @@ class Reports extends Admin_Controller
 			$this->_delete_activity($which, $find_value);
 		}
 
-        $activityDeletedField = $this->activity_model->get_deleted_field();
-        $activityTable = $this->activity_model->get_table();
-        $userDeletedField = $this->user_model->get_deleted_field();
-        $userTable = $this->user_model->get_table();
+        $activityDeletedField   = $this->activity_model->get_deleted_field();
+        $activityTable          = $this->activity_model->get_table();
+        $userDeletedField       = $this->user_model->get_deleted_field();
+        $userKey                = $this->user_model->get_key();
+        $userTable              = $this->user_model->get_table();
 
-		// Set a couple default variables
-		$name = lang('activity_all');
+		// Set default values
+		$name    = lang('activities_all');
 		$options = array('all' => $name);
+
+        // Find the $options and $name based on activity type ($which)
 		switch ($which) {
 			case 'activity_module':
 				$modules = Modules::list_modules();
@@ -350,9 +333,15 @@ class Reports extends Admin_Controller
     			break;
 
 			case 'activity_own':
+                // no break;
 			default:
 				if ($this->hasPermissionViewUser) {
-					foreach ($this->user_model->where("{$userTable}.{$userDeletedField}", 0)->find_all() as $e) {
+                    // Use the same order_by for the user drop-down/select as is
+                    // used on the index page
+                    $this->user_model->where("{$userTable}.{$userDeletedField}", 0)
+                                     ->order_by('username', 'asc');
+
+                    foreach ($this->user_model->find_all() as $e) {
 						$options[$e->id] = $e->username;
 						if ($find_value == $e->id) {
 							$name = $e->username;
@@ -367,21 +356,24 @@ class Reports extends Admin_Controller
     			break;
 		}
 
-		// Set some vars for the view
-		Template::set('vars', array(
-			'which'			=> $which,
-			'view_which'	=> ucwords(lang($which)),
-			'name'			=> $name,
-			'delete_action'	=> $where,
-			'delete_id'		=> $find_value
+		// Set vars for the view
+		Template::set(
+            'vars',
+            array(
+                'which'			=> $which,
+                'view_which'	=> ucwords(lang(str_replace('activity_', 'activities_', $which))),
+                'name'			=> $name,
+                'delete_action'	=> $where,
+                'delete_id'		=> $find_value,
 		));
 
-		// Apply the filter, if there is one
         $this->activity_model->order_by($where, 'asc');
+
+		// Apply the filter, if there is one
         if (empty($find_value) || $find_value == 'all') {
             $total = $this->activity_model->count_by("{$activityTable}.{$activityDeletedField}", 0);
         } else {
-			$where = ($where == 'activity_id') ? 'activity_id <' : $where;
+			$where = $where == 'activity_id' ? 'activity_id <' : $where;
 			$total = $this->activity_model->where($where, $find_value)
                                           ->where("{$activityTable}.{$activityDeletedField}", 0)
                                           ->count_by($where, $find_value);
@@ -397,12 +389,15 @@ class Reports extends Admin_Controller
 
 		// Pagination
 		$this->load->library('pagination');
+
 		$offset = $this->input->get('per_page');
-		$limit = $this->settings_lib->item('site.list_limit');
-		$this->pager['base_url'] 			= current_url() . '?';
-		$this->pager['total_rows'] 			= $total;
-		$this->pager['per_page'] 			= $limit;
-		$this->pager['page_query_string']	= true;
+		$limit  = $this->settings_lib->item('site.list_limit');
+
+		$this->pager['base_url'] 		  = current_url() . '?';
+		$this->pager['total_rows'] 		  = $total;
+		$this->pager['per_page'] 		  = $limit;
+		$this->pager['page_query_string'] = true;
+
 		$this->pagination->initialize($this->pager);
 
 		// Get the activities
@@ -412,8 +407,8 @@ class Reports extends Admin_Controller
                                         'activities.created_on AS created',
                                         'username',
                                      ))
-                             ->where('activities.deleted', 0)
-                             ->join('users', 'activities.user_id = users.id', 'left')
+                             ->where("{$activityTable}.{$activityDeletedField}", 0)
+                             ->join($userTable, "{$activityTable}.user_id = {$userTable}.{$userKey}", 'left')
                              ->order_by('activity_id', 'desc') // Most recent on top
                              ->limit($limit, $offset);
 
@@ -428,5 +423,6 @@ class Reports extends Admin_Controller
 
 		Template::set_view('reports/view');
 		Template::render();
-	}//end _get_activity()
-}//end class
+	}
+}
+/* end /activities/controllers/reports.php */

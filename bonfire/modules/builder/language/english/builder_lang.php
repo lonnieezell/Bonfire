@@ -167,3 +167,12 @@ $lang['mb_soft_delete_field_ph']    = 'deleted';
 $lang['mb_validation_no_match'] = '%s %ss (%s & %s) must be unique!';
 $lang['mb_modulename_check']    = 'The %s field is not valid';
 $lang['mb_modulename_check_class_exists']   = 'The %s field is not valid: the module name matches the name of an existing class.';
+
+$lang['mb_form_log_user']       = 'Log User';
+$lang['mb_deleted_by_field']    = '"Deleted By" field name';
+$lang['mb_deleted_by_field_ph'] = 'deleted_by';
+$lang['mb_form_created_by_field']       = '"Created By" field name';
+$lang['mb_form_created_by_field_ph']    = 'created_by';
+$lang['mb_form_modified_by_field']      = '"Modified By" field name';
+$lang['mb_form_modified_by_field_ph']   = 'modified_by';
+$lang['mb_form_use_pagination'] = 'Use pagination library to create pager';

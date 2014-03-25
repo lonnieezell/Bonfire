@@ -1,31 +1,27 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
  * Activities
  *
- * Allows the developer to manage basic user activity methods
+ * Display user activity
  *
- * @package    Bonfire
- * @subpackage Modules_Activities
- * @category   Controllers
+ * @package    Bonfire\Modules\Activities\Controllers\Activities
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- *
+ * @link       http://cibonfire.com/docs/activities
  */
 class Activities extends Admin_Controller
 {
@@ -38,15 +34,12 @@ class Activities extends Admin_Controller
 	{
 		parent::__construct();
 
+        $this->lang->load('activities/activities');
 		$this->load->model('activities/activity_model');
 	}
 
-	//--------------------------------------------------------------------
-	// HMVC METHODS
-	//--------------------------------------------------------------------
-
 	/**
-	 * Displays the Activities for a module
+	 * Display the Activities for a module
 	 *
 	 * @param string $module Name of the module
 	 * @param int    $limit  The number of activities to return
@@ -58,14 +51,16 @@ class Activities extends Admin_Controller
         $this->auth->restrict('Activities.Module.View');
 
 		if (empty($module)) {
-			logit('No module provided to `activity_list`.');
+			log_message(lang('activities_list_no_module'), 'debug');
 			return;
 		}
 
-		$activities = $this->activity_model->order_by('created_on', 'desc')
-                           ->limit($limit, 0)
-                           ->find_by_module($module);
+		$this->activity_model->order_by('created_on', 'desc')
+                             ->limit($limit, 0);
 
-		$this->load->view('activity_list', array('activities' => $activities));
+		$this->load->view(
+            'activity_list',
+            array('activities' => $this->activity_model->find_by_module($module))
+        );
 	}
 }

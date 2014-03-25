@@ -2,7 +2,8 @@
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
@@ -93,10 +94,15 @@ class Contexts
 	 */
 	protected static $errors = array();
 
+    /**
+     * @var string[] Contexts which are required.
+     */
+    protected static $requiredContexts = array('settings', 'developer');
+
 	//--------------------------------------------------------------------
 
 	/**
-	 * Calls the class init
+	 * Get the CI instance and call the init method
 	 *
 	 * @return void
 	 */
@@ -107,24 +113,21 @@ class Contexts
 	}
 
 	/**
-	 * Loads application helper
+	 * Load the configured contexts
 	 *
 	 * @return void
 	 */
 	protected static function init()
 	{
-		if ( ! function_exists('module_list')) {
-			self::$ci->load->helper('application');
-		}
-
 		self::$contexts = self::$ci->config->item('contexts');
 		log_message('debug', 'UI/Contexts library loaded');
 	}
 
 	/**
-	 * Sets the contexts array
+	 * Set the contexts array
 	 *
-	 * @param  array  Array of Context Menus to Display normally stored in application config.
+	 * @param  array  Array of Context Menus to Display normally stored in
+	 * application config.
 	 * @param  string Area to link to defaults to SITE_AREA or Admin area.
 	 *
 	 * @return void
@@ -154,12 +157,12 @@ class Contexts
 	/**
 	 * Returns a string of any errors during the create context process.
 	 *
-	 * @param	string	$open	A string to place at the beginning of every error.
-	 * @param	string	$close	A string to place at the close of every error.
+	 * @param	string	$open	A string to place at the beginning of each error.
+	 * @param	string	$close	A string to place at the close of each error.
 	 *
 	 * @return 	string
 	 */
-	public static function errors($open= '<li>', $close= '</li>')
+	public static function errors($open = '<li>', $close = '</li>')
 	{
 		$out = '';
 		foreach (self::$errors as $error) {
@@ -190,15 +193,12 @@ class Contexts
 			die(lang('bf_no_contexts'));
 		}
 
-		// Ensure settings context exists
-		if ( ! in_array('settings', $contexts)) {
-			array_push($contexts, 'settings');
-		}
-
-		// Ensure developer context exists
-		if ( ! in_array('developer', $contexts)) {
-			array_push($contexts, 'developer');
-		}
+		// Ensure required contexts exist
+        foreach (self::$requiredContexts as $requiredContext) {
+            if ( ! in_array($requiredContext, $contexts)) {
+                $contexts[] = $requiredContext;
+            }
+        }
 
 		// Sorting
 		switch ($order_by) {
@@ -257,7 +257,7 @@ class Contexts
                 );
 
                 $replace = array(
-                    $parentClass . ' ' . $class,
+                    "{$parentClass} {$class}",
                     $url,
                     $id,
                     self::$templateContextMenuAnchorClass,
@@ -312,7 +312,8 @@ class Contexts
 	 *
 	 * @param string $context   The context to build the nav for.
 	 * @param string $class     The class to use on the nav
-	 * @param bool   $ignore_ul When true, prevents output of surrounding ul tag, used to modify the markup for mobile
+	 * @param bool   $ignore_ul When true, prevents output of surrounding ul
+	 * tag, used to modify the markup for mobile
 	 *
 	 * @return string The HTML necessary to display the menu.
 	 */
@@ -353,7 +354,7 @@ class Contexts
         $ucContext = ucfirst($context);
 		foreach (self::$actions as $module => $config) {
 			if (has_permission('Bonfire.' . ucfirst($module) . '.View')
-                || has_permission(ucfirst($module) . '.' . $ucContext . '.View')
+                || has_permission(ucfirst($module) . ".{$ucContext}.View")
                ) {
 				// Drop-down menus?
 				$menu_view = $config['menus'] && isset($config['menus'][$context]) ? $config['menus'][$context] : '';
@@ -400,7 +401,7 @@ class Contexts
         // matter what.
 		self::$ci->load->helper('config_file');
 
-		$contexts = self::$contexts;
+		$contexts  = self::$contexts;
         $lowerName = strtolower($name);
 
 		// If it isn't in the list of contexts, add it
@@ -460,16 +461,14 @@ class Contexts
 	//--------------------------------------------------------------------
 
 	/**
-	 * Takes an array of key/value pairs and sets the class/id names.
+	 * Take an array of key/value pairs and set the class/id names.
 	 *
-	 * @access public
-	 * @static
-	 *
-	 * @param array $attrs An array of key/value pairs that correspond to the class methods for classes and ids.
+	 * @param array $attrs An array of key/value pairs that correspond to the
+	 * class methods for classes and ids.
 	 *
 	 * @return void
 	 */
-	public static function set_attrs($attrs=array())
+	public static function set_attrs($attrs = array())
 	{
 		if ( ! is_array($attrs)) {
 			return null;
@@ -480,15 +479,10 @@ class Contexts
 				self::$attr = $value;
 			}
 		}
-	}//end set_attrs()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
-	 * Handles building out the HTML for the menu.
-	 *
-	 * @access public
-	 * @static
+	 * Build out the HTML for the menu.
 	 *
 	 * @param string $context   The context to build the nav for.
 	 * @param bool   $ignore_ul
@@ -499,11 +493,11 @@ class Contexts
 	{
 		$list       = '';
         $childClass = self::$child_class;
-        $search = array('{submenu_class}', '{url}', '{display}', '{child_class}', '{view}');
+        $search     = array('{submenu_class}', '{url}', '{display}', '{child_class}', '{view}');
 
 		foreach (self::$menu as $topic_name => $topic) {
-			// If there is more than one item in the topic, we need to build
-			// out a menu based on the multiple items.
+			// If there is more than one item in the topic, we need to build out
+			// a menu based on the multiple items.
 			if (count($topic) > 1) {
                 $subMenu = '';
 				foreach ($topic as $module => $vals) {
@@ -545,71 +539,64 @@ class Contexts
             return $list;
         }
 
-        return str_replace(array('{class}', '{extra}', '{menu}'), array($childClass, '', $list), self::$templateContextNav);
-	}//end build_sub_menu()
-
-	//--------------------------------------------------------------------
-
+        return str_replace(
+            array('{class}', '{extra}', '{menu}'),
+            array($childClass, '', $list),
+            self::$templateContextNav
+        );
+	}
 
 	/**
-	 * Handles building an individual list item (with sub-menus) for the menu.
-	 *
-	 * @access private
-	 * @static
+	 * Build an individual list item (with sub-menus) for the menu.
 	 *
 	 * @param string $module       The name of the module this link belongs to
 	 * @param string $title        The title used on the link
 	 * @param string $display_name The name to display in the menu
 	 * @param string $context      The name of the context
-	 * @param string $menu_view    The name of the view file that contains the sub-menu
+	 * @param string $menu_view    The name of the view file that contains the
+	 * sub-menu
 	 *
 	 * @return string The HTML necessary for a single item and it's sub-menus.
 	 */
-	private static function build_item($module, $title, $display_name, $context, $menu_view='')
+	private static function build_item($module, $title, $display_name, $context, $menu_view = '')
 	{
         // Handle localization of the display name, if needed.
         if (strpos($display_name, 'lang:') === 0) {
             $display_name = lang(str_replace('lang:', '', $display_name));
         }
-
         $displayName = ucwords(str_replace('_', '', $display_name));
 
 		if (empty($menu_view)) {
             $search = array('{extra}', '{url}', '{title}', '{display}');
             $replace = array(
                 $module == self::$ci->uri->segment(3) ? 'class="active" ' : '',
-                site_url(self::$site_area . '/' . $context . '/' . $module),
+                site_url(self::$site_area . "/{$context}/{$module}"),
                 $title,
                 $displayName,
             );
-            $template = self::$templateMenu;
+
+            return str_replace($search, $replace, self::$templateMenu);
 		}
+
 		// Sub Menus?
-		else {
-			// Only works if it's a valid view…
-			$view = self::$ci->load->view($menu_view, null, true);
+        // Only works if it's a valid view…
+        $view = self::$ci->load->view($menu_view, null, true);
 
-            $search = array('{submenu_class}', '{url}', '{display}', '{child_class}', '{view}');
-            $replace = array(
-                self::$submenu_class,
-                '#',
-                $displayName,
-                self::$child_class,
-    			// To maintain backwards compatility, strip out any <ul> tags
-                str_ireplace(array('<ul>', '</ul>'), array('', ''), $view),
-            );
-            $template = self::$templateSubMenu;
-		}
+        $search = array('{submenu_class}', '{url}', '{display}', '{child_class}', '{view}');
+        $replace = array(
+            self::$submenu_class,
+            '#',
+            $displayName,
+            self::$child_class,
+            // To maintain backwards compatility, strip out any <ul> tags
+            str_ireplace(array('<ul>', '</ul>'), array('', ''), $view),
+        );
 
-        return str_replace($search, $replace, $template);
-	}//end build_item()
-
-	//--------------------------------------------------------------------
+        return str_replace($search, $replace, self::$templateSubMenu);
+	}
 
 	/**
 	 * Sort the actions array
-	 *
-	 * @access private
 	 *
 	 * @return void
 	 */
@@ -624,8 +611,6 @@ class Contexts
 		}
 
 		array_multisort($weights, SORT_DESC, $display_names, SORT_ASC, self::$actions);
-	}//end sort_actions()
-
-	//--------------------------------------------------------------------
-
-}//end Contexts
+	}
+}
+/* end /ui/libraries/contexts.php */

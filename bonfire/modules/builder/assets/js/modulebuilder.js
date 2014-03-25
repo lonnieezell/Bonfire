@@ -65,9 +65,9 @@ bonfire.builder = {
 	 */
 	prepTableName: function(prepOptions) {
 		/** Settings used within the function */
-		var prepSettings = $.extend({}, bonfire.builder.prepTableDefaults, prepOptions),
+		var prepSettings,
 		/** The value being prepared for use as the table name */
-			tableName = prepSettings.valueToPrep,
+			tableName,
 		/** Stores event data if prepTableName is called as an event handler */
 			event;
 
@@ -80,8 +80,12 @@ bonfire.builder = {
 			event = prepOptions;
 			prepOptions = prepOptions.data;
 		}
-		prepSettings = $.extend({}, bonfire.builder.prepTableDefaults, prepOptions);
 
+		prepSettings = $.extend({}, bonfire.builder.prepTableDefaults, prepOptions);
+		tableName = prepSettings.valueToPrep
+		if ('' == tableName) {
+			tableName = $(prepSettings.tableNameSelector).val();
+		}
 		if ('' == tableName) {
 			tableName = $(prepSettings.moduleNameSelector).val();
 		}
@@ -121,7 +125,7 @@ function showTableProperties() {
 
 		$('#primary_key_field').val('' == $('#primary_key_field').val() ? 'id' : $('#primary_key_field').val());
 
-		tblName = ( ($('#table_name').val() == '') ? $('#module_name').val() : $('#table_name').val() );
+		tblName = $('#table_name').val() == '' ? $('#module_name').val() : $('#table_name').val();
 		tblName = bonfire.builder.prepTableName({valueToPrep: tblName, setTableName: true});
 	}
 	/* Display the fields used when building from an existing table */
@@ -133,7 +137,7 @@ function showTableProperties() {
 		$('#field_numbers').hide(anim);
 		$('#all_fields').hide(anim);
 
-		tblName = ( ($('#table_name').val() == '') ? $('#module_name').val() : $('#table_name').val() );
+		tblName = $('#table_name').val() == '' ? $('#module_name').val() : $('#table_name').val();
 		tblName = bonfire.builder.prepTableName({valueToPrep: tblName, setTableName: true});
 
 		/* Are there any fields on the form? */
@@ -324,4 +328,4 @@ $('.faded input:focus').closest('.faded').addClass('faded-focus');
 /*------------------------------------------------------------------------------
  * Update the table name when changing the module name
  */
-$('#module_name').on('click focus blur', {valueToPrep: '', setTableName: true}, bonfire.builder.prepTableName);
+$('#module_name, #table_name').on('click focus blur', {valueToPrep: '', setTableName: true}, bonfire.builder.prepTableName);
