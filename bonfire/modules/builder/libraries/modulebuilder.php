@@ -1,4 +1,4 @@
-<?php defined('BASEPATH') || exit('No direct script access allowed');
+<?php
 /**
  * Bonfire
  *
@@ -401,51 +401,108 @@ class Modulebuilder
         ));
     }
 
+    /**
+     * Get the list of boolean data types supported by the database
+     *
+     * @return string[]    The names of the boolean data types
+     */
     public function getBooleanTypes()
     {
         return $this->booleanTypes;
     }
 
+    /**
+     * Get the list of data types supported by the database
+     *
+     * @return array    An array in which the keys are the names of the data
+     * types and the values are an array of generic type information ('integer',
+     * 'numeric', 'binary', 'object', etc.)
+     */
     public function getDatabaseTypes()
     {
         return $this->databaseTypes;
     }
 
+    /**
+     * Get the list of date data types supported by the database
+     *
+     * @return string[]    The names of the date data types
+     */
     public function getDateTypes()
     {
         return $this->dateTypes;
     }
 
+    /**
+     * Get the list of integer data types supported by the database
+     *
+     * @return string[]    The names of the integer data types
+     */
     public function getIntegerTypes()
     {
         return $this->integerTypes;
     }
 
+    /**
+     * Get the list of the list data types supported by the database
+     *
+     * @return string[]    The names of the list data tpes
+     */
     public function getListTypes()
     {
         return $this->listTypes;
     }
 
+    /**
+     * Get the list of the object data types supported by the database
+     *
+     * Object data types include string objects (text fields) and binary objects
+     * (blob, or binary large object, fields)
+     *
+     * @return string[]    The names of the object data types
+     */
     public function getObjectTypes()
     {
         return $this->objectTypes;
     }
 
+    /**
+     * Get the list of the real number data types supported by the database
+     *
+     * @return string[]    The names of the real number data types
+     */
     public function getRealNumberTypes()
     {
         return $this->realNumberTypes;
     }
 
+    /**
+     * Get the list of the string data types supported by the database
+     *
+     * @return string[]    The names of the string data types
+     */
     public function getStringTypes()
     {
         return $this->stringTypes;
     }
 
+    /**
+     * Get the list of the text data types supported by the database
+     *
+     * Usually these are the types which are both string and object types
+     *
+     * @return string[]    The names of the text data types
+     */
     public function getTextTypes()
     {
         return $this->textTypes;
     }
 
+    /**
+     * Get the list of the time data types supported by the database
+     *
+     * @return string[]    The names of the time data types
+     */
     public function getTimeTypes()
     {
         return $this->timeTypes;

@@ -62,13 +62,13 @@ class Modules
 
         /* Autoload App library classes */
         if (is_file($location = APPPATH . "libraries/{$class}" . self::$ext)) {
-            include_once $location;
+            get_instance()->load->library($class);
             return;
         }
 
         /* Autoload Bonfire library classes */
         if (is_file($location = BFPATH . "libraries/{$class}" . self::$ext)) {
-            include_once $location;
+            get_instance()->load->library($class);
             return;
         }
     }
