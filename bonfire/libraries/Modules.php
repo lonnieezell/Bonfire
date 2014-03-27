@@ -33,7 +33,22 @@ class Modules
      */
     private static $routes = array();
 
+    private static $is_initialized = false;
+
+    protected static $ci;
+
     //--------------------------------------------------------------------
+
+    public static function init ()
+    {
+        if ( ! is_null(self::$ci)) return;
+
+        self::$ci =& CI_Controller::get_instance();
+    }
+
+    //--------------------------------------------------------------------
+
+
 
     /**
      * Autoloader for core files and libraries.
@@ -43,6 +58,8 @@ class Modules
      */
     public static function autoload($class)
     {
+        self::init();
+
         /* Don't autoload CI_ prefixed classes or those using the config subclass_prefix */
         if (strstr($class, 'CI_') || strstr($class, config_item('subclass_prefix'))) {
             return;
@@ -62,13 +79,13 @@ class Modules
 
         /* Autoload App library classes */
         if (is_file($location = APPPATH . "libraries/{$class}" . self::$ext)) {
-            get_instance()->load->library($class);
+            self::$ci->load->library($class);
             return;
         }
 
         /* Autoload Bonfire library classes */
         if (is_file($location = BFPATH . "libraries/{$class}" . self::$ext)) {
-            get_instance()->load->library($class);
+            self::$ci->load->library($class);
             return;
         }
     }
@@ -82,11 +99,13 @@ class Modules
      */
     public static function run($module)
     {
+        self::init();
+
         // Get the arguments to pass them along
         $args = func_get_args();
 
         // Use the built-in load method to handle this
-        return get_instance()->load->controller($module, $args);
+        return self::$ci->load->controller($module, $args);
     }
 
     /**
@@ -100,6 +119,8 @@ class Modules
      */
     public static function find($file, $module, $base)
     {
+        self::init();
+
         // Find the actual file name. It will always be the last element.
         $segments   = explode('/', $file);
         $file       = array_pop($segments);
@@ -166,9 +187,10 @@ class Modules
      */
     public static function list_modules($exclude_core=false)
     {
+        self::init();
+
         if ( ! function_exists('directory_map')) {
-            $ci =& get_instance();
-            $ci->load->helper('directory');
+            self::$ci->load->helper('directory');
         }
 
         $map = array();
@@ -285,9 +307,10 @@ class Modules
      */
     public static function files($module_name=null, $module_folder=null, $exclude_core=false)
     {
+        self::init();
+
         if ( ! function_exists('directory_map')) {
-            $ci =& get_instance();
-            $ci->load->helper('directory');
+            self::$ci->load->helper('directory');
         }
 
         $files = array();

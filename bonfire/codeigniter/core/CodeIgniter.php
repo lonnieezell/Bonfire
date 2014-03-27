@@ -183,6 +183,9 @@
  *  Instantiate the output class
  * ------------------------------------------------------
  */
+    // Load the base controller class
+    require BASEPATH.'core/Controller.php';
+
 	$OUT =& load_class('Output', 'core');
 
 /*
@@ -225,9 +228,6 @@
  * ------------------------------------------------------
  *
  */
-	// Load the base controller class
-	require BASEPATH.'core/Controller.php';
-
 	function &get_instance()
 	{
 		return CI_Controller::get_instance();
