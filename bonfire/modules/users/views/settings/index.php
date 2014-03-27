@@ -8,7 +8,7 @@ th.status { width: 10em; }
 		<?php
 		// If there's a current filter, we need to replace the caption with a clear button
 		if ($filter_type == 'first_letter') :
-			echo anchor($index_url, lang('bf_clear'), array('class' => 'btn btn-small btn-primary'));
+			echo anchor($index_url, lang('bf_clear'), array('class' => 'btn btn-sm btn-primary'));
 		else :
 			e(lang('us_filter_first_letter'));
 		endif;

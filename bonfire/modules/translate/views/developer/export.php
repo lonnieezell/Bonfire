@@ -2,7 +2,7 @@
 <div class='admin-box'>
     <?php echo form_open(current_url(), 'class="form-horizontal"'); ?>
         <fieldset>
-            <div class="control-group">
+            <div class="form-group">
                 <label for="export_lang" class="control-label"><?php echo lang('tr_language'); ?></label>
                 <div class="controls">
                     <select name="export_lang" id="export_lang">
@@ -13,7 +13,7 @@
                     </select>
                 </div>
             </div>
-            <div class="control-group">
+            <div class="form-group">
                 <label class="control-label"><?php echo lang('tr_include'); ?></label>
                 <div class="controls">
                     <label for="include_core">

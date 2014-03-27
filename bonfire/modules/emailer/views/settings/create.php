@@ -8,7 +8,7 @@ $num_users_columns = 7;
 #email_content { width: 90%; }
 </style>
 <?php if ($validation_errors) : ?>
-<div class="alert alert-block alert-error fade in">
+<div class="alert alert-block alert-danger fade in">
 	<a class="close" data-dismiss="alert">&times;</a>
 	<h4 class="alert-heading">Please fix the following errors:</h4>
 	<?php echo $validation_errors; ?>

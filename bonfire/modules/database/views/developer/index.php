@@ -26,7 +26,7 @@ input[type='submit'] { margin-left: 1em; }
 				<tr>
 					<td colspan="7">
 						<?php echo lang('bf_with_selected'); ?>:
-						<select name="action" class="span2" style="margin-bottom:0; ">
+						<select name="action" class="col-md-2" style="margin-bottom:0; ">
 							<option value="backup"><?php echo lang('db_backup'); ?></option>
 							<option value="repair"><?php echo lang('db_repair'); ?></option>
 							<option value="optimize"><?php echo lang('db_optimize'); ?></option>

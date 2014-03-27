@@ -12,7 +12,7 @@ $pageModule = 'activity_module';
 $pageDate   = 'activity_date';
 
 ?>
-<ul class="nav nav-pills">
+<ul class="nav navbar-nav nav-pills">
 	<li<?php echo $checkSegment == '' ? ' class="active"' : ''; ?>>
 		<a href="<?php echo $activitiesReportsUrl; ?>"><?php echo lang('activities_home'); ?></a>
 	</li>

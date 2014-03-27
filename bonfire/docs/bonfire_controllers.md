@@ -65,4 +65,47 @@ The final controller sets things up even more for use within the Admin area of y
 <a name="create"></a>
 ## Creating Controllers
 
-Creating controllers in Bonfire is nearly identical to creating controllers in straight CodeIgniter. The only difference is the naming of some of the classes when you're dealing with the Administration side of Bonfire and [Contexts](contexts).
+Creating controllers in Bonfire is nearly identical to creating controllers in straight CodeIgniter. The only difference is the naming of some of the classes when you're dealing with the Administration side of Bonfire and [Contexts](contexts). It does provide some basic tools for you to use, though. 
+
+### Class Variables
+The following class variables are available to you from any controller that extends from `Base_Controller` or one of it's child classes.
+
+#### $current_user
+ If a user is logged in, there basic information will be stored in the `$current_user` class variable. This is also made available within views as `$current_user`. If the user is not logged in, the value will be `NULL`.
+ 
+#### $previous_page
+Will store the uri of the previous page, if that page was a page within your application. This is set during the `post_controller` hook and will filter out any pages in the `$ignore_pages` class variable of the `App_hooks` file.  
+
+Hooks must be enabled for this variable to be populated.
+
+#### $requested_page
+The page that the web server thinks you were requesting. Set during the `pre_controller` hook, it will attempt to determine the page that the user was requesting, while filtering out the `$ignore_pages` uris so that we don't get things like images, etc. 
+
+This value is also saved to the $_SESSION if CodeIgniter's Session class has not been loaded.
+
+Hooks must be enabled for this variable to be populated.
+
+#### $require_authentication
+If set to TRUE, the Base_Controller will load up the authentication class, ensure that the user is logged in via `$this->auth->restrict()` and handle setting up the current user for access in the controller. 
+
+If you are extending from Authenticated_Controller of Admin_Controller, this will have already been called.
+
+#### $autoload
+This array provides a simple means of loading various libraries, helpers and models automatically within your application. 
+
+	protected $autoload = array(
+        'libraries' => array('settings/settings_lib'),
+        'helpers'   => array(),
+        'models'    => array()
+    );
+
+You will not, however, want to extend this directly since you will override parent class autoload needs. Instead, set the value in your class' constructor prior to calling the parent's constructor.
+
+	public function __construct()
+	{
+		$this->autoload['helpers'][] = 'my_new_helper';
+		
+		parent::__construct();
+	}
+ 
+
