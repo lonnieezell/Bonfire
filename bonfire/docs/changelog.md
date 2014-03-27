@@ -55,20 +55,22 @@ Closes Issues:
 * #954 - Assets::js() returns nothing if string is passed as first parameter
 * #952 - Documentation of BF_Model's handling of validation 'label' parameter
 * #948 - Add function strtolower in libraries: Module will be better.
+* #947 - Remove PHP short tag from view for PHP 5.3 support
 * #946 - Unable to load class cache.
 * #941 - Model set_date when time_reference is set to GMT
 * #940 - Model update() throws error in modified_on() when validation fails and set_modified is enabled.
-* #947 - Remove PHP short tag from view for PHP 5.3 support
 * #939, 627 - sync user_meta state/country selects
+* #932 - Resend Activation Link sends incorrect link, preventing user from activating account
 * #849 - No need to save password_iterations in the user table
 * #928 - min_length[8] validation called regardless of minimum length setting for password
 * #926 - Application helper iif issue
 * #922 - Type of MY_Model update_where() method
 * #919 - Incorrect documentation of date_format field in MY_Model
 * #917 - Problem when SITE_AREA is changed
-* #612 - Modifying set created and set modified from models
+* #687 - user-meta fields doesn't respect "required"
 * #637 - Bonfire admin topbar CSS breaks scrolling features (Firefox)
-* #932 - Resend Activation Link sends incorrect link, preventing user from activating account
+* #612 - Modifying set created and set modified from models
+
 
 ## Released versions
 
