@@ -414,7 +414,11 @@ class Users extends Front_Controller
 	//--------------------------------------------------------------------
 
 	/**
-	 * Display the registration form for the user and manage the registration process
+	 * Display the registration form for the user and manage the registration process.
+     *
+     * You can override the redirect URL's for success (Login) and failure (register)
+     * by including a hidden field in your form for each, named 'register_url' and
+     * 'login_url' respectively.
 	 *
 	 * @access public
 	 *
@@ -422,6 +426,9 @@ class Users extends Front_Controller
 	 */
 	public function register()
 	{
+        $register_url   = $this->input->post('register_url') ? $this->input->post('register_url') : REGISTER_URL;
+        $login_url      = $this->input->post('login_url') ? $this->input->post('login_url') : LOGIN_URL;
+
 		// Are users even allowed to register?
 		if (!$this->settings_lib->item('auth.allow_register'))
 		{
@@ -515,12 +522,12 @@ class Users extends Front_Controller
 
 					// Log the Activity
 					log_activity($user_id, lang('us_log_register'), 'users');
-					Template::redirect(LOGIN_URL);
+					Template::redirect($login_url);
 				}
 				else
 				{
 					Template::set_message(lang('us_registration_fail'), 'error');
-					redirect(REGISTER_URL);
+					redirect($register_url);
 				}//end if
 			}//end if
 		}//end if

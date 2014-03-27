@@ -17,6 +17,7 @@ class Authenticated_Controller extends Base_Controller
 
     protected $require_authentication   = true;
 
+
 	//--------------------------------------------------------------------
 
 	/**
@@ -25,13 +26,15 @@ class Authenticated_Controller extends Base_Controller
 	 */
 	public function __construct()
 	{
+        $this->autoload['helpers'] = 'form';
+        $this->autoload['libraries'][]  = 'Template';
+        $this->autoload['libraries'][]  = 'Assets';
+        $this->autoload['libraries'][]  = 'form_validation';
+
 		parent::__construct();
 
-		// Load additional libraries
-		$this->load->helper('form');
-		$this->load->library('form_validation');
 		$this->form_validation->set_error_delimiters('', '');
-		// $this->form_validation->CI =& $this;	// Hack to make it work properly with HMVC
+
 	}//end construct()
 
 	//--------------------------------------------------------------------
