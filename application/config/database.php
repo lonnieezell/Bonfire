@@ -42,9 +42,9 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
+$db['default']['username'] = '';
 $db['default']['password'] = '';
-$db['default']['database'] = 'bonfire_base3';
+$db['default']['database'] = '';
 $db['default']['port']     = '3306';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = 'bf_';
