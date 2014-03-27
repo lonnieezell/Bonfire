@@ -1,5 +1,5 @@
 <?php if ($validationErrors = validation_errors()) : ?>
-<div class="alert alert-error fade in">
+<div class="alert alert-danger fade in">
 	<a class="close" data-dismiss="alert">&times;</a>
 	<p><?php echo $validationErrors; ?></p>
 </div>
@@ -17,7 +17,7 @@
 			<tbody>
 				<tr>
 					<th>
-						<select name="new_action" class="span4">
+						<select name="new_action" class="col-md-4">
     						<?php
                             foreach ($current as $name => $detail) :
                                 if ( ! array_key_exists($name, $settings)) :

@@ -34,7 +34,7 @@
 
 
             <div class="collapse navbar-collapse" id="main-nav-collapse">
-                <ul class="nav navbar-nav navbar-left">
+                <ul class="navbar-nav navbar-nav navbar-left">
                     <?php if (config_item('docs.show_app_docs')) :?>
                     <li <?php echo check_segment(2, 'application') ?>>
                         <a href="<?php echo site_url('docs/application'); ?>"><?php echo lang('docs_title_application') ?></a>

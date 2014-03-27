@@ -11,7 +11,7 @@
             <label for='new_lang'><?php e(lang('tr_new_lang')); ?></label>
             <input type="text" name="new_lang" id="new_lang" value="<?php echo set_value('new_lang'); ?>" />
         </div>
-		<input type="submit" name="select_lang" class="btn btn-small btn-primary" value="<?php e(lang('tr_select_lang')); ?>" />
+		<input type="submit" name="select_lang" class="btn btn-sm btn-primary" value="<?php e(lang('tr_select_lang')); ?>" />
 	<?php echo form_close(); ?>
 </div>
 <!-- Core -->
@@ -24,12 +24,12 @@
     foreach ($lang_files as $file) :
         if ($cnt == 1) :
     ?>
-    <div class="row-fluid">
+    <div class="row">
         <?php
         endif;
         $cnt++;
         ?>
-		<a class='span4' href='<?php echo "{$linkUrl}/{$file}"; ?>'><?php e($file); ?></a>
+		<a class='col-md-4' href='<?php echo "{$linkUrl}/{$file}"; ?>'><?php e($file); ?></a>
 		<?php
         if ($cnt > $brk) :
         ?>
@@ -54,12 +54,12 @@
         foreach ($modules as $file) :
             if ($cnt == 1) :
     ?>
-    <div class="row-fluid">
+    <div class="row">
         <?php
             endif;
             $cnt++;
         ?>
-        <a class='span4' href="<?php echo "{$linkUrl}/{$file}"; ?>"><?php e($file); ?></a>
+        <a class='col-md-4' href="<?php echo "{$linkUrl}/{$file}"; ?>"><?php e($file); ?></a>
         <?php if ($cnt > $brk) : ?>
     </div>
     <?php

@@ -251,23 +251,23 @@ class Reports extends Admin_Controller
     			break;
 		}
 
-		// Set a default delete then check if delete "all" was chosen
-        if ($value == 'activity_id') {
-            $this->activity_model->where("{$value} <", $which);
+        // Set the where clause for the delete
+        $deleteWhere = array();
+        if ($which == 'all') {
+            $deleteWhere["{$value} !="] = 'tsTyImbdOBOgwIqtb94N4Gr6ctatWVDnmYC3NfIfczzxPs0xZLNBnQs38dzBYn8';
+		} elseif ($value == 'activity_id') {
+            $deleteWhere["{$value} <"] = $which;
         } else {
-            $this->activity_model->where($value, $which);
+            $deleteWhere[$value] = $which;
         }
 
-		if ($which == 'all') {
-            $this->activity_model->where("{$value} !=", 'tsTyImbdOBOgwIqtb94N4Gr6ctatWVDnmYC3NfIfczzxPs0xZLNBnQs38dzBYn8');
-		}
-
-		// Check if they can delete their own stuff
+        // Check whether the user can delete his/her own activities
         if ( ! has_permission($this->permissionDeleteOwn)) {
             $this->activity_model->where('user_id !=', $this->auth->user_id());
         }
 
-        $affected = $this->activity_model->delete();
+        $affected = $this->activity_model->delete_where($deleteWhere);
+
 		if (is_numeric($affected)) {
 			Template::set_message(sprintf(lang('activities_deleted'), $affected), 'success');
 			$this->activity_model->log_activity($this->auth->user_id(), sprintf(lang('activities_act_deleted'), $affected), 'activities');
@@ -336,7 +336,12 @@ class Reports extends Admin_Controller
                 // no break;
 			default:
 				if ($this->hasPermissionViewUser) {
-					foreach ($this->user_model->where("{$userTable}.{$userDeletedField}", 0)->find_all() as $e) {
+                    // Use the same order_by for the user drop-down/select as is
+                    // used on the index page
+                    $this->user_model->where("{$userTable}.{$userDeletedField}", 0)
+                                     ->order_by('username', 'asc');
+
+                    foreach ($this->user_model->find_all() as $e) {
 						$options[$e->id] = $e->username;
 						if ($find_value == $e->id) {
 							$name = $e->username;

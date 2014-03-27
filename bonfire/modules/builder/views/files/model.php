@@ -49,41 +49,39 @@ if ($useSoftDeletes) {
 // Validation Rules
 //--------------------------------------------------------------------
 
+$dbPrefix = $this->db->dbprefix;
+$field_prefix = '';
 $rules = '';
+
+if ($db_required == 'new' && $table_as_field_prefix === true) {
+    $field_prefix = "{$module_name_lower}_";
+}
+
 for ($counter = 1; $field_total >= $counter; $counter++) {
 	// Only build on fields that have data entered.
 	if (set_value("view_field_label$counter") == null) {
 		continue;
 	}
 
-	if ($db_required == 'new' && $table_as_field_prefix === true) {
-		$field_name = "{$module_name_lower}_" . set_value("view_field_name$counter");
-	} elseif ($db_required == 'new' && $table_as_field_prefix === false) {
-        $field_name = set_value("view_field_name$counter");
-	} else {
-        $field_name = set_value("view_field_name$counter");
-	}
+    $field_name = set_value("view_field_name$counter");
+	$form_name = $field_prefix . $field_name;
 
-	$form_name = "{$module_name_lower}_" . set_value("view_field_name$counter");
 	$rules .= "
 		array(
 			'field' => '{$form_name}',
-			'label' => 'lang:" . set_value("view_field_name$counter") . "',
+			'label' => 'lang:{$module_name_lower}_field_{$field_name}',
 			'rules' => '";
 
-	// set a friendly variable name
-	$validation_rules = $this->input->post('validation_rules'.$counter);
-
-	// rules have been selected for this fieldset
+	$validation_rules = $this->input->post("validation_rules{$counter}");
 	$rule_counter = 0;
     $tempRules = array();
 
+	// Rules have been selected for this fieldset
 	if (is_array($validation_rules)) {
 		// Add rules such as trim|required
 		foreach ($validation_rules as $key => $value) {
 			if ($value == 'unique') {
-				$prefix = $this->db->dbprefix;
-				$value .= "[{$prefix}{$table_name}.{$field_name},{$prefix}{$table_name}.{$primary_key_field}]";
+				$value .= "[{$dbPrefix}{$table_name}.{$field_name},{$dbPrefix}{$table_name}.{$primary_key_field}]";
 			}
             $tempRules[] = $value;
 		}
@@ -120,7 +118,6 @@ if ( ! empty($rules)) {
 //------------------------------------------------------------------------------
 // Output the model
 //------------------------------------------------------------------------------
-
 echo "<?php defined('BASEPATH') || exit('No direct script access allowed');
 
 class {$ucModuleName}_model extends BF_Model

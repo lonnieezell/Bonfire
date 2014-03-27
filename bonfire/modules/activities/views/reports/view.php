@@ -4,7 +4,7 @@
             <legend><?php echo lang('activities_filter_head'); ?></legend>
             <?php
             $form_help = '<span class="help-inline">' . sprintf(lang('activities_filter_note'), ($vars['view_which'] == ucwords(lang('activities_date')) ? lang('activities_filter_from_before') : lang('activities_filter_only_for')), strtolower($vars['view_which'])) . '</span>';
-            $form_data = array('name' => "{$vars['which']}_select", 'id' => "{$vars['which']}_select", 'class' => 'span3');
+            $form_data = array('name' => "{$vars['which']}_select", 'id' => "{$vars['which']}_select", 'class' => 'col-md-3');
             echo form_dropdown($form_data, $select_options, $filter, lang('activities_filter_head'), '' , $form_help);
             unset($form_data, $form_help);
             ?>
@@ -32,7 +32,7 @@
             $vars['name']
     ); ?></h2>
 <?php if (empty($activity_content)) : ?>
-<div class="alert alert-error fade in">
+<div class="alert alert-danger fade in">
     <a class="close" data-dismiss="alert">&times;</a>
     <h4 class="alert-heading"><?php echo lang('activities_not_found'); ?></h4>
 </div>

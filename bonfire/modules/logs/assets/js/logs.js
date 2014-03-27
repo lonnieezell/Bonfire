@@ -10,7 +10,7 @@
 						break;
 
 					case 'error':
-						if ($(this).hasClass('alert-error')) {
+						if ($(this).hasClass('alert-danger')) {
 							$(this).css('display', 'inherit');
 						} else {
 							$(this).css('display', 'none');

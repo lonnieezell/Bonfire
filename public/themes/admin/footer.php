@@ -1,4 +1,4 @@
-	<footer class="container-fluid footer">
+	<footer class="container footer">
 		<p class="pull-right">
 			Executed in {elapsed_time} seconds, using {memory_usage}.<br />
 			Powered by <a href="http://cibonfire.com" target="_blank"><span class="icon-fire"></span>&nbsp;Bonfire</a> <?php echo BONFIRE_VERSION; ?>

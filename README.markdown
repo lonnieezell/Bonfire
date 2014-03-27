@@ -1,3 +1,8 @@
+#With Bootstrap 3.1
+
+Still needs some tweaks in modules...
+
+---
 # Faster Development of CodeIgniter 2.1.4 Apps
 
 <div style="float: right; margin: 0 20px 20px 0">

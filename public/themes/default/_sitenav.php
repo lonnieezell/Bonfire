@@ -1,5 +1,5 @@
 <div class="masthead">
-    <ul class="nav nav-pills pull-right">
+    <ul class="nav navbar-nav nav-pills pull-right">
         <li <?php echo check_class('home'); ?>><a href="<?php echo site_url(); ?>"><?php e(lang('bf_home')); ?></a></li>
         <?php if (empty($current_user)) : ?>
         <li><a href="<?php echo site_url(LOGIN_URL); ?>">Sign In</a></li>
