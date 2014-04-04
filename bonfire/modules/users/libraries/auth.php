@@ -135,7 +135,7 @@ class Auth
 		if (empty($login) || empty($password))
 		{
 			$error = $this->ci->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucfirst($this->ci->settings_lib->item('auth.login_type'));
-			Template::set_message(sprintf(lang('us_fields_required'), $error), 'error');
+			Template::set_message(sprintf(lang('us_fields_required'), $error), 'danger');
 			return FALSE;
 		}
 
@@ -161,7 +161,7 @@ class Auth
 		// check to see if a value of FALSE came back, meaning that the username or email or password doesn't exist.
 		if ($user == FALSE)
 		{
-			Template::set_message(lang('us_bad_email_pass'), 'error');
+			Template::set_message(lang('us_bad_email_pass'), 'danger');
 			return FALSE;
 		}
 
@@ -171,11 +171,11 @@ class Auth
 		{
 			if ($activation_type == 1)
 			{
-				Template::set_message(lang('us_account_not_active'), 'error');
+				Template::set_message(lang('us_account_not_active'), 'danger');
 			}
 			elseif ($activation_type == 2)
 			{
-				Template::set_message(lang('us_admin_approval_pending'), 'error');
+				Template::set_message(lang('us_admin_approval_pending'), 'danger');
 			}
 
 			return FALSE;
@@ -184,7 +184,7 @@ class Auth
 		// check if the account has been soft deleted.
 		if ($user->deleted >= 1) // in case we go to a unix timestamp later, this will still work.
 		{
-			Template::set_message(sprintf(lang('us_account_deleted'), html_escape(settings_item("site.system_email"))), 'error');
+			Template::set_message(sprintf(lang('us_account_deleted'), html_escape(settings_item("site.system_email"))), 'danger');
 			return FALSE;
 		}
 
@@ -195,7 +195,7 @@ class Auth
 			if ($user->banned)
 			{
 				$this->increase_login_attempts($login);
-				Template::set_message($user->ban_message ? $user->ban_message : lang('us_banned_msg'), 'error');
+				Template::set_message($user->ban_message ? $user->ban_message : lang('us_banned_msg'), 'danger');
 				return FALSE;
 			}
 
@@ -247,7 +247,7 @@ class Auth
 		// Bad password
 		else
 		{
-			Template::set_message(lang('us_bad_email_pass'), 'error');
+			Template::set_message(lang('us_bad_email_pass'), 'danger');
 			$this->increase_login_attempts($login);
 		}
 
@@ -369,7 +369,7 @@ class Auth
 		if ($this->is_logged_in() === FALSE)
 		{
 			$this->ci->load->library('Template');
-			Template::set_message($this->ci->lang->line('us_must_login'), 'error');
+			Template::set_message($this->ci->lang->line('us_must_login'), 'danger');
 			Template::redirect(LOGIN_URL);
 		}
 
