@@ -3,8 +3,9 @@
 ?>
 <p><br/><a href="<?php echo site_url(); ?>">&larr; <?php echo lang('us_back_to') . $this->settings_lib->item('site.title'); ?></a></p>
 
-<div id="login">
-	<h2><?php echo lang('us_login'); ?></h2>
+<div class="container">    
+    <div id="login" class="panel panel-default mainbox col-lg-5 col-6 col-md-offset-3 col-sm-6 col-sm-offset-3 col-xs-7 col-xs-offset-1" style="min-width:260px;"> 
+	<h2 style="padding:20px 15px;"><?php echo lang('us_login'); ?></h2>
 
 	<?php echo Template::message(); ?>
 
@@ -21,33 +22,35 @@
 	</div>
 	<?php endif; ?>
 
-	<?php echo form_open(LOGIN_URL, array('autocomplete' => 'off')); ?>
+ 	<?php echo form_open(LOGIN_URL, array('autocomplete' => 'off')); ?>
 
-		<div class="form-group <?php echo iif( form_error('login') , 'error') ;?>">
-			<div class="controls">
-				<input style="width: 95%" type="text" name="login" id="login_value" value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords($this->settings_lib->item('auth.login_type')) ?>" />
+		<div style="margin-bottom: 20px;" class="form-group <?php echo iif( form_error('login') , 'error') ;?>">
+			<div class="col-lg-12" style="float:none;">
+				<input class="form-control" type="text" name="login" id="login_value" value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords($this->settings_lib->item('auth.login_type')) ?>" />
 			</div>
 		</div>
 
 		<div class="form-group <?php echo iif( form_error('password') , 'error') ;?>">
-			<div class="controls">
-				<input style="width: 95%" type="password" name="password" id="password" value="" tabindex="2" placeholder="<?php echo lang('bf_password'); ?>" />
+			<div class="col-lg-12" style="float:none;">
+				<input class="form-control" type="password" name="password" id="password" value="" tabindex="2" placeholder="<?php echo lang('bf_password'); ?>" />
 			</div>
 		</div>
 
 		<?php if ($this->settings_lib->item('auth.allow_remember')) : ?>
-			<div class="form-group">
-				<div class="controls">
+			<div class="form-group col-lg-12">
+                <div class="input-group">
+                    <div class="checkbox">
 					<label class="checkbox" for="remember_me">
 						<input type="checkbox" name="remember_me" id="remember_me" value="1" tabindex="3" />
-						<span class="inline-help"><?php echo lang('us_remember_note'); ?></span>
+						<?php echo lang('us_remember_note'); ?>
 					</label>
+					</div>
 				</div>
 			</div>
 		<?php endif; ?>
 
 		<div class="form-group">
-			<div class="controls">
+			<div class="col-lg-12">
 				<input class="btn btn-lg btn-primary" type="submit" name="log-me-in" id="submit" value="<?php e(lang('us_let_me_in')); ?>" tabindex="5" />
 			</div>
 		</div>
@@ -72,5 +75,5 @@
 
 		<br/><?php echo anchor('/forgot_password', lang('us_forgot_your_password')); ?>
 	</p>
-
+</div>
 </div>
