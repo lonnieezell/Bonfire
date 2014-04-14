@@ -203,18 +203,25 @@ $mb_save = "
 	//--------------------------------------------------------------------
 
 	/**
-	 * Summary
+	 * Save the data.
 	 *
-	 * @param String \$type Either 'insert' or 'update'
-	 * @param Int	 \$id	The ID of the record to update, ignored on inserts
+	 * @param string \$type Either 'insert' or 'update'.
+	 * @param int	 \$id	The ID of the record to update, ignored on inserts.
 	 *
-	 * @return Mixed    An INT id for successful inserts, TRUE for successful updates, else FALSE
+	 * @return bool|int An int ID for successful inserts, true for successful
+     * updates, else false.
 	 */
 	private function save_{$module_name_lower}(\$type = 'insert', \$id = 0)
 	{
 		if (\$type == 'update') {
 			\$_POST['{$primary_key_field}'] = \$id;
 		}
+
+        // Validate the data
+        \$this->form_validation->set_rules(\$this->{$module_name_lower}_model->get_validation_rules());
+        if (\$this->form_validation->run() === false) {
+            return false;
+        }
 
 		// Make sure we only pass in the fields we want
 		{save_data_array}
@@ -337,8 +344,12 @@ if ($controller_name_lower != $module_name_lower) {
 		$body .= $mb_save;
 	}
 
-	$save_data_array = '
-		$data = array();';
+	$save_data_array = "
+		\$data = \$this->{$module_name_lower}_model->prep_data(\$this->input->post());
+
+        // Additional handling for default values should be added below,
+        // or in the model's prep_data() method
+        ";
 
 	for ($counter = 1; $field_total >= $counter; $counter++) {
 		// Only build on fields that have data entered.
@@ -354,21 +365,20 @@ if ($controller_name_lower != $module_name_lower) {
 			$field_name = set_value("view_field_name$counter");
 		}
 
-		$form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
-
 		// Setup the data array for saving to the db
 		// Set defaults for certain field types
 		switch (set_value("db_field_type$counter")) {
 			case 'DATE':
-				$save_data_array .= "\n\t\t\$data['{$field_name}']\t= \$this->input->post('{$form_name}') ? \$this->input->post('{$form_name}') : '0000-00-00';";
+				$save_data_array .= "\n\t\t\$data['{$field_name}']\t= \$this->input->post('{$field_name}') ? \$this->input->post('{$field_name}') : '0000-00-00';";
 				break;
 
 			case 'DATETIME':
-				$save_data_array .= "\n\t\t\$data['{$field_name}']\t= \$this->input->post('{$form_name}') ? \$this->input->post('{$form_name}') : '0000-00-00 00:00:00';";
+				$save_data_array .= "\n\t\t\$data['{$field_name}']\t= \$this->input->post('{$field_name}') ? \$this->input->post('{$field_name}') : '0000-00-00 00:00:00';";
 				break;
 
 			default:
-				$save_data_array .= "\n\t\t\$data['{$field_name}']\t= \$this->input->post('{$form_name}');";
+                // No need to handle fields for which defaults are not set,
+                // the model's prep_data() method should take care of it.
 				break;
 		}
 	}
