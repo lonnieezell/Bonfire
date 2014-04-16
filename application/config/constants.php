@@ -56,14 +56,5 @@ define('LOGIN_URL', 'login');
 define('REGISTER_URL', 'register');
 
 
-/*
-	The 'IS_AJAX' constant allows for a quick simple test as to whether the
-	current request was made with XHR.
-*/
-
-$ajax_request = ( !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') ? TRUE : FALSE;
-define('IS_AJAX' , $ajax_request );
-unset ( $ajax_request );
-
 /* End of file constants.php */
 /* Location: ./application/config/constants.php */
