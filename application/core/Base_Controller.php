@@ -14,6 +14,8 @@
  * @filesource
  */
 
+require_once BFPATH .'libraries/Pimple.php';
+
 /**
  * Base Controller
  *
@@ -66,16 +68,23 @@ class Base_Controller extends CI_Controller
         'models'    => array()
     );
 
+    /**
+     * Our dependency injection container.
+     */
+    protected $container;
+
 	//--------------------------------------------------------------------
 
 	/**
 	 * Class constructor
 	 *
-	 * @return void
+	 * @return mixed
 	 */
 	public function __construct()
 	{
 		parent::__construct();
+
+        $this->init();
 
         // Most likely, the requested page is saved in the $_SESSION here, so, 
 		// grab it and make it available to CI's session.
@@ -153,6 +162,27 @@ class Base_Controller extends CI_Controller
 
 	//--------------------------------------------------------------------
 
+    /**
+     * Handles setting up our DI container and other core setup tasks.
+     * Placed here to get out of the way of application requirements.
+     */
+    public function init ()
+    {
+        // Get our DI container up and running
+        $this->container = new Pimple();
+
+        // Setup our Template Engine
+        $this->container['templateEngineName']  = 'Bonfire\PlatesTemplate';
+        $this->container['templateEngine']      = function ($c) {
+            return new $c['templateEngineName']();
+        };
+
+        $this->template = $this->container['templateEngine'];
+    }
+
+    //--------------------------------------------------------------------
+
+
 	/**
 	 * If the Auth lib is loaded, it will set the current user, since users
 	 * will never be needed if the Auth library is not loaded. By not requiring
@@ -181,8 +211,8 @@ class Base_Controller extends CI_Controller
 
 			// Make the current user available in the views
             // When calling from Authenticated controller, this class
-		    $this->load->library('Template');
-			Template::set('current_user', $this->current_user);
+            // todo: use new template engine.
+//			Template::set('current_user', $this->current_user);
 		}
 	}
 

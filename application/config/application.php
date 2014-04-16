@@ -97,7 +97,6 @@ $config['sparks_path'] = '../sparks/';
 |
 */
 $config['template.site_path']	= FCPATH;
-
 /*
 |---------------------------------------------------------------------
 | THEME PATHS
@@ -106,7 +105,9 @@ $config['template.site_path']	= FCPATH;
 | one folder path at all times, to serve as the fall-back for when
 | a theme isn't found. Paths are relative to the FCPATH.
 */
-$config['template.theme_paths'] = array('themes');
+$config['template.theme_paths'] = [
+    'admin' => APPPATH .'../themes/admin'
+];
 
 /*
 |--------------------------------------------------------------------
@@ -134,30 +135,13 @@ $config['template.ajax_layout'] = 'ajax';
 
 /*
 |--------------------------------------------------------------------
-| USE THEMES?
-|--------------------------------------------------------------------
-| When set to TRUE, Ocular will check the user agent during the
-| render process, and check the UA against the template.themes (below),
-| allowing you to create mobile versions of your site, and version
-| targetted specifically at a single type of phone (ie, Blackberry or
-| iPhone).
-|
-| Note, that, when rendering, if the file doesn't exist in the
-| targetted theme, Ocular then checks the default site for the same file.
-|
-*/
-$config['template.use_mobile_themes'] = FALSE;
-
-
-/*
-|--------------------------------------------------------------------
 | DEFAULT THEME
 |--------------------------------------------------------------------
 | This is the folder name that contains the default theme to use
 | when 'template.use_mobile_themes' is set to TRUE.
 |
 */
-$config['template.default_theme']	= 'default/';
+$config['template.default_theme']	= 'default';
 
 /*
 |--------------------------------------------------------------------

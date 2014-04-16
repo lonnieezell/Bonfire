@@ -59,7 +59,7 @@ class Admin_Controller extends Authenticated_Controller
             'shortcuts' => config_item('ui.current_shortcuts'),
             'shortcut_keys' => $this->settings_lib->find_all_by('module', 'core.ui'),
         );
-        Template::set('shortcut_data', $shortcut_data);
+//        Template::set('shortcut_data', $shortcut_data);
 
         // Profiler Bar?
         if (ENVIRONMENT == 'development')
@@ -76,7 +76,7 @@ class Admin_Controller extends Authenticated_Controller
         }
 
         // Basic setup
-        Template::set_theme($this->config->item('template.admin_theme'), $this->config->item('template.default_theme'));
+       $this->template->setTheme($this->config->item('template.admin_theme'));
     }//end construct()
 
     //--------------------------------------------------------------------

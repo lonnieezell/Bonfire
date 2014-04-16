@@ -39,7 +39,7 @@ class Content extends Admin_Controller
 	{
 		parent::__construct();
 
-		Template::set('toolbar_title', 'Content');
+//		Template::set('toolbar_title', 'Content');
 
 		$this->auth->restrict('Site.Content.View');
 	}//end __construct()
@@ -53,8 +53,8 @@ class Content extends Admin_Controller
 	 */
 	public function index()
 	{
-		Template::set_view('admin/content/index');
-		Template::render();
+        $this->template->setView('admin/content/index');
+		$this->template->render();
 	}//end index()
 
 	//--------------------------------------------------------------------

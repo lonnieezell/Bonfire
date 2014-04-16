@@ -27,7 +27,6 @@ class Authenticated_Controller extends Base_Controller
 	public function __construct()
 	{
         $this->autoload['helpers'][]    = 'form';
-        $this->autoload['libraries'][]  = 'Template';
         $this->autoload['libraries'][]  = 'Assets';
         $this->autoload['libraries'][]  = 'form_validation';
 

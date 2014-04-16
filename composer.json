@@ -18,6 +18,11 @@
         "forum": "http://forums.cibonfire.com/",
         "source": "https://github.com/ci-bonfire/Bonfire"
     },
+    "autoload": {
+        "psr-4": {
+            "Bonfire\\": ["bonfire/libraries/", "bonfire/interfaces/" ]
+        }
+    },
     "require": {
         "php": ">5.4.0",
         "monolog/monolog": "1.8.*@dev",
