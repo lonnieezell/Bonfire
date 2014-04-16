@@ -14,7 +14,7 @@ a.span4 {
 	border-bottom: 1px solid #e5e5e5;
 	margin-bottom: 5px;
 }
-.admin-box .row-fluid {
+.admin-box .row {
 	margin-bottom: 10px;
 }
 .subhead {
@@ -29,7 +29,7 @@ a.span4 {
 .form-horizontal label {
 	width: 100% !important;
 }
-.form-horizontal .control-group {
+.form-horizontal .form-group {
 	padding-bottom: 5px;
 	padding-top: 5px;
 }

@@ -21,7 +21,7 @@ th.domain {
 	color: #222;
 }
 /* For the role_form */
-.description.control-group,
-.description.control-group .help-inline {
+.description.form-group,
+.description.form-group .help-inline {
     vertical-align: top;
 }

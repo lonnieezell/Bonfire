@@ -349,7 +349,7 @@ class CI_Encrypt {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Adds permuted noise to the IV + encrypted data to protect
+	 * Adds pertext-muted noise to the IV + encrypted data to protect
 	 * against Man-in-the-middle attacks on CBC mode ciphers
 	 * http://www.ciphersbyritter.com/GLOSSARY.HTM#IV
 	 *
@@ -382,7 +382,7 @@ class CI_Encrypt {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Removes permuted noise from the IV + encrypted data, reversing
+	 * Removes pertext-muted noise from the IV + encrypted data, reversing
 	 * _add_cipher_noise()
 	 *
 	 * Function description

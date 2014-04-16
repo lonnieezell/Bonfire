@@ -17,7 +17,7 @@ p.already-registered {
 <section id="register">
     <h1 class="page-header"><?php echo lang('us_sign_up'); ?></h1>
     <?php if ($validation_errors) : ?>
-	<div class="alert alert-error fade in">
+	<div class="alert alert-danger fade in">
 		<?php echo $validation_errors; ?>
 	</div>
     <?php endif; ?>
@@ -25,7 +25,7 @@ p.already-registered {
         <h4 class="alert-heading"><?php echo lang('bf_required_note'); ?></h4>
         <?php if (isset($password_hints)) { echo $password_hints; } ?>
     </div>
-    <div class="row-fluid">
+    <div class="row">
         <div class="span12">
             <?php echo form_open( site_url(REGISTER_URL), array('class' => "form-horizontal", 'autocomplete' => 'off')); ?>
 				<?php Template::block('user_fields', 'user_fields', $fieldData); ?>
@@ -36,7 +36,7 @@ p.already-registered {
                 <!-- Start of User Meta -->
                 <?php $this->load->view('users/user_meta', array('frontend_only' => true)); ?>
                 <!-- End of User Meta -->
-                <div class="control-group">
+                <div class="form-group">
                     <div class="controls">
                         <input class="btn btn-primary" type="submit" name="register" id="submit" value="<?php echo lang('us_register'); ?>"  />
                     </div>

@@ -104,7 +104,7 @@
                     </div>
 					<input type="hidden" name="core_only" value="1" />
 					<?php if (count($core_migrations)) : ?>
-					<div class="control-group">
+					<div class="form-group">
 						<label class="control-label" for="migration"><?php echo lang('migrations_choose_migration'); ?></label>
 						<div class="controls">
 							<select name="migration" id="migration">

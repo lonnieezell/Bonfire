@@ -8,6 +8,6 @@
         <li><a href="<?php echo site_url('logout'); ?>"><?php e(lang('bf_action_logout')); ?></a></li>
         <?php endif; ?>
     </ul>
-    <h3 class="muted"><?php e(class_exists('Settings_lib') ? settings_item('site.title') : 'Bonfire'); ?></h3>
+    <h3 class="text-muted"><?php e(class_exists('Settings_lib') ? settings_item('site.title') : 'Bonfire'); ?></h3>
 </div>
 <hr />

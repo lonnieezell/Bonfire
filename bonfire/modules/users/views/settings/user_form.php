@@ -36,7 +36,7 @@ echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="
     ?>
     <fieldset>
         <legend><?php echo lang('us_role'); ?></legend>
-        <div class="control-group">
+        <div class="form-group">
             <label for="role_id" class="control-label"><?php echo lang('us_role'); ?></label>
             <div class="controls">
                 <select name="role_id" id="role_id" class="chzn-select <?php echo $controlClass; ?>">
@@ -86,7 +86,7 @@ echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="
             $field = 'de' . $field;
         }
         ?>
-        <div class="control-group">
+        <div class="form-group">
             <div class="controls">
                 <label for="<?php echo $field; ?>">
                     <input type="checkbox" name="<?php echo $field; ?>" id="<?php echo $field; ?>" value="1" />
@@ -95,7 +95,7 @@ echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="
             </div>
         </div>
         <?php if ($user->deleted) : ?>
-        <div class="control-group">
+        <div class="form-group">
             <div class="controls">
                 <label for="restore">
                     <input type="checkbox" name="restore" id="restore" value="1" />
@@ -104,7 +104,7 @@ echo form_open($this->uri->uri_string(), 'class="form-horizontal" autocomplete="
             </div>
         </div>
         <?php elseif ($user->banned) : ?>
-        <div class="control-group">
+        <div class="form-group">
             <div class="controls">
                 <label for="unban">
                     <input type="checkbox" name="unban" id="unban" value="1" />

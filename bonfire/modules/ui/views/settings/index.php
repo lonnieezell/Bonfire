@@ -1,5 +1,5 @@
 <?php if ($validationErrors = validation_errors()) : ?>
-<div class="alert alert-error fade in">
+<div class="alert alert-danger fade in">
 	<a class="close" data-dismiss="alert">&times;</a>
 	<p><?php echo $validationErrors; ?></p>
 </div>

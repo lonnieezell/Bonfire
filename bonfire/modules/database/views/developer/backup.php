@@ -12,7 +12,7 @@
 			<p><?php echo lang('db_backup_warning'); ?></p>
 		</div>
 
-		<div class="control-group <?php echo form_error('file_name') ? 'error' : '' ?>">
+		<div class="form-group <?php echo form_error('file_name') ? 'error' : '' ?>">
 			<label for="file_name" class="control-label"><?php echo lang('db_filename'); ?></label>
 			<div class="controls">
 				<input type="text" name="file_name" id="file_name" value="<?php echo set_value('file_name', isset($file) && !empty($file) ? $file : ''); ?>" />
@@ -20,7 +20,7 @@
 			</div>
 		</div>
 
-		<div class="control-group <?php echo form_error('drop_tables') ? 'error' : '' ?>">
+		<div class="form-group <?php echo form_error('drop_tables') ? 'error' : '' ?>">
 			<label for="drop_tables" class="control-label"><?php echo lang('db_drop_question') ?></label>
 			<div class="controls">
 				<select name="drop_tables" id="drop_tables">
@@ -31,7 +31,7 @@
 			</div>
 		</div>
 
-		<div class="control-group <?php echo form_error('add_inserts') ? 'error' : '' ?>">
+		<div class="form-group <?php echo form_error('add_inserts') ? 'error' : '' ?>">
 			<label for="add_inserts" class="control-label"><?php echo lang('db_insert_question'); ?></label>
 			<div class="controls">
 				<select name="add_inserts" id="add_inserts">
@@ -42,7 +42,7 @@
 			</div>
 		</div>
 
-		<div class="control-group <?php echo form_error('file_type') ? 'error' : '' ?>">
+		<div class="form-group <?php echo form_error('file_type') ? 'error' : '' ?>">
 			<label for="file_type" class="control-label"><?php echo lang('db_compress_question'); ?></label>
 			<div class="controls">
 				<select name="file_type" id="file_type">

@@ -12,12 +12,12 @@ $fieldData = array(
 <section id="profile">
 	<h1 class="page-header"><?php echo lang('us_edit_profile'); ?></h1>
     <?php if ($validation_errors) : ?>
-    <div class="alert alert-error">
+    <div class="alert alert-danger">
         <?php echo $validation_errors; ?>
     </div>
     <?php endif; ?>
     <?php if (isset($user) && $user->role_name == 'Banned') : ?>
-    <div data-dismiss="alert" class="alert alert-error">
+    <div data-dismiss="alert" class="alert alert-danger">
         <?php echo lang('us_banned_admin_note'); ?>
     </div>
     <?php endif; ?>
@@ -25,7 +25,7 @@ $fieldData = array(
         <h4 class="alert-heading"><?php echo lang('bf_required_note'); ?></h4>
         <?php if (isset($password_hints)) { echo $password_hints; } ?>
     </div>
-    <div class="row-fluid">
+    <div class="row">
     	<div class="span12">
             <?php echo form_open($this->uri->uri_string(), array('class' => 'form-horizontal', 'autocomplete' => 'off')); ?>
                 <?php Template::block('user_fields', 'user_fields', $fieldData); ?>

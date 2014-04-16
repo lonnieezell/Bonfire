@@ -24,7 +24,7 @@
         <div class="container">
 
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-nav-collapse">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar-collapse">
                     <span class="sr-only">Toggle navigation</span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -33,7 +33,7 @@
             </div>
 
 
-            <div class="collapse navbar-collapse" id="main-nav-collapse">
+            <div class="collapse navbar-collapse" id="main-navbar-collapse">
                 <ul class="nav navbar-nav navbar-left">
                     <?php if (config_item('docs.show_app_docs')) :?>
                     <li <?php echo check_segment(2, 'application') ?>>
