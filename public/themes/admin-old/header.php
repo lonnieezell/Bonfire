@@ -1,14 +1,7 @@
 <?php
-
-Assets::add_css(array(
-    'bootstrap.css',
-    'bootstrap-responsive.css',
-));
-
 if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
     Assets::add_js($this->load->view('ui/shortcut_keys', $shortcut_data, true), 'inline');
 }
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -24,6 +17,9 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
     /* Modernizr is loaded before CSS so CSS can utilize its features */
     ?>
 	<script src="<?php echo Template::theme_url('js/modernizr-2.5.3.js'); ?>"></script>
+
+    <link rel="stylesheet" href="/assets/bootstrap3/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/assets/bootstrap3/css/bootstrap-theme.min.css" />
 	<?php echo Assets::css(null, true); ?>
 </head>
 <body class="desktop">
@@ -34,10 +30,15 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
 	<noscript>
 		<p>Javascript is required to use Bonfire's admin.</p>
 	</noscript>
-    <div class="navbar navbar-static-top navbar-inverse" id="topbar" >
+
+    <div class="navbar navbar-fixed-top navbar-inverse" id="topbar" role="navigation">
+
+    </div>
+
+    <div class="navbar navbar-static-top navbar-inverse" id="topbar" role="navigation">
         <div class="navbar-inner">
             <div class="container-fluid">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <a class="btn navbar-btn" data-toggle="collapse" data-target=".navbar-collapse">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -68,7 +69,7 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
 					</div>
                 </div>
                 <?php endif;?>
-                <div class="nav-collapse in collapse">
+                <div class="navbar-collapse in collapse">
                     <!-- User Menu -->
                     <div class="nav pull-right" id="user-menu">
                         <div class="btn-group">
@@ -103,7 +104,7 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
                         </div>
                     </div>
                     <?php echo Contexts::render_menu('text', 'normal'); ?>
-                </div><!-- /.nav-collapse -->
+                </div><!-- /.navbar-collapse -->
 			</div><!-- /container -->
 			<div class="clearfix"></div>
 		</div><!-- /.navbar-inner -->

@@ -12,7 +12,7 @@ echo theme_view('header');
 
 ?>
 <div class="container-fluid body">
-	<div class="row-fluid">
+	<div class="row">
 		<div class="span2">
 			<?php Template::block('sidebar'); ?>
 		</div>
