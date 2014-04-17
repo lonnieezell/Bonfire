@@ -2,7 +2,7 @@
 #codeigniter-profiler{background:#141722;clear:both;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;position:fixed;bottom:0;left:0;width:100%;z-index:1000;}
 #profiler-panel{background:#1f2332;padding:0 5px;}
 .ci-profiler-box{padding:10px;margin:0 0 10px 0;max-height:300px;overflow:auto;color:#fff;font-family:Monaco,'Lucida Console','Courier New',monospace;font-size:11px!important;}
-.ci-profiler-box h2{color:#ffffff;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:200;font-size:16px!important;padding:0;line-height:2.0;}
+.ci-profiler-box h2{color:#ffffff;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:bolder;font-size:16px!important;padding:0;line-height:2.0;}
 #ci-profiler-menu-open{background:#141722;position:fixed;left:0;bottom:0;padding:5px 7px;}
 #ci-profiler-menu-open img{display:block;}
 #ci-profiler-menu-open:hover{background:#5a8616;}
@@ -22,14 +22,20 @@
 #ci-profiler-menu-vars span,#ci-profiler-vars h2{color:#D28C00;}
 #ci-profiler-menu-files span,#ci-profiler-files h2{color:#5a8616;}
 #ci-profiler-menu-console span,#ci-profiler-console h2{color:#5a8616;}
+.ci-profiler-db-explain { display:block }
+.ci-profiler-db-explain em, #ci-profiler-queries b, #ci-profiler-queries .hilight { font-weight: bolder; color: #3769A0!important; font-style: normal; }
+#ci-profiler-vars .hilight {color:#D28C00!important}
+#ci-profiler-memory .hilight {color:#953FA1!important}
+#ci-profiler-benchmarks .hilight {color:#B72F09!important}
+#ci-profiler-console .hilight {color:#5a8616!important}
 #codeigniter-profiler table{width:100%;}
-#codeigniter-profiler table.main td{padding:7px 15px;text-align:left;vertical-align:top;color:#000;line-height:1;background:#F0F0F0!important;font-size:12px!important;}
+#codeigniter-profiler table.main td{padding:7px 15px;text-align:left;vertical-align:top;color:#000;line-height:1.5;background:#F0F0F0!important;font-size:12px!important;}
 #codeigniter-profiler table.main tr:hover td{background:#cdd1d4!important;}
 #codeigniter-profiler table.main code{font-family:inherit;padding:0;background:transparent;border:0;color:#fff;}
-#codeigniter-profiler table .hilight{color:#000D70!important;}
 #codeigniter-profiler table .faded{color:#aaa!important;}
 #codeigniter-profiler table .small{font-size:10px;letter-spacing:1px;font-weight:lighter;}
 #ci-profiler-menu-exit{background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAPCAYAAAA71pVKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyNpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkQwQUYxNjIzQkNGOTExRTM4OTY3QzU4NjQ2QzdDQkMzIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkQwQUYxNjI0QkNGOTExRTM4OTY3QzU4NjQ2QzdDQkMzIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6RDBBRjE2MjFCQ0Y5MTFFMzg5NjdDNTg2NDZDN0NCQzMiIHN0UmVmOmRvY3VtZW50SUQ9InhtcC5kaWQ6RDBBRjE2MjJCQ0Y5MTFFMzg5NjdDNTg2NDZDN0NCQzMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz6BRWmSAAABa0lEQVR42lzTzyuEURTG8TtjzDSKjEayUBbU/AWymZ0s/KghG2xkwcZCrKSklGzskGJrR6MsZEGRiIUNC0tRo8mGIUS8vrd5bl3vrU/dc885t/ed804kCIKEMSaKH3yZ8upBB+rwjCPsKhdHBX4NzUnEYfddeMQHbnCOa7zjCTnVVdo+4zVOB+W1ibTOnBRWlZ91F7hkTomBUFM8FHerbtjG7tCuDe1rsYaM4mbFDYqXVR81uiXwbj9QfIt2XCk+9WrsGrebHVzqMIJeFIL/q4g+5W3dCfbtiNIoemPYQ7/5v4aQR0JxAfW2+RU1OvxGCxZCzXPIeN9BCiX7CFOaq3ufQz1qCWOar10XXs0L5uymSslJJdpwjE7FWb1jVvGo6lPuphkdtIbmmgjFTapbdHOOKbGlxEiowRlUPq845r5tN4J5FdxrhOvYxp3Ol7zLkhHvX/UJnsU0YgJZVOMNZ1jBg37tpP1X/QkwAM/DSXbJEwZhAAAAAElFTkSuQmCC) 0% 0% no-repeat;position:absolute;right:5px;top:9px;height:15px;width:15px;}
+
 </style>
 <?php
 $profiler_logo = '<img width="22" height="22" title="" alt="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAYAAADEtGw7AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3NpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNS1jMDE0IDc5LjE1MTQ4MSwgMjAxMy8wMy8xMy0xMjowOToxNSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5YmMwMzhkZi0xZGNjLTRhNGYtYjI0ZC0zN2RhYjAzZGNiMjYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NkJFRjQxMDhCQ0Y4MTFFMzg5NjdDNTg2NDZDN0NCQzMiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NkJFRjQxMDdCQ0Y4MTFFMzg5NjdDNTg2NDZDN0NCQzMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6OWJjMDM4ZGYtMWRjYy00YTRmLWIyNGQtMzdkYWIwM2RjYjI2IiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjliYzAzOGRmLTFkY2MtNGE0Zi1iMjRkLTM3ZGFiMDNkY2IyNiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgSqUnYAAAHjSURBVHjarJRLKEVBGMe/43G7XQt5lM2VkhARFhaUkpVHibIXSSIWFrKyoaxYKBsLwsZCFmJjjY2FEll4LAhJHuV1cc74z5w5t3HOnOvKnfqdme873/znO9/MHIMxRqJZH/RLC4MgOIkZlRSwO4q/5YHReIP/IhwBXaAh0cJdsu9NpHAT6JPjokQJ14ANxTYTIdwCtl2+8/8Kt4N1jX/3P8LFYNXnnZNxRqx6+wm7M31Watsv+3xwDNq0CvzmCcyIwyRgLjrAg2JHJI7dHZ0v9QzXlc4BN8RdRnTtV5AGOsG8PjsRX4nnvvdKM8oCA2JsKBMsFiKT5WK8AKucmdYpfCRwkrLjp0C1t8YGNYJWO3t8zpdlY/IysWE+hv+ALCqAPSP9JP08iXrMbPYKM6pCQAn75ILMzpboDXxhwSG+SVxIZGfQoMCZKhbhSVhhjzBWDiAg+UcpiOqU41UWLY/dZsCSq3QvuuN2CM4UexzsgRGwA+Y02zatjK9kvEd4BSwrtnNB1kAtuHZ9DW+3yngWLOqE78EYuCDSSOhboeyPwIT6InqOWeTd8aWDR7Cp7rLPUpcgE2TL805GIOh7pZ8A38RU0BMj2y1wB0KOaDz/ChxOcaZ5XVM070vlP7rCb9VvAQYARSbvijTk29UAAAAASUVORK5CYII=" />';
@@ -304,8 +310,8 @@ window.onload = function() {
 			<table class="main">
 				<?php foreach ($sections['benchmarks'] as $key => $val) : ?>
 				<tr>
+                    <td class="hilight" style="width: 8em"><?php echo $val; ?></td>
 					<td><?php echo $key; ?></td>
-					<td class="hilight"><?php echo $val; ?></td>
 				</tr>
 				<?php endforeach; ?>
 			</table>
