@@ -1,44 +1,32 @@
 .jumbotron {
-    text-align: center;
-    margin: 60px 0;
-}
-.jumbotron h1 {
-    font-size: 72px;
-    line-height: 1;
+	text-align: center;
 }
 .jumbotron .btn {
-    font-size: 21px;
-    padding: 14px 24px;
+	font-size: 21px;
+	padding: 14px 24px;
 }
 
-#login {
-    max-width: 300px;
-    padding: 19px 29px 14px 29px;
-    margin: 20px auto 20px;
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    border-radius: 5px;
-    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+/* Copy of .alert-danger rules to allow
+ * Template::set_message('message', 'error');
+ * to continue working as it did under Bootstrap 2.x
+ */
+.alert-error {
+	color: #a94442;
+	background-color: #f2dede;
+	border-color: #ebccd1;
 }
-#login h2 {
-    font-size: 31.5px;
-    line-height: 40px;
-    margin-bottom: 10px;
+.alert-error hr {
+	border-top-color: #e4b9c0;
+}
+.alert-error .alert-link {
+	color: #843534;
+}
+.alert-error {
+	background-image: -webkit-linear-gradient(top, #f2dede 0%, #e7c3c3 100%);
+	background-image:         linear-gradient(to bottom, #f2dede 0%, #e7c3c3 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2dede', endColorstr='#ffe7c3c3', GradientType=0);
+	background-repeat: repeat-x;
+	border-color: #dca7a7;
 }
 
-.form-group,
-.form-group label,
-.form-group input { 
-    float: left; 
-    display: inline;
-}
-.form-group { 
-    margin-right: 5px;
-}
-.form-group label { 
-    line-height: 27px; 
-}
+/* Add app styles and overrides here */
