@@ -65,6 +65,11 @@ class Install extends CI_Controller {
         $this->load->library('installer_lib');
         $this->lang->load('install');
 
+        if ($this->installer_lib->is_installed())
+        {
+            show_error('This application has already been installed. Cannot install again.');
+        }
+
         // Does the database table even exist?
         if ($this->installer_lib->db_settings_exist === FALSE)
         {
