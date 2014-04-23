@@ -65,6 +65,14 @@ class Install extends CI_Controller {
         $this->load->library('installer_lib');
         $this->lang->load('install');
 
+        // Make sure we're not installed already,
+        // otherwise attackers could take advantage
+        // and recreate the admin account.
+        if ($this->installer_lib->is_installed())
+        {
+            show_error('Bonfire has already been installed.');
+        }
+
         // Does the database table even exist?
         if ($this->installer_lib->db_settings_exist === FALSE)
         {
