@@ -7,7 +7,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
  * @license   http://guides.cibonfire.com/license.html
  * @link      http://cibonfire.com
  * @since     Version 1.0
