@@ -55,21 +55,21 @@ class Developer extends Admin_Controller
 	public function index()
 	{
 		if (isset($_POST['migrate'])) {
-			$core = $this->input->post('core_only') ? '' : 'app_';
+			$core = $this->input->post('core_only') ? '' : Migrations::APP_MIGRATION_PREFIX;
 
 			if ($version = $this->input->post('migration')) {
 				$this->migrate_to($version, $core);
 			}
 		}
 
-		Template::set('installed_version', $this->migrations->get_schema_version('app_'));
-		Template::set('latest_version', $this->migrations->get_latest_version('app_'));
+		Template::set('installed_version', $this->migrations->getVersion(Migrations::APP_MIGRATION_PREFIX));
+		Template::set('latest_version', $this->migrations->getVersion(Migrations::APP_MIGRATION_PREFIX, true));
 
-		Template::set('core_installed_version', $this->migrations->get_schema_version('core'));
-		Template::set('core_latest_version', $this->migrations->get_latest_version());
+		Template::set('core_installed_version', $this->migrations->getVersion(Migrations::CORE_MIGRATIONS));
+		Template::set('core_latest_version', $this->migrations->getVersion(Migrations::CORE_MIGRATIONS, true));
 
-		Template::set('core_migrations', $this->migrations->get_available_versions());
-		Template::set('app_migrations', $this->migrations->get_available_versions('app_'));
+		Template::set('core_migrations', $this->migrations->getAvailableVersions());
+		Template::set('app_migrations', $this->migrations->getAvailableVersions(Migrations::APP_MIGRATION_PREFIX));
 		Template::set('mod_migrations', $this->get_module_versions());
 
 		Template::set('toolbar_title', lang('migrations_title_index'));
@@ -87,7 +87,8 @@ class Developer extends Admin_Controller
 	private function migrate_to($version, $type)
 	{
 		$result = $this->migrations->version($version, $type);
-		if ($result !== false && strlen($this->migrations->error) == 0) {
+        $errorMessage = $this->migrations->getErrorMessage();
+		if ($result !== false && strlen($errorMessage) == 0) {
 			if ($result === 0) {
 				Template::set_message(lang('migrations_uninstall_success'), 'success');
 				log_activity(
@@ -104,8 +105,8 @@ class Developer extends Admin_Controller
                 );
 			}
 		} else {
-			log_message(lang('migrations_migrate_error') . "\n" . $this->migrations->error, 'error');
-			Template::set_message(lang('migrations_migrate_error') . '<br />' . $this->migrations->error, 'error');
+			log_message(lang('migrations_migrate_error') . "\n{$errorMessage}", 'error');
+			Template::set_message(lang('migrations_migrate_error') . "<br />{$errorMessage}", 'error');
 		}
 	}
 
@@ -153,25 +154,39 @@ class Developer extends Admin_Controller
         // Sort modules by key (module directory name)
 		ksort($modules);
 
-		// Sort module migrations in reverse order
-		foreach ($modules as &$mod) {
+        // Get the installed version of all of the modules (modules which have
+        // not been installed will not be included)
+        $installedVersions = $this->migrations->getModuleVersions();
+		$modVersions = array();
+
+        // Add the migration data for each module
+		foreach ($modules as $module => &$mod) {
 			if ( ! array_key_exists('migrations', $mod)) {
 				continue;
 			}
 
+            // Sort module migrations in reverse order
 			arsort($mod['migrations']);
+
+            /**
+             * @internal Calculating the latest version from the migration list
+             * saves ~20% of the load time when a lot of modules (tested with >
+             * 50) are listed. However, it requires the controller to know more
+             * about the format of the migration filenames than may be desirable.
+             * If that is the case, the 'latest_version' key below can be
+             * populated with the result of:
+             * $this->migrations->getVersion("{$module}_", true)
+             */
+
+            // Add the installed version, latest version, and list of migrations
+            $modVersions[$module] = array(
+                'installed_version'	=> isset($installedVersions["{$module}_"]) ? $installedVersions["{$module}_"] : 0,
+                'latest_version'    => intval(substr(current($mod['migrations']), 0, 3), 10),
+                'migrations'        => $mod['migrations'],
+            );
 		}
 
-		$mod_versions = array();
-		foreach ($modules as $module => $migrations) {
-			$mod_versions[$module] = array(
-				'installed_version'	=> $this->migrations->get_schema_version("{$module}_"),
-				'latest_version'	=> $this->migrations->get_latest_version("{$module}_"),
-				'migrations'		=> $migrations['migrations'],
-			);
-		}
-
-		return $mod_versions;
+		return $modVersions;
 	}
 }
 /* end /migrations/controllers/developer.php */
