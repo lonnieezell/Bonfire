@@ -630,7 +630,9 @@ class Developer extends Admin_Controller
 
 		$data = $data + $file_data;
 
-        // @todo use the migrations library?
+        // @todo Need to test whether this section can be removed... Only the
+        // migrations library should know anything about the structure of the
+        // migration versions in the database.
         //
 		// Allow for the Old method - update the schema first to prevent errors
         // in duplicate column names due to Migrations.php caching db columns
@@ -646,10 +648,10 @@ class Developer extends Admin_Controller
 		}
 
 		// Load the migrations library
-		$this->load->library('migrations/Migrations');
+		$this->load->library('migrations/migrations');
 
 		// Run the migration install routine
-		if ($this->migrations->install($data['module_name_lower'] . '_')) {
+		if ($this->migrations->install("{$data['module_name_lower']}_")) {
 			$data['mb_migration_result'] = 'mb_out_tables_success';
 		} else {
 			$data['mb_migration_result'] = 'mb_out_tables_error';

@@ -1,12 +1,47 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ */
+
+/**
+ * Installer library.
+ *
+ * @package Bonfire\Libraries\Installer_lib
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer/installation
+ */
 
 class Installer_lib
 {
-	private $ci;
+    /**
+     * @var mixed Status flag to see how the install check went from outside
+     * controllers
+     */
+	public $db_settings_exist = null;
+	public $db_exists 		  = null;
 
-	public 	$php_version;
-	public	$mysql_server_version;
-	public	$mysql_client_version;
+	public $mysql_server_version;
+	public $mysql_client_version;
+
+    /**
+     * @var string The version of the currently running PHP parser or extension
+     */
+	public $php_version;
+
+    /**
+     * @var CI The CodeIgniter controller instance
+     */
+	private $ci;
 
     /**
      * @var mixed Check whether cURL is enabled in PHP
@@ -19,11 +54,9 @@ class Installer_lib
 	private	$curl_update = 0;
 
     /**
-     * @var mixed Status flag to see how the install check went from outside
-     * controllers
+     * @var string[] Supported database engines
      */
-	public $db_settings_exist = null;
-	public $db_exists 		  = null;
+	private $supported_dbs = array('mysql', 'mysqli');
 
     /**
      * @var string[] Folders the installer checks for write access
@@ -44,11 +77,6 @@ class Installer_lib
 		'application/config/application.php',
 		'application/config/database.php',
 	);
-
-    /**
-     * @var string[] Supported database engines
-     */
-	private $supported_dbs = array('mysql', 'mysqli');
 
 	//--------------------------------------------------------------------
 
@@ -143,12 +171,12 @@ class Installer_lib
 			return false;
 		}
 
-		$driver	    = $this->ci->input->post('driver');
-		$hostname	= $this->ci->input->post('hostname');
-		$username	= $this->ci->input->post('username');
-		$password	= $this->ci->input->post('password');
-		$port		= $this->ci->input->post('port');
-		$db_name	= $this->ci->input->post('database');
+		$db_name  = $this->ci->input->post('database');
+		$driver   = $this->ci->input->post('driver');
+		$hostname = $this->ci->input->post('hostname');
+		$password = $this->ci->input->post('password');
+		$port     = $this->ci->input->post('port');
+		$username = $this->ci->input->post('username');
 
 		switch ($driver) {
 			case 'mysql':
@@ -228,25 +256,20 @@ class Installer_lib
 		}
 	}
 
-	/*
-		Method: is_installed()
-
-
-	*/
     /**
-     * Performs some basic checks to see if the user has already installed the
+     * Perform some basic checks to see if the user has already installed the
      * application and just hasn't moved the install folder...
      *
      * @return bool    true if the application is installed, else false
      */
 	public function is_installed()
 	{
-		// If 'install/installed.txt' exists, the app's installed
+		// If 'install/installed.txt' exists, the app is installed
 		if (is_file(APPPATH . 'config/installed.txt')) {
 			return true;
 		}
 
-		// If the database config doesn't exist, the app's not installed
+		// If the database config doesn't exist, the app is not installed
 		if ( ! is_file(APPPATH . 'config/development/database.php')) {
 			return false;
 		}
@@ -295,8 +318,8 @@ class Installer_lib
     }
 
 	/**
-	 * Checks an array of folders to see if they are writable and returns
-	 * results usable in the requirements check step.
+	 * Check an array of folders to see if they are writable and return results
+	 * in a format usable in the requirements check step.
 	 *
 	 * @param string[] $folders the folders to check
 	 *
@@ -328,7 +351,7 @@ class Installer_lib
 	}
 
 	/**
-	 * Checks an array of files to see if they are writable and returns results
+	 * Check an array of files to see if they are writable and return results
 	 * usable in the requirements check step.
 	 *
 	 * @param string[] $files The files to check
@@ -374,20 +397,20 @@ class Installer_lib
 		// Load the Database before calling the Migrations
 		$this->ci->load->database();
 
-		//
 		// Install the database tables.
-		//
-		$this->ci->load->library('Migrations', array('migrations_path' => BFPATH .'migrations'));
+		$this->ci->load->library(
+            'migrations/migrations',
+            array('migrations_path' => BFPATH . 'migrations')
+        );
 
 		// Core Migrations - this is all that is needed for Bonfire install.
 		if ( ! $this->ci->migrations->install()) {
-			return $this->ci->migrations->error;
+			return $this->ci->migrations->getErrorMessage();
 		}
 
 		// Save the information to the settings table
-
 		$settings = array(
-			'site.title' => 'My Bonfire',
+			'site.title'        => 'My Bonfire',
 			'site.system_email'	=> 'admin@mybonfire.com',
 		);
 
@@ -416,22 +439,20 @@ class Installer_lib
 			return lang('in_db_settings_error');
 		}
 
-		//
 		// Install the admin user in the users table so they can login.
-		//
 		$data = array(
-			'role_id'	=> 1,
-			'email'		=> 'admin@mybonfire.com',
-			'username'	=> 'admin',
-			'active'    => 1,
+			'role_id'  => 1,
+			'email'    => 'admin@mybonfire.com',
+			'username' => 'admin',
+			'active'   => 1,
 		);
 
 		// As of 0.7, using phpass for password encryption...
-		require(BFPATH .'modules/users/libraries/PasswordHash.php');
+		require(BFPATH . 'modules/users/libraries/PasswordHash.php');
 
 		$iterations	= $this->ci->config->item('password_iterations');
-		$hasher = new PasswordHash($iterations, false);
-		$password = $hasher->HashPassword('password');
+		$hasher     = new PasswordHash($iterations, false);
+		$password   = $hasher->HashPassword('password');
 
 		$data['password_hash'] = $password;
 		$data['created_on']    = date('Y-m-d H:i:s');
@@ -460,7 +481,7 @@ class Installer_lib
 			foreach ($module_list as $module_name => $module_detail) {
 				// Install the migrations for the custom modules
 				if ( ! $this->ci->migrations->install("{$module_name}_")) {
-					return $this->ci->migrations->error;
+					return $this->ci->migrations->getErrorMessage();
 				}
 			}
 		}
@@ -493,17 +514,33 @@ class Installer_lib
 			return false;
 		}
 
-		$mod_versions = array();
-		foreach ($modules as $module => $migrations) {
-			$mod_versions[$module] = array(
-				'installed_version'	=> $this->ci->migrations->get_schema_version("{$module}_"),
-				'latest_version'	=> $this->ci->migrations->get_latest_version("{$module}_"),
-				'migrations'		=> $migrations['migrations'],
-			);
+        // Sort modules by key (module directory name)
+		ksort($modules);
+
+        // Get the installed version of all of the modules (modules which have
+        // not been installed will not be included)
+        $installedVersions = $this->migrations->getModuleVersions();
+		$modVersions = array();
+
+        // Add the migration data for each module
+		foreach ($modules as $module => &$mod) {
+			if ( ! array_key_exists('migrations', $mod)) {
+				continue;
+			}
+
+            // Sort module migrations in reverse order
+			arsort($mod['migrations']);
+
+            // Add the installed version, latest version, and list of migrations
+            $modVersions[$module] = array(
+                'installed_version'	=> isset($installedVersions["{$module}_"]) ? $installedVersions["{$module}_"] : 0,
+                'latest_version'    => intval(substr(current($mod['migrations']), 0, 3), 10),
+                'migrations'        => $mod['migrations'],
+            );
 		}
 
-		return $mod_versions;
-	}
+		return $modVersions;
+    }
 
 	/**
 	 * Get the connection string for MongoDB
@@ -524,7 +561,7 @@ class Installer_lib
 			$connect_string .= "{$username}:{$password}@";
 		}
 
-		$connect_string .=  $hostname;
+		$connect_string .= $hostname;
 
 		if ( ! empty($port)) {
 			$connect_string .= ":{$port}";
