@@ -116,7 +116,8 @@ if ($db_required != '') {
 				redirect(SITE_AREA . '/{$controller_name}/{$module_name_lower}');
 			}
 
-			Template::set_message(lang('{$module_name_lower}_create_failure') . \$this->{$module_name_lower}_model->error, 'error');
+			if (!empty( $this->{$module_name_lower}_model->error)) /* not validation error */
+				Template::set_message(lang('{$module_name_lower}_create_failure') . \$this->{$module_name_lower}_model->error, 'error');
 		}";
 
     $editFind = "
@@ -129,8 +130,10 @@ if ($db_required != '') {
 			if (\$this->save_{$module_name_lower}('update', \$id)) {
 				log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_edit_record') . ': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
 				Template::set_message(lang('{$module_name_lower}_edit_success'), 'success');
+				redirect(SITE_AREA . '/{$controller_name}/{$module_name_lower}');
 			} else {
-				Template::set_message(lang('{$module_name_lower}_edit_failure') . \$this->{$module_name_lower}_model->error, 'error');
+				if (!empty( $this->{$module_name_lower}_model->error)) /* not validation error */
+					Template::set_message(lang('{$module_name_lower}_edit_failure') . \$this->{$module_name_lower}_model->error, 'error');
 			}
 		}";
 
