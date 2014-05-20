@@ -62,6 +62,7 @@ Additional Changes:
 * Most bonfire specific code now uses a BF_ prefix instead of the MY_ prefix your application would use.
 * Removed Settings related to the previously removed Updates module
 * The user register form can be modified to include hidden fields named `register_url` and `login_url` that will override the current REGISTER_URL and LOGIN_URL values, respectively, to make it simpler to use the existing logic in custom modules.
+* Added 4th parameter to timezone_menu in the date helper to allow passing additional attributes, such as an ID, for the generated select element. Updated the user_fields view to make sure of this parameter (and fix an accessibility error on the view).
 * Application Helper:
     * The module_* methods in the application_helper have been moved to the Modules class. The application_helper methods are still there but are deprecated.
     * Deprecated form_has_error() method since CI's form_error() does the same thing.
