@@ -43,6 +43,7 @@ class Settings extends Admin_Controller
 
 		$this->auth->restrict('Bonfire.UI.View');
 		$this->auth->restrict('Bonfire.UI.Manage');
+		$this->load->model('activities/activity_model');
 		$this->lang->load('ui');
 
 		Template::set('toolbar_title', 'UI Settings');
