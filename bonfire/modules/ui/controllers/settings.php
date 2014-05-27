@@ -43,7 +43,6 @@ class Settings extends Admin_Controller
 
 		$this->auth->restrict('Bonfire.UI.View');
 		$this->auth->restrict('Bonfire.UI.Manage');
-		$this->load->model('activities/activity_model');
 		$this->lang->load('ui');
 
 		Template::set('toolbar_title', 'UI Settings');
@@ -228,7 +227,7 @@ class Settings extends Admin_Controller
 		}
 
 		// Log the activity
-		$this->activity_model->log_activity($this->current_user->id, lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'ui');
+		log_activity($this->current_user->id, lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'ui');
 
 		return $updated;
 
