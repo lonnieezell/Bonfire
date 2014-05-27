@@ -13,7 +13,7 @@ class Migration_Remove_updates_settings extends Migration
     /**
      * @var array The settings to migrate
      */
-    private $settings = array(
+    private $data = array(
 		array(
 			'name'   => 'updates.do_check',
 			'module' => 'core',
@@ -36,7 +36,7 @@ class Migration_Remove_updates_settings extends Migration
         if ($this->db->table_exists($this->tableName)) {
             $names = array();
             $module = '';
-            foreach ($this->settings as $setting) {
+            foreach ($this->data as $setting) {
                 $names[] = $setting['name'];
                 $module = $setting['module'];
             }
@@ -55,7 +55,7 @@ class Migration_Remove_updates_settings extends Migration
     public function down()
     {
         if ($this->db->table_exists($this->tableName)) {
-            $this->db->insert_batch($this->tableName, $this->settings);
+            $this->db->insert_batch($this->tableName, $this->data);
         }
     }
 }
