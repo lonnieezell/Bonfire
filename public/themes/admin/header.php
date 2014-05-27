@@ -61,7 +61,9 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
                                         <li><span><?php e($data); ?></span> : <?php echo $shortcut_data['shortcuts'][$key]['description']; ?></li>
                                         <?php endforeach; ?>
                                     </ul>
+				    <?php if ( has_permission('Bonfire.UI.View') && has_permission('Bonfire.UI.Manage') ): ?>
                                     <a href="<?php echo site_url(SITE_AREA . '/settings/ui'); ?>"><?php echo lang('bf_keyboard_shortcuts_edit'); ?></a>
+				    <?php endif; ?>
                                 </div>
                             </li>
 						</ul>

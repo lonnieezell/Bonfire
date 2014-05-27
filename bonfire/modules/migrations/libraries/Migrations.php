@@ -934,7 +934,8 @@ class Migrations
             }
 
             // When moving to a version other than 0...
-            if (empty($currentVersion)) {
+            // if (empty($currentVersion)) { // Fixed logical condition test error where 0 was equal to "empty" - By CorkyKaericher 05/25/2014
+            if($currentVersion !== '0'){
                 // If the version was not found, insert it
                 $result = $this->_ci->db->insert(
                     $this->migrationsTable,
