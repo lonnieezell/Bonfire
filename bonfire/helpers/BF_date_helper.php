@@ -1,118 +1,53 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications.
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
 /**
- * Date Helpers
+ * Date helper functions.
  *
  * Includes additional date-related functions helpful in Bonfire development.
  *
- * @package    Bonfire
- * @subpackage Helpers
- * @category   Helpers
+ * @package    Bonfire\Helpers\BF_date_helper
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/address_helpers.html
- *
+ * @link       http://cibonfire.com/docs/developer
  */
 
-if ( ! function_exists('relative_time'))
-{
+if ( ! function_exists('date_difference')) {
 	/**
-	 * Takes a UNIX timestamp and returns a string representing how long ago that date was, like "moments ago", "2 weeks ago", etc.
+	 * Return the difference between two dates.
 	 *
-	 * @param $timestamp int A UNIX timestamp
+	 * @todo Consider updating this to use date_diff() and/or DateInterval.
 	 *
-	 * @return string A human-readable amount of time 'ago'
+	 * @param mixed  $start    The start date as a unix timestamp or in a format
+	 * which can be used within strtotime().
+	 * @param mixed  $end      The ending date as a unix timestamp or in a
+	 * format which can be used within strtotime().
+	 * @param string $interval A string with the interval to use. Valid values
+	 * are 'week', 'day', 'hour', or 'minute'.
+	 * @param bool   $reformat If TRUE, will reformat the time using strtotime().
+	 *
+	 * @return int A number representing the difference between the two dates in
+	 * the interval desired.
 	 */
-	function relative_time($timestamp)
+	function date_difference($start = null, $end = null, $interval = 'day', $reformat = false)
 	{
-		if($timestamp != "" && !is_int($timestamp)){
-			$timestamp = strtotime($timestamp);
-		}
-
-		if(!is_int($timestamp)){
-			return "never";
-		}
-
-		$difference = time() - $timestamp;
-
-		$periods = array("moment", "min", "hour", "day", "week",
-		"month", "year", "decade");
-
-		$lengths = array("60","60","24","7","4.35","12","10", "10");
-
-		if ($difference >= 0)
-		{
-			// this was in the past
-			$ending = "ago";
-		}
-		else
-		{
-			// this was in the future
-			$difference = -$difference;
-			$ending = "to go";
-		}
-
-		for ($j = 0; $difference >= $lengths[$j]; $j++)
-		{
-			$difference /= $lengths[$j];
-		}
-
-		$difference = round($difference);
-
-		if ($difference != 1)
-		{
-			$periods[$j].= "s";
-		}
-
-		if ($difference < 60 && $j == 0)
-		{
-			$text = "$periods[$j] $ending";
-		}
-		else
-		{
-			$text = "$difference $periods[$j] $ending";
-		}
-
-		return $text;
-
-	}//end relative_time()
-}
-
-//---------------------------------------------------------------
-
-if (!function_exists('date_difference'))
-{
-	/**
-	 * Returns the difference between two dates.
-	 *
-	 * @param $start mixed The start date in either unix timestamp or a format that can be used within strtotime().
-	 * @param $end mixed The ending date in either unix timestamp or a format that can be used within strtotime().
-	 * @param $interval string A string with the interval to use. Choices 'week', 'day', 'hour', 'minute'.
-	 * @param $reformat boolean If TRUE, will reformat the time using strtotime().
-	 *
-	 * @return int A number representing the difference between the two dates in the interval desired.
-	 */
-	function date_difference($start=null, $end=null, $interval='day', $reformat=false)
-	{
-		if (is_null($start))
-		{
+		if (is_null($start)) {
 			return false;
 		}
 
-		if (is_null($end))
-		{
+		if (is_null($end)) {
 			$end = date('Y-m-d H:i:s');
 		}
 
@@ -120,74 +55,79 @@ if (!function_exists('date_difference'))
 			'week'		=> 604800,
 			'day'		=> 86400,
 			'hour'		=> 3600,
-			'minute'	=> 60
+			'minute'	=> 60,
 		);
 
-		if ($reformat === true)
-		{
-			$start 	= strtotime($start);
-			$end	= strtotime($end);
+		if ($reformat === true) {
+			$start = strtotime($start);
+			$end   = strtotime($end);
 		}
 
 		$diff = $end - $start;
 
 		return round($diff / $times[$interval]);
-
-	}//end date_difference()
+	}
 }
 
-//---------------------------------------------------------------
-
-if ( ! function_exists('user_time'))
-{
+if ( ! function_exists('relative_time')) {
 	/**
-	 * Converts unix time to a human readable time in user timezone
-	 * or in a given timezone.
+	 * Return a string representing how long ago a given UNIX timestamp was,
+	 * e.g. "moments ago", "2 weeks ago", etc.
 	 *
-	 * For supported timezones visit - http://php.net/manual/timezones.php
-	 * For accepted formats visit - http://php.net/manual/function.date.php
+	 * @todo Consider updating this to use date_diff() and/or DateInterval.
 	 *
-	 * @example echo user_time();
-	 * @example echo user_time($timestamp, 'EET', 'l jS \of F Y h:i:s A');
+	 * @param $timestamp int A UNIX timestamp.
 	 *
-	 * @param int    $timestamp A UNIX timestamp. If non is given current time will be used.
-	 * @param string $timezone  The timezone we want to convert to. If none is given a current logged user timezone will be used.
-	 * @param string $format    The format of the outputted date/time string
-	 *
-	 * @return string A string formatted according to the given format using the given timestamp and given timezone or the current time if no timestamp is given.
+	 * @return string A human-readable amount of time 'ago'.
 	 */
-	function user_time($timestamp = NULL, $timezone = NULL, $format = 'r')
+	function relative_time($timestamp)
 	{
-		if ( ! $timezone)
-		{
-			$CI =& get_instance();
-			$CI->load->library('users/auth');
-			if ($CI->auth->is_logged_in())
-			{
-				$timezone = standard_timezone($CI->auth->user()->timezone);
-			}
+		if ($timestamp != '' && ! is_int($timestamp)) {
+			$timestamp = strtotime($timestamp);
 		}
 
-		$timestamp = ($timestamp) ? $timestamp : time();
+		if ( ! is_int($timestamp)){
+			return "never";
+		}
 
-		$dtzone = new DateTimeZone($timezone);
-		$dtime = new DateTime();
+		$difference = time() - $timestamp;
 
-		return $dtime->setTimestamp($timestamp)->setTimeZone($dtzone)->format($format);
+		$periods = array('moment', 'min', 'hour', 'day', 'week', 'month', 'year', 'decade');
+		$lengths = array('60', '60', '24', '7', '4.35', '12', '10', '10');
 
-	}//end user_time()
+		if ($difference >= 0) {
+			// This was in the past
+			$ending = "ago";
+		} else {
+			// This is in the future
+			$difference = -$difference;
+			$ending = "to go";
+		}
+
+		for ($j = 0; $difference >= $lengths[$j]; $j++) {
+			$difference /= $lengths[$j];
+		}
+
+		$difference = round($difference);
+		if ($difference != 1) {
+			$periods[$j] .= "s";
+		}
+
+		if ($difference < 60 && $j == 0) {
+			return "{$periods[$j]} {$ending}";
+		}
+
+        return "{$difference} {$periods[$j]} {$ending}";
+	}
 }
 
-//---------------------------------------------------------------
-
-if ( ! function_exists('standard_timezone'))
-{
+if ( ! function_exists('standard_timezone')) {
     /**
-     * Convert CodeIgniter's time zone strings to standard PHP time zone strings
+     * Convert CodeIgniter's time zone strings to standard PHP time zone strings.
      *
-     * @param String $ciTimezone A time zone string generated by CodeIgniter
+     * @param string $ciTimezone A time zone string generated by CodeIgniter.
      *
-     * @return String    A PHP time zone string
+     * @return string    A PHP time zone string.
      */
     function standard_timezone($ciTimezone)
     {
@@ -277,9 +217,6 @@ if ( ! function_exists('standard_timezone'))
     }
 }
 
-
-// ------------------------------------------------------------------------
-
 /**
  * Timezone Menu
  *
@@ -343,3 +280,41 @@ if ( ! function_exists('timezone_menu')) {
 		return $menu;
 	}
 }
+
+if ( ! function_exists('user_time')) {
+	/**
+	 * Convert unix time to a human readable time in the user's timezone or in a
+	 * given timezone.
+	 *
+	 * For supported timezones visit - http://php.net/manual/timezones.php
+	 * For accepted formats visit - http://php.net/manual/function.date.php
+	 *
+	 * @example echo user_time();
+	 * @example echo user_time($timestamp, 'EET', 'l jS \of F Y h:i:s A');
+	 *
+	 * @param int    $timestamp A UNIX timestamp. If none is given, current time
+	 * will be used.
+	 * @param string $timezone  The destination timezone for the conversion. If
+	 * none is given, the current user's configured timezone will be used.
+	 * @param string $format    The format string to apply to the converted
+	 * timestamp.
+	 *
+	 * @return string A string containing the timestamp in the requested format.
+	 */
+	function user_time($timestamp = null, $timezone = null, $format = 'r')
+	{
+		if ( ! $timezone) {
+			$CI =& get_instance();
+			$CI->load->library('users/auth');
+			if ($CI->auth->is_logged_in()) {
+				$timezone = standard_timezone($CI->auth->user()->timezone);
+			}
+		}
+
+		$timestamp = $timestamp ?: time();
+        $dtime = new DateTime($timestamp, new DateTimeZone($timezone));
+
+		return $dtime->format($format);
+	}
+}
+/* End /helpers/BF_date_helper.php */
