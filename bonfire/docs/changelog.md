@@ -14,7 +14,11 @@ New Features:
 * Added languages_available and database_types to Module Builder's configurable options. languages_available tells the builder which language files to attempt to build for a new module. database_types gives the builder some information about the types supported by the database, and is used in generating the "Database Type" select on the module builder form, as well as handling several other aspects of building the module.
 
 Closes Issues:
-
+* #1041 - Only display edit keyboard shortcuts link to users with permission to edit them
+* #1040 - Documentation errors (Performance Tips)
+* #1038 - Add HTML5 required attribute to builder-generated form inputs
+* #1036 - Builder: Allow user to undo selecting an option under Input Limitations
+* #1035, 1042 - Migrations library attempts to insert core version (duplicate key) during installation
 * #1011 - save_requested() and prep_redirect() are broken again.
 * #1009 - Activities reports 0 records found when attempting to delete.
 * #1001 - Error handling in Module Builder, default max lengths for fields in existing tables, JavaScript updates of table name, use created/modified/soft deletes and log user as checkboxes
