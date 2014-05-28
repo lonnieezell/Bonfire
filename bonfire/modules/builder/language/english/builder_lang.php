@@ -120,6 +120,7 @@ $lang['mb_form_module_db_no']	= 'None';
 $lang['mb_form_module_db_create']	= 'Create New Table';
 $lang['mb_form_module_db_exists']	= 'Build from Existing Table';
 $lang['mb_form_build']			= 'Build the Module';
+$lang['mb_form_none_of_the_above']  = 'None of these';
 
 // Activities
 $lang['mb_act_create']			= 'Created Module';

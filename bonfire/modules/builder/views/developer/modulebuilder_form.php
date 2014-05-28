@@ -1,7 +1,7 @@
 <?php
 
-$session_error = $this->session->flashdata('error');
-$validation_errors = validation_errors();
+$sessionError = $this->session->flashdata('error');
+$validationErrors = validation_errors();
 
 // Wrapped the whole page in a div.module-builder so module-level CSS won't mess
 // up other pages
@@ -25,21 +25,21 @@ $validation_errors = validation_errors();
     <?php
     endif;
 
-    if ($validation_errors) :
+    if ($validationErrors) :
     ?>
     <div class="alert alert-error fade in">
         <a data-dismiss="alert" class="close">&times;</a>
         <h4 class="alert-heading"><?php echo lang('mb_form_errors'); ?></h4>
-        <?php echo $validation_errors; ?>
+        <?php echo $validationErrors; ?>
     </div>
     <?php
     endif;
 
-    if ($session_error):
+    if ($sessionError):
     ?>
     <div class="alert alert-error fade in">
         <a data-dismiss="alert" class="close">&times;</a>
-        <?php echo $session_error; ?>
+        <?php echo $sessionError; ?>
     </div>
     <?php
     endif;
