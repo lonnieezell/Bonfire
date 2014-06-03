@@ -143,14 +143,17 @@ class Activity_model extends BF_Model
         $usersTable = $this->user_model->get_table();
         $usersKey   = $this->user_model->get_key();
 
-        return $this->select(array(
-                                'username',
-                                'user_id',
-                                'COUNT(user_id) AS activity_count',
+        // Fields in the select list must also be in the group by clause for
+        // compatibility with most databases other than MySQL.
+        $usersFields = array('username', 'user_id');
+
+        return $this->select(array_merge(
+                                $usersFields,
+                                array('COUNT(user_id) AS activity_count')
                             ))
                     ->where("{$this->table_name}.{$this->deleted_field}", 0)
                     ->join($usersTable, "{$this->table_name}.user_id = {$usersTable}.{$usersKey}", 'left')
-                    ->group_by('user_id')
+                    ->group_by($usersFields)
                     ->order_by('activity_count', 'desc')
                     ->limit($limit)
                     ->find_all();
