@@ -1,30 +1,51 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ */
 
-$lang['tr_translate_title'] = 'Перевести на % с';
-$lang['tr_no_modules'] = 'Не Модули не найдено с языковых файлов .';
-$lang['tr_no_core'] = 'Не найдено ни языковые файлы радиатора .';
+/**
+ * Translate language file (Russian).
+ *
+ * Localization strings used by Bonfire.
+ *
+ * @package    Bonfire\Modules\Translate\Language\Russian
+ * @author     Translator < https://github.com/cjmaxik >
+ * @link       http://cibonfire.com/docs/guides
+ */
 
-$lang['tr_core'] = 'ядро';
-$lang['tr_modules'] = 'Модули';
-$lang['tr_current_lang'] = 'Перевести на';
-$lang['tr_language'] = 'язык';
-$lang['tr_other'] = 'Другое ...';
-$lang['tr_select_lang'] = 'выбирать';
-$lang['tr_edit_title'] = 'переводить';
-$lang['tr_save_success'] = 'Языковой файл успешно сохранены .';
-$lang['tr_save_fail'] = 'Былошибка при попытке сохранить файл языка . Проверьте права доступа к файлам .';
-$lang['tr_translate_file'] = 'файл';
+$lang['tr_translate_title'] = 'Перевести на %s';
+$lang['tr_no_modules']      = 'Не найдены модули с файлами языка.';
+$lang['tr_no_core']         = 'Не найден основные файлы перевода.';
 
-$lang['tr_translate'] = 'переводить';
-$lang['tr_export'] = 'Экспорт Языковые файлы';
-$lang['tr_export_short'] = 'экспорт';
+$lang['tr_core']           = 'Ядро';
+$lang['tr_modules']        = 'Модули';
+$lang['tr_current_lang']   = 'Перевести на';
+$lang['tr_language']       = 'Язык';
+$lang['tr_other']          = 'Другой...';
+$lang['tr_select_lang']    = 'Выбрать';
+$lang['tr_edit_title']     = 'Перевести';
+$lang['tr_save_success']   = 'Файл языка успешно загружен';
+$lang['tr_save_fail']      = 'Ошибка при попытке сохранения файла языка. Проверьте права доступа.';
+$lang['tr_translate_file'] = 'Файл';
 
-$lang['tr_export_note'] = 'Экспорт языковые файлы предоставляет вам . Архива с все файлы языка для этого конкретного языка , так что вы можете легко поделиться .';
+$lang['tr_translate']    = 'Перевести';
+$lang['tr_export']       = 'Экспорт файлов языка';
+$lang['tr_export_short'] = 'Экспорт';
 
-$lang['tr_include'] = 'Выберите запчасти';
-$lang['tr_include_core'] = 'включение ключевых';
-$lang['tr_include_mods'] = 'Включают в себя пользовательские модули';
+$lang['tr_export_note'] = 'После экспорта вы получите .zip архив со всеми языковыми файлами для выбранного языка, который можно легко передать.';
 
-$lang['tr_translate_success'] = 'Выбранные записи языке успешно переведены.';
-$lang['tr_translate_part_success'] = 'Выбранные записи языке успешно переведены, но % с не удалось.';
-$lang['tr_translate_failed'] = 'Выбранные записи языка не были переведены . См. в журнале ошибок для деталей.';
+$lang['tr_include']      = 'Выбрать части';
+$lang['tr_include_core'] = 'Включить ядро';
+$lang['tr_include_mods'] = 'Включить другие модули';
+
+/* /translate/language/russian/translate_lang.php */

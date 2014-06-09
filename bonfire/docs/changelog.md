@@ -14,6 +14,7 @@ New Features:
 * Added languages_available and database_types to Module Builder's configurable options. languages_available tells the builder which language files to attempt to build for a new module. database_types gives the builder some information about the types supported by the database, and is used in generating the "Database Type" select on the module builder form, as well as handling several other aspects of building the module.
 
 Closes Issues:
+* #1048 - (almost) full russian language
 * #1041 - Only display edit keyboard shortcuts link to users with permission to edit them
 * #1040 - Documentation errors (Performance Tips)
 * #1038 - Add HTML5 required attribute to builder-generated form inputs
