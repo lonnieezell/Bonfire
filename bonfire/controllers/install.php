@@ -70,7 +70,7 @@ class Install extends CI_Controller {
         // and recreate the admin account.
         if ($this->installer_lib->is_installed())
         {
-            show_error('Bonfire has already been installed.');
+            show_error('This application has already been installed. Cannot install again.');
         }
 
         // Does the database table even exist?

@@ -158,8 +158,8 @@ When called with no parameters, the `js()` method will create links/inline-code 
 
 
 Might produce:
-
 ```
+{% geshi "Javascript" use_classes %}
 <script src="http://bonfire.dev/assets/js/bootstrap.min.js" type="text/javascript" ></script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -235,7 +235,11 @@ Bonfire's image controller provides simple, on-the-fly creation of resized image
 
     http://mysite.com/images
 
+
+### Image Size and Cropping
+
 To return a square thumbnail of a large photo, you can choose to let the images library automatically crop the photo for you, while creating a thumbnail image. Pass along a `size` parameter that will define how wide and how tall the image should be.
+
 
 
     <a href="http://mysite.com/images?size=80">My Thumbnail</a>
@@ -256,11 +260,19 @@ By default, Bonfire will scale your image to fit within the new image size. To r
 
     <a href="http://mysite.com/images?size=80&ratio=no">My Thumbnail</a>
 
+### Image File Path
 
 Bonfire will look for the images within the `assets/images` folder in your web root. If you need to pull files from a different folder, you can use the `assets` parameter and pass in a folder relative to the webroot.
 
     <a href="http://mysite.com/images?size=80&assets=assets/images">My Thumbnail</a>
 
+### Module Images
+
+If you have images stored in a specific module you can access those images by passing the module name to the <tt>module</tt> parameter.
+
+    <a href="http://mysite.com/images/image=name.png?module=blog">Blog Image</a>
+    
+This will load an image in the `assets/images` folder in the blog module: `.../bonfire/modules/blog/assets/images/image-name.png`
 
 <a name="performance"></a>
 ## Boosting Performance

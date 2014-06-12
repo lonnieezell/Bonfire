@@ -169,7 +169,8 @@ class Settings extends Admin_Controller
 			}
 		}
 
-		log_activity($this->auth->user_id(), lang('bf_act_settings_saved') . ': ' . $this->input->ip_address(), 'ui');
+		// Log the activity
+		log_activity($this->current_user->id, lang('bf_act_settings_saved').': ' . $this->input->ip_address(), 'ui');
 
 		return $updated;
 	}
