@@ -223,31 +223,31 @@ class BF_Form_validation extends CI_Form_validation
     }
 
     /**
-     * Checks that a value is unique in the database
+     * Checks that a value is unique in the database.
      *
-     * i.e. '…|required|unique[users.name.id.4]|trim…'
+     * i.e. '…|required|unique[users.name,users.id]|trim…'
      *
      * <code>
-     * "unique[tablename.fieldname.(primaryKey-used-for-updates).(uniqueID-used-for-updates)]"
+     * "unique[tablename.fieldname,tablename.(primaryKey-used-for-updates)]"
      * </code>
      *
      * @author Adapted from Burak Guzel <http://net.tutsplus.com/tutorials/php/6-codeigniter-hacks-for-the-masters/>
      *
-     * @param mixed $value  The value to be checked
+     * @param mixed $value  The value to be checked.
      * @param mixed $params The table and field to check against, if a second
-     * field is passed in this is used as "AND NOT EQUAL"
+     * field is passed in this is used as "AND NOT EQUAL".
      *
-     * @return bool
+     * @return bool True if the value is unique for that field, else false.
      */
     function unique($value, $params)
     {
-        // Allow for more than 1 parameter
+        // Allow for more than 1 parameter.
         $fields = explode(",", $params);
 
-        // Extract the table and field from the first parameter
-        list($table, $field) = explode(".", $fields[0], 2);
+        // Extract the table and field from the first parameter.
+        list($table, $field) = explode('.', $fields[0], 2);
 
-        // Setup the db request
+        // Setup the db request.
         $this->CI->db->select($field)
                      ->from($table)
                      ->where($field, $value)
@@ -255,16 +255,16 @@ class BF_Form_validation extends CI_Form_validation
 
         // Check whether a second parameter was passed to be used as an
         // "AND NOT EQUAL" where clause
-        // eg select * from users where username='test' AND id != 4
+        // eg "select * from users where users.name='test' AND users.id != 4
         if (isset($fields[1])) {
             // Extract the table and field from the second parameter
-            list($where_table, $where_field) = explode(".", $fields[1], 2);
+            list($where_table, $where_field) = explode('.', $fields[1], 2);
 
-            // Get the value from the $where_field, if the value is set, add the
-            // extra where clause
+            // Get the value from the post's $where_field. If the value is set,
+            // add "AND NOT EQUAL" where clause.
             $where_value = $this->CI->input->post($where_field);
             if (isset($where_value)) {
-                $this->CI->db->where("{$where_field} !=", $where_value);
+                $this->CI->db->where("{$where_table}.{$where_field} !=", $where_value);
             }
         }
 
