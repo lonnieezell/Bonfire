@@ -1,16 +1,34 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ */
 
+/**
+ * Bonfire Security Class
+ *
+ * @package   Bonfire\Core\BF_Security
+ * @author    Bonfire Dev Team
+ * @link      http://cibonfire.com/docs/guides
+ */
 class BF_Security extends CI_Security
 {
     /**
-     * @var Array Controllers to ignore during the CSRF cycle.
+     * @var array Controllers to ignore during the CSRF cycle.
      *
      * If part of a module, the controller should be listed as:
      * {module}/{controller}
      */
     protected $ignored_controllers = array();
-
-    //--------------------------------------------------------------------
 
     /**
      * The constructor
@@ -23,8 +41,6 @@ class BF_Security extends CI_Security
 
         $this->ignored_controllers = config_item('csrf_ignored_controllers');
     }
-
-    //--------------------------------------------------------------------
 
     /**
      * Show CSRF Error
@@ -48,22 +64,19 @@ class BF_Security extends CI_Security
      */
     public function csrf_verify()
     {
-        global $RTR;
+        if ( ! empty($this->ignored_controllers)) {
+            global $RTR;
 
-        $module = $RTR->fetch_module();
-        $controller = $RTR->fetch_class();
+            $module = $RTR->fetch_module();
+            $controller = $RTR->fetch_class();
 
-        $path = empty($module) ? $controller : $module .'/'. $controller;
+            $path = empty($module) ? $controller : "{$module}/{$controller}";
 
-        $bypass = in_array($path, $this->ignored_controllers);
-
-        if ($bypass) {
-            return $this;
+            if (in_array($path, $this->ignored_controllers)) {
+                return $this;
+            }
         }
 
         return parent::csrf_verify();
     }
-
-    //--------------------------------------------------------------------
-
 }
