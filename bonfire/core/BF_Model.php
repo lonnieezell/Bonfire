@@ -1,4 +1,5 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+
 /**
  * Bonfire
  *
@@ -6,14 +7,12 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://cibonfire.com/docs/guides/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
-
-// ------------------------------------------------------------------------
 
 /**
  * Bonfire Base Model
@@ -22,158 +21,109 @@
  * overriden by module models. This helps to maintain a standard interface to
  * program to, and makes module creation faster.
  *
- * @package    Bonfire
- * @subpackage BF_Model
- * @category   Models
+ * @package    Bonfire\Core\Models\BF_Model
  * @author     Bonfire Dev Team
  * @link       http://cibonfire.com/docs/bonfire/bonfire_models
- *
  */
 class BF_Model extends CI_Model
 {
 	/**
-	 * Stores custom errors that can be used in UI error reporting.
-	 *
-	 * @var string
-	 * @access public
+	 * @var string Stores custom errors that can be used in UI error reporting.
 	 */
 	public $error = '';
 
 	/**
-	 * The name of the db table this model primarily uses.
-	 *
-	 * @var string
-	 * @access protected
+	 * @var string The name of the db table this model primarily uses.
 	 */
 	protected $table_name = '';
 
 	/**
-	 * The primary key of the table. Used as the 'id' throughout.
-	 *
-	 * @var string
-	 * @access protected
+	 * @var string The primary key of the table. Used as the 'id' throughout.
 	 */
 	protected $key = 'id';
 
 	/**
-	 * Field name to use for the created time column in the DB table if
-	 * $set_created is enabled
-	 *
-	 * @var string
-	 * @access protected
+	 * @var string Field name to use for the created time column in the DB table
+	 * if $set_created is enabled
 	 */
 	protected $created_field = 'created_on';
 
 	/**
-	 * Field name to use for the modified time column in the DB table if
-	 * $set_modified is enabled
-	 *
-	 * @var string
-	 * @access protected
+	 * @var string Field name to use for the modified time column in the DB
+	 * table if $set_modified is enabled
 	 */
 	protected $modified_field = 'modified_on';
 
     /**
-     * Field name to use for the deleted column in the DB table if $soft_deletes
-     * is enabled
-     *
-     * @var string
-     * @access protected
+     * @var string Field name to use for the deleted column in the DB table if
+     * $soft_deletes is enabled
      */
     protected $deleted_field = 'deleted';
 
 	/**
-	 * Whether or not to auto-fill the $created_field on inserts.
-	 *
-	 * @var boolean
-	 * @access protected
+	 * @var boolean Whether or not to auto-fill the $created_field on inserts.
 	 */
 	protected $set_created = true;
 
 	/**
-	 * Whether or not to auto-fill the $modified_field on updates.
-	 *
-	 * @var boolean
-	 * @access protected
+	 * @var boolean Whether or not to auto-fill the $modified_field on updates.
 	 */
 	protected $set_modified = true;
 
 	/**
-	 * If true, will log user id in $created_by_field, $modified_by_field, and
-	 * $deleted_by_field
-	 *
-	 * @var bool
-	 * @access protected
+	 * @var bool If true, will log user id in $created_by_field,
+	 * $modified_by_field, and $deleted_by_field
 	 */
 	protected $log_user = false;
 
 	/**
-	 * Field name to use as the created by column in the DB table
-	 *
-	 * @var string
-	 * @access protected
+	 * @var string Field name to use as the created by column in the DB table
 	 */
 	protected $created_by_field = 'created_by';
 
 	/**
-	 * Field name to use as the modified by column in the DB table
-	 *
-	 * @var string
-	 * @access protected
+	 * @var string Field name to use as the modified by column in the DB table
 	 */
 	protected $modified_by_field = 'modified_by';
 
 	/**
-	 * Field name to use as the deleted by column in the DB table
-	 *
-	 * @var string
-	 * @access protected
+	 * @var string Field name to use as the deleted by column in the DB table
 	 */
 	protected $deleted_by_field = 'deleted_by';
 
 	/**
-	 * The type of date/time field used for $created_field and $modified_field
+	 * @var string The type of date/time field used for $created_field and
+	 * $modified_field.
 	 *
 	 * Valid values are 'int', 'datetime', 'date'
-	 *
-	 * @var string
-	 * @access protected
 	 */
 	protected $date_format = 'int';
 
 	/**
+     * @var boolean Enable/Disable soft deletes
+     *
 	 * If false, the delete() method will perform a delete of that row.
 	 * If true, the value in $deleted_field will be set to 1.
-	 *
-	 * @var boolean
-	 * @access protected
 	 */
 	protected $soft_deletes = false;
 
 	/**
-	 * Stores any selects here for use by the find* functions.
-	 *
-	 * @var string
-	 * @access protected
+	 * @var string Stores any selects here for use by the find* functions.
 	 */
 	protected $selects = '';
 
 	/**
+     * @var bool Protect field/table names
+     *
 	 * If false, the select() method will not try to protect your field or table
 	 * names with backticks.
 	 *
 	 * This is useful if you need a compound select statement.
-	 *
-	 * @var bool
-	 * @access protected
 	 */
 	protected $escape = true;
 
 	/**
-	 * DB Connection details (string or array)
-	 *
-	 * @var mixed
-	 * @access protected
+	 * @var string|array DB Connection details
 	 */
 	protected $db_con = '';
 
@@ -187,136 +137,103 @@ class BF_Model extends CI_Model
 	 *	$before_insert = array('set_created', 'validate_fields');
 	 * </code>
 	 *
-	 * $before_insert contains the names of callback functions within the
+	 * @var string[] Contains the names of callback functions within the
 	 * extending model which will be called before the insert method.
-	 *
-	 * @var array
-	 * @access protected
 	 */
 	protected $before_insert = array();
 
 	/**
-	 * Contains the names of callback functions within the extending model which
-	 * will be called after the insert method
+	 * @var string[] Contains the names of callback functions within the
+	 * extending model which will be called after the insert method
 	 *
 	 * @see $before_insert
-	 *
-	 * @var array
-	 * @access protected
 	 */
 	protected $after_insert = array();
 
 	/**
-	 * Contains the names of callback functions within the extending model which
-	 * will be called before the update method
+	 * @var string[] Contains the names of callback functions within the
+	 * extending model which will be called before the update method
 	 *
 	 * @see $before_insert
-	 *
-	 * @var array
-	 * @access protected
 	 */
 	protected $before_update = array();
 
 	/**
-	 * Contains the names of callback functions within the extending model which
-	 * will be called after the update method
+	 * @var string[] Contains the names of callback functions within the
+	 * extending model which will be called after the update method
 	 *
 	 * @see $before_insert
-	 *
-	 * @var array
-	 * @access protected
 	 */
 	protected $after_update = array();
 
 	/**
-	 * Contains the names of callback functions within the extending model which
-	 * will be called before the find method
+	 * @var string[] Contains the names of callback functions within the
+	 * extending model which will be called before the find method
 	 *
 	 * @see $before_insert
-	 *
-	 * @var array
-	 * @access protected
 	 */
 	protected $before_find = array();
 
 	/**
-	 * Contains the names of callback functions within the extending model which
-	 * will be called after the find method
+	 * @var string[] Contains the names of callback functions within the
+	 * extending model which will be called after the find method
 	 *
 	 * @see $before_insert
-	 *
-	 * @var array
-	 * @access protected
 	 */
 	protected $after_find = array();
 
 	/**
-	 * Contains the names of callback functions within the extending model which
-	 * will be called before the delete method
+	 * @var string[] Contains the names of callback functions within the
+	 * extending model which will be called before the delete method
 	 *
 	 * @see $before_insert
-	 *
-	 * @var array
-	 * @access protected
 	 */
 	protected $before_delete = array();
 
 	/**
-	 * Contains the names of callback functions within the extending model which
-	 * will be called after the delete method
+     * @var string[] Contains the names of callback functions within the
+     * extending model which will be called after the delete method
 	 *
 	 * @see $before_insert
-	 *
-	 * @var array
-	 * @access protected
 	 */
 	protected $after_delete = array();
 
     /**
-     * Contains the names of callback functions within the extending model which
-     * will be called if $validation_rules is empty (or not an array) when
-     * requested via the get_validation_rules() method.
+     * @var string[] Contains the names of callback functions within the
+     * extending model which will be called if $validation_rules is empty (or
+     * not an array) when requested via the get_validation_rules() method.
      *
      * Note: These methods should not add $insert_validation_rules, as they are
      * added to the $validation_rules after these functions return.
      *
 	 * @see $before_insert
-	 *
-     * @var array
-	 * @access protected
      */
     protected $empty_validation_rules = array();
 
 	/**
-     * Protected, non-modifiable attributes
-     *
-     * @var array
-     * @access protected
+     * @var string[] Protected, non-modifiable attributes
      */
     protected $protected_attributes = array();
 
     /**
-     * By default, we return items as objects. You can change this for the
-     * entire class by setting this value to 'array' instead of 'object'.
-     * Alternatively, you can do it on a per-instance basis using the
-     * 'as_array()' and 'as_object()' methods.
+     * @var string Data type of the records returned from find* methods.
      *
-     * @var string
-     * @access protected
+     * By default, results are returned as objects. This can be changed
+     * class-wide by setting this value to 'array' instead of 'object'.
+     *
+     * Alternatively, it can be done on a per-instance basis using the
+     * 'as_array()' and 'as_object()' methods.
      */
     protected $return_type = 'object';
 
 	/**
-	 * Holds the return type temporarily when using the
-	 * as_array() and as_object() methods
-	 *
-	 * @var string
-	 * @access protected
+	 * @var string Holds the return type temporarily when using the as_array()
+	 * and as_object() methods
 	 */
     protected $temp_return_type = null;
 
     /**
-     * @var Array Validation rules used by the model's validation
+     * @var array Validation rules used by the model's validation
      *
      * This array needs to be in the same format as validation rules passed to
      * the Form_validation library.
@@ -841,7 +758,7 @@ class BF_Model extends CI_Model
 			return $result;
 		}
 
-		$this->error = lang('bf_model_db_error') . $this->get_db_error_message();
+		$this->error = sprintf(lang('bf_model_db_error'), $this->get_db_error_message());
 
 		return false;
 	}//end delete_where()
@@ -1802,8 +1719,6 @@ class BF_Model extends CI_Model
     public function limit($value, $offset = '') { $this->db->limit($value, $offset); return $this; }
     public function offset($offset) { $this->db->offset($offset); return $this; }
     public function set($key, $value = '', $escape = TRUE) { $this->db->set($key, $value, $escape); return $this; }
-
-}//end BF_model
-
+}
 /* End of file BF_Model.php */
 /* Location: ./bonfire/core/BF_Model.php */
