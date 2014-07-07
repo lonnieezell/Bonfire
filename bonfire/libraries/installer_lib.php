@@ -519,7 +519,7 @@ class Installer_lib
 
         // Get the installed version of all of the modules (modules which have
         // not been installed will not be included)
-        $installedVersions = $this->migrations->getModuleVersions();
+        $installedVersions = $this->ci->migrations->getModuleVersions();
 		$modVersions = array();
 
         // Add the migration data for each module
