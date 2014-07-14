@@ -23,7 +23,7 @@
  * @link       http://cibonfire.com/docs
  */
 
-$lang['ui_keyboard_shortcuts']	= 'Keyboard shortcuts are setup in the application config. The currently available shortcuts are:';
+$lang['ui_keyboard_shortcuts']	= "Keyboard shortcuts are setup in the application config (the 'ui.current_shortcuts' key in /application/config/application.php).<br />The currently available shortcuts are:";
 $lang['ui_add_shortcut']		= 'Add Shortcut';
 $lang['ui_remove_shortcut']		= 'Remove';
 $lang['ui_no_shortcuts']		= 'There are no shortcut options setup in the application config.';
