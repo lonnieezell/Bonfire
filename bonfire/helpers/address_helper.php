@@ -128,4 +128,51 @@ if ( ! function_exists('state_select')) {
 		return $output;
 	}
 }
+	
+	/**
+	 * Convert from abbreviation
+	 *
+	 * Convert a state abbreviation to the full state name
+	 *
+	 * @access public
+	 * @param string $abbr Two-letter abbreviation
+	 * @param string $country_code Country ISO code
+	 * @return string
+	 */
+if ( ! function_exists('state_abbr_to_name')) {
+	function state_abbr_to_name($abbr, $country_code='US') 
+	{
+	// First, grab the states from the config
+	$all_states = config_item('address.states');
+	// Get the states for the selected country
+	$states = $all_states[$country_code];
+	
+	$abbr = strtoupper($abbr);
+	return isset($states[$abbr]) ? $states[$abbr] : FALSE;
+	}
+}
+
+	/**
+	 * Convert to abbreviation
+	 *
+	 * Convert a full state name to the state abbreviation
+	 *
+	 * @access public
+	 * @param  string $name States full name
+	 * @param  string $country_code Country ISO code 
+	 * @return string/boolean Returns FALSE when not found
+	 */
+if ( ! function_exists('state_name_to_abbr')) {
+	function state_name_to_abbr($name, $country_code='US') 
+	{
+	// First, grab the states from the config
+	$all_states = config_item('address.states');
+	// Get the states for the selected country
+	$states = $all_states[$country_code];
+            		
+     	// Use lowercase for comparison
+       	return array_search(strtolower($name),array_map('strtolower', $states));
+	}
+}
+
 /* End /helpers/address_helper.php */
