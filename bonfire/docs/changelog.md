@@ -5,7 +5,7 @@
 ### 0.7.1 - not released
 
 New Features:
-
+* Composer Auto-loading may be enabled by setting 'composer_autoload' to true (or the path to the autoload.php file) in /application/config/config.php. Please be aware that this currently requires hooks to be enabled and the ```App_hooks->checkAutoloaderConfig()``` method must be included in the ```pre_controller``` hooks in /application/config/hooks.php.
 * Images controller can reference images from a module using the module=... parameter.
 * Template class now provides a `check_segment` method in addition to check_class and check_method.
 * Brand new documentation system that allows splitting your user and dev-related docs, and searching docs.
@@ -62,7 +62,7 @@ Closes Issues:
 * #612 - Modifying set created and set modified from models
 
 Additional Changes:
-
+* Updated list of countries in /application/config/address.php and added state codes for a few more countries.
 * Separated all Bonfire code from your Application's code
 * Most bonfire specific code now uses a BF_ prefix instead of the MY_ prefix your application would use.
 * Removed Settings related to the previously removed Updates module

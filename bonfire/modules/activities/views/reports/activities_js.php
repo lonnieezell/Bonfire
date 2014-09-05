@@ -33,10 +33,10 @@ $('.btn').filter('[id^="delete-"][type="button"]').click(submit_delete);
 
 $("#flex_table").dataTable({
     "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
-    "sPaginationType": "bootstrap",
     "iDisplayLength": <?php echo ($this->settings_lib->item('site.list_limit')) ? $this->settings_lib->item('site.list_limit') : 15; ?>,
     "bInfo": false,
     "bPaginate": false,
+//  "sPaginationType": "bootstrap",
     "bProcessing": true,
     "bServerSide": false,
     "bLengthChange": false,

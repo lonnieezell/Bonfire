@@ -25,7 +25,10 @@
  */
 class Reports extends Admin_Controller
 {
+    private $permissionDeleteDate       = 'Activities.Date.Delete';
+    private $permissionDeleteModule     = 'Activities.Module.Delete';
     private $permissionDeleteOwn        = 'Activities.Own.Delete';
+    private $permissionDeleteUser       = 'Activities.User.Delete';
     private $permissionSiteReportsView  = 'Site.Reports.View';
     private $permissionViewActivities   = 'Bonfire.Activities.View';
     private $permissionViewDate         = 'Activities.Date.View';
@@ -33,6 +36,7 @@ class Reports extends Admin_Controller
     private $permissionViewOwn          = 'Activities.Own.View';
     private $permissionViewUser         = 'Activities.User.View';
 
+    private $hasPermissionDeleteOwn;
     private $hasPermissionViewDate;
     private $hasPermissionViewModule;
     private $hasPermissionViewOwn;
@@ -56,24 +60,26 @@ class Reports extends Admin_Controller
         $this->load->model('activities/activity_model');
 
 		Assets::add_js(array(
-            Template::theme_url('js/bootstrap.js'),
-            Template::theme_url('js/jquery.dataTables.min.js'),
-            Template::theme_url('js/bootstrap-dataTables.js'),
+            'bootstrap',
+            'jquery.dataTables',
+            'bootstrap-dataTables',
         ));
 		Assets::add_js($this->load->view('reports/activities_js', null, true), 'inline');
 
 		Assets::add_css(array(
-            Template::theme_url('css/datatable.css'),
-            Template::theme_url('css/bootstrap-dataTables.css'),
+            'datatable',
+            'bootstrap-dataTables',
         ));
 
-        // Check the permissions, store the results
-        $this->hasPermissionViewUser   = has_permission($this->permissionViewUser);
-        $this->hasPermissionViewModule = has_permission($this->permissionViewModule);
-        $this->hasPermissionViewOwn    = has_permission($this->permissionViewOwn);
-        $this->hasPermissionViewDate   = has_permission($this->permissionViewDate);
+        // Check the permissions, store the results.
+        $this->hasPermissionDeleteOwn  = $this->auth->has_permission($this->permissionDeleteOwn);
+        $this->hasPermissionViewDate   = $this->auth->has_permission($this->permissionViewDate);
+        $this->hasPermissionViewModule = $this->auth->has_permission($this->permissionViewModule);
+        $this->hasPermissionViewOwn    = $this->auth->has_permission($this->permissionViewOwn);
+        $this->hasPermissionViewUser   = $this->auth->has_permission($this->permissionViewUser);
 
-		if ($this->hasPermissionViewUser || $this->hasPermissionViewModule
+        if ($this->hasPermissionViewUser
+            || $this->hasPermissionViewModule
             || $this->hasPermissionViewDate
            ) {
 			Template::set_block('sub_nav', 'reports/_sub_nav');
@@ -89,29 +95,43 @@ class Reports extends Admin_Controller
 	 */
 	public function index()
 	{
-        Template::set('has_permission_view_date', $this->hasPermissionViewDate);
-        Template::set('has_permission_view_module', $this->hasPermissionViewModule);
-        Template::set('has_permission_view_user', $this->hasPermissionViewUser);
-        Template::set('has_permission_view_own', $this->hasPermissionViewOwn);
+        Template::set('hasPermissionDeleteOwn', $this->hasPermissionDeleteOwn);
+        Template::set('hasPermissionViewDate', $this->hasPermissionViewDate);
+        Template::set('hasPermissionViewModule', $this->hasPermissionViewModule);
+        Template::set('hasPermissionViewOwn', $this->hasPermissionViewOwn);
+        Template::set('hasPermissionViewUser', $this->hasPermissionViewUser);
 
 		if ($this->hasPermissionViewUser
             || $this->hasPermissionViewModule
             || $this->hasPermissionViewDate
            ) {
-			Template::set('top_modules', $this->activity_model->findTopModules(5));
-            Template::set('top_users', $this->activity_model->findTopUsers(5));
+            Template::set(
+                'pages',
+                array(
+                    'date'   => 'activity_date',
+                    'module' => 'activity_module',
+                    'own'    => 'activity_own',
+                    'user'   => 'activity_user',
+                )
+            );
+            Template::set('hasPermissionDeleteDate', $this->auth->has_permission($this->permissionDeleteDate));
+            Template::set('hasPermissionDeleteModule', $this->auth->has_permission($this->permissionDeleteModule));
+            Template::set('hasPermissionDeleteUser', $this->auth->has_permission($this->permissionDeleteUser));
+
 			Template::set(
                 'activities',
                 $this->activity_model->where($this->activity_model->get_table() . '.' . $this->activity_model->get_deleted_field(), 0)
                                      ->find_all()
             );
+            Template::set('modules', Modules::list_modules());
+            Template::set('top_modules', $this->activity_model->findTopModules(5));
+            Template::set('top_users', $this->activity_model->findTopUsers(5));
 			Template::set(
                 'users',
                 $this->user_model->where($this->user_model->get_table() . '.' . $this->user_model->get_deleted_field(), 0)
                                  ->order_by('username', 'asc')
                                  ->find_all()
             );
-			Template::set('modules', Modules::list_modules());
 
 			Template::render();
 		} elseif ($this->hasPermissionViewOwn) {
@@ -127,7 +147,7 @@ class Reports extends Admin_Controller
 	public function activity_user()
 	{
 		if ($this->hasPermissionViewUser) {
-            return $this->_get_activity();
+            return $this->getActivity();
 		}
 
 		$this->activityRestricted();
@@ -141,7 +161,7 @@ class Reports extends Admin_Controller
 	public function activity_own()
 	{
 		if ($this->hasPermissionViewOwn) {
-            return $this->_get_activity('activity_own', $this->auth->user_id());
+            return $this->getActivity('activity_own', $this->auth->user_id());
 		}
 
 		$this->activityRestricted();
@@ -155,7 +175,7 @@ class Reports extends Admin_Controller
 	public function activity_module()
 	{
 		if ($this->hasPermissionViewModule) {
-			return $this->_get_activity('activity_module');
+            return $this->getActivity('activity_module');
 		}
 
         $this->activityRestricted();
@@ -168,8 +188,8 @@ class Reports extends Admin_Controller
 	 */
 	public function activity_date()
 	{
-		if (has_permission('Activities.Date.View')) {
-			return $this->_get_activity('activity_date');
+        if ($this->auth->has_permission('Activities.Date.View')) {
+            return $this->getActivity('activity_date');
 		}
 
 		$this->activityRestricted();
@@ -182,7 +202,7 @@ class Reports extends Admin_Controller
 	 */
 	public function delete()
 	{
-		$this->_delete_activity(
+        $this->deleteActivity(
             $this->input->post('action'),
             $this->input->post('which')
         );
@@ -215,7 +235,7 @@ class Reports extends Admin_Controller
 	 *
 	 * @return void
 	 */
-	private function _delete_activity($action, $which)
+    private function deleteActivity($action, $which)
 	{
         // This is before the permission check because the permission check
         // takes longer and depends on the value of $action
@@ -225,8 +245,8 @@ class Reports extends Admin_Controller
 		}
 
 		// Check for permission to delete this
-		$permission = str_replace('activity_', '', $action);
-		if ( ! has_permission('Activities.' . ucfirst($permission) . '.Delete')) {
+        $permission = ucfirst(str_replace('activity_', '', $action));
+        if (! $this->auth->has_permission("Activities.{$permission}.Delete")) {
 			Template::set_message(lang('activities_restricted'), 'error');
 			return;
 		}
@@ -262,7 +282,7 @@ class Reports extends Admin_Controller
         }
 
         // Check whether the user can delete his/her own activities
-        if ( ! has_permission($this->permissionDeleteOwn)) {
+        if (! $this->hasPermissionDeleteOwn) {
             $this->activity_model->where('user_id !=', $this->auth->user_id());
         }
 
@@ -281,22 +301,22 @@ class Reports extends Admin_Controller
 	/**
 	 * Get activity based on parameters passed
 	 *
-	 * @param string $which      Filter the activities by type
-	 * @param bool   $find_value Value to filter by
+     * @param string $which       Which filter to use.
+     * @param bool   $filterValue Value to filter by
 	 *
 	 * @return void
 	 */
-	private function _get_activity($which = 'activity_user', $find_value = false)
+    private function getActivity($which = 'activity_user', $filterValue = false)
 	{
         $postedWhichSelect = $this->input->post("{$which}_select");
 
-		// Check whether $find_value has anything in it
-		if ($find_value === false) {
-			$find_value = $postedWhichSelect == '' ? $this->uri->segment(5) : $postedWhichSelect;
+        // Check whether $filterValue has anything in it
+        if ($filterValue === false) {
+            $filterValue = $postedWhichSelect == '' ? $this->uri->segment(5) : $postedWhichSelect;
 		}
 
 		if (isset($_POST['delete'])) {
-			$this->_delete_activity($which, $find_value);
+            $this->deleteActivity($which, $filterValue);
 		}
 
         $activityDeletedField   = $this->activity_model->get_deleted_field();
@@ -313,23 +333,30 @@ class Reports extends Admin_Controller
 		switch ($which) {
 			case 'activity_module':
 				$modules = Modules::list_modules();
+
+                // Sort modules by key (module directory name)
+                ksort($modules);
+
+                // Setup the list of modules for the filter.
 				foreach ($modules as $mod) {
 					$options[$mod] = $mod;
-					if ($find_value == $mod) {
+                    if ($filterValue == $mod) {
 						$name = ucwords($mod);
 					}
 				}
 				$where = 'module';
+                Template::set('hasPermissionDeleteModule', $this->auth->has_permission($this->permissionDeleteModule));
                 break;
 
 			case 'activity_date':
 				foreach ($this->activity_model->find_all_by($activityDeletedField, 0) as $e) {
 					$options[$e->activity_id] = $e->created_on;
-					if ($find_value == $e->activity_id) {
+                    if ($filterValue == $e->activity_id) {
 						$name = $e->created_on;
 					}
 				}
 				$where = 'activity_id';
+                Template::set('hasPermissionDeleteDate', $this->auth->has_permission($this->permissionDeleteDate));
     			break;
 
 			case 'activity_own':
@@ -343,10 +370,11 @@ class Reports extends Admin_Controller
 
                     foreach ($this->user_model->find_all() as $e) {
 						$options[$e->id] = $e->username;
-						if ($find_value == $e->id) {
+                        if ($filterValue == $e->id) {
 							$name = $e->username;
 						}
 					}
+                    Template::set('hasPermissionDeleteUser', $this->auth->has_permission($this->permissionDeleteUser));
 				} elseif ($this->hasPermissionViewOwn) {
 					$options = array();
 					$options[$this->auth->user_id()] = $this->auth->user()->username;
@@ -364,26 +392,27 @@ class Reports extends Admin_Controller
                 'view_which'	=> ucwords(lang(str_replace('activity_', 'activities_', $which))),
                 'name'			=> $name,
                 'delete_action'	=> $where,
-                'delete_id'		=> $find_value,
-		));
+                'delete_id'     => $filterValue,
+            )
+        );
 
         $this->activity_model->order_by($where, 'asc');
 
 		// Apply the filter, if there is one
-        if (empty($find_value) || $find_value == 'all') {
+        if (empty($filterValue) || $filterValue == 'all') {
             $total = $this->activity_model->count_by("{$activityTable}.{$activityDeletedField}", 0);
         } else {
 			$where = $where == 'activity_id' ? 'activity_id <' : $where;
-			$total = $this->activity_model->where($where, $find_value)
+            $total = $this->activity_model->where($where, $filterValue)
                                           ->where("{$activityTable}.{$activityDeletedField}", 0)
-                                          ->count_by($where, $find_value);
+                                          ->count_by($where, $filterValue);
 
 			// Set this again for use in the main query
-			$this->activity_model->where($where, $find_value);
+            $this->activity_model->where($where, $filterValue);
 		}
 
 		// Does user have permission to see own records?
-        if ( ! $this->hasPermissionViewOwn) {
+        if (! $this->hasPermissionViewOwn) {
             $this->activity_model->where("{$activityTable}.user_id !=", $this->auth->user_id());
 		}
 
@@ -416,13 +445,14 @@ class Reports extends Admin_Controller
 		Template::set('filter', $postedWhichSelect);
 		Template::set('select_options', $options);
 
-        Template::set('has_permission_view_date', $this->hasPermissionViewDate);
-        Template::set('has_permission_view_module', $this->hasPermissionViewModule);
-        Template::set('has_permission_view_user', $this->hasPermissionViewUser);
-        Template::set('has_permission_view_own', $this->hasPermissionViewOwn);
+        Template::set('hasPermissionViewDate', $this->hasPermissionViewDate);
+        Template::set('hasPermissionViewModule', $this->hasPermissionViewModule);
+        Template::set('hasPermissionViewUser', $this->hasPermissionViewUser);
+        Template::set('hasPermissionViewOwn', $this->hasPermissionViewOwn);
+        Template::set('hasPermissionDeleteOwn', $this->hasPermissionDeleteOwn);
 
 		Template::set_view('reports/view');
 		Template::render();
 	}
 }
-/* end /activities/controllers/reports.php */
+/* /activities/controllers/reports.php */

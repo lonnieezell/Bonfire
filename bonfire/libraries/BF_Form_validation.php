@@ -39,11 +39,11 @@ class BF_Form_validation extends CI_Form_validation
      *
      * @return void
      */
-    function __construct($config = array())
+    public function __construct($config = array())
     {
         // Merged super-global $_FILES to $_POST to allow for better file
         // validation inside of Form_validation library
-        if ( ! empty($_FILES) && is_array($_FILES)) {
+        if (! empty($_FILES) && is_array($_FILES)) {
             $_POST = array_merge($_POST, $_FILES);
         }
 
@@ -114,7 +114,7 @@ class BF_Form_validation extends CI_Form_validation
      */
     public function allowed_types($str, $types = null)
     {
-        if ( ! $types) {
+        if (! $types) {
             log_message('debug', 'form_validation method allowed_types was called without any allowed types.');
             $this->CI->form_validation->set_message('allowed_types', lang('bf_form_allowed_types_none'));
             return false;
@@ -139,7 +139,7 @@ class BF_Form_validation extends CI_Form_validation
      *
      * @return	bool
      */
-    function alpha_extra($str)
+    public function alpha_extra($str)
     {
         if (preg_match("/^([\.\s-a-z0-9_-])+$/i", $str)) {
             return true;
@@ -157,7 +157,7 @@ class BF_Form_validation extends CI_Form_validation
      *
      * @return bool
      */
-    function matches_pattern($str, $pattern)
+    public function matches_pattern($str, $pattern)
     {
         if (preg_match('/^' . $pattern . '$/', $str)) {
             return true;
@@ -206,7 +206,7 @@ class BF_Form_validation extends CI_Form_validation
      */
     public function one_of($str, $options = null)
     {
-        if ( ! $options) {
+        if (! $options) {
             log_message('debug', 'form_validation method one_of was called without any possible values.');
             $this->CI->form_validation->set_message('one_of', lang('bf_form_one_of_none'));
             return false;
@@ -239,7 +239,7 @@ class BF_Form_validation extends CI_Form_validation
      *
      * @return bool True if the value is unique for that field, else false.
      */
-    function unique($value, $params)
+    public function unique($value, $params)
     {
         // Allow for more than 1 parameter.
         $fields = explode(",", $params);
@@ -264,7 +264,7 @@ class BF_Form_validation extends CI_Form_validation
             // add "AND NOT EQUAL" where clause.
             $where_value = $this->CI->input->post($where_field);
             if (isset($where_value)) {
-                $this->CI->db->where("{$where_table}.{$where_field} !=", $where_value);
+                $this->CI->db->where("{$where_table}.{$where_field} <>", $where_value);
             }
         }
 

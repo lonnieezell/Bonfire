@@ -81,15 +81,13 @@ class Activity_model extends BF_Model
 			return false;
 		}
 
-		if ( ! is_array($modules)) {
+        if (! is_array($modules)) {
 			$modules = array($modules);
 		}
 
-        if ( ! class_exists('user_model')) {
+        if (! class_exists('user_model')) {
             $this->load->model('users/user_model');
         }
-        $usersTable = $this->user_model->get_table();
-        $usersKey   = $this->user_model->get_key();
 
 		return $this->select(array(
                                 'activity_id',
@@ -104,7 +102,7 @@ class Activity_model extends BF_Model
                             ))
                     ->where_in('module', $modules)
                     ->where("{$this->table_name}.{$this->deleted_field}", 0)
-                    ->join($usersTable, "{$this->table_name}.user_id = {$usersTable}.{$usersKey}", 'left')
+                    ->join($this->user_model->get_table(), "{$this->table_name}.user_id = " . $this->user_model->get_table() . '.' . $this->user_model->get_key(), 'left')
                     ->find_all();
 	}
 
@@ -137,22 +135,17 @@ class Activity_model extends BF_Model
      */
     public function findTopUsers($limit = 5)
     {
-        if ( ! class_exists('user_model')) {
+        if (! class_exists('user_model')) {
             $this->load->model('users/user_model');
         }
-        $usersTable = $this->user_model->get_table();
-        $usersKey   = $this->user_model->get_key();
 
         // Fields in the select list must also be in the group by clause for
         // compatibility with most databases other than MySQL.
         $usersFields = array('username', 'user_id');
 
-        return $this->select(array_merge(
-                                $usersFields,
-                                array('COUNT(user_id) AS activity_count')
-                            ))
+        return $this->select(array_merge($usersFields, array('COUNT(user_id) AS activity_count')))
                     ->where("{$this->table_name}.{$this->deleted_field}", 0)
-                    ->join($usersTable, "{$this->table_name}.user_id = {$usersTable}.{$usersKey}", 'left')
+                    ->join($this->user_model->get_table(), "{$this->table_name}.user_id = " . $this->user_model->get_table() . '.' . $this->user_model->get_key(), 'left')
                     ->group_by($usersFields)
                     ->order_by('activity_count', 'desc')
                     ->limit($limit)
@@ -187,4 +180,4 @@ class Activity_model extends BF_Model
 		));
 	}
 }
-/* end /activities/models/activity_model.php */
+/* /activities/models/activity_model.php */

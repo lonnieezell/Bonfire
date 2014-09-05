@@ -6,19 +6,20 @@ if ( ! function_exists('relative_time')) {
 
 ?>
 <h3><?php echo lang('us_access_logs'); ?></h3>
-<?php if (isset($activities) && is_array($activities) && count($activities)) : ?>
+<?php if ( ! empty($activities) && is_array($activities)) : ?>
 <ul class="clean">
 	<?php
+    // Determine which field is displayed for the user's identity.
+    $identityField = $this->settings_lib->item('auth.login_type') == 'email' ? 'email' : 'username';
     foreach ($activities as $activity) :
-        $identity = $this->settings_lib->item('auth.login_type') == 'email' ? $activity->email : $activity->username;
     ?>
     <li>
         <span class="small"><?php echo relative_time(strtotime($activity->created_on)); ?></span><br/>
-        <strong><?php e($identity); ?></strong> <?php echo $activity->activity; ?>
+        <strong><?php e($activity->{$identityField}); ?></strong> <?php echo $activity->activity; ?>
     </li>
 	<?php endforeach; ?>
 </ul>
-<?php else :
+<?php
+else :
     echo lang('us_no_access_message');
 endif;
-?>

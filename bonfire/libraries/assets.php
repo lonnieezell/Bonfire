@@ -1,12 +1,13 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -18,28 +19,27 @@
  *
  * The Assets class helps manage CSS, JavaScript, and Image assets.
  *
- * @package    Bonfire\Libraries
+ * @package    Bonfire\Libraries\Assets
  * @author     Bonfire Dev Team
  * @link       http://cibonfire.com/docs/bonfire/working_with_assets
- * @version    3.1
- *
  */
 class Assets
 {
 	/**
-	 * @var object Stores the CodeIgniter core object.
+	 * @var object The CodeIgniter core object.
 	 */
 	protected static $ci;
 
     /**
-     * @var Closure Stores the function used to minify CSS
+     * @var Closure The function used to minify CSS
      */
     protected static $cssMinify;
 
     /**
      * @var string[] The directories used by the library.
      *
-     * 'base' is relative to public, all others are relative to 'base'
+     * 'base' is relative to public, all others are relative to 'base', except
+     * 'module', which defines a directory name within both 'css' and 'js'
      *
      * Combines the previous $asset_base, $asset_cache_folder, and
      * $asset_folders into a single array.
@@ -53,7 +53,13 @@ class Assets
         'css'   => 'css',
         'image' => 'images',
         'js'    => 'js',
+        'module' => 'module',
     );
+
+    /**
+     * @var Closure Stores the function used to minify JS
+     */
+    protected static $jsMinify;
 
     /**
      * @var array[] Holds scripts to place at the end of the page
@@ -65,31 +71,12 @@ class Assets
     );
 
 	/**
-	 * @var string[] Holds the external scripts to place at the end of the page.
-	 *
-	 * @deprecated since 0.7.1, use $scripts instead
+	 * @var string[] Holds css to place at the beginning of the page.
 	 */
-	protected static $external_scripts = array();
-
-	/**
-	 * @var string[] Holds the inline scripts to place at the end of the page.
-	 *
-	 * @deprecated since 0.7.1, use $scripts instead
-	 */
-	protected static $inline_scripts = array();
-
-    /**
-     * @var Closure Stores the function used to minify JS
-     */
-    protected static $jsMinify;
-
-	/**
-	 * @var string[] Holds the module scripts which will be combined into one js
-	 * file to place at the end of the page.
-	 *
-	 * @deprecated since 0.7.1, use $scripts instead
-	 */
-	protected static $module_scripts = array();
+	protected static $styles = array(
+        'css'    => array(),
+        'module' => array(),
+    );
 
 	/**
 	 * @var bool Display debug messages
@@ -102,12 +89,6 @@ class Assets
 	private static $globals = true;
 
 	/**
-	 * @var string[] Holds the module css files to place at the beginning of the
-	 * page.
-	 */
-	private static $module_styles = array();
-
-	/**
 	 * @var string Value which indicates a language is read from right to left.
 	 *
 	 * Compared to lang('bf_language_direction') to indicate direction and
@@ -115,11 +96,6 @@ class Assets
 	 * lang('bf_language_direction') == $rtl_postfix
 	 */
 	private static $rtl_postfix = 'rtl';
-
-	/**
-	 * @var string[] Holds the css files to place at the beginning of the page.
-	 */
-	private static $styles = array();
 
 	/**
 	 * Constructor
@@ -149,9 +125,12 @@ class Assets
 		// It is recommended to combine as many config files as sensible into a
         // single file for performance reasons. If the config entry is already
         // available, don't load the file.
-        // @todo Update this to check for 'assets.directories' once it can be
-        // safely assumed that the item should be present
-		if (self::$ci->config->item('assets.base_folder') === false) {
+
+        // @todo Update this to remove the check for 'assets.base_folder' once
+        // it can be safely assumed that the item should no longer be present
+		if (self::$ci->config->item('assets.base_folder') === false
+            && self::$ci->config->item('assets.directories') === false
+           ) {
 			self::$ci->config->load('application');
 		}
 
@@ -167,6 +146,11 @@ class Assets
             self::$directories = array();
             self::$directories['base'] = trim(self::$ci->config->item('assets.base_folder') ?: 'assets', '/');
             self::$directories['cache'] = trim(self::$ci->config->item('assets.cache_folder') ?: 'cache', '/');
+
+            // Set to default because this directory was not in the previous
+            // config locations
+            self::$directories['module'] = 'module';
+
             $assetFolders = self::$ci->config->item('assets.asset_folders') ?: array('js' => 'js', 'css' => 'css', 'image' => 'images');
             foreach ($assetFolders as $key => $value) {
                 self::$directories[$key] = trim($value, '/');
@@ -187,60 +171,11 @@ class Assets
 	}
 
 	//--------------------------------------------------------------------
-	// !GLOBAL METHODS
-	//--------------------------------------------------------------------
-
-	/**
-     * Set the library to include global CSS and JS files
-     *
-	 * If $include is set to true, global includes (like the default media type
-	 * CSS and global.js files) are automatically included in css() and js()
-	 * output.
-	 *
-	 * @deprecated since 0.7.1 use setGlobals() instead
-	 * @param bool $include true to include (default) or false to exclude
-	 *
-	 * @return void
-	 */
-	public static function set_globals($include = true)
-	{
-		self::$globals = (bool)$include;
-	}
-
-    /**
-     * Configure the library to output debug messages to the page
-     *
-     * @param bool $debug true to output debug messages (default) or false to
-     * disable debug messages
-     *
-     * @return void
-     */
-    public static function setDebug($debug = true)
-    {
-        self::$debug = (bool)$debug;
-    }
-
-	/**
-     * Configure the library to include global CSS and JS files.
-     *
-	 * If $include is true, global includes (like the default media CSS and
-	 * global.js files) are automatically included in css() and js() output.
-	 *
-	 * @param bool $include true to include (default) or false to exclude
-	 *
-	 * @return void
-	 */
-    public static function setGlobals($include = true)
-    {
-        self::$globals = (bool)$include;
-    }
-
-	//--------------------------------------------------------------------
 	// !STYLESHEET METHODS
 	//--------------------------------------------------------------------
 
 	/**
-     * Render links to stylesheets
+     * Render links to stylesheets.
      *
 	 * Prepends the $asset_url.
 	 *
@@ -278,7 +213,7 @@ class Assets
 
 		// If no style(s) has been passed in, use all that have been added.
 		if (empty($style)) {
-            $styles = self::$styles;
+            $styles = self::$styles['css'];
 
             // Make sure to include a file based on media type if $globals
             if (self::$globals) {
@@ -290,7 +225,7 @@ class Assets
 		}
 		// If an array has been passed, merge it with any added styles.
 		elseif (is_array($style)) {
-			$styles = array_merge($style, self::$styles);
+			$styles = array_merge($style, self::$styles['css']);
 		}
 		// If a single style has been passed in, render it only.
 		else {
@@ -307,7 +242,7 @@ class Assets
 				'media' => $media,
 			);
 
-			$moduleStyles = self::find_files(self::$module_styles, 'css', $bypassInheritance);
+			$moduleStyles = self::find_files(self::$styles['module'], 'css', $bypassInheritance);
 		}
 
 		$styles = self::find_files($styles, 'css', $bypassInheritance);
@@ -334,6 +269,7 @@ class Assets
                 } elseif (is_string($styleToAdd)) {
                     $attr['href'] = $styleToAdd;
                 } else {
+                    // If it's not an array or a string, skip it
                     continue;
                 }
 
@@ -452,9 +388,9 @@ class Assets
 		}
 
 		if ($prepend) {
-			self::$styles = array_merge($stylesToAdd, self::$styles);
+			self::$styles['css'] = array_merge($stylesToAdd, self::$styles['css']);
 		} else {
-			self::$styles = array_merge(self::$styles, $stylesToAdd);
+			self::$styles['css'] = array_merge(self::$styles['css'], $stylesToAdd);
 		}
 	}
 
@@ -490,7 +426,7 @@ class Assets
         // Add an array
 		if (is_array($path) && count($path)) {
 			foreach ($path as $file) {
-				self::$module_styles[] = array(
+				self::$styles['module'][] = array(
 					'module' => $module,
 					'file'	 => $file,
 					'media'	 => $media
@@ -866,9 +802,9 @@ class Assets
         }
 
 		$attrs = array_merge($attrs, $extraAttrs);
-		$return = '<img' . self::attributes($attrs) . ' />';
+		$result = '<img' . self::attributes($attrs) . ' />';
 
-		return ($suppressEol ? $return : $return . PHP_EOL);
+		return ($suppressEol ? $result : $result . PHP_EOL);
 	}
 
 	//--------------------------------------------------------------------
@@ -880,22 +816,29 @@ class Assets
 	 *
 	 * @param mixed $type Optional a string with the assets folder to locate.
 	 * Leave blank to return the assets base folder.
+	 * @param bool $modulePath (optional) If true, returns the assets URL of the
+	 * given $type with the module path appended, if the $type supports a module
+	 * path
 	 *
 	 * @return string The full url (including http://) to the resource.
 	 */
-	public static function assets_url($type = null)
+	public static function assets_url($type = null, $modulePath = false)
 	{
 		$url = '';
 
-		// Add Assets base and resource type folders if needed
+		// Get resource type folder
         if ($type !== null && $type !== 'base'
             && array_key_exists($type, self::$directories)
            ) {
             $url = self::path(base_url(), self::$directories['base'], self::$directories[$type]) . '/';
         }
-        // Add Assets Base Folder
+        // Get Assets Base Folder
         else {
             $url = self::path(base_url(), self::$directories['base']) . '/';
+        }
+
+        if ($modulePath && ! in_array($type, array('base', 'cache', 'image', 'module'))) {
+            $url = self::path($url, self::$directories['module']) . '/';
         }
 
 		// Cleanup, just to be safe
@@ -922,8 +865,40 @@ class Assets
 		delete_files($cachePath);
 
 		// Write the index.html file back in
-		$indexhtml_data = '<html><head><title>403 Forbidden</title></head><body><p>Directory access is forbidden.</p></body></html>';
-		write_file("{$cachePath}index.html", $indexhtml_data);
+		$indexHtmlData = '<html><head><title>403 Forbidden</title></head><body><p>Directory access is forbidden.</p></body></html>';
+		write_file("{$cachePath}index.html", $indexHtmlData);
+	}
+
+	//--------------------------------------------------------------------
+	// !GLOBAL METHODS
+	//--------------------------------------------------------------------
+
+    /**
+     * Configure the library to output debug messages to the page
+     *
+     * @param bool $debug true to output debug messages (default) or false to
+     * disable debug messages
+     *
+     * @return void
+     */
+    public static function setDebug($debug = true)
+    {
+        self::$debug = (bool) $debug;
+    }
+
+	/**
+     * Configure the library to include global CSS and JS files.
+     *
+	 * If $include is true, global includes (like the default media CSS and
+	 * global.js files) are automatically included in css() and js() output.
+	 *
+	 * @param bool $include true to include (default) or false to exclude
+	 *
+	 * @return void
+	 */
+    public static function setGlobals($include = true)
+    {
+        self::$globals = (bool) $include;
 	}
 
     /**
@@ -973,7 +948,7 @@ class Assets
 					continue;
 				}
 
-				$final .= ' ' . $key . '="' . htmlspecialchars($value, ENT_QUOTES) . '"';
+				$final .= " {$key}=\"" . htmlspecialchars($value, ENT_QUOTES) . '"';
 			}
 		}
 
@@ -981,8 +956,8 @@ class Assets
 	}
 
 	/**
-	 * Locates file by looping through the active and default themes, and
-	 * then the assets folder (as specified in the config file).
+	 * Generates cache file. Locates file by looping through the active and
+	 * default themes, then the assets folder (as specified in the config file).
 	 *
 	 * Files are searched for in this order...
 	 *     1 - active_theme/
@@ -1343,6 +1318,31 @@ class Assets
 
         return (empty($media) ? $filePath : array('file' => $filePath, 'media' => $media, 'server_path' => $serverPath));
 	}
+
+    //--------------------------------------------------------------------------
+    // Deprecated methods (Do Not Use)
+    //--------------------------------------------------------------------------
+
+	/**
+     * Set the library to include global CSS and JS files
+     *
+	 * If $include is set to true, global includes (like the default media type
+	 * CSS and global.js files) are automatically included in css() and js()
+	 * output.
+	 *
+	 * @deprecated since 0.7.1 use setGlobals() instead
+	 * @param bool $include true to include (default) or false to exclude
+	 *
+	 * @return void
+	 */
+	public static function set_globals($include = true)
+	{
+		self::setGlobals($include);
+	}
+
+    //--------------------------------------------------------------------------
+    // End deprecated properties and methods
+    //--------------------------------------------------------------------------
 }
 
 //--------------------------------------------------------------------
@@ -1352,23 +1352,13 @@ class Assets
 //--------------------------------------------------------------------
 
 /**
- * Returns full site url to assets javascript folder.
+ * Returns full site url to assets base folder.
  *
- * @return string Returns full site url to assets javascript folder.
+ * @return string Returns full site url to assets base folder.
  */
-function js_path()
+function assets_path()
 {
-	return Assets::assets_url('js');
-}
-
-/**
- * Returns full site url to assets images folder.
- *
- * @return string Returns full site url to assets images folder.
- */
-function img_path()
-{
-	return Assets::assets_url('image');
+	return Assets::assets_url();
 }
 
 /**
@@ -1382,13 +1372,42 @@ function css_path()
 }
 
 /**
- * Returns full site url to assets base folder.
+ * Returns full site url to assets images folder.
  *
- * @return string Returns full site url to assets base folder.
+ * @return string Returns full site url to assets images folder.
  */
-function assets_path()
+function img_path()
 {
-	return Assets::assets_url();
+	return Assets::assets_url('image');
 }
-/* End of file assets.php */
-/* Location: ./application/libraries/assets.php */
+
+/**
+ * Returns full site url to assets javascript folder.
+ *
+ * @return string Returns full site url to assets javascript folder.
+ */
+function js_path()
+{
+	return Assets::assets_url('js');
+}
+
+/**
+ * Returns full site url to assets css module folder.
+ *
+ * @return string    Returns full site url to assets css module folder.
+ */
+function module_css_path()
+{
+    return Assets::assets_url('css', true);
+}
+
+/**
+ * Returns full site url to assets javascript module folder.
+ *
+ * @return string    Returns full site url to assets javascript module folder.
+ */
+function module_js_path()
+{
+    return Assets::assets_url('js', true);
+}
+/* End /libraries/assets.php */
