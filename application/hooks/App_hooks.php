@@ -70,10 +70,12 @@ class App_hooks
 
         $composerAutoload = $this->ci->settings_lib->item('composer_autoload');
         if ($composerAutoload !== false) {
-            if ($composerAutoload === true
-                && file_exists(APPPATH . 'vendor/autoload.php')
-            ) {
+            if ($composerAutoload === true) {
+                if (file_exists(APPPATH . 'vendor/autoload.php')) {
                 require_once(APPPATH . 'vendor/autoload.php');
+                } elseif (file_exists(APPPATH . '../vendor/autoload.php')) {
+                    require_once(APPPATH . '../vendor/autoload.php');
+                }
             } elseif (file_exists($composerAutoload)) {
                 require_once($composerAutoload);
             }
