@@ -32,20 +32,21 @@ To make sure that your blog shows up in the admin area, we need to create a conf
 Create a new file in your new `config` folder, called `config.php`.
 
 ```
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-    $config['module_config'] = array(
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+
+$config['module_config'] = array(
         'name'          => 'Blog',
         'description'   => 'A Simple Blog Example',
         'author'        => 'Your Name',
         'homepage'      => 'http://...',
         'version'       => '1.0.1',
-        'menu'          => array(
-            'context'   => 'path/to/view'
+    'menus'       => array(
+        'context' => 'path/to/view',
         ),
         'weights'       => array(
-            'context'   => 0
-        )
-    );
+        'context' => 0,
+    ),
+);
 ```
 
 
