@@ -99,10 +99,16 @@ class Migration_Initial_tables extends Migration
             'description'   => 'To view the blog menu.',
             'status'        => 'active'
         ));
+        $this->permission_model->insert(array(
+            'name'          => 'Bonfire.Blog.Delete',
+            'description'   => 'Delete blog entries.',
+            'status'        => 'active'
+        ));
 
         // Assign them to the admin role
         $this->load->model('role_permission_model');
         $this->role_permission_model->assign_to_role('Administrator', 'Bonfire.Blog.View');
+        $this->role_permission_model->assign_to_role('Administrator', 'Bonfire.Blog.Delete');
     }
 
     //--------------------------------------------------------------------
@@ -245,31 +251,45 @@ Edit your index.php view file to reflect the following:
     <div class="admin-box">
         <h3>Blog Posts</h3>
 
-        <?php echo form_open(); ?>
-
+        <?php
+        if (empty($posts) || ! is_array($posts)) :
+        ?>
+        <div class="alert alert-warning">
+            No Posts found.
+        </div>
+        <?php
+        else :
+            $canDelete = $this->auth->has_permission('Bonfire.Blog.Delete'));
+            echo form_open();
+        ?>
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <?php if ($canDelete) : ?>
                         <th class="column-check"><input class="check-all" type="checkbox" /></th>
+                        <?php endif; ?>
                         <th>Title</th>
                         <th style="width: 10em">Date</th>
                     </tr>
                 </thead>
+                <?php if ($canDelete) : ?>
                 <tfoot>
                     <tr>
                         <td colspan="3">
-                            With selected:
-                            <input type="submit" name="submit" class="btn" value="Delete">
+                            <?php echo lang('bf_with_selected') . ' '; ?>
+                            <input type="submit" name="delete" class="btn" value="<?php echo lang('bf_action_delete'); onclick="return confirm('Are you sure you want to delete these posts?')" ?>" />
                         </td>
                     </tr>
                 </tfoot>
+                <?php endif; ?>
                 <tbody>
-                <?php if (isset($posts) && is_array($posts)) :?>
                     <?php foreach ($posts as $post) : ?>
                     <tr>
-                        <td><input type="checkbox" name="checked[]" value="<?php echo $post->post_id ?>" /></td>
+                        <?php if ($canDelete) : ?>
+                        <td><input type="checkbox" name="checked[]" value="<?php echo $post->post_id; ?>" /></td>
+                        <?php endif; ?>
                         <td>
-                            <a href="<?php echo site_url(SITE_AREA .'/content/blog/edit_post/'. $post->post_id) ?>">
+                            <a href="<?php echo site_url(SITE_AREA . "/content/blog/edit_post/{$post->post_id}"); ?>">
                                 <?php e($post->title); ?>
                             </a>
                         </td>
@@ -278,20 +298,12 @@ Edit your index.php view file to reflect the following:
                         </td>
                     </tr>
                     <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="3">
-                            <br/>
-                            <div class="alert alert-warning">
-                                No Posts found.
-                            </div>
-                        </td>
-                    </tr>
-                <?php endif; ?>
                 </tbody>
             </table>
-
-        <?php echo form_close(); ?>
+            <?php
+            echo form_close();
+        endif;
+            ?>
     </div>
 ```
 
@@ -299,6 +311,66 @@ This creates a table that will list each blog post, if any exist. If they don't 
 
 Most of this should be self-explanatory, but there is one new function nestled in there, `e()`. This method is a convenience method that you should consider using wherever you are displaying user-entered data. It simply echos out the string, using the `htmlentities()` function to help protect against XSS and CSRF attacks.
 
+To handle the delete button included in this table, the content controller needs some modifications. First, the `index()` method needs to be updated to check for the delete button:
+
+```
+        public function index()
+        {
+            if (isset($_POST['delete'])) {
+                $this->deletePosts($this->input->post('checked'));
+            }
+
+            // Finished handling the post, now display the list
+            $posts = $this->post_model->where('deleted', 0)->find_all();
+
+            Template::set('posts', $posts);
+            Template::render();
+        }
+```
+
+Then we need to add the ```deletePosts()``` method to loop through the list of post IDs and delete the records:
+
+```
+        public function deletePosts($postIds)
+        {
+            // If no posts were selected, display an error message.
+            if (empty($postIds) || ! is_array($postIds)) {
+                Template::set_message('You have not selected any records to delete.', 'error');
+                return false;
+            }
+
+            // Only allow users with the correct permission to delete posts
+            $this->auth->restrict('Bonfire.Blog.Delete');
+
+            // Track any failures while deleting the selected posts.
+            $failed = 0;
+            foreach ($postIds as $postId) {
+                $result = $this->post_model->delete($postId);
+                if (! $result) {
+                    ++$failed;
+                }
+            }
+
+            $result = false;
+            if ($failed) {
+                Template::set_message("There was a problem deleting {$failed} post(s): {$this->post_model->error}", 'error');
+            } else {
+                Template::set_message('Deleted ' . count($postIds) . ' post(s)', 'success');
+                $result = true;
+            }
+
+            // if any tickets were deleted, log the activity.
+            if ((count($postIds) - $failed) > 0) {
+                log_activity(
+                    $this->auth->user_id(),
+                    'Deleted ' . count($postIds) . ' post(s) : ' $this->input->ip_address(),
+                    'blog'
+                );
+            }
+
+            return $result;
+        }
+```
 ### Module Sub-Menus
 
 Now we just need a way to create new posts. Let's start by creating a new sub-menu that allows us to access other pages. This is not intended for long menus, but to provide a short list of major areas within your module. You will see this used throughout Bonfire, and it appears on the right side of the page, just under the main menu. This is the same bar that holds your `$toolbar_title`.
@@ -440,16 +512,14 @@ Now then modify the controller's `create()` method to actually save the data:
 ```php
     public function create()
     {
-        if ($this->input->post('submit'))
-        {
+        if ($this->input->post('submit')) {
             $data = array(
                 'title' => $this->input->post('title'),
                 'slug'  => $this->input->post('slug'),
                 'body'  => $this->input->post('body')
             );
 
-            if ($this->post_model->insert($data))
-            {
+            if ($this->post_model->insert($data)) {
                 Template::set_message('You post was successfully saved.', 'success');
                 redirect(SITE_AREA .'/content/blog');
             }
@@ -466,18 +536,16 @@ Now then modify the controller's `create()` method to actually save the data:
 Editing our posts is very simple to do now. Simply add the following `edit_post()` method to your controller and you're up and running:
 
 ```php
-    public function edit_post($id=null)
-    {
-        if ($this->input->post('submit'))
+    public function edit_post($id = null)
         {
+        if ($this->input->post('submit')) {
             $data = array(
                 'title' => $this->input->post('title'),
                 'slug'  => $this->input->post('slug'),
                 'body'  => $this->input->post('body')
             );
 
-            if ($this->post_model->update($id, $data))
-            {
+            if ($this->post_model->update($id, $data)) {
                 Template::set_message('You post was successfully saved.', 'success');
                 redirect(SITE_AREA .'/content/blog');
             }
