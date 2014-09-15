@@ -1,6 +1,6 @@
 # A Simple Blog Tutorial
 
-This tutorial will teach you the basics of how to work with Bonfire. Along the way, you will learn the basic concepts you need to know to best work within the system. You will learn the details and the code. We believe it's best to learn how to do things the long way, before using the power of the [Module Builder](using_module_builder).
+This tutorial will teach you the basics of how to work with Bonfire. Along the way, you will learn the basic concepts you need to know to best work within the system. You will learn the details and the code. We believe it's best to learn how to do things the long way, before using the power of the [Module Builder](docs/builder).
 
 <a name="newmodule"></a>
 ## Creating A Module
@@ -424,7 +424,7 @@ Now, let's actually make it functional. In your post_model, we need to let it kn
     );
 ```
 
-These rules follow the same format as the [form validation library](http://ellislab.com/codeigniter/user-guide/libraries/form_validation.html#validationrulesasarray). The one thing to be aware of is that these rules are used for both inserts and updates. This can cause a problem with required fields on inserts. We'll add the `insert_validation_rules` class variable to the pose_model to provide any additional rules we want applied during an insert only.
+These rules follow the same format as the [form validation library](http://ellislab.com/codeigniter/user-guide/libraries/form_validation.html#validationrulesasarray). The one thing to be aware of is that these rules are used for both inserts and updates. This can cause a problem with required fields on inserts. We'll add the `insert_validation_rules` class variable to the post_model to provide any additional rules we want applied during an insert only.
 
 ```php
     protected $insert_validation_rules = array(
@@ -535,15 +535,18 @@ In this case, we're loading our model in the constructor, since we know that we'
 Then, it looks for a view file at `blog/views/index.php`. Create that file now.
 
 ```php
-        <?php foreach ($posts as $post) :?>
+    <?php
+    if (isset($posts) && is_array($posts)) :
+        foreach ($posts as $post) :
+    ?>
         <div class="post">
-            <h2><?php e($post->title) ?></h2>
-
-            <?php echo auto_typography($post->body) ?>
+        <h2><?php e($post->title); ?></h2>
+        <?php echo auto_typography($post->body); ?>
         </div>
-        <?php endforeach; ?>
-
-    <?php else : ?>
+    <?php
+        endforeach;
+    else :
+    ?>
         <div class="alert alert-info">
             No Posts were found.
         </div>
