@@ -1,14 +1,14 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
-
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
  * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @license   http://opensource.org/licenses/MIT    The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -17,16 +17,19 @@
 /**
  * Base Controller
  *
- * A controller that your controllers can extend.
+ * This provides a controller that your controllers can extend. This allows any
+ * tasks that need to be performed sitewide to be done in one place.
  *
- * This allows any tasks which need to be performed sitewide to be done in one
- * place.
+ * Since it extends from MX_Controller, any controller in the system can be used
+ * in the HMVC style, using modules::run(). See the docs at:
+ * https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home
+ * for more details on the HMVC code used in Bonfire.
  *
  * @package    Bonfire\Application\Core\Base_Controller
  * @author     Bonfire Dev Team
  * @link       http://cibonfire.com/docs/bonfire/bonfire_controllers
  */
-class Base_Controller extends CI_Controller
+class Base_Controller extends MX_Controller
 {
 	/**
 	 * @var string Stores the previously viewed page's complete URL.
@@ -58,9 +61,9 @@ class Base_Controller extends CI_Controller
      * should always be loaded, but not to force the entire application to
      * autoload it through the config/autoload file.
      */
-    protected $autoload = array(
-        'libraries' => array('settings/settings_lib'),
-        'helpers'   => array(),
+    public $autoload = array(
+        'libraries' => array('settings/settings_lib', 'events'),
+        'helpers'   => array('application'),
         'models'    => array(),
     );
 
@@ -75,14 +78,6 @@ class Base_Controller extends CI_Controller
 	{
 		parent::__construct();
 
-        // Most likely, the requested page is saved in the $_SESSION here, so,
-		// grab it and make it available to CI's session.
-        if (isset($_SESSION['requested_page']) && class_exists('CI_Session')) {
-            $this->session->set_userdata(array('requested_page' => $_SESSION['requested_page']));
-        }
-
-		$this->load->library('events');
-
 		// Handle any autoloading here...
 		$this->autoload_classes();
 
@@ -95,6 +90,8 @@ class Base_Controller extends CI_Controller
 		// Load the lang file here, after the user's language is known
 		$this->lang->load('application');
 
+        $cacheDriver = array();
+
 		// Performance optimizations for production environments.
 		if (ENVIRONMENT == 'production') {
 			// Saving queries can vastly increase the memory usage
@@ -105,31 +102,32 @@ class Base_Controller extends CI_Controller
 		    // errors to reduce info available to hackers.
 		    $this->db->db_debug = false;
 
-		    $this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
-		}
+            $cacheDriver['adapter'] = 'apc';
+            $cacheDriver['backup']  = 'file';
+        } elseif (ENVIRONMENT == 'testing') {
 		// Testing niceties...
-		elseif (ENVIRONMENT == 'testing') {
 			// Saving Queries can vastly increase the memory usage
 			$this->db->save_queries = false;
 
-			$this->load->driver('cache', array('adapter' => 'apc', 'backup' => 'file'));
-		}
+            $cacheDriver['adapter'] = 'apc';
+            $cacheDriver['backup']  = 'file';
+        } else {
 		// Development niceties...
-		else {
 			// Profiler bar?
-			if ($this->settings_lib->item('site.show_front_profiler')) {
-				if ( ! $this->input->is_cli_request()
+            if ($this->settings_lib->item('site.show_front_profiler')
+                && ! $this->input->is_cli_request()
 					&& ! $this->input->is_ajax_request()
 				) {
 					$this->load->library('Console');
 					$this->output->enable_profiler(true);
 				}
+
+            $cacheDriver['adapter'] = 'dummy';
 			}
 
-			$this->load->driver('cache', array('adapter' => 'dummy'));
-		}
+        $this->load->driver('cache', $cacheDriver);
 
-		// Auto-migrate our core and/or app to latest version.
+        // Auto-migrate core and/or app to latest version.
 		if ($this->config->item('migrate.auto_core')
             || $this->config->item('migrate.auto_app')
         ) {
@@ -137,13 +135,13 @@ class Base_Controller extends CI_Controller
 			$this->migrations->autoLatest();
 		}
 
-		// Make sure no assets in up as a requested page or a 404 page.
-		if ( ! preg_match('/\.(gif|jpg|jpeg|png|css|js|ico|shtml)$/i', $this->uri->uri_string())) {
+        // Make sure no assets end up as a requested page or a 404 page.
+        if (! preg_match('/\.(gif|jpg|jpeg|png|css|js|ico|shtml)$/i', $this->uri->uri_string())) {
 			$this->previous_page  = $this->session->userdata('previous_page');
 			$this->requested_page = $this->session->userdata('requested_page');
 		}
 
-		// Pre-Controller Event
+        // After-Controller Constructor Event
 		Events::trigger('after_controller_constructor', get_class($this));
 	}
 
@@ -156,7 +154,7 @@ class Base_Controller extends CI_Controller
 	 */
 	protected function set_current_user()
 	{
-		if (class_exists('Auth') && isset($this->auth)) {
+        if (class_exists('Auth')) {
 			// Load the currently logged-in user for convenience
 			if ($this->auth->is_logged_in()) {
 				$this->current_user = clone $this->auth->user();
@@ -176,8 +174,9 @@ class Base_Controller extends CI_Controller
 			}
 
 			// Make the current user available in the views
-            // When calling from Authenticated controller, this class
-		    $this->load->library('Template');
+            if (! class_exists('template')) {
+                $this->load->library('template');
+            }
 			Template::set('current_user', $this->current_user);
 		}
 	}
@@ -213,7 +212,7 @@ class Base_Controller extends CI_Controller
     {
         // Using ! empty() because count() returns 1 for certain error conditions
 
-        if ( ! empty($this->autoload['libraries'])
+        if (! empty($this->autoload['libraries'])
             && is_array($this->autoload['libraries'])
         ) {
             foreach ($this->autoload['libraries'] as $library) {
@@ -221,7 +220,7 @@ class Base_Controller extends CI_Controller
             }
         }
 
-        if ( ! empty($this->autoload['helpers'])
+        if (! empty($this->autoload['helpers'])
             && is_array($this->autoload['helpers'])
         ) {
             foreach ($this->autoload['helpers'] as $helper) {
@@ -229,7 +228,7 @@ class Base_Controller extends CI_Controller
             }
         }
 
-        if ( ! empty($this->autoload['models'])
+        if (! empty($this->autoload['models'])
             && is_array($this->autoload['models'])
         ) {
             foreach ($this->autoload['models'] as $model) {

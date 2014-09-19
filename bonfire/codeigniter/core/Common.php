@@ -133,6 +133,7 @@ if ( ! function_exists('load_class'))
 		$name = FALSE;
 
 		// Look for the class first in the local application/libraries folder
+		// then in Bonfire's bonfire/libraries folder
 		// then in the native system/libraries folder
 		foreach (array(APPPATH, BFPATH, BASEPATH) as $path)
 		{
@@ -161,7 +162,6 @@ if ( ! function_exists('load_class'))
                 require(BFPATH.$directory.'/BF_'.$class.'.php');
             }
         }
-
 
         // Is the request a class extension?  If so we load it too
 		if (file_exists(APPPATH.$directory.'/'.config_item('subclass_prefix').$class.'.php'))

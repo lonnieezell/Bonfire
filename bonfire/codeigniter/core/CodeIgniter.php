@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -183,9 +183,6 @@
  *  Instantiate the output class
  * ------------------------------------------------------
  */
-    // Load the base controller class
-    require BASEPATH.'core/Controller.php';
-
 	$OUT =& load_class('Output', 'core');
 
 /*
@@ -228,6 +225,9 @@
  * ------------------------------------------------------
  *
  */
+	// Load the base controller class
+	require BASEPATH.'core/Controller.php';
+
 	function &get_instance()
 	{
 		return CI_Controller::get_instance();
@@ -242,28 +242,12 @@
 	// Load the local application controller
 	// Note: The Router class automatically validates the controller path using the router->_validate_request().
 	// If this include fails it means that the default controller in the Routes.php file is not resolving to something valid.
-
-	$found = false;
-
-	// Check the application controllers
-	if (file_exists(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
-	{
-		$found = APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php';
-	}
-
-	if ( ! $found && file_exists(BFPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
-	{
-		$found = BFPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php';
-	}
-
-	// Check Bonfire's controllers.
-
-	if ( ! $found)
+	if ( ! file_exists(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
 	{
 		show_error('Unable to load your default controller. Please make sure the controller specified in your Routes.php file is valid.');
 	}
 
-	include( $found );
+	include(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php');
 
 	// Set a mark point for benchmarking
 	$BM->mark('loading_time:_base_classes_end');

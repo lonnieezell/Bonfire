@@ -1,6 +1,31 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
+ * @license   http://guides.cibonfire.com/license.html
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
-class BF_Lang extends CI_Lang
+// ------------------------------------------------------------------------
+
+/**
+ * Bonfire Language Class
+ *
+ * This class replaces both CI_Lang and MX_Lang.
+ *
+ * It will fall back to english for un-translated lines.
+ *
+ * It has to extend MX_Lang, because otherwise MX will replace it
+ * (see MX/Ci.php and MX/Base.php).
+ */
+class BF_Lang extends MX_Lang
 {
     /**
      * @var String The fallback language used for un-translated lines.
@@ -9,146 +34,193 @@ class BF_Lang extends CI_Lang
      */
     protected $fallback = 'english';
 
+	public function __construct()
+	{
+		log_message('debug', "Bonfire MY_Lang: Language Class Initialized");
+	}
+
+	// --------------------------------------------------------------------
+
     /**
      * Load a language file
      *
-     * Bonfire modifies this to attempt to find language files within modules, also.
+	 * This version always loads english first (as a fallback).
+	 * It will tolerate either file being missing (but not both).
+	 *
+	 * Parameters not documented here are listed by CI and MX Lang.
+	 * Compatibility with these parameters is provided, though
+	 * not all of the bugs have been implemented.  For full
+	 * details of bug compatibility, please read our code comments.
      *
-     * @access  public
-     * @param   mixed   $langfile   the name of the language file to be loaded. Can be an array
-     * @param   string  $idiom      the language (english, etc.)
-     * @param   bool    $return     return loaded array of translations?
-     * @param   bool    $add_suffix add suffix to $langfile
-     * @param   string  $alt_path   alternative path to look for language file
+	 * The langfile parameter should not be considered optional (!)
      *
-     ************
-     * The $module parameter has been deprecated (since 0.7.1)
-     * @param   string  $module     the name of the module in which the language file may be located
-     *
-     * @return  mixed
+	 * @param	string	the name of the language file to be loaded
+	 * @param	string	the language (english, etc.)
+	 * @return	void
      */
-    public function load($langfile = '', $idiom = '', $return = false, $add_suffix = true, $alt_path = '', $module='')
+	public function load($langfile = '', $idiom = '', $return = FALSE, $add_suffix = TRUE, $alt_path = '', $module = '')
     {
-        $orig_langfile = $langfile;
+		if (is_array($langfile)) {
+			foreach($langfile as $_lang) $this->load($_lang);
+			return $return ? $this->language : TRUE;
+        }
 
-		if (is_array($langfile))
+		// This check ignores $idiom, matching CI behaviour
+		// (though we don't do the buggy add_suffix dance at this point).
+		if (in_array($langfile . '_lang.php', $this->is_loaded, TRUE))
         {
-			foreach($langfile as $_lang)
+			// Also we return a correct value here.
+			// It's too hard to consistently match the CI bug where it returns void
+			// (see the second is_loaded check in __load(), following the add_suffix dance).
+			return $return ? $this->language : TRUE;
+		}
+
+		if ($idiom == '')
             {
-                $this->load($_lang);
+			$config = get_config();
+			$idiom = $config['language'];
             }
-
-			return $return ? $this->language : true;
+		if ($module == '')
+		{
+			$module = CI::$APP->router->fetch_module();
         }
 
-        // Clean up the language file name
-        $langfile = str_replace('.php', '', $langfile);
+		$loaded = $this->__load($langfile, $this->fallback, $add_suffix, $alt_path, $module);
 
-        if ($add_suffix == true)
+		if ($idiom != $this->fallback)
+		{
+			$loaded_native = $this->__load($langfile, $idiom, $add_suffix, $alt_path, $module);
+			if ($loaded_native)
+			{
+				$loaded = array_merge($loaded, $loaded_native);
+			}
+			else
         {
-            $langfile = str_replace('_lang', '', $langfile).'_lang';
+				$missing_native = TRUE;
+				log_message('debug', "Unable to load the requested language file '$langfile' for current language '$idiom'.");
+			}
         }
 
-        $langfile .= '.php';
+		if (empty($loaded))
+		{
+            $fallbackLang = ucwords($this->fallback);
+			show_error("Unable to load the requested language file '$langfile' for current language '$idiom' AND for fallback to '$fallbackLang'.");
+		}
 
-        // If the file has already been loaded, get out of here.
-        if (in_array($langfile, $this->is_loaded, true)) {
-            return;
+		if ($return)
+		{
+			return $loaded;
         }
 
-        // Is there a possible module?
-        $matches = explode('/', $langfile);
-        $module = '';
+		$this->is_loaded[] = $langfile.'_lang.php';
+		$this->language = array_merge($this->language, $loaded);
 
-        if (strpos($matches[0], '.php') === false)
+		// Back-compat with CI return value, just in case apps check it.
+		if (isset($missing_native) && $missing_native == TRUE)
         {
-            $module = $matches[0];
-            $langfile = str_replace($module . '/', '', $langfile);
+			return FALSE;
         }
 
-        unset($matches);
+		return TRUE;
+	}
 
-        $config =& get_config();
-        $ci =& get_instance();
+	//--------------------------------------------------------------------
 
-        // Check the session to see if we have a language var stored there.
-        // This is done by the auth library and the Base_Controller.
-        if (empty($idiom) && class_exists('CI_Session') && isset($ci->session))
+	// @return array - empty means failure
+	private function __load($langfile, $idiom, $add_suffix, $alt_path, $module)
         {
-            if ( ! $idiom = $ci->session->userdata('language'))
+		$lang = array();
+
+		list($path, $file) = Modules::find($langfile.'_lang', $module, 'language/'.$idiom.'/');
+		if ($path)
             {
-                $idiom = '';
-            }
+			// Module file
+			$lang = Modules::load_file($file, $path, 'lang');
+
+			// Save full path for debug message below
+			$file = $path . $file;
         }
 
-        // Choose a default language.
-        // Config file version gets the override.
-        // Otherwise default to English (set as fallback above)
-        if ($idiom == '')
+		if (empty($lang))
+		{
+			// This code copied from CI Lang.  Obviously this means
+			// passing $add_suffix=FALSE doesn't work for module files
+			// (above); the resulting behaviour matches MX_Lang.
+			$langfile = str_replace('.php', '', $langfile);
+			if ($add_suffix == TRUE)
         {
-            $default_lang   = isset($config['language']) ? $config['language'] : $this->fallback;
-            $idiom          = ($default_lang == '') ? $this->fallback : $default_lang;
+				// Extra period matches code from CI Lang
+				// so in reality this won't work if you pass the '_lang' in.
+				$langfile = str_replace('_lang.', '', $langfile).'_lang';
         }
-
-        $lang = array();
-        if ($idiom != $this->fallback)
+			$langfile .= '.php';
+			if (in_array($langfile, $this->is_loaded, TRUE))
         {
-            $lang = $this->load($orig_langfile, $this->fallback, true, $add_suffix, $alt_path, $module);
+				// Inefficient, but this should only happen in the add_suffix=FALSE bugpath.
+				// Note CI would incorrectly return void to the caller, but we need to
+				// let load() know we suceeded otherwise it'll abort the script.
+				return $this->language;
         }
 
         // Determine where the language file is and load it
-        $langfilePath = "language/{$idiom}/{$langfile}";
-
-        if ($alt_path != '' && file_exists($alt_path . $langfilePath))
+			if ($alt_path != '' && file_exists($alt_path.'language/'.$idiom.'/'.$langfile))
         {
-            include($alt_path . $langfilePath);
+				$file = $alt_path.'language/'.$idiom.'/'.$langfile;
+				include($file);
         }
         else
         {
-            $found = false;
-            $ci =& get_instance();
-
-            if ($module != '') {
-                $ci->load->add_module($module);
-            }
-
-            foreach ($ci->load->get_package_paths(true) as $package_path)
+				foreach (get_instance()->load->get_package_paths(TRUE) as $package_path)
+				{
+					$file = $package_path.'language/'.$idiom.'/'.$langfile;
+					if (file_exists($file))
             {
-                if (file_exists($package_path . $langfilePath))
+						include $file;
+						if (!isset($lang))
                 {
-                    include($package_path . $langfilePath);
-                    $found = true;
+							log_message('error', "Language file contains no data? $file");
+						}
                     break;
                 }
             }
+			}
+		}
 
-            // Check whether $lang is empty, as the fallback may have been loaded
-            if ($found !== true && empty($lang))
+		if (!empty($lang))
             {
-                show_error("Unable to load the requested language file: {$langfilePath}");
+			log_message('debug', 'Bonfire MY_Lang: Language file loaded: '.$file);
             }
+
+		return $lang;
         }
 
+	// --------------------------------------------------------------------
 
-        if (empty($lang))
+	/**
+	 * Fetch a line of text from the language array
+	 *
+	 * @param	string	$line	The language line.  Should not be considered optional (!)
+	 * @return	string
+	 */
+	public function line($line='')
+	{
+		if (! isset($line))
         {
-            log_message('error', "Language file contains no data: {$langfilePath}");
-            return;
+			log_message('error', 'lang() called with empty argument');
+
+			return 'FIXME lang() or lang(\'\')';
         }
 
-        if ($return == true)
+		if (! isset($this->language[$line]))
         {
-            return $lang;
+			// Line is missing from both English and native language files
+			log_message('error', 'Could not find the language line "'.$line.'"');
+
+			return 'FIXME ("'.$line.'")';
         }
 
-        $this->is_loaded[] = $langfile;
-        $this->language = array_merge($this->language, $lang);
-        unset($lang);
-
-        log_message('debug', "Language file loaded: {$langfilePath} ({$idiom})");
-        return true;
+		return $this->language[$line];
     }
+} // END Language Class
 
-    //--------------------------------------------------------------------
-
-}
+/* End of file MY_Lang.php */

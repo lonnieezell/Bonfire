@@ -300,18 +300,18 @@ class BF_Model extends CI_Model
 
 		// If there are specific DB connection settings used in the model, load
 		// the database using those settings.
-		if ( ! empty($this->db_con)) {
+        if (! empty($this->db_con)) {
 			$this->db = $this->load->database($this->db_con, true);
 		}
 
 		// When loading the model, make sure the db class is loaded
-		if ( ! isset($this->db)) {
+        if (! isset($this->db)) {
 			$this->load->database();
 		}
 
         // If the $field_info property is set, convert it from an array of
         // arrays to an array of objects
-        if ( ! empty($this->field_info)) {
+        if (! empty($this->field_info)) {
             foreach ($this->field_info as $key => &$field) {
                 $this->field_info[$key] = (object) $field;
             }
@@ -340,13 +340,13 @@ class BF_Model extends CI_Model
 	 *
 	 * @return mixed An object/array representing the db row, or FALSE.
 	 */
-	public function find($id='')
+    public function find($id = '')
 	{
 		$this->trigger('before_find');
 
 		$query = $this->db->get_where($this->table_name, array("{$this->table_name}.{$this->key}" => $id));
 
-		if ( ! $query->num_rows()) {
+        if (! $query->num_rows()) {
 			return false;
 		}
 
@@ -382,7 +382,7 @@ class BF_Model extends CI_Model
 
 		$query = $this->db->get($this->table_name);
 
-		if ( ! $query->num_rows()) {
+        if (! $query->num_rows()) {
 			return false;
 		}
 
@@ -417,21 +417,19 @@ class BF_Model extends CI_Model
 	 * @return bool|mixed An array of objects representing the results, or false
 	 * on failure or empty set.
 	 */
-	public function find_all_by($field=null, $value=null, $type='and')
+    public function find_all_by($field = null, $value = null, $type = 'and')
 	{
 		if (empty($field)) {
 			return false;
 		}
 
-		// Setup the field/value check
-		if ( ! is_array($field)) {
-			$field = array($field => $value);
-		}
+        // Setup the field/value check.
+        $where = is_array($field) ? $field : array($field => $value);
 
 		if ($type == 'or') {
-			$this->db->or_where($field);
+            $this->db->or_where($where);
 		} else {
-			$this->db->where($field);
+            $this->db->where($where);
 		}
 
 		return $this->find_all();
@@ -451,7 +449,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool|mixed The first result returned as an array/object, or false
 	 */
-	public function find_by($field='', $value='', $type='and')
+    public function find_by($field = '', $value = '', $type = 'and')
 	{
 		if (empty($field) || ( ! is_array($field) && empty($value))) {
 			$this->error = lang('bf_model_find_error');
@@ -461,18 +459,16 @@ class BF_Model extends CI_Model
 
 		$this->trigger('before_find');
 
-		if ( ! is_array($field)) {
-			$field = array($field => $value);
-		}
+        $where = is_array($field) ? $field : array($field => $value);
 
 		if ($type == 'or') {
-			$this->db->or_where($field);
+            $this->db->or_where($where);
 		} else {
-			$this->db->where($field);
+            $this->db->where($where);
 		}
 
 		$query = $this->db->get($this->table_name);
-		if ( ! $query->num_rows()) {
+        if (! $query->num_rows()) {
 			return false;
 		}
 
@@ -498,7 +494,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool|mixed The $id of the row inserted, or false on failure
 	 */
-	public function insert($data=null)
+    public function insert($data = null)
 	{
 		if ($this->skip_validation === false) {
 		    $data = $this->validate($data, 'insert');
@@ -547,7 +543,7 @@ class BF_Model extends CI_Model
 	 *  $record = array_merge($set, $record)
 	 * ?
 	 */
-	public function insert_batch($data=null)
+    public function insert_batch($data = null)
 	{
 		$set = array();
 
@@ -560,7 +556,7 @@ class BF_Model extends CI_Model
 			$set[$this->created_by_field] = $this->auth->user_id();
 		}
 
-		if ( ! empty($set)) {
+        if (! empty($set)) {
 			foreach ($data as $key => &$record) {
 				$record = $this->trigger('before_insert', $record);
 
@@ -590,7 +586,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool True on successful update, else false
 	 */
-	public function update($where=null, $data=null)
+    public function update($where = null, $data = null)
 	{
 		if ($this->skip_validation === false) {
 		    $data = $this->validate($data);
@@ -599,7 +595,7 @@ class BF_Model extends CI_Model
             }
 		}
 
-		if ( ! is_array($where)) {
+        if (! is_array($where)) {
 			$where = array($this->key => $where);
 		}
 
@@ -632,7 +628,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool True on successful update, else false
 	 */
-	public function update_where($field=null, $value=null, $data=null)
+    public function update_where($field = null, $value = null, $data = null)
 	{
 		$where = is_array($field) ? $field : array($field => $value);
 		return $this->update($where, $data);
@@ -648,7 +644,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool True on successful update, else false
 	 */
-	public function update_batch($data=null, $index=null)
+    public function update_batch($data = null, $index = null)
 	{
 		if (is_null($index) || is_null($data)) {
 			return false;
@@ -685,7 +681,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool true on successful delete, else false.
 	 */
-	public function delete($id=null)
+    public function delete($id = null)
 	{
 		$this->trigger('before_delete', $id);
 
@@ -733,7 +729,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool true on successful delete, else false
 	 */
-	public function delete_where($where=null)
+    public function delete_where($where = null)
 	{
 		$where = $this->trigger('before_delete', $where);
 
@@ -777,7 +773,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool true if the value does not exist, else false
 	 */
-	public function is_unique($field='', $value='')
+    public function is_unique($field = '', $value = '')
 	{
 		if (empty($field) || empty($value)) {
 			$this->error = lang('bf_model_unique_error');
@@ -822,7 +818,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool|int
 	 */
-	public function count_by($field='', $value=null)
+    public function count_by($field = '', $value = null)
 	{
 		if (empty($field)) {
 			$this->error = lang('bf_model_count_error');
@@ -845,7 +841,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool|mixed The value of the field.
 	 */
-	public function get_field($id=null, $field='')
+    public function get_field($id = null, $field = '')
 	{
 		if (empty($id) || empty($field)) {
 			$this->error = lang('bf_model_fetch_error');
@@ -906,7 +902,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return BF_Model An instance of this class.
 	 */
-	public function where($field=null, $value=null)
+    public function where($field = null, $value = null)
 	{
         if (empty($field)) {
             return $this;
@@ -940,7 +936,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return BF_Model An instance of this class.
 	 */
-	public function order_by($field=null, $order='asc')
+    public function order_by($field = null, $order = 'asc')
 	{
 		if (empty($field)) {
             return $this;
@@ -972,7 +968,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return BF_Model An instance of this class to allow method chaining
 	 */
-	public function soft_delete($val=true)
+    public function soft_delete($val = true)
 	{
 		$this->soft_deletes = (bool)$val;
 		return $this;
@@ -1027,7 +1023,7 @@ class BF_Model extends CI_Model
      *
 	 * @return BF_Model An instance of this class to allow method chaining
      */
-	public function return_insert_id($return=true)
+    public function return_insert_id($return = true)
 	{
 	    $this->return_insert_id = (bool)$return;
 	    return $this;
@@ -1042,7 +1038,7 @@ class BF_Model extends CI_Model
      *
 	 * @return BF_Model An instance of this class to allow method chaining
      */
-	public function skip_validation($skip=true)
+    public function skip_validation($skip = true)
 	{
 	    $this->skip_validation = (bool)$skip;
 	    return $this;
@@ -1065,7 +1061,7 @@ class BF_Model extends CI_Model
 	 */
 	public function created_on($row)
 	{
-		if ( ! array_key_exists($this->created_field, $row)) {
+        if (! array_key_exists($this->created_field, $row)) {
 			$row[$this->created_field] = $this->set_date();
 		}
 
@@ -1087,7 +1083,7 @@ class BF_Model extends CI_Model
 	 */
 	public function modified_on($row)
 	{
-		if ( ! array_key_exists($this->modified_field, $row)) {
+        if (! array_key_exists($this->modified_field, $row)) {
 			$row[$this->modified_field] = $this->set_date();
 		}
 
@@ -1106,9 +1102,9 @@ class BF_Model extends CI_Model
 	 *
 	 * @return mixed
 	 */
-	public function trigger($event, $data=false)
+    public function trigger($event, $data = false)
 	{
-		if ( ! isset($this->$event) || ! is_array($this->$event)) {
+        if (! isset($this->$event) || ! is_array($this->$event)) {
 			return $data;
 		}
 
@@ -1137,7 +1133,7 @@ class BF_Model extends CI_Model
      *
      * @return array    The validation rules for the model or an empty array
      */
-    public function get_validation_rules($type='update')
+    public function get_validation_rules($type = 'update')
     {
         $temp_validation_rules = $this->validation_rules;
 
@@ -1220,7 +1216,7 @@ class BF_Model extends CI_Model
 	 * @param  string $type     Either 'update' or 'insert'.
 	 * @return array/bool       The original data or false
 	 */
-	public function validate($data, $type='update')
+    public function validate($data, $type = 'update')
 	{
 	    if ($this->skip_validation) {
 	        return $data;
@@ -1299,7 +1295,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return int|null|string The current/user time converted to the model's format.
 	 */
-	protected function set_date($user_date=null)
+    protected function set_date($user_date = null)
 	{
 		$curr_date = empty($user_date) ? time() : $user_date;
         $dateFormat = '';
@@ -1331,7 +1327,7 @@ class BF_Model extends CI_Model
      *
      * @return string The name of the method
      */
-    protected function _return_type($multi=false)
+    protected function _return_type($multi = false)
     {
         $method = $multi ? 'result' : 'row';
 
@@ -1402,7 +1398,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return void
 	 */
-	public function set_table($table='')
+    public function set_table($table = '')
 	{
 		$this->table_name = $table;
 	}
@@ -1560,7 +1556,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool
 	 */
-	public function set_date_format($format='int')
+    public function set_date_format($format = 'int')
 	{
 		if ($format != 'int' && $format != 'datetime' && $format != 'date') {
 			return false;
@@ -1579,12 +1575,12 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool
 	 */
-	public function set_modified($modified=true)
+    public function set_modified($modified = true)
 	{
-		// Micro-optimization note: comparison to TRUE and FALSE is faster
+        // Micro-optimization note: comparison to true and FALSE is faster
 		// than is_bool(), because it's a function call
-		// === FALSE || === TRUE is faster than !== TRUE && !== FALSE
-		// because === TRUE will only be compared for values other than FALSE
+        // === FALSE || === true is faster than !== true && !== FALSE
+        // because === true will only be compared for values other than FALSE
 		if ($modified === false || $modified === true) {
 			$this->set_modified = $modified;
 
@@ -1605,7 +1601,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return bool
 	 */
-	public function set_soft_deletes($soft=true)
+    public function set_soft_deletes($soft = true)
 	{
 		if ($modified === false || $modified === true) {
 			$this->soft_deletes = $soft;
@@ -1628,7 +1624,7 @@ class BF_Model extends CI_Model
 	 *
 	 * @return mixed
 	 */
-	protected function logit($message='', $level='debug')
+    protected function logit($message = '', $level = 'debug')
 	{
 		if (empty($message)) {
 			return false;
@@ -1695,30 +1691,30 @@ class BF_Model extends CI_Model
     //                            ->get();
     //
 
-    public function select ($select = '*', $escape = NULL) { $this->db->select($select, $escape); return $this; }
+    public function select ($select = '*', $escape = null) { $this->db->select($select, $escape); return $this; }
     public function select_max ($select = '', $alias = '') { $this->db->select_max($select, $alias); return $this; }
     public function select_min ($select = '', $alias = '') { $this->db->select_min($select, $alias); return $this; }
     public function select_avg ($select = '', $alias = '') { $this->db->select_avg($select, $alias); return $this; }
     public function select_sum ($select = '', $alias = '') { $this->db->select_sum($select, $alias); return $this; }
-    public function distinct ($val=TRUE) { $this->db->distinct($val); return $this; }
+    public function distinct ($val = true) { $this->db->distinct($val); return $this; }
     public function from ($from) { $this->db->from($from); return $this; }
     public function join($table, $cond, $type = '') { $this->db->join($table, $cond, $type); return $this; }
-    //public function where($key, $value = NULL, $escape = TRUE) { $this->db->where($key, $value, $escape); return $this; }
-    public function or_where($key, $value = NULL, $escape = TRUE) { $this->db->or_where($key, $value, $escape); return $this; }
-    public function where_in($key = NULL, $values = NULL) { $this->db->where_in($key, $values); return $this; }
-    public function or_where_in($key = NULL, $values = NULL) { $this->db->or_where_in($key, $values); return $this; }
-    public function where_not_in($key = NULL, $values = NULL) { $this->db->where_not_in($key, $values); return $this; }
-    public function or_where_not_in($key = NULL, $values = NULL) { $this->db->or_where_not_in($key, $values); return $this; }
+    //public function where($key, $value = null, $escape = true) { $this->db->where($key, $value, $escape); return $this; }
+    public function or_where($key, $value = null, $escape = true) { $this->db->or_where($key, $value, $escape); return $this; }
+    public function where_in($key = null, $values = null) { $this->db->where_in($key, $values); return $this; }
+    public function or_where_in($key = null, $values = null) { $this->db->or_where_in($key, $values); return $this; }
+    public function where_not_in($key = null, $values = null) { $this->db->where_not_in($key, $values); return $this; }
+    public function or_where_not_in($key = null, $values = null) { $this->db->or_where_not_in($key, $values); return $this; }
     public function like($field, $match = '', $side = 'both') { $this->db->like($field, $match, $side); return $this; }
     public function not_like($field, $match = '', $side = 'both') { $this->db->not_like($field, $match, $side); return $this; }
     public function or_like($field, $match = '', $side = 'both') { $this->db->or_like($field, $match, $side); return $this; }
     public function or_not_like($field, $match = '', $side = 'both') { $this->db->or_not_like($field, $match, $side); return $this; }
     public function group_by($by) { $this->db->group_by($by); return $this; }
-    public function having($key, $value = '', $escape = TRUE) { $this->db->having($key, $value, $escape); return $this; }
-    public function or_having($key, $value = '', $escape = TRUE) { $this->db->or_having($key, $value, $escape); return $this; }
+    public function having($key, $value = '', $escape = true) { $this->db->having($key, $value, $escape); return $this; }
+    public function or_having($key, $value = '', $escape = true) { $this->db->or_having($key, $value, $escape); return $this; }
     public function limit($value, $offset = '') { $this->db->limit($value, $offset); return $this; }
     public function offset($offset) { $this->db->offset($offset); return $this; }
-    public function set($key, $value = '', $escape = TRUE) { $this->db->set($key, $value, $escape); return $this; }
+    public function set($key, $value = '', $escape = true) { $this->db->set($key, $value, $escape); return $this; }
 }
 /* End of file BF_Model.php */
 /* Location: ./bonfire/core/BF_Model.php */

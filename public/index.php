@@ -18,15 +18,16 @@
  * NOTE: If you change these, also change the error_reporting() code below
  *
  */
-define('ENVIRONMENT', 'development');
+define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
 
 /*
  *---------------------------------------------------------------
  * ERROR REPORTING
  *---------------------------------------------------------------
  *
- * Different environments will require different levels of error reporting.
- * By default development will show errors but testing and live will hide them.
+ * Different environments will require different levels of error reporting. By
+ * default, development will show errors but testing and production will hide
+ * them.
  */
 switch (ENVIRONMENT) {
     case 'development':
@@ -43,7 +44,9 @@ switch (ENVIRONMENT) {
         break;
 
     default:
-        exit('The application environment is not set correctly.');
+        header('HTTP/1.1 503 Service Unavailable.', true, 503);
+        echo 'The application environment is not set correctly.';
+        exit(1); // EXIT_ERROR
 }
 
 /*
@@ -53,7 +56,7 @@ switch (ENVIRONMENT) {
  *
  * Necessary setting for PHP 5.3+ compatibility.
  *
- * Note: This now defaults to UTC instead of GMT if te date.timezone value is
+ * Note: This now defaults to UTC instead of GMT if the date.timezone value is
  * not set (PHP 5.4+), but on PHP 5.3 it may use the TZ environment variable or
  * attempt to guess the timezone from the host operating system. It is
  * recommended to set date.timezone to avoid this, or you can replace
@@ -65,7 +68,7 @@ switch (ENVIRONMENT) {
  */
 if (ini_get('date.timezone') == ''
     && function_exists('date_default_timezone_set')
-   ) {
+) {
     if (function_exists('date_default_timezone_get')) {
         date_default_timezone_set(@date_default_timezone_get());
     } else {
@@ -82,6 +85,8 @@ if (ini_get('date.timezone') == ''
  * will be set accordingly.
  */
 $path = "..";
+
+
 $bonfire_path = "${path}/bonfire";
 
 /*
@@ -201,6 +206,8 @@ $assign_to_config['csrf_ignored_controllers'] = array();
 // --------------------------------------------------------------------
 
 
+
+
 /*
  * ---------------------------------------------------------------
  *  Resolve the system path for increased reliability
@@ -220,8 +227,10 @@ if (realpath($system_path) !== false) {
 $system_path = rtrim($system_path, '/') . '/';
 
 // Is the system path correct?
-if ( ! is_dir($system_path)) {
-    exit("Your system folder path does not appear to be set correctly. Please open the following file and correct this: " . pathinfo(__FILE__, PATHINFO_BASENAME));
+if (! is_dir($system_path)) {
+    header('HTTP/1.1 503 Service Unavailable.', true, 503);
+    echo 'Your system folder path does not appear to be set correctly. Please open the following file and correct this: ' . pathinfo(__FILE__, PATHINFO_BASENAME);
+    exit(3); // EXIT_CONFIG
 }
 
 /*
@@ -252,8 +261,10 @@ define('BFPATH', $bonfire_path . '/');
 if (is_dir($application_folder)) {
     define('APPPATH', $application_folder . '/');
 } else {
-    if ( ! is_dir(BASEPATH . $application_folder . '/')) {
-        exit("Your application folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
+    if (! is_dir(BASEPATH . $application_folder . '/')) {
+        header('HTTP/1.1 503 Service Unavailable.', true, 503);
+        echo 'Your application folder path does not appear to be set correctly. Please open the following file and correct this: ' . SELF;
+        exit(3); // EXIT_CONFIG
     }
 
     define('APPPATH', BASEPATH . $application_folder . '/');
@@ -263,12 +274,15 @@ if (is_dir($application_folder)) {
 if (is_dir($view_folder)) {
     define('VIEWPATH', $view_folder . '/');
 } else {
-    if ( ! is_dir(APPPATH . 'views/')) {
-        exit("Your view folder path does not appear to be set correctly. Please open the following file and correct this: ".SELF);
+    if (! is_dir(APPPATH . 'views/')) {
+        header('HTTP/1.1 503 Service Unavailable.', true, 503);
+        echo 'Your view folder path does not appear to be set correctly. Please open the following file and correct this: ' . SELF;
+        exit(3); // EXIT_CONFIG
     }
 
     define('VIEWPATH', APPPATH . 'views/');
 }
+
 
 /*
  * --------------------------------------------------------------------
@@ -280,5 +294,4 @@ if (is_dir($view_folder)) {
  */
 require_once(BASEPATH . 'core/CodeIgniter.php');
 
-/* End of file index.php */
-/* Location: ./index.php */
+/* End of file public/index.php */

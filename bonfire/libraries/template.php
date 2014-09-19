@@ -1,19 +1,18 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT    The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
-
-// ------------------------------------------------------------------------
 
 /**
  * Template
@@ -23,13 +22,10 @@
  *
  * It supports parent/child themes, controller-named automatic overrides, and more.
  *
- * @package    Bonfire
- * @subpackage Libraries
- * @category   Libraries
+ * @package Bonfire\Libraries\Template
  * @author     Bonfire Dev Team
  * @version    3.0
- * @link       http://cibonfire.com/docs/guides/views.html
- *
+ * @link    http://cibonfire.com/docs/developer/layouts_and_views
  */
 class Template
 {
@@ -411,38 +407,31 @@ class Template
 	 *
 	 * @return bool
 	 */
-	public static function add_theme_path($path=NULL)
+    public static function add_theme_path($path = null)
 	{
-		if (empty($path) || ! is_string($path))
-		{
-			return FALSE;
+        if (empty($path) || ! is_string($path)) {
+            return false;
 		}
 
 		// Make sure the path has a '/' at the end.
-		if (substr($path, -1) != '/')
-		{
+        if (substr($path, -1) != '/') {
 			$path .= '/';
 		}
 
 		// If the path already exists, we're done here.
-		if (isset(self::$theme_paths[$path]))
-		{
-			return TRUE;
+        if (isset(self::$theme_paths[$path])) {
+            return true;
 		}
 
 		// Make sure the folder actually exists
-		if (is_dir(FCPATH . $path))
-		{
+        if (is_dir(self::$site_path . $path)) {
 			array_push(self::$theme_paths, $path);
-			return FALSE;
-		}
-		else
-		{
-			self::debug_message("Cannot add theme folder: $path does not exist");
-			return FALSE;
+            return false;
 		}
 
-	}//end add_theme_path()
+        self::debug_message("Cannot add theme path: '{$path}' does not exist");
+        return false;
+		}
 
 	//--------------------------------------------------------------------
 
@@ -1002,12 +991,20 @@ EOF;
 			// Grab the output of the view.
 			if (self::$parse_views === TRUE)
 			{
-				$data = array_merge((array)$data, self::$ci->load->get_vars());
-				$output = self::$ci->load->view($view_path . $view_file, $data, true);
+                $data = array_merge((array)$data, self::$ci->load->_ci_cached_vars);
+                $output = self::$ci->load->_ci_load(array(
+                    '_ci_path' => $view_path . $view_file,
+                    '_ci_vars' => $data,
+                    '_ci_return' => TRUE,
+                ));
 			}
 			else
 			{
-				$output = self::$ci->load->view($view_path . $view_file, $data, true);
+                $output = self::$ci->load->_ci_load(array(
+                    '_ci_path' => $view_path . $view_file,
+                    '_ci_vars' => $data,
+                    '_ci_return' => TRUE,
+                ));
 			}
 		}//end if
 
