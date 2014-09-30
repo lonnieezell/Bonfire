@@ -28,7 +28,7 @@
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
  *
  */
-class Home extends CI_Controller
+class Home extends MX_Controller
 {
 	public function __construct()
 	{

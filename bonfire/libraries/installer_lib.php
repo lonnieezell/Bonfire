@@ -271,6 +271,7 @@ class Installer_lib
 
 		// If the database config doesn't exist, the app is not installed
 		if ( ! is_file(APPPATH . 'config/development/database.php')) {
+			$this->db_settings_exist = false;
 			return false;
 		}
 		require(APPPATH . '/config/development/database.php');
@@ -302,7 +303,7 @@ class Installer_lib
 			return false;
 		}
 
-		define('BF_INSTALLED', true);
+		defined('BF_INSTALLED') || define('BF_INSTALLED', true);
 
 		return true;
 	}

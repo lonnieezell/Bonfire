@@ -22,10 +22,6 @@ class Install extends CI_Controller {
         $this->lang->load('install');
         $this->load->library('installer_lib');
 
-        if (!$this->installer_lib->is_installed())
-        {
-            //$this->do_install();
-
             $data = array();
 
             // PHP Version Check
@@ -41,10 +37,8 @@ class Install extends CI_Controller {
             $data['files']              = $this->installer_lib->check_files();
 
             Template::set($data);
-            //Template::set('content', $this->load->view('home/install_status', $data, true));
-        }
-        else
-        {
+
+        if ($this->installer_lib->is_installed()) {
             $this->load->library('users/auth');
             $this->load->library('settings/settings_lib');
         }

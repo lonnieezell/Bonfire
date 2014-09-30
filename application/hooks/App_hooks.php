@@ -63,21 +63,26 @@ class App_hooks
      */
     public function checkAutoloaderConfig()
     {
-        // If the settings lib is not available, try to load it.
-        if (! isset($this->ci->settings_lib)) {
-            $this->ci->load->library('settings/settings_lib');
-        }
+        if (isset($this->ci->load)
+            && isset($this->ci->db)
+            && ! empty($this->ci->db->database)
+        ) {
+            // If the settings lib is not available, try to load it.
+            if (! isset($this->ci->settings_lib)) {
+                $this->ci->load->library('settings/settings_lib');
+            }
 
-        $composerAutoload = $this->ci->settings_lib->item('composer_autoload');
-        if ($composerAutoload !== false) {
-            if ($composerAutoload === true) {
-                if (file_exists(APPPATH . 'vendor/autoload.php')) {
-                require_once(APPPATH . 'vendor/autoload.php');
-                } elseif (file_exists(APPPATH . '../vendor/autoload.php')) {
-                    require_once(APPPATH . '../vendor/autoload.php');
+            $composerAutoload = $this->ci->settings_lib->item('composer_autoload');
+            if ($composerAutoload !== false) {
+                if ($composerAutoload === true) {
+                    if (file_exists(APPPATH . 'vendor/autoload.php')) {
+                        require_once(APPPATH . 'vendor/autoload.php');
+                    } elseif (file_exists(APPPATH . '../vendor/autoload.php')) {
+                        require_once(APPPATH . '../vendor/autoload.php');
+                    }
+                } elseif (file_exists($composerAutoload)) {
+                    require_once($composerAutoload);
                 }
-            } elseif (file_exists($composerAutoload)) {
-                require_once($composerAutoload);
             }
         }
     }
@@ -91,20 +96,25 @@ class App_hooks
      *
      */
     public function checkSiteStatus()
-	{
-        // If the settings lib is not available, try to load it.
-        if (! isset($this->ci->settings_lib)) {
-            $this->ci->load->library('settings/settings_lib');
-        }
-
-        if ($this->ci->settings_lib->item('site.status') == 0) {
-            if (! class_exists('Auth')) {
-                $this->ci->load->library('users/auth');
+    {
+        if (isset($this->ci->load)
+            && isset($this->ci->db)
+            && ! empty($this->ci->db->database)
+        ) {
+            // If the settings lib is not available, try to load it.
+            if (! isset($this->ci->settings_lib)) {
+                $this->ci->load->library('settings/settings_lib');
             }
 
-            if (! $this->ci->auth->has_permission('Site.Signin.Offline')) {
-                include (APPPATH .'errors/offline'. EXT);
-                die();
+            if ($this->ci->settings_lib->item('site.status') == 0) {
+                if (! class_exists('Auth')) {
+                    $this->ci->load->library('users/auth');
+                }
+
+                if (! $this->ci->auth->has_permission('Site.Signin.Offline')) {
+                    include (APPPATH .'errors/offline'. EXT);
+                    die();
+                }
             }
         }
     }
@@ -119,14 +129,14 @@ class App_hooks
 	 * @return void
 	 */
     public function prepRedirect()
-		{
+    {
         if (! class_exists('CI_Session')) {
-			$this->ci->load->library('session');
-		}
+            $this->ci->load->library('session');
+        }
 
         if (! in_array($this->ci->uri->ruri_string(), $this->ignore_pages)) {
-			$this->ci->session->set_userdata('previous_page', current_url());
-		}
+            $this->ci->session->set_userdata('previous_page', current_url());
+        }
     }
 
 	/**
@@ -194,7 +204,7 @@ class App_hooks
 	public function check_site_status()
 	{
         return $this->checkSiteStatus();
-        }
+	}
 
     /**
      * Stores the name of the current uri in the session as 'previous_page'.
@@ -208,9 +218,10 @@ class App_hooks
      * @return void
      */
     public function prep_redirect()
-        {
+    {
         return $this->prepRedirect();
-        }
+	}
+
     /**
      * Store the requested page in the session data so we can use it
      * after the user logs in.
@@ -222,7 +233,7 @@ class App_hooks
      * @return void
      */
     public function save_requested()
-			{
+	{
         return $this->saveRequested();
-			}
+	}
 }
