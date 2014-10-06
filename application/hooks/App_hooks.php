@@ -63,10 +63,7 @@ class App_hooks
      */
     public function checkAutoloaderConfig()
     {
-        if (isset($this->ci->load)
-            && isset($this->ci->db)
-            && ! empty($this->ci->db->database)
-        ) {
+        if (isset($this->ci->load)) {
             // If the settings lib is not available, try to load it.
             if (! isset($this->ci->settings_lib)) {
                 $this->ci->load->library('settings/settings_lib');
@@ -97,10 +94,7 @@ class App_hooks
      */
     public function checkSiteStatus()
     {
-        if (isset($this->ci->load)
-            && isset($this->ci->db)
-            && ! empty($this->ci->db->database)
-        ) {
+        if (isset($this->ci->load)) {
             // If the settings lib is not available, try to load it.
             if (! isset($this->ci->settings_lib)) {
                 $this->ci->load->library('settings/settings_lib');
@@ -112,7 +106,7 @@ class App_hooks
                 }
 
                 if (! $this->ci->auth->has_permission('Site.Signin.Offline')) {
-                    include (APPPATH .'errors/offline'. EXT);
+                    include (APPPATH . 'errors/offline.php');
                     die();
                 }
             }
@@ -189,7 +183,6 @@ class App_hooks
     //--------------------------------------------------------------------------
     // Deprecated Methods (do not use)
     //--------------------------------------------------------------------------
-
 
 	/**
 	 * Check the online/offline status of the site.

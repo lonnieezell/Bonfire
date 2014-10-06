@@ -1,7 +1,7 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
-class Install extends CI_Controller {
-
+class Install extends CI_Controller
+{
     public function __construct()
     {
         parent::__construct();
@@ -13,6 +13,9 @@ class Install extends CI_Controller {
         $this->load->library('events');
         $this->load->helper('application');
         $this->lang->load('application');
+
+        $ci =& get_instance();
+        $ci->hooks->enabled = false;
     }
 
     //--------------------------------------------------------------------
@@ -62,22 +65,19 @@ class Install extends CI_Controller {
         // Make sure we're not installed already,
         // otherwise attackers could take advantage
         // and recreate the admin account.
-        if ($this->installer_lib->is_installed())
-        {
+        if ($this->installer_lib->is_installed()) {
             show_error('This application has already been installed. Cannot install again.');
         }
 
         // Does the database table even exist?
-        if ($this->installer_lib->db_settings_exist === FALSE)
-        {
-            show_error( lang('in_need_db_settings') );
+        if ($this->installer_lib->db_settings_exist === false) {
+            show_error(lang('in_need_db_settings'));
         }
 
         // Run our migrations
         $this->load->library('migrations/migrations');
 
-        if ($this->installer_lib->setup())
-        {
+        if ($this->installer_lib->setup()) {
             define('BF_DID_INSTALL', true);
 
             // Log anonymous statistics
@@ -106,16 +106,15 @@ class Install extends CI_Controller {
             'server'            => $this->input->server('SERVER_SOFTWARE'),
             'dbdriver'          => $db->dbdriver,
             'dbserver'          => @mysql_get_server_info($db->conn_id),
-            'dbclient'          => preg_replace('/[^0-9\.]/','', mysql_get_client_info()),
+            'dbclient'        => preg_replace('/[^0-9\.]/', '', mysql_get_client_info()),
             'curl'              => $this->installer_lib->cURL_enabled(),
             'server_hash'       => md5($this->input->server('SERVER_NAME').$this->input->server('SERVER_ADDR').$this->input->server('SERVER_SIGNATURE'))
         );
 
         $data_string = '';
 
-        foreach($data as $key=>$value)
-        {
-            $data_string .= $key.'='.$value.'&';
+        foreach ($data as $key => $value) {
+            $data_string .= "{$key}={$value}&";
         }
         rtrim($data_string, '&');
 
@@ -131,10 +130,5 @@ class Install extends CI_Controller {
         $result = curl_exec($ch);
 
         curl_close($ch);
-
-        //die(var_dump($result));
     }
-
-    //--------------------------------------------------------------------
-
 }
