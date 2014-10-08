@@ -28,14 +28,10 @@
  * @link       http://cibonfire.com/docs/developer
  */
 
-// Since this is listed as deprecated in /public/index.php, ensure it's defined
-// before using it in read_config(), read_db_config(), and write_config().
-defined('EXT') || define('EXT', '.php');
-
 // Ensure this is defined before using it in write_db_config().
 defined('DIR_READ_MODE') || define('DIR_READ_MODE', 0755);
 
-if ( ! function_exists('config_array_output')) {
+if (! function_exists('config_array_output')) {
 	/**
 	 * Output the array string which is then used in the config file.
 	 *
@@ -48,7 +44,7 @@ if ( ! function_exists('config_array_output')) {
 	 */
 	function config_array_output($array, $numTabs = 1)
 	{
-		if ( ! is_array($array)) {
+        if (! is_array($array)) {
 			return false;
 		}
 
@@ -86,7 +82,7 @@ if ( ! function_exists('config_array_output')) {
 	}
 }
 
-if ( ! function_exists('read_config')) {
+if (! function_exists('read_config')) {
 	/**
 	 * Return an array of configuration settings from a single config file.
 	 *
@@ -100,20 +96,20 @@ if ( ! function_exists('read_config')) {
 	 */
 	function read_config($file, $failGracefully = true, $module = '', $moduleOnly = false)
 	{
-		$file = $file == '' ? 'config' : str_replace(EXT, '', $file);
+        $file = $file == '' ? 'config' : str_replace('.php', '', $file);
 
 		// Look in module first
 		$found = false;
 		if ($module) {
 			$fileDetails = Modules::file_path($module, 'config', "{$file}.php");
-			if ( ! empty($fileDetails)) {
+            if (! empty($fileDetails)) {
 				$file = $fileDetails;
 				$found = true;
 			}
 		}
 
 		// Fall back to application directory
-		if ( ! $found && ! $moduleOnly) {
+        if (! $found && ! $moduleOnly) {
             $checkLocations = array();
 
             if (defined('ENVIRONMENT')) {
@@ -123,7 +119,7 @@ if ( ! function_exists('read_config')) {
             $checkLocations[] = APPPATH . "config/{$file}";
 
             foreach ($checkLocations as $location) {
-                if (file_exists($location . EXT)) {
+                if (file_exists($location . '.php')) {
                     $file = $location;
                     $found = true;
                     break;
@@ -131,29 +127,29 @@ if ( ! function_exists('read_config')) {
             }
 		}
 
-		if ( ! $found) {
+        if (! $found) {
 			if ($failGracefully === true) {
 				return false;
 			}
 
-			show_error("The configuration file {$file}" . EXT . ' does not exist.');
+            show_error("The configuration file {$file}.php does not exist.");
 		}
 
-		include($file . EXT);
+        include($file . '.php');
 
-		if ( ! isset($config) || ! is_array($config)) {
+        if (! isset($config) || ! is_array($config)) {
 			if ($failGracefully === true) {
 				return false;
 			}
 
-			show_error("Your {$file}" . EXT . ' file does not appear to contain a valid configuration array.');
+            show_error("Your {$file}.php file does not appear to contain a valid configuration array.");
 		}
 
 		return $config;
 	}
 }
 
-if ( ! function_exists('read_db_config')) {
+if (! function_exists('read_db_config')) {
 	/**
 	 * Retrieve the config/database.php file settings. Plays nice with
 	 * CodeIgniter 2.0's multiple environment support.
@@ -185,10 +181,10 @@ if ( ! function_exists('read_db_config')) {
 
 		// Grab the required settings
 		foreach ($files as $env => $file) {
-			if (file_exists(APPPATH . "config/{$file}" . EXT)) {
-				include(APPPATH . "config/{$file}" . EXT);
+            if (file_exists(APPPATH . "config/{$file}.php")) {
+                include(APPPATH . "config/{$file}.php");
 			} elseif ($failGracefully === false) {
-				show_error("The configuration file {$file}" . EXT . ' does not exist.');
+                show_error("The configuration file {$file}.php does not exist.");
 			}
 
 			// Acts as a reset for given environment and active_group
@@ -233,7 +229,7 @@ if ( ! function_exists('read_db_config')) {
 	}
 }
 
-if ( ! function_exists('write_config')) {
+if (! function_exists('write_config')) {
 	/**
 	 * Save the passed array settings into a single config file located in the
 	 * /config directory.
@@ -259,21 +255,21 @@ if ( ! function_exists('write_config')) {
 		$found = false;
 		if ($module) {
 			$fileDetails = Modules::find($configFile, $module, '');
-			if ( ! empty($fileDetails) && ! empty($fileDetails[0])) {
+            if (! empty($fileDetails) && ! empty($fileDetails[0])) {
 				$configFile = implode('', $fileDetails);
 				$found = true;
 			}
 		}
 
 		// Fall back to application directory
-		if ( ! $found) {
+        if (! $found) {
 			$configFile = "{$apppath}{$configFile}";
-			$found = is_file($configFile . EXT);
+            $found = is_file($configFile . '.php');
 		}
 
 		// Load the file and loop through the lines
 		if ($found) {
-			$contents = file_get_contents($configFile . EXT);
+            $contents = file_get_contents($configFile . '.php');
 			$empty = false;
 		} else {
 			$contents = '';
@@ -289,7 +285,7 @@ if ( ! function_exists('write_config')) {
 			if (is_array($val)) {
 				// Get the array output
 				$val = config_array_output($val);
-			} elseif ( ! is_numeric($val)) {
+            } elseif (! is_numeric($val)) {
 				$val = "\"$val\"";
 			}
 
@@ -305,9 +301,9 @@ if ( ! function_exists('write_config')) {
 		}
 
 		// Backup the file for safety
-		$source = $configFile . EXT;
+        $source = $configFile . '.php';
 		$dest = ($module == '' ? "{$apppath}archives/{$file}" : $configFile)
-            . EXT . '.bak';
+            . '.php.bak';
 
 		if ($empty === false) {
             copy($source, $dest);
@@ -319,21 +315,16 @@ if ( ! function_exists('write_config')) {
 		}
 
 		// Write the changes out...
-		if ( ! function_exists('write_file')) {
-			$CI = get_instance();
-			$CI->load->helper('file');
+        if (! function_exists('write_file')) {
+            get_instance()->load->helper('file');
 		}
 
-		$result = write_file($configFile . EXT, $contents);
-		if ($result === false) {
-			return false;
-		}
-
-        return true;
+        $result = write_file("{$configFile}.php", $contents);
+        return $result !== false;
 	}
 }
 
-if ( ! function_exists('write_db_config')) {
+if (! function_exists('write_db_config')) {
 	/**
 	 * Save the settings to the config/database.php file.
 	 *
@@ -356,7 +347,7 @@ if ( ! function_exists('write_db_config')) {
 	 */
 	function write_db_config($settings = null, $apppath = APPPATH)
 	{
-		if ( ! is_array($settings)) {
+        if (! is_array($settings)) {
 			logit('[Config_File_Helper] Invalid write_db_config PARAMETER!');
 			return false;
 		}
@@ -420,19 +411,20 @@ if ( ! function_exists('write_db_config')) {
 				$dest = "{$destFolder}database.php.bak";
 
 				// Make sure the directory exists
-				if ( ! is_dir($destFolder)) {
+                if (! is_dir($destFolder)) {
 					mkdir($destFolder, DIR_READ_MODE, true);
 				}
 
 				copy($source, $dest);
 
 				// Make sure the file still has the php opening header in it...
-				if ( ! strpos($contents, '<?php') === false) {
+                if (! strpos($contents, '<?php') === false) {
 					$contents = "<?php\n{$contents}";
 				}
 
-				$CI = get_instance();
-				$CI->load->helper('file');;
+                if (! function_exists('write_file')) {
+                    get_instance()->load->helper('file');
+                }
 
 				// Write the changes out...
 				$result = write_file("{$apppath}config/{$env}database.php", $contents);

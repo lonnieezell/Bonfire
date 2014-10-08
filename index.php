@@ -39,9 +39,8 @@
             </ol>
             <div class="alert alert-error">
                 <h3>Oops!</h3>
-                Your Web Root should be set to the <strong>public</strong> folder,but it's <strong>not</strong>. It's pointing to the <strong>Bonfire Root</strong> folder.<br><br>
-
-                See below how your site should be set up on Apache:
+                <p>Your Web Root should be set to the <strong>public</strong> folder, but it's <strong>not</strong>. It's pointing to the <strong>Bonfire Root</strong> folder.</p>
+                <p>See below for an example of how your site should be set up in Apache:</p>
 <pre>&lt;VirtualHost *:80&gt;
     DocumentRoot "[...]/htdocs/Bonfire_Root/public"
     ServerName Bonfire.Root

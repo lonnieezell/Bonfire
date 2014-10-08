@@ -1,7 +1,5 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
 
-defined('EXT') || define('EXT', '.php');
-
 global $CFG;
 
 /* Get module locations from config settings, or use the default module location
@@ -123,34 +121,34 @@ class Modules
 
         // Autoload Modular Extensions MX core classes.
         if (strstr($class, 'MX_')
-            && is_file($location = APPPATH . 'third_party/MX/' . substr($class, 3) . EXT)
+            && is_file($location = APPPATH . 'third_party/MX/' . substr($class, 3) . '.php')
         ) {
             include_once $location;
             return;
         }
 
         // Autoload core classes.
-        if (is_file($location = APPPATH . "core/{$class}" . EXT)) {
+        if (is_file($location = APPPATH . "core/{$class}.php")) {
             include_once $location;
             return;
         }
 
         // Autoload Bonfire Core classes.
         if (strstr($class, 'BF_')
-            && is_file($location = BFPATH . "core/{$class}" . EXT)
+            && is_file($location = BFPATH . "core/{$class}.php")
         ) {
             include_once($location);
             return;
         }
 
         // Autoload library classes.
-        if (is_file($location = APPPATH . "libraries/{$class}" . EXT)) {
+        if (is_file($location = APPPATH . "libraries/{$class}.php")) {
             include_once $location;
             return;
         }
 
         // Autoload Bonfire library classes.
-        if (is_file($location = BFPATH . "libraries/{$class}" . EXT)) {
+        if (is_file($location = BFPATH . "libraries/{$class}.php")) {
             include_once $location;
             return;
         }
@@ -168,8 +166,8 @@ class Modules
      */
     public static function load_file($file, $path, $type = 'other', $result = true)
     {
-        $file = str_replace(EXT, '', $file);
-        $location = $path . $file . EXT;
+        $file = str_replace('.php', '', $file);
+        $location = "{$path}{$file}.php";
 
         if ($type === 'other') {
             if (class_exists($file, false)) {
@@ -208,7 +206,7 @@ class Modules
     {
         $segments   = explode('/', $file);
         $file       = array_pop($segments);
-        $file_ext = pathinfo($file, PATHINFO_EXTENSION) ? $file : $file . EXT;
+        $file_ext = pathinfo($file, PATHINFO_EXTENSION) ? $file : "{$file}.php";
 
         $path = ltrim(implode('/', $segments).'/', '/');
         $module ? $modules[$module] = $path : $modules = array();
@@ -241,7 +239,7 @@ class Modules
     {
         /* load the route file */
         if (! isset(self::$routes[$module])) {
-            if (list($path) = self::find('routes', $module, 'config/') AND $path) {
+            if (list($path) = self::find('routes', $module, 'config/') and $path) {
                 self::$routes[$module] = self::load_file('routes', $path, 'route');
             }
     }
@@ -256,11 +254,11 @@ class Modules
             $key = str_replace(array(':any', ':num'), array('.+', '[0-9]+'), $key);
 
             if (preg_match('#^'.$key.'$#', $uri)) {
-                if (strpos($val, '$') !== false AND strpos($key, '(') !== false) {
+                if (strpos($val, '$') !== false and strpos($key, '(') !== false) {
                     $val = preg_replace('#^'.$key.'$#', $val, $uri);
         }
 
-                return explode('/', $module.'/'.$val);
+                return explode('/', "{$module}/{$val}");
                 }
             }
         }
@@ -356,8 +354,7 @@ class Modules
     public static function files($module_name = null, $module_folder = null, $exclude_core = false)
     {
         if (! function_exists('directory_map')) {
-            $ci =& get_instance();
-            $ci->load->helper('directory');
+            get_instance()->load->helper('directory');
         }
 
         $files = array();
@@ -470,12 +467,10 @@ class Modules
     public static function list_modules($exclude_core = false)
     {
         if (! function_exists('directory_map')) {
-            $ci =& get_instance();
-            $ci->load->helper('directory');
+            get_instance()->load->helper('directory');
         }
 
         $map = array();
-
         foreach (Modules::folders() as $folder) {
             // If excluding core modules, skip the core module folder.
             if ($exclude_core && strpos($folder, 'bonfire/modules') !== false) {
@@ -493,7 +488,9 @@ class Modules
         // Clean out any html or php files.
         if ($count = count($map)) {
             for ($i = 0; $i < $count; $i++) {
-                if (strpos($map[$i], '.html') !== false || strpos($map[$i], '.php') !== false) {
+                if (strpos($map[$i], '.html') !== false
+                    || strpos($map[$i], '.php') !== false
+                ) {
                     unset($map[$i]);
                 }
             }

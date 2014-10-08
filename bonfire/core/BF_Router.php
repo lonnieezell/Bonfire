@@ -41,7 +41,7 @@ class BF_Router extends CI_Router
     {
         $this->module = '';
         $this->directory = '';
-        $ext = $this->config->item('controller_suffix').EXT;
+        $ext = $this->config->item('controller_suffix') . '.php';
 
         /* Use module route if available */
         if (isset($segments[0])

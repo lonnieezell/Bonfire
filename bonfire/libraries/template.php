@@ -29,166 +29,89 @@
  */
 class Template
 {
-
 	/**
-	 * Set the debug mode on the template to output messages
-	 *
-	 * @access public
-	 * @static
-	 *
-	 * @var bool
+     * @var array An array of blocks. The key is the name to reference it by, and
+     * the value is the file. The class will loop through these, parse them, and
+     * push them into the layout.
 	 */
-	public static $debug = false;
+    public static $blocks = array();
 
     /**
-     * @var string Prefix added to debug messages in the log
+     * @var bool Set the debug mode on the template to output messages.
      */
-    protected static $log_prefix = '[Template] ';
+    public static $debug = false;
 
 	/**
-	 * Stores the name of the active theme (folder) with a trailing slash.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+     * @var bool If true, CodeIgniter's Template Parser will be used to parse the
+     * view. If false, the view is displayed with no parsing. Used by the content()
+     * and block().
 	 */
-	protected static $active_theme = '';
-
+    public static $parse_views = false;
 
 	/**
-	 * Stores the default theme from the config file for a slight performance increase.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+     * @var boolean If true, we won't use Session-related functions. This is helpful
+     * during unit testing.
 	 */
-	protected static $default_theme = '';
-
+    public static $ignore_session = false;
 
 	/**
-	 * The view to load. Normally not set unless you need to bypass the automagic.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+     * @var string The full server path to the site root.
 	 */
-	protected static $current_view;
-
+    public static $site_path;
 
 	/**
-	 * The layout to render the views into.
-	 *
-	 * @access public
-	 * @static
-	 *
-	 * @var string
+     * @var string The name of the active theme (folder) with a trailing slash.
 	 */
-	public static $layout;
-
+    protected static $active_theme = '';
 
 	/**
-	 * If TRUE, CodeIgniter's Template Parser will be used to
-	 * parse the view. If FALSE, the view is displayed with
-	 * no parsing. Used by the content() and block()
-	 *
-	 * @access public
-	 * @static
-	 *
-	 * @var bool
+     * @var string The view to load. Normally not set except to bypass the automagic.
 	 */
-	public static $parse_views = FALSE;
-
+    protected static $current_view;
 
 	/**
-	 * The data to be passed into the views. The keys are the names of the variables
-	 * and the values are the values.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var array
+     * @var array The data to be passed into the views. The keys are the names of
+     * the variables and the values are the values.
 	 */
 	protected static $data = array();
 
-
 	/**
-	 * An array of blocks. The key is the name to reference it by, and the value is the file.
-	 * The class will loop through these, parse them, and push them into the layout.
-	 *
-	 * @access public
-	 * @static
-	 *
-	 * @var array
+     * @var string The default theme from the config file.
 	 */
-	public static $blocks = array();
-
+    protected static $default_theme = '';
 
 	/**
-	 * Holds a simple array to store the status Message
-	 * that gets displayed using the message() function.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+     * @var string The layout to render the views into.
 	 */
-	protected static $message;
-
+    public static $layout;
 
 	/**
-	 * An array of paths to look for themes.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var array
+     * @var string Prefix added to debug messages in the log
 	 */
-	protected static $theme_paths = array();
-
+    protected static $log_prefix = '[Template] ';
 
 	/**
-	 * The full server path to the site root.
-	 *
-	 * @access public
-	 * @static
-	 *
-	 * @var string
+     * @var string/array A simple array to store the status Message that gets displayed
+     * using the message() function.
 	 */
-	public static $site_path;
-
+    protected static $message;
 
 	/**
-	 * Stores CI's default view path.
-	 *
-	 * @access protected
-	 * @static
-	 *
-	 * @var string
+     * @var string CI's default view path.
 	 */
 	protected static $orig_view_path;
 
 	/**
-	 * If TRUE, we won't use Session-related functions.
-	 * This is helpful during unit testing.
-	 *
-	 * @var boolean
+     * @var array An array of paths to look for themes.
 	 */
-	public static $ignore_session = FALSE;
+    protected static $theme_paths = array();
 
 	/**
-	 * An instance of the CI super object.
-	 *
-	 * @access private
-	 * @static
-	 *
-	 * @var object
+     * @var object An instance of the CI super object.
 	 */
 	private static $ci;
 
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
 	/**
 	 * This constructor is here purely for CI's benefit, as this is a static class.
@@ -200,55 +123,42 @@ class Template
 		self::$ci =& get_instance();
 
 		self::init();
-
-	}//end __construct()
-
-	//--------------------------------------------------------------------
+    }
 
 	/**
-	 * Grabs an instance of the CI superobject, loads the Ocular config
-	 * file, and sets our default layout.
-	 *
-	 * @access public
-	 * @static
+     * Grabs an instance of the CI superobject, loads the Ocular config file, and
+     * sets our default layout.
 	 *
 	 * @return void
 	 */
 	public static function init()
 	{
 		// If the application config file hasn't been loaded, do it now
-		if ( ! self::$ci->config->item('template.theme_paths'))
-		{
+        if (! self::$ci->config->item('template.theme_paths')) {
 			self::$ci->config->load('application');
 		}
 
 		// Store our settings
-		self::$site_path 		= self::$ci->config->item('template.site_path');
-		self::$theme_paths 		= self::$ci->config->item('template.theme_paths');
-		self::$layout 			= self::$ci->config->item('template.default_layout');
 		self::$default_theme 	= self::$ci->config->item('template.default_theme');
+        self::$layout        = self::$ci->config->item('template.default_layout');
 		self::$parse_views		= self::$ci->config->item('template.parse_views');
+        self::$site_path     = self::$ci->config->item('template.site_path');
+        self::$theme_paths   = self::$ci->config->item('template.theme_paths');
 
         log_message('debug', 'Template library loaded');
-
-	}//end init()
-
-	//--------------------------------------------------------------------
-
+    }
 
 	/**
-	 * Renders out the specified layout, which starts the process
-	 * of rendering the page content. Also determines the correct
-	 * view to use based on the current controller/method.
+     * Renders out the specified layout, which starts the process of rendering the
+     * page content. Also determines the correct view to use based on the current
+     * controller/method.
 	 *
-	 * @access public
-	 * @static
-	 *
-	 * @param  string $layout The name of the a layout to use. This overrides any current or default layouts set.
+     * @param  string $layout The name of the a layout to use. This overrides any
+     * current or default layouts set.
 	 *
 	 * @return void
 	 */
-	public static function render($layout=NULL)
+    public static function render($layout = null)
 	{
 		$output = '';
 		$controller = self::$ci->router->class;
@@ -257,117 +167,95 @@ class Template
 		$layout = empty($layout) ? self::$layout : $layout;
 
 		// Is it in an AJAX call? If so, override the layout
-		if (self::$ci->input->is_ajax_request())
-		{
+        if (self::$ci->input->is_ajax_request()) {
 			$layout = self::$ci->config->item('template.ajax_layout');
-
-			$controller = NULL;
+            $controller = null;
 		}
 
 		// Grab our current view name, based on controller/method
 		// which routes to views/controller/method.
-
-		if (empty(self::$current_view))
-		{
+        if (empty(self::$current_view)) {
 			self::$current_view =  self::$ci->router->class . '/' . self::$ci->router->method;
 		}
 
-		//
 		// Time to render the layout
-		//
-		self::load_view($layout, self::$data, $controller, TRUE, $output);
+        self::load_view($layout, self::$data, $controller, true, $output);
 
-		if (empty($output)) { show_error('Unable to find theme layout: '. $layout); }
+        if (empty($output)) {
+            show_error("Unable to find theme layout: {$layout}");
+        }
 
 		Events::trigger('after_layout_render', $output);
 
 		self::$ci->output->set_output($output);
-
-		// Reset the original view path
-		//self::$ci->load->_ci_view_path = self::$orig_view_path;
-
-	}//end render()
-
-	//--------------------------------------------------------------------
+    }
 
 	/**
 	 * Renders the current page into the layout.
 	 *
 	 * Uses a view based on the controller/function being run. (See __constructor).
 	 *
-	 * @access public
-	 * @static
-	 *
 	 * @return string A string containing the output of the render process.
 	 */
 	public static function content()
 	{
 		$output = '';
-
-        self::debug_message('Current View = '. self::$current_view);
-
-		self::load_view(self::$current_view, NULL, self::$ci->router->class . '/' . self::$ci->router->method, FALSE, $output);
+        self::debug_message('Current View = ' . self::$current_view);
+        self::load_view(
+            self::$current_view,
+            null,
+            self::$ci->router->class . '/' . self::$ci->router->method,
+            false,
+            $output
+        );
 
 		Events::trigger('after_page_render', $output);
 
 		return $output;
+    }
 
-	}//end content()
-
-	//--------------------------------------------------------------------
-
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 	// !BLOCKS
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
 	/**
 	 * Stores the block named $name in the blocks array for later rendering.
 	 * The $current_view variable is the name of an existing view. If it is empty,
 	 * your script should still function as normal.
 	 *
-	 * @access public
-	 * @static
-	 *
 	 * @param string $block_name The name of the block. Must match the name in the block() method.
 	 * @param string $view_name  The name of the view file to render.
 	 *
 	 * @return void
 	 */
-	public static function set_block($block_name='', $view_name='')
-	{
-		if ( ! empty($block_name))
+    public static function set_block($block_name = '', $view_name = '')
 		{
+        if (! empty($block_name)) {
 			self::$blocks[$block_name] = $view_name;
 		}
-
-	}//end set_block()
-
-	//--------------------------------------------------------------------
+    }
 
 	/**
 	 * Renders a "block" to the view.
 	 *
-	 * A block is a partial view contained in a view file in the
-	 * application/views folder. It can be used for sidebars,
-	 * headers, footers, or any other recurring element within
-	 * a site. It is recommended to set a default when calling
-	 * this function within a layout. The default will be rendered
-	 * if no methods override the view (using the set_block() method).
-	 *
-	 * @access public
-	 * @static
+     * A block is a partial view contained in a view file in the application/views
+     * folder. It can be used for sidebars, headers, footers, or any other recurring
+     * element within a site. It is recommended to set a default when calling this
+     * function within a layout. The default will be rendered if no methods override
+     * the view (using the set_block() method).
 	 *
 	 * @param string $block_name   The name of the block to render.
-	 * @param string $default_view The view to render if no other view has been set with the set_block() method.
+     * @param string $default_view The view to render if no other view has been set
+     * with the set_block() method.
 	 * @param array  $data         An array of data to pass to the view.
-	 * @param bool   $themed       Whether we should look in the themes or standard view locations.
+     * @param bool   $themed       Whether we should look in the themes or standard
+     * view locations.
 	 *
 	 * @return void
 	 */
-	public static function block($block_name='', $default_view='', $data=array(), $themed=FALSE)
-	{
-		if (empty($block_name))
+    public static function block($block_name = '', $default_view = '', $data = array(), $themed = false)
 		{
+        if (empty($block_name)) {
 			self::debug_message('No block name provided.');
 			return;
 		}
@@ -375,33 +263,25 @@ class Template
 		// If a block has been set previously use it; otherwise, use the default view.
 		$block_view_name = isset(self::$blocks[$block_name]) ? self::$blocks[$block_name] : $default_view;
 
-		if (empty($block_view_name) && empty($default_view))
-		{
-			self::debug_message('No default block provided for `' . $block_name . '`');
+        if (empty($block_view_name) && empty($default_view)) {
+            self::debug_message("No default block provided for `{$block_name}`");
 			return;
 		}
 
         self::debug_message("Looking for block: <b>{$block_view_name}</b>.");
-
-		self::load_view($block_view_name, $data, FALSE, $themed, $output);
+        self::load_view($block_view_name, $data, false, $themed, $output);
 
 		echo $output;
+    }
 
-	}//end block()
-
-	//--------------------------------------------------------------------
-
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 	// !THEME PATHS
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
 	/**
-	 * Theme paths allow you to have multiple locations for themes to be
-	 * stored. This might be used for separating themes for different sub-
-	 * applications, or a core theme and user-submitted themes.
-	 *
-	 * @access public
-	 * @static
+     * Theme paths allow you to have multiple locations for themes to be stored.
+     * This might be used for separating themes for different sub-applications,
+     * or a core theme and user-submitted themes.
 	 *
 	 * @param string $path A new path where themes can be found.
 	 *
@@ -433,127 +313,92 @@ class Template
         return false;
 		}
 
-	//--------------------------------------------------------------------
-
 	/**
 	 * Remove the theme path
-	 *
-	 * @access public
-	 * @static
 	 *
 	 * @param string $path The path to remove from the theme paths.
 	 *
 	 * @return void
 	 */
-	public static function remove_theme_path($path=NULL)
-	{
-		if (empty($path) || ! is_string($path))
+    public static function remove_theme_path($path = null)
 		{
+        if (empty($path) || ! is_string($path)) {
 			return;
 		}
 
-		if (isset(self::$theme_paths[$path]))
-		{
+        if (isset(self::$theme_paths[$path])) {
 			unset(self::$theme_paths[$path]);
 		}
-
-	}//end remove_theme_path()
-
-	//--------------------------------------------------------------------
+    }
 
 	/**
-	 * Stores the name of the active theme to use. This theme should be
-	 * relative to one of the 'template.theme_paths' folders.
-	 *
-	 * @access public
-	 * @static
+     * Stores the name of the active theme to use. This theme should be relative
+     * to one of the 'template.theme_paths' folders.
 	 *
 	 * @param string $theme         The name of the active theme.
 	 * @param string $default_theme (Optional) The name of the desired default theme.
 	 *
 	 * @return void
 	 */
-	public static function set_theme($theme=NULL, $default_theme=NULL)
-	{
-		if (empty($theme) || ! is_string($theme))
+    public static function set_theme($theme = null, $default_theme = null)
 		{
+        if (empty($theme) || ! is_string($theme)) {
 			return;
 		}
 
 		// Make sure a trailing slash is there
-		if (substr($theme, -1) !== '/')
-		{
+        if (substr($theme, -1) !== '/') {
 			$theme .= '/';
 		}
 
 		self::$active_theme = $theme;
 
 		// Default theme?
-		if ( ! empty($default_theme) && is_string($default_theme))
-        {
+        if (! empty($default_theme) && is_string($default_theme)) {
 			self::set_default_theme($default_theme);
 		}
-	}//end set_theme()
-
-	//--------------------------------------------------------------------
+    }
 
 	/**
 	 * Stores the name of the default theme to use. This theme should be
 	 * relative to one of the template.theme_paths folders.
 	 *
-	 * @access public
-	 * @static
-	 *
 	 * @param string $theme The name of the desired default theme to use.
 	 *
 	 * @return void
 	 */
-	public static function set_default_theme($theme=NULL)
-	{
-		if (empty($theme) || ! is_string($theme))
+    public static function set_default_theme($theme = null)
 		{
+        if (empty($theme) || ! is_string($theme)) {
 			return;
 		}
 
 		// Make sure a trailing slash is there
-		if (substr($theme, -1) !== '/')
-		{
+        if (substr($theme, -1) !== '/') {
 			$theme .= '/';
 		}
 
 		self::$default_theme = $theme;
-
-	}//end set_default_theme()
-
-	//--------------------------------------------------------------------
-
+    }
 
 	/**
 	 * Returns the active theme.
-	 *
-	 * @access public
-	 * @static
 	 *
 	 * @return string The name of the active theme.
 	 */
 	public static function theme()
 	{
 		return ( ! empty(self::$active_theme)) ? self::$active_theme : self::$default_theme;
-	}//end theme()
-
-	//--------------------------------------------------------------------
+    }
 
 	/**
 	 * Returns the full url to a file in the currently active theme.
-	 *
-	 * @access public
-	 * @static
 	 *
 	 * @param string $resource Path to a resource in the theme
 	 *
 	 * @return string The full url (including http://) to the resource.
 	 */
-	public static function theme_url($resource='')
+    public static function theme_url($resource = '')
 	{
 		$url = base_url();
 
@@ -564,121 +409,85 @@ class Template
 		$url .= empty(self::$active_theme) ? self::$default_theme : self::$active_theme;
 
 		// Cleanup, just to be safe
-		$url = str_replace('//', '/', $url);
-		$url = str_replace(':/', '://', $url);
+        $url = str_replace(array('//', ':/'), array('/', '://'), $url);
 
 		return $url . $resource;
-
-	}//end theme_url()
-
-	//--------------------------------------------------------------------
-
+    }
 
 	/**
 	 * Set the current view to render.
-	 *
-	 * @access public
-	 * @static
 	 *
 	 * @param string $view The name of the view file to render as content.
 	 *
 	 * @return void
 	 */
-	public static function set_view($view=NULL)
-	{
-		if (empty($view) || ! is_string($view))
+    public static function set_view($view = null)
 		{
+        if (empty($view) || ! is_string($view)) {
 			return;
 		}
 
 		self::$current_view = $view;
-	}//end set_view()
-
-	//--------------------------------------------------------------------
-
+    }
 
 	/**
 	 * Makes it easy to save information to be rendered within the views.
 	 *
-	 * This should probably be updated to clarify the intended functionality
-	 * when an array is passed into $var_name and $value is '' (and maybe
-	 * change the $value=='' to empty($value)?).
+     * This should probably be updated to clarify the intended functionality when
+     * an array is passed into $var_name and $value is '' (and maybe change the
+     * $value=='' to empty($value)?).
 	 *
 	 * @param string $var_name The name of the variable to set
 	 * @param mixed  $value    The value to set it to.
 	 *
 	 * @return void
 	 */
-	public static function set($var_name='', $value='')
-	{
-		// Added by dkenzik
-		// 20101001
-		// Easier migration when $data is scattered all over your project
-		//
-		if(is_array($var_name) && $value=='')
-		{
-			foreach($var_name as $key => $value)
+    public static function set($var_name = '', $value = '')
 			{
+        if (is_array($var_name) && $value=='') {
+            foreach ($var_name as $key => $value) {
 				self::$data[$key] = $value;
 			}
-		}
-		else
-		{
+        } else {
 			self::$data[$var_name] = $value;
-		}//end if
-
-	}//end set()
-
-	//--------------------------------------------------------------------
+        }
+    }
 
 	/**
-	 * Returns a variable that has been previously set, or FALSE if not exists.
+     * Returns a variable that has been previously set, or false if not exists.
 	 * As of 3.0, will also return class properties.
-	 *
-	 * @access public
-	 * @static
 	 *
 	 * @param string $var_name The name of the data item to return.
 	 *
 	 * @return mixed The value of the class property or view data.
 	 */
-	public static function get($var_name=NULL)
-	{
-		if (empty($var_name))
+    public static function get($var_name = null)
 		{
-			return FALSE;
+        if (empty($var_name)) {
+            return false;
 		}
 
 		// First, is it a class property?
-		if (isset(self::$$var_name))
-		{
+        if (isset(self::$$var_name)) {
 			return self::$$var_name;
 		}
-		else if (isset(self::$data[$var_name]))
-		{
+
+        if (isset(self::$data[$var_name])) {
 			return self::$data[$var_name];
 		}
 
-		return FALSE;
-	}//end get()
-
-	//--------------------------------------------------------------------
+        return false;
+    }
 
 	/**
 	 * Set whether or not the views will be passed through CI's parser.
 	 *
-	 * @access public
-	 *
 	 * @param bool $parse Boolean value. Should we parse views?
 	 */
-	public function parse_views($parse = FALSE)
+    public function parse_views($parse = false)
 	{
 		self::$parse_views = (bool) $parse;
-
-	}//end parse_views()
-
-	//--------------------------------------------------------------------
-
+    }
 
 	/**
 	 * Sets a status message (for displaying small success/error messages).
@@ -686,29 +495,21 @@ class Template
 	 * because you don't always want to have to refresh the page to get the
 	 * message to show up.
 	 *
-	 * @access public
-	 * @static
-	 *
 	 * @param string $message A string with the message to save.
 	 * @param string $type    A string to be included as the CSS class of the containing div.
 	 *
 	 * @return void
 	 */
-	public static function set_message($message='', $type='info')
-	{
-		if ( ! empty($message))
-		{
-			if (isset(self::$ci->session) && ! self::$ignore_session)
+    public static function set_message($message = '', $type = 'info')
 			{
+        if (! empty($message)) {
+            if (isset(self::$ci->session) && ! self::$ignore_session) {
 				self::$ci->session->set_flashdata('message', $type . '::' . $message);
 			}
 
 			self::$message = array('type'=>$type, 'message'=>$message);
 		}
-
-	}//end set_message()
-
-	//---------------------------------------------------------------
+    }
 
 	/**
 	 * Displays a status message (small success/error messages).
@@ -782,7 +583,7 @@ class Template
 	 *
 	 * @return void
 	 */
-	public static function redirect($url=NULL)
+    public static function redirect($url=null)
 	{
 		if ( ! preg_match('#^https?://#i', $url))
 		{
@@ -833,7 +634,7 @@ EOF;
 	 *
 	 * @return void
 	 */
-	public static function load_view($view=NULL, $data=NULL, $override='', $is_themed=TRUE, &$output)
+    public static function load_view($view=null, $data=null, $override='', $is_themed=true, &$output)
 	{
 		if (empty($view))	return '';
 
@@ -859,14 +660,14 @@ EOF;
 			}
 
 			// Should it be parsed?
-			if (self::$parse_views === TRUE)
+            if (self::$parse_views === true)
             {
                 if (!class_exists('CI_Parser'))
                 {
                     self::$ci->load->library('parser');
                 }
 
-                $output = self::$ci->parser->parse($output, $data, TRUE, FALSE);
+                $output = self::$ci->parser->parse($output, $data, true, false);
             }
 		}
 
@@ -881,7 +682,7 @@ EOF;
 			{
 				self::$ci->load->_ci_view_path = self::$orig_view_path;
 
-				if (self::$parse_views === TRUE)
+                if (self::$parse_views === true)
 				{
 
 					if ( ! class_exists('CI_Parser'))
@@ -889,11 +690,11 @@ EOF;
 						self::$ci->load->library('parser');
 					}
 
-					$output = self::$ci->parser->parse($view, $data, TRUE);
+                    $output = self::$ci->parser->parse($view, $data, true);
 				}
 				else
 				{
-					$output = self::$ci->load->view($view, $data, TRUE);
+                    $output = self::$ci->load->view($view, $data, true);
 				}
 			}
 			self::$ci->load->_ci_view_path = self::$orig_view_path;
@@ -917,11 +718,11 @@ EOF;
 	 *
 	 * @return string The content of the file, if found, else empty.
 	 */
-	private static function find_file($view=NULL, $data=NULL)
+    private static function find_file($view=null, $data=null)
 	{
 		if (empty($view))
 		{
-			return FALSE;
+            return false;
 		}
 
 		if ( ! empty($data))
@@ -989,13 +790,13 @@ EOF;
 			self::debug_message('[Find File] Rendering file at: '. $view_path . $view_file .'<br/><br/>');
 
 			// Grab the output of the view.
-			if (self::$parse_views === TRUE)
+            if (self::$parse_views === true)
 			{
                 $data = array_merge((array)$data, self::$ci->load->_ci_cached_vars);
                 $output = self::$ci->load->_ci_load(array(
                     '_ci_path' => $view_path . $view_file,
                     '_ci_vars' => $data,
-                    '_ci_return' => TRUE,
+                    '_ci_return' => true,
                 ));
 			}
 			else
@@ -1003,7 +804,7 @@ EOF;
                 $output = self::$ci->load->_ci_load(array(
                     '_ci_path' => $view_path . $view_file,
                     '_ci_vars' => $data,
-                    '_ci_return' => TRUE,
+                    '_ci_return' => true,
                 ));
 			}
 		}//end if
@@ -1018,12 +819,12 @@ EOF;
 	 * Usefull debugging script to echo out message to the Console
 	 * (if loaded) and to the log files.
 	 *
-	 * By default it will only log the messages if self::$debug == TRUE,
-	 * but this behaviour can be modified by passing $force as TRUE.
+     * By default it will only log the messages if self::$debug == true,
+     * but this behaviour can be modified by passing $force as true.
 	 *
 	 * @param  string  $message The message to log
-	 * @param  boolean $force   If FALSE, will respect self::$debug setting.
-	 *                          If TRUE, will force the message to be logged.
+     * @param  boolean $force   If false, will respect self::$debug setting.
+     *                          If true, will force the message to be logged.
 	 */
     protected static function debug_message($message, $force=false)
     {
@@ -1064,11 +865,11 @@ EOF;
  *
  * @param string $view          The name of the view to render.
  * @param array  $data          An array of data to pass to the view.
- * @param bool   $ignore_mobile If TRUE, will not change the view name based on mobile viewing. If FALSE, will attempt to load a file prefixed with 'mobile_'
+ * @param bool   $ignore_mobile If true, will not change the view name based on mobile viewing. If false, will attempt to load a file prefixed with 'mobile_'
  *
  * @return string
  */
-function theme_view($view=NULL, $data=NULL, $ignore_mobile=FALSE)
+function theme_view($view=null, $data=null, $ignore_mobile=false)
 {
 	if (empty($view)) return '';
 
@@ -1083,7 +884,7 @@ function theme_view($view=NULL, $data=NULL, $ignore_mobile=FALSE)
 
 		if ($ci->agent->is_mobile())
 		{
-			Template::load_view('mobile_' . $view, $data, NULL, TRUE, $output);
+            Template::load_view('mobile_' . $view, $data, null, true, $output);
 		}
 	}
 
@@ -1091,7 +892,7 @@ function theme_view($view=NULL, $data=NULL, $ignore_mobile=FALSE)
 	// or we weren't looking for one to begin with.
 	if (empty($output))
 	{
-		Template::load_view($view, $data, NULL, TRUE, $output);
+        Template::load_view($view, $data, null, true, $output);
 	}
 
 	return $output;
@@ -1113,11 +914,11 @@ function theme_view($view=NULL, $data=NULL, $ignore_mobile=FALSE)
  * @access public
  *
  * @param string $item       The name of the class to check against.
- * @param bool   $class_only If TRUE, will only return 'active'. If FALSE, will return 'class="active"'.
+ * @param bool   $class_only If true, will only return 'active'. If false, will return 'class="active"'.
  *
  * @return string Either <b>class="active"</b> or an empty string.
  */
-function check_class($item='', $class_only=FALSE)
+function check_class($item='', $class_only=false)
 {
 	$ci =& get_instance();
 
@@ -1139,11 +940,11 @@ function check_class($item='', $class_only=FALSE)
  * @access public
  *
  * @param string	$item		The name of the method to check against. Can be an array of names.
- * @param bool		$class_only	If TRUE, will only return 'active'. If FALSE, will return 'class="active"'.
+ * @param bool      $class_only If true, will only return 'active'. If false, will return 'class="active"'.
  *
  * @return string Either <b>class="active"</b> or an empty string.
  */
-function check_method($item, $class_only=FALSE)
+function check_method($item, $class_only=false)
 {
 	$ci =& get_instance();
 
@@ -1175,9 +976,9 @@ function check_method($item, $class_only=FALSE)
  *
  * @param   int     $segment_num    The segment to check the value against.
  * @param   string  $item           The value to check against the segment
- * @param   bool    $class_only     If TRUE, will only return 'active'. If FALSE, will return 'class="active"'.
+ * @param   bool    $class_only     If true, will only return 'active'. If false, will return 'class="active"'.
  */
-function check_segment($segment_num, $item, $class_only=FALSE)
+function check_segment($segment_num, $item, $class_only=false)
 {
     if (get_instance()->uri->segment($segment_num) == $item)
     {
@@ -1196,12 +997,12 @@ function check_segment($segment_num, $item, $class_only=FALSE)
  * @access public
  *
  * @param array $my_segments (optional) Array of Key/Value to make Breadcrumbs from
- * @param bool  $wrap        (boolean)  Set to TRUE to wrap in un-ordered list
- * @param bool  $echo        (boolean)  Set to TRUE to echo the output, set to FALSE to return it.
+ * @param bool  $wrap        (boolean)  Set to true to wrap in un-ordered list
+ * @param bool  $echo        (boolean)  Set to true to echo the output, set to false to return it.
  *
  * @return string A Breadcrumb of your page structure.
  */
-function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
+function breadcrumb($my_segments=null, $wrap=false, $echo=true)
 {
 	$ci =& get_instance();
 
@@ -1222,7 +1023,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 		$separator = $ci->config->item('template.breadcrumb_symbol');
 	}
 
-	if ($wrap === TRUE)
+    if ($wrap === true)
 	{
 		$separator = '<span class="divider">' . $separator . '</span>' . PHP_EOL;
 	}
@@ -1249,7 +1050,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 		$home_link = site_url();
 	}
 
-	if ($wrap === TRUE)
+    if ($wrap === true)
 	{
 		$output  = '<ul class="breadcrumb">' . PHP_EOL;
 		$output .= '<li><a href="'.$home_link.'"><i class="icon-home">&nbsp;</i></a> '.$separator.'</li>' . PHP_EOL;
@@ -1272,7 +1073,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 
 			if ($count == $total)
 			{
-				if ($wrap === TRUE)
+                if ($wrap === true)
 				{
 					$output .= '<li class="active">' . ucfirst(str_replace('_', ' ', $segment)) . '</li>' . PHP_EOL;
 				}
@@ -1283,7 +1084,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 			}
 			else
 			{
-				if ($wrap === TRUE)
+                if ($wrap === true)
 				{
 					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($segment))) .'</a>' . $separator . '</li>' . PHP_EOL;
 				}
@@ -1304,7 +1105,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 
 			if ($count == $total)
 			{
-				if ($wrap === TRUE)
+                if ($wrap === true)
 				{
 					$output .= '<li class="active">' . str_replace('_', ' ', $title) . '</li>' . PHP_EOL;
 				}
@@ -1317,7 +1118,7 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 			else
 			{
 
-				if ($wrap === TRUE)
+                if ($wrap === true)
 				{
 					$output .= '<li><a href="'. $url .'">'. str_replace('_', ' ', ucfirst(mb_strtolower($title))) .'</a>' . $separator . '</li>' . PHP_EOL;
 				}
@@ -1330,14 +1131,14 @@ function breadcrumb($my_segments=NULL, $wrap=FALSE, $echo=TRUE)
 		}
 	}
 
-	if ($wrap === TRUE)
+    if ($wrap === true)
 	{
 		$output .= PHP_EOL . '</ul>' . PHP_EOL;
 	}
 
 	unset($separator, $url, $wrap);
 
-	if ($echo === TRUE)
+    if ($echo === true)
 	{
 		echo $output;
 		unset ($output);
