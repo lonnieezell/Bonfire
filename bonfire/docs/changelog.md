@@ -8,7 +8,7 @@
 
 * Composer Auto-loading may be enabled by setting `'composer_autoload'` to true (or the path to the autoload.php file) in /application/config/config.php. Please be aware that this currently requires hooks to be enabled and the `App_hooks->checkAutoloaderConfig()` method must be included in the `pre_controller` hooks in /application/config/hooks.php.
 * Images controller can reference images from a module using the `module=...` parameter.
-* Template class now provides a `check_segment` method in addition to `check_class` and `check_method`.
+* Template class now provides a `check_segment` helper in addition to `check_class` and `check_method`.
 * Brand new documentation system that allows splitting your user and dev-related docs, and searching docs.
 * CSRF protection can be bypassed for individual controllers by setting `csrf_ignored_controllers` setting in the site's main index file.
 * Now works with [Sparks](http://getsparks.org) out of the box.
@@ -16,6 +16,8 @@
 
 #### Closes Issues:
 
+* #1075 - Removed statistics collection from installer.
+* #1073 - Installation issues with App_hooks when settings table doesn't exist.
 * #1048 - (almost) full russian language
 * #1041 - Only display edit keyboard shortcuts link to users with permission to edit them
 * #1040 - Documentation errors (Performance Tips)
@@ -110,6 +112,8 @@
     * Partial Russian and Italian translations.
     * Many improvements to the Brazilian Portugeuse language handling.
     * Improved support for translations in the Activities, Builder, Logs, Sysinfo, and UI modules.
+* Template Library:
+    * Added `setLayout()` and `getLayout()` methods, deprecated the public `$layout` property (it will become private or protected in a future version).
 
 #### Known Issues:
 
