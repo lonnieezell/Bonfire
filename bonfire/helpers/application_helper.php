@@ -25,7 +25,7 @@
  * @link       http://cibonfire.com/docs/developer
  */
 
-if ( ! function_exists('array_implode')) {
+if (! function_exists('array_implode')) {
 	/**
 	 * Implode an array with the key and value pair giving a glue, a separator
 	 * between pairs, and the array to implode.
@@ -41,7 +41,7 @@ if ( ! function_exists('array_implode')) {
 	 */
 	function array_implode($glue, $separator, $array)
 	{
-		if ( ! is_array($array)) {
+        if (! is_array($array)) {
 			return $array;
 		}
 
@@ -58,7 +58,7 @@ if ( ! function_exists('array_implode')) {
 	}
 }
 
-if ( ! function_exists('dump')) {
+if (! function_exists('dump')) {
 	/**
 	 * Output the given variables with formatting and location.
 	 *
@@ -83,7 +83,7 @@ if ( ! function_exists('dump')) {
 	    foreach ($arguments as $argument) {
 			echo '<br /><strong>Debug #' . (++$i) . " of {$totalArguments}</strong>: ";
 
-			if ( ! empty($argument)
+            if (! empty($argument)
                 && (is_array($argument) || is_object($argument))
             ) {
 				print_r($argument);
@@ -97,7 +97,7 @@ if ( ! function_exists('dump')) {
 	}
 }
 
-if ( ! function_exists('e')) {
+if (! function_exists('e')) {
 	/**
 	 * A convenience function to ensure output is safe to display. Helps to
 	 * defeat XSS attacks by running the text through htmlspecialchars().
@@ -114,7 +114,7 @@ if ( ! function_exists('e')) {
 	}
 }
 
-if ( ! function_exists('gravatar_link')) {
+if (! function_exists('gravatar_link')) {
 	/**
 	 * Create an image link based on Gravatar for the specified email address.
 	 * It will default to the site's generic image if none is found for the user.
@@ -170,7 +170,7 @@ if ( ! function_exists('gravatar_link')) {
 	}
 }
 
-if ( ! function_exists('iif')) {
+if (! function_exists('iif')) {
 	/**
 	* If then Else Statement wrapped in one function, If $expression = true then
 	* $returntrue else $returnfalse.
@@ -188,7 +188,7 @@ if ( ! function_exists('iif')) {
 	{
 		$result = $expression ? $returntrue : $returnfalse;
 
-        if ( $echo === false ) {
+        if ($echo === false) {
             return $result;
         }
 
@@ -196,7 +196,7 @@ if ( ! function_exists('iif')) {
 	}
 }
 
-if ( ! function_exists('js_escape')) {
+if (! function_exists('js_escape')) {
 	/**
 	 * Like html_escape() for JavaScript string literals.
 	 *
@@ -231,7 +231,7 @@ if ( ! function_exists('js_escape')) {
 	}
 }
 
-if ( ! function_exists('list_contexts')) {
+if (! function_exists('list_contexts')) {
     /**
      * Return a list of the contexts specified for the application.
      *
@@ -252,12 +252,12 @@ if ( ! function_exists('list_contexts')) {
         }
 
         // Ensure settings context exists
-        if ( ! in_array('settings', $contexts)) {
+        if (! in_array('settings', $contexts)) {
             array_push($contexts, 'settings');
         }
 
         // Ensure developer context exists
-        if ( ! in_array('developer', $contexts)) {
+        if (! in_array('developer', $contexts)) {
             array_push($contexts, 'developer');
         }
 
@@ -276,7 +276,7 @@ if ( ! function_exists('list_contexts')) {
     }
 }
 
-if ( ! function_exists('log_activity')) {
+if (! function_exists('log_activity')) {
 	/**
 	 * Log an activity if config item 'enable_activities' is true.
 	 *
@@ -289,15 +289,16 @@ if ( ! function_exists('log_activity')) {
 	function log_activity($userId = null, $activity = '', $module = 'any')
 	{
 		$ci =& get_instance();
-
 		if ($ci->config->item('enable_activity_logging') === true) {
 			$ci->load->model('activities/activity_model');
-			$ci->activity_model->log_activity($userId, $activity, $module);
+            return $ci->activity_model->log_activity($userId, $activity, $module);
 		}
+
+        return false;
 	}
 }
 
-if ( ! function_exists('logit')) {
+if (! function_exists('logit')) {
 	/**
 	 * Log an error to the Console (if loaded) and to the log files.
 	 *
@@ -320,7 +321,7 @@ if ( ! function_exists('logit')) {
 	}
 }
 
-if ( ! function_exists('obj_value')) {
+if (! function_exists('obj_value')) {
 	/**
 	 *
 	 * @param object $obj   Object
@@ -363,7 +364,7 @@ if ( ! function_exists('obj_value')) {
 // Module Functions (deprecated - use the Modules library)
 //------------------------------------------------------------------------------
 
-if ( ! function_exists('module_config')) {
+if (! function_exists('module_config')) {
 	/**
 	 * Returns the 'module_config' array from a modules config/config.php
 	 * file. The 'module_config' contains more information about a module,
@@ -397,7 +398,7 @@ if ( ! function_exists('module_config')) {
 	}
 }
 
-if ( ! function_exists('module_controller_exists')) {
+if (! function_exists('module_controller_exists')) {
 	/**
 	 * Determines whether a controller exists for a module.
 	 *
@@ -414,7 +415,7 @@ if ( ! function_exists('module_controller_exists')) {
 	}
 }
 
-if ( ! function_exists('module_file_path')) {
+if (! function_exists('module_file_path')) {
 	/**
 	 * Finds the path to a module's file.
 	 *
@@ -432,7 +433,7 @@ if ( ! function_exists('module_file_path')) {
 	}
 }
 
-if ( ! function_exists('module_files')) {
+if (! function_exists('module_files')) {
 	/**
 	 * Returns an associative array of files within one or more modules.
 	 *
@@ -450,7 +451,7 @@ if ( ! function_exists('module_files')) {
 	}
 }
 
-if ( ! function_exists('module_folders')) {
+if (! function_exists('module_folders')) {
 	/**
 	 * Returns an array of the folders that modules are allowed to be stored in.
 	 * These are set in *bonfire/application/third_party/MX/Modules.php*.
@@ -465,7 +466,7 @@ if ( ! function_exists('module_folders')) {
 	}
 }
 
-if ( ! function_exists('module_list')) {
+if (! function_exists('module_list')) {
 	/**
 	 * Returns a list of all modules in the system.
 	 *
@@ -481,7 +482,7 @@ if ( ! function_exists('module_list')) {
     }
 }
 
-if( ! function_exists('module_path')) {
+if (! function_exists('module_path')) {
 	/**
 	 * Returns the path to the module and it's specified folder.
 	 *

@@ -65,6 +65,8 @@ if (! function_exists('_form_common')) {
             unset($data['name']);
         }
 
+        $defaults['id'] = is_array($data) && ! empty($data['id']) ? $data['id'] : $defaults['name'];
+
         // If label is empty at this point, try to grab it from $data
         if (empty($label)
             && is_array($data)
@@ -93,7 +95,7 @@ if (! function_exists('_form_common')) {
 
         return "
 <div class='control-group{$error}'>
-    <label class='control-label' for='{$defaults['name']}'>{$label}</label>
+    <label class='control-label' for='{$defaults['id']}'>{$label}</label>
     <div class='controls'>
          <input {$output} {$extra} />
         {$tooltip}

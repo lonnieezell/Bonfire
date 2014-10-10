@@ -163,7 +163,7 @@ class Activity_model extends BF_Model
 	 */
 	public function log_activity($user_id = null, $activity = '', $module = 'any')
 	{
-		if (empty($user_id) || ! is_integer($user_id)) {
+        if (is_null($user_id) || ! is_integer($user_id) || $user_id < 0) {
             $this->error = lang('activities_log_no_user_id');
 			return false;
 		}
