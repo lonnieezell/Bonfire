@@ -64,6 +64,7 @@
 * #687 - user-meta fields doesn't respect "required"
 * #637 - Bonfire admin topbar CSS breaks scrolling features (Firefox)
 * #612 - Modifying set created and set modified from models
+* #578 - modulebuilder config: 3 "defaults" not used (except for some error handling which will cause confusion)
 
 #### Additional Changes:
 

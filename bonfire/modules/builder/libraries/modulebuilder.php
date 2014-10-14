@@ -19,7 +19,7 @@
  *
  * Performs the heavy-lifting while creating new modules for Bonfire.
  *
- * Originally based on Ollie Rattue's http://formigniter.org/ project
+ * Originally based on Ollie Rattue's http://formigniter.org/ project.
  *
  * @package    Bonfire\Modules\Builder\Libraries\Modulebuilder
  * @author     Bonfire Dev Team
@@ -27,21 +27,21 @@
  */
 class Modulebuilder
 {
-    /**
-     * @var object A pointer to the CodeIgniter instance.
-     */
+    /** @var object A pointer to the CodeIgniter instance. */
     public $CI;
-
-    /**
-     * @var array Various settings from the modulebuilder config file
-     */
-    public $options = array();
 
     /**
      * @todo Not used?
      */
     public $field_numbers = array(6, 10, 20, 40);
 
+    /** @var array Various settings from the modulebuilder config file. */
+    public $options = array();
+
+    /**
+     * @var array The database types supported by the library. Primarily used to
+     * ensure consistent treatment of database types within the builder module.
+     */
     protected $databaseTypes = array(
         'BIGINT'        => array('numeric', 'integer'),
         'BINARY'        => array('binary'),
@@ -89,49 +89,42 @@ class Modulebuilder
     protected $textTypes = array();
     protected $timeTypes = array();
 
-    /**
-     * @var int Total number of fields being used in this module
-     */
+    /** @var int Total number of fields being used in this module. */
     private $field_total = 0;
 
-    /**
-     * @var array The files being output for the current module
-     */
+    /** @var array The files being output for the current module. */
     private $files = array();
 
-    /**
-     * @var string[] The language files to be used when building the modules
-     */
+    /** @var string[] The language files to use when building the modules. */
     private $languages_available = array('english', 'portuguese_br', 'spanish_am');
 
-
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Setup the options
      *
      * @return void
      */
-    function __construct()
+    public function __construct()
     {
         $this->CI = &get_instance();
         $this->CI->load->config('modulebuilder');
         $this->options = $this->CI->config->item('modulebuilder');
 
-        if ( ! empty($this->options['languages_available'])
+        if (! empty($this->options['languages_available'])
             && is_array($this->options['languages_available'])
            ) {
             $this->languages_available = $this->options['languages_available'];
         }
 
-        if ( ! empty($this->options['database_types'])) {
+        if (! empty($this->options['database_types'])) {
             $this->databaseTypes = $this->options['database_types'];
         }
 
         foreach ($this->databaseTypes as $key => $dataTypes) {
             foreach ($dataTypes as $typeVal) {
                 // The order below is based on the number of occurrences of each
-                // type in the default set of values, from highest to lowest
+                // type in the default set of values, from highest to lowest.
                 switch ($typeVal) {
                     case 'integer':
                         $this->integerTypes[] = $key;
@@ -174,7 +167,7 @@ class Modulebuilder
             'model'      => 'myform_model',
             'view'       => 'myform_view',
             'controller' => 'myform',
-            'migration'  => 'migration'
+            'migration'  => 'migration',
         );
     }
 
@@ -233,6 +226,12 @@ class Modulebuilder
 
         // Used by buildController()
         $data['textTypes']          = $this->textTypes;
+        if (! empty($form_error_delimiters)
+            && isset($form_error_delimiters[0])
+            && isset($form_error_delimiters[1])
+        ) {
+            $data['form_error_delimiters'] = $form_error_delimiters;
+        }
 
         // Used by buildModel() and buildDbSQL()
         $data['realNumberTypes']    = $this->realNumberTypes; // also buildView()
@@ -297,16 +296,18 @@ class Modulebuilder
             } else {
                 // Only build these views for the Admin contexts
                 foreach ($action_names as $key => $action_name) {
-                    if ($action_name != 'delete' ) {
+                    if ($action_name != 'delete') {
                         $data['action_name'] = $action_name;
                         $data['action_label'] = $this->options['form_action_options'][$action_name];
                         $content['views'][$context_name][$action_name] = $this->buildView($data);
                     }
                 }
+                // Build the js view.
                 $data['action_name'] = 'js';
                 $data['action_label'] = $this->options['form_action_options'][$action_name];
                 $content['views'][$context_name]['js'] = $this->buildView($data);
 
+                // Build the sub_nav view.
                 $data['action_name'] = 'sub_nav';
                 $content['views'][$context_name]['_sub_nav'] = $this->buildView($data);
             }
@@ -321,31 +322,35 @@ class Modulebuilder
         // Build the permissions migration file
         $content['acl_migration'] = $this->buildAclSql($data);
 
-        // If the DB is required and there are fields, build a model and migration
+        // If the DB is required and there are fields, build a model and migration.
         if ($field_total && $db_required != '') {
-           // Build the model file
+           // Build the model file.
             $content['model'] = $this->buildModel($data);
 
-            // DB migration
+            // DB migration is only built if this is a new table.
             if ($db_required == 'new') {
                 $content['db_migration'] = $this->buildDbSql($data);
             }
         }
 
         // Did everything build correctly?
-        if ($content['acl_migration'] == false || $content['config'] == false
-            || $content['controllers'] == false || $content['views'] == false
+        if ($content['acl_migration'] == false
+            || $content['config'] == false
+            || $content['controllers'] == false
+            || $content['views'] == false
             || ($db_required != '' && $content['model'] == false)
             || ($db_required == 'new' && $content['db_migration'] == false)
            ) {
             $data['error']  = true;
-            $data['error_msg'] = "The form was not built. There was an error with one of the build_() functions. Probably caused by total fields variable not being set";
+            $data['error_msg'] = 'The form was not built.'
+                . ' There was an error with one of the build_() functions.'
+                . ' This was probably caused by total fields variable not being set.';
         } else {
             // Write the files to disk
             $write_status = $this->_write_files($module_file_name, $content, $table_name, $db_required);
 
             $data['error'] = false;
-            if ( ! $write_status['status']) {
+            if (! $write_status['status']) {
                 // Write failed
                 $data['error']      = true;
                 $data['error_msg']  = $write_status['error'];
@@ -363,42 +368,6 @@ class Modulebuilder
         $data['db_table'] 		= $table_name;
 
         return $data;
-    }
-
-    /**
-     * Generate the files required for the module
-     *
-     * @deprecated since 0.7.1
-     *
-     * @param int    $field_total           The number of fields to add to the table
-     * @param string $module_name           The name given to the module
-     * @param array  $contexts              An array of contexts selected
-     * @param array  $action_names          An array of the controller actions (methods) required
-     * @param string $primary_key_field     The name of the primary key
-     * @param string $db_required           The database requirement setting (new, existing or none)
-     * @param array  $form_error_delimiters An array with the html delimiters for error messages
-     * @param string $module_description    A description for the module which appears in the config file
-     * @param int    $role_id               The id of the role which receives full access to the module
-     * @param string $table_name            The name of the table in the database
-     * @param int    $table_as_field_prefix Use table name as field prefix
-     *
-     * @return array An array with the content for the generated files
-     */
-    public function build_files($field_total, $module_name, $contexts, $action_names, $primary_key_field, $db_required, $form_error_delimiters, $module_description, $role_id, $table_name, $table_as_field_prefix)
-    {
-        return $this->buildFiles(array(
-            'field_total'            => $field_total,
-            'module_name'            => $module_name,
-            'contexts'               => $contexts,
-            'action_names'           => $action_names,
-            'primary_key_field'      => $primary_key_field,
-            'db_required'            => $db_required,
-            'form_error_delimiters'  => $form_error_delimiters,
-            'module_description'     => $module_description,
-            'role_id'                => $role_id,
-            'table_name'             => $table_name,
-            'table_as_field_prefix'  => $table_as_field_prefix
-        ));
     }
 
     /**
@@ -508,9 +477,9 @@ class Modulebuilder
         return $this->timeTypes;
     }
 
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // PRIVATE METHODS
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Generate the ACL (permissions) migration file
@@ -558,7 +527,7 @@ class Modulebuilder
      *  array  'form_error_delimiters' An array with the html delimiters for error messages
      *  string 'table_name'            The name of the table in the database
      *
-     * @return string|bool The content of the controller file or false on error
+     * @return string|boolean The content of the controller file or false on error.
      */
     private function buildController($data)
     {
@@ -570,17 +539,17 @@ class Modulebuilder
     }
 
     /**
-     * Generate the module migration file which creates the database table
+     * Generate the module migration file which creates the database table.
      *
      * @param array $data The data required to build the migration
      *  int    'field_total'       The number of fields to add to the table
      *  string 'module_name'       The name given to the module
      *  string 'primary_key_field' The name of the primary key
      *  string 'table_name'        The name of the table in the database
-     *  bool   'table_as_field_prefix'  Whether the table name is used as a
-     *  prefix for field names
+     *  boolean 'table_as_field_prefix' Whether the table name is used as a prefix
+     *  for field names
      *
-     * @return string A string containing the content of the database migration file
+     * @return string The content of the database migration file.
      */
     private function buildDbSql($data)
     {
@@ -692,11 +661,13 @@ class Modulebuilder
         defined('DIR_WRITE_MODE') || $this->CI->load->config('constants');
 
         $error_msg = 'Module Builder:';
-        $modulePath = $this->options['output_path'] . "{$module_name}/";
+        $modulePath = "{$this->options['output_path']}{$module_name}/";
 
         // Make the $modulePath directory if it does not exist
-        if ( ! is_dir($modulePath) && ! @mkdir($modulePath, DIR_WRITE_MODE)) {
-            $errorMessage = "failed to make directory $modulePath";
+        if (! is_dir($modulePath)
+            && ! @mkdir($modulePath, DIR_WRITE_MODE)
+        ) {
+            $errorMessage = "failed to make directory {$modulePath}";
             log_message('error', $errorMessage);
 
             return array(
@@ -740,7 +711,7 @@ class Modulebuilder
                 // redefined here
                 foreach ($content[$type] as $name => $value) {
                     if ($value != '') {
-                        if ( ! write_file("{$modulePath}/{$type}/{$name}.php", $value)) {
+                        if (! write_file("{$modulePath}/{$type}/{$name}.php", $value)) {
                             $errorMessage = "failed to write file {$modulePath}/{$type}/{$name}.php";
                             log_message('error', $errorMessage);
                             $ret_val['status']  = false;
@@ -773,10 +744,10 @@ class Modulebuilder
                         }
 
                         $viewPath = $this->options['output_path'] . $path;
-                        if ( ! is_dir($viewPath)) {
+                        if (! is_dir($viewPath)) {
                             @mkdir($viewPath, DIR_WRITE_MODE);
                         }
-                        if ( ! write_file("{$viewPath}/{$file_name}", $value)) {
+                        if (! write_file("{$viewPath}/{$file_name}", $value)) {
                             $errorMessage = "failed to write file {$viewPath}/{$file_name}";
                             log_message('error', $errorMessage);
                             $ret_val['status']  = false;
@@ -792,7 +763,7 @@ class Modulebuilder
                     $file_name = "{$module_name}_lang";
                     $path = "{$modulePath}/language/{$lang_name}";
 
-                    if ( ! write_file("{$path}/{$file_name}.{$ext}", $lang_file_contents)) {
+                    if (! write_file("{$path}/{$file_name}.{$ext}", $lang_file_contents)) {
                         $errorMessage = "failed to write language file {$path}/{$file_name}.{$ext}";
                         log_message('error', $errorMessage);
                         $ret_val['status']  = false;
@@ -800,9 +771,8 @@ class Modulebuilder
                         break;
                     }
                 }
-            }
-            // Check whether the content is blank
-            elseif ($value != '') {
+            } elseif ($value != '') {
+                // If the content is not blank.
                 $file_name = $module_name;
                 $path = "{$modulePath}/{$type}s";
 
@@ -830,12 +800,12 @@ class Modulebuilder
                         break;
                 }
 
-                if ( ! is_dir($path) ) {
+                if (! is_dir($path)) {
                     $path = "{$modulePath}";
                 }
 
                 $ext = 'php';
-                if ( ! write_file("{$path}/{$file_name}.{$ext}", $value)) {
+                if (! write_file("{$path}/{$file_name}.{$ext}", $value)) {
                     $errorMessage = "failed to write file {$path}/{$file_name}.{$ext}";
                     log_message('error', $errorMessage);
                     $ret_val['status']  = false;
@@ -901,19 +871,70 @@ class Modulebuilder
         return true;
     }
 
+    //--------------------------------------------------------------------------
+    // Deprecated Methods (do not use)
+    //--------------------------------------------------------------------------
+
     /**
-     * Makes directory, returns TRUE if exists or made
+     * Generate the files required for the module
      *
-     * @deprecated since 0.7.1 use the third parameter for mkdir instead
+     * @deprecated since 0.7.1 Use buildFiles().
+     *
+     * @param int    $field_total           The number of fields to add to the table
+     * @param string $module_name           The name given to the module
+     * @param array  $contexts              An array of contexts selected
+     * @param array  $action_names          An array of the controller actions (methods) required
+     * @param string $primary_key_field     The name of the primary key
+     * @param string $db_required           The database requirement setting (new, existing or none)
+     * @param array  $form_error_delimiters An array with the html delimiters for error messages
+     * @param string $module_description    A description for the module which appears in the config file
+     * @param int    $role_id               The id of the role which receives full access to the module
+     * @param string $table_name            The name of the table in the database
+     * @param int    $table_as_field_prefix Use table name as field prefix
+     *
+     * @return array An array with the content for the generated files
+     */
+    public function build_files(
+        $field_total,
+        $module_name,
+        $contexts,
+        $action_names,
+        $primary_key_field,
+        $db_required,
+        $form_error_delimiters,
+        $module_description,
+        $role_id,
+        $table_name,
+        $table_as_field_prefix
+    ) {
+        return $this->buildFiles(array(
+            'field_total'           => $field_total,
+            'module_name'           => $module_name,
+            'contexts'              => $contexts,
+            'action_names'          => $action_names,
+            'primary_key_field'     => $primary_key_field,
+            'db_required'           => $db_required,
+            'form_error_delimiters' => $form_error_delimiters,
+            'module_description'    => $module_description,
+            'role_id'               => $role_id,
+            'table_name'            => $table_name,
+            'table_as_field_prefix' => $table_as_field_prefix,
+        ));
+    }
+
+    /**
+     * Makes directory, returns true if exists or made.
+     *
+     * @deprecated since 0.7.1 Use mkdir() passing true as the third parameter.
      *
      * @param string $pathname The directory path.
      * @param string $mode     The unix permissions on the directory eg (0775)
      *
-     * @return bool TRUE if exists or made or FALSE on failure.
+     * @return boolean True if exists or made, false on failure.
      */
     private function mkdir_recursive($pathname, $mode)
     {
         return is_dir($pathname) || @mkdir($pathname, $mode, true);
     }
 }
-//end Modulebuilder
+// end /builder/libraries/modulebuilder.php

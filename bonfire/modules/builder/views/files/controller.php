@@ -30,9 +30,8 @@ if ($db_required != '') {
         // Don't display soft-deleted records
         \$this->{$module_name_lower}_model->where(\$this->{$module_name_lower}_model->get_deleted_field(), 0);";
         }
-    }
+    } else {
     // Admin controllers
-    else {
         $indexDelete = "// Deleting anything?
 		if (isset(\$_POST['delete'])) {
             \$this->auth->restrict(\$this->permissionDelete);
@@ -320,6 +319,15 @@ if ($controller_name_lower != $module_name_lower) {
         \$this->auth->restrict(\$this->permissionView);";
 	$subNav = "
 		Template::set_block('sub_nav', '{$controller_name_lower}/_sub_nav');";
+
+    // If the form error delimiters have been passed, set them in the constructor.
+    if (! empty($form_error_delimiters)
+        && isset($form_error_delimiters[0])
+        && isset($form_error_delimiters[1])
+    ) {
+        $constructorExtras .= "
+            \$this->form_validation->set_error_delimiters({$form_error_delimiters[0]}, {$form_error_delimiters[1]});";
+    }
 }
 
 if ($db_required != '') {
