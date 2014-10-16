@@ -326,7 +326,7 @@ if ($controller_name_lower != $module_name_lower) {
         && isset($form_error_delimiters[1])
     ) {
         $constructorExtras .= "
-            \$this->form_validation->set_error_delimiters({$form_error_delimiters[0]}, {$form_error_delimiters[1]});";
+            \$this->form_validation->set_error_delimiters(\"{$form_error_delimiters[0]}\", \"{$form_error_delimiters[1]}\");";
     }
 }
 
