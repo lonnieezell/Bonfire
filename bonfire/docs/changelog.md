@@ -7,11 +7,12 @@
 #### New Features:
 
 * Composer Auto-loading may be enabled by setting `'composer_autoload'` to true (or the path to the autoload.php file) in /application/config/config.php. Please be aware that this currently requires hooks to be enabled and the `App_hooks->checkAutoloaderConfig()` method must be included in the `pre_controller` hooks in /application/config/hooks.php.
+* Now works with [Sparks](http://getsparks.org) out of the box.
+* Brand new documentation system that allows splitting your user and dev-related docs, and searching docs.
+* Added bfmysqli driver to support more features in the MySQLi driver without changing the codeigniter driver. Set `$db['dbdriver'] = 'bfmysqli';` in the database config, configure the other settings as you would for the mysqli driver.
 * Images controller can reference images from a module using the `module=...` parameter.
 * Template class now provides a `check_segment` helper in addition to `check_class` and `check_method`.
-* Brand new documentation system that allows splitting your user and dev-related docs, and searching docs.
 * CSRF protection can be bypassed for individual controllers by setting `csrf_ignored_controllers` setting in the site's main index file.
-* Now works with [Sparks](http://getsparks.org) out of the box.
 * Added `'languages_available'` and `'database_types'` to Module Builder's configurable options. `languages_available` tells the builder which language files to attempt to build for a new module. `database_types` gives the builder some information about the types supported by the database, and is used in generating the "Database Type" select on the module builder form, as well as handling several other aspects of building the module.
 
 #### Closes Issues:
