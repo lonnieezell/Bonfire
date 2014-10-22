@@ -16,6 +16,7 @@
 
 #### Closes Issues:
 
+* #1078 - Module Builder form's script would fail if other scripts using `localStorage` used URLs for keys. Failure of the script would cause collapsing areas in the form to stop functioning. DataTables v1.10 would cause this issue if the `saveState` option was enabled.
 * #1075 - Removed statistics collection from installer.
 * #1073 - Installation issues with App_hooks when settings table doesn't exist.
 * #1048 - (almost) full russian language
@@ -72,7 +73,7 @@
 * Updated CodeIgniter to version 2.2
 * Updated list of countries in /application/config/address.php and added state codes for a few more countries.
 * Separated all Bonfire code from your Application's code
-* Most bonfire specific code now uses a `BF_` prefix instead of the `MY_` prefix your application would use.
+* Most Bonfire-specific code now uses a `BF_` prefix instead of the `MY_` prefix your application would use.
 * Removed Settings related to the previously removed Updates module
 * The user register form can be modified to include hidden fields named `register_url` and `login_url` that will override the current `REGISTER_URL` and `LOGIN_URL` values, respectively, to make it simpler to use the existing logic in custom modules.
 * Added 4th parameter to `timezone_menu` in the date helper to allow passing additional attributes, such as an ID, for the generated select element. Updated the `user_fields` view to make sure of this parameter (and fix an accessibility error on the view).
