@@ -85,6 +85,10 @@
     * Replaced `Assets::$asset_base`, `Assets::$asset_cache_folder`, and `Assets::$asset_folders` with a single `Assets::$directories` array (these were not deprecated because they were private properties). Allow a config item (`'assets.directories'`) to set the value of the new property, but if it is not set the library will attempt to use the old config items (`'assets.base_folder'`, `'assets.cache_folder'`, and `'assets.asset_folders'`).
     * Added closures to hold the functions for CSS/JS minification, which should facilitate swapping out the libraries that perform these functions in the future.
     * Deprecated `Assets::set_globals()`, `Assets::$external_scripts`, `Assets::$inline_scripts`, and `Assets::$module_scripts`. Replaced by `Assets::setGlobals()` and `Assets::$scripts['external']`/`Assets::$scripts['inline']`/`Assets::$scripts['module']`
+* Database module:
+    * Added support for bfmysqli driver.
+    * Changed language files to use `database_` prefix instead of `db_` prefix to prevent conflicts with CodeIgniter's language files.
+    * Moved CSS out of the views.
 * Docs:
     * Docs system is much more robust now, including link fixing, separating application/developer docs in the UI, a basic search system, and more.
     * Added configuration options to docs module to set the environments in which the docs will be displayed and the name of the toc file.

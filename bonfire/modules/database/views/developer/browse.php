@@ -1,18 +1,18 @@
 <div class="alert alert-info">
-	<p><strong><?php e(lang('db_sql_query')); ?></strong>:</p>
+	<h4 class='alert-heading'><?php e(lang('database_sql_query')); ?>:</h4>
 	<p><?php e($query); ?></p>
 </div>
-<?php if (isset($rows) && is_array($rows) && count($rows)) :?>
-<p><?php echo e(lang('db_total_results')); ?>: <?php echo count($rows); ?></p>
+<?php if (empty($rows) || ! is_array($rows)) : ?>
+<div class="alert alert-warning">
+	<?php e(lang('database_no_rows')); ?>
+</div>
+<?php else : ?>
+<p><?php echo e(sprintf(lang('database_total_results'), count($rows))); ?></p>
 <div class="admin-box">
 	<table class="table table-striped">
 		<thead>
 			<tr>
-				<?php
-				$heads = $rows[0];
-			
-				foreach ($heads as $field => $value) :
-				?>
+				<?php foreach ($rows[0] as $field => $value) : ?>
 				<th><?php e($field); ?></th>
 				<?php endforeach; ?>
 			</tr>
@@ -28,8 +28,4 @@
 		</tbody>
 	</table>
 </div>
-<?php else: ?>
-<div class="alert alert-warning">
-	<?php e(lang('db_no_rows')); ?>
-</div>
-<?php endif; ?>
+<?php endif;
