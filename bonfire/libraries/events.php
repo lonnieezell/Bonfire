@@ -1,100 +1,77 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT    The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
  * Events Class
  *
- * Allows you to create hook points throughout the application that any
- * other module can tap into without hacking core code.
+ * Allows you to create hook points throughout the application that any other
+ * module can tap into without hacking core code.
  *
- * @package    Bonfire
- * @subpackage Libraries
- * @category   Libraries
+ * @package Bonfire\Libraries\Events
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/core/unit_test.html
- * @version    3.0
- *
+ * @link    http://cibonfire.com/docs/developer
  */
 class Events
 {
+    /**
+     * @var object The CI instance, only retrieved if required in the init() method.
+     */
+    private static $ci;
 
 	/**
-	 * Holds the registered events.
-	 *
-	 * @access private
-	 *
-	 * @var array
+     * @var array Holds the registered events.
 	 */
 	private static $events;
 
-	//--------------------------------------------------------------------
-
 	/**
-	 * This if here solely for CI loading to work. Just calls the init( ) method.
+     * This if here solely for CI loading to work. Just calls the init() method.
 	 *
 	 * @return void
 	 */
 	public function __construct()
 	{
 		self::init();
-	}//end __construct()
-
-	//--------------------------------------------------------------------
+    }
 
 	/**
-	 * Loads the config/events.php file into memory so we can access it
-	 * later without the disk load.
-	 *
-	 * @access public
+     * Loads the library's dependencies and configuration.
 	 *
 	 * @return void
 	 */
 	public static function init()
 	{
-		if (!function_exists('read_config'))
-		{
-			$ci =& get_instance();
-			$ci->load->helper('config_file');
-			$ci->load->helper('application');
+        if (! function_exists('read_config')) {
+            self::$ci =& get_instance();
+            self::$ci->load->helper('config_file');
 		}
 
+        self::$events = read_config('events', true, null, false);
 
-		self::$events = read_config('events', TRUE, NULL, FALSE);
-
-        // merge other modules events
-        foreach(module_list(TRUE) as $module)
-        {
-        	$module_events = read_config('events', TRUE, $module, TRUE);
-
-            if(is_array($module_events))
-            {
+        // Merge events from indivdual modules.
+        foreach (Modules::list_modules(true) as $module) {
+            $module_events = read_config('events', true, $module, true);
+            if (is_array($module_events)) {
                 self::$events = array_merge_recursive(self::$events, $module_events);
             }
         }
 
-
-		if (self::$events == false)
-		{
+        if (self::$events == false) {
 			self::$events = array();
 		}
-
-	}//end init()
-
-	//--------------------------------------------------------------------
+    }
 
 	/**
 	 * Triggers an individual event.
@@ -108,48 +85,36 @@ class Events
 	 *
 	 * @return void
 	 */
-	public static function trigger($event_name=null, &$payload=null)
-	{
-		if (empty($event_name) || !is_string($event_name))
+    public static function trigger($event_name = null, &$payload = null)
 		{
+        if (empty($event_name)
+            || ! is_string($event_name)
+            || ! array_key_exists($event_name, self::$events)
+        ) {
 			return;
 		}
 
-		if (!array_key_exists($event_name, self::$events))
-		{
-			return;
-		}
-
-		if (!function_exists('module_file_path'))
-		{
-			$ci =& get_instance();
-			$ci->load->helper('application');
-		}
-
-		$subscribers = self::$events[$event_name];
-
-		foreach ($subscribers as $subscriber)
-		{
-			if (strpos($subscriber['filename'], '.php') == false)
-			{
+        foreach (self::$events[$event_name] as $subscriber) {
+            if (strpos($subscriber['filename'], '.php') === false) {
 				$subscriber['filename'] .= '.php';
 			}
 
-			$file_path = module_file_path($subscriber['module'], $subscriber['filepath'], $subscriber['filename']);
+            $file_path = Modules::file_path(
+                $subscriber['module'],
+                $subscriber['filepath'],
+                $subscriber['filename']
+            );
 
-			if (!file_exists($file_path))
-			{
+            if (! file_exists($file_path)) {
 				continue;
 			}
 
 			@include_once($file_path);
 
-			if (!class_exists($subscriber['class']))
-			{
+            if (! class_exists($subscriber['class'])) {
                 // if class doesn't exist check that the function is callable
                 // could be just a helper function
-                if(is_callable($subscriber['method']))
-                {
+                if (is_callable($subscriber['method'])) {
                     call_user_func($subscriber['method'], $payload);
                 }
 				continue;
@@ -157,18 +122,14 @@ class Events
 
 			$class = new $subscriber['class'];
 
-			if (!is_callable( array($class, $subscriber['method']) ))
-			{
+            if (! is_callable(array($class, $subscriber['method']))) {
 				unset($class);
 				continue;
 			}
 
 			$class->{$subscriber['method']}($payload);
 			unset($class);
-		}//end foreach
-
-	}//end trigger()
-
-	//--------------------------------------------------------------------
-
-}//end class
+        }
+    }
+}
+// end class /bonfire/libraries/events.php

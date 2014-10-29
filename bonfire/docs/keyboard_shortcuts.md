@@ -1,4 +1,6 @@
-## 1 Terminology used
+# Keyboard Shortcuts
+
+## Terminology used
 
 This guide will use certain terminology in an effort to make it easier to understand:
 
@@ -9,7 +11,7 @@ Very simple, but worth noting.
 
 
 <a name="base"></a>
-## 2 Base Shortcuts
+## Base Shortcuts
 
 There are seven shortcut actions available in a base install of Bonfire of which two have shortcut keys assigned:
 
@@ -30,7 +32,7 @@ To view the Shortcuts which are active in your Bonfire installation click on the
 
 
 <a name="assign"></a>
-## 3 How to assign keys
+## How to assign keys
 
 You can assign shortcut keys to each of the actions available by simply visiting the Keyboard Shortcuts page under the Settings menu.
 
@@ -41,9 +43,9 @@ Bonfire uses the [Jwerty](http://keithcirkel.co.uk/jwerty/) project to handle th
 Note: Spaces are not allowed in your shortcut keys as this would break the javascript.
 
 <a name="add"></a>
-### 4 How to add actions
+### How to add actions
 
-The shortcut actions are managed in the application config file <tt>/bonfire/application/config/application.php</tt> in the <tt>ui.current_shortcuts</tt> array element.
+The shortcut actions are managed in the application config file `/bonfire/application/config/application.php` in the `ui.current_shortcuts` array element.
 
 The array contains an array "key" for the shortcut action, e.g. 'delete'. The action itself contains a description and the action javascript.
 

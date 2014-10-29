@@ -1,13 +1,14 @@
-<?php
+<?php if (empty($content)) : ?>
 
-if (empty($content)) {
-    $divClass = 'alert';
-    $content = lang('docs_not_found');
-} else {
-    $divClass = 'page';
-}
+    <div class="alert">
+        <span class="glyphicon glyphicon-book"></span>
+        <?php echo lang('docs_not_found'); ?>
+    </div>
 
-?>
-<div class="<?php echo $divClass; ?>">
-    <?php echo $content; ?>
-</div>
+<?php else: ?>
+
+    <div class="page">
+        <?php echo $content; ?>
+    </div>
+
+<?php endif; ?>

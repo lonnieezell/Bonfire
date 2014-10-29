@@ -1,25 +1,27 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ */
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
+/**
+ * Application language file (American Spanish)
+ *
+ * Localization strings used by Bonfire
+ *
+ * @package    Bonfire\Application\Language\Spanish_am
+ * @author     Bonfire Dev Team
+ * @link       http://cibonfire.com/docs/guides
+ */
 
 //--------------------------------------------------------------------
 // ! GENERAL SETTINGS
@@ -93,13 +95,6 @@ $lang['bf_action_ban']			= 'Bloquear';
 //--------------------------------------------------------------------
 // ! SETTINGS LIB
 //--------------------------------------------------------------------
-
-$lang['bf_do_check']			= '¿Buscar actualizaciones?';
-$lang['bf_do_check_edge']		= 'Must be enabled to see bleeding edge updates as well.';
-
-$lang['bf_update_show_edge']	= 'View bleeding edge updates?';
-$lang['bf_update_info_edge']	= 'Deja sin marcar para buscar sólo las nuevas actualizaciones etiquetadas. Comprobar cualquier envío al repositorio oficial.';
-
 $lang['bf_ext_profile_show']	= '¡Las cuentas de usuario tienen perfil extendido?';
 $lang['bf_ext_profile_info']	= 'Check "Extended Profiles" to have extra profile meta-data available option(wip), omiting some default bonfire fields (eg: address).';
 

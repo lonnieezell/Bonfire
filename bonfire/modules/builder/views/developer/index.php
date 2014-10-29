@@ -1,9 +1,8 @@
-<?php if ( ! $writeable) : ?>
+<?php if ( ! $writable) : ?>
 <div class="alert alert-error">
-	<p><?php echo lang('mb_not_writeable_note'); ?></p>
+	<p><?php echo lang('mb_not_writable_note'); ?></p>
 </div>
 <?php endif;?>
-
 <div class="admin-box">
 	<?php if (isset($modules) && is_array($modules) && count($modules)) : ?>
 	<table class="table table-striped">
@@ -19,7 +18,7 @@
 		<tbody>
 		<?php foreach ($modules as $module => $config) : ?>
 			<tr>
-				<td><?php echo $config['name'] ?></td>
+				<td><?php echo $config['name']; ?></td>
 				<td><?php e(isset($config['version']) ? $config['version'] : '---'); ?></td>
 				<td><?php e(isset($config['description']) ? $config['description'] : '---'); ?></td>
 				<td><?php e(isset($config['author']) ? $config['author'] : '---'); ?></td>

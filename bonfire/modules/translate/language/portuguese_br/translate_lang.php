@@ -1,6 +1,6 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
-$lang['tr_translate_title']		= 'Traduzir para %s';
+$lang['tr_translate_title'] = 'Traduzir para %s';
 $lang['tr_no_modules'] = 'Nenhum módulo achado com o arquivo de linguagem.';
 $lang['tr_no_core'] = 'Nenhum arquivo de linguagem do Núcleo foi achado.';
 
@@ -24,3 +24,7 @@ $lang['tr_export_note'] = 'Os arquivos de linguagem providenciadas por você, de
 $lang['tr_include'] = 'Selecionar partes';
 $lang['tr_include_core'] = 'Incluir Núcleo';
 $lang['tr_include_mods'] = 'Incluir módulos customizados';
+
+$lang['tr_translate_success'] = 'entradas de idiomas selecionados foram traduzidos com sucesso.';
+$lang['tr_translate_part_success'] = 'entradas de idiomas selecionados foram traduzidos com sucesso, mas % s falhou.';
+$lang['tr_translate_failed'] = 'As entradas de idiomas selecionados não foram traduzidos . Consulte o log de erro para mais detalhes.';

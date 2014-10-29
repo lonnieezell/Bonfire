@@ -1,32 +1,20 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-//Translator: Sajjad Servatjoo <sajjad.servatjoo[at]gmail[dot]com>
+/**
+ * Builder Language File (Persian)
+ *
+ * @package     Bonfire\Modules\Builder\Language\Persian
+ * @author      Bonfire Dev Team (Translator: Sajjad Servatjoo <sajjad.servatjoo[at]gmail[dot]com>)
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
 
 // INDEX page
 $lang['mb_create_button']		= 'ايجاد افزونه';
 $lang['mb_create_link']			= 'ایجاد افزونه جدید';
 $lang['mb_create_note']			= 'جهت ساخت افزونه ي خود ميتوانيد از افزونه ساز ما استفاده کنيد. تمام فايل هاي مورد نياز به صورت اتوماتيک توليد خواهند شد.';
-$lang['mb_not_writeable_note']	= 'خطا: پوشه ي application/modules قابل نوشتن نمي باشد.';
+$lang['mb_not_writable_note']	= 'خطا: پوشه ي application/modules قابل نوشتن نمي باشد.';
 $lang['mb_generic_description']	= 'توضيحات را اينجا وارد کنيد.';
 $lang['mb_installed_head']		= 'افزونه هاي نصب شده';
 $lang['mb_module']				= 'افزونه';

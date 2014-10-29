@@ -26,13 +26,13 @@ $config['extended_settings_fields'] = array(
 		'name'	=> 'extended_settings_test',
 		'label'	=> 'Test Label',
 		'rules'	=> 'trim',
-		'form_detail'	=> array(
-			'type'	=> 'dropdown',
+		'form_detail' => array(
+			'type'	    => 'dropdown',
 			'settings'	=> array(
-				'name'	=> 'extended_settings_test',
-				'id'	=> 'extended_settings_test',
+				'name'  => 'extended_settings_test',
+				'id'    => 'extended_settings_test',
 			),
-			'options'	=> array(
+			'options' => array(
 				'0'	=> 'Passed',
 				'1'	=> 'Failed',
 			),
@@ -40,12 +40,12 @@ $config['extended_settings_fields'] = array(
 		'permission' => 'This.Shouldnt.ShowUp',
 	),
 	array(
-		'name'   => 'street_name',
-		'label'   => lang('user_meta_street_name'),
-		'rules'   => 'trim|max_length[100]',
+		'name'  => 'street_name',
+		'label' => lang('user_meta_street_name'),
+		'rules' => 'trim|max_length[100]',
 		'form_detail' => array(
-			'type' => 'input',
-			'settings' => array(
+			'type'      => 'input',
+			'settings'  => array(
 				'name'		=> 'street_name',
 				'id'		=> 'street_name',
 				'maxlength'	=> '100',
@@ -55,12 +55,12 @@ $config['extended_settings_fields'] = array(
 		'permission' => 'Site.Settings.View',
 	),
 	array(
-		'name'   => 'state',
-		'label'   => lang('user_meta_state'),
-		'rules'   => 'required|trim|max_length[2]',
+		'name'  => 'state',
+		'label' => lang('user_meta_state'),
+		'rules' => 'trim|max_length[2]',
 		'form_detail' => array(
-			'type' => 'state_select',
-			'settings' => array(
+			'type'      => 'state_select',
+			'settings'  => array(
 				'name'		=> 'state',
 				'id'		=> 'state',
 				'maxlength'	=> '2',
@@ -70,36 +70,17 @@ $config['extended_settings_fields'] = array(
 		'permission' => 'Site.Content.View',
 	),
 	array(
-		'name'   => 'country',
-		'label'   => lang('user_meta_country'),
-		'rules'   => 'required|trim|max_length[100]',
+		'name'  => 'country',
+		'label' => lang('user_meta_country'),
+		'rules' => 'required|trim|max_length[100]',
 		'form_detail' => array(
-			'type' => 'country_select',
-			'settings' => array(
+			'type'      => 'country_select',
+			'settings'  => array(
 				'name'		=> 'country',
 				'id'		=> 'country',
 				'maxlength'	=> '100',
 				'class'		=> 'span6'
 			),
-		),
-	),
-	array(
-		'name'   => 'type',
-		'label'   => lang('user_meta_type'),
-		'rules'   => 'required',
-		'form_detail' => array(
-			'type' => 'dropdown',
-			'settings' => array(
-				'name'		=> 'type',
-				'id'		=> 'type',
-				'class'		=> 'span6',
-			),
-			'options' =>  array(
-				'small'  => 'Small Shirt',
-				'med'    => 'Medium Shirt',
-				'large'   => 'Large Shirt',
-				'xlarge' => 'Extra Large Shirt',
-			  ),
 		),
 	),
 );

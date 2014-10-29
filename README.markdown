@@ -1,4 +1,4 @@
-# Faster Development of CodeIgniter 2.1.4 Apps
+# Faster Development of CodeIgniter 2.x Apps
 
 <div style="float: right; margin: 0 20px 20px 0">
 	<a href='http://www.pledgie.com/campaigns/15326'><img alt='Click here to lend your support to: Bonfire - faster CodeIgniter development and make a donation at www.pledgie.com !' src='http://pledgie.com/campaigns/15326.png?skin_name=chrome' border='0' /></a>
@@ -50,7 +50,7 @@ We strive to make Bonfire a solid base to work with.  In doing so your Bug Repor
 The Bonfire Team is made up from developers around the world interested in making Bonfire a better kickstart for your [CodeIgniter](http://codeigniter.com) projects.
 
 - [Lonnie Ezell](http://lonnieezell.com) - Lead Developer
-- [Sean Downey](https://github.com/seandowney)
-- [Shawn Crigger](https://github.com/svizion)
-- [Alan Jenkins](https://github.com/sourcejedi)
 - [Mat Whitney](https://github.com/mwhitneysdsu)
+- [Alan Jenkins](https://github.com/sourcejedi)
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/ci-bonfire/bonfire/trend.png)](https://bitdeli.com/free "Bitdeli Badge").

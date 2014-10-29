@@ -1,31 +1,20 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
+/**
+ * Builder Language File (Brazilian Portuguese)
+ *
+ * @package     Bonfire\Modules\Builder\Language\Portuguese_br
+ * @author      Bonfire Dev Team
+ * @copyright   Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license     http://opensource.org/licenses/MIT
+ * @link        http://cibonfire.com/docs/builder
+ */
 
 // INDEX page
 $lang['mb_create_button'] = 'Criar Módulo';
 $lang['mb_create_link'] = 'Criar um novo Módulo';
 $lang['mb_create_note'] = 'Utilize o nosso assistente wizbang de criaçõa de módulo para criar o seu próximo módulo. Nós fazemos todo o trabalho pesado, gerando todos os controladores, modelos, visualizações e arquivos de idioma que você precisa.';
-$lang['mb_not_writeable_note'] = 'Erro : A pasta application/modules não é gravável, então o módulo não podê ser gravado no servidor. Por favor dê permissão de gravação nesta pasta e atualize esta página.';
+$lang['mb_not_writable_note'] = 'Erro : A pasta application/modules não é gravável, então o módulo não podê ser gravado no servidor. Por favor dê permissão de gravação nesta pasta e atualize esta página.';
 $lang['mb_generic_description'] = 'Sua descrição aqui.';
 $lang['mb_installed_head'] = 'Instalados os módulos de aplicação';
 $lang['mb_module'] = 'Módulos';
@@ -64,13 +53,13 @@ $lang['mb_form_note'] = '<p><b>Preencha os campos que você gostaria em seu mód
 $lang['mb_table_note'] = '<p>Sua tabela será criada com pelo menos um campo, o campo de chave primária que será utilizado como um identificador único e como um índice. Se você quiser campos adicionais, clique no número desejado para adicioná-los a este formulário.</p>';
 
 $lang['mb_field_note'] = '<p><b>NOTA: Para todos os campos</b><br />Se o tipo de campo do banco de dados é "Enum" ou "Set", por favor insira os valores usando este formato: \'a\',\'b\',\'c\'...<br /> Se você precisa colocar uma barra invertida ("\\") ou um apóstrofo entre esses valores, precedê-lo com uma barra invertida (por exemplo \'\\\\xyz\' or \'a\\\'b\').</p>';
-	
+
 $lang['mb_form_errors'] = 'Por favor, corrija os erros abaixo.';
 $lang['mb_form_mod_details'] = 'Detalhes do módulo';
 $lang['mb_form_mod_name'] = 'Nome do Módulo';
 $lang['mb_form_mod_name_ph'] = 'Fóruns, Blogs, ToDo';
 $lang['mb_form_mod_desc'] = 'Descrição do Módulo';
-$lang['mb_form_mod_desc_ph'] = 'A lista de itens para fazer';
+$lang['mb_form_mod_desc_ph'] = 'A descrição do módulo';
 $lang['mb_form_contexts'] = 'contextos Obrigatório';
 $lang['mb_form_public'] = 'Público';
 $lang['mb_form_table_details'] = 'Detalhes da tabela';
@@ -83,7 +72,9 @@ $lang['mb_form_soft_deletes'] = 'Usar exclusão organizada?';
 $lang['mb_form_use_created'] = 'Usar campo "Criado"?';
 $lang['mb_form_use_modified'] = 'Usar campo "Modificado"?';
 $lang['mb_form_created_field'] = 'Nome do campo "Criado"?';
-$lang['mb_form_modified_field'] = '"Nome do campo "Modificado?';
+$lang['mb_form_created_field_ph']	= 'created_on';
+$lang['mb_form_modified_field'] = 'Nome do campo "Modificado"?';
+$lang['mb_form_modified_field_ph']	= 'modified_on';
 $lang['mb_form_generate'] = 'Criar tablela para o Módulo';
 $lang['mb_form_role_id'] = 'Dê à função acesso completo';
 $lang['mb_form_fieldnum'] = 'Campos da tabela adicional';
@@ -119,16 +110,54 @@ $lang['mb_form_is_natural_no_zero'] = 'Natural, sem zeros';
 $lang['mb_form_valid_ip'] = 'Válido IP';
 $lang['mb_form_valid_base64'] = 'Base64 Válido';
 $lang['mb_form_alpha_extra'] = 'AlphaNuméricos, sublinhado, traço, períodos e espaços.';
-$lang['mb_form_match_existing']	= 'Ensure this matches the existing fieldname!';
+$lang['mb_form_match_existing']	= 'Certifique-se de preencher com o nome do campo existente!';
+$lang['mb_form_module_db_no']	= 'Nenhuma';
+$lang['mb_form_module_db_create']	= 'Criar Nova Tabela';
+$lang['mb_form_module_db_exists']	= 'Construir a partir de Tabela Existente';
+$lang['mb_form_build']			= 'Criar módulo';
 
 // Activities
 $lang['mb_act_create'] = 'Modulo Criado';
 $lang['mb_act_delete'] = 'Módulo excluído';
 
-// $lang['mb_create_a_context']	= 'Create A Context';
-// $lang['mb_tools']				= 'Tools';
-// $lang['mb_mod_builder']			= 'Module Builder';
-// $lang['mb_new_context']			= 'New Context';
-// $lang['mb_no_context_name']		= 'Invalid Context name.';
-// $lang['mb_cant_write_config']	= 'Unable to write to config file.';
-// $lang['mb_context_exists']		= 'Context already exists in application config file.';
+// Create Context
+$lang['mb_create_a_context']	= 'Criar um Contexto';
+$lang['mb_tools']				= 'Ferramentas';
+$lang['mb_mod_builder']			= 'Construtor de Módulos';
+$lang['mb_new_context']			= 'Novo Contexto';
+$lang['mb_no_context_name']		= 'Nome de contexto inválido.';
+$lang['mb_cant_write_config']	= 'Não foi possível gravar o arquivo de configuração.';
+$lang['mb_context_exists']		= 'Contexto já existe no arquivo de configuração da aplicação.';
+$lang['mb_context_name']        = 'Nome do Contexto';
+$lang['mb_context_name_help']   = 'Não pode conter espaços.';
+$lang['mb_context_create_success']  = 'Contexto criado com sucesso.';
+$lang['mb_context_create_error']    = 'Erro criado Contexto: ';
+$lang['mb_context_create_intro']    = 'Cria e define um novo Context.';
+$lang['mb_roles_label']         = 'Permitir para os papéis:';
+$lang['mb_context_migrate']     = 'Criar uma Migração da Aplicação?';
+$lang['mb_context_submit']      = 'Criar';
+
+// Create Module
+$lang['mb_module_table_not_exist']  = 'A tabela com o nome especificado não existe';
+$lang['mb_toolbar_title_create'] = 'Construtor de Módulos';
+
+// Delete Module
+$lang['mb_delete_trans_false']  = 'Não foi possível excluir este módulo.';
+$lang['mb_delete_success']      = 'O módilo e as entradas associadas no Banco de Dados foram excluídos com sucesso.';
+$lang['mb_delete_success_db_only']  = ' PORÉM, a pasta e os arquivos do módulo não foram excluídos. Eles devem ser excluídos manualmente.';
+
+// Validate Form
+$lang['mb_contexts_content']    = 'Contexts :: Content';
+$lang['mb_contexts_developer']  = 'Contexts :: Developer';
+$lang['mb_contexts_public']     = 'Contexts :: Public';
+$lang['mb_contexts_reports']    = 'Contexts :: Reports';
+$lang['mb_contexts_settings']   = 'Contexts :: Settings';
+$lang['mb_module_db']           = 'Tabela do Módulo';
+$lang['mb_form_action_create']  = 'Form Actions :: Criar';
+$lang['mb_form_action_delete']  = 'Form Actions :: Excluir';
+$lang['mb_form_action_edit']    = 'Form Actions :: Editar';
+$lang['mb_form_action_view']    = 'Form Actions :: Listar';
+$lang['mb_soft_delete_field']   = 'Nome do campo de "Soft" Delete';
+$lang['mb_soft_delete_field_ph']    = 'deleted';
+$lang['mb_validation_no_match'] = '%s %ss (%s & %s) must be unique!';
+$lang['mb_modulename_check']    = 'The %s field is not valid';

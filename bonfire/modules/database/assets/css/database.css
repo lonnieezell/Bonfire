@@ -1,0 +1,49 @@
+.backups.admin-box > form,
+.database.admin-box > form {
+	padding: 0;
+}
+.database tfoot label {
+	float: left;
+	width: 160px;
+	padding: 5px 5px 0 0;
+	text-align: right;
+	margin-bottom: 0;
+}
+#database-action {
+	margin-bottom: 0;
+}
+.database input[type='submit'] {
+	margin-left: 1em;
+}
+.database th.records {
+	width: 5.5em;
+}
+.database td.records {
+	text-align: center;
+}
+.backup div.info {
+	padding: 20px;
+}
+.backup .info .heading {
+	font-weight: bold;
+	margin-right: 2em;
+}
+.backups #cb {
+	width: 2em;
+}
+.backups #db_size_column {
+	width: 6.5em;
+}
+.drop-table h4 {
+	margin: 1em 0 0 1em;
+}
+.restore .filename {
+	color: #fff;
+}
+.restore .backups-link {
+	text-align: right;
+	margin-bottom: 10px;
+}
+.restore .content-box {
+	padding: 15px;
+}

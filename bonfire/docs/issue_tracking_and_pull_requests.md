@@ -1,4 +1,4 @@
-# Issue Guidelines
+# Submitting Bug Reports and Feature Requests
 
 Please read this document before submitting an issue or pull request the CI-Bonfire project.
 It really helps us out and lets us know that you respect our time.

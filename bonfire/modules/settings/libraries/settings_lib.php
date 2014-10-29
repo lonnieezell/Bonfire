@@ -1,311 +1,288 @@
-<?php  defined('BASEPATH') or exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications.
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
- * Settings Module Library
+ * Settings Library
  *
- * Provides methods to retrieve and update settings in the database
+ * Provides methods to retrieve settings from the database and/or config files,
+ * and update settings in the database.
  *
- * @package    Bonfire
- * @subpackage Modules_Settings
- * @category   Libraries
+ * @todo sort out the handling of module-specific settings, especially in the cache.
+ *
+ * @todo If someone retrieves a config value with item(), then attempts to change
+ * the value with set(), it will attempt to update the value in the database...
+ *
+ * @package    Bonfire\Modules\Settings\Libraries\Settings_lib
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- * @TODO       Update File Link to a Docs/Guides on the Settings_lib methods
- *
+ * @link       http://cibonfire.com/docs/developer/settings#settings_lib
  */
 class Settings_lib
 {
-
 	/**
-	 * A pointer to the CodeIgniter instance.
-	 *
-	 * @access protected
-	 *
-	 * @var object
+     * @var object A pointer to the CodeIgniter instance.
 	 */
-	protected $ci;
+    protected static $ci;
 
 	/**
-	 * Settings cache
-	 *
-	 * @access private
-	 *
-	 * @var	array
+     * @var array Settings cache
 	 */
 	private static $cache = array();
 
-	//--------------------------------------------------------------------
+    private static $settingsModelLoaded = false;
 
 	/**
-	 * The Settings Construct retrieves all settings and stores them
-	 * in the setting cache
+     * This constructor facilitates loading through CI.
 	 *
 	 * @return void
 	 */
 	public function __construct()
 	{
+        self::init();
+        self::find_all();
+    }
 
-		$this->ci =& get_instance();
-		$this->ci->load->model('settings/settings_model');
+    /**
+     * Initialize the library.
+     *
+     * @return void
+     */
+    public static function init()
+    {
+        if (! is_object(self::$ci)) {
+            self::$ci =& get_instance();
+        }
 
-		$this->find_all();
-
-	}//end __construct()
-
-	// ------------------------------------------------------------------------
+        if (! class_exists('settings_model') && isset(self::$ci->load)) {
+            self::$ci->load->model('settings/settings_model');
+        }
+        if (! self::$settingsModelLoaded
+            && class_exists('settings_model')
+            && isset(self::$ci->db)
+            && ! empty(self::$ci->db->database)
+            && self::$ci->db->table_exists(self::$ci->settings_model->get_table())
+        ) {
+            self::$settingsModelLoaded = true;
+        }
+    }
 
 	/**
-	 * Gets the setting value requested
+     * Get the requested settings value.
 	 *
-	 * @access public
+     * @param string $name The name of the setting record to retrieve.
 	 *
-	 * @param string $name The name of the setting record to retrieve
+     * @return mixed
 	 */
 	public function __get($name)
 	{
 		return self::get($name);
-
-	}//end __get
-
-	// ------------------------------------------------------------------------
+    }
 
 	/**
-	 * Sets the setting value requested
+     * Set the requested setting value.
 	 *
-	 * @access public
-	 *
-	 * @param string $name  The name of the setting
-	 * @param string $value The value to save
+     * @param string $name  The name of the setting.
+     * @param string $value The value to save.
 	 *
 	 * @return bool
 	 */
 	public function __set($name, $value)
 	{
 		return self::set($name, $value);
-
-	}//end __set
-
-	// ------------------------------------------------------------------------
+    }
 
 	/**
-	 * Retrieves a setting.
+     * Retrieve a setting.
 	 *
-	 * @access public
-	 * @static
-	 *
-	 * @param string $name The name of the item to retrieve
+     * @param string $name The name of the item to retrieve.
 	 *
 	 * @return bool
 	 */
 	public static function item($name)
 	{
-		$ci =& get_instance();
-
-		if(isset(self::$cache[$name]))
-		{
+        if (isset(self::$cache[$name])) {
 			return self::$cache[$name];
 		}
 
-		$setting = $ci->settings_model->find_by('name', $name);
+        self::init();
 
-		// Setting doesn't exist, maybe it's a config option
-		$value = $setting ? $setting->value : config_item($name);
+        $value = null;
+        if (self::$settingsModelLoaded) {
+            $setting = self::$ci->settings_model->find_by('name', $name);
+            if ($setting) {
+                $value = $setting->value;
+            }
+        }
 
-		// Store it for later
+        // Setting doesn't exist, maybe it's a config option.
+        if (is_null($value)) {
+            $value = config_item($name);
+        }
+
+        // Store it for later.
 		self::$cache[$name] = $value;
 
 		return $value;
-
-	}//end item()
-
-	// ------------------------------------------------------------------------
+    }
 
 	/**
-	 * Sets a config item
+     * Set a setting in the database.
 	 *
-	 * @access public
-	 * @static
-	 *
-	 * @param string $name   Name of the setting
-	 * @param string $value  Value of the setting
-	 * @param string $module Name of the module
+     * @param string $name   Name of the setting.
+     * @param string $value  Value of the setting.
+     * @param string $module Name of the module.
 	 *
 	 * @return bool
 	 */
-	public static function set($name, $value, $module='core')
+    public static function set($name, $value, $module = 'core')
 	{
-		$ci =& get_instance();
+        self::init();
 
-		if (isset(self::$cache[$name]))
-		{
-			$setting = $ci->settings_model->update_where('name', $name, array('value' => $value));
+        if (! self::$settingsModelLoaded) {
+            return false;
 		}
-		else
-		{
-			// insert
-			$data = array(
+
+        // Since the cache is originally retrieved from the database, the database
+        // is updated if the $name is found in the cache.
+        if (isset(self::$cache[$name])) {
+            $setting = self::$ci->settings_model->update_where('name', $name, array('value' => $value));
+        } else {
+            // If $name was not found in the cache, insert the data into the database.
+            $setting = self::$ci->settings_model->insert(
+                array(
 				'name'   => $name,
 				'value'  => $value,
 				'module' => $module,
+                )
 			);
-
-			$setting = $ci->settings_model->insert($data);
 		}
 
 		self::$cache[$name] = $value;
 
-		return TRUE;
-
-	}//end set()
-
-	// ------------------------------------------------------------------------
+        return true;
+    }
 
 	/**
-	 * Delete config item
+     * Delete a setting in the database.
 	 *
-	 * @access public
-	 * @static
-	 *
-	 * @param string $name   Name of the setting
-	 * @param string $module Name of the module
+     * @param string $name   Name of the setting.
+     * @param string $module Name of the module.
 	 *
 	 * @return bool
 	 */
-	public static function delete($name, $module='core')
+    public static function delete($name, $module = 'core')
 	{
-		$ci =& get_instance();
+        self::init();
 
-		if (isset(self::$cache[$name]))
-		{
-			$data = array(
-				'name'   => $name,
-				'module' => $module,
-			);
-
-			if ($ci->settings_model->delete_where($data))
-			{
+        if (self::$settingsModelLoaded && isset(self::$cache[$name])) {
+            if (self::$ci->settings_model->delete_where(array('name' => $name, 'module' => $module))) {
 				unset(self::$cache[$name]);
 
-				return TRUE;
+                return true;
 			}
 		}
 
-		return FALSE;
-
-	}//end delete()
-
-	// ------------------------------------------------------------------------
+        return false;
+    }
 
 	/**
-	 * Gets all the settings
-	 *
-	 * @access public
+     * Get all of the settings.
 	 *
 	 * @return array
 	 */
 	public function find_all()
 	{
-		if(self::$cache)
-		{
+        if (self::$cache) {
 			return self::$cache;
 		}
 
-		$settings = $this->ci->settings_model->find_all();
+        self::init();
 
-		foreach($settings as $setting)
-		{
+        if (! self::$settingsModelLoaded) {
+            return null;
+        }
+
+        $settings = self::$ci->settings_model->find_all();
+        foreach ($settings as $setting) {
 			self::$cache[$setting->name] = $setting->value;
 		}
 
 		return self::$cache;
-
-	}//end find_all()
-
-	// ------------------------------------------------------------------------
+    }
 
 	/**
-	 * Find By
+     * Get a setting for specific search criteria.
 	 *
-	 * Gets setting for specific search criteria. For multiple matches, see
-	 * find_all_by.
+     * @see find_all_by for multiple matches.
 	 *
-	 * @access public
-	 *
-	 * @param string $field Setting column name
-	 * @param string $value Value ot match
+     * @param string $field Setting column name.
+     * @param string $value Value ot match.
 	 *
 	 * @return	array
 	 */
-	public function find_by($field=null, $value=null)
+    public function find_by($field = null, $value = null)
 	{
+        self::init();
 
-		$settings = $this->ci->settings_model->find_by($field, $value);
+        if (! self::$settingsModelLoaded) {
+            return null;
+        }
 
-		foreach($settings as $setting)
-		{
+        $settings = self::$ci->settings_model->find_by($field, $value);
+        foreach ($settings as $setting) {
 			self::$cache[$setting['name']] = $setting['value'];
 		}
 
 		return $settings;
-
-	}//end find_by()
-
-	// ------------------------------------------------------------------------
+    }
 
 	/**
-	 * Find All By
+     * Get all of the settings based on search criteria.
 	 *
-	 * Gets all the settings based on search criteria. For a single setting
-	 * match, see find_by
+     * @see find_by for a single setting match.
 	 *
-	 * @see find_by
-	 *
-	 * @param string $field Setting column name
-	 * @param string $value Value ot match
+     * @param string $field Setting column name.
+     * @param string $value Value ot match.
 	 *
 	 * @return array
 	 */
-	public function find_all_by($field=null, $value=null)
+    public function find_all_by($field = null, $value = null)
 	{
+        self::init();
 
-		$settings = $this->ci->settings_model->find_all_by($field, $value);
+        if (! self::$settingsModelLoaded) {
+            return null;
+        }
 
-		if (is_array($settings) && count($settings))
-		{
-			foreach($settings as $key => $value)
-			{
+        $settings = self::$ci->settings_model->find_all_by($field, $value);
+        if (! empty($settings) && is_array($settings)) {
+            foreach ($settings as $key => $value) {
 				self::$cache[$key] = $value;
 			}
 		}
 
 		return $settings;
+    }
+}
 
-	}//end find_all_by()
+// -----------------------------------------------------------------------------
+// ! HELPER METHOD
+// -----------------------------------------------------------------------------
 
-
-}//end Settings_lib
-
-// ------------------------------------------------------------------------
-// ! HELPER METHOD BELOW
-// ------------------------------------------------------------------------
-
-if ( ! function_exists('settings_item'))
-{
+if (! function_exists('settings_item')) {
 	/**
 	 * Helper method to retrieve a setting.
 	 *
@@ -313,17 +290,13 @@ if ( ! function_exists('settings_item'))
 	 *
 	 * @return bool|string Returns result of setting or false if none.
 	 */
-	function settings_item($name = NULL)
+    function settings_item($name = null)
 	{
-		if ($name === NULL)
-		{
-			return FALSE;
+        if ($name === null) {
+            return false;
 		}
 
 		return Settings_lib::item($name);
-	}//end settings_item()
-
+    }
 }
-
-
-/* End of class Settings.php */
+/* end /settings/libraries/settings_lib.php */

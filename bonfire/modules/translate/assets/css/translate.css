@@ -1,0 +1,47 @@
+﻿/* index */
+.well form {
+	margin: 0;
+}
+.well form label {
+	width: auto;
+	margin-right: 1em;
+}
+a.span4 {
+	line-height: 32px;
+}
+.admin-box h3 {
+	line-height: 40px;
+	border-bottom: 1px solid #e5e5e5;
+	margin-bottom: 5px;
+}
+.admin-box .row-fluid {
+	margin-bottom: 10px;
+}
+.subhead {
+	font-size: 10pt;
+	font-weight: bold;
+	line-height: 20px;
+	padding: 10px;
+	vertical-align: middle;
+	text-rendering: optimizelegibility;
+}
+/* edit */
+.form-horizontal label {
+	width: 100% !important;
+}
+.form-horizontal .control-group {
+	padding-bottom: 5px;
+	padding-top: 5px;
+}
+.form-horizontal legend h3 {
+	border-bottom: none;
+}
+.gobottom {
+	margin-right: 2px;
+}
+.gotop {
+	margin: 5px 2px;
+}
+span.filename {
+	letter-spacing: -0.03em;
+}

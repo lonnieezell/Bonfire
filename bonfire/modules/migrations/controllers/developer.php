@@ -1,38 +1,30 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
- * Migrations Controller
+ * Manage the database migrations in Bonfire.
  *
- * Manages the database migrations in Bonfire.
- *
- * @package    Bonfire
- * @subpackage Modules_Migrations
- * @category   Controllers
+ * @package    Bonfire\Modules\Migrations\Controllers\Developer
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- *
+ * @link       http://cibonfire.com/docs/migrations
  */
 class Developer extends Admin_Controller
 {
-
-
 	/**
-	 * Sets up the permissions and loads the language file
+	 * Setup the permissions and load the language file
 	 *
 	 * @return void
 	 */
@@ -43,55 +35,49 @@ class Developer extends Admin_Controller
 		$this->auth->restrict('Site.Developer.View');
 		$this->auth->restrict('Bonfire.Database.Manage');
 
-		$this->load->library('Migrations');
+        // Load the database lang file because Migrations is on the database subnav
+        $this->lang->load('database/database');
 		$this->lang->load('migrations');
 
-		Template::set_block('sub_nav', 'database/developer/_sub_nav');
-	}//end __construct()
+		$this->load->library('Migrations');
 
-	//--------------------------------------------------------------------
+        Assets::add_module_css('migrations', 'migrations');
+
+		Template::set_block('sub_nav', 'database/developer/_sub_nav');
+	}
 
 	/**
-	 * Display the list og migrations available at core, application and module level
-	 *
-	 * @access public
+	 * Display the list of migrations available at core, application, and module
+	 * level
 	 *
 	 * @return void
 	 */
 	public function index()
 	{
-		if (isset($_POST['migrate']))
-		{
-			$core = $this->input->post('core_only') ? '' : 'app_';
+		if (isset($_POST['migrate'])) {
+			$core = $this->input->post('core_only') ? '' : Migrations::APP_MIGRATION_PREFIX;
 
-			if ($version = $this->input->post('migration'))
-			{
+			if ($version = $this->input->post('migration')) {
 				$this->migrate_to($version, $core);
 			}
 		}
 
-		Template::set('installed_version', $this->migrations->get_schema_version('app_'));
-		Template::set('latest_version', $this->migrations->get_latest_version('app_'));
+		Template::set('installed_version', $this->migrations->getVersion(Migrations::APP_MIGRATION_PREFIX));
+		Template::set('latest_version', $this->migrations->getVersion(Migrations::APP_MIGRATION_PREFIX, true));
 
-		Template::set('core_installed_version', $this->migrations->get_schema_version('core'));
-		Template::set('core_latest_version', $this->migrations->get_latest_version());
+		Template::set('core_installed_version', $this->migrations->getVersion(Migrations::CORE_MIGRATIONS));
+		Template::set('core_latest_version', $this->migrations->getVersion(Migrations::CORE_MIGRATIONS, true));
 
-		Template::set('core_migrations', $this->migrations->get_available_versions());
-		Template::set('app_migrations', $this->migrations->get_available_versions('app_'));
-
+		Template::set('core_migrations', $this->migrations->getAvailableVersions());
+		Template::set('app_migrations', $this->migrations->getAvailableVersions(Migrations::APP_MIGRATION_PREFIX));
 		Template::set('mod_migrations', $this->get_module_versions());
 
-		Template::set('toolbar_title', 'Database Migrations');
+		Template::set('toolbar_title', lang('migrations_title_index'));
 		Template::render();
-
-	}//end index()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Migrate the selected migration type to a specific migration number
-	 *
-	 * @access private
 	 *
 	 * @param int    $version The version number to migrate to
 	 * @param string $type    The migration type (core, app_, MODULE_)
@@ -101,114 +87,106 @@ class Developer extends Admin_Controller
 	private function migrate_to($version, $type)
 	{
 		$result = $this->migrations->version($version, $type);
-
-		if ($result !== FALSE && strlen($this->migrations->error) == 0)
-		{
-			if ($result === 0)
-			{
-				Template::set_message('<h4 class="alert-heading">Successfully uninstalled module\'s migrations.</h4>', 'success');
-
-				// Log the activity
-				log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' Uninstalled Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+        $errorMessage = $this->migrations->getErrorMessage();
+		if ($result !== false && strlen($errorMessage) == 0) {
+			if ($result === 0) {
+				Template::set_message(lang('migrations_uninstall_success'), 'success');
+				log_activity(
+                    $this->auth->user_id(),
+                    sprintf(lang('migrations_act_uninstall_success'), $type, $version, $this->input->ip_address()),
+                    'migrations'
+                );
+			} else {
+				Template::set_message(sprintf(lang('migrations_migrate_success'), $result), 'success');
+				log_activity(
+                    $this->auth->user_id(),
+                    sprintf(lang('migrations_act_migrate_success'), $type, $version, $this->input->ip_address()),
+                    'migrations'
+                );
 			}
-			else
-			{
-				Template::set_message('<h4 class="alert-heading">Successfully migrated database to version '. $result.'</h4>', 'success');
-
-				// Log the activity
-				log_activity($this->auth->user_id(), 'Migrate Type: '. $type .' to Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
-			}
+		} else {
+			log_message(lang('migrations_migrate_error') . "\n{$errorMessage}", 'error');
+			Template::set_message(lang('migrations_migrate_error') . "<br />{$errorMessage}", 'error');
 		}
-		else
-		{
-			$msg = 'There was an error migrating the database.';
-			logit($msg . "\n" . $this->migrations->error, 'error');
-			$msg = '<h4 class="alert-heading">' . $msg . '</h4><br /><strong>' . $this->migrations->error . '</strong>';
-			Template::set_message($msg, 'error');
-		}//end if
-
-	}//end migrate_to()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Migrate a module to a particular version
 	 *
-	 * @access public
-	 *
 	 * @return void
 	 */
-	public function migrate_module($module='')
+	public function migrate_module($module = '')
 	{
-		if (isset($_POST['migrate']))
-		{
-			$file   = $this->input->post('version');
+		if (isset($_POST['migrate'])) {
+			$file = $this->input->post('version');
+			if (empty($file)) {
+				Template::set_message(lang('migrations_module_none'), 'info');
 
-			if (empty($file))
-			{
-				$msg = 'No version selected for migration.';
-				$msg = '<h4 class="alert-heading">' . $msg . '</h4>';
-				Template::set_message($msg, 'info');
 				redirect(SITE_AREA . '/developer/migrations');
 			}
 
-			$version = $file !== 'uninstall' ? (int)(substr($file, 0, 3)) : 0;
+			$version = $file !== 'uninstall' ? (int) substr($file, 0, 3) : 0;
 
 			// Do the migration
-			$this->migrate_to($version, $module .'_');
-
-			// Log the activity
-			log_activity($this->current_user->id, 'Migrate module: ' . $module . ' Version: ' . $version . ' from: ' . $this->input->ip_address(), 'migrations');
+			$this->migrate_to($version, "{$module}_");
+			log_activity(
+                $this->auth->user_id(),
+                sprintf(lang('migrations_act_module'), $module, $version, $this->input->ip_address()),
+                'migrations'
+            );
 		}
 
-		redirect(SITE_AREA .'/developer/migrations');
-
-	}//end migrate_module()
-
-	//--------------------------------------------------------------------
+		redirect(SITE_AREA . '/developer/migrations');
+	}
 
 	/**
 	 * Get all versions available for the modules
-	 *
-	 * @access private
 	 *
 	 * @return array Array of available versions for each module
 	 */
 	private function get_module_versions()
 	{
-		$mod_versions = array();
-
-		$modules = module_files(null, 'migrations');
-
-		if ($modules === false)
-		{
+		$modules = Modules::files(null, 'migrations');
+		if ($modules === false) {
 			return false;
 		}
 
+        // Sort modules by key (module directory name)
 		ksort($modules);
 
-		// Sort Module Migrations in Reverse Order instead of Randomness.
-		foreach ($modules as &$mod)
-		{
-			if ( ! array_key_exists('migrations', $mod))
-			{
+        // Get the installed version of all of the modules (modules which have
+        // not been installed will not be included)
+        $installedVersions = $this->migrations->getModuleVersions();
+		$modVersions = array();
+
+        // Add the migration data for each module
+		foreach ($modules as $module => &$mod) {
+			if ( ! array_key_exists('migrations', $mod)) {
 				continue;
 			}
 
+            // Sort module migrations in reverse order
 			arsort($mod['migrations']);
+
+            /**
+             * @internal Calculating the latest version from the migration list
+             * saves ~20% of the load time when a lot of modules (tested with >
+             * 50) are listed. However, it requires the controller to know more
+             * about the format of the migration filenames than may be desirable.
+             * If that is the case, the 'latest_version' key below can be
+             * populated with the result of:
+             * $this->migrations->getVersion("{$module}_", true)
+             */
+
+            // Add the installed version, latest version, and list of migrations
+            $modVersions[$module] = array(
+                'installed_version'	=> isset($installedVersions["{$module}_"]) ? $installedVersions["{$module}_"] : 0,
+                'latest_version'    => intval(substr(current($mod['migrations']), 0, 3), 10),
+                'migrations'        => $mod['migrations'],
+            );
 		}
 
-		foreach ($modules as $module => $migrations)
-		{
-			$mod_versions[$module] = array(
-				'installed_version'	=> $this->migrations->get_schema_version($module .'_'),
-				'latest_version'	=> $this->migrations->get_latest_version($module .'_'),
-				'migrations'		=> $migrations['migrations']
-			);
-		}
-
-		return $mod_versions;
-	}//end get_module_versions()
-
-	//--------------------------------------------------------------------
-}//end class
+		return $modVersions;
+	}
+}
+/* end /migrations/controllers/developer.php */

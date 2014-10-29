@@ -10,7 +10,6 @@
     font-size: 21px;
     padding: 14px 24px;
 }
-
 #login {
     max-width: 300px;
     padding: 19px 29px 14px 29px;
@@ -28,4 +27,7 @@
     font-size: 31.5px;
     line-height: 40px;
     margin-bottom: 10px;
+}
+#register label.required {
+	font-weight: bold;
 }

@@ -1,99 +1,67 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
- * Auth Library
- *
- * Provides authentication functions for logging users in/out, restricting access
- * to controllers, and managing login attempts.
+ * The Auth library provides authentication functions for logging users in/out
+ * and managing login attempts as well as authorization functions for restricting
+ * access to controllers, content, and actions.
  *
  * Security and ease-of-use are the two primary goals of the Auth system in Bonfire.
- * This lib will be constantly updated to reflect the latest security practices that
- * we learn about, while maintaining the simple API.
+ * This library will be updated to reflect the latest security practices while
+ * maintaining the simple API.
  *
- * @package    Bonfire
- * @subpackage Modules_Users
- * @category   Libraries
+ * @package    Bonfire\Modules\Users\Libraries\Auth
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- *
+ * @link       http://cibonfire.com/docs/developer/roles_and_permissions
  */
 class Auth
 {
-
-	/**
-	 * The url to redirect to on successful login.
-	 *
-	 * @access public
-	 *
-	 * @var string
-	 */
+    /** @var string The url to redirect to on successful login. */
 	public $login_destination = '';
 
 	/**
-	 * Stores the logged in user after the first test to improve performance.
-	 *
-	 * @access private
-	 *
-	 * @var object
+     * @var string The date format used for users.last_login, login_attempts.time,
+     * and user_cookies.created_on. Passed as the first argument of the PHP date()
+     * function when handling any of these values.
 	 */
-	private $user;
+    protected $loginDateFormat = 'Y-m-d H:i:s';
 
-	/**
-	 * Stores the ip_address of the current user for performance reasons.
-	 *
-	 * @access private
-	 *
-	 * @var string
-	 */
+    /** @var boolean Allow use of the "Remember Me" checkbox/cookie. */
+    private $allowRemember;
+
+    /** @var object A pointer to the CodeIgniter instance. */
+    private $ci;
+
+    /** @var string The ip_address of the current user. */
 	private $ip_address;
 
-	/**
-	 * Stores the name of all existing permissions
-	 *
-	 * @access private
-	 *
-	 * @var array
-	 */
-	private $permissions = NULL;
+    /** @var array The names of all existing permissions. */
+    private $permissions = null;
 
-	/**
-	 * Stores permissions by role so we don't have to scour the database more than once.
-	 *
-	 * @access private
-	 *
-	 * @var array
-	 */
+    /** @var array The permissions by role. */
 	private $role_permissions = array();
 
-	/**
-	 * A pointer to the CodeIgniter instance.
-	 *
-	 * @access private
-	 *
-	 * @var object
-	 */
-	private $ci;
+    /** @var object The logged-in user. */
+    private $user;
 
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
 	/**
-	 * Grabs a pointer to the CI instance, gets the user's IP address,
-	 * and attempts to automatically log in the user.
+     * Grab a pointer to the CI instance, get the user's IP address, and attempt
+     * to automatically log in the user.
 	 *
 	 * @return void
 	 */
@@ -103,1026 +71,1000 @@ class Auth
 
 		$this->ip_address = $this->ci->input->ip_address();
 
-		// We need the users language file for this to work
-		// from other modules.
+        // The users language file is needed for this to work from other modules.
 		$this->ci->lang->load('users/users');
 		$this->ci->load->model('users/user_model');
-
 		$this->ci->load->library('session');
 
-		// Try to log the user in from session/cookie data
+        // Try to log the user in from session/cookie data.
 		$this->autologin();
 
 		log_message('debug', 'Auth class initialized.');
+    }
 
-	}//end __construct()
-
-	//--------------------------------------------------------------------
+    /**
+     * Check the session for the required info, then verify it against the database.
+     *
+     * @return bool
+     */
+    public function is_logged_in()
+    {
+        return (bool) $this->user();
+    }
 
 	/**
 	 * Attempt to log the user in.
 	 *
-	 * @access public
-	 *
-	 * @param string $login    The user's login credentials (email/username)
-	 * @param string $password The user's password
+     * @param string $login    The user's login credentials (email/username).
+     * @param string $password The user's password.
 	 * @param bool   $remember Whether the user should be remembered in the system.
 	 *
 	 * @return bool
 	 */
-	public function login($login, $password, $remember=FALSE)
-	{
-		if (empty($login) || empty($password))
+    public function login($login, $password, $remember = false)
 		{
-			$error = $this->ci->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucfirst($this->ci->settings_lib->item('auth.login_type'));
-			Template::set_message(sprintf(lang('us_fields_required'), $error), 'error');
-			return FALSE;
+        if (empty($login) || empty($password)) {
+            Template::set_message(
+                sprintf(
+                    lang('us_fields_required'),
+                    $this->ci->settings_lib->item('auth.login_type') == 'both' ? lang('bf_login_type_both') : lang('bf_' . $this->ci->settings_lib->item('auth.login_type'))
+                ),
+                'error'
+            );
+            return false;
 		}
 
-		$this->ci->load->model('users/User_model', 'user_model');
+        // Grab the user from the db.
+        $selects = array(
+            'id',
+            'email',
+            'username',
+            'users.role_id',
+            'users.deleted',
+            'users.active',
+            'banned',
+            'ban_message',
+            'password_hash',
+            'force_password_reset'
+        );
 
-		// Grab the user from the db
-		$selects = 'id, email, username, users.role_id, users.deleted, users.active, banned, ban_message, password_hash, password_iterations, force_password_reset';
-
-		if ($this->ci->settings_lib->item('auth.do_login_redirect'))
-		{
-			$selects .= ', login_destination';
+        if ($this->ci->settings_lib->item('auth.do_login_redirect')) {
+            $selects[] = 'login_destination';
 		}
 
-		if ($this->ci->settings_lib->item('auth.login_type') == 'both')
-		{
-			$user = $this->ci->user_model->select($selects)->find_by(array('username' => $login, 'email' => $login), null, 'or');
-		}
-		else
-		{
-			$user = $this->ci->user_model->select($selects)->find_by($this->ci->settings_lib->item('auth.login_type'), $login);
+        $this->ci->user_model->select($selects);
+        if ($this->ci->settings_lib->item('auth.login_type') == 'both') {
+            $user = $this->ci->user_model->find_by(
+                array('username' => $login, 'email' => $login),
+                null,
+                'or'
+            );
+        } else {
+            $user = $this->ci->user_model->find_by(
+                $this->ci->settings_lib->item('auth.login_type'),
+                $login
+            );
 		}
 
-		// check to see if a value of FALSE came back, meaning that the username or email or password doesn't exist.
-		if ($user == FALSE)
-		{
+        // Check whether the username, email, or password doesn't exist.
+        if ($user == false) {
 			Template::set_message(lang('us_bad_email_pass'), 'error');
-			return FALSE;
+            return false;
 		}
 
-		// check if the account has been activated.
+        // Check whether the account has been activated.
+        if ($user->active == 0) {
 		$activation_type = $this->ci->settings_lib->item('auth.user_activation_method');
-		if ($user->active == 0 && $activation_type > 0) // in case we go to a unix timestamp later, this will still work.
-		{
-			if ($activation_type == 1)
-			{
+            if ($activation_type > 0) {
+                if ($activation_type == 1) {
 				Template::set_message(lang('us_account_not_active'), 'error');
-			}
-			elseif ($activation_type == 2)
-			{
+                } elseif ($activation_type == 2) {
 				Template::set_message(lang('us_admin_approval_pending'), 'error');
 			}
 
-			return FALSE;
+                return false;
+            }
 		}
 
-		// check if the account has been soft deleted.
-		if ($user->deleted >= 1) // in case we go to a unix timestamp later, this will still work.
-		{
-			Template::set_message(sprintf(lang('us_account_deleted'), html_escape(settings_item("site.system_email"))), 'error');
-			return FALSE;
+        // Check whether the account has been soft deleted. The >= 1 check ensures
+        // this will still work if the deleted field is a UNIX timestamp.
+        if ($user->deleted >= 1) {
+            Template::set_message(
+                sprintf(
+                    lang('us_account_deleted'),
+                    html_escape(settings_item("site.system_email"))
+                ),
+                'error'
+            );
+            return false;
 		}
 
 		// Try password
-		if ($this->check_password($password, $user->password_hash))
-		{
-			// check if the account has been banned.
-			if ($user->banned)
-			{
+        if (! $this->check_password($password, $user->password_hash)) {
+            // Bad password
+            Template::set_message(lang('us_bad_email_pass'), 'error');
 				$this->increase_login_attempts($login);
-				Template::set_message($user->ban_message ? $user->ban_message : lang('us_banned_msg'), 'error');
-				return FALSE;
+
+            return false;
 			}
 
-            // Check if the user needs to reset their password
-            if ($user->force_password_reset == 1)
-            {
+        // Check whether the account has been banned.
+        if ($user->banned) {
+            $this->increase_login_attempts($login);
+            Template::set_message(
+                $user->ban_message ? $user->ban_message : lang('us_banned_msg'),
+                'error'
+            );
+            return false;
+        }
+
+        // Check whether the user needs to reset their password.
+        if ($user->force_password_reset == 1) {
                 Template::set_message(lang('us_forced_password_reset_note'), 'warning');
 
-                // Need to generate a reset hash to pass the reset_password checks...
+            // Generate a reset hash to pass the reset_password checks...
                 $this->ci->load->helpers(array('string', 'security'));
-
                 $pass_code = random_string('alnum', 40);
-
                 $hash = do_hash($pass_code . $user->email);
 
-                // Save the hash to the db so we can confirm it later.
-                $this->ci->user_model->update_where('id', $user->id, array('reset_hash' => $hash, 'reset_by' => strtotime("+24 hours") ));
+            // Save the hash to the db so it can be confirmed later.
+            $this->ci->user_model->update_where(
+                'id',
+                $user->id,
+                array('reset_hash' => $hash, 'reset_by' => strtotime("+24 hours"))
+            );
 
                 $this->ci->session->set_userdata('pass_check', $hash);
                 $this->ci->session->set_userdata('email', $user->email);
+
+            // Redirect the user to the reset password page.
                 redirect('/users/reset_password');
             }
 
 			$this->clear_login_attempts($login);
 
-			// We've successfully validated the login, so setup the session
-			$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, $remember,'', $user->username);
+        // The login was successfully validated, so setup the session
+        $this->setupSession(
+            $user->id,
+            $user->username,
+            $user->password_hash,
+            $user->email,
+            $user->role_id,
+            $remember,
+            '',
+            $user->username
+        );
 
 			// Save the login info
-			$data = array(
-				'last_login'			=> date('Y-m-d H:i:s', time()),
+        $this->ci->user_model->update(
+            $user->id,
+            array(
+                'last_login' => $this->getLoginTimestamp(),
 				'last_ip'				=> $this->ip_address,
+            )
 			);
-			$this->ci->user_model->update($user->id, $data);
 
-			// Clear the cached result of user() (and hence is_logged_in(), user_id() etc).
+        // Clear the cached result of user() (and is_logged_in(), user_id(), etc.).
 			// Doesn't fix `$this->current_user` in controller (for this page load)...
 			unset($this->user);
 
-			$trigger_data = array('user_id'=>$user->id, 'role_id'=>$user->role_id);
-			Events::trigger('after_login', $trigger_data );
+        // Can't pass the array directly to the trigger, must use a variable.
+        $trigger_data = array('user_id' => $user->id, 'role_id' => $user->role_id);
+        Events::trigger('after_login', $trigger_data);
 
-			// Save our redirect location
-			$this->login_destination = isset($user->login_destination) && !empty($user->login_destination) ? $user->login_destination : '';
+        // Save the redirect location
+        $this->login_destination = empty($user->login_destination) ? '' : $user->login_destination;
 
-			return TRUE;
+        return true;
 		}
-
-		// Bad password
-		else
-		{
-			Template::set_message(lang('us_bad_email_pass'), 'error');
-			$this->increase_login_attempts($login);
-		}
-
-		return FALSE;
-
-	}//end login()
-
-	//--------------------------------------------------------------------
 
 	/**
-	 * Destroys the autologin information and the current session.
-	 *
-	 * @access public
+     * Destroy the autologin information and the current session.
 	 *
 	 * @return void
 	 */
 	public function logout()
 	{
+        // Can't pass the array directly to the trigger, must use a variable.
 		$data = array(
 			'user_id'	=> $this->user_id(),
-			'role_id'	=> $this->role_id()
+            'role_id' => $this->role_id(),
 		);
-
 		Events::trigger('before_logout', $data);
 
 		// Destroy the autologin information
-		$this->delete_autologin();
+        $this->deleteAutologin();
 
 		// Destroy the session
 		$this->ci->session->sess_destroy();
-
-	}//end logout()
-
-	//--------------------------------------------------------------------
+    }
 
 	/**
-	 * Checks the session for the required info, then verifies against the database.
+     * Check the session for the required info, then verify it against the database.
 	 *
-	 * @access public
-	 *
-	 * @return object (or a false value)
+     * @return object (or a false value).
 	 */
 	public function user()
 	{
-		// If we've already checked this session,
-		// return that.
-		if (isset($this->user))
-		{
+        // If the user has already been cached, return it.
+        if (isset($this->user)) {
 			return $this->user;
 		}
 
-		$this->user = FALSE;
+        $this->user = false;
 
-		// Is there any session data we can use?
-		if ($this->ci->session->userdata('identity') && $this->ci->session->userdata('user_id'))
-		{
-			// Grab the user account
+        // Is the required session data available?
+        if (! $this->ci->session->userdata('identity')
+            || ! $this->ci->session->userdata('user_id')
+        ) {
+            return false;
+        }
+
+        // Grab the user account.
 			$user = $this->ci->user_model->find($this->ci->session->userdata('user_id'));
+        if ($user === false) {
+            return false;
+        }
 
-			if ($user !== FALSE)
-			{
-				// load do_hash()
+        // Load the security helper for the do_hash() function.
 				$this->ci->load->helper('security');
 
-				// Ensure user_token is still equivalent to the SHA1 of the user_id and password_hash
-				if (do_hash($this->ci->session->userdata('user_id') . $user->password_hash) === $this->ci->session->userdata('user_token'))
-				{
-					$this->user = $user;
-				}
+        // Ensure user_token is still equivalent to SHA1 of the user_id and password_hash.
+        if (do_hash($this->ci->session->userdata('user_id') . $user->password_hash)
+            !== $this->ci->session->userdata('user_token')
+        ) {
+            return false;
 			}
-		}//end if
 
-		if ($this->user !== FALSE)
-		{
+        $this->user = $user;
 			$this->user->id = (int) $this->user->id;
 			$this->user->role_id = (int) $this->user->role_id;
-		}
 
 		return $this->user;
+    }
 
-	}//end user()
+    //--------------------------------------------------------------------------
+    // Permissions
+    //--------------------------------------------------------------------------
 
+    /**
+     * Verify that the user is logged in and has the appropriate permissions.
+     *
+     * @param string $permission The permission to check for, e.g. 'Site.Signin.Allow'.
+     * @param int    $role_id    The id of the role to check the permission against.
+     * If role_id is not passed into the method, it assumes the current user's role_id.
+     * @param bool   $override   Whether access is granted if this permission doesn't
+     * exist in the database.
+     *
+     * @return bool True if the user/role has permission or $override is true and
+     * the permission was not found in the database, else false.
+     */
+    public function has_permission($permission, $role_id = null, $override = false)
+    {
+        // Move permission to lowercase for easier checking.
+        $permission = strtolower($permission);
 
-	//--------------------------------------------------------------------
+        // If no role is provided, assume it's for the current logged in user.
+        if (empty($role_id)) {
+            $role_id = $this->role_id();
+        }
+
+        $permissions = $this->loadPermissions();
+
+        // Does the user/role have the permission?
+        if (isset($permissions[$permission])) {
+            $role_permissions = $this->loadRolePermissions($role_id);
+            $permission_id    = $permissions[$permission];
+
+            if (isset($role_permissions[$role_id][$permission_id])) {
+                return true;
+            }
+        } elseif ($override) {
+            return true;
+        }
+
+        return false;
+    }
 
 	/**
-	 * Checks the session for the required info, then verifies against the database.
+     * Check whether a permission is in the system.
 	 *
-	 * @access public
+     * @param string $permission The case-insensitive name of the permission to check.
 	 *
-	 * @return bool
+     * @return bool True if the permission was found, else false.
 	 */
-	public function is_logged_in()
+    public function permission_exists($permission)
 	{
-		return (bool) $this->user();
+        // Move permission to lowercase for easier checking.
+        $permission  = strtolower($permission);
+        $permissions = $this->loadPermissions();
 
-	}//end is_logged_in()
-
-	//--------------------------------------------------------------------
+        return isset($permissions[$permission]);
+    }
 
 	/**
-	 * Checks that a user is logged in (and, optionally of the correct role)
-	 * and, if not, send them to the login screen.
+     * Check whether a user is logged in (and, optionally of the correct role) and,
+     * if not, send them to the login screen.
 	 *
 	 * If no permission is checked, will simply verify that the user is logged in.
-	 * If a permission is passed in to the first parameter, will check the user's role
-	 * and verify that role has the appropriate permission.
+     * If a permission is passed in to the first parameter, it will check the user's
+     * role and verify that role has the appropriate permission.
 	 *
-	 * @access public
+     * @param string $permission (Optional) The permission to check for.
+     * @param string $uri        (Optional) The redirect URI if the user does not
+     * have the correct permission.
 	 *
-	 * @param string $permission (Optional) A string representing the permission to check for.
-	 * @param string $uri        (Optional) A string representing an URI to redirect, if FALSE
-	 *
-	 * @return bool TRUE if the user has the appropriate access permissions. Redirect to the previous page if the user doesn't have permissions. Redirect to LOGIN_AREA page if the user is not logged in.
+     * @return bool True if the user has the appropriate access permissions.
+     * Redirect to the previous page if the user doesn't have permissions.
+     * Redirect to LOGIN_AREA page if the user is not logged in.
 	 */
-	public function restrict($permission=NULL, $uri=NULL)
-	{
-		// If user isn't logged in, don't need to check permissions
-		if ($this->is_logged_in() === FALSE)
+    public function restrict($permission = null, $uri = null)
 		{
+        // If user isn't logged in, redirect to the login page.
+        if ($this->is_logged_in() === false) {
 			$this->ci->load->library('Template');
 			Template::set_message($this->ci->lang->line('us_must_login'), 'error');
 			Template::redirect(LOGIN_URL);
 		}
 
-		// Check to see if the user has the proper permissions
-		if ( ! empty($permission) && ! $this->has_permission($permission))
-		{
-			// set message telling them no permission THEN redirect
-			Template::set_message( lang('us_no_permission'), 'attention');
+        // Check whether the user has the proper permissions.
+        if (empty($permission) || $this->has_permission($permission)) {
+            return true;
+        }
 
-			if ( ! $uri)
-			{
+        // If the user is logged in, but does not have permission...
+
+        // If $uri is not set, get the previous page from the session.
+        if (! $uri) {
 				$uri = $this->ci->session->userdata('previous_page');
 
-				// If previous page was the same (e.g. user pressed F5),
-				// but permission has been removed, then redirecting
-				// to it will cause an infinite loop.
-				if ($uri == current_url())
-				{
+            // If previous page and current page are the same, but the user no longer
+            // has permission, redirect to site URL to prevent an infinite loop.
+            if ($uri == current_url()) {
 					$uri = site_url();
 				}
 			}
+
+        // Inform the user of the lack of permission and redirect.
+        $this->ci->load->library('Template');
+        Template::set_message(lang('us_no_permission'), 'attention');
 			Template::redirect($uri);
 		}
 
-		return TRUE;
-
-	}//end restrict()
-
-	//--------------------------------------------------------------------
-
-
-
-	//--------------------------------------------------------------------
-	// !UTILITY METHODS
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    // Roles
+    //--------------------------------------------------------------------------
 
 	/**
-	 * Retrieves the user_id from the current session.
+     * Retrieves the role_id from the current session.
 	 *
-	 * @access public
-	 *
-	 * @return int
+     * @return int The user's role_id.
 	 */
-	public function user_id()
-	{
-		if ( ! $this->is_logged_in())
+    public function role_id()
 		{
-			return FALSE;
+        if (! $this->is_logged_in()) {
+            return false;
+        }
+        return $this->user()->role_id;
 		}
 
-		return $this->user()->id;
-
-	}//end user_id()
-
-	//--------------------------------------------------------------------
-
 	/**
-	 * Retrieves the logged identity from the current session.
-	 * Built from the user's submitted login.
+     * Retrieve the role_name for the requested role.
 	 *
-	 * @access public
+     * @param int $role_id The role ID for which the name will be retrieved.
 	 *
-	 * @return string The identity used to login.
+     * @return string A string with the name of the matched role.
 	 */
-	public function identity()
-	{
-		if ( ! $this->is_logged_in())
+    public function role_name_by_id($role_id)
 		{
-			return FALSE;
+        if (! is_numeric($role_id)) {
+            return '';
 		}
 
-		return $this->ci->session->userdata('identity');
+        // Retrieve the roles.
+        $roles = $this->loadRoles();
 
-	}//end identity()
+        // Try to return the role name.
+        if (isset($roles[$role_id])) {
+            return $roles[$role_id];
+        }
 
-	//--------------------------------------------------------------------
+        return '';
+    }
+
+    protected function loadRoles()
+		{
+        // If the role names are already stored, use them.
+        if (! empty($this->role_names)) {
+            return $this->role_names;
+		}
+
+        // Retrieve the roles from the database.
+        if (! class_exists('role_model')) {
+            $this->ci->load->model('roles/role_model');
+        }
+        $results = $this->ci->role_model->select('role_id, role_name')
+                                        ->find_all();
+
+        // Store the role names.
+        $this->role_names = array();
+        foreach ($results as $role) {
+            $this->role_names[$role->role_id] = $role->role_name;
+        }
+        return $this->role_names;
+    }
+
+    //--------------------------------------------------------------------------
+    // Password Methods
+    //--------------------------------------------------------------------------
 
 	/**
-	 * Retrieves the role_id from the current session.
+     * Check the supplied password against the supplied hash.
 	 *
-	 * @return int The user's role_id.
+     * @param String $password The password to check.
+     * @param String $hash     The hash.
+	 *
+     * @return Bool    true if the password and hash match, else false.
 	 */
-	public function role_id()
+    public function check_password($password, $hash)
 	{
-		if ( ! $this->is_logged_in())
-		{
-			return FALSE;
+        // Load the password hash library
+        $hasher = $this->getPasswordHasher(-1);
+
+        // Try password
+        return $hasher->CheckPassword($password, $hash);
 		}
 
-		return $this->user()->role_id;
+    /**
+     * Hash a password.
+     *
+     * @param string $pass      The password to hash
+     * @param int $iterations   The number of iterations used in hashing the
+     * password.
+     *
+     * @return array            An associative array containing the hashed
+     * password and number of iterations.
+     */
+    public function hash_password($pass, $iterations = 0)
+		{
+        // The shortest valid hash phpass can currently return is 20 characters,
+        // which would only happen with CRYPT_EXT_DES.
+        $min_hash_len = 20;
 
-	}//end role_id()
+        // If $iterations wasn't passed, get it from the settings.
+        if (empty($iterations)
+            || ! is_numeric($iterations)
+            || $iterations <= 0
+        ) {
+            $iterations = $this->ci->settings_lib->item('password_iterations');
+		}
 
-	//--------------------------------------------------------------------
+        // Load the password hash library and hash the password.
+        $hasher   = $this->getPasswordHasher($iterations);
+        $password = $hasher->HashPassword($pass);
+
+        unset($hasher);
+
+        // If the password is shorter than the minimum hash length, something failed.
+        if (strlen($password) < $min_hash_len) {
+            return false;
+        }
+
+        return array('hash' => $password, 'iterations' => $iterations);
+    }
 
 	/**
-	 * Verifies that the user is logged in and has the appropriate access permissions.
+     * Loads the PasswordHash library as needed and returns a new instance.
 	 *
-	 * @access public
+     * Note: Moving the loading of the 'password_iterations' setting into this method
+     * was considered. Since the $iterations value is only really needed for hashing
+     * a password, and the 'password_iterations' value is only used when the $iterations
+     * value passed to the hash_password() method is not a positive integer, it
+     * made more sense to leave it there than to add some indicator to this method
+     * that the calling method didn't need to retrieve the 'password_iterations'
+     * value.
 	 *
-	 * @param string $permission A string with the permission to check for, ie 'Site.Signin.Allow'
-	 * @param int    $role_id    The id of the role to check the permission against. If role_id is not passed into the method, then it assumes it to be the current user's role_id.
-	 * @param bool   $override   Whether or not access is granted if this permission doesn't exist in the database
+     * @param  integer $iterations The number of iterations to be used in hashing
+     * passwords.
 	 *
-	 * @return bool TRUE/FALSE
+     * @return PasswordHash The password hasher.
 	 */
-	public function has_permission($permission, $role_id=NULL, $override = FALSE)
+    protected function getPasswordHasher($iterations)
 	{
-		// move permission to lowercase for easier checking.
-		$permission = strtolower($permission);
+        if (! class_exists('PasswordHash')) {
+            require(dirname(__FILE__) . '/../libraries/PasswordHash.php');
+        }
 
-		// If no role is being provided, assume it's for the current
-		// logged in user.
-		if (empty($role_id))
-		{
-			$role_id = $this->role_id();
-		}
-
-		$this->load_permissions();
-		$this->load_role_permissions($role_id);
-
-		// did we pass?
-		if (isset($this->permissions[$permission]))
-		{
-			$permission_id = $this->permissions[$permission];
-
-			if (isset($this->role_permissions[$role_id][$permission_id]))
-			{
-				return TRUE;
-			}
-		}
-		elseif ($override)
-		{
-			return TRUE;
-		}
-
-		return FALSE;
-
-
-	}//end has_permission()
+        return new PasswordHash((int) $iterations, false);
+    }
 
 	//--------------------------------------------------------------------
+    // !LOGIN ATTEMPTS
+    //--------------------------------------------------------------------
 
 	/**
-	 * Checks to see whether a permission is in the system or not.
+     * Get number of login attempts from the given IP-address and/or login.
 	 *
-	 * @access public
+     * @param string $login (Optional) The login id to check for (email/username).
+     * If no login is passed in, it will only check against the IP Address of the
+     * current user.
 	 *
-	 * @param string $permission The name of the permission to check for. NOT case sensitive.
-	 *
-	 * @return bool TRUE/FALSE
+     * @return int The number of attempts.
 	 */
-	public function permission_exists($permission)
-	{
-		// move permission to lowercase for easier checking.
-		$permission = strtolower($permission);
+    public function num_login_attempts($login = null)
+		{
+        $this->ci->db->select('1', false)
+                     ->where('ip_address', $this->ip_address);
 
-		$this->load_permissions();
+        if (strlen($login) > 0) {
+            $this->ci->db->or_where('login', $login);
+        }
 
-		return isset($this->permissions[$permission]);
+        $query = $this->ci->db->get('login_attempts');
 
-	}//end permission_exists()
-
-	//--------------------------------------------------------------------
+        return $query->num_rows();
+		}
 
 	/**
-	 * Load the permission names from the database
+     * Clear all login attempts for this user, as well as expired logins.
 	 *
-	 * @access public
-	 *
-	 * @param int $role_id An INT with the role id to grab permissions for.
+     * @param string $login   The login credentials (typically email).
+     * @param int    $expires The expiration time (in seconds). Attempts older
+     * than this value will be deleted.
 	 *
 	 * @return void
 	 */
-	private function load_permissions()
+    protected function clear_login_attempts($login, $expires = 86400)
 	{
-		if ( ! isset($this->permissions))
-		{
-			$this->ci->load->model('permissions/permission_model');
-
-			$perms = $this->ci->permission_model->find_all();
-
-			$this->permissions = array();
-
-			foreach ($perms as $perm)
-			{
-				$this->permissions[strtolower($perm->name)] = $perm->permission_id;
-			}
-		}
-
-	}//end load_permissions()
+        $this->ci->db->where(array(
+                                'ip_address' => $this->ip_address,
+                                'login'      => $login,
+                            ))
+                     ->or_where('time <', $this->getLoginTimestamp(time() - $expires))
+                     ->delete('login_attempts');
+    }
 
 	/**
-	 * Load the role permissions from the database
+     * Record a login attempt in the database.
 	 *
-	 * @access public
+     * @param string $login The login id used (typically email or username).
 	 *
-	 * @param int $role_id An INT with the role id to grab permissions for.
-	 *
-	 * @return void
+     * @return void
 	 */
-	private function load_role_permissions($role_id=NULL)
-	{
-		$role_id = ! is_null($role_id) ? $role_id : $this->role_id();
-
-		if ( ! isset($this->role_permissions[$role_id]))
+    protected function increase_login_attempts($login)
 		{
-			$this->ci->load->model('roles/role_permission_model');
-
-			$role_perms = $this->ci->role_permission_model->find_for_role($role_id);
-
-			$this->role_permissions[$role_id] = array();
-
-			if (is_array($role_perms))
-			{
-				foreach($role_perms as $permission)
-				{
-					$this->role_permissions[$role_id][$permission->permission_id] = TRUE;
-				}
-			}
+        $this->ci->db->insert(
+            'login_attempts',
+            array(
+                'ip_address' => $this->ip_address,
+                'login'      => $login,
+                'time'       => $this->getLoginTimestamp(),
+            )
+        );
 		}
 
-	}//end load_role_permissions()
+    //--------------------------------------------------------------------------
+    // !UTILITY METHODS
+    //--------------------------------------------------------------------------
 
-	//--------------------------------------------------------------------
+    /**
+     * Retrieve the logged identity from the current session. Built from the user's
+     * submitted login.
+     *
+     * @return string The identity used to login.
+     */
+    public function identity()
+		{
+        if (! $this->is_logged_in()) {
+            return false;
+		}
+        return $this->ci->session->userdata('identity');
+			}
 
+    /**
+     * Retrieve the user_id from the current session.
+     *
+     * @return int
+     */
+    public function user_id()
+			{
+        if (! $this->is_logged_in()) {
+            return false;
+			}
+        return $this->user()->id;
+		}
+
+    /**
+     * Gets a timestamp using $this->loginDateFormat and the system's configured
+     * 'time_reference'.
+     *
+     * @param  integer $time A UNIX timestamp.
+     *
+     * @return string A timestamp formatted according to $this->loginDateFormat.
+     */
+    protected function getLoginTimestamp($time = null)
+		{
+        if (empty($time)) {
+            $time = time();
+        }
+        return strtolower($this->ci->config->item('time_reference')) == 'gmt' ?
+            gmdate($this->loginDateFormat, $time) : date($this->loginDateFormat, $time);
+		}
+
+    //--------------------------------------------------------------------------
+    // Private Methods
+    //--------------------------------------------------------------------------
 
 	/**
-	 * Retrieves the role_name for the requested role.
+     * Create the session information for the current user and create an
+     * autologin cookie if required.
 	 *
-	 * @access public
+     * @param int $user_id          An int with the user's id.
+     * @param string $username      The user's username.
+     * @param string $password_hash The user's password hash. Used to create a
+     * new, unique user_token.
+     * @param string $email         The user's email address.
+     * @param int    $role_id       The user's role_id.
+     * @param bool   $remember      Whether to keep the user logged in.
+     * @param string $old_token     User's db token to test against.
+     * @param string $user_name     User's made name for displaying options.
 	 *
-	 * @param int $role_id An int representing the role_id.
-	 *
-	 * @return string A string with the name of the matched role.
+     * @return bool TRUE/FALSE on success/failure.
 	 */
-	public function role_name_by_id($role_id)
-	{
-		if ( ! is_numeric($role_id))
-		{
-			return '';
+    private function setupSession(
+        $user_id,
+        $username,
+        $password_hash,
+        $email,
+        $role_id,
+        $remember = false,
+        $old_token = null,
+        $user_name = ''
+    ) {
+        // What are we using as login identity?
+
+        // If "both", defaults to email, unless we display usernames globally
+        if ($this->ci->settings_lib->item('auth.login_type') == 'both') {
+            $login = $this->ci->settings_lib->item('auth.use_usernames') ? $username : $email;
+        } else {
+            $login = $this->ci->settings_lib->item('auth.login_type') == 'username' ? $username : $email;
 		}
 
-		$roles = array();
-
-		// If we already stored the role names, use those...
-		if (isset($this->role_names))
-		{
-			$roles = $this->role_names;
-		}
-		else
-		{
-			if ( ! class_exists('Role_model'))
-			{
-				$this->ci->load->model('roles/role_model');
-			}
-			$results = $this->ci->role_model->select('role_id, role_name')->find_all();
-
-			foreach ($results as $role)
-			{
-				$roles[$role->role_id] = $role->role_name;
-			}
+        // @todo consider taking this out of setupSession()
+        if ($this->ci->settings_lib->item('auth.use_usernames') == 0
+            && $this->ci->settings_lib->item('auth.login_type') == 'username'
+        ) {
+            // If we've a username at identity, and don't want made user name, let's have an email nearby.
+            $us_custom = $email;
+        } else {
+            // For backward compatibility, default to username.
+            $us_custom = $this->ci->settings_lib->item('auth.use_usernames') == 2 ? $user_name : $username;
 		}
 
-		// Try to return the role name
-		if (isset($roles[$role_id]))
-		{
-			return $roles[$role_id];
-		}
+        // Save the user's session info
 
-		return '';
+        // load do_hash()
+        $this->ci->load->helper('security');
 
-	}//end role_name_by_id()
+        $this->ci->session->set_userdata(array(
+            'user_id'     => $user_id,
+            'auth_custom' => $us_custom,
+            'user_token'  => do_hash($user_id . $password_hash),
+            'identity'    => $login,
+            'role_id'     => $role_id,
+            'logged_in'   => true,
+        ));
 
-	//--------------------------------------------------------------------
+        // Should we remember the user?
+        if ($remember === true) {
+            return $this->createAutologin($user_id, $old_token);
+        }
 
-	/*
-	 * Passwords
-	 */
-
-	/**
-	 * Hash a password
-	 *
-	 * @param String $pass		The password to hash
-	 * @param Int $iterations	The number of iterations used in hashing the password
-	 *
-	 * @return Array			An associative array containing the hashed password and number of iterations
-	 */
-	public function hash_password($pass, $iterations=0)
-	{
-		// The shortest valid hash phpass can currently return is 20 characters,
-		// which would only happen with CRYPT_EXT_DES
-		$min_hash_len = 20;
-
-		if (empty($iterations) || ! is_numeric($iterations) || $iterations <= 0)
-		{
-			$iterations = $this->ci->settings_lib->item('password_iterations');
-		}
-
-		// Load the password hash library
-		if ( ! class_exists('PasswordHash'))
-		{
-			require(dirname(__FILE__) . '/../libraries/PasswordHash.php');
-		}
-
-		$hasher = new PasswordHash($iterations, false);
-		$password = $hasher->HashPassword($pass);
-
-		unset($hasher);
-
-		if (strlen($password) < $min_hash_len)
-		{
-			return false;
-		}
-
-		return array('hash' => $password, 'iterations' => $iterations);
-
+        return true;
 	}
 
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    // Permissions
+    //--------------------------------------------------------------------------
 
 	/**
-	 * Check the supplied password against the supplied hash
+     * Load the permission names from the database.
 	 *
-	 * @param String $password The password to check
-	 * @param String $hash     The hash
-	 *
-	 * @return Bool    true if the password and hash match, else false
+     * @return array Permissions: key - lowercase name, value - permission ID.
 	 */
-	public function check_password($password, $hash)
+    private function loadPermissions()
 	{
-		// Load the password hash library
-		if ( ! class_exists('PasswordHash'))
-		{
-			require(dirname(__FILE__) .'/PasswordHash.php');
+        if (! empty($this->permissions)) {
+            return $this->permissions;
 		}
 
-		// Try password
-		$hasher = new PasswordHash(-1, false);
-		$return = $hasher->CheckPassword($password, $hash);
-
-		unset($hasher);
-
-		return $return;
-
+        if (! class_exists('permission_model')) {
+            $this->ci->load->model('permissions/permission_model');
 	}
 
-	//--------------------------------------------------------------------
-	// !LOGIN ATTEMPTS
-	//--------------------------------------------------------------------
+        $this->permissions = array();
+        $perms = $this->ci->permission_model->find_all();
+        foreach ($perms as $perm) {
+            $this->permissions[strtolower($perm->name)] = $perm->permission_id;
+        }
+
+        return $this->permissions;
+    }
 
 	/**
-	 * Records a login attempt into the database.
+     * Load the role permissions from the database.
 	 *
-	 * @access protected
-	 *
-	 * @param string $login The login id used (typically email or username)
+     * @param int $role_id The role id for which permissions are loaded. Uses
+     * the current user's role ID if none is provided.
 	 *
 	 * @return void
 	 */
-	protected function increase_login_attempts($login)
+    private function loadRolePermissions($role_id = null)
 	{
-		$this->ci->db->insert('login_attempts', array('ip_address' => $this->ip_address, 'login' => $login));
+        if (is_null($role_id)) {
+            $role_id = $this->role_id();
+        }
 
-	}//end increase_login_attempts()
+        if (! empty($this->role_permissions[$role_id])) {
+            return $this->role_permissions;
+        }
 
-	//--------------------------------------------------------------------
-
-	/**
-	 * Clears all login attempts for this user, as well as cleans out old logins.
-	 *
-	 * @access protected
-	 *
-	 * @param string $login   The login credentials (typically email)
-	 * @param int    $expires The time (in seconds) that attempts older than will be deleted
-	 *
-	 * @return void
-	 */
-	protected function clear_login_attempts($login, $expires = 86400)
-	{
-		$this->ci->db->where(array('ip_address' => $this->ip_address, 'login' => $login));
-
-		// Purge obsolete login attempts
-		$this->ci->db->or_where('time <', date('Y-m-d H:i:s', time() - $expires));
-
-		$this->ci->db->delete('login_attempts');
-
-	}//end clear_login_attempts()
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Get number of attempts to login occurred from given IP-address and/or login
-	 *
-	 * @param string $login (Optional) The login id to check for (email/username). If no login is passed in, it will only check against the IP Address of the current user.
-	 *
-	 * @return int An int with the number of attempts.
-	 */
-	function num_login_attempts($login=NULL)
-	{
-		$this->ci->db->select('1', FALSE);
-		$this->ci->db->where('ip_address', $this->ip_address);
-		if (strlen($login) > 0)
-		{
-			$this->ci->db->or_where('login', $login);
+        if (! class_exists('role_permission_model')) {
+            $this->ci->load->model('roles/role_permission_model');
 		}
 
-		$query = $this->ci->db->get('login_attempts');
+        $this->role_permissions[$role_id] = array();
+        $role_perms = $this->ci->role_permission_model->find_for_role($role_id);
+        if (! is_array($role_perms)) {
+            return $this->role_permissions;
+        }
 
-		return $query->num_rows();
+        foreach ($role_perms as $permission) {
+            $this->role_permissions[$role_id][$permission->permission_id] = true;
+        }
 
-	}//end num_login_attempts()
+        return $this->role_permissions;
+    }
 
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 	// !AUTO-LOGIN
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
 	/**
-	 * Attempts to log the user in based on an existing 'autologin' cookie.
-	 *
-	 * @access private
+     * Attempt to log the user in based on an existing 'autologin' cookie.
 	 *
 	 * @return void
 	 */
 	private function autologin()
 	{
 		$this->ci->load->library('settings/settings_lib');
-
-		if ($this->ci->settings_lib->item('auth.allow_remember') == FALSE)
-		{
+        if (! $this->allowRemember()) {
 			return;
 		}
 
 		$this->ci->load->helper('cookie');
-
-		$cookie = get_cookie('autologin', TRUE);
-
-		if ( ! $cookie)
-		{
+        $cookie = get_cookie('autologin', true);
+        if (! $cookie) {
 			return;
 		}
 
-		// We have a cookie, so split it into user_id and token
+        // A cookie was retrieved, so split it into user_id and token.
 		list($user_id, $test_token) = explode('~', $cookie);
 
 		// Try to pull a match from the database
-		$this->ci->db->where( array('user_id' => $user_id, 'token' => $test_token) );
-		$query = $this->ci->db->get('user_cookies');
+        $this->ci->db->where(array(
+                                'user_id' => $user_id,
+                                'token'   => $test_token,
+                            ));
 
-		if ($query->num_rows() == 1)
-		{
-			// Save logged in status to save on db access later.
-			$this->logged_in = TRUE;
-
-			// If a session doesn't exist, we need to refresh our autologin token
-			// and get the session started.
-			if ( ! $this->ci->session->userdata('user_id'))
-			{
-				// Grab the current user info for the session
-				$this->ci->load->model('users/User_model', 'user_model');
-				$user = $this->ci->user_model->select('id, username, email, password_hash, users.role_id')->find($user_id);
-
-				if ( ! $user)
-				{
+        $query = $this->ci->db->get('user_cookies');
+        if ($query->num_rows() != 1) {
 					return;
 				}
+        // Save logged in status to reduce db access.
+        $this->logged_in = true;
 
-				$this->setup_session($user->id, $user->username, $user->password_hash, $user->email, $user->role_id, TRUE, $test_token, $user->username);
-			}
+        if ($this->ci->session->userdata('user_id')) {
+            return;
 		}
 
-	}//end autologin()
+        // If a session doesn't exist, refresh the autologin token and start the
+        // session.
 
-	//--------------------------------------------------------------------
+        // Grab the current user info for the session.
+        $this->ci->load->model('users/user_model');
+        $user = $this->ci->user_model->select(array(
+                                                'id',
+                                                'username',
+                                                'email',
+                                                'password_hash',
+                                                'users.role_id'
+                                             ))
+                                     ->find($user_id);
 
+        if (! $user) {
+            return;
+        }
+
+        $this->setupSession(
+            $user->id,
+            $user->username,
+            $user->password_hash,
+            $user->email,
+            $user->role_id,
+            true,
+            $test_token,
+            $user->username
+        );
+    }
 
 	/**
-	 * Create the auto-login entry in the database. This method uses
-	 * Charles Miller's thoughts at:
+     * Create the auto-login entry in the database. This method uses Charles Miller's
+     * thoughts at:
 	 * http://fishbowl.pastiche.org/2004/01/19/persistent_login_cookie_best_practice/
-	 *
-	 * @access private
 	 *
 	 * @param int    $user_id    An int representing the user_id.
 	 * @param string $old_token The previous token that was used to login with.
 	 *
 	 * @return bool Whether the autologin was created or not.
 	 */
-	private function create_autologin($user_id, $old_token=NULL)
+    private function createAutologin($user_id, $old_token = null)
 	{
-		if ($this->ci->settings_lib->item('auth.allow_remember') == FALSE)
-		{
-			return FALSE;
+        if (! $this->allowRemember()) {
+            return false;
 		}
 
-		// load random_string()
+        // Generate a random string for the token.
+        if (! function_exists('random_string')) {
 		$this->ci->load->helper('string');
-
-		// Generate a random string for our token
+        }
 		$token = random_string('alnum', 128);
 
-		// If an old_token is presented, we're refreshing the autologin information
-		// otherwise we're creating a new one.
-		if (empty($old_token))
-		{
+        // If an old token was not provided, create a new one.
+        if (empty($old_token)) {
 			// Create a new token
-			$data = array(
+            $this->ci->db->insert(
+                'user_cookies',
+                array(
 				'user_id'		=> $user_id,
 				'token'			=> $token,
-				'created_on'	=> date('Y-m-d H:i:s')
+                    'created_on' => $this->getLoginTimestamp(),
+                )
 			);
-			$this->ci->db->insert('user_cookies', $data);
-		}
-		else
-		{
-			// Refresh the token
-			$this->ci->db->where('user_id', $user_id);
-			$this->ci->db->where('token', $old_token);
-			$this->ci->db->set('token', $token);
-			$this->ci->db->set('created_on', date('Y-m-d H:i:s'));
-			$this->ci->db->update('user_cookies');
+        } else {
+            // Refresh the token.
+            $this->ci->db->where('user_id', $user_id)
+                         ->where('token', $old_token)
+                         ->set('token', $token)
+                         ->set('created_on', $this->getLoginTimestamp())
+                         ->update('user_cookies');
 		}
 
-		if ($this->ci->db->affected_rows())
-		{
+        if ($this->ci->db->affected_rows()) {
 			// Create the autologin cookie
-			$this->ci->input->set_cookie('autologin', $user_id .'~'. $token, $this->ci->settings_lib->item('auth.remember_length'));
+            $this->ci->input->set_cookie(
+                'autologin',
+                $user_id .'~'. $token,
+                $this->ci->settings_lib->item('auth.remember_length')
+            );
 
-			return TRUE;
+            return true;
 		}
-		else
-		{
-			return FALSE;
-		}
 
-	}//end create_autologin()()
-
-	//--------------------------------------------------------------------
+        return false;
+    }
 
 	/**
-	 * Deletes the autologin cookie for the current user.
-	 *
-	 * @access private
+     * Delete the autologin cookie for the current user.
 	 *
 	 * @return void
 	 */
-	private function delete_autologin()
-	{
-		if ($this->ci->settings_lib->item('auth.allow_remember') == FALSE)
+    private function deleteAutologin()
 		{
+        if (! $this->allowRemember()) {
 			return;
 		}
 
-		// First things first.. grab the cookie so we know what row
-		// in the user_cookies table to delete.
+        // Grab the cookie to determine which row in the table to delete.
+        if (! function_exists('get_cookie')) {
 		$this->ci->load->helper('cookie');
-
+        }
 		$cookie = get_cookie('autologin');
-		if ($cookie)
-		{
+        if ($cookie) {
 			list($user_id, $token) = explode('~', $cookie);
 
-			// Now we can delete the cookie
+            // Now delete the cookie.
 			delete_cookie('autologin');
 
-			// And clean up the database
-			$this->ci->db->where('user_id', $user_id);
-			$this->ci->db->where('token', $token);
-			$this->ci->db->delete('user_cookies');
+            // Clean up the database
+            $this->ci->db->where('user_id', $user_id)
+                         ->where('token', $token)
+                         ->delete('user_cookies');
 		}
 
-		// Also perform a clean up of any autologins older than 2 months
-		$this->ci->db->where('created_on', '< DATE_SUB(CURDATE(), INTERVAL 2 MONTH)');
-		$this->ci->db->delete('user_cookies');
+        // Perform a clean up of any autologins older than 2 months.
+        $this->ci->db->where('created_on <', $this->getLoginTimestamp(strtotime('2 months ago')));
 
-	}//end delete_autologin()
+        $this->ci->db->delete('user_cookies');
+		}
 
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
+    // Utility Methods
+    //--------------------------------------------------------------------------
 
-	/**
-	 * Creates the session information for the current user. Will also create an autologin cookie if required.
-	 *
-	 * @access private
-	 *
-	 * @param int $user_id          An int with the user's id
-	 * @param string $username      The user's username
-	 * @param string $password_hash The user's password hash. Used to create a new, unique user_token.
-	 * @param string $email         The user's email address
-	 * @param int    $role_id       The user's role_id
-	 * @param bool   $remember      A boolean (TRUE/FALSE). Whether to keep the user logged in.
-	 * @param string $old_token     User's db token to test against
-	 * @param string $user_name     User's made name for displaying options
-	 *
-	 * @return bool TRUE/FALSE on success/failure.
-	 */
-	private function setup_session($user_id, $username, $password_hash, $email, $role_id, $remember=FALSE, $old_token=NULL,$user_name='')
-	{
-		// What are we using as login identity?
-		// Should I use _identity_login() and move below code?
-
-		// If "both", defaults to email, unless we display usernames globally
-		if (($this->ci->settings_lib->item('auth.login_type') ==  'both'))
+    private function allowRemember()
 		{
-			$login = $this->ci->settings_lib->item('auth.use_usernames') ? $username : $email;
-		}
-		else
-		{
-			$login = $this->ci->settings_lib->item('auth.login_type') == 'username' ? $username : $email;
+        if (isset($this->allowRemember)) {
+            return $this->allowRemember;
 		}
 
-		// TODO: consider taking this out of setup_session()
-		if ($this->ci->settings_lib->item('auth.use_usernames') == 0  && $this->ci->settings_lib->item('auth.login_type') ==  'username')
-		{
-			// if we've a username at identity, and don't want made user name, let's have an email nearby.
-			$us_custom = $email;
-		}
-		else
-		{
-			// For backward compatibility, defaults to username
-			$us_custom = $this->ci->settings_lib->item('auth.use_usernames') == 2 ? $user_name : $username;
-		}
+        $this->allowRemember = (bool) $this->ci->settings_lib->item('auth.allow_remember');
+        return $this->allowRemember;
+    }
+}
 
-		// Save the user's session info
+//------------------------------------------------------------------------------
+// Helper Functions
+//------------------------------------------------------------------------------
 
-		// load do_hash()
-		$this->ci->load->helper('security');
-
-		$data = array(
-			'user_id'		=> $user_id,
-			'auth_custom'	=> $us_custom,
-			'user_token'	=> do_hash($user_id . $password_hash),
-			'identity'		=> $login,
-			'role_id'		=> $role_id,
-			'logged_in'		=> TRUE,
-		);
-
-		$this->ci->session->set_userdata($data);
-
-		// Should we remember the user?
-		if ($remember === TRUE)
-		{
-			return $this->create_autologin($user_id, $old_token);
-		}
-
-		return TRUE;
-
-	}//end setup_session
-
-	//--------------------------------------------------------------------
-
-	/**
-	 * Returns the identity to be used upon user registration.
-	 *
-	 * @access private
-	 * @todo Decision to be made with this method.
-	 *
-	 * @return void
-	 */
-	private function _identity_login()
-	{
-		//Should I move indentity conditional code from setup_session() here?
-		//Or should conditional code be moved to auth->identity(),
-		//  and if Optional TRUE is passed, it would then determine wich identity to store in userdata?
-
-	}//end _identity_login()
-
-	//--------------------------------------------------------------------
-
-}//end Auth
-
-//--------------------------------------------------------------------
-
-if ( ! function_exists('has_permission'))
-{
+if (! function_exists('has_permission')) {
 	/**
 	 * A convenient shorthand for checking user permissions.
 	 *
-	 * @access public
+     * @param string $permission The permission to check for, ie 'Site.Signin.Allow'.
+     * @param bool   $override   Whether access is granted if this permission doesn't
+     * exist in the database.
 	 *
-	 * @param string $permission The permission to check for, ie 'Site.Signin.Allow'
-	 * @param bool   $override   Whether or not access is granted if this permission doesn't exist in the database
-	 *
-	 * @return bool TRUE/FALSE
+     * @return bool True if the user has the permission or $override is true and
+     * the permission wasn't found in the system, else false.
 	 */
-	function has_permission($permission, $override = FALSE)
+    function has_permission($permission, $override = false)
 	{
-		$ci =& get_instance();
-
-		return $ci->auth->has_permission($permission, NULL, $override);
-
-	}//end has_permission()
+        return get_instance()->auth->has_permission($permission, null, $override);
+    }
 }
 
-//--------------------------------------------------------------------
-
-if ( ! function_exists('permission_exists'))
-{
+if (! function_exists('permission_exists')) {
 	/**
-	 * Checks to see whether a permission is in the system or not.
+     * Check to see whether a permission is in the system.
 	 *
-	 * @access public
+     * @param string $permission Case-insensitive permission to check.
 	 *
-	 * @param string $permission The name of the permission to check for. NOT case sensitive.
-	 *
-	 * @return bool TRUE/FALSE
+     * @return bool True if the permission exists, else false.
 	 */
 	function permission_exists($permission)
 	{
-		$ci =& get_instance();
-
-		return $ci->auth->permission_exists($permission);
-
-	}//end permission_exists()
+        return get_instance()->auth->permission_exists($permission);
+    }
 }
 
-//--------------------------------------------------------------------
-
-if ( ! function_exists('abbrev_name'))
-{
+if (! function_exists('abbrev_name')) {
 	/**
-	 * Retrieves first and last name from given string.
+     * Retrieve first and last name from given string.
 	 *
-	 * @access public
-	 *
-	 * @param string $name Full name
+     * @param string $name Full name.
 	 *
 	 * @return string The First and Last name from given parameter.
 	 */
 	function abbrev_name($name)
 	{
-		if (is_string($name))
-		{
+        if (is_string($name)) {
 			list($fname, $lname) = explode(' ', $name, 2);
 
-			if (is_null($lname)) // Meaning only one name was entered...
-			{
+            if (is_null($lname)) { // Meaning only one name was entered...
 				$lastname = ' ';
-			}
-			else
-			{
-				$lname = explode( ' ', $lname );
+            } else {
+                $lname = explode(' ', $lname);
 				$size = sizeof($lname);
 				$lastname = $lname[$size-1]; //
 			}
 
-			return trim($fname.' '.$lastname) ;
-
+            return trim("{$fname} {$lastname}") ;
 		}
 
-		// TODO: Consider an optional parameter for picking custom var session.
+        // @todo Consider an optional parameter for picking custom var session.
 		// Making it auth private, and using auth custom var
 
 		return $name;
-
-	}//end abbrev_name()
+    }
 }

@@ -55,3 +55,9 @@ bonfire/.ideas
 
 # Ignore the installed.txt file
 public/install/installed.txt
+
+# Ignore any composer downloaded packages
+vendor/*
+
+# Ignore any sparks that have been loaded
+sparks/*

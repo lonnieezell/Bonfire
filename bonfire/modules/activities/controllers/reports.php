@@ -1,4 +1,5 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+
 /**
  * Bonfire
  *
@@ -6,31 +7,40 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
  * Activities Reports Context
  *
- * Allows the administrator to view the activity logs.
+ * Allow the administrator to view the activity logs.
  *
- * @package    Bonfire
- * @subpackage Modules_Activities
- * @category   Controllers
+ * @package    Bonfire\Modules\Activities\Controllers\Reports
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- *
+ * @link       http://cibonfire.com/docs/activities
  */
 class Reports extends Admin_Controller
 {
+    private $permissionDeleteDate       = 'Activities.Date.Delete';
+    private $permissionDeleteModule     = 'Activities.Module.Delete';
+    private $permissionDeleteOwn        = 'Activities.Own.Delete';
+    private $permissionDeleteUser       = 'Activities.User.Delete';
+    private $permissionSiteReportsView  = 'Site.Reports.View';
+    private $permissionViewActivities   = 'Bonfire.Activities.View';
+    private $permissionViewDate         = 'Activities.Date.View';
+    private $permissionViewModule       = 'Activities.Module.View';
+    private $permissionViewOwn          = 'Activities.Own.View';
+    private $permissionViewUser         = 'Activities.User.View';
 
-	//--------------------------------------------------------------------
+    private $hasPermissionDeleteOwn;
+    private $hasPermissionViewDate;
+    private $hasPermissionViewModule;
+    private $hasPermissionViewOwn;
+    private $hasPermissionViewUser;
 
 	/**
 	 * Constructor
@@ -41,410 +51,408 @@ class Reports extends Admin_Controller
 	{
 		parent::__construct();
 
-		$this->auth->restrict('Site.Reports.View');
-		$this->auth->restrict('Bonfire.Activities.View');
+		$this->auth->restrict($this->permissionSiteReportsView);
+		$this->auth->restrict($this->permissionViewActivities);
 
-		$this->lang->load('activities');
+		$this->lang->load('activities/activities');
 		$this->lang->load('datatable');
 
-		Template::set('toolbar_title', lang('activity_title'));
+        $this->load->model('activities/activity_model');
 
-		Assets::add_js(Template::theme_url('js/bootstrap.js'));
+		Assets::add_js(array(
+            'bootstrap',
+            'jquery.dataTables',
+            'bootstrap-dataTables',
+        ));
 		Assets::add_js($this->load->view('reports/activities_js', null, true), 'inline');
 
-		Assets::add_js( array ( Template::theme_url('js/jquery.dataTables.min.js' )) );
-		Assets::add_js( array ( Template::theme_url('js/bootstrap-dataTables.js' )) );
-		Assets::add_css( array ( Template::theme_url('css/datatable.css') ) ) ;
-		Assets::add_css( array ( Template::theme_url('css/bootstrap-dataTables.css') ) ) ;
+		Assets::add_css(array(
+            'datatable',
+            'bootstrap-dataTables',
+        ));
 
-		if (has_permission('Activities.User.View')
-				|| has_permission('Activities.Module.View')
-				|| has_permission('Activities.Date.View')
-			)
-		{
+        // Check the permissions, store the results.
+        $this->hasPermissionDeleteOwn  = $this->auth->has_permission($this->permissionDeleteOwn);
+        $this->hasPermissionViewDate   = $this->auth->has_permission($this->permissionViewDate);
+        $this->hasPermissionViewModule = $this->auth->has_permission($this->permissionViewModule);
+        $this->hasPermissionViewOwn    = $this->auth->has_permission($this->permissionViewOwn);
+        $this->hasPermissionViewUser   = $this->auth->has_permission($this->permissionViewUser);
+
+        if ($this->hasPermissionViewUser
+            || $this->hasPermissionViewModule
+            || $this->hasPermissionViewDate
+           ) {
 			Template::set_block('sub_nav', 'reports/_sub_nav');
 		}
 
-		$this->load->model('activities/activity_model');
-	}//end __construct()
-
-	//--------------------------------------------------------------------
+		Template::set('toolbar_title', lang('activities_title'));
+	}
 
 	/**
-	 * Lists all log files and allows you to change the log_threshold.
-	 *
-	 * @access public
+	 * List all activity logs and allow the user to change the log threshold.
 	 *
 	 * @return void
 	 */
 	public function index()
 	{
-		if (has_permission('Activities.User.View')
-				|| has_permission('Activities.Module.View')
-				|| has_permission('Activities.Date.View'))
-		{
-			// get top 5 modules
-			$this->db->group_by('module');
-			Template::set('top_modules', $this->activity_model->select('module, COUNT(module) AS activity_count')
-					->where('activities.deleted', 0)
-					->limit(5)
-					->order_by('activity_count', 'DESC')
-					->find_all() );
+        Template::set('hasPermissionDeleteOwn', $this->hasPermissionDeleteOwn);
+        Template::set('hasPermissionViewDate', $this->hasPermissionViewDate);
+        Template::set('hasPermissionViewModule', $this->hasPermissionViewModule);
+        Template::set('hasPermissionViewOwn', $this->hasPermissionViewOwn);
+        Template::set('hasPermissionViewUser', $this->hasPermissionViewUser);
 
-			// get top 5 users and usernames
-			$this->db->join('users', 'activities.user_id = users.id', 'left');
-			$query = $this->db->select('username, user_id, COUNT(user_id) AS activity_count')
-					->where('activities.deleted', 0)
-					->group_by('user_id')
-					->order_by('activity_count','DESC')
-					->limit(5)
-					->get($this->activity_model->get_table());
-			Template::set('top_users', $query->result());
+		if ($this->hasPermissionViewUser
+            || $this->hasPermissionViewModule
+            || $this->hasPermissionViewDate
+           ) {
+            Template::set(
+                'pages',
+                array(
+                    'date'   => 'activity_date',
+                    'module' => 'activity_module',
+                    'own'    => 'activity_own',
+                    'user'   => 'activity_user',
+                )
+            );
+            Template::set('hasPermissionDeleteDate', $this->auth->has_permission($this->permissionDeleteDate));
+            Template::set('hasPermissionDeleteModule', $this->auth->has_permission($this->permissionDeleteModule));
+            Template::set('hasPermissionDeleteUser', $this->auth->has_permission($this->permissionDeleteUser));
 
-			Template::set('users', $this->user_model->where('users.deleted', 0)->find_all());
-			Template::set('modules', module_list());
-			Template::set('activities', $this->activity_model->find_all());
+			Template::set(
+                'activities',
+                $this->activity_model->where($this->activity_model->get_table() . '.' . $this->activity_model->get_deleted_field(), 0)
+                                     ->find_all()
+            );
+            Template::set('modules', Modules::list_modules());
+            Template::set('top_modules', $this->activity_model->findTopModules(5));
+            Template::set('top_users', $this->activity_model->findTopUsers(5));
+			Template::set(
+                'users',
+                $this->user_model->where($this->user_model->get_table() . '.' . $this->user_model->get_deleted_field(), 0)
+                                 ->order_by('username', 'asc')
+                                 ->find_all()
+            );
+
 			Template::render();
-		}
-		else if(has_permission('Activities.Own.View'))
-		{
+		} elseif ($this->hasPermissionViewOwn) {
 			$this->activity_own();
-
 		}
-
-	}//end index()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
-	 * Shows the activities for the specified user.
-	 *
-	 * @access public
+	 * Display the activities for the specified user.
 	 *
 	 * @return void
 	 */
 	public function activity_user()
 	{
-
-		if (!has_permission('Activities.User.View')) {
-			Template::set_message(lang('activity_restricted'), 'error');
-			redirect(SITE_AREA .'/reports/activities');
+		if ($this->hasPermissionViewUser) {
+            return $this->getActivity();
 		}
 
-		return $this->_get_activity();
-
-	}//end activity_user()
-
-	//--------------------------------------------------------------------
+		$this->activityRestricted();
+	}
 
 	/**
-	 * Shows the activities for the current user.
-	 *
-	 * @access public
+	 * Display the activities for the current user.
 	 *
 	 * @return void
 	 */
 	public function activity_own()
 	{
-
-		if (!has_permission('Activities.Own.View')) {
-			Template::set_message(lang('activity_restricted'), 'error');
-			redirect(SITE_AREA .'/reports/activities');
+		if ($this->hasPermissionViewOwn) {
+            return $this->getActivity('activity_own', $this->auth->user_id());
 		}
 
-		return $this->_get_activity('activity_own', $this->current_user->id);
-
-	}//end activity_own()
-
-	//--------------------------------------------------------------------
+		$this->activityRestricted();
+	}
 
 	/**
-	 * Shows the activities for the specified module.
-	 *
-	 * @access public
+	 * Display the activities for the specified module.
 	 *
 	 * @return void
 	 */
 	public function activity_module()
 	{
-		if (has_permission('Activities.Module.View')) {
-			return $this->_get_activity('activity_module');
+		if ($this->hasPermissionViewModule) {
+            return $this->getActivity('activity_module');
 		}
 
-		Template::set_message(lang('activity_restricted'), 'error');
-		redirect(SITE_AREA .'/reports/activities');
-
-	}//end activity_module()
-
-	//--------------------------------------------------------------------
+        $this->activityRestricted();
+	}
 
 	/**
-	 * Shows the activities before the specified date.
-	 *
-	 * @access public
+	 * Display the activities before the specified date.
 	 *
 	 * @return void
 	 */
 	public function activity_date()
 	{
-		if (has_permission('Activities.Date.View')) {
-			return $this->_get_activity('activity_date');
+        if ($this->auth->has_permission('Activities.Date.View')) {
+            return $this->getActivity('activity_date');
 		}
 
-		Template::set_message(lang('activity_restricted'), 'error');
-		redirect(SITE_AREA .'/reports/activities');
-
-	}//end activity_date()
-
-
-	//--------------------------------------------------------------------
+		$this->activityRestricted();
+	}
 
 	/**
-	 * Deletes the entries in the activity log for the specified area.
-	 *
-	 * @access public
+	 * Delete the entries in the activity log for the specified area.
 	 *
 	 * @return void
 	 */
 	public function delete()
 	{
-		$action = $this->input->post("action");
-		$which  = $this->input->post("which");
+        $this->deleteActivity(
+            $this->input->post('action'),
+            $this->input->post('which')
+        );
 
-		$this->_delete_activity($action, $which);
-
-		redirect(SITE_AREA .'/reports/activities');
-
-	} // end delete()
-
-	//--------------------------------------------------------------------
+		redirect(SITE_AREA . '/reports/activities');
+	}
 
 	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
 	//--------------------------------------------------------------------
 
+    /**
+     * The user attempted to do something which he/she is not permitted to do.
+     *
+     * Set an error message and redirect the user
+     *
+     * @return void
+     */
+    private function activityRestricted()
+    {
+        Template::set_message(lang('activities_restricted'), 'error');
+        redirect(SITE_AREA . '/reports/activities');
+    }
+
 	/**
 	 * Delete the entries in the activity log for the specified area.
-	 *
-	 * @access private
 	 *
 	 * @param string $action The area we are in
 	 * @param string $which  A specific value to match, or "all"
 	 *
 	 * @return void
 	 */
-	private function _delete_activity($action, $which)
+    private function deleteActivity($action, $which)
 	{
-		// check for permission to delete this
-		$permission = str_replace('activity_', '',$action);
-		if (!has_permission('Activities.'.ucfirst($permission).'.Delete')) {
-			Template::set_message(lang('activity_restricted'), 'error');
+        // This is before the permission check because the permission check
+        // takes longer and depends on the value of $action
+		if (empty($action)) {
+			Template::set_message(lang('activities_delete_no_section'), 'error');
 			return;
 		}
 
-		if (empty($action))
-		{
-			Template::set_message('Delete section not specified', 'error');
+		// Check for permission to delete this
+        $permission = ucfirst(str_replace('activity_', '', $action));
+        if (! $this->auth->has_permission("Activities.{$permission}.Delete")) {
+			Template::set_message(lang('activities_restricted'), 'error');
 			return;
 		}
 
-		if (empty($which))
-		{
-			Template::set_message('Delete value not specified', 'error');
+		if (empty($which)) {
+			Template::set_message(lang('activities_delete_no_value'), 'error');
 			return;
 		}
 
-		// different delete where statement switch
-		switch ($action)
-		{
+		// Change the where statement based on $action
+		switch ($action) {
 			case 'activity_date':
 				$value = 'activity_id';
-			break;
+    			break;
 
 			case 'activity_module':
 				$value = 'module';
-			break;
+    			break;
 
 			default:
 				$value = 'user_id';
-			break;
+    			break;
 		}
 
-		// set a default delete then check if delete "all" was chosen
-		$delete = ($value == 'activity_id') ? $value ." < '".$which."'" : $value ." = '".$which."'";
-		if ($which == 'all')
-		{
-			$delete = $value ." != 'tsTyImbdOBOgwIqtb94N4Gr6ctatWVDnmYC3NfIfczzxPs0xZLNBnQs38dzBYn8'";
-		}
+        // Set the where clause for the delete
+        $deleteWhere = array();
+        if ($which == 'all') {
+            $deleteWhere["{$value} !="] = 'tsTyImbdOBOgwIqtb94N4Gr6ctatWVDnmYC3NfIfczzxPs0xZLNBnQs38dzBYn8';
+		} elseif ($value == 'activity_id') {
+            $deleteWhere["{$value} <"] = $which;
+        } else {
+            $deleteWhere[$value] = $which;
+        }
 
-		// check if they can delete their own stuff
-		$delete .= (has_permission('Activities.Own.Delete')) ? '' : " AND user_id != '" . $this->auth->user_id()."'";
+        // Check whether the user can delete his/her own activities
+        if (! $this->hasPermissionDeleteOwn) {
+            $this->activity_model->where('user_id !=', $this->auth->user_id());
+        }
 
-		$affected = $this->activity_model->delete_where($delete);
-		if (is_numeric($affected))
-		{
-			Template::set_message(sprintf(lang('activity_deleted'), $affected), 'success');
-			$this->activity_model->log_activity($this->auth->user_id(), 'deleted ' . $affected . ' activities', 'activities');
-		}
-		else if (isset($affected))
-		{
-			Template::set_message(lang('activity_nothing'),'attention');
-		}
-		else
-		{
-			Template::set_message('Error : '.$this->activity_model->error, 'error');
-		}
+        $affected = $this->activity_model->delete_where($deleteWhere);
 
-	}//end _delete_activity()
+		if (is_numeric($affected)) {
+			Template::set_message(sprintf(lang('activities_deleted'), $affected), 'success');
+			$this->activity_model->log_activity($this->auth->user_id(), sprintf(lang('activities_act_deleted'), $affected), 'activities');
+		} elseif (isset($affected)) {
+			Template::set_message(lang('activities_nothing'), 'attention');
+		} else {
+			Template::set_message(sprintf(lang('activities_delete_error'), $this->activity_model->error), 'error');
+		}
+	}
 
 	/**
-	 * Gets all the activity based on parameters passed
+	 * Get activity based on parameters passed
 	 *
-	 * @access public
-	 *
-	 * @param string $which      Filter the activities by type
-	 * @param bool   $find_value Value to filter by
+     * @param string $which       Which filter to use.
+     * @param bool   $filterValue Value to filter by
 	 *
 	 * @return void
 	 */
-	private function _get_activity($which='activity_user',$find_value=FALSE)
+    private function getActivity($which = 'activity_user', $filterValue = false)
 	{
-		// check if $find_value has anything in it
-		if ($find_value === FALSE)
-		{
-			$find_value = ($this->input->post($which.'_select') == '') ? $this->uri->segment(5) : $this->input->post($which.'_select');
+        $postedWhichSelect = $this->input->post("{$which}_select");
+
+        // Check whether $filterValue has anything in it
+        if ($filterValue === false) {
+            $filterValue = $postedWhichSelect == '' ? $this->uri->segment(5) : $postedWhichSelect;
 		}
 
-		if (isset($_POST['delete']))
-		{
-			$this->_delete_activity($which, $find_value);
+		if (isset($_POST['delete'])) {
+            $this->deleteActivity($which, $filterValue);
 		}
 
-		Template::set('filter', $this->input->post($which.'_select'));
+        $activityDeletedField   = $this->activity_model->get_deleted_field();
+        $activityTable          = $this->activity_model->get_table();
+        $userDeletedField       = $this->user_model->get_deleted_field();
+        $userKey                = $this->user_model->get_key();
+        $userTable              = $this->user_model->get_table();
 
-		// set a couple default variables
-		$options = array('all' => lang('activity_all'));
-		$name = lang('activity_all');
+		// Set default values
+		$name    = lang('activities_all');
+		$options = array('all' => $name);
 
-		switch ($which)
-		{
+        // Find the $options and $name based on activity type ($which)
+		switch ($which) {
 			case 'activity_module':
-				$modules = module_list();
-				foreach ($modules as $mod)
-				{
-					$options[$mod] = $mod;
+				$modules = Modules::list_modules();
 
-					if ($find_value == $mod)
-					{
+                // Sort modules by key (module directory name)
+                ksort($modules);
+
+                // Setup the list of modules for the filter.
+				foreach ($modules as $mod) {
+					$options[$mod] = $mod;
+                    if ($filterValue == $mod) {
 						$name = ucwords($mod);
 					}
 				}
 				$where = 'module';
-			break;
+                Template::set('hasPermissionDeleteModule', $this->auth->has_permission($this->permissionDeleteModule));
+                break;
 
 			case 'activity_date':
-				foreach($this->activity_model->find_all_by('deleted', 0) as $e)
-				{
+				foreach ($this->activity_model->find_all_by($activityDeletedField, 0) as $e) {
 					$options[$e->activity_id] = $e->created_on;
-
-					if ($find_value == $e->activity_id)
-					{
+                    if ($filterValue == $e->activity_id) {
 						$name = $e->created_on;
 					}
 				}
 				$where = 'activity_id';
-			break;
+                Template::set('hasPermissionDeleteDate', $this->auth->has_permission($this->permissionDeleteDate));
+    			break;
 
 			case 'activity_own':
+                // no break;
 			default:
-				if (has_permission('Activities.User.View'))
-				{
-					foreach($this->user_model->where('users.deleted', 0)->find_all() as $e)
-					{
-						$options[$e->id] = $e->username;
+				if ($this->hasPermissionViewUser) {
+                    // Use the same order_by for the user drop-down/select as is
+                    // used on the index page
+                    $this->user_model->where("{$userTable}.{$userDeletedField}", 0)
+                                     ->order_by('username', 'asc');
 
-						if ($find_value == $e->id)
-						{
+                    foreach ($this->user_model->find_all() as $e) {
+						$options[$e->id] = $e->username;
+                        if ($filterValue == $e->id) {
 							$name = $e->username;
 						}
 					}
-				}
-				else if (has_permission('Activities.Own.View'))
-				{
+                    Template::set('hasPermissionDeleteUser', $this->auth->has_permission($this->permissionDeleteUser));
+				} elseif ($this->hasPermissionViewOwn) {
 					$options = array();
-					$options[$this->current_user->id] = $this->current_user->username;
-					$name = $this->current_user->username;
+					$options[$this->auth->user_id()] = $this->auth->user()->username;
+					$name = $this->auth->user()->username;
 				}
-
 				$where = 'user_id';
-			break;
+    			break;
 		}
 
-		// set some vars for the view
-		$vars = array(
-			'which'			=> $which,
-			'view_which'	=> ucwords(lang($which)),
-			'name'			=> $name,
-			'delete_action'	=> $where,
-			'delete_id'		=> $find_value
-		);
-		Template::set('vars', $vars);
+		// Set vars for the view
+		Template::set(
+            'vars',
+            array(
+                'which'			=> $which,
+                'view_which'	=> ucwords(lang(str_replace('activity_', 'activities_', $which))),
+                'name'			=> $name,
+                'delete_action'	=> $where,
+                'delete_id'     => $filterValue,
+            )
+        );
 
-		// if we have a filter, apply it here
-		$this->db->order_by($where,'asc');
-		if (!empty($find_value) && $find_value != 'all')
-		{
-			$where = ($where == 'activity_id') ? 'activity_id <' : $where;
-			$this->db->where($where,$find_value);
+        $this->activity_model->order_by($where, 'asc');
 
-			$this->db->where('activities.deleted', 0);
-			$total = $this->activity_model->count_by($where, $find_value);
+		// Apply the filter, if there is one
+        if (empty($filterValue) || $filterValue == 'all') {
+            $total = $this->activity_model->count_by("{$activityTable}.{$activityDeletedField}", 0);
+        } else {
+			$where = $where == 'activity_id' ? 'activity_id <' : $where;
+            $total = $this->activity_model->where($where, $filterValue)
+                                          ->where("{$activityTable}.{$activityDeletedField}", 0)
+                                          ->count_by($where, $filterValue);
 
-			// set this again for use in the main query
-			$this->db->where($where,$find_value);
-		}
-		else
-		{
-			$total = $this->activity_model->count_by('activities.deleted', 0);
-		}
-
-		// does user have permission to see own records?
-		if (!has_permission('Activities.Own.View'))
-		{
-			$this->db->where('activities.user_id != ', $this->auth->user_id());
+			// Set this again for use in the main query
+            $this->activity_model->where($where, $filterValue);
 		}
 
-		// don't show the deleted records
-		$this->db->where('activities.deleted', 0);
+		// Does user have permission to see own records?
+        if (! $this->hasPermissionViewOwn) {
+            $this->activity_model->where("{$activityTable}.user_id !=", $this->auth->user_id());
+		}
 
 		// Pagination
 		$this->load->library('pagination');
 
 		$offset = $this->input->get('per_page');
+		$limit  = $this->settings_lib->item('site.list_limit');
 
-		$limit = $this->settings_lib->item('site.list_limit');
-
-		$this->pager['base_url'] 			= current_url() .'?';
-		$this->pager['total_rows'] 			= $total;
-		$this->pager['per_page'] 			= $limit;
-		$this->pager['page_query_string']	= true;
+		$this->pager['base_url'] 		  = current_url() . '?';
+		$this->pager['total_rows'] 		  = $total;
+		$this->pager['per_page'] 		  = $limit;
+		$this->pager['page_query_string'] = true;
 
 		$this->pagination->initialize($this->pager);
 
-		// get the activities
-		$this->db->join('users', 'activities.user_id = users.id', 'left');
-		$this->db->order_by('activity_id','desc'); // most recent stuff on top
-		$this->db->select('activity, module, activities.created_on AS created, username');
-		Template::set('activity_content', $this->activity_model->limit($limit, $offset)->find_all());
+		// Get the activities
+		$this->activity_model->select(array(
+                                        'activity',
+                                        'module',
+                                        'activities.created_on AS created',
+                                        'username',
+                                     ))
+                             ->where("{$activityTable}.{$activityDeletedField}", 0)
+                             ->join($userTable, "{$activityTable}.user_id = {$userTable}.{$userKey}", 'left')
+                             ->order_by('activity_id', 'desc') // Most recent on top
+                             ->limit($limit, $offset);
 
+        Template::set('activity_content', $this->activity_model->find_all());
+		Template::set('filter', $postedWhichSelect);
 		Template::set('select_options', $options);
+
+        Template::set('hasPermissionViewDate', $this->hasPermissionViewDate);
+        Template::set('hasPermissionViewModule', $this->hasPermissionViewModule);
+        Template::set('hasPermissionViewUser', $this->hasPermissionViewUser);
+        Template::set('hasPermissionViewOwn', $this->hasPermissionViewOwn);
+        Template::set('hasPermissionDeleteOwn', $this->hasPermissionDeleteOwn);
 
 		Template::set_view('reports/view');
 		Template::render();
-
-	}//end _get_activity()
-
-
-	//--------------------------------------------------------------------
-
-}//end class
+	}
+}
+/* /activities/controllers/reports.php */

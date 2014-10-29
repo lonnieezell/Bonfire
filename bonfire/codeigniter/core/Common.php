@@ -6,7 +6,7 @@
  *
  * @package		CodeIgniter
  * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
+ * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc.
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -31,9 +31,6 @@
 
 /**
 * Determines if the current version of PHP is greater then the supplied value
-*
-* Since there are a few places where we conditionally test for PHP > 5
-* we'll set a static variable.
 *
 * @access	public
 * @param	string
@@ -133,8 +130,9 @@ if ( ! function_exists('load_class'))
 		$name = FALSE;
 
 		// Look for the class first in the local application/libraries folder
+		// then in Bonfire's bonfire/libraries folder
 		// then in the native system/libraries folder
-		foreach (array(APPPATH, BASEPATH) as $path)
+		foreach (array(APPPATH, BFPATH, BASEPATH) as $path)
 		{
 			if (file_exists($path.$directory.'/'.$class.'.php'))
 			{
@@ -149,7 +147,20 @@ if ( ! function_exists('load_class'))
 			}
 		}
 
-		// Is the request a class extension?  If so we load it too
+        // Search in the Bonfire folder first for class extensions
+        // Note that these classes will have a BF_ prefix, instead of the subclass_prefix (MY_)
+        // to allow for graceful extending of child classes in the application.
+        if (file_exists(BFPATH.$directory.'/BF_'.$class.'.php'))
+        {
+            $name = 'BF_'. $class;
+
+            if (class_exists($name) === FALSE)
+            {
+                require(BFPATH.$directory.'/BF_'.$class.'.php');
+            }
+        }
+
+        // Is the request a class extension?  If so we load it too
 		if (file_exists(APPPATH.$directory.'/'.config_item('subclass_prefix').$class.'.php'))
 		{
 			$name = config_item('subclass_prefix').$class;
@@ -470,9 +481,6 @@ if ( ! function_exists('_exception_handler'))
 	{
 		 // We don't bother with "strict" notices since they tend to fill up
 		 // the log file with excess information that isn't normally very helpful.
-		 // For example, if you are running PHP 5 and you use version 4 style
-		 // class functions (without prefixes like "public", "private", etc.)
-		 // you'll get notices telling you that these have been deprecated.
 		if ($severity == E_STRICT)
 		{
 			return;

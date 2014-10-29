@@ -1,10 +1,8 @@
-<?php echo theme_view('_header'); ?>
+<?php echo theme_view('header'); ?>
 <style>body { background: #f5f5f5; }</style>
-
-<div class="container"> <!-- Start of Main Container -->
-
+<div class="container"><!-- Start of Main Container -->
     <?php
-        echo isset($content) ? $content : Template::content();
-    ?>
+    echo isset($content) ? $content : Template::content();
 
-<?php echo theme_view('_footer', array('show' => false)); ?>
+    echo theme_view('footer', array('show' => false));
+?>

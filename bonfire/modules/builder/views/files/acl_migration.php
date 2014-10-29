@@ -1,113 +1,135 @@
 <?php
 
-$acl_migrations = '<?php if (!defined(\'BASEPATH\')) exit(\'No direct script access allowed\');
+/*
+ * Values passed from calling method:
+ * $module_name_lower
+ * $module_name
+ * $contexts
+ * $action_names
+ * $role_id
+ */
 
-class Migration_Install_' . $module_name_lower . '_permissions extends Migration
-{
+$ucModuleName = ucfirst($module_name_lower);
+$action_status = 'active';
+$permissionValues = '';
 
-	/**
-	 * Permissions to Migrate
-	 *
-	 * @var Array
-	 */
-	private $permission_values = array(';
+foreach ($contexts as $context) {
+	if ($context != 'public') {
+        $ucContextName = ucfirst($context);
+		$permission = "{$ucModuleName}.{$ucContextName}.";
 
-foreach ($contexts as $context)
-{
-	if ($context != 'public')
-	{
-		$permission = ucfirst($module_name) . '.';
-		$permission .= ucfirst($context) . '.';
-
-		foreach ($action_names as $action_name)
-		{
-			$action_permission = '';
+		foreach ($action_names as $action_name) {
 			$action_name = ucfirst($action_name);
-
-			if ($action_name == 'Index')
-			{
+			if ($action_name == 'Index') {
 				$action_name = 'View';
 			}
 
 			$action_permission = $permission . $action_name;
-			$action_status = 'active';
-			$action_description = '';
+			$action_description = "{$action_name} {$ucModuleName} {$ucContextName}";
 
-			$acl_migrations .= '
+			$permissionValues .= "
 		array(
-			\'name\' => \'' . $action_permission . '\',
-			\'description\' => \'' . $action_description . '\',
-			\'status\' => \'' . $action_status . '\',
-		),';
+			'name' => '{$action_permission}',
+			'description' => '{$action_description}',
+			'status' => '{$action_status}',
+		),";
 		}
 	}
 }
 
-$acl_migrations .= '
-	);
+$permissionValues = "array({$permissionValues}
+    );";
+
+echo "<?php defined('BASEPATH') || exit('No direct script access allowed');
+
+class Migration_Install_{$module_name_lower}_permissions extends Migration
+{
+	/**
+	 * @var array Permissions to Migrate
+	 */
+	private \$permissionValues = {$permissionValues}
+
+    /**
+     * @var string The name of the permission key in the role_permissions table
+     */
+    private \$permissionKey = 'permission_id';
+
+    /**
+     * @var string The name of the permission name field in the permissions table
+     */
+    private \$permissionNameField = 'name';
 
 	/**
-	 * The name of the permissions table
-	 *
-	 * @var String
+	 * @var string The name of the role/permissions ref table
 	 */
-	private $table_name = \'permissions\';
+	private \$rolePermissionsTable = 'role_permissions';
+
+    /**
+     * @var numeric The role id to which the permissions will be applied
+     */
+    private \$roleId = '{$role_id}';
+
+    /**
+     * @var string The name of the role key in the role_permissions table
+     */
+    private \$roleKey = 'role_id';
 
 	/**
-	 * The name of the role/permissions ref table
-	 *
-	 * @var String
+	 * @var string The name of the permissions table
 	 */
-	private $roles_table = \'role_permissions\';
+	private \$tableName = 'permissions';
 
 	//--------------------------------------------------------------------
 
 	/**
-	 * Install this migration
+	 * Install this version
 	 *
 	 * @return void
 	 */
 	public function up()
 	{
-		$role_permissions_data = array();
-		foreach ($this->permission_values as $permission_value)
-		{
-			$this->db->insert($this->table_name, $permission_value);
+		\$rolePermissionsData = array();
+		foreach (\$this->permissionValues as \$permissionValue) {
+			\$this->db->insert(\$this->tableName, \$permissionValue);
 
-			$role_permissions_data[] = array(
-				\'role_id\' => \'' . $role_id . '\',
-				\'permission_id\' => $this->db->insert_id(),
+			\$rolePermissionsData[] = array(
+                \$this->roleKey       => \$this->roleId,
+                \$this->permissionKey => \$this->db->insert_id(),
 			);
 		}
 
-		$this->db->insert_batch($this->roles_table, $role_permissions_data);
+		\$this->db->insert_batch(\$this->rolePermissionsTable, \$rolePermissionsData);
 	}
 
-	//--------------------------------------------------------------------
-
 	/**
-	 * Uninstall this migration
+	 * Uninstall this version
 	 *
 	 * @return void
 	 */
 	public function down()
 	{
-		foreach ($this->permission_values as $permission_value)
-		{
-			$query = $this->db->select(\'permission_id\')
-				->get_where($this->table_name, array(\'name\' => $permission_value[\'name\'],));
+        \$permissionNames = array();
+		foreach (\$this->permissionValues as \$permissionValue) {
+            \$permissionNames[] = \$permissionValue[\$this->permissionNameField];
+        }
 
-			foreach ($query->result() as $row)
-			{
-				$this->db->delete($this->roles_table, array(\'permission_id\' => $row->permission_id));
-			}
+        \$query = \$this->db->select(\$this->permissionKey)
+                          ->where_in(\$this->permissionNameField, \$permissionNames)
+                          ->get(\$this->tableName);
 
-			$this->db->delete($this->table_name, array(\'name\' => $permission_value[\'name\']));
-		}
+        if ( ! \$query->num_rows()) {
+            return;
+        }
+
+        \$permissionIds = array();
+        foreach (\$query->result() as \$row) {
+            \$permissionIds[] = \$row->{\$this->permissionKey};
+        }
+
+        \$this->db->where_in(\$this->permissionKey, \$permissionIds)
+                 ->delete(\$this->rolePermissionsTable);
+
+        \$this->db->where_in(\$this->permissionNameField, \$permissionNames)
+                 ->delete(\$this->tableName);
 	}
-
-	//--------------------------------------------------------------------
-
-}';
-
-echo $acl_migrations;
+}";

@@ -1,7 +1,7 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
 $config['module_config'] = array(
 	'description'	=> 'Allows users to create translations for any language.',
-	'name'			=> 'System Information',
+	'name'			=> 'lang:bf_menu_sysinfo',
 	'author'		=> 'Bonfire Team'
 );

@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
@@ -6,85 +6,63 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
  * Emailer Library
  *
- * The Emailer core module makes sending emails a breeze. It uses the
- * default CodeIgniter email library, but extends the functionality to
- * provide the ability to queue emails to be processed later by a CRON
- * job, allowing you to limit the number of emails that are sent per/hour
- * if you have a picky mail server or ISP.
+ * @todo process_queue and send_email should use a common method to send each
+ * message. While it's understandable that the model and library don't need to
+ * be loaded by each iteration of the loop in process_queue (which would be
+ * attempted if it called send_email to handle it), the code to send the email
+ * shouldn't be completely separate for these two methods, either.
  *
- * It also provides the ability to use HTML email templates, though only
- * one template is supported at the moment.
+ * The Emailer core module makes sending emails a breeze. It uses the default
+ * CodeIgniter email library, but extends the functionality to provide the
+ * ability to queue emails to be processed later by a CRON job, allowing you to
+ * limit the number of emails that are sent per/hour if you have a picky mail
+ * server or ISP.
  *
- * @package    Bonfire
- * @subpackage Modules_Emailer
- * @category   Libraries
+ * It also provides the ability to use HTML email templates, though only one
+ * template is supported at the moment.
+ *
+ * @package    Bonfire\Modules\Emailer\Libraries\Emailer
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- *
+ * @link       http://cibonfire.com/docs/guides
  */
 class Emailer
 {
-
-
 	/**
-	 * Whether to send emails immediately or queue them by default.
+	 * @var bool Whether to send emails immediately or queue them by default.
 	 *
-	 * If TRUE, will queue emails into the database to be sent later.
-	 * If FALSE, will send the email immediately.
-	 *
-	 * @access public
-	 *
-	 * @var bool
+	 * If true, will queue emails into the database to be sent later.
+	 * If false, will send the email immediately.
 	 */
-	public $queue_emails = FALSE;
-
+	public $queue_emails = false;
 
 	/**
-	 * Extra information about the running of the script and the sending of an immediate email.
-	 *
-	 * @access public
-	 *
-	 * @var string
+	 * @var string Additional information about the running of the script and
+	 * the sending of an immediate email.
 	 */
 	public $debug_message = '';
 
 	/**
-	 * Whether to set $debug_message.
-	 *
-	 * @access private
-	 *
-	 * @var bool
+	 * @var bool Whether to set $debug_message.
 	 */
-	private $debug = FALSE;
+	private $debug = false;
 
 	/**
-	 * An error generated during the course of the script running.
-	 *
-	 * @access public
-	 *
-	 * @var string
+	 * @var string An error generated during the course of the script running.
 	 */
 	public $error = '';
 
-
 	/**
-	 * A pointer to the CodeIgniter instance.
-	 *
-	 * @access private
-	 *
-	 * @var object
+	 * @var object A pointer to the CodeIgniter instance.
 	 */
 	private $ci;
 
@@ -100,276 +78,297 @@ class Emailer
 		$this->ci =& get_instance();
 	}
 
-	//--------------------------------------------------------------------
-
 	/**
-	 * Handles sending the emails and routing to the appropriate methods
-	 * for queueing or sending.
+	 * Handles sending the emails and routing to the appropriate methods for
+	 * queueing or sending.
 	 *
-	 * Information about the email should be sent in the $data
-	 * array. It looks like:
+	 * Information about the email should be sent in the $data array. It looks
+	 * like:
 	 *
 	 * $data = array(
 	 *     'to' => '',	// either string or array
 	 *     'subject' => '',	// string
 	 *     'message' => '',	// string
 	 *     'alt_message' => ''	// optional (text alt to html email)
+	 *     'attachments' => array('FILENAME_1','FILENAME_2' ) // optional
 	 * );
 	 *
-	 * @access public
+	 * @param array $data   An array of information required to send the email.
+	 * @param bool  $queue_override If true, forces the email to be queued. If
+	 * false, forces the email to be sent immediately. If omitted or set to any
+	 * value other than true/false, $this->queue_emails determines whether the
+	 * email is queued.
 	 *
-	 * @param array $data           An array of required information need to send the email.
-	 * @param bool  $queue_override (optional) Overrides the value of $queue_emails.
-	 *
-	 * @return bool TRUE/FALSE	Whether the operation was successful or not.
+	 * @return bool true if the operation was successful, else false
 	 */
-	public function send($data=array(), $queue_override=null)
+	public function send($data = array(), $queue_override = null)
 	{
-		// Make sure we have the information we need.
-		$to = isset($data['to']) ? $data['to'] : FALSE;
-		$from = settings_item('sender_email');
-		$subject = isset($data['subject']) ? $data['subject'] : FALSE;
-		$message = isset($data['message']) ? $data['message'] : FALSE;
-		$alt_message = isset($data['alt_message']) ? $data['alt_message'] : FALSE;
+		// Ensure the required information is supplied
+		$to      = isset($data['to']) ? $data['to'] : false;
+		$from    = isset($data['from']) ? $data['from'] : settings_item('sender_email');
+		$subject = isset($data['subject']) ? $data['subject'] : false;
+		$message = isset($data['message']) ? $data['message'] : false;
+		$alt_message = isset($data['alt_message']) ? $data['alt_message'] : false;
+		$attachments = isset($data['attachments']) ? $data['attachments'] : false;
 
-		// If we don't have everything, return FALSE.
-		if ($to == FALSE || $subject == FALSE || $message == FALSE)
-		{
+		// Return false if any required fields are missing
+		if ($to == false || $subject == false || $message == false || $from == false) {
 			$this->error = lang('em_missing_data');
-			return FALSE;
+			return false;
 		}
 
-		// Wrap the $message in the email template.
+		// Wrap the $message in the email template, or strip HTML
 		$mailtype = settings_item('mailtype');
 		$templated = $message;
-		if ($mailtype == 'html')
-		{
-			$templated  = $this->ci->load->view('emailer/email/_header', null, TRUE);
-			$templated .= $message;
-			$templated .= $this->ci->load->view('emailer/email/_footer', null, TRUE);
+        if ($mailtype == 'html') {
+            $templated  = $this->ci->load->view('emailer/email/_header', null, true);
+            $templated .= $message;
+            $templated .= $this->ci->load->view('emailer/email/_footer', null, true);
+        } else {
+            $templated = html_entity_decode(strip_tags($message), ENT_QUOTES, 'UTF-8');
+        }
+
+		// Are emails queued?
+		if ($queue_override === true
+            || ($queue_override !== false && $this->queue_emails == true)
+           ) {
+			return $this->queue_email($to, $from, $subject, $templated, $alt_message, $attachments);
 		}
 
-		// Should we put it in the queue?
-		if ($queue_override === TRUE || ($queue_override !== FALSE && $this->queue_emails == TRUE))
-		{
-			return $this->queue_email($to, $from, $subject, $templated, $alt_message);
-		}
-		// Otherwise, we're sending it right now.
-		else
-		{
-			return $this->send_email($to, $from, $subject, $templated, $alt_message);
-		}
-
-	}//end send()
-
-	//--------------------------------------------------------------------
+		// Otherwise, send it right now
+        return $this->send_email($to, $from, $subject, $templated, $alt_message, $attachments);
+	}
 
 	/**
 	 * Add the email to the database to be sent out during a cron job.
 	 *
-	 * @access private
+	 * @todo Update this code to use the emailer_model
 	 *
 	 * @param string $to          The email to send the message to
 	 * @param string $from        The from email (Ignored in this method, but kept for consistency with the send_email method.
 	 * @param string $subject     The subject line of the email
-	 * @param string $message     The text to be inserted into the template for HTML emails.
-	 * @param string $alt_message An optional, text-only version of the message to be sent with HTML emails.
+	 * @param string $message     The message for the email, with the template already applied if HTML emails are enabled.
+	 * @param string $alt_message An optional text-only version of the message to be sent with HTML emails.
+     * @param array  $attachments An optional array containing the location of any files to be attached.
 	 *
-	 * @return bool TRUE/FALSE	Whether it was successful or not.
+	 * @return bool true on success, else false
 	 */
-	private function queue_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE)
+	private function queue_email($to, $from, $subject, $message, $alt_message = false, $attachments = false)
 	{
-		$this->ci->db->set('to_email', $to);
-		$this->ci->db->set('subject', $subject);
-		$this->ci->db->set('message', $message);
+        $data = array(
+            'to_email'  => $to,
+            'subject'   => $subject,
+            'message'   => $message,
+        );
 
-		if ($alt_message)
-		{
-			$this->ci->db->set('alt_message', $alt_message);
+		if ($alt_message) {
+			$data['alt_message'] = $alt_message;
 		}
 
-		if ($this->debug)
-		{
+        if (is_array($attachments)) {
+            $csv_of_file_locations = '';
+            foreach ($attachments as $attachment) {
+                $csv_of_file_locations .= $attachment . ',';
+            }
+            $data['csv_attachment'] = $csv_of_file_locations;
+        }
+
+		if ($this->debug) {
 			$this->debug_message = lang('em_no_debug');
 		}
-		return $this->ci->db->insert('email_queue');
 
-	}//end queue_email
-
-	//--------------------------------------------------------------------
+		return $this->ci->db->insert('email_queue', $data);
+	}
 
 	/**
 	 * Sends the email immediately.
 	 *
-	 * @access private
-	 *
 	 * @param string $to          The email to send the message to
 	 * @param string $from        The from email.
 	 * @param string $subject     The subject line of the email
-	 * @param string $message     The text to be inserted into the template for HTML emails.
-	 * @param string $alt_message An optional, text-only version of the message to be sent with HTML emails.
+	 * @param string $message     The message for the email, with the template already applied if HTML emails are enabled.
+	 * HTML emails.
+	 * @param string $alt_message An optional, text-only version of the message
+	 * to be sent with HTML emails.
+	 * @param array  $attachments An optional array, the array contains the
+	 * location of the files to be attached.
 	 *
-	 * @return bool TRUE/FALSE	Whether it was successful or not.
+	 * @return bool true on success, else false
 	 */
-	private function send_email($to=null, $from=null, $subject=null, $message=null, $alt_message=FALSE)
+	private function send_email($to, $from, $subject, $message, $alt_message = false, $attachments = false)
 	{
 		$this->ci->load->library('email');
 		$this->ci->load->model('settings/settings_model', 'settings_model');
-		$this->ci->email->initialize($this->ci->settings_model->select('name,value')->find_all_by('module', 'email'));
 
+		$this->ci->email->initialize(
+            $this->ci->settings_model->select(array('name', 'value'))
+                                     ->find_all_by('module', 'email')
+        );
+        $this->ci->email->clear(true);
 		$this->ci->email->set_newline("\r\n");
 		$this->ci->email->to($to);
 		$this->ci->email->from($from, settings_item('site.title'));
 		$this->ci->email->subject($subject);
 		$this->ci->email->message($message);
 
-		if ($alt_message)
-		{
+		if ($alt_message) {
 			$this->ci->email->set_alt_message($alt_message);
 		}
 
-		if ((defined('ENVIRONMENT') && ENVIRONMENT == 'development') && $this->ci->config->item('emailer.write_to_file') === TRUE) {
-			if (!function_exists('write_file')) {
+        if (is_array($attachments)) {
+            foreach ($attachments as $attachment) {
+                $this->ci->email->attach($attachment);
+            }
+        }
+
+		if (defined('ENVIRONMENT') && ENVIRONMENT == 'development'
+            && $this->ci->config->item('emailer.write_to_file') === true
+           ) {
+			if ( ! function_exists('write_file')) {
 				$this->ci->load->helper('file');
 			}
-			write_file($this->ci->config->item('log_path').str_replace(" ","_",strtolower($subject)).substr(md5($to.time()),0,8).".html",$message);
-			$result = TRUE;
-		}
-		else
-		{
+			$result = write_file(
+                $this->ci->config->item('log_path') . str_replace(' ', '_', strtolower($subject)) . substr(md5($to . time()), 0, 8) . '.html',
+                $message
+            );
+		} else {
 			$result = $this->ci->email->send();
 		}
 
-		if ($this->debug)
-		{
+		if ($this->debug) {
 			$this->debug_message = $this->ci->email->print_debugger();
 		}
 
 		return $result;
-
-	}//end send_email()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Process the email queue in chunks.
 	 *
-	 * Defaults to 33 which, if processed every 5 minutes, equals 400/hour
-	 * And should keep you safe with most ISP's. Always check your ISP's
-	 * terms of service to verify, though.
-	 *
-	 * @access public
+	 * Defaults to 33 which, if processed every 5 minutes, equals 400/hour and
+	 * should keep you safe with most ISPs. Always check your ISP's terms of
+	 * service to verify, though.
 	 *
 	 * @param int $limit An int specifying how many emails to process at once.
 	 *
-	 * @return bool TRUE/FALSE	Whether the method was successful or not.
+	 * @return bool true on success, else false
 	 */
-	public function process_queue($limit=33)
+	public function process_queue($limit = 33)
 	{
-		$success = TRUE;
-
-		//$limit = 33; // 33 emails every 5 minutes = 400 emails/hour.
-		$this->ci->load->library('email');
-
-		$config_settings = $this->ci->settings_model->select('name,value')->find_all_by('module', 'email');
+		$config_settings = $this->ci->settings_model->select(array('name', 'value'))
+                                                    ->find_all_by('module', 'email');
 
 		// Grab records where success = 0
-		$this->ci->db->limit($limit);
-		$this->ci->db->where('success', 0);
-		$query = $this->ci->db->get('email_queue');
+		$query = $this->ci->db->limit($limit)
+                              ->where('success', 0)
+                              ->get('email_queue');
 
-		if ($query->num_rows() > 0)
-		{
-			$emails = $query->result();
-		}
-		else
-		{
-			return TRUE;
-		}
+		$success = true;
 
-		foreach($emails as $email)
-		{
-			echo '.';
+        // If the query returned no rows, the queue is empty, so it has been
+        // processed successfully
+        if ( ! $query->num_rows()) {
+            return $success;
+        }
 
-			$this->ci->email->clear();
+        $emails = $query->result();
+		$this->ci->load->library('email');
+
+        // MySQL datetime format
+        $dateTimeFormat = 'Y-m-d H:i:s';
+        $now = new DateTime();
+
+		foreach ($emails as $email) {
+			//echo '.';
 			$this->ci->email->initialize($config_settings);
-
-			$this->ci->email->from(settings_item('sender_email'), settings_item('site.title'));
+			$this->ci->email->clear(true);
+			$this->ci->email->set_newline("\r\n");
 			$this->ci->email->to($email->to_email);
-
+			$this->ci->email->from(settings_item('sender_email'), settings_item('site.title'));
 			$this->ci->email->subject($email->subject);
 			$this->ci->email->message($email->message);
-			$this->ci->email->set_newline("\r\n");
 
-			if ($email->alt_message)
-			{
+			if ($email->alt_message) {
 				$this->ci->email->set_alt_message($email->alt_message);
 			}
 
-			$prefix = $this->ci->db->dbprefix;
-
-			if ($this->ci->email->send() === TRUE)
-			{
-				// Email was successfully sent
-				$sql = "UPDATE {$prefix}email_queue SET success=1, attempts=attempts+1, last_attempt = NOW(), date_sent = NOW() WHERE id = " .$email->id;
-				$this->ci->db->query($sql);
+            if ($email->csv_attachment) {
+                $attachments = str_getcsv($email->csv_attachment);
+                foreach ($attachments as $attachment) {
+                    $this->ci->email->attach($attachment);
+                }
 			}
-			else
-			{
-				// Error sending email
-				$sql = "UPDATE {$prefix}email_queue SET attempts = attempts+1, last_attempt=NOW() WHERE id=". $email->id;
-				$this->ci->db->query($sql);
 
-				if ($this->debug)
-				{
+            $data = array(
+                'attempts' => $email->attempts + 1,
+            );
+
+            // Email was successfully sent
+			if ($this->ci->email->send() === true) {
+                $data['success'] = 1;
+			}
+            // Error sending email
+			else {
+                // While explicitly setting 'success' to 0 is not necessary, it
+                // makes it easier to check whether 'date_sent' should be set
+                // below
+                $data['success'] = 0;
+
+				if ($this->debug) {
 					$this->debug_message = $this->ci->email->print_debugger();
 				}
 
-				$success = FALSE;
+                // Note that $success is only set true before the loop, so,
+                // while the loop continues attempting to send queued emails
+                // after a failure, it will still indicate a failure if only
+                // a single email fails
+				$success = false;
 			}
-		}//end foreach
+
+            // Update the timestamp with the current time, this is done after
+            // calling email->send() because sending the email could take time
+            $timeStamp = $now->setTimestamp(time())->format($dateTimeFormat);
+            $data['last_attempt'] = $timeStamp;
+            if ($data['success'] == 1) {
+                $data['date_sent'] = $timeStamp;
+            }
+
+            // @todo modify this to use the emailer_model?
+            $this->ci->db->where('id', $email->id)
+                         ->update('email_queue', $data);
+		}
 
 		return $success;
-
-	}//end process_queue()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Tells the emailer lib whether to generate debugging messages.
 	 *
-	 * @access public
-	 *
-	 * @param bool $enable_debug TRUE/FALSE - enable/disable debugging messages
+	 * @param bool $enable_debug true to enable debugging messages, false to
+	 * disable
 	 */
 	public function enable_debug($enable_debug)
 	{
-		$this->debug = $enable_debug;
-
-	}//end enable_debug()
-
-	//--------------------------------------------------------------------
+		$this->debug = (bool) $enable_debug;
+	}
 
 	/**
 	 * Specifies whether to queue emails in the send() method.
 	 *
-	 * @param bool $queue Queue emails instead of sending them directly.
+	 * @todo is there a requirement to return without setting $queue_emails, or
+	 * should the input just be cast to bool and set the property?
+	 *
+	 * @param bool $queue true to queue emails instead of sending them directly.
 	 *
 	 * @return void
 	 */
 	public function queue_emails($queue)
 	{
-		if ($queue !== TRUE && $queue !== FALSE)
-		{
+		if ($queue !== true && $queue !== false) {
 			return;
 		}
 
 		$this->queue_emails = $queue;
-
-	}//end queue_emails()
-
-	//--------------------------------------------------------------------
-
-}//end class
-
+	}
+}
 /* End of file emailer.php */

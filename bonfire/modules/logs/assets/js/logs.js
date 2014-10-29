@@ -1,29 +1,24 @@
 (function(){
+	var $filter = $('#filter'),
+		filterChange = function() {
+			var filterVal = $filter.val();
 
-	var $filter = $('#filter')
+			$('#log div').each(function() {
+				switch (filterVal) {
+					case 'all':
+						$(this).css('display', 'inherit');
+						break;
 
-	function filterChange(){
-		// Are we filtering at all?
-		var filter_val = $filter.val();
-
-		$('#log div').each(function(){
-
-			switch (filter_val)
-			{
-				case 'all':
-					$(this).css('display', 'block');
-					break;
-				case 'error':
-					if ($(this).hasClass('alert-error'))
-					{
-						$(this).css('display', 'block');
-					} else
-					{
-						$(this).css('display', 'none');
-					}
-			}
-		});
-	}
+					case 'error':
+						if ($(this).hasClass('alert-error')) {
+							$(this).css('display', 'inherit');
+						} else {
+							$(this).css('display', 'none');
+						}
+						break;
+				}
+			});
+		};
 
 	$filter.change(filterChange);
 	filterChange();

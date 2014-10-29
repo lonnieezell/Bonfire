@@ -1,95 +1,67 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
  * Role Settings Model
  *
- * Provides access and utility methods for handling role storage
- * in the database.
+ * Provides access and utility methods for handling role storage in the
+ * database.
  *
- * @package    Bonfire
- * @subpackage Modules_Roles
- * @category   Models
+ * @package    Bonfire\Modules\Roles\Models\Role_model
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- *
+ * @link       http://cibonfire.com/docs/roles
  */
 class Role_model extends BF_Model
 {
-
 	/**
-	 * Name of the table
-	 *
-	 * @access protected
-	 *
-	 * @var string
+	 * @var string Name of the table
 	 */
-	protected $table_name	= 'roles';
+	protected $table_name = 'roles';
 
 	/**
-	 * Name of the primary key
-	 *
-	 * @access protected
-	 *
-	 * @var string
+	 * @var string Name of the primary key
 	 */
-	protected $key			= 'role_id';
+	protected $key = 'role_id';
 
 	/**
-	 * Use soft deletes or not
-	 *
-	 * @access protected
-	 *
-	 * @var bool
+	 * @var bool Use soft deletes (if true)
 	 */
-	protected $soft_deletes	= TRUE;
+	protected $soft_deletes	= true;
 
 	/**
-	 * The date format to use
-	 *
-	 * @access protected
-	 *
-	 * @var string
+	 * @var string The date format to use
 	 */
 	protected $date_format = 'datetime';
 
 	/**
-	 * Set the created time automatically on a new record
-	 *
-	 * @access protected
-	 *
-	 * @var bool
+	 * @var bool Set the created time automatically on a new record (if true)
 	 */
-	protected $set_created = FALSE;
+	protected $set_created = false;
 
 	/**
-	 * Set the modified time automatically on editing a record
-	 *
-	 * @access protected
-	 *
-	 * @var bool
+	 * @var bool Set the modified time automatically on editing a record (if true)
 	 */
-	protected $set_modified = FALSE;
+	protected $set_modified = false;
 
 	//--------------------------------------------------------------------
 
 	/**
-	 * Class constructor. Will load the permission_model, if it's not
-	 * already loaded.
+	 * Class constructor.
+	 *
+	 * Will load the permission_model, if it's not already loaded.
 	 *
 	 * @return void
 	 */
@@ -97,60 +69,46 @@ class Role_model extends BF_Model
 	{
 		parent::__construct();
 
-		if ( ! class_exists('Permission_model'))
-		{
+		if ( ! class_exists('permission_model')) {
 			$this->load->model('permissions/permission_model');
 		}
-
-	}//end __construct()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Returns a single role, with an array of permissions.
 	 *
-	 * @access public
-	 *
 	 * @param int $id An int that matches the role_id of the role in question.
 	 *
-	 * @return mixed|array An array of information about the role, along with a sub-array that contains the role's applicable permissions, or FALSE
+	 * @return mixed|array An array of information about the role, along with a
+	 * sub-array that contains the role's applicable permissions, or false
 	 */
-	public function find($id=NULL)
+	public function find($id = null)
 	{
-		if (empty($id) || ! is_integer($id))
-		{
-			return FALSE;
+		if (empty($id) || ! is_integer($id)) {
+			return false;
 		}
 
 		$role = parent::find($id);
-
-		if ($role == FALSE)
-		{
-			return FALSE;
+		if ($role == false) {
+			return false;
 		}
 
 		$this->get_role_permissions($role);
 
 		return $role;
-
-	}//end find()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
-	 * Locates a role based on the role name. Case doesn't matter.
-	 *
-	 * @access public
+	 * Locates a role based on the role name. Case insensitive.
 	 *
 	 * @param string $name A string with the name of the role.
 	 *
-	 * @return object An object with the role and its permissions, or FALSE
+	 * @return object An object with the role and its permissions, or false
 	 */
-	public function find_by_name($name=NULL)
+	public function find_by_name($name = null)
 	{
-		if (empty($name))
-		{
-			return FALSE;
+		if (empty($name)) {
+			return false;
 		}
 
 		$role = $this->find_by('role_name', $name);
@@ -158,167 +116,141 @@ class Role_model extends BF_Model
 		$this->get_role_permissions($role);
 
 		return $role;
-
-	}//end find_by_name()
-
-	//--------------------------------------------------------------------
-
+	}
 
 	/**
-	 * A simple update of the role. This does, however, clean things up
-	 * when setting this role as the default role for new users.
+	 * A simple update of the role.
 	 *
-	 * @access public
+	 * Additionally, this cleans things up when setting this role as the default
+	 * role for new users.
 	 *
 	 * @param int   $id   An int, being the role_id
-	 * @param array $data An array of key/value pairs to update the db with.
+	 * @param array $data An array of key/value pairs with which to update the db.
 	 *
-	 * @return bool TRUE on successful update, else FALSE
+	 * @return bool true on successful update, else false
 	 */
-	public function update($id=NULL, $data=NULL)
+	public function update($id = null, $data = null)
 	{
-		// If this one is set to default, then we need to
-		// reset all others to NOT be default
-		if (isset($data['default']) && $data['default']  == 1)
-		{
+		// If this role is set to default, then
+        // all others to are reset to NOT be default
+		if (isset($data['default']) && $data['default'] == 1) {
 			$this->db->set('default', 0);
 			$this->db->update($this->table_name);
 		}
 
 		return parent::update($id, $data);
-
-	}//end update()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Verifies that a role can be deleted.
 	 *
 	 * @param int $role_id The role to verify.
 	 *
-	 * @return bool TRUE if the role can be deleted, else FALSE
+	 * @return bool true if the role can be deleted, else false
 	 */
-	public function can_delete_role($role_id=0)
+	public function can_delete_role($role_id = 0)
 	{
 		$this->db->select('can_delete');
-		$delete_role = parent::find($role_id);
 
-		if ($delete_role->can_delete == 1)
-		{
-			return TRUE;
+		$delete_role = parent::find($role_id);
+		if ($delete_role->can_delete == 1) {
+			return true;
 		}
 
-		return FALSE;
-
-	}//end can_delete_role()
-
-	//--------------------------------------------------------------------
+		return false;
+	}
 
 	/**
-	 * Deletes a role. By default, it will perform a soft_delete and
-	 * leave the permissions untouched. However, if $purge == TRUE, then
-	 * all permissions related to this role are also deleted.
+	 * Deletes a role.
 	 *
-	 * @access public
+	 * By default, it will perform a soft_delete and leave the permissions
+	 * untouched. However, if $purge == true, then all permissions related to
+	 * this role are also deleted.
 	 *
 	 * @param int  $id    An integer with the role_id to delete.
-	 * @param bool $purge If FALSE, will perform a soft_delete. If TRUE, will remove the role and related permissions from db.
+	 * @param bool $purge If false, will perform a soft_delete. If true, will
+	 * remove the role and related permissions from db.
 	 *
-	 * @return bool TRUE/FALSE
+	 * @return bool true on successful delete, else false
 	 */
-	function delete($id=0, $purge=FALSE)
+	function delete($id = 0, $purge = false)
 	{
-		// We might not be allowed to delete this role.
-		if ($this->can_delete_role($id) == FALSE)
-		{
+		// Can this role be deleted?
+		if ($this->can_delete_role($id) == false) {
 			$this->error = 'This role can not be deleted.';
-			return FALSE;
+			return false;
 		}
 
-		if ($this->default_role_id() == $id)
-		{
+		if ($this->default_role_id() == $id) {
 			$this->error = 'The default role can not be deleted.';
-			return FALSE;
+			return false;
 		}
 
-		if ($purge === TRUE)
-		{
-			// temporarily set the soft_deletes to TRUE.
-			$this->soft_deletes = FALSE;
+		if ($purge === true) {
+			// Temporarily disable soft deletes.
+            $tempSoftDeletes = $this->soft_deletes;
+			$this->soft_deletes = false;
 		}
 
-		// get the name for management deletion later
+		// Get the name for permission deletion later
 		$role = $this->role_model->find($id);
 
-		// delete the record
+		// Delete the record
 		$deleted = parent::delete($id);
+        if ($deleted === true) {
+            // Update the users to the default role
+            if ( ! class_exists('user_model')) {
+                $this->load->model('users/user_model');
+            }
+            $this->user_model->set_to_default_role($id);
 
-		if ($deleted === TRUE)
-		{
-			// Now update the users to the default role
-			if ( ! class_exists('User_model'))
-			{
-				$this->load->model('users/User_model','user_model');
-			}
+            // Delete the role_permissions for this role
+            if ( ! class_exists('role_permission_model')) {
+                $this->load->model('roles/role_permission_model');
+            }
+            $this->role_permission_model->delete_for_role($id);
 
-			$this->user_model->set_to_default_role($id);
+            // Delete the manage permission for this role
+            $permission_name = 'Permissions.' . ucwords($role->role_name) . '.Manage';
+            if ( ! class_exists('permission_model')) {
+                $this->load->model('permissions/permission_model');
+            }
 
-			// now delete the role_permissions for this role
-			$this->role_permission_model->delete_for_role($id);
+            $perm = $this->permission_model->find_by('name', $permission_name);
+            if ($perm) {
+                // The permission_model's update/delete will remove the
+                // role_permissions for this permission
+                if ($purge === true) {
+                    $this->permission_model->delete_by_name($permission_name);
+                } else {
+                    $this->permission_model->update(array('name' => $permission_name), array('status' => 'inactive'));
+                }
+            }
+        }
 
-			// now delete the manage permission for this role
-			$permission_name = 'Permissions.' . ucwords($role->role_name) . '.Manage';
-
-			if ( ! class_exists('Permission_model'))
-			{
-				$this->load->model('permissions/permission_model');
-			}
-
-			$perm = $this->permission_model->find_by('name', $permission_name);
-			if ($perm)
-			{
-				// remove the role_permissions for this permission
-				$this->db->delete('role_permissions', array('permission_id' => $perm->permission_id));
-
-				if ($purge === TRUE)
-				{
-					$this->db->delete('permissions', array('name' => $permission_name));
-				}
-				else
-				{
-					$this->db->update('permissions', array('status' => 'inactive'), array('name' => $permission_name));
-				}
-			}
-		}//end if
-
-		return $deleted;
-
-	}//end delete()
-
-	//--------------------------------------------------------------------
+        // Restore soft_deletes
+        if ($purge === true) {
+            $this->soft_deletes = $tempSoftDeletes;
+        }
+        return $deleted;
+	}
 
 	/**
 	 * Returns the id of the default role.
 	 *
-	 * @access public
-	 *
-	 * @return mixed ID of the default role or FALSE
+	 * @return int|bool ID of the default role or false
 	 */
 	public function default_role_id()
 	{
 		$this->db->where('default', 1);
-		$query = $this->db->get($this->table_name);
 
-		if ($query->num_rows() == 1)
-		{
+		$query = $this->db->get($this->table_name);
+		if ($query->num_rows() == 1) {
 			return (int)$query->row()->role_id;
 		}
 
-		return FALSE;
-
-	}//end default_role_id()
-
-	//--------------------------------------------------------------------
+		return false;
+	}
 
 	//--------------------------------------------------------------------
 	// !PRIVATE METHODS
@@ -327,54 +259,42 @@ class Role_model extends BF_Model
 	/**
 	 * Finds the permissions and role_permissions array for a single role.
 	 *
-	 * @access public
-	 *
-	 * @param int $role A reference to an existing role object. This object is modified directly.
+	 * @param int $role A reference to an existing role object. This object is
+	 * modified directly.
 	 *
 	 * @return void
 	 */
 	public function get_role_permissions(&$role)
 	{
-		if ( ! is_object($role))
-		{
+		if ( ! is_object($role)) {
 			return;
 		}
 
+		// Grab the active permissions
+		$permissions = $this->permission_model->find_all_by('status', 'active');
+
+		// Setup the permissions for the role
 		$permission_array = array();
-
-		// Grab our permissions for the role.
-		$permissions = $this->permission_model->find_all_by('status','active');
-
-		// Permissions
-		foreach ($permissions as $key => $permission)
-		{
+		foreach ($permissions as $key => $permission) {
 			$permission_array[$permission->name] = $permission;
 		}
 
 		$role->permissions = $permission_array;
 
-		if ( ! class_exists('Role_permission_model'))
-		{
+		if ( ! class_exists('role_permission_model')) {
 			$this->load->model('roles/role_permission_model');
 		}
 
-		// Role Permissions
+		// Get the role permissions for the role
 		$permission_array = array();
 		$role_permissions = $this->role_permission_model->find_for_role($role->role_id);
-
-		if (is_array($role_permissions) && count($role_permissions))
-		{
-			foreach ($role_permissions as $key => $permission)
-			{
+		if (is_array($role_permissions) && count($role_permissions)) {
+			foreach ($role_permissions as $key => $permission) {
 				$permission_array[$permission->permission_id] = 1;
 			}
 		}
 
 		$role->role_permissions = $permission_array;
-		unset($permission_array);
-
-	}//end get_role_permissions()
-
-	//--------------------------------------------------------------------
-
-}//end Role_model
+	}
+}
+/* end /bonfire/modules/roles/models/role_model.php */

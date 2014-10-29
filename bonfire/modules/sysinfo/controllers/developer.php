@@ -1,37 +1,32 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
-
-// ------------------------------------------------------------------------
 
 /**
  * Sysinfo Module
  *
  * Displays various system information to the user
  *
- * @package    Bonfire
- * @subpackage Modules_Sysinfo
- * @category   Controllers
+ * @package    Bonfire\Modules\Sysinfo\Controllers\Developer
  * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/helpers/file_helpers.html
- *
+ * @link       http://cibonfire.com/docs
  */
 class Developer extends Admin_Controller
 {
-
 	/**
-	 * Loads required classes
+	 * Load required classes
 	 *
 	 * @return void
 	 */
@@ -39,71 +34,61 @@ class Developer extends Admin_Controller
 	{
 		parent::__construct();
 
-		// restrict access - View
+		// Restrict access - View
 		$this->auth->restrict('Bonfire.Sysinfo.View');
 
 		$this->lang->load('sysinfo');
 
-		Template::set('toolbar_title', lang('si_system_info'));
+		Template::set('toolbar_title', lang('sysinfo_system_info'));
 
 		Template::set_block('sub_nav', 'developer/_sub_nav');
-
-	}//end __construct()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Display the system information, including Bonfire and PHP versions,
 	 * to the user
 	 *
-	 * @access public
-	 *
 	 * @return void
 	 */
 	public function index()
 	{
+        // Date helper is used for user_time() function in the view
         $this->load->helper('date');
 		Template::render();
-
-	}//end index()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Display the list of modules in the Bonfire installation
-	 *
-	 * @access public
 	 *
 	 * @return void
 	 */
 	public function modules()
 	{
-		$modules = module_list();
+		$modules = Modules::list_modules();
 		$configs = array();
 
-		foreach ($modules as $module)
-		{
-			$configs[$module] = module_config($module);
+		foreach ($modules as $module) {
+			$configs[$module] = Modules::config($module);
 
-			if (!isset($configs[$module]['name']))
-			{
+			if ( ! isset($configs[$module]['name'])) {
 				$configs[$module]['name'] = ucwords($module);
 			}
+			else if (strpos($configs[$module]['name'], 'lang:') === 0) 
+			{ 
+				$configs[$module]['name'] = lang(str_replace('lang:', '', $configs[$module]['name']));
+			} 
+			$configs[$module]['name'] = ucwords(str_replace('_', '', $configs[$module]['name']));
 		}
 
+        // Sort the list of modules by directory name
 		ksort($configs);
+
 		Template::set('modules', $configs);
-
 		Template::render();
-
-	}//end modules()
-
-	//--------------------------------------------------------------------
+	}
 
 	/**
 	 * Display the PHP info settings to the user
-	 *
-	 * @access public
 	 *
 	 * @return void
 	 */
@@ -122,20 +107,16 @@ class Developer extends Admin_Controller
 		$output = preg_replace("/<a href=\"http:\/\/www.zend.com\/\">.*?<\/a>/", "", $output);
 		$output = preg_replace("/<h2 align=\"center\">PHP License<\/h2>.*?<\/table>/si", "", $output);
 		$output = preg_replace("/<h2>PHP License.*?<\/table>/is", "", $output);
-		$output = preg_replace("/<table(.*?)bgcolor=\".*?\">/", "\n\n<table\\1>", $output);
-		$output = preg_replace("/<table(.*?)>/", "\n\n<table\\1 class=\"table table-striped\" cellspacing=\"0\">", $output);
+		$output = preg_replace("/<table(.*?)bgcolor=\".*?\">/", "<table>", $output);
+		$output = preg_replace("/<table(.*?)>/", "<table class=\"table table-striped table-condensed\">", $output);
 		$output = preg_replace("/<a.*?<\/a>/", "", $output);
-		$output = preg_replace("/<th(.*?)>/", "<th \\1 >", $output);
+		$output = preg_replace("/<th(.*?)>/", "<th\\1>", $output);
 		$output = preg_replace("/<hr.*?>/", "<br />", $output);
-		$output = preg_replace("/<tr(.*?).*?".">/", "<tr \\1>\n", $output);
-		$output = preg_replace('/<h(1|2)\s*(class="p")?/i', '<h\\1', $output);
+		$output = preg_replace("/<tr(.*?).*?".">/", "<tr\\1>", $output);
+		$output = preg_replace('/<h(1|2)\s*(class="p")?/i', "\n<h\\1", $output);
 
 		Template::set('phpinfo', $output);
-
 		Template::render();
-
-	}//end php_info()
-
-	//--------------------------------------------------------------------
-
-}//end Developer
+	}
+}
+/* end /sysinfo/controllers/developer.php */

@@ -1,20 +1,19 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications.
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
-
-// ------------------------------------------------------------------------
 
 /**
  * Home controller
@@ -28,7 +27,7 @@
  * @link       http://guides.cibonfire.com/helpers/file_helpers.html
  *
  */
-class Home extends CI_Controller
+class Home extends MX_Controller
 {
 	public function __construct()
 	{
@@ -39,6 +38,18 @@ class Home extends CI_Controller
 		$this->load->library('Assets');
 		$this->lang->load('application');
 		$this->load->library('events');
+
+        $this->load->library('installer_lib');
+        if (! $this->installer_lib->is_installed()) {
+            $ci =& get_instance();
+            $ci->hooks->enabled = false;
+            redirect('install');
+        }
+
+        // Make the requested page var available, since
+        // we're not extending from a Bonfire controller
+        // and it's not done for us.
+        $this->requested_page = isset($_SESSION['requested_page']) ? $_SESSION['requested_page'] : null;
 	}
 
 	//--------------------------------------------------------------------
@@ -50,13 +61,6 @@ class Home extends CI_Controller
 	 */
 	public function index()
 	{
-		$this->load->library('installer_lib');
-
-		if (!$this->installer_lib->is_installed())
-		{
-			redirect( site_url('install') );
-		}
-
 		$this->load->library('users/auth');
 		$this->set_current_user();
 
@@ -76,34 +80,27 @@ class Home extends CI_Controller
 	 */
 	protected function set_current_user()
 	{
-		if (class_exists('Auth'))
-		{
+        if (class_exists('Auth')) {
 			// Load our current logged in user for convenience
-			if ($this->auth->is_logged_in())
-			{
+            if ($this->auth->is_logged_in()) {
 				$this->current_user = clone $this->auth->user();
 
 				$this->current_user->user_img = gravatar_link($this->current_user->email, 22, $this->current_user->email, "{$this->current_user->email} Profile");
 
 				// if the user has a language setting then use it
-				if (isset($this->current_user->language))
-				{
+                if (isset($this->current_user->language)) {
 					$this->config->set_item('language', $this->current_user->language);
 				}
-			}
-			else
-			{
+            } else {
 				$this->current_user = null;
 			}
 
 			// Make the current user available in the views
-			if (!class_exists('Template'))
-			{
+            if (! class_exists('Template')) {
 				$this->load->library('Template');
 			}
 			Template::set('current_user', $this->current_user);
 		}
 	}
-
-	//--------------------------------------------------------------------
-}//end class
+}
+/* end ./application/controllers/home.php */
