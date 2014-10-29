@@ -1,8 +1,8 @@
 # Change Log
 
-## Under development
+## Released versions
 
-### 0.7.1 - not released
+### 0.7.1
 
 #### New Features:
 
@@ -127,8 +127,6 @@
 
 * If a module is named `'application'` or `'developer'`, the docs module won't be able to generate links to any documents which reside in that module.
 
-
-## Released versions
 
 ### 0.7.0
 
