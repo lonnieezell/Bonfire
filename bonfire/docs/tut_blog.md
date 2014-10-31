@@ -35,15 +35,15 @@ Create a new file in your new `config` folder, called `config.php`.
 <?php defined('BASEPATH') || exit('No direct script access allowed');
 
 $config['module_config'] = array(
-        'name'          => 'Blog',
-        'description'   => 'A Simple Blog Example',
-        'author'        => 'Your Name',
-        'homepage'      => 'http://...',
-        'version'       => '1.0.1',
+    'name'        => 'Blog',
+    'description' => 'A Simple Blog Example',
+    'author'      => 'Your Name',
+    'homepage'    => 'http://...',
+    'version'     => '1.0.1',
     'menus'       => array(
         'context' => 'path/to/view',
-        ),
-        'weights'       => array(
+    ),
+    'weights'     => array(
         'context' => 0,
     ),
 );
@@ -497,7 +497,7 @@ Now, let's actually make it functional. In your post_model, we need to let it kn
     );
 ```
 
-These rules follow the same format as the [form validation library](http://ellislab.com/codeigniter/user-guide/libraries/form_validation.html#validationrulesasarray). The one thing to be aware of is that these rules are used for both inserts and updates. This can cause a problem with required fields on inserts. We'll add the `insert_validation_rules` class variable to the post_model to provide any additional rules we want applied during an insert only.
+These rules follow the same format as the [form validation library](http://www.codeigniter.com/user-guide/libraries/form_validation.html#validationrulesasarray). The one thing to be aware of is that these rules are used for both inserts and updates. This can cause a problem with required fields on inserts. We'll add the `insert_validation_rules` class variable to the post_model to provide any additional rules we want applied during an insert only.
 
 ```php
     protected $insert_validation_rules = array(
@@ -538,7 +538,7 @@ Editing our posts is very simple to do now. Simply add the following `edit_post(
 
 ```php
     public function edit_post($id = null)
-        {
+    {
         if ($this->input->post('submit')) {
             $data = array(
                 'title' => $this->input->post('title'),
@@ -608,17 +608,17 @@ Then, it looks for a view file at `blog/views/index.php`. Create that file now.
     if (isset($posts) && is_array($posts)) :
         foreach ($posts as $post) :
     ?>
-        <div class="post">
+    <div class="post">
         <h2><?php e($post->title); ?></h2>
         <?php echo auto_typography($post->body); ?>
-        </div>
+    </div>
     <?php
         endforeach;
     else :
     ?>
-        <div class="alert alert-info">
-            No Posts were found.
-        </div>
+    <div class="alert alert-info">
+        No Posts were found.
+    </div>
     <?php endif; ?>
 ```
 
