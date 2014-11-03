@@ -12,6 +12,7 @@
 
 * Added Constants from CI 3 to /application/config/constants.php
 * CI PR #3303: Fix Common::get_config() error in PHP 5.6
+* Changed language prefix for emailer module from `em_` to `emailer_`
 
 #### Known Issues:
 
