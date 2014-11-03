@@ -73,8 +73,7 @@ class Developer extends Admin_Controller
 			if ( ! isset($configs[$module]['name'])) {
 				$configs[$module]['name'] = ucwords($module);
 			}
-			else if (strpos($configs[$module]['name'], 'lang:') === 0) 
-			{ 
+			elseif (strpos($configs[$module]['name'], 'lang:') === 0) { 
 				$configs[$module]['name'] = lang(str_replace('lang:', '', $configs[$module]['name']));
 			} 
 			$configs[$module]['name'] = ucwords(str_replace('_', '', $configs[$module]['name']));
