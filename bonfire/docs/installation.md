@@ -18,7 +18,9 @@ By keeping the majority of your application files outside of your web root, your
 
 Before accessing your website, you will need to enter the credentials for your database, else a database error will be thrown when you try to access your site. Enter the details for your site in `application/config/database.php`.
 
-If you are using multiple environments (production, testing, and development), you should create a folder matching the environment name inside your config folder. Then copy the existing database.php config file into that folder and setting the details for you environment there. 
+If you are using multiple environments (production, testing, and development), you should create a folder matching the environment name inside your config folder. Then copy the existing database.php config file into that folder and setting the details for you environment there.
+
+It is possible to set the server's environment by defining a server variable. For example, on an Apache server, you can create a .conf file containing the command `SetEnv CI_ENV production` (or add the command to your site's existing .conf file), which, when enabled, will tell Bonfire that it is running on the production server, and the configuration (e.g. `error_reporting`) will change accordingly.
 
 
 ## Write Permissions
@@ -41,17 +43,17 @@ Also, make sure the following file has write permissions:
 
 ## The Install Script
 
-Now head to your site. Since it has not been installed you will see a small greeting screen that checks your PHP version, and the various files and folders to ensure they are writable. If everything looks good here, click the button and your database will be installed for you. 
+Now head to your site. Since it has not been installed you will see a small greeting screen that checks your PHP version, and the various files and folders to ensure they are writable. If everything looks good here, click the button and your database will be installed for you.
 
 ## Logging In
 
-During the installation process, a default admin user has been created for you. You can log in with the following credentials: 
+During the installation process, a default admin user has been created for you. You can log in with the following credentials:
 
 * email: admin@mybonfire.com
 * username: admin
 * password: password
 
-The first thing you should do when logging in the first time is to modify your profile and change your email address and password to be something unique. 
+The first thing you should do when logging in the first time is to modify your profile and change your email address and password to be something unique.
 
 By default, Bonfire is setup to use emails to login with, and not use usernames at all.  This can be easily configured on the main settings screen.
 

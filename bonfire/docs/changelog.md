@@ -1,5 +1,20 @@
 # Change Log
 
+## Under development
+
+### 0.7.2
+
+#### New Features:
+
+#### Closes Issues:
+
+#### Additional Changes:
+
+* Added Constants from CI 3 to /application/config/constants.php
+* CI PR #3303: Fix Common::get_config() error in PHP 5.6
+
+#### Known Issues:
+
 ## Released versions
 
 ### 0.7.1
