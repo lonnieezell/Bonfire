@@ -10,9 +10,23 @@
 
 #### Additional Changes:
 
-* Added Constants from CI 3 to /application/config/constants.php
-* CI PR #3303: Fix Common::get_config() error in PHP 5.6
-* Changed language prefix for emailer module from `em_` to `emailer_`
+* Added Constants from CI 3 to `/application/config/constants.php`.
+* CI PR #3303: Fix `Common::get_config()` error in PHP 5.6.
+* Changed language prefix for emailer module from `em_` to `emailer_`.
+* Application Helper:
+    * `is_https()`:
+        * Added `is_https()` function from CI 3's `core/Common` functions to ensure checks for use of https are consistent and accurate.
+        * Modified `gravatar_link()` function to use `is_https()`.
+        * Modified the Assets library to use `is_https()` (in `external_js()` and `find_files()`).
+        * Did not modify CI 2 core classes to use it, but it could be useful in `core/Config` and `core/Security`. One possibility would be to override `csrf_set_cookie()` in `/bonfire/core/BF_Security.php`.
+    * Modified `list_contexts()` to call `Contexts:getContexts()`, keeping the functionality of determining required and available contexts within the Contexts library.
+* UI/Contexts Library:
+    * Deprecated `set_contexts()` and `get_contexts()` (use `setContexts()` and `getContexts()`).
+    * When using `setContexts()` in place of `set_contexts()`, be aware that the behavior has changed slightly:
+        * when omitting the second argument (`$siteArea`), `setContexts()` will not change the internal `$site_area` variable, while `set_contexts()` would set it to `SITE_AREA`. (`SITE_AREA` is still the default value for the internal variable.)
+        * `setContexts()` will add the required contexts if they are not included in the first argument.
+    * `getContexts()` allows an optional first argument to only return contexts with landing pages (the functionality from the `application_helper`'s `list_contexts()` function).
+    * Modified internal access of the `self::$contexts` array to use `self::getContexts()` and `self::setContexts()`.
 
 #### Known Issues:
 

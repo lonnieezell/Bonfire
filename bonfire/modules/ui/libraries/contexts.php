@@ -72,8 +72,8 @@ class Contexts
     /** @var string[] Contexts which are required. */
     protected static $requiredContexts = array('settings', 'developer');
 
-    /** @var string Admin Area to Link to or other Context. */
-    protected static $site_area = SITE_AREA;
+    /** @var string Admin area to link to or other context. */
+    protected static $site_area;
 
     //--------------------------------------------------------------------------
 
@@ -95,39 +95,61 @@ class Contexts
      */
     protected static function init()
     {
-        self::$contexts = self::$ci->config->item('contexts');
+        self::setContexts(self::$ci->config->item('contexts'), SITE_AREA);
         log_message('debug', 'UI/Contexts library loaded');
     }
 
     /**
-     * Set the contexts array
+     * Set the contexts array and, optionally, the site area.
      *
-     * @param  array  Array of Context Menus to Display normally stored in
-     * application config.
-     * @param  string Area to link to defaults to SITE_AREA or Admin area.
+     * @param  array  Context menus to display, normally stored in application config.
+     * @param  string Area to link to, if not provided (or null), will remain unchanged.
      *
      * @return void
      */
-    public static function set_contexts($contexts = array(), $site_area = SITE_AREA)
+    public static function setContexts($contexts = array(), $siteArea = null)
     {
         if (empty($contexts) || ! is_array($contexts)) {
             die(lang('bf_no_contexts'));
         }
 
-        self::$contexts  = $contexts;
-        self::$site_area = $site_area;
+        // Ensure required contexts exist.
+        foreach (self::$requiredContexts as $requiredContext) {
+            if (! in_array($requiredContext, $contexts)) {
+                $contexts[] = $requiredContext;
+            }
+        }
+
+        self::$contexts = $contexts;
+        if (! is_null($siteArea)) {
+            self::$site_area = $siteArea;
+        }
 
         log_message('debug', 'UI/Contexts set_contexts has been called.');
     }
 
     /**
-     * Returns the context array just in case it is needed later.
+     * Return the context array, just in case it is needed later.
+     *
+     * @param boolean $landingPageFilter If true, only returns contexts which have
+     * a landing page (index.php) available.
      *
      * @return array
      */
-    public static function get_contexts()
+    public static function getContexts($landingPageFilter = false)
     {
-        return self::$contexts;
+        if (! $landingPageFilter) {
+            return self::$contexts;
+        }
+
+        $returnContexts = array();
+        foreach (self::$contexts as $context) {
+            if (file_exists(realpath(VIEWPATH) . '/' . self::$site_area . "/{$context}/index.php")) {
+                $returnContexts[] = $context;
+            }
+        }
+
+        return $returnContexts;
     }
 
     /**
@@ -164,32 +186,25 @@ class Contexts
             self::$ci->benchmark->mark('render_menu_start');
         }
 
-        $contexts = self::$contexts;
+        // As long as the contexts were set with setContexts(), the required contexts
+        // should be in place. However, it's still a good idea to make sure an array
+        // of contexts was provided.
+        $contexts = self::getContexts();
         if (empty($contexts) || ! is_array($contexts)) {
             die(self::$ci->lang->line('bf_no_contexts'));
         }
 
-        // Ensure required contexts exist
-        foreach (self::$requiredContexts as $requiredContext) {
-            if (! in_array($requiredContext, $contexts)) {
-                $contexts[] = $requiredContext;
-            }
-        }
-
-        // Sorting
+        // Sorting (top-level menus).
         switch ($order_by) {
             case 'reverse':
                 $contexts = array_reverse($contexts);
                 break;
-
             case 'asc':
                 natsort($contexts);
                 break;
-
             case 'desc':
                 rsort($contexts);
                 break;
-
             case 'normal':
                 // no break
             case 'default':
@@ -269,7 +284,7 @@ class Contexts
     public static function render_mobile_navs()
     {
         $out = '';
-        foreach (self::$contexts as $context) {
+        foreach (self::getContexts() as $context) {
             $contextNav = self::context_nav($context, '', true);
             $currentId  = " id='{$context}_menu'";
             $out .= str_replace(
@@ -324,7 +339,7 @@ class Contexts
         }
 
         // Order the actions by weight, then alphabetically
-        self::sort_actions();
+        self::sortActions();
 
         // Build up the menu array
         $ucContext = ucfirst($context);
@@ -378,7 +393,7 @@ class Contexts
         // matter what.
         self::$ci->load->helper('config_file');
 
-        $contexts  = self::$contexts;
+        $contexts  = self::getContexts();
         $lowerName = strtolower($name);
 
         // If it isn't in the list of contexts, add it
@@ -405,10 +420,12 @@ class Contexts
         if (self::$ci->permission_model->permission_exists($cname)) {
             $pid = self::$ci->permission_model->find_by('name', $cname)->permission_id;
         } else {
-            $pid = self::$ci->permission_model->insert(array(
-                'name'          => $cname,
-                'description'   => 'Allow user to view the ' . ucwords($name) . ' Context.',
-            ));
+            $pid = self::$ci->permission_model->insert(
+                array(
+                    'name'        => $cname,
+                    'description' => 'Allow user to view the ' . ucwords($name) . ' Context.',
+                )
+            );
         }
 
         // Are there any roles to apply this to? If not, quit, since there will
@@ -472,7 +489,7 @@ class Contexts
         foreach (self::$menu as $topic_name => $topic) {
             if (count($topic) <= 1) {
                 foreach ($topic as $module => $vals) {
-                    $list .= self::build_item(
+                    $list .= self::buildItem(
                         $module,
                         $vals['title'],
                         $vals['display_name'],
@@ -487,7 +504,7 @@ class Contexts
                 foreach ($topic as $module => $vals) {
                     if (empty($vals['menu_view'])) {
                         // If it has no sub-menu, add the item.
-                        $subMenu .= self::build_item(
+                        $subMenu .= self::buildItem(
                             $module,
                             $vals['title'],
                             $vals['display_name'],
@@ -540,16 +557,16 @@ class Contexts
     /**
      * Build an individual list item (with sub-menus) for the menu.
      *
-     * @param string $module       The name of the module this link belongs to
-     * @param string $title        The title used on the link
-     * @param string $display_name The name to display in the menu
-     * @param string $context      The name of the context
+     * @param string $module       The name of the module this link belongs to.
+     * @param string $title        The title used on the link.
+     * @param string $display_name The name to display in the menu.
+     * @param string $context      The name of the context.
      * @param string $menu_view    The name of the view file that contains the
-     * sub-menu
+     * sub-menu.
      *
-     * @return string The HTML necessary for a single item and it's sub-menus.
+     * @return string The HTML necessary for a single item and its sub-menus.
      */
-    private static function build_item($module, $title, $display_name, $context, $menu_view = '')
+    private static function buildItem($module, $title, $display_name, $context, $menu_view = '')
     {
         // Handle localization of the display name, if needed.
         if (strpos($display_name, 'lang:') === 0) {
@@ -593,7 +610,7 @@ class Contexts
      *
      * @return void
      */
-    private static function sort_actions()
+    private static function sortActions()
     {
         $weights       = array();
         $display_names = array();
@@ -604,6 +621,44 @@ class Contexts
         }
 
         array_multisort($weights, SORT_DESC, $display_names, SORT_ASC, self::$actions);
+    }
+
+    //--------------------------------------------------------------------------
+    // Deprecated methods (do not use)
+    //--------------------------------------------------------------------------
+
+    /**
+     * Return the context array, just in case it is needed later.
+     *
+     * @deprecated since 0.7.1 Use getContexts().
+     *
+     * @param boolean $landingPageFilter If true, only returns contexts which have
+     * a landing page (index.php) available.
+     *
+     * @return array The names of the contexts.
+     */
+    public static function get_contexts($landingPageFilter = false)
+    {
+        return self::getContexts($landingPageFilter);
+    }
+
+    /**
+     * Set the contexts array
+     *
+     * @deprecated since 0.7.2 Use setContexts(). Note: SITE_AREA should be passed
+     * as the second argument of setContexts() to replicate the behavior provided
+     * when calling set_contexts() without a second argument. If the second argument
+     * to set_contexts() was never provided, it can probably be safely omitted for
+     * setContexts().
+     *
+     * @param  array  Context menus to display, normally stored in application config.
+     * @param  string Area to link to, defaults to SITE_AREA or Admin area.
+     *
+     * @return void
+     */
+    public static function set_contexts($contexts = array(), $site_area = SITE_AREA)
+    {
+        self::setContexts($contexts, $site_area);
     }
 }
 /* end /ui/libraries/contexts.php */

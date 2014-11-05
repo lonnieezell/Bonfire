@@ -8,7 +8,7 @@
  * @package   Bonfire
  * @author    Bonfire Dev Team
  * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @license   http://opensource.org/licenses/MIT    MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -17,8 +17,8 @@
 /**
  * Application helper functions
  *
- * Includes various helper functions from across the core modules to ease
- * editing and minimize physical files that need to be loaded.
+ * Includes various helper functions from across the core modules to ease editing
+ * and minimize physical files which need to be loaded.
  *
  * @package    Bonfire\Helpers\application_helper
  * @author     Bonfire Dev Team
@@ -27,7 +27,7 @@
 
 if (! function_exists('array_implode')) {
 	/**
-	 * Implode an array with the key and value pair giving a glue, a separator
+     * Implode an array with the key and value pair given a glue, a separator
 	 * between pairs, and the array to implode.
 	 *
 	 * Encode Query Strings
@@ -119,13 +119,13 @@ if (! function_exists('gravatar_link')) {
 	 * Create an image link based on Gravatar for the specified email address.
 	 * It will default to the site's generic image if none is found for the user.
 	 *
-	 * Note that if gravatar does not have an image that matches the criteria,
-	 * it will return a link to an image under *your_theme/images/user.png*.
+     * Note that if gravatar does not have an image that matches the criteria, it
+     * will default to gravatar's 'identicon' return a link to an image under *your_theme/images/user.png*.
 	 * Also, by explicity omitting email you're denying http-req to gravatar.com.
 	 *
-	 * @param string $email The email address to check for. If NULL, defaults to
-	 * theme image.
-	 * @param int    $size  The width (and height) of the resulting image to grab.
+     * @param string  $email The email address to check for. If null, the gravatar
+     * image defaults to 'identicon'.
+     * @param integer $size  The width (and height) of the resulting image to grab.
 	 * @param string $alt   Alt text to be put in the link tag.
 	 * @param string $title The title text to be put in the link tag.
 	 * @param string $class Any class(es) that should be assigned to the link tag.
@@ -135,38 +135,71 @@ if (! function_exists('gravatar_link')) {
 	 */
 	function gravatar_link($email = null, $size = 48, $alt = '', $title = '', $class = null, $id = null)
 	{
-		// Set our default image based on required size.
-		//$defaultImage = Template::theme_url('images/user.png');
-		$defaultImage = 'identicon';
+        // Make sure $size is an integer.
+        $size = empty($size) || is_object($size) || ! is_int($size) ? 48 : intval($size);
 
-		// Set our minimum site rating to PG
+        // If email is empty, don't send an HTTP request to gravatar.com.
+        if (empty($email)) {
+            $avatarURL = Template::theme_url('images/user.png');
+        } else {
+            // While it would be more efficient to place the values for $defaultImage,
+            // $rating, and $gravatarUrl (and $httpProtocol) directly into the call
+            // to sprintf(), it would be more difficult to document and change the
+            // values when necessary (as was the case when the format for the URL
+            // changed in the past).
+            //
+            // Similarly, the calls to the strtolower() and rawurlencode() functions
+            // to manipulate the $rating and $defaultImage values in the sprintf()
+            // call could be avoided/removed by making sure the values were correct
+            // beforehand, but the requirements would need to be documented for
+            // each value anyway...
+
+            // Set the default image.
+            $defaultImage = 'identicon';
+
+            // Set the minimum site rating to PG.
 		$rating = 'PG';
 
-		// If email null, don't send gravatar.com HTTP request
-		if ($email) {
-			// Check whether HTTP or HTTPS Request should be used
-			$httpProtocol = ! empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off' ? 'https://secure.' : 'http://www.';
+            // Check whether HTTP or HTTPS Request should be used.
+            $httpProtocol = is_https() ? 'https://secure.' : 'http://www.';
 
-			// URL for Gravatar
-			$gravatarURL = "{$httpProtocol}gravatar.com/avatar/%s?s=%s&amp;r=%s&amp;d=%s";
+            // URL for Gravatar, with placeholders for sprintf().
+            $gravatarUrl = "{$httpProtocol}gravatar.com/avatar/%s?s=%s&amp;r=%s&amp;d=%s";
+
 			$avatarURL = sprintf(
-				$gravatarURL,
+                $gravatarUrl,
 				md5(strtolower(trim($email))),
 				$size,
 				strtolower($rating),
 				rawurlencode($defaultImage)
 			);
-		} else {
-			$avatarURL = $defaultImage ;
 		}
 
-		$alt = html_escape($alt);
-		$title = html_escape($title);
+        // Escape all of the attributes, except the src, width, and height.
+        // Use an empty alt attribute if $alt is empty.
+        $alt = empty($alt) ? '' : html_escape($alt);
 
-		$id = $id !== null ? " id='{$id}' " : ' ';
-		$class = $class !== null ? " class='{$class}'" : ' ';
+        // These are the most commonly-required attributes for an image tag.
+        $imageAttributes = array(
+            "src='{$avatarURL}'",
+            "width='{$size}'",
+            "height='{$size}'",
+            "alt='{$alt}'",
+        );
 
-		return "<img src='{$avatarURL}' width='{$size}' height='{$size}' alt='{$alt}' title='{$title}' {$class}{$id} />";
+        if (! empty($id)) {
+            $imageAttributes[] = "id='" . html_escape($id) . "'";
+        }
+
+        if (! empty($class)) {
+            $imageAttributes[] = "class='" . html_escape($class) . "'";
+        }
+
+        if (! empty($title)) {
+            $imageAttributes[] = "title='" . html_escape($title) . "'";
+        }
+
+        return "<img " . implode(' ', $imageAttributes) . " />";
 	}
 }
 
@@ -175,14 +208,14 @@ if (! function_exists('iif')) {
 	* If then Else Statement wrapped in one function, If $expression = true then
 	* $returntrue else $returnfalse.
 	*
-	* @param mixed $expression    IF Statement to be checked
-	* @param mixed $returntrue    What to Return on True
-	* @param mixed $returnfalse   What to Return on False
-	* @param bool  $echo          Defaults to false, if set to true will echo
-	* instead of return.
+    * @param mixed   $expression  Expression to evaluate.
+    * @param mixed   $returntrue  What to return if $expression is true.
+    * @param mixed   $returnfalse What to return if $expression is false.
+    * @param boolean $echo        If set to true, the result will echo instead of
+    * returning. Defaults to false (return the result, will not echo).
 	*
-	* @return mixed    If echo is set to true will echo the value of the
-	* expression, defaults to returning the value.
+    * @return mixed If $echo is true, nothing is returned and the result will be
+    * sent to echo. Otherwise, either $returntrue or $returnfalse will be returned.
 	*/
 	function iif($expression, $returntrue, $returnfalse = '', $echo = false)
 	{
@@ -193,6 +226,38 @@ if (! function_exists('iif')) {
         }
 
         echo $result;
+    }
+}
+
+if (! function_exists('is_https')) {
+    /**
+     * Is HTTPS?
+     *
+     * Determines if the application is accessed via an encrypted (HTTPS) connection.
+     *
+     * This function copied from CI v3 /core/Common.php
+     * @copyright Copyright (c) 2008 - 2014, EllisLab, Inc. (http://ellislab.com/)
+     * @copyright Copyright (c) 2014, British Columbia Institute of Technology (http://bcit.ca/)
+     * @license   http://opensource.org/licenses/MIT    MIT License
+     * @link      https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
+     *
+     * @return boolean True if the application is currently using HTTPS, else false.
+     */
+    function is_https()
+    {
+        if (! empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
+            return true;
+        } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])
+            && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'
+        ) {
+            return true;
+        } elseif (! empty($_SERVER['HTTP_FRONT_END_HTTPS'])
+            && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off'
+        ) {
+            return true;
+        }
+
+        return false;
 	}
 }
 
@@ -201,15 +266,16 @@ if (! function_exists('js_escape')) {
 	 * Like html_escape() for JavaScript string literals.
 	 *
 	 * Inside attributes like onclick, you need to use html_escape() *as well*.
-	 * Inside script tags, html_escape() would do the wrong thing, and
-	 * js_escape() is enough on its own.
+     *
+     * Inside script tags, html_escape() would do the wrong thing, and js_escape()
+     * is enough on its own.
 	 *
 	 * Useful for confirm() or alert() - but of course not document.write() or
 	 * similar, so take care.
 	 *
-	 * @param String $str The string to process.
+     * @param string $str The string to process.
 	 *
-	 * @return String    The escaped string.
+     * @return string The escaped string.
 	 */
 	function js_escape($str)
 	{
@@ -235,44 +301,21 @@ if (! function_exists('list_contexts')) {
     /**
      * Return a list of the contexts specified for the application.
      *
-     * The optional $landingPageFilter can be applied to force return of
-     * contexts that have a landing page (index.php) available.
+     * @param boolean $landingPageFilter If true, only returns contexts which have
+     * a landing page (index.php) available.
      *
-     * @param	$landingPageFilter	Boolean	TRUE to filter FALSE for all.
-     *
-     * @return	Array	The context values array.
+     * @return array The context values array.
      */
     function list_contexts($landingPageFilter = false)
     {
+        // While limiting the number of files loaded is good, only the Contexts
+        // library should be determining required and available contexts.
+        if (! class_exists('Contexts', false)) {
         $ci = &get_instance();
-
-        $contexts = $ci->config->item('contexts');
-        if (empty($contexts) || ! is_array($contexts)) {
-            return false;
+            $ci->load->library('ui/contexts');
         }
 
-        // Ensure settings context exists
-        if (! in_array('settings', $contexts)) {
-            array_push($contexts, 'settings');
-        }
-
-        // Ensure developer context exists
-        if (! in_array('developer', $contexts)) {
-            array_push($contexts, 'developer');
-        }
-
-        // Optional removal of contexts without landing pages
-        if ($landingPageFilter === true) {
-            $returnContexts = array();
-            foreach ($contexts as $context) {
-                if (file_exists(realpath(VIEWPATH) . DIRECTORY_SEPARATOR . SITE_AREA . DIRECTORY_SEPARATOR . $context . DIRECTORY_SEPARATOR . 'index.php')) {
-                    array_push($returnContexts, $context);
-                }
-            }
-            $contexts = $returnContexts;
-        }
-
-        return $contexts;
+        return Contexts::getContexts($landingPageFilter);
     }
 }
 
@@ -280,11 +323,12 @@ if (! function_exists('log_activity')) {
 	/**
 	 * Log an activity if config item 'enable_activities' is true.
 	 *
-	 * @param int    $userId   The id of the user that performed the activity.
+     * @param integer $userId   The id of the user that performed the activity.
 	 * @param string $activity The activity details. Max length of 255 chars.
 	 * @param string $module   The name of the module that set the activity.
 	 *
-	 * @return int/bool An int with the ID of the new object, or FALSE on failure.
+     * @return integer/boolean The ID of the new object, or false on failure (or
+     * if enable_activity_logging is not true).
 	 */
 	function log_activity($userId = null, $activity = '', $module = 'any')
 	{
@@ -325,11 +369,13 @@ if (! function_exists('obj_value')) {
 	/**
 	 *
 	 * @param object $obj   Object
-	 * @param string $key   Name of the object element
-	 * @param string $type  Input type
-	 * @param int    $value Value to check the key against
+     * @param string  $key   Name of the object element.
+     * @param string  $type  Input type.
+     * @param integer $value Value to check the key against.
 	 *
-	 * @return null|string
+     * @return null|string If $obj->$key is set, returns the value, or a
+     * checked/selected string if $type is 'checkbox', 'radio', or 'select'. Returns
+     * null if $obj->$key is not set.
 	 */
 	function obj_value($obj, $key, $type = 'text', $value = 0)
 	{
@@ -342,13 +388,11 @@ if (! function_exists('obj_value')) {
 						return 'checked="checked"';
 					}
 					break;
-
 				case 'select':
 					if ($obj->$key == $value) {
 						return 'selected="selected"';
 					}
 					break;
-
 				case 'text':
                     // no break;
 				default:
