@@ -8,7 +8,7 @@ $registerClass  = $currentMethod == 'register' ? ' required' : '';
 $editSettings   = $currentMethod == 'edit';
 
 $defaultLanguage = isset($user->language) ? $user->language : strtolower(settings_item('language'));
-$defaultTimezone = isset($current_user) ? $current_user->timezone : strtoupper(settings_item('site.default_user_timezone'));
+$defaultTimezone = isset($user->timezone) ? $user->timezone : strtoupper(settings_item('site.default_user_timezone'));
 
 ?>
 <div class="control-group<?php echo form_error('email') ? $errorClass : ''; ?>">
@@ -39,7 +39,7 @@ $defaultTimezone = isset($current_user) ? $current_user->timezone : strtoupper(s
     <div class="controls">
         <input class="<?php echo $controlClass; ?>" type="password" id="password" name="password" value="" />
         <span class="help-inline"><?php echo form_error('password'); ?></span>
-        <p class="help-block"><?php if (isset($password_hints)) { echo $password_hints; } ?></p>
+        <p class="help-block"><?php echo isset($password_hints) ? $password_hints : ''; ?></p>
     </div>
 </div>
 <div class="control-group<?php echo form_error('pass_confirm') ? $errorClass : ''; ?>">
@@ -61,7 +61,7 @@ $defaultTimezone = isset($current_user) ? $current_user->timezone : strtoupper(s
 <?php
 endif;
 
-if ( ! empty($languages) && is_array($languages)) :
+if (! empty($languages) && is_array($languages)) :
     if (count($languages) == 1) :
 ?>
 <input type="hidden" id="language" name="language" value="<?php echo $languages[0]; ?>" />
@@ -73,7 +73,7 @@ if ( ! empty($languages) && is_array($languages)) :
     <div class="controls">
         <select name="language" id="language" class="chzn-select <?php echo $controlClass; ?>">
             <?php foreach ($languages as $language) : ?>
-            <option value="<?php e($language); ?>" <?php echo set_select('language', $language, $defaultLanguage == $language ? true : false); ?>>
+            <option value="<?php e($language); ?>" <?php echo set_select('language', $language, $defaultLanguage == $language); ?>>
                 <?php e(ucfirst($language)); ?>
             </option>
             <?php endforeach; ?>
@@ -85,10 +85,17 @@ if ( ! empty($languages) && is_array($languages)) :
     endif;
 endif;
 ?>
-<div class="control-group<?php echo form_error('timezone') ? $errorClass : ''; ?>">
+<div class="control-group<?php echo form_error('timezones') ? $errorClass : ''; ?>">
     <label class="control-label required" for="timezones"><?php echo lang('bf_timezone'); ?></label>
     <div class="controls">
-        <?php echo timezone_menu(set_value('timezones', isset($user) ? $user->timezone : $defaultTimezone), $controlClass, 'timezones', array('id' => 'timezones')); ?>
+        <?php
+        echo timezone_menu(
+            set_value('timezones', isset($user) ? $user->timezone : $defaultTimezone),
+            $controlClass,
+            'timezones',
+            array('id' => 'timezones')
+        );
+        ?>
         <span class="help-inline"><?php echo form_error('timezones'); ?></span>
     </div>
 </div>
