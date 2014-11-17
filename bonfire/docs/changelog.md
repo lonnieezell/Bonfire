@@ -7,6 +7,7 @@
 #### New Features:
 
 #### Closes Issues:
+* #603 Documentation updated to note the potential for `before_`/`after_user_update` events to receive an array in the `user_id` field, and for that field to potentially not include the user's ID.
 
 #### Additional Changes:
 
