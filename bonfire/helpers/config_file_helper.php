@@ -103,7 +103,7 @@ if (! function_exists('read_config')) {
 		if ($module) {
 			$fileDetails = Modules::file_path($module, 'config', "{$file}.php");
             if (! empty($fileDetails)) {
-				$file = $fileDetails;
+				$file = str_replace('.php','', $fileDetails);
 				$found = true;
 			}
 		}
