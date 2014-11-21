@@ -10,6 +10,7 @@
 * #793 Wrong timezone setting (use `site.default_user_timezone` setting when $user->timezone is unavailable, instead of the admin's timezone).
 * #603 Documentation updated to note the potential for `before_`/`after_user_update` events to receive an array in the `user_id` field, and for that field to potentially not include the user's ID.
 * #565 `render_user_form` in the admin doesnt pass the payload.
+* #1082 Strip '.php' extension from module config files in `config_file_helper`'s `read_config()` function when the file is found by `Modules::file_path()`.
 
 #### Additional Changes:
 
