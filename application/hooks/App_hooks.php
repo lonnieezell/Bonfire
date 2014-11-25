@@ -113,6 +113,7 @@ class App_hooks
 
                 if (! $this->ci->auth->has_permission('Site.Signin.Offline')) {
                     if (! in_array($this->ci->uri->ruri_string(), $this->allowOffline)) {
+                        $offlineReason = $this->ci->settings_lib->item('site.offline_reason');
                         include (APPPATH . 'errors/offline.php');
                         die();
                     }
