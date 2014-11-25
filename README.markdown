@@ -1,3 +1,5 @@
+Note: This branch is a test integration of features initially developed in Bonfire-Next ( https://github.com/ci-bonfire/Bonfire-Next ) and Sprint ( https://github.com/ci-bonfire/Sprint ). This is more a proof-of-concept and test of compatibility between code developed for those platforms and Bonfire, rather than a usable branch.
+
 # Faster Development of CodeIgniter 2.x Apps
 
 <div style="float: right; margin: 0 20px 20px 0">
