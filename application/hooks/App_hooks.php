@@ -20,12 +20,18 @@
  * A set of methods used for the CodeIgniter hooks.
  * @link https://ellislab.com/codeigniter/user-guide/general/hooks.html
  *
- * @package    Bonfire\Hooks\App_hooks
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/developer
+ * @package   Bonfire\Hooks\App_hooks
+ * @author    Bonfire Dev Team
+ * @link      http://cibonfire.com/docs/developer
  */
 class App_hooks
 {
+    /** @var array List of pages which bypass the Site Offline page. */
+    protected $allowOffline = array(
+        '/users/login',
+        '/users/logout',
+    );
+
     /**
      * @var object The CodeIgniter core object.
      */
@@ -101,30 +107,32 @@ class App_hooks
             }
 
             if ($this->ci->settings_lib->item('site.status') == 0) {
-                if (! class_exists('Auth')) {
+                if (! class_exists('Auth', false)) {
                     $this->ci->load->library('users/auth');
                 }
 
                 if (! $this->ci->auth->has_permission('Site.Signin.Offline')) {
-                    include (APPPATH . 'errors/offline.php');
-                    die();
+                    if (! in_array($this->ci->uri->ruri_string(), $this->allowOffline)) {
+                        include (APPPATH . 'errors/offline.php');
+                        die();
+                    }
                 }
             }
         }
     }
 
-	/**
-	 * Stores the name of the current uri in the session as 'previous_page'.
-	 * This allows redirects to take us back to the previous page without
-	 * relying on inconsistent browser support or spoofing.
-	 *
-	 * Called by the "post_controller" hook.
-	 *
-	 * @return void
-	 */
+    /**
+     * Stores the name of the current uri in the session as 'previous_page'.
+     * This allows redirects to take us back to the previous page without
+     * relying on inconsistent browser support or spoofing.
+     *
+     * Called by the "post_controller" hook.
+     *
+     * @return void
+     */
     public function prepRedirect()
     {
-        if (! class_exists('CI_Session')) {
+        if (! class_exists('CI_Session', false)) {
             $this->ci->load->library('session');
         }
 
@@ -133,71 +141,78 @@ class App_hooks
         }
     }
 
-	/**
-	 * Store the requested page in the session data so we can use it
-	 * after the user logs in.
-	 *
-	 * Called by the "pre_controller" hook.
-	 *
-	 * @return void
-	 */
+    /**
+     * Store the requested page in the session data so we can use it
+     * after the user logs in.
+     *
+     * Called by the "pre_controller" hook.
+     *
+     * @return void
+     */
     public function saveRequested()
-	{
-        // If the CI_Session class is not loaded, we might be called from
-        // a controller that doesn't extend any of Bonfire's controllers.
-        // In that case, we need to try to do this the old fashioned way
-        // and add it straight to the session.
-        if (! class_exists('CI_Session') && get_instance() === null) {
-            // Let's try to grab it from the REQUEST_URI since
-            // this will work in majority of cases.
-            $uri = isset($_SERVER['REQUEST_URI']) && ! empty($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
+    {
+        // If the CI_Session class is not loaded, this might be a controller that
+        // doesn't extend any of Bonfire's controllers. In that case, try to do
+        // this the old fashioned way and add it straight to the session.
 
-            // Try to get the current URL through PATH INFO
-            if (empty($uri) && isset($_SERVER['PATH_INFO'])) {
-                $path = (isset($_SERVER['PATH_INFO'])) ? $_SERVER['PATH_INFO'] : @getenv('PATH_INFO');
-                if (trim($path, '/') != '' && $path != "/".SELF) {
-                    $uri = $path;
+        if (! class_exists('CI_Session', false)) {
+            if (is_object(get_instance())) {
+                // If an instance is available, just load the session lib.
+                $this->ci->load->library('session');
+            } elseif (get_instance() === null) {
+                // If an instance is not available...
+
+                // Try to grab the REQUEST_URI since this will work in most cases.
+                $uri = empty($_SERVER['REQUEST_URI']) ? null : $_SERVER['REQUEST_URI'];
+                if (empty($uri)) {
+                    // Try to get the current URL through PATH INFO.
+                    $path = isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : @getenv('PATH_INFO');
+                    if (trim($path, '/') != '' && $path != '/'.SELF) {
+                        $uri = $path;
+                    }
                 }
-            }
 
-            // Finally, let's try the query string.
-            if (empty($uri) && isset($_SERVER['QUERY_STRING'])) {
-                $path =  (isset($_SERVER['QUERY_STRING'])) ? $_SERVER['QUERY_STRING'] : @getenv('QUERY_STRING');
-                if (trim($path, '/') != '') {
-                    $uri = $path;
+                if (empty($uri)) {
+                    // Finally, try the query string.
+                    $path =  isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : @getenv('QUERY_STRING');
+                    if (trim($path, '/') != '') {
+                        $uri = $path;
+                    }
                 }
-            }
 
+                // Set the variable in the session and return.
                 $_SESSION['requested_page'] = $uri;
-            return;
-        } elseif (! class_exists('CI_Session') && is_object(get_instance())) {
-        // If we can get an actual instance, then just load the session lib.
-            $this->ci->load->library('session');
+                return;
+            }
         }
 
+        // Either the session library was available all along or it has been loaded,
+        // so determine whether the current URL is in the ignore_pages array and,
+        // if it is not, set it as the requested page in the session.
+
         if (! in_array($this->ci->uri->ruri_string(), $this->ignore_pages)) {
-			$this->ci->session->set_userdata('requested_page', current_url());
-		}
+            $this->ci->session->set_userdata('requested_page', current_url());
+        }
     }
 
     //--------------------------------------------------------------------------
     // Deprecated Methods (do not use)
     //--------------------------------------------------------------------------
 
-	/**
-	 * Check the online/offline status of the site.
-	 *
-	 * Called by the "post_controller_constructor" hook.
-	 *
+    /**
+     * Check the online/offline status of the site.
+     *
+     * Called by the "post_controller_constructor" hook.
+     *
      * @deprecated since 0.7.1 Use checkSiteStatus().
-	 *
-	 * @return void
-	 *
-	 */
-	public function check_site_status()
-	{
+     *
+     * @return void
+     *
+     */
+    public function check_site_status()
+    {
         return $this->checkSiteStatus();
-	}
+    }
 
     /**
      * Stores the name of the current uri in the session as 'previous_page'.
@@ -213,7 +228,7 @@ class App_hooks
     public function prep_redirect()
     {
         return $this->prepRedirect();
-	}
+    }
 
     /**
      * Store the requested page in the session data so we can use it
@@ -226,7 +241,7 @@ class App_hooks
      * @return void
      */
     public function save_requested()
-	{
+    {
         return $this->saveRequested();
-	}
+    }
 }

@@ -7,13 +7,14 @@
 #### New Features:
 
 #### Closes Issues:
+* #337 Can not login to admin when site is turned off (previously closed as non-issue, now fixed).
 * #793 Wrong timezone setting (use `site.default_user_timezone` setting when $user->timezone is unavailable, instead of the admin's timezone).
 * #603 Documentation updated to note the potential for `before_`/`after_user_update` events to receive an array in the `user_id` field, and for that field to potentially not include the user's ID.
 * #565 `render_user_form` in the admin doesnt pass the payload.
 * #1082 Strip '.php' extension from module config files in `config_file_helper`'s `read_config()` function when the file is found by `Modules::file_path()`.
 
 #### Additional Changes:
-
+* Added `$allowOffline` array to `/application/hooks/App_hooks.php` to configure pages which are allowed to bypass the site offline functionality. As long as `'/users/login'` is in this list, users with the correct permissions will be able to log in and bring the site back online. If a user does not have the correct permission, and no additional pages have been added to the list, they will still see the contents of the `/application/errors/offline.php` file once they log in to the site. If you want to disable user logins while the site is offline, set this variable to an empty array. Just make sure you don't log out of the site after setting it offline, or you will have to update the database to get the site back online.
 * Added Constants from CI 3 to `/application/config/constants.php`.
 * CI PR #3303: Fix `Common::get_config()` error in PHP 5.6.
 * Changed language prefix for emailer module from `em_` to `emailer_`.
