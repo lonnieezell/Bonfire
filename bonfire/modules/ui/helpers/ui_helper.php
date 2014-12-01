@@ -20,14 +20,14 @@
  *
  * Manages the keyboard shortcuts used in the Bonfire admin interface.
  *
- * @package    Bonfire\Modules\UI\Helpers\ui_helper
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/bonfire/keyboard_shortcuts
+ * @package Bonfire\Modules\UI\Helpers\ui_helper
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/bonfire/keyboard_shortcuts
  */
 
 if (! function_exists('renderSearchBox')) {
     /**
-     * Display a search box
+     * Display a search box.
      *
      * @return void
      */
@@ -37,10 +37,11 @@ if (! function_exists('renderSearchBox')) {
 
         // Handle any empty arguments.
         if (empty($searchLabel) || empty($searchPlaceholder)) {
-            $search = $ci->lang->line('bf_action_search');
-            $searchLabel = empty($searchLabel) ? "{$seaarch}&hellip;" : $searchLabel;
+            $search            = $ci->lang->line('bf_action_search');
+            $searchLabel       = empty($searchLabel) ? "{$search}&hellip;" : $searchLabel;
             $searchPlaceholder = empty($searchPlaceholder) ? strtolower($search) . '&hellip;' : $searchPlaceholder;
         }
+
         if (empty($template)) {
             $template = "<a href='#' class='list-search'>{searchLabel}</a>
 <div id='search-form' style='display: none'>
@@ -64,11 +65,16 @@ if (! function_exists('renderSearchBox')) {
         );
     }
 }
+
+//------------------------------------------------------------------------------
+// Deprecated function(s) - do not use.
+//------------------------------------------------------------------------------
+
 if (! function_exists('render_search_box')) {
     /**
-     * Display a search box
+     * Display a search box.
      *
-     * @deprecated since 0.7.2 use renderSearchBox()
+     * @deprecated since 0.7.2 use renderSearchBox().
      *
      * @return void
      */
@@ -78,8 +84,8 @@ if (! function_exists('render_search_box')) {
         $search = $ci->lang->line('bf_action_search');
 
         // Although the defaults of renderSearchBox() are currently the same as
-        // the values below, it is possible that the defaults for
-        // renderSearchBox() could be changed before this function is removed.
+        // the values below, it is possible that the defaults for renderSearchBox()
+        // could be changed before this function is removed.
 
         $searchLabel = "{$search}&hellip;";
         $searchPlaceholder = strtolower($search) . '&hellip;';

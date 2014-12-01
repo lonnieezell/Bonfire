@@ -18,9 +18,9 @@
  *
  * Localization strings used by Bonfire.
  *
- * @package    Bonfire\Modules\UI\Language\Russian
- * @author     Translator < https://github.com/cjmaxik >
- * @link       http://cibonfire.com/docs/guides
+ * @package Bonfire\Modules\UI\Language\Russian
+ * @author  Translator < https://github.com/cjmaxik >
+ * @link    http://cibonfire.com/docs/developer/keyboard_shortcuts
  */
 
 $lang['ui_keyboard_shortcuts'] = 'Горячие клавиши редактируются в настройках приложения. Имеющиеся в настройках горячие клавиши:';
@@ -33,7 +33,7 @@ $lang['ui_action']  = 'Действие';
 $lang['ui_actions'] = 'Действия';
 
 $lang['ui_shortcut']          = 'Горячая клавиша';
-$lang['ui_shortcut_help']     = 'Введите нужные клавиши в поле ниже, например alt+j. С примерами можно ознакомиться на <a href="http://keithcirkel.co.uk/jwerty/" target="_blank">сайте проекта Jwerty.</a>';
+$lang['ui_shortcut_help']     = 'Введите нужные клавиши в поле ниже, например alt+j. С примерами можно ознакомиться на <a href="http://keithamus.github.io/jwerty/" target="_blank">сайте проекта Jwerty.</a>';
 $lang['ui_shortcuts']         = 'Горячие клавиши';
 $lang['ui_current_shortcuts'] = 'Текущие горячие клавиши';
 

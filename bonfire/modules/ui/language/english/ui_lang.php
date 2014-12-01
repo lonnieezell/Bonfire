@@ -18,9 +18,9 @@
 /**
  * Language file for the UI module (English)
  *
- * @package    Bonfire\Modules\UI\Language\English
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs
+ * @package Bonfire\Modules\UI\Language\English
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer/keyboard_shortcuts
  */
 
 $lang['ui_keyboard_shortcuts']	= "Keyboard shortcuts are setup in the application config (the 'ui.current_shortcuts' key in /application/config/application.php).<br />The currently available shortcuts are:";
@@ -33,7 +33,7 @@ $lang['ui_action']				= 'Action';
 $lang['ui_actions']				= 'Actions';
 
 $lang['ui_shortcut']			= 'Shortcut Key';
-$lang['ui_shortcut_help']       = 'Enter your preferred keys in the field below, e.g. alt+j - see more examples on the <a href="http://keithcirkel.co.uk/jwerty/" target="_blank">Jwerty project page</a>';
+$lang['ui_shortcut_help']       = 'Enter your preferred keys in the field below, e.g. alt+j - see more examples on the <a href="http://keithamus.github.io/jwerty/" target="_blank">Jwerty project page</a>';
 $lang['ui_shortcuts']			= 'Shortcut Keys';
 $lang['ui_current_shortcuts']	= 'Current Shortcuts';
 

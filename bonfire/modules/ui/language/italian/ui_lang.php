@@ -18,9 +18,9 @@
 /**
  * Ui Language File (Italian)
  *
- * @package     Bonfire\Modules\Ui\Language\Italian
- * @author      Lorenzo Sanzari (ulisse73@quipo.it)
- * @link       http://cibonfire.com/docs
+ * @package Bonfire\Modules\Ui\Language\Italian
+ * @author  Lorenzo Sanzari (ulisse73@quipo.it)
+ * @link    http://cibonfire.com/docs/developer/keyboard_shortcuts
  */
 
 $lang['ui_keyboard_shortcuts'] = 'Le scorciatoie da tastiera sono configurate nell\'applicazione. Le scorciatoie attualmente disponibili sono:';
@@ -33,7 +33,7 @@ $lang['ui_action'] = 'Azione';
 $lang['ui_actions'] = 'Azioni';
 
 $lang['ui_shortcut'] = 'Tasto scorciatoia';
-$lang['ui_shortcut_help'] = 'Inserisci il tuo tasto preferito nel campo seguente, es.. alt+j - guarda altri esempi sulla pagina <a href="http://keithcirkel.co.uk/jwerty/" target="_blank">progetto Jwerty</a>';
+$lang['ui_shortcut_help'] = 'Inserisci il tuo tasto preferito nel campo seguente, es.. alt+j - guarda altri esempi sulla pagina <a href="http://keithamus.github.io/jwerty/" target="_blank">progetto Jwerty</a>';
 $lang['ui_shortcuts'] = 'Tasti scorciatoia';
 $lang['ui_current_shortcuts'] = 'Scorciatoia corrente';
 

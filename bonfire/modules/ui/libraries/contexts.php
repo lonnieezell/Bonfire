@@ -18,9 +18,9 @@
  *
  * Provides helper methods for displaying Context Navigation.
  *
- * @package    Bonfire\Core\Modules\UI\Libraries\Contexts
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/bonfire/contexts
+ * @package Bonfire\Core\Modules\UI\Libraries\Contexts
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/bonfire/contexts
  */
 class Contexts
 {
@@ -78,7 +78,7 @@ class Contexts
     //--------------------------------------------------------------------------
 
     /**
-     * Get the CI instance and call the init method
+     * Get the CI instance and call the init method.
      *
      * @return void
      */
@@ -89,7 +89,7 @@ class Contexts
     }
 
     /**
-     * Load the configured contexts
+     * Load the configured contexts.
      *
      * @return void
      */
@@ -102,8 +102,8 @@ class Contexts
     /**
      * Set the contexts array and, optionally, the site area.
      *
-     * @param  array  Context menus to display, normally stored in application config.
-     * @param  string Area to link to, if not provided (or null), will remain unchanged.
+     * @param array  Context menus to display, normally stored in application config.
+     * @param string Area to link to, if not provided (or null), will remain unchanged.
      *
      * @return void
      */
@@ -134,7 +134,7 @@ class Contexts
      * @param boolean $landingPageFilter If true, only returns contexts which have
      * a landing page (index.php) available.
      *
-     * @return array
+     * @return array The names of the contexts.
      */
     public static function getContexts($landingPageFilter = false)
     {
@@ -155,10 +155,11 @@ class Contexts
     /**
      * Returns a string of any errors during the create context process.
      *
-     * @param string $open    A string to place at the beginning of each error.
-     * @param string $close   A string to place at the close of each error.
+     * @param string $open  A string to place at the beginning of each error.
+     * @param string $close A string to place at the end of each error.
      *
-     * @return  string
+     * @return string All of the current errors with the provided $open/$close strings,
+     * with each close string followed by a newline (\n) character.
      */
     public static function errors($open = '<li>', $close = '</li>')
     {
@@ -173,10 +174,10 @@ class Contexts
     /**
      * Renders a list-based menu (with submenus) for each context.
      *
-     * @param string $mode           What to display in the top menu. Either 'icon', 'text', or 'both'.
-     * @param string $order_by       Determines the sort order of the elements. Valid options are 'normal', 'reverse', 'asc', 'desc'.
-     * @param bool   $top_level_only If true, will only display the top-level links.
-     * @param bool   $benchmark      If true, benchmark start/end marks will be output
+     * @param string $mode            What to output in the top menu ('icon'/'text'/'both').
+     * @param string $order_by        The sort order of the elements ('normal'/'reverse'/'asc'/'desc').
+     * @param boolean $top_level_only If true, output only the top-level links.
+     * @param boolean $benchmark      If true, output benchmark start/end marks.
      *
      * @return string A string with the built navigation.
      */
@@ -206,9 +207,7 @@ class Contexts
                 rsort($contexts);
                 break;
             case 'normal':
-                // no break
             case 'default':
-                // no break
             default:
                 break;
         }
@@ -227,10 +226,13 @@ class Contexts
         // Build out the navigation.
         $menu = '';
         foreach ($contexts as $context) {
+            // Don't display an entry in the menu if the user doesn't have permission
+            // to view it (unless the permission doesn't exist).
             $viewPermission = 'Site.' . ucfirst($context) . '.View';
             if (self::$ci->auth->has_permission($viewPermission)
                 || ! self::$ci->auth->permission_exists($viewPermission)
             ) {
+                // The text/image displayed in the top-level context menu.
                 $title    = self::$ci->lang->line("bf_context_{$context}");
                 $navTitle = str_replace(
                     array('{title}', '{image}'),
@@ -241,6 +243,7 @@ class Contexts
                     $template
                 );
 
+                // Build the menu for this context.
                 $menu .= str_replace(
                     array('{parent_class}', '{url}', '{id}', '{current_class}', '{title}', '{extra}', '{text}', '{content}'),
                     array(
@@ -258,6 +261,7 @@ class Contexts
             }
         }
 
+        // Put the generated menu into the context nav template.
         $nav = str_replace(
             array('{class}', '{extra}', '{menu}'),
             array(
@@ -276,8 +280,10 @@ class Contexts
     }
 
     /**
-     * Create a series of divs, each of which contain a <ul> of links within
-     * that context. This is intended for the tab-style mobile navigation.
+     * Create the mobile navigation.
+     *
+     * The tab-style mobile navigation is made up of a series of divs, each of which
+     * contains a list of links within that context.
      *
      * @return string The navigation lists.
      */
@@ -300,24 +306,24 @@ class Contexts
     /**
      * Build the main navigation menu for each context.
      *
-     * @param string $context   The context to build the nav for.
-     * @param string $class     The class to use on the nav
-     * @param bool   $ignore_ul When true, prevents output of surrounding ul
-     * tag, used to modify the markup for mobile
+     * @param string  $context   The context of the nav to be built.
+     * @param string  $class     The class to use on the nav.
+     * @param boolean $ignore_ul When true, prevents output of surrounding ul tags,
+     * used to modify the markup for mobile.
      *
      * @return string The HTML necessary to display the menu.
      */
     public static function context_nav($context = null, $class = 'dropdown-menu', $ignore_ul = false)
     {
-        // Get a list of modules with a controller matching
-        // $context ('content', 'settings', 'reports', or 'developer')
+        // Get a list of modules with a controller matching $context ('content',
+        // 'settings', 'reports', or 'developer').
         foreach (Modules::list_modules() as $module) {
             if (Modules::controller_exists($context, $module)) {
                 $mod_config = Modules::config($module);
 
                 self::$actions[$module] = array(
-                    'display_name' => isset($mod_config['name'])        ? $mod_config['name']        : $module,
-                    'menus'        => isset($mod_config['menus'])       ? $mod_config['menus']       : false,
+                    'display_name' => isset($mod_config['name']) ? $mod_config['name'] : $module,
+                    'menus'        => isset($mod_config['menus']) ? $mod_config['menus'] : false,
                     'title'        => isset($mod_config['description']) ? $mod_config['description'] : $module,
                     'weight'       => isset($mod_config['weights'][$context]) ? $mod_config['weights'][$context] : 0,
                 );
@@ -338,12 +344,14 @@ class Contexts
             );
         }
 
-        // Order the actions by weight, then alphabetically
+        // Order the actions by weight, then alphabetically.
         self::sortActions();
 
-        // Build up the menu array
+        // Build up the menu array.
         $ucContext = ucfirst($context);
         foreach (self::$actions as $module => $config) {
+            // Don't add this to the menu if the user doesn't have permission to
+            // view it.
             if (self::$ci->auth->has_permission('Bonfire.' . ucfirst($module) . '.View')
                 || self::$ci->auth->has_permission(ucfirst($module) . ".{$ucContext}.View")
             ) {
@@ -361,6 +369,7 @@ class Contexts
             }
         }
 
+        // Add any sub-menus and reset the $actions array for the next pass.
         $menu = self::build_sub_menu($context, $ignore_ul);
         self::$actions = array();
 
@@ -372,15 +381,19 @@ class Contexts
     //--------------------------------------------------------------------------
 
     /**
-     * Creates everything needed for a new context to run. Includes
-     * creating permissions, assigning them to certain roles, and
-     * even creating an application migration for the permissions.
+     * Create everything needed for a new context to run.
      *
-     * @param   string  $name   The name of the context to create.
-     * @param   array   $roles  The names or id's of the roles to give permissions to view.
-     * @param   bool    $migrate    If TRUE, will create an app migration file.
+     * This includes creating permissions, assigning them to certain roles, and
+     * creating an application migration for the permissions.
      *
-     * @return  bool
+     * @todo Create the migration file if $migrate is true...
+     *
+     * @param string  $name    The name of the context to create.
+     * @param array   $roles   The roles (names or IDs) which should have permission
+     * to view this module.
+     * @param boolean $migrate If true, will create a migration file.
+     *
+     * @return boolean False on error, else true.
      */
     public static function create_context($name = '', $roles = array(), $migrate = false)
     {
@@ -389,14 +402,14 @@ class Contexts
             return false;
         }
 
-        // 1. Try to write to the config file so it will show in the menu no
-        // matter what.
+        // Write the context name to the config file.
+
         self::$ci->load->helper('config_file');
 
         $contexts  = self::getContexts();
         $lowerName = strtolower($name);
 
-        // If it isn't in the list of contexts, add it
+        // Add the context if it is not already in the list of contexts.
         if (! in_array($lowerName, $contexts)) {
             array_unshift($contexts, $lowerName);
 
@@ -406,16 +419,23 @@ class Contexts
             }
         }
 
-        // 2. Language File
+        // Create an entry in the application_lang file for the context.
+
         if (! function_exists('addLanguageLine')) {
             self::$ci->load->helper('translate/languages');
-            $temp = addLanguageLine('application_lang.php', array("bf_context_{$lowerName}" => $name), 'english');
         }
 
-        // 3. Create the relevant permissions
+        $temp = addLanguageLine('application_lang.php', array("bf_context_{$lowerName}" => $name), 'english');
+        if (! $temp) {
+            // @todo set error/return if the language line was not added successfully?
+        }
+
+        // Create the relevant permissions.
+
         $cname = 'Site.' . ucfirst($name) . '.View';
 
-        // 3.1. create the actual permission
+        // Get the permission ID, either from an existing permission or by inserting
+        // a new permission.
         self::$ci->load->model('permissions/permission_model');
         if (self::$ci->permission_model->permission_exists($cname)) {
             $pid = self::$ci->permission_model->find_by('name', $cname)->permission_id;
@@ -428,23 +448,29 @@ class Contexts
             );
         }
 
-        // Are there any roles to apply this to? If not, quit, since there will
-        // be nothing to migrate
-        if (count($roles) == 0) {
+        // Assign the permission to the supplied roles.
+
+        // If no roles were supplied, exit, indicating success.
+        if (empty($roles)) {
             return true;
         }
 
+        // Assign the permission to each role.
         self::$ci->load->model('roles/role_permission_model');
         foreach ($roles as $role) {
             if (is_numeric($role)) {
-                // Assign By Id
-                self::$ci->role_permission_model->delete_role_permissions($role, $pid);
-                self::$ci->role_permission_model->create_role_permissions($role, $pid);
+                // Assign By Id.
+                self::$ci->role_permission_model->delete($role, $pid);
+                self::$ci->role_permission_model->create($role, $pid);
             } else {
-                // Assign By Name
+                // Assign By Name.
                 self::$ci->role_permission_model->assign_to_role($role, $cname);
             }
         }
+
+        // if ($migrate) {
+        //  @todo create a migration file.
+        // }
 
         return true;
     }
@@ -456,14 +482,14 @@ class Contexts
     /**
      * Take an array of key/value pairs and set the class/id names.
      *
-     * @param array $attrs An array of key/value pairs that correspond to the
-     * class methods for classes and ids.
+     * @param array $attrs An array of key/value pairs that correspond to the class
+     * methods for classes and ids.
      *
      * @return void
      */
     public static function set_attrs($attrs = array())
     {
-        if (! is_array($attrs)) {
+        if (empty($attrs) || ! is_array($attrs)) {
             return null;
         }
 
@@ -477,10 +503,11 @@ class Contexts
     /**
      * Build out the HTML for the menu.
      *
-     * @param string $context   The context to build the nav for.
-     * @param bool   $ignore_ul
+     * @param string  $context   The context to build the nav for.
+     * @param boolean $ignore_ul If true, the list will be returned without being
+     * placed into the template.
      *
-     * @return string HTML for the sub menu
+     * @return string HTML for the sub menu.
      */
     public static function build_sub_menu($context, $ignore_ul = false)
     {
@@ -561,8 +588,7 @@ class Contexts
      * @param string $title        The title used on the link.
      * @param string $display_name The name to display in the menu.
      * @param string $context      The name of the context.
-     * @param string $menu_view    The name of the view file that contains the
-     * sub-menu.
+     * @param string $menu_view    The name of the view file that contains the sub-menu.
      *
      * @return string The HTML necessary for a single item and its sub-menus.
      */
@@ -606,7 +632,7 @@ class Contexts
     }
 
     /**
-     * Sort the actions array
+     * Sort the actions array.
      *
      * @return void
      */
