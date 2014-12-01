@@ -13,9 +13,12 @@
 * #603 Documentation updated to note the potential for `before_`/`after_user_update` events to receive an array in the `user_id` field, and for that field to potentially not include the user's ID.
 * #565 `render_user_form` in the admin doesnt pass the payload.
 * #1082 Strip '.php' extension from module config files in `config_file_helper`'s `read_config()` function when the file is found by `Modules::file_path()`.
+* #1085 `s` key submits forms automatically
 
 #### Additional Changes:
-* Updated URL for jwerty (keyboard shortcuts).
+* jwerty:
+    * Updated URL for jwerty (keyboard shortcuts).
+    * Updated jwerty.js to version 0.3.2.
 * Added `$allowOffline` array to `/application/hooks/App_hooks.php` to configure pages which are allowed to bypass the site offline functionality. As long as `'/users/login'` is in this list, users with the correct permissions will be able to log in and bring the site back online. If a user does not have the correct permission, and no additional pages have been added to the list, they will still see the contents of the `/application/errors/offline.php` file once they log in to the site. If you want to disable user logins while the site is offline, set this variable to an empty array. Just make sure you don't log out of the site after setting it offline, or you will have to update the database to get the site back online.
 * Added Constants from CI 3 to `/application/config/constants.php`.
 * CI PR #3303: Fix `Common::get_config()` error in PHP 5.6.
