@@ -14,6 +14,7 @@
 * #565 `render_user_form` in the admin doesnt pass the payload.
 * #1082 Strip '.php' extension from module config files in `config_file_helper`'s `read_config()` function when the file is found by `Modules::file_path()`.
 * #1085 `s` key submits forms automatically
+* #1087 Country dropdown in extended settings doesn't update state dropdown
 
 #### Additional Changes:
 * jwerty:

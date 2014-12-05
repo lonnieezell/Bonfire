@@ -3,6 +3,12 @@
 $errorClass = isset($errorClass) ? $errorClass : ' error';
 $showDeveloperTab = $this->auth->has_permission('Site.Developer.View');
 $showExtendedSettings = ! empty($extended_settings);
+if ($showExtendedSettings) {
+    $defaultCountry = 'US';
+    $defaultState   = '';
+    $countryFieldId = false;
+    $stateFieldId   = false;
+}
 
 if (validation_errors()) :
 ?>
@@ -289,10 +295,12 @@ if (validation_errors()) :
                                             $this->load->config('address');
                                             $this->load->helper('address');
                                         }
+                                        $stateFieldId = $field['name'];
+                                        $stateValue = isset($settings["ext.{$field['name']}"]) ? $settings["ext.{$field['name']}"] : $defaultState;
                                         $field_control = state_select(
-                                            isset($settings["ext.{$field['name']}"]) ? $settings["ext.{$field['name']}"] : 'CA',
-                                            'CA',
-                                            'US',
+                                            set_value($field['name'], $stateValue),
+                                            $defaultState,
+                                            $defaultCountry,
                                             $field['name'],
                                             'span6 chzn-select'
                                         );
@@ -302,9 +310,11 @@ if (validation_errors()) :
                                             $this->load->config('address');
                                             $this->load->helper('address');
                                         }
+                                        $countryFieldId = $field['name'];
+                                        $countryValue = isset($settings["ext.{$field['name']}"]) ? $settings["ext.{$field['name']}"] : $defaultCountry;
                                         $field_control = country_select(
-                                            set_value($field['name'], isset($settings["ext.{$field['name']}"]) ? $settings["ext.{$field['name']}"] : 'US'),
-                                            'US',
+                                            set_value($field['name'], $countryValue),
+                                            $defaultCountry,
                                             $field['name'],
                                             'span6 chzn-select'
                                         );
@@ -333,6 +343,20 @@ if (validation_errors()) :
                                 endif;
                             endif;
                         endforeach;
+                        if (! empty($countryFieldId) && ! empty($stateFieldId)) {
+                            Assets::add_js(
+                                $this->load->view('users/country_state_js',
+                                    array(
+                                        'country_name' => $countryFieldId,
+                                        'country_value' => $countryValue,
+                                        'state_name' => $stateFieldId,
+                                        'state_value' => $stateValue,
+                                    ),
+                                    true
+                                ),
+                                'inline'
+                            );
+                        }
                         ?>
                     </fieldset>
                 </div>

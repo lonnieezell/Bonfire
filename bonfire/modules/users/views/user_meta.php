@@ -76,14 +76,14 @@ if (! empty($meta_fields)) :
             $countryFieldId = $field['name'];
             $countryValue = isset($user->$field['name']) ? $user->$field['name'] : $defaultCountry;
 ?>
-<div class="control-group<?php echo form_error('country') ? ' error' : ''; ?>">
-    <label class="control-label" for="country"><?php echo lang('user_meta_country'); ?></label>
+<div class="control-group<?php echo form_error($field['name']) ? ' error' : ''; ?>">
+    <label class="control-label" for="<?php echo $field['name']; ?>"><?php echo lang('user_meta_country'); ?></label>
     <div class="controls">
         <?php
         echo country_select(
             set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : $defaultCountry),
             $defaultCountry,
-            'country',
+            $field['name'],
             'span6 chzn-select'
         );
         ?>
