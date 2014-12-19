@@ -1,6 +1,6 @@
 # Coding Conventions
 
-To the extent possible, code should follow the [PHP-FIG PSR-2 Coding Style Guide](http://www.php-fig.org/psr/psr-2/).
+To the extent possible, code should follow the [PHP-FIG PSR-2 Coding Style Guide](http://www.php-fig.org/psr/psr-2/). Documentation of files, classes, methods/functions, and properties/variables should follow the [proposed PSR-5 PHPDoc standards](https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md).
 
 Due to the use of CodeIgniter 2.x (and for backwards compatibility), strict adherence to PSR-2 is not always possible. For example, most classes are not namespaced, most class names are not in StudlyCaps format, and many method names are not in camelCaps format. Fully namespaced, StudlyCaps classes may not be loadable by the CodeIgniter loader, so how a class is to be used must be taken into consideration when following the coding style guide.
 
@@ -102,11 +102,13 @@ BAD:
     }
 
 ### Comment as Needed
-Comments should be used as frequently as needed, but not overdone. If your variable names and method names are descriptive then your code will be understandable without a lot of comments.
+Documentation of files, classes, methods/functions, and properties/variables should follow the [proposed PSR-5 PHPDoc standards](https://github.com/phpDocumentor/fig-standards/blob/master/proposed/phpdoc.md).
+
+Additional comments should be used as frequently as needed, but not overdone. If your variable names and method names are descriptive then your code will be understandable without a lot of comments.
 
 This doesn’t mean don’t comment at all. That’s even worse.
 
-Use comments to
+Use comments to:
 
 - Describe why you are doing something (not how - that’s what the code is for)
 - Separate the logic into self-contained chunks to make finding your place easier.
