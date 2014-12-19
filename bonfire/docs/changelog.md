@@ -18,6 +18,7 @@
 * #1089 Fix error deleting roles for permissions during permission_model->update()
 
 #### Additional Changes:
+* Removed mdash entities in documentation for "Submitting Bug Reports and Feature Requests" and updated link in Readme
 * Profiler now displays boolean values in config section (displayed values are retrieved from the application_lang file, `'bf_profiler_true'` and `'bf_profiler_false'`).
 * Added support for socket connections (prefixed with /) to bfmysqli database driver, similar to mysqli driver socket support in CI3.
 * jwerty (keyboard shortcuts):
