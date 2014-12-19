@@ -91,13 +91,21 @@ class CI_DB_bfmysqli_driver extends CI_DB
      */
     public function db_connect($persistent = false)
     {
-        $hostName = $persistent === true ? "p:{$this->hostname}" : $this->hostname;
+        $hostName = null;
+        $port     = null;
+        $socket   = null;
 
-        if ($this->port != '') {
-            return @mysqli_connect($hostName, $this->username, $this->password, $this->database, (int) $this->port);
+        // Is this a socket path?
+        if ($this->hostname[0] === '/') {
+            $socket = $this->hostname;
+        } else {
+            $hostName = $persistent === true ? "p:{$this->hostname}" : $this->hostname;
+            if (! empty($this->port)) {
+                $port = (int) $this->port;
+            }
         }
 
-        return @mysqli_connect($hostName, $this->username, $this->password, $this->database);
+        return @mysqli_connect($hostName, $this->username, $this->password, $this->database, $port, $socket);
     }
 
     /**

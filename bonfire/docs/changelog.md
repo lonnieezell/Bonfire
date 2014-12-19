@@ -18,11 +18,13 @@
 * #1089 Fix error deleting roles for permissions during permission_model->update()
 
 #### Additional Changes:
+* Profiler now displays boolean values in config section (displayed values are retrieved from the application_lang file, `'bf_profiler_true'` and `'bf_profiler_false'`).
+* Added support for socket connections (prefixed with /) to bfmysqli database driver, similar to mysqli driver socket support in CI3.
 * jwerty (keyboard shortcuts):
     * Updated URL for jwerty.
     * Updated jwerty.js to version 0.3.2.
 * Added `$allowOffline` array to `/application/hooks/App_hooks.php` to configure pages which are allowed to bypass the site offline functionality. As long as `'/users/login'` is in this list, users with the correct permissions will be able to log in and bring the site back online. If a user does not have the correct permission, and no additional pages have been added to the list, they will still see the contents of the `/application/errors/offline.php` file once they log in to the site. If you want to disable user logins while the site is offline, set this variable to an empty array. Just make sure you don't log out of the site after setting it offline, or you will have to update the database to get the site back online.
-* Added Constants from CI 3 to `/application/config/constants.php`.
+* Added Constants from CI 3 to `/application/config/constants.php` (primarily EXIT_* constants).
 * CI PR #3303: Fix `Common::get_config()` error in PHP 5.6.
 * Changed language prefix for emailer module from `em_` to `emailer_`.
 * Application Helper:

@@ -235,7 +235,7 @@ $config['sess_encrypt_cookie']  = false;
 $config['sess_use_database']    = false;
 $config['sess_table_name']		= 'sessions';
 $config['sess_match_ip']        = false;
-$config['sess_match_useragent'] = true;
+$config['sess_match_useragent'] = true; // May duplicate sessions for Safari users when true.
 $config['sess_time_to_update']	= 300;
 
 /*

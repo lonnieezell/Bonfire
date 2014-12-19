@@ -71,9 +71,12 @@ $config['sparks_path'] = '../sparks/';
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-// SITE PATH
+// Paths
 //------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
+// SITE PATH
+//------------------------------------------------------------------------------
 // The path to the root folder that holds the application. This does not have to
 // be the site root folder, or even the folder defined in FCPATH.
 $config['template.site_path']	= FCPATH;
@@ -85,6 +88,10 @@ $config['template.site_path']	= FCPATH;
 // path at all times, to serve as the fall-back for when a theme isn't found.
 // Paths are relative to the FCPATH.
 $config['template.theme_paths'] = array('themes');
+
+//------------------------------------------------------------------------------
+// Layouts
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // DEFAULT LAYOUT
@@ -102,7 +109,11 @@ $config['template.default_layout'] = "index";
 $config['template.ajax_layout'] = 'ajax';
 
 //------------------------------------------------------------------------------
-// USE THEMES?
+// Themes
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+// USE MOBILE THEMES?
 //------------------------------------------------------------------------------
 // When set to true, the Template library will check the user agent during the
 // rendering process, and check the UA against the template.themes (below),
@@ -126,11 +137,8 @@ $config['template.default_theme']	= 'default/';
 $config['template.admin_theme'] = 'admin';
 
 //------------------------------------------------------------------------------
-// PARSE VIEWS
+// Templates
 //------------------------------------------------------------------------------
-// If set to true, views will be parsed via CodeIgniter's parser.
-// If false, views will be considered PHP views only.
-$config['template.parse_views'] = false;
 
 //------------------------------------------------------------------------------
 // MESSAGE TEMPLATE
@@ -152,6 +160,16 @@ EOD;
 //------------------------------------------------------------------------------
 $config['template.breadcrumb_symbol']	= ' : ';
 
+//------------------------------------------------------------------------------
+// Settings
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+// PARSE VIEWS
+//------------------------------------------------------------------------------
+// If set to true, views will be parsed via CodeIgniter's parser.
+// If false, views will be considered PHP views only.
+$config['template.parse_views'] = false;
 
 //------------------------------------------------------------------------------
 // !ASSETS

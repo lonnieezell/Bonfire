@@ -16,9 +16,9 @@
 /**
  * Bonfire Security Class
  *
- * @package   Bonfire\Core\BF_Security
- * @author    Bonfire Dev Team
- * @link      http://cibonfire.com/docs/guides
+ * @package Bonfire\Core\BF_Security
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer
  */
 class BF_Security extends CI_Security
 {
@@ -64,7 +64,7 @@ class BF_Security extends CI_Security
      */
     public function csrf_verify()
     {
-        if ( ! empty($this->ignored_controllers)) {
+        if (! empty($this->ignored_controllers)) {
             global $RTR;
 
             $module = $RTR->fetch_module();
