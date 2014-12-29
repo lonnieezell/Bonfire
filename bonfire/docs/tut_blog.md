@@ -39,12 +39,6 @@ Create a new file in your new `config` folder, called `config.php`.
         'author'      => 'Your Name',
         'homepage'    => 'http://...',
         'version'     => '1.0.1',
-        'menus'       => array(
-            'context' => 'path/to/view',
-        ),
-        'weights'     => array(
-            'context' => 0,
-        ),
     );
 
 
@@ -55,8 +49,6 @@ Not all of these settings will be used for the Blog module, but you should under
 - **author** is your name or the name of your organization/team.
 - **homepage** is the URL to the homepage of your module. Will appear as a link in the installed modules page.
 - **version** is a simple version string.
-- **menu** is an array that lets you specify sub-menus that will appear under each context. It points to a view file within your module that contains a &lt;ul&gt; of your options.
-- **weights** is an array that allows you to order the menu items within the main context navigation. Think of it like the menu is a bowl of water. The heavier the weight (or the larger the value), the farther down the menu it will sink.
 
 ### Setup the Database
 
