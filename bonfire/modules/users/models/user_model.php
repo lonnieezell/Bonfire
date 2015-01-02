@@ -26,19 +26,19 @@
 class User_model extends BF_Model
 {
     /** @var string Name of the users table. */
-	protected $table_name = 'users';
+    protected $table_name = 'users';
 
     /** @var string Name of the user meta table. */
-	protected $meta_table = 'user_meta';
+    protected $meta_table = 'user_meta';
 
     /** @var string Name of the roles table. */
-	protected $roles_table = 'roles';
+    protected $roles_table = 'roles';
 
     /** @var boolean Use soft deletes or not. */
     protected $soft_deletes = true;
 
     /** @var string The date format to use. */
-	protected $date_format = 'datetime';
+    protected $date_format = 'datetime';
 
     /** @var boolean Set the modified time automatically. */
     protected $set_modified = false;
@@ -130,14 +130,14 @@ class User_model extends BF_Model
 
     //--------------------------------------------------------------------------
 
-	/**
-	 * Constructor
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * Constructor
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
     }
 
     //--------------------------------------------------------------------------
@@ -159,22 +159,22 @@ class User_model extends BF_Model
             $this->db->where("{$this->table_name}.deleted !=", 0);
         } else {
             $this->db->where("{$this->table_name}.deleted", 0);
-		}
+        }
 
         return $this->db->count_all_results($this->table_name);
     }
 
-	/**
+    /**
      * Perform a standard delete, but also allow a record to be purged.
-	 *
+     *
      * @param integer $id    The ID of the user to delete.
      * @param boolean $purge If true, the account will be purged from the system.
      * If false, performs a standard delete (with soft-deletes enabled).
-	 *
+     *
      * @return boolean True on success, else false.
-	 */
+     */
     public function delete($id = 0, $purge = false)
-	{
+    {
         // Temporarily store the current setting for soft-deletes.
         $tempSoftDeletes = $this->soft_deletes;
         if ($purge === true) {
@@ -187,7 +187,7 @@ class User_model extends BF_Model
         $this->soft_deletes = $tempSoftDeletes;
 
         return $result;
-		}
+    }
 
     /**
      * Find a user's record and role information.
@@ -197,11 +197,11 @@ class User_model extends BF_Model
      * @return boolean|object An object with the user's information.
      */
     public function find($id = null)
-		{
+    {
         $this->preFind();
 
         return parent::find($id);
-		}
+    }
 
     /**
      * Find all user records and the associated role information.
@@ -215,22 +215,22 @@ class User_model extends BF_Model
         return parent::find_all();
     }
 
-	/**
+    /**
      * Find a single user based on a field/value match, including role information.
-	 *
+     *
      * @param string $field The field to match. If 'both', attempt to find a user
      * with the $value field matching either the username or email.
      * @param string $value The value to search for.
      * @param string $type  The type of where clause to create ('and' or 'or').
-	 *
+     *
      * @return boolean|object An object with the user's info, or false on failure.
-	 */
+     */
     public function find_by($field = null, $value = null, $type = 'and')
-			{
+    {
         $this->preFind();
 
         return parent::find_by($field, $value, $type);
-			}
+    }
 
     /**
      * Create a new user in the database.
@@ -251,74 +251,74 @@ class User_model extends BF_Model
             ) {
                 $data['display_name'] = $data['username'];
             } else {
-				$data['display_name'] = $data['email'];
-			}
-		}
+                $data['display_name'] = $data['email'];
+            }
+        }
 
         // Hash the password.
-		$password = $this->auth->hash_password($data['password']);
+        $password = $this->auth->hash_password($data['password']);
         if (empty($password) || empty($password['hash'])) {
-			return false;
-		}
+            return false;
+        }
 
-		$data['password_hash'] = $password['hash'];
+        $data['password_hash'] = $password['hash'];
 
-		unset($data['password'], $password);
+        unset($data['password'], $password);
 
         // Get the default role if the role_id was not provided.
         if (! isset($data['role_id'])) {
             if (! class_exists('role_model')) {
                 $this->load->model('roles/role_model');
-			}
-			$data['role_id'] = $this->role_model->default_role_id();
-		}
+            }
+            $data['role_id'] = $this->role_model->default_role_id();
+        }
 
-		$id = parent::insert($data);
-		Events::trigger('after_create_user', $id);
+        $id = parent::insert($data);
+        Events::trigger('after_create_user', $id);
 
-		return $id;
+        return $id;
     }
 
-	/**
+    /**
      * Update an existing user. Before saving, it will:
      * - Generate a new password/hash if both password and pass_confirm are provided.
      * - Store the country code.
-	 *
+     *
      * @param integer $id   The user's ID.
-	 * @param array $data An array of key/value pairs to update for the user.
-	 *
+     * @param array $data An array of key/value pairs to update for the user.
+     *
      * @return boolean True if the update succeeded, null on invalid $id, or false
      * on failure.
-	 */
+     */
     public function update($id = null, $data = array())
-		{
+    {
         if (empty($id)) {
             return null;
-		}
+        }
 
         $trigger_data = array(
             'user_id' => $id,
             'data'    => $data,
         );
-		Events::trigger('before_user_update', $trigger_data);
+        Events::trigger('before_user_update', $trigger_data);
 
         // If the password is provided, hash it.
         if (! empty($data['password'])) {
-			$password = $this->auth->hash_password($data['password']);
+            $password = $this->auth->hash_password($data['password']);
             if (empty($password) || empty($password['hash'])) {
-				return false;
-			}
+                return false;
+            }
 
-			$data['password_hash'] = $password['hash'];
+            $data['password_hash'] = $password['hash'];
 
-			unset($data['password'], $password);
-		}
+            unset($data['password'], $password);
+        }
 
         // If the country is passed as 'iso', change it to 'country_iso'.
         if (isset($data['iso'])) {
-			$data['country_iso'] = $data['iso'];
-			unset($data['iso']);
-		}
+            $data['country_iso'] = $data['iso'];
+            unset($data['iso']);
+        }
 
         $result = parent::update($id, $data);
         if ($result) {
@@ -326,8 +326,8 @@ class User_model extends BF_Model
                 'user_id' => $id,
                 'data'    => $data,
             );
-			Events::trigger('after_user_update', $trigger_data);
-		}
+            Events::trigger('after_user_update', $trigger_data);
+        }
 
         return $result;
     }
@@ -336,18 +336,18 @@ class User_model extends BF_Model
     // Other BF_Model Method Overrides.
     //--------------------------------------------------------------------------
 
-	/**
+    /**
      * Extracts the model's fields (except the key and those handled by observers)
      * from the $post_data and returns an array of name => value pairs.
-	 *
+     *
      * @param array $post_data The post data, usually $this->input->post() when
      * called from the controller.
-	 *
+     *
      * @return array An array of name => value pairs containing the prepared data
      * for the model's fields.
-	 */
+     */
     public function prep_data($post_data)
-		{
+    {
         // Take advantage of BF_Model's prep_data() method.
         $data = parent::prep_data($post_data);
 
@@ -356,17 +356,17 @@ class User_model extends BF_Model
         // Only set 'timezone' if one was selected from the 'timezones' select.
         if (! empty($post_data['timezones'])) {
             $data['timezone'] = $post_data['timezones'];
-		}
+        }
 
         // Only set 'password' if a value was provided (so the user's profile can
         // be updated without changing the password).
         if (! empty($post_data['password'])) {
             $data['password'] = $post_data['password'];
-		}
+        }
 
         if ($data['display_name'] === '') {
             unset($data['display_name']);
-		}
+        }
 
         // Convert actions to the proper values.
         if (isset($post_data['restore']) && $post_data['restore']) {
@@ -383,7 +383,7 @@ class User_model extends BF_Model
         } elseif (isset($post_data['deactivate']) && $post_data['deactivate']) {
             // 'deactivate': unset the 'active' flag.
             $data['active'] = 0;
-		}
+        }
 
         return $data;
     }
@@ -392,44 +392,41 @@ class User_model extends BF_Model
     // Roles
     // -------------------------------------------------------------------------
 
-	/**
+    /**
      * Count the number of users that belong to each role.
-	 *
+     *
      * @return boolean|array An array of objects with the name of each role and
      * the number of users in that role, else false.
-	 */
-	public function count_by_roles()
-	{
-		$this->db->select(array(
-                "{$this->roles_table}.role_name",
-				'count(1) as count',
-			))
-			->from($this->table_name)
-            ->join($this->roles_table, "{$this->roles_table}.role_id = {$this->table_name}.role_id", 'left')
-            ->group_by("{$this->roles_table}.role_name");
+     */
+    public function count_by_roles()
+    {
+        $this->db->select(array("{$this->roles_table}.role_name", 'count(1) as count'))
+                 ->from($this->table_name)
+                 ->join($this->roles_table, "{$this->roles_table}.role_id = {$this->table_name}.role_id", 'left')
+                 ->group_by("{$this->roles_table}.role_name");
 
-		$query = $this->db->get();
+        $query = $this->db->get();
         if ($query->num_rows()) {
-			return $query->result();
-		}
+            return $query->result();
+        }
 
         return false;
-		}
+    }
 
-	/**
+    /**
      * Update all users with the current role to have the default role.
-	 *
+     *
      * @param integer $current_role The ID of the role of users which will be set
      * to the default role.
-	 *
+     *
      * @return boolean True on successful update, else false.
-	 */
+     */
     public function set_to_default_role($current_role)
-		{
+    {
         // Is the $current_role the right data type?
         if (! is_int($current_role)) {
             return false;
-		}
+        }
 
         // Get the default role ID.
         if (! class_exists('role_model')) {
@@ -450,50 +447,50 @@ class User_model extends BF_Model
     // Password Methods.
     //--------------------------------------------------------------------------
 
-	/**
+    /**
      * Flag one or more user accounts to require a password reset on the user's
      * next login.
-	 *
+     *
      * @param integer $user_id The ID of the user to flag for password reset.
-	 *
+     *
      * @return boolean True if the account was updated successfully, else false.
-	 */
+     */
     public function force_password_reset($user_id = null)
-		{
+    {
         if (! empty($user_id) && is_numeric($user_id)) {
-			$this->db->where('id', $user_id);
-		}
+            $this->db->where('id', $user_id);
+        }
 
-		return $this->db->set('force_password_reset', 1)->update($this->table_name);
-	}
+        return $this->db->set('force_password_reset', 1)->update($this->table_name);
+    }
 
-	/**
-	 * Generates a new password hash for the given password.
-	 *
-	 * @param string $old The password to hash.
+    /**
+     * Generates a new password hash for the given password.
+     *
+     * @param string $old The password to hash.
      * @param integer $iterations    The number of iterations to use in generating the hash
-	 *
-	 * @return array An array with the hashed password and the number of iterations, or false
-	 */
+     *
+     * @return array An array with the hashed password and the number of iterations, or false
+     */
     public function hash_password($old = '', $iterations = 0)
-	{
-		$password = $this->auth->hash_password($old, $iterations);
+    {
+        $password = $this->auth->hash_password($old, $iterations);
         if (empty($password) || empty($password['hash'])) {
-			return false;
-		}
+            return false;
+        }
 
-		return array($password['hash'], $password['iterations']);
-		}
+        return array($password['hash'], $password['iterations']);
+    }
 
-	/**
+    /**
      * Helper Method for Generating Password Hints based on Settings library.
-	 *
+     *
      * Call this method in the controller and echo $password_hints in the view.
-	 *
+     *
      * @return void
-	 */
+     */
     public function password_hints()
-	{
+    {
         $message = array(
             sprintf(
                 lang('bf_password_min_length_help'),
@@ -507,7 +504,7 @@ class User_model extends BF_Model
 
         if ($this->settings_lib->item('auth.password_force_symbols') == 1) {
             $message[] = lang('bf_password_symbols_required_help');
-		}
+        }
 
         if ($this->settings_lib->item('auth.password_force_mixed_case') == 1) {
             $message[] = lang('bf_password_caps_required_help');
@@ -519,24 +516,24 @@ class User_model extends BF_Model
     }
 
     //--------------------------------------------------------------------------
-	// !META METHODS
+    // !META METHODS
     //--------------------------------------------------------------------------
 
-	/**
+    /**
      * Retrieve all meta values defined for a user.
-	 *
+     *
      * @param integer $user_id The ID of the user for which the meta will be retrieved.
      * @param array   $fields  The meta_key names to retrieve.
-	 *
+     *
      * @return stdClass An object with the key/value pairs, or an empty object.
-	 */
+     */
     public function find_meta_for($user_id = null, $fields = null)
-		{
+    {
         // Is $user_id the right data type?
         if (! is_numeric($user_id)) {
-			$this->error = lang('us_invalid_user_id');
+            $this->error = lang('us_invalid_user_id');
             return new stdClass();
-		}
+        }
 
         // Limiting to certain fields?
         if (! empty($fields) && is_array($fields)) {
@@ -547,7 +544,7 @@ class User_model extends BF_Model
                           ->get($this->meta_table);
         if (! $query->num_rows()) {
             return new stdClass();
-			}
+        }
 
         $result = new stdClass();
         foreach ($query->result() as $row) {
@@ -555,67 +552,67 @@ class User_model extends BF_Model
             $result->$key = $row->meta_value;
         }
 
-		return $result;
+        return $result;
     }
 
-	/**
+    /**
      * Locate a single user and the user's meta information.
-	 *
+     *
      * @param integer $user_id The ID of the user to fetch.
-	 *
+     *
      * @return boolean|object An object with the user's profile and meta information,
      * or false on failure.
-	 */
+     */
     public function find_user_and_meta($user_id = null)
-		{
+    {
         // Is $user_id the right data type?
         if (! is_numeric($user_id)) {
-			$this->error = lang('us_invalid_user_id');
+            $this->error = lang('us_invalid_user_id');
             return false;
-		}
+        }
 
         // Does a user with this $user_id exist?
         $result = $this->find($user_id);
         if (! $result) {
             $this->error = lang('us_invalid_user_id');
             return false;
-		}
+        }
 
         // Get the meta data for this user and join it to the user profile data.
-		$this->db->where('user_id', $user_id);
-		$query = $this->db->get($this->meta_table);
+        $this->db->where('user_id', $user_id);
+        $query = $this->db->get($this->meta_table);
         if ($query->num_rows()) {
             foreach ($query->result() as $row) {
-				$key = $row->meta_key;
-				$result->$key = $row->meta_value;
-			}
-		}
+                $key = $row->meta_key;
+                $result->$key = $row->meta_value;
+            }
+        }
 
-		return $result;
+        return $result;
     }
 
-	/**
+    /**
      * Save one or more key/value pairs of meta information for a user.
-	 *
+     *
      * @example
      * $data = array(
      *    'location'    => 'That City, Katmandu',
      *    'interests'   => 'My interests'
      * );
      * $this->user_model->save_meta_for($user_id, $data);
-	 *
+     *
      * @param integer $user_id The ID of the user for which to save the meta data.
      * @param array   $data    An array of key/value pairs to save.
-	 *
+     *
      * @return boolean True on success, else false.
-	 */
+     */
     public function save_meta_for($user_id = null, $data = array())
-		{
+    {
         // Is $user_id the right data type?
         if (! is_numeric($user_id)) {
-			$this->error = lang('us_invalid_user_id');
+            $this->error = lang('us_invalid_user_id');
             return false;
-		}
+        }
 
         // If there's no data, get out of here.
         if (empty($data)) {
@@ -647,8 +644,8 @@ class User_model extends BF_Model
             // Count the number of successful insert/update results.
             if ($result) {
                 ++$successCount;
-			}
-		}
+            }
+        }
 
         if ($successCount == count($data)) {
             return true;
@@ -658,69 +655,69 @@ class User_model extends BF_Model
     }
 
     //--------------------------------------------------------------------------
-	// !ACTIVATION
+    // !ACTIVATION
     //--------------------------------------------------------------------------
 
-	/**
+    /**
      * Accepts an activation code and validates against a matching entry in the database.
-	 *
+     *
      * There are some instances where the activation hash should be removed but
      * the user should be left inactive (e.g. Admin Activation), so $leave_inactive
      * enables that use case.
-	 *
+     *
      * @param int    $user_id        The user to be activated (null will match any).
      * @param string $code           The activation code to be verified.
      * @param bool   $leave_inactive Flag whether to remove the activate hash value,
      * but leave active = 0.
-	 *
+     *
      * @return int User Id on success, false on error.
-	 */
+     */
     public function activate($user_id, $code, $leave_inactive = false)
-		{
+    {
         if ($user_id) {
-			$this->db->where('id', $user_id);
-		}
+            $this->db->where('id', $user_id);
+        }
 
-		$query = $this->db->select('id')
-		                  ->where('activate_hash', $code)
-		                  ->get($this->table_name);
+        $query = $this->db->select('id')
+                          ->where('activate_hash', $code)
+                          ->get($this->table_name);
 
         if ($query->num_rows() !== 1) {
-		    $this->error = lang('us_err_no_matching_code');
+            $this->error = lang('us_err_no_matching_code');
             return false;
-		}
+        }
 
-		// Now we can find the $user_id, even if it was passed as NULL
-		$result = $query->row();
-		$user_id = $result->id;
+        // Now we can find the $user_id, even if it was passed as NULL
+        $result = $query->row();
+        $user_id = $result->id;
 
         $active = $leave_inactive === false ? 1 : 0;
         if ($this->update($user_id, array('activate_hash' => '', 'active' => $active))) {
-			return $user_id;
-		}
+            return $user_id;
+        }
 
         return false;
     }
 
-	/**
+    /**
      * This function is triggered during account setup to ensure user is not active
      * and, if not supressed, generate an activation hash code. This function can
      * be used to deactivate accounts based on public view events.
-	 *
-	 * @param int    $user_id    The username or email to match to deactivate
-	 * @param string $login_type Login Method
-	 * @param bool   $make_hash  Create a hash
-	 *
+     *
+     * @param int    $user_id    The username or email to match to deactivate
+     * @param string $login_type Login Method
+     * @param bool   $make_hash  Create a hash
+     *
      * @return mixed $activate_hash on success, false on error
-	 */
+     */
     public function deactivate($user_id, $make_hash = true)
-	{
-		// create a temp activation code.
+    {
+        // create a temp activation code.
         $activate_hash = '';
         if ($make_hash === true) {
-			$this->load->helpers(array('string', 'security'));
-			$activate_hash = do_hash(random_string('alnum', 40) . time());
-		}
+            $this->load->helper('string');
+            $activate_hash = sha1(random_string('alnum', 40) . time());
+        }
 
         $this->db->update(
             $this->table_name,
@@ -730,67 +727,67 @@ class User_model extends BF_Model
 
         if ($this->db->affected_rows() != 1) {
             return false;
-		}
+        }
 
         return $make_hash ? $activate_hash : true;
     }
 
-	/**
-	 * Admin specific activation function for admin approvals or re-activation.
-	 *
+    /**
+     * Admin specific activation function for admin approvals or re-activation.
+     *
      * @param int $user_id The user ID to activate.
-	 *
+     *
      * @return bool True on success, false on error.
-	 */
+     */
     public function admin_activation($user_id = false)
-		{
+    {
         if ($user_id === false) {
-			$this->error = lang('us_err_no_id');
+            $this->error = lang('us_err_no_id');
             return false;
-	    }
+        }
 
-		$query = $this->db->select('id')
-               	      ->where('id', $user_id)
-               	      ->limit(1)
-               	      ->get($this->table_name);
+        $query = $this->db->select('id')
+                      ->where('id', $user_id)
+                      ->limit(1)
+                      ->get($this->table_name);
 
         if ($query->num_rows() !== 1) {
-		    $this->error = lang('us_err_no_matching_id');
+            $this->error = lang('us_err_no_matching_id');
             return false;
-		}
+        }
 
-		$result = $query->row();
+        $result = $query->row();
 
         $this->update($result->id, array('activate_hash' => '', 'active' => 1));
         if ($this->db->affected_rows() > 0) {
-			return $result->id;
-		}
+            return $result->id;
+        }
 
-			$this->error = lang('us_err_user_is_active');
+            $this->error = lang('us_err_user_is_active');
         return false;
-		}
+    }
 
-	/**
-	 * Admin only deactivation function.
-	 *
+    /**
+     * Admin only deactivation function.
+     *
      * @param int $user_id The user ID to deactivate.
-	 *
+     *
      * @return boolean True on success, false on error.
-	 */
+     */
     public function admin_deactivation($user_id = false)
-		{
+    {
         if ($user_id === false) {
-			$this->error = lang('us_err_no_id');
+            $this->error = lang('us_err_no_id');
             return false;
-	    }
+        }
 
         if ($this->deactivate($user_id, 'id', false)) {
-			return $user_id;
-		}
+            return $user_id;
+        }
 
-			$this->error = lang('us_err_user_is_inactive');
+            $this->error = lang('us_err_user_is_inactive');
         return false;
-		}
+    }
 
     /**
      * Count Inactive users.
@@ -814,7 +811,7 @@ class User_model extends BF_Model
     public function set_activation($user_id)
     {
         // User activation method
-		$activation_method = $this->settings_lib->item('auth.user_activation_method');
+        $activation_method = $this->settings_lib->item('auth.user_activation_method');
 
         // Prepare user messaging vars
         $emailMsgData   = array();
@@ -838,14 +835,13 @@ class User_model extends BF_Model
                 );
 
                 $emailView  = '_emails/activated';
-                $message 	.= lang('us_account_active_login');
+                $message    .= lang('us_account_active_login');
 
                 $emailMsgData = array(
                     'title' => $site_title,
                     'link'  => site_url(),
                 );
                 break;
-
             case 1:
                 // Email Activiation.
                 // Run the account deactivate to assure everything is set correctly.
@@ -863,7 +859,6 @@ class User_model extends BF_Model
                     'link'  => $activate_link
                 );
                 break;
-
             case 2:
                 // Admin Activation.
                 $ccAdmin   = true;
@@ -882,9 +877,9 @@ class User_model extends BF_Model
         // Now send the email
         $this->load->library('emailer/emailer');
         $data = array(
-            'to'		=> $this->find($user_id)->email,
-            'subject'	=> $subject,
-            'message'	=> $email_mess,
+            'to'        => $this->find($user_id)->email,
+            'subject'   => $subject,
+            'message'   => $email_mess,
         );
 
         if ($this->emailer->send($data)) {
