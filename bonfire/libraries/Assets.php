@@ -113,8 +113,8 @@ class Assets
 
         // @todo Update this to remove the check for 'assets.base_folder' once
         // it can be safely assumed that the item should no longer be present
-        if (self::$ci->config->item('assets.base_folder') === false
-            && self::$ci->config->item('assets.directories') === false
+        if (empty(self::$ci->config->item('assets.base_folder'))
+            && empty(self::$ci->config->item('assets.directories'))
         ) {
             self::$ci->config->load('application');
         }
