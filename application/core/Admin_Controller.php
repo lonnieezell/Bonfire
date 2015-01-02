@@ -67,12 +67,7 @@ class Admin_Controller extends Authenticated_Controller
                 && $this->auth->has_permission('Bonfire.Profiler.View')
             ) {
                 // Profiler bar?
-                if (! $this->input->is_cli_request()
-                    && ! $this->input->is_ajax_request()
-                ) {
-                    $this->load->library('Console');
-                    $this->output->enable_profiler(true);
-                }
+                $this->showProfiler(false);
             }
         }
 
