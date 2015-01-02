@@ -43,7 +43,7 @@ class Docs extends Base_Controller
         }
 
         // Was a doc group provided?
-        if ( ! $this->docsGroup) {
+        if (! $this->docsGroup) {
             redirect('docs/' . config_item('docs.default_group'));
         }
 
@@ -53,13 +53,12 @@ class Docs extends Base_Controller
 
         // Make sure we can still get to the search method.
         if ($this->docsGroup == 'search') {
-           $this->docsGroup = false;
-        }
-        // Are we allowed to show developer docs in this environment?
-        elseif ($this->docsGroup == 'developer'
-                && ! $this->showDevDocs
-                && ENVIRONMENT != 'development'
+            $this->docsGroup = false;
+        } elseif ($this->docsGroup == 'developer'
+            && ! $this->showDevDocs
+            && ENVIRONMENT != 'development'
         ) {
+            // Are we allowed to show developer docs in this environment?
             if ($this->showAppDocs) {
                 Template::set_message(lang('docs_not_allowed_dev'), 'warning');
 
@@ -73,8 +72,6 @@ class Docs extends Base_Controller
 
         $this->load->helper('form');
     }
-
-    //--------------------------------------------------------------------
 
     /**
      * Display the list of documents available and the current document
@@ -174,7 +171,7 @@ class Docs extends Base_Controller
      */
     private function get_folder_files($folder, $type, $ignoredFolders = array())
     {
-        if ( ! is_dir($folder)) {
+        if (! is_dir($folder)) {
             return array();
         }
 
@@ -211,7 +208,7 @@ class Docs extends Base_Controller
 
             // If $files isn't an array, then make it one so that all situations
             // may be dealt with cleanly.
-            if ( ! is_array($files)) {
+            if (! is_array($files)) {
                 $files = array($files);
             }
 
@@ -237,8 +234,6 @@ class Docs extends Base_Controller
         return $toc;
     }
 
-    //--------------------------------------------------------------------
-
     /**
      * Checks all modules to see if they include docs and prepares their doc
      * information for use in the sidebar.
@@ -255,9 +250,8 @@ class Docs extends Base_Controller
             // If these are developer docs, add the folder to the path.
             if ($this->docsGroup == $this->docsTypeBf) {
                 $path .= '/' . $this->docsTypeBf;
-            }
-            // For Application docs, ignore the 'developers' folder.
-            else {
+            } else {
+                // For Application docs, ignore the 'developers' folder.
                 $ignored_folders[] = $this->docsTypeBf;
             }
 
@@ -285,7 +279,7 @@ class Docs extends Base_Controller
         $defaultType = $this->docsTypeApp;
 
         // Strip the controller name
-        if ($segments[1] == $this->router->fetch_class()) {
+        if ($segments[1] == $this->router->class) {
             array_shift($segments);
         }
 
@@ -313,7 +307,6 @@ class Docs extends Base_Controller
             case $this->docsTypeBf:
                 $content = is_file(BFPATH . $this->docsDir . '/' . $file) ? file_get_contents(BFPATH . $this->docsDir . '/' . $file) : '';
                 break;
-
             case $this->docsTypeApp:
                 $content = is_file(APPPATH . $this->docsDir . '/' . $file) ? file_get_contents(APPPATH . $this->docsDir . '/' . $file) : '';
                 break;
@@ -371,7 +364,7 @@ class Docs extends Base_Controller
             $href = $link->attributes()->href;
 
             // If the href is null, it's probably a named anchor with no content.
-            if ( ! $href) {
+            if (! $href) {
                 // Make sure it has an href, else the XML will not close this
                 // tag correctly.
                 $link['href'] = ' ';

@@ -293,7 +293,7 @@ class CI_Profiler
      */
     protected function _compile_controller_info()
     {
-        return $this->CI->router->fetch_class() . '/' . $this->CI->router->fetch_method();
+        return $this->CI->router->class . '/' . $this->CI->router->fetch_method();
     }
 
     /**

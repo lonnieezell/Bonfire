@@ -68,7 +68,7 @@ class BF_Security extends CI_Security
             global $RTR;
 
             $module = $RTR->fetch_module();
-            $controller = $RTR->fetch_class();
+            $controller = $RTR->class;
 
             $path = empty($module) ? $controller : "{$module}/{$controller}";
 

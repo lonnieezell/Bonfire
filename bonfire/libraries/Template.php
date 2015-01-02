@@ -860,7 +860,7 @@ function theme_view($view = null, $data = null, $ignore_mobile = false)
  */
 function check_class($item = '', $class_only = false)
 {
-    if (strtolower(get_instance()->router->fetch_class()) == strtolower($item)) {
+    if (strtolower(get_instance()->router->class) == strtolower($item)) {
 		return $class_only ? 'active' : 'class="active"';
 	}
 

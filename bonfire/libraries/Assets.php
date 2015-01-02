@@ -225,7 +225,7 @@ class Assets
         if ($bypassModule == false) {
             // Add a style named for the controller so it will be looked for.
             $styles[] = array(
-                'file'  => self::$ci->router->fetch_class(),
+                'file'  => self::$ci->router->class,
                 'media' => $media,
             );
 
@@ -308,7 +308,7 @@ class Assets
             $theme = trim(Template::get('default_theme'), '/');
         }
 
-        $fileName = "{$theme}_" . self::$ci->router->fetch_module() . '_' . self::$ci->router->fetch_class();
+        $fileName = "{$theme}_" . self::$ci->router->fetch_module() . '_' . self::$ci->router->class;
         if (self::$ci->config->item('assets.encrypt_name') == true) {
             $fileName = md5($fileName);
         }
@@ -577,7 +577,7 @@ class Assets
         }
 
         // Add a style named for the controller so it will be looked for.
-        $scripts[] = self::$ci->router->fetch_class();
+        $scripts[] = self::$ci->router->class;
 
         // Prep scripts array with only files that can actually be found.
         $scripts = self::find_files($scripts, 'js');
@@ -719,7 +719,7 @@ class Assets
         $theme = Template::theme();
 
         // Get the class name, module name, and uri segments
-        $className   = self::$ci->router->fetch_class();
+        $className   = self::$ci->router->class;
         $moduleName  = self::$ci->router->fetch_module();
         $uriSegments = self::$ci->uri->segment_array();
 

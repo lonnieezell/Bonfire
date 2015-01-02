@@ -89,7 +89,7 @@ class Modules
             }
 
             // Set the module directory.
-            $path = APPPATH . 'controllers/' . CI::$APP->router->fetch_directory();
+            $path = APPPATH . 'controllers/' . CI::$APP->router->directory;
 
             // Load the controller class.
             $class = $class . CI::$APP->config->item('controller_suffix');
@@ -98,7 +98,7 @@ class Modules
             // Create and register the new controller.
             $controller = ucfirst($class);
             self::$registry[$alias] = new $controller($params);
-    }
+        }
 
         return self::$registry[$alias];
     }
@@ -242,7 +242,7 @@ class Modules
             if (list($path) = self::find('routes', $module, 'config/') and $path) {
                 self::$routes[$module] = self::load_file('routes', $path, 'route');
             }
-    }
+        }
 
         if (! isset(self::$routes[$module])) {
             return;
@@ -256,12 +256,12 @@ class Modules
             if (preg_match('#^'.$key.'$#', $uri)) {
                 if (strpos($val, '$') !== false and strpos($key, '(') !== false) {
                     $val = preg_replace('#^'.$key.'$#', $val, $uri);
-        }
+                }
 
                 return explode('/', "{$module}/{$val}");
-                }
             }
         }
+    }
 
     /**
      * Determines whether a controller exists for a module.
@@ -369,7 +369,7 @@ class Modules
             if (empty($module_name)) {
                 $modules = directory_map($path);
             } elseif (is_dir($path . $module_name)) {
-            // Only map the $module_name directory if it exists
+                // Only map the $module_name directory if it exists
                 $path = $path . $module_name;
                 $modules[$module_name] = directory_map($path);
             }
@@ -386,9 +386,9 @@ class Modules
                         // Add the entire module
                         $files[$mod_name] = $values;
                     } elseif (isset($values[$module_folder])
-                              && count($values[$module_folder])
+                        && count($values[$module_folder])
                     ) {
-                    // Add just the specified folder for this module
+                        // Add just the specified folder for this module
                         $files[$mod_name] = array(
                             $module_folder  => $values[$module_folder],
                         );
