@@ -5,6 +5,7 @@
 ### 0.7.2
 
 #### New Features:
+* Uses bfmysqli database driver (a modified version of the mysqli driver) by default.
 
 #### Closes Issues:
 * #337 Can not login to admin when site is turned off (previously closed as non-issue, now fixed).
@@ -18,6 +19,14 @@
 * #1089 Fix error deleting roles for permissions during permission_model->update()
 
 #### Additional Changes:
+* Improved support for CI 3:
+    * Renamed library and model files to uppercase first letter.
+    * Added support for loading model files named with uppercase first letter.
+    * Accept null or false return from `config->item()` when config file has not been loaded.
+    * Replaced use of `router->fetch_directory()` and `router->fetch_class()` with `router->directory` and `router->class`, respectively.
+    * Replaced `random_string('unique', ...)` with `random_string('md5',...)`.
+    * Replaced `read_file()` with `file_get_contents()`.
+    * Replaced `do_hash()` with `sha1()`.
 * Removed mdash entities in documentation for "Submitting Bug Reports and Feature Requests" and updated link in Readme
 * Profiler now displays boolean values in config section (displayed values are retrieved from the application_lang file, `'bf_profiler_true'` and `'bf_profiler_false'`).
 * Added support for socket connections (prefixed with /) to bfmysqli database driver, similar to mysqli driver socket support in CI3.
