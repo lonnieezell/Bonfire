@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  */
@@ -33,34 +33,22 @@ class Installer_lib
     public $mysql_server_version;
     public $mysql_client_version;
 
-    /**
-     * @var string The version of the currently running PHP parser or extension
-     */
+    /** @var string The version of the currently running PHP parser or extension. */
     public $php_version;
 
-    /**
-     * @var CI The CodeIgniter controller instance
-     */
+    /** @var CI The CodeIgniter controller instance. */
     private $ci;
 
-    /**
-     * @var mixed Check whether cURL is enabled in PHP
-     */
+    /** @var mixed Check whether cURL is enabled in PHP. */
     private $curl_error = 0;
 
-    /**
-     * @var mixed Whether we should check for updates
-     */
+    /** @var mixed Whether we should check for updates. */
     private $curl_update = 0;
 
-    /**
-     * @var string[] Supported database engines
-     */
-    private $supported_dbs = array('mysql', 'mysqli');
+    /** @var string[] Supported database engines. */
+    private $supported_dbs = array('mysql', 'mysqli', 'bfmysqli');
 
-    /**
-     * @var string[] Folders the installer checks for write access
-     */
+    /** @var string[] Folders the installer checks for write access. */
     private $writable_folders = array(
         'application/cache',
         'application/logs',
@@ -70,15 +58,13 @@ class Installer_lib
         'public/assets/cache',
     );
 
-    /**
-     * @var string[] Files the installer checks for write access
-     */
+    /** @var string[] Files the installer checks for write access. */
     private $writable_files = array(
         'application/config/application.php',
         'application/config/database.php',
     );
 
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Constructor
@@ -90,29 +76,27 @@ class Installer_lib
     public function __construct($config = array())
     {
         $this->ci =& get_instance();
-
         $this->curl_update = $this->cURL_enabled();
     }
 
     /**
-     * Determine whether the installed version of PHP is above $version
+     * Determine whether the installed version of PHP is above $version.
      *
-     * @param string $version The version to compare to the installed version
+     * @param string $version The version to compare to the installed version.
      *
-     * @return bool    true if the installed version is at or above $version,
-     * else false
+     * @return boolean True if the installed version is at or above $version, else
+     * false.
      */
     public function php_acceptable($version = null)
     {
         $this->php_version = phpversion();
-
         return version_compare($this->php_version, $version, '>=');
     }
 
     /**
-     *  Tests whether the specified database type can be found.
+     * Tests whether the specified database type can be found.
      *
-     * @return  boolean
+     * @return boolean
      */
     public function db_available()
     {
@@ -121,6 +105,8 @@ class Installer_lib
         switch ($driver) {
             case 'mysql':
                 return function_exists('mysql_connect');
+            case 'bfmysqli':
+                // no break;
             case 'mysqli':
                 return class_exists('Mysqli');
             case 'cubrid':
@@ -151,7 +137,7 @@ class Installer_lib
     /**
      *  Attempts to connect to the database given the existing $_POST vars.
      *
-     * @return  boolean
+     * @return boolean
      */
     public function test_db_connection()
     {
@@ -169,6 +155,8 @@ class Installer_lib
         switch ($driver) {
             case 'mysql':
                 return @mysql_connect("$hostname:$port", $username, $password);
+            case 'bfmysqli':
+                // no break;
             case 'mysqli':
                 $mysqli = new mysqli($hostname, $username, $password, '', $port);
                 if (! $mysqli->connect_error) {
@@ -233,10 +221,10 @@ class Installer_lib
     }
 
     /**
-     * Perform some basic checks to see if the user has already installed the
-     * application and just hasn't moved the install folder...
+     * Perform some basic checks to see if the user has already installed the application
+     * and just hasn't moved the install folder...
      *
-     * @return bool    true if the application is installed, else false
+     * @return boolean True if the application is installed, else false.
      */
     public function is_installed()
     {
@@ -285,9 +273,9 @@ class Installer_lib
     }
 
     /**
-     * Verify that cURL is enabled as a PHP extension
+     * Verify that cURL is enabled as a PHP extension.
      *
-     * @return bool    true if cURL is enabled, else false
+     * @return boolean True if cURL is enabled, else false.
      */
     public function cURL_enabled()
     {
@@ -298,9 +286,9 @@ class Installer_lib
      * Check an array of folders to see if they are writable and return results
      * in a format usable in the requirements check step.
      *
-     * @param string[] $folders the folders to check
+     * @param string[] $folders the folders to check.
      *
-     * @return  array
+     * @return array
      */
     public function check_folders($folders = null)
     {
@@ -331,9 +319,9 @@ class Installer_lib
      * Check an array of files to see if they are writable and return results
      * usable in the requirements check step.
      *
-     * @param string[] $files The files to check
+     * @param string[] $files The files to check.
      *
-     * @return  array
+     * @return array
      */
     public function check_files($files = null)
     {
@@ -361,10 +349,10 @@ class Installer_lib
     }
 
     /**
-     * Performs the actual installation of the database, creates the config
-     * files, and installs the user account.
+     * Perform the actual installation of the database, creates the config files,
+     * and install the user account.
      *
-     * @return  string|bool
+     * @return string|bool
      */
     public function setup()
     {
@@ -475,14 +463,14 @@ class Installer_lib
         return true;
     }
 
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // !Private Methods
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
-     * Get the versions of the modules
+     * Get the versions of the modules.
      *
-     * @return array    The installed/latest versions of each module
+     * @return array The installed/latest versions of each module.
      */
     private function get_module_versions()
     {
@@ -528,7 +516,7 @@ class Installer_lib
      * @param string $password Password
      * @param string $db_name  The name of the database to connect to
      *
-     * @return string    The connection string used to connect to the database
+     * @return string The connection string used to connect to the database
      */
     private function get_mongo_connection_string($hostname, $port = '', $username = '', $password = '', $db_name = '')
     {
@@ -560,7 +548,7 @@ class Installer_lib
      * @param string $password Password
      * @param string $db_name  The name of the database to connect to
      *
-     * @return string    The connection string used to connect to the database
+     * @return string The connection string used to connect to the database
      */
     private function get_postgre_connection_string($hostname, $port = '', $username = '', $password = '', $db_name = '')
     {
