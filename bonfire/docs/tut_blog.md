@@ -408,7 +408,7 @@ Then we need to add the ```deletePosts()``` method to loop through the list of p
             if ((count($postIds) - $failed) > 0) {
                 log_activity(
                     $this->auth->user_id(),
-                    'Deleted ' . count($postIds) . ' post(s) : ' $this->input->ip_address(),
+                    'Deleted ' . count($postIds) . ' post(s) : ' . $this->input->ip_address(),
                     'blog'
                 );
             }
