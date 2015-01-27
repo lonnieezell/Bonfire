@@ -516,17 +516,17 @@ Now, let's make it functional. In your `post_model`, we need to let it know what
             array(
                 'field' => 'title',
                 'label' => 'Title',
-                'rules' => 'trim|strip_tags|xss_clean'
+                'rules' => 'trim|strip_tags'
             ),
             array(
                 'field' => 'slug',
                 'label' => 'Slug',
-                'rules' => 'trim|strip_tags|xss_clean'
+                'rules' => 'trim|strip_tags'
             ),
             array(
                 'field' => 'body',
                 'label' => 'Body',
-                'rules' => 'trim|strip_tags|xss_clean'
+                'rules' => 'trim|strip_tags'
             )
         );
 

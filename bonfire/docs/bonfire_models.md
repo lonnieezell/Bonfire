@@ -720,7 +720,7 @@ The `$validation_rules` variable can take an array of data that follows the same
         array(
             'field' => 'username',
             'label' => 'Username',
-            'rules' => 'trim|strip_tags|min_length[4]|xss_clean'
+            'rules' => 'trim|strip_tags|min_length[4]'
         ),
         array(
             'field' => 'password',

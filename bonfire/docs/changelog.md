@@ -19,6 +19,7 @@
 * #1089 Fix error deleting roles for permissions during permission_model->update()
 
 #### Additional Changes:
+* Upgraded CI to v2.2.1
 * Improved support for CI 3:
     * Renamed library and model files to uppercase first letter.
     * Added support for loading model files named with uppercase first letter.

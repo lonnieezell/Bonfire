@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  */
@@ -39,13 +39,15 @@ class BF_Security extends CI_Security
     {
         parent::__construct();
 
+        // Get config value indicating controllers which should be ignored when
+        // applying CSRF protection.
         $this->ignored_controllers = config_item('csrf_ignored_controllers');
     }
 
     /**
-     * Show CSRF Error
+     * Show CSRF Error.
      *
-     * Override the csrf_show_error method to improve the error message
+     * Override the csrf_show_error method to improve the error message.
      *
      * @return void
      */
@@ -55,12 +57,12 @@ class BF_Security extends CI_Security
     }
 
     /**
-     * Verify Cross Site Request Forgery Protection
+     * Verify Cross Site Request Forgery Protection.
      *
-     * Override the csrf_verify method to allow us to set controllers and
-     * modules to override.
+     * Override the csrf_verify method to allow us to set controllers and modules
+     * to override.
      *
-     * @return object   Returns $this to allow method chaining
+     * @return object Returns $this to allow method chaining.
      */
     public function csrf_verify()
     {
