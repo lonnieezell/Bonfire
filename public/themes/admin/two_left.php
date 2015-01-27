@@ -12,16 +12,18 @@ echo theme_view('header');
 
 ?>
 <div class="body">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row-fluid">
             <div class="span2">
                 <?php Template::block('sidebar'); ?>
             </div>
             <div class="span10">
-                <?php
-                echo Template::message();
-                echo isset($content) ? $content : Template::content();
-                ?>
+                <div class="well">
+                    <?php echo Template::message(); ?>
+                    <?php
+                    echo isset($content) ? $content : Template::content();
+                    ?>
+                </div>
             </div>
         </div>
     </div>

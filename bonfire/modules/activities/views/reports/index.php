@@ -13,22 +13,9 @@ $activitiesReportsPage = SITE_AREA . '/reports/activities';
 $activitiesReportsUrl = site_url($activitiesReportsPage);
 
 ?>
-<style>
-.row.icons {
-    margin-bottom: 20px;
-}
-td.button-column {
-    text-align: right;
-}
-td.button-column,
-td.label-column,
-td.button-column button {
-    width: 20em;
-}
-</style>
-<div class="row icons">
+<div class="row-fluid">
     <?php if ($hasPermissionViewOwn) : ?>
-	<div class="column size1of4 media-box">
+	<div class="span3">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['own']}"; ?>'>
             <span class="fa fa-user muted fa-3x pull-left"></span>
         </a>
@@ -40,7 +27,7 @@ td.button-column button {
     endif;
     if ($hasPermissionViewUser) :
     ?>
-    <div class="column size1of4 media-box">
+    <div class="span3">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['user']}"; ?>'>
             <span class="fa fa-users muted fa-3x pull-left"></span>
         </a>
@@ -52,7 +39,7 @@ td.button-column button {
     endif;
     if ($hasPermissionViewModule) :
     ?>
-    <div class="column size1of4 media-box">
+    <div class="span3">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['module']}"; ?>'>
             <span class="fa fa-puzzle-piece muted fa-3x pull-left"></span>
         </a>
@@ -64,7 +51,7 @@ td.button-column button {
     endif;
     if ($hasPermissionViewDate) :
     ?>
-    <div class="column size1of4 media-box">
+    <div class="span3">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['date']}"; ?>'>
 			<span class="fa fa-calendar muted fa-3x pull-left"></span>
 		</a>
@@ -74,8 +61,8 @@ td.button-column button {
 	</div>
 	<?php endif; ?>
 </div>
-<div class="row">
-	<div class="column size1of2">
+<div class="row-fluid">
+	<div class="span6">
 		<!-- Active Modules -->
 		<div class="admin-box">
 			<h3><?php echo lang('activities_top_modules'); ?></h3>
@@ -101,7 +88,7 @@ td.button-column button {
             <?php endif; ?>
 		</div>
 	</div>
-	<div class="column size1of2 last-column">
+	<div class="span6">
 		<div class="admin-box">
 			<!-- Active Users -->
 			<h3><?php echo lang('activities_top_users'); ?></h3>
@@ -151,8 +138,8 @@ td.button-column button {
                             <option value="<?php echo $current_user->id; ?>"><?php e($current_user->username); ?></option>
                         </select>
                     </td>
-                    <td class='button-column'>
-                        <button type="button" class="btn btn-danger" id="delete-activity_own"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_own_delete'); ?></button>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-block" id="delete-activity_own"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_own_delete'); ?></button>
                     </td>
                 <?php echo form_close(); ?>
             </tr>
@@ -172,8 +159,8 @@ td.button-column button {
                             <?php endforeach; ?>
                         </select>
                     </td>
-                    <td class='button-column'>
-                        <button type="button" class="btn btn-danger" id="delete-activity_user"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_user_delete'); ?></button>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-block" id="delete-activity_user"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_user_delete'); ?></button>
                     </td>
                 <?php echo form_close(); ?>
             </tr>
@@ -195,8 +182,8 @@ td.button-column button {
                             <?php endforeach; ?>
                         </select>
                     </td>
-                    <td class='button-column'>
-                        <button type="button" class="btn btn-danger" id="delete-activity_module"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_module_delete'); ?></button>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-block" id="delete-activity_module"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_module_delete'); ?></button>
                     </td>
                 <?php echo form_close(); ?>
 			</tr>
@@ -217,8 +204,8 @@ td.button-column button {
                             <?php endforeach; ?>
                         </select>
                     </td>
-                    <td class='button-column'>
-                        <button type="button" class="btn btn-danger" id="delete-activity_date"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_date_delete'); ?></button>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-block" id="delete-activity_date"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_date_delete'); ?></button>
                     </td>
                 <?php echo form_close(); ?>
 			</tr>
