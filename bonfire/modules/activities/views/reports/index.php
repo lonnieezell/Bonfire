@@ -30,43 +30,43 @@ td.button-column button {
     <?php if ($hasPermissionViewOwn) : ?>
 	<div class="column size1of4 media-box">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['own']}"; ?>'>
-			<img src="<?php echo Template::theme_url('images/activity-user.png'); ?>" alt='user icon' />
-		</a>
+            <span class="fa fa-user muted fa-3x pull-left"></span>
+        </a>
         <p><strong><?php echo lang(str_replace('activity_', 'activities_', $pages['own'])); ?></strong><br />
             <span><?php echo lang(str_replace('activity_', 'activities_', "{$pages['own']}_description")); ?></span>
-		</p>
-	</div>
-	<?php
+        </p>
+    </div>
+    <?php
     endif;
     if ($hasPermissionViewUser) :
     ?>
-	<div class="column size1of4 media-box">
+    <div class="column size1of4 media-box">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['user']}"; ?>'>
-			<img src="<?php echo Template::theme_url('images/customers.png'); ?>" alt='users icon' />
-		</a>
+            <span class="fa fa-users muted fa-3x pull-left"></span>
+        </a>
         <p><strong><?php echo lang(str_replace('activity_', 'activities_', "{$pages['user']}s")); ?></strong><br />
             <span><?php echo lang(str_replace('activity_', 'activities_', "{$pages['user']}s_description")); ?></span>
-		</p>
-	</div>
-	<?php
+        </p>
+    </div>
+    <?php
     endif;
     if ($hasPermissionViewModule) :
     ?>
-	<div class="column size1of4 media-box">
+    <div class="column size1of4 media-box">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['module']}"; ?>'>
-			<img src="<?php echo Template::theme_url('images/product.png'); ?>" alt='modules icon' />
-		</a>
+            <span class="fa fa-puzzle-piece muted fa-3x pull-left"></span>
+        </a>
         <p><strong><?php echo lang(str_replace('activity_', 'activities_', "{$pages['module']}s")); ?></strong><br />
             <span><?php echo lang(str_replace('activity_', 'activities_', "{$pages['module']}_description")); ?></span>
-		</p>
-	</div>
-	<?php
+        </p>
+    </div>
+    <?php
     endif;
     if ($hasPermissionViewDate) :
     ?>
-	<div class="column size1of4 media-box">
+    <div class="column size1of4 media-box">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['date']}"; ?>'>
-			<img src="<?php echo Template::theme_url('images/calendar.png'); ?>" alt='calendar icon' />
+			<span class="fa fa-calendar muted fa-3x pull-left"></span>
 		</a>
         <p><strong><?php echo lang(str_replace('activity_', 'activities_', $pages['date'])); ?></strong><br />
             <span><?php echo lang(str_replace('activity_', 'activities_', "{$pages['date']}_description")); ?></span>
@@ -152,7 +152,7 @@ td.button-column button {
                         </select>
                     </td>
                     <td class='button-column'>
-                        <button type="button" class="btn btn-danger" id="delete-activity_own"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_own_delete'); ?></button>
+                        <button type="button" class="btn btn-danger" id="delete-activity_own"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_own_delete'); ?></button>
                     </td>
                 <?php echo form_close(); ?>
             </tr>
@@ -173,7 +173,7 @@ td.button-column button {
                         </select>
                     </td>
                     <td class='button-column'>
-                        <button type="button" class="btn btn-danger" id="delete-activity_user"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_user_delete'); ?></button>
+                        <button type="button" class="btn btn-danger" id="delete-activity_user"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_user_delete'); ?></button>
                     </td>
                 <?php echo form_close(); ?>
             </tr>
@@ -196,7 +196,7 @@ td.button-column button {
                         </select>
                     </td>
                     <td class='button-column'>
-                        <button type="button" class="btn btn-danger" id="delete-activity_module"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_module_delete'); ?></button>
+                        <button type="button" class="btn btn-danger" id="delete-activity_module"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_module_delete'); ?></button>
                     </td>
                 <?php echo form_close(); ?>
 			</tr>
@@ -218,7 +218,7 @@ td.button-column button {
                         </select>
                     </td>
                     <td class='button-column'>
-                        <button type="button" class="btn btn-danger" id="delete-activity_date"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_date_delete'); ?></button>
+                        <button type="button" class="btn btn-danger" id="delete-activity_date"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_date_delete'); ?></button>
                     </td>
                 <?php echo form_close(); ?>
 			</tr>

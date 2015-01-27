@@ -1,7 +1,7 @@
 <?php if (empty($content)) : ?>
 
     <div class="alert">
-        <span class="glyphicon glyphicon-book"></span>
+        <span class="fa fa-book"></span>
         <?php echo lang('docs_not_found'); ?>
     </div>
 

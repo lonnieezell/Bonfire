@@ -13,6 +13,6 @@
 	</select>
 	<fieldset class="submits">
 		<input class="btn btn-primary" type="submit" name="migrate" value="<?php echo lang('migrations_migrate_button'); ?>" />
-        <?php echo ' ' . lang('bf_or') . ' ' . anchor(SITE_AREA . '/developer/migrations', '<span class="icon-refresh icon-white"></span>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
+        <?php echo ' ' . lang('bf_or') . ' ' . anchor(SITE_AREA . '/developer/migrations', '<span class="fa fa-refresh"></span>&nbsp;' . lang('bf_action_cancel'), 'class="btn btn-danger"'); ?>
 	</fieldset>
 <?php echo form_close(); ?>

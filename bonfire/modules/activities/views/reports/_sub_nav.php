@@ -14,25 +14,25 @@ $pageDate   = 'activity_date';
 ?>
 <ul class="nav nav-pills">
 	<li<?php echo $checkSegment == '' ? ' class="active"' : ''; ?>>
-		<a href="<?php echo $activitiesReportsUrl; ?>"><?php echo lang('activities_home'); ?></a>
+		<a href="<?php echo $activitiesReportsUrl; ?>"><span class="fa fa-home"></span> <?php echo lang('activities_home'); ?></a>
 	</li>
     <?php if ($has_permission_view_user || $has_permission_view_own) : ?>
 	<li<?php echo $checkSegment == $pageUser || $checkSegment == 'activity_own' ? ' class="active"' : ''; ?>>
-		<a href="<?php echo "{$activitiesReportsUrl}/{$pageUser}"; ?>"><?php echo lang(str_replace('activity_', 'activities_', $pageUser)); ?></a>
+		<a href="<?php echo "{$activitiesReportsUrl}/{$pageUser}"; ?>"><span class="fa fa-user"></span> <?php echo lang(str_replace('activity_', 'activities_', $pageUser)); ?></a>
 	</li>
     <?php
     endif;
     if ($has_permission_view_module) :
     ?>
 	<li<?php echo $checkSegment == $pageModule ? ' class="active"' : ''; ?>>
-		<a href="<?php echo "{$activitiesReportsUrl}/{$pageModule}"; ?>"><?php echo lang(str_replace('activity_', 'activities_', $pageModule)); ?></a>
+		<a href="<?php echo "{$activitiesReportsUrl}/{$pageModule}"; ?>"><span class="fa fa-puzzle-piece"></span> <?php echo lang(str_replace('activity_', 'activities_', $pageModule)); ?></a>
 	</li>
     <?php
     endif;
     if ($has_permission_view_date) :
     ?>
 	<li<?php echo $checkSegment == $pageDate ? ' class="active"' : ''; ?>>
-		<a href="<?php echo "{$activitiesReportsUrl}/{$pageDate}"; ?>"><?php echo lang(str_replace('activity_', 'activities_', $pageDate)); ?></a>
+		<a href="<?php echo "{$activitiesReportsUrl}/{$pageDate}"; ?>"><span class="fa fa-calendar"></span> <?php echo lang(str_replace('activity_', 'activities_', $pageDate)); ?></a>
 	</li>
     <?php endif; ?>
 </ul>

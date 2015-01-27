@@ -53,7 +53,7 @@
         </div>
         <fieldset class="form-actions">
             <input type="hidden" name="checked[]" value="<?php e($log_file); ?>" />
-            <button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('logs_delete_confirm'))) ?>')"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('logs_delete1_button'); ?></button>
+            <button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('logs_delete_confirm'))) ?>')"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('logs_delete1_button'); ?></button>
         </fieldset>
     <?php echo form_close(); ?>
 </div>

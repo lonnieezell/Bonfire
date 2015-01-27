@@ -51,7 +51,7 @@ $validation_errors = validation_errors();
         </fieldset>
         <fieldset class="form-actions">
             <input type="submit" name="build" class="btn btn-primary" value="<?php echo lang('mb_context_submit'); ?>" />
-            <?php echo anchor(site_url(SITE_AREA . '/developer/builder'), '<span class="icon-white icon-ban-circle"></span>&nbsp;' . htmlspecialchars(lang('bf_action_cancel')), array('class' => 'btn btn-warning')); ?>
+            <?php echo anchor(site_url(SITE_AREA . '/developer/builder'), '<span class="fa fa-ban"></span>&nbsp;' . htmlspecialchars(lang('bf_action_cancel')), array('class' => 'btn btn-warning')); ?>
         </fieldset>
 	<?php echo form_close(); ?>
 </div>

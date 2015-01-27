@@ -7,7 +7,7 @@
 		<fieldset>
             <legend>
                 <?php if (count($orig) > 30) : ?>
-                <button class="gobottom pull-right btn btn-small"><span class="icon icon-arrow-down"></span></button>
+                <button class="gobottom pull-right btn btn-small"><span class="fa fa-arrow-down"></span></button>
 				<?php endif; ?>
                 <h3><?php echo lang('tr_translate_file') . ": <span class='filename'>{$lang_file}</span>"; ?></h3>
             </legend>
@@ -31,7 +31,7 @@
                             endif;
                             if (count($orig) > 30) :
                             ?>
-                            <button class="gotop pull-right btn btn-small"><span class="icon icon-arrow-up"></span></button>
+                            <button class="gotop pull-right btn btn-small"><span class="fa fa-arrow-up"></span></button>
                             <?php endif; ?>
                         </td>
                     </tr>

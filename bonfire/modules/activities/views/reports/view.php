@@ -34,13 +34,13 @@ $hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDel
             echo form_submit('filter', lang('activities_filter'), 'class="btn btn-primary"');
             if ($vars['which'] == 'activity_own' && $hasPermissionDeleteOwn) :
             ?>
-            <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_own"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_own_delete'); ?></button>
+            <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_own"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_own_delete'); ?></button>
             <?php elseif ($vars['which'] == 'activity_user' && $hasPermissionDeleteUser) : ?>
-            <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_user"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_user_delete'); ?></button>
+            <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_user"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_user_delete'); ?></button>
             <?php elseif ($vars['which'] == 'activity_module' && $hasPermissionDeleteModule) : ?>
-            <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_module"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_module_delete'); ?></button>
+            <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_module"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_module_delete'); ?></button>
             <?php elseif ($vars['which'] == 'activity_date' && $hasPermissionDeleteDate) : ?>
-            <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_date"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_date_delete'); ?></button>
+            <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_date"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('activities_date_delete'); ?></button>
             <?php endif; ?>
         </fieldset>
     <?php echo form_close(); ?>
@@ -71,7 +71,7 @@ $hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDel
         <tbody>
             <?php foreach ($activity_content as $activity) : ?>
             <tr>
-                <td><span class="icon-user"></span>&nbsp;<?php e($activity->username); ?></td>
+                <td><span class="fa fa-user"></span>&nbsp;<?php e($activity->username); ?></td>
                 <td><?php echo $activity->activity; ?></td>
                 <td><?php echo $activity->module; ?></td>
                 <td><?php echo date('M j, Y g:i A', strtotime($activity->created)); ?></td>
