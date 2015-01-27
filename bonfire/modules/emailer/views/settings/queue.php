@@ -49,7 +49,7 @@ td.preview { text-align: center !important; }
                     <td colspan="<?php echo $numColumns; ?>">
                         <?php echo lang('bf_with_selected') . '&nbsp;'; ?>
                         <button type="submit" name="delete" id="delete-me" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('emailer_delete_confirm'))); ?>')">
-                            <span class="icon-white icon-trash"></span> <?php echo lang('bf_action_delete'); ?>
+                            <span class="fa fa-trash"></span> <?php echo lang('bf_action_delete'); ?>
                         </button>
                     </td>
                 </tr>

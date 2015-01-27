@@ -18,12 +18,14 @@ echo "<?php
 <ul class='nav nav-pills'>
 	<li<?php echo \$checkSegment == '' ? ' class=\"active\"' : ''; ?>>
 		<a href=\"<?php echo site_url(\$areaUrl); ?>\" id='list'>
+			<span class=\"fa fa-list\"></span>
             <?php echo lang('{$module_name_lower}_list'); ?>
         </a>
 	</li>
 	<?php if (\$this->auth->has_permission('{$createPermission}')) : ?>
 	<li<?php echo \$checkSegment == 'create' ? ' class=\"active\"' : ''; ?>>
 		<a href=\"<?php echo site_url(\$areaUrl . '/create'); ?>\" id='create_new'>
+			<span class=\"fa fa-plus\"></span>
             <?php echo lang('{$module_name_lower}_new'); ?>
         </a>
 	</li>

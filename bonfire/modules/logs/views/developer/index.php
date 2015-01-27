@@ -62,7 +62,7 @@ if ( ! empty($logs) && is_array($logs)) :
 		</div>
 		<fieldset class="form-actions">
 			<button type="submit" name="delete_all" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('logs_delete_all_confirm'))); ?>')">
-				<span class="icon-white icon-trash"></span>&nbsp;<?php echo lang('logs_delete_button'); ?>
+				<span class="fa fa-trash"></span>&nbsp;<?php echo lang('logs_delete_button'); ?>
 			</button>
 		</fieldset>
 	<?php echo form_close(); ?>

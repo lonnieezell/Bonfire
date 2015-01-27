@@ -95,7 +95,7 @@ if ($validationErrors) :
             echo lang('bf_or') . ' ' . anchor(SITE_AREA . '/settings/roles', lang('bf_action_cancel'));
             if (isset($role) && $role->can_delete == 1 && has_permission('Bonfire.Roles.Delete')) :
             ?>
-            <button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('role_delete_confirm') . ' ' . lang('role_delete_note'))); ?>')"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('role_delete_role'); ?></button>
+            <button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('role_delete_confirm') . ' ' . lang('role_delete_note'))); ?>')"><span class="fa fa-trash"></span>&nbsp;<?php echo lang('role_delete_role'); ?></button>
             <?php endif;?>
         </fieldset>
 	<?php echo form_close(); ?>
