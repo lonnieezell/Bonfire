@@ -21,6 +21,7 @@
  * @package Bonfire\Application\Language\Russian
  * @author  Translator < https://github.com/modgahead >
  * @author  Translator < https://github.com/cjmaxik >
+ * @author  Translator < https://github.com/nkondrashov >
  * @link    http://cibonfire.com/docs/guides
  */
 
@@ -286,4 +287,27 @@ $lang['bf_form_valid_password_mixed_2'] = 'Поле %s должно содерж
 $lang['bf_form_allowed_types']          = 'Поле %s должно содержать один из разрешенных элементов для выбора.';
 $lang['bf_form_one_of']                 = 'Поле %s должно содержать один из доступных для выбора элементов.';
 
-/* End of file ./application/language/russian/application_lang.php */
+//--------------------------------------------------------------------
+// Menu Strings - feel free to add your own custom modules here
+// if you want to localize your menus
+//--------------------------------------------------------------------
+$lang['bf_menu_activities']     = 'Активности';
+$lang['bf_menu_code_builder']   = 'Генератор кода';
+$lang['bf_menu_db_tools']       = 'База данных';
+$lang['bf_menu_db_maintenance'] = 'Обслуживание';
+$lang['bf_menu_db_backup']      = 'Бекапы';
+$lang['bf_menu_emailer']        = 'Очердь писем';
+$lang['bf_menu_email_settings'] = 'Настройки';
+$lang['bf_menu_email_template'] = 'Шаблоны';
+$lang['bf_menu_email_queue']    = 'Посмотреть очередь';
+$lang['bf_menu_kb_shortcuts']   = 'Горячие клавиши';
+$lang['bf_menu_logs']           = 'Логи';
+$lang['bf_menu_migrations']     = 'Миграции';
+$lang['bf_menu_permissions']    = 'Права';
+$lang['bf_menu_queue']          = 'Очередь';
+$lang['bf_menu_roles']          = 'Роли';
+$lang['bf_menu_settings']       = 'Настройки';
+$lang['bf_menu_sysinfo']        = 'Информация о системе';
+$lang['bf_menu_template']       = 'Шаблон';
+$lang['bf_menu_translate']      = 'Перевод';
+$lang['bf_menu_users']          = 'Пользователи';
