@@ -96,7 +96,7 @@ class Modulebuilder
     private $files = array();
 
     /** @var string[] The language files to use when building the modules. */
-    private $languages_available = array('russian', 'english', 'portuguese_br', 'spanish_am');
+    private $languages_available = array('english', 'portuguese_br', 'spanish_am');
 
     //--------------------------------------------------------------------------
 
