@@ -73,17 +73,17 @@ $lang['activities_none_found']            = 'Вы не имеете прав д�
 $lang['activities_all']                   = 'Все';
 $lang['activities_cleanup']               = 'Очистка логов.';
 
-$lang['activities_list_no_module']      = 'No module provided to `activity_list`.';
-$lang['activities_model_no_module']     = 'No module name given to `find_by_module`.';
-$lang['activities_log_no_user_id']      = 'You must provide a numeric user id to log activity.';
-$lang['activities_log_no_activity']     = 'Not enough information provided to insert activity.';
-$lang['activities_delete_no_section']   = 'Delete section not specified';
-$lang['activities_delete_no_value']     = 'Delete value not specified';
-$lang['activities_act_deleted']         = 'Deleted %d activities';
-$lang['activities_delete_error']        = 'Error: %s';
+$lang['activities_list_no_module']      = 'Неет модуля для `activity_list`.';
+$lang['activities_model_no_module']     = 'Нет имени для модуля длч `find_by_module`.';
+$lang['activities_log_no_user_id']      = 'Вы должны предоставить цифровой идентификатор пользователя для простомтра активности.';
+$lang['activities_log_no_activity']     = 'Нет информации об активности.';
+$lang['activities_delete_no_section']   = 'Удаляемы раздел не выбран';
+$lang['activities_delete_no_value']     = 'Удаляемое значение не указано';
+$lang['activities_act_deleted']         = 'Удалено %d активностей';
+$lang['activities_delete_error']        = 'ОШИБКА: %s';
 
-$lang['activities_view_before']         = '%s before';
-$lang['activities_filter_from_before']  = 'from before';
-$lang['activities_filter_only_for']     = 'only for';
+$lang['activities_view_before']         = '%s до';
+$lang['activities_filter_from_before']  = 'от до';
+$lang['activities_filter_only_for']     = 'только для';
 
-$lang['activities_username_not_found']  = '(Username not found)';
+$lang['activities_username_not_found']  = '(Пользователи не найдены)';
