@@ -73,7 +73,7 @@ $lang['activities_none_found']            = 'Вы не имеете прав д�
 $lang['activities_all']                   = 'Все';
 $lang['activities_cleanup']               = 'Очистка логов.';
 
-$lang['activities_list_no_module']      = 'Неет модуля для `activity_list`.';
+$lang['activities_list_no_module']      = 'Нет модуля для `activity_list`.';
 $lang['activities_model_no_module']     = 'Нет имени для модуля длч `find_by_module`.';
 $lang['activities_log_no_user_id']      = 'Вы должны предоставить цифровой идентификатор пользователя для простомтра активности.';
 $lang['activities_log_no_activity']     = 'Нет информации об активности.';
