@@ -1,9 +1,19 @@
 <?php
+/**
+ * System messages translation for CodeIgniter(tm)
+ *
+ * @author	CodeIgniter community
+ * @copyright	Copyright (c) 2014 - 2015, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license	http://opensource.org/licenses/MIT	MIT License
+ * @link	http://codeigniter.com
+ */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['email_must_be_array'] = 'متد تعیین صلاحیت (validation) باید آرایه بر گرداند.';
 $lang['email_invalid_address'] = 'آدرس ایمیل %s اشتباه است.';
 $lang['email_attachment_missing'] = 'این الحاقیه: %s پیدا نشد.';
 $lang['email_attachment_unreadable'] = 'این الحاقیه : %s باز نشد.';
+$lang['email_no_from'] = 'ارسال ایمیل بدون هدر "From"????!!!';
 $lang['email_no_recipients'] = 'نام گیرنده را در گیرنده (To) یا کپی (CC) یا کپی نامرئی (BCC) معین کنید.';
 $lang['email_send_failure_phpmail'] = 'امکان ارسال ایمیل با PHP mail() نیست. ممکن است این گزینه در سرویس دهنده ایمیل شما غیر فعال شده باشد.';
 $lang['email_send_failure_sendmail'] = 'امکان ارسال ایمیل با PHP Sendmail نیست. ممکن است این گزینه در سرویس دهنده ایمیل شما غیر فعال شده باشد.';
@@ -18,4 +28,3 @@ $lang['email_smtp_auth_un'] = 'خطای زمان ورود از نام کاربر
 $lang['email_smtp_auth_pw'] = 'خطای زمان ورود از رمز عبور، خطا: %s';
 $lang['email_smtp_data_failure'] = 'امکان ارسال دیتا نیست : %s';
 $lang['email_exit_status'] = 'كد وضعیت خروج: %s';
-?>

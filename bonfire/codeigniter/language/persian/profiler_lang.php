@@ -17,4 +17,3 @@ $lang['profiler_no_get'] = 'دیتای GET وجود ندارد';
 $lang['profiler_no_uri'] = 'دیتایی در رشته URI وجود ندارد';
 $lang['profiler_no_memory'] = 'میزان استفاده از حافظه مشخص نیست !';
 $lang['profiler_no_profiles'] = 'اطلاعاتی جهت ممیزی وجود ندارد. تمام بخشهای ممیزی غیر فعال شده اند.';
-?>

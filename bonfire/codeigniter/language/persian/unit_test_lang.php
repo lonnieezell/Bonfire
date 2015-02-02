@@ -19,4 +19,3 @@ $lang['ut_object'] = 'آبجکت';
 $lang['ut_resource'] = 'ریسورس';
 $lang['ut_null'] = 'خالی';
 $lang['ut_notes'] = 'یادداشت';
-?>

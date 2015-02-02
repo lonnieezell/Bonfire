@@ -36,7 +36,7 @@ class CI_DB_pdo_utility extends CI_DB_utility {
 		// Not sure if PDO lets you list all databases...
 		if ($this->db->db_debug)
 		{
-			return $this->db->display_error('db_unsuported_feature');
+			return $this->db->display_error('db_unsupported_feature');
 		}
 		return FALSE;
 	}
@@ -57,7 +57,7 @@ class CI_DB_pdo_utility extends CI_DB_utility {
 		// Not a supported PDO feature
 		if ($this->db->db_debug)
 		{
-			return $this->db->display_error('db_unsuported_feature');
+			return $this->db->display_error('db_unsupported_feature');
 		}
 		return FALSE;
 	}
@@ -78,7 +78,7 @@ class CI_DB_pdo_utility extends CI_DB_utility {
 		// Not a supported PDO feature
 		if ($this->db->db_debug)
 		{
-			return $this->db->display_error('db_unsuported_feature');
+			return $this->db->display_error('db_unsupported_feature');
 		}
 		return FALSE;
 	}
@@ -95,7 +95,7 @@ class CI_DB_pdo_utility extends CI_DB_utility {
 	function _backup($params = array())
 	{
 		// Currently unsupported
-		return $this->db->display_error('db_unsuported_feature');
+		return $this->db->display_error('db_unsupported_feature');
 	}
 
 }

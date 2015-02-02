@@ -38,7 +38,7 @@ class CI_DB_odbc_forge extends CI_DB_forge {
 		// designed to connect to an existing database
 		if ($this->db->db_debug)
 		{
-			return $this->db->display_error('db_unsuported_feature');
+			return $this->db->display_error('db_unsupported_feature');
 		}
 		return FALSE;
 	}
@@ -58,7 +58,7 @@ class CI_DB_odbc_forge extends CI_DB_forge {
 		// designed to connect to an existing database
 		if ($this->db->db_debug)
 		{
-			return $this->db->display_error('db_unsuported_feature');
+			return $this->db->display_error('db_unsupported_feature');
 		}
 		return FALSE;
 	}
@@ -183,7 +183,7 @@ class CI_DB_odbc_forge extends CI_DB_forge {
 		// Not a supported ODBC feature
 		if ($this->db->db_debug)
 		{
-			return $this->db->display_error('db_unsuported_feature');
+			return $this->db->display_error('db_unsupported_feature');
 		}
 		return FALSE;
 	}

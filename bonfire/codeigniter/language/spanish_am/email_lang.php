@@ -18,4 +18,3 @@ $lang['email_smtp_auth_un'] = 'Fallo autentificando el usuario. Error: %s';
 $lang['email_smtp_auth_pw'] = 'Fallo usando la contraseña. Error: %s';
 $lang['email_smtp_data_failure'] = 'No se han podido enviar los datos: %s';
 $lang['email_exit_status'] = 'Código de estado de salida: %s';
-?>

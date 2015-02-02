@@ -16,4 +16,3 @@ $lang['upload_no_filepath'] = 'مسیر ارسال صحیح نیست.';
 $lang['upload_no_file_types'] = 'هنوز نوع فایلهای مجاز تعیین نشده.';
 $lang['upload_bad_filename'] = 'فایلی با همین نام قبلا ارسال شده.';
 $lang['upload_not_writable'] = 'شاخه مقصد قابل نوشتن نیست.';
-?>

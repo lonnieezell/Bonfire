@@ -350,7 +350,7 @@ class CI_DB_utility extends CI_DB_forge {
 		{
 			if ($this->db->db_debug)
 			{
-				return $this->db->display_error('db_unsuported_compression');
+				return $this->db->display_error('db_unsupported_compression');
 			}
 
 			$prefs['format'] = 'txt';

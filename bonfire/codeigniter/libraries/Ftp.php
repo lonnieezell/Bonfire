@@ -211,7 +211,7 @@ class CI_FTP {
 		{
 			if ($this->debug == TRUE)
 			{
-				$this->_error('ftp_unable_to_makdir');
+				$this->_error('ftp_unable_to_mkdir');
 			}
 			return FALSE;
 		}

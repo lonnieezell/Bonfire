@@ -18,4 +18,3 @@ $lang['imglib_invalid_path'] = 'مسیر عکس اشتباه است.';
 $lang['imglib_copy_failed'] = 'عکس کپی نشد.';
 $lang['imglib_missing_font'] = 'فونت پیدا نشد.';
 $lang['imglib_save_failed'] = 'عكس ذخیره نشد. لطفا اطمینان حاصل كنید كه عكس و پوشه آن قابل نوشتن هستند.';
-?>

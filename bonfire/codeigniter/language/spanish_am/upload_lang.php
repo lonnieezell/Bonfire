@@ -16,4 +16,3 @@ $lang['upload_no_filepath'] = 'La dirección para subir el archivo parece no ser
 $lang['upload_no_file_types'] = 'Todavía no ha especificado ningún tipo de archivo permitido.';
 $lang['upload_bad_filename'] = 'El archivo enviado ya existe en el servidor.';
 $lang['upload_not_writable'] = 'Parece que no se puede escribir en el directorio de destino.';
-?>

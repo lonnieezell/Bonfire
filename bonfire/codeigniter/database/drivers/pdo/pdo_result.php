@@ -77,7 +77,7 @@ class CI_DB_pdo_result extends CI_DB_result {
 	{
 		if ($this->db->db_debug)
 		{
-			return $this->db->display_error('db_unsuported_feature');
+			return $this->db->display_error('db_unsupported_feature');
 		}
 		return FALSE;
 	}
@@ -95,21 +95,21 @@ class CI_DB_pdo_result extends CI_DB_result {
 	function field_data()
 	{
 		$data = array();
-	
+
 		try
 		{
 			for($i = 0; $i < $this->num_fields(); $i++)
 			{
 				$data[] = $this->result_id->getColumnMeta($i);
 			}
-			
+
 			return $data;
 		}
 		catch (Exception $e)
 		{
 			if ($this->db->db_debug)
 			{
-				return $this->db->display_error('db_unsuported_feature');
+				return $this->db->display_error('db_unsupported_feature');
 			}
 			return FALSE;
 		}
@@ -173,7 +173,7 @@ class CI_DB_pdo_result extends CI_DB_result {
 	 * @return	object
 	 */
 	function _fetch_object()
-	{	
+	{
 		return $this->result_id->fetchObject();
 	}
 

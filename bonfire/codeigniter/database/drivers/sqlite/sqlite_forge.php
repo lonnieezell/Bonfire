@@ -182,7 +182,7 @@ class CI_DB_sqlite_forge extends CI_DB_forge {
 	{
 		if ($this->db->db_debug)
 		{
-			return $this->db->display_error('db_unsuported_feature');
+			return $this->db->display_error('db_unsupported_feature');
 		}
 		return array();
 	}

@@ -80,7 +80,7 @@ class CI_DB_mysqli_utility extends CI_DB_utility {
 	function _backup($params = array())
 	{
 		// Currently unsupported
-		return $this->db->display_error('db_unsuported_feature');
+		return $this->db->display_error('db_unsupported_feature');
 	}
 }
 
