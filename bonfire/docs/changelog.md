@@ -52,6 +52,7 @@
         * `setContexts()` will add the required contexts if they are not included in the first argument.
     * `getContexts()` allows an optional first argument to only return contexts with landing pages (the functionality from the `application_helper`'s `list_contexts()` function).
     * Modified internal access of the `self::$contexts` array to use `self::getContexts()` and `self::setContexts()`.
+* Fixed russian language support for activities, logs, and sysinfo modules. Added russian language support to builder.
 
 #### Known Issues:
 

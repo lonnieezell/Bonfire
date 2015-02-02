@@ -21,9 +21,9 @@
  *
  * Originally based on Ollie Rattue's http://formigniter.org/ project.
  *
- * @package    Bonfire\Modules\Builder\Libraries\Modulebuilder
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/builder
+ * @package Bonfire\Modules\Builder\Libraries\Modulebuilder
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer/builder
  */
 class Modulebuilder
 {
@@ -43,40 +43,40 @@ class Modulebuilder
      * ensure consistent treatment of database types within the builder module.
      */
     protected $databaseTypes = array(
-        'BIGINT'        => array('numeric', 'integer'),
-        'BINARY'        => array('binary'),
-        'BIT'           => array('numeric', 'integer', 'bit'),
-        'BLOB'          => array('binary', 'object'),
-        'BOOL'          => array('numeric', 'integer', 'boolean'),
-        'BOOLEAN'       => array('numeric', 'integer', 'boolean'),
-        'CHAR'          => array('string'),
-        'DATE'          => array('date'),
-        'DATETIME'      => array('date', 'time'),
-        'DEC'           => array('numeric', 'real'),
-        'DECIMAL'       => array('numeric', 'real'),
-        'DOUBLE'        => array('numeric', 'real'),
-        'ENUM'          => array('string', 'list'),
-        'FLOAT'         => array('numeric', 'real'),
-        'INT'           => array('numeric', 'integer'),
-        'INTEGER'       => array('numeric', 'integer'),
-        'LONGBLOB'      => array('binary', 'object'),
-        'LONGTEXT'      => array('string', 'object'),
-        'MEDIUMBLOB'    => array('binary', 'object'),
-        'MEDIUMINT'     => array('numeric', 'integer'),
-        'MEDIUMTEXT'    => array('string', 'object'),
-        'NUMERIC'       => array('numeric', 'real'),
-        'REAL'          => array('numeric', 'real'),
-        'SET'           => array('string', 'list'),
-        'SMALLINT'      => array('numeric', 'integer'),
-        'TIME'          => array('time'),
-        'TIMESTAMP'     => array('date', 'time'),
-        'TINYBLOB'      => array('binary', 'object'),
-        'TINYINT'       => array('numeric', 'integer'),
-        'TINYTEXT'      => array('string', 'object'),
-        'TEXT'          => array('string', 'object'),
-        'VARBINARY'     => array('binary'),
-        'VARCHAR'       => array('string'),
-        'YEAR'          => array('year', 'integer'),
+        'BIGINT'     => array('numeric', 'integer'),
+        'BINARY'     => array('binary'),
+        'BIT'        => array('numeric', 'integer', 'bit'),
+        'BLOB'       => array('binary', 'object'),
+        'BOOL'       => array('numeric', 'integer', 'boolean'),
+        'BOOLEAN'    => array('numeric', 'integer', 'boolean'),
+        'CHAR'       => array('string'),
+        'DATE'       => array('date'),
+        'DATETIME'   => array('date', 'time'),
+        'DEC'        => array('numeric', 'real'),
+        'DECIMAL'    => array('numeric', 'real'),
+        'DOUBLE'     => array('numeric', 'real'),
+        'ENUM'       => array('string', 'list'),
+        'FLOAT'      => array('numeric', 'real'),
+        'INT'        => array('numeric', 'integer'),
+        'INTEGER'    => array('numeric', 'integer'),
+        'LONGBLOB'   => array('binary', 'object'),
+        'LONGTEXT'   => array('string', 'object'),
+        'MEDIUMBLOB' => array('binary', 'object'),
+        'MEDIUMINT'  => array('numeric', 'integer'),
+        'MEDIUMTEXT' => array('string', 'object'),
+        'NUMERIC'    => array('numeric', 'real'),
+        'REAL'       => array('numeric', 'real'),
+        'SET'        => array('string', 'list'),
+        'SMALLINT'   => array('numeric', 'integer'),
+        'TIME'       => array('time'),
+        'TIMESTAMP'  => array('date', 'time'),
+        'TINYBLOB'   => array('binary', 'object'),
+        'TINYINT'    => array('numeric', 'integer'),
+        'TINYTEXT'   => array('string', 'object'),
+        'TEXT'       => array('string', 'object'),
+        'VARBINARY'  => array('binary'),
+        'VARCHAR'    => array('string'),
+        'YEAR'       => array('year', 'integer'),
     );
 
     protected $booleanTypes = array();
@@ -96,7 +96,13 @@ class Modulebuilder
     private $files = array();
 
     /** @var string[] The language files to use when building the modules. */
-    private $languages_available = array('english', 'portuguese_br', 'spanish_am');
+    private $languages_available = array(
+        'english',
+        'italian',
+        'portuguese_br',
+        'russian',
+        'spanish_am',
+    );
 
     //--------------------------------------------------------------------------
 
@@ -108,12 +114,17 @@ class Modulebuilder
     public function __construct()
     {
         $this->CI = &get_instance();
+
+        // Get the options from the modulebuilder config file.
         $this->CI->load->config('modulebuilder');
         $this->options = $this->CI->config->item('modulebuilder');
 
+        // If 'languages_available' and 'database_types' are set in the config
+        // file, override the default values with the configured values.
+
         if (! empty($this->options['languages_available'])
             && is_array($this->options['languages_available'])
-           ) {
+        ) {
             $this->languages_available = $this->options['languages_available'];
         }
 
@@ -121,6 +132,7 @@ class Modulebuilder
             $this->databaseTypes = $this->options['database_types'];
         }
 
+        // Set the different types arrays from the configured $databaseTypes array.
         foreach ($this->databaseTypes as $key => $dataTypes) {
             foreach ($dataTypes as $typeVal) {
                 // The order below is based on the number of occurrences of each
@@ -129,31 +141,24 @@ class Modulebuilder
                     case 'integer':
                         $this->integerTypes[] = $key;
                         break;
-
                     case 'string':
                         $this->stringTypes[] = $key;
                         break;
-
                     case 'object':
                         $this->objectTypes[] = $key;
                         break;
-
                     case 'real':
                         $this->realNumberTypes[] = $key;
                         break;
-
                     case 'date':
                         $this->dateTypes[] = $key;
                         break;
-
                     case 'time':
                         $this->timeTypes[] = $key;
                         break;
-
                     case 'boolean':
                         $this->booleanTypes[] = $key;
                         break;
-
                     case 'list':
                         $this->listTypes[] = $key;
                         break;
@@ -161,6 +166,7 @@ class Modulebuilder
             }
         }
 
+        // Text types are those database types which are both objects and strings.
         $this->textTypes = array_intersect($this->objectTypes, $this->stringTypes);
 
         $this->files = array(
@@ -172,60 +178,87 @@ class Modulebuilder
     }
 
     /**
-     * Generate the files required for the module
+     * Generate the files required for the module.
      *
-     * @param array $data The data required to build the module
-     *  int    'field_total'           The number of fields to add to the table
-     *  string 'module_name'           The name given to the module
-     *  array  'contexts'              An array of contexts selected
-     *  array  'action_names'          An array of the controller actions (methods) required
-     *  string 'primary_key_field'     The name of the primary key
-     *  string 'db_required'           The database requirement setting (new, existing or none)
-     *  array  'form_error_delimiters' An array with the html delimiters for error messages
-     *  string 'module_description'    A description for the module which appears in the config file
-     *  int    'role_id'               The id of the role which receives full access to the module
-     *  string 'table_name'            The name of the table in the database
-     *  int    'table_as_field_prefix' Use table name as field prefix
+     * @param array $data The data required to build the module:
+     *  array   'action_names'          Controller actions (methods) required.
+     *  array   'contexts'              Selected contexts.
+     *  string  'db_required'           Database requirement ('new'/'existing'/'none').
+     *  integer 'field_total'           Number of fields to add to the table.
+     *  array   'form_error_delimiters' Error message delimiters.
+     *  string  'module_description'    Description of the module.
+     *  string  'module_name'           Name given to the module.
+     *  string  'primary_key_field'     The primary key field's name.
+     *  integer 'role_id'               Module admin's role ID.
+     *  integer 'table_as_field_prefix' Use table name as field prefix.
+     *  string  'table_name'            The name of the database table.
+     * (optional $data fields):
+     *  string  'controller_name'   Controller name (default: sanitized 'module_name').
+     *  string  'created_by_field'  Model's $created_by_field (default: 'creadted_by').
+     *  string  'created_field'     Model's $created_field (default: 'created_on').
+     *  string  'deleted_by_field'  Model's $deleted_by_field (default: 'deleted_by').
+     *  boolean 'logUser'           Model's $log_user (default: false).
+     *  string  'modified_by_field' Model's $modified_by_field (default: 'modified_by').
+     *  string  'modified_field'    Model's $modified_field (default: 'modified_on').
+     *  string  'module_name_lower' Lowercase module name (default: strtolower('controller_name')).
+     *  string  'soft_delete_field' Model's $deleted_field (default: 'deleted').
+     *  string  'textarea_editor'   Textarea editor to use in views (default: none).
+     *  boolean 'useCreated'        Model's $set_created (default: false).
+     *  boolean 'useModified'       Model's $set_modified (default: false).
+     *  boolean 'usePagination'     Add pagination to controller/view (default: false).
+     *  boolean 'useSoftDeletes'    Model's $soft_deletes (default: false).
      *
-     * @return array An array with the content for the generated files
+     * @return array An array with the content for the generated files.
      */
     public function buildFiles($data)
     {
-        $action_names           = $data['action_names'];
-        $contexts               = $data['contexts'];
-        $db_required            = $data['db_required'];
-        $field_total            = $data['field_total'];
-        $form_error_delimiters  = $data['form_error_delimiters'];
-        $module_description     = $data['module_description'];
-        $module_name            = $data['module_name'];
-        $primary_key_field      = $data['primary_key_field'];
-        $role_id                = $data['role_id'];
-        $table_as_field_prefix  = $data['table_as_field_prefix'];
-        $table_name             = $data['table_name'];
+        // Retrieve the options from $data, setting defaults for optional fields.
 
-        $controller_name        = isset($data['controller_name']) ? $data['controller_name'] : preg_replace("/[ -]/", "_", $module_name);
-        $module_name_lower      = isset($data['module_name_lower']) ? $data['module_name_lower'] : strtolower($controller_name);
+        // Required fields.
+        $action_names          = $data['action_names'];
+        $contexts              = $data['contexts'];
+        $db_required           = $data['db_required'];
+        $field_total           = $data['field_total'];
+        $form_error_delimiters = $data['form_error_delimiters'];
+        $module_description    = $data['module_description'];
+        $module_name           = $data['module_name'];
+        $primary_key_field     = $data['primary_key_field'];
+        $role_id               = $data['role_id'];
+        $table_as_field_prefix = $data['table_as_field_prefix'];
+        $table_name            = $data['table_name'];
 
-        $logUser                = isset($data['logUser']) ? $data['logUser'] : false;
-        $useCreated             = isset($data['useCreated']) ? $data['useCreated'] : false;
-        $useModified            = isset($data['useModified']) ? $data['useModified'] : false;
-        $usePagination          = isset($data['usePagination']) ? $data['usePagination'] : false;
-        $useSoftDeletes         = isset($data['useSoftDeletes']) ? $data['useSoftDeletes'] : false;
+        // Optional fields.
 
-        $created_field          = isset($data['created_field']) ? $data['created_field'] : 'created_on';
-        $created_by_field       = isset($data['created_by_field']) ? $data['created_by_field'] : 'created_by';
-        $soft_delete_field      = isset($data['soft_delete_field']) ? $data['soft_delete_field'] : 'deleted';
-        $deleted_by_field       = isset($data['deleted_by_field']) ? $data['deleted_by_field'] : 'deleted_by';
-        $modified_field         = isset($data['modified_field']) ? $data['modified_field'] : 'modified_on';
-        $modified_by_field      = isset($data['modified_by_field']) ? $data['modified_by_field'] : 'modified_by';
+        // Defaults based on $module_name.
+        $controller_name   = isset($data['controller_name']) ? $data['controller_name'] : preg_replace("/[ -]/", "_", $module_name);
+        $module_name_lower = isset($data['module_name_lower']) ? $data['module_name_lower'] : strtolower($controller_name);
 
-        $textarea_editor        = isset($data['textarea_editor']) ? $data['textarea_editor'] : '';
+        // Boolean fields.
+        $logUser        = isset($data['logUser']) ? $data['logUser'] : false;
+        $useCreated     = isset($data['useCreated']) ? $data['useCreated'] : false;
+        $useModified    = isset($data['useModified']) ? $data['useModified'] : false;
+        $usePagination  = isset($data['usePagination']) ? $data['usePagination'] : false;
+        $useSoftDeletes = isset($data['useSoftDeletes']) ? $data['useSoftDeletes'] : false;
+
+        // Model fields, defaults based on BF_Model.
+        $created_field     = isset($data['created_field']) ? $data['created_field'] : 'created_on';
+        $created_by_field  = isset($data['created_by_field']) ? $data['created_by_field'] : 'created_by';
+        $soft_delete_field = isset($data['soft_delete_field']) ? $data['soft_delete_field'] : 'deleted';
+        $deleted_by_field  = isset($data['deleted_by_field']) ? $data['deleted_by_field'] : 'deleted_by';
+        $modified_field    = isset($data['modified_field']) ? $data['modified_field'] : 'modified_on';
+        $modified_by_field = isset($data['modified_by_field']) ? $data['modified_by_field'] : 'modified_by';
+
+        $textarea_editor   = isset($data['textarea_editor']) ? $data['textarea_editor'] : '';
 
         // Used by buildConfig()
         $current_user = $this->CI->user_model->find($this->CI->auth->user_id());
 
-        // Used by buildController()
-        $data['textTypes']          = $this->textTypes;
+        // Setup $data to be used by other methods.
+
+        // Config values:
+
+        // Used by buildController().
+        $data['textTypes'] = $this->textTypes;
         if (! empty($form_error_delimiters)
             && isset($form_error_delimiters[0])
             && isset($form_error_delimiters[1])
@@ -233,32 +266,36 @@ class Modulebuilder
             $data['form_error_delimiters'] = $form_error_delimiters;
         }
 
-        // Used by buildModel() and buildDbSQL()
-        $data['realNumberTypes']    = $this->realNumberTypes; // also buildView()
-        $data['listTypes']          = $this->listTypes;
+        // Used by buildModel() and buildDbSQL().
+        $data['realNumberTypes'] = $this->realNumberTypes; // also buildView().
+        $data['listTypes']       = $this->listTypes;
 
-        $data['controller_name'] = $controller_name;
-        $data['module_name_lower'] = $module_name_lower;
-        $data['logUser'] = $logUser;
-        $data['useCreated'] = $useCreated;
-        $data['useModified'] = $useModified;
-        $data['usePagination'] = $usePagination;
-        $data['useSoftDeletes'] = $useSoftDeletes;
-        $data['created_field'] = $created_field;
-        $data['created_by_field'] = $created_by_field;
-        $data['soft_delete_field'] = $soft_delete_field;
-        $data['deleted_by_field'] = $deleted_by_field;
-        $data['modified_field'] = $modified_field;
+        // Values passed in $data or defaults.
+        $data['controller_name']   = $controller_name;
+        $data['created_by_field']  = $created_by_field;
+        $data['created_field']     = $created_field;
+        $data['deleted_by_field']  = $deleted_by_field;
+        $data['logUser']           = $logUser;
         $data['modified_by_field'] = $modified_by_field;
-        $data['textarea_editor'] = $textarea_editor;
-        $data['username'] = $current_user->username;
+        $data['modified_field']    = $modified_field;
+        $data['module_name_lower'] = $module_name_lower;
+        $data['soft_delete_field'] = $soft_delete_field;
+        $data['textarea_editor']   = $textarea_editor;
+        $data['useCreated']        = $useCreated;
+        $data['useModified']       = $useModified;
+        $data['usePagination']     = $usePagination;
+        $data['useSoftDeletes']    = $useSoftDeletes;
 
+        $data['username']          = $current_user->username;
+
+        // Get the singular case of $module_name for the name of the model file.
         $this->CI->load->helper('inflector');
         $this->files = array(
             'model'     => singular($module_name) . '_model',
             'migration' => 'migration',
         );
 
+        // Content array will hold the results of the various build*() methods.
         $content = array(
             'acl_migration' => false,
             'config'        => false,
@@ -270,31 +307,28 @@ class Modulebuilder
         );
 
         // If the db is required there is at least one field, the primary ID,
-        // so $field_total is at least 1
+        // so $field_total is at least 1.
         $field_total = empty($field_total) && $db_required != '' ? 1 : $field_total;
 
         // Build the files
-        $module_file_name = $module_name_lower;
 
-        // Each context has a controller and a set of views
+        // Each context has a controller and a set of views.
         foreach ($contexts as $key => $context_name) {
-            // Controller
-            $public_context = false;
             if ($context_name == 'public') {
-                $context_name   = $module_file_name;
-                $public_context = true;
-            }
-            $data['controller_name'] = $context_name;
-            $content['controllers'][$context_name] = $this->buildController($data);
+                // Public controllers are named after the module.
+                $data['controller_name'] = $module_name_lower;
+                $content['controllers'][$module_name_lower] = $this->buildController($data);
 
-            // Views
-            if ($public_context === true) {
-                // Only build this view in the Public context
+                // Build the public view.
                 $data['action_name'] = 'index_front';
                 $data['action_label'] = 'Index';
-                $content['views'][$context_name]['index'] = $this->buildView($data);
+                $content['views'][$module_name_lower]['index'] = $this->buildView($data);
             } else {
-                // Only build these views for the Admin contexts
+                // Admin controllers are named after the context.
+                $data['controller_name'] = $context_name;
+                $content['controllers'][$context_name] = $this->buildController($data);
+
+                // Build the admin views.
                 foreach ($action_names as $key => $action_name) {
                     if ($action_name != 'delete') {
                         $data['action_name'] = $action_name;
@@ -313,18 +347,18 @@ class Modulebuilder
             }
         }
 
-        // Build the config file
+        // Build the config file.
         $content['config'] = $this->buildConfig($data);
 
-        // Build the lang file
-        $content['lang'] = $this->build_lang($field_total, $module_name, $module_file_name);
+        // Build the lang file.
+        $content['lang'] = $this->buildLang($field_total, $module_name, $module_name_lower);
 
-        // Build the permissions migration file
+        // Build the permissions migration file.
         $content['acl_migration'] = $this->buildAclSql($data);
 
         // If the DB is required and there are fields, build a model and migration.
         if ($field_total && $db_required != '') {
-           // Build the model file.
+            // Build the model file.
             $content['model'] = $this->buildModel($data);
 
             // DB migration is only built if this is a new table.
@@ -334,46 +368,67 @@ class Modulebuilder
         }
 
         // Did everything build correctly?
-        if ($content['acl_migration'] == false
-            || $content['config'] == false
-            || $content['controllers'] == false
-            || $content['views'] == false
-            || ($db_required != '' && $content['model'] == false)
-            || ($db_required == 'new' && $content['db_migration'] == false)
-           ) {
-            $data['error']  = true;
-            $data['error_msg'] = 'The form was not built.'
-                . ' There was an error with one of the build_() functions.'
-                . ' This was probably caused by total fields variable not being set.';
+        $buildError = false;
+        $buildErrorMessage = '';
+        if ($content['acl_migration'] == false) {
+            $buildError = true;
+            $buildErrorMessage .= 'There was an error building the ACL migration. ';
+        }
+        if ($content['config'] == false) {
+            $buildError = true;
+            $buildErrorMessage .= 'There was an error building the config file. ';
+        }
+        if ($content['controllers'] == false) {
+            $buildError = true;
+            $buildErrorMessage .= 'There was an error building the controllers. ';
+        }
+        if ($content['views'] == false) {
+            $buildError = true;
+            $buildErrorMessage .= 'There was an error building the views. ';
+        }
+        // The model is only built when $db_required is set.
+        if ($db_required != '' && $content['model'] == false) {
+            $buildError = true;
+            $buildErrorMessage .= 'There was an error building the model. ';
+        }
+        // The db migration is only built when $db_required is 'new'.
+        if ($db_required == 'new' && $content['db_migration'] == false) {
+            $buildError = true;
+            $buildErrorMessage .= 'There was an error building the DB migration. ';
+        }
+
+        if ($buildError) {
+            $data['error']     = true;
+            $data['error_msg'] = $buildErrorMessage;
         } else {
-            // Write the files to disk
-            $write_status = $this->_write_files($module_file_name, $content, $table_name, $db_required);
+            // Write the files to disk.
+            $write_status = $this->writeFiles($module_name_lower, $content, $table_name, $db_required);
 
             $data['error'] = false;
             if (! $write_status['status']) {
-                // Write failed
-                $data['error']      = true;
-                $data['error_msg']  = $write_status['error'];
+                // Write failed.
+                $data['error']     = true;
+                $data['error_msg'] = $write_status['error'];
             }
         }
 
-        // Make the variables available to the view file
-        $data['acl_migration'] 	= $content['acl_migration'];
-        $data['build_config'] 	= $content['config'];
-        $data['controllers'] 	= $content['controllers'];
-        $data['db_migration'] 	= $content['db_migration'];
-        $data['lang'] 			= $content['lang'];
-        $data['model'] 			= $content['model'];
-        $data['views'] 			= $content['views'];
-        $data['db_table'] 		= $table_name;
+        // Return the content and database table name.
+        $data['acl_migration'] = $content['acl_migration'];
+        $data['build_config']  = $content['config'];
+        $data['controllers']   = $content['controllers'];
+        $data['db_migration']  = $content['db_migration'];
+        $data['lang']          = $content['lang'];
+        $data['model']         = $content['model'];
+        $data['views']         = $content['views'];
+        $data['db_table']      = $table_name;
 
         return $data;
     }
 
     /**
-     * Get the list of boolean data types supported by the database
+     * Get the list of boolean data types supported by the database.
      *
-     * @return string[]    The names of the boolean data types
+     * @return string[] The names of the boolean data types.
      */
     public function getBooleanTypes()
     {
@@ -381,11 +436,11 @@ class Modulebuilder
     }
 
     /**
-     * Get the list of data types supported by the database
+     * Get the list of data types supported by the database.
      *
-     * @return array    An array in which the keys are the names of the data
-     * types and the values are an array of generic type information ('integer',
-     * 'numeric', 'binary', 'object', etc.)
+     * @return array An array in which the keys are the names of the data types
+     * and the values are an array of generic type information ('integer', 'numeric',
+     * 'binary', 'object', etc.).
      */
     public function getDatabaseTypes()
     {
@@ -393,9 +448,9 @@ class Modulebuilder
     }
 
     /**
-     * Get the list of date data types supported by the database
+     * Get the list of date data types supported by the database.
      *
-     * @return string[]    The names of the date data types
+     * @return string[] The names of the date data types.
      */
     public function getDateTypes()
     {
@@ -403,9 +458,9 @@ class Modulebuilder
     }
 
     /**
-     * Get the list of integer data types supported by the database
+     * Get the list of integer data types supported by the database.
      *
-     * @return string[]    The names of the integer data types
+     * @return string[] The names of the integer data types.
      */
     public function getIntegerTypes()
     {
@@ -413,9 +468,9 @@ class Modulebuilder
     }
 
     /**
-     * Get the list of the list data types supported by the database
+     * Get the list of the list data types supported by the database.
      *
-     * @return string[]    The names of the list data tpes
+     * @return string[] The names of the list data tpes.
      */
     public function getListTypes()
     {
@@ -423,12 +478,12 @@ class Modulebuilder
     }
 
     /**
-     * Get the list of the object data types supported by the database
+     * Get the list of the object data types supported by the database.
      *
      * Object data types include string objects (text fields) and binary objects
-     * (blob, or binary large object, fields)
+     * (blob, or binary large object, fields).
      *
-     * @return string[]    The names of the object data types
+     * @return string[] The names of the object data types.
      */
     public function getObjectTypes()
     {
@@ -436,9 +491,9 @@ class Modulebuilder
     }
 
     /**
-     * Get the list of the real number data types supported by the database
+     * Get the list of the real number data types supported by the database.
      *
-     * @return string[]    The names of the real number data types
+     * @return string[] The names of the real number data types.
      */
     public function getRealNumberTypes()
     {
@@ -446,9 +501,9 @@ class Modulebuilder
     }
 
     /**
-     * Get the list of the string data types supported by the database
+     * Get the list of the string data types supported by the database.
      *
-     * @return string[]    The names of the string data types
+     * @return string[] The names of the string data types.
      */
     public function getStringTypes()
     {
@@ -456,11 +511,11 @@ class Modulebuilder
     }
 
     /**
-     * Get the list of the text data types supported by the database
+     * Get the list of the text data types supported by the database.
      *
-     * Usually these are the types which are both string and object types
+     * Usually these are the types which are both string and object types.
      *
-     * @return string[]    The names of the text data types
+     * @return string[] The names of the text data types.
      */
     public function getTextTypes()
     {
@@ -468,9 +523,9 @@ class Modulebuilder
     }
 
     /**
-     * Get the list of the time data types supported by the database
+     * Get the list of the time data types supported by the database.
      *
-     * @return string[]    The names of the time data types
+     * @return string[] The names of the time data types.
      */
     public function getTimeTypes()
     {
@@ -482,16 +537,16 @@ class Modulebuilder
     //--------------------------------------------------------------------------
 
     /**
-     * Generate the ACL (permissions) migration file
+     * Generate the ACL (permissions) migration file.
      *
-     * @param array $data The data required to build the permissions migration
-     *  int    'field_total'  The number of fields to add to the table
-     *  string 'module_name'  The name given to the module
-     *  array  'contexts'     An array of contexts selected
-     *  array  'action_names' An array of the controller actions (methods) required
-     *  int    'role_id'      The id of the role which receives full access to the module
+     * @param array $data The data required to build the permissions migration:
+     *  integer 'field_total'  Number of fields to add to the table.
+     *  string  'module_name'  Name given to the module.
+     *  array   'contexts'     Selected contexts.
+     *  array   'action_names' Controller actions (methods) required.
+     *  integer 'role_id'      The role ID of the module's admin.
      *
-     * @return string A string containing the content of the permission migration file
+     * @return string The content of the permission migration file.
      */
     private function buildAclSql($data)
     {
@@ -499,15 +554,15 @@ class Modulebuilder
     }
 
     /**
-     * Generate the content of the module config file
+     * Generate the content of the module config file.
      *
-     * @param array $data The data used to generate the config file's content
-     *  string 'module_name'        The name given to the module
-     *  string 'module_description' The description text for the module
-     *  string 'username'           The user name for the current user
-     *  string 'module_name_lower'  Cleaned/lowercase version of module_name
+     * @param array $data The data used to generate the config file's content:
+     *  string 'module_name'        The name given to the module.
+     *  string 'module_description' The description text for the module.
+     *  string 'username'           The user name for the current user.
+     *  string 'module_name_lower'  Clean/lowercase version of module_name.
      *
-     * @return string A string containing the content of the config file
+     * @return string The content of the config file.
      */
     private function buildConfig($data)
     {
@@ -515,19 +570,19 @@ class Modulebuilder
     }
 
     /**
-     * Generate the content of a controller file
+     * Generate the content of a controller file.
      *
-     * @param array $data The data required to build the controller
-     *  int    'field_total'           The number of fields to add to the table
-     *  string 'module_name'           The name given to the module
-     *  string 'controller_name'       The name of the controller class
-     *  array  'action_names'          An array of the controller actions (methods) required
-     *  string 'primary_key_field'     The name of the primary key
-     *  string 'db_required'           The database requirement setting (new, existing or none)
-     *  array  'form_error_delimiters' An array with the html delimiters for error messages
-     *  string 'table_name'            The name of the table in the database
+     * @param array $data The data required to build the controller:
+     *  integer 'field_total'           The number of fields to add to the table.
+     *  string  'module_name'           The name given to the module.
+     *  string  'controller_name'       The name of the controller class.
+     *  array   'action_names'          The controller actions (methods) required.
+     *  string  'primary_key_field'     The name of the primary key.
+     *  string  'db_required'           Database requirement ('new'/'existing'/'none').
+     *  array   'form_error_delimiters' Error message delimiters.
+     *  string  'table_name'            The name of the table in the database.
      *
-     * @return string|boolean The content of the controller file or false on error.
+     * @return string/boolean The content of the controller file or false on error.
      */
     private function buildController($data)
     {
@@ -541,15 +596,15 @@ class Modulebuilder
     /**
      * Generate the module migration file which creates the database table.
      *
-     * @param array $data The data required to build the migration
-     *  int    'field_total'       The number of fields to add to the table
-     *  string 'module_name'       The name given to the module
-     *  string 'primary_key_field' The name of the primary key
-     *  string 'table_name'        The name of the table in the database
+     * @param array $data The data required to build the migration:
+     *  integer 'field_total'           The number of fields to add to the table.
+     *  string  'module_name'           The name given to the module.
+     *  string  'primary_key_field'     The name of the primary key.
+     *  string  'table_name'            The name of the table in the database.
      *  boolean 'table_as_field_prefix' Whether the table name is used as a prefix
-     *  for field names
+     *  for field names.
      *
-     * @return string The content of the database migration file.
+     * @return string/boolean The content of the migration file or false on error.
      */
     private function buildDbSql($data)
     {
@@ -558,8 +613,8 @@ class Modulebuilder
             return false;
         }
 
-        // There are no doubt more types where a value/length isn't possible
-        // - needs investigating
+        // Types where a value/length isn't possible.
+        // @todo Determine whether more types should be added.
         $data['no_length'] = array_merge(
             $this->objectTypes,
             $this->booleanTypes,
@@ -568,23 +623,23 @@ class Modulebuilder
         );
 
         // Types where a value/length is optional, will not output a constraint
-        // if the field is empty
+        // if the field is empty.
         $data['optional_length'] = array_diff($this->integerTypes, $this->booleanTypes);
 
         return $this->CI->load->view('files/db_migration', $data, true);
     }
 
     /**
-     * Generate the content of a model file
+     * Generate the content of a model file.
      *
      * @param array $data The data to use when building the model:
-     *  int    'field_total'       The number of fields to add to the table
-     *  string 'module_name_lower' The name given to the module
-     *  array  'action_names'      An array of the controller actions (methods) required
-     *  string 'primary_key_field' The name of the primary key
-     *  string 'table_name'        The name of the table in the database
+     *  integer 'field_total'       The number of fields to add to the table.
+     *  string  'module_name_lower' The name given to the module.
+     *  array   'action_names'      The controller actions (methods) required.
+     *  string  'primary_key_field' The name of the primary key.
+     *  string  'table_name'        The name of the table in the database.
      *
-     * @return string|bool The content of the model file or false on error
+     * @return string/boolean The content of the model file or false on error.
      */
     private function buildModel($data)
     {
@@ -597,17 +652,17 @@ class Modulebuilder
     }
 
     /**
-     * Generate the content for a view file
+     * Generate the content for a view file.
      *
-     * @param array $data   The data required to build the view
-     *  int    'field_total'        The number of fields to add to the table
-     *  string 'module_name'        The name given to the module
-     *  string 'controller_name'    The controller class name
-     *  string 'action_name'        The controller method which will use the view
-     *  string 'action_label'       The value used on the submit button
-     *  string 'primary_key_field'  The name of the primary key
+     * @param array $data The data required to build the view:
+     *  integer 'field_total'       The number of fields to add to the table.
+     *  string  'module_name'       The name given to the module.
+     *  string  'controller_name'   The controller class name.
+     *  string  'action_name'       The controller method which will use the view.
+     *  string  'action_label'      The value used on the submit button.
+     *  string  'primary_key_field' The name of the primary key.
      *
-     * @return string|bool The content of the view file or false on error
+     * @return string/boolean The content of the view file or false on error.
      */
     private function buildView($data)
     {
@@ -623,20 +678,13 @@ class Modulebuilder
             case 'list':
                 $view_name = 'index';
                 break;
-
             case 'index':
-                // no break
             case 'index_front':
-                // no break
             case 'delete':
-                // no break
             case 'js':
-                // no break
             case 'sub_nav':
-                // no break
                 $view_name = $action_name;
                 break;
-
             default:
                 $view_name = 'default';
                 break;
@@ -646,21 +694,21 @@ class Modulebuilder
     }
 
     /**
-     * Write the files for the module to the server
+     * Write the files for the module to the /application/modules/ directory.
      *
-     * @param string $module_name The name of the module
-     * @param array  $content     An array containing the content for the files
-     * @param string $table_name  The name of the db table
-     * @param string $db_required The database requirement setting (new, existing or none)
+     * @param string $module_name The name of the module.
+     * @param array  $content     An array containing the content for the files.
+     * @param string $table_name  The name of the db table.
+     * @param string $db_required DB requirement ('new'/'existing'/'none').
      *
-     * @return array An array containing the status and error message
+     * @return array An array containing 'status' (boolean) and 'error' message (string).
      */
-    private function _write_files($module_name, $content, $table_name, $db_required)
+    private function writeFiles($module_name, $content, $table_name, $db_required)
     {
-        // Load the constants config if DIR_WRITE_MODE is undefined
+        // Load the constants config if DIR_WRITE_MODE is undefined.
         defined('DIR_WRITE_MODE') || $this->CI->load->config('constants');
 
-        $error_msg = 'Module Builder:';
+        $error_msg  = 'Module Builder:';
         $modulePath = "{$this->options['output_path']}{$module_name}/";
 
         // Make the $modulePath directory if it does not exist
@@ -781,21 +829,17 @@ class Modulebuilder
                         $file_name = "001_Install_{$file_name}_permissions";
                         $path = "{$modulePath}/migrations";
                         break;
-
                     case 'db_migration':
                         $file_name = "002_Install_{$table_name}";
                         $path = "{$modulePath}/migrations";
                         break;
-
                     case 'model':
                         $file_name .= "_model";
                         break;
-
                     case 'config':
                         $file_name = "config";
                         $path = "{$modulePath}/config";
                         break;
-
                     default:
                         break;
                 }
@@ -808,8 +852,8 @@ class Modulebuilder
                 if (! write_file("{$path}/{$file_name}.{$ext}", $value)) {
                     $errorMessage = "failed to write file {$path}/{$file_name}.{$ext}";
                     log_message('error', $errorMessage);
-                    $ret_val['status']  = false;
-                    $ret_val['error']   = "{$error_msg} {$errorMessage}";
+                    $ret_val['status'] = false;
+                    $ret_val['error']  = "{$error_msg} {$errorMessage}";
                     break;
                 }
             }
@@ -819,18 +863,36 @@ class Modulebuilder
     }
 
     /**
-     * Generate the content of a language file
+     * Generate the content of the language files.
      *
-     * @param string $module_name       The name given to the module
-     * @param string $module_name_lower The name given to the module in lowercase
+     * @param integer $field_total       The number of fields submitted.
+     * @param string  $module_name       The name given to the module.
+     * @param string  $module_name_lower The name given to the module in lowercase.
      *
-     * @return string A string containing the content of the language file
+     * @return array An array using the language name/idiom as the key and the content
+     * of the language file as the value.
      */
-    private function build_lang($field_total, $module_name, $module_name_lower)
+    private function buildLang($field_total, $module_name, $module_name_lower)
     {
         $data['field_total'] = $field_total;
         $data['module_name'] = $module_name;
         $data['module_name_lower'] = $module_name_lower;
+
+        // Build out the field labels for the language files from the submitted
+        // form values.
+        $fieldEntries = '';
+        for ($counter = 1; $field_total >= $counter; $counter++) {
+            if (set_value("view_field_label$counter") == null) {
+                // If the label is not set, move on to the next field.
+                continue;
+            }
+
+            $fieldLabel = set_value("view_field_label$counter");
+            $fieldName  = set_value("view_field_name$counter");
+            $fieldEntries .= "\n\$lang['{$module_name_lower}_field_{$fieldName}'] = '{$fieldLabel}';";
+        }
+
+        $data['fieldEntries'] = $fieldEntries;
 
         $lang = array();
         foreach ($this->languages_available as $language_file) {
@@ -848,22 +910,24 @@ class Modulebuilder
      * This code is not really portable. Would have been nice to create a rule
      * that accepted an array.
      *
-     * @param string $str     Name of the field
-     * @param int    $fieldno The position number of this field
+     * @param string  $str     Name of the field.
+     * @param integer $fieldno The position number of this field.
      *
-     * @return bool
+     * @return boolean False if validation failed, else true.
      */
     protected function no_match($str, $fieldno)
     {
         for ($counter = 1; $this->field_total >= $counter; $counter++) {
-            // Nothing has been entered into this field or the field being
-            // checked is the same as the field it will be checked against
-            if ($_POST["view_field_name$counter"] == '' || $fieldno == $counter) {
+            if ($_POST["view_field_name$counter"] == ''
+                || $fieldno == $counter
+            ) {
+                // Nothing has been entered into this field, or the field being
+                // checked is the same as the field to which it will be compared.
                 continue;
             }
 
             if ($str == $_POST["view_field_name$counter"]) {
-                $this->CI->form_validation->set_message('no_match', "Field names must be unique!");
+                $this->CI->form_validation->set_message('no_match', 'lang:builder_validation_no_match');
                 return false;
             }
         }
@@ -907,19 +971,21 @@ class Modulebuilder
         $table_name,
         $table_as_field_prefix
     ) {
-        return $this->buildFiles(array(
-            'field_total'           => $field_total,
-            'module_name'           => $module_name,
-            'contexts'              => $contexts,
-            'action_names'          => $action_names,
-            'primary_key_field'     => $primary_key_field,
-            'db_required'           => $db_required,
-            'form_error_delimiters' => $form_error_delimiters,
-            'module_description'    => $module_description,
-            'role_id'               => $role_id,
-            'table_name'            => $table_name,
-            'table_as_field_prefix' => $table_as_field_prefix,
-        ));
+        return $this->buildFiles(
+            array(
+                'action_names'          => $action_names,
+                'contexts'              => $contexts,
+                'db_required'           => $db_required,
+                'field_total'           => $field_total,
+                'form_error_delimiters' => $form_error_delimiters,
+                'module_description'    => $module_description,
+                'module_name'           => $module_name,
+                'primary_key_field'     => $primary_key_field,
+                'role_id'               => $role_id,
+                'table_as_field_prefix' => $table_as_field_prefix,
+                'table_name'            => $table_name,
+            )
+        );
     }
 
     /**
