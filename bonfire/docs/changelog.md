@@ -37,7 +37,6 @@
 * Added `$allowOffline` array to `/application/hooks/App_hooks.php` to configure pages which are allowed to bypass the site offline functionality. As long as `'/users/login'` is in this list, users with the correct permissions will be able to log in and bring the site back online. If a user does not have the correct permission, and no additional pages have been added to the list, they will still see the contents of the `/application/errors/offline.php` file once they log in to the site. If you want to disable user logins while the site is offline, set this variable to an empty array. Just make sure you don't log out of the site after setting it offline, or you will have to update the database to get the site back online.
 * Added Constants from CI 3 to `/application/config/constants.php` (primarily EXIT_* constants).
 * CI PR #3303: Fix `Common::get_config()` error in PHP 5.6.
-* Changed language prefix for emailer module from `em_` to `emailer_`.
 * Application Helper:
     * `is_https()`:
         * Added `is_https()` function from CI 3's `core/Common` functions to ensure checks for use of https are consistent and accurate.
@@ -52,7 +51,12 @@
         * `setContexts()` will add the required contexts if they are not included in the first argument.
     * `getContexts()` allows an optional first argument to only return contexts with landing pages (the functionality from the `application_helper`'s `list_contexts()` function).
     * Modified internal access of the `self::$contexts` array to use `self::getContexts()` and `self::setContexts()`.
-* Fixed russian language support for activities, logs, and sysinfo modules. Added russian language support to builder.
+* Language improvements:
+    * CI Language files adapted from https://github.com/bcit-ci/codeigniter3-translations (official CI3 translations repository)
+    * DB files modified to use `db_unsupported_compression` and `db_unsupported_feature` (instead of `db_unsuported_*`) and FTP library modified to use `ftp_unable_to_mkdir` instead of `ftp_unable_to_makdir`, so other language files may be pulled down from the official CI3 translations.
+    * Updated `form_validation_lang` files to allow use with either CI 2 or 3.
+    * Changed language prefix for emailer module from `em_` to `emailer_`.
+    * Fixed russian language support for activities, logs, and sysinfo modules. Added russian language support to builder.
 
 #### Known Issues:
 
