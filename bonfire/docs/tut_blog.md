@@ -63,8 +63,8 @@ Create a new file at `blog/migrations/001_Initial_tables.php`.
     class Migration_Initial_tables extends Migration
     {
         private $permissionValues = array(
-            array('name' => 'Bonfire.Blog.View', 'description' => 'View the blog menu.', 'status' => 'active'),
-            array('name' => 'Bonfire.Blog.Delete', 'description' => 'Delete blog entries', 'status' => 'active'),
+            array('name' => 'Blog.Content.View', 'description' => 'View the blog menu.', 'status' => 'active'),
+            array('name' => 'Blog.Content.Delete', 'description' => 'Delete blog entries', 'status' => 'active'),
         );
 
         private $permittedRoles = array(
