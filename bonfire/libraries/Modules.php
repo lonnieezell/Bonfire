@@ -213,7 +213,14 @@ class Modules
                 log_message('debug', "File already loaded: {$location}");
                 return $result;
             }
-            include_once $location;
+            if (file_exists($location)) {
+                include_once $location;
+            } elseif (file_exists("{$path}/" . ucfirst($file) . '.php')) {
+                include_once("{$path}/" . ucfirst($file) . '.php');
+            } else {
+                log_message('debug', "File not found: {$location}");
+                return $result;
+            }
         } else {
             // Load config or language array.
             include $location;
