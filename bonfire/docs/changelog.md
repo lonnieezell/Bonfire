@@ -17,6 +17,7 @@
 * #1085 `s` key submits forms automatically
 * #1087 Country dropdown in extended settings doesn't update state dropdown
 * #1089 Fix error deleting roles for permissions during permission_model->update()
+* #1097, 1081 Installer looks for database configuration only in /application/config/development/database.php
 
 #### Additional Changes:
 * Upgraded CI to v2.2.1

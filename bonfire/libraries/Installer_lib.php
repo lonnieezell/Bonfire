@@ -106,7 +106,6 @@ class Installer_lib
             case 'mysql':
                 return function_exists('mysql_connect');
             case 'bfmysqli':
-                // no break;
             case 'mysqli':
                 return class_exists('Mysqli');
             case 'cubrid':
@@ -156,7 +155,6 @@ class Installer_lib
             case 'mysql':
                 return @mysql_connect("$hostname:$port", $username, $password);
             case 'bfmysqli':
-                // no break;
             case 'mysqli':
                 $mysqli = new mysqli($hostname, $username, $password, '', $port);
                 if (! $mysqli->connect_error) {
@@ -234,11 +232,16 @@ class Installer_lib
         }
 
         // If the database config doesn't exist, the app is not installed
-        if (! is_file(APPPATH . 'config/development/database.php')) {
+        if (defined('ENVIRONMENT') && is_file(APPPATH . 'config/' . ENVIRONMENT . '/database.php')) {
+            require(APPPATH . 'config/' . ENVIRONMENT . '/database.php');
+        } elseif (is_file(APPPATH . 'config/development/database.php')) {
+            require(APPPATH . 'config/development/database.php');
+        } elseif (is_file(APPPATH . 'config/database.php')) {
+            require(APPPATH . 'config/database.php');
+        } else {
             $this->db_settings_exist = false;
             return false;
         }
-        require(APPPATH . '/config/development/database.php');
 
         // If $db['default'] doesn't exist, the app can't load the database
         if (! isset($db) || ! isset($db['default'])) {
