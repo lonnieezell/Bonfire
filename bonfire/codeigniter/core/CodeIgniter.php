@@ -243,16 +243,28 @@
 	// Load the local application controller
 	// Note: The Router class automatically validates the controller path using the router->_validate_request().
 	// If this include fails it means that the default controller in the Routes.php file is not resolving to something valid.
-	if ( ! file_exists(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
+	if (file_exists(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
 	{
-        // Check the Bonfire Path for the controller.
-        if (file_exists(BFPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php')) {
-            include(BFPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php');
-        } else {
-            show_error('Unable to load your default controller. Please make sure the controller specified in your Routes.php file is valid.');
-        }
-	} else {
         include(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php');
+    }
+    elseif (file_exists(APPPATH.'controllers/'.$RTR->fetch_directory().ucfirst($RTR->fetch_class()).'.php'))
+    {
+        // CI 3 compatibility mode
+        include(APPPATH.'controllers/'.$RTR->fetch_directory().ucfirst($RTR->fetch_class()).'.php');
+    }
+    elseif (file_exists(BFPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
+    {
+        // Bonfire path.
+        include(BFPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php');
+    }
+    elseif (file_exists(BFPATH.'controllers/'.$RTR->fetch_directory().ucfirst($RTR->fetch_class()).'.php'))
+    {
+        // Bonfire path with ucfirst filename (CI3 compatibility mode).
+        include(BFPATH.'controllers/'.$RTR->fetch_directory().ucfirst($RTR->fetch_class()).'.php');
+    }
+    else
+    {
+        show_error('Unable to load your default controller. Please make sure the controller specified in your Routes.php file is valid.');
     }
 
 	// Set a mark point for benchmarking
