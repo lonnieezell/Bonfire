@@ -17,12 +17,12 @@ spl_autoload_register('Modules::autoload');
  * Bonfire
  *
  * An open source project to allow developers to jumpstart their development of
- * CodeIgniter applications
+ * CodeIgniter applications.
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT    The MIT License
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -335,6 +335,8 @@ class Modules
         // Look in all module paths.
         foreach (Modules::folders() as $folder) {
             if (is_file("{$folder}{$module}/controllers/{$controller}.php")) {
+                return true;
+            } elseif (is_file("{$folder}{$module}/controllers/" . ucfirst($controller) . '.php')) {
                 return true;
             }
         }
