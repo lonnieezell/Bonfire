@@ -125,7 +125,7 @@ class Permission_model extends BF_Model
      *
      * @return boolean True if the permission was updated, else false.
      */
-    public function update($id, $data)
+    public function update($id = null, $data = null)
     {
         $updated = parent::update($id, $data);
 

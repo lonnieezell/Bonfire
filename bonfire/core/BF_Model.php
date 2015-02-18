@@ -813,7 +813,7 @@ class BF_Model extends CI_Model
      */
     public function format_dropdown()
     {
-        $args = & func_get_args();
+        $args = func_get_args();
         if (count($args) == 2) {
             list($key, $value) = $args;
         } else {
@@ -1501,7 +1501,7 @@ class BF_Model extends CI_Model
             return false;
         }
 
-        if (class_exists('Console')) {
+        if (class_exists('Console', false)) {
             Console::log($message);
         }
 

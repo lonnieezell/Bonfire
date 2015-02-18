@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT    The MIT License
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -25,9 +25,9 @@
  * https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home
  * for more details on the HMVC code used in Bonfire.
  *
- * @package    Bonfire\Application\Core\Base_Controller
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/bonfire/bonfire_controllers
+ * @package Bonfire\Application\Core\Base_Controller
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/bonfire/bonfire_controllers
  */
 class Base_Controller extends MX_Controller
 {
@@ -81,7 +81,8 @@ class Base_Controller extends MX_Controller
         // Handle any autoloading here...
         $this->autoload_classes();
 
-        Events::trigger('before_controller', get_class($this));
+        $controllerClass = get_class($this);
+        Events::trigger('before_controller', $controllerClass);
 
         if ($this->require_authentication === true) {
             $this->authenticate();
@@ -136,7 +137,8 @@ class Base_Controller extends MX_Controller
         }
 
         // After-Controller Constructor Event
-        Events::trigger('after_controller_constructor', get_class($this));
+        $controllerClass = get_class($this);
+        Events::trigger('after_controller_constructor', $controllerClass);
     }
 
     /**
@@ -247,4 +249,3 @@ class Base_Controller extends MX_Controller
         }
     }
 }
-/* End of file ./application/core/Base_Controller.php */

@@ -105,9 +105,12 @@ class BF_Loader extends MX_Loader
 
         if ($path === false) {
             // Use $this->_ci_load_library() in CI 3
-            // $this->_ci_load_library($library, $params, $object_name);
-            $this->_ci_load_class($library, $params, $object_name);
-            $_alias = $this->_ci_classes[$class];
+            if (substr(CI_VERSION, 0, 1) != '2') {
+                $this->_ci_load_library($library, $params, $object_name);
+            } else {
+                $this->_ci_load_class($library, $params, $object_name);
+                $_alias = $this->_ci_classes[$class];
+            }
         } else {
             Modules::load_file($_library, $path);
 

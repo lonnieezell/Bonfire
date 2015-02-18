@@ -1,4 +1,6 @@
-<?php defined('BASEPATH') || exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
 /*
 | -------------------------------------------------------------------------
 | URI ROUTING
@@ -23,7 +25,7 @@
 | RESERVED ROUTES
 | -------------------------------------------------------------------------
 |
-| There area two reserved routes:
+| There are two reserved routes (three in CI3):
 |
 |	$route['default_controller'] = 'welcome';
 |
@@ -33,13 +35,24 @@
 |
 |	$route['404_override'] = 'errors/page_missing';
 |
-| This route will tell the Router what URI segments to use if those provided
-| in the URL cannot be matched to a valid route.
+| This route will tell the Router which controller/method to use if those
+| provided in the URL cannot be matched to a valid route.
 |
+| CI3:
+|
+|	$route['translate_uri_dashes'] = FALSE;
+|
+| This is not exactly a route, but allows you to automatically route
+| controller and method names that contain dashes. '-' isn't a valid
+| class or method name character, so it requires translation.
+| When you set this option to TRUE, it will replace ALL dashes in the
+| controller and method URI segments.
+|
+| Examples:	my-controller/index	-> my_controller/index
+|		my-controller/my-method	-> my_controller/my_method
 */
 
-
-$route['default_controller'] = "home";
+$route['default_controller'] = 'home';
 $route['404_override'] = '';
 
 // Authentication
@@ -65,11 +78,8 @@ Route::prefix(SITE_AREA, function(){
     Route::context('settings');
 });
 
-
-$route[SITE_AREA]	= 'admin/home';
-
-
 $route = Route::map($route);
 
-/* End of file routes.php */
-/* Location: ./application/config/routes.php */
+if (defined(CI_VERSION) && substr(CI_VERSION, 0, 1) != '2') {
+    $route['translate_uri_dashes'] = false;
+}

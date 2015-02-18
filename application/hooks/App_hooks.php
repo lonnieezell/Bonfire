@@ -69,24 +69,34 @@ class App_hooks
      */
     public function checkAutoloaderConfig()
     {
-        if (isset($this->ci->load)) {
-            // If the settings lib is not available, try to load it.
-            if (! isset($this->ci->settings_lib)) {
-                $this->ci->load->library('settings/settings_lib');
-            }
+        // CI 3 loads Composer itself.
+        if (defined('CI_VERSION') && substr(CI_VERSION, 0, 1) != '2') {
+            return;
+        }
 
-            $composerAutoload = $this->ci->settings_lib->item('composer_autoload');
-            if ($composerAutoload !== false) {
-                if ($composerAutoload === true) {
-                    if (file_exists(APPPATH . 'vendor/autoload.php')) {
-                        require_once(APPPATH . 'vendor/autoload.php');
-                    } elseif (file_exists(APPPATH . '../vendor/autoload.php')) {
-                        require_once(APPPATH . '../vendor/autoload.php');
-                    }
-                } elseif (file_exists($composerAutoload)) {
-                    require_once($composerAutoload);
-                }
+        // CI's loader isn't available.
+        if (! isset($this->ci->load)) {
+            return;
+        }
+
+        // If the settings lib is not available, try to load it.
+        if (! isset($this->ci->settings_lib)) {
+            $this->ci->load->library('settings/settings_lib');
+        }
+
+        $composerAutoload = $this->ci->settings_lib->item('composer_autoload');
+        if ($composerAutoload === false) {
+            return;
+        }
+
+        if ($composerAutoload === true) {
+            if (file_exists(APPPATH . 'vendor/autoload.php')) {
+                require_once(APPPATH . 'vendor/autoload.php');
+            } elseif (file_exists(APPPATH . '../vendor/autoload.php')) {
+                require_once(APPPATH . '../vendor/autoload.php');
             }
+        } elseif (file_exists($composerAutoload)) {
+            require_once($composerAutoload);
         }
     }
 
