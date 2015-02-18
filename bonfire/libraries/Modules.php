@@ -370,6 +370,8 @@ class Modules
         foreach (Modules::folders() as $module_folder) {
             if (is_file("{$module_folder}{$module}/{$folder}/{$file}")) {
                 return "{$module_folder}{$module}/{$folder}/{$file}";
+            } elseif (is_file("{$module_folder}{$module}/{$folder}/" . ucfirst($file))) {
+                return "{$module_folder}{$module}/{$folder}/" . ucfirst($file);
             }
         }
     }
