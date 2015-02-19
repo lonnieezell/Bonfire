@@ -125,7 +125,7 @@ class Contexts
             self::$site_area = $siteArea;
         }
 
-        log_message('debug', 'UI/Contexts set_contexts has been called.');
+        log_message('debug', 'UI/Contexts setContexts has been called.');
     }
 
     /**

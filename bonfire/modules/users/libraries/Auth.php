@@ -74,7 +74,12 @@ class Auth
         // The users language file is needed for this to work from other modules.
         $this->ci->lang->load('users/users');
         $this->ci->load->model('users/user_model');
-        $this->ci->load->library('session');
+        if (substr(CI_VERSION, 0, 1) != '2') {
+            $this->ci->load->driver('session');
+        } else {
+            $this->ci->load->library('session');
+        }
+
 
         // Try to log the user in from session/cookie data.
         $this->autologin();
@@ -476,7 +481,7 @@ class Auth
         }
 
         // Retrieve the roles from the database.
-        if (! class_exists('role_model')) {
+        if (! class_exists('role_model', false)) {
             $this->ci->load->model('roles/role_model');
         }
         $results = $this->ci->role_model->select('role_id, role_name')
@@ -567,7 +572,7 @@ class Auth
      */
     protected function getPasswordHasher($iterations)
     {
-        if (! class_exists('PasswordHash')) {
+        if (! class_exists('PasswordHash', false)) {
             require(dirname(__FILE__) . '/../libraries/PasswordHash.php');
         }
 
@@ -770,7 +775,7 @@ class Auth
             return $this->permissions;
         }
 
-        if (! class_exists('permission_model')) {
+        if (! class_exists('permission_model', false)) {
             $this->ci->load->model('permissions/permission_model');
         }
 
@@ -801,7 +806,7 @@ class Auth
             return $this->role_permissions;
         }
 
-        if (! class_exists('role_permission_model')) {
+        if (! class_exists('role_permission_model', false)) {
             $this->ci->load->model('roles/role_permission_model');
         }
 

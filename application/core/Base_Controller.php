@@ -150,7 +150,7 @@ class Base_Controller extends MX_Controller
      */
     protected function set_current_user()
     {
-        if (class_exists('Auth')) {
+        if (class_exists('Auth', false)) {
             // Load the currently logged-in user for convenience
             if ($this->auth->is_logged_in()) {
                 $this->current_user = clone $this->auth->user();
@@ -170,7 +170,7 @@ class Base_Controller extends MX_Controller
             }
 
             // Make the current user available in the views
-            if (! class_exists('template')) {
+            if (! class_exists('template', false)) {
                 $this->load->library('template');
             }
             Template::set('current_user', $this->current_user);
@@ -237,7 +237,8 @@ class Base_Controller extends MX_Controller
     {
         // $this->input->is_cli_request() is deprecated in CI 3.0, but the replacement
         // common is_cli() function is not available in CI 2.2.
-        if (! $this->input->is_cli_request()
+        $isCliRequest = substr(CI_VERSION, 0, 1) == '2' ? $this->input->is_cli_request() : is_cli();
+        if (! $isCliRequest
             && ! $this->input->is_ajax_request()
         ) {
             if ($frontEnd == false

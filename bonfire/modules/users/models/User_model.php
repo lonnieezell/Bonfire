@@ -7,7 +7,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -20,7 +20,7 @@
  * The central way to access and perform CRUD on users.
  *
  * @package Bonfire\Modules\Users\Models\User_model
- * @author     Bonfire Dev Team
+ * @author  Bonfire Dev Team
  * @link    http://cibonfire.com/docs/developer
  */
 class User_model extends BF_Model
@@ -267,7 +267,7 @@ class User_model extends BF_Model
 
         // Get the default role if the role_id was not provided.
         if (! isset($data['role_id'])) {
-            if (! class_exists('role_model')) {
+            if (! class_exists('role_model', false)) {
                 $this->load->model('roles/role_model');
             }
             $data['role_id'] = $this->role_model->default_role_id();
@@ -429,7 +429,7 @@ class User_model extends BF_Model
         }
 
         // Get the default role ID.
-        if (! class_exists('role_model')) {
+        if (! class_exists('role_model', false)) {
             $this->load->model('roles/role_model');
         }
         $defaultRoleId = $this->role_model->default_role_id();

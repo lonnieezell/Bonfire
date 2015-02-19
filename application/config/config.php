@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
@@ -293,7 +293,7 @@ $config['cache_path'] = APPPATH . 'cache/';
 | URL query string.  Please be aware this might result in numerous cache files.
 |
  */
-$config['cache_query_string'] = FALSE;
+$config['cache_query_string'] = false;
 
 /*
 |--------------------------------------------------------------------------
@@ -382,9 +382,13 @@ $config['sess_table_name']		= 'sessions';
 $config['sess_match_useragent'] = true; // May duplicate sessions for Safari users when true.
 
 // CI 3 Session Variables
-$config['sess_driver'] = 'files';
-$config['sess_save_path'] = null;
+$config['sess_driver'] = 'database';
 $config['sess_regenerate_destroy'] = false;
+
+// If you use a different database table name, update
+// /bonfire/migrations/043_Add_ci3_sessions.php
+// accordingly or create the table manually.
+$config['sess_save_path'] = 'ci3_sessions';
 
 /*
 |--------------------------------------------------------------------------

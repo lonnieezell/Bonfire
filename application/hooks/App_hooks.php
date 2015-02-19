@@ -144,7 +144,11 @@ class App_hooks
     public function prepRedirect()
     {
         if (! class_exists('CI_Session', false)) {
-            $this->ci->load->library('session');
+            if (substr(CI_VERSION, 0, 1) == '2') {
+                $this->ci->load->library('session');
+            } else {
+                $this->ci->load->driver('session');
+            }
         }
 
         if (! in_array($this->ci->uri->ruri_string(), $this->ignore_pages)) {
@@ -169,7 +173,11 @@ class App_hooks
         if (! class_exists('CI_Session', false)) {
             if (is_object(get_instance())) {
                 // If an instance is available, just load the session lib.
-                $this->ci->load->library('session');
+                if (substr(CI_VERSION, 0, 1) == '2') {
+                    $this->ci->load->library('session');
+                } else {
+                    $this->ci->load->driver('session');
+                }
             } elseif (get_instance() === null) {
                 // If an instance is not available...
 
