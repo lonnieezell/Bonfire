@@ -450,7 +450,9 @@ class Modules
                 continue;
             }
 
-            foreach ($modules as $mod_name => $values) {
+            foreach ($modules as $modDir => $values) {
+                // Compatibility fix for CI3
+                $mod_name = rtrim($modDir, DIRECTORY_SEPARATOR);
                 if (is_array($values)) {
                     if (empty($module_folder)) {
                         // Add the entire module.
@@ -461,6 +463,14 @@ class Modules
                         // Add just the specified folder for this module.
                         $files[$mod_name] = array(
                             $module_folder => $values[$module_folder],
+                        );
+                    } elseif (isset($values[$module_folder . DIRECTORY_SEPARATOR])
+                        && count($values[$module_folder . DIRECTORY_SEPARATOR])
+                    ) {
+                        // CI 3 added the directory separator to the folder name
+                        // in the output of directory_map().
+                        $files[$mod_name] = array(
+                            $module_folder => $values[$module_folder . DIRECTORY_SEPARATOR],
                         );
                     }
                 }
@@ -574,6 +584,8 @@ class Modules
                 || stripos($map[$i], '.php') !== false
             ) {
                 unset($map[$i]);
+            } else {
+                $map[$i] = rtrim($map[$i], DIRECTORY_SEPARATOR);
             }
         }
 
