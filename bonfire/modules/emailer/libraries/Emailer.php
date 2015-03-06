@@ -278,12 +278,10 @@ class Emailer
                               ->where('success', 0)
                               ->get($this->tableName);
 
-        $success = true;
-
         // If the query returned no rows, the queue is empty, so it has been
         // processed successfully.
         if (! $query->num_rows()) {
-            return $success;
+            return true;
         }
 
         $emails = $query->result();
@@ -296,6 +294,7 @@ class Emailer
         $senderEmail = settings_item('sender_email');
         $siteTitle = settings_item('site.title');
 
+        $success = true;
         foreach ($emails as $email) {
             $this->ci->email->initialize($config_settings);
             $this->ci->email->clear(true);

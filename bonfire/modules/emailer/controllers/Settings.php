@@ -52,9 +52,9 @@ class Settings extends Admin_Controller
      */
     public function index()
     {
-        $this->load->library('form_validation');
-
         if (isset($_POST['save'])) {
+            $this->load->library('form_validation');
+
             $this->form_validation->set_rules('sender_email', 'lang:emailer_system_email', 'required|trim|valid_email|max_length[120]');
             $this->form_validation->set_rules('protocol', 'lang:emailer_email_server', 'trim');
 
@@ -69,7 +69,9 @@ class Settings extends Admin_Controller
                 $this->form_validation->set_rules('smtp_timeout', 'lang:emailer_smtp_timeout', 'trim|numeric');
             }
 
-            if ($this->form_validation->run() !== false) {
+            if ($this->form_validation->run() === false) {
+                Template::set_message('There was an error saving your settings.', 'error');
+            } else {
                 $data = array(
                     array('name' => 'sender_email', 'value' => $this->input->post('sender_email')),
                     array('name' => 'mailtype',     'value' => $this->input->post('mailtype')),
@@ -84,15 +86,12 @@ class Settings extends Admin_Controller
 
                 // Save the settings to the db
                 $updated = $this->settings_model->update_batch($data, 'name');
-
                 if ($updated) {
                     // Success, reload the page so they can see their settings
                     Template::set_message('Email settings successfully saved.', 'success');
                     redirect(SITE_AREA . '/settings/emailer');
-                } else {
-                    Template::set_message('There was an error saving your settings.', 'error');
                 }
-            } else {
+
                 Template::set_message('There was an error saving your settings.', 'error');
             }
         }
@@ -187,19 +186,24 @@ class Settings extends Admin_Controller
         // Deleting anything?
         if (isset($_POST['delete'])) {
             $checked = $this->input->post('checked');
-            if (is_array($checked) && count($checked)) {
-                $result = false;
+            if (! empty($checked) && is_array($checked)) {
+                $result = true;
+                $emailError = '';
                 foreach ($checked as $pid) {
-                    $result = $this->emailer_model->delete($pid);
+                    $deleted = $this->emailer_model->delete($pid);
+                    if (! $deleted) {
+                        $result = false;
+                        $emailError = $this->emailer_model->error;
+                    }
                 }
 
                 if ($result) {
                     Template::set_message(sprintf(lang('emailer_delete_success'), count($checked)), 'success');
                 } else {
-                    Template::set_message(sprintf(lang('emailer_delete_failure'), $this->emailer_model->error), 'error');
+                    Template::set_message(sprintf(lang('emailer_delete_failure'), $emailError), 'error');
                 }
             } else {
-                Template::set_message(sprintf(lang('emailer_delete_error'), $this->emailer_model->error), 'error');
+                Template::set_message(lang('emailer_delete_none'), 'error');
             }
         } elseif (isset($_POST['force_process'])) {
             $this->load->library('emailer');
@@ -217,9 +221,9 @@ class Settings extends Admin_Controller
             $this->load->library('emailer');
 
             $data = array(
-                'to'        => $this->settings_lib->item('site.system_email'),
-                'subject'   => lang('emailer_test_mail_subject'),
-                'message'   => lang('emailer_test_mail_body'),
+                'to'      => $this->settings_lib->item('site.system_email'),
+                'subject' => lang('emailer_test_mail_subject'),
+                'message' => lang('emailer_test_mail_body'),
             );
 
             $this->emailer->send($data, true);
@@ -273,9 +277,11 @@ class Settings extends Admin_Controller
     public function create()
     {
         $this->load->model('users/user_model');
-        $this->load->library('emailer');
 
         if (isset($_POST['create'])) {
+            $this->load->library('emailer');
+            $this->load->library('form_validation');
+
             // Validate subject, content and recipients
             $this->form_validation->set_rules('email_subject', 'lang:emailer_email_subject', 'required|trim|min_length[1]|max_length[255]');
             $this->form_validation->set_rules('email_content', 'lang:emailer_email_content', 'required|trim|min_length[1]');
@@ -288,14 +294,15 @@ class Settings extends Admin_Controller
                 Template::set('checked', $this->input->post('checked'));
             } else {
                 $data = array (
-                    'subject'   => $this->input->post('email_subject'),
-                    'message'   => $this->input->post('email_content'),
+                    'subject' => $this->input->post('email_subject'),
+                    'message' => $this->input->post('email_content'),
                 );
-                $checked = $this->input->post('checked');
 
+                $checked = $this->input->post('checked');
                 $success_count = 0;
-                if (is_array($checked) && count($checked)) {
+                if (! empty($checked) && is_array($checked)) {
                     $result = false;
+                    $emailError = '';
                     foreach ($checked as $user_id) {
                         // Get the email from $user_id
                         $user = $this->user_model->find($user_id);
@@ -304,29 +311,28 @@ class Settings extends Admin_Controller
 
                             $result = $this->emailer->send($data, true);
                             if ($result) {
-                                $success_count++;
+                                ++$success_count;
+                            } else {
+                                $emailError = $this->emailer->error;
                             }
                         }
                     }
 
                     if ($result) {
-                        Template::set_message($success_count . ' ' . lang('emailer_create_email_success'), 'success');
+                        Template::set_message(sprintf(lang('emailer_create_email_queued'), $success_count), 'success');
                         redirect(SITE_AREA . '/settings/emailer/queue');
-                    } else {
-                        Template::set_message(sprintf(lang('emailer_create_email_failure'), $this->user_model->error), 'error');
                     }
+
+                    Template::set_message(sprintf(lang('emailer_create_email_failure'), $emailError), 'error');
                 } else {
-                    Template::set_message(sprintf(lang('emailer_create_email_error'), $this->user_model->error), 'error');
+                    Template::set_message(lang('emailer_create_email_no_users'), 'error');
                 }
             }
-        }//end if (isset($_POST['create']))
+        }
 
-        $users = $this->user_model->where('users.deleted', 0)->find_all();
-
-        Template::set('users', $users);
+        Template::set('users', $this->user_model->where('users.deleted', 0)->find_all());
         Template::set('toolbar_title', lang('emailer_create_email'));
 
         Template::render();
     }
 }
-/* End of file /emailer/controllers/settings.php */
