@@ -219,7 +219,7 @@ class Assets
             $styles = array_merge($style, self::$styles['css']);
         } else {
             // If a single style has been passed in, render it only.
-            $styles = array(
+            $styles[] = array(
                 'file'  => $style,
                 'media' => $media,
             );
@@ -244,22 +244,12 @@ class Assets
         } else {
             // Loop through the styles, spitting out links for each one.
             foreach ($styles as $styleToAdd) {
-                $attr = array(
-                    'rel'   => 'stylesheet',
-                    'type'  => 'text/css',
-                    'href'  => '',
-                    'media' => $media,
-                );
-
                 if (is_array($styleToAdd)) {
-                    $attr['href'] = $styleToAdd['file'];
-                    if (! empty($styleToAdd['media'])) {
-                        $attr['media'] = $styleToAdd['media'];
-                    }
+                    $attr = array('href' => $styleToAdd['file']);
+                    $attr['media'] = empty($styleToAdd['media']) ? $media : $styleToAdd['media'];
                 } elseif (is_string($styleToAdd)) {
-                    $attr['href'] = $styleToAdd;
+                    $attr = array('href' => $styleToAdd, 'media' => $media);
                 } else {
-                    // If it's not an array or a string, skip it
                     continue;
                 }
 
@@ -267,8 +257,7 @@ class Assets
                     $attr['href'] .= '.css';
                 }
 
-
-                $return .= '<link' . self::attributes($attr) . " />\n";
+                $return .= self::buildStyleLink($attr) . "\n";
             }
         }
 
@@ -323,15 +312,13 @@ class Assets
 
         // Create our link attributes
         $attr = array(
-            'rel'   => 'stylesheet',
-            'type'  => 'text/css',
             'href'  => self::path(base_url(), self::$directories['base'], self::$directories['cache'], "{$fileName}{$min}.css"),
             'media' => $media,
         );
 
         $output = '';
         if (self::generate_file($files, $fileName, 'css')) {
-            $output = '<link' . self::attributes($attr) . " />\n";
+            $output = self::buildStyleLink($attr) . "\n";
         }
 
         return $output;
@@ -368,7 +355,7 @@ class Assets
 
         // Add an array
         $stylesToAdd = array();
-        if (is_array($style) && count($style)) {
+        if (is_array($style)) {
             foreach ($style as $file) {
                 $stylesToAdd[] = array(
                     'file'  => $file,
@@ -414,7 +401,7 @@ class Assets
         }
 
         // Add an array
-        if (is_array($path) && count($path)) {
+        if (is_array($path)) {
             foreach ($path as $file) {
                 self::$styles['module'][] = array(
                     'module' => $module,
@@ -590,10 +577,7 @@ class Assets
             && ! $list
             && self::$ci->config->item('assets.js_combine')
         ) {
-            $attr = array('type'  => 'text/javascript');
-            $attr['src'] = self::combine_js($scripts);
-
-            $return .= '<script' . self::attributes($attr) . "></script>\n";
+            $return .= self::buildScriptElement(self::combine_js($scripts), 'text/javascript') . "\n";
         } else {
             // Or generate individual links
             $http_protocol = is_https() ? 'https' : 'http';
@@ -602,7 +586,7 @@ class Assets
                 if ($addExtension && substr($script, -3) != '.js') {
                     $script .= '.js';
                 }
-                $attr = array('type' => 'text/javascript');
+                $scriptSource = '';
 
                 // If $script has a full url built in, leave it alone
                 if (strpos($script, $http_protocol . ':') !== false // Absolute URL with current protocol, which should be more likely
@@ -610,18 +594,18 @@ class Assets
                     || strpos($script, 'https:') !== false          // We should assume $http_protocol is most likely 'http', so check 'https' next
                     || strpos($script, 'http:') !== false           // Finally, check 'http' in case $http_protocol is 'https'
                 ) {
-                    $attr['src'] = $script;
+                    $scriptSource = $script;
                 } elseif (strpos($script, base_url()) === 0) {
                     // Otherwise, build the full url
-                    $attr['src'] = self::path(site_url(), $script);
+                    $scriptSource = self::path(site_url(), $script);
                 } else {
-                    $attr['src'] = self::path(site_url(), self::$directories['base'], self::$directories['js'], $script);
+                    $scriptSource = self::path(site_url(), self::$directories['base'], self::$directories['js'], $script);
                 }
 
                 if ($list) {
-                    $return .= '"' . $attr['src'] . '", ';
+                    $return .= '"' . $scriptSource . '", ';
                 } else {
-                    $return .= '<script' . self::attributes($attr) . "></script>\n";
+                    $return .= self::buildScriptElement($scriptSource, 'text/javascript') . "\n";
                 }
             }
         }
@@ -654,18 +638,13 @@ class Assets
 
         // Mod Scripts are always combined. This allows the working files to be
         // out of the web root, but still provides a link to the assets.
-        $src = self::combine_js($scripts, 'module');
-
-        $attr = array(
-            'src'  => $src . '?_dt=' . time(),
-            'type' => 'text/javascript',
-        );
+        $src = self::combine_js($scripts, 'module') . '?_dt=' . time();
 
         if ($list) {
-            return '"' . $attr['src'] . '"';
+            return '"' . $src . '"';
         }
 
-        return '<script' . self::attributes($attr) . "></script>\n";
+        return self::buildScriptElement($src, 'text/javascript') . "\n";
     }
 
     /**
@@ -686,19 +665,13 @@ class Assets
         }
 
         // Create the shell opening
-        $output = "<script type='text/javascript'>\n" .
-            self::$ci->config->item('assets.js_opener') . "\n";
+        $content = self::$ci->config->item('assets.js_opener') . "\n";
 
         // Loop through all available scripts, inserting them inside the shell.
-        foreach (self::$scripts['inline'] as $script) {
-            $output .= $script . "\n";
-        }
+        $content .= implode("\n", self::$scripts['inline']);
+        $content .= "\n" . self::$ci->config->item('assets.js_closer');
 
-        // Close the shell.
-        $output .= "\n" . self::$ci->config->item('assets.js_closer') .
-            "\n</script>\n";
-
-        return $output;
+        return self::buildScriptElement('', 'text/javascript', $content);
     }
 
     /**
@@ -788,7 +761,7 @@ class Assets
         $attrs = array_merge($attrs, $extraAttrs);
         $result = '<img' . self::attributes($attrs) . ' />';
 
-        return ($suppressEol ? $result : $result . PHP_EOL);
+        return $result . ($suppressEol ? '' : PHP_EOL);
     }
 
     //--------------------------------------------------------------------------
@@ -810,24 +783,23 @@ class Assets
         $url = '';
 
         // Get resource type folder
-        if ($type !== null && $type !== 'base'
+        if ($type !== null
+            && $type !== 'base'
             && array_key_exists($type, self::$directories)
-           ) {
-            $url = self::path(base_url(), self::$directories['base'], self::$directories[$type]) . '/';
+        ) {
+            $url = self::path(base_url(), self::$directories['base'], self::$directories[$type]);
         } else {
             // Get Assets Base Folder
-            $url = self::path(base_url(), self::$directories['base']) . '/';
+            $url = self::path(base_url(), self::$directories['base']);
         }
 
         if ($modulePath && ! in_array($type, array('base', 'cache', 'image', 'module'))) {
-            $url = self::path($url, self::$directories['module']) . '/';
+            $url = self::path($url, self::$directories['module']);
         }
+        $url .= '/';
 
         // Cleanup, just to be safe
-        $url = str_replace('//', '/', $url);
-        $url = str_replace(':/', '://', $url);
-
-        return $url;
+        return str_replace(array('//', ':/'), array('/', '://'), $url);
     }
 
     /**
@@ -847,8 +819,11 @@ class Assets
         delete_files($cachePath);
 
         // Write the index.html file back in
-        $indexHtmlData = '<html><head><title>403 Forbidden</title></head><body><p>Directory access is forbidden.</p></body></html>';
-        write_file("{$cachePath}index.html", $indexHtmlData);
+        write_file(
+            "{$cachePath}index.html",
+            '<!DOCTYPE html>
+<html><head><title>403 Forbidden</title></head><body><p>Directory access is forbidden.</p></body></html>'
+        );
     }
 
     //--------------------------------------------------------------------------
@@ -882,6 +857,44 @@ class Assets
     public static function setGlobals($include = true)
     {
         self::$globals = (bool) $include;
+    }
+
+    protected static function buildScriptElement($src = '', $type = '', $content = '')
+    {
+        if (empty($src) && empty($content)) {
+            return '';
+        }
+
+        $return = '<script';
+        if (! empty($src)) {
+            $return .= " src='" . htmlspecialchars($src, ENT_QUOTES) . "'";
+        }
+        if (! empty($type)) {
+            $return .= " type='" . htmlspecialchars($type, ENT_QUOTES) . "'";
+        }
+        $return .= '>';
+        if (! empty($content)) {
+            $return .= "\n{$content}\n";
+        }
+
+        return "{$return}</script>";
+    }
+
+    protected static function buildStyleLink(Array $style)
+    {
+        $default = array(
+            'rel'   => 'stylesheet',
+            'type'  => 'text/css',
+            'href'  => '',
+            'media' => 'all',
+        );
+        $styleToAdd = array_merge($default, $style);
+        $final = '<link';
+        foreach ($default as $key => $value) {
+            $final .= " {$key}='" . htmlspecialchars($styleToAdd[$key], ENT_QUOTES) . "'";
+        }
+
+        return "{$final} />";
     }
 
     /**
