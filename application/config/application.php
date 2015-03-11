@@ -273,3 +273,16 @@ $config['emailer.write_to_file'] = false;
 //------------------------------------------------------------------------------
 $config['migrate.auto_core'] = false;
 $config['migrate.auto_app']  = false;
+
+//------------------------------------------------------------------------------
+// CommonMark library used by Docs module
+//------------------------------------------------------------------------------
+// The valid_drivers array will be merged with the valid_drivers array defined in
+// the CommonMark library, so the MarkdownExtended driver will remain useable even
+// if it is not included in the configured list.
+$config['commonmark.valid_drivers'] = array('Parsedown');
+// This is the driver configured to be used by the CommonMark library. The driver
+// will be loaded from either /bonfire/libraries/CommonMark/drivers/ or
+// /application/libraries/CommonMark/drivers/ (capitalization is important on most
+// servers). The file name for the driver must be CommonMark_{drivername}.php
+$config['commonmark.driver'] = 'MarkdownExtended';

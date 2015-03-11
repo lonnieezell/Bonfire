@@ -338,8 +338,9 @@ class Docs extends Base_Controller
         }
 
         // Parse the file
-        $this->load->helper('markdown_extended');
-        $content = MarkdownExtended($content);
+        $this->load->library('CommonMark');
+
+        $content = $this->commonmark->parse($content);
 
         return trim($content);
     }

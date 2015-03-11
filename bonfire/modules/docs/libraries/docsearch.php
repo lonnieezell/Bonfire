@@ -61,9 +61,10 @@ class docSearch {
         $this->ci =& get_instance();
 
         $this->ci->load->helper('text');
-        $this->ci->load->helper('markdown_extended');
+
+        $this->ci->load->library('CommonMark');
     }
-    
+
     //--------------------------------------------------------------------
 
     /**
@@ -215,7 +216,7 @@ class docSearch {
 
         $extract = substr($excerpt, $start_offset);
 
-        $extract = strip_tags( MarkdownExtended($extract) );
+        $extract = strip_tags($this->ci->commonmark->parse($extract));
 
         $extract = character_limiter($extract, $this->excerpt_length);
 
