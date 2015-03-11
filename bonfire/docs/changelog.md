@@ -22,13 +22,14 @@
 #### Additional Changes:
 * Upgraded CI to v2.2.1
 * Improved support for CI 3:
-    * Renamed library and model files to uppercase first letter.
-    * Added support for loading model files named with uppercase first letter.
+    * Renamed controller, library, and model files to uppercase first letter.
+    * Added support for loading controller and model files named with uppercase first letter.
     * Accept null or false return from `config->item()` when config file has not been loaded.
     * Replaced use of `router->fetch_directory()` and `router->fetch_class()` with `router->directory` and `router->class`, respectively.
     * Replaced `random_string('unique', ...)` with `random_string('md5',...)`.
     * Replaced `read_file()` with `file_get_contents()`.
     * Replaced `do_hash()` with `sha1()`.
+    * Added Constants from CI 3 to `/application/config/constants.php` (primarily EXIT_* constants).
 * Removed mdash entities in documentation for "Submitting Bug Reports and Feature Requests" and updated link in Readme
 * Profiler now displays boolean values in config section (displayed values are retrieved from the application_lang file, `'bf_profiler_true'` and `'bf_profiler_false'`).
 * Added support for socket connections (prefixed with /) to bfmysqli database driver, similar to mysqli driver socket support in CI3.
@@ -36,8 +37,6 @@
     * Updated URL for jwerty.
     * Updated jwerty.js to version 0.3.2.
 * Added `$allowOffline` array to `/application/hooks/App_hooks.php` to configure pages which are allowed to bypass the site offline functionality. As long as `'/users/login'` is in this list, users with the correct permissions will be able to log in and bring the site back online. If a user does not have the correct permission, and no additional pages have been added to the list, they will still see the contents of the `/application/errors/offline.php` file once they log in to the site. If you want to disable user logins while the site is offline, set this variable to an empty array. Just make sure you don't log out of the site after setting it offline, or you will have to update the database to get the site back online.
-* Added Constants from CI 3 to `/application/config/constants.php` (primarily EXIT_* constants).
-* CI PR #3303: Fix `Common::get_config()` error in PHP 5.6.
 * Application Helper:
     * `is_https()`:
         * Added `is_https()` function from CI 3's `core/Common` functions to ensure checks for use of https are consistent and accurate.
@@ -58,6 +57,11 @@
     * Updated `form_validation_lang` files to allow use with either CI 2 or 3.
     * Changed language prefix for emailer module from `em_` to `emailer_`.
     * Fixed russian language support for activities, logs, and sysinfo modules. Added russian language support to builder.
+* CommonMark support in Docs
+    * Added CommonMark driver based on the Parsedown library [v1.5.1](https://github.com/erusev/parsedown/tree/9da19c1108c39df9b42adc42e39b8371070652d0) in /application/libraries/CommonMark/drivers/CommonMark_Parsedown.php (the Parsedown library is located in /application/libraries/Parsedown.php).
+    * Added CommonMark driver based on the `markdown_extended_helper` in /bonfire/libraries/CommonMark/drivers/CommonMark_MarkdownExtended.php
+
+
 
 #### Known Issues:
 

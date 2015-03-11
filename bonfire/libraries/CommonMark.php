@@ -10,9 +10,7 @@ class CommonMark
 
     protected $driver;
 
-    protected $lib_name = 'Commonmark';
-
-    protected $valid_drivers = array('MarkdownExtended', 'Parsedown');
+    protected $valid_drivers = array('MarkdownExtended');
 
     public function __construct(array $params = array())
     {

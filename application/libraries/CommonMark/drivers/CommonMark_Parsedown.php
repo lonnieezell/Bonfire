@@ -1,6 +1,6 @@
 <?php
 
-class Commonmark_Parsedown extends CI_Driver
+class CommonMark_Parsedown
 {
     protected $parser = null;
 

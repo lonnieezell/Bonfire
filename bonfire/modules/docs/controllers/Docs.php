@@ -2,12 +2,13 @@
 
 class Docs extends Base_Controller
 {
-    protected $docsDir      = 'docs';
-    protected $docsExt      = '.md';
-    protected $docsGroup    = null;
-    protected $docsTypeApp  = 'application';
-    protected $docsTypeBf   = 'developer';
-    protected $docsTypeMod  = 'module';
+    protected $docsDir     = 'docs';
+    protected $docsExt     = '.md';
+    protected $docsGroup   = null;
+    protected $docsParser  = null;
+    protected $docsTypeApp = 'application';
+    protected $docsTypeBf  = 'developer';
+    protected $docsTypeMod = 'module';
 
     protected $ignoreFiles  = array('_404.md');
     protected $tocFile;
@@ -50,6 +51,7 @@ class Docs extends Base_Controller
         $this->showAppDocs = config_item('docs.show_app_docs');
         $this->showDevDocs = config_item('docs.show_dev_docs');
         $this->tocFile = config_item('docs.toc_file') ?: '_toc.ini';
+        $this->docsParser = empty(config_item('docs.commonmark_driver')) ? null : config_item('docs.commonmark_driver');
 
         // Make sure we can still get to the search method.
         if ($this->docsGroup == 'search') {
@@ -339,6 +341,9 @@ class Docs extends Base_Controller
 
         // Parse the file
         $this->load->library('CommonMark');
+        if ($this->docsParser !== null) {
+            $this->commonmark->loadDriver($this->docsParser);
+        }
 
         $content = $this->commonmark->parse($content);
 
