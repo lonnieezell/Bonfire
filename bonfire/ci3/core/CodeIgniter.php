@@ -55,7 +55,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @var	string
  *
  */
-	define('CI_VERSION', '3.0-dev');
+	define('CI_VERSION', '3.0rc3');
 
 /*
  * ------------------------------------------------------
@@ -409,6 +409,8 @@ if ( ! is_php('5.4'))
     		require_once(APPPATH.'controllers/'.$RTR->directory.$class.'.php');
         } elseif (file_exists(BFPATH . 'controllers/' . $RTR->directory . $class . '.php')) {
             require_once(BFPATH . 'controllers/' . $RTR->directory . $class . '.php');
+        } else {
+            $e404 = TRUE;
         }
 
 		if ( ! class_exists($class, FALSE) OR $method[0] === '_' OR method_exists('CI_Controller', $method))
