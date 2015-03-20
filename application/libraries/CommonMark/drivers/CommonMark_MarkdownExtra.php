@@ -1,43 +1,60 @@
 <?php
 
-class CommonMark_MarkdownExtra
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications.
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License.
+ * @link      http://cibonfire.com
+ * @since     0.7.2
+ * @filesource
+ */
+
+/**
+ * CommonMark Driver for PHP Markdown Extra Lib v1.5
+ *
+ * Adapter to use the Markdown Extra library within the Bonfire CommonMark library.
+ *
+ * @package Bonfire\Libraries\CommonMark\Drivers\CommonMark_MarkdownExtra
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer/commonmark
+ * @link    https://github.com/michelf/php-markdown
+ */
+class CommonMark_MarkdownExtra extends CommonMarkDriver
 {
-    protected $parser = null;
+    /** @var string The class to instantiate and load into $this->converter. */
+    protected $converterLib = '\Michelf\MarkdownExtra';
 
-    public function init()
+    /** @var array The name(s) of the file(s) to load the library manually. */
+    protected $files = array('MarkdownExtra.inc.php');
+
+    /**
+     * Set the paths array, in case the library must be loaded manually.
+     */
+    public function __construct()
     {
-        if (get_instance()->config->item('composer_autoload') === false) {
-            $paths = array(
-                APPPATH . 'vendor/michelf/php-markdown/Michelf',
-                APPPATH . '../vendor/michelf/php-markdown/Michelf',
-                APPPATH . 'third_party/michelf/php-markdown/Michelf',
-                APPPATH . 'third_party/Michelf',
-            );
-            $filename = 'MarkdownExtra.inc.php';
-            $found = false;
-            foreach ($paths as $path) {
-                if (file_exists("{$path}/{$filename}")) {
-                    require_once("{$path}/{$filename}");
-                    $found = true;
-                    break;
-                }
-            }
-
-            if (! $found) {
-                log_message('error', 'CommonMark_MarkdownExtra: Could not find MarkdownExtra');
-                return false;
-            }
-        }
-
-        $this->parser = new \Michelf\MarkdownExtra();
+        $this->paths = array(
+            APPPATH . 'vendor/michelf/php-markdown/Michelf',
+            APPPATH . '../vendor/michelf/php-markdown/Michelf',
+            APPPATH . 'third_party/michelf/php-markdown/Michelf',
+            APPPATH . 'third_party/Michelf',
+        );
     }
 
-    public function parse($text)
+    /**
+     * The library method used to convert CommonMark to HTML.
+     *
+     * @param string $text CommonMark text to convert.
+     *
+     * @return string HTML text.
+     */
+    protected function toHtml($text)
     {
-        if ($this->parser === null && $this->init() === false) {
-            return;
-        }
-
-        return $this->parser->defaultTransform($text);
+        return $this->converter->defaultTransform($text);
     }
 }

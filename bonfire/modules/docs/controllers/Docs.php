@@ -345,7 +345,7 @@ class Docs extends Base_Controller
             $this->commonmark->loadDriver($this->docsParser);
         }
 
-        $content = $this->commonmark->parse($content);
+        $content = $this->commonmark->convert($content);
 
         return trim($content);
     }

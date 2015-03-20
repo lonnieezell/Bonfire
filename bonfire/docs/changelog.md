@@ -5,7 +5,9 @@
 ### 0.7.2
 
 #### New Features:
-* Uses bfmysqli database driver (a modified version of the mysqli driver) by default.
+* In CI 2.x, uses bfmysqli database driver (a modified version of the mysqli driver) by default.
+* CommonMark support in Docs
+    * View the [CommonMark Library docs](developer/commonmark) for more information.
 
 #### Closes Issues:
 * #337 Can not login to admin when site is turned off (previously closed as non-issue, now fixed).
@@ -57,11 +59,6 @@
     * Updated `form_validation_lang` files to allow use with either CI 2 or 3.
     * Changed language prefix for emailer module from `em_` to `emailer_`.
     * Fixed russian language support for activities, logs, and sysinfo modules. Added russian language support to builder.
-* CommonMark support in Docs
-    * Added CommonMark driver based on the Parsedown library [v1.5.1](https://github.com/erusev/parsedown/tree/9da19c1108c39df9b42adc42e39b8371070652d0) in /application/libraries/CommonMark/drivers/CommonMark_Parsedown.php (the Parsedown library is located in /application/libraries/Parsedown.php).
-    * Added CommonMark driver based on the `markdown_extended_helper` in /bonfire/libraries/CommonMark/drivers/CommonMark_MarkdownExtended.php
-
-
 
 #### Known Issues:
 

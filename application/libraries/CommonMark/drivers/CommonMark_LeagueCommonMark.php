@@ -1,166 +1,160 @@
 <?php
 
-class CommonMark_LeagueCommonMark
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications.
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License.
+ * @link      http://cibonfire.com
+ * @since     0.7.2
+ * @filesource
+ */
+
+/**
+ * CommonMark driver for league/commonmark v0.7.2
+ *
+ * Adapter to use the league/commonmark library within the Bonfire CommonMark library.
+ *
+ * @package Bonfire\Libraries\CommonMark\Drivers\CommonMark_Markdown
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer/commonmark
+ * @link    https://github.com/thephpleague/commonmark
+ */
+class CommonMark_LeagueCommonMark extends CommonMarkDriver
 {
-    protected $parser = null;
+    /** @var string The class to instantiate and load into $this->converter. */
+    protected $converterLib = 'League\CommonMark\CommonMarkConverter';
 
-    protected function init()
+    /** @var array The files required to load the library manually. */
+    protected $files = array(
+        'Block/Element/AbstractBlock.php',
+        'Block/Element/AbstractInlineContainer.php',
+        'Block/Element/BlockQuote.php',
+        'Block/Element/Document.php',
+        'Block/Element/FencedCode.php',
+        'Block/Element/Header.php',
+        'Block/Element/HorizontalRule.php',
+        'Block/Element/HtmlBlock.php',
+        'Block/Element/IndentedCode.php',
+        'Block/Element/ListBlock.php',
+        'Block/Element/ListData.php',
+        'Block/Element/ListItem.php',
+        'Block/Element/Paragraph.php',
+        'Block/Parser/BlockParserInterface.php',
+        'Block/Parser/AbstractBlockParser.php',
+        'Block/Parser/ATXHeaderParser.php',
+        'Block/Parser/BlockQuoteParser.php',
+        'Block/Parser/FencedCodeParser.php',
+        'Block/Parser/HorizontalRuleParser.php',
+        'Block/Parser/HtmlBlockParser.php',
+        'Block/Parser/IndentedCodeParser.php',
+        'Block/Parser/LazyParagraphParser.php',
+        'Block/Parser/ListParser.php',
+        'Block/Parser/SetExtHeaderParser.php',
+        'Block/Renderer/BlockRendererInterface.php',
+        'Block/Renderer/BlockQuoteRenderer.php',
+        'Block/Renderer/DocumentRenderer.php',
+        'Block/Renderer/FencedCodeRenderer.php',
+        'Block/Renderer/HeaderRenderer.php',
+        'Block/Renderer/HorizontalRuleRenderer.php',
+        'Block/Renderer/HtmlBlockRenderer.php',
+        'Block/Renderer/IndentedCodeRenderer.php',
+        'Block/Renderer/ListBlockRenderer.php',
+        'Block/Renderer/ListItemRenderer.php',
+        'Block/Renderer/ParagraphRenderer.php',
+        'ContextInterface.php',
+        'Context.php',
+        'Cursor.php',
+        'CursorState.php',
+        'Delimiter/Delimiter.php',
+        'Delimiter/DelimiterStack.php',
+        'DocParser.php',
+        'Environment.php',
+        'EnvironmentAwareInterface.php',
+        'Extension/ExtensionInterface.php',
+        'Extension/Extension.php',
+        'Extension/CommonMarkCoreExtension.php',
+        'Extension/MiscExtension.php',
+        'HtmlElement.php',
+        'HtmlRendererInterface.php',
+        'HtmlRenderer.php',
+        'Inline/Element/AbstractInline.php',
+        'Inline/Element/AbstractInlineContainer.php',
+        'Inline/Element/AbstractStringContainer.php',
+        'Inline/Element/AbstractWebResource.php',
+        'Inline/Element/Code.php',
+        'Inline/Element/Emphasis.php',
+        'Inline/Element/Html.php',
+        'Inline/Element/Image.php',
+        'Inline/Element/Link.php',
+        'Inline/Element/Newline.php',
+        'Inline/Element/Strong.php',
+        'Inline/Element/Text.php',
+        'Inline/Parser/InlineParserInterface.php',
+        'Inline/Parser/AbstractInlineParser.php',
+        'Inline/Parser/AutolinkParser.php',
+        'Inline/Parser/BacktickParser.php',
+        'Inline/Parser/BangParser.php',
+        'Inline/Parser/CloseBracketParser.php',
+        'Inline/Parser/EmphasisParser.php',
+        'Inline/Parser/EntityParser.php',
+        'Inline/Parser/EscapableParser.php',
+        'Inline/Parser/NewlineParser.php',
+        'Inline/Parser/OpenBracketParser.php',
+        'Inline/Parser/RawHtmlParser.php',
+        'Inline/Processor/InlineProcessorInterface.php',
+        'Inline/Processor/EmphasisProcessor.php',
+        'Inline/Renderer/InlineRendererInterface.php',
+        'Inline/Renderer/CodeRenderer.php',
+        'Inline/Renderer/EmphasisRenderer.php',
+        'Inline/Renderer/ImageRenderer.php',
+        'Inline/Renderer/LinkRenderer.php',
+        'Inline/Renderer/NewlineRenderer.php',
+        'Inline/Renderer/RawHtmlRenderer.php',
+        'Inline/Renderer/StrongRenderer.php',
+        'Inline/Renderer/TextRenderer.php',
+        'InlineParserContext.php',
+        'InlineParserEngine.php',
+        'Reference/Reference.php',
+        'Reference/ReferenceMap.php',
+        'ReferenceParser.php',
+        'UnmatchedBlockCloser.php',
+        'Util/ArrayCollection.php',
+        'Util/Html5Entities.php',
+        'Util/LinkParserHelper.php',
+        'Util/RegexHelper.php',
+        'Util/TextHelper.php',
+        'Util/UrlEncoder.php',
+        'CommonMarkConverter.php',
+    );
+
+    /**
+     * Set the paths array, in case the library must be loaded manually.
+     */
+    public function __construct()
     {
-        if (! $this->loadLibrary()) {
-            return false;
-        }
-
-        $this->parser = new League\CommonMark\CommonMarkConverter();
-    }
-
-    public function parse($text)
-    {
-        if ($this->parser === null && $this->init() === false) {
-            return;
-        }
-
-        return $this->parser->convertToHtml($text);
-    }
-
-    protected function loadLibrary()
-    {
-        if (get_instance()->config->item('composer_autoload') !== false) {
-            return true;
-        }
-
-        $paths = array(
+        $this->paths = array(
             APPPATH . 'vendor/league/commonmark/src',
             APPPATH . '../vendor/league/commonmark/src',
             APPPATH . 'third_party/league/commonmark/src',
             APPPATH . 'third_party/league/commonmark',
         );
-        foreach ($paths as $path) {
-            if (file_exists("{$path}/CommonMarkConverter.php")) {
-                // This is one of many reasons why autoloaders exist...
-                require_once("{$path}/Block/Element/AbstractBlock.php");
-                require_once("{$path}/Block/Element/AbstractInlineContainer.php");
-                require_once("{$path}/Block/Element/BlockQuote.php");
-                require_once("{$path}/Block/Element/Document.php");
-                require_once("{$path}/Block/Element/FencedCode.php");
-                require_once("{$path}/Block/Element/Header.php");
-                require_once("{$path}/Block/Element/HorizontalRule.php");
-                require_once("{$path}/Block/Element/HtmlBlock.php");
-                require_once("{$path}/Block/Element/IndentedCode.php");
-                require_once("{$path}/Block/Element/ListBlock.php");
-                require_once("{$path}/Block/Element/ListData.php");
-                require_once("{$path}/Block/Element/ListItem.php");
-                require_once("{$path}/Block/Element/Paragraph.php");
+    }
 
-                require_once("{$path}/Block/Parser/BlockParserInterface.php");
-                require_once("{$path}/Block/Parser/AbstractBlockParser.php");
-                require_once("{$path}/Block/Parser/ATXHeaderParser.php");
-                require_once("{$path}/Block/Parser/BlockQuoteParser.php");
-                require_once("{$path}/Block/Parser/FencedCodeParser.php");
-                require_once("{$path}/Block/Parser/HorizontalRuleParser.php");
-                require_once("{$path}/Block/Parser/HtmlBlockParser.php");
-                require_once("{$path}/Block/Parser/IndentedCodeParser.php");
-                require_once("{$path}/Block/Parser/LazyParagraphParser.php");
-                require_once("{$path}/Block/Parser/ListParser.php");
-                require_once("{$path}/Block/Parser/SetExtHeaderParser.php");
-
-                require_once("{$path}/Block/Renderer/BlockRendererInterface.php");
-                require_once("{$path}/Block/Renderer/BlockQuoteRenderer.php");
-                require_once("{$path}/Block/Renderer/DocumentRenderer.php");
-                require_once("{$path}/Block/Renderer/FencedCodeRenderer.php");
-                require_once("{$path}/Block/Renderer/HeaderRenderer.php");
-                require_once("{$path}/Block/Renderer/HorizontalRuleRenderer.php");
-                require_once("{$path}/Block/Renderer/HtmlBlockRenderer.php");
-                require_once("{$path}/Block/Renderer/IndentedCodeRenderer.php");
-                require_once("{$path}/Block/Renderer/ListBlockRenderer.php");
-                require_once("{$path}/Block/Renderer/ListItemRenderer.php");
-                require_once("{$path}/Block/Renderer/ParagraphRenderer.php");
-
-                require_once("{$path}/ContextInterface.php");
-                require_once("{$path}/Context.php");
-
-                require_once("{$path}/Cursor.php");
-                require_once("{$path}/CursorState.php");
-
-                require_once("{$path}/Delimiter/Delimiter.php");
-                require_once("{$path}/Delimiter/DelimiterStack.php");
-
-                require_once("{$path}/DocParser.php");
-                require_once("{$path}/Environment.php");
-                require_once("{$path}/EnvironmentAwareInterface.php");
-
-                require_once("{$path}/Extension/ExtensionInterface.php");
-                require_once("{$path}/Extension/Extension.php");
-                require_once("{$path}/Extension/CommonMarkCoreExtension.php");
-                require_once("{$path}/Extension/MiscExtension.php");
-
-                require_once("{$path}/HtmlElement.php");
-
-                require_once("{$path}/HtmlRendererInterface.php");
-                require_once("{$path}/HtmlRenderer.php");
-
-                require_once("{$path}/Inline/Element/AbstractInline.php");
-                require_once("{$path}/Inline/Element/AbstractInlineContainer.php");
-                require_once("{$path}/Inline/Element/AbstractStringContainer.php");
-                require_once("{$path}/Inline/Element/AbstractWebResource.php");
-                require_once("{$path}/Inline/Element/Code.php");
-                require_once("{$path}/Inline/Element/Emphasis.php");
-                require_once("{$path}/Inline/Element/Html.php");
-                require_once("{$path}/Inline/Element/Image.php");
-                require_once("{$path}/Inline/Element/Link.php");
-                require_once("{$path}/Inline/Element/Newline.php");
-                require_once("{$path}/Inline/Element/Strong.php");
-                require_once("{$path}/Inline/Element/Text.php");
-
-                require_once("{$path}/Inline/Parser/InlineParserInterface.php");
-                require_once("{$path}/Inline/Parser/AbstractInlineParser.php");
-                require_once("{$path}/Inline/Parser/AutolinkParser.php");
-                require_once("{$path}/Inline/Parser/BacktickParser.php");
-                require_once("{$path}/Inline/Parser/BangParser.php");
-                require_once("{$path}/Inline/Parser/CloseBracketParser.php");
-                require_once("{$path}/Inline/Parser/EmphasisParser.php");
-                require_once("{$path}/Inline/Parser/EntityParser.php");
-                require_once("{$path}/Inline/Parser/EscapableParser.php");
-                require_once("{$path}/Inline/Parser/NewlineParser.php");
-                require_once("{$path}/Inline/Parser/OpenBracketParser.php");
-                require_once("{$path}/Inline/Parser/RawHtmlParser.php");
-
-                require_once("{$path}/Inline/Processor/InlineProcessorInterface.php");
-                require_once("{$path}/Inline/Processor/EmphasisProcessor.php");
-
-                require_once("{$path}/Inline/Renderer/InlineRendererInterface.php");
-                require_once("{$path}/Inline/Renderer/CodeRenderer.php");
-                require_once("{$path}/Inline/Renderer/EmphasisRenderer.php");
-                require_once("{$path}/Inline/Renderer/ImageRenderer.php");
-                require_once("{$path}/Inline/Renderer/LinkRenderer.php");
-                require_once("{$path}/Inline/Renderer/NewlineRenderer.php");
-                require_once("{$path}/Inline/Renderer/RawHtmlRenderer.php");
-                require_once("{$path}/Inline/Renderer/StrongRenderer.php");
-                require_once("{$path}/Inline/Renderer/TextRenderer.php");
-
-                require_once("{$path}/InlineParserContext.php");
-                require_once("{$path}/InlineParserEngine.php");
-
-                require_once("{$path}/Reference/Reference.php");
-                require_once("{$path}/Reference/ReferenceMap.php");
-
-                require_once("{$path}/ReferenceParser.php");
-                require_once("{$path}/UnmatchedBlockCloser.php");
-
-                require_once("{$path}/Util/ArrayCollection.php");
-                require_once("{$path}/Util/Html5Entities.php");
-                require_once("{$path}/Util/LinkParserHelper.php");
-                require_once("{$path}/Util/RegexHelper.php");
-                require_once("{$path}/Util/TextHelper.php");
-                require_once("{$path}/Util/UrlEncoder.php");
-
-                require_once("{$path}/CommonMarkConverter.php");
-
-                return true;
-            }
-        }
-
-        log_message('error', 'CommonMark_LeagueCommonMark: Could not find League\CommonMark');
-
-        return false;
+    /**
+     * The library method used to convert CommonMark to HTML.
+     *
+     * @param string $text CommonMark text to convert.
+     *
+     * @return string HTML text.
+     */
+    protected function toHtml($text)
+    {
+        return $this->converter->convertToHtml($text);
     }
 }
