@@ -421,8 +421,8 @@ class Modules
      */
     public static function files($module_name = null, $module_folder = null, $exclude_core = false)
     {
-        // Ensure the directory_map() function is available.
-        if (! function_exists('directory_map')) {
+        // Ensure the bcDirectoryMap() function is available.
+        if (! function_exists('bcDirectoryMap')) {
             get_instance()->load->helper('directory');
         }
 
@@ -437,11 +437,11 @@ class Modules
 
             // Only map the whole modules directory if $module_name isn't passed.
             if (empty($module_name)) {
-                $modules = directory_map($path);
+                $modules = bcDirectoryMap($path);
             } elseif (is_dir($path . $module_name)) {
                 // Only map the $module_name directory if it exists.
                 $path = $path . $module_name;
-                $modules[$module_name] = directory_map($path);
+                $modules[$module_name] = bcDirectoryMap($path);
             }
 
             // If the element is not an array, it's a file, so ignore it. Otherwise,
@@ -451,26 +451,14 @@ class Modules
             }
 
             foreach ($modules as $modDir => $values) {
-                // Compatibility fix for CI3
-                $mod_name = rtrim($modDir, DIRECTORY_SEPARATOR);
                 if (is_array($values)) {
                     if (empty($module_folder)) {
                         // Add the entire module.
-                        $files[$mod_name] = $values;
-                    } elseif (isset($values[$module_folder])
-                        && count($values[$module_folder])
-                    ) {
+                        $files[$modDir] = $values;
+                    } elseif (! empty($values[$module_folder])) {
                         // Add just the specified folder for this module.
-                        $files[$mod_name] = array(
+                        $files[$modDir] = array(
                             $module_folder => $values[$module_folder],
-                        );
-                    } elseif (isset($values[$module_folder . DIRECTORY_SEPARATOR])
-                        && count($values[$module_folder . DIRECTORY_SEPARATOR])
-                    ) {
-                        // CI 3 added the directory separator to the folder name
-                        // in the output of directory_map().
-                        $files[$mod_name] = array(
-                            $module_folder => $values[$module_folder . DIRECTORY_SEPARATOR],
                         );
                     }
                 }
@@ -555,8 +543,8 @@ class Modules
      */
     public static function list_modules($exclude_core = false)
     {
-        // Ensure the directory_map function is available.
-        if (! function_exists('directory_map')) {
+        // Ensure the bcDirectoryMap function is available.
+        if (! function_exists('bcDirectoryMap')) {
             get_instance()->load->helper('directory');
         }
 
@@ -567,7 +555,7 @@ class Modules
                 continue;
             }
 
-            $dirs = directory_map($folder, 1);
+            $dirs = bcDirectoryMap($folder, 1);
             if (is_array($dirs)) {
                 $map = array_merge($map, $dirs);
             }
@@ -584,8 +572,6 @@ class Modules
                 || stripos($map[$i], '.php') !== false
             ) {
                 unset($map[$i]);
-            } else {
-                $map[$i] = rtrim($map[$i], DIRECTORY_SEPARATOR);
             }
         }
 

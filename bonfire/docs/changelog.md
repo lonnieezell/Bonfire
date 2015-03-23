@@ -8,6 +8,9 @@
 * In CI 2.x, uses bfmysqli database driver (a modified version of the mysqli driver) by default.
 * CommonMark support in Docs
     * View the [CommonMark Library docs](developer/commonmark) for more information.
+* Added `BF_directory_helper`:
+    * `bcDirectoryMap()` function provides the same output as CI2's `directory_map()` function. This was used primarily to make the Modules library and various portions of the translate module work properly in CI3.
+    * In the long term, both the Modules library and translate module should be updated with more robust path/directory name handling, which would make this function unnecessary.
 
 #### Closes Issues:
 * #337 Can not login to admin when site is turned off (previously closed as non-issue, now fixed).
@@ -59,6 +62,7 @@
     * Updated `form_validation_lang` files to allow use with either CI 2 or 3.
     * Changed language prefix for emailer module from `em_` to `emailer_`.
     * Fixed russian language support for activities, logs, and sysinfo modules. Added russian language support to builder.
+    * Changed language prefix for translate module from `tr_` to `translate_`.
 
 #### Known Issues:
 
