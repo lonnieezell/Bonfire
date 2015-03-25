@@ -62,11 +62,7 @@ $autoload['packages'] = array(
 |	$autoload['libraries'] = array('user_agent' => 'ua');
 */
 
-if (defined('CI_VERSION') && substr(CI_VERSION, 0, 1) != '2') {
-    $autoload['libraries'] = array('database');
-} else {
-    $autoload['libraries'] = array('database', 'session');
-}
+$autoload['libraries'] = array('database', 'session');
 
 
 /*
@@ -81,11 +77,8 @@ if (defined('CI_VERSION') && substr(CI_VERSION, 0, 1) != '2') {
 |
 |	$autoload['drivers'] = array('cache');
 */
-if (defined('CI_VERSION') && substr(CI_VERSION, 0, 1) != '2') {
-    $autoload['drivers'] = array('session');
-} else {
-    $autoload['drivers'] = array();
-}
+
+$autoload['drivers'] = array();
 
 /*
 | -------------------------------------------------------------------
