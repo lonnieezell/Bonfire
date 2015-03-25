@@ -190,8 +190,8 @@ $config['assets.directories'] = array(
 
 // The 'assets.js_opener' and 'assets.js_closer' strings are used to wrap all
 // inline scripts. By default, these are setup to work with jQuery.
-$config['assets.js_opener'] = "$(document).ready(function() {\n";
-$config['assets.js_closer'] = "});\n";
+$config['assets.js_opener'] = "$(document).ready(function() {";
+$config['assets.js_closer'] = "});";
 
 // The 'assets.css_combine' and 'assets.js_combine' settings tell the Assets
 // library whether css and js files, respectively, should be combined.
