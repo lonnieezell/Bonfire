@@ -12,7 +12,7 @@ All wrapped up in an elegant interface that will make you proud when you hand th
 
 ## Current Features
 
-- CodeIgniter 2.x included. CodeIgniter 3.x support available with some minor changes.
+- CodeIgniter 2.x included. CodeIgniter 3.x support available with [some minor changes](https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/docs/ci3.md).
 - Very flexible template/theme system, capable of Wordpress-like parent/child themes.
 - Uses Twitter Bootstrap 2.x for the Admin and Default themes
 - Fully modular and built around HMVC
