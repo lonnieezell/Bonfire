@@ -51,7 +51,8 @@ class Docs extends Base_Controller
         $this->showAppDocs = config_item('docs.show_app_docs');
         $this->showDevDocs = config_item('docs.show_dev_docs');
         $this->tocFile = config_item('docs.toc_file') ?: '_toc.ini';
-        $this->docsParser = empty(config_item('docs.commonmark_driver')) ? null : config_item('docs.commonmark_driver');
+        $commonmark_driver = config_item('docs.commonmark_driver');
+        $this->docsParser = empty($commonmark_driver) ? null : $commonmark_driver;
 
         // Make sure we can still get to the search method.
         if ($this->docsGroup == 'search') {
