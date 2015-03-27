@@ -9,71 +9,58 @@ The Template library can be configured by setting several values in `/applicatio
 
 ### template.site_path
 
-    // The path to the root folder that holds the application. This does not have to
-    // be the site root folder, or even the folder defined in FCPATH.
+The path to the root folder that holds the application.
+This does not have to be the site root folder, or even the folder defined in FCPATH.
+
     $config['template.site_path'] = FCPATH;
 
 ### template.theme_paths
 
-    // An array of folders to look in for themes. There must be at least one folder
-    // path at all times, to serve as the fall-back for when a theme isn't found.
-    // Paths are relative to the FCPATH.
+An array of folders to look in for themes.
+There must be at least one folder path at all times, to serve as the fall-back for when a theme isn't found.
+Paths are relative to the `template.site_path`.
+
     $config['template.theme_paths'] = array('themes');
 
 ### template.default_layout
-    // This is the name of the default layout used if no others are specified.
-    // NOTE: do not include an ending ".php" extension.
+
+This is the name of the default layout used if no others are specified.
+NOTE: do not include an ending ".php" extension.
+
     $config['template.default_layout'] = "index";
 
 ### template.ajax_layout
-    //------------------------------------------------------------------------------
-    // DEFAULT AJAX LAYOUT
-    //------------------------------------------------------------------------------
-    // This is the name of the default layout used when the page is displayed via an
-    // AJAX call.
-    // NOTE: do not include an ending ".php" extension.
+
+This is the name of the default layout used when the page is displayed via an AJAX call.
+NOTE: do not include an ending ".php" extension.
+
     $config['template.ajax_layout'] = 'ajax';
 
 ### template.use_mobile_themes
-    //------------------------------------------------------------------------------
-    // Themes
-    //------------------------------------------------------------------------------
 
-    //------------------------------------------------------------------------------
-    // USE MOBILE THEMES?
-    //------------------------------------------------------------------------------
-    // When set to true, the Template library will check the user agent during the
-    // rendering process, and check the UA against the template.themes (below),
-    // allowing you to create mobile versions of your site, and versions targetted
-    // specifically at a single type of phone (ie, Blackberry or iPhone).
-    // NOTE: when rendering, if the file doesn't exist in the targetted theme, the
-    // Template library then checks the default site for the same file.
+When set to true, the Template library will check the user agent during the rendering process against the `template.themes`, allowing you to create mobile versions of your site, and versions targetted specifically at a single type of phone (ie, Blackberry or iPhone).
+NOTE: when rendering, if the file doesn't exist in the targetted theme, the Template library then checks the default site for the same file.
+
     $config['template.use_mobile_themes'] = false;
 
 ### template.default_theme
-    //------------------------------------------------------------------------------
-    // DEFAULT THEME
-    //------------------------------------------------------------------------------
-    // This is the folder name that contains the default theme to use when
-    // 'template.use_mobile_themes' is set to true.
+
+This is the folder name that contains the default theme to use when searching for a view in your site's themes.
+
     $config['template.default_theme'] = 'default/';
 
 ### template.admin_theme
-    //------------------------------------------------------------------------------
-    // ADMIN THEME
-    //------------------------------------------------------------------------------
-    // This is the folder name that contains the default admin theme to use
+
+This is the folder name that contains the default theme to use for the site's admin area (`SITE_AREA`).
+
     $config['template.admin_theme'] = 'admin';
 
 ### template.message_template
-    //------------------------------------------------------------------------------
-    // MESSAGE TEMPLATE
-    //------------------------------------------------------------------------------
-    // This is the template that the Template library will use when displaying
-    // messages through the message() function.
-    // To set the class for the type of message (error, success, etc), the {type}
-    // placeholder will be replaced. The message will replace the {message}
-    // placeholder.
+
+This is the template that the Template library will use when displaying messages through the message() function.
+To set the class for the type of message (error, success, etc), the `{type}` placeholder will be replaced.
+The message will replace the `{message}` placeholder.
+
     $config['template.message_template'] =<<<EOD
     <div class="alert alert-block alert-{type} fade in notification">
         <a data-dismiss="alert" class="close" href="#">&times;</a>
@@ -82,21 +69,16 @@ The Template library can be configured by setting several values in `/applicatio
     EOD;
 
 ### template.breadcrumb_symbol
-    //------------------------------------------------------------------------------
-    // BREADCRUMB Separator - The symbol displayed between the breadcrumb elements.
-    //------------------------------------------------------------------------------
+
+Breadcrumb separator, the symbol displayed between the breadcrumb elements.
+
     $config['template.breadcrumb_symbol'] = ' : ';
 
 ### template.parse_views
-    //------------------------------------------------------------------------------
-    // Settings
-    //------------------------------------------------------------------------------
 
-    //------------------------------------------------------------------------------
-    // PARSE VIEWS
-    //------------------------------------------------------------------------------
-    // If set to true, views will be parsed via CodeIgniter's parser.
-    // If false, views will be considered PHP views only.
+If set to true, views will be parsed via CodeIgniter's parser.
+If false, views will be considered PHP views only.
+
     $config['template.parse_views'] = false;
 
 ## Methods

@@ -7,7 +7,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -23,9 +23,9 @@
  * This library will be updated to reflect the latest security practices while
  * maintaining the simple API.
  *
- * @package    Bonfire\Modules\Users\Libraries\Auth
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/developer/roles_and_permissions
+ * @package Bonfire\Modules\Users\Libraries\Auth
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer/roles_and_permissions
  */
 class Auth
 {
@@ -90,7 +90,7 @@ class Auth
     /**
      * Check the session for the required info, then verify it against the database.
      *
-     * @return bool
+     * @return boolean True if the user is logged in, else false.
      */
     public function is_logged_in()
     {
@@ -100,11 +100,11 @@ class Auth
     /**
      * Attempt to log the user in.
      *
-     * @param string $login    The user's login credentials (email/username).
-     * @param string $password The user's password.
-     * @param bool   $remember Whether the user should be remembered in the system.
+     * @param string  $login    The user's login credentials (email/username).
+     * @param string  $password The user's password.
+     * @param boolean $remember Whether the user should be remembered in the system.
      *
-     * @return bool
+     * @return boolean True if the user has authenticated, else false.
      */
     public function login($login, $password, $remember = false)
     {
@@ -286,7 +286,7 @@ class Auth
     /**
      * Check the session for the required info, then verify it against the database.
      *
-     * @return object (or a false value).
+     * @return object/boolean Returns the user info or false.
      */
     public function user()
     {
@@ -331,14 +331,14 @@ class Auth
     /**
      * Verify that the user is logged in and has the appropriate permissions.
      *
-     * @param string $permission The permission to check for, e.g. 'Site.Signin.Allow'.
-     * @param int    $role_id    The id of the role to check the permission against.
+     * @param string  $permission The permission to check for, e.g. 'Site.Signin.Allow'.
+     * @param integer $role_id    The id of the role to check the permission against.
      * If role_id is not passed into the method, it assumes the current user's role_id.
-     * @param bool   $override   Whether access is granted if this permission doesn't
+     * @param boolean $override   Whether access is granted if this permission doesn't
      * exist in the database.
      *
-     * @return bool True if the user/role has permission or $override is true and
-     * the permission was not found in the database, else false.
+     * @return boolean True if the user/role has permission or the permission was
+     * not found in the database and $override is true, else false.
      */
     public function has_permission($permission, $role_id = null, $override = false)
     {
@@ -372,7 +372,7 @@ class Auth
      *
      * @param string $permission The case-insensitive name of the permission to check.
      *
-     * @return bool True if the permission was found, else false.
+     * @return boolean True if the permission was found, else false.
      */
     public function permission_exists($permission)
     {
@@ -395,7 +395,7 @@ class Auth
      * @param string $uri        (Optional) The redirect URI if the user does not
      * have the correct permission.
      *
-     * @return bool True if the user has the appropriate access permissions.
+     * @return boolean True if the user has the appropriate access permissions.
      * Redirect to the previous page if the user doesn't have permissions.
      * Redirect to LOGIN_AREA page if the user is not logged in.
      */
@@ -439,7 +439,7 @@ class Auth
     /**
      * Retrieves the role_id from the current session.
      *
-     * @return int The user's role_id.
+     * @return integer/boolean The user's role_id or false.
      */
     public function role_id()
     {
@@ -452,7 +452,7 @@ class Auth
     /**
      * Retrieve the role_name for the requested role.
      *
-     * @param int $role_id The role ID for which the name will be retrieved.
+     * @param integer $role_id The role ID for which the name will be retrieved.
      *
      * @return string A string with the name of the matched role.
      */
@@ -473,6 +473,11 @@ class Auth
         return '';
     }
 
+    /**
+     * Retrieve the list of roles from the library's internal list or the database.
+     *
+     * @return array The list of role_id and role_name values.
+     */
     protected function loadRoles()
     {
         // If the role names are already stored, use them.
@@ -502,10 +507,10 @@ class Auth
     /**
      * Check the supplied password against the supplied hash.
      *
-     * @param String $password The password to check.
-     * @param String $hash     The hash.
+     * @param string $password The password to check.
+     * @param string $hash     The hash.
      *
-     * @return Bool    true if the password and hash match, else false.
+     * @return boolean True if the password and hash match, else false.
      */
     public function check_password($password, $hash)
     {
@@ -519,12 +524,11 @@ class Auth
     /**
      * Hash a password.
      *
-     * @param string $pass      The password to hash
-     * @param int $iterations   The number of iterations used in hashing the
-     * password.
+     * @param string $pass        The password to hash
+     * @param integer $iterations The number of iterations used in hashing the password.
      *
-     * @return array            An associative array containing the hashed
-     * password and number of iterations.
+     * @return array An associative array containing the hashed password and number
+     * of iterations.
      */
     public function hash_password($pass, $iterations = 0)
     {
@@ -565,7 +569,7 @@ class Auth
      * that the calling method didn't need to retrieve the 'password_iterations'
      * value.
      *
-     * @param  integer $iterations The number of iterations to be used in hashing
+     * @param integer $iterations The number of iterations to be used in hashing
      * passwords.
      *
      * @return PasswordHash The password hasher.
@@ -590,7 +594,7 @@ class Auth
      * If no login is passed in, it will only check against the IP Address of the
      * current user.
      *
-     * @return int The number of attempts.
+     * @return integer The number of attempts.
      */
     public function num_login_attempts($login = null)
     {
@@ -609,8 +613,8 @@ class Auth
     /**
      * Clear all login attempts for this user, as well as expired logins.
      *
-     * @param string $login   The login credentials (typically email).
-     * @param int    $expires The expiration time (in seconds). Attempts older
+     * @param string  $login   The login credentials (typically email).
+     * @param integer $expires The expiration time (in seconds). Attempts older
      * than this value will be deleted.
      *
      * @return void
@@ -649,7 +653,7 @@ class Auth
      * Retrieve the logged identity from the current session. Built from the user's
      * submitted login.
      *
-     * @return string The identity used to login.
+     * @return string/boolean The identity used to login, or false.
      */
     public function identity()
     {
@@ -662,7 +666,7 @@ class Auth
     /**
      * Retrieve the user_id from the current session.
      *
-     * @return int
+     * @return integer/boolean The user's ID or false.
      */
     public function user_id()
     {
@@ -676,7 +680,7 @@ class Auth
      * Gets a timestamp using $this->loginDateFormat and the system's configured
      * 'time_reference'.
      *
-     * @param  integer $time A UNIX timestamp.
+     * @param integer $time A UNIX timestamp.
      *
      * @return string A timestamp formatted according to $this->loginDateFormat.
      */
@@ -697,17 +701,17 @@ class Auth
      * Create the session information for the current user and create an
      * autologin cookie if required.
      *
-     * @param int $user_id          An int with the user's id.
-     * @param string $username      The user's username.
-     * @param string $password_hash The user's password hash. Used to create a
+     * @param integer $user_id       An int with the user's id.
+     * @param string  $username      The user's username.
+     * @param string  $password_hash The user's password hash. Used to create a
      * new, unique user_token.
-     * @param string $email         The user's email address.
-     * @param int    $role_id       The user's role_id.
-     * @param bool   $remember      Whether to keep the user logged in.
-     * @param string $old_token     User's db token to test against.
-     * @param string $user_name     User's made name for displaying options.
+     * @param string  $email         The user's email address.
+     * @param integer $role_id       The user's role_id.
+     * @param boolean $remember      Whether to keep the user logged in.
+     * @param string  $old_token     User's db token to test against.
+     * @param string  $user_name     User's made name for displaying options.
      *
-     * @return bool TRUE/FALSE on success/failure.
+     * @return boolean True/false on success/failure.
      */
     private function setupSession(
         $user_id,
@@ -791,7 +795,7 @@ class Auth
     /**
      * Load the role permissions from the database.
      *
-     * @param int $role_id The role id for which permissions are loaded. Uses
+     * @param integer $role_id The role id for which permissions are loaded. Uses
      * the current user's role ID if none is provided.
      *
      * @return void
@@ -891,10 +895,10 @@ class Auth
      * thoughts at:
      * http://fishbowl.pastiche.org/2004/01/19/persistent_login_cookie_best_practice/
      *
-     * @param int    $user_id    An int representing the user_id.
-     * @param string $old_token The previous token that was used to login with.
+     * @param integer $user_id   An int representing the user_id.
+     * @param string  $old_token The previous token that was used to login with.
      *
-     * @return bool Whether the autologin was created or not.
+     * @return boolean Whether the autologin was created or not.
      */
     private function createAutologin($user_id, $old_token = null)
     {
@@ -980,6 +984,13 @@ class Auth
     // Utility Methods
     //--------------------------------------------------------------------------
 
+    /**
+     * Retrieve the 'auth.allow_remember' setting from the settings library and
+     * store it for the library's internal use.
+     *
+     * @return boolean True if the "Remember Me" checkbox is permitted by the site's
+     * settings to be displayed on the login form, else false.
+     */
     private function allowRemember()
     {
         if (isset($this->allowRemember)) {
@@ -999,12 +1010,12 @@ if (! function_exists('has_permission')) {
     /**
      * A convenient shorthand for checking user permissions.
      *
-     * @param string $permission The permission to check for, ie 'Site.Signin.Allow'.
-     * @param bool   $override   Whether access is granted if this permission doesn't
+     * @param string  $permission The permission to check for, ie 'Site.Signin.Allow'.
+     * @param boolean $override   Whether access is granted if this permission doesn't
      * exist in the database.
      *
-     * @return bool True if the user has the permission or $override is true and
-     * the permission wasn't found in the system, else false.
+     * @return boolean True if the user has the permission or $override is true
+     * and the permission wasn't found in the system, else false.
      */
     function has_permission($permission, $override = false)
     {
@@ -1018,7 +1029,7 @@ if (! function_exists('permission_exists')) {
      *
      * @param string $permission Case-insensitive permission to check.
      *
-     * @return bool True if the permission exists, else false.
+     * @return boolean True if the permission exists, else false.
      */
     function permission_exists($permission)
     {
@@ -1029,6 +1040,8 @@ if (! function_exists('permission_exists')) {
 if (! function_exists('abbrev_name')) {
     /**
      * Retrieve first and last name from given string.
+     *
+     * @deprecated since 0.7.2. No replacement is currently planned.
      *
      * @param string $name Full name.
      *
