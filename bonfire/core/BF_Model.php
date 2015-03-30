@@ -1254,6 +1254,11 @@ class BF_Model extends CI_Model
      */
     protected function get_db_error_message()
     {
+        if (substr(CI_VERSION, 0, 1) != '2') {
+            $error = $this->db->error();
+            return isset($error['message']) ? $error['message'] : '';
+        }
+
         switch ($this->db->platform()) {
             case 'cubrid':
                 return cubrid_errno($this->db->conn_id);

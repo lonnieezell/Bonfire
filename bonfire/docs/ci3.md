@@ -10,7 +10,7 @@ If you run into any problems while testing CI3 with Bonfire, please feel free to
 
 If you would like to test it out for yourself, you will need to do the following:
 - Setup (or update) a Bonfire installation with the latest code from the [develop branch on GitHub](https://github.com/ci-bonfire/Bonfire). Make sure the site is configured and working under CodeIgniter 2.x.
-- Download [the latest CI3 release](http://www.codeigniter.com/download) ([CI3 RC3](https://github.com/bcit-ci/CodeIgniter/archive/3.0rc3.zip) is the latest release candidate at the time of this writing). The more adventurous can download the latest code from [their development branch on GitHub](https://github.com/bcit-ci/CodeIgniter).
+- Download [the latest CI3 release](http://www.codeigniter.com/download) ([CI3.0](https://github.com/bcit-ci/CodeIgniter/archive/3.0rc3.zip) is the latest release at the time of this writing). The more adventurous can download the latest code from [their development branch on GitHub](https://github.com/bcit-ci/CodeIgniter).
 - Making sure to *not* overwrite the existing files in the /bonfire/ci3/ directory of your working test site, copy the files from the CI3 system directory into the /bonfire/ci3/ directory. (If you do happen to overwrite the files, you can pull them down from the Bonfire GitHub repository.)
 
 ## Updating your application
