@@ -23,15 +23,11 @@
 
 class Installer_lib
 {
-    /**
-     * @var mixed Status flag to see how the install check went from outside
-     * controllers
-     */
-    public $db_settings_exist = null;
-    public $db_exists         = null;
+    /** @var boolean Indicates whether the default database settings were found. */
+    public $db_exists = null;
 
-    public $mysql_server_version;
-    public $mysql_client_version;
+    /** @var boolean Indicates whether the database settings were found. */
+    public $db_settings_exist = null;
 
     /** @var string The version of the currently running PHP parser or extension. */
     public $php_version;
@@ -63,6 +59,20 @@ class Installer_lib
         'application/config/application.php',
         'application/config/database.php',
     );
+
+    /**
+     * The version of the MySQL Client.
+     * @var string
+     * @deprecated since 0.7.2.
+     */
+    public $mysql_client_version;
+
+    /**
+     * The version of the MySQL Server.
+     * @var string
+     * @deprecated since 0.7.2.
+     */
+    public $mysql_server_version;
 
     //--------------------------------------------------------------------------
 
