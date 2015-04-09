@@ -26,7 +26,7 @@
 
 #### Additional Changes:
 * Upgraded CI to v2.2.1
-* Improved support for CI 3:
+* [Improved support for CI 3](https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/docs/ci3.md).:
     * Renamed controller, library, and model files to uppercase first letter.
     * Added support for loading controller and model files named with uppercase first letter.
     * Accept null or false return from `config->item()` when config file has not been loaded.
