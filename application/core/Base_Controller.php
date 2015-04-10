@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT    The MIT License
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -25,33 +25,33 @@
  * https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home
  * for more details on the HMVC code used in Bonfire.
  *
- * @package    Bonfire\Application\Core\Base_Controller
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/bonfire/bonfire_controllers
+ * @package Bonfire\Application\Core\Base_Controller
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/bonfire/bonfire_controllers
  */
 class Base_Controller extends MX_Controller
 {
-	/**
-	 * @var string Stores the previously viewed page's complete URL.
-	 */
-	protected $previous_page;
+    /**
+     * @var string Stores the previously viewed page's complete URL.
+     */
+    protected $previous_page;
 
-	/**
-	 * @var string Stores the page requested.
-	 *
-	 * This will sometimes be different than the previous page if a redirect
-	 * happened in the controller.
-	 */
-	protected $requested_page;
+    /**
+     * @var string Stores the page requested.
+     *
+     * This will sometimes be different than the previous page if a redirect
+     * happened in the controller.
+     */
+    protected $requested_page;
 
-	/**
-	 * @var object Stores the current user's details, if they've logged in.
-	 */
-	protected $current_user = null;
+    /**
+     * @var object Stores the current user's details, if they've logged in.
+     */
+    protected $current_user = null;
 
     /**
      * @var bool If TRUE, this class requires the user to be logged in before
-	 * accessing any method.
+     * accessing any method.
      */
     protected $require_authentication = false;
 
@@ -67,119 +67,115 @@ class Base_Controller extends MX_Controller
         'models'    => array(),
     );
 
-	//--------------------------------------------------------------------
+    //--------------------------------------------------------------------
 
-	/**
-	 * Class constructor
-	 *
-	 * @return void
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * Class constructor
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		// Handle any autoloading here...
-		$this->autoload_classes();
+        // Handle any autoloading here...
+        $this->autoload_classes();
 
-		Events::trigger('before_controller', get_class($this));
+        $controllerClass = get_class($this);
+        Events::trigger('before_controller', $controllerClass);
 
         if ($this->require_authentication === true) {
             $this->authenticate();
         }
 
-		// Load the lang file here, after the user's language is known
-		$this->lang->load('application');
+        // Load the lang file here, after the user's language is known
+        $this->lang->load('application');
 
         $cacheDriver = array();
 
-		// Performance optimizations for production environments.
-		if (ENVIRONMENT == 'production') {
-			// Saving queries can vastly increase the memory usage
-		    $this->db->save_queries = false;
+        // Performance optimizations for production environments.
+        if (ENVIRONMENT == 'production') {
+            // Saving queries can vastly increase the memory usage
+            $this->db->save_queries = false;
 
-		    // With debugging information turned off, at times it is possible to
-		    // continue on after db errors. Also turns off display of any DB
-		    // errors to reduce info available to hackers.
-		    $this->db->db_debug = false;
+            // With debugging information turned off, at times it is possible to
+            // continue on after db errors. Also turns off display of any DB
+            // errors to reduce info available to hackers.
+            $this->db->db_debug = false;
 
             $cacheDriver['adapter'] = 'apc';
             $cacheDriver['backup']  = 'file';
         } elseif (ENVIRONMENT == 'testing') {
-		// Testing niceties...
-			// Saving Queries can vastly increase the memory usage
-			$this->db->save_queries = false;
+            // Testing niceties...
+            // Saving Queries can vastly increase the memory usage
+            $this->db->save_queries = false;
 
             $cacheDriver['adapter'] = 'apc';
             $cacheDriver['backup']  = 'file';
         } else {
-		// Development niceties...
-			// Profiler bar?
-            if ($this->settings_lib->item('site.show_front_profiler')
-                && ! $this->input->is_cli_request()
-					&& ! $this->input->is_ajax_request()
-				) {
-					$this->load->library('Console');
-					$this->output->enable_profiler(true);
-				}
+            // Development niceties...
+            // Profiler bar?
+            $this->showProfiler();
 
             $cacheDriver['adapter'] = 'dummy';
-			}
+        }
 
         $this->load->driver('cache', $cacheDriver);
 
         // Auto-migrate core and/or app to latest version.
-		if ($this->config->item('migrate.auto_core')
+        if ($this->config->item('migrate.auto_core')
             || $this->config->item('migrate.auto_app')
         ) {
-			$this->load->library('migrations/migrations');
-			$this->migrations->autoLatest();
-		}
+            $this->load->library('migrations/migrations');
+            $this->migrations->autoLatest();
+        }
 
         // Make sure no assets end up as a requested page or a 404 page.
         if (! preg_match('/\.(gif|jpg|jpeg|png|css|js|ico|shtml)$/i', $this->uri->uri_string())) {
-			$this->previous_page  = $this->session->userdata('previous_page');
-			$this->requested_page = $this->session->userdata('requested_page');
-		}
+            $this->previous_page  = $this->session->userdata('previous_page');
+            $this->requested_page = $this->session->userdata('requested_page');
+        }
 
         // After-Controller Constructor Event
-		Events::trigger('after_controller_constructor', get_class($this));
-	}
+        $controllerClass = get_class($this);
+        Events::trigger('after_controller_constructor', $controllerClass);
+    }
 
-	/**
-	 * If the Auth lib is loaded, it will set the current user, since users will
-	 * never be needed if the Auth library is not loaded. By not requiring this
-	 * to be executed and loaded for every command, calls that don't need users
-	 * at all, or which rely on a different type of auth (like an API or
-	 * cronjob), can be sped up.
-	 */
-	protected function set_current_user()
-	{
-        if (class_exists('Auth')) {
-			// Load the currently logged-in user for convenience
-			if ($this->auth->is_logged_in()) {
-				$this->current_user = clone $this->auth->user();
+    /**
+     * If the Auth lib is loaded, it will set the current user, since users will
+     * never be needed if the Auth library is not loaded. By not requiring this
+     * to be executed and loaded for every command, calls that don't need users
+     * at all, or which rely on a different type of auth (like an API or
+     * cronjob), can be sped up.
+     */
+    protected function set_current_user()
+    {
+        if (class_exists('Auth', false)) {
+            // Load the currently logged-in user for convenience
+            if ($this->auth->is_logged_in()) {
+                $this->current_user = clone $this->auth->user();
 
-				$this->current_user->user_img = gravatar_link(
-                                                    $this->current_user->email,
-                                                    22,
-                                                    $this->current_user->email,
-                                                    "{$this->current_user->email} Profile"
-                                                );
+                $this->current_user->user_img = gravatar_link(
+                    $this->current_user->email,
+                    22,
+                    $this->current_user->email,
+                    "{$this->current_user->email} Profile"
+                );
 
-				// If the user has a language setting then use it
-				if (isset($this->current_user->language)) {
-					$this->config->set_item('language', $this->current_user->language);
+                // If the user has a language setting then use it
+                if (isset($this->current_user->language)) {
+                    $this->config->set_item('language', $this->current_user->language);
                     $this->session->set_userdata('language', $this->current_user->language);
-				}
-			}
+                }
+            }
 
-			// Make the current user available in the views
-            if (! class_exists('template')) {
+            // Make the current user available in the views
+            if (! class_exists('template', false)) {
                 $this->load->library('template');
             }
-			Template::set('current_user', $this->current_user);
-		}
-	}
+            Template::set('current_user', $this->current_user);
+        }
+    }
 
     /**
      * Performs the authentication of a class. Ensures that a user is logged in.
@@ -236,5 +232,21 @@ class Base_Controller extends MX_Controller
             }
         }
     }
+
+    protected function showProfiler($frontEnd = true)
+    {
+        // $this->input->is_cli_request() is deprecated in CI 3.0, but the replacement
+        // common is_cli() function is not available in CI 2.2.
+        $isCliRequest = substr(CI_VERSION, 0, 1) == '2' ? $this->input->is_cli_request() : is_cli();
+        if (! $isCliRequest
+            && ! $this->input->is_ajax_request()
+        ) {
+            if ($frontEnd == false
+                || $this->settings_lib->item('site.show_front_profiler')
+            ) {
+                $this->load->library('Console');
+                $this->output->enable_profiler(true);
+            }
+        }
+    }
 }
-/* End of file ./application/core/Base_Controller.php */

@@ -38,25 +38,89 @@ class BF_Loader extends MX_Loader
      *
      * @param string $helper The helper to load.
      *
-     * @return void;
+     * @return $this
      **/
-    public function helper($helper = array()) {
+    public function helper($helper = array())
+    {
+        if (is_array($helper)) {
+            return $this->helpers($helper);
+        }
 
-        if (is_array($helper)) return $this->helpers($helper);
+        if (isset($this->_ci_helpers[$helper])) {
+            return;
+        }
 
-        if (isset($this->_ci_helpers[$helper])) return;
-
-        list($path, $_helper) = Modules::find($helper.'_helper', $this->_module, 'helpers/');
+        list($path, $_helper) = Modules::find("{$helper}_helper", $this->_module, 'helpers/');
 
         if ($path === false) {
+            // If the helper was not found in a module, check for a BF_ prefixed
+            // helper in the Bonfire helpers directory.
             if (file_exists(BFPATH . "helpers/BF_{$helper}_helper.php")) {
                 include_once(BFPATH . "helpers/BF_{$helper}_helper.php");
             }
-            return parent::helper($helper);
+            parent::helper($helper);
+            return $this;
         }
 
         Modules::load_file($_helper, $path);
-        $this->_ci_helpers[$_helper] = TRUE;
+        $this->_ci_helpers[$_helper] = true;
+        return $this;
+    }
+
+
+    /** Load a module library **/
+    /**
+     * Load a library contained within a module.
+     *
+     * Copied from MX_Loader, modified to check the bonfire/libraries directory
+     * for a 'BF_' prefixed library.
+     *
+     * @param  string $library     The library to load.
+     * @param  mixed  $params      Parameters to pass to the library.
+     * @param  string $object_name An alias for the library.
+     *
+     * @return $this
+     */
+    public function library($library, $params = null, $object_name = null)
+    {
+        if (is_array($library)) {
+            return $this->libraries($library);
+        }
+
+        $class = strtolower(basename($library));
+
+        if (isset($this->_ci_classes[$class]) && $_alias = $this->_ci_classes[$class]) {
+            return $this;
+        }
+
+        ($_alias = strtolower($object_name)) or $_alias = $class;
+
+        list($path, $_library) = Modules::find($library, $this->_module, 'libraries/');
+
+        /* load library config file as params */
+        if ($params == null) {
+            list($path2, $file) = Modules::find($_alias, $this->_module, 'config/');
+            ($path2) && $params = Modules::load_file($file, $path2, 'config');
+        }
+
+        if ($path === false) {
+            // Use $this->_ci_load_library() in CI 3
+            if (substr(CI_VERSION, 0, 1) != '2') {
+                $this->_ci_load_library($library, $params, $object_name);
+            } else {
+                $this->_ci_load_class($library, $params, $object_name);
+                $_alias = $this->_ci_classes[$class];
+            }
+        } else {
+            Modules::load_file($_library, $path);
+
+            $library = ucfirst($_library);
+            CI::$APP->$_alias = new $library($params);
+
+            $this->_ci_classes[$class] = $_alias;
+        }
+
+        return $this;
     }
 
     /**
@@ -84,38 +148,38 @@ class BF_Loader extends MX_Loader
      * $this->loadSubclassedLibrary() to check for library extensions using the
      * BF_ prefix in the /bonfire/libraries directory.
      *
-     * @param   string  the item that is being loaded
-     * @param   mixed   any additional parameters
-     * @param   string  an optional object name
+     * @param string The item that is being loaded
+     * @param mixed  Any additional parameters
+     * @param string An optional object name
+     *
      * @return  void
      */
     protected function _ci_load_class($class, $params = null, $object_name = null)
     {
-        // Get the class name, and while we're at it trim any slashes.
-        // The directory path can be included as part of the class name,
-        // but we don't want a leading slash
+        // Get the class name and trim any slashes. The directory path can be included
+        // as part of the class name, but a leading slash is not desired.
         $class = str_replace('.php', '', trim($class, '/'));
 
-        // Was the path included with the class name?
-        // We look for a slash to determine this
+        // Look for a slash to determine whether the path was included with the
+        // class name.
         $subdir = '';
         if (($last_slash = strrpos($class, '/')) !== false) {
-            // Extract the path
+            // Extract the path.
             $subdir = substr($class, 0, $last_slash + 1);
 
-            // Get the filename from the path
+            // Get the filename from the path.
             $class = substr($class, $last_slash + 1);
         }
 
-        // We'll test for both lowercase and capitalized versions of the file name
+        // Test for both lowercase and capitalized versions of the file name.
         foreach (array(ucfirst($class), strtolower($class)) as $class) {
-            // Is this a class extension request?
-            // Modified to check the Bonfire libraries for BF_ class extensions.
+            // Is this a class extension request? Check the Bonfire libraries for
+            // BF_ class extensions.
             if ($this->loadSubclassedLibrary($class, $subdir, $params, $object_name)) {
                 return;
             }
 
-            // Lets search for the requested library file and load it.
+            // Search for the requested library file and load it.
             $is_duplicate = false;
             foreach ($this->_ci_library_paths as $path) {
                 $filepath = "{$path}libraries/{$subdir}{$class}.php";
@@ -125,14 +189,13 @@ class BF_Loader extends MX_Loader
                     continue;
                 }
 
-                // Safety:  Was the class already loaded by a previous call?
+                // Safety: Was the class already loaded by a previous call?
                 if (in_array($filepath, $this->_ci_loaded_files)) {
-                    // Before we deem this to be a duplicate request, let's see
-                    // if a custom object name is being supplied.  If so, we'll
-                    // return a new instance of the object
+                    // Before this is deemed to be a duplicate request, see if a
+                    // custom object name is being supplied. If so, return a new
+                    // instance of the object.
                     if (! is_null($object_name)) {
-                        $CI =& get_instance();
-                        if (! isset($CI->$object_name)) {
+                        if (! isset(get_instance()->$object_name)) {
                             return $this->_ci_init_class($class, '', $params, $object_name);
                         }
                     }
@@ -146,16 +209,16 @@ class BF_Loader extends MX_Loader
                 $this->_ci_loaded_files[] = $filepath;
                 return $this->_ci_init_class($class, '', $params, $object_name);
             }
-        } // END FOREACH
+        }
 
-        // One last attempt. Maybe the library is in a subdirectory, but it wasn't specified?
+        // Maybe the library is in a subdirectory, but it wasn't specified?
         if ($subdir == '') {
             $path = strtolower($class) . '/' . $class;
             return $this->_ci_load_class($path, $params);
         }
 
-        // If we got this far we were unable to find the requested class.
-        // We do not issue errors if the load call failed due to a duplicate request.
+        // Unable to find the requested class. Do not issue errors if the load call
+        // failed due to a duplicate request.
         if ($is_duplicate == false) {
             log_message('error', "Unable to load the requested class: {$class}");
             show_error("Unable to load the requested class: {$class}");
@@ -179,8 +242,8 @@ class BF_Loader extends MX_Loader
      * @param mixed  $params     Any additional parameters.
      * @param string $objectName An optional object name.
      *
-     * @return bool True if the file was loaded (either in this call or previously).
-     *              False if the file was not found.
+     * @return boolean True if the file was loaded (either in this call or previously).
+     * False if the file was not found.
      */
     protected function loadSubclassedLibrary($class, $subdir, $params = null, $objectName = null)
     {
@@ -202,12 +265,11 @@ class BF_Loader extends MX_Loader
 
         // Safety: Was the class already loaded by a previous call?
         if ($includeSubclass && in_array($subclass, $this->_ci_loaded_files)) {
-            // Before we deem this to be a duplicate request, let's see
-            // if a custom object name is being supplied.  If so, we'll
-            // return a new instance of the object
+            // Before this is deemed to be a duplicate request, see if a custom
+            // object name is being supplied. If so, return a new instance of the
+            // object.
             if (! is_null($objectName)) {
-                $CI =& get_instance();
-                if (! isset($CI->$objectName)) {
+                if (! isset(get_instance()->$objectName)) {
                     return $this->_ci_init_class(
                         $class,
                         config_item('subclass_prefix'),
@@ -224,8 +286,7 @@ class BF_Loader extends MX_Loader
         // Safety: Was the class already loaded by a previous call?
         if ($includeBfclass && in_array($bfclass, $this->_ci_loaded_files)) {
             if (! is_null($objectName)) {
-                $CI =& get_instance();
-                if (! isset($CI->$objectName)) {
+                if (! isset(get_instance()->$objectName)) {
                     return $this->_ci_init_class($class, 'BF_', $params, $objectName);
                 }
             }

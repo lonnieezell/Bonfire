@@ -1,5 +1,71 @@
 # Change Log
 
+## Under development
+
+### 0.7.2
+
+#### New Features:
+* In CI 2.x, uses bfmysqli database driver (a modified version of the mysqli driver) by default.
+* CommonMark support in Docs
+    * View the [CommonMark Library docs](developer/commonmark) for more information.
+* Added `BF_directory_helper`:
+    * `bcDirectoryMap()` function provides the same output as CI2's `directory_map()` function. This was used primarily to make the Modules library and various portions of the translate module work properly in CI3.
+    * In the long term, both the Modules library and translate module should be updated with more robust path/directory name handling, which would make this function unnecessary.
+
+#### Closes Issues:
+* #337 Can not login to admin when site is turned off (previously closed as non-issue, now fixed).
+* #357 Custom Message When Site is Off/Closed
+* #793 Wrong timezone setting (use `site.default_user_timezone` setting when $user->timezone is unavailable, instead of the admin's timezone).
+* #603 Documentation updated to note the potential for `before_`/`after_user_update` events to receive an array in the `user_id` field, and for that field to potentially not include the user's ID.
+* #565 `render_user_form` in the admin doesnt pass the payload.
+* #1082 Strip '.php' extension from module config files in `config_file_helper`'s `read_config()` function when the file is found by `Modules::file_path()`.
+* #1085 `s` key submits forms automatically
+* #1087 Country dropdown in extended settings doesn't update state dropdown
+* #1089 Fix error deleting roles for permissions during permission_model->update()
+* #1097, 1081 Installer looks for database configuration only in /application/config/development/database.php
+
+#### Additional Changes:
+* Upgraded CI to v2.2.1
+* [Improved support for CI 3](https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/docs/ci3.md).:
+    * Renamed controller, library, and model files to uppercase first letter.
+    * Added support for loading controller and model files named with uppercase first letter.
+    * Accept null or false return from `config->item()` when config file has not been loaded.
+    * Replaced use of `router->fetch_directory()` and `router->fetch_class()` with `router->directory` and `router->class`, respectively.
+    * Replaced `random_string('unique', ...)` with `random_string('md5',...)`.
+    * Replaced `read_file()` with `file_get_contents()`.
+    * Replaced `do_hash()` with `sha1()`.
+    * Added Constants from CI 3 to `/application/config/constants.php` (primarily EXIT_* constants).
+* Removed mdash entities in documentation for "Submitting Bug Reports and Feature Requests" and updated link in Readme
+* Profiler now displays boolean values in config section (displayed values are retrieved from the application_lang file, `'bf_profiler_true'` and `'bf_profiler_false'`).
+* Added support for socket connections (prefixed with /) to bfmysqli database driver, similar to mysqli driver socket support in CI3.
+* jwerty (keyboard shortcuts):
+    * Updated URL for jwerty.
+    * Updated jwerty.js to version 0.3.2.
+* Added `$allowOffline` array to `/application/hooks/App_hooks.php` to configure pages which are allowed to bypass the site offline functionality. As long as `'/users/login'` is in this list, users with the correct permissions will be able to log in and bring the site back online. If a user does not have the correct permission, and no additional pages have been added to the list, they will still see the contents of the `/application/errors/offline.php` file once they log in to the site. If you want to disable user logins while the site is offline, set this variable to an empty array. Just make sure you don't log out of the site after setting it offline, or you will have to update the database to get the site back online.
+* Application Helper:
+    * `is_https()`:
+        * Added `is_https()` function from CI 3's `core/Common` functions to ensure checks for use of https are consistent and accurate.
+        * Modified `gravatar_link()` function to use `is_https()`.
+        * Modified the Assets library to use `is_https()` (in `external_js()` and `find_files()`).
+        * Did not modify CI 2 core classes to use it, but it could be useful in `core/Config` and `core/Security`. One possibility would be to override `csrf_set_cookie()` in `/bonfire/core/BF_Security.php`.
+    * Modified `list_contexts()` to call `Contexts:getContexts()`, keeping the functionality of determining required and available contexts within the Contexts library.
+* UI/Contexts Library:
+    * Deprecated `set_contexts()` and `get_contexts()` (use `setContexts()` and `getContexts()`).
+    * When using `setContexts()` in place of `set_contexts()`, be aware that the behavior has changed slightly:
+        * when omitting the second argument (`$siteArea`), `setContexts()` will not change the internal `$site_area` variable, while `set_contexts()` would set it to `SITE_AREA`. (`SITE_AREA` is still the default value for the internal variable.)
+        * `setContexts()` will add the required contexts if they are not included in the first argument.
+    * `getContexts()` allows an optional first argument to only return contexts with landing pages (the functionality from the `application_helper`'s `list_contexts()` function).
+    * Modified internal access of the `self::$contexts` array to use `self::getContexts()` and `self::setContexts()`.
+* Language improvements:
+    * CI Language files adapted from https://github.com/bcit-ci/codeigniter3-translations (official CI3 translations repository)
+    * DB files modified to use `db_unsupported_compression` and `db_unsupported_feature` (instead of `db_unsuported_*`) and FTP library modified to use `ftp_unable_to_mkdir` instead of `ftp_unable_to_makdir`, so other language files may be pulled down from the official CI3 translations.
+    * Updated `form_validation_lang` files to allow use with either CI 2 or 3.
+    * Changed language prefix for emailer module from `em_` to `emailer_`.
+    * Fixed russian language support for activities, logs, and sysinfo modules. Added russian language support to builder.
+    * Changed language prefix for translate module from `tr_` to `translate_`.
+
+#### Known Issues:
+
 ## Released versions
 
 ### 0.7.1

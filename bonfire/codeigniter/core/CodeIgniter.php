@@ -5,8 +5,9 @@
  * An open source application development framework for PHP 5.1.6 or newer
  *
  * @package		CodeIgniter
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc.
+ * @copyright		Copyright (c) 2014 - 2015, British Columbia Institute of Technology (http://bcit.ca/)
  * @license		http://codeigniter.com/user_guide/license.html
  * @link		http://codeigniter.com
  * @since		Version 1.0
@@ -23,7 +24,7 @@
  * @package		CodeIgniter
  * @subpackage	codeigniter
  * @category	Front-controller
- * @author		ExpressionEngine Dev Team
+ * @author		EllisLab Dev Team
  * @link		http://codeigniter.com/user_guide/
  */
 
@@ -33,7 +34,7 @@
  * @var string
  *
  */
-	define('CI_VERSION', '2.2.0');
+	define('CI_VERSION', '2.2.1');
 
 /**
  * CodeIgniter Branch (Core = TRUE, Reactor = FALSE)
@@ -242,15 +243,28 @@
 	// Load the local application controller
 	// Note: The Router class automatically validates the controller path using the router->_validate_request().
 	// If this include fails it means that the default controller in the Routes.php file is not resolving to something valid.
-	if ( ! file_exists(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
+	if (file_exists(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
 	{
-        if (file_exists(BFPATH . 'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php')) {
-            include(BFPATH . 'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php');
-        } else {
-		show_error('Unable to load your default controller. Please make sure the controller specified in your Routes.php file is valid.');
-	}
-	} else {
-	include(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php');
+        include(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php');
+    }
+    elseif (file_exists(APPPATH.'controllers/'.$RTR->fetch_directory().ucfirst($RTR->fetch_class()).'.php'))
+    {
+        // CI 3 compatibility mode
+        include(APPPATH.'controllers/'.$RTR->fetch_directory().ucfirst($RTR->fetch_class()).'.php');
+    }
+    elseif (file_exists(BFPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php'))
+    {
+        // Bonfire path.
+        include(BFPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php');
+    }
+    elseif (file_exists(BFPATH.'controllers/'.$RTR->fetch_directory().ucfirst($RTR->fetch_class()).'.php'))
+    {
+        // Bonfire path with ucfirst filename (CI3 compatibility mode).
+        include(BFPATH.'controllers/'.$RTR->fetch_directory().ucfirst($RTR->fetch_class()).'.php');
+    }
+    else
+    {
+        show_error('Unable to load your default controller. Please make sure the controller specified in your Routes.php file is valid.');
     }
 
 	// Set a mark point for benchmarking

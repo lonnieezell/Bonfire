@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  */
@@ -18,22 +18,36 @@
  *
  * Localization strings used by Bonfire.
  *
- * @package    Bonfire\Modules\Sysinfo\Language\Russian
- * @author     Translator < https://github.com/cjmaxik >
- * @link       http://cibonfire.com/docs/guides
+ * @package Bonfire\Modules\Sysinfo\Language\Russian
+ * @author  Translator < https://github.com/cjmaxik >
+ * @author  Translator < https://github.com/nkondrashov >
+ * @link    http://cibonfire.com/docs/guides
  */
 
-$lang['si_system_info'] = 'Системная информация';
-$lang['si_system']      = 'Система';
-$lang['si_modules']     = 'Модули';
-$lang['si_php']         = 'PHP';
+$lang['sysinfo_system_info'] = 'Системная информация';
+$lang['sysinfo_system']      = 'Система';
+$lang['sysinfo_modules']     = 'Модули';
+$lang['sysinfo_php']         = 'PHP';
 
-$lang['si_installed_mods'] = 'Установленные модули';
-$lang['si_php_info']       = 'Информация PHP';
+$lang['sysinfo_installed_mods'] = 'Установленные модули';
+$lang['sysinfo_php_info']       = 'Информация PHP';
 
-$lang['sys_mod_name']   = 'Имя модуля';
-$lang['sys_mod_ver']    = 'Версия';
-$lang['sys_mod_desc']   = 'Описание';
-$lang['sys_mod_author'] = 'Автор';
+$lang['sysinfo_mod_name']   = 'Имя модуля';
+$lang['sysinfo_mod_ver']    = 'Версия';
+$lang['sysinfo_mod_desc']   = 'Описание';
+$lang['sysinfo_mod_author'] = 'Автор';
 
-/* /sysinfo/language/russian/sysinfo_lang.php */
+$lang['sysinfo_version_bf']   = 'Версия Bonfire';
+$lang['sysinfo_version_ci']   = 'Версия CodeIgniter';
+$lang['sysinfo_version_php']  = 'Версия PHP';
+$lang['sysinfo_time_server']  = 'Время сервера';
+$lang['sysinfo_time_local']   = 'Локальное время';
+$lang['sysinfo_db_name']      = 'Имя базы данных';
+$lang['sysinfo_db_server']    = 'Сервер базы данных';
+$lang['sysinfo_db_version']   = 'Версия базы данных';
+$lang['sysinfo_db_charset']   = 'Кодировка базы данных';
+$lang['sysinfo_db_collation'] = 'Кодировка Collation базы данных';
+$lang['sysinfo_basepath']     = 'Полный путь';
+$lang['sysinfo_apppath']      = 'Пусть к приложению';
+$lang['sysinfo_site_url']     = 'URl Сайта';
+$lang['sysinfo_environment']  = 'Статус';

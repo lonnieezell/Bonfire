@@ -40,11 +40,11 @@ $lang['migrations_app_migrations']  = 'Миграция приложения';
 $lang['migrations_core_migrations'] = 'Миграция ядра Bonfire';
 $lang['migrations_mod_migrations']  = 'Миграция модуля';
 
-$lang['migrations_tbl_module']        = 'Модулт';
+$lang['migrations_tbl_module']        = 'Модуль';
 $lang['migrations_tbl_installed_ver'] = 'Установленная версия';
 $lang['migrations_tbl_latest_ver']    = 'Последняя версия';
 
-$lang['migrations_uninstall'] = 'Ужалить';
+$lang['migrations_uninstall'] = 'Удалить';
 
 $lang['migrations_tab_app']  = 'Приложение';
 $lang['migrations_tab_mod']  = 'Модули';

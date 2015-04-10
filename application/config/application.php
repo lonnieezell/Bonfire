@@ -71,9 +71,12 @@ $config['sparks_path'] = '../sparks/';
 //------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
-// SITE PATH
+// Paths
 //------------------------------------------------------------------------------
 
+//------------------------------------------------------------------------------
+// SITE PATH
+//------------------------------------------------------------------------------
 // The path to the root folder that holds the application. This does not have to
 // be the site root folder, or even the folder defined in FCPATH.
 $config['template.site_path']	= FCPATH;
@@ -85,6 +88,10 @@ $config['template.site_path']	= FCPATH;
 // path at all times, to serve as the fall-back for when a theme isn't found.
 // Paths are relative to the FCPATH.
 $config['template.theme_paths'] = array('themes');
+
+//------------------------------------------------------------------------------
+// Layouts
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // DEFAULT LAYOUT
@@ -102,7 +109,11 @@ $config['template.default_layout'] = "index";
 $config['template.ajax_layout'] = 'ajax';
 
 //------------------------------------------------------------------------------
-// USE THEMES?
+// Themes
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+// USE MOBILE THEMES?
 //------------------------------------------------------------------------------
 // When set to true, the Template library will check the user agent during the
 // rendering process, and check the UA against the template.themes (below),
@@ -126,11 +137,8 @@ $config['template.default_theme']	= 'default/';
 $config['template.admin_theme'] = 'admin';
 
 //------------------------------------------------------------------------------
-// PARSE VIEWS
+// Templates
 //------------------------------------------------------------------------------
-// If set to true, views will be parsed via CodeIgniter's parser.
-// If false, views will be considered PHP views only.
-$config['template.parse_views'] = false;
 
 //------------------------------------------------------------------------------
 // MESSAGE TEMPLATE
@@ -152,6 +160,16 @@ EOD;
 //------------------------------------------------------------------------------
 $config['template.breadcrumb_symbol']	= ' : ';
 
+//------------------------------------------------------------------------------
+// Settings
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+// PARSE VIEWS
+//------------------------------------------------------------------------------
+// If set to true, views will be parsed via CodeIgniter's parser.
+// If false, views will be considered PHP views only.
+$config['template.parse_views'] = false;
 
 //------------------------------------------------------------------------------
 // !ASSETS
@@ -172,8 +190,8 @@ $config['assets.directories'] = array(
 
 // The 'assets.js_opener' and 'assets.js_closer' strings are used to wrap all
 // inline scripts. By default, these are setup to work with jQuery.
-$config['assets.js_opener'] = "$(document).ready(function() {\n";
-$config['assets.js_closer'] = "});\n";
+$config['assets.js_opener'] = "$(document).ready(function() {";
+$config['assets.js_closer'] = "});";
 
 // The 'assets.css_combine' and 'assets.js_combine' settings tell the Assets
 // library whether css and js files, respectively, should be combined.
@@ -255,3 +273,21 @@ $config['emailer.write_to_file'] = false;
 //------------------------------------------------------------------------------
 $config['migrate.auto_core'] = false;
 $config['migrate.auto_app']  = false;
+
+//------------------------------------------------------------------------------
+// CommonMark library used by Docs module
+//------------------------------------------------------------------------------
+// The valid_drivers array will be merged with the valid_drivers array defined in
+// the CommonMark library, so the MarkdownExtended driver will remain useable even
+// if it is not included in the configured list.
+$config['commonmark.valid_drivers'] = array(
+    'Parsedown',
+    'Markdown',
+    'MarkdownExtra',
+    'LeagueCommonMark',
+);
+// This is the driver configured to be used by the CommonMark library. The driver
+// will be loaded from either /bonfire/libraries/CommonMark/drivers/ or
+// /application/libraries/CommonMark/drivers/ (capitalization is important on most
+// servers). The file name for the driver must be CommonMark_{drivername}.php
+$config['commonmark.driver'] = 'MarkdownExtended';

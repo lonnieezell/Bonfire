@@ -10,8 +10,6 @@ Using migration files also creates a version of your database that can be includ
 
 Migrations are contained in sequentially numbered files so the system knows the order to apply them or remove them.
 
-
-
 <a name="spheres"></a>
 ## Migrations Spheres
 
@@ -24,14 +22,12 @@ Core migrations are files that are necessary for the database schema of Bonfire 
 
 These are stored under *application/db/migrations/core*.
 
-
 <a name="application"></a>
 ### Application Migrations
 
 For your own application, you should use application-level migrations. This is the perfect place for changes apply to application-specific changes. However, if you are planning on re-using modules from one application to the next, you should consider placing them at the module level.
 
 These migration files are stored under *application/db/migrations*.
-
 
 <a name="module"></a>
 ### Module Migrations
@@ -49,12 +45,10 @@ To disable migrations, edit the following line in *application/core modules/migr
 
     $config['migrations_enabled'] = true;
 
-
 <a name="anatomy"></a>
 ## Anatomy of a Migration
 
 A migration is a subclass of `Migration` that implements two methods: up (perform the required transformations) and down (revert them). Within each migration you can use any of the methods that CodeIgniter provides, like the [dbutils](http://codeigniter.com/user_guide/database/utilities.html) and [dbforge](http://codeigniter.com/user_guide/database/forge.html) classes.
-
 
 <a name="creating"></a>
 ## Creating a Migration
@@ -82,19 +76,17 @@ The file is a standard PHP class, that must follow three simple rules:
 ### A Skeleton Migration
 
 ```php
-    class Migration_Install_initial_tables extends Migration {
-
-      function up() {
-          ...
+    class Migration_Install_initial_tables extends Migration
+    {
+      public function up()
+      {
+          // ...
       }
 
-      //--------------------------------------------------------------------
-
-      function down() {
-          ...
+      public function down()
+      {
+          // ...
       }
-
-      //--------------------------------------------------------------------
     }
 ```
 
@@ -116,3 +108,79 @@ Migrations can be set to auto-run when discovered by changing a couple of lines 
 `migrate.auto_app`, when set to TRUE, will run a check for new migrations for your application-specific migrations on every page load.
 
 These are very handy to have set to TRUE in both Development and Staging/Test environments, but will slow your site down some since they check on every page load. It is recommended that Production environments set both of these to FALSE and run your migrations manually or as part of an update script.
+
+## Migration Class
+
+The Migration class is an abstract base class which your migrations must extend.
+This class provides the ability to use `$this->` to reference any libraries currently loaded by Bonfire/CodeIgniter.
+It also requires you to define the `up()`/`down()` methods and allows you to set the `migration_type` property to control the behavior of your migration.
+
+### migration_type Property
+
+By default, the `migration_type` property is set to `'forge'`, which means the library will load dbforge and your migration will be expected to execute the commands required to perform the migration.
+
+If the property is set to `'sql'`, dbforge will not be loaded, and the Migrations library will attempt to execute your migration as a SQL migration.
+A SQL migration is expected to return a SQL string from the `up()` and `down()` methods which will perform the required changes when executed against the database.
+
+## Migrations Library
+
+### Properties
+
+#### error
+
+_Deprecated_ since 0.7.1. Use `getErrorMessage()`.
+
+The most recent error message.
+
+### Methods
+
+#### autoLatest()
+
+Auto-run core and/or app migrations.
+Used on page load to run current core and app migrations up to the latest version, if enabled in the config file.
+
+`'migrate.auto_core'` determines whether core migrations are run when this method is called.
+
+`'migrate.auto_app'` determines whether app migrations are run when this method is called.
+
+#### doSqlMigration([$sql = ''])
+
+Executes raw SQL migrations.
+Multiple commands may be passed in $sql by separating them with a semicolon (`;`).
+
+#### getAvailableVersions([$type = ''])
+
+Return a list of available migrations files of the given `$type`.
+
+- If `$type` is empty, returns a list of core migrations.
+- If a module name is supplied in `$type`, returns a list of migrations for that module.
+- If `$type` is `'app_'`, returns a list of app migrations.
+
+#### getErrorMessage()
+
+Returns the most recent error message, or an empty string.
+
+#### getErrors([$key = ''])
+
+Get all of the errors (in an array), or the error message associated with the given `$key`.
+
+#### getModuleVersions()
+
+Retrieve the module versions in a single DB call and set the cache.
+The retrieved versions will be in an array with the module names as the keys and the versions as the values.
+If the database query fails, an empty array is returned.
+
+#### getVersion([$type = ''[, $getLatest = false]])
+
+Get the schema version from the cache.
+If a database query is required, cache the result.
+
+If `$getLatest` is true, the latest available version for the given $type will be returned.
+
+$type can be 'app_', 'core', or the name of a module.
+If `$type` is empty, it will default to 'core'.
+
+#### install([$type = ''])
+
+Install all migrations up to the latest version for the given `$type`, where `$type` is the name of the module, `'app_'`, or empty for core migrations.
+

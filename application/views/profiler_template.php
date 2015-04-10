@@ -44,12 +44,12 @@ $profiler_logo = '<img width="22" height="22" alt="Profiler" src="data:image/png
 ?>
 <script type="text/javascript">
 var ci_profiler_bar = {
-	/** Current toolbar section open */
-	current: null,
-	/** Current vars and config section open */
-	currentvar: null,
-	/** Current config section open */
-	currentli: null,
+    /** Current toolbar section open */
+    current: null,
+    /** Current vars and config section open */
+    currentvar: null,
+    /** Current config section open */
+    currentli: null,
     /** The class name used for the active section */
     currentClass: 'current',
     /** The id of the icon used to open the profiler */
@@ -57,129 +57,132 @@ var ci_profiler_bar = {
     /** The id of the profiler itself */
     profilerId: 'codeigniter-profiler',
     /** Toggle a toolbar section */
-	show: function(obj, el) {
-		if (obj == ci_profiler_bar.current) {
-			this.off(obj, el);
-			this.current = null;
+    show: function(obj, el) {
+        if (obj == ci_profiler_bar.current) {
+            this.off(obj, el);
+            this.current = null;
             this.currentvar = null;
-		} else {
-			this.off(this.current, this.currentvar);
-			this.current = obj;
+        } else {
+            this.off(this.current, this.currentvar);
+            this.current = obj;
             this.currentvar = el;
-			this.on(this.current, this.currentvar);
-		}
-	},
-	/** Turn an element on */
-	on: function(obj, el) {
-		if (document.getElementById(obj) != null) {
-			document.getElementById(obj).style.display = 'block';
-		}
+            this.on(this.current, this.currentvar);
+        }
+    },
+    /** Turn an element on */
+    on: function(obj, el) {
+        if (document.getElementById(obj) != null) {
+            document.getElementById(obj).style.display = 'block';
+        }
         this.add_class(el, this.currentClass);
-	},
-	/** Turn an element off */
-	off: function(obj, el) {
-		if (document.getElementById(obj) != null) {
-			document.getElementById(obj).style.display = 'none';
-		}
+    },
+    /** Turn an element off */
+    off: function(obj, el) {
+        if (document.getElementById(obj) != null) {
+            document.getElementById(obj).style.display = 'none';
+        }
         this.remove_class(el, this.currentClass);
-	},
-	/** Toggle an element */
-	toggle: function(obj) {
-		if (typeof obj == 'string') {
-			obj = document.getElementById(obj);
-		}
-		if (obj) {
-			obj.style.display = obj.style.display == 'none' ? 'block' : 'none';
-		}
-	},
-	/** Open the toolbar */
-	open: function() {
-		document.getElementById(this.openIconId).style.display = 'none';
-		document.getElementById(this.profilerId).style.display = 'block';
-		this.set_cookie('open');
-	},
-	/** Close the toolbar */
-	close : function() {
-		document.getElementById(this.profilerId).style.display = 'none';
-		document.getElementById(this.openIconId).style.display = 'block';
-		this.set_cookie('closed');
-	},
-	/** Add class to element */
-	add_class: function(obj, a_class) {
-		document.getElementById(obj).className += " " + a_class;
-	},
-	/** Remove class from element */
-	remove_class : function(obj, r_class) {
-		if (undefined != obj) {
-			document.getElementById(obj).className = document.getElementById(obj).className.replace(r_class, '');
-		}
-	},
+    },
+    /** Toggle an element */
+    toggle: function(obj) {
+        if (typeof obj == 'string') {
+            obj = document.getElementById(obj);
+        }
+        if (obj) {
+            obj.style.display = obj.style.display == 'none' ? 'block' : 'none';
+        }
+    },
+    /** Open the toolbar */
+    open: function() {
+        document.getElementById(this.openIconId).style.display = 'none';
+        document.getElementById(this.profilerId).style.display = 'block';
+        this.set_cookie('open');
+    },
+    /** Close the toolbar */
+    close : function() {
+        document.getElementById(this.profilerId).style.display = 'none';
+        document.getElementById(this.openIconId).style.display = 'block';
+        this.set_cookie('closed');
+    },
+    /** Add class to element */
+    add_class: function(obj, a_class) {
+        document.getElementById(obj).className += " " + a_class;
+    },
+    /** Remove class from element */
+    remove_class : function(obj, r_class) {
+        if (undefined != obj) {
+            document.getElementById(obj).className = document.getElementById(obj).className.replace(r_class, '');
+        }
+    },
     /** Read the cookie */
-	read_cookie: function() {
-		var nameEQ = "Profiler=",
+    read_cookie: function() {
+        var nameEQ = "Profiler=",
             ca = document.cookie.split(';'),
             i = 0,
             c;
-		for (i = 0; i < ca.length; i++) {
-			c = ca[i];
-			while (c.charAt(0) == ' ') {
+        for (i = 0; i < ca.length; i++) {
+            c = ca[i];
+            while (c.charAt(0) == ' ') {
                 c = c.substring(1, c.length);
             }
-			if (c.indexOf(nameEQ) == 0) {
+            if (c.indexOf(nameEQ) == 0) {
                 return c.substring(nameEQ.length, c.length);
             }
-		}
-		return null;
-	},
+        }
+        return null;
+    },
     /** Set the cookie. */
-	set_cookie: function(value) {
-		var expires = "; expires=",
+    set_cookie: function(value) {
+        var expires = "; expires=",
             date = new Date();
-		date.setTime(date.getTime() + (365*24*60*60*1000));
-		expires += date.toGMTString();
-		document.cookie = "Profiler=" + value + expires + "; path=/";
-	},
+        date.setTime(date.getTime() + (365*24*60*60*1000));
+        expires += date.toGMTString();
+        document.cookie = "Profiler=" + value + expires + "; path=/";
+    },
     /** Set the load state */
-	set_load_state: function() {
-		var cookie_state = this.read_cookie();
-		if (cookie_state == 'open') {
-			this.open();
-		} else {
-			this.close();
-		}
-	},
+    set_load_state: function() {
+        var cookie_state = this.read_cookie();
+        if (cookie_state == 'open') {
+            this.open();
+        } else {
+            this.close();
+        }
+    },
     /** Toggle a data table */
-	toggle_data_table: function(obj) {
-		if (typeof obj == 'string') {
-			obj = document.getElementById(obj + '_table');
-		}
-		if (obj) {
-			obj.style.display = obj.style.display == 'none' ? 'block' : 'none';
-		}
-	}
+    toggle_data_table: function(obj) {
+        if (typeof obj == 'string') {
+            obj = document.getElementById(obj + '_table');
+        }
+        if (obj) {
+            obj.style.display = obj.style.display == 'none' ? 'block' : 'none';
+        }
+    }
 };
 window.onload = function() {
-	ci_profiler_bar.set_load_state();
+    ci_profiler_bar.set_load_state();
 }
 </script>
 <a href="#codeigniter-profiler" id="ci-profiler-menu-open" onclick="ci_profiler_bar.open(); return false;"><?php echo $profiler_logo; ?></a>
 <div id="codeigniter-profiler">
-	<div id="ci-profiler-menu">
+    <div id="ci-profiler-menu">
         <!-- CI Logo -->
         <a><?php echo $profiler_logo; ?></a>
-		<?php if (isset($sections['console'])) : ?>
-		<!-- Console -->
-		<a href="#ci-profiler-console" id="ci-profiler-menu-console" onclick="ci_profiler_bar.show('ci-profiler-console', 'ci-profiler-menu-console'); return false;">
-			<?php echo lang('bf_profiler_menu_console'); ?>
-			<span><?php echo is_array($sections['console']) ? $sections['console']['log_count'] + $sections['console']['memory_count'] : 0 ?></span>
-		</a>
-		<?php
-        endif;
-        if (isset($sections['benchmarks'])) :
+        <?php
+        if (! empty($sections)) :
+            if (isset($sections['console'])) :
         ?>
-		<!-- Benchmarks -->
-		<a href="#ci-profiler-benchmarks" id="ci-profiler-menu-time" onclick="ci_profiler_bar.show('ci-profiler-benchmarks', 'ci-profiler-menu-time'); return false;">
-			<?php echo lang('bf_profiler_menu_time'); ?>
+        <!-- Console -->
+        <a href="#ci-profiler-console" id="ci-profiler-menu-console" onclick="ci_profiler_bar.show('ci-profiler-console', 'ci-profiler-menu-console'); return false;">
+            <?php echo lang('bf_profiler_menu_console'); ?>
+            <span><?php echo is_array($sections['console']) ? $sections['console']['log_count'] + $sections['console']['memory_count'] : 0; ?></span>
+        </a>
+        <?php
+            endif;
+            if (isset($sections['benchmarks'])) :
+        ?>
+        <!-- Benchmarks -->
+        <a href="#ci-profiler-benchmarks" id="ci-profiler-menu-time" onclick="ci_profiler_bar.show('ci-profiler-benchmarks', 'ci-profiler-menu-time'); return false;">
+            <?php echo lang('bf_profiler_menu_time'); ?>
             <span><?php
                 if ($cip_time_format == 'ms') {
                     echo $this->benchmark->elapsed_time('total_execution_time_start', 'total_execution_time_end') * 1000;
@@ -189,260 +192,267 @@ window.onload = function() {
                     echo lang('bf_profiler_menu_time_s');
                 }
             ?></span>
-		</a>
-		<a href="#ci-profiler-memory" id="ci-profiler-menu-memory" onclick="ci_profiler_bar.show('ci-profiler-memory', 'ci-profiler-menu-memory'); return false;">
-			<?php echo lang('bf_profiler_menu_memory'); ?>
-			<span><?php echo function_exists('memory_get_usage') ? (round(memory_get_usage()/1024/1024, 2) . ' ' . lang('bf_profiler_menu_memory_mb')) : '0'; ?></span>
-		</a>
-		<?php
+        </a>
+        <a href="#ci-profiler-memory" id="ci-profiler-menu-memory" onclick="ci_profiler_bar.show('ci-profiler-memory', 'ci-profiler-menu-memory'); return false;">
+            <?php echo lang('bf_profiler_menu_memory'); ?>
+            <span><?php echo function_exists('memory_get_usage') ? (round(memory_get_usage()/1024/1024, 2) . ' ' . lang('bf_profiler_menu_memory_mb')) : '0'; ?></span>
+        </a>
+        <?php
+            endif;
+            if (isset($sections['queries'])) :
+        ?>
+        <!-- Queries -->
+        <a href="#ci-profiler-queries" id="ci-profiler-menu-queries" onclick="ci_profiler_bar.show('ci-profiler-queries', 'ci-profiler-menu-queries'); return false;">
+            <?php echo lang('bf_profiler_menu_queries_db'); ?>
+            <span><?php echo is_array($sections['queries']) ? (count($sections['queries']) - 1) : 0; ?>
+                <?php echo lang('bf_profiler_menu_queries'); ?>
+            </span>
+        </a>
+        <?php
+            endif;
+            if (isset($sections['http_headers'])
+                || isset($sections['get'])
+                || isset($sections['config'])
+                || isset($sections['post'])
+                || isset($sections['uri_string'])
+                || isset($sections['controller_info'])
+                || isset($sections['userdata'])
+            ) :
+        ?>
+        <!-- Vars and Config -->
+        <a href="#ci-profiler-vars" id="ci-profiler-menu-vars" onclick="ci_profiler_bar.show('ci-profiler-vars', 'ci-profiler-menu-vars'); return false;">
+            <?php echo lang('bf_profiler_menu_vars'); ?>
+        </a>
+        <?php
+            endif;
+            if (isset($sections['files'])) :
+        ?>
+        <!-- Files -->
+        <a href="#ci-profiler-files" id="ci-profiler-menu-files" onclick="ci_profiler_bar.show('ci-profiler-files', 'ci-profiler-menu-files'); return false;">
+            <?php echo lang('bf_profiler_menu_files'); ?>
+            <span><?php echo is_array($sections['files']) ? count($sections['files']) : 0; ?></span>
+        </a>
+        <?php
+            endif;
+        endif;
+        ?>
+        <a href="#ci-profiler-menu-open" id="ci-profiler-menu-exit" onclick="ci_profiler_bar.close(); return false;"></a>
+    </div>
+    <!-- Profiler Panel -->
+    <div id="profiler-panel">
+        <?php if (empty($sections)) : ?>
+        <p class="ci-profiler-box"><?php echo lang('profiler_no_profiles'); ?></p>
+        <?php
+        else :
+            if (isset($sections['console'])) :
+        ?>
+        <!-- Console -->
+        <div id="ci-profiler-console" class="ci-profiler-box">
+            <h2><?php echo lang('bf_profiler_box_console'); ?></h2>
+            <?php if (is_array($sections['console'])) : ?>
+            <table class="main">
+                <?php
+                foreach ($sections['console']['console'] as $log) :
+                    if ($log['type'] == 'log') :
+                ?>
+                <tr>
+                    <td><?php echo $log['type']; ?></td>
+                    <td class="faded"><pre><?php echo $log['data']; ?></pre></td>
+                    <td></td>
+                </tr>
+                <?php elseif ($log['type'] == 'memory') : ?>
+                <tr>
+                    <td><?php echo $log['type']; ?></td>
+                    <td><em><?php echo $log['data_type']; ?></em>:
+                        <?php echo $log['name']; ?>
+                    </td>
+                    <td class="hilight"><?php echo $log['data']; ?></td>
+                </tr>
+                <?php
+                    endif;
+                endforeach;
+                ?>
+            </table>
+            <?php
+            else :
+                echo $sections['console'];
+            endif;
+            ?>
+        </div>
+        <!-- Memory -->
+        <div id="ci-profiler-memory" class="ci-profiler-box">
+            <h2><?php echo lang('bf_profiler_box_memory'); ?></h2>
+            <?php if (is_array($sections['console'])) : ?>
+            <table class="main">
+                <?php
+                foreach ($sections['console']['console'] as $log) :
+                    if ($log['type'] == 'memory') :
+                ?>
+                <tr>
+                    <td><?php echo $log['type']; ?></td>
+                    <td><em><?php echo $log['data_type']; ?></em>:
+                        <?php echo $log['name']; ?>
+                    </td>
+                    <td class="hilight"><?php echo $log['data']; ?></td>
+                </tr>
+                <?php
+                    endif;
+                endforeach;
+                ?>
+            </table>
+            <?php
+            else :
+                echo $sections['console'];
+            endif;
+            ?>
+        </div>
+        <?php
+        endif; // isset($sections['console'])
+        if (isset($sections['benchmarks'])) :
+        ?>
+        <!-- Benchmarks -->
+        <div id="ci-profiler-benchmarks" class="ci-profiler-box">
+            <h2><?php echo lang('bf_profiler_box_benchmarks'); ?></h2>
+            <?php if (is_array($sections['benchmarks'])) : ?>
+            <table class="main">
+                <?php foreach ($sections['benchmarks'] as $key => $val) : ?>
+                <tr>
+                    <td class="hilight"><?php echo $val; ?></td>
+                    <td><?php echo $key; ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+            <?php
+            else :
+                echo $sections['benchmarks'];
+            endif;
+            ?>
+        </div>
+        <?php
         endif;
         if (isset($sections['queries'])) :
         ?>
-		<!-- Queries -->
-		<a href="#ci-profiler-queries" id="ci-profiler-menu-queries" onclick="ci_profiler_bar.show('ci-profiler-queries', 'ci-profiler-menu-queries'); return false;">
-			<?php echo lang('bf_profiler_menu_queries_db'); ?>
-			<span><?php echo is_array($sections['queries']) ? (count($sections['queries']) - 1) : 0; ?>
-                <?php echo lang('bf_profiler_menu_queries'); ?>
-            </span>
-		</a>
-		<?php
+        <!-- Queries -->
+        <div id="ci-profiler-queries" class="ci-profiler-box">
+            <h2><?php echo lang('bf_profiler_box_queries'); ?></h2>
+            <?php if (is_array($sections['queries'])) : ?>
+            <table class="main">
+                <?php
+                foreach ($sections['queries'] as $key => $query) :
+                    if (isset($query['time'])) :
+                ?>
+                <tr>
+                    <td class="hilight"><?php echo $query['time']; ?></td>
+                    <td><?php echo $query['query']; ?></td>
+                </tr>
+                <?php
+                    else :
+                        foreach ($query as $time => $val) :
+                ?>
+                <tr>
+                    <td class="hilight"><?php echo $time; ?></td>
+                    <td><?php echo $val; ?></td>
+                </tr>
+                <?php
+                        endforeach;
+                    endif;
+                endforeach;
+                ?>
+            </table>
+            <?php
+            else :
+                echo $sections['queries'];
+            endif;
+            ?>
+        </div>
+        <?php
         endif;
-        if (isset($sections['http_headers']) || isset($sections['get'])
-            || isset($sections['config']) || isset($sections['post'])
-            || isset($sections['uri_string']) || isset($sections['controller_info'])
+        if (isset($sections['http_headers'])
+            || isset($sections['get'])
+            || isset($sections['config'])
+            || isset($sections['post'])
+            || isset($sections['uri_string'])
+            || isset($sections['controller_info'])
             || isset($sections['userdata'])
         ) :
         ?>
-		<!-- Vars and Config -->
-		<a href="#ci-profiler-vars" id="ci-profiler-menu-vars" onclick="ci_profiler_bar.show('ci-profiler-vars', 'ci-profiler-menu-vars'); return false;">
-			<?php echo lang('bf_profiler_menu_vars'); ?>
-		</a>
-		<?php
-        endif;
+        <!-- Vars and Config -->
+        <div id="ci-profiler-vars" class="ci-profiler-box">
+            <?php if (isset($sections['userdata'])) : ?>
+            <!-- User Data -->
+            <a href="#" onclick="ci_profiler_bar.toggle_data_table('userdata'); return false;">
+                <h2><?php echo lang('bf_profiler_box_session'); ?></h2>
+            </a>
+            <?php if (is_array($sections['userdata'])) : ?>
+            <table class="main" id="userdata_table">
+                <?php foreach ($sections['userdata'] as $key => $val) : ?>
+                <tr>
+                    <td class="hilight"><?php echo $key; ?></td>
+                    <td><?php e($val); ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+            <?php
+                endif;
+            endif; // isset($sections['userdata'])
+            ?>
+            <!-- The Rest -->
+            <?php
+            foreach (array('get', 'post', 'uri_string', 'controller_info', 'headers', 'config') as $section) :
+                if (isset($sections[$section])) :
+            ?>
+            <a href='#<?php echo "{$section}_table"; ?>' onclick="ci_profiler_bar.toggle_data_table('<?php echo $section; ?>'); return false;">
+                <h2><?php echo lang("profiler_{$section}" . ($section == 'get' || $section == 'post' ? '_data' : '')); ?></h2>
+            </a>
+            <table class="main" id="<?php echo $section; ?>_table">
+                <?php
+                    if (is_array($sections[$section])) :
+                        foreach ($sections[$section] as $key => $val) :
+                ?>
+                <tr>
+                    <td class="hilight"><?php echo $key; ?></td>
+                    <td><?php e($val); ?></td>
+                </tr>
+                <?php
+                        endforeach;
+                    else :
+                ?>
+                <tr>
+                    <td><?php echo $sections[$section]; ?></td>
+                </tr>
+                <?php endif; ?>
+            </table>
+            <?php
+                endif; // isset($sections[$section])
+            endforeach;
+            ?>
+        </div>
+        <?php
+        endif; // isset($sections['http_headers']) || isset($sections['get']) || isset($sections['config']) || isset($sections['post']) || isset($sections['uri_string']) || isset($sections['controller_info']) || isset($sections['userdata'])
         if (isset($sections['files'])) :
         ?>
-		<!-- Files -->
-		<a href="#ci-profiler-files" id="ci-profiler-menu-files" onclick="ci_profiler_bar.show('ci-profiler-files', 'ci-profiler-menu-files'); return false;">
-			<?php echo lang('bf_profiler_menu_files'); ?>
-			<span><?php echo is_array($sections['files']) ? count($sections['files']) : 0; ?></span>
-		</a>
-		<?php endif; ?>
-		<a href="#ci-profiler-menu-open" id="ci-profiler-menu-exit" onclick="ci_profiler_bar.close(); return false;"></a>
-	</div>
-	<!-- Profiler Panel -->
-	<div id="profiler-panel">
-        <?php
-        if (count($sections) > 0) :
-            if (isset($sections['console'])) :
-                $console_is_array = is_array($sections['console']);
-        ?>
-		<!-- Console -->
-		<div id="ci-profiler-console" class="ci-profiler-box">
-			<h2><?php echo lang('bf_profiler_box_console'); ?></h2>
-			<?php if ($console_is_array) : ?>
-			<table class="main">
-				<?php
-				foreach ($sections['console']['console'] as $log) :
-					if ($log['type'] == 'log') :
-				?>
-				<tr>
-					<td><?php echo $log['type']; ?></td>
-					<td class="faded"><pre><?php echo $log['data']; ?></pre></td>
-					<td></td>
-				</tr>
-				<?php elseif ($log['type'] == 'memory') : ?>
-				<tr>
-					<td><?php echo $log['type']; ?></td>
-					<td><em><?php echo $log['data_type']; ?></em>:
-						<?php echo $log['name']; ?>
-					</td>
-					<td class="hilight"><?php echo $log['data']; ?></td>
-				</tr>
-				<?php
-					endif;
-				endforeach;
-				?>
-			</table>
-			<?php
-			else :
-				echo $sections['console'];
-			endif;
-			?>
-		</div>
-		<!-- Memory -->
-		<div id="ci-profiler-memory" class="ci-profiler-box">
-			<h2><?php echo lang('bf_profiler_box_memory'); ?></h2>
-			<?php if ($console_is_array) : ?>
-			<table class="main">
-				<?php
-				foreach ($sections['console']['console'] as $log) :
-					if ($log['type'] == 'memory') :
-				?>
-				<tr>
-					<td><?php echo $log['type']; ?></td>
-					<td><em><?php echo $log['data_type']; ?></em>:
-						<?php echo $log['name']; ?>
-					</td>
-					<td class="hilight"><?php echo $log['data']; ?></td>
-				</tr>
-				<?php
-					endif;
-				endforeach;
-				?>
-			</table>
-			<?php
-			else :
-				echo $sections['console'];
-			endif;
-			?>
-		</div>
-        <?php
-		endif; // isset($sections['console'])
-		if (isset($sections['benchmarks'])) :
-        ?>
-		<!-- Benchmarks -->
-		<div id="ci-profiler-benchmarks" class="ci-profiler-box">
-			<h2><?php echo lang('bf_profiler_box_benchmarks'); ?></h2>
-			<?php if (is_array($sections['benchmarks'])) : ?>
-			<table class="main">
-				<?php foreach ($sections['benchmarks'] as $key => $val) : ?>
-				<tr>
-                    <td class="hilight"><?php echo $val; ?></td>
-					<td><?php echo $key; ?></td>
-				</tr>
-				<?php endforeach; ?>
-			</table>
-			<?php
-			else :
-				echo $sections['benchmarks'];
-			endif;
-			?>
-		</div>
-        <?php
-		endif;
-		if (isset($sections['queries'])) :
-        ?>
-		<!-- Queries -->
-		<div id="ci-profiler-queries" class="ci-profiler-box">
-			<h2><?php echo lang('bf_profiler_box_queries'); ?></h2>
-			<?php if (is_array($sections['queries'])) : ?>
-			<table class="main">
-				<?php
-				foreach ($sections['queries'] as $key => $query) :
-					if (isset($query['time'])) :
-				?>
-				<tr>
-					<td class="hilight"><?php echo $query['time']; ?></td>
-					<td><?php echo $query['query']; ?></td>
-				</tr>
-				<?php
-					else :
-						foreach ($query as $time => $val) :
-				?>
-				<tr>
-					<td class="hilight"><?php echo $time; ?></td>
-					<td><?php echo $val; ?></td>
-				</tr>
-				<?php
-						endforeach;
-					endif;
-				endforeach;
-				?>
-			</table>
-			<?php
-			else :
-				echo $sections['queries'];
-			endif;
-			?>
-		</div>
-        <?php
-		endif;
-		if (isset($sections['http_headers']) || isset($sections['get'])
-            || isset($sections['config']) || isset($sections['post'])
-            || isset($sections['uri_string']) || isset($sections['controller_info'])
-            || isset($sections['userdata'])
-        ) :
-        ?>
-		<!-- Vars and Config -->
-		<div id="ci-profiler-vars" class="ci-profiler-box">
-			<?php if (isset($sections['userdata'])) : ?>
-			<!-- User Data -->
-			<a href="#" onclick="ci_profiler_bar.toggle_data_table('userdata'); return false;">
-				<h2><?php echo lang('bf_profiler_box_session'); ?></h2>
-			</a>
-			<?php if (is_array($sections['userdata'])) : ?>
-			<table class="main" id="userdata_table">
-				<?php foreach ($sections['userdata'] as $key => $val) : ?>
-				<tr>
-					<td class="hilight"><?php echo $key; ?></td>
-					<td><?php e($val); ?></td>
-				</tr>
-				<?php endforeach; ?>
-			</table>
-			<?php
-				endif;
-			endif; // isset($sections['userdata'])
-			?>
-			<!-- The Rest -->
-			<?php
-			foreach (array('get', 'post', 'uri_string', 'controller_info', 'headers', 'config') as $section) :
-				if (isset($sections[$section])) :
-					$append = ($section == 'get' || $section == 'post') ? '_data' : '';
-			?>
-			<a href='#<?php echo "{$section}_table"; ?>' onclick="ci_profiler_bar.toggle_data_table('<?php echo $section; ?>'); return false;">
-				<h2><?php echo lang("profiler_{$section}{$append}"); ?></h2>
-			</a>
-			<table class="main" id="<?php echo $section; ?>_table">
-				<?php
-					if (is_array($sections[$section])) :
-						foreach ($sections[$section] as $key => $val) :
-				?>
-				<tr>
-					<td class="hilight"><?php echo $key; ?></td>
-					<td><?php e($val); ?></td>
-				</tr>
-				<?php
-						endforeach;
-					else :
-				?>
-				<tr>
-					<td><?php echo $sections[$section]; ?></td>
-				</tr>
-				<?php endif; ?>
-			</table>
-			<?php
-				endif; // isset($sections[$section])
-			endforeach;
-			?>
-		</div>
-		<?php
-		endif; // isset($sections['http_headers']) || isset($sections['get']) || isset($sections['config']) || isset($sections['post']) || isset($sections['uri_string']) || isset($sections['controller_info']) || isset($sections['userdata'])
-		if (isset($sections['files'])) :
-		?>
-		<!-- Files -->
-		<div id="ci-profiler-files" class="ci-profiler-box">
-			<h2><?php echo lang('bf_profiler_box_files'); ?></h2>
-			<?php if (is_array($sections['files'])) : ?>
-			<table class="main">
-				<?php foreach ($sections['files'] as $key => $val) : ?>
-				<tr>
-					<td class="hilight"><?php echo preg_replace("/\/.*\//", "", $val); ?><br/>
-						<span class="faded small"><?php echo str_replace(FCPATH, '', $val); ?></span>
-					</td>
-				</tr>
-				<?php endforeach; ?>
-			</table>
-			<?php
-			else :
-				echo $sections['files'];
-			endif;
-			?>
-		</div>
+        <!-- Files -->
+        <div id="ci-profiler-files" class="ci-profiler-box">
+            <h2><?php echo lang('bf_profiler_box_files'); ?></h2>
+            <?php if (is_array($sections['files'])) : ?>
+            <table class="main">
+                <?php foreach ($sections['files'] as $key => $val) : ?>
+                <tr>
+                    <td class="hilight"><?php echo preg_replace("/\/.*\//", "", $val); ?><br/>
+                        <span class="faded small"><?php echo str_replace(FCPATH, '', $val); ?></span>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+            <?php
+            else :
+                echo $sections['files'];
+            endif;
+            ?>
+        </div>
         <?php
             endif; // isset($sections['files'])
-        else :
+        endif; // empty($sections)
         ?>
-		<p class="ci-profiler-box"><?php echo lang('profiler_no_profiles'); ?></p>
-        <?php endif; /* count($sections) */ ?>
-	</div><!-- /profiler_panel -->
+    </div><!-- /profiler_panel -->
 </div><!-- /codeigniter_profiler -->

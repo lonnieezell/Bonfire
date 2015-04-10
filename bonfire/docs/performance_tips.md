@@ -12,7 +12,7 @@ While Bonfire has caching loaded and enabled by default, it sets the driver to a
 
 To change the type of cache driver used, you need to edit the `MY_Controller` file. Find the `__construct()__` method of the `Base_Controller` and you'll see that in a production environment it defaults to using `APC` caching with a `file cache` as the backup. For some servers, the file-based caching may be slowing things down so you will need to adjust and tweak as necessary for your specific environment.
 
-For types of caching, refer to the [CodeIgniter User Guide](http://ellislab.com/codeigniter/user-guide/libraries/caching.html).
+For types of caching, refer to the [CodeIgniter User Guide](http://www.codeigniter.com/user-guide/libraries/caching.html).
 
 ## Disable Database Debugging
 

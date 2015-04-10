@@ -49,7 +49,7 @@
     <?php echo form_open(site_url(SITE_AREA . '/developer/logs'), array('class' => 'form-horizontal')); ?>
         <div class="alert alert-warning fade in">
             <a class="close" data-dismiss="alert">&times;</a>
-            <?php echo sprintf(lang('logs_delete1_note'), $log_file_pretty); ?>
+            <?php echo lang('logs_delete1_note'); ?>
         </div>
         <fieldset class="form-actions">
             <input type="hidden" name="checked[]" value="<?php e($log_file); ?>" />

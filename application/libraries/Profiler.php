@@ -4,12 +4,12 @@
  *
  * An open source application development framework for PHP 5.1.6 or newer
  *
- * @package		CodeIgniter
- * @author		ExpressionEngine Dev Team
- * @copyright	Copyright © 2008 - 2011, EllisLab, Inc.
- * @license		http://codeigniter.com/user_guide/license.html
- * @link		http://codeigniter.com
- * @since		Version 1.0
+ * @package     CodeIgniter
+ * @author      ExpressionEngine Dev Team
+ * @copyright   Copyright © 2008 - 2011, EllisLab, Inc.
+ * @license     http://codeigniter.com/user_guide/license.html
+ * @link        http://codeigniter.com
+ * @since       Version 1.0
  * @filesource
  */
 
@@ -23,151 +23,141 @@
  * a set of template files in order to allow customization.
  *
  * @package     CodeIgniter\Libraries\Profiler
- * @author		ExpressionEngine Dev Team
- * @link		http://codeigniter.com/user_guide/general/profiling.html
+ * @author      ExpressionEngine Dev Team
+ * @link        http://codeigniter.com/user_guide/general/profiling.html
  */
 class CI_Profiler
 {
     public $CI;
 
-	protected $_available_sections = array(
-										'benchmarks',
-										'get',
-										'memory_usage',
-										'post',
-										'uri_string',
-										'controller_info',
-										'queries',
-										'http_headers',
-										'config',
-										'files',
-										'console',
-										'userdata'
-										);
+    protected $_available_sections = array(
+        'benchmarks',
+        'get',
+        'memory_usage',
+        'post',
+        'uri_string',
+        'controller_info',
+        'queries',
+        'http_headers',
+        'config',
+        'files',
+        'console',
+        'userdata',
+    );
 
-    /**
-     * @var array Results from _compile_x().
-     */
+    protected $_query_toggle_count = 25;
+
+    /** @var array Results from _compile_x(). */
     protected $_sections = array();
 
-    /**
-     * @var string Benchmark time format for display - either 'sec' or 'ms'.
-     */
+    /** @var string Benchmark time format for display - either 'sec' or 'ms'. */
     protected $_time_format = 'ms';
 
-	// --------------------------------------------------------------------
+    // -------------------------------------------------------------------------
 
-	public function __construct($config = array())
-	{
-		$this->CI =& get_instance();
-		$this->CI->load->language('profiler');
+    public function __construct($config = array())
+    {
+        $this->CI =& get_instance();
+        $this->CI->load->language('profiler');
 
-		// default all sections to display
+        if (isset($config['query_toggle_count'])) {
+            $this->_query_toggle_count = (int) $config['query_toggle_count'];
+            unset($config['query_toggle_count']);
+        }
+
+        // Default all sections to display.
         foreach ($this->_available_sections as $section) {
             if (! isset($config[$section])) {
                 $this->_compile_{$section} = true;
-			}
-		}
+            }
+        }
 
-		// Make sure the Console is loaded.
+        // Make sure the Console is loaded.
         if (! class_exists('Console')) {
-			$this->load->library('Console');
-		}
+            $this->load->library('Console');
+        }
 
-		$this->set_sections($config);
-	}
+        $this->set_sections($config);
+    }
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Set Sections
-	 *
-	 * Sets the private _compile_* properties to enable/disable Profiler sections
-	 *
-	 * @param	mixed
-	 * @return	void
-	 */
-	public function set_sections($config)
-	{
+    /**
+     * Set the private _compile_* properties to enable/disable Profiler sections.
+     *
+     * @param array The section names (keys) and their enable/disable state (values).
+     *
+     * @return  void
+     */
+    public function set_sections($config)
+    {
         foreach ($config as $method => $enable) {
             if (in_array($method, $this->_available_sections)) {
                 $this->_compile_{$method} = ($enable !== false);
-			}
-		}
-	}
+            }
+        }
+    }
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Auto Profiler
-	 *
+    /**
+     * Compile benchmarks.
+     *
      * This function cycles through the entire array of mark points and matches
      * any two points that are named identically (ending in "_start" and "_end"
      * respectively). It then compiles the execution times for all points and returns
-     * it as an array.
-	 *
-	 * @return	array
-	 */
-	protected function _compile_benchmarks()
-	{
-		$profile = array();
-		$output = array();
+     * them in an array.
+     *
+     * @return  array
+     */
+    protected function _compile_benchmarks()
+    {
+        $profile = array();
         foreach ($this->CI->benchmark->marker as $key => $val) {
-			// We match the "end" marker so that the list ends
-			// up in the order that it was defined
+            // Match the "end" marker so that the list ends up in the defined order.
             if (preg_match("/(.+?)_end/i", $key, $match)) {
-                if (isset($this->CI->benchmark->marker[$match[1] . '_end'])
-                    and isset($this->CI->benchmark->marker[$match[1] . '_start'])
+                if (isset($this->CI->benchmark->marker["{$match[1]}_end"])
+                    && isset($this->CI->benchmark->marker["{$match[1]}_start"])
                 ) {
-                    $time = $this->CI->benchmark->elapsed_time(
-                        $match[1] . '_start',
-                        $key
-                    );
-
+                    $time = $this->CI->benchmark->elapsed_time("{$match[1]}_start", $key);
                     if ($this->_time_format == 'ms') {
                         $time = round($time * 1000) . ' ms';
-					}
+                    }
 
-					$profile[$match[1]] = $time;
-				}
-			}
-		}
+                    $profile[$match[1]] = $time;
+                }
+            }
+        }
 
-		// Build a table containing the profile data.
-		// Note: At some point we might want to make this data available to be logged.
+        // Build a table containing the profile data.
+        // Note: Making this data available to be logged might be useful.
 
+        $output = array();
         foreach ($profile as $key => $val) {
-			$key = ucwords(str_replace(array('_', '-'), ' ', $key));
-			$output[$key] = $val;
-		}
+            $key = ucwords(str_replace(array('_', '-'), ' ', $key));
+            $output[$key] = $val;
+        }
 
-		return $output;
-	}
+        return $output;
+    }
 
-	// --------------------------------------------------------------------
+    /**
+     * Compile Queries
+     *
+     * @return array
+     */
+    protected function _compile_queries()
+    {
+        $dbs = array();
 
-	/**
-	 * Compile Queries
-	 *
-	 * @return	string
-	 */
-	protected function _compile_queries()
-	{
-		$dbs = array();
-		$output = array();
-
-		// Let's determine which databases are currently connected to
+        // Determine the currently connected database(s).
         foreach (get_object_vars($this->CI) as $CI_object) {
             if (is_object($CI_object)
                 && is_subclass_of(get_class($CI_object), 'CI_DB')
             ) {
-				$dbs[] = $CI_object;
-			}
-		}
+                $dbs[] = $CI_object;
+            }
+        }
 
         if (count($dbs) == 0) {
-			return $this->CI->lang->line('profiler_no_db');
-		}
+            return $this->CI->lang->line('profiler_no_db');
+        }
 
         $highlight = array(
             'SELECT', 'DISTINCT', 'FROM', 'WHERE', 'and', 'LEFT&nbsp;JOIN', 'ORDER&nbsp;BY',
@@ -176,46 +166,45 @@ class CI_Profiler
             'COUNT', 'MAX', 'MIN', ' ON', 'AS', 'AVG', 'SUM', '(', ')'
         );
 
+        $output = array();
         foreach ($dbs as $db) {
             if (count($db->queries) == 0) {
-				$output = $this->CI->lang->line('profiler_no_queries');
+                $output[] = $this->CI->lang->line('profiler_no_queries');
             } else {
-				$total = 0; // total query time
-				$counts = array_count_values($db->queries);
+                $total  = 0; // total query time
+                $counts = array_count_values($db->queries);
 
                 foreach ($db->queries as $key => $val) {
-					$duplicate = false;
-					$time = number_format($db->query_times[$key], 4);
-                    $query = $duplicate ? '<span class="ci-profiler-duplicate">' . $val . '</span>' : $val;
+                    $duplicate = false;
+                    $time = number_format($db->query_times[$key], 4);
+                    $query = $duplicate ? "<span class='ci-profiler-duplicate'>{$val}</span>" : $val;
 
-                    $explain = strpos($val, 'SELECT') !== false ? $this->CI->db->query('EXPLAIN ' . $val) : null;
+                    $explain = strpos($val, 'SELECT') !== false ? $this->CI->db->query("EXPLAIN {$val}") : null;
                     if (! is_null($explain)) {
-						$query .= $this->build_sql_explain($explain->row(), $time);
-					}
+                        $query .= $this->build_sql_explain($explain->row(), $time);
+                    }
 
-					$total += $db->query_times[$key];
+                    $total += $db->query_times[$key];
                     foreach ($highlight as $bold) {
-						$query = str_replace($bold, '<b>'. $bold .'</b>', $query);
-					}
+                        $query = str_replace($bold, "<strong>{$bold}</strong>", $query);
+                    }
 
-					$output[] = array(
-						'query' => $query,
-						'time'	=> $time
-					);
-				}
+                    $output[] = array(
+                        'query' => $query,
+                        'time'  => $time
+                    );
+                }
 
-				$total = number_format($total, 4);
-				$output[][$total] = 'Total Query Execution Time';
-			}
-		}
+                $total = number_format($total, 4);
+                $output[][$total] = 'Total Query Execution Time';
+            }
+        }
 
-		return $output;
-	}
+        return $output;
+    }
 
-	// --------------------------------------------------------------------
-
-	public function build_sql_explain($data, $time)
-	{
+    public function build_sql_explain($data, $time)
+    {
         $output = "<span class='ci-profiler-db-explain'>" .
             "Speed: <em>{$time}</em>" .
             " - Possible keys: <em>{possible_keys}</em>" .
@@ -233,124 +222,108 @@ class CI_Profiler
             );
         }
 
-		return $output;
-	}
+        return $output;
+    }
 
-	//--------------------------------------------------------------------
-
-	/**
-	 * Compile $_GET Data
-	 *
-	 * @return	string
-	 */
-	protected function _compile_get()
-	{
-		$output = array();
+    /**
+     * Compile $_GET Data
+     *
+     * @return array/string
+     */
+    protected function _compile_get()
+    {
         if (count($_GET) == 0) {
-			$output = $this->CI->lang->line('profiler_no_get');
-        } else {
-            foreach ($_GET as $key => $val) {
-                if (! is_numeric($key)) {
-                    $key = "'" . $key . "'";
-				}
+            return $this->CI->lang->line('profiler_no_get');
+        }
 
-                if (is_array($val)) {
-                    $output['&#36;_GET[' . $key . ']'] = "<pre>" . htmlspecialchars(stripslashes(print_r($val, true))) . "</pre>";
-                } else {
-                    $output['&#36;_GET[' . $key . ']'] = htmlspecialchars(stripslashes($val));
-				}
-			}
-		}
+        $output = array();
+        foreach ($_GET as $key => $val) {
+            if (! is_numeric($key)) {
+                $key = "'{$key}'";
+            }
 
-		return $output;
-	}
+            $output["&#36;_GET[{$key}]"] = is_array($val) ?
+                 "<pre>" . htmlspecialchars(stripslashes(print_r($val, true))) . "</pre>"
+                 : htmlspecialchars(stripslashes($val));
+        }
 
-	// --------------------------------------------------------------------
+        return $output;
+    }
 
-	/**
-	 * Compile $_POST Data
-	 *
-	 * @return	string
-	 */
-	protected function _compile_post()
-	{
-		$output = array();
+    /**
+     * Compile $_POST Data
+     *
+     * @return array/string
+     */
+    protected function _compile_post()
+    {
         if (count($_POST) == 0) {
-			$output = $this->CI->lang->line('profiler_no_post');
-        } else {
-            foreach ($_POST as $key => $val) {
-                if (! is_numeric($key)) {
-                    $key = "'" . $key . "'";
-				}
+            return $this->CI->lang->line('profiler_no_post');
+        }
 
-                if (is_array($val)) {
-                    $output['&#36;_POST[' . $key . ']'] = '<pre>' . htmlspecialchars(stripslashes(print_r($val, true))) . '</pre>';
-                } else {
-                    $output['&#36;_POST[' . $key . ']'] = htmlspecialchars(stripslashes($val));
-				}
-			}
-		}
+        $output = array();
+        foreach ($_POST as $key => $val) {
+            if (! is_numeric($key)) {
+                $key = "'{$key}'";
+            }
 
-		return $output;
-	}
+            $output["&#36;_POST[{$key}]"] = is_array($val) ?
+                '<pre>' . htmlspecialchars(stripslashes(print_r($val, true))) . '</pre>'
+                : htmlspecialchars(stripslashes($val));
+        }
 
-	// --------------------------------------------------------------------
+        return $output;
+    }
 
-	/**
-	 * Show query string
-	 *
-	 * @return	string
-	 */
-	protected function _compile_uri_string()
-	{
+    /**
+     * Show query string
+     *
+     * @return  string
+     */
+    protected function _compile_uri_string()
+    {
         return $this->CI->uri->uri_string == '' ?
             $this->CI->lang->line('profiler_no_uri') : $this->CI->uri->uri_string;
-	}
+    }
 
-	// --------------------------------------------------------------------
+    /**
+     * Show the controller and function that were called
+     *
+     * @return  string
+     */
+    protected function _compile_controller_info()
+    {
+        return $this->CI->router->class . '/' . $this->CI->router->fetch_method();
+    }
 
-	/**
-	 * Show the controller and function that were called
-	 *
-	 * @return	string
-	 */
-	protected function _compile_controller_info()
-	{
-        return $this->CI->router->fetch_class() . "/" . $this->CI->router->fetch_method();
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Compile memory usage
-	 *
-	 * Display total used memory
-	 *
-	 * @return	string
-	 */
-	protected function _compile_memory_usage()
-	{
+    /**
+     * Compile memory usage
+     *
+     * Display total used memory
+     *
+     * @return string
+     */
+    protected function _compile_memory_usage()
+    {
         if (function_exists('memory_get_usage')
-            && ($usage = memory_get_usage()) != ''
+            && '' != ($usage = memory_get_usage())
         ) {
             return number_format($usage) . ' bytes';
-		}
+        }
 
         return $this->CI->lang->line('profiler_no_memory_usage');
-	}
+    }
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Compile header information
-	 *
-	 * Lists HTTP headers
-	 *
-	 * @return	string
-	 */
-	protected function _compile_http_headers()
-	{
-		$output = array();
+    /**
+     * Compile header information
+     *
+     * Lists HTTP headers
+     *
+     * @return  string
+     */
+    protected function _compile_http_headers()
+    {
+        $output = array();
         foreach (array(
             'HTTP_ACCEPT', 'HTTP_USER_AGENT', 'HTTP_CONNECTION', 'SERVER_PORT',
             'SERVER_NAME', 'REMOTE_ADDR', 'SERVER_SOFTWARE', 'HTTP_ACCEPT_LANGUAGE',
@@ -358,97 +331,97 @@ class CI_Profiler
             'SERVER_PROTOCOL', 'QUERY_STRING', 'HTTP_ACCEPT_ENCODING', 'HTTP_X_FORWARDED_FOR'
         ) as $header) {
             $output[$header] = isset($_SERVER[$header]) ? $_SERVER[$header] : '';
-		}
+        }
 
-		return $output;
-	}
+        return $output;
+    }
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Compile config information
-	 *
-	 * Lists developer config variables
-	 *
-	 * @return	string
-	 */
-	protected function _compile_config()
-	{
-		$output = array();
+    /**
+     * Compile config information
+     *
+     * Lists developer config variables
+     *
+     * @return  string
+     */
+    protected function _compile_config()
+    {
+        $output = array();
         foreach ($this->CI->config->config as $config => $val) {
-            if (is_array($val)) {
-                $val = print_r($val, true);
-			}
+            if ($val === true) {
+                $output[$config] = $this->CI->lang->line('bf_profiler_true');
+            } elseif ($val === false) {
+                $output[$config] = $this->CI->lang->line('bf_profiler_false');
+            } elseif (is_array($val)) {
+                $output[$config] = htmlspecialchars(stripslashes(print_r($val, true)));
+            } else {
+                $output[$config] = htmlspecialchars(stripslashes($val));
+            }
+        }
 
-			$output[$config] = htmlspecialchars($val);
-		}
+        return $output;
+    }
 
-		return $output;
-	}
+    public function _compile_files()
+    {
+        $files = get_included_files();
+        sort($files);
 
-	// --------------------------------------------------------------------
+        return $files;
+    }
 
-	public function _compile_files()
-	{
-		$files = get_included_files();
-
-		sort($files);
-
-		return $files;
-	}
-
-	//--------------------------------------------------------------------
-
-	public function _compile_console()
-	{
-		$logs = Console::get_logs();
+    public function _compile_console()
+    {
+        $logs = Console::get_logs();
         if ($logs['console']) {
             foreach ($logs['console'] as $key => $log) {
                 if ($log['type'] == 'log') {
-					$logs['console'][$key]['data'] = print_r($log['data'], true);
+                    $logs['console'][$key]['data'] = print_r($log['data'], true);
                 } elseif ($log['type'] == 'memory') {
-					$logs['console'][$key]['data'] = $this->get_file_size($log['data']);
-				}
-			}
-		}
+                    $logs['console'][$key]['data'] = $this->get_file_size($log['data']);
+                }
+            }
+        }
 
-		return $logs;
-	}
-
-	//--------------------------------------------------------------------
+        return $logs;
+    }
 
     public function _compile_userdata()
-	{
-		$output = array();
-        if (false !== $this->CI->load->is_loaded('session')) {
-			$compiled_userdata = $this->CI->session->all_userdata();
-            if (count($compiled_userdata)) {
-                foreach ($compiled_userdata as $key => $val) {
-                    $output[$key] = htmlspecialchars(
-                        stripslashes(
-                            is_array($val) ? print_r($val, true) : $val
-                        )
-                    );
-				}
-			}
-		}
+    {
+        if (! isset($this->CI->session)) {
+            return '';
+        }
 
-		return $output;
-	}
+        $compiled_userdata = $this->CI->session->all_userdata();
+        if (empty($compiled_userdata)) {
+            return '';
+        }
 
-	//--------------------------------------------------------------------
+        $output = array();
+        foreach ($compiled_userdata as $key => $val) {
+            if ($val === true) {
+                $output[$key] = $this->CI->lang->line('bf_profiler_true');
+            } elseif ($val === false) {
+                $output[$key] = $this->CI->lang->line('bf_profiler_false');
+            } elseif (is_array($val)) {
+                $output[$key] = htmlspecialchars(stripslashes(print_r($val, true)));
+            } else {
+                $output[$key] = htmlspecialchars(stripslashes($val));
+            }
+        }
+
+        return $output;
+    }
 
     public static function get_file_size($size, $retstring = null)
     {
         // adapted from code at http://aidanlister.com/repos/v/function.size_readable.php
-	    $sizes = array('bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
-
         if ($retstring === null) {
             $retstring = '%01.2f %s';
         }
 
-		$lastsizestring = end($sizes);
-		foreach ($sizes as $sizestring) {
+        $sizes = array('bytes', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $lastsizestring = end($sizes);
+        foreach ($sizes as $sizestring) {
             if ($size < 1024) {
                 break;
             }
@@ -457,67 +430,66 @@ class CI_Profiler
             }
         }
 
-        // Bytes aren't normally fractional
+        // Bytes aren't normally fractional.
         if ($sizestring == $sizes[0]) {
             $retstring = '%01d %s';
-		}
+        }
 
-		return sprintf($retstring, $size, $sizestring);
-	}
+        return sprintf($retstring, $size, $sizestring);
+    }
 
-	//--------------------------------------------------------------------
+    /**
+     * Run the Profiler
+     *
+     * @return  string
+     */
+    public function run()
+    {
+        $this->CI->load->helper('language');
+        $fields_displayed = 0;
 
-	/**
-	 * Run the Profiler
-	 *
-	 * @return	string
-	 */
-	public function run()
-	{
-		$this->CI->load->helper('language');
-		$fields_displayed = 0;
-
+        // Run each _compile_* method and add the results to the $_sections array.
         foreach ($this->_available_sections as $section) {
             if ($this->_compile_{$section} !== false) {
-				$func = "_compile_{$section}";
+                $func = "_compile_{$section}";
                 if ($section == 'http_headers') {
                     $section = 'headers';
                 }
-				$this->_sections[$section] = $this->{$func}();
+                $this->_sections[$section] = $this->{$func}();
                 ++$fields_displayed;
-			}
-		}
+            }
+        }
 
-		// Has the user created an override in application/views?
+        // Has the user created an override in application/views?
         if (is_file(APPPATH . 'views/profiler_template.php')) {
             $output = $this->CI->load->view(
                 'profiler_template',
                 array(
                     'sections'        => $this->_sections,
-                    'cip_time_format' => $this->_time_format
+                    'cip_time_format' => $this->_time_format,
                 ),
                 true
             );
         } else {
-			// Load the view from system/views
-			$orig_view_path = $this->CI->load->_ci_view_path;
+            // Load the view from system/views
+            $orig_view_path = $this->CI->load->_ci_view_path;
             $this->CI->load->_ci_view_path = BASEPATH . 'views/';
 
             $output = $this->CI->load->_ci_load(
                 array(
-					'_ci_view' 		=> 'profiler_template',
+                    '_ci_view'   => 'profiler_template',
                     '_ci_vars'   => array(
                         'sections'        => $this->_sections,
                         'cip_time_format' => $this->_time_format
                     ),
-					'_ci_return'	=> true,
+                    '_ci_return' => true,
                 )
             );
 
-			$this->CI->load->_ci_view_path = $orig_view_path;
-		}
+            $this->CI->load->_ci_view_path = $orig_view_path;
+        }
 
-		return $output;
-	}
+        return $output;
+    }
 }
 /* End of file ./application/libraries/Profiler.php */
