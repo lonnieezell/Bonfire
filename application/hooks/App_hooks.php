@@ -173,11 +173,7 @@ class App_hooks
         if (! class_exists('CI_Session', false)) {
             if (is_object(get_instance())) {
                 // If an instance is available, just load the session lib.
-                if (substr(CI_VERSION, 0, 1) == '2') {
-                    $this->ci->load->library('session');
-                } else {
-                    $this->ci->load->driver('session');
-                }
+                $this->ci->load->library('session');
             } elseif (get_instance() === null) {
                 // If an instance is not available...
 
@@ -208,8 +204,13 @@ class App_hooks
         // Either the session library was available all along or it has been loaded,
         // so determine whether the current URL is in the ignore_pages array and,
         // if it is not, set it as the requested page in the session.
+        //
+        // Output of uri->ruri_string() is considerably different in CI 3 when using
+        // the BF_Router, so the following normalizes the output for the comparison
+        // with $this->ignore_pages.
 
-        if (! in_array($this->ci->uri->ruri_string(), $this->ignore_pages)) {
+        $ruriString = '/' . ltrim(str_replace($this->ci->router->directory, '', $this->ci->uri->ruri_string()), '/');
+        if (! in_array($ruriString, $this->ignore_pages)) {
             $this->ci->session->set_userdata('requested_page', current_url());
         }
     }
