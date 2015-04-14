@@ -144,14 +144,11 @@ class App_hooks
     public function prepRedirect()
     {
         if (! class_exists('CI_Session', false)) {
-            if (substr(CI_VERSION, 0, 1) == '2') {
-                $this->ci->load->library('session');
-            } else {
-                $this->ci->load->driver('session');
-            }
+            $this->ci->load->library('session');
         }
 
-        if (! in_array($this->ci->uri->ruri_string(), $this->ignore_pages)) {
+        $ruriString = '/' . ltrim(str_replace($this->ci->router->directory, '', $this->ci->uri->ruri_string()), '/');
+        if (! in_array($ruriString, $this->ignore_pages)) {
             $this->ci->session->set_userdata('previous_page', current_url());
         }
     }
