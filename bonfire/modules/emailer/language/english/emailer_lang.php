@@ -106,3 +106,12 @@ $lang['emailer_mailtype_html']     = 'HTML';
 $lang['emailer_protocol_mail']     = 'mail';
 $lang['emailer_protocol_sendmail'] = 'sendmail';
 $lang['emailer_protocol_smtp']     = 'SMTP';
+
+$lang['form_validation_emailer_system_email']  = 'System Email';
+$lang['form_validation_emailer_email_server']  = 'Email Server';
+$lang['form_validation_emailer_sendmail_path'] = 'Sendmail Path';
+$lang['form_validation_emailer_smtp_address']  = 'SMTP Server Address';
+$lang['form_validation_emailer_smtp_username'] = 'SMTP Username';
+$lang['form_validation_emailer_smtp_password'] = 'SMTP Password';
+$lang['form_validation_emailer_smtp_port']     = 'SMTP Port';
+$lang['form_validation_emailer_smtp_timeout']  = 'SMTP timeout';

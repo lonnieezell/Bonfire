@@ -8,7 +8,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -90,3 +90,12 @@ $lang['emailer_create_setting']       = 'Configura email';
 $lang['emailer_create_email_error']   = 'Errore nella creazione dell\'email: $s';
 $lang['emailer_create_email_success'] = 'Le email sono state inserite in coda.';
 $lang['emailer_create_email_failure'] = 'Creazione emails fallita: %s';
+
+$lang['form_validation_emailer_system_email']  = 'Email di Sistema';
+$lang['form_validation_emailer_email_server']  = 'Server Email';
+$lang['form_validation_emailer_sendmail_path'] = 'Percorso Sendmail';
+$lang['form_validation_emailer_smtp_address']  = 'Indirizzo Server SMTP';
+$lang['form_validation_emailer_smtp_username'] = 'Nome Utente SMTP';
+$lang['form_validation_emailer_smtp_password'] = 'Password SMTP';
+$lang['form_validation_emailer_smtp_port']     = 'Porta SMTP';
+$lang['form_validation_emailer_smtp_timeout']  = 'Timeout SMTP';

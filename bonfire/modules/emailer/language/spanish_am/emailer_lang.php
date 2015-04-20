@@ -8,7 +8,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -78,3 +78,12 @@ $lang['emailer_delete_confirm']          = '¡Esta seguro de que quiere eliminar
 // $lang['emailer_create_email_error']   = 'Error in creating emails: %s';
 // $lang['emailer_create_email_success'] = 'Email(s) are inserted into email queue.';
 // $lang['emailer_create_email_failure'] = 'Fail in creating emails: %s';
+
+$lang['form_validation_emailer_system_email']  = 'Correo electrónico para el sistema';
+$lang['form_validation_emailer_email_server']  = 'Servidor de Correo';
+// $lang['form_validation_emailer_sendmail_path'] = 'Sendmail Path';
+// $lang['form_validation_emailer_smtp_address']  = 'SMTP Server Address';
+// $lang['form_validation_emailer_smtp_username'] = 'SMTP Username';
+// $lang['form_validation_emailer_smtp_password'] = 'SMTP Password';
+// $lang['form_validation_emailer_smtp_port']     = 'SMTP Port';
+// $lang['form_validation_emailer_smtp_timeout']  = 'SMTP timeout';
