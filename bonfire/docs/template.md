@@ -196,6 +196,13 @@ The optional `$default_theme` allows you to also set a default theme to use in c
 
 Sets the view to be rendered in the content block.
 
+### setSessionUse($useSession = true)
+
+Enable/disable the library's use of sessions.
+This is primarily used by the installer (when sessions are not likely to be available), but is also useful for testing.
+
+If `$useSession` is `true`, the library will use sesssions; if `false`, the library will not use sessions.
+
 ### theme()
 
 Returns the name of the active theme.
@@ -260,9 +267,11 @@ An array of named blocks and the path/filename of the view for each block.
 
 A boolean value which controls the library's output of debug messages.
 
-### $ignore_session
+### $ignore_session *Deprecated*
 
 A boolean value which disables the library's use of sessions, primarily for unit testing.
+
+Use `setSessionUse()` instead. Note that `setSessionUse()` expects the opposite value of `$ignore_session`, so `setSessionUse(false)` is equivalent to setting `$ignore_session = true`.
 
 ### $layout *Deprecated*
 

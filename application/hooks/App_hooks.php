@@ -7,7 +7,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -31,6 +31,8 @@ class App_hooks
         '/users/login',
         '/users/logout',
     );
+
+    protected $isInstalled = false;
 
     /**
      * @var object The CodeIgniter core object.
@@ -60,6 +62,15 @@ class App_hooks
     public function __construct()
     {
         $this->ci =& get_instance();
+
+        if (is_object($this->ci)) {
+            $this->isInstalled = $this->ci->config->item('bonfire.installed');
+            if (! $this->isInstalled) {
+                // Is Bonfire installed?
+                $this->ci->load->library('installer_lib');
+                $this->isInstalled = $this->ci->installer_lib->is_installed();
+            }
+        }
     }
 
     /**
@@ -163,6 +174,10 @@ class App_hooks
      */
     public function saveRequested()
     {
+        if (! $this->isInstalled) {
+            return;
+        }
+
         // If the CI_Session class is not loaded, this might be a controller that
         // doesn't extend any of Bonfire's controllers. In that case, try to do
         // this the old fashioned way and add it straight to the session.
