@@ -8,8 +8,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -21,9 +21,9 @@
  * This class extends the CodeIgniter core Form_validation library to add extra
  * functionality used in Bonfire.
  *
- * @package    Bonfire\Libraries\BF_Form_validation
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/guides
+ * @package Bonfire\Libraries\BF_Form_validation
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs
  */
 class BF_Form_validation extends CI_Form_validation
 {
@@ -64,6 +64,32 @@ class BF_Form_validation extends CI_Form_validation
         }
 
         return ! empty($this->_field_data[$field]['error']);
+    }
+
+    /**
+     * Reset validation vars
+     *
+     * Prevents subsequent validation routines from being affected by the results
+     * of any previous validation routine due to the CI singleton.
+     *
+     * This method can be removed when compatibility with CI 2 is no longer needed,
+     * as the method already exists in CI 3.
+     *
+     * @return $this
+     */
+    public function reset_validation()
+    {
+        // Just in case the parent method changes at some point in the future.
+        if (substr(CI_VERSION, 0, 1) != '2') {
+            return parent::reset_validation();
+        }
+
+        $this->_field_data = array();
+        $this->_config_rules = array();
+        $this->_error_array = array();
+        $this->_error_messages = array();
+        $this->error_string = '';
+        return $this;
     }
 
     /**
@@ -327,4 +353,3 @@ class BF_Form_validation extends CI_Form_validation
         return true;
     }
 }
-/* End of file : /libraries/BF_Form_validation.php */
