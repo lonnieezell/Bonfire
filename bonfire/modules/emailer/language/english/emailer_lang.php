@@ -27,6 +27,7 @@
 $lang['emailer_template']       = 'Template';
 $lang['emailer_email_template'] = 'Email Template';
 $lang['emailer_emailer_queue']  = 'Email Queue';
+$lang['emailer_email_test']     = 'Test Email';
 
 $lang['emailer_system_email']      = 'System Email';
 $lang['emailer_system_email_note'] = 'The email that all system-generated emails are sent from.';
@@ -106,6 +107,9 @@ $lang['emailer_mailtype_html']     = 'HTML';
 $lang['emailer_protocol_mail']     = 'mail';
 $lang['emailer_protocol_sendmail'] = 'sendmail';
 $lang['emailer_protocol_smtp']     = 'SMTP';
+
+$lang['emailer_settings_save_error'] = 'There was an error saving your settings.';
+$lang['emailer_settings_save_success'] = 'Email settings successfully saved.';
 
 $lang['form_validation_emailer_system_email']  = 'System Email';
 $lang['form_validation_emailer_email_server']  = 'Email Server';

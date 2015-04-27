@@ -11,6 +11,7 @@
 
 #### Closes Issues:
 * #1103 Installation using CI 3.0 fails due to use of sessions before CI 3 session table is created.
+* #1033 Email sending test makes subnav bar crash
 
 #### Additional Changes:
 * Upgraded CI to v2.2.2.
