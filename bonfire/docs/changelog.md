@@ -8,6 +8,7 @@
 * If you are not using the installer, add `$config['bonfire.installed'] = "1";` to `/application/config/application.php`.
 * Added `Template::setSessionUse($useSession = true)`, deprecated `Template::$ignore_session`. Note that the parameter accepted by `setSessionUse()` would be the opposite value of that used with `$ignore_session`.
 * Added `form_validation->reset_validation()` support for CI 2 (in `BF_Form_Validation`, in CI 3 the method calls the parent method, in case of any future changes).
+* Added `\application\language\english\bf_form_validation_lang.php` to store custom form validation language entries. This file is automatically loaded by the `BF_Form_validation` library when calling `$this->form_validation->run()`.
 
 #### Closes Issues:
 * #1103 Installation using CI 3.0 fails due to use of sessions before CI 3 session table is created.
@@ -17,6 +18,7 @@
 * Upgraded CI to v2.2.2.
 * Fixes an issue when creating new roles which caused permissions to modify the new role not to be created/added to the admin/current user.
 * Fixes issues with Emailer not displaying saved settings properly.
+* Fixes issues with Add/Remove Shortcuts in UI module.
 * CI 3 compatibility improvements:
     * Fix Runtime Notice for Users Settings: Only variables should be passed by reference.
     * Don't use `$this->load->driver('session')`, and don't check for the CI version before loading the session library.

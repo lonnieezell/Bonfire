@@ -102,6 +102,7 @@ class BF_Form_validation extends CI_Form_validation
      */
     public function run($module = '', $group = '')
     {
+        $this->CI->lang->load('bf_form_validation');
         is_object($module) && $this->CI =& $module;
         return parent::run($group);
     }
