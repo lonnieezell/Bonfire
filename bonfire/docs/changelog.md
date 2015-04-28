@@ -19,6 +19,9 @@
 * Fixes an issue when creating new roles which caused permissions to modify the new role not to be created/added to the admin/current user.
 * Fixes issues with Emailer not displaying saved settings properly.
 * Fixes issues with Add/Remove Shortcuts in UI module.
+* Database module:
+    * Fixed display of validation errors on backup.
+    * Added message indicating user submitted index with the separator selected in the dropdown.
 * CI 3 compatibility improvements:
     * Fix Runtime Notice for Users Settings: Only variables should be passed by reference.
     * Don't use `$this->load->driver('session')`, and don't check for the CI version before loading the session library.
