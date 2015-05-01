@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -25,6 +25,10 @@
  */
 class Settings extends Admin_Controller
 {
+    private $permissionDevView = 'Site.Developer.View';
+    private $permissionView    = 'Bonfire.Settings.View';
+    private $permissionManage  = 'Bonfire.Settings.Manage';
+
     /**
      * Sets up the permissions and loads required classes
      *
@@ -35,8 +39,8 @@ class Settings extends Admin_Controller
         parent::__construct();
 
         // Restrict access - View and Manage.
-        $this->auth->restrict('Bonfire.Settings.View');
-        $this->auth->restrict('Bonfire.Settings.Manage');
+        $this->auth->restrict($this->permissionView);
+        $this->auth->restrict($this->permissionManage);
 
         $this->lang->load('settings');
         if (! class_exists('settings_lib', false)) {
@@ -81,6 +85,7 @@ class Settings extends Admin_Controller
         Template::set('languages', list_languages());
         Template::set('selected_languages', unserialize($settings['site.languages']));
         Template::set('settings', $settings);
+        Template::set('showDeveloperTab', $this->auth->has_permission($this->permissionDevView));
 
         Template::render();
     }
@@ -108,7 +113,7 @@ class Settings extends Admin_Controller
         $this->form_validation->set_rules('password_force_symbols', 'lang:bf_password_force_symbols', 'trim|numeric');
         $this->form_validation->set_rules('password_force_mixed_case', 'lang:bf_password_force_mixed_case', 'trim|numeric');
         $this->form_validation->set_rules('password_show_labels', 'lang:bf_password_show_labels', 'trim|numeric');
-        $this->form_validation->set_rules('languages[]', 'lang:bf_language', 'required|trim|is_array');
+        $this->form_validation->set_rules('languages[]', 'lang:bf_language', 'required|trim');
 
         // Setup the validation rules for any extended settings
         $extended_data = array();
