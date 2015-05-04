@@ -127,9 +127,8 @@ class docSearch {
             }
 
             // Is it a folder?
-            if (is_array($dir) && count($dir))
-            {
-                $results = array_merge($results, $this->search_folder($terms, $folder .'/'. $dir));
+            if (is_array($file) && count($file)) {
+                $results = array_merge($results, $this->search_folder($term, "{$folder}/{$dir}"));
                 continue;
             }
 

@@ -12,6 +12,7 @@
 
 #### Closes Issues:
 * #1107 No model error generated for a failed update
+* #1105 Doc searching - preg_match error when directory is encountered
 * #1103 Installation using CI 3.0 fails due to use of sessions before CI 3 session table is created.
 * #1033 Email sending test makes subnav bar crash
 
