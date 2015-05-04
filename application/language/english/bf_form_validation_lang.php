@@ -25,4 +25,8 @@
 
 $lang['form_validation_is_array']    = 'The {field} field must be an array.';
 
-$lang['form_validation_bf_language'] = 'Language';
+$lang['form_validation_bf_email']            = 'Email';
+$lang['form_validation_bf_language']         = 'Language';
+$lang['form_validation_bf_username']         = 'Username';
+$lang['form_validation_bf_password']         = 'Password';
+$lang['form_validation_bf_password_confirm'] = 'Password (again)';
