@@ -780,8 +780,10 @@ class Auth
 
         $this->permissions = array();
         $perms = $this->ci->permission_model->find_all();
-        foreach ($perms as $perm) {
-            $this->permissions[strtolower($perm->name)] = $perm->permission_id;
+        if (! empty($perms)) {
+            foreach ($perms as $perm) {
+                $this->permissions[strtolower($perm->name)] = $perm->permission_id;
+            }
         }
 
         return $this->permissions;
