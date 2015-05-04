@@ -11,6 +11,7 @@
 * Added `\application\language\english\bf_form_validation_lang.php` to store custom form validation language entries. This file is automatically loaded by the `BF_Form_validation` library when calling `$this->form_validation->run()`.
 
 #### Closes Issues:
+* #1107 No model error generated for a failed update
 * #1103 Installation using CI 3.0 fails due to use of sessions before CI 3 session table is created.
 * #1033 Email sending test makes subnav bar crash
 

@@ -8,7 +8,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT The MIT License.
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -22,9 +22,9 @@
  * overriden by module models. This helps to maintain a standard interface to
  * program to, and makes module creation faster.
  *
- * @package    Bonfire\Core\Models\BF_Model
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/bonfire/bonfire_models
+ * @package Bonfire\Core\Models\BF_Model
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/bonfire/bonfire_models
  */
 class BF_Model extends CI_Model
 {
@@ -575,6 +575,7 @@ class BF_Model extends CI_Model
             return true;
         }
 
+        $this->error = sprintf(lang('bf_model_db_error'), $this->get_db_error_message());
         return false;
     }
 
@@ -623,6 +624,7 @@ class BF_Model extends CI_Model
             return true;
         }
 
+        $this->error = sprintf(lang('bf_model_db_error'), $this->get_db_error_message());
         return false;
     }
 
