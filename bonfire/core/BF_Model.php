@@ -620,12 +620,15 @@ class BF_Model extends CI_Model
         }
 
         $result = $this->db->update_batch($this->table_name, $data, $index);
-        if (empty($result)) {
-            return true;
+
+        // CI 2 returns null on success, CI 3 returns the number of affected rows.
+        // Both return false on failure, or display the DB error message.
+        if ($result === false) {
+            $this->error = sprintf(lang('bf_model_db_error'), $this->get_db_error_message());
+            return false;
         }
 
-        $this->error = sprintf(lang('bf_model_db_error'), $this->get_db_error_message());
-        return false;
+        return true;
     }
 
     /**

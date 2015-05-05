@@ -66,11 +66,14 @@ class Settings extends Admin_Controller
         if (isset($_POST['save'])) {
             if ($this->saveSettings($extended_settings)) {
                 Template::set_message(lang('settings_saved_success'), 'success');
-
-                redirect(SITE_AREA . '/settings/settings');
+            } else {
+                Template::set_message(lang('settings_error_success'), 'error');
+                $settingsError = $this->settings_lib->getError();
+                if ($settingsError) {
+                    Template::set_message($settingsError, 'error');
+                }
             }
-
-            Template::set_message(lang('settings_error_success'), 'error');
+            redirect(SITE_AREA . '/settings/settings');
         }
 
         // Read the current settings
@@ -170,7 +173,7 @@ class Settings extends Admin_Controller
         );
 
         // Save the settings to the DB.
-        $updated = $this->settings_model->update_batch($data, 'name');
+        $updated = $this->settings_lib->update_batch($data);
 
         // If the update was successful and there are extended settings to save...
         if ($updated && ! empty($extended_data)) {

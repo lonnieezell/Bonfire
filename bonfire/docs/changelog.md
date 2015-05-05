@@ -12,6 +12,7 @@
 
 #### Closes Issues:
 * #1107 No model error generated for a failed update
+* #1106 Settings controller displays error message on success.
 * #1105 Doc searching - preg_match error when directory is encountered
 * #1103 Installation using CI 3.0 fails due to use of sessions before CI 3 session table is created.
 * #1033 Email sending test makes subnav bar crash
@@ -21,6 +22,7 @@
 * Fixes an issue when creating new roles which caused permissions to modify the new role not to be created/added to the admin/current user.
 * Fixes issues with Emailer not displaying saved settings properly.
 * Fixes issues with Add/Remove Shortcuts in UI module.
+* Fixes result of `BF_Model->update_batch()` when the update completed successfully in CI 3, or failed in CI 2.
 * Database module:
     * Fixed display of validation errors on backup.
     * Added message indicating user submitted index with the separator selected in the dropdown.
