@@ -11,6 +11,9 @@
 * Added `\application\language\english\bf_form_validation_lang.php` to store custom form validation language entries. This file is automatically loaded by the `BF_Form_validation` library when calling `$this->form_validation->run()`.
 
 #### Closes Issues:
+* #1110 `BF_Form_validation` not loaded in CI3
+* #1109 Mobule Builder not using `lang(module_field_name)` for create/edit views.
+* #1108 Can't create new user using CI3
 * #1107 No model error generated for a failed update
 * #1106 Settings controller displays error message on success.
 * #1105 Doc searching - preg_match error when directory is encountered
