@@ -23,7 +23,6 @@
 * Fixes issues with Emailer not displaying saved settings properly.
 * Fixes issues with Add/Remove Shortcuts in UI module.
 * Fixes result of `BF_Model->update_batch()` when the update completed successfully in CI 3, or failed in CI 2.
-* Fix loading of `BF_`-prefixed libraries when a `MY_`-prefixed library is not present.
 * Database module:
     * Fixed display of validation errors on backup.
     * Added message indicating user submitted index with the separator selected in the dropdown.
@@ -31,6 +30,8 @@
     * Fix Runtime Notice for Users Settings: Only variables should be passed by reference.
     * Don't use `$this->load->driver('session')`, and don't check for the CI version before loading the session library.
     * Normalize the output of `uri->ruri_string()` before checking it in `App_hooks` (may be needed elsewhere).
+    * Fix loading of `BF_`-prefixed libraries when a `MY_`-prefixed library is not present.
+    * Don't display developer documentation for modules in the application docs.
 * Installer improvements:
     * Updated a number of migrations to remove session use.
     * Removed session from autoload.

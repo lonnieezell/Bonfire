@@ -1,5 +1,28 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
 
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications.
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
+
+/**
+ * The Docs controller provides access to Bonfire's documentation and allows the
+ * developer to provide access to documentation for their application.
+ *
+ * @package Bonfire\Modules\Docs\Controllers\Docs
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs
+ */
 class Docs extends Base_Controller
 {
     protected $docsDir     = 'docs';
@@ -57,7 +80,7 @@ class Docs extends Base_Controller
         // Make sure we can still get to the search method.
         if ($this->docsGroup == 'search') {
             $this->docsGroup = false;
-        } elseif ($this->docsGroup == 'developer'
+        } elseif ($this->docsGroup == $this->docsTypeBf
             && ! $this->showDevDocs
             && ENVIRONMENT != 'development'
         ) {
@@ -144,9 +167,9 @@ class Docs extends Base_Controller
 
         // Get the list of docs based on the current docs group
         // (application-specific or developer docs)
-        if ($this->docsGroup == 'application') {
+        if ($this->docsGroup == $this->docsTypeApp) {
             $data['docs'] = $this->get_folder_files(APPPATH . $this->docsDir, $this->docsTypeApp);
-        } elseif ($this->docsGroup == 'developer') {
+        } elseif ($this->docsGroup == $this->docsTypeBf) {
             $data['docs'] = $this->get_folder_files(BFPATH . $this->docsDir, $this->docsTypeBf);
         }
 
@@ -186,7 +209,7 @@ class Docs extends Base_Controller
         // If the toc file does not exist, build the links by listing the files
         // in the directory (and any sub-directories)
         $this->load->helper('directory');
-        $map = directory_map($folder);
+        $map = bcDirectoryMap($folder);
 
         // If directory_map can not open the directory or find any files inside
         // the directory, return an empty array.
@@ -265,6 +288,7 @@ class Docs extends Base_Controller
                 }
             }
         }
+        ksort($docs_modules);
 
         return $docs_modules;
     }

@@ -1,7 +1,9 @@
 <div id="toc">
     <ul class="nav">
+        <?php if (empty($docs) || ! is_array($docs)) : ?>
+        <p class="text-center"><?php echo lang('docs_not_found'); ?></p>
         <?php
-        if ( ! empty($docs) && is_array($docs)) :
+        else :
             foreach ($docs as $file => $name) :
                 if (is_array($name)) :
         ?>
@@ -18,15 +20,14 @@
         <?php
                 endif;
             endforeach;
-        else :
-        ?>
-        <p class="text-center"><?php echo lang('docs_not_found'); ?></p>
-        <?php
         endif;
 
-        if ( ! empty($module_docs) && is_array($module_docs)) : ?>
+        // Module-specific docs.
+        if (empty($module_docs) || ! is_array($module_docs)) :
+        ?>
+        <li class='parent'><?php echo anchor(site_url($docsDir . '/' . str_replace($docsExt, '', $module)), ucwords(str_replace('_', ' ', $module))); ?></li>
+        <?php else : ?>
         <li class="parent"><div class="nav-header"><?php e(lang('docs_title_modules')); ?></div></li>
-        <!-- Module Specific Docs -->
         <?php
             foreach ($module_docs as $module => $mod_files) :
                 if (count($mod_files)) :
@@ -34,13 +35,11 @@
         <li class="parent">
             <div class='nav-header'><?php echo $module; ?></div>
             <ul class='nav'>
-            <?php foreach ($mod_files as $fileName => $title) : ?>
+                <?php foreach ($mod_files as $fileName => $title) : ?>
                 <li><?php echo anchor(site_url($docsDir . '/' . str_replace($docsExt, '', $fileName)), ucwords($title)); ?></li>
-            <?php endforeach; ?>
+                <?php endforeach; ?>
             </ul>
         </li>
-        <?php else : ?>
-        <li class='parent'><?php echo anchor(site_url($docsDir . '/' . str_replace($docsExt, '', $module)), ucwords(str_replace('_', ' ', $module))); ?></li>
         <?php
                 endif;
             endforeach;
