@@ -2,6 +2,18 @@
 
 ## Under development
 
+### 0.7.4
+
+#### New Features:
+
+#### Closes Issues:
+
+#### Additional Changes:
+
+#### Known Issues:
+
+## Released versions
+
 ### 0.7.3
 
 #### New Features:
@@ -42,8 +54,6 @@
     * `App_hooks` disables session use when `bonfire.installed` is not found.
 
 #### Known Issues:
-
-## Released versions
 
 ### 0.7.2
 
