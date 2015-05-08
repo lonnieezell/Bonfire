@@ -27,7 +27,7 @@
     <div class="row-fluid">
         <?php
         endif;
-        $cnt++;
+        ++$cnt;
         ?>
         <a class='span4' href='<?php echo "{$linkUrl}/{$file}"; ?>'><?php e($file); ?></a>
         <?php

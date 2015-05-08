@@ -7,7 +7,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -31,6 +31,8 @@ class App_hooks
         '/users/login',
         '/users/logout',
     );
+
+    protected $isInstalled = false;
 
     /**
      * @var object The CodeIgniter core object.
@@ -60,6 +62,15 @@ class App_hooks
     public function __construct()
     {
         $this->ci =& get_instance();
+
+        if (is_object($this->ci)) {
+            $this->isInstalled = $this->ci->config->item('bonfire.installed');
+            if (! $this->isInstalled) {
+                // Is Bonfire installed?
+                $this->ci->load->library('installer_lib');
+                $this->isInstalled = $this->ci->installer_lib->is_installed();
+            }
+        }
     }
 
     /**
@@ -144,14 +155,11 @@ class App_hooks
     public function prepRedirect()
     {
         if (! class_exists('CI_Session', false)) {
-            if (substr(CI_VERSION, 0, 1) == '2') {
-                $this->ci->load->library('session');
-            } else {
-                $this->ci->load->driver('session');
-            }
+            $this->ci->load->library('session');
         }
 
-        if (! in_array($this->ci->uri->ruri_string(), $this->ignore_pages)) {
+        $ruriString = '/' . ltrim(str_replace($this->ci->router->directory, '', $this->ci->uri->ruri_string()), '/');
+        if (! in_array($ruriString, $this->ignore_pages)) {
             $this->ci->session->set_userdata('previous_page', current_url());
         }
     }
@@ -166,6 +174,10 @@ class App_hooks
      */
     public function saveRequested()
     {
+        if (! $this->isInstalled) {
+            return;
+        }
+
         // If the CI_Session class is not loaded, this might be a controller that
         // doesn't extend any of Bonfire's controllers. In that case, try to do
         // this the old fashioned way and add it straight to the session.
@@ -173,11 +185,7 @@ class App_hooks
         if (! class_exists('CI_Session', false)) {
             if (is_object(get_instance())) {
                 // If an instance is available, just load the session lib.
-                if (substr(CI_VERSION, 0, 1) == '2') {
-                    $this->ci->load->library('session');
-                } else {
-                    $this->ci->load->driver('session');
-                }
+                $this->ci->load->library('session');
             } elseif (get_instance() === null) {
                 // If an instance is not available...
 
@@ -208,8 +216,13 @@ class App_hooks
         // Either the session library was available all along or it has been loaded,
         // so determine whether the current URL is in the ignore_pages array and,
         // if it is not, set it as the requested page in the session.
+        //
+        // Output of uri->ruri_string() is considerably different in CI 3 when using
+        // the BF_Router, so the following normalizes the output for the comparison
+        // with $this->ignore_pages.
 
-        if (! in_array($this->ci->uri->ruri_string(), $this->ignore_pages)) {
+        $ruriString = '/' . ltrim(str_replace($this->ci->router->directory, '', $this->ci->uri->ruri_string()), '/');
+        if (! in_array($ruriString, $this->ignore_pages)) {
             $this->ci->session->set_userdata('requested_page', current_url());
         }
     }

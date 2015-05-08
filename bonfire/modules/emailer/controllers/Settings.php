@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -20,9 +20,9 @@
  * Allows the management of the Emailer. Assists in setting up the proper email
  * settings, as well as editing the template and viewing emails in the queue.
  *
- * @package    Bonfire\Modules\Emailer\Controllers\Settings
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/guides
+ * @package Bonfire\Modules\Emailer\Controllers\Settings
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs
  */
 class Settings extends Admin_Controller
 {
@@ -53,8 +53,6 @@ class Settings extends Admin_Controller
     public function index()
     {
         if (isset($_POST['save'])) {
-            $this->load->library('form_validation');
-
             $this->form_validation->set_rules('sender_email', 'lang:emailer_system_email', 'required|trim|valid_email|max_length[120]');
             $this->form_validation->set_rules('protocol', 'lang:emailer_email_server', 'trim');
 
@@ -70,7 +68,7 @@ class Settings extends Admin_Controller
             }
 
             if ($this->form_validation->run() === false) {
-                Template::set_message('There was an error saving your settings.', 'error');
+                Template::set_message(lang('emailer_settings_save_error'), 'error');
             } else {
                 $data = array(
                     array('name' => 'sender_email', 'value' => $this->input->post('sender_email')),
@@ -88,11 +86,11 @@ class Settings extends Admin_Controller
                 $updated = $this->settings_model->update_batch($data, 'name');
                 if ($updated) {
                     // Success, reload the page so they can see their settings
-                    Template::set_message('Email settings successfully saved.', 'success');
+                    Template::set_message(lang('emailer_settings_save_success'), 'success');
                     redirect(SITE_AREA . '/settings/emailer');
                 }
 
-                Template::set_message('There was an error saving your settings.', 'error');
+                Template::set_message(lang('emailer_settings_save_error'), 'error');
             }
         }
 
@@ -133,17 +131,6 @@ class Settings extends Admin_Controller
     }
 
     /**
-     * @todo Remove this?
-     *
-     * @return void
-     */
-    public function emails()
-    {
-        Template::set('toolbar_title', lang('emailer_email_contents'));
-        Template::render();
-    }
-
-    /**
      * Send a test email
      *
      * @return void
@@ -158,13 +145,14 @@ class Settings extends Admin_Controller
         $this->emailer->enable_debug(true);
 
         $data = array(
-            'to'        => $this->input->post('email'),
-            'subject'   => lang('emailer_test_mail_subject'),
-            'message'   => lang('emailer_test_mail_body'),
+            'to'      => $this->input->post('email'),
+            'subject' => lang('emailer_test_mail_subject'),
+            'message' => lang('emailer_test_mail_body'),
          );
 
         $success = $this->emailer->send($data, false);
 
+        Template::set('toolbar_title', lang('emailer_email_test'));
         Template::set('success', $success);
         Template::set('debug', $this->emailer->debug_message);
 
@@ -181,7 +169,7 @@ class Settings extends Admin_Controller
         $offset = $this->uri->segment(5);
 
         $this->load->library('pagination');
-        $this->load->model('Emailer_model', 'emailer_model', true);
+        $this->load->model('emailer/emailer_model');
 
         // Deleting anything?
         if (isset($_POST['delete'])) {
@@ -279,9 +267,6 @@ class Settings extends Admin_Controller
         $this->load->model('users/user_model');
 
         if (isset($_POST['create'])) {
-            $this->load->library('emailer');
-            $this->load->library('form_validation');
-
             // Validate subject, content and recipients
             $this->form_validation->set_rules('email_subject', 'lang:emailer_email_subject', 'required|trim|min_length[1]|max_length[255]');
             $this->form_validation->set_rules('email_content', 'lang:emailer_email_content', 'required|trim|min_length[1]');
@@ -301,6 +286,7 @@ class Settings extends Admin_Controller
                 $checked = $this->input->post('checked');
                 $success_count = 0;
                 if (! empty($checked) && is_array($checked)) {
+                    $this->load->library('emailer');
                     $result = false;
                     $emailError = '';
                     foreach ($checked as $user_id) {

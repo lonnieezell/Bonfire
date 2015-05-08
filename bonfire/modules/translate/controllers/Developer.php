@@ -6,8 +6,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -20,19 +20,14 @@
  * to add language files for other languages.  The user can export current language
  * files for translation.
  *
- * @package    Bonfire\Modules\Translate\Controllers\Developer
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/guides
+ * @package Bonfire\Modules\Translate\Controllers\Developer
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs
  */
-
 class Developer extends Admin_Controller
 {
-    /**
-     * @vary string[] Array of current languages
-     */
+    /** @var array The names of the current languages. */
     private $langs;
-
-    //--------------------------------------------------------------------
 
     /**
      * Constructor - Load required classes
@@ -62,7 +57,7 @@ class Developer extends Admin_Controller
      * Display a list of all core language files, as well as a list of modules
      * the user can choose to edit.
      *
-     * @param string $transLang The target language for translation
+     * @param string $transLang The target language for translation.
      *
      * @return void
      */
@@ -75,7 +70,8 @@ class Developer extends Admin_Controller
 
         // Selecting a different language?
         if (isset($_POST['select_lang'])) {
-            $transLang = $this->input->post('trans_lang') == 'other' ? $this->input->post('new_lang') : $this->input->post('trans_lang');
+            $transLang = $this->input->post('trans_lang') == 'other' ?
+                $this->input->post('new_lang') : $this->input->post('trans_lang');
         }
 
         // If the selected language is not in the list of languages, add it.
@@ -83,14 +79,17 @@ class Developer extends Admin_Controller
             $this->langs[] = $transLang;
         }
 
-        // Check whether there are custom modules
+        // Check whether there are custom modules with lang files.
         $allLangFiles = list_lang_files();
-
         if (isset($allLangFiles['custom'])) {
-            Template::set('modules', $allLangFiles['custom']);
+            $moduleLangFiles = $allLangFiles['custom'];
+            sort($moduleLangFiles);
+            Template::set('modules', $moduleLangFiles);
         }
 
-        Template::set('lang_files', $allLangFiles['core']);
+        $coreLangFiles = $allLangFiles['core'];
+        sort($coreLangFiles);
+        Template::set('lang_files', $coreLangFiles);
         Template::set('languages', $this->langs);
         Template::set('trans_lang', $transLang);
         Template::set('toolbar_title', sprintf(lang('translate_title_index'), ucfirst($transLang)));
@@ -98,10 +97,10 @@ class Developer extends Admin_Controller
     }
 
     /**
-     * Allow the user to edit a language file
+     * Allow the user to edit a language file.
      *
-     * @param string $transLang The target language for translation
-     * @param string $langFile  The file to translate
+     * @param string $transLang The target language for translation.
+     * @param string $langFile  The file to translate.
      *
      * @return void
      */
@@ -114,7 +113,7 @@ class Developer extends Admin_Controller
         if ($langFile) {
             // Save the file...
             if (isset($_POST['save'])) {
-                // If the file saves successfully, redirect to the index
+                // If the file saves successfully, redirect to the index.
                 if (save_lang_file($langFile, $transLang, $_POST['lang'])) {
                     Template::set_message(lang('translate_save_success'), 'success');
                     redirect(SITE_AREA . "/developer/translate/index/{$transLang}");
@@ -123,11 +122,11 @@ class Developer extends Admin_Controller
                 Template::set_message(lang('translate_save_fail'), 'error');
             }
 
-            // Get the lang file
+            // Get the lang file.
             $orig = load_lang_file($langFile, $origLang);
             $new = $transLang ? load_lang_file($langFile, $transLang) : $orig;
 
-            // Translate
+            // Translate.
             if (isset($_POST['translate']) && is_array($_POST['checked'])) {
                 if (isset($_POST['lang'])) {
                     foreach ($_POST['lang'] as $key => $val) {
@@ -145,7 +144,7 @@ class Developer extends Admin_Controller
                     $cnt = 0;
                     $this->load->library('translate_lib');
 
-                    // Attempt to translate each of the selected values
+                    // Attempt to translate each of the selected values.
                     foreach ($_POST['checked'] as $key) {
                         $new[$key] = '* ' . $new[$key];
                         $val = '';
@@ -161,8 +160,8 @@ class Developer extends Admin_Controller
                             $chkd[] = $key;
                         }
 
-                        // Give up if 5 errors occur without any successful
-                        // attempts, as this may imply network or other issues
+                        // Give up if 5 errors occur without any successful attempts,
+                        // as this may imply network or other issues.
                         if ($errcnt >= 5 && $cnt == 0) {
                             break;
                         }
@@ -250,4 +249,3 @@ class Developer extends Admin_Controller
         die();
     }
 }
-/* /bonfire/modules/translate/controllers/developer.php */

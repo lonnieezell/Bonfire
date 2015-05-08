@@ -2,6 +2,49 @@
 
 ## Under development
 
+### 0.7.3
+
+#### New Features:
+* If you are not using the installer, add `$config['bonfire.installed'] = "1";` to `/application/config/application.php`.
+* Added `Template::setSessionUse($useSession = true)`, deprecated `Template::$ignore_session`. Note that the parameter accepted by `setSessionUse()` would be the opposite value of that used with `$ignore_session`.
+* Added `form_validation->reset_validation()` support for CI 2 (in `BF_Form_Validation`, in CI 3 the method calls the parent method, in case of any future changes).
+* Added `\application\language\english\bf_form_validation_lang.php` to store custom form validation language entries. This file is automatically loaded by the `BF_Form_validation` library when calling `$this->form_validation->run()`.
+
+#### Closes Issues:
+* #1110 `BF_Form_validation` not loaded in CI3
+* #1109 Mobule Builder not using `lang(module_field_name)` for create/edit views.
+* #1108 Can't create new user using CI3
+* #1107 No model error generated for a failed update
+* #1106 Settings controller displays error message on success.
+* #1105 Doc searching - preg_match error when directory is encountered
+* #1103 Installation using CI 3.0 fails due to use of sessions before CI 3 session table is created.
+* #1033 Email sending test makes subnav bar crash
+
+#### Additional Changes:
+* Upgraded CI to v2.2.2.
+* Fixes an issue when creating new roles which caused permissions to modify the new role not to be created/added to the admin/current user.
+* Fixes issues with Emailer not displaying saved settings properly.
+* Fixes issues with Add/Remove Shortcuts in UI module.
+* Fixes result of `BF_Model->update_batch()` when the update completed successfully in CI 3, or failed in CI 2.
+* Database module:
+    * Fixed display of validation errors on backup.
+    * Added message indicating user submitted index with the separator selected in the dropdown.
+* CI 3 compatibility improvements:
+    * Fix Runtime Notice for Users Settings: Only variables should be passed by reference.
+    * Don't use `$this->load->driver('session')`, and don't check for the CI version before loading the session library.
+    * Normalize the output of `uri->ruri_string()` before checking it in `App_hooks` (may be needed elsewhere).
+    * Fix loading of `BF_`-prefixed libraries when a `MY_`-prefixed library is not present.
+    * Don't display developer documentation for modules in the application docs.
+* Installer improvements:
+    * Updated a number of migrations to remove session use.
+    * Removed session from autoload.
+    * `bonfire.installed` setting added to application config by the installer.
+    * `App_hooks` disables session use when `bonfire.installed` is not found.
+
+#### Known Issues:
+
+## Released versions
+
 ### 0.7.2
 
 #### New Features:
@@ -65,8 +108,6 @@
     * Changed language prefix for translate module from `tr_` to `translate_`.
 
 #### Known Issues:
-
-## Released versions
 
 ### 0.7.1
 

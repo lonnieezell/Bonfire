@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -102,6 +102,14 @@ $lang['database_sql_query']                 = 'SQL Query';
 $lang['database_table_name']                = 'Table Name';
 $lang['database_tables']                    = 'Tables';
 $lang['database_total_results']             = 'Total Results: %s';
+
+$lang['database_backup_tables'] = 'Backup Tables';
+
+$lang['database_validation_errors_heading'] = 'Please fix the following errors:';
+$lang['database_action_unknown']            = 'An unsupported action was selected.';
+
+$lang['form_validation_database_filename'] = 'File Name';
+$lang['form_validation_database_tables']   = 'Tables';
 
 // -----------------------------------------------------------------------------
 // The remaining items appear to no longer be in use...

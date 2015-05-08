@@ -74,12 +74,7 @@ class Auth
         // The users language file is needed for this to work from other modules.
         $this->ci->lang->load('users/users');
         $this->ci->load->model('users/user_model');
-        if (substr(CI_VERSION, 0, 1) != '2') {
-            $this->ci->load->driver('session');
-        } else {
-            $this->ci->load->library('session');
-        }
-
+        $this->ci->load->library('session');
 
         // Try to log the user in from session/cookie data.
         $this->autologin();
@@ -785,8 +780,10 @@ class Auth
 
         $this->permissions = array();
         $perms = $this->ci->permission_model->find_all();
-        foreach ($perms as $perm) {
-            $this->permissions[strtolower($perm->name)] = $perm->permission_id;
+        if (! empty($perms)) {
+            foreach ($perms as $perm) {
+                $this->permissions[strtolower($perm->name)] = $perm->permission_id;
+            }
         }
 
         return $this->permissions;

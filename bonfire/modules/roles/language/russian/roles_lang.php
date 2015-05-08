@@ -7,7 +7,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -18,9 +18,9 @@
  *
  * Localization strings used by Bonfire
  *
- * @package    Bonfire\Modules\Roles\Language\Russian
- * @author     Translator < https://github.com/cjmaxik >
- * @link       http://cibonfire.com/docs/guides
+ * @package Bonfire\Modules\Roles\Language\Russian
+ * @author  Translator < https://github.com/cjmaxik >
+ * @link    http://cibonfire.com/docs/bonfire/roles_and_permissions
  */
 
 $lang['role_intro']         = 'Роли позволяют распределить права пользователей.';
@@ -65,4 +65,8 @@ $lang['matrix_delete_success'] = 'Данные права были удален�
 $lang['matrix_delete_fail']    = 'Возникла проблема при удалении прав:';
 $lang['matrix_auth_fail']      = 'Аутентификация: У вас нет прав контролировать доступ данной роли.';
 
-/* end of file /roles/language/russian/roles_lang.php */
+$lang['form_validation_role_name'] = 'Имя роли';
+$lang['form_validation_role_login_destination'] = 'Страница после входа';
+$lang['form_validation_role_default_context']   = 'Контекст по умолчанию';
+$lang['form_validation_role_default_role']      = 'Роль по умолчанию';
+$lang['form_validation_role_can_delete_role']   = 'Удаляемая';

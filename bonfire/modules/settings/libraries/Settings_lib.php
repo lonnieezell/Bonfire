@@ -38,6 +38,9 @@ class Settings_lib
     /** @var array Settings cache. */
     private static $cache = array();
 
+    /** @var array Error messages. */
+    protected static $errors = array();
+
     /** @var array Hold observers to handle settings drivers */
     private static $observers = array();
 
@@ -104,6 +107,36 @@ class Settings_lib
     }
 
     /**
+     * Get an error message previously set by the library.
+     *
+     * @param  integer|null $index The index of the error message to retrieve.
+     *
+     * @return string|boolean Returns the message at the given index. If no index
+     * was provided or no error message was found with the given index, returns
+     * the last error message. If no errors have been set, returns false.
+     */
+    public static function getError($index = null)
+    {
+        if (is_null($index)
+            || ! isset(self::$errors[$index])
+        ) {
+            return end(self::$errors);
+        }
+
+        return self::$errors[$index];
+    }
+
+    /**
+     * Get the error messages previously set by the library.
+     *
+     * @return array An array of error messages, or an empty array.
+     */
+    public static function getErrors()
+    {
+        return self::$errors;
+    }
+
+    /**
      * Retrieve a setting.
      *
      * @param string $name The name of the item to retrieve.
@@ -148,18 +181,22 @@ class Settings_lib
      */
     public static function set($name, $value, $module = 'core')
     {
-        self::init();
-
         if (! self::$settingsModelLoaded) {
-            return false;
+            self::init();
+
+            if (! self::$settingsModelLoaded) {
+                self::$errors[] = 'Settings Model could not be loaded';
+                return false;
+            }
         }
 
-        // Since the cache is originally retrieved from the database, the database
-        // is updated if the $name is found in the cache.
-        if (isset(self::$cache[$name])) {
+        // If the value is cached and found in the database, update the database.
+        if (isset(self::$cache[$name])
+            && self::$ci->settings_model->find_by('name', $name)
+        ) {
             $setting = self::$ci->settings_model->update_where('name', $name, array('value' => $value));
         } else {
-            // If $name was not found in the cache, insert the data into the database.
+            // Otherwise, insert the data.
             $setting = self::$ci->settings_model->insert(
                 array(
                     'name'   => $name,
@@ -180,19 +217,31 @@ class Settings_lib
      * @param string $name   Name of the setting.
      * @param string $module Name of the module.
      *
-     * @return bool
+     * @return boolean True if the setting was deleted successfully, else false.
      */
     public static function delete($name, $module = 'core')
     {
-        self::init();
+        if (! self::$settingsModelLoaded) {
+            self::init();
 
-        if (self::$settingsModelLoaded && isset(self::$cache[$name])) {
-            if (self::$ci->settings_model->delete_where(array('name' => $name, 'module' => $module))) {
-                unset(self::$cache[$name]);
-
-                return true;
+            if (! self::$settingsModelLoaded) {
+                self::$errors[] = 'Settings Model could not be loaded.';
+                return false;
             }
         }
+
+        if (! isset(self::$cache[$name])) {
+            self::$errors[] = 'Error deleting setting: setting not found in cache.';
+            return false;
+        }
+
+        if (self::$ci->settings_model->delete_where(array('name' => $name, 'module' => $module))) {
+            unset(self::$cache[$name]);
+
+            return true;
+        }
+
+        self::$errors[] = empty(self::$ci->settings_model->error) ? 'Error deleting setting from the database.' : self::$ci->settings_model->error;
 
         return false;
     }
@@ -200,18 +249,21 @@ class Settings_lib
     /**
      * Get all of the settings.
      *
-     * @return array
+     * @return array|null
      */
-    public function find_all()
+    public static function find_all()
     {
-        if (self::$cache) {
-            return self::$cache;
+        if (! self::$settingsModelLoaded) {
+            self::init();
+
+            if (! self::$settingsModelLoaded) {
+                self::$errors[] = 'Settings Model could not be loaded.';
+                return null;
+            }
         }
 
-        self::init();
-
-        if (! self::$settingsModelLoaded) {
-            return null;
+        if (self::$cache) {
+            return self::$cache;
         }
 
         $settings = self::$ci->settings_model->find_all();
@@ -230,14 +282,17 @@ class Settings_lib
      * @param string $field Setting column name.
      * @param string $value Value ot match.
      *
-     * @return  array
+     * @return array|null
      */
-    public function find_by($field = null, $value = null)
+    public static function find_by($field = null, $value = null)
     {
-        self::init();
-
         if (! self::$settingsModelLoaded) {
-            return null;
+            self::init();
+
+            if (! self::$settingsModelLoaded) {
+                self::$errors[] = 'Settings Model could not be loaded.';
+                return null;
+            }
         }
 
         $settings = self::$ci->settings_model->find_by($field, $value);
@@ -256,14 +311,17 @@ class Settings_lib
      * @param string $field Setting column name.
      * @param string $value Value ot match.
      *
-     * @return array
+     * @return array|null
      */
-    public function find_all_by($field = null, $value = null)
+    public static function find_all_by($field = null, $value = null)
     {
-        self::init();
-
         if (! self::$settingsModelLoaded) {
-            return null;
+            self::init();
+
+            if (! self::$settingsModelLoaded) {
+                self::$errors[] = 'Settings Model could not be loaded.';
+                return null;
+            }
         }
 
         $settings = self::$ci->settings_model->find_all_by($field, $value);
@@ -274,6 +332,60 @@ class Settings_lib
         }
 
         return $settings;
+    }
+
+    /**
+     * Perform a batch update of settings in the database. Inserts any data not
+     * already in the database.
+     *
+     * @param  array $data The settings to update in the database.
+     *
+     * @return boolean True on success, false on failure.
+     */
+    public static function update_batch($data)
+    {
+        if (! self::$settingsModelLoaded) {
+            self::init();
+
+            if (! self::$settingsModelLoaded) {
+                self::$errors[] = 'Settings Model could not be loaded';
+                return false;
+            }
+        }
+
+        $index = 'name';
+        $internalCache = array();
+        $settings = self::$ci->settings_model->find_all();
+        foreach ($settings as $setting) {
+            $internalCache[$setting->name] = $setting->value;
+        }
+
+        $updateData = array();
+        $insertData = array();
+        foreach ($data as $record) {
+            if (isset($internalCache[$record[$index]])) {
+                $updateData[] = $record;
+            } else {
+                $insertData[] = $record;
+            }
+            self::$cache[$record[$index]] = $record['value'];
+        }
+
+        $result = false;
+        if (! empty($updateData)) {
+            $result = self::$ci->settings_model->update_batch($updateData, $index);
+            if (! $result && self::$ci->settings_model->error) {
+                self::$errors[] = self::$ci->settings_model->error;
+            }
+        }
+        if (! empty($insertData)) {
+            $result = self::$ci->settings_model->insert_batch($insertData);
+            if (! $result && self::$ci->settings_model->error) {
+                self::$errors[] = self::$ci->settings_model->error;
+            }
+        }
+
+        return $result;
     }
 
     // -------------------------------------------------------------------------
@@ -312,7 +424,7 @@ if (! function_exists('settings_item')) {
      *
      * @param string $name The name of the item to retrieve
      *
-     * @return bool|string Returns result of setting or false if none.
+     * @return boolean|string Returns result of setting or false if none.
      */
     function settings_item($name = null)
     {
@@ -323,4 +435,3 @@ if (! function_exists('settings_item')) {
         return Settings_lib::item($name);
     }
 }
-/* end /settings/libraries/settings_lib.php */

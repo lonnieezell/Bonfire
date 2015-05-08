@@ -2,7 +2,6 @@
 
 $hasPermissionDeleteDate   = isset($hasPermissionDeleteDate) ? $hasPermissionDeleteDate : false;
 $hasPermissionDeleteModule = isset($hasPermissionDeleteModule) ? $hasPermissionDeleteModule : false;
-$hasPermissionDeleteOwn    = isset($hasPermissionDeleteOwn) ? $hasPermissionDeleteOwn : false;
 $hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDeleteUser : false;
 
 ?>
@@ -47,9 +46,9 @@ $hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDel
 </div>
 <h2><?php
     echo sprintf(
-            lang('activities_view'),
-            $vars['view_which'] == ucwords(lang('activities_date')) ? sprintf(lang('activities_view_before'), $vars['view_which']) : $vars['view_which'],
-            $vars['name']
+        lang('activities_view'),
+        $vars['view_which'] == ucwords(lang('activities_date')) ? sprintf(lang('activities_view_before'), $vars['view_which']) : $vars['view_which'],
+        $vars['name']
     );
     ?></h2>
 <?php if (empty($activity_content)) : ?>

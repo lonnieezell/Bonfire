@@ -20,7 +20,6 @@
  * @author  Bonfire Dev Team
  * @link    http://cibonfire.com/docs/developer/installation
  */
-
 class Installer_lib
 {
     /** @var boolean Indicates whether the default database settings were found. */
@@ -87,6 +86,44 @@ class Installer_lib
     {
         $this->ci =& get_instance();
         $this->curl_update = $this->cURL_enabled();
+        $this->php_version = phpversion();
+    }
+
+    /**
+     * Check an array of files/folders to see if they are writable and return the
+     * results in a format usable in the requirements check step of the installation.
+     *
+     * Note that this only returns the data in the format expected by the Install
+     * controller if called via check_folders() and check_files(). Otherwise, the
+     * files and folders are intermingled unless they are passed as input.
+     *
+     * @param  array $filesAndFolders An array of paths to files/folders to check.
+     *
+     * @return array An associative array with the path as key and boolean value
+     * indicating whether the path is writable.
+     */
+    public function checkWritable(array $filesAndFolders = array())
+    {
+        if (empty($filesAndFolders)) {
+            $filesAndFolders = array_merge($this->writable_files, $this->writable_folders);
+        }
+
+        $this->ci->load->helper('file');
+
+        $data = array();
+        foreach ($filesAndFolders as $fileOrFolder) {
+            // If it starts with 'public/', then that represents the web root.
+            // Otherwise, try to locate it from the main folder.
+            if (strpos($fileOrFolder, 'public/') === 0) {
+                $realpath = FCPATH . preg_replace('{^public/}', '', $fileOrFolder);
+            } else {
+                $realpath = str_replace('application/', '', APPPATH) . $fileOrFolder;
+            }
+
+            $data[$fileOrFolder] = is_really_writable($realpath);
+        }
+
+        return $data;
     }
 
     /**
@@ -99,7 +136,6 @@ class Installer_lib
      */
     public function php_acceptable($version = null)
     {
-        $this->php_version = phpversion();
         return version_compare($this->php_version, $version, '>=');
     }
 
@@ -309,23 +345,7 @@ class Installer_lib
             $folders = $this->writable_folders;
         }
 
-        // Load the file helper
-        $this->ci->load->helper('file');
-
-        $data = array();
-        foreach ($folders as $folder) {
-            // If it starts with 'public/', then that represents the web root.
-            // Otherwise, try to locate it from the main folder.
-            if (strpos($folder, 'public/') === 0) {
-                $realpath = FCPATH . preg_replace('{^public/}', '', $folder);
-            } else {
-                $realpath = str_replace('application/', '', APPPATH) . $folder;
-            }
-
-            $data[$folder] = is_really_writable($realpath);
-        }
-
-        return $data;
+        return $this->checkWritable($folders);
     }
 
     /**
@@ -342,30 +362,14 @@ class Installer_lib
             $files = $this->writable_files;
         }
 
-        // Load the file helper
-        $this->ci->load->helper('file');
-
-        $data = array();
-        foreach ($files as $file) {
-            // If it starts with 'public/', then that represents the web root.
-            // Otherwise, try to locate it from the main folder.
-            if (strpos($file, 'public/') === 0) {
-                $realpath = $this->FCPATH . preg_replace('{^public/}', '', $file);
-            } else {
-                $realpath = str_replace('application/', '', APPPATH) . $file;
-            }
-
-            $data[$file] = is_really_writable($realpath);
-        }
-
-        return $data;
+        return $this->checkWritable($files);
     }
 
     /**
-     * Perform the actual installation of the database, creates the config files,
+     * Perform the actual installation of the database, create the config files,
      * and install the user account.
      *
-     * @return string|bool
+     * @return string|boolean True on successful installation, else an error message.
      */
     public function setup()
     {
@@ -472,6 +476,11 @@ class Installer_lib
         $filename = APPPATH . 'config/installed.txt';
         $msg = 'Installed On: ' . date('r') . "\n";
         write_file($filename, $msg);
+
+        $config_array = array(
+            'bonfire.installed' => true,
+        );
+        write_config('application', $config_array, '', APPPATH);
 
         return true;
     }

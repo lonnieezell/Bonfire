@@ -3,45 +3,33 @@
 /**
  * Translate Module Library
  *
- * Provides methods to retrieve translations from external sites
+ * Provides methods to retrieve translations from external sites.
  *
  * @uses Bonfire\Libraries\Curl (CodeIgniter cURL library from Phil Sturgeon)
  *
- * @package    Bonfire\Modules\Translate\Libraries\Translate_lib
- * @author     Bonfire Dev Team
- * @link       http://guides.cibonfire.com/
- * @todo       Update Link to a Docs/Guides on the translate_lib methods
+ * @package Bonfire\Modules\Translate\Libraries\Translate_lib
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs
+ * @todo    Update Link to a Docs/Guides on the translate_lib methods
  */
 class Translate_lib
 {
-    /**
-     * @var object A pointer to the CodeIgniter instance.
-     */
+    /** @var object A pointer to the CodeIgniter instance. */
     protected $ci;
 
-    /**
-     * @var string Last translation result
-     */
+    /** @var string Last translation result. */
     public $lastResult = '';
 
-    /**
-     * @var string Language engine for translation
-     */
+    /** @var string Language engine for translation. */
     private $langEngine = 'google';
 
-    /**
-     * @var string Language code translating from
-     */
+    /** @var string Language code translating from. */
     private $langFrom;
 
-    /**
-     * @var string Language code translating to
-     */
+    /** @var string Language code translating to. */
     private $langTo;
 
-    /**
-     * @var array URL formats (Google Translate, others)
-     */
+    /** @var array URL formats (Google Translate, others). */
     private static $urlFormat = array(
         'google' => array(
             'url' => 'http://translate.google.com/translate_a/t?client=t&text=%s&hl=en&sl=%s&tl=%s&ie=UTF-8&oe=UTF-8&multires=1&otf=1&pc=1&trs=1&ssel=3&tsel=6&sc=1',
@@ -120,7 +108,7 @@ class Translate_lib
         $this->ci->load->library('curl');
         $url = sprintf(self::$urlFormat[$this->langEngine]['url'], rawurlencode($text), $this->langFrom, $this->langTo);
         $result = $this->ci->curl->simple_get($url);
-        if ( ! $result) {
+        if (! $result) {
             return false;
         }
 
@@ -128,7 +116,7 @@ class Translate_lib
         $result = preg_replace('!,+!', ',', $result); // Remove repeated commas
         $result = str_replace('[,', '[', $result); // Remove extra comma after bracket
         $resultArray = json_decode($result, true);
-        if ( ! isset($resultArray[0])) {
+        if (! isset($resultArray[0])) {
             return false;
         }
 
@@ -140,4 +128,3 @@ class Translate_lib
         return $this->lastResult = $finalResult;
     }
 }
-/* End of class Translate_lib.php */

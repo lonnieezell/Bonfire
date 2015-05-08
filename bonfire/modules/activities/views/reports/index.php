@@ -2,12 +2,7 @@
 
 $hasPermissionDeleteDate   = isset($hasPermissionDeleteDate) ? $hasPermissionDeleteDate : false;
 $hasPermissionDeleteModule = isset($hasPermissionDeleteModule) ? $hasPermissionDeleteModule : false;
-$hasPermissionDeleteOwn    = isset($hasPermissionDeleteOwn) ? $hasPermissionDeleteOwn : false;
 $hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDeleteUser : false;
-$hasPermissionViewDate     = isset($hasPermissionViewDate) ? $hasPermissionViewDate : false;
-$hasPermissionViewModule   = isset($hasPermissionViewModule) ? $hasPermissionViewModule : false;
-$hasPermissionViewOwn      = isset($hasPermissionViewOwn) ? $hasPermissionViewOwn : false;
-$hasPermissionViewUser     = isset($hasPermissionViewUser) ? $hasPermissionViewUser : false;
 
 $activitiesReportsPage = SITE_AREA . '/reports/activities';
 $activitiesReportsUrl = site_url($activitiesReportsPage);
@@ -79,7 +74,9 @@ td.button-column button {
 		<!-- Active Modules -->
 		<div class="admin-box">
 			<h3><?php echo lang('activities_top_modules'); ?></h3>
-            <?php if (! empty($top_modules) && is_array($top_modules)) : ?>
+            <?php if (empty($top_modules) || ! is_array($top_modules)) : ?>
+            <p><?php echo lang('activities_no_top_modules'); ?></p>
+            <?php else : ?>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -96,8 +93,6 @@ td.button-column button {
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <?php else : ?>
-            <p><?php echo lang('activities_no_top_modules'); ?></p>
             <?php endif; ?>
 		</div>
 	</div>
@@ -105,7 +100,9 @@ td.button-column button {
 		<div class="admin-box">
 			<!-- Active Users -->
 			<h3><?php echo lang('activities_top_users'); ?></h3>
-            <?php if (! empty($top_users) && is_array($top_users)) : ?>
+            <?php if (empty($top_users) || ! is_array($top_users)) : ?>
+            <p><?php echo lang('activities_no_top_users'); ?></p>
+            <?php else : ?>
             <table class="table table-striped">
                 <thead>
                     <tr>
@@ -122,23 +119,19 @@ td.button-column button {
                     <?php endforeach; ?>
                 </tbody>
             </table>
-            <?php else : ?>
-            <p><?php echo lang('activities_no_top_users'); ?></p>
             <?php endif; ?>
 		</div>
 	</div>
 </div>
+<?php
+if ($hasPermissionDeleteOwn
+    || $hasPermissionDeleteUser
+    || $hasPermissionDeleteModule
+    || $hasPermissionDeleteDate
+) :
+?>
 <div class="admin-box">
 	<h3><?php echo lang('activities_cleanup'); ?></h3>
-    <?php
-    if (! $hasPermissionDeleteOwn
-        && ! $hasPermissionDeleteUser
-        && ! $hasPermissionDeleteModule
-        && ! $hasPermissionDeleteDate
-    ) :
-    ?>
-    <p><?php echo lang('activities_none_found'); ?></p>
-    <?php else : ?>
 	<table class="table table-striped">
 		<tbody>
             <?php if ($hasPermissionDeleteOwn) : ?>
@@ -225,5 +218,6 @@ td.button-column button {
 			<?php endif; ?>
 		</tbody>
 	</table>
-    <?php endif; ?>
 </div>
+<?php
+endif;

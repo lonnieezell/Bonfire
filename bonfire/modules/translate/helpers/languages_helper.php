@@ -6,8 +6,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -18,20 +18,21 @@
  *
  * Includes fucntions to help with the management of the language files.
  *
- * @package    Bonfire\Modules\Translate\Helpers\Languages
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/guides
+ * @package Bonfire\Modules\Translate\Helpers\Languages
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs
  */
 
 if (! function_exists('addLanguageLine')) {
     /**
-     * Add one or more lines to an existing language file
+     * Add one or more lines to an existing language file.
      *
-     * @param string $filename The name of the file to update
-     * @param array $line     An array of key/value pairs containing the language entries to update/add and the values to set them to
-     * @param string $language The language of the file to update
+     * @param string $filename The name of the file to update.
+     * @param array  $line     An array of key/value pairs containing the language
+     * entries to update/add and the values to set them to.
+     * @param string $language The language of the file to update.
      *
-     * @return bool    true on successful update, else false
+     * @return boolean True on successful update, else false.
      */
     function addLanguageLine($filename, $line, $language = 'english')
     {
@@ -51,7 +52,7 @@ if (! function_exists('list_languages')) {
      * Lists the existing languages in the system by examining the core
      * language folders in bonfire/application/language.
      *
-     * @return string[] Array of the names of the language directories
+     * @return array The names of the language directories.
      */
     function list_languages()
     {
@@ -70,57 +71,55 @@ if (! function_exists('list_lang_files')) {
      * Searches the application/languages folder as well as all core modules
      * for folders matching the language name.
      *
-     * @param string $language The language
+     * @param string $language The language.
      *
-     * @return array An array of files.
+     * @return array The filenames.
      */
     function list_lang_files($language = 'english')
     {
-        $lang_files = array();
-
         // Base language files.
-        $lang_files['core'] = find_lang_files(APPPATH . "language/{$language}/");
+        $langFiles = array();
+        $langFiles['core'] = find_lang_files(APPPATH . "language/{$language}/");
 
-        // Module directories
+        // Build the 'core' and 'custom' module lists.
         $modules = Modules::list_modules();
-        // Application Module directories only
-        $custom_modules = Modules::list_modules(true);
-
+        $appModules = Modules::list_modules(true);
         foreach ($modules as $module) {
-            $module_langs = Modules::files($module, 'language');
+            $moduleLangs = Modules::files($module, 'language');
             $type = 'core';
 
-            if (isset($module_langs[$module]['language'][$language])) {
+            if (isset($moduleLangs[$module]['language'][$language])) {
                 $path = implode('/', array(Modules::path($module, 'language'), $language));
-
                 $files = find_lang_files($path . '/');
-                if (in_array($module, $custom_modules)) {
+
+                // 'core' modules will only be found in $modules, while 'custom'
+                // modules will be found in both $modules and $appModules.
+                if (in_array($module, $appModules)) {
                     $type = 'custom';
                 }
 
                 if (is_array($files)) {
                     foreach ($files as $file) {
-                        $lang_files[$type][] = $file;
+                        $langFiles[$type][] = $file;
                     }
                 }
             }
         }
 
-        return $lang_files;
+        return $langFiles;
     }
 }
 
 if (! function_exists('find_lang_files')) {
     /**
-     * Search a folder for language files
+     * Search a folder for language files.
      *
      * Searches an individual folder for any language files and returns an array
-     * appropriate for adding to the $lang_files array in the get_lang_files()
-     * function.
+     * appropriate for adding to the $langFiles array in the get_lang_files() function.
      *
-     * @param string $path The folder to search
+     * @param string $path The folder to search.
      *
-     * @return array An array of files
+     * @return array Filenames.
      */
     function find_lang_files($path = null)
     {
@@ -141,10 +140,12 @@ if (! function_exists('load_lang_file')) {
     /**
      * Load a single language file into an array.
      *
-     * @param string $filename The name of the file to locate. The file will be found by looking in all modules.
+     * @param string $filename The name of the file to locate. The file will be
+     * found by looking in all modules.
      * @param string $language The language to retrieve.
      *
-     * @return mixed An array on loading the language file, false on error
+     * @return mixed The $lang array from the file or false if not found. Returns
+     * null if $filename is empty.
      */
     function load_lang_file($filename = null, $language = 'english')
     {
@@ -152,7 +153,7 @@ if (! function_exists('load_lang_file')) {
             return null;
         }
 
-        // Is it a application lang file? Use the English folder to determine.
+        // Is it an application lang file? Use the English folder to determine.
         $arFiles = scandir(APPPATH . "language/english/");
         if ($filename == 'application_lang.php' || in_array($filename, $arFiles)) {
             $path = APPPATH . "language/{$language}/{$filename}";
@@ -177,15 +178,19 @@ if (! function_exists('load_lang_file')) {
 
 if (! function_exists('save_lang_file')) {
     /**
-     * Save a language file
+     * Save a language file.
      *
-     * @param string $filename The name of the file to locate. The file will be found by looking in all modules.
-     * @param string $language The language to retrieve.
-     * @param array  $settings An array of the language settings
-     * @param bool   $return   TRUE to return the contents or FALSE to write to file
-     * @param bool   $allowNewValues if true, new values can be added to the file
+     * @param string  $filename The name of the file to locate. The file will be
+     * found by looking in all modules.
+     * @param string  $language The language to retrieve.
+     * @param array   $settings An array of the language settings.
+     * @param boolean $return   True to return the contents or false to write to
+     * the file.
+     * @param boolean $allowNewValues If true, new values can be added to the file.
      *
-     * @return mixed A string when the $return setting is true
+     * @return boolean|string False if there was a problem loading the file. Otherwise,
+     * returns true when $return is false or a string containing the file's contents
+     * when $return is true.
      */
     function save_lang_file($filename = null, $language = 'english', $settings = null, $return = false, $allowNewValues = false)
     {
@@ -281,4 +286,3 @@ if (! function_exists('save_lang_file')) {
         return false;
     }
 }
-/* /bonfire/modules/translate/helpers/languages_helper.php */

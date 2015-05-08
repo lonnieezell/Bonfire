@@ -8,7 +8,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -68,3 +68,12 @@ $lang['emailer_subject']            = 'عنوان';
 
 $lang['emailer_missing_data']       = 'یک یا چند فیلد اجباری وارد نشده است.';
 $lang['emailer_no_debug']           = 'ایمیل در صف قرار گرفت. اطلاعات دیباگ جهت نمایش موجود نیست.';
+
+$lang['form_validation_emailer_system_email']  = 'ایمیل سیستم';
+$lang['form_validation_emailer_email_server']  = 'سرور ایمیل';
+// $lang['form_validation_emailer_sendmail_path'] = 'Sendmail Path';
+// $lang['form_validation_emailer_smtp_address']  = 'SMTP Server Address';
+// $lang['form_validation_emailer_smtp_username'] = 'SMTP Username';
+// $lang['form_validation_emailer_smtp_password'] = 'SMTP Password';
+// $lang['form_validation_emailer_smtp_port']     = 'SMTP Port';
+// $lang['form_validation_emailer_smtp_timeout']  = 'SMTP timeout';

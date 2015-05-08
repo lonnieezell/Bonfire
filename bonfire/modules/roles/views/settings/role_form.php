@@ -1,16 +1,14 @@
 <?php
 
-$validationErrors = validation_errors();
-
-if ($validationErrors) :
+if (validation_errors()) :
 ?>
 <div class="alert alert-error fade in">
-	<a class="close" data-dismiss="alert">&times;</a>
-	<?php echo $validationErrors; ?>
+    <a class="close" data-dismiss="alert">&times;</a>
+    <?php echo validation_errors(); ?>
 </div>
 <?php endif; ?>
 <div class="admin-box">
-	<?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
+    <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
         <fieldset>
             <legend><?php echo lang('role_details'); ?></legend>
             <div class="control-group<?php echo form_error('role_name') ? ' error' : ''; ?>">
@@ -42,7 +40,7 @@ if ($validationErrors) :
                 <div class="controls">
                     <select name="default_context" id="default_context">
                         <?php
-                        if (isset($contexts) && is_array($contexts) && count($contexts)) :
+                        if (! empty($contexts) && is_array($contexts)) :
                             foreach ($contexts as $context) :
                         ?>
                         <option value="<?php echo $context;?>" <?php echo set_select('default_context', $context, isset($role) && $role->default_context == $context); ?>><?php echo ucfirst($context); ?></option>
@@ -93,10 +91,13 @@ if ($validationErrors) :
             <input type="submit" name="save" class="btn btn-primary" value="<?php echo lang('role_save_role'); ?>" />
             <?php
             echo lang('bf_or') . ' ' . anchor(SITE_AREA . '/settings/roles', lang('bf_action_cancel'));
-            if (isset($role) && $role->can_delete == 1 && has_permission('Bonfire.Roles.Delete')) :
+            if (isset($role)
+                && $role->can_delete == 1
+                && has_permission('Bonfire.Roles.Delete')
+            ) :
             ?>
             <button type="submit" name="delete" class="btn btn-danger" onclick="return confirm('<?php e(js_escape(lang('role_delete_confirm') . ' ' . lang('role_delete_note'))); ?>')"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('role_delete_role'); ?></button>
             <?php endif;?>
         </fieldset>
-	<?php echo form_close(); ?>
+    <?php echo form_close(); ?>
 </div>

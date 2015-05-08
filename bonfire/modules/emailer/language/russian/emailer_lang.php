@@ -7,7 +7,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -89,5 +89,14 @@ $lang['emailer_create_setting']       = 'Настройка письма';
 $lang['emailer_create_email_error']   = 'Ошибка при создании писем: %s';
 $lang['emailer_create_email_success'] = 'Письмо(а) были добавлены в очередь.';
 $lang['emailer_create_email_failure'] = 'Ошибка при создании писем: %s';
+
+$lang['form_validation_emailer_system_email']  = 'Системный Email';
+$lang['form_validation_emailer_email_server']  = 'Email-сервер';
+$lang['form_validation_emailer_sendmail_path'] = 'Путь до Sendmail';
+$lang['form_validation_emailer_smtp_address']  = 'Адрес сервера SMTP';
+$lang['form_validation_emailer_smtp_username'] = 'Имя пользователя SMTP';
+$lang['form_validation_emailer_smtp_password'] = 'Пароль SMTP';
+$lang['form_validation_emailer_smtp_port']     = 'Порт SMTP';
+$lang['form_validation_emailer_smtp_timeout']  = 'Таймаут SMTP';
 
 /* end of file /emailer/language/russian/emailer_lang.php */

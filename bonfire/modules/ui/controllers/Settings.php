@@ -8,8 +8,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -22,7 +22,7 @@
  *
  * @package Bonfire\Modules\UI\Controllers\Settings
  * @author  Bonfire Dev Team
- * @link    http://cibonfire.com/docs/bonfire/keyboard_shortcuts
+ * @link    http://cibonfire.com/docs/developer/keyboard_shortcuts
  */
 class Settings extends Admin_Controller
 {
@@ -103,7 +103,6 @@ class Settings extends Admin_Controller
 
         // Read available shortcuts from the application config.
         $availableActions = config_item('ui.current_shortcuts');
-
         if (array_key_exists($action, $availableActions)) {
             return $this->saveSettings(array($action => $shortcut));
         }
@@ -118,7 +117,7 @@ class Settings extends Admin_Controller
      */
     private function removeShortcut()
     {
-        $this->form_validation->set_rules('remove_shortcut[]', 'lang:ui_actions', 'required|is_array');
+        $this->form_validation->set_rules('remove_shortcut[]', 'lang:ui_actions', 'required');
         if ($this->form_validation->run() === false) {
             return false;
         }
@@ -127,7 +126,6 @@ class Settings extends Admin_Controller
 
         // Read the current settings
         $availableActions = $this->settings_lib->find_all_by('module', 'core.ui');
-
         if (array_key_exists($action, $availableActions)) {
             return $this->settings_lib->delete($action, 'core.ui');
         }
@@ -210,4 +208,3 @@ class Settings extends Admin_Controller
         return true;
     }
 }
-/* end /ui/controllers/settings.php */
