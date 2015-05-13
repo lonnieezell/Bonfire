@@ -7,6 +7,7 @@
 #### New Features:
 
 #### Closes Issues:
+* #1112 Can't login to site when offline in CI3
 
 #### Additional Changes:
 
