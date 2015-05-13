@@ -88,7 +88,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
                 <div class='controls'>
                     <label class='checkbox' for='{$form_name}'>
                         <input type='checkbox' id='{$form_name}' name='{$form_name}' " . ($required_attribute ? "required='required' " : "") . " value='1' <?php echo set_checkbox('{$form_name}', 1, isset(\${$module_name_lower}->{$field_name}) && \${$module_name_lower}->{$field_name} == 1); ?> />
-                        <?php echo lang('{$module_name_lower}_field_{$field_name}'); ?>{$required}
+                        <?php echo lang('{$module_name_lower}_field_{$field_name}'){$required}; ?>
                     </label>
                     <span class='help-inline'><?php echo form_error('{$field_name}'); ?></span>
                 </div>
@@ -117,7 +117,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 
             $viewFields .= PHP_EOL . "
             <div class=\"control-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
-                <?php echo form_label(lang('{$module_name_lower}_field_{$field_name}') . {$required}, '{$form_name}', array('class' => 'control-label')); ?>
+                <?php echo form_label(lang('{$module_name_lower}_field_{$field_name}') {$required}, '{$form_name}', array('class' => 'control-label')); ?>
                 <div class='controls'>
                     <input id='{$form_name}' type='{$type}' " . ($required_attribute ? "required='required' " : "") . "name='{$form_name}' {$maxlength} value=\"<?php echo set_value('{$form_name}', isset(\${$module_name_lower}->{$field_name}) ? \${$module_name_lower}->{$field_name} : ''); ?>\" />
                     <span class='help-inline'><?php echo form_error('{$field_name}'); ?></span>
