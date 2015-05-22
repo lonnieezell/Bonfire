@@ -7,6 +7,7 @@
 #### New Features:
 
 #### Closes Issues:
+* #1114 Differences in Routing between CI2 and CI3
 * #1113 Syntax error in the builder-built view (when adding a required input field)
 * #1112 Can't login to site when offline in CI3
 
