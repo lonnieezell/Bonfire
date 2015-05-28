@@ -366,6 +366,9 @@ class Settings_lib
             if (isset($internalCache[$record[$index]])) {
                 $updateData[] = $record;
             } else {
+                if (! isset($record['module'])) {
+                    $record['module'] = 'core';
+                }
                 $insertData[] = $record;
             }
             self::$cache[$record[$index]] = $record['value'];
