@@ -29,7 +29,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
     if (is_array($validation_rules)) {
         foreach ($validation_rules as $key => $value) {
             if ($value == 'required') {
-                $required = ". lang('bf_form_label_required')";
+                $required = " . lang('bf_form_label_required')";
                 $required_attribute = true;
             }
         }
@@ -40,7 +40,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
         case 'textarea':
             $viewFields .= PHP_EOL . "
             <div class=\"control-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
-                <?php echo form_label(lang('{$module_name_lower}_field_{$field_name}') . {$required}, '{$form_name}', array('class' => 'control-label')); ?>
+                <?php echo form_label(lang('{$module_name_lower}_field_{$field_name}'){$required}, '{$form_name}', array('class' => 'control-label')); ?>
                 <div class='controls'>
                     <?php echo form_textarea(array('name' => '{$form_name}', 'id' => '{$form_name}', 'rows' => '5', 'cols' => '80', 'value' => set_value('$form_name', isset(\${$module_name_lower}->{$field_name}) ? \${$module_name_lower}->{$field_name} : '')" . ($required_attribute ? ", 'required' => 'required'" : "") . ")); ?>
                     <span class='help-inline'><?php echo form_error('{$field_name}'); ?></span>
@@ -50,7 +50,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
         case 'radio':
             $viewFields .= PHP_EOL . "
             <div class=\"control-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
-                <?php echo form_label(lang('{$module_name_lower}_field_{$field_name}') . {$required}, '', array('class' => 'control-label', 'id' => '{$form_name}_label')); ?>
+                <?php echo form_label(lang('{$module_name_lower}_field_{$field_name}'){$required}, '', array('class' => 'control-label', 'id' => '{$form_name}_label')); ?>
                 <div class='controls' aria-labelled-by='{$form_name}_label'>
                     <label class='radio' for='{$form_name}_option1'>
                         <input id='{$form_name}_option1' name='{$form_name}' type='radio' " . ($required_attribute ? "required='required' " : "") . "value='option1' <?php echo set_radio('{$form_name}', 'option1', isset(\${$module_name_lower}->{$field_name}) && \${$module_name_lower}->{$field_name} == 'option1'); ?> />
@@ -79,7 +79,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
             }
             $viewFields .= "
                 );
-                echo form_dropdown(array('name' => '{$form_name}'" . ($required_attribute ? ", 'required' => 'required'" : "") . "), \$options, set_value('{$form_name}', isset(\${$module_name_lower}->{$field_name}) ? \${$module_name_lower}->{$field_name} : ''), lang('{$module_name_lower}_field_{$field_name}') . '{$required}');
+                echo form_dropdown(array('name' => '{$form_name}'" . ($required_attribute ? ", 'required' => 'required'" : "") . "), \$options, set_value('{$form_name}', isset(\${$module_name_lower}->{$field_name}) ? \${$module_name_lower}->{$field_name} : ''), lang('{$module_name_lower}_field_{$field_name}'){$required});
             ?>";
             break;
         case 'checkbox':
@@ -117,7 +117,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 
             $viewFields .= PHP_EOL . "
             <div class=\"control-group<?php echo form_error('{$field_name}') ? ' error' : ''; ?>\">
-                <?php echo form_label(lang('{$module_name_lower}_field_{$field_name}') {$required}, '{$form_name}', array('class' => 'control-label')); ?>
+                <?php echo form_label(lang('{$module_name_lower}_field_{$field_name}'){$required}, '{$form_name}', array('class' => 'control-label')); ?>
                 <div class='controls'>
                     <input id='{$form_name}' type='{$type}' " . ($required_attribute ? "required='required' " : "") . "name='{$form_name}' {$maxlength} value=\"<?php echo set_value('{$form_name}', isset(\${$module_name_lower}->{$field_name}) ? \${$module_name_lower}->{$field_name} : ''); ?>\" />
                     <span class='help-inline'><?php echo form_error('{$field_name}'); ?></span>

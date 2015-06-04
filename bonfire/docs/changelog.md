@@ -7,6 +7,7 @@
 #### New Features:
 
 #### Closes Issues:
+* #1116 Syntax error in the builder-built view (when adding a required input field), pt 2.
 * #1115 Can't save settings, 'module' field not being sent to settings table
 * #1114 Differences in Routing between CI2 and CI3
 * #1113 Syntax error in the builder-built view (when adding a required input field)
