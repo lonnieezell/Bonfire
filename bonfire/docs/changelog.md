@@ -1,6 +1,6 @@
 # Change Log
 
-## Under development
+## Released versions
 
 ### 0.7.4
 
@@ -17,8 +17,6 @@
 #### Additional Changes:
 
 #### Known Issues:
-
-## Released versions
 
 ### 0.7.3
 
