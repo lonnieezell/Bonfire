@@ -130,9 +130,10 @@ $bonfire_path = "{$path}/bonfire";
  * Include the path if the folder is not in the same directory
  * as this file.
  */
-$system_path = "{$path}/bonfire/codeigniter";
+// CI 2 system path:
+// $system_path = "{$path}/bonfire/ci2";
 // CI 3 system path:
-// $system_path = "{$path}/bonfire/ci3";
+$system_path = "{$path}/bonfire/ci3";
 
 /*
  *------------------------------------------------------------------------------
