@@ -1,5 +1,19 @@
 # Change Log
 
+## Under development
+
+### 0.8.0
+
+#### New Features:
+* Installed/Enabled version of CodeIgniter upgraded to 3.0
+* CI v2.x compatibility maintained, but requires [some additional steps to use/enable](https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/docs/ci2.md).
+
+#### Closes Issues:
+
+#### Additional Changes:
+
+#### Known Issues:
+
 ## Released versions
 
 ### 0.7.4
