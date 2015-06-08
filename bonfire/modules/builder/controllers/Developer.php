@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -23,9 +23,9 @@
  *
  * This code is originally based on Ollie Rattue's http://formigniter.org/ project
  *
- * @package    Bonfire\Modules\Builder\Controllers\Developer
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/builder
+ * @package Bonfire\Modules\Builder\Controllers\Developer
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer/builder
  */
 class Developer extends Admin_Controller
 {
@@ -81,12 +81,11 @@ class Developer extends Admin_Controller
         foreach ($modules as $module) {
             $configs[$module] = Modules::config($module);
 
-            if ( ! isset($configs[$module]['name'])) {
+            if (! isset($configs[$module]['name'])) {
                 $configs[$module]['name'] = ucwords($module);
-            }
-            // If the name is configured, check to see if it is a lang entry and
-            // if it is, pull it from the application_lang file
-            elseif (strpos($configs[$module]['name'], 'lang:') === 0) {
+            } elseif (strpos($configs[$module]['name'], 'lang:') === 0) {
+                // If the name is configured, check to see if it is a lang entry
+                // and, if it is, pull it from the application_lang file.
                 $configs[$module]['name'] = lang(str_replace('lang:', '', $configs[$module]['name']));
             }
         }
@@ -108,44 +107,46 @@ class Developer extends Admin_Controller
     /**
      * Display the form which allows the user to create a context.
      *
-     * @return	void
+     * @return  void
      */
     public function create_context()
     {
-    	// Form submittal?
-    	if (isset($_POST['build'])) {
-    		$this->form_validation->set_rules('context_name', 'lang:mb_context_name', 'required|trim|alpha_numeric|xss_clean');
+        // Form submittal?
+        if (isset($_POST['build'])) {
+            $this->form_validation->set_rules('context_name', 'lang:mb_context_name', 'required|trim|alpha_numeric');
 
-    		if ($this->form_validation->run() !== false) {
-    			// Validated!
-	    		$name		= $this->input->post('context_name');
-		    	$for_roles	= $this->input->post('roles');
-		    	$migrate	= $this->input->post('migrate') == 'on';
+            if ($this->form_validation->run() !== false) {
+                // Validated!
+                $name       = $this->input->post('context_name');
+                $for_roles  = $this->input->post('roles');
+                $migrate    = $this->input->post('migrate') == 'on';
 
-		    	// Try to save the context, using the UI/Context helper
-		    	$this->load->library('ui/contexts');
-		    	if (Contexts::create_context($name, $for_roles, $migrate)) {
-		    		Template::set_message(lang('mb_context_create_success'), 'success');
-			    	redirect(SITE_AREA . '/developer/builder');
-		    	}
+                // Try to save the context, using the UI/Context helper
+                $this->load->library('ui/contexts');
+                if (Contexts::create_context($name, $for_roles, $migrate)) {
+                    Template::set_message(lang('mb_context_create_success'), 'success');
+                    redirect(SITE_AREA . '/developer/builder');
+                }
 
-		    	// Creating the context failed
-			    Template::set_message(lang('mb_context_create_error') . Contexts::errors(), 'error');
-		    }
-    	}
+                // Creating the context failed
+                Template::set_message(lang('mb_context_create_error') . Contexts::errors(), 'error');
+            }
+        }
 
-    	// Load roles for display in the form.
-    	$this->load->model('roles/role_model');
-    	$this->role_model->select(array(
-                                    'role_id',
-                                    'role_name',
-                                 ))
-    					 ->where('deleted', 0);
+        // Load roles for display in the form.
+        $this->load->model('roles/role_model');
+        $this->role_model->select(
+            array(
+                'role_id',
+                'role_name',
+            )
+        )
+                         ->where('deleted', 0);
 
-    	Template::set('roles', $this->role_model->find_all());
-    	Template::set('toolbar_title', lang('mb_create_a_context'));
+        Template::set('roles', $this->role_model->find_all());
+        Template::set('toolbar_title', lang('mb_create_a_context'));
 
-    	Template::render();
+        Template::render();
     }
 
     //--------------------------------------------------------------------
@@ -168,9 +169,11 @@ class Developer extends Admin_Controller
         if ($this->validate_form($this->field_total) == false) {
             // Display the modulebuilder_form
             $this->prepareModuleForm($this->field_total, isset($_POST['build']));
-        }
-        // Validation Passed, Use existing DB, need to detect the fields
-        elseif ($this->input->post('module_db') == 'existing' && $this->field_total == 0) {
+        } elseif ($this->input->post('module_db') == 'existing'
+            && $this->field_total == 0
+        ) {
+            // Validation Passed, Use existing DB, need to detect the fields.
+            //
             // If the table name includes the prefix, remove the prefix
             $_POST['table_name'] = preg_replace("/^".$this->db->dbprefix."/", "", $this->input->post('table_name'));
 
@@ -183,7 +186,7 @@ class Developer extends Admin_Controller
             $formError  = false;
 
             // If the table wasn't found, log/set an error message
-            if ( ! empty($_POST) && $num_fields == 0) {
+            if (! empty($_POST) && $num_fields == 0) {
                 $formError = true;
                 $error_message = lang('mb_module_table_not_exist');
                 log_message('error', "ModuleBuilder: {$error_message}");
@@ -194,9 +197,8 @@ class Developer extends Admin_Controller
 
             // Display the modulebuilder_form
             $this->prepareModuleForm($fieldTotal, $formError);
-        }
-        // Validation passed and ready to proceed
-        else {
+        } else {
+            // Validation passed and ready to proceed
             $this->build_module($this->field_total);
             log_activity((int) $this->current_user->id, lang('mb_act_create') . ': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
 
@@ -289,7 +291,7 @@ class Developer extends Admin_Controller
                                                 ->find_all();
 
         // Undo any permissions that exist, from the roles as well
-        if ( ! empty($permissionIds)) {
+        if (! empty($permissionIds)) {
             foreach ($permissionIds as $row) {
                 $this->permission_model->delete($row->permission_id);
             }
@@ -304,7 +306,7 @@ class Developer extends Admin_Controller
             $mtTableName = $this->mt->get_table();
 
             // If the model has a table and it exists in the database, drop it
-            if ( ! empty($mtTableName) && $this->db->table_exists($mtTableName)) {
+            if (! empty($mtTableName) && $this->db->table_exists($mtTableName)) {
                 $this->dbforge->drop_table($mtTableName);
             }
         }
@@ -335,10 +337,7 @@ class Developer extends Admin_Controller
     private function prepareModuleForm($fieldTotal, $formError)
     {
         $this->load->model('roles/role_model');
-        $this->role_model->select(array(
-                                    'role_id',
-                                    'role_name',
-                                 ))
+        $this->role_model->select(array('role_id', 'role_name'))
                          ->where('deleted', 0)
                          ->order_by('role_name');
 
@@ -361,26 +360,38 @@ class Developer extends Admin_Controller
         Template::set('form_error', $formError);
         Template::set('listFieldTypes', $listFieldTypes);
         Template::set('roles', $this->role_model->as_array()->find_all());
-        Template::set('textarea_editors', array(
-            ''          => 'None',
-            'ckeditor'  => 'CKEditor',
-            'elrte'     => 'ElRte with ElFinder',
-            'markitup'  => 'MarkitUp!',
-            'tinymce'   => 'TinyMCE',
-            'xinha'     => 'Xinha',
-        ));
+        Template::set(
+            'textarea_editors',
+            array(
+                ''          => 'None',
+                'ckeditor'  => 'CKEditor',
+                'elrte'     => 'ElRte with ElFinder',
+                'markitup'  => 'MarkitUp!',
+                'tinymce'   => 'TinyMCE',
+                'xinha'     => 'Xinha',
+            )
+        );
         Template::set('textFieldTypes', $textFieldTypes);
-        Template::set('truefalse', array(
-            'false' => 'False',
-            'true' => 'True',
-        ));
+        Template::set(
+            'truefalse',
+            array(
+                'false' => 'False',
+                'true' => 'True',
+            )
+        );
         Template::set('validation_limits', $this->options['validation_limits']);
         Template::set('validation_rules', $this->options['validation_rules']);
-        Template::set('view_field_types', array(
-            'input' 	=> 'INPUT',         'checkbox' 	=> 'CHECKBOX',
-            'password' 	=> 'PASSWORD',      'radio' 	=> 'RADIO',
-            'select' 	=> 'SELECT',        'textarea' 	=> 'TEXTAREA',
-        ));
+        Template::set(
+            'view_field_types',
+            array(
+                'input'    => 'INPUT',
+                'checkbox' => 'CHECKBOX',
+                'password' => 'PASSWORD',
+                'radio'    => 'RADIO',
+                'select'   => 'SELECT',
+                'textarea' => 'TEXTAREA',
+            )
+        );
 
         Template::set_view('developer/modulebuilder_form');
     }
@@ -394,40 +405,41 @@ class Developer extends Admin_Controller
      */
     private function validate_form($field_total = 0)
     {
-        $this->form_validation->set_rules("contexts_content",'lang:mb_contexts_content',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("contexts_developer",'lang:mb_contexts_developer',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("contexts_public",'lang:mb_contexts_public',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("contexts_reports",'lang:mb_contexts_reports',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("contexts_settings",'lang:mb_contexts_settings',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("module_db",'lang:mb_module_db',"trim|xss_clean|alpha");
-        $this->form_validation->set_rules("form_action_create",'lang:mb_form_action_create',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("form_action_delete",'lang:mb_form_action_delete',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("form_action_edit",'lang:mb_form_action_edit',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("form_action_view",'lang:mb_form_action_view',"trim|xss_clean|is_numeric");
-        $this->form_validation->set_rules("form_error_delimiters",'lang:mb_form_err_delims',"required|trim|xss_clean");
-        $this->form_validation->set_rules("module_description",'lang:mb_form_mod_desc',"trim|required|xss_clean");
-        $this->form_validation->set_rules("module_name",'lang:mb_form_mod_name',"trim|required|xss_clean|callback__modulename_check");
-        $this->form_validation->set_rules("role_id",'lang:mb_form_role_id',"trim|xss_clean|is_numeric");
+        $this->form_validation->set_rules("contexts_content", 'lang:mb_contexts_content', "trim|is_numeric");
+        $this->form_validation->set_rules("contexts_developer", 'lang:mb_contexts_developer', "trim|is_numeric");
+        $this->form_validation->set_rules("contexts_public", 'lang:mb_contexts_public', "trim|is_numeric");
+        $this->form_validation->set_rules("contexts_reports", 'lang:mb_contexts_reports', "trim|is_numeric");
+        $this->form_validation->set_rules("contexts_settings", 'lang:mb_contexts_settings', "trim|is_numeric");
+        $this->form_validation->set_rules("module_db", 'lang:mb_module_db', "trim|alpha");
+        $this->form_validation->set_rules("form_action_create", 'lang:mb_form_action_create', "trim|is_numeric");
+        $this->form_validation->set_rules("form_action_delete", 'lang:mb_form_action_delete', "trim|is_numeric");
+        $this->form_validation->set_rules("form_action_edit", 'lang:mb_form_action_edit', "trim|is_numeric");
+        $this->form_validation->set_rules("form_action_view", 'lang:mb_form_action_view', "trim|is_numeric");
+        $this->form_validation->set_rules("form_error_delimiters", 'lang:mb_form_err_delims', "required|trim");
+        $this->form_validation->set_rules("module_description", 'lang:mb_form_mod_desc', "trim|required");
+        $this->form_validation->set_rules("module_name", 'lang:mb_form_mod_name', "trim|required|callback__modulename_check");
+        $this->form_validation->set_rules("role_id", 'lang:mb_form_role_id', "trim|is_numeric");
 
         // If there's no database table, don't use the table validation
         if ($this->input->post('module_db')) {
-            $this->form_validation->set_rules("table_name",'lang:mb_form_table_name',"trim|required|xss_clean|alpha_dash");
+            $this->form_validation->set_rules("table_name", 'lang:mb_form_table_name', "trim|required|alpha_dash");
 
             // If it's a new table, extra validation is required
             if ($this->input->post('module_db') == 'new') {
-                $this->form_validation->set_rules("primary_key_field",'lang:mb_form_primarykey',"required|trim|xss_clean|alpha_dash");
-                $this->form_validation->set_rules("soft_delete_field",'lang:mb_soft_delete_field',"trim|xss_clean|alpha_dash");
-                $this->form_validation->set_rules("created_field",'lang:mb_form_created_field',"trim|xss_clean|alpha_dash");
-                $this->form_validation->set_rules("modified_field",'lang:mb_form_modified_field',"trim|xss_clean|alpha_dash");
-                $this->form_validation->set_rules('deleted_by_field', 'lang:mb_deleted_by_field', 'trim|xss_clean|alpha_dash');
-                $this->form_validation->set_rules('created_by_field', 'lang:mb_form_created_by_field', 'trim|xss_clean|alpha_dash');
-                $this->form_validation->set_rules('modified_by_field', 'lang:mb_form_modified_by_field', 'trim|xss_clean|alpha_dash');
+                $this->form_validation->set_rules("primary_key_field", 'lang:mb_form_primarykey', "required|trim|alpha_dash");
+                $this->form_validation->set_rules("soft_delete_field", 'lang:mb_soft_delete_field', "trim|alpha_dash");
+                $this->form_validation->set_rules("created_field", 'lang:mb_form_created_field', "trim|alpha_dash");
+                $this->form_validation->set_rules("modified_field", 'lang:mb_form_modified_field', "trim|alpha_dash");
+                $this->form_validation->set_rules('deleted_by_field', 'lang:mb_deleted_by_field', 'trim|alpha_dash');
+                $this->form_validation->set_rules('created_by_field', 'lang:mb_form_created_by_field', 'trim|alpha_dash');
+                $this->form_validation->set_rules('modified_by_field', 'lang:mb_form_modified_by_field', 'trim|alpha_dash');
                 // textarea_editor seems to be gone...
-                //$this->form_validation->set_rules("textarea_editor",'lang:mb_form_text_ed',"trim|xss_clean|alpha_dash");
-            }
-            // If it's an existing table, the primary key validation is required
-            elseif ($this->input->post('module_db') == 'existing' && $field_total > 0) {
-                $this->form_validation->set_rules("primary_key_field",'lang:mb_form_primarykey',"required|trim|xss_clean|alpha_dash");
+                //$this->form_validation->set_rules("textarea_editor", 'lang:mb_form_text_ed', "trim|alpha_dash");
+            } elseif ($this->input->post('module_db') == 'existing'
+                && $field_total > 0
+            ) {
+                // If it's an existing table, the primary key validation is required
+                $this->form_validation->set_rules("primary_key_field", 'lang:mb_form_primarykey', "required|trim|alpha_dash");
             }
 
             // No need to do any of the below on every iteration of the loop
@@ -459,29 +471,30 @@ class Developer extends Admin_Controller
                 // Better to do it this way round as this statement will be
                 // fullfilled more than the one below
                 if ($counter != 1) {
-                    $this->form_validation->set_rules("view_field_label$counter", $field_details_label . lang('mb_form_label'), 'trim|xss_clean|alpha_extra');
+                    $this->form_validation->set_rules("view_field_label$counter", $field_details_label . lang('mb_form_label'), 'trim|alpha_extra');
                 } else {
                     // At least one field is required in the form
-                    $this->form_validation->set_rules("view_field_label$counter", $field_details_label . lang('mb_form_label'),'trim|required|xss_clean|alpha_extra');
+                    $this->form_validation->set_rules("view_field_label$counter", $field_details_label . lang('mb_form_label'), 'trim|required|alpha_extra');
                 }
 
                 $label = $this->input->post("view_field_label$counter");
                 $name_required = empty($label) ? '' : 'required|';
 
-                $this->form_validation->set_rules("view_field_name$counter", $field_details_label . lang('mb_form_fieldname'), "trim|".$name_required."callback__no_match[$counter]|xss_clean");
-                $this->form_validation->set_rules("view_field_type$counter", $field_details_label . lang('mb_form_type'), "trim|required|xss_clean|alpha");
-                $this->form_validation->set_rules("db_field_type$counter", $field_details_label . lang('mb_form_dbtype'), "trim|xss_clean|alpha");
+                $this->form_validation->set_rules("view_field_name$counter", $field_details_label . lang('mb_form_fieldname'), "trim|{$name_required}callback__no_match[$counter]");
+                $this->form_validation->set_rules("view_field_type$counter", $field_details_label . lang('mb_form_type'), "trim|required|alpha");
+                $this->form_validation->set_rules("db_field_type$counter", $field_details_label . lang('mb_form_dbtype'), "trim|alpha");
 
                 $field_type = $this->input->post("db_field_type$counter");
                 $db_len_required = '';
-                if ( ! empty($label) && ! in_array($field_type, $no_length)
+                if (! empty($label)
+                    && ! in_array($field_type, $no_length)
                     && ! in_array($field_type, $optional_length)
-                   ) {
-                    $db_len_required = 'required|';
+                ) {
+                    $db_len_required = '|required';
                 }
 
-                $this->form_validation->set_rules("db_field_length_value$counter", $field_details_label . lang('mb_form_length'), "trim|".$db_len_required."xss_clean");
-                $this->form_validation->set_rules('validation_rules'.$counter.'[]', $field_details_label . lang('mb_form_rules'), 'trim|xss_clean');
+                $this->form_validation->set_rules("db_field_length_value$counter", $field_details_label . lang('mb_form_length'), "trim{$db_len_required}");
+                $this->form_validation->set_rules('validation_rules'.$counter.'[]', $field_details_label . lang('mb_form_rules'), 'trim');
             }
         }
 
@@ -500,7 +513,7 @@ class Developer extends Admin_Controller
         $newfields = array();
 
         // Check whether the table exists in this database
-        if ( ! $this->db->table_exists($table_name)) {
+        if (! $this->db->table_exists($table_name)) {
             return false;
         }
 
@@ -545,25 +558,25 @@ class Developer extends Admin_Controller
         return $newfields;
     }
 
-	/**
-	 * Handles the heavy-lifting of building a module from ther user's specs.
-	 *
-	 * @param int $field_total The number of fields to add to the table
-	 *
-	 * @return void
-	 */
-	private function build_module($field_total = 0)
-	{
-		$action_names			= $this->input->post('form_action');
-		$contexts				= $this->input->post('contexts');
-		$db_required			= $this->input->post('module_db');
-		$form_error_delimiters	= explode(',', $this->input->post('form_error_delimiters'));
-		$module_description		= $this->input->post('module_description');
-		$module_name			= $this->input->post('module_name');
-		$primary_key_field		= $this->input->post('primary_key_field');
-		$role_id				= $this->input->post('role_id');
-		$table_name				= strtolower(preg_replace("/[ -]/", "_", $this->input->post('table_name')));
-		$table_as_field_prefix	= (bool) $this->input->post('table_as_field_prefix');
+    /**
+     * Handles the heavy-lifting of building a module from ther user's specs.
+     *
+     * @param int $field_total The number of fields to add to the table
+     *
+     * @return void
+     */
+    private function build_module($field_total = 0)
+    {
+        $action_names           = $this->input->post('form_action');
+        $contexts               = $this->input->post('contexts');
+        $db_required            = $this->input->post('module_db');
+        $form_error_delimiters  = explode(',', $this->input->post('form_error_delimiters'));
+        $module_description     = $this->input->post('module_description');
+        $module_name            = $this->input->post('module_name');
+        $primary_key_field      = $this->input->post('primary_key_field');
+        $role_id                = $this->input->post('role_id');
+        $table_name             = strtolower(preg_replace("/[ -]/", "_", $this->input->post('table_name')));
+        $table_as_field_prefix  = (bool) $this->input->post('table_as_field_prefix');
 
         $logUser        = $this->input->post('log_user') == 1;
         $useCreated     = $this->input->post('use_created') == 1;
@@ -580,85 +593,90 @@ class Developer extends Admin_Controller
 
         $textarea_editor = $this->input->post('textarea_editor');
 
-		if ($primary_key_field == '') {
-			$primary_key_field = $this->options['primary_key_field'];
-		}
+        if ($primary_key_field == '') {
+            $primary_key_field = $this->options['primary_key_field'];
+        }
 
-		if ( ! is_array($form_error_delimiters)
+        if (! is_array($form_error_delimiters)
             || count($form_error_delimiters) != 2
-           ) {
-			$form_error_delimiters = $this->options['$form_error_delimiters'];
-		}
+        ) {
+            $form_error_delimiters = $this->options['$form_error_delimiters'];
+        }
 
         $controller_name = preg_replace("/[ -]/", "_", $module_name);
         $module_name_lower = strtolower($controller_name);
 
         $this->load->library('modulebuilder');
-		$file_data = $this->modulebuilder->buildFiles(array(
-            'action_names'          => $action_names,
-            'contexts'              => $contexts,
-            'controller_name'       => $controller_name,
-            'created_by_field'      => $created_by_field,
-            'created_field'         => $created_field,
-            'db_required'           => $db_required,
-            'deleted_by_field'      => $deleted_by_field,
-            'field_total'           => $field_total,
-            'form_error_delimiters' => $form_error_delimiters,
-            'logUser'               => $logUser,
-            'modified_by_field'     => $modified_by_field,
-            'modified_field'        => $modified_field,
-            'module_description'    => $module_description,
-            'module_name'           => $module_name,
-            'module_name_lower'     => $module_name_lower,
-            'primary_key_field'     => $primary_key_field,
-            'role_id'               => $role_id,
-            'soft_delete_field'     => $soft_delete_field,
-            'table_as_field_prefix' => $table_as_field_prefix,
-            'table_name'            => $table_name,
-            'textarea_editor'       => $textarea_editor,
-            'useCreated'            => $useCreated,
-            'useModified'           => $useModified,
-            'usePagination'         => $usePagination,
-            'useSoftDeletes'        => $useSoftDeletes,
-        ));
+        $file_data = $this->modulebuilder->buildFiles(
+            array(
+                'action_names'          => $action_names,
+                'contexts'              => $contexts,
+                'controller_name'       => $controller_name,
+                'created_by_field'      => $created_by_field,
+                'created_field'         => $created_field,
+                'db_required'           => $db_required,
+                'deleted_by_field'      => $deleted_by_field,
+                'field_total'           => $field_total,
+                'form_error_delimiters' => $form_error_delimiters,
+                'logUser'               => $logUser,
+                'modified_by_field'     => $modified_by_field,
+                'modified_field'        => $modified_field,
+                'module_description'    => $module_description,
+                'module_name'           => $module_name,
+                'module_name_lower'     => $module_name_lower,
+                'primary_key_field'     => $primary_key_field,
+                'role_id'               => $role_id,
+                'soft_delete_field'     => $soft_delete_field,
+                'table_as_field_prefix' => $table_as_field_prefix,
+                'table_name'            => $table_name,
+                'textarea_editor'       => $textarea_editor,
+                'useCreated'            => $useCreated,
+                'useModified'           => $useModified,
+                'usePagination'         => $usePagination,
+                'useSoftDeletes'        => $useSoftDeletes,
+            )
+        );
 
-		// Make the variables available to the view file
-		$data['module_name']		= $module_name;
-		$data['controller_name']	= $controller_name;
-		$data['module_name_lower']  = $module_name_lower;
-		$data['table_name']			= empty($table_name) ? $module_name_lower : $table_name;
+        // Make the variables available to the view file
+        $data['module_name']       = $module_name;
+        $data['controller_name']   = $controller_name;
+        $data['module_name_lower'] = $module_name_lower;
+        $data['table_name']        = empty($table_name) ? $module_name_lower : $table_name;
 
-		$data = $data + $file_data;
+        $data = $data + $file_data;
 
         // @todo Need to test whether this section can be removed... Only the
         // migrations library should know anything about the structure of the
         // migration versions in the database.
         //
-		// Allow for the Old method - update the schema first to prevent errors
+        // Allow for the Old method - update the schema first to prevent errors
         // in duplicate column names due to Migrations.php caching db columns
-		if ( ! $this->db->field_exists('version', 'schema_version')) {
-			$this->dbforge->add_column('schema_version', array(
-				$data['module_name_lower'] . '_version' => array(
-					'type'			=> 'INT',
-					'constraint'    => 4,
-					'null'			=> true,
-					'default'		=> 0,
-				),
-			));
-		}
+        if (! $this->db->field_exists('version', 'schema_version')) {
+            $this->dbforge->add_column(
+                'schema_version',
+                array(
+                    $data['module_name_lower'] . '_version' => array(
+                        'type'          => 'INT',
+                        'constraint'    => 4,
+                        'null'          => true,
+                        'default'       => 0,
+                    ),
+                )
+            );
+        }
 
-		// Load the migrations library
-		$this->load->library('migrations/migrations');
+        // Load the migrations library
+        $this->load->library('migrations/migrations');
 
-		// Run the migration install routine
-		if ($this->migrations->install("{$data['module_name_lower']}_")) {
-			$data['mb_migration_result'] = 'mb_out_tables_success';
-		} else {
-			$data['mb_migration_result'] = 'mb_out_tables_error';
-		}
+        // Run the migration install routine
+        if ($this->migrations->install("{$data['module_name_lower']}_")) {
+            $data['mb_migration_result'] = 'mb_out_tables_success';
+        } else {
+            $data['mb_migration_result'] = 'mb_out_tables_error';
+        }
 
-		Template::set($data);
-	}
+        Template::set($data);
+    }
 
     /**
      * Check that the Modules folder is writable
@@ -699,7 +717,7 @@ class Developer extends Admin_Controller
      */
     public function _modulename_check($str)
     {
-        if ( ! preg_match("/^([A-Za-z \-]+)$/", $str)) {
+        if (! preg_match("/^([A-Za-z \-]+)$/", $str)) {
             $this->form_validation->set_message('_modulename_check', lang('mb_modulename_check'));
             return false;
         }
@@ -741,4 +759,3 @@ class Developer extends Admin_Controller
         return true;
     }
 }
-/* End of file: /builder/controllers/developer.php */

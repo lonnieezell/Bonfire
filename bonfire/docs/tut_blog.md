@@ -41,7 +41,6 @@ Create a new file in your new `config` folder, called `config.php`.
         'version'     => '1.0.1',
     );
 
-
 Not all of these settings will be used for the Blog module, but you should understand how they work.
 
 - **name** is the human-readable name of your module.

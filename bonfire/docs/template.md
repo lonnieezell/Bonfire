@@ -212,6 +212,15 @@ Returns the name of the active theme.
 Returns the full URL to the currently active theme.
 If `$resource` is supplied, returns the full URL to that resource within the currently active theme (does not validate the existence of the resource within the theme).
 
+### themeView($view[, $data = null[, $ignore_mobile = false]])
+
+Set an insertion point for a view (`$view`) within a view.
+- `$view`: The name of the view to be rendered.
+- `$data`: An array of data to be passed to the view.
+- `$ignore_mobile`:
+    - If `true`, the library will not attempt to find a version of this view named for mobile devices (prefixed with `mobile_`).
+    - If `false` (default), the library will attempt to find a version of this view named for mobile devices when it detects that the page is being accessed from a mobile device.
+
 ### remove_theme_path($path)
 
 Remove a theme path (`$path`) from the list of paths to be used when searching for themed views.
@@ -251,11 +260,7 @@ If `$item` does not match, an empty string is returned.
 ### theme_view($view[, $data = null[, $ignore_mobile = false]])
 
 Set an insertion point for a view (`$view`) within a view.
-- `$view`: The name of the view to be rendered.
-- `$data`: An array of data to be passed to the view.
-- `$ignore_mobile`:
-    - If `true`, the library will not attempt to find a version of this view named for mobile devices (prefixed with `mobile_`).
-    - If `false` (default), the library will attempt to find a version of this view named for mobile devices when it detects that the page is being accessed from a mobile device.
+A helper function for `Template::themeView()`.
 
 ## Properties
 

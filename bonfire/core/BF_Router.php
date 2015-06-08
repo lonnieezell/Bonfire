@@ -70,6 +70,20 @@ class BF_Router extends CI_Router
     private $located = 0;
 
     /**
+     * Class constructor runs the route mapping function in CI3.
+     *
+     * @param array $routing Optional configuration values.
+     *
+     * @return void
+     */
+    public function __construct($routing = null)
+    {
+        parent::__construct($routing);
+
+        log_message('info', 'BF_Router class initialized');
+    }
+
+    /**
      * Get the name of the current module.
      *
      * @return string The name of the current module.
@@ -225,6 +239,28 @@ class BF_Router extends CI_Router
         }
 
         $this->located = -1;
+    }
+
+    /**
+     * Set the default controller.
+     *
+     * NOTE: this method should be protected for use with CI3, but must be public
+     * for use with CI2.
+     *
+     * @return void
+     */
+    public function _set_default_controller()
+    {
+        if (empty($this->directory)) {
+            // Set the default controller module path.
+            $this->_set_module_path($this->default_controller);
+        }
+
+        parent::_set_default_controller();
+
+        if (empty($this->class)) {
+            $this->_set_404override_controller();
+        }
     }
 
     /**

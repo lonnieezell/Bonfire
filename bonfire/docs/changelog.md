@@ -1,6 +1,22 @@
 # Change Log
 
-## Under development
+## Released versions
+
+### 0.7.4
+
+#### New Features:
+
+#### Closes Issues:
+* #1119 Module Builder xss_clean error
+* #1116 Syntax error in the builder-built view (when adding a required input field), pt 2
+* #1115 Can't save settings, 'module' field not being sent to settings table
+* #1114 Differences in Routing between CI2 and CI3
+* #1113 Syntax error in the builder-built view (when adding a required input field)
+* #1112 Can't login to site when offline in CI3
+
+#### Additional Changes:
+
+#### Known Issues:
 
 ### 0.7.3
 
@@ -42,8 +58,6 @@
     * `App_hooks` disables session use when `bonfire.installed` is not found.
 
 #### Known Issues:
-
-## Released versions
 
 ### 0.7.2
 

@@ -8,7 +8,7 @@
  * @package   Bonfire
  * @author    Bonfire Dev Team
  * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT    The MIT License
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -122,9 +122,9 @@ class Template
         }
 
         // Store our settings
-        self::$default_theme    = self::$ci->config->item('template.default_theme');
+        self::$default_theme = self::$ci->config->item('template.default_theme');
         self::$layout        = self::$ci->config->item('template.default_layout');
-        self::$parse_views      = self::$ci->config->item('template.parse_views');
+        self::$parse_views   = self::$ci->config->item('template.parse_views');
         self::$site_path     = self::$ci->config->item('template.site_path');
         self::$theme_paths   = self::$ci->config->item('template.theme_paths');
 
@@ -709,6 +709,44 @@ EOF;
         }
     }
 
+    /**
+     * Load a view (from the current theme) and return the content of that view.
+     *
+     * Allows for simple mobile templates by checking for a filename prefixed with
+     * 'mobile_' when loading the view (if $ignoreMobile is false). For example,
+     * if $view is 'index', the mobile version would be 'mobile_index'. If the file
+     * is not found with the mobile prefix, it will load the regular view.
+     *
+     * @param string  $view         The name of the view to load.
+     * @param array   $data         An array of data to pass to the view.
+     * @param boolean $ignoreMobile Disable loading mobile_ prefixed views (if true).
+     *
+     * @return string The content of the loaded view.
+     */
+    public static function themeView($view = null, $data = null, $ignoreMobile = false)
+    {
+        if (empty($view)) {
+            return '';
+        }
+
+        $output = '';
+
+        // If allowed, try to load the mobile version of the file.
+        if (! $ignoreMobile) {
+            self::$ci->load->library('user_agent');
+            if (self::$ci->agent->is_mobile()) {
+                self::load_view("mobile_{$view}", $data, null, true, $output);
+            }
+        }
+
+        // If output is empty, either mobile is ignored or no mobile file was found.
+        if (empty($output)) {
+            self::load_view($view, $data, null, true, $output);
+        }
+
+        return $output;
+    }
+
     //--------------------------------------------------------------------------
     // !PRIVATE METHODS
     //--------------------------------------------------------------------------
@@ -716,8 +754,6 @@ EOF;
     /**
      * Searches through the the active theme and the default theme to try to find
      * a view file. If found, it returns the rendered view.
-     *
-     * @access private
      *
      * @param string $view The name of the view to find.
      * @param array  $data An array of key/value pairs to pass to the views.
@@ -845,28 +881,7 @@ EOF;
  */
 function theme_view($view = null, $data = null, $ignore_mobile = false)
 {
-    if (empty($view)) {
-        return '';
-    }
-
-    $output ='';
-
-    // If allowed, try to load the mobile version of the file.
-    if (! $ignore_mobile) {
-        $ci =& get_instance();
-
-        $ci->load->library('user_agent');
-        if ($ci->agent->is_mobile()) {
-            Template::load_view("mobile_{$view}", $data, null, true, $output);
-        }
-    }
-
-    // If output is empty, either mobile is ignored or no mobile file was found.
-    if (empty($output)) {
-        Template::load_view($view, $data, null, true, $output);
-    }
-
-    return $output;
+    return Template::themeView($view, $data, $ignore_mobile);
 }
 
 /**
@@ -1034,4 +1049,3 @@ function breadcrumb($my_segments = null, $wrap = false, $echo = true)
 
     return $output;
 }
-/* End of file ./application/libraries/template.php */
