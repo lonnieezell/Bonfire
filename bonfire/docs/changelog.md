@@ -1,5 +1,18 @@
 # Change Log
 
+## Under development
+
+### 0.7.5
+
+#### New Features:
+
+#### Closes Issues:
+* #1118 Settings error when password options are not selected in security tab.
+
+#### Additional Changes:
+
+#### Known Issues:
+
 ## Released versions
 
 ### 0.7.4
