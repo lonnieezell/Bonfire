@@ -2,6 +2,19 @@
 
 ## Under development
 
+### 0.8.1
+
+#### New Features:
+
+#### Closes Issues:
+* #1118 Settings error when password options are not selected in security tab.
+
+#### Additional Changes:
+
+#### Known Issues:
+
+## Released versions
+
 ### 0.8.0
 
 #### New Features:
@@ -13,8 +26,6 @@
 #### Additional Changes:
 
 #### Known Issues:
-
-## Released versions
 
 ### 0.7.4
 

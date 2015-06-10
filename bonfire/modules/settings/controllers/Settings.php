@@ -149,12 +149,9 @@ class Settings extends Admin_Controller
             array('name' => 'auth.name_change_frequency', 'value' => $this->input->post('name_change_frequency')),
             array('name' => 'auth.name_change_limit', 'value' => $this->input->post('name_change_limit')),
             array('name' => 'auth.password_min_length', 'value' => $this->input->post('password_min_length')),
-            array('name' => 'auth.password_force_numbers', 'value' => $this->input->post('password_force_numbers')),
-            array('name' => 'auth.password_force_symbols', 'value' => $this->input->post('password_force_symbols')),
-            array(
-                'name'  => 'auth.password_force_mixed_case',
-                'value' => $this->input->post('password_force_mixed_case')
-            ),
+            array('name' => 'auth.password_force_numbers', 'value' => $this->input->post('password_force_numbers') ? 1 : 0),
+            array('name' => 'auth.password_force_symbols', 'value' => $this->input->post('password_force_symbols') ? 1 : 0),
+            array('name' => 'auth.password_force_mixed_case', 'value' => $this->input->post('password_force_mixed_case') ? 1 : 0),
             array('name' => 'auth.password_show_labels', 'value' => $this->input->post('password_show_labels') ? 1 : 0),
             array('name' => 'password_iterations', 'value' => $this->input->post('password_iterations')),
 
