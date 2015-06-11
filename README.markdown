@@ -41,6 +41,15 @@ If you're interested in helping out, fork the project and start coding! I'd love
 
 Let's make this the best kick-start to any CodeIgniter project.
 
+### Branches
+
+Due to the shift from CI2 to CI3, there are 2 branches containing recent releases and 2 development branches.
+
+- The releases are in the master (v0.8.0) and 0.7.4 (v0.7.4) branches.
+- The development branches are develop (v0.8.1) and 0.7.5-dev (v0.7.5) branches.
+
+Any changes due to issues in the Bonfire code are currently being made to both development branches.
+
 ## Bug Reports
 
 We strive to make Bonfire a solid base to work with. In doing so your Bug Reports are very vital to us. Before making a Bug Report please check the existing
