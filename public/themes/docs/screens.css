@@ -1,0 +1,266 @@
+/* reset */
+article, aside, details, figcaption, figure, footer,header,hgroup,main, nav, section, summary { display: block; }
+audio, canvas, video { display: inline-block; }
+audio:not([controls]) { display: none; height: 0; }
+[hidden] { display: none; }
+html { font-family: sans-serif; /* 1 */  -ms-text-size-adjust: 100%; /* 2 */ -webkit-text-size-adjust: 100%; /* 2 */ }
+body { margin: 0; }
+a:focus { outline: thin dotted; }
+a:active, a:hover { outline: 0; }
+h1 { font-size: 2em; margin: 0.67em 0; }
+abbr[title] { border-bottom: 1px dotted; }
+b, strong { font-weight: bold; }
+dfn { font-style: italic; }
+hr { -moz-box-sizing: content-box; box-sizing: content-box; height: 0; }
+mark { background: #ff0; color: #000; }
+code, kbd, pre, samp { font-family: monospace, serif; font-size: 1em; }
+pre { white-space: pre-wrap; }
+q { quotes: "\201C" "\201D" "\2018" "\2019"; }
+small { font-size: 80%; }
+sub, sup { font-size: 75%;line-height: 0; position: relative; vertical-align: baseline; }
+sup { top: -0.5em; }
+sub { bottom: -0.25em; }
+img { border: 0; }
+svg:not(:root) { overflow: hidden; }
+figure { margin: 0; }
+fieldset { border: 1px solid #c0c0c0; margin: 0 2px; padding: 0.35em 0.625em 0.75em; }
+legend { border: 0; /* 1 */ padding: 0; /* 2 */ }
+button, input, select, textarea { font-family: inherit; /* 1 */ font-size: 100%; /* 2 */ margin: 0; /* 3 */ }
+button, input { line-height: normal; }
+button, select { text-transform: none; }
+button, html input[type="button"], /* 1 */ input[type="reset"], input[type="submit"] { -webkit-appearance: button; /* 2 */ cursor: pointer; /* 3 */ }
+button[disabled], html input[disabled] { cursor: default; }
+input[type="checkbox"], input[type="radio"] { box-sizing: border-box; /* 1 */ padding: 0; /* 2 */ }
+input[type="search"] { -webkit-appearance: textfield; /* 1 */  -moz-box-sizing: content-box; -webkit-box-sizing: content-box; /* 2 */ box-sizing: content-box; }
+input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webkit-search-decoration { -webkit-appearance: none; }
+button::-moz-focus-inner, input::-moz-focus-inner { border: 0; padding: 0; }
+textarea { overflow: auto; /* 1 */ vertical-align: top; /* 2 */}
+table { border-collapse: collapse; border-spacing: 0; }
+
+/*--------------------------------------------------------------------
+// Basic Styles
+//--------------------------------------------------------------------*/
+
+html, body {
+	height: 100%;
+}
+body {
+    background-color: #aab9c6;
+    color: #333;
+}
+h1, h2, h3, h4, h5 {
+	line-height: 1.5em;
+	margin: 0;
+}
+ul, ol, dl {
+	line-height: 1.7em;
+}
+
+/*
+    Header
+*/
+.header {
+    background: #222;
+    height: 40px;
+    color: #ccc;
+}
+.header h1 {
+    color: #fff;
+    font-weight: normal;
+    height: 24px;
+    line-height: 40px;
+}
+
+/*
+    Content Area
+*/
+
+.main {
+    position: absolute;
+    top: 40px;
+    left: 0;
+    margin-left: 25%;
+    height: 100%;
+    width: 75%;
+    background-color: #fff;
+    border-left: 1px solid #c0c0c0;
+    overflow-y: auto;
+}
+.main .inner {
+    padding: 30px 20px;
+    max-width: 50em;
+}
+
+/*
+    Sidebar
+*/
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 25%;
+}
+.sidebar .inner {
+    padding: 20px;
+}
+
+/*
+    Table of Contents
+*/
+
+ul.toc {
+    list-style-type: none;
+    list-style-position: inside;
+    padding-left: 1em;
+    margin-top: 0;
+}
+ul.toc li a {
+    line-height: 1.4em;
+    color: #666;
+    font-weight: lighter;
+    font-size: 90%;
+    text-decoration: none;
+    display: block;
+}
+ul.toc li a:hover {
+	text-decoration: underline;
+}
+ul.toc li.active a {
+	font-weight: bold;
+}
+
+ul.toc ul {
+    list-style-type: none;
+    padding-left: 0em;
+}
+ul.toc li.parent {
+    margin-top: 0.5em;
+}
+ul.toc li.parent h4,
+ul.toc li.parent h4 a {
+    font-weight: normal;
+	font-size: 100%;
+}
+a:link, a:visited {
+    color: #7795b4;
+    text-decoration: none;
+}
+a:hover { text-decoration: underline; }
+
+/*
+    Help Formatting
+ */
+.page {
+    padding-right: 40px;
+}
+.page > *:first-child { margin: 0 !important; }
+.page p, .page blockquote, .page ul, .page ol,
+.page dl, .page table, .page pre {
+    margin: 15px 0;
+}
+.page ul ul {
+	margin-top: 0;
+}
+.page p {
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.page h2 {
+    font-size: 2.0em;
+    border-bottom: 1px solid #eee;
+    margin: 1em 0 15px;
+    padding: 0;
+    font-weight: bold;
+    line-height: 1.7;
+}
+.page h3 {
+    font-size: 1.5em;
+    margin: 1em 0 15px;
+    padding: 0;
+    font-weight: bold;
+    line-height: 1.7;
+    cursor: text;
+    position: relative;
+}
+tt {
+    background: #f8f8f8;
+    border: 1px solid #ddd;
+    overflow: auto;
+    padding: 0px 5px;
+    border-radius: 3px;
+}
+
+.page table {
+    width: 100%;
+    overflow: auto;
+    display: block;
+    border-collapse: collapse;
+    border-spacing: 2px;
+    border: 1px solid #ccc;
+}
+.page tr {
+    border-top: 1px solid #ccc;
+}
+.page table th, .page table td {
+    border: 1px solid #ddd;
+    padding: 6px 13px;
+    font-size: 15px;
+    line-height: 1.7
+}
+.page table th { font-weight: bold; }
+.page table tr:nth-child(2n) {
+    background-color: #f8f8f8
+}
+
+code,
+pre {
+  padding: 0 3px 2px;
+  font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+  font-size: 12px;
+  color: #333333;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+code {
+  padding: 2px 4px;
+  color: #d14;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  white-space: nowrap;
+}
+pre {
+  display: block;
+  padding: 9.5px;
+  margin: 0 0 10px;
+  font-size: 13px;
+  line-height: 20px;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre;
+  white-space: pre-wrap;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+pre.prettyprint {
+  margin-bottom: 20px;
+}
+pre code {
+  padding: 0;
+  color: inherit;
+  white-space: pre;
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: 0;
+}
+.pre-scrollable {
+  max-height: 340px;
+  overflow-y: scroll;
+}
+

@@ -1,0 +1,3 @@
+<?php
+
+e($email->message);
