@@ -1,10 +1,5 @@
 <?php
 
-Assets::add_css(array(
-    'bootstrap.css',
-    'bootstrap-responsive.css',
-));
-
 if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
     Assets::add_js($this->load->view('ui/shortcut_keys', $shortcut_data, true), 'inline');
 }
@@ -24,6 +19,7 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
     /* Modernizr is loaded before CSS so CSS can utilize its features */
     ?>
 	<script src="<?php echo Template::theme_url('js/modernizr-2.5.3.js'); ?>"></script>
+    <link href="<?php echo base_url(); ?>components/bootstrap-default/css/bootstrap.css" rel="stylesheet" />
 	<?php echo Assets::css(null, true); ?>
 </head>
 <body class="desktop">
@@ -34,18 +30,22 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
 	<noscript>
 		<p>Javascript is required to use Bonfire's admin.</p>
 	</noscript>
-    <div class="navbar navbar-static-top navbar-inverse" id="topbar" >
-            <div class="container"><div class="navbar-header">
+    <div class="navbar navbar-static-top navbar-inverse" id="topbar" role="navigation">
+      <div class="container-fluid" id="navfluid">
+         <header class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navigationbar">
+                   <span class="sr-only">Toggle navigation</span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                   <span class="icon-bar"></span>
+                </button>
                 <?php
                 echo anchor('/', html_escape($this->settings_lib->item('site.title')), 'class="navbar-brand"');
-                ?>
-                </div>
-                <?php
+                echo '<div class="navbar-collapse collapse" id="navigationbar">';
                 if (isset($shortcut_data) && is_array($shortcut_data['shortcuts'])
                     && is_array($shortcut_data['shortcut_keys']) && count($shortcut_data['shortcut_keys'])
                    ) :
                 ?>
- 
                 <!-- Shortcut Menu -->
                 <div class="nav navbar-nav pull-right" id="shortcuts">
                     <div class="btn-group">
@@ -59,14 +59,16 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
                                         <li><span><?php e($data); ?></span> : <?php echo $shortcut_data['shortcuts'][$key]['description']; ?></li>
                                         <?php endforeach; ?>
                                     </ul>
+				    <?php if ( has_permission('Bonfire.UI.View') && has_permission('Bonfire.UI.Manage') ): ?>
                                     <a href="<?php echo site_url(SITE_AREA . '/settings/ui'); ?>"><?php echo lang('bf_keyboard_shortcuts_edit'); ?></a>
+				    <?php endif; ?>
                                 </div>
                             </li>
 						</ul>
 					</div>
                 </div>
                 <?php endif;?>
-                <div class="navbar-collapse collapse">
+                <div class="nav-collapse collapse">
                     <!-- User Menu -->
                     <div class="nav navbar-nav pull-right" id="user-menu">
                         <div class="btn-group">
@@ -86,7 +88,7 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
                                         <div class="toolbar-profile-img">
                                             <?php echo gravatar_link($current_user->email, 96, null, $userDisplayName); ?>
                                         </div>
-                                        
+
                                         <div class="toolbar-profile-info">
                                             <p><strong><?php echo $userDisplayName; ?></strong><br />
                                                 <?php e($current_user->email); ?>
@@ -102,10 +104,10 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
                     </div>
                     <?php echo Contexts::render_menu('text', 'normal'); ?>
                 </div><!-- /.nav-collapse -->
-			</div><!-- /container -->
+             <?php echo '</div>'; ?>
+			</header><!-- /navbar-header -->
+			</div><!-- /container-fluid -->
 			<div class="clearfix"></div>
-		</div><!-- /.navbar-inner -->
-	</div><!-- /.navbar -->
     <div class="subnav" >
        <div class="container">
            <?php if (isset($toolbar_title)) : ?>
@@ -116,3 +118,4 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
            </div>
        </div>
    </div>
+	</div>

@@ -30,9 +30,8 @@ if ($db_required != '') {
         // Don't display soft-deleted records
         \$this->{$module_name_lower}_model->where(\$this->{$module_name_lower}_model->get_deleted_field(), 0);";
         }
-    }
+    } else {
     // Admin controllers
-    else {
         $indexDelete = "// Deleting anything?
 		if (isset(\$_POST['delete'])) {
             \$this->auth->restrict(\$this->permissionDelete);
@@ -110,13 +109,16 @@ if ($db_required != '') {
     $createSave = "
 		if (isset(\$_POST['save'])) {
 			if (\$insert_id = \$this->save_{$module_name_lower}()) {
-				log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_create_record') . ': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				log_activity(\$this->auth->user_id(), lang('{$module_name_lower}_act_create_record') . ': ' . \$insert_id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
 				Template::set_message(lang('{$module_name_lower}_create_success'), 'success');
 
 				redirect(SITE_AREA . '/{$controller_name}/{$module_name_lower}');
 			}
 
-			Template::set_message(lang('{$module_name_lower}_create_failure') . \$this->{$module_name_lower}_model->error, 'error');
+            // Not validation error
+			if ( ! empty(\$this->{$module_name_lower}_model->error)) {
+				Template::set_message(lang('{$module_name_lower}_create_failure') . \$this->{$module_name_lower}_model->error, 'error');
+            }
 		}";
 
     $editFind = "
@@ -127,10 +129,14 @@ if ($db_required != '') {
 			\$this->auth->restrict(\$this->permissionEdit);
 
 			if (\$this->save_{$module_name_lower}('update', \$id)) {
-				log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_edit_record') . ': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				log_activity(\$this->auth->user_id(), lang('{$module_name_lower}_act_edit_record') . ': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
 				Template::set_message(lang('{$module_name_lower}_edit_success'), 'success');
-			} else {
-				Template::set_message(lang('{$module_name_lower}_edit_failure') . \$this->{$module_name_lower}_model->error, 'error');
+				redirect(SITE_AREA . '/{$controller_name}/{$module_name_lower}');
+			}
+
+            // Not validation error
+            if ( ! empty(\$this->{$module_name_lower}_model->error)) {
+                Template::set_message(lang('{$module_name_lower}_edit_failure') . \$this->{$module_name_lower}_model->error, 'error');
 			}
 		}";
 
@@ -140,11 +146,12 @@ if ($db_required != '') {
 			\$this->auth->restrict(\$this->permissionDelete);
 
 			if (\$this->{$module_name_lower}_model->delete(\$id)) {
-				log_activity(\$this->current_user->id, lang('{$module_name_lower}_act_delete_record') . ': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
+				log_activity(\$this->auth->user_id(), lang('{$module_name_lower}_act_delete_record') . ': ' . \$id . ' : ' . \$this->input->ip_address(), '{$module_name_lower}');
 				Template::set_message(lang('{$module_name_lower}_delete_success'), 'success');
 
 				redirect(SITE_AREA . '/{$controller_name}/{$module_name_lower}');
 			}
+
             Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'error');
 		}";
 	}
@@ -203,18 +210,25 @@ $mb_save = "
 	//--------------------------------------------------------------------
 
 	/**
-	 * Summary
+	 * Save the data.
 	 *
-	 * @param String \$type Either 'insert' or 'update'
-	 * @param Int	 \$id	The ID of the record to update, ignored on inserts
+	 * @param string \$type Either 'insert' or 'update'.
+	 * @param int	 \$id	The ID of the record to update, ignored on inserts.
 	 *
-	 * @return Mixed    An INT id for successful inserts, TRUE for successful updates, else FALSE
+	 * @return bool|int An int ID for successful inserts, true for successful
+     * updates, else false.
 	 */
 	private function save_{$module_name_lower}(\$type = 'insert', \$id = 0)
 	{
 		if (\$type == 'update') {
 			\$_POST['{$primary_key_field}'] = \$id;
 		}
+
+        // Validate the data
+        \$this->form_validation->set_rules(\$this->{$module_name_lower}_model->get_validation_rules());
+        if (\$this->form_validation->run() === false) {
+            return false;
+        }
 
 		// Make sure we only pass in the fields we want
 		{save_data_array}
@@ -305,6 +319,15 @@ if ($controller_name_lower != $module_name_lower) {
         \$this->auth->restrict(\$this->permissionView);";
 	$subNav = "
 		Template::set_block('sub_nav', '{$controller_name_lower}/_sub_nav');";
+
+    // If the form error delimiters have been passed, set them in the constructor.
+    if (! empty($form_error_delimiters)
+        && isset($form_error_delimiters[0])
+        && isset($form_error_delimiters[1])
+    ) {
+        $constructorExtras .= "
+            \$this->form_validation->set_error_delimiters(\"{$form_error_delimiters[0]}\", \"{$form_error_delimiters[1]}\");";
+    }
 }
 
 if ($db_required != '') {
@@ -337,8 +360,12 @@ if ($controller_name_lower != $module_name_lower) {
 		$body .= $mb_save;
 	}
 
-	$save_data_array = '
-		$data = array();';
+	$save_data_array = "
+		\$data = \$this->{$module_name_lower}_model->prep_data(\$this->input->post());
+
+        // Additional handling for default values should be added below,
+        // or in the model's prep_data() method
+        ";
 
 	for ($counter = 1; $field_total >= $counter; $counter++) {
 		// Only build on fields that have data entered.
@@ -354,21 +381,20 @@ if ($controller_name_lower != $module_name_lower) {
 			$field_name = set_value("view_field_name$counter");
 		}
 
-		$form_name = $module_name_lower . '_' . set_value("view_field_name$counter");
-
 		// Setup the data array for saving to the db
 		// Set defaults for certain field types
 		switch (set_value("db_field_type$counter")) {
 			case 'DATE':
-				$save_data_array .= "\n\t\t\$data['{$field_name}']\t= \$this->input->post('{$form_name}') ? \$this->input->post('{$form_name}') : '0000-00-00';";
+				$save_data_array .= "\n\t\t\$data['{$field_name}']\t= \$this->input->post('{$field_name}') ? \$this->input->post('{$field_name}') : '0000-00-00';";
 				break;
 
 			case 'DATETIME':
-				$save_data_array .= "\n\t\t\$data['{$field_name}']\t= \$this->input->post('{$form_name}') ? \$this->input->post('{$form_name}') : '0000-00-00 00:00:00';";
+				$save_data_array .= "\n\t\t\$data['{$field_name}']\t= \$this->input->post('{$field_name}') ? \$this->input->post('{$field_name}') : '0000-00-00 00:00:00';";
 				break;
 
 			default:
-				$save_data_array .= "\n\t\t\$data['{$field_name}']\t= \$this->input->post('{$form_name}');";
+                // No need to handle fields for which defaults are not set,
+                // the model's prep_data() method should take care of it.
 				break;
 		}
 	}

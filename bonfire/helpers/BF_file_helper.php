@@ -1,56 +1,77 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
-// ------------------------------------------------------------------------
+<?php defined('BASEPATH') || exit('No direct script access allowed');
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications.
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
 /**
- * Get Filenames by extension
+ * File helper functions.
  *
- * Reads the specified directory and builds an array containing the filenames.
- * Any sub-folders contained within the specified path are read as well.
- *
- * @access	public
- * @param	string	path to source
- * @param   array   extensions to be found
- * @param	bool	whether to include the path as part of the filename
- * @param	bool	internal variable to determine recursion status - do not use in calls
- * @return	array
- */
-if ( ! function_exists('get_filenames_by_extension'))
-{
-	function get_filenames_by_extension($source_dir, $extensions = array(), $include_path = FALSE, $_recursion = FALSE)
+ * @package Bonfire\Helpers\BF_file_helper
+ * @author  Bonfire Dev Team
+  * @link   http://cibonfire.com/docs/developer
+*/
+
+if ( ! function_exists('get_filenames_by_extension')) {
+    /**
+     * Get filenames by extension.
+     *
+     * Read the specified directory and build an array containing the filenames.
+     * Any sub-folders contained within the specified path are also read.
+     *
+     * @param string $sourceDir   Path to the directory.
+     * @param array $extensions   Extensions of files to retrieve.
+     * @param bool $includePath Whether the path will be included with the
+     * filename.
+     * @param bool $_recursion   Internal variable to determine recursion status.
+     * Not intended for external use.
+     *
+     * @return array    An array of filenames.
+     */
+	function get_filenames_by_extension($sourceDir, $extensions = array(), $includePath = false, $_recursion = false)
 	{
 		static $_filedata = array();
 
-		if ($fp = @opendir($source_dir))
-		{
-			// reset the array and make sure $source_dir has a trailing slash on the initial call
-			if ($_recursion === FALSE)
-			{
+		if ($fp = @opendir($sourceDir)) {
+			// Reset the array and ensure $sourceDir has a trailing slash on the
+            // initial call
+			if ($_recursion === false) {
 				$_filedata = array();
-				$source_dir = rtrim(realpath($source_dir), DIRECTORY_SEPARATOR).DIRECTORY_SEPARATOR;
+				$sourceDir = rtrim(realpath($sourceDir), DIRECTORY_SEPARATOR)
+                    . DIRECTORY_SEPARATOR;
 			}
 
-			while (FALSE !== ($file = readdir($fp)))
-			{
-				if (@is_dir($source_dir.$file) && strncmp($file, '.', 1) !== 0)
-				{
-					get_filenames_by_extension($source_dir.$file.DIRECTORY_SEPARATOR, $extensions, $include_path, TRUE);
-				}
-				elseif (strncmp($file, '.', 1) !== 0)
-				{
-					if(in_array(pathinfo($file, PATHINFO_EXTENSION), $extensions))
-					{
-					    $_filedata[] = ($include_path == TRUE) ? $source_dir.$file : $file;
-					}
-				}
+			while (false !== ($file = readdir($fp))) {
+                if (strncmp($file, '.', 1) === 0) {
+                    continue;
+                }
+
+                if (@is_dir("{$sourceDir}{$file}")) {
+                    get_filenames_by_extension(
+                        "{$sourceDir}{$file}" . DIRECTORY_SEPARATOR,
+                        $extensions,
+                        $includePath,
+                        true
+                    );
+                } elseif (in_array(pathinfo($file, PATHINFO_EXTENSION), $extensions)) {
+                    $_filedata[] = $includePath ? "{$sourceDir}{$file}" : $file;
+                }
 			}
+
 			return $_filedata;
 		}
-		else
-		{
-			return FALSE;
-		}
+
+		return false;
 	}
 }
-
-
+/* End /helpers/BF_file_helper.php */

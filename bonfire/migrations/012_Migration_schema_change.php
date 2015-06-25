@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * This Migration file should not be used in an install situation
@@ -49,50 +49,52 @@ class Migration_Migration_schema_change extends Migration
 	 */
 	private $new_key = 'type';
 
-	/****************************************************************
-	 * Migration methods
-	 */
+    //--------------------------------------------------------------------------
+	// Migration methods
+    //--------------------------------------------------------------------------
+
 	/**
 	 * Install this migration
 	 */
 	public function up()
 	{
-		// check if the table is in the old format
-		if ( ! $this->db->field_exists($this->new_key, $this->table_name))
-		{
-			// the table is in the old format
+		// Determine whether the table is in the old format by checking for the
+        // existence of the 'type' column. To ensure the db class is checking
+        // the current state of the table, query the table before calling
+        // $this->db->field_exists().
 
-			// backup the schema_version table
+        $versionQuery = $this->db->get($this->table_name);
+
+		if ( ! $this->db->field_exists($this->new_key, $this->table_name)) {
+            // Get the existing data from the table.
+            $versionArray = $versionQuery->row_array();
+
+			// Backup the table.
 			$this->dbforge->rename_table($this->table_name, $this->backup_table);
 
-			// modify the schema_version table
+			// Modify the table to conform to the schema for the new version.
 			$this->dbforge->add_field($this->fields);
-			$this->dbforge->add_key($this->new_key, TRUE);
+			$this->dbforge->add_key($this->new_key, true);
 			$this->dbforge->create_table($this->table_name);
 
-			// add records for each of the old permissions
-			$permission_records = array();
-			foreach ($version_array as $type => $version_num)
-			{
-				if ($type == 'version')
-				{
-					$type_field = 'core';
-					$version_num++;
-				}
-				else
-				{
-					$type_field = str_replace('version', '', $type);
+			// Add records for each of the old permissions.
+			$permissionRecords = array();
+			foreach ($versionArray as $type => $versionNum) {
+				if ($type == 'version') {
+					$typeField = 'core';
+					$versionNum++;
+				} else {
+					$typeField = str_replace('version', '', $type);
 				}
 
-				$permission_records[] = array(
-					'type' => $type_field,
-					'version' => $version_num,
+				$permissionRecords[] = array(
+					'type'    => $typeField,
+					'version' => $versionNum,
 				);
 			}
 
-			if ( ! empty($permission_records))
-			{
-				$this->db->insert_batch($this->table_name, $permission_records);
+			if ( ! empty($permissionRecords)) {
+				$this->db->insert_batch($this->table_name, $permissionRecords);
 			}
 		}
 	}
@@ -102,12 +104,10 @@ class Migration_Migration_schema_change extends Migration
 	 */
 	public function down()
 	{
-		// check if the old schema exists
-		if ($this->db->table_exists($this->backup_table))
-		{
-			// Reverse the schema_version table changes
+		// Determine whether the table is in the new format.
+		if ($this->db->table_exists($this->backup_table)) {
+			// Drop the table and rename the backup table.
 			$this->dbforge->drop_table($this->table_name);
-
 			$this->dbforge->rename_table($this->backup_table, $this->table_name);
 		}
 	}

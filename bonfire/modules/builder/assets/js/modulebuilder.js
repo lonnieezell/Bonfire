@@ -162,6 +162,8 @@ function showTableProperties() {
 /**
  * Store form data in LocalStorage
  *
+ * @todo Scope the data in localStorage so conflicts with other code are less likely.
+ *
  * Uses LocalStorage to hold entered information for all of the fields, so the
  * user doesn't have to enter it again when the page is redirected (when
  * choosing the number of fields). Also clears a checkbox's value if it
@@ -194,6 +196,8 @@ function storeFormData() {
 /**
  * Retrieve form data from LocalStorage
  *
+ * @todo Scope the data in localStorage so conflicts with other code are less likely.
+ *
  * Re-populate the form fields if they have been stored in LocalStorage. Once
  * the fields are loaded, all LocalStorage information is cleared.
  *
@@ -210,6 +214,13 @@ function getFormData() {
 	for (i = 0; i < localStorage.length; i++) {
 		key = localStorage.key(i);
     	value = localStorage[key];
+
+        // If the key contains a '/', it was most likely set by some other script.
+        // (DataTables v1.10 raises this issue by using the page's URL as the key
+        // when the stateSave option is enabled.)
+        if (key.indexOf('/') > -1) {
+            continue;
+        }
 
 		/* Restore the checked state of checkbox/radio buttons */
 		if ($('#' + key).is(':checkbox, :radio')) {

@@ -1,52 +1,59 @@
 <style>
-th.id { width: 3em; }
-th.last-login { width: 11em; }
-th.status { width: 10em; }
+.filter-link-list a.active { text-decoration: underline; cursor: default; }
+.user-table th.id { width: 3em; }
+.user-table th.last-login { width: 11em; }
+.user-table th.status { width: 10em; }
 </style>
 <div class="well shallow-well">
 	<span class="filter-link-list">
 		<?php
-		// If there's a current filter, we need to replace the caption with a clear button
-		if ($filter_type == 'first_letter') :
-			echo anchor($index_url, lang('bf_clear'), array('class' => 'btn btn-sm btn-primary'));
-		else :
+        // If there's a current filter, add a clear button.
+        if ($filter_type == 'first_letter') {
+			echo anchor($index_url, lang('bf_clear'), array('class' => 'btn btn-small btn-primary'));
+        }
 			e(lang('us_filter_first_letter'));
-		endif;
+
+        $filterLetter = ! empty($first_letter);
 
 		$letters = range('A', 'Z');
-		foreach ($letters as $letter) :
-			echo anchor($index_url . 'first_letter-' . $letter, $letter) . PHP_EOL;
-		endforeach;
+        foreach ($letters as $letter) {
+            echo anchor(
+                "{$index_url}first_letter-{$letter}",
+                $letter,
+                array('class' => $filterLetter && $letter == $first_letter ? 'active' : '')
+            ) . PHP_EOL;
+        }
 		?>
 	</span>
 </div>
-<ul class="nav nav-tabs" >
+<ul class="nav nav-tabs">
 	<li<?php echo $filter_type == 'all' ? ' class="active"' : ''; ?>><?php echo anchor($index_url, lang('us_tab_all')); ?></li>
-	<li<?php echo $filter_type == 'inactive' ? ' class="active"' : ''; ?>><?php echo anchor($index_url . 'inactive/', lang('us_tab_inactive')); ?></li>
-	<li<?php echo $filter_type == 'banned' ? ' class="active"' : ''; ?>><?php echo anchor($index_url . 'banned/', lang('us_tab_banned')); ?></li>
-	<li<?php echo $filter_type == 'deleted' ? ' class="active"' : ''; ?>><?php echo anchor($index_url . 'deleted/', lang('us_tab_deleted')); ?></li>
+    <li<?php echo $filter_type == 'inactive' ? ' class="active"' : ''; ?>><?php echo anchor("{$index_url}inactive/", lang('us_tab_inactive')); ?></li>
+    <li<?php echo $filter_type == 'banned' ? ' class="active"' : ''; ?>><?php echo anchor("{$index_url}banned/", lang('us_tab_banned')); ?></li>
+    <li<?php echo $filter_type == 'deleted' ? ' class="active"' : ''; ?>><?php echo anchor("{$index_url}deleted/", lang('us_tab_deleted')); ?></li>
 	<li class="<?php echo $filter_type == 'role_id' ? 'active ' : ''; ?>dropdown">
 		<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 			<?php
 			echo lang('us_tab_roles');
-			echo isset($filter_role) ? ": $filter_role" : '';
+            echo isset($filter_role) ? ": {$filter_role}" : '';
 			?>
 			<span class="caret light-caret"></span>
 		</a>
 		<ul class="dropdown-menu">
 			<?php foreach ($roles as $role) : ?>
-			<li><?php echo anchor($index_url . 'role_id-' . $role->role_id, $role->role_name); ?></li>
+            <li><?php echo anchor("{$index_url}role_id-{$role->role_id}", $role->role_name); ?></li>
 			<?php endforeach; ?>
 		</ul>
 	</li>
 </ul>
+<?php if (empty($users) || ! is_array($users)) : ?>
+<p><?php echo lang('us_no_users'); ?></p>
 <?php
-$num_columns = 8;
-$has_users = isset($users) && is_array($users) && count($users);
-
-echo form_open();
+else :
+    $numColumns = 8;
+    echo form_open();
 ?>
-	<table class="table table-striped">
+    <table class="table table-striped user-table">
 		<thead>
 			<tr>
 				<th class="column-check"><input class="check-all" type="checkbox" /></th>
@@ -59,10 +66,9 @@ echo form_open();
 				<th class='status'><?php echo lang('us_status'); ?></th>
 			</tr>
 		</thead>
-		<?php if ($has_users) : ?>
 		<tfoot>
 			<tr>
-				<td colspan="<?php echo $num_columns; ?>">
+                <td colspan="<?php echo $numColumns; ?>">
 					<?php
 					echo lang('bf_with_selected');
 
@@ -79,21 +85,17 @@ echo form_open();
 				</td>
 			</tr>
 		</tfoot>
-		<?php endif; ?>
 		<tbody>
-			<?php
-			if ($has_users) :
-				foreach ($users as $user) :
-			?>
+            <?php foreach ($users as $user) : ?>
 			<tr>
 				<td class="column-check"><input type="checkbox" name="checked[]" value="<?php echo $user->id; ?>" /></td>
 				<td class='id'><?php echo $user->id; ?></td>
 				<td><?php
-					echo anchor(site_url(SITE_AREA . '/settings/users/edit/' . $user->id), $user->username);
+                    echo anchor(site_url(SITE_AREA . "/settings/users/edit/{$user->id}"), $user->username);
 
 					if ($user->banned) :
 					?>
-					<span class="label label-warning">Banned</span>
+                    <span class="label label-warning"><?php echo lang('us_tab_banned'); ?></span>
 					<?php endif; ?>
 				</td>
 				<td><?php echo $user->display_name; ?></td>
@@ -108,18 +110,10 @@ echo form_open();
 					<?php endif; ?>
 				</td>
 			</tr>
-			<?php
-				endforeach;
-			else :
-			?>
-			<tr>
-				<td colspan="<?php echo $num_columns; ?>"><?php echo lang('us_no_users'); ?></td>
-			</tr>
-			<?php endif; ?>
+            <?php endforeach; ?>
 		</tbody>
 	</table>
 <?php
-echo form_close();
-
-echo $this->pagination->create_links();
-?>
+    echo form_close();
+    echo $this->pagination->create_links();
+endif;

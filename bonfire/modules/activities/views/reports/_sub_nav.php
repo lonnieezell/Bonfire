@@ -1,10 +1,5 @@
 <?php
 
-$has_permission_view_date = isset($has_permission_view_date) ? $has_permission_view_date : has_permission('Activities.Date.View');
-$has_permission_view_module = isset($has_permission_view_module) ? $has_permission_view_module : has_permission('Activities.Module.View');
-$has_permission_view_own = isset($has_permission_view_own) ? $has_permission_view_own : has_permission('Activities.Own.View');
-$has_permission_view_user = isset($has_permission_view_user) ? $has_permission_view_user : has_permission('Activities.User.View');
-
 $checkSegment = $this->uri->segment(4);
 $activitiesReportsUrl = site_url(SITE_AREA . '/reports/activities');
 $pageUser   = 'activity_user';
@@ -14,25 +9,25 @@ $pageDate   = 'activity_date';
 ?>
 <ul class="nav navbar-nav nav-pills">
 	<li<?php echo $checkSegment == '' ? ' class="active"' : ''; ?>>
-		<a href="<?php echo $activitiesReportsUrl; ?>"><?php echo lang('activities_home'); ?></a>
+        <?php echo anchor($activitiesReportsUrl, lang('activities_home')); ?>
 	</li>
-    <?php if ($has_permission_view_user || $has_permission_view_own) : ?>
+    <?php if ($hasPermissionViewUser || $hasPermissionViewOwn) : ?>
 	<li<?php echo $checkSegment == $pageUser || $checkSegment == 'activity_own' ? ' class="active"' : ''; ?>>
-		<a href="<?php echo "{$activitiesReportsUrl}/{$pageUser}"; ?>"><?php echo lang(str_replace('activity_', 'activities_', $pageUser)); ?></a>
+		<?php echo anchor("{$activitiesReportsUrl}/{$pageUser}", lang(str_replace('activity_', 'activities_', $pageUser))); ?>
 	</li>
     <?php
     endif;
-    if ($has_permission_view_module) :
+    if ($hasPermissionViewModule) :
     ?>
 	<li<?php echo $checkSegment == $pageModule ? ' class="active"' : ''; ?>>
-		<a href="<?php echo "{$activitiesReportsUrl}/{$pageModule}"; ?>"><?php echo lang(str_replace('activity_', 'activities_', $pageModule)); ?></a>
+		<?php echo anchor("{$activitiesReportsUrl}/{$pageModule}", lang(str_replace('activity_', 'activities_', $pageModule))); ?>
 	</li>
     <?php
     endif;
-    if ($has_permission_view_date) :
+    if ($hasPermissionViewDate) :
     ?>
 	<li<?php echo $checkSegment == $pageDate ? ' class="active"' : ''; ?>>
-		<a href="<?php echo "{$activitiesReportsUrl}/{$pageDate}"; ?>"><?php echo lang(str_replace('activity_', 'activities_', $pageDate)); ?></a>
+		<?php echo anchor("{$activitiesReportsUrl}/{$pageDate}", lang(str_replace('activity_', 'activities_', $pageDate))); ?>
 	</li>
     <?php endif; ?>
 </ul>

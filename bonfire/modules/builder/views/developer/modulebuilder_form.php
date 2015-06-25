@@ -1,7 +1,7 @@
 <?php
 
-$session_error = $this->session->flashdata('error');
-$validation_errors = validation_errors();
+$sessionError = $this->session->flashdata('error');
+$validationErrors = validation_errors();
 
 // Wrapped the whole page in a div.module-builder so module-level CSS won't mess
 // up other pages
@@ -16,7 +16,7 @@ $validation_errors = validation_errors();
     //--------------------------------------------------------------------------
     // Begin Error Messages section
     //--------------------------------------------------------------------------
-    if ( ! $writable) :
+    if (! $writable) :
     ?>
     <div class="alert alert-danger fade in">
         <a class="close" data-dismiss="alert">&times;</a>
@@ -25,21 +25,21 @@ $validation_errors = validation_errors();
     <?php
     endif;
 
-    if ($validation_errors) :
+    if ($validationErrors) :
     ?>
     <div class="alert alert-danger fade in">
         <a data-dismiss="alert" class="close">&times;</a>
         <h4 class="alert-heading"><?php echo lang('mb_form_errors'); ?></h4>
-        <?php echo $validation_errors; ?>
+        <?php echo $validationErrors; ?>
     </div>
     <?php
     endif;
 
-    if ($session_error):
+    if ($sessionError):
     ?>
     <div class="alert alert-danger fade in">
         <a data-dismiss="alert" class="close">&times;</a>
-        <?php echo $session_error; ?>
+        <?php echo $sessionError; ?>
     </div>
     <?php
     endif;
@@ -64,7 +64,7 @@ $validation_errors = validation_errors();
         $formSubmitUrl = current_url();
         if ($field_total > 0) {
             $urlSegments = $this->uri->segment_array();
-            if ( ! is_numeric($urlSegments[$this->uri->total_segments()])) {
+            if (! is_numeric($urlSegments[$this->uri->total_segments()])) {
                 $formSubmitUrl .= "/{$field_total}";
             }
         }
@@ -198,6 +198,16 @@ $validation_errors = validation_errors();
                     <div class="controls">
                         <input name="form_error_delimiters" id="form_error_delimiters" type="text" value="<?php echo set_value("form_error_delimiters", "<span class='error'>,</span>"); ?>" />
                         <span class="help-inline"><?php echo form_error('form_error_delimiters'); ?></span>
+                    </div>
+                </div>
+                <div class="form-group mb_advanced">
+                    <label for="textarea_editor" class="control-label block"><?php echo lang('mb_form_text_ed'); ?></label>
+                    <div class="controls">
+                        <select name="textarea_editor" id="textarea_editor">
+                        <?php foreach($textarea_editors as $val => $label):?>
+                            <option value="<?php echo $val?>"><?php echo $label?></option>
+                        <?php endforeach;?>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group mb_advanced">

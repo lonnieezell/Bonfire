@@ -32,6 +32,7 @@ $config['modulebuilder']['validation_limits'] = array(
     'alpha_dash',           'valid_email',          'integer',
     'is_decimal',           'is_natural',           'is_natural_no_zero',
     'valid_ip',             'valid_base64',         'alpha_extra',
+    'none_of_the_above',
 );
 
 /**

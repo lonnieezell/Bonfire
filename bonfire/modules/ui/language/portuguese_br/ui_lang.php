@@ -18,9 +18,9 @@
 /**
  * Language file for the UI module (Brazilian Portuguese)
  *
- * @package    Bonfire\Modules\UI\Language\Portuguese_br
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs
+ * @package Bonfire\Modules\UI\Language\Portuguese_br
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer/keyboard_shortcuts
  */
 
 $lang['ui_keyboard_shortcuts'] = 'Os atalhos de teclado são configurados no arquivo application/config.php. Os atalhos disponíveis atualmente são:';
@@ -33,7 +33,7 @@ $lang['ui_action'] = 'Ação';
 $lang['ui_actions'] = 'Ações';
 
 $lang['ui_shortcut'] = 'Tecla de Atalho';
-$lang['ui_shortcut_help'] = 'Coloque suas teclas de atalho no campo abaixo ex: alt+j - veja mais exemplos em <a href="http://keithcirkel.co.uk/jwerty/" target="_blank">Jwerty project page</a>';
+$lang['ui_shortcut_help'] = 'Coloque suas teclas de atalho no campo abaixo ex: alt+j - veja mais exemplos em <a href="http://keithamus.github.io/jwerty/" target="_blank">Jwerty project page</a>';
 $lang['ui_shortcuts'] = 'Teclas de atalho';
 $lang['ui_current_shortcuts'] = 'Atalhos atuais';
 

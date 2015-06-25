@@ -1,4 +1,4 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
 /**
  * Admin Controller
@@ -62,26 +62,17 @@ class Admin_Controller extends Authenticated_Controller
         Template::set('shortcut_data', $shortcut_data);
 
         // Profiler Bar?
-        if (ENVIRONMENT == 'development')
-        {
-            if ($this->settings_lib->item('site.show_profiler') AND has_permission('Bonfire.Profiler.View'))
-            {
+        if (ENVIRONMENT == 'development') {
+            if ($this->settings_lib->item('site.show_profiler')
+                && $this->auth->has_permission('Bonfire.Profiler.View')
+            ) {
                 // Profiler bar?
-                if ( ! $this->input->is_cli_request() AND ! $this->input->is_ajax_request())
-                {
-                    $this->load->library('Console');
-                    $this->output->enable_profiler(TRUE);
-                }
+                $this->showProfiler(false);
             }
         }
 
         // Basic setup
         Template::set_theme($this->config->item('template.admin_theme'), $this->config->item('template.default_theme'));
-    }//end construct()
-
-    //--------------------------------------------------------------------
-
+    }
 }
-
 /* End of file Admin_Controller.php */
-/* Location: ./application/core/Admin_Controller.php */

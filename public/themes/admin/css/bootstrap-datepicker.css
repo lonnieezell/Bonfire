@@ -148,7 +148,7 @@ cursor: pointer;
 .datepicker thead tr:first-child th:hover {
 background: #eeeeee;
 }
-.input-group.date .input-group-addon i, .input-group.date .input-group-addon i {
+.input-append.date .add-on i, .input-prepend.date .add-on i {
 display: block;
 cursor: pointer;
 width: 16px;

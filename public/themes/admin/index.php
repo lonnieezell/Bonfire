@@ -1,6 +1,6 @@
 <?php
 
-Assets::add_js(array('bootstrap.min.js', 'jwerty.js'), 'external', true);
+Assets::add_js(array('jwerty.js'), 'external', true);
 
 echo theme_view('header');
 
@@ -13,4 +13,5 @@ echo theme_view('header');
         ?>
 	</div>
 </div>
+
 <?php echo theme_view('footer'); ?>

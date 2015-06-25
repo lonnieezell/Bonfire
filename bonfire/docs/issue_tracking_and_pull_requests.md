@@ -10,11 +10,11 @@ If you think this guide can be improved, please let us know.
 
 The GitHub issue tracker should only be used for one of the following:
 
-+ **Bugs** &mdash; when a feature of the project has been _identified as
++ **Bugs** - when a feature of the project has been _identified as
   broken_.
-+ **Feature requests** &mdash; when you ask for a _new feature_ to be added to a
++ **Feature requests** - when you ask for a _new feature_ to be added to a
   Bonfire.
-+ **Contribution enquiries** &mdash; when you want to discuss whether a _new
++ **Contribution enquiries** - when you want to discuss whether a _new
   feature_ or _change_ would be accepted in Bonfire before you begin
 development work on it.
 
@@ -38,18 +38,18 @@ improve the code for everyone else!
 
 Please read the following guidelines for reporting bugs:
 
-1. **Use the GitHub issue search** &mdash; check if the issue has already been
+1. **Use the GitHub issue search** - check if the issue has already been
    reported. If it has been, please comment on the existing issue.
 
-2. **Check if the issue has been fixed** &mdash; the latest `master` or
+2. **Check if the issue has been fixed** - the latest `master` or
    development branch may already contain a fix.
 
-3. **Isolate the demonstrable problem** &mdash; make sure that the code in the
+3. **Isolate the demonstrable problem** - make sure that the code in the
    project's repository is _definitely_ responsible for the issue. Create a
 [reduced test case](http://css-tricks.com/6263-reduced-test-cases/) - an
 extremely simple and immediately viewable example of the issue.
 
-4. **Include a live example** &mdash; provide a link to your reduced test case
+4. **Include a live example** - provide a link to your reduced test case
    when appropriate (e.g. if the issue is related to frond-end technologies).
 Please use [jsFiddle](http://jsfiddle.net) to host examples.
 

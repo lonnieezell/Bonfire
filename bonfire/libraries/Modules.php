@@ -1,145 +1,277 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
-// PHP5 Autoloader for core files and libraries.
+global $CFG;
+
+/* Get module locations from config settings, or use the default module location
+ * and offset
+ */
+is_array(Modules::$locations = $CFG->item('modules_locations')) || Modules::$locations = array(
+    realpath(APPPATH) . '/modules/' => '../../application/modules/',
+    realpath(BFPATH) . '/modules/' => '../../bonfire/modules/',
+);
+
+/* PHP5 spl_autoload */
 spl_autoload_register('Modules::autoload');
+
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications.
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
 
 /**
  * Modules class for Bonfire.
  *
- * Provides utility functions for working with modules, as well as an
- * autoloader that can be used throughout the system. Inspired by, and,
- * to some extent, provides backwards-compatibility with the Modules class
- * provided by WireDesignz HMVC package that we used to use.
+ * Adapted from Wiredesignz Modular Extensions - HMVC.
+ * @link https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc
  *
+ * Provides utility functions for working with modules, as well as an autoloader
+ * which can be used throughout the system. Inspired by, and, to some extent, provides
+ * backwards-compatibility with the Modules class provided by WireDesignz HMVC package.
+ *
+ * @package Bonfire\Libraries\Modules
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer
  */
 class Modules
 {
-    /**
-     * @var String Path for Bonfire's "core modules"
-     */
-    protected static $bfModulesDir = 'bonfire/modules';
+    public static $locations;
+    public static $registry;
+    public static $routes;
 
     /**
-     * @var String File extension
+     * Run a module controller method. Output from module is buffered and returned.
      *
-     * Since EXT is deprecated, there's no need to use/redefine a global
-     * constant for this.
-     */
-    private static $ext = '.php';
-
-    /**
-     * Modules/routes cache
-     * @var array
-     */
-    private static $routes = array();
-
-    //--------------------------------------------------------------------
-
-    /**
-     * Autoloader for core files and libraries.
+     * @param string $module The module/controller/method to run.
      *
-     * @param  string $class Class to autoload.
+     * @return mixed The output from the module.
+     */
+    public static function run($module)
+    {
+        $method = 'index';
+
+        // If a directory separator is found in $module, use the right side of the
+        // separator as $method, the left side as $module.
+        if (($pos = strrpos($module, '/')) != false) {
+            $method = substr($module, $pos + 1);
+            $module = substr($module, 0, $pos);
+        }
+
+        // Load the class indicated by $module and check whether $method exists.
+        $class = self::load($module);
+        if (! $class || ! method_exists($class, $method)) {
+            log_message('error', "Module controller failed to run: {$module}/{$method}");
+            return;
+        }
+
+        // Buffer the output.
+        ob_start();
+
+        // Get the remaining arguments and pass them to $method.
+        $args = func_get_args();
+        $output = call_user_func_array(array($class, $method), array_slice($args, 1));
+
+        // Get/clean the current buffer.
+        $buffer = ob_get_clean();
+
+        // If $output is not null, return it, otherwise return the buffered content.
+        return $output !== null ? $output : $buffer;
+    }
+
+    /**
+     * Load a module controller.
+     *
+     * @param string $module The module/controller to load.
+     *
+     * @return mixed The loaded controller.
+     */
+    public static function load($module)
+    {
+        // If $module is an array, the first item is $module and the remaining items
+        // are $params.
+        is_array($module) ? list($module, $params) = each($module) : $params = null;
+
+        // Get the requested controller class name.
+        $alias = strtolower(basename($module));
+
+        // Maintain a registry of controllers.
+        // - If the controller is not found in the registry, attempt to find and
+        //   load it, then add it to the registry.
+        // - If the controller was already in the registry or is found, loaded,
+        //   and added to the registry successfully, return the registered controller.
+
+        if (! isset(self::$registry[$alias])) {
+            // If the controller was not found in the registry, find it.
+            list($class) = CI::$APP->router->locate(explode('/', $module));
+            if (empty($class)) {
+                // The controller was not found.
+                return;
+            }
+
+            // Set the module directory and load the controller.
+            $path = APPPATH . 'controllers/' . CI::$APP->router->directory;
+            $class = $class . CI::$APP->config->item('controller_suffix');
+            self::load_file($class, $path);
+
+            // Create and register the new controller.
+            $controller = ucfirst($class);
+            self::$registry[$alias] = new $controller($params);
+        }
+
+        // Return the controller from the registry.
+        return self::$registry[$alias];
+    }
+
+    /**
+     * Library base class autoload.
+     *
+     * @param string $class The class to load.
+     *
      * @return void
      */
     public static function autoload($class)
     {
-        /* Don't autoload CI_ prefixed classes or those using the config subclass_prefix */
-        if (strstr($class, 'CI_') || strstr($class, config_item('subclass_prefix'))) {
+        // Don't autoload CI_ prefixed classes or those using the config subclass_prefix.
+        if (strstr($class, 'CI_')
+            || strstr($class, config_item('subclass_prefix'))
+        ) {
             return;
         }
 
-        /* Autoload App core classes */
-        if (is_file($location = APPPATH . "core/{$class}" . self::$ext)) {
+        // Autoload Modular Extensions MX core classes.
+        if (strstr($class, 'MX_')
+            && is_file($location = APPPATH . 'third_party/MX/' . substr($class, 3) . '.php')
+        ) {
             include_once $location;
             return;
         }
 
-        /* Autoload BF core classes */
-        if (is_file($location = BFPATH . "core/{$class}" . self::$ext)) {
+        // Autoload core classes.
+        if (is_file($location = APPPATH . "core/{$class}.php")) {
             include_once $location;
             return;
         }
 
-        /* Autoload App library classes */
-        if (is_file($location = APPPATH . "libraries/{$class}" . self::$ext)) {
-            get_instance()->load->library($class);
+        // Autoload Bonfire core classes.
+        if (strstr($class, 'BF_')
+            && is_file($location = BFPATH . "core/{$class}.php")
+        ) {
+            include_once($location);
             return;
         }
 
-        /* Autoload Bonfire library classes */
-        if (is_file($location = BFPATH . "libraries/{$class}" . self::$ext)) {
-            get_instance()->load->library($class);
+        // Autoload library classes.
+        if (is_file($location = APPPATH . "libraries/{$class}.php")) {
+            include_once $location;
+            return;
+        }
+
+        // Autoload Bonfire library classes.
+        if (is_file($location = BFPATH . "libraries/{$class}.php")) {
+            include_once $location;
             return;
         }
     }
 
     /**
-     * Run a controller action from another module
+     * Load a module file.
      *
-     * @param String $module The Module/Controller/Action to run
+     * @param string $file The filename.
+     * @param string $path The path to the file.
+     * @param string $type The type of file.
+     * @param mixed  $result
      *
-     * @return Mixed    The return value from the action
+     * @return mixed
      */
-    public static function run($module)
+    public static function load_file($file, $path, $type = 'other', $result = true)
     {
-        // Get the arguments to pass them along
-        $args = func_get_args();
+        // If $file includes the '.php' extension, remove it.
+        $fileName = explode('.', $file);
+        $ext = array_pop($fileName);
+        if ($ext && strcasecmp($ext, 'php') === 0) {
+            $file = implode('.', $fileName);
+        }
+        unset($ext, $fileName);
 
-        // Use the built-in load method to handle this
-        return get_instance()->load->controller($module, $args);
+        // Ensure proper directory separators.
+        $path = rtrim(rtrim($path, '/'), "\\");
+        $file = ltrim(ltrim($file, '/'), "\\");
+
+        $location = "{$path}/{$file}.php";
+
+        if ($type === 'other') {
+            if (class_exists($file, false)) {
+                log_message('debug', "File already loaded: {$location}");
+                return $result;
+            }
+            if (file_exists($location)) {
+                include_once $location;
+            } elseif (file_exists("{$path}/" . ucfirst($file) . '.php')) {
+                include_once("{$path}/" . ucfirst($file) . '.php');
+            } else {
+                log_message('debug', "File not found: {$location}");
+                return $result;
+            }
+        } else {
+            // Load config or language array.
+            include $location;
+
+            if (! isset($$type) || ! is_array($$type)) {
+                show_error("{$location} does not contain a valid {$type} array");
+            }
+
+            $result = $$type;
+        }
+
+        log_message('debug', "File loaded: {$location}");
+        return $result;
     }
 
     /**
-     * Scans the module directories for a specific file.
+     * Find a file.
      *
+     * Scans for files located within module directories. Also scans application
+     * directories for models, plugins, and views. Generates fatal error if file
+     * not found.
      *
-     * @param  string $file   The name of the file to find.
-     * @param  string $module the name of the module or modules to look in for the file.
-     * @param  string $base   The path within the module to look for the file.
-     * @return array          [ {full_path_to_file}, {file} ] or FALSE
+     * @param string $file   The file.
+     * @param string $module The module.
+     * @param string $base
+     *
+     * @return array
      */
     public static function find($file, $module, $base)
     {
-        // Find the actual file name. It will always be the last element.
-        $segments   = explode('/', $file);
-        $file       = array_pop($segments);
-        $file_ext   = pathinfo($file, PATHINFO_EXTENSION) ? $file : $file . self::$ext;
+        $segments = explode('/', $file);
+        $file     = array_pop($segments);
+        $file_ext = pathinfo($file, PATHINFO_EXTENSION) ? $file : "{$file}.php";
 
-        // Put the pieces back to get the path.
-        $path = implode('/', $segments) . '/';
-        $base = rtrim($base, '/') . '/';
+        $path = ltrim(implode('/', $segments) . '/', '/');
+        $module ? $modules[$module] = $path : $modules = array();
 
-        // Look in any possible module locations based on the string segments.
-        $modules = array();
-        if ( ! empty($module)) {
-            $modules[$module] = $path;
-        }
-
-        // Collect the modules from the segments
-        if ( ! empty($segments)) {
+        if (! empty($segments)) {
             $modules[array_shift($segments)] = ltrim(implode('/', $segments) . '/', '/');
         }
 
-        // Try to find the file/module combo.
-        $locations = config_item('modules_locations');
-        foreach ($locations as $location) {
+        foreach (Modules::$locations as $location => $offset) {
             foreach ($modules as $module => $subpath) {
-                // Combine the elements to make an actual path to the file
-                $full_path = str_replace('//', '/', "{$location}{$module}/{$base}{$subpath}");
+                $fullpath = "{$location}{$module}/{$base}{$subpath}";
 
-                // If it starts with a '/' assume it's a full path already.
-                if (substr($path, 0, 1) == '/' && strlen($path) > 1) {
-                    $full_path = $path;
+                if (is_file($fullpath . $file_ext)) {
+                    return array($fullpath, $file);
                 }
 
-                // Libraries are a special consideration since they are
-                // frequently ucfirst.
-                if ($base == 'libraries/' && is_file($full_path . ucfirst($file_ext))) {
-                    return array($full_path, ucfirst($file));
-                }
-
-                if (is_file($full_path . $file_ext)) {
-                    return array($full_path, $file);
+                if (is_file($fullpath . ucfirst($file_ext))) {
+                    return array($fullpath, ucfirst($file));
                 }
             }
         }
@@ -148,75 +280,70 @@ class Modules
     }
 
     /**
-     * Convenience method to return the locations where modules can be found.
+     * Parse module routes.
      *
-     * @return array The config settings array for modules_locations.
+     * @param  string $module The module.
+     * @param  string $uri    The URI.
+     *
+     * @return mixed The parsed route or void.
      */
-    public static function folders()
+    public static function parse_routes($module, $uri)
     {
-        return config_item('modules_locations');
-    }
+        // If the module's route is not already set, load the file and set it.
+        if (! isset(self::$routes[$module])) {
 
-    /**
-     * Returns a list of all modules in the system.
-     *
-     * @param bool $exclude_core Whether to exclude the Bonfire core modules or not
-     *
-     * @return array A list of all modules in the system.
-     */
-    public static function list_modules($exclude_core=false)
-    {
-        if ( ! function_exists('directory_map')) {
-            $ci =& get_instance();
-            $ci->load->helper('directory');
+            // The use of 'and' allows assignment to occur before the comparison,
+            // so '&&' could not be used here without additional parentheses...
+            // @see http://php.net/manual/en/language.operators.precedence.php
+
+            if (list($path) = self::find('routes', $module, 'config/')
+                and $path
+            ) {
+                self::$routes[$module] = self::load_file('routes', $path, 'route');
+            }
         }
 
-        $map = array();
-
-        foreach (Modules::folders() as $folder) {
-            // If excluding core modules, skip the core module folder
-            if ($exclude_core && strpos($folder, self::$bfModulesDir) !== false) {
-                continue;
-            }
-
-            $dirs = directory_map($folder, 1);
-            if ( ! is_array($dirs)) {
-                $dirs = array();
-            }
-
-            $map = array_merge($map, $dirs);
+        // If the module's route is still not set, return.
+        if (! isset(self::$routes[$module])) {
+            return;
         }
 
-        // Clean out any html or php files
-        if ($count = count($map)) {
-            for ($i = 0; $i < $count; $i++) {
-                if (strpos($map[$i], '.html') !== false || strpos($map[$i], '.php') !== false) {
-                    unset($map[$i]);
+        // Parse module routes.
+        foreach (self::$routes[$module] as $key => $val) {
+            // Translate the placeholders for the regEx.
+            $key = str_replace(array(':any', ':num'), array('.+', '[0-9]+'), $key);
+
+            // Parse the route.
+            if (preg_match('#^'.$key.'$#', $uri)) {
+                if (strpos($val, '$') !== false && strpos($key, '(') !== false) {
+                    $val = preg_replace('#^'.$key.'$#', $val, $uri);
                 }
+
+                // Return the parsed route.
+                return explode('/', "{$module}/{$val}");
             }
         }
-
-        return $map;
     }
 
     /**
-     * Determines whether a controller exists for a module.
+     * Determine whether a controller exists for a module.
      *
-     * @param $controller string The name of the controller to look for (without the .php)
-     * @param $module string The name of module to look in.
+     * @param $controller string The controller to look for (without the extension).
+     * @param $module     string The module to look in.
      *
-     * @return boolean
+     * @return boolean True if the controller is found, else false.
      */
-    public static function controller_exists($controller=null, $module=null)
+    public static function controller_exists($controller = null, $module = null)
     {
         if (empty($controller) || empty($module)) {
             return false;
         }
 
-        // Look in all module paths
-        $folders = Modules::folders();
-        foreach ($folders as $folder) {
+        // Look in all module paths.
+        foreach (Modules::folders() as $folder) {
             if (is_file("{$folder}{$module}/controllers/{$controller}.php")) {
+                return true;
+            } elseif (is_file("{$folder}{$module}/controllers/" . ucfirst($controller) . '.php')) {
                 return true;
             }
         }
@@ -225,118 +352,127 @@ class Modules
     }
 
     /**
-     * Finds the path to a module's file.
+     * Find the path to a module's file.
      *
      * @param $module string The name of the module to find.
-     * @param $folder string The folder within the module to search for the file (ie. controllers).
-     * @param $file string The name of the file to search for.
+     * @param $folder string The folder within the module to search for the file
+     * (ie. controllers).
+     * @param $file   string The name of the file to search for.
      *
-     * @return string The full path to the file, or false if the file was not found
+     * @return string The full path to the file.
      */
-    public static function file_path($module=null, $folder=null, $file=null)
+    public static function file_path($module = null, $folder = null, $file = null)
     {
         if (empty($module) || empty($folder) || empty($file)) {
             return false;
         }
 
-        $folders = Modules::folders();
-        foreach ($folders as $module_folder) {
-            $test_file = "{$module_folder}{$module}/{$folder}/{$file}";
-            if (is_file($test_file)) {
-                return $test_file;
+        foreach (Modules::folders() as $module_folder) {
+            if (is_file("{$module_folder}{$module}/{$folder}/{$file}")) {
+                return "{$module_folder}{$module}/{$folder}/{$file}";
+            } elseif (is_file("{$module_folder}{$module}/{$folder}/" . ucfirst($file))) {
+                return "{$module_folder}{$module}/{$folder}/" . ucfirst($file);
             }
         }
-
-        return false;
     }
 
-    //--------------------------------------------------------------------
-
     /**
-     * Returns the path to the module and it's specified folder.
+     * Return the path to the module and its specified folder.
      *
-     * @param $module string The name of the module (must match the folder name)
-     * @param $folder string The folder name to search for. (Optional)
+     * @param $module string The name of the module (must match the folder name).
+     * @param $folder string The folder name to search for (Optional).
      *
-     * @return string The path, relative to the front controller, or false if the folder was not found
+     * @return string The path, relative to the front controller.
      */
-    public static function path($module=null, $folder=null)
+    public static function path($module = null, $folder = null)
     {
         foreach (Modules::folders() as $module_folder) {
-            if (is_dir($module_folder . $module)) {
-                if ( ! empty($folder) && is_dir("{$module_folder}{$module}/{$folder}")) {
+            // Check each folder for the module's folder.
+            if (is_dir("{$module_folder}{$module}")) {
+                // If $folder was specified and exists, return it.
+                if (! empty($folder)
+                    && is_dir("{$module_folder}{$module}/{$folder}")
+                ) {
                     return "{$module_folder}{$module}/{$folder}";
                 }
-                return $module_folder . $module . '/';
+
+                // Return the module's folder.
+                return "{$module_folder}{$module}/";
             }
         }
-
-        return false;
     }
 
     /**
-     * Returns an associative array of files within one or more modules.
+     * Return an associative array of files within one or more modules.
      *
-     * @param $module_name string If not NULL, will return only files from that module.
-     * @param $module_folder string If not NULL, will return only files within that folder of each module (ie 'views')
-     * @param $exclude_core boolean Whether we should ignore all core modules.
+     * @param $module_name   string  If not null, will return only files from that
+     * module.
+     * @param $module_folder string  If not null, will return only files within
+     * that sub-folder of each module (ie 'views').
+     * @param $exclude_core  boolean If true, excludes all core modules.
      *
-     * @return array An associative array, like: array('module_name' => array('folder' => array('file1', 'file2')))
+     * @return array An associative array, like:
+     * <code>
+     * array(
+     *     'module_name' => array(
+     *         'folder' => array('file1', 'file2')
+     *     )
+     * )
      */
-    public static function files($module_name=null, $module_folder=null, $exclude_core=false)
+    public static function files($module_name = null, $module_folder = null, $exclude_core = false)
     {
-        if ( ! function_exists('directory_map')) {
-            $ci =& get_instance();
-            $ci->load->helper('directory');
+        // Ensure the bcDirectoryMap() function is available.
+        if (! function_exists('bcDirectoryMap')) {
+            get_instance()->load->helper('directory');
         }
 
         $files = array();
-
         foreach (Modules::folders() as $path) {
-            // If excluding core modules, skip the core module folder
-            if ($exclude_core && strpos($folder, self::$bfModulesDir) !== false) {
+            // If excluding core modules, skip the core module folder.
+            if ($exclude_core
+                && stripos($path, 'bonfire/modules') !== false
+            ) {
                 continue;
             }
 
-            // Only map the whole modules directory if $module_name isn't passed
+            // Only map the whole modules directory if $module_name isn't passed.
             if (empty($module_name)) {
-                $modules = directory_map($path);
-            }
-            // Only map the $module_name directory if it exists
-            elseif (is_dir($path . $module_name)) {
+                $modules = bcDirectoryMap($path);
+            } elseif (is_dir($path . $module_name)) {
+                // Only map the $module_name directory if it exists.
                 $path = $path . $module_name;
-                $modules[$module_name] = directory_map($path);
+                $modules[$module_name] = bcDirectoryMap($path);
             }
 
-            // If the element is not an array, it's a file, so ignore it.
-            // Otherwise it is assumed to be a module.
+            // If the element is not an array, it's a file, so ignore it. Otherwise,
+            // it is assumbed to be a module.
             if (empty($modules) || ! is_array($modules)) {
                 continue;
             }
 
-            foreach ($modules as $mod_name => $values) {
+            foreach ($modules as $modDir => $values) {
                 if (is_array($values)) {
-                    // Add just the specified folder for this module
-                    if ( ! empty($module_folder) && isset($values[$module_folder]) && count($values[$module_folder])) {
-                        $files[$mod_name] = array(
-                            $module_folder  => $values[$module_folder],
+                    if (empty($module_folder)) {
+                        // Add the entire module.
+                        $files[$modDir] = $values;
+                    } elseif (! empty($values[$module_folder])) {
+                        // Add just the specified folder for this module.
+                        $files[$modDir] = array(
+                            $module_folder => $values[$module_folder],
                         );
-                    }
-                    // Add the entire module
-                    elseif (empty($module_folder)) {
-                        $files[$mod_name] = $values;
                     }
                 }
             }
         }
 
-        return count($files) ? $files : false;
+        return empty($files) ? false : $files;
     }
 
     /**
-     * Returns the 'module_config' array from a modules config/config.php
-     * file. The 'module_config' contains more information about a module,
-     * and even provide enhanced features within the UI. All fields are optional
+     * Returns the 'module_config' array from a modules config/config.php file.
+     *
+     * The 'module_config' contains more information about a module, and even
+     * provides enhanced features within the UI. All fields are optional.
      *
      * @author Liam Rutherford (http://www.liamr.com)
      *
@@ -353,27 +489,92 @@ class Modules
      * );
      * </code>
      *
-     * @param $module_name string The name of the module.
-     * @param $return_full boolean If true, will return the entire config array. If false, will return only the 'module_config' portion.
+     * @param $module_name string  The name of the module.
+     * @param $return_full boolean Ignored if the 'module_config' portion exists.
+     * Otherwise, if true, will return the entire config array, else an empty array
+     * is returned.
      *
-     * @return array An array of config settings, or an empty array if empty/not found.
+     * @return array An array of config settings, or an empty array.
      */
-    public static function config($module_name=null, $return_full=false)
+    public static function config($module_name = null, $return_full = false)
     {
-        $config_param = array();
+        // Get the path of the file and determine whether it exists.
         $config_file = Modules::file_path($module_name, 'config', 'config.php');
+        if (! file_exists($config_file)) {
+            return array();
+        }
 
-        if (file_exists($config_file)) {
-            include($config_file);
+        // Include the file and determine whether it contains a config array.
+        include($config_file);
+        if (! isset($config)) {
+            return array();
+        }
 
-            /* Check for the optional module_config and serialize if exists*/
-            if (isset($config['module_config'])) {
-                $config_param =$config['module_config'];
-            } elseif ($return_full === true && isset($config) && is_array($config)) {
-                $config_param = $config;
+        // Check for the optional module_config and serialize if exists.
+        if (isset($config['module_config'])) {
+            return $config['module_config'];
+        } elseif ($return_full === true && is_array($config)) {
+            // If 'module_config' did not exist, $return_full is true, and $config
+            // is an array, return it.
+            return $config;
+        }
+
+        // 'module_config' was not found and either $return_full is false or $config
+        // was not an array.
+        return array();
+    }
+
+    /**
+     * Returns an array of the folders in which modules may be stored.
+     *
+     * @return array The folders in which modules may be stored.
+     */
+    public static function folders()
+    {
+        return array_keys(Modules::$locations);
+    }
+
+    /**
+     * Returns a list of all modules in the system.
+     *
+     * @param bool $exclude_core Whether to exclude the Bonfire core modules.
+     *
+     * @return array A list of all modules in the system.
+     */
+    public static function list_modules($exclude_core = false)
+    {
+        // Ensure the bcDirectoryMap function is available.
+        if (! function_exists('bcDirectoryMap')) {
+            get_instance()->load->helper('directory');
+        }
+
+        $map = array();
+        foreach (Modules::folders() as $folder) {
+            // If excluding core modules, skip the core module folder.
+            if ($exclude_core && stripos($folder, 'bonfire/modules') !== false) {
+                continue;
+            }
+
+            $dirs = bcDirectoryMap($folder, 1);
+            if (is_array($dirs)) {
+                $map = array_merge($map, $dirs);
             }
         }
 
-        return $config_param;
+        $count = count($map);
+        if (! $count) {
+            return $map;
+        }
+
+        // Clean out any html or php files.
+        for ($i = 0; $i < $count; $i++) {
+            if (stripos($map[$i], '.html') !== false
+                || stripos($map[$i], '.php') !== false
+            ) {
+                unset($map[$i]);
+            }
+        }
+
+        return $map;
     }
 }

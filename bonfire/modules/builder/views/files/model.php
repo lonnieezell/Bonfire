@@ -80,6 +80,10 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
 	if (is_array($validation_rules)) {
 		// Add rules such as trim|required
 		foreach ($validation_rules as $key => $value) {
+            if ($value == 'none_of_the_above') {
+                continue;
+            }
+
 			if ($value == 'unique') {
 				$value .= "[{$dbPrefix}{$table_name}.{$field_name},{$dbPrefix}{$table_name}.{$primary_key_field}]";
 			}

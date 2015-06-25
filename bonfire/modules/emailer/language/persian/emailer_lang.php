@@ -1,67 +1,79 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
-/*
-	Copyright (c) 2011 Lonnie Ezell
+<?php defined('BASEPATH') || exit('No direct script access allowed');
 
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-	
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-	
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-//Translator: Sajjad Servatjoo <sajjad.servatjoo[at]gmail[dot]com>
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ */
 
-$lang['em_template']			= 'قالب';
-$lang['em_email_template']		= 'فالب ایمیل';
-$lang['em_emailer_queue']		= 'صف ایمیل';
+/**
+ * Emailer language file (Persian)
+ *
+ * Localization strings used by Bonfire's Emailer module.
+ *
+ * @package Bonfire\Modules\Emailer\Language\Persian
+ * @author  Sajjad Servatjoo <sajjad.servatjoo[at]gmail[dot]com> (translator)
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer
+ */
 
-$lang['em_system_email']		= 'ایمیل سیستم';
-$lang['em_system_email_note']	= 'آدرس ایمیلی که تمامی ایمیل های تولید شده توسط سیستم بوسیله آن ارسال می شود.';
-$lang['em_email_server']		= 'سرور ایمیل';
-$lang['em_settings']			= 'تنظیمات ایمیل';
-$lang['em_settings_note']		= '<b>Mail</b> استفاده از تابع استاندارد ایمیل در php که نیازی به تنظیمات ندارد.';
-$lang['em_location']			= 'موقعیت';
-$lang['em_server_address']		= 'آدرس سرور';
-$lang['em_port']				= 'ورت';
-$lang['em_timeout_secs']		= 'زمان انتظار (ثانیه)';
-$lang['em_email_type']			= 'نوع ایمیل';
-$lang['em_test_settings']		= 'آزمایش تنظیمات ایمیل';
+$lang['emailer_template']           = 'قالب';
+$lang['emailer_email_template']     = 'فالب ایمیل';
+$lang['emailer_emailer_queue']      = 'صف ایمیل';
 
-$lang['em_template_note']		= 'ایمیل های در قالب HTML ارسال میشوند و شما میتوانید با ویرایش بالا و پایین ایمیل آنها را سفارشی نمایید.';
-$lang['em_header']				= 'بالا';
-$lang['em_footer']				= 'پایین';
+$lang['emailer_system_email']       = 'ایمیل سیستم';
+$lang['emailer_system_email_note']  = 'آدرس ایمیلی که تمامی ایمیل های تولید شده توسط سیستم بوسیله آن ارسال می شود.';
+$lang['emailer_email_server']       = 'سرور ایمیل';
+$lang['emailer_settings']           = 'تنظیمات ایمیل';
+$lang['emailer_settings_note']      = '<b>Mail</b> استفاده از تابع استاندارد ایمیل در php که نیازی به تنظیمات ندارد.';
+$lang['emailer_location']           = 'موقعیت';
+$lang['emailer_server_address']     = 'آدرس سرور';
+$lang['emailer_port']               = 'ورت';
+$lang['emailer_timeout_secs']       = 'زمان انتظار (ثانیه)';
+$lang['emailer_email_type']         = 'نوع ایمیل';
+$lang['emailer_test_settings']      = 'آزمایش تنظیمات ایمیل';
 
-$lang['em_test_header']			= 'آزمایش تنظیمات';
-$lang['em_test_intro']			= 'آدرس ایمیلی را جهت آزمایش تنظیمات ایمیل وارد نمایید.<br/>لطفا تنظیمات انجام شده را قبل از آزمایش ذخیره نمایید.';
-$lang['em_test_button']			= 'ارسال ایمیل آزمایشی';
-$lang['em_test_result_header']	= 'نتایج آزمایش';
-$lang['em_test_debug_header']	= 'اطلاعات دیباگ';
-$lang['em_test_success']		= 'ایمیل با موفقیت ارسال شد. اگر ایمیل در Inbox نباشد پوشه اسپم را بررسی نمایید.';
-$lang['em_test_error']			= 'بنظر میرسد ایمیل ارسال نشده است.';
+$lang['emailer_template_note']      = 'ایمیل های در قالب HTML ارسال میشوند و شما میتوانید با ویرایش بالا و پایین ایمیل آنها را سفارشی نمایید.';
+$lang['emailer_header']             = 'بالا';
+$lang['emailer_footer']             = 'پایین';
 
-$lang['em_test_mail_subject']	= 'تبریک ، افزونه ایمیل با موفقیت کار می کند.';
-$lang['em_test_mail_body']		= 'اگر این ایمیل را مشاهده می کنید بدین معناست که تنظیمات ایمیل شما موفقیت آمیز بوده است.';
+$lang['emailer_test_header']        = 'آزمایش تنظیمات';
+$lang['emailer_test_intro']         = 'آدرس ایمیلی را جهت آزمایش تنظیمات ایمیل وارد نمایید.<br/>لطفا تنظیمات انجام شده را قبل از آزمایش ذخیره نمایید.';
+$lang['emailer_test_button']        = 'ارسال ایمیل آزمایشی';
+$lang['emailer_test_result_header'] = 'نتایج آزمایش';
+$lang['emailer_test_debug_header']  = 'اطلاعات دیباگ';
+$lang['emailer_test_success']       = 'ایمیل با موفقیت ارسال شد. اگر ایمیل در Inbox نباشد پوشه اسپم را بررسی نمایید.';
+$lang['emailer_test_error']         = 'بنظر میرسد ایمیل ارسال نشده است.';
 
-$lang['em_stat_no_queue']		= 'ایمیلی در صف ارسال موجود نیست.';
-$lang['em_total_in_queue']		= 'ایمیل های موجود در صف ارسال:';
-$lang['em_total_sent']			= 'ایمیل های ارسال شده:';
+$lang['emailer_test_mail_subject']  = 'تبریک ، افزونه ایمیل با موفقیت کار می کند.';
+$lang['emailer_test_mail_body']     = 'اگر این ایمیل را مشاهده می کنید بدین معناست که تنظیمات ایمیل شما موفقیت آمیز بوده است.';
 
-$lang['em_sent']				= 'فرستاده شده';
-$lang['em_attempts']			= 'تلاش';
-$lang['em_id']					= 'ID';
-$lang['em_to']					= 'به';
-$lang['em_subject']				= 'عنوان';
+$lang['emailer_stat_no_queue']      = 'ایمیلی در صف ارسال موجود نیست.';
+$lang['emailer_total_in_queue']     = 'ایمیل های موجود در صف ارسال:';
+$lang['emailer_total_sent']         = 'ایمیل های ارسال شده:';
 
-$lang['em_missing_data']		= 'یک یا چند فیلد اجباری وارد نشده است.';
-$lang['em_no_debug']			= 'ایمیل در صف قرار گرفت. اطلاعات دیباگ جهت نمایش موجود نیست.';
+$lang['emailer_sent']               = 'فرستاده شده';
+$lang['emailer_attempts']           = 'تلاش';
+$lang['emailer_id']                 = 'ID';
+$lang['emailer_to']                 = 'به';
+$lang['emailer_subject']            = 'عنوان';
+
+$lang['emailer_missing_data']       = 'یک یا چند فیلد اجباری وارد نشده است.';
+$lang['emailer_no_debug']           = 'ایمیل در صف قرار گرفت. اطلاعات دیباگ جهت نمایش موجود نیست.';
+
+$lang['form_validation_emailer_system_email']  = 'ایمیل سیستم';
+$lang['form_validation_emailer_email_server']  = 'سرور ایمیل';
+// $lang['form_validation_emailer_sendmail_path'] = 'Sendmail Path';
+// $lang['form_validation_emailer_smtp_address']  = 'SMTP Server Address';
+// $lang['form_validation_emailer_smtp_username'] = 'SMTP Username';
+// $lang['form_validation_emailer_smtp_password'] = 'SMTP Password';
+// $lang['form_validation_emailer_smtp_port']     = 'SMTP Port';
+// $lang['form_validation_emailer_smtp_timeout']  = 'SMTP timeout';

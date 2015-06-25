@@ -1,29 +1,25 @@
 $(document).ready(function(){
-
-	$('#allow_name_change').change(function(){
-		var allow_change = $(this).attr('checked');
-	
-		if (allow_change == 'checked')
-		{
+	$('#allow_name_change').on('change', function(){
+		if ('checked' == $(this).attr('checked')) {
 			$('#name-change-settings').css('display', 'block');
-		}
-		else
-		{
+		} else {
 			$('#name-change-settings').css('display', 'none');
 		}
 	});
-	
-	$('#allow_remember').change(function(){
-		var allow_change = $(this).attr('checked');
-	
-		if (allow_change == 'checked')
-		{
+
+	$('#allow_remember').on('change', function(){
+		if ('checked' == $(this).attr('checked')) {
 			$('#remember-length').css('display', 'block');
-		}
-		else
-		{
+		} else {
 			$('#remember-length').css('display', 'none');
 		}
 	});
 
+    $('#status').on('change', function() {
+        if (0 == $(this).val()) {
+            $('#offline_reason').parents('.form-group').css('display', 'block');
+        } else {
+            $('#offline_reason').parents('.form-group').css('display', 'none');
+        }
+    });
 });

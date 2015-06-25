@@ -38,7 +38,7 @@ You can assign shortcut keys to each of the actions available by simply visiting
 
 There you can choose the action in a dropdown list and assign keys.
 
-Bonfire uses the [Jwerty](http://keithcirkel.co.uk/jwerty/) project to handle the shortcuts and you will find more examples of possible shortcut keys on the project site.
+Bonfire uses the [Jwerty](http://keithamus.github.io/jwerty/) project to handle the shortcuts and you will find more examples of possible shortcut keys on the project site.
 
 Note: Spaces are not allowed in your shortcut keys as this would break the javascript.
 

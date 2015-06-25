@@ -84,3 +84,5 @@ $lang['activities_delete_error']        = 'Error: %s';
 $lang['activities_view_before']         = '%s before';
 $lang['activities_filter_from_before']  = 'from before';
 $lang['activities_filter_only_for']     = 'only for';
+
+$lang['activities_username_not_found']  = '(Username not found)';
