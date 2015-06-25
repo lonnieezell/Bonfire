@@ -1,9 +1,9 @@
-#With Bootstrap 3.1
+#With Bootstrap 3.3.5
 
 Still needs some tweaks in modules...
 
 ---
-# Faster Development of CodeIgniter 2.1.4 Apps
+# Faster Development of CodeIgniter 3.0 Apps
 
 <div style="float: right; margin: 0 20px 20px 0">
 	<a href='http://www.pledgie.com/campaigns/15326'><img alt='Click here to lend your support to: Bonfire - faster CodeIgniter development and make a donation at www.pledgie.com !' src='http://pledgie.com/campaigns/15326.png?skin_name=chrome' border='0' /></a>
