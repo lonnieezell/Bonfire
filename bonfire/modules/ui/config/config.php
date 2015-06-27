@@ -1,8 +1,8 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
 
 $config['module_config'] = array(
-	'description'	=> 'Provides helpers for consistent admin UI features.',
-	'author'		=> 'Bonfire Team',
-	'version'		=> '0.1.0',
-    'name'          => 'lang:bf_menu_kb_shortcuts',
+    'author'      => 'Bonfire Team',
+    'description' => 'Provides helpers for consistent admin UI features.',
+    'name'        => 'lang:bf_menu_kb_shortcuts',
+    'version'     => '0.7.3',
 );

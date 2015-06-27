@@ -1,16 +1,11 @@
 <?php
 
-$has_permission_view_date = isset($has_permission_view_date) ? $has_permission_view_date : has_permission('Activities.Date.View');
-$has_permission_view_module = isset($has_permission_view_module) ? $has_permission_view_module : has_permission('Activities.Module.View');
-$has_permission_view_own = isset($has_permission_view_own) ? $has_permission_view_own : has_permission('Activities.Own.View');
-$has_permission_view_user = isset($has_permission_view_user) ? $has_permission_view_user : has_permission('Activities.User.View');
+$hasPermissionDeleteDate   = isset($hasPermissionDeleteDate) ? $hasPermissionDeleteDate : false;
+$hasPermissionDeleteModule = isset($hasPermissionDeleteModule) ? $hasPermissionDeleteModule : false;
+$hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDeleteUser : false;
 
 $activitiesReportsPage = SITE_AREA . '/reports/activities';
 $activitiesReportsUrl = site_url($activitiesReportsPage);
-$pageUser = 'activity_user';
-$pageModule = 'activity_module';
-$pageDate = 'activity_date';
-$pageOwn = 'activity_own';
 
 ?>
 <style>
@@ -18,57 +13,58 @@ $pageOwn = 'activity_own';
     margin-bottom: 20px;
 }
 td.button-column {
-    width: 15em;
     text-align: right;
 }
-td.label-column {
-    width: 15em;
+td.button-column,
+td.label-column,
+td.button-column button {
+    width: 20em;
 }
 </style>
 <div class="row icons">
-	<?php if ($has_permission_view_own) : ?>
+    <?php if ($hasPermissionViewOwn) : ?>
 	<div class="column size1of4 media-box">
-		<a href='<?php echo "{$activitiesReportsUrl}/{$pageOwn}"; ?>'>
+        <a href='<?php echo "{$activitiesReportsUrl}/{$pages['own']}"; ?>'>
 			<img src="<?php echo Template::theme_url('images/activity-user.png'); ?>" alt='user icon' />
 		</a>
-		<p><strong><?php echo lang(str_replace('activity_', 'activities_', $pageOwn)); ?></strong><br />
-            <span><?php echo lang(str_replace('activity_', 'activities_', "{$pageOwn}_description")); ?></span>
+        <p><strong><?php echo lang(str_replace('activity_', 'activities_', $pages['own'])); ?></strong><br />
+            <span><?php echo lang(str_replace('activity_', 'activities_', "{$pages['own']}_description")); ?></span>
 		</p>
 	</div>
 	<?php
     endif;
-    if ($has_permission_view_user) :
+    if ($hasPermissionViewUser) :
     ?>
 	<div class="column size1of4 media-box">
-		<a href='<?php echo "{$activitiesReportsUrl}/{$pageUser}"; ?>'>
+        <a href='<?php echo "{$activitiesReportsUrl}/{$pages['user']}"; ?>'>
 			<img src="<?php echo Template::theme_url('images/customers.png'); ?>" alt='users icon' />
 		</a>
-		<p><strong><?php echo lang(str_replace('activity_', 'activities_', "{$pageUser}s")); ?></strong><br />
-            <span><?php echo lang(str_replace('activity_', 'activities_', "{$pageUser}s_description")); ?></span>
+        <p><strong><?php echo lang(str_replace('activity_', 'activities_', "{$pages['user']}s")); ?></strong><br />
+            <span><?php echo lang(str_replace('activity_', 'activities_', "{$pages['user']}s_description")); ?></span>
 		</p>
 	</div>
 	<?php
     endif;
-    if ($has_permission_view_module) :
+    if ($hasPermissionViewModule) :
     ?>
 	<div class="column size1of4 media-box">
-		<a href='<?php echo "{$activitiesReportsUrl}/{$pageModule}"; ?>'>
+        <a href='<?php echo "{$activitiesReportsUrl}/{$pages['module']}"; ?>'>
 			<img src="<?php echo Template::theme_url('images/product.png'); ?>" alt='modules icon' />
 		</a>
-		<p><strong><?php echo lang(str_replace('activity_', 'activities_', "{$pageModule}s")); ?></strong><br />
-    		<span><?php echo lang(str_replace('activity_', 'activities_', "{$pageModule}_description")); ?></span>
+        <p><strong><?php echo lang(str_replace('activity_', 'activities_', "{$pages['module']}s")); ?></strong><br />
+            <span><?php echo lang(str_replace('activity_', 'activities_', "{$pages['module']}_description")); ?></span>
 		</p>
 	</div>
 	<?php
     endif;
-    if ($has_permission_view_date) :
+    if ($hasPermissionViewDate) :
     ?>
 	<div class="column size1of4 media-box">
-		<a href='<?php echo "{$activitiesReportsUrl}/{$pageDate}"; ?>'>
+        <a href='<?php echo "{$activitiesReportsUrl}/{$pages['date']}"; ?>'>
 			<img src="<?php echo Template::theme_url('images/calendar.png'); ?>" alt='calendar icon' />
 		</a>
-		<p><strong><?php echo lang(str_replace('activity_', 'activities_', $pageDate)); ?></strong><br />
-    		<span><?php echo lang(str_replace('activity_', 'activities_', "{$pageDate}_description")); ?></span>
+        <p><strong><?php echo lang(str_replace('activity_', 'activities_', $pages['date'])); ?></strong><br />
+            <span><?php echo lang(str_replace('activity_', 'activities_', "{$pages['date']}_description")); ?></span>
 		</p>
 	</div>
 	<?php endif; ?>
@@ -78,65 +74,67 @@ td.label-column {
 		<!-- Active Modules -->
 		<div class="admin-box">
 			<h3><?php echo lang('activities_top_modules'); ?></h3>
-			<?php if (isset($top_modules) && is_array($top_modules) && count($top_modules)) : ?>
+            <?php if (empty($top_modules) || ! is_array($top_modules)) : ?>
+            <p><?php echo lang('activities_no_top_modules'); ?></p>
+            <?php else : ?>
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th><?php echo lang(str_replace('activity_', 'activities_', $pageModule)); ?></th>
+                        <th><?php echo lang(str_replace('activity_', 'activities_', $pages['module'])); ?></th>
                         <th><?php echo lang('activities_logged'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($top_modules as $top_module) : ?>
+                    <?php foreach ($top_modules as $topModule) : ?>
                     <tr>
-                        <td><strong><?php echo ucwords($top_module->module); ?></strong></td>
-                        <td><?php echo $top_module->activity_count; ?></td>
+                        <td><strong><?php echo ucwords($topModule->module); ?></strong></td>
+                        <td><?php echo $topModule->activity_count; ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
-			<?php
-            else :
-                echo lang('activities_no_top_modules');
-			endif;
-            ?>
+            <?php endif; ?>
 		</div>
 	</div>
 	<div class="column size1of2 last-column">
 		<div class="admin-box">
 			<!-- Active Users -->
 			<h3><?php echo lang('activities_top_users'); ?></h3>
-			<?php if (isset($top_users) && is_array($top_users) && count($top_users)) : ?>
+            <?php if (empty($top_users) || ! is_array($top_users)) : ?>
+            <p><?php echo lang('activities_no_top_users'); ?></p>
+            <?php else : ?>
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th><?php echo lang(str_replace('activity_', 'activities_', $pageUser)); ?></th>
+                        <th><?php echo lang(str_replace('activity_', 'activities_', $pages['user'])); ?></th>
                         <th><?php echo lang('activities_logged'); ?></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($top_users as $top_user) : ?>
+                    <?php foreach ($top_users as $topUser) : ?>
                     <tr>
-                        <td><strong><?php e($top_user->username == '' ? 'Not found' : $top_user->username); ?></strong></td>
-                        <td><?php echo $top_user->activity_count; ?></td>
+                        <td><strong><?php e($topUser->username == '' ? lang('activities_username_not_found') : $topUser->username); ?></strong></td>
+                        <td><?php echo $topUser->activity_count; ?></td>
                     </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
-			<?php
-            else :
-                echo lang('activities_no_top_users');
-            endif;
-            ?>
+            <?php endif; ?>
 		</div>
 	</div>
 </div>
+<?php
+if ($hasPermissionDeleteOwn
+    || $hasPermissionDeleteUser
+    || $hasPermissionDeleteModule
+    || $hasPermissionDeleteDate
+) :
+?>
 <div class="admin-box">
 	<h3><?php echo lang('activities_cleanup'); ?></h3>
-	<?php $empty_table = true; ?>
 	<table class="table table-striped">
 		<tbody>
-			<?php if (has_permission('Activities.Own.Delete')) : ?>
+            <?php if ($hasPermissionDeleteOwn) : ?>
             <tr>
                 <?php echo form_open("{$activitiesReportsPage}/delete", array('id' => 'activity_own_form', 'class' => 'form-inline')); ?>
                     <td class='label-column'><label for="activity_own_select"><?php echo lang('activities_delete_own_note'); ?></label></td>
@@ -152,9 +150,8 @@ td.label-column {
                 <?php echo form_close(); ?>
             </tr>
             <?php
-                $empty_table = false;
             endif;
-            if (has_permission('Activities.User.Delete')) :
+            if ($hasPermissionDeleteUser) :
             ?>
             <tr>
                 <?php echo form_open("{$activitiesReportsPage}/delete", array('id' => 'activity_user_form', 'class' => 'form-inline')); ?>
@@ -174,9 +171,9 @@ td.label-column {
                 <?php echo form_close(); ?>
             </tr>
 			<?php
-                $empty_table = false;
             endif;
-            if (has_permission('Activities.Module.Delete')) :
+
+            if ($hasPermissionDeleteModule) :
             ?>
 			<tr>
                 <?php echo form_open("{$activitiesReportsPage}/delete", array('id' => 'activity_module_form', 'class' => 'form-inline')); ?>
@@ -197,9 +194,9 @@ td.label-column {
                 <?php echo form_close(); ?>
 			</tr>
 			<?php
-                $empty_table = false;
             endif;
-            if (has_permission('Activities.Date.Delete')) :
+
+            if ($hasPermissionDeleteDate) :
             ?>
 			<tr>
                 <?php echo form_open("{$activitiesReportsPage}/delete", array('id' => 'activity_date_form', 'class' => 'form-inline')); ?>
@@ -218,16 +215,9 @@ td.label-column {
                     </td>
                 <?php echo form_close(); ?>
 			</tr>
-			<?php
-                $empty_table = false;
-            endif;
-
-            if ($empty_table) :
-            ?>
-			<tr>
-				<td colspan="3"><?php echo lang('activities_none_found'); ?></td>
-			</tr>
 			<?php endif; ?>
 		</tbody>
 	</table>
 </div>
+<?php
+endif;

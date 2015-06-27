@@ -8,8 +8,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -21,9 +21,9 @@
  * This class extends the CodeIgniter core Form_validation library to add extra
  * functionality used in Bonfire.
  *
- * @package    Bonfire\Libraries\BF_Form_validation
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/guides
+ * @package Bonfire\Libraries\BF_Form_validation
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs
  */
 class BF_Form_validation extends CI_Form_validation
 {
@@ -39,11 +39,11 @@ class BF_Form_validation extends CI_Form_validation
      *
      * @return void
      */
-    function __construct($config = array())
+    public function __construct($config = array())
     {
         // Merged super-global $_FILES to $_POST to allow for better file
         // validation inside of Form_validation library
-        if ( ! empty($_FILES) && is_array($_FILES)) {
+        if (! empty($_FILES) && is_array($_FILES)) {
             $_POST = array_merge($_POST, $_FILES);
         }
 
@@ -67,6 +67,32 @@ class BF_Form_validation extends CI_Form_validation
     }
 
     /**
+     * Reset validation vars
+     *
+     * Prevents subsequent validation routines from being affected by the results
+     * of any previous validation routine due to the CI singleton.
+     *
+     * This method can be removed when compatibility with CI 2 is no longer needed,
+     * as the method already exists in CI 3.
+     *
+     * @return $this
+     */
+    public function reset_validation()
+    {
+        // Just in case the parent method changes at some point in the future.
+        if (substr(CI_VERSION, 0, 1) != '2') {
+            return parent::reset_validation();
+        }
+
+        $this->_field_data = array();
+        $this->_config_rules = array();
+        $this->_error_array = array();
+        $this->_error_messages = array();
+        $this->error_string = '';
+        return $this;
+    }
+
+    /**
      * Performs the actual form validation
      *
      * @param string $module Name of the module
@@ -76,6 +102,7 @@ class BF_Form_validation extends CI_Form_validation
      */
     public function run($module = '', $group = '')
     {
+        $this->CI->lang->load('bf_form_validation');
         is_object($module) && $this->CI =& $module;
         return parent::run($group);
     }
@@ -114,7 +141,7 @@ class BF_Form_validation extends CI_Form_validation
      */
     public function allowed_types($str, $types = null)
     {
-        if ( ! $types) {
+        if (! $types) {
             log_message('debug', 'form_validation method allowed_types was called without any allowed types.');
             $this->CI->form_validation->set_message('allowed_types', lang('bf_form_allowed_types_none'));
             return false;
@@ -139,7 +166,7 @@ class BF_Form_validation extends CI_Form_validation
      *
      * @return	bool
      */
-    function alpha_extra($str)
+    public function alpha_extra($str)
     {
         if (preg_match("/^([\.\s-a-z0-9_-])+$/i", $str)) {
             return true;
@@ -157,7 +184,7 @@ class BF_Form_validation extends CI_Form_validation
      *
      * @return bool
      */
-    function matches_pattern($str, $pattern)
+    public function matches_pattern($str, $pattern)
     {
         if (preg_match('/^' . $pattern . '$/', $str)) {
             return true;
@@ -206,7 +233,7 @@ class BF_Form_validation extends CI_Form_validation
      */
     public function one_of($str, $options = null)
     {
-        if ( ! $options) {
+        if (! $options) {
             log_message('debug', 'form_validation method one_of was called without any possible values.');
             $this->CI->form_validation->set_message('one_of', lang('bf_form_one_of_none'));
             return false;
@@ -223,31 +250,31 @@ class BF_Form_validation extends CI_Form_validation
     }
 
     /**
-     * Checks that a value is unique in the database
+     * Checks that a value is unique in the database.
      *
-     * i.e. '…|required|unique[users.name.id.4]|trim…'
+     * i.e. '…|required|unique[users.name,users.id]|trim…'
      *
      * <code>
-     * "unique[tablename.fieldname.(primaryKey-used-for-updates).(uniqueID-used-for-updates)]"
+     * "unique[tablename.fieldname,tablename.(primaryKey-used-for-updates)]"
      * </code>
      *
      * @author Adapted from Burak Guzel <http://net.tutsplus.com/tutorials/php/6-codeigniter-hacks-for-the-masters/>
      *
-     * @param mixed $value  The value to be checked
+     * @param mixed $value  The value to be checked.
      * @param mixed $params The table and field to check against, if a second
-     * field is passed in this is used as "AND NOT EQUAL"
+     * field is passed in this is used as "AND NOT EQUAL".
      *
-     * @return bool
+     * @return bool True if the value is unique for that field, else false.
      */
-    function unique($value, $params)
+    public function unique($value, $params)
     {
-        // Allow for more than 1 parameter
+        // Allow for more than 1 parameter.
         $fields = explode(",", $params);
 
-        // Extract the table and field from the first parameter
-        list($table, $field) = explode(".", $fields[0], 2);
+        // Extract the table and field from the first parameter.
+        list($table, $field) = explode('.', $fields[0], 2);
 
-        // Setup the db request
+        // Setup the db request.
         $this->CI->db->select($field)
                      ->from($table)
                      ->where($field, $value)
@@ -255,16 +282,16 @@ class BF_Form_validation extends CI_Form_validation
 
         // Check whether a second parameter was passed to be used as an
         // "AND NOT EQUAL" where clause
-        // eg select * from users where username='test' AND id != 4
+        // eg "select * from users where users.name='test' AND users.id != 4
         if (isset($fields[1])) {
             // Extract the table and field from the second parameter
-            list($where_table, $where_field) = explode(".", $fields[1], 2);
+            list($where_table, $where_field) = explode('.', $fields[1], 2);
 
-            // Get the value from the $where_field, if the value is set, add the
-            // extra where clause
+            // Get the value from the post's $where_field. If the value is set,
+            // add "AND NOT EQUAL" where clause.
             $where_value = $this->CI->input->post($where_field);
             if (isset($where_value)) {
-                $this->CI->db->where("{$where_field} !=", $where_value);
+                $this->CI->db->where("{$where_table}.{$where_field} <>", $where_value);
             }
         }
 
@@ -327,4 +354,3 @@ class BF_Form_validation extends CI_Form_validation
         return true;
     }
 }
-/* End of file : /libraries/BF_Form_validation.php */

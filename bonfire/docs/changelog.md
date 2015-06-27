@@ -2,74 +2,277 @@
 
 ## Under development
 
-### 0.7.1 - not released
+### 0.8.1
 
-Additional Changes:
-* Replaced Assets::$asset_base, Assets::$asset_cache_folder, and Assets::$asset_folders with a single Assets::$directories array (these were not deprecated because they were private properties). Allow a config item ('assets.directories') to set the value of the new property, but if it is not set the library will attempt to use the old config items ('assets.base_folder', 'assets.cache_folder', and 'assets.asset_folders').
-* Added closures to hold the functions for CSS/JS minification, which should facilitate swapping out the libraries that perform these functions in the future.
-* Deprecated Assets::set_globals(), Assets::$external_scripts, Assets::$inline_scripts, and Assets::$module_scripts. Replaced by Assets::setGlobals() and Assets::$scripts['external']/Assets::$scripts['inline']/Assets::$scripts['module']
-* Partial Russian translation
-* Deprecated the module_* functions in application_helper. They're in the Modules class now.
-* Deprecated form_has_error() method since CI's form_error() does the same thing.
-* Docs system is much more robust now, including link fixing, separating application/developer docs in the UI, a basic search system, and more.
-* Separated all Bonfire code from your Application's code
-* Most bonfire specific code now uses a BF_ prefix instead of the MY_ prefix your application would use..
-* The module_* methods in the application_helper file have been moved to the Modules class. The application_helper methods are still there but are considered deprecated.
-* Many improvements to the Brazilian Portugeuse language handling.
-* Improved support for translations in the Activities, Builder, Logs, Sysinfo, and UI modules.
-* Removed Settings related to the previously removed Updates module
-* The user register form can be modified to include hidden fields named `register_url` and `login_url` that will override the current REGISTER_URL and LOGIN_URL values, respectively, to make it simpler to use the existing logic in custom modules.
+#### New Features:
 
-New Features:
-* Images controller can reference images from a module using the module=... parameter.
-* Template class now provides a `check_segment` method in addition to check_class and check_method.
-* Brand new documentation system that allows splitting your user and dev-related docs, and searching docs.
-* CSRF protection can be bypassed for individual controllers by setting `csrf_ignored_controllers` setting in the site's main index file.
+#### Closes Issues:
+* #1118 Settings error when password options are not selected in security tab.
+
+#### Additional Changes:
+
+#### Known Issues:
+
+## Released versions
+
+### 0.8.0
+
+#### New Features:
+* Installed/Enabled version of CodeIgniter upgraded to 3.0
+* CI v2.x compatibility maintained, but requires [some additional steps to use/enable](https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/docs/ci2.md).
+
+#### Closes Issues:
+
+#### Additional Changes:
+
+#### Known Issues:
+
+### 0.7.4
+
+#### New Features:
+
+#### Closes Issues:
+* #1119 Module Builder xss_clean error
+* #1116 Syntax error in the builder-built view (when adding a required input field), pt 2
+* #1115 Can't save settings, 'module' field not being sent to settings table
+* #1114 Differences in Routing between CI2 and CI3
+* #1113 Syntax error in the builder-built view (when adding a required input field)
+* #1112 Can't login to site when offline in CI3
+
+#### Additional Changes:
+
+#### Known Issues:
+
+### 0.7.3
+
+#### New Features:
+* If you are not using the installer, add `$config['bonfire.installed'] = "1";` to `/application/config/application.php`.
+* Added `Template::setSessionUse($useSession = true)`, deprecated `Template::$ignore_session`. Note that the parameter accepted by `setSessionUse()` would be the opposite value of that used with `$ignore_session`.
+* Added `form_validation->reset_validation()` support for CI 2 (in `BF_Form_Validation`, in CI 3 the method calls the parent method, in case of any future changes).
+* Added `\application\language\english\bf_form_validation_lang.php` to store custom form validation language entries. This file is automatically loaded by the `BF_Form_validation` library when calling `$this->form_validation->run()`.
+
+#### Closes Issues:
+* #1110 `BF_Form_validation` not loaded in CI3
+* #1109 Mobule Builder not using `lang(module_field_name)` for create/edit views.
+* #1108 Can't create new user using CI3
+* #1107 No model error generated for a failed update
+* #1106 Settings controller displays error message on success.
+* #1105 Doc searching - preg_match error when directory is encountered
+* #1103 Installation using CI 3.0 fails due to use of sessions before CI 3 session table is created.
+* #1033 Email sending test makes subnav bar crash
+
+#### Additional Changes:
+* Upgraded CI to v2.2.2.
+* Fixes an issue when creating new roles which caused permissions to modify the new role not to be created/added to the admin/current user.
+* Fixes issues with Emailer not displaying saved settings properly.
+* Fixes issues with Add/Remove Shortcuts in UI module.
+* Fixes result of `BF_Model->update_batch()` when the update completed successfully in CI 3, or failed in CI 2.
+* Database module:
+    * Fixed display of validation errors on backup.
+    * Added message indicating user submitted index with the separator selected in the dropdown.
+* CI 3 compatibility improvements:
+    * Fix Runtime Notice for Users Settings: Only variables should be passed by reference.
+    * Don't use `$this->load->driver('session')`, and don't check for the CI version before loading the session library.
+    * Normalize the output of `uri->ruri_string()` before checking it in `App_hooks` (may be needed elsewhere).
+    * Fix loading of `BF_`-prefixed libraries when a `MY_`-prefixed library is not present.
+    * Don't display developer documentation for modules in the application docs.
+* Installer improvements:
+    * Updated a number of migrations to remove session use.
+    * Removed session from autoload.
+    * `bonfire.installed` setting added to application config by the installer.
+    * `App_hooks` disables session use when `bonfire.installed` is not found.
+
+#### Known Issues:
+
+### 0.7.2
+
+#### New Features:
+* In CI 2.x, uses bfmysqli database driver (a modified version of the mysqli driver) by default.
+* CommonMark support in Docs
+    * View the [CommonMark Library docs](developer/commonmark) for more information.
+* Added `BF_directory_helper`:
+    * `bcDirectoryMap()` function provides the same output as CI2's `directory_map()` function. This was used primarily to make the Modules library and various portions of the translate module work properly in CI3.
+    * In the long term, both the Modules library and translate module should be updated with more robust path/directory name handling, which would make this function unnecessary.
+
+#### Closes Issues:
+* #337 Can not login to admin when site is turned off (previously closed as non-issue, now fixed).
+* #357 Custom Message When Site is Off/Closed
+* #793 Wrong timezone setting (use `site.default_user_timezone` setting when $user->timezone is unavailable, instead of the admin's timezone).
+* #603 Documentation updated to note the potential for `before_`/`after_user_update` events to receive an array in the `user_id` field, and for that field to potentially not include the user's ID.
+* #565 `render_user_form` in the admin doesnt pass the payload.
+* #1082 Strip '.php' extension from module config files in `config_file_helper`'s `read_config()` function when the file is found by `Modules::file_path()`.
+* #1085 `s` key submits forms automatically
+* #1087 Country dropdown in extended settings doesn't update state dropdown
+* #1089 Fix error deleting roles for permissions during permission_model->update()
+* #1097, 1081 Installer looks for database configuration only in /application/config/development/database.php
+
+#### Additional Changes:
+* Upgraded CI to v2.2.1
+* [Improved support for CI 3](https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/docs/ci3.md).:
+    * Renamed controller, library, and model files to uppercase first letter.
+    * Added support for loading controller and model files named with uppercase first letter.
+    * Accept null or false return from `config->item()` when config file has not been loaded.
+    * Replaced use of `router->fetch_directory()` and `router->fetch_class()` with `router->directory` and `router->class`, respectively.
+    * Replaced `random_string('unique', ...)` with `random_string('md5',...)`.
+    * Replaced `read_file()` with `file_get_contents()`.
+    * Replaced `do_hash()` with `sha1()`.
+    * Added Constants from CI 3 to `/application/config/constants.php` (primarily EXIT_* constants).
+* Removed mdash entities in documentation for "Submitting Bug Reports and Feature Requests" and updated link in Readme
+* Profiler now displays boolean values in config section (displayed values are retrieved from the application_lang file, `'bf_profiler_true'` and `'bf_profiler_false'`).
+* Added support for socket connections (prefixed with /) to bfmysqli database driver, similar to mysqli driver socket support in CI3.
+* jwerty (keyboard shortcuts):
+    * Updated URL for jwerty.
+    * Updated jwerty.js to version 0.3.2.
+* Added `$allowOffline` array to `/application/hooks/App_hooks.php` to configure pages which are allowed to bypass the site offline functionality. As long as `'/users/login'` is in this list, users with the correct permissions will be able to log in and bring the site back online. If a user does not have the correct permission, and no additional pages have been added to the list, they will still see the contents of the `/application/errors/offline.php` file once they log in to the site. If you want to disable user logins while the site is offline, set this variable to an empty array. Just make sure you don't log out of the site after setting it offline, or you will have to update the database to get the site back online.
+* Application Helper:
+    * `is_https()`:
+        * Added `is_https()` function from CI 3's `core/Common` functions to ensure checks for use of https are consistent and accurate.
+        * Modified `gravatar_link()` function to use `is_https()`.
+        * Modified the Assets library to use `is_https()` (in `external_js()` and `find_files()`).
+        * Did not modify CI 2 core classes to use it, but it could be useful in `core/Config` and `core/Security`. One possibility would be to override `csrf_set_cookie()` in `/bonfire/core/BF_Security.php`.
+    * Modified `list_contexts()` to call `Contexts:getContexts()`, keeping the functionality of determining required and available contexts within the Contexts library.
+* UI/Contexts Library:
+    * Deprecated `set_contexts()` and `get_contexts()` (use `setContexts()` and `getContexts()`).
+    * When using `setContexts()` in place of `set_contexts()`, be aware that the behavior has changed slightly:
+        * when omitting the second argument (`$siteArea`), `setContexts()` will not change the internal `$site_area` variable, while `set_contexts()` would set it to `SITE_AREA`. (`SITE_AREA` is still the default value for the internal variable.)
+        * `setContexts()` will add the required contexts if they are not included in the first argument.
+    * `getContexts()` allows an optional first argument to only return contexts with landing pages (the functionality from the `application_helper`'s `list_contexts()` function).
+    * Modified internal access of the `self::$contexts` array to use `self::getContexts()` and `self::setContexts()`.
+* Language improvements:
+    * CI Language files adapted from https://github.com/bcit-ci/codeigniter3-translations (official CI3 translations repository)
+    * DB files modified to use `db_unsupported_compression` and `db_unsupported_feature` (instead of `db_unsuported_*`) and FTP library modified to use `ftp_unable_to_mkdir` instead of `ftp_unable_to_makdir`, so other language files may be pulled down from the official CI3 translations.
+    * Updated `form_validation_lang` files to allow use with either CI 2 or 3.
+    * Changed language prefix for emailer module from `em_` to `emailer_`.
+    * Fixed russian language support for activities, logs, and sysinfo modules. Added russian language support to builder.
+    * Changed language prefix for translate module from `tr_` to `translate_`.
+
+#### Known Issues:
+
+### 0.7.1
+
+#### New Features:
+
+* Composer Auto-loading may be enabled by setting `'composer_autoload'` to true (or the path to the autoload.php file) in /application/config/config.php. Please be aware that this currently requires hooks to be enabled and the `App_hooks->checkAutoloaderConfig()` method must be included in the `pre_controller` hooks in /application/config/hooks.php.
 * Now works with [Sparks](http://getsparks.org) out of the box.
-* Added languages_available and database_types to Module Builder's configurable options. languages_available tells the builder which language files to attempt to build for a new module. database_types gives the builder some information about the types supported by the database, and is used in generating the "Database Type" select on the module builder form, as well as handling several other aspects of building the module.
+* Brand new documentation system that allows splitting your user and dev-related docs, and searching docs.
+* Added bfmysqli driver to support more features in the MySQLi driver without changing the codeigniter driver. Set `$db['dbdriver'] = 'bfmysqli';` in the database config, configure the other settings as you would for the mysqli driver.
+* Images controller can reference images from a module using the `module=...` parameter.
+* Template class now provides a `check_segment` helper in addition to `check_class` and `check_method`.
+* CSRF protection can be bypassed for individual controllers by setting `csrf_ignored_controllers` setting in the site's main index file.
+* Added `'languages_available'` and `'database_types'` to Module Builder's configurable options. `languages_available` tells the builder which language files to attempt to build for a new module. `database_types` gives the builder some information about the types supported by the database, and is used in generating the "Database Type" select on the module builder form, as well as handling several other aspects of building the module.
 
-Closes Issues:
-* #1011 - save_requested() and prep_redirect() are broken again.
+#### Closes Issues:
+
+* #1078 - Module Builder form's script would fail if other scripts using `localStorage` used URLs for keys. Failure of the script would cause collapsing areas in the form to stop functioning. DataTables v1.10 would cause this issue if the `saveState` option was enabled.
+* #1075 - Removed statistics collection from installer.
+* #1073 - Installation issues with App_hooks when settings table doesn't exist.
+* #1048 - (almost) full russian language
+* #1041 - Only display edit keyboard shortcuts link to users with permission to edit them
+* #1040 - Documentation errors (Performance Tips)
+* #1038 - Add HTML5 required attribute to builder-generated form inputs
+* #1036 - Builder: Allow user to undo selecting an option under Input Limitations
+* #1035, 1042 - Migrations library attempts to insert core version (duplicate key) during installation
+* #1011 - `save_requested()` and `prep_redirect()` are broken again.
 * #1009 - Activities reports 0 records found when attempting to delete.
 * #1001 - Error handling in Module Builder, default max lengths for fields in existing tables, JavaScript updates of table name, use created/modified/soft deletes and log user as checkboxes
 * #1000 - Cache errors when using custom ENVIRONMENT settings
-* #983 - Assets::js() creates invalid path when base_url is set to a directory
-* #982 - MY_Security renamed to BF_Security
-* #979 - Calling Modules::Run() from view is broken
-* #975 - BF_Model->update(): check validation result before continuing with update
+* #983 - `Assets::js()` creates invalid path when `base_url` is set to a directory
+* #982 - `MY_Security` renamed to `BF_Security`
+* #979 - Calling `Modules::Run()` from view is broken
+* #975 - `BF_Model->update()`: check validation result before continuing with update
 * #968 - Error loading language file in languages other than English
 * #967 - Should make the CSRF ignore list configurable.
 * #965 - State input no longer required in extended settings
-* #964 - Fixed documentation of Template::set()
+* #964 - Fixed documentation of `Template::set()`
 * #962 - Updated docs system doesn't load module docs for application or module docs named something other than index
 * #958 - ENVIRONMENT config files are being ignored.
 * #957 - Documentation of required server configuration on display of root index.php
 * #955 - Fixed the path of the User Modules' views
-* #954 - Assets::js() returns nothing if string is passed as first parameter
-* #952 - Documentation of BF_Model's handling of validation 'label' parameter
+* #954 - `Assets::js()` returns nothing if string is passed as first parameter
+* #952 - Documentation of `BF_Model`'s handling of validation 'label' parameter
 * #948 - Add function strtolower in libraries: Module will be better.
 * #947 - Remove PHP short tag from view for PHP 5.3 support
 * #946 - Unable to load class cache.
-* #941 - Model set_date when time_reference is set to GMT
-* #940 - Model update() throws error in modified_on() when validation fails and set_modified is enabled.
-* #939, 627 - sync user_meta state/country selects
-* #937 - Module Builder support for $log_user, $created_by_field, $modified_by_field, and $deleted_by_field
+* #941 - Model `set_date` when `time_reference` is set to GMT
+* #940 - Model `update()` throws error in `modified_on()` when validation fails and `set_modified` is enabled.
+* #939, 627 - sync `user_meta` state/country selects
+* #937 - Module Builder support for `$log_user`, `$created_by_field`, `$modified_by_field`, and `$deleted_by_field`
 * #932 - Resend Activation Link sends incorrect link, preventing user from activating account
-* #928 - min_length[8] validation called regardless of minimum length setting for password
+* #928 - `min_length[8]` validation called regardless of minimum length setting for password
 * #926 - Application helper iif issue
-* #922 - Type of MY_Model update_where() method
-* #919 - Incorrect documentation of date_format field in MY_Model
-* #917 - Problem when SITE_AREA is changed
-* #849 - No need to save password_iterations in the user table
+* #922 - Type of `MY_Model` `update_where()` method
+* #919 - Incorrect documentation of `date_format` field in `MY_Model`
+* #917 - Problem when `SITE_AREA` is changed
+* #849 - No need to save `password_iterations` in the user table
 * #769 - Filter out soft-deleted records on public index generated by module builder
+* #757 - Migration version is always up when SQL migrations fail
 * #737 - Paging data in Module Builder
+* #726 - Admin notification for approval
 * #709 - Language entry is now created when creating a new context
-* #697 - Module Builder now warns about any names which pass a class_exists() check
+* #697 - Module Builder now warns about any names which pass a `class_exists()` check
 * #687 - user-meta fields doesn't respect "required"
 * #637 - Bonfire admin topbar CSS breaks scrolling features (Firefox)
 * #612 - Modifying set created and set modified from models
+* #578 - modulebuilder config: 3 "defaults" not used (except for some error handling which will cause confusion)
 
-## Released versions
+#### Additional Changes:
+
+* Updated CodeIgniter to version 2.2
+* Updated list of countries in /application/config/address.php and added state codes for a few more countries.
+* Separated all Bonfire code from your Application's code
+* Most Bonfire-specific code now uses a `BF_` prefix instead of the `MY_` prefix your application would use.
+* Removed Settings related to the previously removed Updates module
+* The user register form can be modified to include hidden fields named `register_url` and `login_url` that will override the current `REGISTER_URL` and `LOGIN_URL` values, respectively, to make it simpler to use the existing logic in custom modules.
+* Added 4th parameter to `timezone_menu` in the date helper to allow passing additional attributes, such as an ID, for the generated select element. Updated the `user_fields` view to make sure of this parameter (and fix an accessibility error on the view).
+* Application Helper:
+    * The `module_*` methods in the `application_helper` have been moved to the Modules class. The `application_helper` methods are still there but are deprecated.
+    * Deprecated `form_has_error()` method since CI's `form_error()` does the same thing.
+* Assets Library:
+    * Replaced `Assets::$asset_base`, `Assets::$asset_cache_folder`, and `Assets::$asset_folders` with a single `Assets::$directories` array (these were not deprecated because they were private properties). Allow a config item (`'assets.directories'`) to set the value of the new property, but if it is not set the library will attempt to use the old config items (`'assets.base_folder'`, `'assets.cache_folder'`, and `'assets.asset_folders'`).
+    * Added closures to hold the functions for CSS/JS minification, which should facilitate swapping out the libraries that perform these functions in the future.
+    * Deprecated `Assets::set_globals()`, `Assets::$external_scripts`, `Assets::$inline_scripts`, and `Assets::$module_scripts`. Replaced by `Assets::setGlobals()` and `Assets::$scripts['external']`/`Assets::$scripts['inline']`/`Assets::$scripts['module']`
+* Database module:
+    * Added support for bfmysqli driver.
+    * Changed language files to use `database_` prefix instead of `db_` prefix to prevent conflicts with CodeIgniter's language files.
+    * Moved CSS out of the views.
+* Docs:
+    * Docs system is much more robust now, including link fixing, separating application/developer docs in the UI, a basic search system, and more.
+    * Added configuration options to docs module to set the environments in which the docs will be displayed and the name of the toc file.
+    * Fixed an issue in the docs module that prevented the sidebar links from building properly for application or developer docs if a toc file was not used.
+* Migrations:
+    * The Migrations library now only requests version information which hasn't previously been retrieved by the library on the current request (2 static properties maintain the library's schema version and the current versions of the modules and the app/core migrations).
+    * Significantly reduced the impact of using `migrate.auto_core` and `migrate.auto_app` when multiple controllers are loaded which inherit from `Base_Controller`.
+    * Improved the load time of the migrations view (especially when a large number of modules are installed).
+    * Fixed an error in the `version()` method when an error occurred in `glob()` while retrieving the migrations for a given step (see comment in the code for more details).
+    * When running multiple migrations, only update the version in the database once.
+    * Reduced the number of methods in the library with knowledge of the database table's structure.
+    * Overhauled the library's API:
+        * Added:
+            * `getErrorMessage()` - return the most recent error message
+            * `getErrors()` - return all errors
+            * `getModuleVersions()` - retrieve the current version of all modules in one call
+            * `Migrations::APP_MIGRATION_PREFIX` constant - the prefix used for app migrations (`'app_'`)
+            * `Migrations::CORE_MIGRATIONS` constant - the migration type used for core migrations (`'core'`)
+            * `Migrations::MAX_SCHEMA_VERSION` - the maximum version of the schema_version table supported by the library (`3`)
+        * Deprecated (all of the below still work, but eventually will be removed, their performance may also be degraded, as the methods are now pass-throughs to the new methods):
+            * `$error` property (use `getErrorMessage()`)
+            * `auto_latest()` - use `autoLatest()`
+            * `do_sql_migration()` - use `doSqlMigration()`
+            * `get_available_versions()` - use `getAvailableVersions()`
+            * `get_latest_version()` - use `getVersion($type, true)`
+            * `get_schema_version()` - use `getVersion($type)`
+            * `set_verbose()` - use `setVerbose()`
+* Translations:
+    * Partial Russian and Italian translations.
+    * Many improvements to the Brazilian Portugeuse language handling.
+    * Improved support for translations in the Activities, Builder, Logs, Sysinfo, and UI modules.
+* Template Library:
+    * Added `setLayout()` and `getLayout()` methods, deprecated the public `$layout` property (it will become private or protected in a future version).
+
+#### Known Issues:
+
+* If a module is named `'application'` or `'developer'`, the docs module won't be able to generate links to any documents which reside in that module.
+
 
 ### 0.7.0
 
@@ -79,7 +282,7 @@ Closes Issues:
 * Updated .htaccess sections taken from html5boilerplate, supporting the new Apache 2.4.
 * Updated jwerty to version 0.3.1 (seems to fix issue where creating a shortcut for '&' kills keyboard input on all admin pages)
 
-New Features:
+#### New Features:
 
 * [New Folder Structure](site_structure)
 * The password hash changes from SHA1 (salted, but not iterated) to [phpass](http://www.openwall.com/phpass/) libraries. When on PHP 5.3 or with the Suhosin patch installed, Blowfish encryption is used. If bcrypt is not available, will fallback to extended DES-based hashes, or even to phpass' provided (but slower) hash method, if necessary.
@@ -94,7 +297,7 @@ New Features:
 * New constants LOGIN_URL and REGISTER_URL are used in place throughout the site to make it easy to change the login and registration URLs.
 * New docs system that provides basic methods for packaging documentation with your modules and application using Markdown formatted text files.
 
-Closes named issues:
+#### Closes named issues:
 
 * #598 - Fix password help message for number required
 * #557 - When logging in, check the user isn't banned
@@ -121,7 +324,7 @@ Closes named issues:
 * #767 - Don't allow deleting the default role, it causes problems
 * #785 - email activation can fail with "The URI you submitted has disallowed characters"
 
-Additional changes:
+#### Additional changes:
 
 * $table in MY_Model changed to $table_name to avoid potential conflict with the table library.
 * database backup - fix effect of yes/no dropdowns for languages other than English
@@ -146,19 +349,19 @@ Additional changes:
 
 Migrations should be set to auto-run in the application config file so that the new password hash is enforced before you try to login the first time after updating. The migrations force all users to create new passwords so that the newer encryption methods are used.
 
-The "ban" button in the users page is working now, and the permission Site.Signin.Allow has been removed.  If you created a custom role which banned logins by excluding this permission, they will now be able to log in.
+The "ban" button in the users page is working now, and the permission `Site.Signin.Allow` has been removed.  If you created a custom role which banned logins by excluding this permission, they will now be able to log in.
 
-If you attempt to downgrade to 0.6.*, Bonfire will at best restore Site.Signin.Allow to the Administrator role. No other role will be able to log in.  This was written with developers in mind, not downgrading a production system.  (But it would be interesting to hear any feedback).
+If you attempt to downgrade to 0.6.*, Bonfire will at best restore `Site.Signin.Allow` to the Administrator role. No other role will be able to log in.  This was written with developers in mind, not downgrading a production system.  (But it would be interesting to hear any feedback).
 
 The comment recommending `IS_AJAX` as a security check has been removed.  `IS_AJAX` is not effective as a security check.  It may have happened to prevent CSRF on AJAX methods, but Bonfire now supports CodeIgniter CSRF protection (see upgrade notes for 0.6.1).  For other purposes, you may prefer to avoid the Bonfire-specific constant in favour of the standard CodeIgniter method `$this->input->is_ajax_request()`.
 
-Because the MY_Controller file no longer ships with Bonfire, you should make a backup of your current MY_Controller file, if you have made any changes. This file will be renamed to Base_Controller.php. Any changes you made should then be redistributed over the new Controller files in application/core.
+Because the `MY_Controller` file no longer ships with Bonfire, you should make a backup of your current `MY_Controller` file, if you have made any changes. This file will be renamed to `Base_Controller.php`. Any changes you made should then be redistributed over the new Controller files in application/core.
 
 If you use the $table class var within any of your module's model files, you will need to change that reference to $table_name.
 
-If your module calls the activity_model for logging purposes, you will need to either switch the code to the new log_activity() helper method or load the acvitity_model explicitly.
+If your module calls the `activity_model` for logging purposes, you will need to either switch the code to the new `log_activity()` helper method or load the `activity_model` explicitly.
 
-All templates that use the current Template::yield() function must be updated to Template::content() due to the addition of generators in PHP 5.5.
+All templates that use the current `Template::yield()` function must be updated to `Template::content()` due to the addition of generators in PHP 5.5.
 
 
 ### 0.6.1
@@ -195,7 +398,7 @@ In the AJAX request, an extra data field:
 
 ### Version 0.6
 
-Additions:
+#### Additions:
 
 - Major UI Upgrade to use Twitter Bootstrap
 - Application and other settings are moved into the DB
@@ -214,7 +417,7 @@ Additions:
 
 ### Version 0.5.2
 
-Additions:
+#### Additions:
 
 - Fix for parse_views in the Template library
 - Change text to use lang file - issue #360
@@ -226,13 +429,9 @@ Additions:
 
 ### Version 0.5.1
 
-Additions:
+#### Additions:
 
 - Hotfix for issue in Module Builder
-
-
-Additions:
-
 - Edit Profile for the front end user - issue #197
 - Mode_rewrite check in the installer to set the base_url - issue #52
 - Adding extra functionality to the config_file_helper to allow reading and writing of module config files
@@ -250,7 +449,7 @@ Additions:
 
 ### Version 0.5
 
-Additions:
+#### Additions:
 
 - Edit Profile for the front end user - issue #197
 - Mode_rewrite check in the installer to set the base_url - issue #52
@@ -266,8 +465,7 @@ Additions:
 - Emailer improvements
 - Localization improvements, including Persian language files (thanks to Github user "sajjad-ser")
 
-
-Bugs:
+#### Bugs:
 
 - #236 - Email Settings - fixing the password validation
 - #252 - MY_Form_Validation unique() not working
@@ -301,14 +499,14 @@ Bugs:
 
 ### Version 0.2
 
-Additions:
+#### Additions:
 
 - Major revamp to the ModuleBuilder
 - Added new date_difference function to MY_date_helper.
 - Removed the Tester module and replaced with integrated SimpleTest suite.
 - You can now view and delete system-wide activities in the Reports context.
 
-Enhancements:
+#### Enhancements:
 
 - Emailer has better tools for testing the Queue.
 - Activities logged for more activities throughout Bonfire.
@@ -322,7 +520,7 @@ Enhancements:
 - Installer improvements to make it more usable and stable (we hope)
 - Creating and deleting roles adds/removes proper permissions to the system.
 
-Bugs:
+#### Bugs:
 
 - Fixed bug in MY_Form_Validation to allow the form validation library to work with Modular Extensions HMVC. See http://www.mahbubblog.com/php/form-validation-callbacks-in-hmvc-in-codeigniter/ for more details.
 - User module plays better with various display/login options
@@ -352,7 +550,7 @@ Bugs:
 
 Released: August 11, 2011
 
-Additions:
+#### Additions:
 
 - The Emailer class has a new setting, html or text email format.
 - Emailer class now has a way to test your email settings.
@@ -366,7 +564,7 @@ Additions:
 - Now has a proper AJAX loading display.
 - Adding Activity records to the Module Builder
 
-Enhancements:
+#### Enhancements:
 
 - Forgot Password feature was revised for better security.
 - Users can have countries stored with their profile. A country table added to db as well as a country_select function to the helper.
@@ -382,7 +580,7 @@ Enhancements:
 - Adding activity log when saving the App settings
 - Moved site, update and email based config settings into the new settings database table - this removed the need for the config/email.php
 
-Bugs:
+#### Bugs:
 
 - Upgraded to the latest version of head.js to fix a bug where AJAX page loads were not working in FF3 and IE.
 - Misc. bugfixes in the install routine that should allow for smooth installation in a larger number of cases.
@@ -397,8 +595,6 @@ Bugs:
 - Config helper now allows apostrophes in config items.
 - HMVC modules locations array moved to application/config.php so it won't be overwritten in the future.
 - write_config() function now writes backups to application/archives like it should have been.
-
-
 
 ### Version 0.1 - Initial Release
 Released: March 30, 2011

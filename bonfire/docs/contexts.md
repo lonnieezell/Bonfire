@@ -76,3 +76,46 @@ The localized version will automatically be used if present, otherwise the name 
 You can restrict access to your contexts by creating a new permission. This permission should be named 'Site.{context}.View', where <td>{context}</td> is the name of your context. Once this permission is created in the system, no one will be able to view the context if they do not have permission.
 
 In order to manage the permission, you will need to create another permission called 'Permissions.{context}.Manage'.
+
+## Custom Context Menus
+
+To customize the context menus for your module, simply add any of the following entries to your module's `config.php` file's `'module_config'` array:
+
+- **name** is the human-readable name of your module, to be displayed in the context menu. If not specified, the name of the module directory will be used.
+- **description** is a short description of your module and will appear in the list of installed modules, as well as being used in the 'title' attribute of the link in the context menu. If not specified, the name of the module directory will be used.
+- **menus** is an array which allows you to specify sub-menus that appear under each context. The value is the relative path to a view file which contains a &lt;ul&gt; of your options.
+- **menu_topic** is an array which allows you to specify that the menu for a given context will appear as a sub-menu under a given `'menu_topic'`. The same `'menu_topic'` may be used by multiple modules within the application to group related functionality within a single sub-menu.
+- **weights** is an array that allows you to order the menu items within the main context navigation. Think of it like the menu is a bowl of water. The heavier the weight (or the larger the value), the farther down the menu it will sink.
+
+Values specified under `'menu_topic'` or `'name'` may optionally use the `lang:` prefix to indicate an entry in the `'application_lang'` file to be used for translating that particular item in the menu; any `'menu_topic'` specified with a `lang:` prefix should be specified with that prefix consistently throughout the application's modules.
+
+In most cases, only `'name'` and `'description'` are specified (along with `'author'` and `'version'`, which are not used within the context menu).
+
+An example `config.php` file may look like the following:
+
+    <?php defined('BASEPATH') || exit('No direct script access allowed');
+
+    $config['module_config'] = array(
+        'name'        => 'lang:bf_menu_blog_name',
+        'description' => 'A Simple Blog Example',
+        'author'      => 'Your Name',
+        'homepage'    => 'http://...',
+        'version'     => '1.0.1',
+        'menus'       => array(
+            'context' => 'path/to/view',
+        ),
+        'menu_topic'  => array(
+            'context' => 'lang:bf_menu_blog_context_name',
+        ),
+        'weights'     => array(
+            'context' => 0,
+        ),
+    );
+
+Note that `'context'` under `'menus'`, `'menu_topic'`, and `'weights'` is a placeholder for the name of the context (e.g. `content`, `settings`, etc.).
+
+Bonfire makes use of the `'menus'` setting in the `database` and `emailer` modules to create sub-menus in the `developer` and `settings` contexts.
+
+The `'menu_topic'` setting is used to group menu entries for Bonfire's `migrations` module with those from the `database` module.
+
+The `'weights'` setting is used to weight the `'Users'` entry in the `settings` context, which, by default, causes the `Users` entry to be listed first in the menu.

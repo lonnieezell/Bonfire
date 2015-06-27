@@ -167,11 +167,11 @@ class Sparks_Loader extends CI_Loader
 	{
         if($basepath !== NULL)
         {
-            $autoload_path = $basepath.'config/autoload'.EXT;
+            $autoload_path = $basepath.'config/autoload.php';
         }
         else
         {
-            $autoload_path = APPPATH.'config/autoload'.EXT;
+            $autoload_path = APPPATH.'config/autoload.php';
         }
 
         if(! file_exists($autoload_path))

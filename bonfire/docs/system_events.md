@@ -72,11 +72,11 @@ after_block_render	 | Called just after the block is rendered. Payload is an arr
 
 Event	 | Description
 -----------------------------|---------------
-after_login	 | Called after successful login. Payload is an array of ‘user_id’ and ‘role_id’.	|
-before_logout	 | Called just before logging the user out. Payload is an array of ‘user_id’ and ‘role_id’.	|
+after_login	 | Called after successful login. Payload is an array of `user_id` and `role_id`.	|
+before_logout	 | Called just before logging the user out. Payload is an array of `user_id` and `role_id`.	|
 after_create_user	 | Called after a user is created. Payload is the new user’s id.	|
-before_user_update	 | Called just prior to updating a user. Payload is an array of ‘user_id’ and ‘data’, where data is all of the update information passed into the method.	|
-after_user_update	 | Called just after updating a user. Payload is an array of ‘user_id’ and ‘data’, where data is all of the update information passed into the method.	|
+before_user_update	 | Called just prior to updating a user. Payload is an array of `user_id` and ‘data’, where data is all of the update information passed into the method. Note: `user_id` may be an array if the `user_model`'s `update()` method is called with an array as the first parameter. In this case, the user's ID may not be in the array...	|
+after_user_update	 | Called just after updating a user. Payload is an array of `user_id` and ‘data’, where data is all of the update information passed into the method. Note: `user_id` may be an array if the `user_model`'s `update()` method is called with an array as the first parameter. In this case, the user's ID may not be in the array...	|
 
 ## Using Events In Your Modules
 

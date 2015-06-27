@@ -8,11 +8,11 @@ Feel free to add your own tips to help other developers out.
 
 ## Set a Caching Type
 
-While Bonfire has caching loaded and enabled by default, it sets the driver to a non-caching driver that makes development easier since you don't have to worry about results not showing up because the previous cache hasn't expired yet. While the use of caching is small at the moment, it will increase in future releases (specifically 0.7) to boost performance in the admin area. You should definitely implement caching, where appropriate, in your own applications.
+While Bonfire has caching loaded and enabled by default, it sets the driver to a non-caching driver that makes development easier since you don't have to worry about results not showing up because the previous cache hasn't expired yet. While the use of caching is small at the moment, it will increase in future releases to boost performance in the admin area. You should definitely implement caching, where appropriate, in your own applications.
 
 To change the type of cache driver used, you need to edit the `MY_Controller` file. Find the `__construct()__` method of the `Base_Controller` and you'll see that in a production environment it defaults to using `APC` caching with a `file cache` as the backup. For some servers, the file-based caching may be slowing things down so you will need to adjust and tweak as necessary for your specific environment.
 
-For types of caching, refer to the [CodeIgniter User Guide](http://codeigniter.com/user_guide/libraries/caching.html).
+For types of caching, refer to the [CodeIgniter User Guide](http://www.codeigniter.com/user-guide/libraries/caching.html).
 
 ## Disable Database Debugging
 

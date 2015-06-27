@@ -1,35 +1,32 @@
 <div class="alert alert-info">
-	<p><strong><?php e(lang('db_sql_query')); ?></strong>:</p>
-	<p><?php e($query); ?></p>
+    <h4 class='alert-heading'><?php e(lang('database_sql_query')); ?>:</h4>
+    <p><?php e($query); ?></p>
 </div>
-<?php if (isset($rows) && is_array($rows) && count($rows)) :?>
-<p><?php echo e(lang('db_total_results')); ?>: <?php echo count($rows); ?></p>
-<div class="admin-box">
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<?php
-				$heads = $rows[0];
-			
-				foreach ($heads as $field => $value) :
-				?>
-				<th><?php e($field); ?></th>
-				<?php endforeach; ?>
-			</tr>
-		</thead>
-		<tbody>
-			<?php foreach ($rows as $row) : ?>
-			<tr>
-				<?php foreach ($row as $key => $value) : ?>
-				<td><?php e($value); ?></td>
-				<?php endforeach; ?>
-			</tr>
-			<?php endforeach; ?>
-		</tbody>
-	</table>
-</div>
-<?php else: ?>
+<?php if (empty($num_rows) || empty($rows) || ! is_array($rows)) : ?>
 <div class="alert alert-warning">
-	<?php e(lang('db_no_rows')); ?>
+    <?php e(lang('database_no_rows')); ?>
 </div>
-<?php endif; ?>
+<?php else : ?>
+<p><?php echo e(sprintf(lang('database_total_results'), $num_rows)); ?></p>
+<div class="admin-box">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <?php foreach ($rows[0] as $field => $value) : ?>
+                <th><?php e($field); ?></th>
+                <?php endforeach; ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($rows as $row) : ?>
+            <tr>
+                <?php foreach ($row as $key => $value) : ?>
+                <td><?php e($value); ?></td>
+                <?php endforeach; ?>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+<?php
+endif;

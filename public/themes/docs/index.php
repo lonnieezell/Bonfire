@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8" />
     <title>Docs - <?php e($this->settings_lib->item('site.title')); ?></title>
+    <link href="components/bootstrap-default/css/bootstrap.css" rel="stylesheet" />
     <?php
-    $jqueryVersion = '1.7.2';
+    $jqueryVersion = '2.x';
     $highlightScript = '$("pre code").each(function(i, e) {hljs.highlightBlock(e)});';
 
-    Assets::add_js('bootstrap.min.js');
     Assets::add_js('highlight.min.js');
     Assets::add_js($highlightScript, 'inline');
 
-    Assets::add_css('bootstrap.css');
-    Assets::add_css('bootstrap-theme.css');
     Assets::add_css('github');
     echo Assets::css();
     ?>
@@ -34,7 +32,7 @@
 
 
             <div class="collapse navbar-collapse" id="main-nav-collapse">
-                <ul class="navbar-nav navbar-nav navbar-left">
+                <ul class="nav navbar-nav navbar-left">
                     <?php if (config_item('docs.show_app_docs')) :?>
                     <li <?php echo check_segment(2, 'application') ?>>
                         <a href="<?php echo site_url('docs/application'); ?>"><?php echo lang('docs_title_application') ?></a>
@@ -85,8 +83,8 @@
 
     </div>
 
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/<?php echo $jqueryVersion; ?>/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="<?php echo js_path(); ?>jquery-<?php echo $jqueryVersion; ?>.min.js"><\/script>')</script>
+    <script src="<?php  echo base_url(); ?>components/jquery/jquery.min.js"></script>
+    <script src='<?php  echo base_url(); ?>components/bootstrap/js/bootstrap.min.js'></script>
     <?php echo Assets::js(); ?>
 </body>
 </html>

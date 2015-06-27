@@ -1,4 +1,5 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+defined('BASEPATH') || exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
@@ -10,10 +11,12 @@
 |
 |	http://example.com/
 |
-| If this is not set then CodeIgniter will guess the protocol, domain and
-| path to your installation.
+| If this is not set then CodeIgniter will try guess the protocol, domain
+| and path to your installation. However, you should always configure this
+| explicitly and never rely on auto-guessing, especially in production
+| environments.
 |
-*/
+ */
 $config['base_url']	= '';
 
 /*
@@ -25,7 +28,7 @@ $config['base_url']	= '';
 | something else. If you are using mod_rewrite to remove the page set this
 | variable so that it is blank.
 |
-*/
+ */
 $config['index_page'] = "index.php";
 
 /*
@@ -37,13 +40,13 @@ $config['index_page'] = "index.php";
 | URI string.  The default setting of 'AUTO' works for most servers.
 | If your links do not seem to work, try one of the other delicious flavors:
 |
-| 'AUTO'			Default - auto detects
-| 'PATH_INFO'		Uses the PATH_INFO
-| 'QUERY_STRING'	Uses the QUERY_STRING
-| 'REQUEST_URI'		Uses the REQUEST_URI
-| 'ORIG_PATH_INFO'	Uses the ORIG_PATH_INFO
+| 'AUTO'		Default - auto detects
+| 'CLI' or 'argv'	Uses $_SERVER['argv'] (for php-cli only) // CI3
+| 'PATH_INFO'		Uses $_SERVER['PATH_INFO']
+| 'REQUEST_URI'		Uses $_SERVER['REQUEST_URI']
+| 'QUERY_STRING'	Uses $_SERVER['QUERY_STRING']
 |
-*/
+ */
 $config['uri_protocol']	= 'AUTO';
 
 /*
@@ -55,8 +58,7 @@ $config['uri_protocol']	= 'AUTO';
 | For more information please see the user guide:
 |
 | http://codeigniter.com/user_guide/general/urls.html
-*/
-
+ */
 $config['url_suffix'] = '';
 
 /*
@@ -79,6 +81,8 @@ $config['language']	= 'english';
 | This determines which character set is used by default in various methods
 | that require a character set to be provided.
 |
+| See http://php.net/htmlspecialchars for a list of supported charsets.
+|
 */
 $config['charset'] = 'UTF-8';
 
@@ -93,7 +97,6 @@ $config['charset'] = 'UTF-8';
 */
 $config['enable_hooks'] = true;
 
-
 /*
 |--------------------------------------------------------------------------
 | Class Extension Prefix
@@ -105,29 +108,53 @@ $config['enable_hooks'] = true;
 | http://codeigniter.com/user_guide/general/core_classes.html
 | http://codeigniter.com/user_guide/general/creating_libraries.html
 |
-*/
+ */
 $config['subclass_prefix'] = 'MY_';
 
+/*
+|--------------------------------------------------------------------------
+| Composer auto-loading
+|--------------------------------------------------------------------------
+|
+| Enabling this setting will tell CodeIgniter to look for a Composer
+| package auto-loader script in application/vendor/autoload.php.
+|
+|	$config['composer_autoload'] = TRUE;
+|
+| Or if you have your vendor/ directory located somewhere else, you
+| can opt to set a specific path as well:
+|
+|	$config['composer_autoload'] = '/path/to/vendor/autoload.php';
+|
+| For more information about Composer, please visit http://getcomposer.org/
+|
+| Note: This will NOT disable or override the CodeIgniter-specific
+|	autoloading (application/config/autoload.php)
+ */
+$config['composer_autoload'] = true;
+// $config['composer_autoload'] = '../vendor/autoload.php';
 
 /*
 |--------------------------------------------------------------------------
 | Allowed URL Characters
 |--------------------------------------------------------------------------
 |
-| This lets you specify with a regular expression which characters are permitted
-| within your URLs.  When someone tries to submit a URL with disallowed
-| characters they will get a warning message.
+| This lets you specify which characters are permitted within your URLs.
+| When someone tries to submit a URL with disallowed characters they will
+| get a warning message.
 |
 | As a security measure you are STRONGLY encouraged to restrict URLs to
 | as few characters as possible.  By default only these are allowed: a-z 0-9~%.:_-
 |
 | Leave blank to allow all characters -- but only if you are insane.
 |
+| The configured value is actually a regular expression character group
+| and it will be executed as: ! preg_match('/^[<permitted_uri_chars>]+$/i
+|
 | DO NOT CHANGE THIS UNLESS YOU FULLY UNDERSTAND THE REPERCUSSIONS!!
 |
-*/
+ */
 $config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
-
 
 /*
 |--------------------------------------------------------------------------
@@ -153,12 +180,12 @@ $config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
 | this feature is enabled, since CodeIgniter is designed primarily to
 | use segment based URLs.
 |
-*/
-$config['allow_get_array']		= TRUE;
-$config['enable_query_strings'] = FALSE;
+ */
+$config['allow_get_array']      = true;
+$config['enable_query_strings'] = false;
 $config['controller_trigger']	= 'c';
 $config['function_trigger']		= 'm';
-$config['directory_trigger']	= 'd'; // experimental not currently in use
+$config['directory_trigger'] = 'd';
 
 /*
 |--------------------------------------------------------------------------
@@ -176,10 +203,14 @@ $config['directory_trigger']	= 'd'; // experimental not currently in use
 |	3 = Informational Messages
 |	4 = All Messages
 |
+| You can also pass in a array with threshold levels to show individual error types
+|
+| 	array(2) = Debug Messages, without Error Messages
+|
 | For a live site you'll usually only enable Errors (1) to be logged otherwise
 | your log files will fill up very fast.
 |
-*/
+ */
 $config['log_threshold'] = 0;
 
 /*
@@ -188,10 +219,36 @@ $config['log_threshold'] = 0;
 |--------------------------------------------------------------------------
 |
 | Leave this BLANK unless you would like to set something other than the default
-| application/logs/ folder. Use a full server path with trailing slash.
+| application/logs/ directory. Use a full server path with trailing slash.
+|
+ */
+$config['log_path'] = APPPATH .'logs/';
+
+/*
+|--------------------------------------------------------------------------
+| Log File Extension (CI3)
+|--------------------------------------------------------------------------
+|
+| The default filename extension for log files. The default 'php' allows for
+| protecting the log files via basic scripting, when they are to be stored
+| under a publicly accessible directory.
+|
+| Note: Leaving it blank will default to 'php'.
 |
 */
-$config['log_path'] = APPPATH .'logs/';
+$config['log_file_extension'] = '';
+
+/*
+|--------------------------------------------------------------------------
+| Log File Permissions (CI3)
+|--------------------------------------------------------------------------
+|
+| The file system permissions to be applied on newly created log files.
+|
+| IMPORTANT: This MUST be an integer (no quotes) and you MUST use octal
+|            integer notation (i.e. 0700, 0644, etc.)
+*/
+$config['log_file_permissions'] = 0644;
 
 /*
 |--------------------------------------------------------------------------
@@ -201,8 +258,20 @@ $config['log_path'] = APPPATH .'logs/';
 | Each item that is logged has an associated date. You can use PHP date
 | codes to set your own date formatting
 |
-*/
+ */
 $config['log_date_format'] = 'Y-m-d H:i:s';
+
+/*
+|--------------------------------------------------------------------------
+| Error Views Directory Path (CI3)
+|--------------------------------------------------------------------------
+|
+| Leave this BLANK unless you would like to set something other than the default
+| application/views/errors/ directory.  Use a full server path with trailing slash.
+|
+*/
+$config['error_views_path'] = '';
+
 
 /*
 |--------------------------------------------------------------------------
@@ -210,63 +279,153 @@ $config['log_date_format'] = 'Y-m-d H:i:s';
 |--------------------------------------------------------------------------
 |
 | Leave this BLANK unless you would like to set something other than the default
-| system/cache/ folder.  Use a full server path with trailing slash.
+| application/cache/ directory.  Use a full server path with trailing slash.
 |
-*/
-$config['cache_path'] = APPPATH .'cache/';
+ */
+$config['cache_path'] = APPPATH . 'cache/';
+
+/*
+|--------------------------------------------------------------------------
+| Cache Include Query String (CI3)
+|--------------------------------------------------------------------------
+|
+| Set this to TRUE if you want to use different cache files depending on the
+| URL query string.  Please be aware this might result in numerous cache files.
+|
+ */
+$config['cache_query_string'] = false;
 
 /*
 |--------------------------------------------------------------------------
 | Encryption Key
 |--------------------------------------------------------------------------
 |
-| If you use the Encryption class or the Session class you
-| MUST set an encryption key.  See the user guide for info.
+| If you use the Encryption class, you must set an encryption key.
+| See the user guide for more info.
 |
-*/
-$config['encryption_key'] = "55c396b34d26afe0ecf01f3a959dec16";
+| http://codeigniter.com/user_guide/libraries/encryption.html
+|
+ */
+$config['encryption_key'] = "a474231e8d5f13af5c0de89cd4879f8f";
 
 /*
-|--------------------------------------------------------------------------
+|------------------------------------------------------------------------------
 | Session Variables
-|--------------------------------------------------------------------------
-|
-| 'sess_cookie_name'		= the name you want for the cookie
-| 'sess_expiration'			= the number of SECONDS you want the session to last.
+|------------------------------------------------------------------------------
+| (CI2)
+| 'sess_cookie_name'     = the name you want for the cookie
+| 'sess_expiration'      = the number of SECONDS you want the session to last.
 |   by default sessions last 7200 seconds (two hours).  Set to zero for no expiration.
-| 'sess_expire_on_close'	= Whether to cause the session to expire automatically
+| 'sess_expire_on_close' = Whether to cause the session to expire automatically
 |   when the browser window is closed
-| 'sess_encrypt_cookie'		= Whether to encrypt the cookie
-| 'sess_use_database'		= Whether to save the session data to a database
-| 'sess_table_name'			= The name of the session database table
-| 'sess_match_ip'			= Whether to match the user's IP address when reading the session data
-| 'sess_match_useragent'	= Whether to match the User Agent when reading the session data
-| 'sess_time_to_update'		= how many seconds between CI refreshing Session Information
+| 'sess_encrypt_cookie'  = Whether to encrypt the cookie
+| 'sess_use_database'    = Whether to save the session data to a database
+| 'sess_table_name'      = The name of the session database table
+| 'sess_match_ip'        = Whether to match the user's IP address when reading the session data
+| 'sess_match_useragent' = Whether to match the User Agent when reading the session data
+| 'sess_time_to_update'  = how many seconds between CI refreshing Session Information
+|------------------------------------------------------------------------------
+| (CI3)
 |
-*/
+| 'sess_driver'
+|
+|	The storage driver to use: files, database, redis, memcached
+|
+| 'sess_cookie_name'
+|
+|	The session cookie name, must contain only [0-9a-z_-] characters
+|
+| 'sess_expiration'
+|
+|	The number of SECONDS you want the session to last.
+|	Setting to 0 (zero) means expire when the browser is closed.
+|
+| 'sess_save_path'
+|
+|	The location to save sessions to, driver dependant.
+|
+|	For the 'files' driver, it's a path to a writable directory.
+|   WARNING: Only absolute paths are supported!
+|
+|	For the 'database' driver, it's a table name.
+|	Please read up the manual for the format with other session drivers.
+|
+|	IMPORTANT: You are REQUIRED to set a valid save path!
+|
+| 'sess_match_ip'
+|
+|	Whether to match the user's IP address when reading the session data.
+|
+| 'sess_time_to_update'
+|
+|	How many seconds between CI regenerating the session ID.
+|
+| 'sess_regenerate_destroy'
+|
+|	Whether to destroy session data associated with the old session ID
+|	when auto-regenerating the session ID. When set to FALSE, the data
+|	will be later deleted by the garbage collector.
+|
+| Other session cookie settings are shared with the rest of the application,
+| except for 'cookie_prefix' and 'cookie_httponly', which are ignored here.
+|
+ */
+// Shared (CI 2 and 3) Session Variables
 $config['sess_cookie_name']		= 'bf_session';
 $config['sess_expiration']		= 7200;
-$config['sess_expire_on_close']	= FALSE;
-$config['sess_encrypt_cookie']	= FALSE;
-$config['sess_use_database']	= FALSE;
+$config['sess_time_to_update'] = 300;
+$config['sess_match_ip'] = false;
+
+// CI 2 Session Variables
+$config['sess_expire_on_close'] = false;
+$config['sess_encrypt_cookie']  = false;
+$config['sess_use_database']    = false;
 $config['sess_table_name']		= 'sessions';
-$config['sess_match_ip']		= FALSE;
-$config['sess_match_useragent']	= TRUE;
-$config['sess_time_to_update']	= 300;
+$config['sess_match_useragent'] = true; // May duplicate sessions for Safari users when true.
+
+// CI 3 Session Variables
+$config['sess_driver'] = 'database';
+$config['sess_regenerate_destroy'] = false;
+
+// If you use a different database table name, update
+// /bonfire/migrations/043_Add_ci3_sessions.php
+// accordingly or create the table manually.
+$config['sess_save_path'] = 'ci3_sessions';
 
 /*
 |--------------------------------------------------------------------------
 | Cookie Related Variables
 |--------------------------------------------------------------------------
 |
-| 'cookie_prefix' = Set a prefix if you need to avoid collisions
-| 'cookie_domain' = Set to .your-domain.com for site-wide cookies
-| 'cookie_path'   =  Typically will be a forward slash
+| 'cookie_prefix'   = Set a cookie name prefix if you need to avoid collisions
+| 'cookie_domain'   = Set to .your-domain.com for site-wide cookies
+| 'cookie_path'     = Typically will be a forward slash
+| 'cookie_secure'   = Cookie will only be set if a secure HTTPS connection exists.
+| 'cookie_httponly' = Cookie will only be accessible via HTTP(S) (no javascript) (CI3)
 |
-*/
+| Note: These settings (with the exception of 'cookie_prefix' and
+|       'cookie_httponly') will also affect sessions.
+|
+ */
 $config['cookie_prefix']	= '';
 $config['cookie_domain']	= '';
 $config['cookie_path']		= '/';
+$config['cookie_secure'] = false;
+$config['cookie_httponly'] = false;
+
+/*
+|--------------------------------------------------------------------------
+| Standardize newlines (CI3)
+|--------------------------------------------------------------------------
+|
+| Determines whether to standardize newline characters in input data,
+| meaning to replace \r\n, \r, \n occurences with the PHP_EOL value.
+|
+| This is particularly useful for portability between UNIX-based OSes,
+| (usually \n) and Windows (\r\n).
+|
+*/
+$config['standardize_newlines'] = false;
 
 /*
 |--------------------------------------------------------------------------
@@ -276,8 +435,8 @@ $config['cookie_path']		= '/';
 | Determines whether the XSS filter is always active when GET, POST or
 | COOKIE data is encountered
 |
-*/
-$config['global_xss_filtering'] = FALSE;
+ */
+$config['global_xss_filtering'] = false;
 
 /*
 |--------------------------------------------------------------------------
@@ -290,11 +449,15 @@ $config['global_xss_filtering'] = FALSE;
 | 'csrf_token_name' = The token name
 | 'csrf_cookie_name' = The cookie name
 | 'csrf_expire' = The number in seconds the token should expire.
-*/
-$config['csrf_protection'] = TRUE;
+| 'csrf_regenerate' = Regenerate token on every submission (CI3)
+| 'csrf_exclude_uris' = Array of URIs which ignore CSRF checks (CI3)
+ */
+$config['csrf_protection']  = true;
 $config['csrf_token_name'] = 'ci_csrf_token';
 $config['csrf_cookie_name'] = 'ci_csrf_token';
 $config['csrf_expire'] = 7200;
+$config['csrf_regenerate'] = true;
+$config['csrf_exclude_uris'] = array();
 
 /*
 |--------------------------------------------------------------------------
@@ -306,28 +469,30 @@ $config['csrf_expire'] = 7200;
 | Even if it does, however, not all browsers support compression
 | so enable only if you are reasonably sure your visitors can handle it.
 |
+| Only used if zlib.output_compression is turned off in your php.ini.
+| Please do not use it together with httpd-level output compression.
+|
 | VERY IMPORTANT:  If you are getting a blank page when compression is enabled it
 | means you are prematurely outputting something to your browser. It could
 | even be a line of whitespace at the end of one of your scripts.  For
 | compression to work, nothing can be sent before the output buffer is called
 | by the output class.  Do not 'echo' any values with compression enabled.
 |
-*/
-$config['compress_output'] = FALSE;
+ */
+$config['compress_output'] = false;
 
 /*
 |--------------------------------------------------------------------------
 | Master Time Reference
 |--------------------------------------------------------------------------
 |
-| Options are 'local' or 'gmt'.  This pref tells the system whether to use
-| your server's local time as the master 'now' reference, or convert it to
-| GMT.  See the 'date helper' page of the user guide for information
-| regarding date handling.
+| Options are 'local' or any PHP supported timezone. This preference tells
+| the system whether to use your server's local time as the master 'now'
+| reference, or convert it to the configured one timezone. See the 'date
+| helper' page of the user guide for information regarding date handling.
 |
-*/
-$config['time_reference'] = 'gmt';
-
+ */
+$config['time_reference'] = 'utc';
 
 /*
 |--------------------------------------------------------------------------
@@ -338,23 +503,23 @@ $config['time_reference'] = 'gmt';
 | can rewrite the tags on-the-fly, enabling you to utilize that syntax
 | in your view files.  Options are TRUE or FALSE (boolean)
 |
-*/
-$config['rewrite_short_tags'] = FALSE;
-
+ */
+$config['rewrite_short_tags'] = false;
 
 /*
 |--------------------------------------------------------------------------
 | Reverse Proxy IPs
 |--------------------------------------------------------------------------
 |
-| If your server is behind a reverse proxy, you must whitelist the proxy IP
-| addresses from which CodeIgniter should trust the HTTP_X_FORWARDED_FOR
-| header in order to properly identify the visitor's IP address.
-| Comma-delimited, e.g. '10.0.1.200,10.0.1.201'
+| If your server is behind a reverse proxy, you must whitelist the proxy
+| IP addresses from which CodeIgniter should trust headers such as
+| HTTP_X_FORWARDED_FOR and HTTP_CLIENT_IP in order to properly identify
+| the visitor's IP address.
 |
-*/
+| You can use both an array or a comma-separated list of proxy addresses,
+| as well as specifying whole subnets. Here are a few examples:
+|
+| Comma-separated:	'10.0.1.200,192.168.5.0/24'
+| Array:		array('10.0.1.200', '192.168.5.0/24')
+ */
 $config['proxy_ips'] = '';
-
-
-/* End of file config.php */
-/* Location: ./application/config/config.php */

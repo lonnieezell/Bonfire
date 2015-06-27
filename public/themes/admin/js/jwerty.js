@@ -1,34 +1,17 @@
 /*
  * jwerty - Awesome handling of keyboard events
  *
- * jwerty is a JS lib which allows you to bind, fire and assert key combination strings against
- *  elements and events. It normalises the poor std api into something easy to use and clear.
+ * jwerty is a JS lib which allows you to bind, fire and assert key combination
+ * strings against elements and events. It normalises the poor std api into
+ * something easy to use and clear.
  *
  * This code is licensed under the MIT
- * For more details, see http://www.opensource.org/licenses/mit-license.php
- * For more information, see http://github.com/keithcirkel/jwerty
+ * For the full license see: http://keithamus.mit-license.org/
+ * For more information see: http://keithamus.github.com/jwerty
  *
  * @author Keith Cirkel ('keithamus') <jwerty@keithcirkel.co.uk>
- * @license http://www.opensource.org/licenses/mit-license.php
+ * @license http://keithamus.mit-license.org/
  * @copyright Copyright © 2011, Keith Cirkel
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
  *
  */
 (function (global, exports) {
@@ -114,7 +97,7 @@
             // Insert key, or ins
             ins: 45, insert: 45,
             // Delete key, on Mac: ⌫ (Delete)
-            del: 45, 'delete': 45,
+            del: 46, 'delete': 46,
             
             // Left Arrow Key, or ←
             '←': 37, left: 37, 'arrow-left': 37,
@@ -132,7 +115,8 @@
             '+': 107, 'plus': 107,
             // Num-Subtract, or -
             '-': 109, subtract: 109,
-            //';': 186, //???
+            // Semicolon
+            ';': 186, semicolon:186,
             // = or equals
             '=': 187, 'equals': 187,
             // Comma, or ,
@@ -396,7 +380,7 @@
                 // For each property in the jwertyCode object, compare to `event`
                 for (var p in jwertyCode[n]) {
                     // ...except for jwertyCode.jwertyCombo...
-                    if (p !== 'jwertyCombo' && event[p] !== jwertyCode[n][p]) returnValue = false;
+                    if (p !== 'jwertyCombo' && event[p] != jwertyCode[n][p]) returnValue = false;
                 }
                 // If this jwertyCode optional wasn't falsey, then we can return early.
                 if (returnValue !== false) return returnValue;

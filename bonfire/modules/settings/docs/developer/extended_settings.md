@@ -43,7 +43,7 @@ Each field is defined in its own array within the <tt>extended_settings_fields</
                     'name'		=> 'street_name',
                     'id'		=> 'street_name',
                     'maxlength'	=> '100',
-                    'class'		=> 'col-md-6',
+                    'class'		=> 'col-sm-6 col-lg-4',
                 ),
             ),
             'permission' => 'Site.Settings.View',
@@ -58,7 +58,7 @@ Each field is defined in its own array within the <tt>extended_settings_fields</
                     'name'		=> 'state',
                     'id'		=> 'state',
                     'maxlength'	=> '2',
-                    'class'		=> 'span1'
+                    'class'		=> 'col-sm-1'
                 ),
             ),
             'permission' => 'Site.Content.View',
@@ -73,7 +73,7 @@ Each field is defined in its own array within the <tt>extended_settings_fields</
                     'name'		=> 'country',
                     'id'		=> 'country',
                     'maxlength'	=> '100',
-                    'class'		=> 'col-md-6'
+                    'class'		=> 'col-sm-6 col-lg-4'
                 ),
             ),
         ),
@@ -86,7 +86,7 @@ Each field is defined in its own array within the <tt>extended_settings_fields</
                 'settings' => array(
                     'name'		=> 'type',
                     'id'		=> 'type',
-                    'class'		=> 'col-md-6',
+                    'class'		=> 'col-sm-6 col-lg-4',
                 ),
                 'options' =>  array(
                     'small'  => 'Small Shirt',

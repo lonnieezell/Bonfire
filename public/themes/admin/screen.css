@@ -63,16 +63,19 @@ pre {
 	min-height: 300px;
 	font-weight: lighter;
 }
-.nav {
-	font-size: 10pt;
-}
 .navbar-static-top {
 	margin-bottom: 0;
 }
-.nav .dropdown img {
-	display: none;
+.navbar {
+	font-size: 10pt;
+}
+.navbar-header {
+    width: 100%;
 }
 .navbar-nav .dropdown img {
+	display: none;
+}
+.navbar .dropdown img {
 	display: none;
 }
 .dropdown-menu > li > ul {
@@ -95,7 +98,9 @@ a.navbar-brand {
 	-ms-text-overflow: ellipsis;
 	text-overflow: ellipsis;
 }
-#user-menu .btn-group, #shortcuts .btn-group { padding-top: 5px;}
+#user-menu .btn-group, #shortcuts .btn-group { 
+    padding-top: 5px;
+}
 /* Subnav */
 .subnav {
 	width: 100%;
@@ -106,9 +111,9 @@ a.navbar-brand {
 	background-image: -o-linear-gradient(top, #e8e8e8 0%, #d8d8d8 100%);
 	background-image: -ms-linear-gradient(top, #e8e8e8 0%, #d8d8d8 100%);
 	background-image: linear-gradient(top, #e8e8e8 0%, #d8d8d8 100%); /* W3C */
-	-webkit-border-radius: 0px;
-	-moz-border-radius: 0px;
-	border-radius: 0px;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
 	border-bottom: 1px solid #c5c5c5;
 	border-top: 1px solid #163355;
 	-webkit-box-shadow: 0 3px 5px rgba(0,0,0,.08);
@@ -120,11 +125,11 @@ a.navbar-brand {
 	font-size: 18px;
 	line-height: 16px;
 }
-.subnav .navbar-nav {
+.subnav .nav {
 	margin-bottom: 0;
 	margin-top: -44px;
 }
-.subnav .navbar-nav > li > a {
+.subnav .nav > li > a {
 	margin: .1px;
 	padding-top: 11px;
 	padding-bottom: 11px;
@@ -136,17 +141,17 @@ a.navbar-brand {
 	-moz-border-radius: 0;
 	border-radius: 0;
 }
-.subnav .navbar-nav > li:last-child > a {
+.subnav .nav > li:last-child > a {
 	border-right: none;
 }
-.subnav .navbar-nav > li > a:hover,
-.subnav .navbar-nav .active a,
-.subnav .navbar-nav a:hover,
-.subnav .navbar-nav .active a {
+.subnav .nav > li > a:hover,
+.subnav .nav .active a,
+.subnav .nav a:hover,
+.subnav .nav .active a {
 	background: transparent;
 	color: #333;
 }
-.subnav .navbar-nav .active a {
+.subnav .nav .active a {
 	background-color: #ddd;
 	border-right-color: #c5c5c5;
 	border-left: 0;
@@ -308,7 +313,7 @@ footer.footer {
 .admin-box tfoot {
 	line-height: 18px;
 }
-.admin-box .navbar-nav {
+.admin-box .nav {
 	margin-bottom: 3px;
 }
 .admin-box > p {
@@ -384,9 +389,9 @@ tfoot td {
 /* Forms */
 .form-horizontal .form-group {
 	border-bottom: 1px solid #e5e5e5;
-	margin-bottom: 0;
-	padding-top: 4px;
 	padding-bottom: 5px;
+	padding-top: 4px;
+	margin-bottom: 0;
 }
 .form-horizontal .form-group > label {
 	font-weight: bold;
@@ -458,28 +463,6 @@ input[type=radio] {
 .caret.light-caret {
 	border-top: 4px solid #a6a6a6;
 }
-/* Copy of .alert-danger rules to allow
- * Template::set_message('message', 'error');
- * to continue working as it did under Bootstrap 2.x
- */
-.alert-error {
-	color: #a94442;
-	background-color: #f2dede;
-	border-color: #ebccd1;
-}
-.alert-error hr {
-	border-top-color: #e4b9c0;
-}
-.alert-error .alert-link {
-	color: #843534;
-}
-.alert-error {
-	background-image: -webkit-linear-gradient(top, #f2dede 0%, #e7c3c3 100%);
-	background-image:         linear-gradient(to bottom, #f2dede 0%, #e7c3c3 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2dede', endColorstr='#ffe7c3c3', GradientType=0);
-	background-repeat: repeat-x;
-	border-color: #dca7a7;
-}
 /*--------------------------------------------------------------------
 // RESPONSIVE FIXES
 //-------------------------------------------------------------------*/
@@ -498,7 +481,7 @@ input[type=radio] {
 		padding-top: 20px;
 		margin-top: -5px;
 	}
-	.navbar-nav .navbar-btn {
+	.navbar .btn-navbar {
 		display: inline;
 	}
 	#shortcuts {
@@ -535,9 +518,6 @@ input[type=radio] {
 		display: block;
 		float: none;
 		margin-top: 36px;
-	}
-	.form-horizontal .form-group {
-		border-bottom: 0;
 	}
 	.form-horizontal .form-group > label {
 		display: block;

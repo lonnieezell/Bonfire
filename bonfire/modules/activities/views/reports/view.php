@@ -1,25 +1,44 @@
+<?php
+
+$hasPermissionDeleteDate   = isset($hasPermissionDeleteDate) ? $hasPermissionDeleteDate : false;
+$hasPermissionDeleteModule = isset($hasPermissionDeleteModule) ? $hasPermissionDeleteModule : false;
+$hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDeleteUser : false;
+
+?>
 <div class="box select admin-box">
     <?php echo form_open(SITE_AREA . "/reports/activities/{$vars['which']}", 'class="form-horizontal constrained"'); ?>
         <fieldset>
             <legend><?php echo lang('activities_filter_head'); ?></legend>
             <?php
-            $form_help = '<span class="help-inline">' . sprintf(lang('activities_filter_note'), ($vars['view_which'] == ucwords(lang('activities_date')) ? lang('activities_filter_from_before') : lang('activities_filter_only_for')), strtolower($vars['view_which'])) . '</span>';
-            $form_data = array('name' => "{$vars['which']}_select", 'id' => "{$vars['which']}_select", 'class' => 'col-md-3');
-            echo form_dropdown($form_data, $select_options, $filter, lang('activities_filter_head'), '' , $form_help);
-            unset($form_data, $form_help);
+            echo form_dropdown(
+                array(
+                    'name'  => "{$vars['which']}_select",
+                    'id'    => "{$vars['which']}_select",
+                    'class' => 'col-sm-3',
+                ),
+                $select_options,
+                $filter,
+                lang('activities_filter_head'),
+                '',
+                '<span class="help-inline">' . sprintf(
+                    lang('activities_filter_note'),
+                    $vars['view_which'] == ucwords(lang('activities_date')) ? lang('activities_filter_from_before') : lang('activities_filter_only_for'),
+                    strtolower($vars['view_which'])
+                ) . '</span>'
+            );
             ?>
         </fieldset>
         <fieldset class="form-actions">
             <?php
             echo form_submit('filter', lang('activities_filter'), 'class="btn btn-primary"');
-            if ($vars['which'] == 'activity_own' && has_permission('Activities.Own.Delete')) :
+            if ($vars['which'] == 'activity_own' && $hasPermissionDeleteOwn) :
             ?>
             <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_own"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_own_delete'); ?></button>
-            <?php elseif ($vars['which'] == 'activity_user' && has_permission('Activities.User.Delete')) : ?>
+            <?php elseif ($vars['which'] == 'activity_user' && $hasPermissionDeleteUser) : ?>
             <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_user"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_user_delete'); ?></button>
-            <?php elseif ($vars['which'] == 'activity_module' && has_permission('Activities.Module.Delete')) : ?>
+            <?php elseif ($vars['which'] == 'activity_module' && $hasPermissionDeleteModule) : ?>
             <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_module"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_module_delete'); ?></button>
-            <?php elseif ($vars['which'] == 'activity_date' && has_permission('Activities.Date.Delete')) : ?>
+            <?php elseif ($vars['which'] == 'activity_date' && $hasPermissionDeleteDate) : ?>
             <button type="submit" name="delete" class="btn btn-danger" id="delete-activity_date"><span class="icon-trash icon-white"></span>&nbsp;<?php echo lang('activities_date_delete'); ?></button>
             <?php endif; ?>
         </fieldset>
@@ -27,10 +46,11 @@
 </div>
 <h2><?php
     echo sprintf(
-            lang('activities_view'),
-            $vars['view_which'] == ucwords(lang('activities_date')) ? sprintf(lang('activities_view_before'), $vars['view_which']) : $vars['view_which'],
-            $vars['name']
-    ); ?></h2>
+        lang('activities_view'),
+        $vars['view_which'] == ucwords(lang('activities_date')) ? sprintf(lang('activities_view_before'), $vars['view_which']) : $vars['view_which'],
+        $vars['name']
+    );
+    ?></h2>
 <?php if (empty($activity_content)) : ?>
 <div class="alert alert-danger fade in">
     <a class="close" data-dismiss="alert">&times;</a>
@@ -62,4 +82,3 @@
 <?php
     echo $this->pagination->create_links();
 endif;
-?>
