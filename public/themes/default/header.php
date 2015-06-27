@@ -1,5 +1,3 @@
-<script src='<?php echo base_url(); ?>components/bootstrap/js/bootstrap.min.js'></script>
-
 <?php
 
 $inline  = '$(".dropdown-toggle").dropdown();';
