@@ -1,10 +1,14 @@
 <?php
 
 $errorClass   = empty($errorClass) ? ' error' : $errorClass;
-$controlClass = empty($controlClass) ? 'col-sm-6' : $controlClass;
+$labelClass = empty($labelClass) ? 'control-label col-sm-3 col-lg-2' : $labelClass;
+$wrapClass = empty($wrapClass) ? 'controls col-sm-6 col-lg-4' : $wrapClass;
+$controlClass = empty($controlClass) ? 'form-control' : $controlClass;
 $fieldData = array(
     'errorClass'    => $errorClass,
-    'controlClass'  => $controlClass,
+    'labelClass'  => $labelClass,
+    'wrapClass'     => $wrapClass,
+    'controlClass'  => $controlClass
 );
 
 ?>
@@ -46,7 +50,7 @@ $fieldData = array(
                 </fieldset>
                 <fieldset>
                     <div class="form-group">
-                        <div class="controls">
+                                    <div class="<?php echo $wrapClass; ?>">
                             <input class="btn btn-primary" type="submit" name="register" id="submit" value="<?php echo lang('us_register'); ?>" />
                         </div>
                     </div>
