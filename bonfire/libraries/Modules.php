@@ -2,10 +2,13 @@
 
 global $CFG;
 
-/* Get module locations from config settings, or use the default module location
- * and offset
+/* Get module locations from config settings. If not found, load the application
+ * config file. If still not found, use the default module locations and offsets.
  */
-is_array(Modules::$locations = $CFG->item('modules_locations')) || Modules::$locations = array(
+is_array(Modules::$locations = $CFG->item('modules_locations')) ||
+($CFG->load('application', false, true)
+    && is_array(Modules::$locations = $CFG->item('modules_locations'))
+) || Modules::$locations = array(
     realpath(APPPATH) . '/modules/' => '../../application/modules/',
     realpath(BFPATH) . '/modules/' => '../../bonfire/modules/',
 );
