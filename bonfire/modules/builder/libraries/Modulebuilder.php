@@ -316,8 +316,9 @@ class Modulebuilder
         foreach ($contexts as $key => $context_name) {
             if ($context_name == 'public') {
                 // Public controllers are named after the module.
-                $data['controller_name'] = $module_name_lower;
-                $content['controllers'][$module_name_lower] = $this->buildController($data);
+                $controllerName = ucfirst($module_name_lower);
+                $data['controller_name'] = $controllerName;
+                $content['controllers'][$controllerName] = $this->buildController($data);
 
                 // Build the public view.
                 $data['action_name'] = 'index_front';
@@ -325,8 +326,9 @@ class Modulebuilder
                 $content['views'][$module_name_lower]['index'] = $this->buildView($data);
             } else {
                 // Admin controllers are named after the context.
-                $data['controller_name'] = $context_name;
-                $content['controllers'][$context_name] = $this->buildController($data);
+                $controllerName = ucfirst($context_name);
+                $data['controller_name'] = $controllerName;
+                $content['controllers'][$controllerName] = $this->buildController($data);
 
                 // Build the admin views.
                 foreach ($action_names as $key => $action_name) {
@@ -838,7 +840,7 @@ class Modulebuilder
                         $path = "{$modulePath}/migrations";
                         break;
                     case 'model':
-                        $file_name .= "_model";
+                        $file_name = ucfirst($file_name) . '_model';
                         break;
                     case 'config':
                         $file_name = "config";
