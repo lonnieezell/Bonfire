@@ -34,8 +34,8 @@ if (! empty($meta_fields)) :
         elseif ($field['form_detail']['type'] == 'checkbox') :
 ?>
 <div class="form-group<?php echo form_error($field['name']) ? ' error' : ''; ?>">
-    <label class="control-label" for="<?php echo $field['name']; ?>"><?php echo $field['label']; ?></label>
-    <div class="controls">
+    <label class="<?php echo $labelClass; ?>" for="<?php echo $field['name']; ?>"><?php echo $field['label']; ?></label>
+        <div class="<?php echo $wrapClass; ?>">
         <?php
         echo form_checkbox(
             $field['form_detail']['settings'],
@@ -56,15 +56,15 @@ if (! empty($meta_fields)) :
             $stateValue = isset($user->$field['name']) ? $user->$field['name'] : $defaultState;
 ?>
 <div class="form-group<?php echo form_error($field['name']) ? ' error' : ''; ?>">
-    <label class="control-label" for="<?php echo $field['name']; ?>"><?php echo lang('user_meta_state'); ?></label>
-    <div class="controls">
+    <label class="<?php echo $labelClass; ?>" for="<?php echo $field['name']; ?>"><?php echo lang('user_meta_state'); ?></label>
+                <div class="<?php echo $wrapClass; ?>">
         <?php
         echo state_select(
             set_value($field['name'], $stateValue),
             $defaultState,
             $defaultCountry,
             $field['name'],
-            'col-sm-6 chzn-select'
+            'chzn-select '.$controlClass
         );
         ?>
     </div>
@@ -77,14 +77,14 @@ if (! empty($meta_fields)) :
             $countryValue = isset($user->$field['name']) ? $user->$field['name'] : $defaultCountry;
 ?>
 <div class="form-group<?php echo form_error($field['name']) ? ' error' : ''; ?>">
-    <label class="control-label" for="<?php echo $field['name']; ?>"><?php echo lang('user_meta_country'); ?></label>
-    <div class="controls">
+    <label class="<?php echo $labelClass; ?>" for="<?php echo $field['name']; ?>"><?php echo lang('user_meta_country'); ?></label>
+        <div class="<?php echo $wrapClass; ?>">
         <?php
         echo country_select(
             set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : $defaultCountry),
             $defaultCountry,
             $field['name'],
-            'col-sm-6 chzn-select'
+            'chzn-select '.$controlClass
         );
         ?>
     </div>

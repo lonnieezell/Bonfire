@@ -50,7 +50,7 @@
 		<?php endif; ?>
 
 		<div class="form-group">
-			<div class="controls">
+			            <div class="<?php echo $wrapClass; ?>">
 				<input class="btn btn-lg btn-primary" type="submit" name="log-me-in" id="submit" value="<?php e(lang('us_let_me_in')); ?>" tabindex="5" />
 			</div>
 		</div>
