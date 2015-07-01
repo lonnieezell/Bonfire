@@ -1,7 +1,7 @@
 {
     "name": "ci-bonfire/bonfire",
     "description": "Kickstart your CodeIgniter-based web application development.",
-    "version": "0.7.1-dev",
+    "version": "0.7.5-dev",
     "type": "project",
     "homepage": "http://cibonfire.com",
     "license": "MIT",
@@ -14,7 +14,7 @@
         {
             "name": "Lonnie Ezell",
             "email": "lonnieje@gmail.com",
-            "homepage": "lonnieezell.com",
+            "homepage": "http://lonnieezell.com",
             "role": "Project Starter and Lead"
         }
     ],
