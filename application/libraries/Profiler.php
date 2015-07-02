@@ -162,7 +162,7 @@ class CI_Profiler
         $highlight = array(
             'SELECT', 'DISTINCT', 'FROM', 'WHERE', 'and', 'LEFT JOIN', 'ORDER BY',
             'GROUP BY', 'LIMIT', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'OR ',
-            'HAVING', 'OFFSET', 'NOT&nbsp;IN', ' IN', 'LIKE', 'NOT LIKE',
+            'HAVING', 'OFFSET', 'NOT IN', ' IN', 'LIKE', 'NOT LIKE',
             'COUNT', 'MAX', 'MIN', ' ON', ' AS ', 'AVG', 'SUM', '(', ')'
         );
 

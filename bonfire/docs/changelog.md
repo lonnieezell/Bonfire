@@ -7,12 +7,14 @@
 #### New Features:
 
 #### Closes Issues:
+* #1136 Profiler: MySQL explain update fails on older versions
 * #1131 Modules Library: modules_locations not loaded from application config.
 * #1129 Module Builder: filenames and class names built with incorrect case for CI3.
 * #1128 Module Builder: Use of `strip_slashes()` without loading the string helper.
 * #1118 Settings error when password options are not selected in security tab.
 
 #### Additional Changes:
+* Profiler: Improved SQL highlighting in Queries tab
 
 #### Known Issues:
 
