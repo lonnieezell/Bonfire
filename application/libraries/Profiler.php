@@ -183,7 +183,7 @@ class CI_Profiler
 
                     $explain = $explainSupported
                         && stripos($val, 'SELECT') !== false
-                        && ! ($explainPartial && preg_match('/UPDATE|INSERT/i', $val)
+                        && ! ($explainPartial && preg_match('/UPDATE|INSERT|DELETE/i', $val)
                         ) ? $this->CI->db->query("EXPLAIN {$val}") : null;
                     if (! is_null($explain)) {
                         $query .= $this->build_sql_explain($explain->row(), $time);
