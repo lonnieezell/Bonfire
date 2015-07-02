@@ -50,6 +50,9 @@ Due to the shift from CI2 to CI3, there are 2 branches containing recent release
 
 Any changes due to issues in the Bonfire code are currently being made to both development branches.
 
+- v0.8.x uses CodeIgniter 3 by default. CI2 is supported, but not included.
+- v0.7.x uses CodeIgniter 2 by default. CI3 is supported, but not included.
+
 ## Bug Reports
 
 We strive to make Bonfire a solid base to work with. In doing so your Bug Reports are very vital to us. Before making a Bug Report please check the existing
