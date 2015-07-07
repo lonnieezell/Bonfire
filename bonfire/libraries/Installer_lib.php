@@ -272,7 +272,7 @@ class Installer_lib
      */
     public function is_installed()
     {
-        // If 'install/installed.txt' exists, the app is installed
+        // If 'config/installed.txt' exists, the app is installed
         if (is_file(APPPATH . 'config/installed.txt')) {
             return true;
         }
