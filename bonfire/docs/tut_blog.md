@@ -304,7 +304,7 @@ Edit the index.php view file to reflect the following:
         <?php
         else :
             $numColumns = 2;
-            $canDelete = $this->auth->has_permission('Bonfire.Blog.Delete');
+            $canDelete = $this->auth->has_permission('Bonfire.Blog.Delete'));
             if ($canDelete) {
                 ++$numColumns;
             }
