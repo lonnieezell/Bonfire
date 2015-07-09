@@ -113,11 +113,14 @@ class Installer_lib
         $data = array();
         foreach ($filesAndFolders as $fileOrFolder) {
             // If it starts with 'public/', then that represents the web root.
-            // Otherwise, try to locate it from the main folder.
+            // Otherwise, try to locate it from the main folder. This does not use
+            // DIRECTORY_SEPARATOR because the string is supplied by $this->writable_folders
+            // or $this->writable_files.
             if (strpos($fileOrFolder, 'public/') === 0) {
                 $realpath = FCPATH . preg_replace('{^public/}', '', $fileOrFolder);
             } else {
-                $realpath = str_replace('application/', '', APPPATH) . $fileOrFolder;
+                // Because this is APPPATH, use DIRECTORY_SEPARATOR instead of '/'.
+                $realpath = str_replace('application' . DIRECTORY_SEPARATOR, '', APPPATH) . $fileOrFolder;
             }
 
             $data[$fileOrFolder] = is_really_writable($realpath);

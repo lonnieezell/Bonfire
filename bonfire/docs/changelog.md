@@ -16,6 +16,7 @@
 * Profiler: Improved SQL highlighting in Queries tab.
 * Docs: update paths in installation docs to reflect 0.6 directory changes.
 * Builder: Added a note to the create_context page reminding users to add route(s) for the new context.
+* Installer: Fix error checking writable directories in APPPATH on Windows
 
 #### Known Issues:
 
