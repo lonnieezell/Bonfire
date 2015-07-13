@@ -14,10 +14,11 @@
 * #1118 Settings error when password options are not selected in security tab.
 
 #### Additional Changes:
-* Profiler: Improved SQL highlighting in Queries tab.
-* Docs: update paths in installation docs to reflect 0.6 directory changes.
 * Builder: Added a note to the create_context page reminding users to add route(s) for the new context.
+* Contexts: Fix links when using `$top_level_only` parameter in `render_menu()`
+* Docs: update paths in installation docs to reflect 0.6 directory changes.
 * Installer: Fix error checking writable directories in APPPATH on Windows
+* Profiler: Improved SQL highlighting in Queries tab.
 
 #### Known Issues:
 
