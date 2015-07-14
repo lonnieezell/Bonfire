@@ -10,3 +10,6 @@
 
 ## GitHub
 
+* Push updated files to dev branch
+* Create a pull request or create new branch from dev branch (switch to dev branch, if necessary, then create new branch)
+* Go to the releases page and "Draft a new release"
