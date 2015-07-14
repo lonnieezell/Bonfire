@@ -93,7 +93,7 @@ define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 // Bonfire-specific Constants
 // -----------------------------------------------------------------------------
 
-define('BONFIRE_VERSION', 'v0.8.1');
+define('BONFIRE_VERSION', 'v0.8.2-dev');
 
 // -----------------------------------------------------------------------------
 // The 'App Area' allows you to specify the base folder used for all of the contexts
