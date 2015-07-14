@@ -13,6 +13,8 @@
 * #1118 Settings error when password options are not selected in security tab.
 
 #### Additional Changes:
+* CI Upgraded to v2.2.3: Removed a fallback to `mysql_escape_string()` in the 'mysql' database driver (`escape_str()` method).
+
 * Builder: Added a note to the create_context page reminding users to add route(s) for the new context.
 * Contexts: Fix links when using `$top_level_only` parameter in `render_menu()`
 * Docs: update paths in installation docs to reflect 0.6 directory changes.
