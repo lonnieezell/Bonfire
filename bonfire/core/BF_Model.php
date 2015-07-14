@@ -247,7 +247,7 @@ class BF_Model extends CI_Model
      * This can be set to avoid a database call if using $this->prep_data() and/or
      * $this->get_field_info().
      *
-     * @see http://www.codeigniter.com/user_guide/database/fields.html
+     * @see http://www.codeigniter.com/user_guide/database/metadata.html#retrieve-field-metadata
      *
      * Each field's definition should be as follows:
         array(
