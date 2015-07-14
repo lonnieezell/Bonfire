@@ -2,6 +2,8 @@
 
 ## Under development
 
+## Released versions
+
 ### 0.7.5
 
 #### New Features:
@@ -22,8 +24,6 @@
 * Profiler: Improved SQL highlighting in Queries tab.
 
 #### Known Issues:
-
-## Released versions
 
 ### 0.7.4
 
