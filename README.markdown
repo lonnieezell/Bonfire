@@ -45,8 +45,8 @@ Let's make this the best kick-start to any CodeIgniter project.
 
 Due to the shift from CI2 to CI3, there are 2 branches containing recent releases and 2 development branches.
 
-- The releases are in the master (v0.8.0) and 0.7.4 (v0.7.4) branches.
-- The development branches are develop (v0.8.1) and 0.7.5-dev (v0.7.5) branches.
+- The releases are in the master (v0.8.1) and 0.7.5 (v0.7.5) branches.
+- The development branches are develop (v0.8.2) and 0.7.6-dev (v0.7.6) branches.
 
 Any changes due to issues in the Bonfire code are currently being made to both development branches.
 
