@@ -43,17 +43,21 @@
  */
 class PasswordHash
 {
-    /**
-     * @deprecated since 0.8.2 - will be protected in a future version
-     * @var string
-     */
-    public $itoa64;
+    // -------------------------------------------------------------------------
+    // Protected Properties - intended for internal use only
+    // -------------------------------------------------------------------------
 
     /**
      * @deprecated since 0.8.2 - will be protected in a future version
      * @var integer
      */
     public $iteration_count_log2;
+
+    /**
+     * @deprecated since 0.8.2 - will be protected in a future version
+     * @var string
+     */
+    public $itoa64;
 
     /**
      * @deprecated since 0.8.2 - will be protected in a future version
@@ -92,6 +96,72 @@ class PasswordHash
             $this->random_state .= getmypid();
         }
     }
+
+    /**
+     * Check whether a plain-text password matches a hashed password.
+     *
+     * @param string $password    The plain-text password.
+     * @param string $stored_hash The hashed password.
+     *
+     * @return boolean True if the passwords match, else false.
+     */
+    public function CheckPassword($password, $stored_hash)
+    {
+        $hash = $this->crypt_private($password, $stored_hash);
+        if ($hash[0] == '*') {
+            $hash = crypt($password, $stored_hash);
+        }
+
+        return $hash == $stored_hash;
+    }
+
+    /**
+     * Hash a password so it can be stored securely.
+     *
+     * @param string $password The plain-text password to be hashed.
+     *
+     * @return string The hashed password.
+     */
+    public function HashPassword($password)
+    {
+        $random = '';
+        if (CRYPT_BLOWFISH == 1 && ! $this->portable_hashes) {
+            $random = $this->get_random_bytes(16);
+            $hash = crypt($password, $this->gensalt_blowfish($random));
+            if (strlen($hash) == 60) {
+                return $hash;
+            }
+        }
+
+        if (CRYPT_EXT_DES == 1 && ! $this->portable_hashes) {
+            if (strlen($random) < 3) {
+                $random = $this->get_random_bytes(3);
+            }
+
+            $hash = crypt($password, $this->gensalt_extended($random));
+            if (strlen($hash) == 20) {
+                return $hash;
+            }
+        }
+
+        if (strlen($random) < 6) {
+            $random = $this->get_random_bytes(6);
+        }
+
+        $hash = $this->crypt_private($password, $this->gensalt_private($random));
+        if (strlen($hash) == 34) {
+            return $hash;
+        }
+
+        // Returning '*' on error is safe here, but would _not_ be safe in a crypt(3)-like
+        // function used _both_ for generating new hashes and for validating passwords
+        // against existing hashes.
+        return '*';
+    }
+
+    // -------------------------------------------------------------------------
+    // Protected Methods - intended for internal use only
+    // -------------------------------------------------------------------------
 
     /**
      * @deprecated since 0.8.2 - will be protected in a future version
@@ -285,68 +355,5 @@ class PasswordHash
         } while (1);
 
         return $output;
-    }
-
-    /**
-     * Hash a password so it can be stored securely.
-     *
-     * @param string $password The plain-text password to be hashed.
-     *
-     * @return string The hashed password.
-     */
-    public function HashPassword($password)
-    {
-        $random = '';
-
-        if (CRYPT_BLOWFISH == 1 && ! $this->portable_hashes) {
-            $random = $this->get_random_bytes(16);
-            $hash = crypt($password, $this->gensalt_blowfish($random));
-            if (strlen($hash) == 60) {
-                return $hash;
-            }
-        }
-
-        if (CRYPT_EXT_DES == 1 && ! $this->portable_hashes) {
-            if (strlen($random) < 3) {
-                $random = $this->get_random_bytes(3);
-            }
-
-            $hash = crypt($password, $this->gensalt_extended($random));
-            if (strlen($hash) == 20) {
-                return $hash;
-            }
-        }
-
-        if (strlen($random) < 6) {
-            $random = $this->get_random_bytes(6);
-        }
-
-        $hash = $this->crypt_private($password, $this->gensalt_private($random));
-        if (strlen($hash) == 34) {
-            return $hash;
-        }
-
-        // Returning '*' on error is safe here, but would _not_ be safe in a crypt(3)-like
-        // function used _both_ for generating new hashes and for validating passwords
-        // against existing hashes.
-        return '*';
-    }
-
-    /**
-     * Check whether a plain-text password matches a hashed password.
-     *
-     * @param string $password    The plain-text password.
-     * @param string $stored_hash The hashed password.
-     *
-     * @return boolean True if the passwords match, else false.
-     */
-    public function CheckPassword($password, $stored_hash)
-    {
-        $hash = $this->crypt_private($password, $stored_hash);
-        if ($hash[0] == '*') {
-            $hash = crypt($password, $stored_hash);
-        }
-
-        return $hash == $stored_hash;
     }
 }
