@@ -9,6 +9,11 @@
 #### Closes Issues:
 
 #### Additional Changes:
+* PasswordHash library (PHPass):
+    * removed PHP4 compatibility
+    * changed constructor to PHP5-style constructor
+    * added visibility to properties/methods
+    * deprecated all of the properties/methods except `__construct()`, `CheckPassword()`, and `HashPassword()` (all deprecated properties/methods will become `protected` in a future version)
 
 #### Known Issues:
 
