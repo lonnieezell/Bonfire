@@ -691,7 +691,7 @@ class Modulebuilder
         }
 
         if (! function_exists('strip_slashes')) {
-            $this->load->helper('string');
+            $this->CI->load->helper('string');
         }
 
         return $this->CI->load->view("files/view_{$view_name}", $data, true);
