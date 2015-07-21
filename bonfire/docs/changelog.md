@@ -7,6 +7,7 @@
 #### New Features:
 
 #### Closes Issues:
+* #1143: Emailer Settings: can't send email.
 * #1142: Module Builder: Fix #1128 properly (undefined property: Modulebuilder::$load).
 
 #### Additional Changes:

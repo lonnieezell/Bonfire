@@ -270,7 +270,7 @@ class Settings extends Admin_Controller
             // Validate subject, content and recipients
             $this->form_validation->set_rules('email_subject', 'lang:emailer_email_subject', 'required|trim|min_length[1]|max_length[255]');
             $this->form_validation->set_rules('email_content', 'lang:emailer_email_content', 'required|trim|min_length[1]');
-            $this->form_validation->set_rules('checked', 'lang:bf_users', 'required');
+            $this->form_validation->set_rules('checked[]', 'lang:bf_users', 'required');
 
             if ($this->form_validation->run() === false) {
                 // @todo This shouldn't be necessary, is set_value() not used in the view?

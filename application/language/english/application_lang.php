@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License.
  * @link      http://cibonfire.com
  * @since     Version 1.0
  */
@@ -311,3 +311,8 @@ $lang['multiple_migrations_name']		= 'Multiple migrations name: %s';
 $lang['migration_class_doesnt_exist']	= 'Migration class does not exist: %s';
 $lang['wrong_migration_interface']		= 'Wrong migration interface: %s';
 $lang['invalid_migration_filename']		= 'Wrong migration filename: %s - %s';
+
+//------------------------------------------------------------------------------
+// Form validation labels (for CI 3.0, should be fixed in 3.0.1)
+//------------------------------------------------------------------------------
+$lang['form_validation_bf_users'] = 'Users';
