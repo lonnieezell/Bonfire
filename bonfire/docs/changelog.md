@@ -5,6 +5,8 @@
 ### 0.8.2
 
 #### New Features:
+* Installer_lib now reads `writable_folders` and `writable_files` from the newly added `/application/config/installer_lib.php`
+* The `sysinfo` module's `Developer` controller will attempt to load the `installer_lib` config and display the writable/not writable status of the same directories/files.
 
 #### Closes Issues:
 * #1147: Unique validation fails on existing role.

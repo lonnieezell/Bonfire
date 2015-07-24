@@ -49,3 +49,18 @@ $lang['sysinfo_basepath']     = 'Base Path';
 $lang['sysinfo_apppath']      = 'App Path';
 $lang['sysinfo_site_url']     = 'Site_URL';
 $lang['sysinfo_environment']  = 'Environment';
+
+$lang['sysinfo_writable']     = 'Writable';
+$lang['sysinfo_not_writable'] = 'Not Writable';
+
+$lang['sysinfo_writable_folders']                        = 'Writable Folders';
+$lang['sysinfo_writable_folders_application_cache']      = '/application/cache';
+$lang['sysinfo_writable_folders_application_logs']       = '/application/logs';
+$lang['sysinfo_writable_folders_application_config']     = '/application/config';
+$lang['sysinfo_writable_folders_application_archives']   = '/application/archives';
+$lang['sysinfo_writable_folders_application_db_backups'] = '/application/db/backups';
+$lang['sysinfo_writable_folders_public_assets_cache']    = '/public/assets/cache';
+
+$lang['sysinfo_writable_files']                                    = 'Writable Files';
+$lang['sysinfo_writable_files_application_config_application_php'] = '/application/config/application.php';
+$lang['sysinfo_writable_files_application_config_database_php']    = '/application/config/database.php';

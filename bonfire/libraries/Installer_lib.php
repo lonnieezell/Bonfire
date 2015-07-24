@@ -44,20 +44,10 @@ class Installer_lib
     private $supported_dbs = array('mysql', 'mysqli', 'bfmysqli');
 
     /** @var string[] Folders the installer checks for write access. */
-    private $writable_folders = array(
-        'application/cache',
-        'application/logs',
-        'application/config',
-        'application/archives',
-        'application/db/backups',
-        'public/assets/cache',
-    );
+    private $writable_folders;
 
     /** @var string[] Files the installer checks for write access. */
-    private $writable_files = array(
-        'application/config/application.php',
-        'application/config/database.php',
-    );
+    private $writable_files;
 
     /**
      * The version of the MySQL Client.
@@ -84,6 +74,13 @@ class Installer_lib
      */
     public function __construct($config = array())
     {
+        if (! empty($config['writable_folders'])) {
+            $this->writable_folders = $config['writable_folders'];
+        }
+        if (! empty($config['writable_files'])) {
+            $this->writable_files = $config['writable_files'];
+        }
+
         $this->ci =& get_instance();
         $this->curl_update = $this->cURL_enabled();
         $this->php_version = phpversion();
