@@ -7,6 +7,7 @@
 #### New Features:
 
 #### Closes Issues:
+* #1149: Blog Tutorial defined `$modified_field` without default value.
 * #1147: Unique validation fails on existing role.
 * #1144: Emailer lang entries missing when sending mail from users module.
 * #1142: Module Builder: Fix #1128 properly (undefined property: Modulebuilder::$load).
