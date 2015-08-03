@@ -9,6 +9,7 @@
 * The `sysinfo` module's `Developer` controller will attempt to load the `installer_lib` config and display the writable/not writable status of the same directories/files.
 
 #### Closes Issues:
+* #1151: [BF_Router] Call to undefined method `_set_404override_controller()`
 * #1149: Blog Tutorial defined `$modified_field` without default value.
 * #1147: Unique validation fails on existing role.
 * #1144: Emailer lang entries missing when sending mail from users module.
