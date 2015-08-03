@@ -264,6 +264,17 @@ class BF_Router extends CI_Router
     }
 
     /**
+     * Sets the module path to the 404_override controller. This is pulled from
+     * the MX Router primarily for use by the _set_default_controller() method.
+     *
+     * @return void
+     */
+    protected function _set_404override_controller()
+    {
+        $this->_set_module_path($this->routes['404_override']);
+    }
+
+    /**
      * Set module path.
      *
      * @param string &$_route The route for which the module path should be set.
