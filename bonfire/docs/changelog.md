@@ -10,6 +10,7 @@
 
 #### Closes Issues:
 * #1151: [BF_Router] Call to undefined method `_set_404override_controller()`
+* #1150: Changing Role name breaks permissions
 * #1149: Blog Tutorial defined `$modified_field` without default value.
 * #1147: Unique validation fails on existing role.
 * #1144: Emailer lang entries missing when sending mail from users module.

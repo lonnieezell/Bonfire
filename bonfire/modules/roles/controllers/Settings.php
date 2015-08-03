@@ -262,6 +262,8 @@ class Settings extends Admin_Controller
             $id = $this->role_model->insert($data);
             $return = is_numeric($id);
         } elseif ($type == 'update') {
+            // Grab the name of the role being updated.
+            $current_name = $this->role_model->find($id)->role_name;
             $return = $this->role_model->update($id, $data);
         }
 
@@ -276,15 +278,13 @@ class Settings extends Admin_Controller
         }
 
         // Add a new management permission for the role.
-        $new_perm_name = 'Permissions.' . ucwords($roleName) . '.Manage';
+        $add_perm = array(
+            'name'        => 'Permissions.' . ucwords($roleName) . '.Manage',
+            'description' => "To manage the access control permissions for the {$roleName} role.",
+            'status'      => 'active'
+        );
 
         if ($type == 'insert') {
-            $add_perm = array(
-                'name'        => $new_perm_name,
-                'description' => "To manage the access control permissions for the {$roleName} role.",
-                'status'      => 'active'
-            );
-
             $permissionId = $this->permission_model->insert($add_perm);
 
             if (! $permissionId) {
@@ -314,18 +314,12 @@ class Settings extends Admin_Controller
                 $this->form_validation->reset_validation();
                 $this->role_permission_model->insert_batch($rolePermissions);
             }
-        } else {
-            // Update
-            //
-            // Grab the name of the role being updated.
-            $current_name = $this->role_model->find($id)->role_name;
-
+        } elseif ($type == 'update') {
             // Update the permission name.
-            $this->permission_model->update_where(
-                'name',
-                'Permissions.' . ucwords($current_name) . '.Manage',
-                array('name' => $new_perm_name)
-            );
+            $currentPermission = $this->permission_model->find_by('name', 'Permissions.' . ucwords($current_name) . '.Manage');
+            $permissionKey = $this->permission_model->get_key();
+            $add_perm['status'] = $currentPermission->status;
+            $this->permission_model->update($currentPermission->{$permissionKey}, $add_perm);
         }
 
         // Reset validation so the role_permissions model can use it.
