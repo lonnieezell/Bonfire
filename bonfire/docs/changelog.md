@@ -1,6 +1,6 @@
 # Change Log
 
-## Under development
+## Released versions
 
 ### 0.8.2
 
@@ -25,8 +25,6 @@
     * deprecated all of the properties/methods except `__construct()`, `CheckPassword()`, and `HashPassword()` (all deprecated properties/methods will become `protected` in a future version)
 
 #### Known Issues:
-
-## Released versions
 
 ### 0.8.1
 
