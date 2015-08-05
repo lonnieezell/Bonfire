@@ -1,5 +1,17 @@
 # Change Log
 
+## Under development
+
+### 0.8.3
+
+#### New Features:
+
+#### Closes Issues:
+
+#### Additional Changes:
+
+#### Known Issues:
+
 ## Released versions
 
 ### 0.8.2
