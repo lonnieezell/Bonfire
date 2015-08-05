@@ -3,6 +3,7 @@
 ## Under development
 
 ### 0.9.0
+* Minimum PHP version changed to 5.4
 
 #### New Features:
 
