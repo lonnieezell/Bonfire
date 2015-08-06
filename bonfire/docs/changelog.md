@@ -4,6 +4,7 @@
 
 ### 0.9.0
 * Minimum PHP version changed to 5.4
+* Remove CI2 compatibility
 
 #### New Features:
 
