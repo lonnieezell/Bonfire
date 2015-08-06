@@ -1259,41 +1259,8 @@ class BF_Model extends CI_Model
      */
     protected function get_db_error_message()
     {
-        if (substr(CI_VERSION, 0, 1) != '2') {
-            $error = $this->db->error();
-            return isset($error['message']) ? $error['message'] : '';
-        }
-
-        switch ($this->db->platform()) {
-            case 'cubrid':
-                return cubrid_errno($this->db->conn_id);
-            case 'mssql':
-                return mssql_get_last_message();
-            case 'mysql':
-                return mysql_error($this->db->conn_id);
-            case 'mysqli':
-                return mysqli_error($this->db->conn_id);
-            case 'oci8':
-                // If the error was during connection, no conn_id should be passed
-                $error = is_resource($this->db->conn_id) ? oci_error($this->db->conn_id) : oci_error();
-                return $error['message'];
-            case 'odbc':
-                return odbc_errormsg($this->db->conn_id);
-            case 'pdo':
-                $error_array = $this->db->conn_id->errorInfo();
-                return $error_array[2];
-            case 'postgre':
-                return pg_last_error($this->db->conn_id);
-            case 'sqlite':
-                return sqlite_error_string(sqlite_last_error($this->db->conn_id));
-            case 'sqlsrv':
-                $error = array_shift(sqlsrv_errors());
-                return !empty($error['message']) ? $error['message'] : null;
-            default:
-                // !WARNING! $this->db->_error_message() is supposed to be private
-                // and possibly won't be available in future versions of CI.
-                return $this->db->_error_message();
-        }
+        $error = $this->db->error();
+        return isset($error['message']) ? $error['message'] : '';
     }
 
     /**
