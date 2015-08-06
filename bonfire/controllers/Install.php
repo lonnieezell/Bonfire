@@ -19,13 +19,13 @@
  *
  * @package Bonfire\Controllers\Install
  * @author  Bonfire Dev Team
- * @version 0.7.3
+ * @version 0.9
  * @link    http://cibonfire.com/docs/developer/installation
  */
 class Install extends CI_Controller
 {
     /** @var string The minimum PHP version required to use Bonfire. */
-    protected $minVersionPhp = '5.3';
+    protected $minVersionPhp = '5.4';
 
     /**
      * Initialize the installer.
