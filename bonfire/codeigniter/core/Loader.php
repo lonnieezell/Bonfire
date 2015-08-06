@@ -501,6 +501,7 @@ class CI_Loader {
 			}
 
 			$ext_helper = APPPATH.'helpers/'.config_item('subclass_prefix').$helper.'.php';
+            $bfHelper = BFPATH . "helpers/BF_{$helper}.php";
 
 			// Is this a helper extension request?
 			if (file_exists($ext_helper))
@@ -513,12 +514,24 @@ class CI_Loader {
 				}
 
 				include_once($ext_helper);
+                // Look for Bonfire helper extension.
+                if (file_exists($bfHelper))
+                {
+                    include_once($bfHelper);
+                }
 				include_once($base_helper);
 
 				$this->_ci_helpers[$helper] = TRUE;
 				log_message('debug', 'Helper loaded: '.$helper);
 				continue;
 			}
+
+            // Look for Bonfire helper extension.
+            if (file_exists($bfHelper))
+            {
+                include_once($bfHelper);
+                $this->_ci_helpers[$helper] = TRUE;
+            }
 
 			// Try to load the helper
 			foreach ($this->_ci_helper_paths as $path)

@@ -53,11 +53,7 @@ class BF_Loader extends MX_Loader
         list($path, $_helper) = Modules::find("{$helper}_helper", $this->_module, 'helpers/');
 
         if ($path === false) {
-            // If the helper was not found in a module, check for a BF_ prefixed
-            // helper in the Bonfire helpers directory.
-            if (file_exists(BFPATH . "helpers/BF_{$helper}_helper.php")) {
-                include_once(BFPATH . "helpers/BF_{$helper}_helper.php");
-            }
+            // If the helper was not found in a module, check the traditional locations.
             parent::helper($helper);
             return $this;
         }

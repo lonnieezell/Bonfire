@@ -9,6 +9,7 @@
 #### Closes Issues:
 
 #### Additional Changes:
+* MY_*_helper files can now override BF_*_helper files
 
 #### Known Issues:
 
