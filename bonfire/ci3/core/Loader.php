@@ -566,6 +566,13 @@ class CI_Loader {
 				}
 			}
 
+            // Look for Bonfire helper extension.
+            if (file_exists(BFPATH . "helpers/BF_{$helper}.php"))
+            {
+                include_once(BFPATH . "helpers/BF_{$helper}.php");
+                $ext_loaded = TRUE;
+            }
+
 			// If we have loaded extensions - check if the base one is here
 			if ($ext_loaded === TRUE)
 			{
