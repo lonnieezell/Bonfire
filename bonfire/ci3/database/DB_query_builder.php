@@ -794,13 +794,23 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 
 		$not = ($not) ? ' NOT' : '';
 
-		$where_in = array();
-		foreach ($values as $value)
+		if ($escape === TRUE)
 		{
-			$where_in[] = $this->escape($value);
+			$where_in = array();
+			foreach ($values as $value)
+			{
+				$where_in[] = $this->escape($value);
+			}
+		}
+		else
+		{
+			$where_in = array_values($values);
 		}
 
-		$prefix = (count($this->qb_where) === 0) ? $this->_group_get_type('') : $this->_group_get_type($type);
+		$prefix = (count($this->qb_where) === 0 && count($this->qb_cache_where) === 0)
+			? $this->_group_get_type('')
+			: $this->_group_get_type($type);
+
 		$where_in = array(
 			'condition' => $prefix.$key.$not.' IN('.implode(', ', $where_in).')',
 			'escape' => $escape
@@ -918,13 +928,18 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 		}
 
 		is_bool($escape) OR $escape = $this->_protect_identifiers;
+		// lowercase $side in case somebody writes e.g. 'BEFORE' instead of 'before' (doh)
+		$side = strtolower($side);
 
 		foreach ($field as $k => $v)
 		{
 			$prefix = (count($this->qb_where) === 0 && count($this->qb_cache_where) === 0)
 				? $this->_group_get_type('') : $this->_group_get_type($type);
 
-			$v = $this->escape_like_str($v);
+			if ($escape === TRUE)
+			{
+				$v = $this->escape_like_str($v);
+			}
 
 			if ($side === 'none')
 			{
@@ -944,7 +959,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 			}
 
 			// some platforms require an escape sequence definition for LIKE wildcards
-			if ($this->_like_escape_str !== '')
+			if ($escape === TRUE && $this->_like_escape_str !== '')
 			{
 				$like_statement .= sprintf($this->_like_escape_str, $this->_like_escape_chr);
 			}
@@ -1292,7 +1307,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 	 * Compiles a SELECT query string and returns the sql.
 	 *
 	 * @param	string	the table name to select from (optional)
-	 * @param	bool	TRUE: resets QB values; FALSE: leave QB vaules alone
+	 * @param	bool	TRUE: resets QB values; FALSE: leave QB values alone
 	 * @return	string
 	 */
 	public function get_compiled_select($table = '', $reset = TRUE)
@@ -1353,7 +1368,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 	 * returned by an Query Builder query.
 	 *
 	 * @param	string
-     * @param   bool    the reset clause
+	 * @param	bool	the reset clause
 	 * @return	int
 	 */
 	public function count_all_results($table = '', $reset = TRUE)
@@ -1368,10 +1383,10 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 			? $this->query($this->_count_string.$this->protect_identifiers('numrows')."\nFROM (\n".$this->_compile_select()."\n) CI_count_all_results")
 			: $this->query($this->_compile_select($this->_count_string.$this->protect_identifiers('numrows')));
 
-        if ($reset === TRUE)
-        {
-            $this->_reset_select();
-        }
+		if ($reset === TRUE)
+		{
+			$this->_reset_select();
+		}
 
 		if ($result->num_rows() === 0)
 		{
@@ -1734,7 +1749,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 			return FALSE;
 		}
 
-		$sql = $this->_update($this->protect_identifiers($this->qb_from[0], TRUE, NULL, FALSE), $this->qb_set);
+		$sql = $this->_update($this->qb_from[0], $this->qb_set);
 
 		if ($reset === TRUE)
 		{
@@ -1782,7 +1797,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 			$this->limit($limit);
 		}
 
-		$sql = $this->_update($this->protect_identifiers($this->qb_from[0], TRUE, NULL, FALSE), $this->qb_set);
+		$sql = $this->_update($this->qb_from[0], $this->qb_set);
 		$this->_reset_write();
 		return $this->query($sql);
 	}
@@ -1799,7 +1814,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 	 * @param	string	the table to update data on
 	 * @return	bool
 	 */
-	protected function _validate_update($table = '')
+	protected function _validate_update($table)
 	{
 		if (count($this->qb_set) === 0)
 		{
@@ -1808,7 +1823,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 
 		if ($table !== '')
 		{
-			$this->qb_from[0] = $table;
+			$this->qb_from = array($this->protect_identifiers($table, TRUE, NULL, FALSE));
 		}
 		elseif ( ! isset($this->qb_from[0]))
 		{
@@ -2090,10 +2105,13 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 		}
 		elseif (is_array($table))
 		{
+			empty($where) && $reset_data = FALSE;
+
 			foreach ($table as $single_table)
 			{
 				$this->delete($single_table, $where, $limit, $reset_data);
 			}
+
 			return;
 		}
 		else
@@ -2253,7 +2271,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 			else
 			{
 				// Cycle through the "select" portion of the query and prep each column name.
-				// The reason we protect identifiers here rather then in the select() function
+				// The reason we protect identifiers here rather than in the select() function
 				// is because until the user calls the from() function we don't know if there are aliases
 				foreach ($this->qb_select as $key => $val)
 				{
@@ -2324,7 +2342,7 @@ abstract class CI_DB_query_builder extends CI_DB_driver {
 
 				// Split multiple conditions
 				$conditions = preg_split(
-					'/(\s*AND\s+|\s*OR\s+)/i',
+					'/((^|\s+)AND\s+|(^|\s+)OR\s+)/i',
 					$this->{$qb_key}[$i]['condition'],
 					-1,
 					PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY

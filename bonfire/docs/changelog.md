@@ -6,6 +6,7 @@
 * Minimum PHP version changed to 5.4
 * Removed CI2 compatibility
 * Removed functions/methods/properties deprecated prior to 0.7.4/0.8.0.
+* Upgraded CodeIgniter to 3.0.1
 
 #### New Features:
 * MY_*_helper files can now override BF_*_helper files
