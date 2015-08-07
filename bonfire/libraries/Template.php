@@ -917,7 +917,7 @@ function check_class($item = '', $class_only = false)
 function check_method($item, $class_only = false)
 {
     $items = is_array($item) ? $item : array($item);
-    if (in_array(get_instance()->router->fetch_method(), $items)) {
+    if (in_array(get_instance()->router->method, $items)) {
         return $class_only ? 'active' : 'class="active"';
     }
 
