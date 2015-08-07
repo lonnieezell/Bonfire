@@ -3,13 +3,14 @@
 ## Under development
 
 ### 0.8.3
+* Upgraded CodeIgniter to 3.0.1
 
 #### New Features:
+* MY_*_helper files can now override BF_*_helper files
 
 #### Closes Issues:
 
 #### Additional Changes:
-* MY_*_helper files can now override BF_*_helper files
 
 #### Known Issues:
 
