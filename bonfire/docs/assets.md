@@ -307,10 +307,6 @@ Call `setDebug(false)` to disable debug messages.
 
 Configure the library to include global CSS and JS files (e.g. screen.css and global.js) automatically in the output of `css()` and `js()` calls.
 
-### set_globals([$include = true]) *Deprecated*
-
-Use `setGlobals()` instead.
-
 ### init()
 
 Called internally by the constructor to initialize the library when loaded by CodeIgniter.

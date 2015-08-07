@@ -21,16 +21,6 @@ Boolean property to indicate to the install controller whether the database sett
 The version of the currently-running PHP parser/extension.
 Set to the result of `phpversion()` by the `php_acceptable()` method.
 
-### $mysql_client_version *Deprecated*
-
-The version of the MySQL client.
-This property does not appear to be in use and has been deprecated in Bonfire 0.7.2.
-
-### $mysql_server_version *Deprecated*
-
-The version of the MySQL server.
-This property does not appear to be in use and has been deprecated in Bonfire 0.7.2.
-
 ## Methods
 
 ### php_acceptable($version)

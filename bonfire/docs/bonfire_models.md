@@ -462,9 +462,9 @@ Returns the `$field_info` array, attempting to populate it from the database if 
 
 ### `prep_data()`
 
-Intended to be called by a controller and/or extended in the model, `prep_data` processes an array of field/value pairs (can be the result of `$this->input->post()`) and attempts to setup a `$data` array suitable for use in the model's `insert`/`update` methods. The output array will not include the model's `key`, `created_on`, `created_by`, `modified_on`, `modified_by`, `deleted`, or `deleted_by` fields, or fields indicated as the primary key in the model's `field_info` array.
+Intended to be called by a controller and/or extended in the model, `prep_data()` processes an array of field/value pairs (can be the result of `$this->input->post()`) and attempts to setup a `$data` array suitable for use in the model's `insert`/`update` methods. The output array will not include the model's `key`, `created_on`, `created_by`, `modified_on`, `modified_by`, `deleted`, or `deleted_by` fields, or fields indicated as the primary key in the model's `field_info` array.
 
-For example, the user_model extends prep_data to map field names from the view that don't match the tables in the database and ensure fields that should not be set are not set:
+For example, the `user_model` extends `prep_data()` to map field names from the view that don't match the tables in the database and ensure fields that should not be set are not set:
 
 
     public function prep_data($post_data)
@@ -499,33 +499,33 @@ For example, the user_model extends prep_data to map field names from the view t
 The User Settings controller then uses the model's `prep_data` method to process the post data before inserting/updating the user:
 
 
-	private function save_user($type='insert', $id=0, $meta_fields=array(), $cur_role_name = '')
+	private function saveUser($type = 'insert', $id = 0, $meta_fields = array())
 	{
         /* ... Omitting validation setup and gathering of user_meta data ... */
 
-		// Compile our core user elements to save.
+        // Compile our core user elements to save.
         $data = $this->user_model->prep_data($this->input->post());
+        $result = false;
 
-		if ($type == 'insert') {
-			$activation_method = $this->settings_lib->item('auth.user_activation_method');
+        if ($type == 'insert') {
+            $activationMethod = $this->settings_lib->item('auth.user_activation_method');
+            if ($activationMethod == 0) {
+                // No activation method, so automatically activate the user.
+                $data['active'] = 1;
+            }
 
-			// No activation method
-			if ($activation_method == 0) {
-				// Activate the user automatically
-				$data['active'] = 1;
-			}
-
-			$return = $this->user_model->insert($data);
-			$id = $return;
-		} else {	// Update
-			$return = $this->user_model->update($id, $data);
-		}
+            $id = $this->user_model->insert($data);
+            if (is_numeric($id)) {
+                $result = $id;
+            }
+        } else {
+            $result = $this->user_model->update($id, $data);
+        }
 
         /* ... Omitting saving user_meta data and event trigger ... */
 
-		return $return;
-
-	}//end save_user()
+        return $result;
+	}
 
 
 <a name="returns"></a>

@@ -1443,28 +1443,6 @@ class BF_Model extends CI_Model
     }
 
     /**
-     * Set whether soft deletes are used by the delete method.
-     *
-     * @deprecated since 0.7
-     *
-     * @param boolean $soft If true, soft deletes will be enabled. If false, soft
-     * deletes will be disabled.
-     *
-     * @return boolean False if $soft is a value other than true or false, else
-     * true.
-     */
-    public function set_soft_deletes($soft = true)
-    {
-        if ($modified === false || $modified === true) {
-            $this->soft_deletes = $soft;
-
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Log an error to the Console (if loaded) and to the log files.
      *
      * @param string $message The string to write to the logs.
