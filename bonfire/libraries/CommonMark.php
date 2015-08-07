@@ -127,18 +127,4 @@ class CommonMark
     {
         return $this->adapter->convert($text);
     }
-
-    /**
-     * Convert the CommonMark text to HTML.
-     *
-     * @deprecated since 0.7.2. Use convert().
-     *
-     * @param string $text The CommonMark text to convert.
-     *
-     * @return string The result of the conversion (HTML text).
-     */
-    public function parse($text)
-    {
-        return $this->convert($text);
-    }
 }
