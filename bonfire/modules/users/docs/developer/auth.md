@@ -128,11 +128,3 @@ A shortcut to `$this->auth->has_permission($permission, null, $override)`
 
 Determine whether `$permission` is in the site's list of permissions.
 A shortcut to `$this->auth->permission_exists($permission)`
-
-### abbrev_name($name) *Deprecated*
-
-Attempts to return a first and last name from the given string.
-
-This function is deprecated.
-It doesn't appear to be used within Bonfire and is unrelated to the Auth library.
-If there is some reason to keep this function, it may be moved to a more appropriate location.
