@@ -7,11 +7,12 @@
 * Remove CI2 compatibility
 
 #### New Features:
+* MY_*_helper files can now override BF_*_helper files
 
 #### Closes Issues:
 
 #### Additional Changes:
-* MY_*_helper files can now override BF_*_helper files
+* Separated abstract Migration class from the file containing the Migrations library. The library's constructor now loads the file containing the abstract class via a require_once() call.
 
 #### Known Issues:
 
