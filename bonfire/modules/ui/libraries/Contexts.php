@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  */
@@ -20,7 +20,7 @@
  *
  * @package Bonfire\Core\Modules\UI\Libraries\Contexts
  * @author  Bonfire Dev Team
- * @link    http://cibonfire.com/docs/bonfire/contexts
+ * @link    http://cibonfire.com/docs/developer/contexts
  */
 class Contexts
 {
@@ -648,43 +648,4 @@ class Contexts
 
         array_multisort($weights, SORT_DESC, $display_names, SORT_ASC, self::$actions);
     }
-
-    //--------------------------------------------------------------------------
-    // Deprecated methods (do not use)
-    //--------------------------------------------------------------------------
-
-    /**
-     * Return the context array, just in case it is needed later.
-     *
-     * @deprecated since 0.7.1 Use getContexts().
-     *
-     * @param boolean $landingPageFilter If true, only returns contexts which have
-     * a landing page (index.php) available.
-     *
-     * @return array The names of the contexts.
-     */
-    public static function get_contexts($landingPageFilter = false)
-    {
-        return self::getContexts($landingPageFilter);
-    }
-
-    /**
-     * Set the contexts array
-     *
-     * @deprecated since 0.7.2 Use setContexts(). Note: SITE_AREA should be passed
-     * as the second argument of setContexts() to replicate the behavior provided
-     * when calling set_contexts() without a second argument. If the second argument
-     * to set_contexts() was never provided, it can probably be safely omitted for
-     * setContexts().
-     *
-     * @param  array  Context menus to display, normally stored in application config.
-     * @param  string Area to link to, defaults to SITE_AREA or Admin area.
-     *
-     * @return void
-     */
-    public static function set_contexts($contexts = array(), $site_area = SITE_AREA)
-    {
-        self::setContexts($contexts, $site_area);
-    }
 }
-/* end /ui/libraries/contexts.php */
