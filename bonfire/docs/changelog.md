@@ -4,7 +4,8 @@
 
 ### 0.9.0
 * Minimum PHP version changed to 5.4
-* Remove CI2 compatibility
+* Removed CI2 compatibility
+* Removed functions/methods/properties deprecated prior to 0.7.4/0.8.0.
 
 #### New Features:
 * MY_*_helper files can now override BF_*_helper files
@@ -13,6 +14,7 @@
 
 #### Additional Changes:
 * Separated abstract Migration class from the file containing the Migrations library. The library's constructor now loads the file containing the abstract class via a require_once() call.
+* Removed use of deprecated function `module_file_path()` from Images controller.
 
 #### Known Issues:
 
