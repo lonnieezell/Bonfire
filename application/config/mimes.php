@@ -1,4 +1,6 @@
-<?php defined('BASEPATH') || exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
 /*
 | -------------------------------------------------------------------
 | MIME TYPES
@@ -125,7 +127,7 @@ $mimes = array(
     'rsa'   => 'application/x-pkcs7',
     'cer'   => array('application/pkix-cert', 'application/x-x509-ca-cert'),
     '3g2'   => 'video/3gpp2',
-    '3gp'   => 'video/3gp',
+    '3gp'   =>	array('video/3gp', 'video/3gpp'),
     'mp4'   => 'video/mp4',
     'm4a'   => 'audio/x-m4a',
     'f4v'   => 'video/mp4',
@@ -151,6 +153,9 @@ $mimes = array(
     'jar'   => array('application/java-archive', 'application/x-java-application', 'application/x-jar', 'application/x-compressed'),
     'svg'   => array('image/svg+xml', 'application/xml', 'text/xml'),
     'vcf'   => 'text/x-vcard',
+    'srt'   =>	array('text/srt', 'text/plain'),
+    'vtt'   =>	array('text/vtt', 'text/plain'),
+    'ico'   =>	array('image/x-icon', 'image/x-ico', 'image/vnd.microsoft.icon')
 );
 
 if (defined('CI_VERSION') && substr(CI_VERSION, 0, 1) != '2') {
