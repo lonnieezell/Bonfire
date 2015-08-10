@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') || exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
@@ -27,7 +27,6 @@ define('DIR_WRITE_MODE', 0777);
 | These modes are used when working with fopen()/popen()
 |
 */
-
 define('FOPEN_READ', 'rb');
 define('FOPEN_READ_WRITE', 'r+b');
 define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
@@ -36,11 +35,6 @@ define('FOPEN_WRITE_CREATE', 'ab');
 define('FOPEN_READ_WRITE_CREATE', 'a+b');
 define('FOPEN_WRITE_CREATE_STRICT', 'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
-
-// -----------------------------------------------------------------------------
-// CI3 Constants - These may not be honored by the system (especially SHOW_DEBUG_BACKTRACE),
-// but they are provided for forward-compatibility.
-// -----------------------------------------------------------------------------
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +47,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 |
 */
 define('SHOW_DEBUG_BACKTRACE', true);
+
 /*
 |--------------------------------------------------------------------------
 | Exit Status Codes
