@@ -20,9 +20,9 @@
  * Includes various helper functions from across the core modules to ease editing
  * and minimize physical files which need to be loaded.
  *
- * @package    Bonfire\Helpers\application_helper
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/developer
+ * @package Bonfire\Helpers\application_helper
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer/global_helpers
  */
 
 if (! function_exists('array_implode')) {
@@ -30,8 +30,7 @@ if (! function_exists('array_implode')) {
      * Implode an array with the key and value pair given a glue, a separator
      * between pairs, and the array to implode.
      *
-     * Encode Query Strings
-     * @example $query = url_encode(array_implode('=', '&', $array));
+     * @example $query = url_encode(array_implode('=', '&', $array)); // Encode Query Strings
      *
      * @param string $glue      The glue between key and value.
      * @param string $separator Separator between pairs.
@@ -99,12 +98,12 @@ if (! function_exists('dump')) {
 
 if (! function_exists('e')) {
     /**
-     * A convenience function to ensure output is safe to display. Helps to
-     * defeat XSS attacks by running the text through htmlspecialchars().
+     * A convenience function to ensure output is safe to display. Helps to defeat
+     * XSS attacks by running the text through htmlspecialchars().
      *
      * Should be used anywhere user-submitted text is displayed.
      *
-     * @param String $str The text to process and output.
+     * @param string $str The text to process and output.
      *
      * @return void
      */
@@ -117,15 +116,16 @@ if (! function_exists('e')) {
 if (! function_exists('gravatar_link')) {
     /**
      * Create an image link based on Gravatar for the specified email address.
-     * It will default to the site's generic image if none is found for the user.
+     * Defaults to the site's generic image if none is found for the user.
      *
      * Note that if gravatar does not have an image that matches the criteria, it
-     * will default to gravatar's 'identicon' return a link to an image under *your_theme/images/user.png*.
+     * will default to gravatar's 'identicon' return a link to an image under
+     * *your_theme/images/user.png*.
      * Also, by explicity omitting email you're denying http-req to gravatar.com.
      *
-     * @param string  $email The email address to check for. If null, the gravatar
+     * @param string $email The email address to check for. If null, the gravatar
      * image defaults to 'identicon'.
-     * @param integer $size  The width (and height) of the resulting image to grab.
+     * @param int    $size  The width (and height) of the resulting image to grab.
      * @param string $alt   Alt text to be put in the link tag.
      * @param string $title The title text to be put in the link tag.
      * @param string $class Any class(es) that should be assigned to the link tag.
@@ -206,58 +206,26 @@ if (! function_exists('gravatar_link')) {
 if (! function_exists('iif')) {
     /**
     * If then Else Statement wrapped in one function, If $expression = true then
-    * $returntrue else $returnfalse.
+    * $returnTrue else $returnFalse.
     *
-    * @param mixed   $expression  Expression to evaluate.
-    * @param mixed   $returntrue  What to return if $expression is true.
-    * @param mixed   $returnfalse What to return if $expression is false.
-    * @param boolean $echo        If set to true, the result will echo instead of
+    * @param mixed $expression  Expression to evaluate.
+    * @param mixed $returnTrue  What to return if $expression is true.
+    * @param mixed $returnFalse What to return if $expression is false.
+    * @param bool  $echo        If set to true, the result will echo instead of
     * returning. Defaults to false (return the result, will not echo).
     *
     * @return mixed If $echo is true, nothing is returned and the result will be
-    * sent to echo. Otherwise, either $returntrue or $returnfalse will be returned.
+    * sent to echo. Otherwise, either $returnTrue or $returnFalse will be returned.
     */
-    function iif($expression, $returntrue, $returnfalse = '', $echo = false)
+    function iif($expression, $returnTrue, $returnFalse = '', $echo = false)
     {
-        $result = $expression ? $returntrue : $returnfalse;
+        $result = $expression ? $returnTrue : $returnFalse;
 
         if ($echo === false) {
             return $result;
         }
 
         echo $result;
-    }
-}
-
-if (! function_exists('is_https')) {
-    /**
-     * Is HTTPS?
-     *
-     * Determines if the application is accessed via an encrypted (HTTPS) connection.
-     *
-     * This function copied from CI v3 /core/Common.php
-     * @copyright Copyright (c) 2008 - 2014, EllisLab, Inc. (http://ellislab.com/)
-     * @copyright Copyright (c) 2014, British Columbia Institute of Technology (http://bcit.ca/)
-     * @license   http://opensource.org/licenses/MIT    MIT License
-     * @link      https://github.com/bcit-ci/CodeIgniter/blob/develop/system/core/Common.php
-     *
-     * @return boolean True if the application is currently using HTTPS, else false.
-     */
-    function is_https()
-    {
-        if (! empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
-            return true;
-        } elseif (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])
-            && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https'
-        ) {
-            return true;
-        } elseif (! empty($_SERVER['HTTP_FRONT_END_HTTPS'])
-            && strtolower($_SERVER['HTTP_FRONT_END_HTTPS']) !== 'off'
-        ) {
-            return true;
-        }
-
-        return false;
     }
 }
 
@@ -301,7 +269,7 @@ if (! function_exists('list_contexts')) {
     /**
      * Return a list of the contexts specified for the application.
      *
-     * @param boolean $landingPageFilter If true, only returns contexts which have
+     * @param bool $landingPageFilter If true, only returns contexts which have
      * a landing page (index.php) available.
      *
      * @return array The context values array.
@@ -320,14 +288,14 @@ if (! function_exists('list_contexts')) {
 
 if (! function_exists('log_activity')) {
     /**
-     * Log an activity if config item 'enable_activities' is true.
+     * Log an activity if config item 'enable_activity_logging' is true.
      *
-     * @param integer $userId   The id of the user that performed the activity.
+     * @param int    $userId   The id of the user that performed the activity.
      * @param string $activity The activity details. Max length of 255 chars.
      * @param string $module   The name of the module that set the activity.
      *
-     * @return integer/boolean The ID of the new object, or false on failure (or
-     * if enable_activity_logging is not true).
+     * @return int|bool The ID of the new object, or false on failure (or if
+     * enable_activity_logging is not true).
      */
     function log_activity($userId = null, $activity = '', $module = 'any')
     {
@@ -345,8 +313,8 @@ if (! function_exists('logit')) {
     /**
      * Log an error to the Console (if loaded) and to the log files.
      *
-     * @param $message string The string to write to the logs.
-     * @param $level string The log level, as per CI log_message method.
+     * @param string $message The string to write to the logs.
+     * @param string $level   The log level, as per CI log_message method.
      *
      * @return void
      */
@@ -367,10 +335,10 @@ if (! function_exists('logit')) {
 if (! function_exists('obj_value')) {
     /**
      *
-     * @param object $obj   Object
-     * @param string  $key   Name of the object element.
-     * @param string  $type  Input type.
-     * @param integer $value Value to check the key against.
+     * @param object $obj   Object.
+     * @param string $key   Name of the object element.
+     * @param string $type  Input type.
+     * @param int    $value Value to check the key against.
      *
      * @return null|string If $obj->$key is set, returns the value, or a
      * checked/selected string if $type is 'checkbox', 'radio', or 'select'. Returns
