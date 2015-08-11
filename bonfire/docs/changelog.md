@@ -12,6 +12,7 @@
 * MY_*_helper files can now override BF_*_helper files
 
 #### Closes Issues:
+* #1153: Error: "Undefined index: user_agent" caused by out-dated `MX_Loader`.
 
 #### Additional Changes:
 * Separated abstract Migration class from the file containing the Migrations library. The library's constructor now loads the file containing the abstract class via a require_once() call.
