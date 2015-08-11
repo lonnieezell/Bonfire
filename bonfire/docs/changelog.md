@@ -9,6 +9,7 @@ Upgraded CodeIgniter to 3.0.1
 * MY_*_helper files can now override BF_*_helper files
 
 #### Closes Issues:
+* #1153: Error: "Undefined index: user_agent" caused by out-dated `MX_Loader`.
 
 #### Additional Changes:
 
