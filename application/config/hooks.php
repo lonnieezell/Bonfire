@@ -15,15 +15,6 @@ $hook['pre_controller'][] = array(
     'params'   => ''
 );
 
-// Check whether the Composer Autoloader should be used.
-$hook['pre_controller'][] = array(
-    'class'    => 'App_hooks',
-    'function' => 'checkAutoloaderConfig',
-    'filename' => 'App_hooks.php',
-    'filepath' => 'hooks',
-    'params'   => ''
-);
-
 // Allow performance of good redirects to previous pages.
 $hook['post_controller'][] = array(
     'class'    => 'App_hooks',
@@ -41,5 +32,3 @@ $hook['post_controller_constructor'][] = array(
     'filepath' => 'hooks',
     'params'   => ''
 );
-
-/* End of file /application/config/hooks.php */
