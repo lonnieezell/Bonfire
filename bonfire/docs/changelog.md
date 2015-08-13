@@ -23,6 +23,7 @@
     * Changed the default value of the `$escape` argument to `null` on `or_where()`, `having()`, `or_having()`, and `set()`, so the current state of `$this->db`'s `$this->_protect_identifiers` isn't overridden by default.
     * Changed the default value of the `$offset` argument to `0` on `limit()`, instead of an empty string.
     * Removed unnecessary `is_string()`/`is_array()` conditional from `where()`.
+* BF_Lang: `$langfile` parameter of `load()` is no longer optional, to match the CI3 definition of the base method.
 
 #### Known Issues:
 
