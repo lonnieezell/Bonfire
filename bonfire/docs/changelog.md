@@ -9,7 +9,8 @@
 * Upgraded CodeIgniter to 3.0.1
 
 #### New Features:
-* MY_*_helper files can now override BF_*_helper files
+* MY_*_helper files can now override BF_*_helper files.
+* Setting `'auth.log_failed_login_activity'` to `true` in `/application/config/application.php` will cause login attempts using invalid passwords or for banned accounts to be added to the activity log.
 
 #### Closes Issues:
 * #1153: Error: "Undefined index: user_agent" caused by out-dated `MX_Loader`.

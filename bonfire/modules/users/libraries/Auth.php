@@ -51,6 +51,13 @@ class Auth
     /** @var string The name of the db table tracking user login attempts. */
     protected $loginAttemptsTable = 'login_attempts';
 
+    /**
+     * @var bool If true, failed logins will be tracked in activity logs. Controlled
+     * by 'auth.log_failed_login_activity' in application config. Currently, this
+     * only logs occurrences which would increase the login_attempts entry.
+     */
+    protected $logFailedLogins = false;
+
     /** @var boolean Allow use of the "Remember Me" checkbox/cookie. */
     private $allowRemember;
 
@@ -89,6 +96,11 @@ class Auth
         $this->ci->load->library('session');
         $this->ci->load->library('settings/settings_lib');
         $this->ci->load->library('Template');
+
+        if ($this->ci->config->item('auth.log_failed_login_activity') === null) {
+            $this->ci->config->load('application');
+        }
+        $this->logFailedLogins = $this->ci->config->item('auth.log_failed_login_activity') ?: false;
 
         // Try to log the user in from session/cookie data.
         $this->autologin();
@@ -200,14 +212,14 @@ class Auth
         if (! $this->check_password($password, $user->password_hash)) {
             // Bad password
             Template::set_message(lang('us_bad_email_pass'), 'error');
-            $this->increase_login_attempts($login);
+            $this->increase_login_attempts($login, 'us_bad_email_pass');
 
             return false;
         }
 
         // Check whether the account has been banned.
         if ($user->banned) {
-            $this->increase_login_attempts($login);
+            $this->increase_login_attempts($login, 'us_banned_admin_note');
             Template::set_message(
                 $user->ban_message ? $user->ban_message : lang('us_banned_msg'),
                 'error'
@@ -641,11 +653,28 @@ class Auth
      * Record a login attempt in the database.
      *
      * @param string $login The login id used (typically email or username).
+     * @param string $reason The key to a language line indicating why access was
+     * denied.
      *
      * @return void
      */
-    protected function increase_login_attempts($login)
+    protected function increase_login_attempts($login, $reason = '')
     {
+        if ($this->logFailedLogins) {
+            if (! class_exists('activity_model', false)) {
+                $this->ci->load->model('activities/activity_model');
+            }
+            $this->ci->activity_model->log_activity(
+                0,
+                sprintf(
+                    lang('users_act_invalid_login_attempt'),
+                    $this->ip_address,
+                    $login,
+                    empty($reason) ? '' : lang($reason)
+                ),
+                'users'
+            );
+        }
         $this->ci->db->insert(
             $this->loginAttemptsTable,
             array(
