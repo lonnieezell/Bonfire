@@ -18,6 +18,11 @@
 * Separated abstract Migration class from the file containing the Migrations library. The library's constructor now loads the file containing the abstract class via a require_once() call.
 * Removed use of deprecated function `module_file_path()` from Images controller.
 * Deprecated `Base_Controller->autoload_classes()` (a public method), to be replaced by `Base_Controller->autoloadClasses()` (a protected method).
+* BF_Model:
+    * Changed most methods to no longer use `num_rows()` in place of a check for an empty result set.
+    * Changed the default value of the `$escape` argument to `null` on `or_where()`, `having()`, `or_having()`, and `set()`, so the current state of `$this->db`'s `$this->_protect_identifiers` isn't overridden by default.
+    * Changed the default value of the `$offset` argument to `0` on `limit()`, instead of an empty string.
+    * Removed unnecessary `is_string()`/`is_array()` conditional from `where()`.
 
 #### Known Issues:
 
