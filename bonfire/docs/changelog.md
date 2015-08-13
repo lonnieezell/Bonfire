@@ -27,6 +27,9 @@
 * BF_Security:
     * Add 403 status code to `csrf_show_error()` to match CI3.
     * Add `'info'`-level log message when `csrf_verify()` skips verification because the controller was found in `$this->ignored_controllers`.
+* BF_Router: Removed CI2 compatibility
+    * Only load ucfirst() controllers.
+    * `_set_default_controller()` and `_validate_request()` are protected methods (they were public in CI2).
 
 #### Known Issues:
 
