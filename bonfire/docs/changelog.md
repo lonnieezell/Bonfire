@@ -24,6 +24,9 @@
     * Changed the default value of the `$offset` argument to `0` on `limit()`, instead of an empty string.
     * Removed unnecessary `is_string()`/`is_array()` conditional from `where()`.
 * BF_Lang: `$langfile` parameter of `load()` is no longer optional, to match the CI3 definition of the base method.
+* BF_Security:
+    * Add 403 status code to `csrf_show_error()` to match CI3.
+    * Add `'info'`-level log message when `csrf_verify()` skips verification because the controller was found in `$this->ignored_controllers`.
 
 #### Known Issues:
 
