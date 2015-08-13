@@ -1,5 +1,26 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
 
+/**
+ * Bonfire
+ *
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications.
+ *
+ * @package   Bonfire
+ * @author    Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License.
+ * @link      http://cibonfire.com
+ * @since     Version 1.0
+ * @filesource
+ */
+
+/**
+ * Bonfire Loader
+ *
+ * @package Bonfire\Core\BF_Loader
+ * @author  Bonfire Dev Team
+ */
 class BF_Loader extends MX_Loader
 {
     /**
@@ -40,7 +61,7 @@ class BF_Loader extends MX_Loader
      */
     public function spark($spark, $autoload = array())
     {
-        require_once "{$this->sparksLoaderPath}Sparks_Loader.php";
+        require_once("{$this->sparksLoaderPath}Sparks_Loader.php");
 
         $loader = new Sparks_Loader();
         $loader->spark($spark, $autoload);
@@ -54,10 +75,10 @@ class BF_Loader extends MX_Loader
      * @used-by CI_Loader::_ci_load_library()
      * @uses    CI_Loader::_ci_init_library()
      *
-     * @param string  $library     Library name to load
-     * @param string  $file_path   Path to the library filename, relative to libraries/
-     * @param mixed   $params      Optional parameters to pass to the class constructor
-     * @param string  $object_name Optional object name to assign to
+     * @param string $library     Library name to load
+     * @param string $file_path   Path to the library filename, relative to libraries/
+     * @param mixed  $params      Optional parameters to pass to the class constructor
+     * @param string $object_name Optional object name to assign to
      *
      * @return void
      */
