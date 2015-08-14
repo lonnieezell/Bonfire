@@ -2,41 +2,47 @@
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications.
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2013, Bonfire Dev Team
- * @license   http://guides.cibonfire.com/license.html
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License.
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
  */
 
-// ------------------------------------------------------------------------
-
 /**
  * Bonfire Language Class
  *
- * This class replaces both CI_Lang and MX_Lang.
- *
+ * This class extends both CI_Lang and MX_Lang.
  * It will fall back to english for un-translated lines.
+ * It has to extend MX_Lang, otherwise MX will replace it (see MX/Ci.php and MX/Base.php).
  *
- * It has to extend MX_Lang, because otherwise MX will replace it
- * (see MX/Ci.php and MX/Base.php).
+ * @package Bonfire\Core\BF_Lang
+ * @author  Bonfire Dev Team
  */
 class BF_Lang extends MX_Lang
 {
     /**
-     * @var String The fallback language used for un-translated lines.
-     * If you change this, you should ensure that all language files have been
-     * translated to the language indicated by the new value.
+     * @var string The fallback language used for un-translated lines. If you change
+     * this, you should ensure that all language files have been translated to the
+     * language indicated by the new value.
      */
     protected $fallback = 'english';
 
+    /**
+     * Constructor
+     *
+     * @return void
+     */
     public function __construct()
     {
-        log_message('debug', "Bonfire MY_Lang: Language Class Initialized");
+        parent::__construct();
+
+        log_message('debug', "BF_Lang: Language Class Initialized");
     }
 
     /**
@@ -50,13 +56,15 @@ class BF_Lang extends MX_Lang
      * not all of the bugs have been implemented.  For full
      * details of bug compatibility, please read our code comments.
      *
-     * The langfile parameter should not be considered optional (!)
+     * @param string $langfile   The name of the language file to be loaded.
+     * @param string $idiom      The name of the language (english, etc.).
+     * @param bool   $return     Whether to return the loaded array of translations.
+     * @param bool   $add_suffix Whether to add _lang suffix to $langfile.
+     * @param string $alt_path   Alternative path to look for the language file.
      *
-     * @param   string  the name of the language file to be loaded
-     * @param   string  the language (english, etc.)
-     * @return  void
+     * @return void|string[] If $return is true, returns an array containing translations.
      */
-    public function load($langfile = '', $idiom = '', $return = false, $add_suffix = true, $alt_path = '', $module = '')
+    public function load($langfile, $idiom = '', $return = false, $add_suffix = true, $alt_path = '', $module = '')
     {
         if (is_array($langfile)) {
             foreach ($langfile as $_lang) {
@@ -71,7 +79,7 @@ class BF_Lang extends MX_Lang
         if (in_array($langfile . '_lang.php', $this->is_loaded, true)) {
             // Also we return a correct value here.
             // It's too hard to consistently match the CI bug where it returns void
-            // (see the second is_loaded check in __load(), following the add_suffix dance).
+            // (see the second is_loaded check in loadFile(), following the add_suffix dance).
             return $return ? $this->language : true;
         }
 
@@ -84,10 +92,10 @@ class BF_Lang extends MX_Lang
             $module = CI::$APP->router->fetch_module();
         }
 
-        $loaded = $this->__load($langfile, $this->fallback, $add_suffix, $alt_path, $module);
+        $loaded = $this->loadFile($langfile, $this->fallback, $add_suffix, $alt_path, $module);
 
         if ($idiom != $this->fallback) {
-            $loaded_native = $this->__load($langfile, $idiom, $add_suffix, $alt_path, $module);
+            $loaded_native = $this->loadFile($langfile, $idiom, $add_suffix, $alt_path, $module);
             if ($loaded_native) {
                 $loaded = array_merge($loaded, $loaded_native);
             } else {
@@ -116,8 +124,18 @@ class BF_Lang extends MX_Lang
         return true;
     }
 
-    // @return array - empty means failure
-    private function __load($langfile, $idiom, $add_suffix, $alt_path, $module)
+    /**
+     * Loads a language file from a series of potential paths, including modules.
+     *
+     * @param string $langfile   The name of the language file to be loaded.
+     * @param string $idiom      The name of the language (english, etc.).
+     * @param bool   $add_suffix Whether to add _lang suffix to $langfile.
+     * @param string $alt_path   Alternative path to look for the language file.
+     * @param string $module     The name of the module to check.
+     *
+     * @return array An empty array indicates failure.
+     */
+    private function loadFile($langfile, $idiom, $add_suffix, $alt_path, $module)
     {
         $lang = array();
 
@@ -180,9 +198,11 @@ class BF_Lang extends MX_Lang
      *
      * Fetches a single line of text from the language array
      *
-     * @param   string  $line       Language line key
-     * @param   bool    $log_errors Whether to log an error message if the line is not found
-     * @return  string  Translation
+     * @param string $line       Language line key.
+     * @param bool   $log_errors Whether to log an error message if the line is
+     * not found.
+     *
+     * @return string Translation.
      */
     public function line($line, $log_errors = true)
     {

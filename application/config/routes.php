@@ -25,7 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | RESERVED ROUTES
 | -------------------------------------------------------------------------
 |
-| There are two reserved routes (three in CI3):
+| There are three reserved routes:
 |
 |	$route['default_controller'] = 'welcome';
 |
@@ -37,8 +37,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 | This route will tell the Router which controller/method to use if those
 | provided in the URL cannot be matched to a valid route.
-|
-| CI3:
 |
 |	$route['translate_uri_dashes'] = FALSE;
 |
@@ -54,6 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 $route['default_controller'] = 'home';
 $route['404_override'] = '';
+$route['translate_uri_dashes'] = false;
 
 // Authentication
 Route::any(LOGIN_URL, 'users/login', array('as' => 'login'));
@@ -79,7 +78,3 @@ Route::prefix(SITE_AREA, function(){
 });
 
 $route = Route::map($route);
-
-if (defined(CI_VERSION) && substr(CI_VERSION, 0, 1) != '2') {
-    $route['translate_uri_dashes'] = false;
-}

@@ -44,34 +44,10 @@ class Installer_lib
     private $supported_dbs = array('mysql', 'mysqli', 'bfmysqli');
 
     /** @var string[] Folders the installer checks for write access. */
-    private $writable_folders = array(
-        'application/cache',
-        'application/logs',
-        'application/config',
-        'application/archives',
-        'application/db/backups',
-        'public/assets/cache',
-    );
+    private $writable_folders;
 
     /** @var string[] Files the installer checks for write access. */
-    private $writable_files = array(
-        'application/config/application.php',
-        'application/config/database.php',
-    );
-
-    /**
-     * The version of the MySQL Client.
-     * @var string
-     * @deprecated since 0.7.2.
-     */
-    public $mysql_client_version;
-
-    /**
-     * The version of the MySQL Server.
-     * @var string
-     * @deprecated since 0.7.2.
-     */
-    public $mysql_server_version;
+    private $writable_files;
 
     //--------------------------------------------------------------------------
 
@@ -84,6 +60,13 @@ class Installer_lib
      */
     public function __construct($config = array())
     {
+        if (! empty($config['writable_folders'])) {
+            $this->writable_folders = $config['writable_folders'];
+        }
+        if (! empty($config['writable_files'])) {
+            $this->writable_files = $config['writable_files'];
+        }
+
         $this->ci =& get_instance();
         $this->curl_update = $this->cURL_enabled();
         $this->php_version = phpversion();
@@ -97,7 +80,7 @@ class Installer_lib
      * controller if called via check_folders() and check_files(). Otherwise, the
      * files and folders are intermingled unless they are passed as input.
      *
-     * @param  array $filesAndFolders An array of paths to files/folders to check.
+     * @param array $filesAndFolders An array of paths to files/folders to check.
      *
      * @return array An associative array with the path as key and boolean value
      * indicating whether the path is writable.
@@ -113,11 +96,14 @@ class Installer_lib
         $data = array();
         foreach ($filesAndFolders as $fileOrFolder) {
             // If it starts with 'public/', then that represents the web root.
-            // Otherwise, try to locate it from the main folder.
+            // Otherwise, try to locate it from the main folder. This does not use
+            // DIRECTORY_SEPARATOR because the string is supplied by $this->writable_folders
+            // or $this->writable_files.
             if (strpos($fileOrFolder, 'public/') === 0) {
                 $realpath = FCPATH . preg_replace('{^public/}', '', $fileOrFolder);
             } else {
-                $realpath = str_replace('application/', '', APPPATH) . $fileOrFolder;
+                // Because this is APPPATH, use DIRECTORY_SEPARATOR instead of '/'.
+                $realpath = str_replace('application' . DIRECTORY_SEPARATOR, '', APPPATH) . $fileOrFolder;
             }
 
             $data[$fileOrFolder] = is_really_writable($realpath);
@@ -210,7 +196,7 @@ class Installer_lib
             case 'cubrid':
                 return @cubrid_connect($hostname, $port, $db_name, $username, $password);
             case 'mongodb': // deprecated
-                $connect_string = $this->get_mongo_connection_string($hostname, $port, $username, $password, $db_name);
+                $connect_string = $this->getMongoConnectionString($hostname, $port, $username, $password, $db_name);
                 try {
                     $mongo = new Mongo($connect_string);
                     return true;
@@ -220,7 +206,7 @@ class Installer_lib
                 return false;
                 break;
             case 'mongoclient': // no driver support at this time
-                $connect_string = $this->get_mongo_connection_string($hostname, $port, $username, $password, $db_name);
+                $connect_string = $this->getMongoConnectionString($hostname, $port, $username, $password, $db_name);
                 try {
                     $mongo = new MongoClient($connect_string);
                     return true;
@@ -232,13 +218,13 @@ class Installer_lib
             case 'mssql':
                 return @mssql_connect("$hostname,$port", $username, $password);
             case 'oci8':
-                $connect_string = $this->get_oracle_connection_string($hostname, $port);
+                $connect_string = $this->getOracleConnectionString($hostname, $port);
                 return @oci_connect($username, $password, $connect_string);
             case 'odbc':
-                $connect_string = $this->get_odbc_connection_string($hostname);
+                $connect_string = $this->getOdbcConnectionString($hostname);
                 return @odbc_connect($connect_string, $username, $password);
             case 'pdo':
-                $connect_string = $this->get_pdo_connection_string($hostname, $db_name);
+                $connect_string = $this->getPdoConnectionString($hostname, $db_name);
                 try {
                     $pdo = new PDO($connect_string, $username, $password);
                     return true;
@@ -248,7 +234,7 @@ class Installer_lib
                 return false;
                 break;
             case 'postgre':
-                $connect_string = $this->get_postgre_connection_string($hostname, $port, $username, $password, $db_name);
+                $connect_string = $this->getPostgreConnectionString($hostname, $port, $username, $password, $db_name);
                 return @pg_connect($connect_string);
             case 'sqlite':
                 if (! $sqlite = @sqlite_open($db_name, FILE_WRITE_MODE, $error)) {
@@ -257,7 +243,7 @@ class Installer_lib
                 }
                 return $sqlite;
             case 'sqlsrv':
-                $connection = $this->get_sqlsrv_connection($username, $password, $db_name);
+                $connection = $this->getSqlsrvConnection($username, $password, $db_name);
                 return sqlsrv_connect($hostname, $connection);
             default:
                 return false;
@@ -272,7 +258,7 @@ class Installer_lib
      */
     public function is_installed()
     {
-        // If 'install/installed.txt' exists, the app is installed
+        // If 'config/installed.txt' exists, the app is installed
         if (is_file(APPPATH . 'config/installed.txt')) {
             return true;
         }
@@ -458,7 +444,7 @@ class Installer_lib
         // migrations, and after populating the user table.
 
         // Get the list of custom modules in the main application
-        $module_list = $this->get_module_versions();
+        $module_list = $this->getModuleVersions();
         if (is_array($module_list) && count($module_list)) {
             foreach ($module_list as $module_name => $module_detail) {
                 // Install the migrations for the custom modules
@@ -494,7 +480,7 @@ class Installer_lib
      *
      * @return array The installed/latest versions of each module.
      */
-    private function get_module_versions()
+    private function getModuleVersions()
     {
         $modules = Modules::files(null, 'migrations');
         if ($modules === false) {
@@ -540,7 +526,7 @@ class Installer_lib
      *
      * @return string The connection string used to connect to the database
      */
-    private function get_mongo_connection_string($hostname, $port = '', $username = '', $password = '', $db_name = '')
+    private function getMongoConnectionString($hostname, $port = '', $username = '', $password = '', $db_name = '')
     {
         $connect_string = 'mongodb://';
 
@@ -572,7 +558,7 @@ class Installer_lib
      *
      * @return string The connection string used to connect to the database
      */
-    private function get_postgre_connection_string($hostname, $port = '', $username = '', $password = '', $db_name = '')
+    private function getPostgreConnectionString($hostname, $port = '', $username = '', $password = '', $db_name = '')
     {
         $connect_string = '';
         $components = array(
@@ -604,7 +590,7 @@ class Installer_lib
      *
      * @return string    The connection string used to connect to the database
      */
-    private function get_oracle_connection_string($hostname, $port = '')
+    private function getOracleConnectionString($hostname, $port = '')
     {
         $connect_string = '//' . $hostname;
         if (! empty($port)) {
@@ -624,7 +610,7 @@ class Installer_lib
      *
      * @return string    The connection string used to connect to the database
      */
-    private function get_odbc_connection_string($hostname)
+    private function getOdbcConnectionString($hostname)
     {
         return $hostname;
     }
@@ -640,7 +626,7 @@ class Installer_lib
      *
      * @return string    The connection string used to connect to the database
      */
-    private function get_pdo_connection_string($hostname, $db_name = '')
+    private function getPdoConnectionString($hostname, $db_name = '')
     {
         $connect_string = $hostname;
         if (! empty($db_name)) {
@@ -661,7 +647,7 @@ class Installer_lib
      *
      * @return array    The connection settings array used to connect to the database
      */
-    private function get_sqlsrv_connection($username, $password, $db_name, $char_set = 'UTF-8', $pooling = false)
+    private function getSqlsrvConnection($username, $password, $db_name, $char_set = 'UTF-8', $pooling = false)
     {
         $character_set = 0 === strcasecmp('utf8', $char_set) ? 'UTF-8' : $char_set;
         $connection = array(

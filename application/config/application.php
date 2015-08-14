@@ -3,11 +3,11 @@
  * Bonfire
  *
  * An open source project to allow developers to jumpstart their development of
- * CodeIgniter applications
+ * CodeIgniter applications.
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT    The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -19,16 +19,15 @@
  */
 $config['site.default_user_timezone'] = 'UM8';
 
-//--------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Module Locations
-//--------------------------------------------------------------------
-// These paths are checked in the order listed whenever a module is
-// attempting to be located, whether it's loading a library, helper,
-// or routes file.
+//------------------------------------------------------------------------------
+// These paths are checked in the order listed when attempting to locate a module,
+// whether loading a library, helper, or routes file.
 //
 $config['modules_locations'] = array(
     realpath(APPPATH) . '/modules/' => '../../application/modules/',
-    realpath(APPPATH . '../bonfire') . '/modules/' => '../../bonfire/modules/',
+    realpath(BFPATH) . '/modules/' => '../../bonfire/modules/',
 );
 
 //------------------------------------------------------------------------------
@@ -215,31 +214,14 @@ $config['assets.encrypt_name'] = false;
 $config['assets.encode'] = false;
 
 //------------------------------------------------------------------------------
-// Deprecated assets config items
-// (Use 'assets.directories' instead)
+// Auth
 //------------------------------------------------------------------------------
 
-// The base folder (relative to the template.site_root config setting) that all
-// of the assets are stored in. This is used to generate both the url and the
-// relative file path.
-// This should NOT include the trailing slash.
-$config['assets.base_folder'] = 'assets';
+// If 'auth.log_failed_login_activity' is set to true, entries will be added to
+// the activity logs whenever someone attempts to login with a bad password or a
+// banned account.
+$config['auth.log_failed_login_activity'] = false;
 
-// The names of the folders for the various assets.
-// These default to 'js', 'css', and 'images'.
-// These folders are expected to be found directly under the
-// 'assets.base_folder'.
-// While searching through themes, these names are also used to build alternate
-// folders to look into, under the theme folders.
-$config['assets.asset_folders'] = array(
-	'css'	=> 'css',
-	'js'	=> 'js',
-	'image'	=> 'images'
-);
-
-//------------------------------------------------------------------------------
-// End deprecated assets config items
-//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 // !Shortcut Keys

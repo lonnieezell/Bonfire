@@ -1,6 +1,6 @@
 <?php /* /users/views/user_fields.php */
 
-$currentMethod = $this->router->fetch_method();
+$currentMethod = $this->router->method;
 
 $errorClass     = empty($errorClass) ? ' error' : $errorClass;
 $controlClass   = empty($controlClass) ? 'span4' : $controlClass;

@@ -1,7 +1,7 @@
 # Installing Bonfire
 
 ## Overview
-Bonfire has a simple installation script that is designed to help you, the developer, get up and running with a minimum of fuss.  It is not designed to be used for an end product that you distribute.  Installation is a simple process mainly composed of uploading your files and letting Bonfire install its database tables for you.
+Bonfire has a simple installation script that is designed to help you, the developer, get up and running with a minimum of fuss. It is not designed to be used for an end product that you distribute. Installation is a simple process mainly composed of uploading your files and letting Bonfire install its database tables for you.
 
 ## Upload Your Files
 
@@ -22,26 +22,26 @@ Details on the available options for the `database.php` config file can be found
 
 Ensure that you can access the database using the configured settings. While Bonfire's migrations can create the necessary tables for you, it will not create the database in which those tables reside.
 
-If you are using multiple environments (production, testing, and development), you should create a folder matching the environment name inside your config folder. Then copy the existing database.php config file into that folder and set the details for your environment there.
+If you are using multiple environments (production, testing, and development), you should create a folder matching the environment name inside your config folder. Then copy the existing `database.php` config file into that folder and set the details for your environment there.
 
-It is possible to set the server's environment by defining a server variable. For example, on an Apache server, you can create a .conf file containing the command `SetEnv CI_ENV production` (or add the command to your site's existing .conf file), which, when enabled, will tell Bonfire that it is running on the production server, and the configuration (e.g. `error_reporting`) will change accordingly.
+It is possible to set the server's environment by defining a server variable. For example, on an Apache server, you can create a `.conf` file containing the command `SetEnv CI_ENV production` (or add the command to your site's existing `.conf` file), which, when enabled, will tell Bonfire that it is running on the production server, and the configuration (e.g. `error_reporting`) will change accordingly.
 
 
 ## Write Permissions
 
-Verify that the following folders are writeable during the install process:
+Verify that the following folders are writable during the install process:
 
-    /bonfire/application/cache
-    /bonfire/application/logs
-    /bonfire/application/config
-    /bonfire/application/archives
-    /bonfire/application/db/backups
-    /bonfire/application/db/migrations
-    /assets/cache
+    /application/cache
+    /application/logs
+    /application/config
+    /application/archives
+    /application/db/backups
+    /application/db/migrations
+    /public/assets/cache
 
 Also, make sure the following file has write permissions:
 
-    /bonfire/application/config/application.php
+    /application/config/application.php
 
 
 
@@ -69,7 +69,7 @@ Once your site is installed and configured, you may want to consider taking some
 * Remove the installer: delete the file `/bonfire/controllers/install.php` from your server (or install/configure your site on a test server and copy the files, without the install controller, to your site's server).
 * Remove `/public/tests.php`
 * Disable automatic migrations in the `/application/config/application.php` file. While `migrate.auto_core` and `migrate.auto_app` are disabled by default, it is often convenient to enable this feature during development. Disabling them can improve your page load times, and ensures that migrations are only run when you intentionally run them.
-* Restrict write access: while the `/bonfire/application/cache`, `/assets/cache`, and `/bonfire/application/logs` directories should be writable (by your web server), you can remove write access from the config and db directories. This may limit some functionality (for instance DB backups through the Bonfire interface probably won't work if the web server can't write to the `/application/db/backups` directory), so consider the trade-offs for your environment.
+* Restrict write access: while the `/application/cache`, `/assets/cache`, and `/application/logs` directories should be writable (by your web server), you can remove write access from the config and db directories. This may limit some functionality (for instance DB backups through the Bonfire interface probably won't work if the web server can't write to the `/application/db/backups` directory), so consider the trade-offs for your environment.
 * Additionally, if you opened up write access for Builder (to `/application/modules`), you will probably want to disable that capability as well (obviously, the module builder will not work in this case, but you can still use it in a local/dev environment and copy the files to the server).
 * Restrict database access: you may be able to adjust the permissions for the database user configured for your Bonfire site to remove potentially damaging capabilities like dropping tables. Ideally, you would enable these permissions only when running migrations against your database.
 

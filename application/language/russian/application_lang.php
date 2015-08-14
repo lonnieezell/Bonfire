@@ -8,7 +8,7 @@
  * @package   Bonfire
  * @author    Bonfire Dev Team
  * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT The MIT License
+ * @license   http://opensource.org/licenses/MIT The MIT License.
  * @link      http://cibonfire.com
  * @since     Version 1.0
  */
@@ -312,3 +312,8 @@ $lang['bf_menu_sysinfo']        = 'Информация о системе';
 $lang['bf_menu_template']       = 'Шаблон';
 $lang['bf_menu_translate']      = 'Перевод';
 $lang['bf_menu_users']          = 'Пользователи';
+
+//------------------------------------------------------------------------------
+// Form validation labels (for CI 3.0, should be fixed in 3.0.1)
+//------------------------------------------------------------------------------
+$lang['form_validation_bf_users'] = 'Пользователи';

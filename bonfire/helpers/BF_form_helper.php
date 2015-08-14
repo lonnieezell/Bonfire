@@ -51,8 +51,8 @@ if (! function_exists('_form_common')) {
     function _form_common($type = 'text', $data = '', $value = '', $label = '', $extra = '', $tooltip = '')
     {
         $defaults = array(
-            'name' => (is_array($data) ? '' : $data),
-            'type' => $type,
+            'name'  => (is_array($data) ? '' : $data),
+            'type'  => $type,
             'value' => $value,
         );
 
@@ -408,7 +408,7 @@ if (! function_exists('form_dropdown')) {
 <div class='control-group{$error}'>
     <label class='control-label' for='{$data['id']}'>{$label}</label>
     <div class='controls'>
-         <select {$output} {$extra}>
+        <select {$output} {$extra}>
             {$options_vals}
         </select>
         {$tooltip}
@@ -440,24 +440,3 @@ if (! function_exists('form_multiselect')) {
         return form_dropdown($name, $options, $selected, $label, $extra, $tooltip);
     }
 }
-
-if (! function_exists('form_has_error')) {
-    /**
-     * Check whether the form has an error
-     *
-     * @deprecated since 0.7.1 use form_error() in the main form library
-     *
-     * @param string $field Name of the field
-     *
-     * @return bool
-     */
-    function form_has_error($field = null)
-    {
-        if (false === ($OBJ =& _get_validation_object())) {
-            return false;
-        }
-
-        return $OBJ->has_error($field);
-    }
-}
-/* end /bonfire/helpers/BF_form_helper.php */

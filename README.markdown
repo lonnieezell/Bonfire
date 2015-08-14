@@ -1,4 +1,4 @@
-# Faster Development of CodeIgniter 3.x/2.x Apps
+# Faster Development of CodeIgniter Apps
 
 <div style="float: right; margin: 0 20px 20px 0">
 	<a href='http://www.pledgie.com/campaigns/15326'><img alt='Click here to lend your support to: Bonfire - faster CodeIgniter development and make a donation at www.pledgie.com !' src='http://pledgie.com/campaigns/15326.png?skin_name=chrome' border='0' /></a>
@@ -12,7 +12,7 @@ All wrapped up in an elegant interface that will make you proud when you hand th
 
 ## Current Features
 
-- CodeIgniter 3.x included. CodeIgniter 2.x support available with [some minor changes](https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/docs/ci2.md).
+- CodeIgniter 3.x included.
 - Very flexible template/theme system, capable of Wordpress-like parent/child themes.
 - Uses Twitter Bootstrap 2.x for the Admin and Default themes
 - Fully modular and built around HMVC
@@ -43,12 +43,18 @@ Let's make this the best kick-start to any CodeIgniter project.
 
 ### Branches
 
-Due to the shift from CI2 to CI3, there are 2 branches containing recent releases and 2 development branches.
+Due to the shift from CI2 to CI3, there are 2 branches containing recent releases and 3 development branches.
 
-- The releases are in the master (v0.8.0) and 0.7.4 (v0.7.4) branches.
-- The development branches are develop (v0.8.1) and 0.7.5-dev (v0.7.5) branches.
+- The releases are in the master (v0.8.x) and 0.7.x (v0.7.x) branches.
+- The development branches are develop (v0.9+), 0.8-dev (v0.8.x), and 0.7-dev (v0.7.x).
 
-Any changes due to issues in the Bonfire code are currently being made to both development branches.
+Bug fixes are currently being made to all three development branches, but 0.7-dev and 0.8-dev are now bugfix-only branches.
+
+- v0.7.x uses CodeIgniter 2 by default. CI3 is supported, but not included.
+- v0.8.x uses CodeIgniter 3 by default. CI2 is supported, but not included.
+- v0.9+ uses CodeIgniter 3, and will not continue to support CI2.
+
+The develop branch will be the only branch receiving new features and/or major code changes.
 
 ## Bug Reports
 

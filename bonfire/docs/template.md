@@ -272,18 +272,6 @@ An array of named blocks and the path/filename of the view for each block.
 
 A boolean value which controls the library's output of debug messages.
 
-### $ignore_session *Deprecated*
-
-A boolean value which disables the library's use of sessions, primarily for unit testing.
-
-Use `setSessionUse()` instead. Note that `setSessionUse()` expects the opposite value of `$ignore_session`, so `setSessionUse(false)` is equivalent to setting `$ignore_session = true`.
-
-### $layout *Deprecated*
-
-The layout into which views will be rendered.
-
-Use `getLayout()` and `setLayout()` instead.
-
 ### $parse_views
 
 A boolean value which determines whether CI's Parser will be used to parse the views.

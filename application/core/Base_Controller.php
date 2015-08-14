@@ -21,9 +21,8 @@
  * tasks that need to be performed sitewide to be done in one place.
  *
  * Since it extends from MX_Controller, any controller in the system can be used
- * in the HMVC style, using modules::run(). See the docs at:
+ * in the HMVC style. For more details on the HMVC code used in Bonfire, see:
  * https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home
- * for more details on the HMVC code used in Bonfire.
  *
  * @package Bonfire\Application\Core\Base_Controller
  * @author  Bonfire Dev Team
@@ -32,34 +31,32 @@
 class Base_Controller extends MX_Controller
 {
     /**
-     * @var string Stores the previously viewed page's complete URL.
+     * @var string Stores the previously viewed page's complete URL. Managed by
+     * App_hooks->prepRedirect() via a 'post_controller' hook and stored in the
+     * session.
      */
     protected $previous_page;
 
     /**
-     * @var string Stores the page requested.
-     *
-     * This will sometimes be different than the previous page if a redirect
-     * happened in the controller.
+     * @var string Stores the requested page, which will sometimes differ from the
+     * current page in cases like the login page, where the requested page will
+     * need to be available if they are successfully authenticated. Managed by
+     * App_hooks->saveRequested() via a 'pre_controller' hook and stored in the
+     * session.
      */
     protected $requested_page;
 
-    /**
-     * @var object Stores the current user's details, if they've logged in.
-     */
+    /** @var object Stores the current user's details, if they've logged in. */
     protected $current_user = null;
 
-    /**
-     * @var bool If TRUE, this class requires the user to be logged in before
-     * accessing any method.
-     */
+    /** @var bool If true, the user must log in to access any method. */
     protected $require_authentication = false;
 
     /**
-     * @var array Stores a number of items to 'autoload' when the class
-     * constructor runs. This allows any controller to easily set items which
-     * should always be loaded, but not to force the entire application to
-     * autoload it through the config/autoload file.
+     * @var array Stores a number of items to 'autoload' when the constructor runs.
+     * This allows any controller to easily set items which should always be loaded,
+     * but not to force the entire application to autoload it through the config/autoload
+     * file.
      */
     public $autoload = array(
         'libraries' => array('settings/settings_lib', 'events'),
@@ -67,7 +64,7 @@ class Base_Controller extends MX_Controller
         'models'    => array(),
     );
 
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Class constructor
@@ -79,6 +76,8 @@ class Base_Controller extends MX_Controller
         parent::__construct();
 
         // Handle any autoloading here...
+        // Because this may be overloaded in someone's custom controllers, this
+        // will be updated to call $this->autoloadClasses() in the future.
         $this->autoload_classes();
 
         $controllerClass = get_class($this);
@@ -94,30 +93,36 @@ class Base_Controller extends MX_Controller
         $cacheDriver = array();
 
         // Performance optimizations for production environments.
-        if (ENVIRONMENT == 'production') {
-            // Saving queries can vastly increase the memory usage
-            $this->db->save_queries = false;
+        //
+        // Overrides database configuration of save_queries in production/testing
+        // environments and db_debug in production as a hedge against accidental
+        // configuration issues.
+        switch (ENVIRONMENT) {
+            case 'production':
+                // With debugging information turned off, at times it is possible to
+                // continue on after db errors. Also turns off display of any DB errors
+                // to reduce info available to hackers.
+                $this->db->db_debug = false;
 
-            // With debugging information turned off, at times it is possible to
-            // continue on after db errors. Also turns off display of any DB
-            // errors to reduce info available to hackers.
-            $this->db->db_debug = false;
+                // If you need more differences between production/testing, you
+                // may want to prevent fall-through by adding a break before the
+                // 'testing' case.
 
-            $cacheDriver['adapter'] = 'apc';
-            $cacheDriver['backup']  = 'file';
-        } elseif (ENVIRONMENT == 'testing') {
-            // Testing niceties...
-            // Saving Queries can vastly increase the memory usage
-            $this->db->save_queries = false;
+                // no break
+            case 'testing':
+                // Saving queries can vastly increase the memory usage.
+                $this->db->save_queries = false;
 
-            $cacheDriver['adapter'] = 'apc';
-            $cacheDriver['backup']  = 'file';
-        } else {
-            // Development niceties...
-            // Profiler bar?
-            $this->showProfiler();
+                $cacheDriver['adapter'] = 'apc';
+                $cacheDriver['backup']  = 'file';
+                break;
+            default:
+                // Development niceties...
+                // Profiler bar?
+                $this->showProfiler();
 
-            $cacheDriver['adapter'] = 'dummy';
+                $cacheDriver['adapter'] = 'dummy';
+                break;
         }
 
         $this->load->driver('cache', $cacheDriver);
@@ -142,71 +147,89 @@ class Base_Controller extends MX_Controller
     }
 
     /**
-     * If the Auth lib is loaded, it will set the current user, since users will
-     * never be needed if the Auth library is not loaded. By not requiring this
-     * to be executed and loaded for every command, calls that don't need users
-     * at all, or which rely on a different type of auth (like an API or
-     * cronjob), can be sped up.
+     * If the Auth lib is loaded, set $this->current_user.
+     *
+     * By returning if the Auth library hasn't already been loaded, we potentially
+     * save some time and prevent loading unnecessary libraries.
+     *
+     * @return void
      */
     protected function set_current_user()
     {
-        if (class_exists('Auth', false)) {
-            // Load the currently logged-in user for convenience
-            if ($this->auth->is_logged_in()) {
-                $this->current_user = clone $this->auth->user();
-
-                $this->current_user->user_img = gravatar_link(
-                    $this->current_user->email,
-                    22,
-                    $this->current_user->email,
-                    "{$this->current_user->email} Profile"
-                );
-
-                // If the user has a language setting then use it
-                if (isset($this->current_user->language)) {
-                    $this->config->set_item('language', $this->current_user->language);
-                    $this->session->set_userdata('language', $this->current_user->language);
-                }
-            }
-
-            // Make the current user available in the views
-            if (! class_exists('template', false)) {
-                $this->load->library('template');
-            }
-            Template::set('current_user', $this->current_user);
+        if (! class_exists('Auth', false)) {
+            return;
         }
+
+        // Load the currently logged-in user for convenience.
+        if ($this->auth->is_logged_in()) {
+            $this->current_user = clone $this->auth->user();
+
+            $this->current_user->user_img = gravatar_link(
+                $this->current_user->email,
+                22,
+                $this->current_user->email,
+                "{$this->current_user->email} Profile"
+            );
+
+            // If the user has a language setting then use it
+            if (isset($this->current_user->language)) {
+                $this->config->set_item('language', $this->current_user->language);
+                $this->session->set_userdata('language', $this->current_user->language);
+            }
+        }
+
+        // Make the current user available in the views.
+        if (! class_exists('template', false)) {
+            $this->load->library('template');
+        }
+        Template::set('current_user', $this->current_user);
     }
 
     /**
-     * Performs the authentication of a class. Ensures that a user is logged in.
-     * Any additional authentication will need to be done by the child classes.
+     * Ensures that a user is logged in. Any additional authentication will need
+     * to be done by the child classes.
      *
-     * By having the authenticaiton handled here, it can be called in the
-     * Base_Controller's __construct() method to ensure the user's chosen
-     * language is used.
+     * By having the authentication handled here (rather than Authenticated_Controller),
+     * it can be called in the Base_Controller's __construct() method to ensure
+     * the user's chosen language is used whenever the user is logged in, even if
+     * the child controller doesn't require authentication.
+     *
+     * @return void
      */
     protected function authenticate()
     {
-        // Load the Auth library before the parent constructor to ensure the
-        // current user's settings are honored by the parent
         $this->load->library('users/auth');
 
         // Ensure the user is logged in.
         $this->auth->restrict();
-
         $this->set_current_user();
     }
 
     /**
-     * Autoloads any class-specific files that are needed throughout the
-     * controller. This is often used by base controllers, but can easily be
-     * used to autoload models, etc.
+     * Autoload any class-specific files that are needed throughout the controller.
+     * This is often used by base controllers, but can easily be used to autoload
+     * models, etc.
+     *
+     * @deprecated since 0.9.0. Use autoloadClasses() instead. Note the difference
+     * in visibility.
      *
      * @return void
      */
     public function autoload_classes()
     {
-        // Using ! empty() because count() returns 1 for certain error conditions
+        $this->autoloadClasses();
+    }
+
+    /**
+     * Autoload any class-specific files that are needed throughout the controller.
+     * This is often used by base controllers, but can easily be used to autoload
+     * models, etc.
+     *
+     * @return void
+     */
+    protected function autoloadClasses()
+    {
+        // Using ! empty() because count() returns 1 for certain error conditions.
 
         if (! empty($this->autoload['libraries'])
             && is_array($this->autoload['libraries'])
@@ -233,20 +256,26 @@ class Base_Controller extends MX_Controller
         }
     }
 
+    /**
+     * Enable the profiler if it is permitted for the current request.
+     *
+     * @param bool $frontEnd Set to true for a front-end (public/non-admin) page,
+     * false for an admin page. This determines whether the 'site.show_front_profiler'
+     * setting will be used to control display of the profiler.
+     *
+     * @return void
+     */
     protected function showProfiler($frontEnd = true)
     {
-        // $this->input->is_cli_request() is deprecated in CI 3.0, but the replacement
-        // common is_cli() function is not available in CI 2.2.
-        $isCliRequest = substr(CI_VERSION, 0, 1) == '2' ? $this->input->is_cli_request() : is_cli();
-        if (! $isCliRequest
-            && ! $this->input->is_ajax_request()
-        ) {
-            if ($frontEnd == false
-                || $this->settings_lib->item('site.show_front_profiler')
-            ) {
-                $this->load->library('Console');
-                $this->output->enable_profiler(true);
-            }
+        if (is_cli() || $this->input->is_ajax_request()) {
+            return;
         }
+
+        if ($frontEnd && ! $this->settings_lib->item('site.show_front_profiler')) {
+            return;
+        }
+
+        $this->load->library('Console');
+        $this->output->enable_profiler(true);
     }
 }

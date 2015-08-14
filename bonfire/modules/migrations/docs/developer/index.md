@@ -124,14 +124,6 @@ A SQL migration is expected to return a SQL string from the `up()` and `down()` 
 
 ## Migrations Library
 
-### Properties
-
-#### error
-
-_Deprecated_ since 0.7.1. Use `getErrorMessage()`.
-
-The most recent error message.
-
 ### Methods
 
 #### autoLatest()

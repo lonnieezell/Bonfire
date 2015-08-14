@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -75,8 +75,9 @@ if (! function_exists('relative_time')) {
      * e.g. "moments ago", "2 weeks ago", etc.
      *
      * @todo Consider updating this to use date_diff() and/or DateInterval.
+     * @todo Internationalization.
      *
-     * @param $timestamp int A UNIX timestamp.
+     * @param int $timestamp A UNIX timestamp.
      *
      * @return string A human-readable amount of time 'ago'.
      */
@@ -218,64 +219,6 @@ if (! function_exists('standard_timezone')) {
     }
 }
 
-if (! function_exists('timezone_menu')) {
-    /**
-     * Generate a drop-down menu of timezones.
-     *
-     * @internal A similar version of the timezone_menu function was originally
-     * accepted as a commit to CodeIgniter in June 2012 (see link below). The
-     * signature of the function remains the same in the CI 3.x base, though the
-     * internals have changed somewhat. Pulling in the current version would require
-     * bringing in changes outside of this file. The $attributes argument could take
-     * the place of the $class and $name arguments, but this allows for backwards
-     * compatibility (since the $class and $name arguments were already in place).
-     * If/when the CI date_helper is updated in Bonfire, this function should be
-     * removed (to allow the CI function to be used).
-     * @link https://github.com/EllisLab/CodeIgniter/commit/7540dede0f01acd7aa1ffd224defc5189305a815
-     *
-     * @param   string  $default    The default/selected timezone.
-     * @param   string  $class      The class attribute of the select element.
-     * @param   string  $name       The name attribute of the select element.
-     * @param   mixed   $attributes Additional attributes to set on the menu's
-     * select element. If a name or class are passed here, the behavior is likely
-     * to be browser-dependant, as the function does not attempt to prevent it.
-     *
-     * @return  string  The HTML for the timezone menu.
-     */
-    function timezone_menu($default = 'UTC', $class = '', $name = 'timezones', $attributes = '')
-    {
-        $CI =& get_instance();
-        $CI->lang->load('date');
-
-        $default = $default === 'GMT' ? 'UTC' : $default;
-
-        $menu = "<select name='{$name}'";
-        if ($class != '') {
-            $menu .= " class='{$class}'";
-        }
-
-        // Add the submitted attributes submitted, if any.
-        if (is_array($attributes)) {
-            foreach ($attributes as $key => $val) {
-                $menu .= " {$key}='{$val}'";
-            }
-        } elseif (is_string($attributes) && strlen($attributes) > 0) {
-            $menu .= " {$attributes}";
-        }
-        $menu .= ">\n";
-
-        // The timezones() function should be defined in the CI date_helper.
-        foreach (timezones() as $key => $val) {
-            $selected = $default == $key ? " selected='selected'" : '';
-            $menu .= "<option value='{$key}'{$selected}>"
-                  . $CI->lang->line($key)
-                  . "</option>\n";
-        }
-
-        return "{$menu}</select>";
-    }
-}
-
 if (! function_exists('user_time')) {
     /**
      * Convert unix time to a human readable time in the user's timezone or in a
@@ -321,4 +264,3 @@ if (! function_exists('user_time')) {
         return $dtime->setTimezone(new DateTimeZone($timezone))->format($format);
     }
 }
-/* End /helpers/BF_date_helper.php */

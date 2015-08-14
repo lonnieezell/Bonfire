@@ -1,15 +1,11 @@
-<?php
-
-$validation_errors = validation_errors();
-
-?>
-<p class="intro"><?php echo lang('mb_context_create_intro'); ?></p>
+<p class='intro'><?php echo lang('mb_context_create_intro'); ?></p>
+<p class='intro'><?php echo lang('mb_context_create_intro_note'); ?></p>
 <div class="admin-box">
-    <?php if ($validation_errors) : ?>
+    <?php if (validation_errors()) : ?>
 	<div class="alert alert-error">
         <a data-dismiss="alert" class="close">&times;</a>
         <h4 class="alert-heading"><?php echo lang('mb_form_errors'); ?></h4>
-		<?php echo $validation_errors; ?>
+		<?php echo validation_errors(); ?>
 	</div>
     <?php endif; ?>
 	<?php echo form_open(current_url(), 'class="form-horizontal"'); ?>
@@ -24,7 +20,7 @@ $validation_errors = validation_errors();
                     ?></span>
                 </div>
             </div>
-            <?php if (isset($roles) && is_array($roles) && count($roles)) : ?>
+            <?php if (! empty($roles) && is_array($roles)) : ?>
             <div class="control-group">
                 <label class="control-label" id="roles_label"><?php echo lang('mb_roles_label'); ?></label>
                 <div class="controls" aria-labelledby="roles_label" role="group">
@@ -51,7 +47,13 @@ $validation_errors = validation_errors();
         </fieldset>
         <fieldset class="form-actions">
             <input type="submit" name="build" class="btn btn-primary" value="<?php echo lang('mb_context_submit'); ?>" />
-            <?php echo anchor(site_url(SITE_AREA . '/developer/builder'), '<span class="icon-white icon-ban-circle"></span>&nbsp;' . htmlspecialchars(lang('bf_action_cancel')), array('class' => 'btn btn-warning')); ?>
+            <?php
+            echo anchor(
+                site_url(SITE_AREA . '/developer/builder'),
+                '<span class="icon-white icon-ban-circle"></span>&nbsp;' . htmlspecialchars(lang('bf_action_cancel')),
+                array('class' => 'btn btn-warning')
+            );
+            ?>
         </fieldset>
 	<?php echo form_close(); ?>
 </div>

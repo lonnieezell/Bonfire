@@ -2,21 +2,83 @@
 
 ## Under development
 
+### 0.9.0
+* Minimum PHP version changed to 5.4
+* Removed CI2 compatibility
+* Removed functions/methods/properties deprecated prior to 0.7.4/0.8.0.
+* Upgraded CodeIgniter to 3.0.1
+
+#### New Features:
+* MY_*_helper files can now override BF_*_helper files.
+* Setting `'auth.log_failed_login_activity'` to `true` in `/application/config/application.php` will cause login attempts using invalid passwords or for banned accounts to be added to the activity log.
+
+#### Closes Issues:
+* #1153: Error: "Undefined index: user_agent" caused by out-dated `MX_Loader`.
+
+#### Additional Changes:
+* Separated abstract Migration class from the file containing the Migrations library. The library's constructor now loads the file containing the abstract class via a require_once() call.
+* Removed use of deprecated function `module_file_path()` from Images controller.
+* Deprecated `Base_Controller->autoload_classes()` (a public method), to be replaced by `Base_Controller->autoloadClasses()` (a protected method).
+* BF_Model:
+    * Changed most methods to no longer use `num_rows()` in place of a check for an empty result set.
+    * Changed the default value of the `$escape` argument to `null` on `or_where()`, `having()`, `or_having()`, and `set()`, so the current state of `$this->db`'s `$this->_protect_identifiers` isn't overridden by default.
+    * Changed the default value of the `$offset` argument to `0` on `limit()`, instead of an empty string.
+    * Removed unnecessary `is_string()`/`is_array()` conditional from `where()`.
+* BF_Lang: `$langfile` parameter of `load()` is no longer optional, to match the CI3 definition of the base method.
+* BF_Security:
+    * Add 403 status code to `csrf_show_error()` to match CI3.
+    * Add `'info'`-level log message when `csrf_verify()` skips verification because the controller was found in `$this->ignored_controllers`.
+* BF_Router: Removed CI2 compatibility
+    * Only load ucfirst() controllers.
+    * `_set_default_controller()` and `_validate_request()` are protected methods (they were public in CI2).
+
+#### Known Issues:
+
+## Released versions
+
+### 0.8.2
+
+#### New Features:
+* Installer_lib now reads `writable_folders` and `writable_files` from the newly added `/application/config/installer_lib.php`
+* The `sysinfo` module's `Developer` controller will attempt to load the `installer_lib` config and display the writable/not writable status of the same directories/files.
+
+#### Closes Issues:
+* #1151: [BF_Router] Call to undefined method `_set_404override_controller()`
+* #1150: Changing Role name breaks permissions
+* #1149: Blog Tutorial defined `$modified_field` without default value.
+* #1147: Unique validation fails on existing role.
+* #1144: Emailer lang entries missing when sending mail from users module.
+* #1143: Emailer Settings: can't send email.
+* #1142: Module Builder: Fix #1128 properly (undefined property: Modulebuilder::$load).
+
+#### Additional Changes:
+* PasswordHash library (PHPass):
+    * removed PHP4 compatibility
+    * changed constructor to PHP5-style constructor
+    * added visibility to properties/methods
+    * deprecated all of the properties/methods except `__construct()`, `CheckPassword()`, and `HashPassword()` (all deprecated properties/methods will become `protected` in a future version)
+
+#### Known Issues:
+
 ### 0.8.1
 
 #### New Features:
 
 #### Closes Issues:
+* #1136 Profiler: MySQL explain update fails on older versions.
 * #1131 Modules Library: modules_locations not loaded from application config.
 * #1129 Module Builder: filenames and class names built with incorrect case for CI3.
 * #1128 Module Builder: Use of `strip_slashes()` without loading the string helper.
 * #1118 Settings error when password options are not selected in security tab.
 
 #### Additional Changes:
+* Builder: Added a note to the create_context page reminding users to add route(s) for the new context.
+* Contexts: Fix links when using `$top_level_only` parameter in `render_menu()`
+* Docs: update paths in installation docs to reflect 0.6 directory changes.
+* Installer: Fix error checking writable directories in APPPATH on Windows
+* Profiler: Improved SQL highlighting in Queries tab.
 
 #### Known Issues:
-
-## Released versions
 
 ### 0.8.0
 
@@ -27,6 +89,45 @@
 #### Closes Issues:
 
 #### Additional Changes:
+
+#### Known Issues:
+
+### 0.7.6
+(Concurrent with 0.8.2)
+
+#### New Features:
+
+#### Closes Issues:
+* #1151: [BF_Router] Call to undefined method `_set_404override_controller()`
+* #1150: Changing Role name breaks permissions
+* #1149: Blog Tutorial defined `$modified_field` without default value.
+* #1147: Unique validation fails on existing role.
+* #1144: Emailer lang entries missing when sending mail from users module.
+* #1142: Module Builder: Fix #1128 properly (undefined property: Modulebuilder::$load).
+
+#### Additional Changes:
+
+#### Known Issues:
+
+### 0.7.5
+(Concurrent with 0.8.1)
+
+#### New Features:
+
+#### Closes Issues:
+* #1136 Profiler: MySQL explain update fails on older versions.
+* #1131 Modules Library: modules_locations not loaded from application config.
+* #1128 Module Builder: Use of `strip_slashes()` without loading the string helper.
+* #1118 Settings error when password options are not selected in security tab.
+
+#### Additional Changes:
+* CI Upgraded to v2.2.3: Removed a fallback to `mysql_escape_string()` in the 'mysql' database driver (`escape_str()` method).
+
+* Builder: Added a note to the create_context page reminding users to add route(s) for the new context.
+* Contexts: Fix links when using `$top_level_only` parameter in `render_menu()`
+* Docs: update paths in installation docs to reflect 0.6 directory changes.
+* Installer: Fix error checking writable directories in APPPATH on Windows
+* Profiler: Improved SQL highlighting in Queries tab.
 
 #### Known Issues:
 

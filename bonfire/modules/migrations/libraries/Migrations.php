@@ -8,8 +8,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -43,70 +43,10 @@
  * @author  Phil Sturgeon http://philsturgeon.co.uk/
  * @author  Spicer Matthews <spicer@cloudmanic.com> Cloudmanic Labs, LLC http://www.cloudmanic.com/
  * @author  Bonfire Dev Team
- */
-
-/**
- * Migration Interface
- *
- * All migrations should implement this, forces up() and down() and gives access
- * to the CI super-global.
- *
- * @package Bonfire\Modules\Migrations\Libraries\Migrations
- * @author  Phil Sturgeon http://philsturgeon.co.uk/
- * @author  Bonfire Dev Team
- * @link       http://cibonfire.com/docs/migrations
- */
-abstract class Migration
-{
-    /**
-     * @var string The type of migration being ran, either 'forge' or 'sql'.
-     */
-    public $migration_type = 'forge';
-
-    //--------------------------------------------------------------------
-
-    /**
-     * Abstract method ran when increasing the schema version.
-     *
-     * Typically installs new data to the database or creates new tables.
-     */
-    abstract public function up();
-
-    /**
-     * Abstract method ran when decreasing the schema version.
-     */
-    abstract public function down();
-
-    //--------------------------------------------------------------------
-
-    /**
-     * Getter method
-     *
-     * @param mixed $var
-     *
-     * @return object
-     */
-    public function __get($var)
-    {
-        return get_instance()->$var;
-    }
-}
-//end Migration interface
-
-/**
- * Migrations Library
- *
- * @package Bonfire\Modules\Migrations\Libraries\Migrations
- * @author  Mat'as Montes
- * @author  Bonfire Dev Team
- * @link    http://cibonfire.com/docs/migrations
+ * @link    http://cibonfire.com/docs/developer/migrations
  */
 class Migrations
 {
-    //--------------------------------------------------------------------------
-    // Class constants
-    //--------------------------------------------------------------------------
-
     /**
      * The prefix used for app migrations.
      */
@@ -122,44 +62,18 @@ class Migrations
      */
     const MAX_SCHEMA_VERSION = 3;
 
-    //--------------------------------------------------------------------------
-    // Public properties
-    //--------------------------------------------------------------------------
-
-    /**
-     * @var string The most recent error message.
-     *
-     * @deprecated since 0.7.1. Use getErrorMessage().
-     */
-    public $error = '';
-
-    //--------------------------------------------------------------------------
-    // Protected properties
-    //--------------------------------------------------------------------------
-
-    /**
-     * @var CI The CodeIgniter instance.
-     */
+    /** @var object The CodeIgniter instance. */
     protected $_ci;
 
     /**
-     * @var array Errors which have occurred during the current execution of the
-     * library.
+     * @var array Errors which occurred during the current execution of the library.
      */
     protected $errors = array();
 
-    /**
-     * @var string The name of the schema version/migrations table.
-     */
+    /** @var string The name of the schema version/migrations table. */
     protected $migrationsTable = 'schema_version';
 
-    //--------------------------------------------------------------------------
-    // Private properties
-    //--------------------------------------------------------------------------
-
-    /**
-     * @var string Path to the core migrations files.
-     */
+    /** @var string Path to the core migrations files. */
     private $coreMigrationsPath;
 
     /**
@@ -170,14 +84,10 @@ class Migrations
      */
     private static $migrationsSchemaVersion = 0;
 
-    /**
-     * @var array Cache of the current versions.
-     */
+    /** @var array Cache of the current versions. */
     private static $schemaVersion;
 
-    /**
-     * @var bool If true, show verbose messages.
-     */
+    /** @var bool If true, show verbose messages. */
     private $verbose = false;
 
     //--------------------------------------------------------------------------
@@ -185,12 +95,15 @@ class Migrations
     //--------------------------------------------------------------------------
 
     /**
-     * Initialize the configuration settings
+     * Initialize the library with the configuration settings.
      *
      * @return void
      */
     public function __construct($params = array())
     {
+        // Require the abstract Migration class for use by the migrations.
+        require_once(Modules::file_path('migrations', 'libraries', 'Migration.php'));
+
         $this->_ci =& get_instance();
 
         $this->coreMigrationsPath = isset($params['migrations_path']) ?
@@ -234,9 +147,10 @@ class Migrations
     }
 
     /**
-     * Execute raw SQL migrations. Will manually break the commands on a ';' so
-     * that multiple commmands can be executed in a single migration. Very handy
-     * for using phpMyAdmin dumps.
+     * Execute raw SQL migrations.
+     *
+     * Will manually break the commands on a ';' so multiple commmands can be executed
+     * in a single migration. Very handy for using phpMyAdmin dumps.
      *
      * @param string $sql A string with one or more SQL commands to be run.
      *
@@ -294,7 +208,7 @@ class Migrations
     /**
      * Get the most recent error message.
      *
-     * @return string    The most recent error message.
+     * @return string The most recent error message.
      */
     public function getErrorMessage()
     {
@@ -308,11 +222,11 @@ class Migrations
     /**
      * Get all of the errors.
      *
-     * @param string $key   If set, returns only the error message associated
-     * with the given key.
+     * @param string $key If set, returns only the error message associated with
+     * the given key.
      *
-     * @return array/string    An array of errors or the error message
-     * associated with the given key.
+     * @return array|string An array of errors or the error message associated with
+     * the given key.
      */
     public function getErrors($key = '')
     {
@@ -326,9 +240,8 @@ class Migrations
     /**
      * Retrieve the module versions in a single DB call and set the cache.
      *
-     * @return array    The module versions. Keys are the module names and
-     * values are the versions. If the database query fails, returns an empty
-     * array.
+     * @return array The module versions. Keys are the module names and values are
+     * the versions. If the database query fails, returns an empty array.
      */
     public function getModuleVersions()
     {
@@ -359,12 +272,12 @@ class Migrations
     }
 
     /**
-     * Get the schema version from the cache. If a database query is required,
-     * cache the result.
+     * Get the schema version from the cache. If a database query is required, cache
+     * the result.
      *
-     * @param string $type The type for which the version is requested
+     * @param string $type The type for which the version is requested.
      *
-     * @return int    The version
+     * @return int The version.
      */
     public function getVersion($type = '', $getLatest = false)
     {
@@ -407,11 +320,10 @@ class Migrations
      * Install the migrations for the given type up to the latest version.
      *
      * @param string $type The name of the module or self::APP_MIGRATION_PREFIX
-     * for application migrations. If empty, the core migrations will be
-     * installed.
+     * for application migrations. If empty, the core migrations will be installed.
      *
-     * @return int The version number for the given type after installing the
-     * migrations or 0 on error.
+     * @return int The version number for the given type after installing the migrations
+     * or 0 on error.
      */
     public function install($type = '')
     {
@@ -445,7 +357,7 @@ class Migrations
      * @param string $type    A string which represents the name of the module,
      * or 'app_' for application migrations. If empty, applies core migrations.
      *
-     * @return int/bool Returns 0 (int) if failed, true (bool) if already latest,
+     * @return int|bool Returns 0 (int) if failed, true (bool) if already latest,
      * schema version (int) if upgraded.
      */
     public function version($version, $type = '')
@@ -651,10 +563,10 @@ class Migrations
      * Get the migrations path for a given migration type.
      *
      * @param string $type The name of the module for module migrations.
-     * self::APP_MIGRATION_PREFIX for application migrations. Empty for core
-     * migrations.
+     * self::APP_MIGRATION_PREFIX for application migrations.
+     * Empty for core migrations.
      *
-     * @return string    The migrations path for the given migration type.
+     * @return string The migrations path for the given migration type.
      */
     protected function getMigrationsPath($type = '')
     {
@@ -690,9 +602,6 @@ class Migrations
         } else {
             $this->errors[$key] = $value;
         }
-
-        // To maintain compatibility until the $error property is removed...
-        $this->error = $value;
     }
 
     //--------------------------------------------------------------------------
@@ -987,94 +896,4 @@ class Migrations
 
         return $result;
     }
-
-    //--------------------------------------------------------------------------
-    // Deprecated Methods
-    //--------------------------------------------------------------------------
-
-    /**
-     * Handle auto-upgrading migrations of core and/or app on page load.
-     *
-     * @deprecated since 0.7.1. Use autoLatest().
-     *
-     * @return void
-     */
-    public function auto_latest()
-    {
-        $this->autoLatest();
-    }
-
-    /**
-     * Execute raw SQL migrations. Will manually break the commands on a ';' so
-     * that multiple commmands can be run at once. Very handy for using
-     * phpMyAdmin dumps.
-     *
-     * @deprecated since 0.7.1. Use doSqlMigration().
-     *
-     * @param string $sql A string with one or more SQL commands to be run.
-     *
-     * @return void
-     */
-    public function do_sql_migration($sql = '')
-    {
-        return $this->doSqlMigration($sql);
-    }
-
-    /**
-     * Return a list of available migration files in the migrations folder.
-     *
-     * @deprecated since 0.7.1. Use getAvailableVersions().
-     *
-     * @param string $type A string that represents the name of the module, or
-     * 'app_' for application migrations. If empty, it returns core migrations.
-     *
-     * @return array An array of migration files
-     */
-    public function get_available_versions($type = '')
-    {
-        return $this->getAvailableVersions($type);
-    }
-
-    /**
-     * Retrieve the latest available version.
-     *
-     * @deprecated since 0.7.1. Use getVersion($type, true).
-     *
-     * @param string $type A string that represents the name of the module, or
-     * 'app_' for application migrations. If empty, it returns core migrations.
-     *
-     * @return int Latest available migration file.
-     */
-    public function get_latest_version($type = '')
-    {
-        return $this->getLatestVersion($type);
-    }
-
-    /**
-     * Retrieve current schema version.
-     *
-     * @deprecated since 0.7.1.
-     *
-     * @param string $type A string that represents the name of the module, or
-     * 'app_' for application migrations. If empty, it returns core migrations.
-     *
-     * @return int Current Schema version
-     */
-    public function get_schema_version($type = '')
-    {
-        return $this->getVersion($type);
-    }
-
-    /**
-     * Set whether there should be verbose output.
-     *
-     * @deprecated since 0.7.1 use setVerbose().
-     *
-     * @param bool $state True to enable verbose output, false to disable.
-     */
-    public function set_verbose($state)
-    {
-        $this->setVerbose($state);
-    }
 }
-/* End /modules/migrations/libraries/Migrations.php */

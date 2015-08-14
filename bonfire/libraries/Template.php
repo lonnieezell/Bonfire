@@ -35,26 +35,6 @@ class Template
     /** @var boolean Set the debug mode on the template to output messages. */
     public static $debug = false;
 
-    /**
-     * Disable Session use, primarily for unit testing.
-     *
-     * @deprecated since 0.7.3 use setSessionUse(). This will likely become a protected
-     * property in a future version. Note that setSessionUse() expects the opposite
-     * value of $ignore_session, so setSessionUse(false) is equivalent to setting
-     * $ignore_session = true.
-     *
-     * @var boolean
-     */
-    public static $ignore_session = false;
-
-    /**
-     * @var string The layout into which views will be rendered.
-     *
-     * @deprecated since 0.7.1 This will become a protected property. Use setLayout()
-     * and getLayout().
-     */
-    public static $layout;
-
     /** @var boolean When true, CI's Parser will be used to parse the views. */
     public static $parse_views = false;
 
@@ -73,6 +53,22 @@ class Template
 
     /** @var string The default theme ('template.default_theme' in the config). */
     protected static $default_theme = '';
+
+    /**
+     * Used by setSessionUse() to disable Session use, primarily for unit testing
+     * and initial installation of Bonfire.
+     *
+     * @var boolean
+     */
+    protected static $ignore_session = false;
+
+    /**
+     * Used by setLayout to store the name of the layout into which views will be
+     * rendered.
+     *
+     * @var string
+     */
+    protected static $layout;
 
     /** @var string Prefix added to debug messages in the log. */
     protected static $log_prefix = '[Template] ';
@@ -921,7 +917,7 @@ function check_class($item = '', $class_only = false)
 function check_method($item, $class_only = false)
 {
     $items = is_array($item) ? $item : array($item);
-    if (in_array(get_instance()->router->fetch_method(), $items)) {
+    if (in_array(get_instance()->router->method, $items)) {
         return $class_only ? 'active' : 'class="active"';
     }
 

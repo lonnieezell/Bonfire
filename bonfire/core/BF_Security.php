@@ -23,10 +23,8 @@
 class BF_Security extends CI_Security
 {
     /**
-     * @var array Controllers to ignore during the CSRF cycle.
-     *
-     * If part of a module, the controller should be listed as:
-     * {module}/{controller}
+     * @var array Controllers to ignore during the CSRF cycle. If part of a module,
+     * the controller should be listed as: {module}/{controller}
      */
     protected $ignored_controllers = array();
 
@@ -53,7 +51,10 @@ class BF_Security extends CI_Security
      */
     public function csrf_show_error()
     {
-        show_error('The action you have requested is not allowed. You either do not have access, or your login session has expired and you need to sign in again.');
+        show_error(
+            'The action you have requested is not allowed. You either do not have access, or your login session has expired and you need to sign in again.',
+            403
+        );
     }
 
     /**
@@ -75,6 +76,7 @@ class BF_Security extends CI_Security
             $path = empty($module) ? $controller : "{$module}/{$controller}";
 
             if (in_array($path, $this->ignored_controllers)) {
+                log_message('info', "CSRF verification skipped for '{$path}'");
                 return $this;
             }
         }

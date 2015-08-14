@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
 
-require_once BFPATH . 'libraries/Modules.php';
-require_once BFPATH . 'libraries/Route.php';
+require_once(BFPATH . 'libraries/Modules.php');
+require_once(BFPATH . 'libraries/Route.php');
 
 /**
  * Bonfire
@@ -22,15 +22,15 @@ require_once BFPATH . 'libraries/Route.php';
  * Modular Extensions - HMVC
  *
  * Adapted from the CodeIgniter Core Classes
- * @link    http://codeigniter.com
+ * @link http://codeigniter.com
  *
  * Description:
  * This library extends the CodeIgniter router class.
  *
  * Install this file as application/third_party/MX/Router.php
  *
- * @copyright   Copyright (c) 2015 Wiredesignz
- * @version     5.5
+ * @copyright Copyright (c) 2015 Wiredesignz
+ * @version   5.5
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -55,12 +55,13 @@ require_once BFPATH . 'libraries/Route.php';
  * Bonfire Router
  *
  * Parses URIs and determines routing to the appropriate controller. Adapted from
- * MX Router to add searching the Bonfire path(s) and include/utilize the Bonfire
- * Modules and Route libraries.
+ * MX_Router to add searching the Bonfire path(s) and include/utilize the Bonfire
+ * Modules and Route libraries. This does not extend MX_Router because that router
+ * loads its own module class, which we do not want to load.
  *
  * @package Bonfire\Core\BF_Router
  * @author  Bonfire Dev Team
- * @link    http://cibonfire.com/docs
+ * @link    http://cibonfire.com/docs/developer/routes
  */
 class BF_Router extends CI_Router
 {
@@ -100,7 +101,7 @@ class BF_Router extends CI_Router
      *
      * @return array The segments which indicate the location of the controller.
      */
-    public function _validate_request($segments)
+    protected function _validate_request($segments)
     {
         if (count($segments) == 0) {
             return $segments;
@@ -126,6 +127,8 @@ class BF_Router extends CI_Router
     /**
      * Locate the controller.
      *
+     * Used by Modules::load().
+     *
      * @param  array $segments The URL segments.
      *
      * @return array The segments indicating the location of the controller.
@@ -148,38 +151,32 @@ class BF_Router extends CI_Router
         /* check modules */
         foreach (Modules::$locations as $location => $offset) {
             /* module exists? */
-            if (is_dir($source = $location.$module.'/controllers/')) {
+            if (is_dir($source = "{$location}{$module}/controllers/")) {
                 $this->module = $module;
-                $this->directory = $offset.$module.'/controllers/';
+                $this->directory = "{$offset}{$module}/controllers/";
 
                 /* module sub-controller exists? */
                 if ($directory) {
-                    if (is_file($source.ucfirst($directory).$ext)
-                        || is_file($source.$directory.$ext)
-                    ) {
+                    if (is_file($source . ucfirst($directory) . $ext)) {
                         $this->located = 2;
                         return array_slice($segments, 1);
                     }
 
                     /* module sub-directory exists? */
-                    if (is_dir($source.$directory.'/')) {
-                        $source .= $directory.'/';
-                        $this->directory .= $directory.'/';
+                    if (is_dir("{$source}{$directory}/")) {
+                        $source .= "{$directory}/";
+                        $this->directory .= "{$directory}/";
 
                         /* module sub-directory controller exists? */
                         if ($controller) {
-                            if (is_file($source.ucfirst($controller).$ext)
-                                || is_file($source.$controller.$ext)
-                            ) {
+                            if (is_file($source . ucfirst($controller) . $ext)) {
                                 $this->located = 3;
                                 return array_slice($segments, 2);
                             } else {
                                 $this->located = -1;
                             }
                         }
-                    } elseif (is_file($source.ucfirst($directory).$ext)
-                        || is_file($source.$directory.$ext)
-                    ) {
+                    } elseif (is_file($source . ucfirst($directory) . $ext)) {
                         $this->located = 2;
                         return array_slice($segments, 1);
                     } else {
@@ -188,9 +185,7 @@ class BF_Router extends CI_Router
                 }
 
                 /* module controller exists? */
-                if (is_file($source.ucfirst($module).$ext)
-                    || is_file($source.$module.$ext)
-                ) {
+                if (is_file($source . ucfirst($module) . $ext)) {
                     $this->located = 1;
                     return $segments;
                 }
@@ -203,37 +198,29 @@ class BF_Router extends CI_Router
 
         foreach (array(APPPATH, BFPATH) as $searchPath) {
             /* application controller exists? */
-            if (is_file($searchPath.'controllers/'.ucfirst($module).$ext)
-                || is_file($searchPath.'controllers/'.$module.$ext)
-            ) {
+            if (is_file("{$searchPath}controllers/" . ucfirst($module) . $ext)) {
                 return $segments;
             }
 
             /* application sub-directory controller exists? */
             if ($directory) {
-                if (is_file($searchPath.'controllers/'.$module.'/'.ucfirst($directory).$ext)
-                    || is_file($searchPath.'controllers/'.$module.'/'.$directory.$ext)
-                ) {
-                    $this->directory = $module.'/';
+                if (is_file("{$searchPath}controllers/{$module}/" . ucfirst($directory) . $ext)) {
+                    $this->directory = "{$module}/";
                     return array_slice($segments, 1);
                 }
 
                 /* application sub-sub-directory controller exists? */
                 if ($controller) {
-                    if (is_file($searchPath.'controllers/'.$module.'/'.$directory.'/'.ucfirst($controller).$ext)
-                        || is_file($searchPath.'controllers/'.$module.'/'.$directory.'/'.$controller.$ext)
-                    ) {
-                        $this->directory = $module.'/'.$directory.'/';
+                    if (is_file("{$searchPath}controllers/{$module}/{$directory}/" . ucfirst($controller) . $ext)) {
+                        $this->directory = "{$module}/{$directory}/";
                         return array_slice($segments, 2);
                     }
                 }
             }
 
             /* application sub-directory default controller exists? */
-            if (is_file($searchPath.'controllers/'.$module.'/'.ucfirst($this->default_controller).$ext)
-                || is_file($searchPath.'controllers/'.$module.'/'.$this->default_controller.$ext)
-            ) {
-                $this->directory = $module.'/';
+            if (is_file("{$searchPath}controllers/{$module}/" . ucfirst($this->default_controller) . $ext)) {
+                $this->directory = "{$module}/";
                 return array($this->default_controller);
             }
         }
@@ -244,12 +231,9 @@ class BF_Router extends CI_Router
     /**
      * Set the default controller.
      *
-     * NOTE: this method should be protected for use with CI3, but must be public
-     * for use with CI2.
-     *
      * @return void
      */
-    public function _set_default_controller()
+    protected function _set_default_controller()
     {
         if (empty($this->directory)) {
             // Set the default controller module path.
@@ -261,6 +245,17 @@ class BF_Router extends CI_Router
         if (empty($this->class)) {
             $this->_set_404override_controller();
         }
+    }
+
+    /**
+     * Sets the module path to the 404_override controller. This is pulled from
+     * the MX Router primarily for use by the _set_default_controller() method.
+     *
+     * @return void
+     */
+    protected function _set_404override_controller()
+    {
+        $this->_set_module_path($this->routes['404_override']);
     }
 
     /**
@@ -306,4 +301,3 @@ class BF_Router extends CI_Router
         parent::set_class($class);
     }
 }
-/* End of file ./bonfire/core/BF_Router.php */

@@ -29,12 +29,10 @@
  */
 class Developer extends Admin_Controller
 {
-    /**
-     * @var Array The options from the /config/modulebuilder.php file
-     */
+    /** @var array The options from the /config/modulebuilder.php file. */
     private $options;
 
-    //---------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Setup restrictions and load configs, libraries and language files
@@ -54,8 +52,11 @@ class Developer extends Admin_Controller
         if (isset($this->options['form_error_delimiters'])
             && is_array($this->options['form_error_delimiters'])
             && count($this->options['form_error_delimiters']) == 2
-           ) {
-            $this->form_validation->set_error_delimiters($this->options['form_error_delimiters'][0], $this->options['form_error_delimiters'][1]);
+        ) {
+            $this->form_validation->set_error_delimiters(
+                $this->options['form_error_delimiters'][0],
+                $this->options['form_error_delimiters'][1]
+            );
         }
 
         Assets::add_module_css('builder', 'builder.css');
@@ -68,8 +69,8 @@ class Developer extends Admin_Controller
     /**
      * Display a list of installed modules
      *
-     * Includes the options to create a new module or context and delete
-     * existing modules.
+     * Includes the options to create a new module or context and delete existing
+     * modules.
      *
      * @return void
      */
@@ -100,9 +101,9 @@ class Developer extends Admin_Controller
         Template::render('two_left');
     }
 
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // !Context Builder
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Display the form which allows the user to create a context.
@@ -149,9 +150,9 @@ class Developer extends Admin_Controller
         Template::render();
     }
 
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // !Module Builder
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Display the form which allows the user to create a module.
@@ -175,7 +176,11 @@ class Developer extends Admin_Controller
             // Validation Passed, Use existing DB, need to detect the fields.
             //
             // If the table name includes the prefix, remove the prefix
-            $_POST['table_name'] = preg_replace("/^".$this->db->dbprefix."/", "", $this->input->post('table_name'));
+            $_POST['table_name'] = preg_replace(
+                "/^".$this->db->dbprefix."/",
+                "",
+                $this->input->post('table_name')
+            );
 
             // Read the fields from the db table and pass them back to the form
             $table_fields = $this->table_info($this->input->post('table_name'));
@@ -200,7 +205,11 @@ class Developer extends Admin_Controller
         } else {
             // Validation passed and ready to proceed
             $this->build_module($this->field_total);
-            log_activity((int) $this->current_user->id, lang('mb_act_create') . ': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(), 'modulebuilder');
+            log_activity(
+                $this->auth->user_id(),
+                lang('mb_act_create') . ': ' . $this->input->post('module_name') . ' : ' . $this->input->ip_address(),
+                'modulebuilder'
+            );
 
             Template::set_view('developer/output');
         }
@@ -240,7 +249,11 @@ class Developer extends Admin_Controller
         if (delete_files(Modules::path($module_name), true)) {
             @rmdir(Modules::path("{$module_name}/"));
 
-            log_activity((int) $this->auth->user_id(), lang('mb_act_delete') . ": {$module_name} : " . $this->input->ip_address(), 'builder');
+            log_activity(
+                $this->auth->user_id(),
+                lang('mb_act_delete') . ": {$module_name} : " . $this->input->ip_address(),
+                'builder'
+            );
             Template::set_message(lang('mb_delete_success'), 'success');
         } else {
             // Database removal succeeded, but the files may still be present
@@ -250,9 +263,9 @@ class Developer extends Admin_Controller
         redirect(SITE_AREA . '/developer/builder');
     }
 
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // !PRIVATE METHODS
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Delete the data for a module
@@ -329,7 +342,7 @@ class Developer extends Admin_Controller
      * @todo Ideally the field type variables would be set at a higher level for
      * consistent use throughout the builder
      *
-     * @param int $fieldTotal The number of fields to add to the table
+     * @param int  $fieldTotal The number of fields to add to the table
      * @param bool $formError Set to true if an error has occurred on the form
      *
      * @return void
@@ -530,7 +543,10 @@ class Developer extends Admin_Controller
             $type = '';
             if (isset($field->type)) {
                 if (strpos($field->type, "(")) {
-                    list($type, $max_length) = explode("--", str_replace("(", "--", str_replace(")", "", $field->type)));
+                    list($type, $max_length) = explode(
+                        "--",
+                        str_replace("(", "--", str_replace(")", "", $field->type))
+                    );
                 } else {
                     $type = $field->type;
                 }
@@ -679,25 +695,9 @@ class Developer extends Admin_Controller
     }
 
     /**
-     * Check that the Modules folder is writable
-     *
-     * @deprecated since 0.7.1 use checkWritable() instead
-     *
-     * @todo This method was marked private in the DocBlock but is public, since
-     * it is now deprecated, just need to ensure it is not used elsewhere before
-     * it is deleted.
-     *
-     * @return  bool
-     */
-    public function _check_writeable()
-    {
-        return $this->checkWritable();
-    }
-
-    /**
      * Verify that the Modules folder is writable
      *
-     * @return bool    true if the folder is writable, else false
+     * @return bool True if the folder is writable, else false.
      */
     private function checkWritable()
     {
@@ -752,7 +752,16 @@ class Developer extends Admin_Controller
             }
 
             if ($str == $_POST["view_field_name{$counter}"]) {
-                $this->form_validation->set_message('_no_match', sprintf(lang('mb_validation_no_match'), lang('mb_form_field_details'), lang('mb_form_fieldname'), $fieldno, $counter));
+                $this->form_validation->set_message(
+                    '_no_match',
+                    sprintf(
+                        lang('mb_validation_no_match'),
+                        lang('mb_form_field_details'),
+                        lang('mb_form_fieldname'),
+                        $fieldno,
+                        $counter
+                    )
+                );
                 return false;
             }
         }

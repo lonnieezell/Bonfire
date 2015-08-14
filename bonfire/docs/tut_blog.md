@@ -103,14 +103,15 @@ Create a new file at `blog/migrations/001_Initial_tables.php`.
                         'null' => false,
                     ),
                     'modified_on' => array(
-                        'type' => 'datetime',
-                        'null' => false,
+                        'type'    => 'datetime',
+                        'null'    => true,
+                        'default' => '0000-00-00 00:00:00',
                     ),
                     'deleted' => array(
-                        'type' => 'tinyint',
+                        'type'       => 'tinyint',
                         'constraint' => 1,
-                        'null' => false,
-                        'default' => 0,
+                        'null'       => false,
+                        'default'    => 0,
                     ),
                 ),
             ),
@@ -304,7 +305,7 @@ Edit the index.php view file to reflect the following:
         <?php
         else :
             $numColumns = 2;
-            $canDelete = $this->auth->has_permission('Bonfire.Blog.Delete'));
+            $canDelete = $this->auth->has_permission('Bonfire.Blog.Delete');
             if ($canDelete) {
                 ++$numColumns;
             }

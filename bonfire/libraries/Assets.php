@@ -1310,31 +1310,6 @@ class Assets
 
         return (empty($media) ? $filePath : array('file' => $filePath, 'media' => $media, 'server_path' => $serverPath));
     }
-
-    //--------------------------------------------------------------------------
-    // Deprecated methods (Do Not Use)
-    //--------------------------------------------------------------------------
-
-    /**
-     * Set the library to include global CSS and JS files
-     *
-     * If $include is set to true, global includes (like the default media type
-     * CSS and global.js files) are automatically included in css() and js()
-     * output.
-     *
-     * @deprecated since 0.7.1 use setGlobals() instead
-     * @param bool $include true to include (default) or false to exclude
-     *
-     * @return void
-     */
-    public static function set_globals($include = true)
-    {
-        self::setGlobals($include);
-    }
-
-    //--------------------------------------------------------------------------
-    // End deprecated methods
-    //--------------------------------------------------------------------------
 }
 
 //------------------------------------------------------------------------------

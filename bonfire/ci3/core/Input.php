@@ -682,7 +682,7 @@ class CI_Input {
 		/* We strip slashes if magic quotes is on to keep things consistent
 
 		   NOTE: In PHP 5.4 get_magic_quotes_gpc() will always return 0 and
-			 it will probably not exist in future versions at all.
+		         it will probably not exist in future versions at all.
 		*/
 		if ( ! is_php('5.4') && get_magic_quotes_gpc())
 		{
@@ -799,19 +799,27 @@ class CI_Input {
 	 */
 	public function get_request_header($index, $xss_clean = FALSE)
 	{
-		if (empty($this->headers))
+		static $headers;
+
+		if ( ! isset($headers))
 		{
-			$this->request_headers();
+			empty($this->headers) OR $this->request_headers();
+			foreach ($this->headers as $key => $value)
+			{
+				$headers[strtolower($key)] = $value;
+			}
 		}
 
-		if ( ! isset($this->headers[$index]))
+		$index = strtolower($index);
+
+		if ( ! isset($headers[$index]))
 		{
 			return NULL;
 		}
 
 		return ($xss_clean === TRUE)
-			? $this->security->xss_clean($this->headers[$index])
-			: $this->headers[$index];
+			? $this->security->xss_clean($headers[$index])
+			: $headers[$index];
 	}
 
 	// --------------------------------------------------------------------
@@ -836,7 +844,7 @@ class CI_Input {
 	 * Test to see if a request was made from the command line.
 	 *
 	 * @deprecated	3.0.0	Use is_cli() instead
-	 * @return      bool
+	 * @return	bool
 	 */
 	public function is_cli_request()
 	{
