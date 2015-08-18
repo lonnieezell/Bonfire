@@ -1,5 +1,12 @@
 <?php
 /**
+ * Note: This should be replaced with something else ASAP, maybe JShrink (https://github.com/tedious/JShrink).
+ *
+ * @package Bonfire\Libraries\JSMin
+ * @link    https://github.com/rgrove/jsmin-php
+ * @version 1.1.2
+ */
+/**
  * jsmin.php - PHP implementation of Douglas Crockford's JSMin.
  *
  * This is pretty much a direct port of jsmin.c to PHP with just a few
@@ -40,9 +47,10 @@
  * @author Ryan Grove <ryan@wonko.com>
  * @copyright 2002 Douglas Crockford <douglas@crockford.com> (jsmin.c)
  * @copyright 2008 Ryan Grove <ryan@wonko.com> (PHP port)
+ * @copyright 2012 Adam Goforth <aag@adamgoforth.com> (Updates)
  * @license http://opensource.org/licenses/mit-license.php MIT License
- * @version 1.1.1 (2008-03-02)
- * @link https://github.com/rgrove/jsmin-php/
+ * @version 1.1.2 (2012-05-01)
+ * @link https://github.com/rgrove/jsmin-php
  */
 
 class JSMin {
@@ -227,9 +235,17 @@ class JSMin {
    *
    * @uses action()
    * @uses isAlphaNum()
+   * @uses get()
+   * @uses peek()
    * @return string
    */
   protected function min() {
+    if (0 == strncmp($this->peek(), "\xef", 1)) {
+        $this->get();
+        $this->get();
+        $this->get();
+    }
+
     $this->a = "\n";
     $this->action(self::ACTION_DELETE_A_B);
 
@@ -250,6 +266,8 @@ class JSMin {
             case '(':
             case '+':
             case '-':
+            case '!':
+            case '~':
               $this->action(self::ACTION_KEEP_A);
               break;
 
@@ -372,4 +390,3 @@ class JSMin {
 
 // -- Exceptions ---------------------------------------------------------------
 class JSMinException extends Exception {}
-?>

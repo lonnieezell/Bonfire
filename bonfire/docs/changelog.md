@@ -8,6 +8,7 @@
 * Removed functions/methods/properties deprecated prior to 0.7.4/0.8.0.
 * Upgraded CodeIgniter to 3.0.1
 * Upgraded CSSMin to 3.0.3 [natxet/CssMin](https://github.com/natxet/CssMin)
+* Upgraded JSMin to 1.1.2 [rgrove/jsmin-php](https://github.com/rgrove/jsmin-php) - need to evaluate potential replacement
 
 #### New Features:
 * MY_*_helper files can now override BF_*_helper files.
