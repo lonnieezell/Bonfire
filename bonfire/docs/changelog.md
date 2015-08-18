@@ -31,6 +31,7 @@
 * BF_Router: Removed CI2 compatibility
     * Only load ucfirst() controllers.
     * `_set_default_controller()` and `_validate_request()` are protected methods (they were public in CI2).
+* `user_meta` view in `users` module updated to make it less likely to have issues with PHP 7.
 
 #### Known Issues:
 
