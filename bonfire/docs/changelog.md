@@ -12,6 +12,7 @@
 * #1153: Error: "Undefined index: user_agent" caused by out-dated `MX_Loader`.
 
 #### Additional Changes:
+* `user_meta` view in `users` module updated to make it less likely to have issues with PHP 7.
 
 #### Known Issues:
 
