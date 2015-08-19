@@ -50,7 +50,7 @@ for ($counter = 1; $field_total >= $counter; $counter++) {
     else {
         $table_records .= "
 				<?php if (\$can_edit) : ?>
-					<td><?php echo anchor(SITE_AREA . '/{$controller_name}/{$module_name_lower}/edit/' . \$record->{$primary_key_field}, {$pencil_icon} \$record->{$field_name}); ?></td>
+					<td><?php echo anchor(SITE_AREA . '/" . strtolower($controller_name) . "/{$module_name_lower}/edit/' . \$record->{$primary_key_field}, {$pencil_icon} \$record->{$field_name}); ?></td>
 				<?php else : ?>
 					<td><?php e(\$record->{$field_name}); ?></td>
 				<?php endif; ?>";

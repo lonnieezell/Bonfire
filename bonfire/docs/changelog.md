@@ -10,6 +10,7 @@ Upgraded CodeIgniter to 3.0.1
 
 #### Closes Issues:
 * #1153: Error: "Undefined index: user_agent" caused by out-dated `MX_Loader`.
+* #1154: [Builder] Cancel button contains "Content" instead of "content".
 
 #### Additional Changes:
 * `user_meta` view in `users` module updated to make it less likely to have issues with PHP 7.
