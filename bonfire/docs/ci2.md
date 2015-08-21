@@ -11,7 +11,7 @@ If you run into any problems while using CI2 with Bonfire, please feel free to [
 
 To install CI2, you will need to do the following:
 - Setup (or update) a Bonfire installation with the [latest code from GitHub](https://github.com/ci-bonfire/Bonfire).
-- Download [the latest CI2 release](http://www.codeigniter.com/download) ([CI 2.2.3](https://github.com/bcit-ci/CodeIgniter/archive/2.2.3.zip) is the latest 2.x release at the time of this writing).
+- Download [the latest CI2 release](http://www.codeigniter.com/download) ([CI 2.2.4](https://github.com/bcit-ci/CodeIgniter/archive/2.2.4.zip) is the latest 2.x release at the time of this writing).
 - Making sure to *not* overwrite the existing files in the `/bonfire/ci2/` directory of your working test site, copy the files from the CI2 system directory into the `/bonfire/ci2/` directory. (If you do happen to overwrite the files, you can pull them down from the Bonfire GitHub repository.)
 
 ## Switching CodeIgniter versions
