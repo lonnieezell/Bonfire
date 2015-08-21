@@ -201,21 +201,23 @@ class CI_URI {
 			return '';
 		}
 
-		$uri = parse_url($_SERVER['REQUEST_URI']);
+		// parse_url() returns false if no host is present, but the path or query string
+		// contains a colon followed by a number
+		$uri = parse_url('http://dummy'.$_SERVER['REQUEST_URI']);
 		$query = isset($uri['query']) ? $uri['query'] : '';
 		$uri = isset($uri['path']) ? $uri['path'] : '';
 
-        if (isset($_SERVER['SCRIPT_NAME'][0]))
-        {
-    		if (strpos($uri, $_SERVER['SCRIPT_NAME']) === 0)
-    		{
-    			$uri = (string) substr($uri, strlen($_SERVER['SCRIPT_NAME']));
-    		}
-    		elseif (strpos($uri, dirname($_SERVER['SCRIPT_NAME'])) === 0)
-    		{
-    			$uri = (string) substr($uri, strlen(dirname($_SERVER['SCRIPT_NAME'])));
-    		}
-        }
+		if (isset($_SERVER['SCRIPT_NAME'][0]))
+		{
+			if (strpos($uri, $_SERVER['SCRIPT_NAME']) === 0)
+			{
+				$uri = (string) substr($uri, strlen($_SERVER['SCRIPT_NAME']));
+			}
+			elseif (strpos($uri, dirname($_SERVER['SCRIPT_NAME'])) === 0)
+			{
+				$uri = (string) substr($uri, strlen(dirname($_SERVER['SCRIPT_NAME'])));
+			}
+		}
 
 		// This section ensures that even on servers that require the URI to be in the query string (Nginx) a correct
 		// URI is found, and also fixes the QUERY_STRING server var and $_GET array.

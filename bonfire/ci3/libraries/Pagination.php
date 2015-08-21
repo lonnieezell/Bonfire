@@ -353,7 +353,8 @@ class CI_Pagination {
 	 */
 	public function initialize(array $params = array())
 	{
-		if (isset($params['attributes']) && is_array($params['attributes']))
+		isset($params['attributes']) OR $params['attributes'] = array();
+		if (is_array($params['attributes']))
 		{
 			$this->_parse_attributes($params['attributes']);
 			unset($params['attributes']);
@@ -644,7 +645,7 @@ class CI_Pagination {
 
 		// Kill double slashes. Note: Sometimes we can end up with a double slash
 		// in the penultimate link so we'll kill all double slashes.
-		$output = preg_replace('#([^:])//+#', '\\1/', $output);
+		$output = preg_replace('#([^:"])//+#', '\\1/', $output);
 
 		// Add the wrapper HTML if exists
 		return $this->full_tag_open.$output.$this->full_tag_close;

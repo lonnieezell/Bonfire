@@ -466,7 +466,7 @@ class CI_FTP {
 
 	/**
 	 * Delete a folder and recursively delete everything (including sub-folders)
-	 * containted within it.
+	 * contained within it.
 	 *
 	 * @param	string	$filepath
 	 * @return	bool
@@ -490,7 +490,7 @@ class CI_FTP {
 				// so we'll recursively call delete_dir()
 				if ( ! preg_match('#/\.\.?$#', $list[$i]) && ! @ftp_delete($this->conn_id, $list[$i]))
 				{
-					$this->delete_dir($list[$i]);
+					$this->delete_dir($filepath.$list[$i]);
 				}
 			}
 		}

@@ -2,6 +2,22 @@
 
 ## Released versions
 
+### 0.8.3
+* Upgraded CodeIgniter 3 to 3.0.1
+* Upgraded CodeIgniter 2 to 2.2.4
+
+#### New Features:
+* MY_*_helper files can now override BF_*_helper files
+
+#### Closes Issues:
+* #1153: Error: "Undefined index: user_agent" caused by out-dated `MX_Loader`.
+* #1154: [Builder] Cancel button contains "Content" instead of "content".
+
+#### Additional Changes:
+* `user_meta` view in `users` module updated to make it less likely to have issues with PHP 7.
+
+#### Known Issues:
+
 ### 0.8.2
 
 #### New Features:
