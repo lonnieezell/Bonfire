@@ -1,5 +1,17 @@
 # Change Log
 
+## Under development
+
+### 0.7.8
+
+#### New Features:
+
+#### Closes Issues:
+
+#### Additional Changes:
+
+#### Known Issues:
+
 ## Released versions
 
 ### 0.7.7
