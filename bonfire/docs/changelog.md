@@ -3,8 +3,8 @@
 ## Released versions
 
 ### 0.7.7
-Upgraded CodeIgniter 3 to 3.0.1
-Upgraded CodeIgniter 2 to 2.2.4
+* Upgraded CodeIgniter 3 to 3.0.1
+* Upgraded CodeIgniter 2 to 2.2.4
 
 #### New Features:
 * MY_*_helper files can now override BF_*_helper files
