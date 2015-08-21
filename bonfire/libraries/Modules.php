@@ -93,6 +93,8 @@ class Modules
     /**
      * Load a module controller.
      *
+     * @uses BF_Router::load()
+     *
      * @param string $module The module/controller to load.
      *
      * @return mixed The loaded controller.

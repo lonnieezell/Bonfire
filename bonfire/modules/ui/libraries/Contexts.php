@@ -503,6 +503,9 @@ class Contexts
     /**
      * Build out the HTML for the menu.
      *
+     * @deprecated since 0.9.0. This method will be removed or protected later,
+     * in part because it depends on the internal state from context_nav().
+     *
      * @param string  $context   The context to build the nav for.
      * @param boolean $ignore_ul If true, the list will be returned without being
      * placed into the template.

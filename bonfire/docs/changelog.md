@@ -6,18 +6,14 @@
 * Minimum PHP version changed to 5.4
 * Removed CI2 compatibility
 * Removed functions/methods/properties deprecated prior to 0.7.4/0.8.0.
-* Upgraded CodeIgniter to 3.0.1
 * Upgraded CSSMin to 3.0.3 [natxet/CssMin](https://github.com/natxet/CssMin)
 * Upgraded JSMin to 1.1.2 [rgrove/jsmin-php](https://github.com/rgrove/jsmin-php) - need to evaluate potential replacement
 * Upgraded and deprecated `markdown_helper` and `markdown_extended_helper`. Use the [CommonMark library](https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/docs/commonmark.md) with one of the drivers in `/application/libraries/CommonMark/drivers/` instead.
 
 #### New Features:
-* MY_*_helper files can now override BF_*_helper files.
 * Setting `'auth.log_failed_login_activity'` to `true` in `/application/config/application.php` will cause login attempts using invalid passwords or for banned accounts to be added to the activity log.
 
 #### Closes Issues:
-* #1153: Error: "Undefined index: user_agent" caused by out-dated `MX_Loader`.
-* #1154: [Builder] Cancel button contains "Content" instead of "content".
 
 #### Additional Changes:
 * Separated abstract Migration class from the file containing the Migrations library. The library's constructor now loads the file containing the abstract class via a require_once() call.
@@ -35,11 +31,26 @@
 * BF_Router: Removed CI2 compatibility
     * Only load ucfirst() controllers.
     * `_set_default_controller()` and `_validate_request()` are protected methods (they were public in CI2).
-* `user_meta` view in `users` module updated to make it less likely to have issues with PHP 7.
 
 #### Known Issues:
 
 ## Released versions
+
+### 0.8.3
+* Upgraded CodeIgniter 3 to 3.0.1
+* Upgraded CodeIgniter 2 to 2.2.4
+
+#### New Features:
+* MY_*_helper files can now override BF_*_helper files
+
+#### Closes Issues:
+* #1153: Error: "Undefined index: user_agent" caused by out-dated `MX_Loader`.
+* #1154: [Builder] Cancel button contains "Content" instead of "content".
+
+#### Additional Changes:
+* `user_meta` view in `users` module updated to make it less likely to have issues with PHP 7.
+
+#### Known Issues:
 
 ### 0.8.2
 
@@ -96,6 +107,24 @@
 #### Additional Changes:
 
 #### Known Issues:
+
+### 0.7.7
+(Concurrent with 0.8.3)
+* Upgraded CodeIgniter 3 to 3.0.1
+* Upgraded CodeIgniter 2 to 2.2.4
+
+#### New Features:
+* MY_*_helper files can now override BF_*_helper files
+
+#### Closes Issues:
+* #1153: Error: "Undefined index: user_agent" caused by out-dated `MX_Loader`.
+* #1154: [Builder] Cancel button contains "Content" instead of "content".
+
+#### Additional Changes:
+* `user_meta` view in `users` module updated to make it less likely to have issues with PHP 7.
+
+#### Known Issues:
+
 
 ### 0.7.6
 (Concurrent with 0.8.2)

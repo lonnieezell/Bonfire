@@ -8,7 +8,7 @@
  * @package   Bonfire
  * @author    Bonfire Dev Team
  * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT    MIT License
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -44,6 +44,8 @@ class Images extends Base_Controller
      * Simply redirects all calls to the index() method.
      *
      * @param string $file The name of the image to return.
+     *
+     * @return void
      */
     public function _remap($file = null)
     {
@@ -51,9 +53,12 @@ class Images extends Base_Controller
     }
 
     /**
-     * Performs the image processing based on the parameters provided in the GET request
+     * Performs the image processing based on the parameters provided in the GET
+     * request.
      *
      * @param string $file The name of the image to return.
+     *
+     * @return void
      */
     public function index($file = null)
     {
