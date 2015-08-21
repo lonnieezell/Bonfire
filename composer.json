@@ -1,7 +1,7 @@
 {
     "name": "ci-bonfire/bonfire",
     "description": "Kickstart your CodeIgniter-based web application development.",
-    "version": "0.8.3-dev",
+    "version": "0.8.3",
     "type": "project",
     "homepage": "http://cibonfire.com",
     "license": "MIT",
