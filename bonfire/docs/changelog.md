@@ -1,6 +1,18 @@
 # Change Log
 
+## Under development
+
+### 0.8.4
+
 ## Released versions
+
+#### New Features:
+
+#### Closes Issues:
+
+#### Additional Changes:
+
+#### Known Issues:
 
 ### 0.8.3
 * Upgraded CodeIgniter 3 to 3.0.1
