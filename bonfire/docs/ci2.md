@@ -1,7 +1,7 @@
 # CodeIgniter 2.x Support in Bonfire
 
 This document is intended to help you configure your Bonfire application to use CodeIgniter 2.x (CI2).
-Since CI2 is scheduled to reach end of life in October, 2014, this functionality is intended as a vehicle for upgrading an existing application to support CodeIgniter 3.x (CI3).
+Since CI2 is scheduled to reach end of life in October, 2015, this functionality is intended as a vehicle for upgrading an existing application to support CodeIgniter 3.x (CI3).
 While there is every reason to believe that CI2 will work fine with Bonfire 0.8.x, this is not intended for long-term production use.
 
 ## Installing CI2
