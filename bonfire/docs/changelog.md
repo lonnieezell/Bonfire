@@ -1,6 +1,6 @@
 # Change Log
 
-## Under development
+## Released versions
 
 ### 0.7.7
 Upgraded CodeIgniter 3 to 3.0.1
@@ -17,8 +17,6 @@ Upgraded CodeIgniter 2 to 2.2.4
 * `user_meta` view in `users` module updated to make it less likely to have issues with PHP 7.
 
 #### Known Issues:
-
-## Released versions
 
 ### 0.7.6
 
