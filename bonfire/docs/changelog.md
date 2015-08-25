@@ -9,6 +9,7 @@
 * Upgraded CSSMin to 3.0.3 [natxet/CssMin](https://github.com/natxet/CssMin)
 * Upgraded JSMin to 1.1.2 [rgrove/jsmin-php](https://github.com/rgrove/jsmin-php) - need to evaluate potential replacement
 * Upgraded and deprecated `markdown_helper` and `markdown_extended_helper`. Use the [CommonMark library](https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/docs/commonmark.md) with one of the drivers in `/application/libraries/CommonMark/drivers/` instead.
+* Updated Wiredesignz HMVC with latest commits through 2015-08-14 (autoload aliased libraries/models, check controller suffix before adding)
 
 #### New Features:
 * Setting `'auth.log_failed_login_activity'` to `true` in `/application/config/application.php` will cause login attempts using invalid passwords or for banned accounts to be added to the activity log.
