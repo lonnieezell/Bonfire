@@ -72,11 +72,7 @@ switch (ENVIRONMENT) {
     case 'testing':
     case 'production':
         ini_set('display_errors', 0);
-        if (version_compare(PHP_VERSION, '5.3', '>=')) {
-            error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
-        } else {
-            error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
-        }
+        error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
         break;
     default:
         header('HTTP/1.1 503 Service Unavailable.', true, 503);
@@ -130,8 +126,6 @@ $bonfire_path = "{$path}/bonfire";
  * Include the path if the folder is not in the same directory
  * as this file.
  */
-// CI 2 system path:
-// $system_path = "{$path}/bonfire/ci2";
 // CI 3 system path:
 $system_path = "{$path}/bonfire/ci3";
 

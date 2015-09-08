@@ -55,7 +55,7 @@ abstract class CommonMarkDriver
      * The driver/adapter may overload this method to perform initialization (load
      * the underlying library) itself.
      *
-     * @return boolean True if the initialization was performed successfully, else
+     * @return bool True if the initialization was performed successfully, else
      * false.
      */
     protected function init()
@@ -90,7 +90,7 @@ abstract class CommonMarkDriver
     /**
      * Load the underlying library used by the driver/adapter.
      *
-     * @return boolean True if the library was loaded successfully, else false.
+     * @return bool True if the library was loaded successfully, else false.
      */
     private function loadLibrary()
     {
@@ -101,7 +101,9 @@ abstract class CommonMarkDriver
 
         // If possible, allow composer to load the driver's library.
         if (get_instance()->config->item('composer_autoload') !== false) {
-            return true;
+            if (class_exists($this->converterLib)) {
+                return true;
+            }
         }
 
         // Is there a list of paths and files to load?

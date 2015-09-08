@@ -297,7 +297,10 @@ class BF_Router extends CI_Router
      */
     public function set_class($class)
     {
-        $class = $class . $this->config->item('controller_suffix');
+        $suffix = $this->config->item('controller_suffix');
+        if (strpos($class, $suffix) === false) {
+            $class .= $suffix;
+        }
         parent::set_class($class);
     }
 }

@@ -10,7 +10,7 @@
  * @category    	Libraries
  * @author        	Philip Sturgeon
  * @license         http://philsturgeon.co.uk/code/dbad-license
- * @link			http://philsturgeon.co.uk/code/codeigniter-curl
+ * @link			https://github.com/philsturgeon/codeigniter-curl
  */
 class Curl {
 
@@ -146,7 +146,7 @@ class Curl {
 		// Override method, I think this overrides $_POST with PUT data but... we'll see eh?
 		$this->option(CURLOPT_HTTPHEADER, array('X-HTTP-Method-Override: PUT'));
 	}
-	
+
 	public function patch($params = array(), $options = array())
 	{
 		// If its an array (instead of a query string) then format it correctly
