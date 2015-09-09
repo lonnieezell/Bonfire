@@ -254,6 +254,10 @@ class Emailer
             $this->debug_message = $this->ci->email->print_debugger();
         }
 
+        if (! $result) {
+            log_message('error', sprintf(lang('emailer_send_error'), $this->ci->email->print_debugger()));
+        }
+
         return $result;
     }
 
@@ -387,4 +391,3 @@ class Emailer
         $this->queue_emails = $queue;
     }
 }
-/* End of file /emailer/libraries/emailer.php */

@@ -116,7 +116,7 @@ class BF_Model extends CI_Model
      * @var string[] The names of callback methods within the extending model which
      * will be called before the insert method.
      */
-    protected $before_insert = array();
+    protected $before_insert = [];
 
     /**
      * @var string[] The names of callback methods within the extending model which
@@ -124,7 +124,7 @@ class BF_Model extends CI_Model
      *
      * @see $before_insert
      */
-    protected $after_insert = array();
+    protected $after_insert = [];
 
     /**
      * @var string[] The names of callback methods within the extending model which
@@ -132,7 +132,7 @@ class BF_Model extends CI_Model
      *
      * @see $before_insert
      */
-    protected $before_update = array();
+    protected $before_update = [];
 
     /**
      * @var string[] The names of callback methods within the extending model which
@@ -140,7 +140,7 @@ class BF_Model extends CI_Model
      *
      * @see $before_insert
      */
-    protected $after_update = array();
+    protected $after_update = [];
 
     /**
      * @var string[] The names of callback methods within the extending model which
@@ -148,7 +148,7 @@ class BF_Model extends CI_Model
      *
      * @see $before_insert
      */
-    protected $before_find = array();
+    protected $before_find = [];
 
     /**
      * @var string[] The names of callback methods within the extending model which
@@ -156,7 +156,7 @@ class BF_Model extends CI_Model
      *
      * @see $before_insert
      */
-    protected $after_find = array();
+    protected $after_find = [];
 
     /**
      * @var string[] The names of callback methods within the extending model which
@@ -164,7 +164,7 @@ class BF_Model extends CI_Model
      *
      * @see $before_insert
      */
-    protected $before_delete = array();
+    protected $before_delete = [];
 
     /**
      * @var string[] The names of callback methods within the extending model which
@@ -172,7 +172,7 @@ class BF_Model extends CI_Model
      *
      * @see $before_insert
      */
-    protected $after_delete = array();
+    protected $after_delete = [];
 
     /**
      * @var string[] The names of callback methods within the extending model which
@@ -184,10 +184,10 @@ class BF_Model extends CI_Model
      *
      * @see $before_insert
      */
-    protected $empty_validation_rules = array();
+    protected $empty_validation_rules = [];
 
     /** @var string[] Protected, non-modifiable attributes. */
-    protected $protected_attributes = array();
+    protected $protected_attributes = [];
 
     /**
      * @var string Data type of the records returned from find* methods.
@@ -211,10 +211,10 @@ class BF_Model extends CI_Model
      *
      * @see http://www.codeigniter.com/user_guide/libraries/form_validation.html#validationrulesasarray
      */
-    protected $validation_rules = array();
+    protected $validation_rules = [];
 
     /** @var array Additional validation rules only used on insert. */
-    protected $insert_validation_rules = array();
+    protected $insert_validation_rules = [];
 
     /**
      * @var bool Skip the model's validation. Used in conjunction with skip_validation()
@@ -223,7 +223,7 @@ class BF_Model extends CI_Model
     protected $skip_validation = false;
 
     /**
-     * @var boolean If true, inserts will return the inserted ID.
+     * @var bool If true, inserts will return the inserted ID.
      * This can potentially slow down large imports drastically, so it can be disabled
      * via the return_insert_id(false) method.
      * This will also disable $after_insert, since the observer receives the ID.
@@ -246,7 +246,7 @@ class BF_Model extends CI_Model
      *      'primary_key'     => (1 if the column is a primary key),
      *  ),
      */
-    protected $field_info = array();
+    protected $field_info = [];
 
     //--------------------------------------------------------------------------
 
@@ -305,8 +305,9 @@ class BF_Model extends CI_Model
     public function find($id = '')
     {
         $this->trigger('before_find');
+        $this->where("{$this->table_name}.{$this->key}", $id);
 
-        $query = $this->db->get_where($this->table_name, array("{$this->table_name}.{$this->key}" => $id));
+        $query = $this->db->get($this->table_name);
         $return = $query->{$this->_return_type()}();
         if (empty($return)) {
             return false;
@@ -379,11 +380,11 @@ class BF_Model extends CI_Model
         }
 
         // Setup the field/value check.
-        $where = is_array($field) ? $field : array($field => $value);
+        $where = is_array($field) ? $field : [$field => $value];
         if ($type == 'or') {
-            $this->db->or_where($where);
+            $this->or_where($where);
         } else {
-            $this->db->where($where);
+            $this->where($where);
         }
 
         return $this->find_all();
@@ -411,11 +412,11 @@ class BF_Model extends CI_Model
 
         $this->trigger('before_find');
 
-        $where = is_array($field) ? $field : array($field => $value);
+        $where = is_array($field) ? $field : [$field => $value];
         if ($type == 'or') {
-            $this->db->or_where($where);
+            $this->or_where($where);
         } else {
-            $this->db->where($where);
+            $this->where($where);
         }
 
         $query = $this->db->get($this->table_name);
@@ -493,15 +494,15 @@ class BF_Model extends CI_Model
      */
     public function insert_batch($data = null)
     {
-        $set = array();
+        $set = [];
 
         // Add the created field.
         if ($this->set_created === true) {
             $set[$this->created_field] = $this->set_date();
-        }
 
-        if ($this->set_created === true && $this->log_user === true) {
-            $set[$this->created_by_field] = $this->auth->user_id();
+            if ($this->log_user === true) {
+                $set[$this->created_by_field] = $this->auth->user_id();
+            }
         }
 
         if (! empty($set)) {
@@ -516,7 +517,7 @@ class BF_Model extends CI_Model
             return true;
         }
 
-        $this->error = $this->get_db_error_message();
+        $this->error = sprintf(lang('bf_model_db_error'), $this->get_db_error_message());
         return false;
     }
 
@@ -539,7 +540,7 @@ class BF_Model extends CI_Model
         }
 
         if (! is_array($where)) {
-            $where = array($this->key => $where);
+            $where = [$this->key => $where];
         }
 
         $data = $this->trigger('before_update', $data);
@@ -553,7 +554,7 @@ class BF_Model extends CI_Model
         }
 
         if ($result = $this->db->update($this->table_name, $data, $where)) {
-            $this->trigger('after_update', array($data, $result));
+            $this->trigger('after_update', [$data, $result]);
             return true;
         }
 
@@ -573,7 +574,7 @@ class BF_Model extends CI_Model
      */
     public function update_where($field = null, $value = null, $data = null)
     {
-        $where = is_array($field) ? $field : array($field => $value);
+        $where = is_array($field) ? $field : [$field => $value];
         return $this->update($where, $data);
     }
 
@@ -625,29 +626,7 @@ class BF_Model extends CI_Model
      */
     public function delete($id = null)
     {
-        $this->trigger('before_delete', $id);
-
-        // Set the where clause to be used in the update/delete below.
-        $this->db->where($this->key, $id);
-
-        if ($this->soft_deletes !== true) {
-            $result = $this->db->delete($this->table_name);
-        } else {
-            $data = array($this->deleted_field => 1);
-            if ($this->log_user === true) {
-                $data[$this->deleted_by_field] = $this->auth->user_id();
-            }
-
-            $result = $this->db->update($this->table_name, $data);
-        }
-
-        if ($result) {
-            $this->trigger('after_delete', $id);
-            return true;
-        }
-
-        $this->error = sprintf(lang('bf_model_db_error'), $this->get_db_error_message());
-        return false;
+        return $this->delete_where([$this->key => $id]);
     }
 
     /**
@@ -667,13 +646,12 @@ class BF_Model extends CI_Model
     public function delete_where($where = null)
     {
         $where = $this->trigger('before_delete', $where);
+        $this->where($where);
 
-        // Set the where clause to be used in the update/delete below.
-        $this->db->where($where);
         if ($this->soft_deletes !== true) {
             $result = $this->db->delete($this->table_name);
         } else {
-            $data = array($this->deleted_field => 1);
+            $data = [$this->deleted_field => 1];
             if ($this->log_user === true) {
                 $data[$this->deleted_by_field] = $this->auth->user_id();
             }
@@ -712,7 +690,7 @@ class BF_Model extends CI_Model
             return false;
         }
 
-        $this->db->where($field, $value);
+        $this->where($field, $value);
         $query = $this->db->get($this->table_name);
 
         if ($query && $query->num_rows() == 0) {
@@ -753,9 +731,9 @@ class BF_Model extends CI_Model
             return false;
         }
 
-        $this->db->where($field, $value);
+        $this->where($field, $value);
 
-        return (int)$this->db->count_all_results($this->table_name);
+        return (int) $this->count_all();
     }
 
     /**
@@ -774,10 +752,10 @@ class BF_Model extends CI_Model
             return false;
         }
 
-        $query = $this->db->select($field)
-                          ->where($this->key, $id)
-                          ->get($this->table_name);
+        $this->select($field)
+            ->where($this->key, $id);
 
+        $query = $this->db->get($this->table_name);
         if ($query && $query->num_rows() > 0) {
             return $query->row()->$field;
         }
@@ -802,10 +780,10 @@ class BF_Model extends CI_Model
             $value = $args[0];
         }
 
-        $query = $this->db->select(array($key, $value))
-                          ->get($this->table_name);
+        $this->select([$key, $value]);
+        $query = $this->db->get($this->table_name);
 
-        $options = array();
+        $options = [];
         foreach ($query->result() as $row) {
             $options[$row->{$key}] = $row->{$value};
         }
@@ -862,12 +840,14 @@ class BF_Model extends CI_Model
             return $this;
         }
 
+        if (is_array($field)) {
+            foreach ($field as $f => $o) {
+                $this->order_by($f, $o);
+            }
+        }
+
         if (is_string($field)) {
             $this->db->order_by($field, $order);
-        } elseif (is_array($field)) {
-            foreach ($field as $f => $o) {
-                $this->db->order_by($f, $o);
-            }
         }
 
         return $this;
@@ -890,7 +870,7 @@ class BF_Model extends CI_Model
      */
     public function soft_delete($val = true)
     {
-        $this->soft_deletes = (bool)$val;
+        $this->soft_deletes = (bool) $val;
         return $this;
     }
 
@@ -936,7 +916,7 @@ class BF_Model extends CI_Model
      */
     public function return_insert_id($return = true)
     {
-        $this->return_insert_id = (bool)$return;
+        $this->return_insert_id = (bool) $return;
         return $this;
     }
 
@@ -949,7 +929,7 @@ class BF_Model extends CI_Model
      */
     public function skip_validation($skip = true)
     {
-        $this->skip_validation = (bool)$skip;
+        $this->skip_validation = (bool) $skip;
         return $this;
     }
 
@@ -1019,7 +999,7 @@ class BF_Model extends CI_Model
                 $this->callback_parameters = explode(',', $matches[3]);
             }
 
-            $data = call_user_func_array(array($this, $method), array($data));
+            $data = call_user_func_array([$this, $method], [$data]);
         }
 
         return $data;
@@ -1045,54 +1025,58 @@ class BF_Model extends CI_Model
         if (empty($temp_validation_rules) || ! is_array($temp_validation_rules)) {
             $temp_validation_rules = $this->trigger('empty_validation_rules', $temp_validation_rules);
             if (empty($temp_validation_rules) || ! is_array($temp_validation_rules)) {
-                return array();
+                return [];
             }
 
-            // If the observer returns a non-empty array, set $validation_rules
-            // so they aren't re-generated for this instance of the model.
+            // If the observer returns a non-empty array, prevent calling it again
+            // for this instance of the model.
             $this->validation_rules = $temp_validation_rules;
         }
 
-        // Any insert additions?
-        if ($type == 'insert'
-            && is_array($this->insert_validation_rules)
-            && ! empty($this->insert_validation_rules)
+        // If this is not an insert or there are no insert rules, it's time to go.
+        if ($type != 'insert'
+            || ! is_array($this->insert_validation_rules)
+            || empty($this->insert_validation_rules)
         ) {
-            // Get the index for each field in the validation rules
-            $fieldIndexes = array();
-            foreach ($temp_validation_rules as $key => $validation_rule) {
-                $fieldIndexes[$validation_rule['field']] = $key;
+            return $temp_validation_rules;
+        }
+
+        // Update the validation rules with the insert rules.
+
+        // Get the index for each field in the validation rules.
+        $fieldIndexes = [];
+        foreach ($temp_validation_rules as $key => $validation_rule) {
+            $fieldIndexes[$validation_rule['field']] = $key;
+        }
+
+        foreach ($this->insert_validation_rules as $key => $rule) {
+            if (is_array($rule)) {
+                $insert_rule = $rule;
+            } else {
+                // If $key isn't a field name and $insert_rule isn't an array,
+                // there's nothing useful to do, so skip it.
+                if (is_numeric($key)) {
+                    continue;
+                }
+
+                $insert_rule = [
+                    'field' => $key,
+                    'rules' => $rule,
+                ];
             }
 
-            foreach ($this->insert_validation_rules as $key => $rule) {
-                if (is_array($rule)) {
-                    $insert_rule = $rule;
+            // If the field is already in the validation rules, update the
+            // validation rule to merge the insert rule (replace empty rules).
+            if (isset($fieldIndexes[$insert_rule['field']])) {
+                $fieldKey = $fieldIndexes[$insert_rule['field']];
+                if (empty($temp_validation_rules[$fieldKey]['rules'])) {
+                    $temp_validation_rules[$fieldKey]['rules'] = $insert_rule['rules'];
                 } else {
-                    // If $key isn't a field name and $insert_rule isn't an array,
-                    // there's nothing useful to do, so skip it.
-                    if (is_numeric($key)) {
-                        continue;
-                    }
-
-                    $insert_rule = array(
-                        'field' => $key,
-                        'rules' => $rule,
-                    );
+                    $temp_validation_rules[$fieldKey]['rules'] .= "|{$insert_rule['rules']}";
                 }
-
-                // If the field is already in the validation rules, update the
-                // validation rule to merge the insert rule (replace empty rules).
-                if (isset($fieldIndexes[$insert_rule['field']])) {
-                    $fieldKey = $fieldIndexes[$insert_rule['field']];
-                    if (empty($temp_validation_rules[$fieldKey]['rules'])) {
-                        $temp_validation_rules[$fieldKey]['rules'] = $insert_rule['rules'];
-                    } else {
-                        $temp_validation_rules[$fieldKey]['rules'] .= "|{$insert_rule['rules']}";
-                    }
-                } else {
-                    // Otherwise, add the insert rule to the validation rules
-                    $temp_validation_rules[] = $insert_rule;
-                }
+            } else {
+                // Otherwise, add the insert rule to the validation rules
+                $temp_validation_rules[] = $insert_rule;
             }
         }
 
@@ -1123,6 +1107,11 @@ class BF_Model extends CI_Model
             return $data;
         }
 
+        // @todo: considering replacing this with form_validation->set_data($data),
+        // but what if some of the data is in $_POST but not in $data? Maybe we
+        // should loop through $current_validation_rules and retrieve $_POST data
+        // for any fields which are not in $data... Don't forget to move this below
+        // $this->load->library('form_validation') if changing it to set_data().
         foreach ($data as $key => $val) {
             $_POST[$key] = $val;
         }
@@ -1153,7 +1142,7 @@ class BF_Model extends CI_Model
      * Useful for removing the primary key, or submit button names if $_POST is
      * thrown at the model.
      *
-     * @param object/array $row The data from which $this->protected_attributes
+     * @param object|array $row The data from which $this->protected_attributes
      * will be removed.
      *
      * @return array The data without the protected attributes.
@@ -1451,8 +1440,8 @@ class BF_Model extends CI_Model
      */
     public function prep_data($post_data)
     {
-        $data = array();
-        $skippedFields = array();
+        $data = [];
+        $skippedFields = [];
         $skippedFields[] = $this->get_created_field();
         $skippedFields[] = $this->get_created_by_field();
         $skippedFields[] = $this->get_deleted_field();
@@ -1462,7 +1451,7 @@ class BF_Model extends CI_Model
 
         // Though the model doesn't support multiple keys well, $this->key could
         // be an array or a string.
-        $skippedFields = array_merge($skippedFields, (array)$this->key);
+        $skippedFields = array_merge($skippedFields, (array) $this->key);
 
         // If the field is the primary key, one of the created/modified/deleted
         // fields, or has not been set in the $post_data, skip it.

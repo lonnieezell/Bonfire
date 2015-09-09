@@ -119,3 +119,5 @@ $lang['form_validation_emailer_smtp_username'] = 'SMTP Username';
 $lang['form_validation_emailer_smtp_password'] = 'SMTP Password';
 $lang['form_validation_emailer_smtp_port']     = 'SMTP Port';
 $lang['form_validation_emailer_smtp_timeout']  = 'SMTP timeout';
+
+$lang['emailer_send_error'] = 'Error sending email: %s';

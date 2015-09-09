@@ -8,7 +8,7 @@
  * @package   Bonfire
  * @author    Bonfire Dev Team
  * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -42,44 +42,44 @@ class Permission_model extends BF_Model
     /** @var string Name of the primary key. */
     protected $key = 'permission_id';
 
-    /** @var boolean Use soft deletes (if true). */
+    /** @var bool Use soft deletes (if true). */
     protected $soft_deletes = false;
 
     /** @var string The date format to use. */
     protected $date_format = 'datetime';
 
-    /** @var boolean Set the created time automatically on a new record (if true). */
+    /** @var bool Set the created time automatically on a new record (if true). */
     protected $set_created = false;
 
-    /** @var boolean Set the modified time automatically on editing a record (if true). */
+    /** @var bool Set the modified time automatically on editing a record (if true). */
     protected $set_modified = false;
 
     /** @var array Metadata for the model's database fields. */
-    protected $field_info = array(
-        array('name' => 'permission_id', 'primary_key' => 1),
-        array('name' => 'name'),
-        array('name' => 'description'),
-        array('name' => 'status'),
-    );
+    protected $field_info = [
+        ['name' => 'permission_id', 'primary_key' => 1],
+        ['name' => 'name'],
+        ['name' => 'description'],
+        ['name' => 'status'],
+    ];
 
     /** @var array Rules used to validate the model. */
-    protected $validation_rules = array(
-        array(
+    protected $validation_rules = [
+        [
             'field' => 'name',
             'label' => 'lang:permissions_name',
             'rules' => 'required|trim|max_length[255]',
-        ),
-        array(
+        ],
+        [
             'field' => 'description',
             'label' => 'lang:permissions_description',
             'rules' => 'trim|max_length[100]',
-        ),
-        array(
+        ],
+        [
             'field' => 'status',
             'label' => 'lang:permissions_status',
             'rules' => 'required|trim',
-        ),
-    );
+        ],
+    ];
 
     //--------------------------------------------------------------------------
 
@@ -96,9 +96,9 @@ class Permission_model extends BF_Model
     /**
      * Delete a particular permission from the database.
      *
-     * @param integer $id Permission ID to delete.
+     * @param int $id Permission ID to delete.
      *
-     * @return boolean True if the permission was deleted successfully, else false.
+     * @return bool True if the permission was deleted successfully, else false.
      */
     public function delete($id = 0)
     {
@@ -109,6 +109,9 @@ class Permission_model extends BF_Model
         }
 
         // If the delete succeeded, delete the role_permissions for this $id.
+        if (! class_exists('role_permission_model', false)) {
+            $this->load->model('roles/role_permission_model');
+        }
         $this->role_permission_model->delete_for_permission($id);
 
         return true;
@@ -119,11 +122,11 @@ class Permission_model extends BF_Model
      *
      * Remove it from role_permissions if set to inactive.
      *
-     * @param integer $id   The primary key value or an array of key/value pairs
+     * @param int   $id   The primary key value or an array of key/value pairs
      * for the where clause to determine the row to update.
-     * @param array   $data An array of key/value pairs to update.
+     * @param array $data An array of key/value pairs to update.
      *
-     * @return boolean True if the permission was updated, else false.
+     * @return bool True if the permission was updated, else false.
      */
     public function update($id = null, $data = null)
     {
@@ -174,7 +177,7 @@ class Permission_model extends BF_Model
      *
      * @param string $name The name of the permission to delete.
      *
-     * @return boolean True if the permission was deleted successfully, else false.
+     * @return bool True if the permission was deleted successfully, else false.
      */
     public function delete_by_name($name = null)
     {
@@ -191,8 +194,8 @@ class Permission_model extends BF_Model
      *
      * @param string $permission The name of the permission to check.
      *
-     * @return boolean true if the permission was found, null if no permission was
-     * passed, else false.
+     * @return bool|void Null if no permission was passed, true if the permission
+     * was found, else false.
      */
     public function permission_exists($permission = null)
     {

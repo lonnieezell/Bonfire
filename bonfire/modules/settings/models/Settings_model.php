@@ -8,7 +8,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -20,9 +20,9 @@
  *
  * Retrieves and updates settings in the database.
  *
- * @package    Bonfire\Modules\Settings\Models\Settings_Model
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/developer/settings
+ * @package Bonfire\Modules\Settings\Models\Settings_Model
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer/settings
  */
 class Settings_model extends BF_Model
 {
@@ -32,16 +32,16 @@ class Settings_model extends BF_Model
     /** @var string Name of the primary key. */
     protected $key = 'name';
 
-    /** @var boolean Use soft deletes or not. */
+    /** @var bool Use soft deletes or not. */
     protected $soft_deletes = false;
 
     /** @var string The date format to use. */
     protected $date_format = 'datetime';
 
-    /** @var boolean Set the created time automatically on a new record. */
+    /** @var bool Set the created time automatically on a new record. */
     protected $set_created = false;
 
-    /** @var boolean Set the modified time automatically on editing a record. */
+    /** @var bool Set the modified time automatically on editing a record. */
     protected $set_modified = false;
 
     /**
@@ -51,7 +51,8 @@ class Settings_model extends BF_Model
      * @param string $value The value that field should be.
      * @param string $type  The type of where clause to use, either 'and' or 'or'.
      *
-     * @return array
+     * @return array|bool False if $field is empty, an empty array if no results,
+     * or an array of name/value pairs.
      */
     public function find_all_by($field = null, $value = null, $type = 'and')
     {
@@ -61,25 +62,25 @@ class Settings_model extends BF_Model
 
         // Setup the field/value check.
         if (! is_array($field)) {
-            $field = array($field => $value);
+            $field = [$field => $value];
         }
 
         if ($type == 'or') {
-            $this->db->or_where($field);
+            $this->or_where($field);
         } else {
-            $this->db->where($field);
+            $this->where($field);
         }
 
         $results = $this->find_all();
+        if (empty($results) || ! is_array($results)) {
+            return [];
+        }
 
-        $resultArray = array();
-        if (! empty($results) && is_array($results)) {
-            foreach ($results as $record) {
-                $resultArray[$record->name] = $record->value;
-            }
+        $resultArray = [];
+        foreach ($results as $record) {
+            $resultArray[$record->name] = $record->value;
         }
 
         return $resultArray;
     }
 }
-/* end /settings/models/settings_model.php */

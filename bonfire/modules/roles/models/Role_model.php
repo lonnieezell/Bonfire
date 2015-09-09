@@ -8,7 +8,7 @@
  * @package   Bonfire
  * @author    Bonfire Dev Team
  * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -31,72 +31,66 @@ class Role_model extends BF_Model
     /** @var string Name of the primary key. */
     protected $key = 'role_id';
 
-    /** @var boolean Use soft deletes (if true). */
+    /** @var bool Use soft deletes (if true). */
     protected $soft_deletes = true;
 
     /** @var string The date format to use. */
     protected $date_format = 'datetime';
 
-    /**
-     * @var boolean Set the created time automatically when creating a new record
-     * (if true).
-     */
+    /** @var bool Set the created time automatically (if true). */
     protected $set_created = false;
 
-    /**
-     * @var boolean Set the modified time automatically when editing a record (if
-     * true).
-     */
+    /** @var bool Set the modified time automatically (if true). */
     protected $set_modified = false;
 
     /**
      * @var array Validation rules. Note that role_name rules for updates are added
      * by this model's overridden get_validation_rules() method.
      */
-    protected $validation_rules = array(
-        array(
+    protected $validation_rules = [
+        [
             'field' => 'description',
             'label' => 'lang:bf_description',
             'rules' => 'trim|max_length[255]',
-        ),
-        array(
+        ],
+        [
             'field' => 'login_destination',
             'label' => 'lang:role_login_destination',
             'rules' => 'trim|max_length[255]',
-        ),
-        array(
+        ],
+        [
             'field' => 'default_context',
             'label' => 'lang:role_default_context',
             'rules' => 'trim',
-        ),
-        array(
+        ],
+        [
             'field' => 'default',
             'label' => 'lang:role_default_role',
             'rules' => 'trim|is_numeric|max_length[1]',
-        ),
-        array(
+        ],
+        [
             'field' => 'can_delete',
             'label' => 'lang:role_can_delete_role',
             'rules' => 'trim|is_numeric|max_length[1]',
-        ),
-    );
+        ],
+    ];
 
     /** @var array Additional validation rules only used on insert. */
-    protected $insert_validation_rules = array(
-        array(
+    protected $insert_validation_rules = [
+        [
             'field' => 'role_name',
             'label' => 'lang:role_name',
             'rules' => 'required|trim|max_length[60]|unique[roles.role_name]',
-        ),
-    );
+        ],
+    ];
 
-    protected $updateValidationRules = array(
-        array(
+    protected $updateValidationRules = [
+        [
             'field' => 'role_name',
             'label' => 'lang:role_name',
             'rules' => 'required|trim|max_length[60]|unique[roles.role_name,roles.role_id]',
-        ),
-    );
+        ],
+    ];
 
     //--------------------------------------------------------------------------
 
@@ -113,10 +107,10 @@ class Role_model extends BF_Model
     /**
      * Returns a single role, with an array of permissions.
      *
-     * @param integer $id An int that matches the role_id of the role in question.
+     * @param int $id The role_id of the role in question.
      *
-     * @return boolean|array An array of information about the role, along with
-     * a sub-array containing the role's applicable permissions, or false.
+     * @return bool|array An array of information about the role, along with a sub-array
+     * containing the role's applicable permissions, or false.
      */
     public function find($id = null)
     {
@@ -139,7 +133,7 @@ class Role_model extends BF_Model
      *
      * @param string $name A string with the name of the role.
      *
-     * @return boolean|object An object with the role and its permissions, or false.
+     * @return bool|object An object with the role and its permissions, or false.
      */
     public function find_by_name($name = null)
     {
@@ -186,17 +180,19 @@ class Role_model extends BF_Model
      * Additionally, this cleans things up when setting this role as the default
      * role for new users.
      *
-     * @param integer $id   The role id.
-     * @param array   $data Array of key/value pairs with which to update the db.
+     * @param int   $id   The role id.
+     * @param array $data Array of key/value pairs with which to update the db.
      *
-     * @return boolean True on successful update, else false.
+     * @return bool True on successful update, else false.
      */
     public function update($id = null, $data = null)
     {
         // If this role is set to default, then set all others to NOT be default.
         if (isset($data['default']) && $data['default'] == 1) {
-            $this->db->set('default', 0)
-                     ->update($this->table_name);
+            $validate = $this->skip_validation;
+            $this->skip_validation(true);
+            parent::update(['default' => 1], ['default' => 0]);
+            $this->skip_validation($validate);
         }
 
         return parent::update($id, $data);
@@ -205,13 +201,13 @@ class Role_model extends BF_Model
     /**
      * Verifies that a role can be deleted.
      *
-     * @param integer $role_id The role to verify.
+     * @param int $role_id The role to verify.
      *
-     * @return boolean True if the role can be deleted, else false.
+     * @return bool True if the role can be deleted, else false.
      */
     public function can_delete_role($role_id = 0)
     {
-        $this->db->select('can_delete');
+        $this->select('can_delete');
         $delete_role = parent::find($role_id);
 
         return $delete_role->can_delete == 1;
@@ -224,11 +220,11 @@ class Role_model extends BF_Model
      * However, if $purge == true, then all permissions related to this role are
      * also deleted.
      *
-     * @param integer $id    An integer with the role_id to delete.
-     * @param boolean $purge If false, will perform a soft_delete. If true, will
+     * @param int  $id    An integer with the role_id to delete.
+     * @param bool $purge If false, will perform a soft_delete. If true, will
      * remove the role and related permissions from db.
      *
-     * @return boolean True on successful delete, else false.
+     * @return bool True on successful delete, else false.
      */
     public function delete($id = 0, $purge = false)
     {
@@ -249,10 +245,10 @@ class Role_model extends BF_Model
             $this->soft_deletes = false;
         }
 
-        // Get the name for permission deletion later.
+        // Get the role name for permission deletion later.
         $role = $this->role_model->find($id);
 
-        // Delete the record
+        // Delete the record.
         $deleted = parent::delete($id);
         if ($deleted === true) {
             // Update the users to the default role.
@@ -280,7 +276,7 @@ class Role_model extends BF_Model
                 if ($purge === true) {
                     $this->permission_model->delete_by_name($permission_name);
                 } else {
-                    $this->permission_model->update(array('name' => $permission_name), array('status' => 'inactive'));
+                    $this->permission_model->update(['name' => $permission_name], ['status' => 'inactive']);
                 }
             }
         }
@@ -296,18 +292,19 @@ class Role_model extends BF_Model
     /**
      * Returns the id of the default role.
      *
-     * @return integer|boolean ID of the default role or false.
+     * @return int|bool ID of the default role or false.
      */
     public function default_role_id()
     {
-        $this->db->where('default', 1);
-
+        $this->where('default', 1);
         $query = $this->db->get($this->table_name);
-        if ($query->num_rows() == 1) {
-            return (int)$query->row()->role_id;
+
+        $row = $query->row();
+        if (empty($row) || ! isset($row->role_id)) {
+            return false;
         }
 
-        return false;
+        return (int) $row->role_id;
     }
 
     //--------------------------------------------------------------------------
@@ -335,26 +332,22 @@ class Role_model extends BF_Model
         $permissions = $this->permission_model->find_all_by('status', 'active');
 
         // Setup the permissions for the role.
-        $permission_array = array();
+        $role->permissions = [];
         foreach ($permissions as $key => $permission) {
-            $permission_array[$permission->name] = $permission;
+            $role->permissions[$permission->name] = $permission;
         }
-
-        $role->permissions = $permission_array;
 
         if (! class_exists('role_permission_model', false)) {
             $this->load->model('roles/role_permission_model');
         }
 
         // Get the role permissions for the role
-        $permission_array = array();
+        $role->role_permissions = [];
         $role_permissions = $this->role_permission_model->find_for_role($role->role_id);
-        if (is_array($role_permissions) && count($role_permissions)) {
+        if (! empty($role_permissions) && is_array($role_permissions)) {
             foreach ($role_permissions as $key => $permission) {
-                $permission_array[$permission->permission_id] = 1;
+                $role->role_permissions[$permission->permission_id] = 1;
             }
         }
-
-        $role->role_permissions = $permission_array;
     }
 }
