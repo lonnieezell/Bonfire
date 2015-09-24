@@ -8,7 +8,7 @@
  * @package   Bonfire
  * @author    Bonfire Dev Team
  * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -17,8 +17,7 @@
 /**
  * Role Permissions Settings Model
  *
- * Provides access and utility methods for handling permission storage in the
- * database.
+ * Provides access and utility methods for handling permission storage in the database.
  *
  * Permissions are a simple string made up of 3 parts:
  * * Domain  - A generic classification system
@@ -36,47 +35,33 @@
  */
 class Role_permission_model extends BF_Model
 {
-    /**
-     * @var string Name of the table
-     */
+    /** @var string Name of the table. */
     protected $table_name = 'role_permissions';
 
-    /**
-     * @var string Name of the primary key
-     */
+    /** @var string Name of the primary key. */
     protected $key = 'permission_id';
 
-    /**
-     * @var bool Use soft deletes (if true)
-     */
+    /** @var bool Use soft deletes (if true). */
     protected $soft_deletes = true;
 
-    /**
-     * @var string The date format to use
-     */
+    /** @var string The date format to use. */
     protected $date_format = 'datetime';
 
-    /**
-     * @var bool Set the created time automatically on a new record (if true)
-     */
+    /** @var bool Set the created time automatically (if true). */
     protected $set_created = false;
 
-    /**
-     * @var bool Set the modified time automatically on editing a record (if true)
-     */
+    /** @var bool Set the modified time automatically (if true) */
     protected $set_modified = false;
 
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Create a new role permission entry
      *
-     * @access public
-     *
      * @param int $role_id       ID of the role
      * @param int $permission_id ID of the permission
      *
-     * @return mixed ID of the new record or false if an error
+     * @return int|bool ID of the new record or false if an error.
      */
     public function create($role_id, $permission_id = null)
     {
@@ -90,12 +75,7 @@ class Role_permission_model extends BF_Model
             return false;
         }
 
-        $data = array(
-            'role_id' => $role_id,
-            'permission_id' => $permission_id,
-        );
-
-        return $this->insert($data);
+        return $this->insert(['role_id' => $role_id, 'permission_id' => $permission_id]);
     }
 
     /**
@@ -108,7 +88,7 @@ class Role_permission_model extends BF_Model
      */
     private function delete_for($role_id, $permission_id)
     {
-        $where = array();
+        $where = [];
         if (! empty($role_id)) {
             $where['role_id'] = $role_id;
         }
@@ -190,9 +170,9 @@ class Role_permission_model extends BF_Model
      * @param array $permissions A simple array with the values being equal to
      * the name of the permission to set. All other permissions are set to 0.
      *
-     * @return mixed    false on empty or non-numeric $role_id, else void
+     * @return bool|void False on empty or non-numeric $role_id, else void.
      */
-    public function set_for_role($role_id = null, $permissions = array())
+    public function set_for_role($role_id = null, $permissions = [])
     {
         if (empty($role_id) || ! is_numeric($role_id)) {
             return false;
@@ -205,12 +185,12 @@ class Role_permission_model extends BF_Model
         }
 
         // Set the permissions
-        $permission_data = array();
+        $permission_data = [];
         foreach ($permissions as $key => $permission_id) {
-            $permission_data[] = array(
-                'role_id' => $role_id,
+            $permission_data[] = [
+                'role_id'       => $role_id,
                 'permission_id' => $permission_id,
-            );
+            ];
         }
 
         $this->insert_batch($permission_data);
@@ -220,10 +200,10 @@ class Role_permission_model extends BF_Model
      *  A convenience method to assign a single permission to a role by names,
      *  rather than by ids.
      *
-     * @param   str $role_name          The name of the role
-     * @param   str $permission_name    The name of the permission to assign.
+     * @param string $role_name       The name of the role
+     * @param string $permission_name The name of the permission to assign.
      *
-     * @return mixed The inserted id or false on error
+     * @return int|bool The inserted id or false on error.
      */
     public function assign_to_role($role_name = null, $permission_name = null)
     {
@@ -269,8 +249,6 @@ class Role_permission_model extends BF_Model
     /**
      * Find all of the roles
      *
-     * @access public
-     *
      * @return object
      */
     public function find_all_roles()
@@ -283,12 +261,12 @@ class Role_permission_model extends BF_Model
     }
 
     /**
-     * Create a new role permission entry
+     * Create a new role permission entry.
      *
-     * @param int $role_id       ID of the role
-     * @param int $permission_id ID of the permission#
+     * @param int $role_id       ID of the role.
+     * @param int $permission_id ID of the permission.
      *
-     * @return bool true on success, else false
+     * @return bool true on success, else false.
      */
     public function create_role_permissions($role_id, $permission_id)
     {
@@ -296,12 +274,12 @@ class Role_permission_model extends BF_Model
     }
 
     /**
-     * Delete the permission for the role
+     * Delete the permission for the role.
      *
-     * @param int $role_id       ID of the role
-     * @param int $permission_id ID of the permission#
+     * @param int $role_id       ID of the role.
+     * @param int $permission_id ID of the permission.
      *
-     * @return bool true on success, else false
+     * @return bool true on success, else false.
      */
     public function delete_role_permissions($role_id, $permission_id)
     {
