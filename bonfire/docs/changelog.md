@@ -3,6 +3,7 @@
 ## Under development
 
 ### 0.7.8
+Upgraded CodeIgniter 2 to 2.2.5
 
 #### New Features:
 
