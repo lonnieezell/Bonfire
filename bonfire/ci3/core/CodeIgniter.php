@@ -55,7 +55,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @var	string
  *
  */
-	define('CI_VERSION', '3.0.1');
+	define('CI_VERSION', '3.0.2');
 
 /*
  * ------------------------------------------------------
@@ -405,6 +405,7 @@ if ( ! is_php('5.4'))
 	}
 	else
 	{
+        // Check for Bonfire controller if Application controller was not found.
         if (file_exists(APPPATH.'controllers/'.$RTR->directory.$class.'.php')) {
     		require_once(APPPATH.'controllers/'.$RTR->directory.$class.'.php');
         } elseif (file_exists(BFPATH . 'controllers/' . $RTR->directory . $class . '.php')) {

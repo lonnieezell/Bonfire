@@ -3,6 +3,7 @@
 ## Under development
 
 ### 0.8.4
+Upgraded CodeIgniter 3 to 3.0.2
 
 ## Released versions
 
