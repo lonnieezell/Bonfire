@@ -4,6 +4,7 @@
 
 ### 0.7.8
 Upgraded CodeIgniter 2 to 2.2.5
+Upgraded CodeIgniter 3 to 3.0.2
 
 #### New Features:
 

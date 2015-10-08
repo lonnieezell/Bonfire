@@ -14,10 +14,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | always be used to set the mode correctly.
 |
 */
-define('FILE_READ_MODE', 0644);
-define('FILE_WRITE_MODE', 0666);
-define('DIR_READ_MODE', 0755);
-define('DIR_WRITE_MODE', 0777);
+defined('FILE_READ_MODE')  || define('FILE_READ_MODE', 0644);
+defined('FILE_WRITE_MODE') || define('FILE_WRITE_MODE', 0666);
+defined('DIR_READ_MODE')   || define('DIR_READ_MODE', 0755);
+defined('DIR_WRITE_MODE')  || define('DIR_WRITE_MODE', 0775);
 
 /*
 |--------------------------------------------------------------------------
@@ -27,14 +27,14 @@ define('DIR_WRITE_MODE', 0777);
 | These modes are used when working with fopen()/popen()
 |
 */
-define('FOPEN_READ', 'rb');
-define('FOPEN_READ_WRITE', 'r+b');
-define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
-define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
-define('FOPEN_WRITE_CREATE', 'ab');
-define('FOPEN_READ_WRITE_CREATE', 'a+b');
-define('FOPEN_WRITE_CREATE_STRICT', 'xb');
-define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
+defined('FOPEN_READ')                           || define('FOPEN_READ', 'rb');
+defined('FOPEN_READ_WRITE')                     || define('FOPEN_READ_WRITE', 'r+b');
+defined('FOPEN_WRITE_CREATE_DESTRUCTIVE')       || define('FOPEN_WRITE_CREATE_DESTRUCTIVE', 'wb'); // truncates existing file data, use with care
+defined('FOPEN_READ_WRITE_CREATE_DESCTRUCTIVE') || define('FOPEN_READ_WRITE_CREATE_DESTRUCTIVE', 'w+b'); // truncates existing file data, use with care
+defined('FOPEN_WRITE_CREATE')                   || define('FOPEN_WRITE_CREATE', 'ab');
+defined('FOPEN_READ_WRITE_CREATE')              || define('FOPEN_READ_WRITE_CREATE', 'a+b');
+defined('FOPEN_WRITE_CREATE_STRICT')            || define('FOPEN_WRITE_CREATE_STRICT', 'xb');
+defined('FOPEN_READ_WRITE_CREATE_STRICT')       || define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 
 // -----------------------------------------------------------------------------
 // CI3 Constants - These may not be honored by the system (especially SHOW_DEBUG_BACKTRACE),
@@ -51,7 +51,7 @@ define('FOPEN_READ_WRITE_CREATE_STRICT', 'x+b');
 | of this setting
 |
 */
-define('SHOW_DEBUG_BACKTRACE', true);
+defined('SHOW_DEBUG_BACKTRACE') || define('SHOW_DEBUG_BACKTRACE', true);
 
 /*
 |--------------------------------------------------------------------------
@@ -78,29 +78,28 @@ define('SHOW_DEBUG_BACKTRACE', true);
 | http://tldp.org/LDP/abs/html/exitcodes.html
 |
 */
-define('EXIT_SUCCESS', 0); // no errors
-define('EXIT_ERROR', 1); // generic error
-define('EXIT_CONFIG', 3); // configuration error
-define('EXIT_UNKNOWN_FILE', 4); // file not found
-define('EXIT_UNKNOWN_CLASS', 5); // unknown class
-define('EXIT_UNKNOWN_METHOD', 6); // unknown class member
-define('EXIT_USER_INPUT', 7); // invalid user input
-define('EXIT_DATABASE', 8); // database error
-define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
-define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
+defined('EXIT_SUCCESS')        || define('EXIT_SUCCESS', 0); // no errors
+defined('EXIT_ERROR')          || define('EXIT_ERROR', 1); // generic error
+defined('EXIT_CONFIG')         || define('EXIT_CONFIG', 3); // configuration error
+defined('EXIT_UNKNOWN_FILE')   || define('EXIT_UNKNOWN_FILE', 4); // file not found
+defined('EXIT_UNKNOWN_CLASS')  || define('EXIT_UNKNOWN_CLASS', 5); // unknown class
+defined('EXIT_UNKNOWN_METHOD') || define('EXIT_UNKNOWN_METHOD', 6); // unknown class member
+defined('EXIT_USER_INPUT')     || define('EXIT_USER_INPUT', 7); // invalid user input
+defined('EXIT_DATABASE')       || define('EXIT_DATABASE', 8); // database error
+defined('EXIT__AUTO_MIN')      || define('EXIT__AUTO_MIN', 9); // lowest automatically-assigned error code
+defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 // -----------------------------------------------------------------------------
 // Bonfire-specific Constants
 // -----------------------------------------------------------------------------
-
-define('BONFIRE_VERSION', 'v0.7.8-dev');
+defined('BONFIRE_VERSION') || define('BONFIRE_VERSION', 'v0.7.8-dev');
 
 // -----------------------------------------------------------------------------
 // The 'App Area' allows you to specify the base folder used for all of the contexts
 // in the app. By default, this is set to '/admin', but this does not make sense
 // for all applications.
 // -----------------------------------------------------------------------------
-define('SITE_AREA', 'admin');
+defined('SITE_AREA') || define('SITE_AREA', 'admin');
 
 // -----------------------------------------------------------------------------
 // The 'LOGIN_URL' and 'REGISTER_URL' constant allows changing of the url where
@@ -116,10 +115,10 @@ define('REGISTER_URL', 'register');
 // The 'IS_AJAX' constant allows for a quick simple test as to whether the current
 // request was made with XHR.
 // -----------------------------------------------------------------------------
-// @todo Shouldn't this work without the "? true : false" portion?
 //
-$ajax_request = (! empty($_SERVER['HTTP_X_REQUESTED_WITH'])
-        && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest'
-    ) ? true : false;
-define('IS_AJAX', $ajax_request);
-unset($ajax_request);
+if (! defined('IS_AJAX')) {
+    $ajax_request = ! empty($_SERVER['HTTP_X_REQUESTED_WITH'])
+        && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
+    define('IS_AJAX', $ajax_request);
+    unset($ajax_request);
+}
