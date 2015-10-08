@@ -350,6 +350,9 @@ $config['encryption_key'] = "58f62e7a5c072527eb00fad7ccb6f547";
 |
 |	Whether to match the user's IP address when reading the session data.
 |
+|	WARNING: If you're using the database driver, don't forget to update
+|	         your session table's PRIMARY KEY when changing this setting.
+|
 | 'sess_time_to_update'
 |
 |	How many seconds between CI regenerating the session ID.

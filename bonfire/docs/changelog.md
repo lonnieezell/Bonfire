@@ -4,6 +4,7 @@
 
 ### 0.9.0
 * Minimum PHP version changed to 5.4
+* Upgraded CodeIgniter 3 to 3.0.2
 * Removed CI2 compatibility
 * Removed functions/methods/properties deprecated prior to 0.7.4/0.8.0.
 * Upgraded CSSMin to 3.0.3 [natxet/CssMin](https://github.com/natxet/CssMin)
