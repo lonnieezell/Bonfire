@@ -92,15 +92,14 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest auto
 // -----------------------------------------------------------------------------
 // Bonfire-specific Constants
 // -----------------------------------------------------------------------------
-
-define('BONFIRE_VERSION', 'v0.8.4-dev');
+defined('BONFIRE_VERSION') || define('BONFIRE_VERSION', 'v0.8.4-dev');
 
 // -----------------------------------------------------------------------------
 // The 'App Area' allows you to specify the base folder used for all of the contexts
 // in the app. By default, this is set to '/admin', but this does not make sense
 // for all applications.
 // -----------------------------------------------------------------------------
-define('SITE_AREA', 'admin');
+defined('SITE_AREA') || define('SITE_AREA', 'admin');
 
 // -----------------------------------------------------------------------------
 // The 'LOGIN_URL' and 'REGISTER_URL' constant allows changing of the url where
