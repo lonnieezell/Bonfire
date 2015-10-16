@@ -11,6 +11,7 @@
 #### New Features:
 
 #### Closes Issues:
+* #1163/1164: Fix /public/tests.php shows "SimpleTest documentation" instead of "Bonfire Tests".
 
 #### Additional Changes:
 
