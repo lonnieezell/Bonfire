@@ -56,6 +56,10 @@ class MY_DB {
     public function row_array() { }
     public function result_array() { }
     public function num_rows() { }
+
+    // Fixed Fatal error: Call to undefined method MockMY_DB::error()
+    // when running user_model_test.php
+    public function error() { }
 }
 
 /*

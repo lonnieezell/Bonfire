@@ -84,7 +84,7 @@ class assets_test extends CI_UnitTestCase {
     public function test_css_includes_media_type()
     {
         $r = Assets::css();
-        $this->assertTrue(strpos($r, 'media="screen"') !== false, 'Value = "'. htmlentities($r) .'"');
+        $this->assertTrue(strpos($r, "media='screen'") !== false, 'Value = "'. htmlentities($r) .'"');
     }
 
     //--------------------------------------------------------------------
@@ -92,7 +92,7 @@ class assets_test extends CI_UnitTestCase {
     public function test_css_includes_media_type_with_string_passed()
     {
         $r = Assets::css('screen');
-        $this->assertTrue(strpos($r, 'media="screen"') !== false, 'Value = "'. htmlentities($r) .'"');
+        $this->assertTrue(strpos($r, "media='screen'") !== false, 'Value = "'. htmlentities($r) .'"');
     }
 
     //--------------------------------------------------------------------
