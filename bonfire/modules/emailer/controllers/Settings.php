@@ -264,6 +264,7 @@ class Settings extends Admin_Controller
      */
     public function create()
     {
+        $this->load->helper('date_helper');
         $this->load->model('users/user_model');
 
         if (isset($_POST['create'])) {

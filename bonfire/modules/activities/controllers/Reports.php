@@ -59,6 +59,8 @@ class Reports extends Admin_Controller
 
         $this->load->model('activities/activity_model');
 
+        $this->load->helper('date_helper');
+
         Assets::add_js(
             array(
                 'bootstrap',
@@ -358,11 +360,12 @@ class Reports extends Admin_Controller
                 break;
             case 'activity_date':
                 foreach ($this->activity_model->find_all_by($activityDeletedField, 0) as $e) {
-                    $options[$e->activity_id] = $e->created_on;
+                    $options[$e->activity_id] = user_time(strtotime($e->created_on), null);
                     if ($filterValue == $e->activity_id) {
                         $name = $e->created_on;
                     }
                 }
+
                 $where = 'activity_id';
                 Template::set('hasPermissionDeleteDate', $this->auth->has_permission($this->permissionDeleteDate));
                 break;

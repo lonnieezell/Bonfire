@@ -65,6 +65,8 @@ class Settings extends Admin_Controller
      */
     public function index($filter = 'all', $offset = 0)
     {
+        $this->load->helper('date_helper');
+
         $this->auth->restrict($this->permissionManage);
 
         // Fetch roles for the filter and the list.
