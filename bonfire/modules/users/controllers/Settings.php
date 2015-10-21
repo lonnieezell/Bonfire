@@ -538,9 +538,10 @@ class Settings extends Admin_Controller
             $this->user_model->save_meta_for($id, $metaData);
         }
 
+        // Add result to payload.
+        $payload['result'] = $result;
         // Any modules needing to save data?
-        $postData = $this->input->post();
-        Events::trigger('save_user', $postData);
+        Events::trigger('save_user', $payload);
 
         return $result;
     }
