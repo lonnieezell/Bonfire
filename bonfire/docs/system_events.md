@@ -59,6 +59,8 @@ Event	 | Description
 ---------------------------------|-------------
 before_controller	 | Called prior to the controller constructor being ran. Payload is the name of the current controller.	|
 after_controller_constructor	| Called just after the controller constructor is ran, but prior to the method being ran. Payload is the name of the current controller.	|
+before_front_controller | Called prior to the Front Controller constructor being ran. No Payload.
+after_front_controller | Called just after the Front Controller constructor being ran. No Payload.
 
 **Templates and Pages**
 
@@ -72,11 +74,15 @@ after_block_render	 | Called just after the block is rendered. Payload is an arr
 
 Event	 | Description
 -----------------------------|---------------
+purge_user | Called after a user is purged(hard-deleted from db). Payload is user's id. |
+before_user_validation | Called on saving a user from either `insert` or `update` before running form validation. Payload is an array of `user_id` and POST `data`|
 after_login	 | Called after successful login. Payload is an array of `user_id` and `role_id`.	|
 before_logout	 | Called just before logging the user out. Payload is an array of `user_id` and `role_id`.	|
 after_create_user	 | Called after a user is created. Payload is the new user’s id.	|
 before_user_update	 | Called just prior to updating a user. Payload is an array of `user_id` and ‘data’, where data is all of the update information passed into the method. Note: `user_id` may be an array if the `user_model`'s `update()` method is called with an array as the first parameter. In this case, the user's ID may not be in the array...	|
 after_user_update	 | Called just after updating a user. Payload is an array of `user_id` and ‘data’, where data is all of the update information passed into the method. Note: `user_id` may be an array if the `user_model`'s `update()` method is called with an array as the first parameter. In this case, the user's ID may not be in the array...	|
+save_user | Called after a user is inserted or updated and meta data is saved. Payload is an array of `user_id`, `result` of insert and update, and POST `data`. Note: `result` from insert is boolean|integer The ID of the new user on success, else false. `result` from update is boolean True if the update succeeded, null on invalid $id, or false on failure. |
+render_user_form     | Called on user form views before rendering user_meta fields. This allow modules to render custom fields. Payload is `null` on registration and user data on profile or updating user. 
 
 ## Using Events In Your Modules
 
