@@ -607,6 +607,8 @@ class Users extends Front_Controller
             $this->user_model->save_meta_for($id, $metaData);
         }
 
+        // Add result to payload.
+        $payload['result'] = $result;
         // Trigger event after saving the user.
         Events::trigger('save_user', $payload);
 
