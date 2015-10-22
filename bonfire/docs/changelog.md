@@ -12,8 +12,11 @@
 
 #### Closes Issues:
 * #1163/1164: Fix /public/tests.php shows "SimpleTest documentation" instead of "Bonfire Tests".
+* #1165: Fixed failed tests and updated root index.php
+* #1168/1166: Fixed wrong date displayed due to un-utilized user timezone.
 
 #### Additional Changes:
+* #1169/1166: Add 'result' to save_user payload to provide payload consistency with Settings.php and Users.php
 
 #### Known Issues:
 
