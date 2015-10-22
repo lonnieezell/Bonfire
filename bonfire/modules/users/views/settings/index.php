@@ -101,7 +101,7 @@ else :
 				<td><?php echo $user->display_name; ?></td>
 				<td><?php echo $user->email ? mailto($user->email) : ''; ?></td>
 				<td><?php echo $roles[$user->role_id]->role_name; ?></td>
-				<td class='last-login'><?php echo $user->last_login != '0000-00-00 00:00:00' ? date('M j, y g:i A', strtotime($user->last_login)) : '---'; ?></td>
+				<td class='last-login'><?php echo $user->last_login != '0000-00-00 00:00:00' ? user_time(strtotime($user->last_login), null, 'M j, y g:i A') : '---'; ?></td>
 				<td class='status'>
 					<?php if ($user->active) : ?>
 					<span class="label label-success"><?php echo lang('us_active'); ?></span>
