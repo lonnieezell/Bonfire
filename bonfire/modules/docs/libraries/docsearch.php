@@ -101,7 +101,7 @@ class DocSearch
     private function search_folder($term, $folder)
     {
         $results = array();
-        $map = directory_map($folder, 2);
+        $map = bcDirectoryMap($folder, 2);
 
         // Make sure we have something to work with.
         if (empty($map) || ! is_array($map)) {
@@ -160,9 +160,10 @@ class DocSearch
                         continue;
                     }
 
-                    $result_url = '/docs/'. str_replace('docs', '', $folder) . str_replace('.md', '', $file);
+                    $result_url = '/docs/'. str_replace('docs', '', $folder . '/') . str_replace('.md', '', $file);
                     $result_url = str_replace(BFPATH, 'developer/', $result_url);
                     $result_url = str_replace(APPPATH, 'application/', $result_url);
+                    $result_url = str_replace('//', '/', $result_url);
 
                     $results[] = array(
                         'title'   => $this->extract_title($excerpt, $file),
