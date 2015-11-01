@@ -341,6 +341,9 @@ function discover_tests($start_folder=null, $ignore_onlys=false)
 	{
 		foreach ($folders as $folder)
 		{
+            // remove trailing backslash
+            $folder = rtrim($folder, DIRECTORY_SEPARATOR);
+
 			// Folders get ran back through this function
 			// and will return an array of valid files.
 			// Merge this array with ours and call it good.

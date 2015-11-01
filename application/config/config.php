@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') || exit('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
 |--------------------------------------------------------------------------
@@ -37,15 +37,16 @@ $config['index_page'] = "index.php";
 |--------------------------------------------------------------------------
 |
 | This item determines which server global should be used to retrieve the
-| URI string.  The default setting of 'AUTO' works for most servers.
+| URI string.  The default setting of 'REQUEST_URI' works for most servers.
 | If your links do not seem to work, try one of the other delicious flavors:
 |
-| 'AUTO'		Default - auto detects
+| 'AUTO'		    auto detects
 | 'CLI' or 'argv'	Uses $_SERVER['argv'] (for php-cli only) // CI3
-| 'PATH_INFO'		Uses $_SERVER['PATH_INFO']
 | 'REQUEST_URI'		Uses $_SERVER['REQUEST_URI']
 | 'QUERY_STRING'	Uses $_SERVER['QUERY_STRING']
+| 'PATH_INFO'		Uses $_SERVER['PATH_INFO']
 |
+| WARNING: If you set this to 'PATH_INFO', URIs will always be URL-decoded!
  */
 $config['uri_protocol']	= 'AUTO';
 
@@ -192,8 +193,6 @@ $config['directory_trigger'] = 'd';
 | Error Logging Threshold
 |--------------------------------------------------------------------------
 |
-| If you have enabled error logging, you can set an error threshold to
-| determine what gets logged. Threshold options are:
 | You can enable error logging by setting a threshold over zero. The
 | threshold determines what gets logged. Threshold options are:
 |
@@ -203,7 +202,7 @@ $config['directory_trigger'] = 'd';
 |	3 = Informational Messages
 |	4 = All Messages
 |
-| You can also pass in a array with threshold levels to show individual error types
+| You can also pass an array with threshold levels to show individual error types
 |
 | 	array(2) = Debug Messages, without Error Messages
 |
@@ -272,7 +271,6 @@ $config['log_date_format'] = 'Y-m-d H:i:s';
 */
 $config['error_views_path'] = '';
 
-
 /*
 |--------------------------------------------------------------------------
 | Cache Directory Path
@@ -289,8 +287,15 @@ $config['cache_path'] = APPPATH . 'cache/';
 | Cache Include Query String (CI3)
 |--------------------------------------------------------------------------
 |
-| Set this to TRUE if you want to use different cache files depending on the
-| URL query string.  Please be aware this might result in numerous cache files.
+| Whether to take the URL query string into consideration when generating
+| output cache files. Valid options are:
+|
+|	FALSE      = Disabled
+|	TRUE       = Enabled, take all query parameters into account.
+|	             Please be aware that this may result in numerous cache
+|	             files generated for the same page over and over again.
+|	array('q') = Enabled, but only take into account the specified list
+|	             of query parameters.
 |
  */
 $config['cache_query_string'] = false;
@@ -309,9 +314,9 @@ $config['cache_query_string'] = false;
 $config['encryption_key'] = "a474231e8d5f13af5c0de89cd4879f8f";
 
 /*
-|------------------------------------------------------------------------------
+|--------------------------------------------------------------------------
 | Session Variables
-|------------------------------------------------------------------------------
+|--------------------------------------------------------------------------
 | (CI2)
 | 'sess_cookie_name'     = the name you want for the cookie
 | 'sess_expiration'      = the number of SECONDS you want the session to last.
@@ -342,7 +347,7 @@ $config['encryption_key'] = "a474231e8d5f13af5c0de89cd4879f8f";
 |
 | 'sess_save_path'
 |
-|	The location to save sessions to, driver dependant.
+|	The location to save sessions to, driver dependent.
 |
 |	For the 'files' driver, it's a path to a writable directory.
 |   WARNING: Only absolute paths are supported!
@@ -352,9 +357,16 @@ $config['encryption_key'] = "a474231e8d5f13af5c0de89cd4879f8f";
 |
 |	IMPORTANT: You are REQUIRED to set a valid save path!
 |
+|   Bonfire note: If you use a different database table name in 'sess_save_path', update
+|   /bonfire/migrations/043_Add_ci3_sessions.php
+|   accordingly or create the table manually.
+|
 | 'sess_match_ip'
 |
 |	Whether to match the user's IP address when reading the session data.
+|
+|	WARNING: If you're using the database driver, don't forget to update
+|	         your session table's PRIMARY KEY when changing this setting.
 |
 | 'sess_time_to_update'
 |
@@ -386,10 +398,6 @@ $config['sess_match_useragent'] = true; // May duplicate sessions for Safari use
 // CI 3 Session Variables
 $config['sess_driver'] = 'database';
 $config['sess_regenerate_destroy'] = false;
-
-// If you use a different database table name, update
-// /bonfire/migrations/043_Add_ci3_sessions.php
-// accordingly or create the table manually.
 $config['sess_save_path'] = 'ci3_sessions';
 
 /*
@@ -419,7 +427,7 @@ $config['cookie_httponly'] = false;
 |--------------------------------------------------------------------------
 |
 | Determines whether to standardize newline characters in input data,
-| meaning to replace \r\n, \r, \n occurences with the PHP_EOL value.
+| meaning to replace \r\n, \r, \n occurrences with the PHP_EOL value.
 |
 | This is particularly useful for portability between UNIX-based OSes,
 | (usually \n) and Windows (\r\n).
@@ -434,6 +442,9 @@ $config['standardize_newlines'] = false;
 |
 | Determines whether the XSS filter is always active when GET, POST or
 | COOKIE data is encountered
+|
+| WARNING: This feature is DEPRECATED in CI3 and currently available only
+|          for backwards compatibility purposes!
 |
  */
 $config['global_xss_filtering'] = false;
@@ -502,6 +513,8 @@ $config['time_reference'] = 'utc';
 | If your PHP installation does not have short tag support enabled CI
 | can rewrite the tags on-the-fly, enabling you to utilize that syntax
 | in your view files.  Options are TRUE or FALSE (boolean)
+|
+| Note: You need to have eval() enabled for this to work.
 |
  */
 $config['rewrite_short_tags'] = false;

@@ -11,7 +11,8 @@ if (validation_errors()) :
     <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
         <fieldset>
             <legend><?php echo lang('role_details'); ?></legend>
-            <div class="form-group<?php echo form_error('role_name') ? ' error' : ''; ?>">
+            <input type='hidden' name='role_id' value="<?php echo set_value('role_id', isset($role) ? $role->role_id : ''); ?>" />
+            <div class="control-group<?php echo form_error('role_name') ? ' error' : ''; ?>">
                 <label class="control-label" for="role_name"><?php echo lang('role_name'); ?></label>
                 <div class="controls">
                     <input type="text" name="role_name" id="role_name" class="input-xlarge" value="<?php echo set_value('role_name', isset($role) ? $role->role_name : ''); ?>" />

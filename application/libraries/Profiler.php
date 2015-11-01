@@ -160,10 +160,10 @@ class CI_Profiler
         }
 
         $highlight = array(
-            'SELECT', 'DISTINCT', 'FROM', 'WHERE', 'and', 'LEFT&nbsp;JOIN', 'ORDER&nbsp;BY',
-            'GROUP&nbsp;BY', 'LIMIT', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'OR&nbsp;',
-            'HAVING', 'OFFSET', 'NOT&nbsp;IN', ' IN', 'LIKE', 'NOT&nbsp;LIKE',
-            'COUNT', 'MAX', 'MIN', ' ON', 'AS', 'AVG', 'SUM', '(', ')'
+            'SELECT', 'DISTINCT', 'FROM', 'WHERE', 'and', 'LEFT JOIN', 'ORDER BY',
+            'GROUP BY', 'LIMIT', 'INSERT', 'INTO', 'VALUES', 'UPDATE', 'OR ',
+            'HAVING', 'OFFSET', 'NOT IN', ' IN', 'LIKE', 'NOT LIKE',
+            'COUNT', 'MAX', 'MIN', ' ON', ' AS ', 'AVG', 'SUM', '(', ')'
         );
 
         $output = array();
@@ -173,20 +173,25 @@ class CI_Profiler
             } else {
                 $total  = 0; // total query time
                 $counts = array_count_values($db->queries);
+                $explainSupported = stripos($this->CI->db->platform(), 'mysql') !== false;
+                $explainPartial = $explainSupported && version_compare($this->CI->db->version(), '5.6.3', '<');
 
                 foreach ($db->queries as $key => $val) {
                     $duplicate = false;
                     $time = number_format($db->query_times[$key], 4);
                     $query = $duplicate ? "<span class='ci-profiler-duplicate'>{$val}</span>" : $val;
 
-                    $explain = strpos($val, 'SELECT') !== false ? $this->CI->db->query("EXPLAIN {$val}") : null;
+                    $explain = $explainSupported
+                        && stripos($val, 'SELECT') !== false
+                        && ! ($explainPartial && preg_match('/UPDATE|INSERT|DELETE/i', $val)
+                        ) ? $this->CI->db->query("EXPLAIN {$val}") : null;
                     if (! is_null($explain)) {
                         $query .= $this->build_sql_explain($explain->row(), $time);
                     }
 
                     $total += $db->query_times[$key];
                     foreach ($highlight as $bold) {
-                        $query = str_replace($bold, "<strong>{$bold}</strong>", $query);
+                        $query = str_ireplace($bold, "<strong>{$bold}</strong>", $query);
                     }
 
                     $output[] = array(

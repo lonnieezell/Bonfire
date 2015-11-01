@@ -171,7 +171,7 @@ endif;
         <fieldset class='form-actions'>
             <input type='submit' name='save' class='btn btn-primary' value=\"<?php echo lang('{$module_name_lower}_action_{$action_name}'); ?>\" />
             <?php echo lang('bf_or'); ?>
-            <?php echo anchor(SITE_AREA . '/{$controller_name}/{$module_name_lower}', lang('{$module_name_lower}_cancel'), 'class=\"btn btn-warning\"'); ?>
+            <?php echo anchor(SITE_AREA . '/" . strtolower($controller_name) . "/{$module_name_lower}', lang('{$module_name_lower}_cancel'), 'class=\"btn btn-warning\"'); ?>
             {$delete}
         </fieldset>
     <?php echo form_close(); ?>
