@@ -5,7 +5,7 @@
 ### 0.9.0
 * Minimum PHP version changed to 5.4
 
-* Upgraded CodeIgniter 3 to 3.0.2
+* Upgraded CodeIgniter 3 to 3.0.3
 * Upgraded CSSMin to 3.0.3 [natxet/CssMin](https://github.com/natxet/CssMin)
 * Upgraded JSMin to 1.1.2 [rgrove/jsmin-php](https://github.com/rgrove/jsmin-php) - need to evaluate potential replacement
 * Upgraded and deprecated `markdown_helper` and `markdown_extended_helper`. Use the [CommonMark library](https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/docs/commonmark.md) with one of the drivers in `/application/libraries/CommonMark/drivers/` instead.
