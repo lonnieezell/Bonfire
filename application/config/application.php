@@ -5,11 +5,11 @@ $config['bonfire.installed'] = "1";
  * Bonfire
  *
  * An open source project to allow developers to jumpstart their development of
- * CodeIgniter applications
+ * CodeIgniter applications.
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT    The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -21,16 +21,15 @@ $config['bonfire.installed'] = "1";
  */
 $config['site.default_user_timezone'] = 'UM8';
 
-//--------------------------------------------------------------------
+//------------------------------------------------------------------------------
 // Module Locations
-//--------------------------------------------------------------------
-// These paths are checked in the order listed whenever a module is
-// attempting to be located, whether it's loading a library, helper,
-// or routes file.
+//------------------------------------------------------------------------------
+// These paths are checked in the order listed when attempting to locate a module,
+// whether loading a library, helper, or routes file.
 //
 $config['modules_locations'] = array(
     realpath(APPPATH) . '/modules/' => '../../application/modules/',
-    realpath(APPPATH . '../bonfire') . '/modules/' => '../../bonfire/modules/',
+    realpath(BFPATH) . '/modules/' => '../../bonfire/modules/',
 );
 
 //------------------------------------------------------------------------------

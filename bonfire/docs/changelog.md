@@ -2,12 +2,14 @@
 
 ## Under development
 
-### 0.8.1
+### 0.7.8
+Upgraded CodeIgniter 2 to 2.2.5
+Upgraded CodeIgniter 3 to 3.0.2
 
 #### New Features:
 
 #### Closes Issues:
-* #1118 Settings error when password options are not selected in security tab.
+* #1163/1164: Fix /public/tests.php shows "SimpleTest documentation" instead of "Bonfire Tests".
 
 #### Additional Changes:
 
@@ -15,15 +17,56 @@
 
 ## Released versions
 
-### 0.8.0
+### 0.7.7
+* Upgraded CodeIgniter 3 to 3.0.1
+* Upgraded CodeIgniter 2 to 2.2.4
 
 #### New Features:
-* Installed/Enabled version of CodeIgniter upgraded to 3.0
-* CI v2.x compatibility maintained, but requires [some additional steps to use/enable](https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/docs/ci2.md).
+* MY_*_helper files can now override BF_*_helper files
 
 #### Closes Issues:
+* #1153: Error: "Undefined index: user_agent" caused by out-dated `MX_Loader`.
+* #1154: [Builder] Cancel button contains "Content" instead of "content".
 
 #### Additional Changes:
+* `user_meta` view in `users` module updated to make it less likely to have issues with PHP 7.
+
+#### Known Issues:
+
+### 0.7.6
+
+#### New Features:
+
+#### Closes Issues:
+* #1151: [BF_Router] Call to undefined method `_set_404override_controller()`
+* #1150: Changing Role name breaks permissions
+* #1149: Blog Tutorial defined `$modified_field` without default value.
+* #1147: Unique validation fails on existing role.
+* #1144: Emailer lang entries missing when sending mail from users module.
+* #1142: Module Builder: Fix #1128 properly (undefined property: Modulebuilder::$load).
+
+#### Additional Changes:
+
+#### Known Issues:
+
+### 0.7.5
+
+#### New Features:
+
+#### Closes Issues:
+* #1136 Profiler: MySQL explain update fails on older versions.
+* #1131 Modules Library: modules_locations not loaded from application config.
+* #1128 Module Builder: Use of `strip_slashes()` without loading the string helper.
+* #1118 Settings error when password options are not selected in security tab.
+
+#### Additional Changes:
+* CI Upgraded to v2.2.3: Removed a fallback to `mysql_escape_string()` in the 'mysql' database driver (`escape_str()` method).
+
+* Builder: Added a note to the create_context page reminding users to add route(s) for the new context.
+* Contexts: Fix links when using `$top_level_only` parameter in `render_menu()`
+* Docs: update paths in installation docs to reflect 0.6 directory changes.
+* Installer: Fix error checking writable directories in APPPATH on Windows
+* Profiler: Improved SQL highlighting in Queries tab.
 
 #### Known Issues:
 

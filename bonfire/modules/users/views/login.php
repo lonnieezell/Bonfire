@@ -1,5 +1,6 @@
 <?php
 	$site_open = $this->settings_lib->item('auth.allow_register');
+	$wrapClass = empty($wrapClass) ? 'controls col-sm-6 col-lg-4' : $wrapClass;
 ?>
 <p><br/><a href="<?php echo site_url(); ?>">&larr; <?php echo lang('us_back_to') . $this->settings_lib->item('site.title'); ?></a></p>
 

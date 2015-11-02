@@ -195,7 +195,7 @@ if ( ! function_exists('load_class'))
 		// Did we find the class?
 		if ($name === FALSE)
 		{
-			// Note: We use exit() rather then show_error() in order to avoid a
+			// Note: We use exit() rather than show_error() in order to avoid a
 			// self-referencing loop with the Exceptions class
 			set_status_header(503);
 			echo 'Unable to locate the specified class: '.$class.'.php';
@@ -520,6 +520,9 @@ if ( ! function_exists('set_status_header'))
 		{
 			is_int($code) OR $code = (int) $code;
 		    $stati = array(
+				100	=> 'Continue',
+				101	=> 'Switching Protocols',
+
 			    200	=> 'OK',
 			    201	=> 'Created',
 			    202	=> 'Accepted',
@@ -538,6 +541,7 @@ if ( ! function_exists('set_status_header'))
 
 			    400	=> 'Bad Request',
 			    401	=> 'Unauthorized',
+				402	=> 'Payment Required',
 			    403	=> 'Forbidden',
 			    404	=> 'Not Found',
 			    405	=> 'Method Not Allowed',
@@ -687,7 +691,7 @@ if ( ! function_exists('_shutdown_handler'))
 	 * of CodeIgniter.php. The main reason we use this is to simulate
 	 * a complete custom exception handler.
 	 *
-	 * E_STRICT is purposivly neglected because such events may have
+	 * E_STRICT is purposively neglected because such events may have
 	 * been caught. Duplication or none? None is preferred for now.
 	 *
 	 * @link	http://insomanic.me.uk/post/229851073/php-trick-catching-fatal-errors-e-error-with-a
@@ -843,19 +847,9 @@ if ( ! function_exists('function_usable'))
 		{
 			if ( ! isset($_suhosin_func_blacklist))
 			{
-				if (extension_loaded('suhosin'))
-				{
-					$_suhosin_func_blacklist = explode(',', trim(ini_get('suhosin.executor.func.blacklist')));
-
-					if ( ! in_array('eval', $_suhosin_func_blacklist, TRUE) && ini_get('suhosin.executor.disable_eval'))
-					{
-						$_suhosin_func_blacklist[] = 'eval';
-					}
-				}
-				else
-				{
-					$_suhosin_func_blacklist = array();
-				}
+				$_suhosin_func_blacklist = extension_loaded('suhosin')
+					? explode(',', trim(ini_get('suhosin.executor.func.blacklist')))
+					: array();
 			}
 
 			return ! in_array($function_name, $_suhosin_func_blacklist, TRUE);

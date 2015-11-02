@@ -28,7 +28,7 @@ if (! empty($meta_fields)) :
             echo form_dropdown(
                 $field['form_detail']['settings'],
                 $field['form_detail']['options'],
-                set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : ''),
+                set_value($field['name'], isset($user->{$field['name']}) ? $user->{$field['name']} : ''),
                 $field['label']
             );
         elseif ($field['form_detail']['type'] == 'checkbox') :
@@ -42,7 +42,7 @@ if (! empty($meta_fields)) :
             $field['form_detail']['value'],
             $field['form_detail']['value'] == set_value(
                 $field['name'],
-                isset($user->$field['name']) ? $user->$field['name'] : ''
+                isset($user->{$field['name']}) ? $user->{$field['name']} : ''
             )
         );
         ?>
@@ -53,7 +53,7 @@ if (! empty($meta_fields)) :
             && is_callable('state_select')
         ) :
             $stateFieldId = $field['name'];
-            $stateValue = isset($user->$field['name']) ? $user->$field['name'] : $defaultState;
+            $stateValue = isset($user->{$field['name']}) ? $user->{$field['name']} : $defaultState;
 ?>
 <div class="form-group<?php echo form_error($field['name']) ? ' error' : ''; ?>">
     <label class="<?php echo $labelClass; ?>" for="<?php echo $field['name']; ?>"><?php echo lang('user_meta_state'); ?></label>
@@ -74,14 +74,14 @@ if (! empty($meta_fields)) :
             && is_callable('country_select')
         ) :
             $countryFieldId = $field['name'];
-            $countryValue = isset($user->$field['name']) ? $user->$field['name'] : $defaultCountry;
+            $countryValue = isset($user->{$field['name']}) ? $user->{$field['name']} : $defaultCountry;
 ?>
 <div class="form-group<?php echo form_error($field['name']) ? ' error' : ''; ?>">
     <label class="<?php echo $labelClass; ?>" for="<?php echo $field['name']; ?>"><?php echo lang('user_meta_country'); ?></label>
         <div class="<?php echo $wrapClass; ?>">
         <?php
         echo country_select(
-            set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : $defaultCountry),
+            set_value($field['name'], isset($user->{$field['name']}) ? $user->{$field['name']} : $defaultCountry),
             $defaultCountry,
             $field['name'],
             'chzn-select '.$controlClass
@@ -95,7 +95,7 @@ if (! empty($meta_fields)) :
             if (is_callable($form_method)) {
                 echo $form_method(
                     $field['form_detail']['settings'],
-                    set_value($field['name'], isset($user->$field['name']) ? $user->$field['name'] : ''),
+                    set_value($field['name'], isset($user->{$field['name']}) ? $user->{$field['name']} : ''),
                     $field['label']
                 );
             }

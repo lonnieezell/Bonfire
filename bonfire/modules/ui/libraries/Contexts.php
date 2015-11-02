@@ -250,7 +250,7 @@ class Contexts
                         self::$parent_class . ' ' . check_class($context, true),
                         site_url(self::$site_area . "/{$context}"),
                         "tb_{$context}",
-                        self::$templateContextMenuAnchorClass,
+                        $top_level_only ? '' : self::$templateContextMenuAnchorClass,
                         $title,
                         str_replace('{dataId}', $context, self::$templateContextMenuExtra),
                         $navTitle,

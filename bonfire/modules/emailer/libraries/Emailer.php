@@ -3,12 +3,13 @@
 /**
  * Bonfire
  *
- * An open source project to allow developers get a jumpstart their development of CodeIgniter applications
+ * An open source project to allow developers to jumpstart their development of
+ * CodeIgniter applications.
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License.
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -32,9 +33,9 @@
  * attempted if it called send_email to handle it), the code to send the email
  * shouldn't be completely separate for these two methods, either.
  *
- * @package    Bonfire\Modules\Emailer\Libraries\Emailer
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/guides
+ * @package Bonfire\Modules\Emailer\Libraries\Emailer
+ * @author  Bonfire Dev Team
+ * @link    https://github.com/ci-bonfire/Bonfire/blob/develop/bonfire/modules/emailer/docs/developer/index.md
  */
 class Emailer
 {
@@ -82,6 +83,9 @@ class Emailer
     public function __construct()
     {
         $this->ci =& get_instance();
+
+        // Make sure the emailer_ lang entries are available.
+        $this->ci->lang->load('emailer/emailer');
     }
 
     /**
