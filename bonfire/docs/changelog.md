@@ -18,6 +18,8 @@
 
 #### Additional Changes:
 * #1169/1166: Add 'result' to save_user payload to provide payload consistency with Settings.php and Users.php
+* #1177: Include Bonfire and Application modules when searching from Docs
+* #1178: Fixed docs default_group redirection
 
 #### Known Issues:
 
