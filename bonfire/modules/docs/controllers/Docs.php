@@ -33,7 +33,7 @@ class Docs extends Base_Controller
     protected $docsTypeBf  = 'developer';
     protected $docsTypeMod = 'module';
 
-    protected $ignoreFiles  = array('_404.md');
+    protected $ignoreFiles = array('_404.md');
     protected $tocFile;
 
     private $showAppDocs;
@@ -66,25 +66,27 @@ class Docs extends Base_Controller
             redirect();
         }
 
-        $this->showAppDocs = config_item('docs.show_app_docs');
-        $this->showDevDocs = config_item('docs.show_dev_docs');
-
-        // Was a doc group provided?
-        if (! $this->docsGroup) {
-            if($this->showAppDocs){
-                redirect('docs/application');
-            }
-            else if($this->showDevDocs){
-                redirect('docs/developer');
-            }
-            else{
-                redirect('docs/' . config_item('docs.default_group'));
-            }
-        }
-
         $this->tocFile = config_item('docs.toc_file') ?: '_toc.ini';
         $commonmark_driver = config_item('docs.commonmark_driver');
         $this->docsParser = empty($commonmark_driver) ? null : $commonmark_driver;
+
+        $this->showAppDocs = config_item('docs.show_app_docs');
+        $this->showDevDocs = config_item('docs.show_dev_docs');
+
+        Template::set_theme(config_item('docs.theme'), 'docs');
+
+        $this->load->helper('form');
+
+        // Was a doc group provided?
+        if (! $this->docsGroup) {
+            if ($this->showAppDocs) {
+                redirect('docs/application');
+            } elseif ($this->showDevDocs) {
+                redirect('docs/developer');
+            } else {
+                redirect('docs/' . config_item('docs.default_group'));
+            }
+        }
 
         // Make sure we can still get to the search method.
         if ($this->docsGroup == 'search') {
@@ -102,14 +104,10 @@ class Docs extends Base_Controller
 
             show_error(lang('docs_not_allowed'));
         }
-
-        Template::set_theme(config_item('docs.theme'), 'docs');
-
-        $this->load->helper('form');
     }
 
     /**
-     * Display the list of documents available and the current document
+     * Display the list of documents available and the current document.
      *
      * @return void
      */
@@ -117,10 +115,10 @@ class Docs extends Base_Controller
     {
         $data = array();
 
-        $content = $this->read_page($this->uri->segment_array());
-        $content = $this->post_process($content);
+        $content = $this->readPage($this->uri->segment_array());
+        $content = $this->postProcess($content);
 
-        $data['sidebar'] = $this->build_sidebar();
+        $data['sidebar'] = $this->buildSidebar();
         $data['content'] = $content;
 
         Template::set($data);
@@ -139,18 +137,16 @@ class Docs extends Base_Controller
 
         $terms = $this->input->post('search_terms');
         if ($terms) {
-            // set docsGroup and
-            // if both are disabled...
-            if(!$this->showAppDocs && !$this->showDevDocs){
+            // Set docsGroup and, if both are disabled...
+            if (! $this->showAppDocs && ! $this->showDevDocs) {
                 $docsGroup = config_item('docs.default_group');
                 $this->docsGroup = $docsGroup;
 
-                // if $docsGroup is "application"
-                if(strpos($docsGroup, "application") !== false){
+                // If $docsGroup is "application".
+                if (strpos($docsGroup, "application") !== false) {
                     $this->showAppDocs = true;
-                }
-                // if $docsGroup is "developer"
-                else  if(strpos($docsGroup, "developer") !== false){
+                } elseif (strpos($docsGroup, "developer") !== false) {
+                    // If $docsGroup is "developer".
                     $this->showDevDocs = true;
                 }
             }
@@ -164,24 +160,24 @@ class Docs extends Base_Controller
                 $search_folders[] = BFPATH . $this->docsDir;
             }
 
-            // Include modules when searching
-            foreach(Modules::list_modules() as $module){
-                // get module 'docs' path
+            // Include modules when searching.
+            foreach (Modules::list_modules() as $module) {
+                // Get module 'docs' path.
                 $path = Modules::path($module, 'docs');
 
-                // skip APPPATH . $this->docsDir string
-                if(strpos($path, "{$module}/docs") !== false){
+                // Skip APPPATH . $this->docsDir string.
+                if (strpos($path, "{$module}/docs") !== false) {
                     $path = str_replace(realpath(BFPATH), rtrim(BFPATH, '/'), $path);
 
-                    // trim trailing APPATH directory separator
+                    // Trim trailing APPATH directory separator.
                     $apppath = rtrim(APPPATH, DIRECTORY_SEPARATOR);
 
-                    // add if showAppDocs and if $path contains $appath
+                    // Add if showAppDocs and if $path contains $appath.
                     if ($this->showAppDocs && strpos($path, $apppath) !== false) {
                         $search_folders[] = $path;
                     }
 
-                    // add if showDevDocs and if $path contains BFPATH
+                    // Add if showDevDocs and if $path contains BFPATH.
                     if ($this->showDevDocs && strpos($path, BFPATH) !== false) {
                         $search_folders[] = $path;
                     }
@@ -210,41 +206,40 @@ class Docs extends Base_Controller
      *
      * @return string The HTML for the sidebar.
      */
-    private function build_sidebar()
+    private function buildSidebar()
     {
         $data = array();
 
         // Get the list of docs based on the current docs group
         // (application-specific or developer docs)
         if ($this->docsGroup == $this->docsTypeApp) {
-            $data['docs'] = $this->get_folder_files(APPPATH . $this->docsDir, $this->docsTypeApp);
+            $data['docs'] = $this->getFolderFiles(APPPATH . $this->docsDir, $this->docsTypeApp);
         } elseif ($this->docsGroup == $this->docsTypeBf) {
-            $data['docs'] = $this->get_folder_files(BFPATH . $this->docsDir, $this->docsTypeBf);
+            $data['docs'] = $this->getFolderFiles(BFPATH . $this->docsDir, $this->docsTypeBf);
         }
 
         // Get the docs for the modules
-        $data['module_docs'] = $this->get_module_docs();
+        $data['module_docs'] = $this->getModuleDocs();
 
         // Set the remaining data for the view
         $data['docsDir'] = $this->docsDir;
         $data['docsExt'] = $this->docsExt;
 
-        return $this->post_process($this->load->view('docs/_sidebar', $data, true));
+        return $this->postProcess($this->load->view('docs/_sidebar', $data, true));
     }
 
     /**
      * Retrieves the list of files in a folder and preps the name and filename
      * so it's ready for creating the HTML.
      *
-     * @param  String $folder The path to the folder to retrieve.
-     * @param  String $type   The type of documentation being retrieved
+     * @param string $folder         The path to the folder to retrieve.
+     * @param string $type           The type of documentation being retrieved
      * ('application', 'bonfire', or the name of the module).
-     * @param  Array  $ignoredFolders   A list of sub-folders we should ignore.
+     * @param array  $ignoredFolders A list of sub-folders we should ignore.
      *
-     * @return Array  An associative array @see parse_ini_file for format
-     * details.
+     * @return array An associative array @see parse_ini_file for format details.
      */
-    private function get_folder_files($folder, $type, $ignoredFolders = array())
+    private function getFolderFiles($folder, $type, $ignoredFolders = array())
     {
         if (! is_dir($folder)) {
             return array();
@@ -315,7 +310,7 @@ class Docs extends Base_Controller
      *
      * @return array
      */
-    private function get_module_docs()
+    private function getModuleDocs()
     {
         $docs_modules = array();
         foreach (Modules::list_modules() as $module) {
@@ -331,7 +326,7 @@ class Docs extends Base_Controller
             }
 
             if (is_dir($path)) {
-                $files = $this->get_folder_files($path, $module, $ignored_folders);
+                $files = $this->getFolderFiles($path, $module, $ignored_folders);
                 if (is_array($files) && count($files)) {
                     $docs_modules[$module] = $files;
                 }
@@ -345,11 +340,11 @@ class Docs extends Base_Controller
     /**
      * Does the actual work of reading in and parsing the help file.
      *
-     * @param  array  $segments The uri_segments array.
+     * @param array $segments The uri_segments array.
      *
      * @return string
      */
-    private function read_page($segments = array())
+    private function readPage($segments = array())
     {
         $content = null;
         $defaultType = $this->docsTypeApp;
@@ -430,9 +425,9 @@ class Docs extends Base_Controller
      *
      * @param $content
      *
-     * @return string   The post-processed HTML.
+     * @return string The post-processed HTML.
      */
-    private function post_process($content)
+    private function postProcess($content)
     {
         $xml = new SimpleXMLElement('<?xml version="1.0" standalone="yes"?><div>' . $content . '</div>');
 

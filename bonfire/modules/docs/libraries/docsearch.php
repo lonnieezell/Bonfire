@@ -69,12 +69,12 @@ class DocSearch
     /**
      * The entry point for performing a search of the documentation.
      *
-     * @param null $terms
-     * @param array $folders
+     * @param string $terms
+     * @param array  $folders
      *
      * @return array|null
      */
-    public function search ($terms = null, $folders = array())
+    public function search($terms = null, $folders = array())
     {
         if (empty($terms) || empty($folders)) {
             return null;
@@ -84,7 +84,7 @@ class DocSearch
 
         $results = array();
         foreach ($folders as $folder) {
-            $results = array_merge($results, $this->search_folder($terms, $folder));
+            $results = array_merge($results, $this->searchFolder($terms, $folder));
         }
 
         return $results;
@@ -93,12 +93,12 @@ class DocSearch
     /**
      * Searches a single directory worth of files.
      *
-     * @param $term
-     * @param $folder
+     * @param string $term
+     * @param string $folder
      *
      * @return array The results.
      */
-    private function search_folder($term, $folder)
+    private function searchFolder($term, $folder)
     {
         $results = array();
         $map = bcDirectoryMap($folder, 2);
@@ -118,7 +118,7 @@ class DocSearch
 
             // Is it a folder?
             if (is_array($file) && count($file)) {
-                $results = array_merge($results, $this->search_folder($term, "{$folder}/{$dir}"));
+                $results = array_merge($results, $this->searchFolder($term, "{$folder}/{$dir}"));
                 continue;
             }
 
@@ -160,63 +160,56 @@ class DocSearch
                         continue;
                     }
 
-                    // remove trailing directory separator
+                    // Remove trailing directory separator.
                     $apppath = rtrim(APPPATH, DIRECTORY_SEPARATOR);
                     $filename = str_replace('.md', '', $file);
 
-                    // does $folder contains BFPATH?
-                    if(strpos($folder, BFPATH) !== false){
-
-                        // does $folder contains BFPATH . 'docs' ?
-                        if(strpos($folder, BFPATH . 'docs') !== false){
+                    // Does $folder contain BFPATH?
+                    if (strpos($folder, BFPATH) !== false) {
+                        // Does $folder contain BFPATH . 'docs'?
+                        if (strpos($folder, BFPATH . 'docs') !== false) {
                             $result_url = str_replace(BFPATH . 'docs', '', $folder);
                             $result_url = '/docs/developer' . $result_url . '/' .  $filename;
-                        }
-
-                        // does $folder contains BFPATH . 'modules/' ?
-                        else if(strpos($folder, BFPATH . 'modules/') !== false){
-                            // does $folder ends with '/docs/developer' ?
-                            if(substr( $folder , -strlen( '/docs/developer' ) ) == '/docs/developer'){
-                                // remove '/docs/developer' from $folder
-                                $result_url = str_replace('/docs/developer', '', $folder);
-                                $result_url = str_replace(BFPATH . 'modules/', '/docs/developer/', $result_url);
+                        } elseif (strpos($folder, BFPATH . 'modules/') !== false) {
+                            // Does $folder contain BFPATH . 'modules/'?
+                            // Does $folder end with '/docs/developer'?
+                            if (substr($folder, -strlen('/docs/developer')) == '/docs/developer') {
+                                // Remove '/docs/developer' from $folder.
+                                $result_url  = str_replace('/docs/developer', '', $folder);
+                                $result_url  = str_replace(BFPATH . 'modules/', '/docs/developer/', $result_url);
                                 $result_url .= '/' . $filename;
-                            }
-                            else{
-                                $result_url = str_replace(BFPATH . 'modules/', '/docs/application/', $folder);
-                                // remove trailing 'docs' from $result_url
-                                $result_url = rtrim($result_url, 'docs');
+                            } else {
+                                $result_url  = str_replace(BFPATH . 'modules/', '/docs/application/', $folder);
+                                // Remove trailing 'docs' from $result_url.
+                                $result_url  = rtrim($result_url, 'docs');
                                 $result_url .= $filename;
                             }
                         }
-                    }
-                    // does $folder contains APPATH?
-                    else if(strpos($folder, APPPATH . 'docs') !== false){
+                    } elseif (strpos($folder, APPPATH . 'docs') !== false) {
+                        // Does $folder contain APPATH?
                         $result_url = str_replace(APPPATH . 'docs', '', $folder);
                         $result_url = '/docs/application' . $result_url . '/' .  $filename;
-                    }
-                    // does $folder contains $apppath
-                    else if(strpos($folder, $apppath . '/modules/') !== false){
-                        // does $folder ends with '/docs/developer' ?
-                        if(substr( $folder , -strlen( '/docs/developer' ) ) == '/docs/developer'){
-                            // remove '/docs/developer' from $folder
-                            $result_url = str_replace('/docs/developer', '', $folder);
-                            $result_url = str_replace($apppath . '/modules/', '/docs/developer/', $result_url);
+                    } elseif (strpos($folder, $apppath . '/modules/') !== false) {
+                        // $folder contains $apppath /modules/.
+                        // Does $folder end with '/docs/developer'?
+                        if (substr($folder, -strlen('/docs/developer')) == '/docs/developer') {
+                            // Remove '/docs/developer' from $folder.
+                            $result_url  = str_replace('/docs/developer', '', $folder);
+                            $result_url  = str_replace($apppath . '/modules/', '/docs/developer/', $result_url);
                             $result_url .= '/' . $filename;
-                        }
-                        else{
-                            $result_url = str_replace($apppath . '/modules/', '/docs/application/', $folder);
-                            // remove trailing 'docs' from $result_url
-                            $result_url = rtrim($result_url, 'docs');
+                        } else {
+                            $result_url  = str_replace($apppath . '/modules/', '/docs/application/', $folder);
+                            // Remove trailing 'docs' from $result_url.
+                            $result_url  = rtrim($result_url, 'docs');
                             $result_url .= $filename;
                         }
                     }
 
                     $results[] = array(
-                        'title'   => $this->extract_title($excerpt, $file),
+                        'title'   => $this->extractTitle($excerpt, $file),
                         'file'    => $folder .'/'. $file,
                         'url'     => $result_url,
-                        'extract' => $this->build_extract($excerpt, $term, $match[0][0])
+                        'extract' => $this->buildExtract($excerpt, $term, $match[0][0]),
                     );
 
                     ++$file_count;
@@ -230,22 +223,22 @@ class DocSearch
     /**
      * Handles extracting the text surrounding our match and basic match formatting.
      *
-     * @param $excerpt
-     * @param $term
-     * @param $match_string
+     * @param string $excerpt
+     * @param string $term
+     * @param string $match_string
      *
      * @return string
      */
-    private function build_extract($excerpt, $term, $match_string)
+    private function buildExtract($excerpt, $term, $match_string)
     {
-        // Find the character positions within the string that our match was found at.
+        // Find the character positions within the string that the match was found.
         // That way we'll know from what positions before and after this we want to grab it in.
-        $start_offset   = stripos($excerpt, $match_string);
+        $start_offset = stripos($excerpt, $match_string);
 
         // Modify the start and end positions based on $this->excerpt_length / 2.
         $buffer = floor($this->excerpt_length / 2);
 
-        // Adjust our start position
+        // Adjust our start position.
         $start_offset = $start_offset - $buffer;
         if ($start_offset < 0) {
             $start_offset = 0;
@@ -256,7 +249,7 @@ class DocSearch
         $extract = character_limiter($extract, $this->excerpt_length);
 
         // Wrap the search term in a span we can style.
-        $extract = str_ireplace($term, '<span class="term-hilight">'. $term .'</span>', $extract);
+        $extract = str_ireplace($term, '<span class="term-hilight">' . $term . '</span>', $extract);
 
         return $extract;
     }
@@ -265,11 +258,12 @@ class DocSearch
      * Extracts the title from a bit of markdown formatted text. If it doesn't
      * have an h1 or h2, then it uses the filename.
      *
-     * @param $excerpt
-     * @param $file
+     * @param string $excerpt
+     * @param string $file
+     *
      * @return string
      */
-    private function extract_title($excerpt, $file)
+    private function extractTitle($excerpt, $file)
     {
         $title = '';
 
