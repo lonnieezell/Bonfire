@@ -66,13 +66,22 @@ class Docs extends Base_Controller
             redirect();
         }
 
-        // Was a doc group provided?
-        if (! $this->docsGroup) {
-            redirect('docs/' . config_item('docs.default_group'));
-        }
-
         $this->showAppDocs = config_item('docs.show_app_docs');
         $this->showDevDocs = config_item('docs.show_dev_docs');
+
+        // Was a doc group provided?
+        if (! $this->docsGroup) {
+            if($this->showAppDocs){
+                redirect('docs/application');
+            }
+            else if($this->showDevDocs){
+                redirect('docs/developer');
+            }
+            else{
+                redirect('docs/' . config_item('docs.default_group'));
+            }
+        }
+
         $this->tocFile = config_item('docs.toc_file') ?: '_toc.ini';
         $commonmark_driver = config_item('docs.commonmark_driver');
         $this->docsParser = empty($commonmark_driver) ? null : $commonmark_driver;
