@@ -160,10 +160,57 @@ class DocSearch
                         continue;
                     }
 
-                    $result_url = '/docs/'. str_replace('docs', '', $folder . '/') . str_replace('.md', '', $file);
-                    $result_url = str_replace(BFPATH, 'developer/', $result_url);
-                    $result_url = str_replace(APPPATH, 'application/', $result_url);
-                    $result_url = str_replace('//', '/', $result_url);
+                    // remove trailing directory separator
+                    $apppath = rtrim(APPPATH, DIRECTORY_SEPARATOR);
+                    $filename = str_replace('.md', '', $file);
+
+                    // does $folder contains BFPATH?
+                    if(strpos($folder, BFPATH) !== false){
+
+                        // does $folder contains BFPATH . 'docs' ?
+                        if(strpos($folder, BFPATH . 'docs') !== false){
+                            $result_url = str_replace(BFPATH . 'docs', '', $folder);
+                            $result_url = '/docs/developer' . $result_url . '/' .  $filename;
+                        }
+
+                        // does $folder contains BFPATH . 'modules/' ?
+                        else if(strpos($folder, BFPATH . 'modules/') !== false){
+                            // does $folder ends with '/docs/developer' ?
+                            if(substr( $folder , -strlen( '/docs/developer' ) ) == '/docs/developer'){
+                                // remove '/docs/developer' from $folder
+                                $result_url = str_replace('/docs/developer', '', $folder);
+                                $result_url = str_replace(BFPATH . 'modules/', '/docs/developer/', $result_url);
+                                $result_url .= '/' . $filename;
+                            }
+                            else{
+                                $result_url = str_replace(BFPATH . 'modules/', '/docs/application/', $folder);
+                                // remove trailing 'docs' from $result_url
+                                $result_url = rtrim($result_url, 'docs');
+                                $result_url .= $filename;
+                            }
+                        }
+                    }
+                    // does $folder contains APPATH?
+                    else if(strpos($folder, APPPATH . 'docs') !== false){
+                        $result_url = str_replace(APPPATH . 'docs', '', $folder);
+                        $result_url = '/docs/application' . $result_url . '/' .  $filename;
+                    }
+                    // does $folder contains $apppath
+                    else if(strpos($folder, $apppath . '/modules/') !== false){
+                        // does $folder ends with '/docs/developer' ?
+                        if(substr( $folder , -strlen( '/docs/developer' ) ) == '/docs/developer'){
+                            // remove '/docs/developer' from $folder
+                            $result_url = str_replace('/docs/developer', '', $folder);
+                            $result_url = str_replace($apppath . '/modules/', '/docs/developer/', $result_url);
+                            $result_url .= '/' . $filename;
+                        }
+                        else{
+                            $result_url = str_replace($apppath . '/modules/', '/docs/application/', $folder);
+                            // remove trailing 'docs' from $result_url
+                            $result_url = rtrim($result_url, 'docs');
+                            $result_url .= $filename;
+                        }
+                    }
 
                     $results[] = array(
                         'title'   => $this->extract_title($excerpt, $file),

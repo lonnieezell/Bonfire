@@ -130,6 +130,22 @@ class Docs extends Base_Controller
 
         $terms = $this->input->post('search_terms');
         if ($terms) {
+            // set docsGroup and
+            // if both are disabled...
+            if(!$this->showAppDocs && !$this->showDevDocs){
+                $docsGroup = config_item('docs.default_group');
+                $this->docsGroup = $docsGroup;
+
+                // if $docsGroup is "application"
+                if(strpos($docsGroup, "application") !== false){
+                    $this->showAppDocs = true;
+                }
+                // if $docsGroup is "developer"
+                else  if(strpos($docsGroup, "developer") !== false){
+                    $this->showDevDocs = true;
+                }
+            }
+
             $search_folders = array();
             if ($this->showAppDocs) {
                 $search_folders[] = APPPATH . $this->docsDir;
@@ -137,6 +153,30 @@ class Docs extends Base_Controller
 
             if ($this->showDevDocs) {
                 $search_folders[] = BFPATH . $this->docsDir;
+            }
+
+            // Include modules when searching
+            foreach(Modules::list_modules() as $module){
+                // get module 'docs' path
+                $path = Modules::path($module, 'docs');
+
+                // skip APPPATH . $this->docsDir string
+                if(strpos($path, "{$module}/docs") !== false){
+                    $path = str_replace(realpath(BFPATH), rtrim(BFPATH, '/'), $path);
+
+                    // trim trailing APPATH directory separator
+                    $apppath = rtrim(APPPATH, DIRECTORY_SEPARATOR);
+
+                    // add if showAppDocs and if $path contains $appath
+                    if ($this->showAppDocs && strpos($path, $apppath) !== false) {
+                        $search_folders[] = $path;
+                    }
+
+                    // add if showDevDocs and if $path contains BFPATH
+                    if ($this->showDevDocs && strpos($path, BFPATH) !== false) {
+                        $search_folders[] = $path;
+                    }
+                }
             }
 
             Template::set('results', $this->docsearch->search($terms, $search_folders));
