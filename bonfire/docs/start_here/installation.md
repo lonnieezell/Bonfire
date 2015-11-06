@@ -61,6 +61,16 @@ When logging in the first time you should modify your profile and change your em
 
 By default, Bonfire is setup to use emails to login, and not use usernames at all. This can be easily configured on the main settings screen.
 
+## Sub-Folders
+
+If your project is installed in a subfolder of your webroot, or your development environment requries /public to be in the URL, you can modify your .htaccess file to respect the subfolder.
+
+Edit the .htaccess file and to add a RewriteBase option pointing to the folder that you're using around line 151.
+
+    <IfModule mod_rewrite.c>
+      Options +FollowSymlinks
+      RewriteEngine On
+      RewriteBase /public
 
 ## Securing Your Site
 
@@ -68,7 +78,7 @@ Once your site is installed and configured, you may want to consider taking some
 
 * Remove the installer: delete the file `/bonfire/controllers/install.php` from your server (or install/configure your site on a test server and copy the files, without the install controller, to your site's server).
 * Remove `/public/tests.php`
-* Disable automatic migrations in the `/application/config/application.php` file. While `migrate.auto_core` and `migrate.auto_app` are disabled by default, it is often convenient to enable this feature during development. Disabling them can improve your page load times, and ensures that migrations are only run when you intentionally run them.
+* [Turn Off Auto-Migrations](going_deeper/performance_tips) in the `/application/config/application.php` file. While `migrate.auto_core` and `migrate.auto_app` are disabled by default, it is often convenient to enable this feature during development. Disabling them can improve your page load times, and ensures that migrations are only run when you intentionally run them.
 * Restrict write access: while the `/application/cache`, `/assets/cache`, and `/application/logs` directories should be writable (by your web server), you can remove write access from the config and db directories. This may limit some functionality (for instance DB backups through the Bonfire interface probably won't work if the web server can't write to the `/application/db/backups` directory), so consider the trade-offs for your environment.
 * Additionally, if you opened up write access for Builder (to `/application/modules`), you will probably want to disable that capability as well (obviously, the module builder will not work in this case, but you can still use it in a local/dev environment and copy the files to the server).
 * Restrict database access: you may be able to adjust the permissions for the database user configured for your Bonfire site to remove potentially damaging capabilities like dropping tables. Ideally, you would enable these permissions only when running migrations against your database.

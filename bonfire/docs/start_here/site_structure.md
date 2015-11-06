@@ -33,7 +33,8 @@ Hopefully, this page will give you an idea of the reasoning and purpose behind t
             Sparks_Loader.php
         views/
     bonfire/
-        codeigniter/
+        ci2/
+        ci3/
         controllers/
         core/
         docs/
@@ -94,7 +95,8 @@ It is also possible to override portions of Bonfire's core modules by adding fil
 
 The bonfire folder holds Bonfire, itself, as well as the codeigniter system files.
 
-- *codeigniter* houses the CodeIgniter system files
+- *ci2* houses the CodeIgniter 2 system files
+- *ci3* houses the CodeIgniter 3 system files
 - *controllers* contains Bonfire's custom controllers for images and the installer
 - *core* holds Bonfire's overrides for HMVC and custom routing functionality
 - *docs* you are here...

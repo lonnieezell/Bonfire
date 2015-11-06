@@ -42,22 +42,22 @@ Bonfire's User module provides a flexible `User_model`, ready for your users to 
 
 Quickly browse your database, perform backups, restore old backups, and keep your database versioned with Migrations. Unlike CodeIgniter's built-in migrations, Bonfire allows for the core, your app, and each module to maintain their own set of migrations.
 
-#### System Events
+#### [System Events](basic_concepts/system_events)
 
 Very similar to CodeIgniter's Hooks, System Events allow you to hook into Bonfire's core code without modifying core files. It also provides a simple way for you to add hooks to your own code for other modules to use.
 
-#### Activities Log
+#### [Activities Log](activities)
 
 This library provides a simple way to log user activities, such as 'JohnDoe deleted the Page titled "Page 1"'. This makes it simple to keep a clear, consistent log of every important action of every user.
 
-#### Settings
+#### [Settings](settings)
 
 Easily store application-wide settings in the database, allowing your users to change settings simply and easily.
 
 
 ## Navigating Bonfire
 
-### Contexts
+### [Contexts](basic_concepts/contexts)
 
 Once you log into the admin portion of Bonfire, you will find a menu with 4 categories across the top: Content, Reports, Settings, and Developer. These four categories are what Bonfire calls **Contexts**.
 
@@ -71,18 +71,7 @@ Contexts don't have to be visible to everyone who uses your admin area, though. 
 
 Bonfire is primarily a collection of modules that handle all of the various parts. This makes it easy to create your own modules that can be reused and passed around with a minimum of work.
 
-If you navigate the project, look in the main *bonfire* folder. You will find the following folder structure:
-
-Folder      | Purpose
-------------|---------------
-application | Holds Bonfire's primary files and the core modules.
-codeigniter | Holds the CodeIgniter system files.
-modules     | Holds your own custom modules.
-themes      | Holds all of your themes.
-
-A module is a mini-application that can contain assets (like CSS or JS), config files, controllers, models, libraries, helpers, and views. This is all powered by [Modular Extensions HMVC](https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc/wiki/Home) and allows for HMVC usage (which we will touch on later in the tutorial).
-
-
+A module is a mini-application that can contain assets (like CSS or JS), config files, controllers, models, libraries, helpers, and views. This is all powered by [Modular Extensions HMVC](https://bitbucket.org/wiredesignz/codeigniter-modular-extensions-hmvc) and allows for HMVC usage (which we will touch on later in the tutorial).
 
 ## Creating A New Bonfire Project
 
@@ -93,4 +82,4 @@ During this tutorial we will create a (simple) blog module that will have you ma
 
 ---
 
-Next: [A Simple Blog Tutorial](tut_blog)
+Next: [A Simple Blog Tutorial](start_here/tut_blog)
