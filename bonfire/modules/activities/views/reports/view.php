@@ -73,7 +73,7 @@ $hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDel
                 <td><span class="icon-user"></span>&nbsp;<?php e($activity->username); ?></td>
                 <td><?php echo $activity->activity; ?></td>
                 <td><?php echo $activity->module; ?></td>
-                <td><?php echo date('M j, Y g:i A', strtotime($activity->created)); ?></td>
+                <td><?php echo user_time(strtotime($activity->created), null, 'M j, Y g:i A'); ?></td>
             </tr>
             <?php endforeach; ?>
         </tbody>

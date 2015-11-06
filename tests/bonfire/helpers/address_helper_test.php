@@ -78,7 +78,7 @@ class address_helper_test extends CI_UnitTestCase {
     public function test_state_select_uses_passed_name()
     {
         $select = state_select('', 'MO', 'US', 'valid_states');
-        $this->assertTrue(strpos($select, 'name="valid_states"') !== false);
+        $this->assertTrue(strpos($select, "name='valid_states'") !== false);
     }
 
     //--------------------------------------------------------------------
@@ -86,7 +86,7 @@ class address_helper_test extends CI_UnitTestCase {
     public function test_state_select_sets_id_to_name()
     {
         $select = state_select('', 'MO', 'US', 'valid_states');
-        $this->assertTrue(strpos($select, 'id="valid_states"') !== false);
+        $this->assertTrue(strpos($select, "id='valid_states'") !== false);
     }
 
     //--------------------------------------------------------------------
@@ -94,7 +94,7 @@ class address_helper_test extends CI_UnitTestCase {
     public function test_state_select_sets_class()
     {
         $select = state_select('', 'MO', 'US', 'valid_states', 'myClass');
-        $this->assertTrue(strpos($select, 'class="myClass"') !== false);
+        $this->assertTrue(strpos($select, "class='myClass'") !== false);
     }
 
     //--------------------------------------------------------------------
@@ -148,7 +148,7 @@ class address_helper_test extends CI_UnitTestCase {
     public function test_country_select_uses_passed_name()
     {
         $select = country_select('', 'US', 'myName');
-        $this->assertTrue(strpos($select, 'name="myName"') !== false);
+        $this->assertTrue(strpos($select, "name='myName'") !== false);
     }
 
     //--------------------------------------------------------------------
@@ -156,7 +156,7 @@ class address_helper_test extends CI_UnitTestCase {
     public function test_country_select_sets_id_to_name()
     {
         $select = country_select('', 'US', 'myName');
-        $this->assertTrue(strpos($select, 'id="myName"') !== false);
+        $this->assertTrue(strpos($select, "id='myName'") !== false);
     }
 
     //--------------------------------------------------------------------
@@ -164,7 +164,7 @@ class address_helper_test extends CI_UnitTestCase {
     public function test_country_select_sets_class()
     {
         $select = country_select('', 'US', 'myName', 'myClass');
-        $this->assertTrue(strpos($select, 'class="myClass"') !== false);
+        $this->assertTrue(strpos($select, "class='myClass'") !== false);
     }
 
     //--------------------------------------------------------------------
