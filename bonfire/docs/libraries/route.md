@@ -1,7 +1,7 @@
 # Route
 
 Bonfire includes a Route library to supplement the functionality provided by CodeIgniter's (and the Wiredesignz HMVC) router(s).
-Additional information may be available in the section on [Improved Routes](routes).
+Additional information may be available in the section on [Improved Routes](basic_concepts/routes).
 
 ## Methods
 

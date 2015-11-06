@@ -1,7 +1,7 @@
 # Events
 
 Bonfire includes an events library which can be used to configure event handling for your application (and to handle events triggered by Bonfire, as well).
-See [System Events](developer/system_events) for additional documentation.
+See [System Events](basic_concepts/system_events) for additional documentation.
 
 ## trigger($event_name[, &$payload])
 

@@ -1,7 +1,7 @@
 # Assets
 
 Bonfire includes an assets library for handling CSS, JavaScript, and image assets.
-Additional information may be available in the section on [working with assets](working_with_assets)
+Additional information may be available in the section on [working with assets](basic_concepts/working_with_assets)
 
 ## Configuration
 

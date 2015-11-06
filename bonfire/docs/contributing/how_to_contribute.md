@@ -67,13 +67,11 @@ If your comment simply says "+1", then odds are that other reviewers aren't goin
 
 Bonfire has two main sets of documentation: the Guides help you learn Bonfire, while the API is a reference.
 
-You can help improve the guides by making them more coherent, adding missing information, correcting factual errors, fixing typos, bringing it up to date with the latest edge Bonfire. To get involved in the translation of Bonfire guides, please see [Translating Bonfire Guides]().
+You can help improve the guides by making them more coherent, adding missing information, correcting factual errors, fixing typos, bringing it up to date with the latest edge Bonfire.
 
 Changes are made directly within this wiki so please double-check all edits for correctness and good English. If you are a non-native English speaker, feel free to post on the [forums](http://forums.cibonfire.com) or post an issue here on GitHub asking someone to look over your English for the portion you edited.
 
 If you are unsure of the documentation changes, you can create an issue in the Bonfire [issues tracker](https://github.com/ci-bonfire/Bonfire/issues?sort=created&direction=desc&state=open) on GitHub.
-
-When working with documentation, please take into account the [API Documentation Guidelines](api_documentation_guidelines.html) and the [Coding Conventions](coding_conventions).
 
 <a name="bonfire-code"></a>
 ## Contributing to the Bonfire Code

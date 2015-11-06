@@ -1,7 +1,7 @@
 # Installer
 
 Bonfire includes the `Installer_lib` library to simplify the installation process.
-For additional information, see [Installing Bonfire](developer/installation).
+For additional information, see [Installing Bonfire](start_here/installation).
 
 This documentation is primarily intended for those who wish to improve or extend the `Installer_lib`.
 The library is not intended for use within an application, and should be removed once the application is installed.

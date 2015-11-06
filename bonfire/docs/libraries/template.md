@@ -1,7 +1,7 @@
 # Template
 
 Bonfire includes a Template library which makes it easier to build pages for a website based on layouts and partial views.
-Additional information about using the Template library may be found in [Layouts and Views](layouts_and_views).
+Additional information about using the Template library may be found in [Layouts and Views](basic_concepts/layouts_and_views).
 
 ## Configuration
 

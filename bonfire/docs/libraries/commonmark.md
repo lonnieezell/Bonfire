@@ -1,6 +1,6 @@
 # CommonMark
 
-Bonfire includes a basic library for converting [CommonMark] (http://spec.commonmark.org/) (and/or [MarkDown] (http://daringfireball.net/projects/markdown/syntax)) documents to HTML.
+Bonfire includes a basic library for converting [CommonMark](http://spec.commonmark.org/) (and/or [MarkDown](http://daringfireball.net/projects/markdown/syntax)) documents to HTML.
 
 This library uses a configurable driver to perform the conversion, so the underlying conversion library can be easily updated/replaced as needed.
 

@@ -125,7 +125,7 @@ project:
    <dev-branch>`).
 5. Create a new topic branch to contain your feature, change, or fix ( `git
    checkout -b <topic-branch-name>` ).
-6. Make sure that your changes adhere to the current [coding conventions](coding_conventions) used
+6. Make sure that your changes adhere to the current [coding conventions](contributing/coding_conventions) used
    throughout the project - indentation, accurate comments, etc.
 7. Commit your changes in logical chunks. Please adhere to these [git commit
    message guidelines](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html)
