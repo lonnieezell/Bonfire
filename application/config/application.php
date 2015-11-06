@@ -290,3 +290,21 @@ $config['commonmark.valid_drivers'] = array(
 // /application/libraries/CommonMark/drivers/ (capitalization is important on most
 // servers). The file name for the driver must be CommonMark_{drivername}.php
 $config['commonmark.driver'] = 'MarkdownExtended';
+
+//------------------------------------------------------------------------------
+// !Gravatar
+//------------------------------------------------------------------------------
+
+// What happens when an email address has no matching Gravatar image?
+//
+// Gravatar has a number of built in options which you can also use as defaults.
+// https://en.gravatar.com/site/implement/images/
+//
+// 404 - do not load any image if none is associated with the email hash, instead return an HTTP 404 (File Not Found) response
+// mm - (mystery-man) a simple, cartoon-style silhouetted outline of a person (does not vary by email hash)
+// identicon - a geometric pattern based on an email hash
+// monsterid - a generated 'monster' with different colors, faces, etc
+// wavatar - generated faces with differing features and backgrounds
+// retro - awesome generated, 8-bit arcade-style pixelated faces
+// blank - a transparent PNG image (border added to HTML below for demonstration purposes)
+$config['users.gravatar_default_image'] = 'identicon';

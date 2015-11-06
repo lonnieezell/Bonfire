@@ -155,7 +155,7 @@ if (! function_exists('gravatar_link')) {
             // each value anyway...
 
             // Set the default image.
-            $defaultImage = 'identicon';
+            $defaultImage = config_item('users.gravatar_default_image');
 
             // Set the minimum site rating to PG.
 		$rating = 'PG';
