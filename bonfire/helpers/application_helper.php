@@ -154,8 +154,14 @@ if (! function_exists('gravatar_link')) {
             // beforehand, but the requirements would need to be documented for
             // each value anyway...
 
-            // Set the default image.
-            $defaultImage = config_item('users.gravatar_default_image');
+			// Set the default image.
+			$defaultImage = config_item('users.gravatar_default_image');
+
+			// Check if config value is valid
+			if (!in_array($defaultImage, array('404', 'mm', 'identicon', 'monsterid', 'wavatar', 'retro', 'blank'))) {
+				// default value
+				$defaultImage = 'identicon';
+			}
 
             // Set the minimum site rating to PG.
 		$rating = 'PG';
