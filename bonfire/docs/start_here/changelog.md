@@ -9,6 +9,7 @@
 ## Released versions
 
 #### New Features:
+* Added `users.gravatar_default_image` setting to application config to set the default image used when `gravatar_link()` can't find an image for the supplied email address.
 
 #### Closes Issues:
 * #1163/1164: Fix /public/tests.php shows "SimpleTest documentation" instead of "Bonfire Tests".
