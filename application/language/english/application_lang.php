@@ -29,7 +29,7 @@
 //------------------------------------------------------------------------------
 $lang['bf_site_name']			= 'Site Name';
 $lang['bf_site_email']			= 'Site Email';
-$lang['bf_site_email_help']		= 'The default email that system-generated emails are sent from.';
+$lang['bf_site_email_help']		= 'The administrator contact email address. Additionally, if the Emailer System Email setting is not configured, system-generated emails may be sent from this address.';
 $lang['bf_site_status']			= 'Site Status';
 $lang['bf_online']				= 'Online';
 $lang['bf_offline']				= 'Offline';

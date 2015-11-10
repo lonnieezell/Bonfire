@@ -19,6 +19,7 @@
 
 #### Closes Issues:
 * #1163/1164: Fix /public/tests.php shows "SimpleTest documentation" instead of "Bonfire Tests".
+* #1174: Clarify the difference between Site Email and System Email, use Site Email as fallback when System Email is not configured.
 
 #### Additional Changes:
 * Separated abstract Migration class from the file containing the Migrations library. The library's constructor now loads the file containing the abstract class via a require_once() call.
