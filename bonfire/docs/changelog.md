@@ -3,8 +3,8 @@
 ## Under development
 
 ### 0.7.8
-Upgraded CodeIgniter 2 to 2.2.5
-Upgraded CodeIgniter 3 to 3.0.2
+Upgraded CodeIgniter 2 to 2.2.6 (see the [2.2.6 Upgrade Notes](http://www.codeigniter.com/userguide2/installation/upgrade_226.html))
+Upgraded CodeIgniter 3 to 3.0.3 (see the [3.0.3 Upgrade Notes](http://www.codeigniter.com/user_guide/installation/upgrade_303.html))
 
 #### New Features:
 
