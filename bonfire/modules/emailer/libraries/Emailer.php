@@ -89,11 +89,10 @@ class Emailer
     }
 
     /**
-     * Handle sending the emails and routing to the appropriate methods for
-     * queueing or sending.
+     * Handle sending the emails and routing to the appropriate methods for queueing
+     * or sending.
      *
-     * Information about the email should be sent in the $data array. It looks
-     * like:
+     * Information about the email should be sent in the $data array. It looks like:
      *
      * $data = array(
      *     'to' => '',  // either string or array
@@ -103,54 +102,55 @@ class Emailer
      *     'attachments' => array('FILENAME_1','FILENAME_2' ) // optional
      * );
      *
-     * @param array $data   An array of information required to send the email.
-     * @param bool  $queueOverride If true, forces the email to be queued. If
-     * false, forces the email to be sent immediately. If omitted or set to any
-     * value other than true/false, $this->queue_emails determines whether the
-     * email is queued.
+     * @param array $data          An array of settings required to send the email.
+     * @param bool  $queueOverride If true, forces the email to be queued. If false,
+     * forces the email to be sent immediately. If omitted or set to any value other
+     * than true/false, $this->queue_emails determines whether the email is queued.
      *
-     * @return bool true if the operation was successful, else false
+     * @return bool True if the operation was successful, else false.
      */
     public function send($data = array(), $queueOverride = null)
     {
         // Ensure the required information is supplied.
+        $from = empty($data['from']) ? (settings_item('sender_email') ?: settings_item('site.system_email'))
+            : $data['from'];
+
         if (empty($data['to'])
             || ! isset($data['message'])
             || ! isset($data['subject'])
-            || (empty($data['from']) && settings_item('sender_email') == false)
+            || empty($from)
         ) {
             $this->error = lang('emailer_missing_data');
             return false;
+        }
+
+        // If $queueOverride is not a boolean value, use $this->queue_emails.
+        if ($queueOverride !== true && $queueOverride !== false) {
+            $queueOverride = (bool) $this->queue_emails;
         }
 
         $to      = $data['to'];
         $subject = $data['subject'];
         $message = $data['message'];
 
-        $from        = empty($data['from']) ? settings_item('sender_email') : $data['from'];
         $altMessage  = isset($data['alt_message']) ? $data['alt_message'] : false;
         $attachments = isset($data['attachments']) ? $data['attachments'] : false;
 
         // Wrap the $message in the email template, or strip HTML.
         $mailtype  = settings_item('mailtype');
         $templated = '';
-        if ($mailtype == 'html') {
+        if ($mailtype != 'html') {
+            $templated = html_entity_decode(strip_tags($message), ENT_QUOTES, 'UTF-8');
+        } else {
             $templated  = $this->ci->load->view('emailer/email/_header', null, true);
             $templated .= $message;
             $templated .= $this->ci->load->view('emailer/email/_footer', null, true);
-        } else {
-            $templated = html_entity_decode(strip_tags($message), ENT_QUOTES, 'UTF-8');
         }
 
         // Are emails queued?
-        if ($queueOverride === true
-            || ($queueOverride !== false && $this->queue_emails == true)
-        ) {
-            return $this->queueEmail($to, $from, $subject, $templated, $altMessage, $attachments);
-        }
-
-        // Otherwise, send it.
-        return $this->sendEmail($to, $from, $subject, $templated, $altMessage, $attachments);
+        return $queueOverride ?
+            $this->queueEmail($to, $from, $subject, $templated, $altMessage, $attachments)
+            : $this->sendEmail($to, $from, $subject, $templated, $altMessage, $attachments);
     }
 
     /**
@@ -252,6 +252,10 @@ class Emailer
 
         if ($this->debug) {
             $this->debug_message = $this->ci->email->print_debugger();
+        }
+
+        if (! $result) {
+            log_message('error', sprintf(lang('emailer_send_error'), $this->ci->email->print_debugger()));
         }
 
         return $result;
@@ -387,4 +391,3 @@ class Emailer
         $this->queue_emails = $queue;
     }
 }
-/* End of file /emailer/libraries/emailer.php */

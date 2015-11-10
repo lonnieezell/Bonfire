@@ -16,6 +16,7 @@
 * #1165: Fixed failed tests and updated root index.php
 * #1168/1166: Fixed wrong date displayed due to un-utilized user timezone.
 * #1173: Fixed wrong uri when docs search result is from nested docs folder.
+* #1174: Clarify the difference between Site Email and System Email, use Site Email as fallback when System Email is not configured.
 
 #### Additional Changes:
 * #1169/1166: Add 'result' to save_user payload to provide payload consistency with Settings.php and Users.php
