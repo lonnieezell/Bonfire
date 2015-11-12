@@ -314,7 +314,7 @@ class MY_Model_test extends CI_UnitTestCase {
 
     public function test_triggered_insert()
     {
-        $this->model->db->expectOnce('insert', array('records_table', array('title' => 'MyTitle', 'created_on' => time()) ));
+        $this->model->db->expectOnce('insert', array('records_table', array('title' => 'MyTitle', 'created_on' => date('U', time())) ));
         $this->model->db->expectOnce('insert_id');
         $this->model->db->returns('insert', true);
         $this->model->db->returns('insert_id', 5);
@@ -335,8 +335,8 @@ class MY_Model_test extends CI_UnitTestCase {
         );
 
         $triggered_data = array(
-            array('created_on' => time(), 'title' => 'My Title'),
-            array('created_on' => time(), 'title' => 'Another Title')
+            array('created_on' => date('U', time()), 'title' => 'My Title'),
+            array('created_on' => date('U', time()), 'title' => 'Another Title')
         );
 
         $this->model->db->expectOnce('insert_batch', array( 'records_table', $triggered_data ));
@@ -350,7 +350,7 @@ class MY_Model_test extends CI_UnitTestCase {
     {
         $triggered_data = array(
             'column' => 'value',
-            'modified_on' => time()
+            'modified_on' => date('U', time())
         );
 
         $this->model->db->expectOnce('update', array( 'records_table', $triggered_data, array('id' => 5) ));
@@ -369,8 +369,8 @@ class MY_Model_test extends CI_UnitTestCase {
         );
 
         $triggered_data = array(
-            array('title' => 'My Title', 'modified_on' => time()),
-            array('title' => 'Another Title', 'modified_on' => time())
+            array('title' => 'My Title', 'modified_on' => date('U', time())),
+            array('title' => 'Another Title', 'modified_on' => date('U', time()))
         );
 
         $this->model->db->expectOnce('update_batch', array( 'records_table', $triggered_data, 'title' ));
@@ -384,7 +384,7 @@ class MY_Model_test extends CI_UnitTestCase {
     {
         $triggered_data = array(
             'column' => 'value',
-            'modified_on' => time()
+            'modified_on' => date('U', time())
         );
 
         $this->model->db->expectOnce('update', array( 'records_table', $triggered_data, array('id' => 5) ));

@@ -89,68 +89,68 @@ class Emailer
     }
 
     /**
-     * Handle sending the emails and routing to the appropriate methods for
-     * queueing or sending.
+     * Handle sending the emails and routing to the appropriate methods for queueing
+     * or sending.
      *
-     * Information about the email should be sent in the $data array. It looks
-     * like:
+     * Information about the email should be sent in the $data array. It looks like:
      *
-     * $data = array(
-     *     'to' => '',  // either string or array
-     *     'subject' => '', // string
-     *     'message' => '', // string
-     *     'alt_message' => ''  // optional (text alt to html email)
-     *     'attachments' => array('FILENAME_1','FILENAME_2' ) // optional
-     * );
+     * $data = [
+     *     'to'          => '', // either string or array
+     *     'subject'     => '', // string
+     *     'message'     => '', // string
+     *     'alt_message' => '', // optional (text alt to html email)
+     *     'attachments' => ['FILENAME_1', 'FILENAME_2'], // optional
+     * ];
      *
-     * @param array $data   An array of information required to send the email.
-     * @param bool  $queueOverride If true, forces the email to be queued. If
-     * false, forces the email to be sent immediately. If omitted or set to any
-     * value other than true/false, $this->queue_emails determines whether the
-     * email is queued.
+     * @param array $data          An array of settings required to send the email.
+     * @param bool  $queueOverride If true, forces the email to be queued. If false,
+     * forces the email to be sent immediately. If omitted or set to any value other
+     * than true/false, $this->queue_emails determines whether the email is queued.
      *
-     * @return bool true if the operation was successful, else false
+     * @return bool True if the operation was successful, else false.
      */
-    public function send($data = array(), $queueOverride = null)
+    public function send($data = [], $queueOverride = null)
     {
         // Ensure the required information is supplied.
+        $from = empty($data['from']) ? (settings_item('sender_email') ?: settings_item('site.system_email'))
+            : $data['from'];
+
         if (empty($data['to'])
             || ! isset($data['message'])
             || ! isset($data['subject'])
-            || (empty($data['from']) && settings_item('sender_email') == false)
+            || empty($from)
         ) {
             $this->error = lang('emailer_missing_data');
             return false;
+        }
+
+        // If $queueOverride is not a boolean value, use $this->queue_emails.
+        if ($queueOverride !== true && $queueOverride !== false) {
+            $queueOverride = (bool) $this->queue_emails;
         }
 
         $to      = $data['to'];
         $subject = $data['subject'];
         $message = $data['message'];
 
-        $from        = empty($data['from']) ? settings_item('sender_email') : $data['from'];
         $altMessage  = isset($data['alt_message']) ? $data['alt_message'] : false;
         $attachments = isset($data['attachments']) ? $data['attachments'] : false;
 
         // Wrap the $message in the email template, or strip HTML.
         $mailtype  = settings_item('mailtype');
         $templated = '';
-        if ($mailtype == 'html') {
+        if ($mailtype != 'html') {
+            $templated = html_entity_decode(strip_tags($message), ENT_QUOTES, 'UTF-8');
+        } else {
             $templated  = $this->ci->load->view('emailer/email/_header', null, true);
             $templated .= $message;
             $templated .= $this->ci->load->view('emailer/email/_footer', null, true);
-        } else {
-            $templated = html_entity_decode(strip_tags($message), ENT_QUOTES, 'UTF-8');
         }
 
         // Are emails queued?
-        if ($queueOverride === true
-            || ($queueOverride !== false && $this->queue_emails == true)
-        ) {
-            return $this->queueEmail($to, $from, $subject, $templated, $altMessage, $attachments);
-        }
-
-        // Otherwise, send it.
-        return $this->sendEmail($to, $from, $subject, $templated, $altMessage, $attachments);
+        return $queueOverride ?
+            $this->queueEmail($to, $from, $subject, $templated, $altMessage, $attachments)
+            : $this->sendEmail($to, $from, $subject, $templated, $altMessage, $attachments);
     }
 
     /**
@@ -173,11 +173,11 @@ class Emailer
      */
     private function queueEmail($to, $from, $subject, $message, $altMessage = false, $attachments = false)
     {
-        $data = array(
+        $data = [
             'to_email' => $to,
             'subject'  => $subject,
             'message'  => $message,
-        );
+        ];
 
         if ($altMessage) {
             $data['alt_message'] = $altMessage;
@@ -215,8 +215,7 @@ class Emailer
         $this->ci->load->model('settings/settings_model', 'settings_model');
 
         $this->ci->email->initialize(
-            $this->ci->settings_model->select(array('name', 'value'))
-                                     ->find_all_by('module', 'email')
+            $this->ci->settings_model->select(['name', 'value'])->find_all_by('module', 'email')
         );
         $this->ci->email->clear(true);
         $this->ci->email->set_newline("\r\n");
@@ -278,13 +277,13 @@ class Emailer
      */
     public function process_queue($limit = 33)
     {
-        $config_settings = $this->ci->settings_model->select(array('name', 'value'))
-                                                    ->find_all_by('module', 'email');
+        $config_settings = $this->ci->settings_model->select(['name', 'value'])
+            ->find_all_by('module', 'email');
 
         // Grab records where success = 0
         $query = $this->ci->db->limit($limit)
-                              ->where('success', 0)
-                              ->get($this->tableName);
+            ->where('success', 0)
+            ->get($this->tableName);
 
         // If the query returned no rows, the queue is empty, so it has been
         // processed successfully.
@@ -323,9 +322,7 @@ class Emailer
                 }
             }
 
-            $data = array(
-                'attempts' => $email->attempts + 1,
-            );
+            $data = ['attempts' => $email->attempts + 1];
 
             if ($this->ci->email->send() === true) {
                 // Email was successfully sent
