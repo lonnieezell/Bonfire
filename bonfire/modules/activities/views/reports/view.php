@@ -4,6 +4,7 @@ $hasPermissionDeleteDate   = isset($hasPermissionDeleteDate) ? $hasPermissionDel
 $hasPermissionDeleteModule = isset($hasPermissionDeleteModule) ? $hasPermissionDeleteModule : false;
 $hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDeleteUser : false;
 
+if($vars['which'] !== 'activity_own'):
 ?>
 <div class="box select admin-box">
     <?php echo form_open(SITE_AREA . "/reports/activities/{$vars['which']}", 'class="form-horizontal constrained"'); ?>
@@ -44,6 +45,7 @@ $hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDel
         </fieldset>
     <?php echo form_close(); ?>
 </div>
+<?php endif; ?>
 <h2><?php
     echo sprintf(
         lang('activities_view'),
