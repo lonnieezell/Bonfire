@@ -33,7 +33,8 @@
                 <p>Before continuing:</p>
                 <ol>
                     <li>Create your database manually</li>
-                    <li>Edit your <strong>application/config/database.php</strong> file accordingly</li>
+                    <li>Edit your <strong>/application/config/database.php</strong> file accordingly</li>
+                    <li>Set the <strong>base_url</strong> in <strong>/application/config/config.php</strong> </li>
                 </ol>
                 <div class="alert alert-error">
                     <h3>Oops!</h3>
