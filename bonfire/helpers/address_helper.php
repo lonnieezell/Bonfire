@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -19,9 +19,9 @@
  *
  * Provides various helper functions when working with address(es) in forms.
  *
- * @package    Bonfire\Helpers\address_helper
- * @author     Bonfire Dev Team
- * @link       http://cibonfire.com/docs/developer
+ * @package Bonfire\Helpers\address_helper
+ * @author  Bonfire Dev Team
+ * @link    http://cibonfire.com/docs/developer
  */
 
 if (! function_exists('country_select')) {
@@ -29,43 +29,42 @@ if (! function_exists('country_select')) {
      * Create a country-based form dropdown based on the entries in the
      * address.countries config.
      *
-     * @param string $selectedIso The value of the item that should be selected
+     * @param string       $selectedIso The value of the item that should be selected
      * when the dropdown is rendered.
-     * @param string $defaultIso  The value of the item that should be selected
+     * @param string       $defaultIso  The value of the item that should be selected
      * if no other matches are found.
-     * @param string $selectName  The name assigned to the select element.
+     * @param string       $selectName  The name assigned to the select element.
      * Defaults to 'iso'.
-     * @param string $attr Optional value for class name or an array of attributes.
+     * @param string|array $attr Optional class value or an array of attributes.
      *
-     * @return string The full html for the select input.
+     * @return string The full html for the select element.
      */
     function country_select($selectedIso = '', $defaultIso = 'US', $selectName = 'iso', $attr = '')
     {
-        // Grab the countries from the config
+        // Grab the countries from the config.
         $countries = config_item('address.countries');
         if (! is_array($countries) || empty($countries)) {
             return lang('us_no_countries');
         }
 
-        // If $selectedIso is empty, set the selection to $defaultIso
+        // If $selectedIso is empty, set the selection to $defaultIso.
         if (empty($selectedIso)) {
             $selectedIso = $defaultIso;
         }
 
-        // Setup the opening select tag
+        // Setup the opening select tag.
         $output = "<select name='{$selectName}' id='{$selectName}'";
         if (! empty($attr) && is_string($attr)) {
             $output .= " class='{$attr}'";
-        }
-        // add support for array attributes.
-        else if(! empty($attr) && is_array($attr)){
+        } elseif (! empty($attr) && is_array($attr)) {
+            // Support array of attributes.
             foreach ($attr as $attribute => $value) {
                 $output .= " {$attribute}='{$value}'";
             }
         }
         $output .= ">\n";
 
-        // Add the option elements
+        // Add the option elements.
         $output .= "<option value=''>&nbsp;</option>\n";
         foreach ($countries as $countryIso => $country) {
             $output .= "<option value='{$countryIso}'";
@@ -82,49 +81,52 @@ if (! function_exists('country_select')) {
 
 if (! function_exists('state_select')) {
     /**
-     * Creates a state/provience/county form dropdown based on the entries in
-     * the address.states config. The word "state" is used but the structure can
-     * be used for Canadian provinces, Irish and UK counties, and any other area
-     * based data.
+     * Creates a state/provience/county form dropdown based on the entries in the
+     * address.states config. The word "state" is used but the structure can be
+     * used for Canadian provinces, Irish and UK counties, and any other area based
+     * data.
      *
-     * @param string $selectedCode The value of the item that should be selected when the dropdown is drawn.
-     * @param string $defaultCode The value of the item that should be selected if no other matches are found.
-     * @param string $countryCode The code of the country for which the states/priviences/counties are returned. Defaults to 'US'.
-     * @param string $selectName The name assigned to the select. Defaults to 'state_code'.
-     * @param string $attr Optional value for class name or an array of attributes.
+     * @param string       $selectedCode The value of the item that should be selected
+     * when the dropdown is rendered.
+     * @param string       $defaultCode  The value of the item that should be selected
+     * if no other matches are found.
+     * @param string       $countryCode  The code of the country for which the states/
+     * provinces/counties are returned. Defaults to 'US'.
+     * @param string       $selectName   The name assigned to the select. Defaults
+     * to 'state_code'.
+     * @param string|array $attr         Optional class value or an array of attributes.
      *
-     * @return string The full html for the select input.
+     * @return string The full html for the select element.
      */
     function state_select($selectedCode = '', $defaultCode = '', $countryCode = 'US', $selectName = 'state_code', $attr = '')
     {
-        // Grab the states from the config
+        // Grab the states from the config.
         $allStates = config_item('address.states');
         if (! is_array($allStates) || empty($allStates[$countryCode])) {
             return lang('us_no_states');
         }
 
-        // Get the states for the selected country
+        // Get the states for the selected country.
         $states = $allStates[$countryCode];
 
-        // If $selectedCode is empty, set it to $defaultCode
+        // If $selectedCode is empty, set it to $defaultCode.
         if (empty($selectedCode)) {
             $selectedCode = $defaultCode;
         }
 
-        // Setup the opening select tag
+        // Setup the opening select tag.
         $output = "<select name='{$selectName}' id='{$selectName}'";
-        if (is_string($attr) && ! empty($attr)) {
+        if (! empty($attr) && is_string($attr)) {
             $output .= " class='{$attr}'";
-        }
-        // add support for array attributes.
-        else if(! empty($attr) && is_array($attr)){
+        } elseif (! empty($attr) && is_array($attr)) {
+            // Support array attributes.
             foreach ($attr as $attribute => $value) {
                 $output .= " {$attribute}='{$value}'";
             }
         }
         $output .= ">\n";
 
-        // Add the option elements
+        // Add the option elements.
         $output .= "<option value=''>&nbsp;</option>\n";
         foreach ($states as $abbrev => $name) {
             $output .= "<option value='{$abbrev}'";
@@ -156,9 +158,9 @@ if (! function_exists('state_abbr_to_name')) {
      */
     function state_abbr_to_name($abbr, $country_code = 'US')
     {
-        // First, grab the states from the config
+        // First, grab the states from the config.
         $all_states = config_item('address.states');
-        // Get the states for the selected country
+        // Get the states for the selected country.
         $states = $all_states[$country_code];
 
         $abbr = strtoupper($abbr);
@@ -168,25 +170,23 @@ if (! function_exists('state_abbr_to_name')) {
 
 if (! function_exists('state_name_to_abbr')) {
     /**
-     * Convert a full state/region/subdivision name to the abbreviation
-     * (ISO 3166-2 code).
+     * Convert a full state/region/subdivision name to the abbreviation (ISO 3166-2
+     * code).
      *
-     * @param  string $name State's full name.
-     * @param  string $country_code Country ISO 3166-1 alpha-2 code.
+     * @param string $name         State's full name.
+     * @param string $country_code Country ISO 3166-1 alpha-2 code.
      *
-     * @return string/boolean Returns the state's ISO 3166-2 code/abbreviation,
-     * or false when not found.
+     * @return string|bool Returns the state's ISO 3166-2 code/abbreviation, or
+     * false when not found.
      */
     function state_name_to_abbr($name, $country_code = 'US')
     {
-        // First, grab the states from the config
+        // First, grab the states from the config.
         $all_states = config_item('address.states');
-        // Get the states for the selected country
+        // Get the states for the selected country.
         $states = $all_states[$country_code];
 
-        // Use lowercase for comparison
+        // Use lowercase for comparison.
         return array_search(strtolower($name), array_map('strtolower', $states));
     }
 }
-
-/* End /helpers/address_helper.php */

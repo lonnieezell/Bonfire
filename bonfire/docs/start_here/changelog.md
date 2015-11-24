@@ -22,6 +22,9 @@
 * #1169/1166: Add 'result' to save_user payload to provide payload consistency with Settings.php and Users.php
 * #1177: Include Bonfire and Application modules when searching from Docs
 * #1178: Fixed docs default_group redirection
+* #1185: Updated installation docs to include setting `base_url` in `/application/config/config.php`
+* #1186: Updated `country_select()` and `state_select()` to accept an array of attributes in place of `$classValue`.
+* #1187: Removed filter dropdown/select from report when displaying `activity_own`, because no other users are displayed in the list when using `activity_own`.
 
 #### Known Issues:
 
