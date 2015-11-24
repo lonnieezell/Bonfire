@@ -35,11 +35,11 @@ if (! function_exists('country_select')) {
      * if no other matches are found.
      * @param string $selectName  The name assigned to the select element.
      * Defaults to 'iso'.
-     * @param string $classValue       Optional value for class name.
+     * @param string $attr Optional value for class name or an array of attributes.
      *
      * @return string The full html for the select input.
      */
-    function country_select($selectedIso = '', $defaultIso = 'US', $selectName = 'iso', $classValue = '')
+    function country_select($selectedIso = '', $defaultIso = 'US', $selectName = 'iso', $attr = '')
     {
         // Grab the countries from the config
         $countries = config_item('address.countries');
@@ -54,8 +54,14 @@ if (! function_exists('country_select')) {
 
         // Setup the opening select tag
         $output = "<select name='{$selectName}' id='{$selectName}'";
-        if (! empty($classValue) && is_string($classValue)) {
-            $output .= " class='{$classValue}'";
+        if (! empty($attr) && is_string($attr)) {
+            $output .= " class='{$attr}'";
+        }
+        // add support for array attributes.
+        else if(! empty($attr) && is_array($attr)){
+            foreach ($attr as $attribute => $value) {
+                $output .= " {$attribute}='{$value}'";
+            }
         }
         $output .= ">\n";
 
@@ -85,11 +91,11 @@ if (! function_exists('state_select')) {
      * @param string $defaultCode The value of the item that should be selected if no other matches are found.
      * @param string $countryCode The code of the country for which the states/priviences/counties are returned. Defaults to 'US'.
      * @param string $selectName The name assigned to the select. Defaults to 'state_code'.
-     * @param string $classValue Optional value for class name.
+     * @param string $attr Optional value for class name or an array of attributes.
      *
      * @return string The full html for the select input.
      */
-    function state_select($selectedCode = '', $defaultCode = '', $countryCode = 'US', $selectName = 'state_code', $classValue = '')
+    function state_select($selectedCode = '', $defaultCode = '', $countryCode = 'US', $selectName = 'state_code', $attr = '')
     {
         // Grab the states from the config
         $allStates = config_item('address.states');
@@ -107,8 +113,14 @@ if (! function_exists('state_select')) {
 
         // Setup the opening select tag
         $output = "<select name='{$selectName}' id='{$selectName}'";
-        if (is_string($classValue) && ! empty($classValue)) {
-            $output .= " class='{$classValue}'";
+        if (is_string($attr) && ! empty($attr)) {
+            $output .= " class='{$attr}'";
+        }
+        // add support for array attributes.
+        else if(! empty($attr) && is_array($attr)){
+            foreach ($attr as $attribute => $value) {
+                $output .= " {$attribute}='{$value}'";
+            }
         }
         $output .= ">\n";
 
