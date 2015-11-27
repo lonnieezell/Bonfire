@@ -1179,24 +1179,10 @@ class Assets
                             </ul>" . PHP_EOL;
                     }
 
-                    // DEFAULT THEME
-                    // First, check the default theme. Add found files to the
-                    // array. Anything in the active theme will override it.
-                    //
-                    // If $default_theme and $active_theme are the same,
-                    // checking $default_theme would just repeat the
-                    // $active_theme section, resulting in duplicates
-                    if (! $bypass_inheritance && $default_theme !== $active_theme) {
-                        if ($file_array = self::get_file_array($site_path, "{$path}/{$default_theme}", $file, $type, $media)) {
-                            $new_files[] = $file_array;
-                            $found = true;
-                        } elseif ($file_array = self::get_file_array($site_path, "{$path}/{$default_theme}{$clean_type}/", $file, $type, $media)) {
-                            // If it wasn't in the root, check the $type sub-folder
-                            $new_files[] = $file_array;
-                            $found = true;
-                        }
-                    }
                     // ACTIVE THEME
+                    // First, check the active theme. Add found files to the
+                    // array. If not found, find in default theme.
+                    //
                     // By grabbing a copy from both $default_theme and
                     // $active_theme, simple CSS-only overrides for a theme are
                     // supported, completely changing appearance through a
@@ -1211,6 +1197,23 @@ class Assets
                             $found = true;
                         }
                     }
+
+                    // DEFAULT THEME
+                    //
+                    // If $default_theme and $active_theme are the same,
+                    // checking $default_theme would just repeat the
+                    // $active_theme section, resulting in duplicates
+                    if (! $bypass_inheritance && $default_theme !== $active_theme && !$found) {
+                        if ($file_array = self::get_file_array($site_path, "{$path}/{$default_theme}", $file, $type, $media)) {
+                            $new_files[] = $file_array;
+                            $found = true;
+                        } elseif ($file_array = self::get_file_array($site_path, "{$path}/{$default_theme}{$clean_type}/", $file, $type, $media)) {
+                            // If it wasn't in the root, check the $type sub-folder
+                            $new_files[] = $file_array;
+                            $found = true;
+                        }
+                    }
+
                     // ASSET BASE
                     // If the file hasn't been found, yet, look in the
                     // 'assets.base_folder'
