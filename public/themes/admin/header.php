@@ -1,8 +1,8 @@
 <?php
 
 Assets::add_css(array(
-    'bootstrap.css',
-    'bootstrap-responsive.css',
+    'bootstrap.min.css',
+    'bootstrap-responsive.min.css',
 ));
 
 if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {

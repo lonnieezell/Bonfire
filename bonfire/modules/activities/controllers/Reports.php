@@ -63,7 +63,6 @@ class Reports extends Admin_Controller
 
         Assets::add_js(
             array(
-                'bootstrap',
                 'jquery.dataTables',
                 'bootstrap-dataTables',
             )
