@@ -154,12 +154,14 @@ $lang['mb_delete_success']      = 'The module and associated database entries we
 $lang['mb_delete_success_db_only']  = ' HOWEVER, the module folder and files were not removed. They must be removed manually.';
 
 // Validate Form
+$lang['mb_contexts']    = 'Contexts';
 $lang['mb_contexts_content']    = 'Contexts :: Content';
 $lang['mb_contexts_developer']  = 'Contexts :: Developer';
 $lang['mb_contexts_public']     = 'Contexts :: Public';
 $lang['mb_contexts_reports']    = 'Contexts :: Reports';
 $lang['mb_contexts_settings']   = 'Contexts :: Settings';
 $lang['mb_module_db']           = 'Module Table';
+$lang['mb_form_action']  = 'Form Actions';
 $lang['mb_form_action_create']  = 'Form Actions :: Create';
 $lang['mb_form_action_delete']  = 'Form Actions :: Delete';
 $lang['mb_form_action_edit']    = 'Form Actions :: Edit';

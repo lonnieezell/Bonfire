@@ -88,17 +88,19 @@ class Migration_Install_{$module_name_lower}_permissions extends Migration
 	 */
 	public function up()
 	{
-		\$rolePermissionsData = array();
-		foreach (\$this->permissionValues as \$permissionValue) {
-			\$this->db->insert(\$this->tableName, \$permissionValue);
+		if(!empty(\$this->permissionValues)){
+			\$rolePermissionsData = array();
+			foreach (\$this->permissionValues as \$permissionValue) {
+				\$this->db->insert(\$this->tableName, \$permissionValue);
 
-			\$rolePermissionsData[] = array(
-                \$this->roleKey       => \$this->roleId,
-                \$this->permissionKey => \$this->db->insert_id(),
-			);
+				\$rolePermissionsData[] = array(
+					\$this->roleKey       => \$this->roleId,
+					\$this->permissionKey => \$this->db->insert_id(),
+				);
+			}
+
+			\$this->db->insert_batch(\$this->rolePermissionsTable, \$rolePermissionsData);
 		}
-
-		\$this->db->insert_batch(\$this->rolePermissionsTable, \$rolePermissionsData);
 	}
 
 	/**
@@ -108,28 +110,30 @@ class Migration_Install_{$module_name_lower}_permissions extends Migration
 	 */
 	public function down()
 	{
-        \$permissionNames = array();
-		foreach (\$this->permissionValues as \$permissionValue) {
-            \$permissionNames[] = \$permissionValue[\$this->permissionNameField];
-        }
+		if(!empty(\$this->permissionValues)){
+			\$permissionNames = array();
+			foreach (\$this->permissionValues as \$permissionValue) {
+				\$permissionNames[] = \$permissionValue[\$this->permissionNameField];
+			}
 
-        \$query = \$this->db->select(\$this->permissionKey)
-                          ->where_in(\$this->permissionNameField, \$permissionNames)
-                          ->get(\$this->tableName);
+			\$query = \$this->db->select(\$this->permissionKey)
+							  ->where_in(\$this->permissionNameField, \$permissionNames)
+							  ->get(\$this->tableName);
 
-        if ( ! \$query->num_rows()) {
-            return;
-        }
+			if ( ! \$query->num_rows()) {
+				return;
+			}
 
-        \$permissionIds = array();
-        foreach (\$query->result() as \$row) {
-            \$permissionIds[] = \$row->{\$this->permissionKey};
-        }
+			\$permissionIds = array();
+			foreach (\$query->result() as \$row) {
+				\$permissionIds[] = \$row->{\$this->permissionKey};
+			}
 
-        \$this->db->where_in(\$this->permissionKey, \$permissionIds)
-                 ->delete(\$this->rolePermissionsTable);
+			\$this->db->where_in(\$this->permissionKey, \$permissionIds)
+					 ->delete(\$this->rolePermissionsTable);
 
-        \$this->db->where_in(\$this->permissionNameField, \$permissionNames)
-                 ->delete(\$this->tableName);
+			\$this->db->where_in(\$this->permissionNameField, \$permissionNames)
+					 ->delete(\$this->tableName);
+		 }
 	}
 }";

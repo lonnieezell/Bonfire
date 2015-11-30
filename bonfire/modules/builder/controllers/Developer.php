@@ -405,12 +405,14 @@ class Developer extends Admin_Controller
      */
     private function validate_form($field_total = 0)
     {
+        $this->form_validation->set_rules("contexts[]", 'lang:mb_contexts', "required");
         $this->form_validation->set_rules("contexts_content", 'lang:mb_contexts_content', "trim|is_numeric");
         $this->form_validation->set_rules("contexts_developer", 'lang:mb_contexts_developer', "trim|is_numeric");
         $this->form_validation->set_rules("contexts_public", 'lang:mb_contexts_public', "trim|is_numeric");
         $this->form_validation->set_rules("contexts_reports", 'lang:mb_contexts_reports', "trim|is_numeric");
         $this->form_validation->set_rules("contexts_settings", 'lang:mb_contexts_settings', "trim|is_numeric");
         $this->form_validation->set_rules("module_db", 'lang:mb_module_db', "trim|alpha");
+        $this->form_validation->set_rules("form_action[]", 'lang:mb_form_action', "required");
         $this->form_validation->set_rules("form_action_create", 'lang:mb_form_action_create', "trim|is_numeric");
         $this->form_validation->set_rules("form_action_delete", 'lang:mb_form_action_delete', "trim|is_numeric");
         $this->form_validation->set_rules("form_action_edit", 'lang:mb_form_action_edit', "trim|is_numeric");
@@ -418,7 +420,7 @@ class Developer extends Admin_Controller
         $this->form_validation->set_rules("form_error_delimiters", 'lang:mb_form_err_delims', "required|trim");
         $this->form_validation->set_rules("module_description", 'lang:mb_form_mod_desc', "trim|required");
         $this->form_validation->set_rules("module_name", 'lang:mb_form_mod_name', "trim|required|callback__modulename_check");
-        $this->form_validation->set_rules("role_id", 'lang:mb_form_role_id', "trim|is_numeric");
+        $this->form_validation->set_rules("role_id", 'lang:mb_form_role_id', "trim|required|is_numeric");
 
         // If there's no database table, don't use the table validation
         if ($this->input->post('module_db')) {
