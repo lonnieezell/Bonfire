@@ -190,7 +190,7 @@ To install this migration, navigate to Developer / Database / Migrations. Click 
 
 In order to manage your blog, you will create a new entry under the Content menu that takes you to all of the blog management features. To get started you will need one controller and one view.
 
-Create a new controller, `blog/controllers/content.php`. Each context uses a controller of the same name. In this case we want to create some actions for the Content Context, so we create a file named `content.php`.
+Create a new controller, `blog/controllers/Content.php`. Each context uses a controller of the same name. In this case we want to create some actions for the Content Context, so we create a file named `Content.php`.
 
     <?php defined('BASEPATH') || exit('No direct script access allowed');
 
@@ -589,9 +589,9 @@ Editing our posts is very simple to do now. Simply add the following `edit_post(
 
 ## The Public Context
 
-Now that we have basic administration pages in place, it's time to actually let the users view your awesome blog posts. This requires that we create a new controller, in the same blog module, called `blog`. This will handle what we call your <em>Public Context</em> and is simply a front-facing controller that will directly map to the URI. In this case, you can view this controller at `http://yoursite.com/blog`.
+Now that we have basic administration pages in place, it's time to actually let the users view your awesome blog posts. This requires that we create a new controller, in the same blog module, called `Blog`. This will handle what we call your <em>Public Context</em> and is simply a front-facing controller that will directly map to the URI. In this case, you can view this controller at `http://yoursite.com/blog`.
 
-Create a new file, `modules/blog/controllers/blog.php`
+Create a new file, `modules/blog/controllers/Blog.php`
 
     <?php
 
