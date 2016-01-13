@@ -25,6 +25,7 @@
 * #1185: Updated installation docs to include setting `base_url` in `/application/config/config.php`
 * #1186: Updated `country_select()` and `state_select()` to accept an array of attributes in place of `$classValue`.
 * #1187: Removed filter dropdown/select from report when displaying `activity_own`, because no other users are displayed in the list when using `activity_own`.
+* Fixed `FOPEN_READ_WRITE_CREATE_DESTRUCTIVE` in constants config.
 
 #### Known Issues:
 
