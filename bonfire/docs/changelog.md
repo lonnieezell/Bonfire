@@ -12,6 +12,7 @@ Upgraded CodeIgniter 3 to 3.0.3 (see the [3.0.3 Upgrade Notes](http://www.codeig
 * #1163/1164: Fix /public/tests.php shows "SimpleTest documentation" instead of "Bonfire Tests".
 
 #### Additional Changes:
+* Fixed `FOPEN_READ_WRITE_CREATE_DESTRUCTIVE` in constants config.
 
 #### Known Issues:
 
