@@ -37,6 +37,7 @@
 * BF_Router: Removed CI2 compatibility
     * Only load ucfirst() controllers.
     * `_set_default_controller()` and `_validate_request()` are protected methods (they were public in CI2).
+* Fixed `FOPEN_READ_WRITE_CREATE_DESTRUCTIVE` in constants config.
 
 #### Known Issues:
 
