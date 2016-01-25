@@ -7,8 +7,8 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT
+ * @copyright Copyright (c) 2011 - 2016, Bonfire Dev Team
+ * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -34,16 +34,16 @@ class User_model extends BF_Model
     /** @var string Name of the roles table. */
     protected $roles_table = 'roles';
 
-    /** @var boolean Use soft deletes or not. */
+    /** @var bool Use soft deletes or not. */
     protected $soft_deletes = true;
 
     /** @var string The date format to use. */
     protected $date_format = 'datetime';
 
-    /** @var boolean Set the modified time automatically. */
+    /** @var bool Set the modified time automatically. */
     protected $set_modified = false;
 
-    /** @var boolean Skip the validation. */
+    /** @var bool Skip the validation. */
     protected $skip_validation = true;
 
     /** @var array Validation rules. */
@@ -90,7 +90,7 @@ class User_model extends BF_Model
         ),
     );
 
-    /** @var Array Additional validation rules only used on insert. */
+    /** @var array Additional validation rules only used on insert. */
     protected $insert_validation_rules = array(
         array(
             'field' => 'password',
@@ -147,10 +147,10 @@ class User_model extends BF_Model
     /**
      * Count the users in the system.
      *
-     * @param boolean $get_deleted If true, count users which have been deleted,
-     * else count users which have not been deleted.
+     * @param bool $get_deleted If true, count users which have been deleted, else
+     * count users which have not been deleted.
      *
-     * @return integer The number of users found.
+     * @return int The number of users found.
      */
     public function count_all($get_deleted = false)
     {
@@ -167,11 +167,11 @@ class User_model extends BF_Model
     /**
      * Perform a standard delete, but also allow a record to be purged.
      *
-     * @param integer $id    The ID of the user to delete.
-     * @param boolean $purge If true, the account will be purged from the system.
+     * @param int  $id    The ID of the user to delete.
+     * @param bool $purge If true, the account will be purged from the system.
      * If false, performs a standard delete (with soft-deletes enabled).
      *
-     * @return boolean True on success, else false.
+     * @return bool True on success, else false.
      */
     public function delete($id = 0, $purge = false)
     {
@@ -192,9 +192,9 @@ class User_model extends BF_Model
     /**
      * Find a user's record and role information.
      *
-     * @param integer $id The user's ID.
+     * @param int $id The user's ID.
      *
-     * @return boolean|object An object with the user's information.
+     * @return bool|object An object with the user's information.
      */
     public function find($id = null)
     {
@@ -206,7 +206,7 @@ class User_model extends BF_Model
     /**
      * Find all user records and the associated role information.
      *
-     * @return boolean An array of objects with each user's information.
+     * @return bool An array of objects with each user's information.
      */
     public function find_all()
     {
@@ -223,7 +223,7 @@ class User_model extends BF_Model
      * @param string $value The value to search for.
      * @param string $type  The type of where clause to create ('and' or 'or').
      *
-     * @return boolean|object An object with the user's info, or false on failure.
+     * @return bool|object An object with the user's info, or false on failure.
      */
     public function find_by($field = null, $value = null, $type = 'and')
     {
@@ -240,7 +240,7 @@ class User_model extends BF_Model
      * 'email' or 'username' must be unique. If 'role_id' is not included, the default
      * role from the Roles model will be assigned.
      *
-     * @return boolean|integer The ID of the new user on success, else false.
+     * @return bool|int The ID of the new user on success, else false.
      */
     public function insert($data = array())
     {
@@ -284,10 +284,10 @@ class User_model extends BF_Model
      * - Generate a new password/hash if both password and pass_confirm are provided.
      * - Store the country code.
      *
-     * @param integer $id   The user's ID.
+     * @param int $id   The user's ID.
      * @param array $data An array of key/value pairs to update for the user.
      *
-     * @return boolean True if the update succeeded, null on invalid $id, or false
+     * @return bool True if the update succeeded, null on invalid $id, or false
      * on failure.
      */
     public function update($id = null, $data = array())
@@ -395,15 +395,15 @@ class User_model extends BF_Model
     /**
      * Count the number of users that belong to each role.
      *
-     * @return boolean|array An array of objects with the name of each role and
+     * @return bool|array An array of objects with the name of each role and
      * the number of users in that role, else false.
      */
     public function count_by_roles()
     {
         $this->db->select(array("{$this->roles_table}.role_name", 'count(1) as count'))
-                 ->from($this->table_name)
-                 ->join($this->roles_table, "{$this->roles_table}.role_id = {$this->table_name}.role_id", 'left')
-                 ->group_by("{$this->roles_table}.role_name");
+            ->from($this->table_name)
+            ->join($this->roles_table, "{$this->roles_table}.role_id = {$this->table_name}.role_id", 'left')
+            ->group_by("{$this->roles_table}.role_name");
 
         $query = $this->db->get();
         if ($query->num_rows()) {
@@ -416,10 +416,10 @@ class User_model extends BF_Model
     /**
      * Update all users with the current role to have the default role.
      *
-     * @param integer $current_role The ID of the role of users which will be set
+     * @param int $current_role The ID of the role of users which will be set
      * to the default role.
      *
-     * @return boolean True on successful update, else false.
+     * @return bool True on successful update, else false.
      */
     public function set_to_default_role($current_role)
     {
@@ -451,9 +451,9 @@ class User_model extends BF_Model
      * Flag one or more user accounts to require a password reset on the user's
      * next login.
      *
-     * @param integer $user_id The ID of the user to flag for password reset.
+     * @param int $user_id The ID of the user to flag for password reset.
      *
-     * @return boolean True if the account was updated successfully, else false.
+     * @return bool True if the account was updated successfully, else false.
      */
     public function force_password_reset($user_id = null)
     {
@@ -467,10 +467,12 @@ class User_model extends BF_Model
     /**
      * Generates a new password hash for the given password.
      *
-     * @param string $old The password to hash.
-     * @param integer $iterations    The number of iterations to use in generating the hash
+     * @param string $old        The password to hash.
+     * @param int    $iterations The number of iterations to use when generating
+     * the hash.
      *
-     * @return array An array with the hashed password and the number of iterations, or false
+     * @return array An array with the hashed password and the number of iterations,
+     * or false.
      */
     public function hash_password($old = '', $iterations = 0)
     {
@@ -522,8 +524,8 @@ class User_model extends BF_Model
     /**
      * Retrieve all meta values defined for a user.
      *
-     * @param integer $user_id The ID of the user for which the meta will be retrieved.
-     * @param array   $fields  The meta_key names to retrieve.
+     * @param int   $user_id The ID of the user for which the meta will be retrieved.
+     * @param array $fields  The meta_key names to retrieve.
      *
      * @return stdClass An object with the key/value pairs, or an empty object.
      */
@@ -541,7 +543,7 @@ class User_model extends BF_Model
         }
 
         $query = $this->db->where('user_id', $user_id)
-                          ->get($this->meta_table);
+            ->get($this->meta_table);
         if (! $query->num_rows()) {
             return new stdClass();
         }
@@ -558,9 +560,9 @@ class User_model extends BF_Model
     /**
      * Locate a single user and the user's meta information.
      *
-     * @param integer $user_id The ID of the user to fetch.
+     * @param int $user_id The ID of the user to fetch.
      *
-     * @return boolean|object An object with the user's profile and meta information,
+     * @return bool|object An object with the user's profile and meta information,
      * or false on failure.
      */
     public function find_user_and_meta($user_id = null)
@@ -601,10 +603,10 @@ class User_model extends BF_Model
      * );
      * $this->user_model->save_meta_for($user_id, $data);
      *
-     * @param integer $user_id The ID of the user for which to save the meta data.
-     * @param array   $data    An array of key/value pairs to save.
+     * @param int   $user_id The ID of the user for which to save the meta data.
+     * @param array $data    An array of key/value pairs to save.
      *
-     * @return boolean True on success, else false.
+     * @return bool True on success, else false.
      */
     public function save_meta_for($user_id = null, $data = array())
     {
@@ -634,7 +636,7 @@ class User_model extends BF_Model
 
             // Determine whether the data needs to be updated or inserted.
             $query = $this->db->where($where)
-                              ->get($this->meta_table);
+                ->get($this->meta_table);
             if ($query->num_rows()) {
                 $result = $this->db->update($this->meta_table, $obj, $where);
             } else {
@@ -647,11 +649,7 @@ class User_model extends BF_Model
             }
         }
 
-        if ($successCount == count($data)) {
-            return true;
-        }
-
-        return false;
+        return $successCount == count($data);
     }
 
     //--------------------------------------------------------------------------
@@ -679,8 +677,8 @@ class User_model extends BF_Model
         }
 
         $query = $this->db->select('id')
-                          ->where('activate_hash', $code)
-                          ->get($this->table_name);
+            ->where('activate_hash', $code)
+            ->get($this->table_name);
 
         if ($query->num_rows() !== 1) {
             $this->error = lang('us_err_no_matching_code');
@@ -747,9 +745,9 @@ class User_model extends BF_Model
         }
 
         $query = $this->db->select('id')
-                      ->where('id', $user_id)
-                      ->limit(1)
-                      ->get($this->table_name);
+            ->where('id', $user_id)
+            ->limit(1)
+            ->get($this->table_name);
 
         if ($query->num_rows() !== 1) {
             $this->error = lang('us_err_no_matching_id');
@@ -763,7 +761,7 @@ class User_model extends BF_Model
             return $result->id;
         }
 
-            $this->error = lang('us_err_user_is_active');
+        $this->error = lang('us_err_user_is_active');
         return false;
     }
 
@@ -772,7 +770,7 @@ class User_model extends BF_Model
      *
      * @param int $user_id The user ID to deactivate.
      *
-     * @return boolean True on success, false on error.
+     * @return bool True on success, false on error.
      */
     public function admin_deactivation($user_id = false)
     {
@@ -781,11 +779,11 @@ class User_model extends BF_Model
             return false;
         }
 
-        if ($this->deactivate($user_id, 'id', false)) {
+        if ($this->deactivate($user_id, false)) {
             return $user_id;
         }
 
-            $this->error = lang('us_err_user_is_inactive');
+        $this->error = lang('us_err_user_is_inactive');
         return false;
     }
 
@@ -803,7 +801,7 @@ class User_model extends BF_Model
     /**
      * Configure activation for the given user based on current user_activation_method.
      *
-     * @param number $user_id User's ID.
+     * @param int $user_id User's ID.
      *
      * @return array A 'message' (string) and 'error' (boolean, true if an error
      * occurred sending the activation email).
@@ -814,14 +812,14 @@ class User_model extends BF_Model
         $activation_method = $this->settings_lib->item('auth.user_activation_method');
 
         // Prepare user messaging vars
-        $emailMsgData   = array();
-        $emailView      = '';
-        $subject        = '';
-        $email_mess     = '';
-        $message        = lang('us_email_thank_you');
-        $type           = 'success';
-        $site_title     = $this->settings_lib->item('site.title');
-        $error          = false;
+        $emailMsgData = array();
+        $emailView    = '';
+        $subject      = '';
+        $email_mess   = '';
+        $message      = lang('us_email_thank_you');
+        $type         = 'success';
+        $site_title   = $this->settings_lib->item('site.title');
+        $error        = false;
         $ccAdmin      = false;
 
         switch ($activation_method) {
@@ -834,8 +832,8 @@ class User_model extends BF_Model
                     lang('us_account_reg_complete')
                 );
 
-                $emailView  = '_emails/activated';
-                $message    .= lang('us_account_active_login');
+                $emailView = '_emails/activated';
+                $message  .= lang('us_account_active_login');
 
                 $emailMsgData = array(
                     'title' => $site_title,
@@ -845,13 +843,13 @@ class User_model extends BF_Model
             case 1:
                 // Email Activiation.
                 // Run the account deactivate to assure everything is set correctly.
-                $activation_code    = $this->deactivate($user_id);
+                $activation_code = $this->deactivate($user_id);
 
                 // Create the link to activate membership
                 $activate_link = site_url("activate/{$user_id}");
-                $subject            =  lang('us_email_subj_activate');
-                $emailView          = '_emails/activate';
-                $message            .= lang('us_check_activate_email');
+                $subject       =  lang('us_email_subj_activate');
+                $emailView     = '_emails/activate';
+                $message      .= lang('us_check_activate_email');
 
                 $emailMsgData = array(
                     'title' => $site_title,
@@ -862,9 +860,9 @@ class User_model extends BF_Model
             case 2:
                 // Admin Activation.
                 $ccAdmin   = true;
-                $subject    =  lang('us_email_subj_pending');
-                $emailView  = '_emails/pending';
-                $message    .= lang('us_admin_approval_pending');
+                $subject   =  lang('us_email_subj_pending');
+                $emailView = '_emails/pending';
+                $message  .= lang('us_admin_approval_pending');
 
                 $emailMsgData = array(
                     'title' => $site_title,
@@ -877,9 +875,9 @@ class User_model extends BF_Model
         // Now send the email
         $this->load->library('emailer/emailer');
         $data = array(
-            'to'        => $this->find($user_id)->email,
-            'subject'   => $subject,
-            'message'   => $email_mess,
+            'to'      => $this->find($user_id)->email,
+            'subject' => $subject,
+            'message' => $email_mess,
         );
 
         if ($this->emailer->send($data)) {
@@ -900,8 +898,8 @@ class User_model extends BF_Model
             }
         } else {
             // If the message was not sent successfully, set an error message.
-            $message    .= lang('us_err_no_email') . $this->emailer->error;
-            $error      = true;
+            $message .= lang('us_err_no_email') . $this->emailer->error;
+            $error    = true;
         }
 
         return array('message' => $message, 'error' => $error);
@@ -914,14 +912,14 @@ class User_model extends BF_Model
     /**
      * Return the most recent login attempts.
      *
-     * @param integer $limit The maximum number of results to return.
+     * @param int $limit The maximum number of results to return.
      *
-     * @return boolean|array An array of objects with the login attempts, or false.
+     * @return bool|array An array of objects with the login attempts, or false.
      */
     public function get_login_attempts($limit = 15)
     {
         $this->db->limit($limit)
-                 ->order_by('login', 'desc');
+            ->order_by('login', 'desc');
 
         $query = $this->db->get('login_attempts');
         if ($query->num_rows()) {
@@ -951,4 +949,3 @@ class User_model extends BF_Model
         );
     }
 }
-//end User_model
