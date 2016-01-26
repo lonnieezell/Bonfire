@@ -7,7 +7,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2016, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -165,7 +165,7 @@ class User_model extends BF_Model
     /**
      * Perform a standard delete, but also allow a record to be purged.
      *
-     * @param int $id     The ID of the user to delete.
+     * @param int  $id    The ID of the user to delete.
      * @param bool $purge If true, the account will be purged from the system.
      * If false, performs a standard delete (with soft-deletes enabled).
      *
@@ -278,7 +278,7 @@ class User_model extends BF_Model
      * - Generate a new password/hash if both password and pass_confirm are provided.
      * - Store the country code.
      *
-     * @param int $id     The user's ID.
+     * @param int   $id   The user's ID.
      * @param array $data An array of key/value pairs to update for the user.
      *
      * @return bool True if the update succeeded, null on invalid $id, or false
@@ -457,8 +457,8 @@ class User_model extends BF_Model
      * Generates a new password hash for the given password.
      *
      * @param string $old        The password to hash.
-     * @param int    $iterations The number of iterations to use in generating the
-     * hash.
+     * @param int    $iterations The number of iterations to use when generating
+     * the hash.
      *
      * @return array An array with the hashed password and the number of iterations,
      * or false.
@@ -587,8 +587,8 @@ class User_model extends BF_Model
      * );
      * $this->user_model->save_meta_for($user_id, $data);
      *
-     * @param int $user_id The ID of the user for which to save the meta data.
-     * @param array   $data    An array of key/value pairs to save.
+     * @param int   $user_id The ID of the user for which to save the meta data.
+     * @param array $data    An array of key/value pairs to save.
      *
      * @return bool True on success, else false.
      */
@@ -763,7 +763,7 @@ class User_model extends BF_Model
             return false;
         }
 
-        if ($this->deactivate($user_id, 'id', false)) {
+        if ($this->deactivate($user_id, false)) {
             return $user_id;
         }
 
