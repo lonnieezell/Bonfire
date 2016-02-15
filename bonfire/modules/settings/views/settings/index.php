@@ -1,6 +1,6 @@
 <?php
 
-$errorClass = isset($errorClass) ? $errorClass : ' error';
+$errorClass = isset($errorClass) ? $errorClass : ' has-error';
 $showExtendedSettings = ! empty($extended_settings);
 if ($showExtendedSettings) {
     $defaultCountry = 'US';
@@ -17,19 +17,13 @@ if (validation_errors()) :
 </div>
 <?php endif; ?>
 <style>
-.tab-content.main-settings {
-    padding-bottom: 9px;
-    border-bottom: 1px solid #ddd;
-}
 #name-change-settings input {
-    width: 2em;
-}
-#password_iterations {
-    width: auto;
+    width: 4em;
+    display: inline;
 }
 </style>
 <div class="admin-box">
-    <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
+    <?php echo form_open($this->uri->uri_string()); ?>
         <div class="tabbable">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#main-settings" data-toggle="tab"><?php echo lang('set_tab_settings'); ?></a></li>

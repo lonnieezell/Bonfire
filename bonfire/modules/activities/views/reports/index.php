@@ -23,7 +23,7 @@ td.button-column button {
 </style>
 <div class="row icons">
     <?php if ($hasPermissionViewOwn) : ?>
-	<div class="column size1of4 media-box">
+	<div class="col-sm-3 media-box">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['own']}"; ?>'>
 			<img src="<?php echo Template::theme_url('images/activity-user.png'); ?>" alt='user icon' />
 		</a>
@@ -35,7 +35,7 @@ td.button-column button {
     endif;
     if ($hasPermissionViewUser) :
     ?>
-	<div class="column size1of4 media-box">
+	<div class="col-sm-3 media-box">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['user']}"; ?>'>
 			<img src="<?php echo Template::theme_url('images/customers.png'); ?>" alt='users icon' />
 		</a>
@@ -47,7 +47,7 @@ td.button-column button {
     endif;
     if ($hasPermissionViewModule) :
     ?>
-	<div class="column size1of4 media-box">
+	<div class="col-sm-3 media-box">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['module']}"; ?>'>
 			<img src="<?php echo Template::theme_url('images/product.png'); ?>" alt='modules icon' />
 		</a>
@@ -59,7 +59,7 @@ td.button-column button {
     endif;
     if ($hasPermissionViewDate) :
     ?>
-	<div class="column size1of4 media-box">
+	<div class="col-sm-3 media-box">
         <a href='<?php echo "{$activitiesReportsUrl}/{$pages['date']}"; ?>'>
 			<img src="<?php echo Template::theme_url('images/calendar.png'); ?>" alt='calendar icon' />
 		</a>
@@ -70,7 +70,7 @@ td.button-column button {
 	<?php endif; ?>
 </div>
 <div class="row">
-	<div class="column size1of2">
+	<div class="col-sm-6">
 		<!-- Active Modules -->
 		<div class="admin-box">
 			<h3><?php echo lang('activities_top_modules'); ?></h3>
@@ -96,7 +96,7 @@ td.button-column button {
             <?php endif; ?>
 		</div>
 	</div>
-	<div class="column size1of2 last-column">
+	<div class="col-sm-6 last-column">
 		<div class="admin-box">
 			<!-- Active Users -->
 			<h3><?php echo lang('activities_top_users'); ?></h3>

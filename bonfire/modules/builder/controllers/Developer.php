@@ -129,7 +129,7 @@ class Developer extends Admin_Controller
                 }
 
                 // Creating the context failed
-                Template::set_message(lang('mb_context_create_error') . Contexts::errors(), 'error');
+                Template::set_message(lang('mb_context_create_error') . Contexts::errors(), 'danger');
             }
         }
 
@@ -230,7 +230,7 @@ class Developer extends Admin_Controller
         // Remove the module's data and permissions from the database
         if ($this->deleteModuleData($module_name) === false) {
             // Something went wrong while trying to delete the data
-            Template::set_message(lang('mb_delete_trans_false'), $this->db->error, 'error');
+            Template::set_message(lang('mb_delete_trans_false'), $this->db->error, 'danger');
 
             redirect(SITE_AREA . '/developer/builder');
         }

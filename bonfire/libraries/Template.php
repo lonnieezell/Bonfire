@@ -561,7 +561,7 @@ class Template
      *
      * @return string A string with the results of inserting the message into the message template.
      */
-    public static function message($message = '', $type = 'information')
+    public static function message($message = '', $type = 'info')
     {
         // Does session data exist?
         if (empty($message)

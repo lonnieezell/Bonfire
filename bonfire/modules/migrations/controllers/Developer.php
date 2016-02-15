@@ -106,7 +106,7 @@ class Developer extends Admin_Controller
             }
         } else {
             log_message(lang('migrations_migrate_error') . "\n{$errorMessage}", 'error');
-            Template::set_message(lang('migrations_migrate_error') . "<br />{$errorMessage}", 'error');
+            Template::set_message(lang('migrations_migrate_error') . "<br />{$errorMessage}", 'danger');
         }
     }
 

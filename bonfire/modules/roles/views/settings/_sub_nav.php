@@ -4,7 +4,7 @@ $testSegment = $this->uri->segment(4);
 $rolesUrl = site_url(SITE_AREA . '/settings/roles');
 
 ?>
-<ul class="nav navbar-nav nav-pills">
+<ul class='nav navbar-nav'>
 	<li<?php echo $testSegment == '' ? ' class="active"' : ''; ?>>
 		<a href="<?php echo $rolesUrl; ?>"><?php echo lang('role_roles'); ?></a>
 	</li>

@@ -1,14 +1,10 @@
 <?php
 
-$errorClass = ' error';
-$labelClass = 'control-label col-sm-3 col-lg-2';
-$wrapClass = 'controls col-sm-6 col-lg-4';
-$controlClass = 'form-control';
+$errorClass   = empty($errorClass) ? ' has-error' : $errorClass;
+$controlClass = empty($controlClass) ? 'form-control' : $controlClass;
 $fieldData = array(
-    'errorClass'    => $errorClass,
-    'labelClass'  => $labelClass,
-    'wrapClass'  => $wrapClass,
-    'controlClass'  => $controlClass
+    'errorClass'   => $errorClass,
+    'controlClass' => $controlClass,
 );
 
 if (isset($password_hints)) {
@@ -57,7 +53,7 @@ if (empty($renderPayload) && isset($this->auth)) {
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <?php echo form_open($this->uri->uri_string(), array('class' => 'form-horizontal', 'autocomplete' => 'off')); ?>
+            <?php echo form_open($this->uri->uri_string(), array('autocomplete' => 'off')); ?>
                 <fieldset>
                     <?php Template::block('user_fields', 'user_fields', $fieldData); ?>
                 </fieldset>

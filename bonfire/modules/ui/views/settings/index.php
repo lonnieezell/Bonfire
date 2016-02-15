@@ -6,7 +6,7 @@
 <?php endif; ?>
 <p class='intro'><?php echo lang('ui_keyboard_shortcuts'); ?></p>
 <div class="admin-box">
-    <?php echo form_open($this->uri->uri_string(), array('class' => "form-horizontal", 'id' => 'shortcut_form')); ?>
+    <?php echo form_open($this->uri->uri_string(), array('id' => 'shortcut_form')); ?>
         <table class="table table-striped table-condensed">
             <thead>
                 <tr>
@@ -27,7 +27,7 @@
             <tbody>
                 <tr>
                     <th>
-                        <select name="new_action" class="col-sm-4">
+                        <select name="new_action" class="span4">
                             <?php
                             foreach ($current as $name => $detail) :
                                 if (! array_key_exists($name, $settings)) :

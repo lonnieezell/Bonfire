@@ -7,7 +7,7 @@ $field_prefix    = '';
 $headers         = '';
 $editColumnAdded = false;
 $pager           = '';
-$pencil_icon     = "'<span class=\"icon-pencil\"></span> ' . ";
+$pencil_icon     = "'<span class=\"fa fa-pencil\"></span> ' . ";
 $table_records   = '';
 
 if ($usePagination) {

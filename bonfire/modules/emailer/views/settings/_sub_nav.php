@@ -1,5 +1,5 @@
-<ul class="nav navbar-nav nav-pills">
-    <li <?php echo $this->uri->segment(4) == '' ? 'class="active"' : '' ?>>
+<ul class='nav navbar-nav'>
+<li <?php echo $this->uri->segment(4) == '' ? 'class="active"' : '' ?>>
         <a href="<?php echo site_url(SITE_AREA .'/settings/emailer') ?>"><?php echo lang('bf_context_settings'); ?></a>
     </li>
     <li <?php echo $this->uri->segment(4) == 'template' ? 'class="active"' : '' ?>>

@@ -5,7 +5,7 @@ $checkSegment = $this->uri->segment(4);
 $developerUrl = site_url(SITE_AREA . '/developer');
 
 ?>
-<ul class="nav navbar-nav nav-pills">
+<ul class='nav navbar-nav'>
 	<li<?php echo $checkSegment == '' && $migrationsSegment != 'migrations' ? ' class="active"' : ''; ?>>
 		<a href='<?php echo "{$developerUrl}/database"; ?>'><?php echo lang('database_maintenance'); ?></a>
 	</li>

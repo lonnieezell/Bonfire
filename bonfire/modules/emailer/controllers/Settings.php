@@ -62,13 +62,13 @@ class Settings extends Admin_Controller
             } elseif ($protocol == 'smtp') {
                 $this->form_validation->set_rules('smtp_host', 'lang:emailer_smtp_address', 'required|trim');
                 $this->form_validation->set_rules('smtp_user', 'lang:emailer_smtp_username', 'trim');
-                $this->form_validation->set_rules('smtp_pass', 'lang:emailer_smtp_password', 'trim|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,20}]');
+                $this->form_validation->set_rules('smtp_pass', 'lang:emailer_smtp_password', 'trim|matches_pattern[[A-Za-z0-9!@#\%$^&+=]{2,64}]');
                 $this->form_validation->set_rules('smtp_port', 'lang:emailer_smtp_port', 'trim|numeric');
                 $this->form_validation->set_rules('smtp_timeout', 'lang:emailer_smtp_timeout', 'trim|numeric');
             }
 
             if ($this->form_validation->run() === false) {
-                Template::set_message(lang('emailer_settings_save_error'), 'error');
+                Template::set_message(lang('emailer_settings_save_error'), 'danger');
             } else {
                 $data = array(
                     array('name' => 'sender_email', 'value' => $this->input->post('sender_email')),
@@ -90,7 +90,7 @@ class Settings extends Admin_Controller
                     redirect(SITE_AREA . '/settings/emailer');
                 }
 
-                Template::set_message(lang('emailer_settings_save_error'), 'error');
+                Template::set_message(lang('emailer_settings_save_error'), 'danger');
             }
         }
 
@@ -188,10 +188,10 @@ class Settings extends Admin_Controller
                 if ($result) {
                     Template::set_message(sprintf(lang('emailer_delete_success'), count($checked)), 'success');
                 } else {
-                    Template::set_message(sprintf(lang('emailer_delete_failure'), $emailError), 'error');
+                    Template::set_message(sprintf(lang('emailer_delete_failure'), $emailError), 'danger');
                 }
             } else {
-                Template::set_message(lang('emailer_delete_none'), 'error');
+                Template::set_message(lang('emailer_delete_none'), 'danger');
             }
         } elseif (isset($_POST['force_process'])) {
             $this->load->library('emailer');
@@ -217,7 +217,7 @@ class Settings extends Admin_Controller
             $this->emailer->send($data, true);
         }
 
-        Template::set('emails', $this->emailer_model->limit($this->limit, $offset)->find_all());
+        Template::set('emails', $this->emailer_model->order_by('id', 'desc')->limit($this->limit, $offset)->find_all());
         Template::set('total_in_queue', $this->emailer_model->count_by('date_sent IS NULL'));
         Template::set('total_sent', $this->emailer_model->count_by('date_sent IS NOT NULL'));
 
@@ -270,7 +270,7 @@ class Settings extends Admin_Controller
             // Validate subject, content and recipients
             $this->form_validation->set_rules('email_subject', 'lang:emailer_email_subject', 'required|trim|min_length[1]|max_length[255]');
             $this->form_validation->set_rules('email_content', 'lang:emailer_email_content', 'required|trim|min_length[1]');
-            $this->form_validation->set_rules('checked', 'lang:bf_users', 'required');
+            $this->form_validation->set_rules('checked[]', 'lang:bf_users', 'required');
 
             if ($this->form_validation->run() === false) {
                 // @todo This shouldn't be necessary, is set_value() not used in the view?
@@ -309,9 +309,9 @@ class Settings extends Admin_Controller
                         redirect(SITE_AREA . '/settings/emailer/queue');
                     }
 
-                    Template::set_message(sprintf(lang('emailer_create_email_failure'), $emailError), 'error');
+                    Template::set_message(sprintf(lang('emailer_create_email_failure'), $emailError), 'danger');
                 } else {
-                    Template::set_message(lang('emailer_create_email_no_users'), 'error');
+                    Template::set_message(lang('emailer_create_email_no_users'), 'danger');
                 }
             }
         }

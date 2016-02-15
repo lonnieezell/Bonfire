@@ -10,19 +10,21 @@ td.preview { text-align: center !important; }
 </style>
 <div class="admin-box">
     <div class="row">
-        <div class="column size1of3">
+        <div class="col-md-4">
             <p><strong><?php echo lang('emailer_total_in_queue'); ?></strong> <?php echo $total_in_queue ? $total_in_queue : '0'; ?></p>
         </div>
-        <div class="column size1of3">
+        <div class="col-md-4">
             <p><strong><?php echo lang('emailer_total_sent'); ?></strong> <?php echo $total_sent ? $total_sent : '0'; ?></p>
         </div>
-        <div class="column size1of3 last-column text-right">
+        <div class="col-md-4 text-right">
             <?php echo form_open($this->uri->uri_string(), array('class' => 'form-inline')); ?>
                 <input type="submit" name="force_process" class="btn btn-primary" value="<?php e(lang('emailer_force_process')); ?>" />
                 <input type="submit" name="insert_test" class="btn btn-warning" value="<?php e(lang('emailer_insert_test')); ?>" />
             <?php echo form_close(); ?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12">
     <?php if (empty($emails) || ! is_array($emails)) : ?>
     <div class="alert alert-warning">
         <p><?php echo lang('emailer_stat_no_queue'); ?></p>
@@ -77,10 +79,12 @@ td.preview { text-align: center !important; }
         echo form_close();
     endif;
         ?>
+        </div>
+    </div>
 </div>
 <?php if (isset($email_debug)) : ?>
 <h3><?php echo lang('emailer_queue_debug_heading'); ?></h3>
-<div class="notification attention">
+<div class="alert alert-warning">
     <p><?php echo lang('emailer_queue_debug_error'); ?></p>
 </div>
 <div class="box">

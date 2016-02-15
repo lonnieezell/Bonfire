@@ -23,7 +23,7 @@
                     );
                     break;
                 case 'state_select':
-                    if (! is_callable('state_select')) {
+                    if (!is_callable('state_select')) {
                         $this->load->config('address');
                         $this->load->helper('address');
                     }
@@ -34,11 +34,11 @@
                         $defaultState,
                         $defaultCountry,
                         $field['name'],
-                        'col-sm-6 col-lg-4 chzn-select'
+                        'form-control'
                     );
                     break;
                 case 'country_select':
-                    if (! is_callable('country_select')) {
+                    if (!is_callable('country_select')) {
                         $this->load->config('address');
                         $this->load->helper('address');
                     }
@@ -48,7 +48,7 @@
                         set_value($field['name'], $countryValue),
                         $defaultCountry,
                         $field['name'],
-                        'col-sm-6 col-lg-4 chzn-select'
+                        'form-control'
                     );
                     break;
                 default:
@@ -63,19 +63,17 @@
                     break;
             }
 
-            if (! empty($field_control)) :
-    ?>
-    <div class="form-group<?php echo form_error($field['name']) ? $errorClass : ''; ?>">
-        <label class="control-label" for="<?php echo $field['name']; ?>"><?php echo $field['label']; ?></label>
-        <div class="controls">
-            <?php echo $field_control; ?>
-        </div>
-    </div>
-    <?php
+            if (!empty($field_control)) :
+                ?>
+                <div class="form-group<?php echo form_error($field['name']) ? $errorClass : ''; ?>">
+                    <label for="<?php echo $field['name']; ?>"><?php echo $field['label']; ?></label>
+                    <?php echo $field_control; ?>
+                </div>
+                <?php
             endif;
         endif;
     endforeach;
-    if (! empty($countryFieldId) && ! empty($stateFieldId)) {
+    if (!empty($countryFieldId) && !empty($stateFieldId)) {
         Assets::add_js(
             $this->load->view('users/country_state_js',
                 array(

@@ -1,5 +1,5 @@
 <?php if (has_permission('Bonfire.Users.Manage')):?>
-<ul class="nav navbar-nav nav-pills">
+	<ul class='nav navbar-nav'>
 	<li <?php echo $this->uri->segment(4) == '' ? 'class="active"' : '' ?>>
 		<a href="<?php echo site_url(SITE_AREA .'/settings/users') ?>"><?php echo lang('bf_users'); ?></a>
 	</li>

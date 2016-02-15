@@ -18,8 +18,8 @@
                     </div>
                     <?php if (count($app_migrations)) : ?>
 					<input type="hidden" name="core_only" value="0" />
-					<label class='control-label' for='app_migration'><?php echo lang('migrations_choose_migration'); ?></label>
-                    <select name="migration" id='app_migration'>
+					<labelfor='app_migration'><?php echo lang('migrations_choose_migration'); ?></label>
+                    <select name="migration" class="form-control" id='app_migration'>
 						<?php foreach ($app_migrations as $migration) :?>
                         <option value="<?php echo (int) substr($migration, 0, 3); ?>" <?php echo ((int) substr($migration, 0, 3) == $this->uri->segment(5)) ? 'selected="selected"' : ''; ?>><?php echo $migration; ?></option>
 						<?php endforeach; ?>
@@ -60,7 +60,7 @@
                             <td><?php echo $migrations['installed_version']; ?></td>
                             <td><?php echo $migrations['latest_version']; ?></td>
                             <td class='migrate'>
-                                <?php echo form_open(site_url(SITE_AREA . "/developer/migrations/migrate_module/{$module}"), 'class="form-horizontal"'); ?>
+                                <?php echo form_open(site_url(SITE_AREA . "/developer/migrations/migrate_module/{$module}"), ''); ?>
                                     <input type="hidden" name="is_module" value="1" />
                                     <select name="version">
                                         <option value=""><?php echo lang('migrations_choose_migration'); ?></option>
@@ -94,7 +94,7 @@
 		</div>
 		<!-- Bonfire Migrations -->
 		<div id="core-tab" class="tab-pane">
-            <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
+            <?php echo form_open($this->uri->uri_string(), ''); ?>
                 <fieldset>
                     <legend><?php echo lang('migrations_core_migrations'); ?></legend>
                     <div class="alert alert-info fade in">
@@ -105,15 +105,13 @@
 					<input type="hidden" name="core_only" value="1" />
 					<?php if (count($core_migrations)) : ?>
 					<div class="form-group">
-						<label class="control-label" for="migration"><?php echo lang('migrations_choose_migration'); ?></label>
-						<div class="controls">
-							<select name="migration" id="migration">
-                                <option value=""></option>
-                                <?php foreach ($core_migrations as $migration) :?>
-								<option value="<?php echo (int) substr($migration, 0, 3) ?>" <?php echo ((int)substr($migration, 0, 3) == $this->uri->segment(5)) ? 'selected="selected"' : '' ?>><?php echo $migration ?></option>
-                                <?php endforeach; ?>
-							</select>
-						</div>
+						<label for="migration"><?php echo lang('migrations_choose_migration'); ?></label>
+                        <select name="migration" class="form-control" id="migration">
+                            <option value=""></option>
+                            <?php foreach ($core_migrations as $migration) :?>
+                            <option value="<?php echo (int) substr($migration, 0, 3) ?>" <?php echo ((int)substr($migration, 0, 3) == $this->uri->segment(5)) ? 'selected="selected"' : '' ?>><?php echo $migration ?></option>
+                            <?php endforeach; ?>
+                        </select>
 					</div>
                 </fieldset>
                 <fieldset class='form-actions'>

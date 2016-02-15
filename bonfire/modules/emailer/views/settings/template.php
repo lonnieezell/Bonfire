@@ -1,25 +1,16 @@
 <p class="intro"><?php echo lang('emailer_template_note'); ?></p>
 <div class="admin-box">
-    <style scoped='scoped'>
-    .admin-box .template {
-        width: 99%;
-    }
-    </style>
     <?php echo form_open(SITE_AREA . '/settings/emailer/template'); ?>
         <fieldset>
             <legend><?php echo lang('emailer_header'); ?></legend>
-			<div class="clearfix">
-				<div class="input">
-					<textarea name="header" rows="15" class="template"><?php echo htmlspecialchars_decode($this->load->view('email/_header', null, true)) ;?></textarea>
-				</div>
+			<div class="form-group">
+				<textarea name="header" rows="15" class="form-control"><?php echo htmlspecialchars_decode($this->load->view('email/_header', null, true)) ;?></textarea>
 			</div>
 		</fieldset>
 		<fieldset>
 			<legend><?php echo lang('emailer_footer'); ?></legend>
-			<div class="clearfix">
-				<div class="input">
-					<textarea name="footer" rows="15" class="template"><?php echo htmlspecialchars_decode($this->load->view('email/_footer', null, true)) ;?></textarea>
-				</div>
+			<div class="form-group">
+				<textarea name="footer" rows="15" class="form-control"><?php echo htmlspecialchars_decode($this->load->view('email/_footer', null, true)) ;?></textarea>
 			</div>
 		</fieldset>
 		<fieldset class="form-actions">

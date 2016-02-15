@@ -67,10 +67,10 @@ class Settings extends Admin_Controller
             if ($this->saveSettings($extended_settings)) {
                 Template::set_message(lang('settings_saved_success'), 'success');
             } else {
-                Template::set_message(lang('settings_error_success'), 'error');
+                Template::set_message(lang('settings_error_success'), 'danger');
                 $settingsError = $this->settings_lib->getError();
                 if ($settingsError) {
-                    Template::set_message($settingsError, 'error');
+                    Template::set_message($settingsError, 'danger');
                 }
             }
             redirect(SITE_AREA . '/settings/settings');

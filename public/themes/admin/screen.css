@@ -101,6 +101,12 @@ a.navbar-brand {
 #user-menu .btn-group, #shortcuts .btn-group { 
     padding-top: 5px;
 }
+.nav > li.nav-header {
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 15px 0 15px;
+}
 /* Subnav */
 .subnav {
 	width: 100%;
@@ -286,8 +292,6 @@ footer.footer {
 /* Admin Box */
 .admin-box {
 	margin-bottom: 18px;
-	-ms-overflow-x: scroll;
-	overflow-x: auto;
 	min-height: 250px;
 }
 .admin-box h3 {
@@ -380,6 +384,7 @@ tfoot td {
 	color: #000;
 	border-color: #d5d5d5;
 }
+
 /* Link Lists */
 .filter-link-list a {
 	display: inline-block;

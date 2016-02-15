@@ -69,6 +69,24 @@ class Developer extends Admin_Controller
             'sysinfo_environment'  => ENVIRONMENT,
         );
 
+        $this->config->load('installer_lib', true, true);
+        $installerConfig = $this->config->item('installer_lib');
+        if (is_array($installerConfig)) {
+            foreach ($installerConfig as $key => $value) {
+                if (is_array($value)) {
+                    $data["sysinfo_{$key}"] = '';
+                    $writable = $this->checkWritable($value);
+                    foreach ($value as $path) {
+                        $data["sysinfo_{$key}_" . str_replace(array('/', '\\', '.'), '_', $path)] = lang(
+                            $writable[$path] ? 'sysinfo_writable' : 'sysinfo_not_writable'
+                        );
+                    }
+                } else {
+                    $data["sysinfo_{$key}"] = $value;
+                }
+            }
+        }
+
         Template::set('info', $data);
         Template::render();
     }
@@ -137,7 +155,7 @@ class Developer extends Admin_Controller
         $output = preg_replace('/<h(1|2)\s*(class="p")?/i', "\n<h\\1", $output);
 
         $output = preg_replace(
-            "/<table class=\"{$tableClass}\">(\s+)<tr><td>(\s+)<h1>PHP Version(.*?)<\/h1>(\s+)<\/td><\/tr>(\s+)<\/table><br \/>/is",
+            "/<table class=\"{$tableClass}\">(\s+)<tr><td>(\s+)<h1>PHP Version(.*?)<\/h1>(\s+)<\/td><\/tr>(\s+)<\/table>/is",
             "<div class='tab-pane active' id='sysinfoVersion'><h3>PHP Version:\\3</h3>",
             $output
         );
@@ -179,5 +197,53 @@ class Developer extends Admin_Controller
 
         Template::set('phpinfo', $output);
         Template::render();
+    }
+
+
+    /**
+     * Check an array of files/folders to see if they are writable and return the
+     * results in a format usable in the requirements check step of the installation.
+     *
+     * Note that this only returns the data in the format expected by the Install
+     * controller if called via check_folders() and check_files(). Otherwise, the
+     * files and folders are intermingled unless they are passed as input.
+     *
+     * Yes, this is almost a direct copy of the method with the same name in Installer_lib.
+     * Since the Installer_lib is supposed to be fairly independent from the rest
+     * of Bonfire, we can't expect to be able to load it and use the method from
+     * there.
+     *
+     * @param  array $filesAndFolders An array of paths to files/folders to check.
+     *
+     * @return array An associative array with the path as key and boolean value
+     * indicating whether the path is writable.
+     */
+    protected function checkWritable(array $filesAndFolders = array())
+    {
+        if (empty($filesAndFolders)) {
+            return array();
+        }
+
+        if (! function_exists('is_really_writable')) {
+            $this->load->helper('file');
+        }
+
+        $data = array();
+        foreach ($filesAndFolders as $fileOrFolder) {
+            // If it starts with 'public/', then that represents the web root.
+            // Otherwise, try to locate it from the main folder. This does not use
+            // DIRECTORY_SEPARATOR because the string is supplied by $this->writable_folders
+            // or $this->writable_files.
+            if (strpos($fileOrFolder, 'public/') === 0) {
+                $realpath = FCPATH . preg_replace('{^public/}', '', $fileOrFolder);
+            } else {
+                // Because this is APPPATH, use DIRECTORY_SEPARATOR instead of '/'.
+                $realpath = str_replace('application' . DIRECTORY_SEPARATOR, '', APPPATH) . $fileOrFolder;
+            }
+
+            $data[$fileOrFolder] = is_really_writable($realpath);
+        }
+
+        return $data;
     }
 }
