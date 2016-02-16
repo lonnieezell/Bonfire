@@ -1,7 +1,7 @@
 <?php
 
-$errorClass = ' error';
-$controlClass = 'col-sm-6 col-lg-4';
+$errorClass = ' has-error';
+$controlClass = 'form-control';
 $fieldData = array(
     'errorClass'    => $errorClass,
     'controlClass'  => $controlClass,
@@ -49,7 +49,7 @@ if (isset($password_hints)) :
 <?php
 endif;
 
-echo form_open($this->uri->uri_string(), array('class' => 'form-horizontal', 'autocomplete' => 'off'));
+echo form_open($this->uri->uri_string(), array('autocomplete' => 'off'));
 ?>
     <fieldset>
         <legend><?php echo lang('us_account_details'); ?></legend>
@@ -67,8 +67,7 @@ echo form_open($this->uri->uri_string(), array('class' => 'form-horizontal', 'au
     <fieldset>
         <legend><?php echo lang('us_role'); ?></legend>
         <div class="form-group">
-            <label for="role_id" class="<?php echo $labelClass; ?>"><?php echo lang('us_role'); ?></label>
-            <div class="<?php echo $wrapClass; ?>">
+            <label for="role_id"><?php echo lang('us_role'); ?></label>
                 <select name="role_id" id="role_id" class="chzn-select <?php echo $controlClass; ?>">
                     <?php
                     if (! empty($roles) && is_array($roles)) :
@@ -88,7 +87,6 @@ echo form_open($this->uri->uri_string(), array('class' => 'form-horizontal', 'au
                     endif;
                     ?>
                 </select>
-            </div>
         </div>
     </fieldset>
     <?php endif; ?>
@@ -112,7 +110,7 @@ echo form_open($this->uri->uri_string(), array('class' => 'form-horizontal', 'au
     <fieldset>
         <legend><?php echo lang('us_account_status'); ?></legend>
         <div class="form-group">
-v            <div class="<?php echo $wrapClass; ?>">
+v            <div class="checkbox">
                 <label for="<?php echo $field; ?>">
                     <input type="checkbox" name="<?php echo $field; ?>" id="<?php echo $field; ?>" value="1" />
                     <?php echo lang("us_{$field}_note"); ?>
@@ -121,7 +119,7 @@ v            <div class="<?php echo $wrapClass; ?>">
         </div>
         <?php if ($user->deleted) : ?>
         <div class="form-group">
-            <div class="<?php echo $wrapClass; ?>">
+            <div class="checkbox">
                 <label for="restore">
                     <input type="checkbox" name="restore" id="restore" value="1" />
                     <?php echo lang('us_restore_note'); ?>
@@ -130,7 +128,7 @@ v            <div class="<?php echo $wrapClass; ?>">
         </div>
         <?php elseif ($user->banned) : ?>
         <div class="form-group">
-            <div class="<?php echo $wrapClass; ?>">
+            <div class="checkbox">
                 <label for="unban">
                     <input type="checkbox" name="unban" id="unban" value="1" />
                     <?php echo lang('us_unban_note'); ?>

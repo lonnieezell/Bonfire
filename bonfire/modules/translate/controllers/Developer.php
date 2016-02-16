@@ -119,7 +119,7 @@ class Developer extends Admin_Controller
                     redirect(SITE_AREA . "/developer/translate/index/{$transLang}");
                 }
 
-                Template::set_message(lang('translate_save_fail'), 'error');
+                Template::set_message(lang('translate_save_fail'), 'danger');
             }
 
             // Get the lang file.
@@ -172,7 +172,7 @@ class Developer extends Admin_Controller
                     } elseif ($cnt > 0) {
                         Template::set_message(sprintf(lang('translate_part_success'), $cnt, $errcnt), 'info');
                     } else {
-                        Template::set_message(lang('translate_failed'), 'error');
+                        Template::set_message(lang('translate_failed'), 'danger');
                     }
                 }
             }

@@ -61,17 +61,17 @@ class Reports extends Admin_Controller
 
         Assets::add_js(
             array(
-                'bootstrap',
-                'jquery.dataTables',
-                'bootstrap-dataTables',
+                'bootstrap.min',
+                'jquery.dataTables.min',
+                'dataTables.bootstrap.min',
             )
         );
         Assets::add_js($this->load->view('reports/activities_js', null, true), 'inline');
 
         Assets::add_css(
             array(
-                'datatable',
-                'bootstrap-dataTables',
+                'jquery.dataTables.min',
+                'dataTables.bootstrap.min',
             )
         );
 
@@ -229,7 +229,7 @@ class Reports extends Admin_Controller
      */
     private function activityRestricted()
     {
-        Template::set_message(lang('activities_restricted'), 'error');
+        Template::set_message(lang('activities_restricted'), 'danger');
         redirect(SITE_AREA . '/reports/activities');
     }
 
@@ -246,19 +246,19 @@ class Reports extends Admin_Controller
         // This is before the permission check because the permission check
         // takes longer and depends on the value of $action.
         if (empty($action)) {
-            Template::set_message(lang('activities_delete_no_section'), 'error');
+            Template::set_message(lang('activities_delete_no_section'), 'danger');
             return;
         }
 
         // Check for permission to delete this
         $permission = ucfirst(str_replace('activity_', '', $action));
         if (! $this->auth->has_permission("Activities.{$permission}.Delete")) {
-            Template::set_message(lang('activities_restricted'), 'error');
+            Template::set_message(lang('activities_restricted'), 'danger');
             return;
         }
 
         if (empty($which)) {
-            Template::set_message(lang('activities_delete_no_value'), 'error');
+            Template::set_message(lang('activities_delete_no_value'), 'danger');
             return;
         }
 
@@ -296,9 +296,9 @@ class Reports extends Admin_Controller
             Template::set_message(sprintf(lang('activities_deleted'), $affected), 'success');
             $this->activity_model->log_activity($this->auth->user_id(), sprintf(lang('activities_act_deleted'), $affected), 'activities');
         } elseif (isset($affected)) {
-            Template::set_message(lang('activities_nothing'), 'attention');
+            Template::set_message(lang('activities_nothing'), 'warning');
         } else {
-            Template::set_message(sprintf(lang('activities_delete_error'), $this->activity_model->error), 'error');
+            Template::set_message(sprintf(lang('activities_delete_error'), $this->activity_model->error), 'danger');
         }
     }
 

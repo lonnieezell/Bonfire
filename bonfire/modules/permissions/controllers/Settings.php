@@ -83,12 +83,12 @@ class Settings extends Admin_Controller
 				}
 				else
 				{
-					Template::set_message(lang('permissions_del_failure') . $this->permission_model->error, 'error');
+					Template::set_message(lang('permissions_del_failure') . $this->permission_model->error, 'danger');
 				}
 			}
 			else
 			{
-				Template::set_message(lang('permissions_del_error') . $this->permission_model->error, 'error');
+				Template::set_message(lang('permissions_del_error') . $this->permission_model->error, 'danger');
 			}
 		}//end if
 
@@ -156,7 +156,7 @@ class Settings extends Admin_Controller
 
 		if (empty($id))
 		{
-			Template::set_message(lang("permissions_invalid_id"), 'error');
+			Template::set_message(lang("permissions_invalid_id"), 'danger');
 			redirect(SITE_AREA .'/settings/permissions');
 		}
 

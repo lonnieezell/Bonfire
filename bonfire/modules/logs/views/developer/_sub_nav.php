@@ -4,7 +4,7 @@ $checkSegment = $this->uri->segment(4);
 $logsUrl = site_url(SITE_AREA . '/developer/logs');
 
 ?>
-<ul class="nav navbar-nav nav-pills">
+<ul class='nav navbar-nav'>
 	<li<?php echo $checkSegment != 'settings' ? ' class="active"' : ''; ?>>
 		<a href="<?php echo $logsUrl; ?>"><?php echo lang('logs_logs'); ?></a>
 	</li>

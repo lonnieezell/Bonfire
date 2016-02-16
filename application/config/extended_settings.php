@@ -54,7 +54,7 @@ $config['extended_settings_fields'] = array(
                 'name'      => 'street_name',
                 'id'        => 'street_name',
                 'maxlength' => '100',
-                'class'     => 'col-sm-6 col-lg-4'
+                'class'     => 'form-control'
             ),
         ),
         'permission'  => 'Site.Settings.View',
@@ -69,7 +69,7 @@ $config['extended_settings_fields'] = array(
                 'name'      => 'country',
                 'id'        => 'country',
                 'maxlength' => '100',
-                'class'     => 'col-sm-6 col-lg-4'
+                'class'     => 'form-control'
             ),
         ),
     ),
@@ -83,7 +83,7 @@ $config['extended_settings_fields'] = array(
                 'name'      => 'state',
                 'id'        => 'state',
                 'maxlength' => '2',
-                'class'     => 'col-sm-1'
+                'class'     => 'form-control'
             ),
         ),
         'permission'  => 'Site.Content.View',
@@ -97,7 +97,7 @@ $config['extended_settings_fields'] = array(
             'settings' => array(
                 'name'   => 'type',
                 'id'     => 'type',
-                'class'  => 'col-sm-6 col-lg-4',
+                'class'  => 'form-control',
             ),
             'options'  =>  array(
                 'small'  => 'Small Shirt',

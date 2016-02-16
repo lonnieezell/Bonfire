@@ -1,5 +1,4 @@
 <style>
-#email_content { width: 90%; }
 .id_column { width: 3em; }
 .login_column { width: 11em; }
 .status_column { width: 10em; }
@@ -12,23 +11,19 @@
 </div>
 <?php endif; ?>
 <div class="admin-box">
-    <?php echo form_open($this->uri->uri_string(), 'class="form-horizontal"'); ?>
+    <?php echo form_open($this->uri->uri_string()); ?>
         <fieldset>
             <div class='form-group'>
-                <label class='control-label' for='email_subject'><?php echo lang('emailer_email_subject'); ?></label>
-                <div class='controls'>
-                    <input type="text" size="50" name="email_subject" id="email_subject" value="<?php if (isset($email_subject)) { e($email_subject); } ?>" />
-                </div>
+                <label for='email_subject'><?php echo lang('emailer_email_subject'); ?></label>
+                <input type="text" size="50" name="email_subject" id="email_subject" class="form-control" value="<?php if (isset($email_subject)) { e($email_subject); } ?>" />
             </div>
             <div class='form-group'>
-                <label class='control-label' for='email_content'><?php echo lang('emailer_email_content'); ?></label>
-                <div class='controls'>
-                    <textarea name="email_content" id="email_content" rows="15"><?php
-                        if (isset($email_content)) {
-                            e($email_content);
-                        }
-                    ?></textarea>
-                </div>
+                <label for='email_content'><?php echo lang('emailer_email_content'); ?></label>
+                <textarea name="email_content" id="email_content" rows="15" class="form-control"><?php
+                    if (isset($email_content)) {
+                        e($email_content);
+                    }
+                ?></textarea>
             </div>
         </fieldset>
         <h3><?php echo lang('bf_users'); ?></h3>

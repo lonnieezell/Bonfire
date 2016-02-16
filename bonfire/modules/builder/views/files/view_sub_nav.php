@@ -15,7 +15,7 @@ echo "<?php
 \$areaUrl = SITE_AREA . '/{$controller_name_lower}/{$module_name_lower}';
 
 ?>
-<ul class='nav navbar-nav nav-pills'>
+<ul class='nav navbar-nav'>
 	<li<?php echo \$checkSegment == '' ? ' class=\"active\"' : ''; ?>>
 		<a href=\"<?php echo site_url(\$areaUrl); ?>\" id='list'>
             <?php echo lang('{$module_name_lower}_list'); ?>

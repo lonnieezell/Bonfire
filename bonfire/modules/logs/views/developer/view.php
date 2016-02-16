@@ -6,17 +6,13 @@
         <?php echo lang('logs_not_found'); ?>
     </div>
     <?php else : ?>
-    <span class='form-horizontal'>
-        <div class='form-group'>
-            <label for='filter' class='control-label'><?php echo lang('logs_filter_label'); ?></label>
-            <div class='controls'>
-                <select id="filter">
-                    <option value="all"><?php echo lang('logs_show_all_entries'); ?></option>
-                    <option value="error"><?php echo lang('logs_show_errors'); ?></option>
-                </select>
-            </div>
-        </div>
-    </span>
+    <div class='form-group'>
+        <label for='filter'><?php echo lang('logs_filter_label'); ?></label>
+        <select id="filter" class="form-control">
+            <option value="all"><?php echo lang('logs_show_all_entries'); ?></option>
+            <option value="error"><?php echo lang('logs_show_errors'); ?></option>
+        </select>
+    </div>
     <div id="log">
         <?php
         foreach ($log_content as $row) :
@@ -46,7 +42,7 @@
 </div>
 <div class="admin-box">
     <h3><?php echo lang('logs_delete1_button') ?></h3>
-    <?php echo form_open(site_url(SITE_AREA . '/developer/logs'), array('class' => 'form-horizontal')); ?>
+    <?php echo form_open(site_url(SITE_AREA . '/developer/logs'), array()); ?>
         <div class="alert alert-warning fade in">
             <a class="close" data-dismiss="alert">&times;</a>
             <?php echo lang('logs_delete1_note'); ?>

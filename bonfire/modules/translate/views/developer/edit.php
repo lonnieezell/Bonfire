@@ -1,7 +1,7 @@
 <div class="admin-box">
     <?php
     if (! empty($orig) && is_array($orig)) :
-        echo form_open(current_url(), 'class="form-horizontal" id="translate_form"');
+        echo form_open(current_url(), 'id="translate_form"');
     ?>
         <input type="hidden" name="trans_lang" value="<?php e($trans_lang); ?>" />
         <fieldset>
@@ -40,12 +40,12 @@
                     <?php foreach ($orig as $key => $val) : ?>
                     <tr>
                         <td class='column-check'><input type='checkbox' name='checked[]' value="<?php echo $key; ?>" <?php echo in_array($key, $chkd) ? "checked='checked' " : ''; ?>/></td>
-                        <td><label class="control-label" for="lang<?php echo $key; ?>"><?php e($val); ?></label></td>
+                        <td><label for="lang<?php echo $key; ?>"><?php e($val); ?></label></td>
                         <td>
                             <?php if (strlen($val) < 80) : ?>
-                            <input type="text" class="input-xxlarge" name="lang[<?php echo $key; ?>]" id="lang<?php echo $key; ?>" value="<?php e(isset($new[$key]) ? $new[$key] : ''); ?>" />
+                            <input type="text" class="form-control" name="lang[<?php echo $key; ?>]" id="lang<?php echo $key; ?>" value="<?php e(isset($new[$key]) ? $new[$key] : ''); ?>" />
                             <?php else : ?>
-                            <textarea class="input-xxlarge" name="lang[<?php echo $key; ?>]" id="lang<?php echo $key; ?>"><?php e(isset($new[$key]) ? $new[$key] : ''); ?></textarea>
+                            <textarea class="form-control" name="lang[<?php echo $key; ?>]" id="lang<?php echo $key; ?>"><?php e(isset($new[$key]) ? $new[$key] : ''); ?></textarea>
                             <?php endif; ?>
                         </td>
                     </tr>

@@ -151,7 +151,7 @@ class Developer extends Admin_Controller
                 );
                 Template::set_message(lang('logs_settings_modified_success'), 'success');
             } else {
-                Template::set_message(lang('logs_settings_modified_failure'), 'error');
+                Template::set_message(lang('logs_settings_modified_failure'), 'danger');
             }
         }
 
@@ -168,7 +168,7 @@ class Developer extends Admin_Controller
     public function view($file = '')
     {
         if (empty($file)) {
-            Template::set_message(lang('logs_view_empty'), 'error');
+            Template::set_message(lang('logs_view_empty'), 'danger');
             redirect(SITE_AREA . '/developer/logs');
         }
 

@@ -1,8 +1,8 @@
 <?php
 
-$errorClass = ' error';
-$labelClass = 'control-label col-sm-3 col-lg-2';
-$wrapClass = 'controls col-sm-6 col-lg-4';
+$errorClass = ' has-error';
+$labelClass = '';
+$wrapClass = '';
 $controlClass = 'form-control';
 $fieldData = array(
     'errorClass'    => $errorClass,
@@ -57,7 +57,7 @@ if (empty($renderPayload) && isset($this->auth)) {
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <?php echo form_open($this->uri->uri_string(), array('class' => 'form-horizontal', 'autocomplete' => 'off')); ?>
+            <?php echo form_open($this->uri->uri_string(), array('autocomplete' => 'off')); ?>
                 <fieldset>
                     <?php Template::block('user_fields', 'user_fields', $fieldData); ?>
                 </fieldset>

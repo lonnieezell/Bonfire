@@ -57,19 +57,19 @@ class Settings extends Admin_Controller
             if ($this->addShortcut()) {
                 Template::set_message(lang('ui_shortcut_success'), 'success');
             } else {
-                Template::set_message(lang('ui_shortcut_add_error'), 'error');
+                Template::set_message(lang('ui_shortcut_add_error'), 'danger');
             }
         } elseif (isset($_POST['remove_shortcut'])) {
             if ($this->removeShortcut()) {
                 Template::set_message(lang('ui_shortcut_remove_success'), 'success');
             } else {
-                Template::set_message(lang('ui_shortcut_remove_error'), 'error');
+                Template::set_message(lang('ui_shortcut_remove_error'), 'danger');
             }
         } elseif (isset($_POST['save'])) {
             if ($this->saveSettings()) {
                 Template::set_message(lang('ui_shortcut_save_success'), 'success');
             } else {
-                Template::set_message(lang('ui_shortcut_save_error'), 'error');
+                Template::set_message(lang('ui_shortcut_save_error'), 'danger');
             }
         }
 

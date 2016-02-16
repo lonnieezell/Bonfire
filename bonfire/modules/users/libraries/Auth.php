@@ -109,7 +109,7 @@ class Auth
                     lang('us_fields_required'),
                     $this->ci->settings_lib->item('auth.login_type') == 'both' ? lang('bf_login_type_both') : lang('bf_' . $this->ci->settings_lib->item('auth.login_type'))
                 ),
-                'error'
+                'danger'
             );
             return false;
         }
@@ -148,7 +148,7 @@ class Auth
 
         // Check whether the username, email, or password doesn't exist.
         if ($user == false) {
-            Template::set_message(lang('us_bad_email_pass'), 'error');
+            Template::set_message(lang('us_bad_email_pass'), 'danger');
             return false;
         }
 
@@ -157,9 +157,9 @@ class Auth
             $activation_type = $this->ci->settings_lib->item('auth.user_activation_method');
             if ($activation_type > 0) {
                 if ($activation_type == 1) {
-                    Template::set_message(lang('us_account_not_active'), 'error');
+                    Template::set_message(lang('us_account_not_active'), 'danger');
                 } elseif ($activation_type == 2) {
-                    Template::set_message(lang('us_admin_approval_pending'), 'error');
+                    Template::set_message(lang('us_admin_approval_pending'), 'danger');
                 }
 
                 return false;
@@ -174,7 +174,7 @@ class Auth
                     lang('us_account_deleted'),
                     html_escape(settings_item("site.system_email"))
                 ),
-                'error'
+                'danger'
             );
             return false;
         }
@@ -182,7 +182,7 @@ class Auth
         // Try password
         if (! $this->check_password($password, $user->password_hash)) {
             // Bad password
-            Template::set_message(lang('us_bad_email_pass'), 'error');
+            Template::set_message(lang('us_bad_email_pass'), 'danger');
                 $this->increase_login_attempts($login);
 
             return false;
@@ -193,7 +193,7 @@ class Auth
             $this->increase_login_attempts($login);
             Template::set_message(
                 $user->ban_message ? $user->ban_message : lang('us_banned_msg'),
-                'error'
+                'danger'
             );
             return false;
         }
@@ -398,8 +398,7 @@ class Auth
     {
         // If user isn't logged in, redirect to the login page.
         if ($this->is_logged_in() === false) {
-            $this->ci->load->library('Template');
-            Template::set_message($this->ci->lang->line('us_must_login'), 'error');
+            Template::set_message($this->ci->lang->line('us_must_login'), 'danger');
             Template::redirect(LOGIN_URL);
         }
 
@@ -423,7 +422,7 @@ class Auth
 
         // Inform the user of the lack of permission and redirect.
         $this->ci->load->library('Template');
-        Template::set_message(lang('us_no_permission'), 'attention');
+        Template::set_message(lang('us_no_permission'), 'warning');
             Template::redirect($uri);
     }
 

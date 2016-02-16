@@ -109,6 +109,7 @@ $lang['us_self_delete']				= 'Unauthorized. Sorry, you can not delete yourself.'
 $lang['us_filter_first_letter']		= 'Username starts with: ';
 $lang['us_account_details']			= 'Account Details';
 $lang['us_last_login']				= 'Last Login';
+$lang['us_account_meta']			= 'Metadata';
 
 
 $lang['us_account_created_success'] = 'Your account has been created. Please log in.';

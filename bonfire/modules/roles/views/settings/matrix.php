@@ -42,5 +42,5 @@ if (isset($domains) && is_array($domains) && count($domains)) :
     endforeach;
 else:
 ?>
-<div class="notification attention"><?php echo $authentication_failed; ?></div>
+<div class="alert alert-warning"><?php echo $authentication_failed; ?></div>
 <?php endif; ?>

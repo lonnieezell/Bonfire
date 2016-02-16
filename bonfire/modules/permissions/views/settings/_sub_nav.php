@@ -4,7 +4,7 @@ $testSegment = $this->uri->segment(4);
 $settingsUrl = site_url(SITE_AREA . '/settings');
 
 ?>
-<ul class="nav navbar-nav nav-pills">
+<ul class='nav navbar-nav'>
 	<li<?php echo $testSegment == '' ? ' class="active"' : '' ?>>
 		<a href='<?php echo "{$settingsUrl}/permissions"; ?>'><?php echo lang('bf_action_list'); ?></a>
 	</li>

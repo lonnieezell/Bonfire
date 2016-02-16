@@ -6,7 +6,7 @@ $hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDel
 
 ?>
 <div class="box select admin-box">
-    <?php echo form_open(SITE_AREA . "/reports/activities/{$vars['which']}", 'class="form-horizontal constrained"'); ?>
+    <?php echo form_open(SITE_AREA . "/reports/activities/{$vars['which']}", ''); ?>
         <fieldset>
             <legend><?php echo lang('activities_filter_head'); ?></legend>
             <?php
@@ -14,13 +14,13 @@ $hasPermissionDeleteUser   = isset($hasPermissionDeleteUser) ? $hasPermissionDel
                 array(
                     'name'  => "{$vars['which']}_select",
                     'id'    => "{$vars['which']}_select",
-                    'class' => 'col-sm-3',
+                    'class' => 'form-control',
                 ),
                 $select_options,
                 $filter,
                 lang('activities_filter_head'),
                 '',
-                '<span class="help-inline">' . sprintf(
+                '<span class="help-block">' . sprintf(
                     lang('activities_filter_note'),
                     $vars['view_which'] == ucwords(lang('activities_date')) ? lang('activities_filter_from_before') : lang('activities_filter_only_for'),
                     strtolower($vars['view_which'])

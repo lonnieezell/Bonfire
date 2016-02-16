@@ -62,7 +62,7 @@ class Docs extends Base_Controller
         if (config_item('docs.permitted_environments')
             && ! in_array(ENVIRONMENT, config_item('docs.permitted_environments'))
         ) {
-            Template::set_message(lang('docs_env_disabled'), 'error');
+            Template::set_message(lang('docs_env_disabled'), 'danger');
             redirect();
         }
 

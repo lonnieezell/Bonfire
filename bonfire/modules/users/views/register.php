@@ -1,8 +1,8 @@
 <?php
 
-$errorClass   = empty($errorClass) ? ' error' : $errorClass;
-$labelClass = empty($labelClass) ? 'control-label col-sm-3 col-lg-2' : $labelClass;
-$wrapClass = empty($wrapClass) ? 'controls col-sm-6 col-lg-4' : $wrapClass;
+$errorClass   = empty($errorClass) ? ' has-error' : $errorClass;
+$labelClass = empty($labelClass) ? '' : $labelClass;
+$wrapClass = empty($wrapClass) ? '' : $wrapClass;
 $controlClass = empty($controlClass) ? 'form-control' : $controlClass;
 $fieldData = array(
     'errorClass'    => $errorClass,
@@ -34,7 +34,7 @@ $fieldData = array(
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <?php echo form_open(site_url(REGISTER_URL), array('class' => "form-horizontal", 'autocomplete' => 'off')); ?>
+            <?php echo form_open(site_url(REGISTER_URL), array('autocomplete' => 'off')); ?>
                 <fieldset>
                     <?php Template::block('user_fields', 'user_fields', $fieldData); ?>
                 </fieldset>

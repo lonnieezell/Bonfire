@@ -4,7 +4,7 @@ $testSegment = $this->uri->segment(4);
 $translateUrl = site_url(SITE_AREA . '/developer/translate');
 
 ?>
-<ul class="nav navbar-nav nav-pills">
+<ul class='nav navbar-nav'>
 	<li<?php echo $testSegment == '' ? ' class="active"' : '' ?>>
 		<a href="<?php echo $translateUrl; ?>">
             <?php echo lang('translate_translate'); ?>

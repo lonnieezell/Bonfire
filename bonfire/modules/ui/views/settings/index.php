@@ -6,7 +6,7 @@
 <?php endif; ?>
 <p class='intro'><?php echo lang('ui_keyboard_shortcuts'); ?></p>
 <div class="admin-box">
-    <?php echo form_open($this->uri->uri_string(), array('class' => "form-horizontal", 'id' => 'shortcut_form')); ?>
+    <?php echo form_open($this->uri->uri_string(), array('id' => 'shortcut_form')); ?>
         <table class="table table-striped table-condensed">
             <thead>
                 <tr>
@@ -27,7 +27,7 @@
             <tbody>
                 <tr>
                     <th>
-                        <select name="new_action" class="col-sm-4">
+                        <select name="new_action" class="form-control">
                             <?php
                             foreach ($current as $name => $detail) :
                                 if (! array_key_exists($name, $settings)) :
@@ -41,13 +41,13 @@
                             ?>
                         </select>
                     </th>
-                    <td><input type="text" name="new_shortcut" class="medium" value="<?php echo set_value('new_shortcut'); ?>" /></td>
+                    <td><input type="text" name="new_shortcut" class="form-control" value="<?php echo set_value('new_shortcut'); ?>" /></td>
                     <td><input type="submit" name="add_shortcut" class="btn" value="<?php echo lang('ui_add_shortcut'); ?>" /></td>
                 </tr>
                 <?php foreach ($settings as $action => $shortcut) : ?>
                 <tr>
                     <th><?php echo $current[$action]['description']; ?></th>
-                    <td><input type="text" name="shortcut_<?php echo $action;?>" value="<?php echo set_value("shortcut_$action", $shortcut); ?>" /></td>
+                    <td><input type="text" class="form-control" name="shortcut_<?php echo $action;?>" value="<?php echo set_value("shortcut_$action", $shortcut); ?>" /></td>
                     <td><input type="submit" name="remove_shortcut[<?php echo $action; ?>]" value="<?php echo lang('ui_remove_shortcut'); ?>" class="btn btn-danger" /></td>
                 </tr>
                 <?php endforeach; ?>

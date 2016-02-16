@@ -105,7 +105,7 @@ class Developer extends Admin_Controller
     public function browse($table = '')
     {
         if (empty($table)) {
-            Template::set_message(lang('database_no_table_name'), 'error');
+            Template::set_message(lang('database_no_table_name'), 'danger');
             redirect(SITE_AREA . '/developer/database');
         }
 
@@ -133,7 +133,7 @@ class Developer extends Admin_Controller
             $checked = $this->input->post('checked');
             if (empty($checked) || ! is_array($checked)) {
                 // No files selected.
-                Template::set_message(lang('database_backup_delete_none'), 'error');
+                Template::set_message(lang('database_backup_delete_none'), 'danger');
             } else {
                 // Delete the files.
                 $failed = 0;
@@ -150,7 +150,7 @@ class Developer extends Admin_Controller
                 } else {
                     Template::set_message(
                         "{$deletedCount}<br />" . lang('database_backup_deleted_error'),
-                        'error'
+                        'danger'
                     );
                 }
             }
@@ -230,7 +230,7 @@ class Developer extends Admin_Controller
                         'success'
                     );
                 } else {
-                    Template::set_message(lang('database_backup_failure'), 'error');
+                    Template::set_message(lang('database_backup_failure'), 'danger');
                 }
 
                 redirect(SITE_AREA . '/developer/database');
@@ -238,7 +238,7 @@ class Developer extends Admin_Controller
 
             // Validation failed.
             Template::set('tables', $this->input->post('tables'));
-            Template::set_message(lang('database_backup_failure_validation'), 'error');
+            Template::set_message(lang('database_backup_failure_validation'), 'danger');
 
         }
 
@@ -263,7 +263,7 @@ class Developer extends Admin_Controller
 
         $backupFile = "{$this->backup_folder}{$filename}";
         if (! file_exists($backupFile)) {
-            Template::set_message(sprintf(lang('database_get_backup_error'), $filename), 'error');
+            Template::set_message(sprintf(lang('database_get_backup_error'), $filename), 'danger');
             redirect(SITE_AREA . '/developer/database/backups');
         }
 
@@ -293,7 +293,7 @@ class Developer extends Admin_Controller
             $file = file($backupFile);
             if (empty($file)) {
                 // Couldn't read from file.
-                Template::set_message(sprintf(lang('database_restore_read_error'), $backupFile), 'error');
+                Template::set_message(sprintf(lang('database_restore_read_error'), $backupFile), 'danger');
                 redirect(SITE_AREA . '/developer/database/backups');
             }
 
@@ -357,7 +357,7 @@ class Developer extends Admin_Controller
 
         if (empty($_POST['tables']) || ! is_array($_POST['tables'])) {
             // No tables were selected.
-            Template::set_message(lang('database_drop_none'), 'error');
+            Template::set_message(lang('database_drop_none'), 'danger');
             redirect(SITE_AREA . '/developer/database');
         }
 
@@ -385,7 +385,7 @@ class Developer extends Admin_Controller
                 $tableCount == 1 ? lang('database_drop_success_singular') : lang('database_drop_success_plural'),
                 $tableCount
             ),
-            $notDropped == 0 ? 'success' : 'error'
+            $notDropped == 0 ? 'success' : 'danger'
         );
 
         redirect(SITE_AREA . '/developer/database');
@@ -406,7 +406,7 @@ class Developer extends Admin_Controller
     {
         if (empty($tables) || ! is_array($tables)) {
             // No tables selected
-            Template::set_message(lang('database_repair_none'), 'error');
+            Template::set_message(lang('database_repair_none'), 'danger');
             redirect(SITE_AREA . '/developer/database');
         }
 
@@ -440,7 +440,7 @@ class Developer extends Admin_Controller
         if ($result = $this->dbutil->optimize_database()) {
             Template::set_message(lang('database_optimize_success'), 'success');
         } else {
-            Template::set_message(lang('database_optimize_failure'), 'error');
+            Template::set_message(lang('database_optimize_failure'), 'danger');
         }
 
         redirect(SITE_AREA . '/developer/database');

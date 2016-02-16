@@ -26,7 +26,7 @@ else : ?>
 <?php
 endif;
 ?>
-<div class="alert">
+<div class="alert alert-info">
 	<button type='button' class='close' data-dismiss='alert'>&times;</button>
 	<?php printf(lang($mb_migration_result), anchor(SITE_AREA .'/developer/migrations#mod-tab', 'Migrations')) ;?>
 </div>

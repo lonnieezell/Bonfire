@@ -32,7 +32,7 @@ $('.btn').filter('[id^="delete-"][type="submit"]').click(confirm_delete);
 $('.btn').filter('[id^="delete-"][type="button"]').click(submit_delete);
 
 $("#flex_table").dataTable({
-    "sDom": "<'row'<'col-sm-6'l><'col-sm-6'f>r>t<'row'<'col-sm-6'i><'col-sm-6'p>>",
+    "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
     "iDisplayLength": <?php echo ($this->settings_lib->item('site.list_limit')) ? $this->settings_lib->item('site.list_limit') : 15; ?>,
     "bInfo": false,
     "bPaginate": false,

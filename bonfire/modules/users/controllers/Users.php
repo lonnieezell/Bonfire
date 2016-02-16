@@ -174,7 +174,7 @@ class Users extends Front_Controller
                 Template::redirect('/users/profile');
             }
 
-            Template::set_message(lang('us_profile_updated_error'), 'error');
+            Template::set_message(lang('us_profile_updated_error'), 'danger');
         }
 
         // Get the current user information.
@@ -210,7 +210,7 @@ class Users extends Front_Controller
     {
         // Are users allowed to register?
         if (! $this->settings_lib->item('auth.allow_register')) {
-            Template::set_message(lang('us_register_disabled'), 'error');
+            Template::set_message(lang('us_register_disabled'), 'danger');
             Template::redirect('/');
         }
 
@@ -234,14 +234,14 @@ class Users extends Front_Controller
                 $message = $activation['message'];
                 $error   = $activation['error'];
 
-                Template::set_message($message, $error ? 'error' : 'success');
+                Template::set_message($message, $error ? 'danger' : 'success');
 
                 log_activity($userId, lang('us_log_register'), 'users');
                 Template::redirect($login_url);
 
             }
 
-            Template::set_message(lang('us_registration_fail'), 'error');
+            Template::set_message(lang('us_registration_fail'), 'danger');
             // Don't redirect because validation errors will be lost.
         }
 
@@ -287,7 +287,7 @@ class Users extends Front_Controller
                 $user = $this->user_model->find_by('email', $this->input->post('email'));
                 if ($user === false) {
                     // No user found with the entered email address.
-                    Template::set_message(lang('us_invalid_email'), 'error');
+                    Template::set_message(lang('us_invalid_email'), 'danger');
                 } else {
                     // User exists, create a hash to confirm the reset request.
                     $this->load->helper('string');
@@ -318,7 +318,7 @@ class Users extends Front_Controller
                     if ($this->emailer->send($data)) {
                         Template::set_message(lang('us_reset_pass_message'), 'success');
                     } else {
-                        Template::set_message(lang('us_reset_pass_error') . $this->emailer->error, 'error');
+                        Template::set_message(lang('us_reset_pass_error') . $this->emailer->error, 'danger');
                     }
                 }
             }
@@ -361,7 +361,7 @@ class Users extends Front_Controller
 
         // If there is no code/email, then it's not a valid request.
         if (empty($code) || empty($email)) {
-            Template::set_message(lang('us_reset_invalid_email'), 'error');
+            Template::set_message(lang('us_reset_invalid_email'), 'danger');
             Template::redirect(LOGIN_URL);
         }
 
@@ -387,7 +387,7 @@ class Users extends Front_Controller
                 }
 
                 if (! empty($this->user_model->error)) {
-                    Template::set_message(sprintf(lang('us_reset_password_error'), $this->user_model->error), 'error');
+                    Template::set_message(sprintf(lang('us_reset_password_error'), $this->user_model->error), 'danger');
                 }
             }
         }
@@ -404,7 +404,7 @@ class Users extends Front_Controller
 
         // $user will be an Object if a single result was returned.
         if (! is_object($user)) {
-            Template::set_message(lang('us_reset_invalid_email'), 'error');
+            Template::set_message(lang('us_reset_invalid_email'), 'danger');
             Template::redirect(LOGIN_URL);
         }
 
@@ -461,14 +461,14 @@ class Users extends Front_Controller
                     if ($this->emailer->send($data)) {
                         Template::set_message(lang('us_account_active'), 'success');
                     } else {
-                        Template::set_message(lang('us_err_no_email'). $this->emailer->error, 'error');
+                        Template::set_message(lang('us_err_no_email'). $this->emailer->error, 'danger');
                     }
 
                     Template::redirect('/');
                 }
 
                 if (! empty($this->user_model->error)) {
-                    Template::set_message($this->user_model->error . '. ' . lang('us_err_activate_code'), 'error');
+                    Template::set_message($this->user_model->error . '. ' . lang('us_err_activate_code'), 'danger');
                 }
             }
         }
@@ -493,13 +493,13 @@ class Users extends Front_Controller
                 // Form validated. Does the user actually exist?
                 $user = $this->user_model->find_by('email', $_POST['email']);
                 if ($user === false) {
-                    Template::set_message('Cannot find that email in our records.', 'error');
+                    Template::set_message('Cannot find that email in our records.', 'danger');
                 } else {
                     $activation = $this->user_model->set_activation($user->id);
                     $message = $activation['message'];
                     $error = $activation['error'];
 
-                    Template::set_message($message, $error ? 'error' : 'success');
+                    Template::set_message($message, $error ? 'danger' : 'success');
                 }
             }
         }

@@ -52,7 +52,7 @@ if ($db_required != '') {
 				if (\$result) {
 					Template::set_message(count(\$checked) . ' ' . lang('{$module_name_lower}_delete_success'), 'success');
 				} else {
-					Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'error');
+					Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'danger');
 				}
 			}
 		}";
@@ -117,7 +117,7 @@ if ($db_required != '') {
 
             // Not validation error
 			if ( ! empty(\$this->{$module_name_lower}_model->error)) {
-				Template::set_message(lang('{$module_name_lower}_create_failure') . \$this->{$module_name_lower}_model->error, 'error');
+				Template::set_message(lang('{$module_name_lower}_create_failure') . \$this->{$module_name_lower}_model->error, 'danger');
             }
 		}";
 
@@ -136,7 +136,7 @@ if ($db_required != '') {
 
             // Not validation error
             if ( ! empty(\$this->{$module_name_lower}_model->error)) {
-                Template::set_message(lang('{$module_name_lower}_edit_failure') . \$this->{$module_name_lower}_model->error, 'error');
+                Template::set_message(lang('{$module_name_lower}_edit_failure') . \$this->{$module_name_lower}_model->error, 'danger');
 			}
 		}";
 
@@ -152,7 +152,7 @@ if ($db_required != '') {
 				redirect(SITE_AREA . '/{$controller_name}/{$module_name_lower}');
 			}
 
-            Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'error');
+            Template::set_message(lang('{$module_name_lower}_delete_failure') . \$this->{$module_name_lower}_model->error, 'danger');
 		}";
 	}
 }
@@ -187,7 +187,7 @@ $mb_edit = "
 	{
 		\$id = \$this->uri->segment(5);
 		if (empty(\$id)) {
-			Template::set_message(lang('{$module_name_lower}_invalid_id'), 'error');
+			Template::set_message(lang('{$module_name_lower}_invalid_id'), 'danger');
 
 			redirect(SITE_AREA . '/{$controller_name}/{$module_name_lower}');
 		}

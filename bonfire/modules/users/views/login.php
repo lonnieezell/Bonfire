@@ -1,6 +1,6 @@
 <?php
 	$site_open = $this->settings_lib->item('auth.allow_register');
-	$wrapClass = empty($wrapClass) ? 'controls col-sm-6 col-lg-4' : $wrapClass;
+	$wrapClass = empty($wrapClass) ? '' : $wrapClass;
 ?>
 <p><br/><a href="<?php echo site_url(); ?>">&larr; <?php echo lang('us_back_to') . $this->settings_lib->item('site.title'); ?></a></p>
 
@@ -25,28 +25,22 @@
 
 	<?php echo form_open(LOGIN_URL, array('autocomplete' => 'off')); ?>
 
-		<div class="form-group <?php echo iif( form_error('login') , 'error') ;?>">
-			<div class="controls col-sm-12">
-				<input class="form-control" type="text" name="login" id="login_value" value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords($this->settings_lib->item('auth.login_type')) ?>" style="margin-bottom: 15px;" />
-			</div>
+		<div class="form-group <?php echo iif( form_error('login') , 'has-error') ;?>">
+			<input class="form-control" type="text" name="login" id="login_value" value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords($this->settings_lib->item('auth.login_type')) ?>" style="margin-bottom: 15px;" />
 		</div>
 
-		<div class="form-group <?php echo iif( form_error('password') , 'error') ;?>">
-			<div class="controls col-sm-12">
-				<input class="form-control" type="password" name="password" id="password" value="" tabindex="2" placeholder="<?php echo lang('bf_password'); ?>" />
-			</div>
+		<div class="form-group <?php echo iif( form_error('password') , 'has-error') ;?>">
+			<input class="form-control" type="password" name="password" id="password" value="" tabindex="2" placeholder="<?php echo lang('bf_password'); ?>" />
 		</div>
 
 		<?php if ($this->settings_lib->item('auth.allow_remember')) : ?>
 			<div class="form-group">
-				<div class="controls input-group">
 					<div class="checkbox">
-					<label class="checkbox" for="remember_me">
+					<label for="remember_me">
 						<input type="checkbox" name="remember_me" id="remember_me" value="1" tabindex="3" />
-						<span class="inline-help"><?php echo lang('us_remember_note'); ?></span>
+						<span class="help-inline"><?php echo lang('us_remember_note'); ?></span>
 					</label>
 				    </div>
-                </div>
 			</div>
 		<?php endif; ?>
 
