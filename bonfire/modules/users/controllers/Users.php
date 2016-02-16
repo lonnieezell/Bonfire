@@ -258,7 +258,7 @@ class Users extends Front_Controller
         Template::set_view('users/register');
         Template::set('languages', unserialize($this->settings_lib->item('site.languages')));
         Template::set('page_title', 'Register');
-        Template::render('register');
+        Template::render();
     }
 
     // -------------------------------------------------------------------------
@@ -612,4 +612,26 @@ class Users extends Front_Controller
 
         return $result;
     }
+
+    // -------------------------------------------------------------------------
+    // Deprecated Methods (do not use)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Save the user.
+     *
+     * @deprecated since 0.7.1 Use saveUser(). Normally this would not be deprecated
+     * because it is private, but just in case someone has a custom public controller
+     * for their users module...
+     *
+     * @param integer $id          The id of the user in the case of an edit operation.
+     * @param array   $meta_fields Array of meta fields fur the user.
+     *
+     * @return boolean True on successful update, else false.
+           */
+    private function save_user($id = 0, $meta_fields = array())
+    {
+        return $this->saveUser('update', $id, $meta_fields);
+    }
 }
+/* End of file /bonfire/modules/users/controllers/users.php */

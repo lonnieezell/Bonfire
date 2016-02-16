@@ -1,10 +1,14 @@
 <?php
 
-$errorClass   = empty($errorClass) ? ' has-error' : $errorClass;
-$controlClass = empty($controlClass) ? 'form-control' : $controlClass;
+$errorClass = ' has-error';
+$labelClass = '';
+$wrapClass = '';
+$controlClass = 'form-control';
 $fieldData = array(
-    'errorClass'   => $errorClass,
-    'controlClass' => $controlClass,
+    'errorClass'    => $errorClass,
+    'labelClass'  => $labelClass,
+    'wrapClass'  => $wrapClass,
+    'controlClass'  => $controlClass
 );
 
 if (isset($password_hints)) {

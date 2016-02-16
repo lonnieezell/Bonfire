@@ -1,20 +1,18 @@
 <?php
 
-if (!empty($meta_fields)) :
+if (! empty($meta_fields)) :
     $defaultCountry = 'US';
-    $defaultState = '';
+    $defaultState   = '';
     $countryFieldId = false;
-    $stateFieldId = false;
+    $stateFieldId   = false;
 
     $displayFrontend = isset($frontend_only) ? $frontend_only : false;
-    $userIsAdmin = isset($current_user) ? ($current_user->role_id == 1) : false;
-    ?>
-    <legend><?php echo lang('us_account_meta'); ?></legend>
-    <?
+    $userIsAdmin     = isset($current_user) ? ($current_user->role_id == 1) : false;
+
     foreach ($meta_fields as $field) :
         $adminField = isset($field['admin_only']) ? $field['admin_only'] : false;
         // If this is an admin field and the user is not an admin, skip it.
-        if ($adminField && !$userIsAdmin) {
+        if ($adminField && ! $userIsAdmin) {
             continue;
         }
 
@@ -22,7 +20,7 @@ if (!empty($meta_fields)) :
         $frontField = isset($field['frontend']) ? $field['frontend'] : true;
 
         // If displaying the front end and this is not a frontend field, skip it.
-        if ($displayFrontend && !$frontField) {
+        if ($displayFrontend && ! $frontField) {
             continue;
         }
 
@@ -34,62 +32,58 @@ if (!empty($meta_fields)) :
                 $field['label']
             );
         elseif ($field['form_detail']['type'] == 'checkbox') :
-            ?>
-            <div class="form-group<?php echo form_error($field['name']) ? ' has-error' : ''; ?>">
-                <div class="checkbox">
-                    <label for="<?php echo $field['name']; ?>"><?php echo $field['label']; ?>
-                        <?php
-                        echo form_checkbox(
-                            $field['form_detail']['settings'],
-                            $field['form_detail']['value'],
-                            $field['form_detail']['value'] == set_value(
-                                $field['name'],
-                                isset($user->{$field['name']}) ? $user->{$field['name']} : ''
-                            )
-                        );
-                        ?>
-                    </label>
-                </div>
-            </div>
-            <?php
-        elseif ($field['form_detail']['type'] == 'country_select'
-            && is_callable('country_select')
-        ) :
-            $countryFieldId = $field['name'];
-            $countryValue = isset($user->{$field['name']}) ? $user->{$field['name']} : $defaultCountry;
-            ?>
-            <div class="form-group<?php echo form_error($field['name']) ? ' has-error' : ''; ?>">
-                <label for="<?php echo $field['name']; ?>"><?php echo lang('user_meta_country'); ?></label>
-
-                <?php
-                echo country_select(
-                    set_value($field['name'], isset($user->{$field['name']}) ? $user->{$field['name']} : $defaultCountry),
-                    $defaultCountry,
-                    $field['name'],
-                    'form-control chzn-select'
-                );
-                ?>
-            </div>
-            <?php
+?>
+<div class="form-group<?php echo form_error($field['name']) ? ' error' : ''; ?>">
+    <label for="<?php echo $field['name']; ?>"><?php echo $field['label']; ?></label>
+        <?php
+        echo form_checkbox(
+            $field['form_detail']['settings'],
+            $field['form_detail']['value'],
+            $field['form_detail']['value'] == set_value(
+                $field['name'],
+                isset($user->{$field['name']}) ? $user->{$field['name']} : ''
+            )
+        );
+        ?>
+</div>
+<?php
         elseif ($field['form_detail']['type'] == 'state_select'
             && is_callable('state_select')
         ) :
             $stateFieldId = $field['name'];
             $stateValue = isset($user->{$field['name']}) ? $user->{$field['name']} : $defaultState;
-            ?>
-            <div class="form-group<?php echo form_error($field['name']) ? ' has-error' : ''; ?>">
-                <label for="<?php echo $field['name']; ?>"><?php echo lang('user_meta_state'); ?></label>
-                <?php
-                echo state_select(
-                    set_value($field['name'], $stateValue),
-                    $defaultState,
-                    $defaultCountry,
-                    $field['name'],
-                    'form-control chzn-select'
-                );
-                ?>
-            </div>
-            <?php
+?>
+<div class="form-group<?php echo form_error($field['name']) ? ' error' : ''; ?>">
+    <label for="<?php echo $field['name']; ?>"><?php echo lang('user_meta_state'); ?></label>
+        <?php
+        echo state_select(
+            set_value($field['name'], $stateValue),
+            $defaultState,
+            $defaultCountry,
+            $field['name'],
+            'chzn-select '.$controlClass
+        );
+        ?>
+</div>
+<?php
+        elseif ($field['form_detail']['type'] == 'country_select'
+            && is_callable('country_select')
+        ) :
+            $countryFieldId = $field['name'];
+            $countryValue = isset($user->{$field['name']}) ? $user->{$field['name']} : $defaultCountry;
+?>
+<div class="form-group<?php echo form_error($field['name']) ? ' error' : ''; ?>">
+    <label for="<?php echo $field['name']; ?>"><?php echo lang('user_meta_country'); ?></label>
+        <?php
+        echo country_select(
+            set_value($field['name'], isset($user->{$field['name']}) ? $user->{$field['name']} : $defaultCountry),
+            $defaultCountry,
+            $field['name'],
+            'chzn-select '.$controlClass
+        );
+        ?>
+</div>
+<?php
         else :
             $form_method = "form_{$field['form_detail']['type']}";
             if (is_callable($form_method)) {
@@ -101,15 +95,15 @@ if (!empty($meta_fields)) :
             }
         endif;
     endforeach;
-    if (!empty($countryFieldId) && !empty($stateFieldId)) {
+    if (! empty($countryFieldId) && ! empty($stateFieldId)) {
         Assets::add_js(
             $this->load->view(
                 'country_state_js',
                 array(
-                    'country_name' => $countryFieldId,
+                    'country_name'  => $countryFieldId,
                     'country_value' => $countryValue,
-                    'state_name' => $stateFieldId,
-                    'state_value' => $stateValue,
+                    'state_name'    => $stateFieldId,
+                    'state_value'   => $stateValue,
                 ),
                 true
             ),

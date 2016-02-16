@@ -5,7 +5,7 @@
 <!-- Migration Confirmation -->
 <h2><?php echo lang('migrations_migrate_to'); ?> <?php echo $latest_version; ?>?</h2>
 <?php echo form_open($this->uri->uri_string(), 'class="constrained"'); ?>
-	<labelfor='migration'><?php echo lang('migrations_choose_migration'); ?></label>
+	<label for='migration'><?php echo lang('migrations_choose_migration'); ?></label>
 	<select name="migration" class="form-control" id='migration'>
 		<?php foreach ($migrations as $migration) :?>
 		<option value="<?php echo (int)substr($migration, 0, 3) ?>" <?php echo ((int)substr($migration, 0, 3) == $this->uri->segment(5)) ? 'selected="selected"' : '' ?>><?php echo $migration ?></option>

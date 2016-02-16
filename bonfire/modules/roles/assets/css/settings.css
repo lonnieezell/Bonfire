@@ -20,3 +20,8 @@ th.domain {
 	width: 150px;
 	color: #222;
 }
+/* For the role_form */
+.description.form-group,
+.description.form-group .help-inline {
+    vertical-align: top;
+}

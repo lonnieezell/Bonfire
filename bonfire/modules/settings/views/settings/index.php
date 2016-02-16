@@ -17,9 +17,16 @@ if (validation_errors()) :
 </div>
 <?php endif; ?>
 <style>
+.tab-content.main-settings {
+    padding-bottom: 9px;
+    border-bottom: 1px solid #ddd;
+}
 #name-change-settings input {
-    width: 4em;
+    width: 3em;
     display: inline;
+}
+#password_iterations {
+    width: auto;
 }
 </style>
 <div class="admin-box">

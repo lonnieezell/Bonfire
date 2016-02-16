@@ -363,7 +363,7 @@ class Settings_lib
         $updateData = array();
         $insertData = array();
         foreach ($data as $record) {
-            if (array_key_exists($record[$index], $internalCache)) {
+            if (isset($internalCache[$record[$index]])) {
                 $updateData[] = $record;
             } else {
                 if (! isset($record['module'])) {

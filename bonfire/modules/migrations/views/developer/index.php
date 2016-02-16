@@ -18,7 +18,7 @@
                     </div>
                     <?php if (count($app_migrations)) : ?>
 					<input type="hidden" name="core_only" value="0" />
-					<labelfor='app_migration'><?php echo lang('migrations_choose_migration'); ?></label>
+					<label for='app_migration'><?php echo lang('migrations_choose_migration'); ?></label>
                     <select name="migration" class="form-control" id='app_migration'>
 						<?php foreach ($app_migrations as $migration) :?>
                         <option value="<?php echo (int) substr($migration, 0, 3); ?>" <?php echo ((int) substr($migration, 0, 3) == $this->uri->segment(5)) ? 'selected="selected"' : ''; ?>><?php echo $migration; ?></option>

@@ -12,31 +12,33 @@
         <fieldset>
             <div class="form-group<?php echo form_error('context_name') ? ' has-error' : ''; ?>">
                 <label for="context_name"><?php echo lang('mb_context_name'); ?></label>
-                <input type="text" name="context_name" id="context_name" class="form-control" value="<?php echo settings_item('context_name'); ?>" />
-                <dib class="help-block"><?php
-                    echo form_error('context_name') ? form_error('context_name') . '<br />' : '';
-                    echo lang('mb_context_name_help');
-                ?></dib>
+                    <input type="text" name="context_name" id="context_name" class="form-control" value="<?php echo settings_item('context_name'); ?>" />
+                    <span class="help-block"><?php
+                        echo form_error('context_name') ? form_error('context_name') . '<br />' : '';
+                        echo lang('mb_context_name_help');
+                    ?></span>
             </div>
             <?php if (! empty($roles) && is_array($roles)) : ?>
             <div class="form-group">
                 <label id="roles_label"><?php echo lang('mb_roles_label'); ?></label>
                 <div class="checkbox">
-                <?php foreach ($roles as $role) : ?>
-                <label class="checkbox" for="roles_<?php echo $role->role_id; ?>">
-                    <input type="checkbox" name="roles[]" id="roles_<?php echo $role->role_id; ?>" value="<?php echo $role->role_id; ?>" <?php echo set_checkbox('roles[]', $role->role_id); ?> />
-                    <?php echo $role->role_name; ?>
-                </label>
-                <?php endforeach; ?>
+                    <?php foreach ($roles as $role) : ?>
+                    <label class="checkbox" for="roles_<?php echo $role->role_id; ?>">
+                        <input type="checkbox" name="roles[]" id="roles_<?php echo $role->role_id; ?>" value="<?php echo $role->role_id; ?>" <?php echo set_checkbox('roles[]', $role->role_id); ?> />
+                        <?php echo $role->role_name; ?>
+                    </label>
+                    <?php endforeach; ?>
                 </div>
             </div>
             <?php endif; ?>
             <?php
             /* TODO: Add this in later.
             <div class="form-group">
-                <label class="checkbox" for="migrate">
-                    <input type="checkbox" name="migrate" id="migrate" value="1" <?php echo set_checkbox('migrate', '1'); ?> /> <?php echo lang('mb_context_migrate'); ?>
-                </label>
+                <div class="checkbox">
+                    <label for="migrate">
+                        <input type="checkbox" name="migrate" id="migrate" value="1" <?php echo set_checkbox('migrate', '1'); ?> /> <?php echo lang('mb_context_migrate'); ?>
+                    </label>
+                </div>
             </div>
             */
             ?>

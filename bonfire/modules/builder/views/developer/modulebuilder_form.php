@@ -8,7 +8,6 @@ $validationErrors = validation_errors();
 ?>
 <div class='module-builder'>
     <p class="intro"><?php e(lang('mb_create_note')); ?></p>
-
     <div class="alert alert-info fade in">
         <a class="close" data-dismiss="alert">&times;</a>
         <?php echo lang('mb_form_note'); ?>
@@ -17,42 +16,41 @@ $validationErrors = validation_errors();
     //--------------------------------------------------------------------------
     // Begin Error Messages section
     //--------------------------------------------------------------------------
-    if (!$writable) :
-        ?>
-        <div class="alert alert-danger fade in">
-            <a class="close" data-dismiss="alert">&times;</a>
-
-            <p><?php echo lang('mb_not_writable_note'); ?></p>
-        </div>
-        <?php
+    if (! $writable) :
+    ?>
+    <div class="alert alert-danger fade in">
+        <a class="close" data-dismiss="alert">&times;</a>
+        <p><?php echo lang('mb_not_writable_note'); ?></p>
+    </div>
+    <?php
     endif;
 
     if ($validationErrors) :
-        ?>
-        <div class="alert alert-danger fade in">
-            <a data-dismiss="alert" class="close">&times;</a>
-            <h4 class="alert-heading"><?php echo lang('mb_form_errors'); ?></h4>
-            <?php echo $validationErrors; ?>
-        </div>
-        <?php
+    ?>
+    <div class="alert alert-danger fade in">
+        <a data-dismiss="alert" class="close">&times;</a>
+        <h4 class="alert-heading"><?php echo lang('mb_form_errors'); ?></h4>
+        <?php echo $validationErrors; ?>
+    </div>
+    <?php
     endif;
 
     if ($sessionError):
-        ?>
-        <div class="alert alert-danger fade in">
-            <a data-dismiss="alert" class="close">&times;</a>
-            <?php echo $sessionError; ?>
-        </div>
-        <?php
+    ?>
+    <div class="alert alert-danger fade in">
+        <a data-dismiss="alert" class="close">&times;</a>
+        <?php echo $sessionError; ?>
+    </div>
+    <?php
     endif;
 
     if (isset($error_message)) :
-        ?>
-        <div class="alert alert-danger fade in">
-            <a data-dismiss="alert" class="close">&times;</a>
-            <?php echo $error_message; ?>
-        </div>
-        <?php
+    ?>
+    <div class="alert alert-danger fade in">
+        <a data-dismiss="alert" class="close">&times;</a>
+        <?php echo $error_message; ?>
+    </div>
+    <?php
     endif;
     //--------------------------------------------------------------------------
     // End Error Messages section
@@ -66,333 +64,287 @@ $validationErrors = validation_errors();
         $formSubmitUrl = current_url();
         if ($field_total > 0) {
             $urlSegments = $this->uri->segment_array();
-            if (!is_numeric($urlSegments[$this->uri->total_segments()])) {
+            if (! is_numeric($urlSegments[$this->uri->total_segments()])) {
                 $formSubmitUrl .= "/{$field_total}";
             }
         }
         echo form_open($formSubmitUrl, array('id' => 'module_form', 'class' => ''));
-        //------------------------------------------------------------------
-        // Module Details
-        //------------------------------------------------------------------
+            //------------------------------------------------------------------
+            // Module Details
+            //------------------------------------------------------------------
         ?>
-        <fieldset id="module_details">
-            <legend><?php echo lang('mb_form_mod_details'); ?></legend>
-            <div class="form-group<?php echo form_error('module_name') ? ' has-error' : ''; ?>">
-                <label for="module_name"><?php echo lang('mb_form_mod_name'); ?></label>
-                <input name="module_name" id="module_name" type="text" class="form-control"
-                       value="<?php echo set_value("module_name"); ?>"
-                       placeholder="<?php echo lang('mb_form_mod_name_ph'); ?>"/>
-                <span class="help-block"><?php echo form_error('module_name'); ?></span>
-
-                <div><a href="#" class="mb_show_advanced small"><?php echo lang('mb_form_show_advanced'); ?></a></div>
-            </div>
-            <?php
-            //--------------------------------------------------------------
-            // Module Details - Advanced Options
-            //--------------------------------------------------------------
-            ?>
-            <div class="form-group mb_advanced<?php echo form_error('module_description') ? ' has-error' : ''; ?>">
-                <label for="module_description"><?php echo lang('mb_form_mod_desc'); ?></label>
-                <input name="module_description" id="module_description" class="form-control" type="text"
-                       value="<?php echo set_value("module_description", lang('mb_form_mod_desc_ph')); ?>"
-                       placeholder="<?php echo lang('mb_form_mod_desc_ph'); ?>"/>
-                <span class="help-block"><?php echo form_error('module_description'); ?></span>
-            </div>
-            <div class="form-group mb_advanced">
-                <label id="contexts_label"><?php echo lang('mb_form_contexts'); ?></label>
-
-                <div class="checkbox" aria-labelledby="contexts_label" role="group">
-                    <label for="contexts_public">
-                        <input name="contexts[]" id="contexts_public" type="checkbox" value="public" checked="checked"/>
-                        <?php echo lang('mb_form_public'); ?>
-                    </label>
+            <fieldset id="module_details">
+                <legend><?php echo lang('mb_form_mod_details'); ?></legend>
+                <div class="form-group<?php echo form_error('module_name') ? ' has-error' : ''; ?>">
+                    <label for="module_name"><?php echo lang('mb_form_mod_name'); ?></label>
+                    <input name="module_name" id="module_name" type="text" class="form-control" value="<?php echo set_value("module_name"); ?>" placeholder="<?php echo lang('mb_form_mod_name_ph'); ?>"/>
+                    <span class="help-block"><?php echo form_error('module_name'); ?></span>
+                    <div><a href="#" class="mb_show_advanced small"><?php echo lang('mb_form_show_advanced'); ?></a></div>
                 </div>
                 <?php
-                // Build the checkboxes for each available Context
-                foreach ($availableContexts as $context) :
-                    ?>
+                //--------------------------------------------------------------
+                // Module Details - Advanced Options
+                //--------------------------------------------------------------
+                ?>
+                <div class="form-group mb_advanced<?php echo form_error('module_description') ? ' has-error' : ''; ?>">
+                    <label for="module_description"><?php echo lang('mb_form_mod_desc'); ?></label>
+                    <input name="module_description" id="module_description" class="form-control" type="text" value="<?php echo set_value("module_description", lang('mb_form_mod_desc_ph')); ?>" placeholder="<?php echo lang('mb_form_mod_desc_ph'); ?>"/>
+                    <span class="help-block"><?php echo form_error('module_description'); ?></span>
+                </div>
+                <div class="form-group mb_advanced">
+                    <label id="contexts_label"><?php echo lang('mb_form_contexts'); ?></label>
                     <div class="checkbox" aria-labelledby="contexts_label" role="group">
-                        <label for="contexts_<?php echo $context; ?>">
-                            <input name="contexts[]" id="contexts_<?php echo $context; ?>" type="checkbox"
-                                   value="<?php echo $context; ?>" checked="checked"/>
-                            <?php echo ucwords($context); ?>
+                        <label for="contexts_public">
+                            <input name="contexts[]" id="contexts_public" type="checkbox" value="public" checked="checked"/>
+                            <?php echo lang('mb_form_public'); ?>
                         </label>
                     </div>
-                <?php endforeach; ?>
-            </div>
-            <div class="form-group mb_advanced<?php echo form_error('form_action') ? ' has-error' : ''; ?>">
-                <?php echo form_error("form_action"); ?>
-                <label id="form_action_label"><?php echo lang('mb_form_actions'); ?></label>
-                <?php
-                // Build the checkboxes for the Controller Actions
-                foreach ($form_action_options as $action => $label) :
-                    ?>
-                    <div class="checkbox" aria-labelledby="form_action_label" role="group">
-                        <label for="form_action_<?php echo $action; ?>">
+                        <?php
+                        // Build the checkboxes for each available Context
+                        foreach ($availableContexts as $context) :
+                        ?>
+                        <div class="checkbox" aria-labelledby="contexts_label" role="group">
+                        <label for="contexts_<?php echo $context; ?>">
+                            <input name="contexts[]" id="contexts_<?php echo $context; ?>" type="checkbox" value="<?php echo $context; ?>" checked="checked" />
+                            <?php echo ucwords($context); ?>
+                        </label>
+                        </div>
+                        <?php endforeach; ?>
+                </div>
+                <div class="form-group mb_advanced<?php echo form_error('form_action') ? ' has-error' : ''; ?>">
+                    <?php echo form_error("form_action"); ?>
+                    <label id="form_action_label"><?php echo lang('mb_form_actions'); ?></label>
+                        <?php
+                        // Build the checkboxes for the Controller Actions
+                        foreach($form_action_options as $action => $label) :
+                        ?>
+                        <div class="checkbox" aria-labelledby="form_action_label" role="group">
+                            <label for="form_action_<?php echo $action; ?>">
                             <?php
                             $data = array(
-                                'name' => 'form_action[]',
-                                'id' => "form_action_{$action}",
-                                'value' => $action,
-                                'checked' => 'checked',
+                                'name'        => 'form_action[]',
+                                'id'          => "form_action_{$action}",
+                                'value'       => $action,
+                                'checked'     => 'checked',
                             );
                             echo form_checkbox($data);
                             echo $label;
                             ?>
                         </label>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-            <div class="form-group mb_advanced">
-                <label for="role_id"><?php echo lang('mb_form_role_id'); ?></label>
-
-                <select name="role_id" id="role_id" class="form-control">
-                    <?php foreach ($roles as $role): ?>
-                        <option
-                            value="<?php echo $role['role_id']; ?>"<?php echo $defaultRoleWithFullAccess == $role['role_id'] ? ' selected="selected"' : ''; ?>><?php e($role['role_name']); ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <?php
-            //--------------------------------------------------------------
-            // End of Module Details - Advanced Options
-            //--------------------------------------------------------------
-            ?>
-            <div class="form-group">
-                <label for='mb_module_db'><?php echo lang('mb_module_db'); ?></label>
-
-                <div id='mb_module_db'>
-                    <div class="radio">
+                        </div>
+                        <?php endforeach;?>
+                </div>
+                <div class="form-group mb_advanced">
+                    <label for="role_id"><?php echo lang('mb_form_role_id'); ?></label>
+                        <select name="role_id" id="role_id" class="form-control">
+                            <?php foreach ($roles as $role): ?>
+                            <option value="<?php echo $role['role_id']; ?>"<?php echo $defaultRoleWithFullAccess == $role['role_id'] ? ' selected="selected"' : ''; ?>><?php e($role['role_name']); ?></option>
+                            <?php endforeach;?>
+                        </select>
+                </div>
+                <?php
+                //--------------------------------------------------------------
+                // End of Module Details - Advanced Options
+                //--------------------------------------------------------------
+                ?>
+                <div class="form-group">
+                    <label for='mb_module_db'><?php echo lang('mb_module_db'); ?></label>
+                    <div id='mb_module_db'>
+                        <div class="radio">
                         <label for="db_no">
-                            <input name="module_db" id="db_no" type="radio"
-                                   value="" <?php echo set_radio('module_db', '', true); ?> class="radio"/>
+                            <input name="module_db" id="db_no" type="radio" value="" <?php echo set_radio('module_db', '', true); ?> class="radio"/>
                             <?php echo lang('mb_form_module_db_no'); ?>
                         </label>
-                    </div>
-                    <div class="radio"><label for="db_create">
-                            <input name="module_db" id="db_create" type="radio"
-                                   value="new" <?php echo set_radio('module_db', 'new'); ?> class="radio"/>
+                        </div>
+                        <div class="radio"><label for="db_create">
+                            <input name="module_db" id="db_create" type="radio" value="new" <?php echo set_radio('module_db', 'new'); ?> class="radio"/>
                             <?php echo lang('mb_form_module_db_create'); ?>
                         </label>
-                    </div>
-                    <div class="radio">
+                        </div>
+                        <div class="radio">
                         <label for="db_exists">
-                            <input name="module_db" id="db_exists" type="radio"
-                                   value="existing" <?php echo set_radio('module_db', 'existing'); ?> class="radio"/>
+                            <input name="module_db" id="db_exists" type="radio" value="existing" <?php echo set_radio('module_db', 'existing'); ?> class="radio"/>
                             <?php echo lang('mb_form_module_db_exists'); ?>
                         </label>
                     </div>
                 </div>
-            </div>
-        </fieldset>
-        <?php
-        //------------------------------------------------------------------
-        // Table Details
-        //------------------------------------------------------------------
-        ?>
-        <fieldset id="db_details">
-            <legend><?php echo lang('mb_form_table_details'); ?></legend>
-            <div class="form-group">
-                <a href="#" class="mb_show_advanced small"><?php echo lang('mb_form_show_advanced'); ?></a>
-            </div>
+            </fieldset>
             <?php
-            //--------------------------------------------------------------
-            // Table Details - Advanced Options
-            //--------------------------------------------------------------
+            //------------------------------------------------------------------
+            // Table Details
+            //------------------------------------------------------------------
             ?>
-            <div class="form-group mb_advanced<?php echo form_error('table_name') ? ' has-error' : ''; ?>">
-                <label for="table_name"><?php echo lang('mb_form_table_name'); ?></label>
-
-                <input name="table_name" id="table_name" type="text" value="<?php echo set_value('table_name'); ?>"
-                       placeholder="<?php echo lang('mb_form_table_name_ph'); ?>" class="form-control"/>
-                <span class="help-block"><?php echo form_error('table_name'); ?></span>
-            </div>
-            <div class="form-group mb_advanced<?php echo form_error('form_error_delimiters') ? ' has-error' : ''; ?>">
-                <label for="form_error_delimiters"><?php echo lang('mb_form_err_delims'); ?></label>
-
-                <input name="form_error_delimiters" id="form_error_delimiters" type="text" class="form-control"
-                       value="<?php echo set_value("form_error_delimiters", "<span class='error'>,</span>"); ?>"/>
-                <span class="help-block"><?php echo form_error('form_error_delimiters'); ?></span>
-            </div>
-            <div class="form-group mb_advanced">
-                <label for="textarea_editor"><?php echo lang('mb_form_text_ed'); ?></label>
-
-                <select name="textarea_editor" id="textarea_editor" class="form-control">
-                    <?php foreach ($textarea_editors as $val => $label): ?>
-                        <option value="<?php echo $val ?>"><?php echo $label ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="form-group mb_advanced">
-                <div class="checkbox">
-                    <label for="use_pagination">
-                        <input type='checkbox' name="use_pagination" id="use_pagination"
-                               value="1" <?php echo set_checkbox('use_pagination', 1); ?> />
-                        <?php echo lang('mb_form_use_pagination'); ?>
-                    </label>
+            <fieldset id="db_details">
+                <legend><?php echo lang('mb_form_table_details'); ?></legend>
+                <div class="form-group">
+                    <a href="#" class="mb_show_advanced small"><?php echo lang('mb_form_show_advanced'); ?></a>
                 </div>
-            </div>
-            <div class="form-group mb_advanced">
-                <div class="checkbox">
-                    <label for="log_user">
-                        <input type='checkbox' name="log_user" id="log_user"
-                               value='1' <?php echo set_checkbox('log_user', 1); ?> />
-                        <?php echo lang('mb_form_log_user'); ?>
-                    </label>
+                <?php
+                //--------------------------------------------------------------
+                // Table Details - Advanced Options
+                //--------------------------------------------------------------
+                ?>
+                <div class="form-group mb_advanced<?php echo form_error('table_name') ? ' has-error' : ''; ?>">
+                    <label for="table_name"><?php echo lang('mb_form_table_name'); ?></label>
+                    <input name="table_name" id="table_name" type="text" value="<?php echo set_value('table_name'); ?>" placeholder="<?php echo lang('mb_form_table_name_ph'); ?>" class="form-control"/>
+                    <span class="help-block"><?php echo form_error('table_name'); ?></span>
                 </div>
-            </div>
-            <div class="form-group mb_advanced">
-                <div class="checkbox">
-                    <label for="use_soft_deletes">
-                        <input type='checkbox' name="use_soft_deletes" id="use_soft_deletes"
-                               value='1' <?php echo set_checkbox('use_soft_deletes', 1); ?> />
-                        <?php echo lang('mb_form_soft_deletes'); ?>
-                    </label>
+                <div class="form-group mb_advanced<?php echo form_error('form_error_delimiters') ? ' has-error' : ''; ?>">
+                    <label for="form_error_delimiters"><?php echo lang('mb_form_err_delims'); ?></label>
+                    <input name="form_error_delimiters" id="form_error_delimiters" type="text" class="form-control" value="<?php echo set_value("form_error_delimiters", "<span class='error'>,</span>"); ?>"/>
+                    <span class="help-block"><?php echo form_error('form_error_delimiters'); ?></span>
                 </div>
-            </div>
-            <div class="form-group mb_advanced<?php echo form_error('soft_delete_field') ? ' has-error' : ''; ?>">
-                <label for="soft_delete_field"><?php echo lang('mb_soft_delete_field'); ?></label>
-
-                <input name="soft_delete_field" id="soft_delete_field" type="text" class="form-control"
-                       value="<?php echo set_value('soft_delete_field', lang('mb_soft_delete_field_ph')); ?>"/>
-                <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
-                <span class="help-block"><?php echo form_error('soft_delete_field'); ?></span>
-            </div>
-            <div class="form-group mb_advanced<?php echo form_error('deleted_by_field') ? ' has-error' : ''; ?>">
-                <label for="deleted_by_field"><?php echo lang('mb_deleted_by_field'); ?></label>
-
-                <input name="deleted_by_field" id="deleted_by_field" type="text" class="form-control"
-                       value="<?php echo set_value('deleted_by_field', lang('mb_deleted_by_field_ph')); ?>"/>
-                <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
-                <span class="help-block"><?php echo form_error('deleted_by_field'); ?></span>
-            </div>
-            <div class="form-group mb_advanced">
-                <div class="checkbox">
-                    <label for="use_created">
-                        <input type='checkbox' name="use_created" id="use_created"
-                               value='1' <?php echo set_checkbox('use_created', 1); ?> />
-                        <?php echo lang('mb_form_use_created'); ?>
-                    </label>
+                <div class="form-group mb_advanced">
+                    <label for="textarea_editor"><?php echo lang('mb_form_text_ed'); ?></label>
+                    <select name="textarea_editor" id="textarea_editor" class="form-control">
+                        <?php foreach ($textarea_editors as $val => $label): ?>
+                            <option value="<?php echo $val ?>"><?php echo $label ?></option>
+                        <?php endforeach; ?>
+                    </select>
                 </div>
-            </div>
-            <div class="form-group mb_advanced<?php echo form_error('created_field') ? ' has-error' : ''; ?>">
-                <label for="created_field"><?php echo lang('mb_form_created_field'); ?></label>
-
-                <input name="created_field" id="created_field" type="text" class="form-control"
-                       value="<?php echo set_value('created_field', lang('mb_form_created_field_ph')); ?>"/>
-                <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
-                <span class="help-block"><?php echo form_error('created_field'); ?></span>
-            </div>
-            <div class="form-group mb_advanced<?php echo form_error('created_by_field') ? ' has-error' : ''; ?>">
-                <label for="created_by_field"><?php echo lang('mb_form_created_by_field'); ?></label>
-
-                <input name="created_by_field" id="created_by_field" type="text" class="form-control"
-                       value="<?php echo set_value('created_by_field', lang('mb_form_created_by_field_ph')); ?>"/>
-                <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
-                <span class="help-block"><?php echo form_error('created_by_field'); ?></span>
-            </div>
-            <div class="form-group mb_advanced">
-                <div class="checkbox">
-                    <label for="use_modified">
-                        <input type='checkbox' name="use_modified" id="use_modified"
-                               value='1' <?php echo set_checkbox('use_modified', 1); ?> />
-                        <?php echo lang('mb_form_use_modified'); ?>
-                    </label>
+                <div class="form-group mb_advanced">
+                    <div class="checkbox">
+                        <label for="use_pagination">
+                            <input type='checkbox' name="use_pagination" id="use_pagination" value="1" <?php echo set_checkbox('use_pagination', 1); ?> />
+                            <?php echo lang('mb_form_use_pagination'); ?>
+                        </label>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group mb_advanced<?php echo form_error('modified_field') ? ' has-error' : ''; ?>">
-                <label for="modified_field"><?php echo lang('mb_form_modified_field'); ?></label>
-
-                <input name="modified_field" id="modified_field" type="text" class="form-control"
-                       value="<?php echo set_value('modified_field', lang('mb_form_modified_field_ph')); ?>"/>
-                <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
-                <span class="help-block"><?php echo form_error('modified_field'); ?></span>
-            </div>
-            <div class="form-group mb_advanced<?php echo form_error('modified_by_field') ? ' has-error' : ''; ?>">
-                <label for="modified_by_field"><?php echo lang('mb_form_modified_by_field'); ?></label>
-
-                <input name="modified_by_field" id="modified_by_field" type="text" class="form-control"
-                       value="<?php echo set_value('modified_by_field', lang('mb_form_modified_by_field_ph')); ?>"/>
-                <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
-                <span class="help-block"><?php echo form_error('modified_by_field'); ?></span>
-            </div>
-            <?php
-            //--------------------------------------------------------------
-            // End of Table Details - Advanced Options
-            //--------------------------------------------------------------
-            ?>
-            <div class="alert alert-info fade in mb_new_table">
-                <a class="close" data-dismiss="alert">&times;</a>
-                <?php echo lang('mb_table_note'); ?>
-            </div>
-            <div class="form-group mb_new_table<?php echo form_error('primary_key_field') ? ' has-error' : ''; ?>">
-                <label for="primary_key_field"><?php echo lang('mb_form_primarykey'); ?></label>
-
-                <input name="primary_key_field" id="primary_key_field" type="text" class="form-control"
-                       value="<?php echo set_value("primary_key_field", (isset($existing_table_fields[0]) && $existing_table_fields[0]['primary_key']) ? $existing_table_fields[0]['name'] : 'id'); ?>"/>
-                <span class="help-block"><?php echo form_error('primary_key_field'); ?></span>
-            </div>
-            <div id="field_numbers" class="form-group">
-                <label><?php echo lang('mb_form_fieldnum'); ?></label>
-
-                <div>
-                    <?php
-                    $field_num_count = count($field_numbers);
-                    $lastFieldNumIndex = $field_num_count - 1;
-                    for ($ndx = 0; $ndx < $field_num_count; $ndx++) :
+                <div class="form-group mb_advanced">
+                    <div class="checkbox">
+                        <label for="log_user">
+                            <input type='checkbox' name="log_user" id="log_user" value='1' <?php echo set_checkbox('log_user', 1); ?> />
+                            <?php echo lang('mb_form_log_user'); ?>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group mb_advanced">
+                    <div class="checkbox">
+                        <label for="use_soft_deletes">
+                            <input type='checkbox' name="use_soft_deletes" id="use_soft_deletes" value='1' <?php echo set_checkbox('use_soft_deletes', 1); ?> />
+                            <?php echo lang('mb_form_soft_deletes'); ?>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group mb_advanced<?php echo form_error('soft_delete_field') ? ' has-error' : ''; ?>">
+                    <label for="soft_delete_field"><?php echo lang('mb_soft_delete_field'); ?></label>
+                    <input name="soft_delete_field" id="soft_delete_field" type="text" class="form-control" value="<?php echo set_value('soft_delete_field', lang('mb_soft_delete_field_ph')); ?>"/>
+                    <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
+                    <span class="help-block"><?php echo form_error('soft_delete_field'); ?></span>
+                </div>
+                <div class="form-group mb_advanced<?php echo form_error('deleted_by_field') ? ' has-error' : ''; ?>">
+                    <label for="deleted_by_field"><?php echo lang('mb_deleted_by_field'); ?></label>
+                    <input name="deleted_by_field" id="deleted_by_field" type="text" class="form-control" value="<?php echo set_value('deleted_by_field', lang('mb_deleted_by_field_ph')); ?>"/>
+                    <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
+                    <span class="help-block"><?php echo form_error('deleted_by_field'); ?></span>
+                </div>
+                <div class="form-group mb_advanced">
+                    <div class="checkbox">
+                        <label for="use_created">
+                            <input type='checkbox' name="use_created" id="use_created" value='1' <?php echo set_checkbox('use_created', 1); ?> />
+                            <?php echo lang('mb_form_use_created'); ?>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group mb_advanced<?php echo form_error('created_field') ? ' has-error' : ''; ?>">
+                    <label for="created_field"><?php echo lang('mb_form_created_field'); ?></label>
+                    <input name="created_field" id="created_field" type="text" class="form-control" value="<?php echo set_value('created_field', lang('mb_form_created_field_ph')); ?>"/>
+                    <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
+                    <span class="help-block"><?php echo form_error('created_field'); ?></span>
+                </div>
+                <div class="form-group mb_advanced<?php echo form_error('created_by_field') ? ' has-error' : ''; ?>">
+                    <label for="created_by_field"><?php echo lang('mb_form_created_by_field'); ?></label>
+                    <input name="created_by_field" id="created_by_field" type="text" class="form-control" value="<?php echo set_value('created_by_field', lang('mb_form_created_by_field_ph')); ?>"/>
+                    <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
+                    <span class="help-block"><?php echo form_error('created_by_field'); ?></span>
+                </div>
+                <div class="form-group mb_advanced">
+                    <div class="checkbox">
+                        <label for="use_modified">
+                            <input type='checkbox' name="use_modified" id="use_modified" value='1' <?php echo set_checkbox('use_modified', 1); ?> />
+                            <?php echo lang('mb_form_use_modified'); ?>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group mb_advanced<?php echo form_error('modified_field') ? ' has-error' : ''; ?>">
+                    <label for="modified_field"><?php echo lang('mb_form_modified_field'); ?></label>
+                    <input name="modified_field" id="modified_field" type="text" class="form-control" value="<?php echo set_value('modified_field', lang('mb_form_modified_field_ph')); ?>"/>
+                    <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
+                    <span class="help-block"><?php echo form_error('modified_field'); ?></span>
+                </div>
+                <div class="form-group mb_advanced<?php echo form_error('modified_by_field') ? ' has-error' : ''; ?>">
+                    <label for="modified_by_field"><?php echo lang('mb_form_modified_by_field'); ?></label>
+                    <input name="modified_by_field" id="modified_by_field" type="text" class="form-control" value="<?php echo set_value('modified_by_field', lang('mb_form_modified_by_field_ph')); ?>"/>
+                    <span class="help-block match-existing-notes"><?php echo lang('mb_form_match_existing'); ?></span>
+                    <span class="help-block"><?php echo form_error('modified_by_field'); ?></span>
+                </div>
+                <?php
+                //--------------------------------------------------------------
+                // End of Table Details - Advanced Options
+                //--------------------------------------------------------------
+                ?>
+                <div class="alert alert-info fade in mb_new_table">
+                    <a class="close" data-dismiss="alert">&times;</a>
+                    <?php echo lang('mb_table_note'); ?>
+                </div>
+                <div class="form-group mb_new_table<?php echo form_error('primary_key_field') ? ' has-error' : ''; ?>">
+                    <label for="primary_key_field"><?php echo lang('mb_form_primarykey'); ?></label>
+                    <input name="primary_key_field" id="primary_key_field" type="text" class="form-control" value="<?php echo set_value("primary_key_field", (isset($existing_table_fields[0]) && $existing_table_fields[0]['primary_key']) ? $existing_table_fields[0]['name'] : 'id'); ?>"/>
+                    <span class="help-block"><?php echo form_error('primary_key_field'); ?></span>
+                </div>
+                <div id="field_numbers" class="form-group">
+                    <label><?php echo lang('mb_form_fieldnum'); ?></label>
+                    <div>
+                        <?php
+                        $field_num_count = count($field_numbers);
+                        $lastFieldNumIndex = $field_num_count - 1;
+                        for ($ndx = 0; $ndx < $field_num_count; $ndx++) :
                         ?>
-                    <a href="<?php echo site_url(SITE_AREA . '/developer/builder/create_module/' . $field_numbers[$ndx]); ?>"<?php echo $field_numbers[$ndx] == $field_total ? ' class="current"' : ''; ?>>
-                        <?php echo $field_numbers[$ndx]; ?>
+                        <a href="<?php echo site_url(SITE_AREA . '/developer/builder/create_module/' . $field_numbers[$ndx]); ?>"<?php echo $field_numbers[$ndx] == $field_total ? ' class="current"' : ''; ?>>
+                            <?php echo $field_numbers[$ndx]; ?>
                         </a><?php echo $ndx < $lastFieldNumIndex ? ' | ' : ''; ?>
-                    <?php endfor; ?>
+                        <?php endfor; ?>
+                    </div>
                 </div>
-            </div>
-        </fieldset>
-        <?php
-        //------------------------------------------------------------------
-        // Field Details
-        //------------------------------------------------------------------
-        ?>
-        <div id="all_fields">
+            </fieldset>
             <?php
-            // Loop to build fields
-            for ($count = 1; $count <= $field_total; $count++) :
-                $viewFieldLabel = "view_field_label{$count}";
-                $viewFieldName = "view_field_name{$count}";
-                $viewFieldType = "view_field_type{$count}";
-                $dbFieldType = "db_field_type{$count}";
-                $dbFieldLength = "db_field_length_value{$count}";
-                $validationLbl = "validation_label{$count}";
-                $validLimitLbl = "validation_limit_label{$count}";
+            //------------------------------------------------------------------
+            // Field Details
+            //------------------------------------------------------------------
+            ?>
+            <div id="all_fields">
+                <?php
+                // Loop to build fields
+                for ($count = 1; $count <= $field_total; $count++) :
+                    $viewFieldLabel = "view_field_label{$count}";
+                    $viewFieldName  = "view_field_name{$count}";
+                    $viewFieldType  = "view_field_type{$count}";
+                    $dbFieldType    = "db_field_type{$count}";
+                    $dbFieldLength  = "db_field_length_value{$count}";
+                    $validationLbl  = "validation_label{$count}";
+                    $validLimitLbl  = "validation_limit_label{$count}";
                 ?>
                 <fieldset id="field<?php echo $count; ?>_details">
                     <legend><?php echo lang('mb_form_field_details') . " {$count}"; ?></legend>
                     <?php if ($count == 1) : ?>
-                        <div class="alert alert-info fade in">
-                            <a class="close" data-dismiss="alert">&times;</a>
-                            <?php echo lang('mb_field_note'); ?>
-                        </div>
+                    <div class="alert alert-info fade in">
+                        <a class="close" data-dismiss="alert">&times;</a>
+                        <?php echo lang('mb_field_note'); ?>
+                    </div>
                     <?php endif; ?>
                     <div class="form-group<?php echo form_error($viewFieldLabel) ? ' has-error' : ''; ?>">
                         <label for="<?php echo $viewFieldLabel; ?>"><?php echo lang('mb_form_label'); ?></label>
 
-                        <input name="<?php echo $viewFieldLabel; ?>" id="<?php echo $viewFieldLabel; ?>" type="text"
-                               value="<?php echo set_value($viewFieldLabel, isset($existing_table_fields[$count]) ? ucwords(str_replace('_', ' ', $existing_table_fields[$count]['name'])) : ''); ?>"
-                               placeholder="<?php echo lang('mb_form_label_ph'); ?>"
-                               class="form-control"/>
+                        <input name="<?php echo $viewFieldLabel; ?>" id="<?php echo $viewFieldLabel; ?>" type="text" value="<?php echo set_value($viewFieldLabel, isset($existing_table_fields[$count]) ? ucwords(str_replace('_', ' ', $existing_table_fields[$count]['name'])) : ''); ?>" placeholder="<?php echo lang('mb_form_label_ph'); ?>" class="form-control"/>
                         <span class="help-block"><?php echo form_error($viewFieldLabel); ?></span>
                     </div>
                     <div class="form-group<?php echo form_error($viewFieldName) ? ' has-error' : ''; ?>">
                         <label for="<?php echo $viewFieldName; ?>"><?php echo lang('mb_form_fieldname'); ?></label>
-
-                        <input name="<?php echo $viewFieldName; ?>" id="<?php echo $viewFieldName; ?>" type="text"
-                               value="<?php echo set_value($viewFieldName, isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['name'] : ''); ?>"
-                               maxlength="30" placeholder="<?php echo lang('mb_form_fieldname_ph'); ?>"
-                               class="form-control"/>
-                        <span class="help-block"><?php
-                            echo form_error($viewFieldName) ? form_error($viewFieldName) . '<br />' : '';
-                            echo lang('mb_form_fieldname_help'); ?>
-                        </span>
+                        <input name="<?php echo $viewFieldName; ?>" id="<?php echo $viewFieldName; ?>" type="text" value="<?php echo set_value($viewFieldName, isset($existing_table_fields[$count]) ? $existing_table_fields[$count]['name'] : ''); ?>" maxlength="30" placeholder="<?php echo lang('mb_form_fieldname_ph'); ?>" class="form-control"/>
+                            <span class="help-block"><?php
+                                echo form_error($viewFieldName) ? form_error($viewFieldName) . '<br />' : '';
+                                echo lang('mb_form_fieldname_help');
+                            ?></span>
                     </div>
                     <?php
                     $default_field_type = 'INPUT';
@@ -411,78 +363,66 @@ $validationErrors = validation_errors();
 
                     $default_max_len = '';
                     if (isset($existing_table_fields[$count])
-                        && !in_array($existing_table_fields[$count]['type'], $textFieldTypes)
-                    ) {
+                        && ! in_array($existing_table_fields[$count]['type'], $textFieldTypes)
+                       ) {
                         $default_max_len = in_array($existing_table_fields[$count]['type'], $listFieldTypes) ? $existing_table_fields[$count]['values'] : $existing_table_fields[$count]['max_length'];
                     }
                     ?>
                     <div class="form-group <?php echo form_error($dbFieldLength) ? ' has-error' : ''; ?>">
                         <label for="<?php echo $dbFieldLength; ?>"><?php echo lang('mb_form_length'); ?></label>
-
-                        <input name="<?php echo $dbFieldLength; ?>" id="<?php echo $dbFieldLength; ?>" type="text"
-                               value="<?php echo set_value($dbFieldLength, $default_max_len); ?>"
-                               placeholder="<?php echo lang('mb_form_length_ph'); ?>"
-                               class="form-control"/>
+                        <input name="<?php echo $dbFieldLength; ?>" id="<?php echo $dbFieldLength; ?>" type="text" value="<?php echo set_value($dbFieldLength, $default_max_len); ?>" placeholder="<?php echo lang('mb_form_length_ph'); ?>" class="form-control"/>
                         <span class="help-block"><?php echo form_error($dbFieldLength); ?></span>
                     </div>
                     <div class="form-group">
                         <label id="<?php echo $validationLbl; ?>"><?php echo lang('mb_form_rules'); ?></label>
-
                         <div aria-labelledby="<?php echo $validationLbl; ?>" role="group">
                             <?php
                             echo form_error("cont_validation_rules{$count}[]");
                             foreach ($validation_rules as $validation_rule) :
                                 $validationRulesRuleCount = "validation_rules_{$validation_rule}{$count}";
                                 $validationRulesCount = "validation_rules{$count}[]";
-                                ?>
-                                <div class="checkbox">
-                                <span class="faded">
+                            ?>
+                            <div class="checkbox">
+                            <span class="faded">
                                 <label for="<?php echo $validationRulesRuleCount; ?>">
-                                    <input name="<?php echo $validationRulesCount; ?>"
-                                           id="<?php echo $validationRulesRuleCount; ?>" type="checkbox"
-                                           value="<?php echo $validation_rule; ?>" <?php echo set_checkbox($validationRulesCount, $validation_rule); ?> />
+                                    <input name="<?php echo $validationRulesCount; ?>" id="<?php echo $validationRulesRuleCount; ?>" type="checkbox" value="<?php echo $validation_rule; ?>" <?php echo set_checkbox($validationRulesCount, $validation_rule); ?> />
                                     <?php echo lang("mb_form_{$validation_rule}"); ?>
                                 </label>
-                                </span>
-                                </div>
+                            </span>
+                            </div>
                             <?php endforeach; ?>
-                            <a class="small mb_show_advanced_rules"
-                               href="#"><em><?php echo lang('mb_form_show_more'); ?></em></a>
+                            <a class="small mb_show_advanced_rules" href="#"><em><?php echo lang('mb_form_show_more'); ?></em></a>
                         </div>
                     </div>
                     <div class="form-group mb_advanced">
                         <label id="<?php echo $validLimitLbl; ?>"><?php echo lang('mb_form_rules_limits'); ?></label>
-
                         <div aria-labelledby="<?php echo $validLimitLbl; ?>" role="group">
                             <?php
                             foreach ($validation_limits as $validation_limit) :
                                 $validationRulesLimitCount = "validation_rules_{$validation_limit}{$count}";
                                 $validationRulesCount = "validation_rules{$count}[]";
-                                ?>
-                                <div class="radio">
-                                <span class="faded">
+                            ?>
+                            <div class="radio">
+                            <span class="faded">
                                 <label for="<?php echo $validationRulesLimitCount; ?>">
-                                    <input name="<?php echo $validationRulesCount; ?>"
-                                           id="<?php echo $validationRulesLimitCount; ?>" type="radio"
-                                           value="<?php echo $validation_limit; ?>" <?php echo set_radio($validationRulesCount, $validation_limit); ?> />
+                                    <input name="<?php echo $validationRulesCount; ?>" id="<?php echo $validationRulesLimitCount; ?>" type="radio" value="<?php echo $validation_limit; ?>" <?php echo set_radio($validationRulesCount, $validation_limit); ?> />
                                     <?php echo lang("mb_form_{$validation_limit}"); ?>
                                 </label>
-                                </span>
-                                </div>
+                            </span>
+                            </div>
                             <?php endforeach; ?>
                         </div>
                     </div>
                 </fieldset>
-            <?php endfor; ?>
-        </div>
-        <!-- /#all_fields -->
-        <fieldset class="form-actions">
-            <?php
-            if ($writable):
-                echo form_submit('build', lang('mb_form_build'), 'class="btn btn-primary"');
-            endif;
-            ?>
-        </fieldset>
+                <?php endfor; ?>
+            </div><!-- /#all_fields -->
+            <fieldset class="form-actions">
+                <?php
+                if ($writable):
+                    echo form_submit('build', lang('mb_form_build'), 'class="btn btn-primary"');
+                endif;
+                ?>
+            </fieldset>
         <?php echo form_close(); ?>
     </div>
 </div>

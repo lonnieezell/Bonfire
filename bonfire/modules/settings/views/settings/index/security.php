@@ -19,7 +19,7 @@
         <div class='help-block'><?php echo form_error('user_activation_method'); ?></div>
     </div>
     <div class="form-group<?php echo form_error('login_type') ? $errorClass : ''; ?>">
-        <labelfor="login_type"><?php echo lang('bf_login_type') ?></label>
+        <label for="login_type"><?php echo lang('bf_login_type') ?></label>
         <select class="form-control" name="login_type" id="login_type">
             <option value="email" <?php echo set_select('auth.login_type', 'email', isset($settings['auth.login_type']) && $settings['auth.login_type'] == 'email'); ?>><?php echo lang('bf_login_type_email'); ?></option>
             <option value="username" <?php echo set_select('auth.login_type', 'username', isset($settings['auth.login_type']) && $settings['auth.login_type'] == 'username'); ?>><?php echo lang('bf_login_type_username'); ?></option>

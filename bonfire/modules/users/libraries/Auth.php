@@ -8,7 +8,7 @@
  * @package   Bonfire
  * @author    Bonfire Dev Team
  * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
- * @license   http://opensource.org/licenses/MIT The MIT License
+ * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com
  * @since     Version 1.0
  * @filesource
@@ -38,25 +38,6 @@ class Auth
      * function when handling any of these values.
      */
     protected $loginDateFormat = 'Y-m-d H:i:s';
-
-    /** @var string The name of the cookie index holding autologin data. */
-    protected $autoLoginIndex = 'autologin';
-
-    /** @var string The separator used in the autologin data. */
-    protected $autoLoginSeparator = '~';
-
-    /** @var string The name of the db table containing user tokens. */
-    protected $cookiesTable = 'user_cookies';
-
-    /** @var string The name of the db table tracking user login attempts. */
-    protected $loginAttemptsTable = 'login_attempts';
-
-    /**
-     * @var bool If true, failed logins will be tracked in activity logs. Controlled
-     * by 'auth.log_failed_login_activity' in application config. Currently, this
-     * only logs occurrences which would increase the login_attempts entry.
-     */
-    protected $logFailedLogins = false;
 
     /** @var boolean Allow use of the "Remember Me" checkbox/cookie. */
     private $allowRemember;
@@ -94,13 +75,6 @@ class Auth
         $this->ci->lang->load('users/users');
         $this->ci->load->model('users/user_model');
         $this->ci->load->library('session');
-        $this->ci->load->library('settings/settings_lib');
-        $this->ci->load->library('Template');
-
-        if ($this->ci->config->item('auth.log_failed_login_activity') === null) {
-            $this->ci->config->load('application');
-        }
-        $this->logFailedLogins = $this->ci->config->item('auth.log_failed_login_activity') ?: false;
 
         // Try to log the user in from session/cookie data.
         $this->autologin();
@@ -133,10 +107,7 @@ class Auth
             Template::set_message(
                 sprintf(
                     lang('us_fields_required'),
-                    lang(
-                        $this->ci->settings_lib->item('auth.login_type') == 'both' ?
-                        'bf_login_type_both' : 'bf_' . $this->ci->settings_lib->item('auth.login_type')
-                    )
+                    $this->ci->settings_lib->item('auth.login_type') == 'both' ? lang('bf_login_type_both') : lang('bf_' . $this->ci->settings_lib->item('auth.login_type'))
                 ),
                 'danger'
             );
@@ -201,7 +172,7 @@ class Auth
             Template::set_message(
                 sprintf(
                     lang('us_account_deleted'),
-                    html_escape($this->ci->settings_lib->item('site.system_email'))
+                    html_escape(settings_item("site.system_email"))
                 ),
                 'danger'
             );
@@ -212,14 +183,14 @@ class Auth
         if (! $this->check_password($password, $user->password_hash)) {
             // Bad password
             Template::set_message(lang('us_bad_email_pass'), 'danger');
-            $this->increase_login_attempts($login, 'us_bad_email_pass');
+                $this->increase_login_attempts($login);
 
             return false;
         }
 
         // Check whether the account has been banned.
         if ($user->banned) {
-            $this->increase_login_attempts($login, 'us_banned_admin_note');
+            $this->increase_login_attempts($login);
             Template::set_message(
                 $user->ban_message ? $user->ban_message : lang('us_banned_msg'),
                 'danger'
@@ -232,9 +203,7 @@ class Auth
             Template::set_message(lang('us_forced_password_reset_note'), 'warning');
 
             // Generate a reset hash to pass the reset_password checks...
-            if (! function_exists('random_string')) {
-                $this->ci->load->helper('string');
-            }
+            $this->ci->load->helper('string');
             $hash = sha1(random_string('alnum', 40) . $user->email);
 
             // Save the hash to the db so it can be confirmed later.
@@ -248,7 +217,7 @@ class Auth
             $this->ci->session->set_userdata('email', $user->email);
 
             // Redirect the user to the reset password page.
-            Template::redirect('users/reset_password');
+            redirect('/users/reset_password');
         }
 
         $this->clear_login_attempts($login);
@@ -261,7 +230,8 @@ class Auth
             $user->email,
             $user->role_id,
             $remember,
-            ''
+            '',
+            $user->username
         );
 
             // Save the login info
@@ -269,15 +239,15 @@ class Auth
             $user->id,
             array(
                 'last_login' => $this->getLoginTimestamp(),
-                'last_ip'    => $this->ip_address,
+                'last_ip'               => $this->ip_address,
             )
         );
 
         // Clear the cached result of user() (and is_logged_in(), user_id(), etc.).
-        // Doesn't fix `$this->current_user` in controller (for this page load)...
-        unset($this->user);
+            // Doesn't fix `$this->current_user` in controller (for this page load)...
+            unset($this->user);
 
-        // Can't pass the array directly to trigger, must use a variable.
+        // Can't pass the array directly to the trigger, must use a variable.
         $trigger_data = array('user_id' => $user->id, 'role_id' => $user->role_id);
         Events::trigger('after_login', $trigger_data);
 
@@ -294,9 +264,9 @@ class Auth
      */
     public function logout()
     {
-        // Can't pass the array directly to trigger, must use a variable.
+        // Can't pass the array directly to the trigger, must use a variable.
         $data = array(
-            'user_id' => $this->user_id(),
+            'user_id'   => $this->user_id(),
             'role_id' => $this->role_id(),
         );
         Events::trigger('before_logout', $data);
@@ -330,7 +300,7 @@ class Auth
         }
 
         // Grab the user account.
-        $user = $this->ci->user_model->find($this->ci->session->userdata('user_id'));
+            $user = $this->ci->user_model->find($this->ci->session->userdata('user_id'));
         if ($user === false) {
             return false;
         }
@@ -343,8 +313,8 @@ class Auth
         }
 
         $this->user = $user;
-        $this->user->id = (int) $this->user->id;
-        $this->user->role_id = (int) $this->user->role_id;
+            $this->user->id = (int) $this->user->id;
+            $this->user->role_id = (int) $this->user->role_id;
 
         return $this->user;
     }
@@ -441,18 +411,19 @@ class Auth
 
         // If $uri is not set, get the previous page from the session.
         if (! $uri) {
-            $uri = $this->ci->session->userdata('previous_page');
+                $uri = $this->ci->session->userdata('previous_page');
 
             // If previous page and current page are the same, but the user no longer
             // has permission, redirect to site URL to prevent an infinite loop.
             if ($uri == current_url()) {
-                $uri = site_url();
+                    $uri = site_url();
             }
         }
 
         // Inform the user of the lack of permission and redirect.
-        Template::set_message(lang('us_no_permission'), 'danger');
-        Template::redirect($uri);
+        $this->ci->load->library('Template');
+        Template::set_message(lang('us_no_permission'), 'warning');
+            Template::redirect($uri);
     }
 
     //--------------------------------------------------------------------------
@@ -469,7 +440,6 @@ class Auth
         if (! $this->is_logged_in()) {
             return false;
         }
-
         return $this->user()->role_id;
     }
 
@@ -558,7 +528,7 @@ class Auth
     {
         // The shortest valid hash phpass can currently return is 20 characters,
         // which would only happen with CRYPT_EXT_DES.
-        $minHashLength = 20;
+        $min_hash_len = 20;
 
         // If $iterations wasn't passed, get it from the settings.
         if (empty($iterations)
@@ -571,10 +541,11 @@ class Auth
         // Load the password hash library and hash the password.
         $hasher   = $this->getPasswordHasher($iterations);
         $password = $hasher->HashPassword($pass);
+
         unset($hasher);
 
         // If the password is shorter than the minimum hash length, something failed.
-        if (strlen($password) < $minHashLength) {
+        if (strlen($password) < $min_hash_len) {
             return false;
         }
 
@@ -628,7 +599,7 @@ class Auth
             $this->ci->db->or_where('login', $login);
         }
 
-        $query = $this->ci->db->get($this->loginAttemptsTable);
+        $query = $this->ci->db->get('login_attempts');
 
         return $query->num_rows();
     }
@@ -646,37 +617,20 @@ class Auth
     {
         $this->ci->db->where(array('ip_address' => $this->ip_address, 'login' => $login))
                      ->or_where('time <', $this->getLoginTimestamp(time() - $expires))
-                     ->delete($this->loginAttemptsTable);
+                     ->delete('login_attempts');
     }
 
     /**
      * Record a login attempt in the database.
      *
      * @param string $login The login id used (typically email or username).
-     * @param string $reason The key to a language line indicating why access was
-     * denied.
      *
      * @return void
      */
-    protected function increase_login_attempts($login, $reason = '')
+    protected function increase_login_attempts($login)
     {
-        if ($this->logFailedLogins) {
-            if (! class_exists('activity_model', false)) {
-                $this->ci->load->model('activities/activity_model');
-            }
-            $this->ci->activity_model->log_activity(
-                0,
-                sprintf(
-                    lang('users_act_invalid_login_attempt'),
-                    $this->ip_address,
-                    $login,
-                    empty($reason) ? '' : lang($reason)
-                ),
-                'users'
-            );
-        }
         $this->ci->db->insert(
-            $this->loginAttemptsTable,
+            'login_attempts',
             array(
                 'ip_address' => $this->ip_address,
                 'login'      => $login,
@@ -741,19 +695,28 @@ class Auth
      * Create the session information for the current user and create an
      * autologin cookie if required.
      *
-     * @param integer $userId   An int with the user's id.
-     * @param string  $username The user's username.
-     * @param string  $hash     The user's password hash. Used to create a new,
-     * unique user token.
-     * @param string  $email    The user's email address.
-     * @param integer $roleId   The user's role_id.
-     * @param boolean $remember Whether to keep the user logged in.
-     * @param string  $oldToken User's db token to test against.
+     * @param integer $user_id       An int with the user's id.
+     * @param string  $username      The user's username.
+     * @param string  $password_hash The user's password hash. Used to create a
+     * new, unique user_token.
+     * @param string  $email         The user's email address.
+     * @param integer $role_id       The user's role_id.
+     * @param boolean $remember      Whether to keep the user logged in.
+     * @param string  $old_token     User's db token to test against.
+     * @param string  $user_name     User's made name for displaying options.
      *
      * @return boolean True/false on success/failure.
      */
-    private function setupSession($userId, $username, $hash, $email, $roleId, $remember = false, $oldToken = null)
-    {
+    private function setupSession(
+        $user_id,
+        $username,
+        $password_hash,
+        $email,
+        $role_id,
+        $remember = false,
+        $old_token = null,
+        $user_name = ''
+    ) {
         // What are we using as login identity?
 
         // If "both", defaults to email, unless we display usernames globally
@@ -763,28 +726,33 @@ class Auth
             $login = $this->ci->settings_lib->item('auth.login_type') == 'username' ? $username : $email;
         }
 
-        // @todo consider taking this out of setupSession().
-        // For backward compatibility, default to username, but if use_usernames
-        // is 0 and login_type is username, use email.
-        $authCustom = $this->ci->settings_lib->item('auth.use_usernames') == 0 &&
-            $this->ci->settings_lib->item('auth.login_type') == 'username' ?
-            $email : $username;
+        // @todo consider taking this out of setupSession()
+        if ($this->ci->settings_lib->item('auth.use_usernames') == 0
+            && $this->ci->settings_lib->item('auth.login_type') == 'username'
+        ) {
+            // If we've a username at identity, and don't want made user name, let's have an email nearby.
+            $us_custom = $email;
+        } else {
+            // For backward compatibility, default to username.
+            $us_custom = $this->ci->settings_lib->item('auth.use_usernames') == 2 ? $user_name : $username;
+        }
 
-        // Save the user's session info.
+        // Save the user's session info
+
         $this->ci->session->set_userdata(
             array(
-                'user_id'     => $userId,
-                'auth_custom' => $authCustom,
-                'user_token'  => sha1($userId . $hash),
+                'user_id'     => $user_id,
+                'auth_custom' => $us_custom,
+                'user_token'  => sha1($user_id . $password_hash),
                 'identity'    => $login,
-                'role_id'     => $roleId,
+                'role_id'     => $role_id,
                 'logged_in'   => true,
             )
         );
 
         // Should we remember the user?
         if ($remember === true) {
-            return $this->createAutologin($userId, $oldToken);
+            return $this->createAutologin($user_id, $old_token);
         }
 
         return true;
@@ -866,29 +834,42 @@ class Auth
      */
     private function autologin()
     {
+        $this->ci->load->library('settings/settings_lib');
         if (! $this->allowRemember()) {
             return;
         }
 
-        $cookie = $this->getAutologinCookie(true);
-        if (is_null($cookie)) {
+        $this->ci->load->helper('cookie');
+        $cookie = get_cookie('autologin', true);
+        if (! $cookie) {
             return;
         }
 
+        // A cookie was retrieved, so split it into user_id and token.
+        list($user_id, $test_token) = explode('~', $cookie);
+
+        // Try to pull a match from the database
+        $this->ci->db->where(array('user_id' => $user_id, 'token' => $test_token));
+
+        $query = $this->ci->db->get('user_cookies');
+        if ($query->num_rows() != 1) {
+            return;
+        }
         // Save logged in status to reduce db access.
         $this->logged_in = true;
 
-        // If the session exists, there's nothing more to do.
         if ($this->ci->session->userdata('user_id')) {
             return;
         }
 
+        // If a session doesn't exist, refresh the autologin token and start the
+        // session.
+
         // Grab the current user info for the session.
         $this->ci->load->model('users/user_model');
         $user = $this->ci->user_model->select(array('id', 'username', 'email', 'password_hash', 'users.role_id'))
-                                     ->find($cookie->userId);
+                                     ->find($user_id);
 
-        // If no user was found, the session can't be created properly.
         if (! $user) {
             return;
         }
@@ -900,7 +881,8 @@ class Auth
             $user->email,
             $user->role_id,
             true,
-            $cookie->token
+            $test_token,
+            $user->username
         );
     }
 
@@ -910,17 +892,54 @@ class Auth
      * http://fishbowl.pastiche.org/2004/01/19/persistent_login_cookie_best_practice/
      *
      * @param integer $user_id   An int representing the user_id.
-     * @param string  $oldToken The previous token that was used to login with.
+     * @param string  $old_token The previous token that was used to login with.
      *
      * @return boolean Whether the autologin was created or not.
      */
-    private function createAutologin($user_id, $oldToken = null)
+    private function createAutologin($user_id, $old_token = null)
     {
         if (! $this->allowRemember()) {
             return false;
         }
 
-        return $this->setAutologinCookie($user_id, $oldToken);
+        // Generate a random string for the token.
+        if (! function_exists('random_string')) {
+            $this->ci->load->helper('string');
+        }
+        $token = random_string('alnum', 128);
+
+        // If an old token was not provided, create a new one.
+        if (empty($old_token)) {
+            // Create a new token
+            $this->ci->db->insert(
+                'user_cookies',
+                array(
+                'user_id'       => $user_id,
+                'token'         => $token,
+                    'created_on' => $this->getLoginTimestamp(),
+                )
+            );
+        } else {
+            // Refresh the token.
+            $this->ci->db->where('user_id', $user_id)
+                         ->where('token', $old_token)
+                         ->set('token', $token)
+                         ->set('created_on', $this->getLoginTimestamp())
+                         ->update('user_cookies');
+        }
+
+        if ($this->ci->db->affected_rows()) {
+            // Create the autologin cookie
+            $this->ci->input->set_cookie(
+                'autologin',
+                $user_id .'~'. $token,
+                $this->ci->settings_lib->item('auth.remember_length')
+            );
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -934,136 +953,27 @@ class Auth
             return;
         }
 
-        $this->deleteAutologinCookie();
-        $this->cleanupCookies();
-    }
-
-    //--------------------------------------------------------------------------
-    // Cookie Methods
-    //--------------------------------------------------------------------------
-
-    /**
-     * Remove old user tokens from the database.
-     *
-     * @return void
-     */
-    private function cleanupCookies()
-    {
-        // Perform a clean up of any autologins older than 2 months.
-        $this->ci->db->where('created_on <', $this->getLoginTimestamp(strtotime('2 months ago')))
-                     ->delete($this->cookiesTable);
-    }
-
-    /**
-     * Delete the autologin data from the user's cookie.
-     *
-     * @param  boolean $removeDbEntry Remove the user's token from the database.
-     *
-     * @return void
-     */
-    private function deleteAutologinCookie($removeDbEntry = true)
-    {
-        if ($removeDbEntry) {
-            // Grab the cookie to determine which row in the table to delete.
-            $cookie = $this->getAutologinCookie(false, false);
-            if (! is_null($cookie)) {
-                // Now delete the cookie from the database.
-                $this->ci->db->where('user_id', $cookie->userId)
-                             ->where('token', $cookie->token)
-                             ->delete($this->cookiesTable);
-            }
-        }
-
-        if (! function_exists('delete_cookie')) {
-            $this->ci->load->helper('cookie');
-        }
-        delete_cookie($this->autoLoginIndex);
-    }
-
-    /**
-     * Get the user ID and token from the cookie.
-     *
-     * @param  boolean $xssClean Pass the data through CI's xss_clean().
-     * @param  boolean $checkDb  Verify that the cookie data matches the database.
-     *
-     * @return object The login cookie (with userId and token properties) or null
-     * if the cookie was not found or did not match the database (when $checkDb
-     * is true).
-     */
-    private function getAutologinCookie($xssClean = null, $checkDb = true)
-    {
+        // Grab the cookie to determine which row in the table to delete.
         if (! function_exists('get_cookie')) {
             $this->ci->load->helper('cookie');
         }
+        $cookie = get_cookie('autologin');
+        if ($cookie) {
+            list($user_id, $token) = explode('~', $cookie);
 
-        $cookie = get_cookie($this->autoLoginIndex, $xssClean);
-        if (! $cookie) {
-            return null;
+            // Now delete the cookie.
+            delete_cookie('autologin');
+
+            // Clean up the database
+            $this->ci->db->where('user_id', $user_id)
+                         ->where('token', $token)
+                         ->delete('user_cookies');
         }
 
-        $loginCookie = new stdClass;
-        list($loginCookie->userId, $loginCookie->token) = explode($this->autoLoginSeparator, $cookie);
+        // Perform a clean up of any autologins older than 2 months.
+        $this->ci->db->where('created_on <', $this->getLoginTimestamp(strtotime('2 months ago')));
 
-        if ($checkDb) {
-            // Try to pull a match for the cookie from the database.
-            $query = $this->ci->db->where(array('user_id' => $loginCookie->userId, 'token' => $loginCookie->token))
-                                  ->get($this->cookiesTable);
-            if ($query->num_rows() != 1) {
-                return null;
-            }
-        }
-
-        return $loginCookie;
-    }
-
-    /**
-     * Set the autologin cookie data.
-     * @param integer $userId   The user's ID.
-     * @param string  $oldToken The user's existing autologin token.
-     *
-     * @return boolean True if the data was set successfully in the cookie and database,
-     * else false.
-     */
-    private function setAutologinCookie($userId, $oldToken = null)
-    {
-        // Generate a random string for the token.
-        if (! function_exists('random_string')) {
-            $this->ci->load->helper('string');
-        }
-        $token = random_string('alnum', 128);
-
-        if (empty($oldToken)) {
-            $this->ci->db->insert(
-                $this->cookiesTable,
-                array(
-                    'user_id'    => $userId,
-                    'token'      => $token,
-                    'created_on' => $this->getLoginTimestamp(),
-                )
-            );
-        } else {
-            $this->ci->db->where('user_id', $userId)
-                         ->where('token', $oldToken)
-                         ->set('token', $token)
-                         ->set('created_on', $this->getLoginTimestamp())
-                         ->update($this->cookiesTable);
-        }
-
-        if ($this->ci->db->affected_rows()) {
-            if (! function_exists('set_cookie')) {
-                $this->ci->load->helper('cookie');
-            }
-
-            set_cookie(
-                $this->autoLoginIndex,
-                "{$userId}{$this->autoLoginSeparator}{$token}",
-                $this->ci->settings_lib->item('auth.remember_length')
-            );
-
-            return true;
-        }
-
-        return false;
+        $this->ci->db->delete('user_cookies');
     }
 
     //--------------------------------------------------------------------------
@@ -1120,5 +1030,38 @@ if (! function_exists('permission_exists')) {
     function permission_exists($permission)
     {
         return get_instance()->auth->permission_exists($permission);
+    }
+}
+
+if (! function_exists('abbrev_name')) {
+    /**
+     * Retrieve first and last name from given string.
+     *
+     * @deprecated since 0.7.2. No replacement is currently planned.
+     *
+     * @param string $name Full name.
+     *
+     * @return string The First and Last name from given parameter.
+     */
+    function abbrev_name($name)
+    {
+        if (is_string($name)) {
+            list($fname, $lname) = explode(' ', $name, 2);
+
+            if (is_null($lname)) { // Meaning only one name was entered...
+                $lastname = ' ';
+            } else {
+                $lname = explode(' ', $lname);
+                $size = sizeof($lname);
+                $lastname = $lname[$size-1]; //
+            }
+
+            return trim("{$fname} {$lastname}");
+        }
+
+        // @todo Consider an optional parameter for picking custom var session.
+        // Making it auth private, and using auth custom var
+
+        return $name;
     }
 }
