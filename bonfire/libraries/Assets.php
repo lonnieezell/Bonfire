@@ -7,7 +7,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2016, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT    The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -163,9 +163,9 @@ class Assets
         log_message('debug', 'Assets library loaded.');
     }
 
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // !STYLESHEET METHODS
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Render links to stylesheets.
@@ -188,9 +188,9 @@ class Assets
      *
      * @param mixed   $style The style(s) for which links will be rendered.
      * @param string  $media The media to assign to the style(s).
-     * @param boolean $bypassInheritance If true, skip check for parent theme styles.
-     * @param boolean $bypassModule If true, do not output the css file named after
-     * the controller, or the module styles.
+     * @param bool   $bypassInheritance If true, skip check for parent theme styles.
+     * @param bool   $bypassModule      If true, do not output the css file named
+     * after the controller, or the module styles.
      *
      * @return string A string containing all requested links.
      */
@@ -207,7 +207,7 @@ class Assets
         if (empty($style)) {
             $styles = self::$styles['css'];
 
-            // Make sure to include a file based on media type if $globals
+            // Make sure to include a file based on media type if $globals.
             if (self::$globals) {
                 $styles[] = array(
                     'file'  => $media,
@@ -347,10 +347,7 @@ class Assets
 
         // Add a string
         if (is_string($style)) {
-            $style = array(
-                'field' => $style,
-                'media' => $media,
-            );
+            $style = array($style);
         }
 
         // Add an array
@@ -1212,8 +1209,7 @@ class Assets
                         }
                     }
                     // ASSET BASE
-                    // If the file hasn't been found, yet, look in the
-                    // 'assets.base_folder'
+                    // If the file hasn't been found, yet, look in self::directories['base']
                     if (! $found) {
                         // Assets/type folder
                         if ($file_array = self::get_file_array($site_path, self::$directories['base'] . "/{$clean_type}/", $file, $type, $media)) {

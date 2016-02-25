@@ -21,6 +21,7 @@
 * #1163/1164: Fix /public/tests.php shows "SimpleTest documentation" instead of "Bonfire Tests".
 * #1174: Clarify the difference between Site Email and System Email, use Site Email as fallback when System Email is not configured.
 * #1209: Deactivate user results in "user status was not changed" message, though user is deactivated.
+* #1216: media CSS file is added for each call to `add_css()` when the first argument is a string.
 
 #### Additional Changes:
 * Separated abstract Migration class from the file containing the Migrations library. The library's constructor now loads the file containing the abstract class via a require_once() call.
