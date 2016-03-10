@@ -429,7 +429,7 @@ class Developer extends Admin_Controller
         $this->form_validation->set_rules("form_action_edit", 'lang:mb_form_action_edit', "trim|is_numeric");
         $this->form_validation->set_rules("form_action_view", 'lang:mb_form_action_view', "trim|is_numeric");
         $this->form_validation->set_rules("form_error_delimiters", 'lang:mb_form_err_delims', "required|trim");
-        $this->form_validation->set_rules("module_description", 'lang:mb_form_mod_desc', "trim|required");
+        $this->form_validation->set_rules("module_description", 'lang:mb_form_mod_desc', "trim|required|addslashes");
         $this->form_validation->set_rules("module_name", 'lang:mb_form_mod_name', "trim|required|callback__modulename_check");
         $this->form_validation->set_rules("role_id", 'lang:mb_form_role_id', "trim|is_numeric");
 
