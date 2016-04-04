@@ -390,11 +390,7 @@ class Assets
 
         // Add a string
         if (is_string($path)) {
-            $path = array(
-                'module' => $module,
-                'file'   => $path,
-                'media'  => $media
-            );
+            $path = array($path);
         }
 
         // Add an array
