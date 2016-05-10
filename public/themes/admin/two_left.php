@@ -1,12 +1,6 @@
 <?php
 
-Assets::add_js(array(
-                    Template::theme_url('js/bootstrap.min.js'),
-                    Template::theme_url('js/jwerty.js')
-               ),
-               'external',
-               true
-);
+Assets::add_js(array('bootstrap.min.js', 'jwerty.js'), 'external', true);
 
 echo theme_view('header');
 
