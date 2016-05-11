@@ -157,7 +157,7 @@ class Base_Controller extends MX_Controller
     protected function set_current_user()
     {
         if (! class_exists('Auth', false)) {
-            return;
+            $this->load->library('users/auth');
         }
 
         // Load the currently logged-in user for convenience.
