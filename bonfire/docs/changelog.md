@@ -1,10 +1,10 @@
 # Change Log
 
-## Under development
+## Released versions
 
 ### 0.7.8
-Upgraded CodeIgniter 2 to 2.2.6 (see the [2.2.6 Upgrade Notes](http://www.codeigniter.com/userguide2/installation/upgrade_226.html))
-Upgraded CodeIgniter 3 to 3.0.3 (see the [3.0.3 Upgrade Notes](http://www.codeigniter.com/user_guide/installation/upgrade_303.html))
+Upgraded CodeIgniter 2 to 2.2.6 (see the [2.2.6 Upgrade Notes](https://codeigniter.com/userguide2/installation/upgrade_226.html))
+Upgraded CodeIgniter 3 to 3.0.6 (see the [3.0.6 Upgrade Notes](https://codeigniter.com/user_guide/installation/upgrade_306.html))
 
 #### New Features:
 
@@ -16,8 +16,6 @@ Upgraded CodeIgniter 3 to 3.0.3 (see the [3.0.3 Upgrade Notes](http://www.codeig
 * Fixed `FOPEN_READ_WRITE_CREATE_DESTRUCTIVE` in constants config.
 
 #### Known Issues:
-
-## Released versions
 
 ### 0.7.7
 * Upgraded CodeIgniter 3 to 3.0.1

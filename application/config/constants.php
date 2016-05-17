@@ -92,7 +92,7 @@ defined('EXIT__AUTO_MAX')      || define('EXIT__AUTO_MAX', 125); // highest auto
 // -----------------------------------------------------------------------------
 // Bonfire-specific Constants
 // -----------------------------------------------------------------------------
-defined('BONFIRE_VERSION') || define('BONFIRE_VERSION', 'v0.7.8-dev');
+defined('BONFIRE_VERSION') || define('BONFIRE_VERSION', 'v0.7.8');
 
 // -----------------------------------------------------------------------------
 // The 'App Area' allows you to specify the base folder used for all of the contexts
