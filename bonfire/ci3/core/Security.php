@@ -6,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2014 - 2015, British Columbia Institute of Technology
+ * Copyright (c) 2014 - 2016, British Columbia Institute of Technology
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,10 +28,10 @@
  *
  * @package	CodeIgniter
  * @author	EllisLab Dev Team
- * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (http://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2015, British Columbia Institute of Technology (http://bcit.ca/)
+ * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
+ * @copyright	Copyright (c) 2014 - 2016, British Columbia Institute of Technology (http://bcit.ca/)
  * @license	http://opensource.org/licenses/MIT	MIT License
- * @link	http://codeigniter.com
+ * @link	https://codeigniter.com
  * @since	Version 1.0.0
  * @filesource
  */
@@ -44,7 +44,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  * @subpackage	Libraries
  * @category	Security
  * @author		EllisLab Dev Team
- * @link		http://codeigniter.com/user_guide/libraries/security.html
+ * @link		https://codeigniter.com/user_guide/libraries/security.html
  */
 class CI_Security {
 
@@ -593,6 +593,22 @@ class CI_Security {
 			return FALSE;
 		}
 
+		if (function_exists('random_bytes'))
+		{
+			try
+			{
+				// The cast is required to avoid TypeError
+				return random_bytes((int) $length);
+			}
+			catch (Exception $e)
+			{
+				// If random_bytes() can't do the job, we can't either ...
+				// There's no point in using fallbacks.
+				log_message('error', $e->getMessage());
+				return FALSE;
+			}
+		}
+
 		// Unfortunately, none of the following PRNGs is guaranteed to exist ...
 		if (defined('MCRYPT_DEV_URANDOM') && ($output = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM)) !== FALSE)
 		{
@@ -746,7 +762,14 @@ class CI_Security {
 	 */
 	public function strip_image_tags($str)
 	{
-		return preg_replace(array('#<img[\s/]+.*?src\s*=\s*["\'](.+?)["\'].*?\>#', '#<img[\s/]+.*?src\s*=\s*(.+?).*?\>#'), '\\1', $str);
+		return preg_replace(
+			array(
+				'#<img[\s/]+.*?src\s*=\s*(["\'])([^\\1]+?)\\1.*?\>#i',
+				'#<img[\s/]+.*?src\s*=\s*?(([^\s"\'=<>`]+)).*?\>#i'
+			),
+			'\\2',
+			$str
+		);
 	}
 
 	// ----------------------------------------------------------------

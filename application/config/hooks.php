@@ -3,7 +3,7 @@
  * Define "hooks" to extend CI without hacking the core files. Please see the
  * user guide for info:
  *
- * @link http://www.codeigniter.com/user_guide/general/hooks.html
+ * @link https://www.codeigniter.com/user_guide/general/hooks.html
  */
 
 // Store the requested URL, which will sometimes be different from previous URL.
