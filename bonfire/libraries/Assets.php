@@ -186,8 +186,8 @@ class Assets
      * @todo Determine whether a passed filename should be relative to the site
      * root or the $asset_url
      *
-     * @param mixed   $style The style(s) for which links will be rendered.
-     * @param string  $media The media to assign to the style(s).
+     * @param mixed  $style             The style(s) for which links will be rendered.
+     * @param string $media             The media to assign to the style(s).
      * @param bool   $bypassInheritance If true, skip check for parent theme styles.
      * @param bool   $bypassModule      If true, do not output the css file named
      * after the controller, or the module styles.
@@ -911,6 +911,38 @@ class Assets
         return implode($sep, $path);
     }
 
+    /**
+     * Strip the extension from the filename.
+     *
+     * This uses pathinfo() because other methods failed, including strripos(),
+     * substr(), and rtrim().
+     *
+     * @param  string $file The filename, potentially including path and extension.
+     * @param  string $type The file extension to strip, potentially including '.'.
+     *
+     * @return string       The filename without the specified extension.
+     */
+    protected static function stripExtension($file, $type)
+    {
+        // Normalize $type.
+        if (strpos($type, '.') !== 0) {
+            $type = ".{$type}";
+        }
+
+        $filePathInfo = pathinfo($file);
+
+        // If no extension was found or the extension doesn't match $type, do nothing.
+        if (! isset($filePathInfo['extension'])
+            || ".{$filePathInfo['extension']}" != $type
+        ) {
+            return $file;
+        }
+
+        return $filePathInfo['dirname'] != '.'
+            ? self::path($filePathInfo['dirname'], $filePathInfo['filename'])
+            : $filePathInfo['filename'];
+    }
+
     //--------------------------------------------------------------------------
     // !PRIVATE METHODS
     //--------------------------------------------------------------------------
@@ -1008,14 +1040,7 @@ class Assets
 
             // Javascript
             if ($fileType == 'js') {
-                // Using strripos and substr because rtrim was giving some odd
-                // results (for instance, rtrim('tickets.js', '.js');
-                // would return 'ticket')
-                $pos = strripos($app_file, '.js');
-                if ($pos !== false) {
-                    $app_file = substr($app_file, 0, $pos);
-                }
-                $app_file .= '.js';
+                $app_file = self::stripExtension($app_file, '.js') . '.js';
             }
             $files_array[$key] = $app_file;
 
@@ -1129,24 +1154,18 @@ class Assets
 
             $file = (string)$file;
 
-            // Strip out the file type for consistency
-            // Using strripos and substr because rtrim was giving some odd
-            // results (for instance, rtrim('tickets.js', '.js');
-            // would return 'ticket')
-            $pos = strripos($file, $type);
-            if ($pos !== false) {
-                $file = substr($file, 0, $pos);
-            }
-
             // If it contains an external URL, there's nothing more to do
-            if (strpos($file, $http_protocol . ':') !== false   // Absolute URL with current protocol, which should be more likely
-                    || strpos($file, '//') === 0                // Protocol-relative URL
-                    || strpos($file, 'https:') !== false        // We should assume $http_protocol is most likely 'http', so check 'https' next
-                    || strpos($file, 'http:') !== false         // Finally, check 'http' in case $http_protocol is 'https'
-               ) {
+            if (strpos($file, $http_protocol . ':') !== false // Absolute URL with current protocol, which should be more likely
+                || strpos($file, '//') === 0                  // Protocol-relative URL
+                || strpos($file, 'https:') !== false          // We should assume $http_protocol is most likely 'http', so check 'https' next
+                || strpos($file, 'http:') !== false           // Finally, check 'http' in case $http_protocol is 'https'
+            ) {
                 $new_files[] = empty($media) ? $file : array('file' => $file, 'media' => $media);
                 continue;
             }
+
+            // Strip out the file type for consistency
+            $file = self::stripExtension($file, $type);
 
             $found = false;
 
@@ -1247,8 +1266,8 @@ class Assets
                 // If the file was found, add it to the array for output
                 if (! empty($path)) {
                     $file = array(
-                        'file'          => '',
-                        'server_path'   => $path
+                        'file'        => '',
+                        'server_path' => $path
                     );
                     if (isset($media)) {
                         $file['media'] = $media;
@@ -1257,7 +1276,7 @@ class Assets
                     $new_files[] = $file;
                 }
             }
-        } //end foreach
+        }
 
         return $new_files;
     }
