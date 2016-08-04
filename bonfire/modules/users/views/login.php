@@ -23,7 +23,7 @@
 
 	<?php echo form_open(LOGIN_URL, array('autocomplete' => 'off')); ?>
 
-		<div class="control-group <?php echo iif( form_error('login') , 'error') ;?>">
+		<div class="control-group <?php echo if( form_error('login') , 'error') ;?>">
 			<div class="controls">
 				<input style="width: 95%" type="text" name="login" id="login_value" value="<?php echo set_value('login'); ?>" tabindex="1" placeholder="<?php echo $this->settings_lib->item('auth.login_type') == 'both' ? lang('bf_username') .'/'. lang('bf_email') : ucwords($this->settings_lib->item('auth.login_type')) ?>" />
 			</div>
