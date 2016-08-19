@@ -613,12 +613,13 @@ class Assets
      * since the module directories are not normally in a location accessible to
      * the browser.
      *
-     * @param boolean $list If true, will echo out the script name enclosed in quotes.
+     * @param boolean $list   If true, will echo out the script name enclosed in quotes.
      * Convenient for using with third-party js loaders.
+     * @param boolean $cached If false, will append the ?_dt=timestamp GET param to js files url.
      *
      * @return string A string with the link(s) to the script files.
      */
-    public static function module_js($list = false)
+    public static function module_js($list = false, $cached = false)
     {
         if (empty(self::$scripts['module'])
             || ! is_array(self::$scripts['module'])
@@ -631,7 +632,7 @@ class Assets
 
         // Mod Scripts are always combined. This allows the working files to be
         // out of the web root, but still provides a link to the assets.
-        $src = self::combine_js($scripts, 'module') . '?_dt=' . time();
+        $src = self::combine_js($scripts, 'module') . ( $cached ? '' : '?_dt=' . time() );
 
         if ($list) {
             return '"' . $src . '"';
