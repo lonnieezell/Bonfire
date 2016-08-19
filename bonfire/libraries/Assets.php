@@ -535,10 +535,11 @@ class Assets
      * adding files. Set to false to prevent the addition of the extension.
      * @param boolean $bypassGlobals If true, do not include global scripts (global.js)
      * for this call.
+     * @param boolean $bypassInheritance If true, skip check for parent theme scripts.
      *
      * @return string The list of scripts, formatted according to $list.
      */
-    public static function external_js($extJs = null, $list = false, $addExtension = true, $bypassGlobals = false)
+    public static function external_js($extJs = null, $list = false, $addExtension = true, $bypassGlobals = false, $bypassInheritance = false)
     {
         $return = '';
         $scripts = array();
@@ -563,7 +564,7 @@ class Assets
         $scripts[] = self::$ci->router->class;
 
         // Prep scripts array with only files that can actually be found.
-        $scripts = self::find_files($scripts, 'js');
+        $scripts = self::find_files($scripts, 'js', $bypassInheritance);
 
         // Either combine the files into one...
         if (! $renderSingleScript
