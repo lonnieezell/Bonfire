@@ -167,19 +167,19 @@ $lang['bf_context_developer']   = 'Desarrollo';
 //--------------------------------------------------------------------
 // Activities
 //--------------------------------------------------------------------
-$lang['bf_act_settings_saved']  = 'App settings saved from';
+$lang['bf_act_settings_saved']  = 'Configuración de la aplicación grabada desde';
 $lang['bf_unauthorized_attempt']= 'intentó sin éxito acceder a una página que requiere el siguiente permiso "% s" desde ';
 
 $lang['bf_keyboard_shortcuts']      = 'Atajos de teclado disponibles:';
 $lang['bf_keyboard_shortcuts_none'] = 'No hay atajos de teclado asignados.';
-$lang['bf_keyboard_shortcuts_edit'] = 'Update the keyboard shortcuts';
+$lang['bf_keyboard_shortcuts_edit'] = 'Actualizar atajos de teclado';
 
 //--------------------------------------------------------------------
 // Common
 //--------------------------------------------------------------------
 $lang['bf_question_mark']         = '?';
 $lang['bf_language_direction']  = 'ltr';
-$lang['log_intro']              = 'These are your log messages';
+$lang['log_intro']              = 'Estos son los mensajes de registro';
 
 //--------------------------------------------------------------------
 // Login
@@ -219,13 +219,13 @@ $lang['bf_activate_admin']          = 'Administrador';
 $lang['bf_activate']                = 'Activado';
 $lang['bf_activate_resend']         = 'Reenviar activación';
 
-$lang['bf_reg_complete_error']      = 'An error occurred completing your registration. Please try again or contact the site administrator for help.';
-$lang['bf_reg_activate_email']      = 'An email containing your activation code has been sent to [EMAIL].';
-$lang['bf_reg_activate_admin']      = 'You will be notified when the site administrator has approved your membership.';
-$lang['bf_reg_activate_none']       = 'Please login to begin using the site.';
-$lang['bf_user_not_active']         = 'User account is not active.';
-$lang['bf_login_activate_title']    = 'Need to activate your account?';
-$lang['bf_login_activate_email']    = '<b>Have an activation code to enter to activate your membership?</b> Enter it on the [ACCOUNT_ACTIVATE_URL] page.<br /><br />    <b>Need your code again?</b> Request it again on the [ACTIVATE_RESEND_URL] page.';
+$lang['bf_reg_complete_error']      = 'Se produjo un error al completar su registro. Inténtelo de nuevo o póngase en contacto con el administrador del sitio para ayuda.';
+$lang['bf_reg_activate_email']      = 'Un correo electrónico que contiene el código de activación ha sido enviado a [EMAIL].';
+$lang['bf_reg_activate_admin']      = 'Se le notificará cuando el administrador del sitio ha aprobado su membresía.';
+$lang['bf_reg_activate_none']       = 'Entra en la cuenta para comenzar a usar el sitio.';
+$lang['bf_user_not_active']         = 'Cuenta de usuario no activada.';
+$lang['bf_login_activate_title']    = 'Necesitas activar su cuenta?';
+$lang['bf_login_activate_email']    = '<b>Tienes un código de activación para entrar y activar su membresía?</b> Introducirlo en la página de [ACCOUNT_ACTIVATE_URL].<br /><br />    <b>Necesitas el codigo de nuevo?</b> Solicitar de nuevo en la página de [ACTIVATE_RESEND_URL].';
 
 //--------------------------------------------------------------------
 // Migrations lib
