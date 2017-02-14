@@ -22,17 +22,17 @@ class Migration_Password_strength_settings extends Migration
 		array(
 			'name'		=> 'auth.password_force_numbers',
 			'module'	=> 'core',
-			'value'		=> '0',
+			'value'		=> '1',
 		),
 		array(
 			'name'		=> 'auth.password_force_symbols',
 			'module'	=> 'core',
-			'value'		=> '0',
+			'value'		=> '1',
 		),
 		array(
 			'name'		=> 'auth.password_force_mixed_case',
 			'module'	=> 'core',
-			'value'		=> '0',
+			'value'		=> '1',
 		),
 	);
 
