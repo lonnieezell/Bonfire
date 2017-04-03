@@ -74,7 +74,7 @@ if (isset($shortcut_data) && is_array($shortcut_data['shortcut_keys'])) {
                     <!-- User Menu -->
                     <div class="nav pull-right" id="user-menu">
                         <div class="btn-group">
-                            <a href="<?php echo site_url(SITE_AREA . '/settings/users/edit'); ?>" id="tb_email" class="btn dark" title="<?php echo lang('bf_user_settings'); ?>">
+                            <a href="<?php echo site_url('users/profile'); ?>" id="tb_email" class="btn dark" title="<?php echo lang('bf_user_settings'); ?>">
                                 <?php
                                 $userDisplayName = isset($current_user->display_name) && ! empty($current_user->display_name) ? $current_user->display_name : ($this->settings_lib->item('auth.use_usernames') ? $current_user->username : $current_user->email);
                                 echo $userDisplayName;

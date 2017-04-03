@@ -22,7 +22,15 @@ class Migration_Update_ci3_sessions extends Migration
      */
     public function up()
     {
-        $this->db->query("ALTER TABLE ci3_sessions CHANGE id id varchar(128) NOT NULL;");
+		$fields = array(
+			'id' => array(
+				'type'		  => 'varchar',
+				'constraint'	=> 128,
+				'null'		  => false,
+			)
+		);
+
+		$this->dbforge->modify_column('ci3_sessions', $fields);
 
         // For Postgres, use this instead...
         // $this->db->query("ALTER TABLE ci3_sessions ALTER COLUMN id SET DATA TYPE varchar(128);");
