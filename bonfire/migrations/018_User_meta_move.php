@@ -170,7 +170,7 @@ class Migration_User_meta_move extends Migration
 				'add_insert'	=> true,
 			);
 
-			$backup =& $this->dbutil->backup($prefs);
+			$backup = $this->dbutil->backup($prefs);
 
 			$this->load->helper('file');
 			write_file($filename, $backup);

@@ -7,7 +7,7 @@
  *
  * @package   Bonfire
  * @author    Bonfire Dev Team
- * @copyright Copyright (c) 2011 - 2014, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2016, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT    The MIT License
  * @link      http://cibonfire.com
  * @since     Version 1.0
@@ -163,9 +163,9 @@ class Assets
         log_message('debug', 'Assets library loaded.');
     }
 
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
     // !STYLESHEET METHODS
-    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------------
 
     /**
      * Render links to stylesheets.
@@ -186,11 +186,11 @@ class Assets
      * @todo Determine whether a passed filename should be relative to the site
      * root or the $asset_url
      *
-     * @param mixed   $style The style(s) for which links will be rendered.
-     * @param string  $media The media to assign to the style(s).
-     * @param boolean $bypassInheritance If true, skip check for parent theme styles.
-     * @param boolean $bypassModule If true, do not output the css file named after
-     * the controller, or the module styles.
+     * @param mixed  $style             The style(s) for which links will be rendered.
+     * @param string $media             The media to assign to the style(s).
+     * @param bool   $bypassInheritance If true, skip check for parent theme styles.
+     * @param bool   $bypassModule      If true, do not output the css file named
+     * after the controller, or the module styles.
      *
      * @return string A string containing all requested links.
      */
@@ -207,7 +207,7 @@ class Assets
         if (empty($style)) {
             $styles = self::$styles['css'];
 
-            // Make sure to include a file based on media type if $globals
+            // Make sure to include a file based on media type if $globals.
             if (self::$globals) {
                 $styles[] = array(
                     'file'  => $media,
@@ -347,10 +347,7 @@ class Assets
 
         // Add a string
         if (is_string($style)) {
-            $style = array(
-                'field' => $style,
-                'media' => $media,
-            );
+            $style = array($style);
         }
 
         // Add an array
@@ -393,11 +390,7 @@ class Assets
 
         // Add a string
         if (is_string($path)) {
-            $path = array(
-                'module' => $module,
-                'file'   => $path,
-                'media'  => $media
-            );
+            $path = array($path);
         }
 
         // Add an array
@@ -542,10 +535,11 @@ class Assets
      * adding files. Set to false to prevent the addition of the extension.
      * @param boolean $bypassGlobals If true, do not include global scripts (global.js)
      * for this call.
+     * @param boolean $bypassInheritance If true, skip check for parent theme scripts.
      *
      * @return string The list of scripts, formatted according to $list.
      */
-    public static function external_js($extJs = null, $list = false, $addExtension = true, $bypassGlobals = false)
+    public static function external_js($extJs = null, $list = false, $addExtension = true, $bypassGlobals = false, $bypassInheritance = false)
     {
         $return = '';
         $scripts = array();
@@ -570,7 +564,7 @@ class Assets
         $scripts[] = self::$ci->router->class;
 
         // Prep scripts array with only files that can actually be found.
-        $scripts = self::find_files($scripts, 'js');
+        $scripts = self::find_files($scripts, 'js', $bypassInheritance);
 
         // Either combine the files into one...
         if (! $renderSingleScript
@@ -620,12 +614,13 @@ class Assets
      * since the module directories are not normally in a location accessible to
      * the browser.
      *
-     * @param boolean $list If true, will echo out the script name enclosed in quotes.
+     * @param boolean $list   If true, will echo out the script name enclosed in quotes.
      * Convenient for using with third-party js loaders.
+     * @param boolean $cached If false, will append the ?_dt=timestamp GET param to js files url.
      *
      * @return string A string with the link(s) to the script files.
      */
-    public static function module_js($list = false)
+    public static function module_js($list = false, $cached = false)
     {
         if (empty(self::$scripts['module'])
             || ! is_array(self::$scripts['module'])
@@ -638,7 +633,7 @@ class Assets
 
         // Mod Scripts are always combined. This allows the working files to be
         // out of the web root, but still provides a link to the assets.
-        $src = self::combine_js($scripts, 'module') . '?_dt=' . time();
+        $src = self::combine_js($scripts, 'module') . ( $cached ? '' : '?_dt=' . time() );
 
         if ($list) {
             return '"' . $src . '"';
@@ -918,6 +913,38 @@ class Assets
         return implode($sep, $path);
     }
 
+    /**
+     * Strip the extension from the filename.
+     *
+     * This uses pathinfo() because other methods failed, including strripos(),
+     * substr(), and rtrim().
+     *
+     * @param  string $file The filename, potentially including path and extension.
+     * @param  string $type The file extension to strip, potentially including '.'.
+     *
+     * @return string       The filename without the specified extension.
+     */
+    protected static function stripExtension($file, $type)
+    {
+        // Normalize $type.
+        if (strpos($type, '.') !== 0) {
+            $type = ".{$type}";
+        }
+
+        $filePathInfo = pathinfo($file);
+
+        // If no extension was found or the extension doesn't match $type, do nothing.
+        if (! isset($filePathInfo['extension'])
+            || ".{$filePathInfo['extension']}" != $type
+        ) {
+            return $file;
+        }
+
+        return $filePathInfo['dirname'] != '.'
+            ? self::path($filePathInfo['dirname'], $filePathInfo['filename'])
+            : $filePathInfo['filename'];
+    }
+
     //--------------------------------------------------------------------------
     // !PRIVATE METHODS
     //--------------------------------------------------------------------------
@@ -1015,14 +1042,7 @@ class Assets
 
             // Javascript
             if ($fileType == 'js') {
-                // Using strripos and substr because rtrim was giving some odd
-                // results (for instance, rtrim('tickets.js', '.js');
-                // would return 'ticket')
-                $pos = strripos($app_file, '.js');
-                if ($pos !== false) {
-                    $app_file = substr($app_file, 0, $pos);
-                }
-                $app_file .= '.js';
+                $app_file = self::stripExtension($app_file, '.js') . '.js';
             }
             $files_array[$key] = $app_file;
 
@@ -1136,24 +1156,18 @@ class Assets
 
             $file = (string)$file;
 
-            // Strip out the file type for consistency
-            // Using strripos and substr because rtrim was giving some odd
-            // results (for instance, rtrim('tickets.js', '.js');
-            // would return 'ticket')
-            $pos = strripos($file, $type);
-            if ($pos !== false) {
-                $file = substr($file, 0, $pos);
-            }
-
             // If it contains an external URL, there's nothing more to do
-            if (strpos($file, $http_protocol . ':') !== false   // Absolute URL with current protocol, which should be more likely
-                    || strpos($file, '//') === 0                // Protocol-relative URL
-                    || strpos($file, 'https:') !== false        // We should assume $http_protocol is most likely 'http', so check 'https' next
-                    || strpos($file, 'http:') !== false         // Finally, check 'http' in case $http_protocol is 'https'
-               ) {
+            if (strpos($file, $http_protocol . ':') !== false // Absolute URL with current protocol, which should be more likely
+                || strpos($file, '//') === 0                  // Protocol-relative URL
+                || strpos($file, 'https:') !== false          // We should assume $http_protocol is most likely 'http', so check 'https' next
+                || strpos($file, 'http:') !== false           // Finally, check 'http' in case $http_protocol is 'https'
+            ) {
                 $new_files[] = empty($media) ? $file : array('file' => $file, 'media' => $media);
                 continue;
             }
+
+            // Strip out the file type for consistency
+            $file = self::stripExtension($file, $type);
 
             $found = false;
 
@@ -1212,8 +1226,7 @@ class Assets
                         }
                     }
                     // ASSET BASE
-                    // If the file hasn't been found, yet, look in the
-                    // 'assets.base_folder'
+                    // If the file hasn't been found, yet, look in self::directories['base']
                     if (! $found) {
                         // Assets/type folder
                         if ($file_array = self::get_file_array($site_path, self::$directories['base'] . "/{$clean_type}/", $file, $type, $media)) {
@@ -1255,8 +1268,8 @@ class Assets
                 // If the file was found, add it to the array for output
                 if (! empty($path)) {
                     $file = array(
-                        'file'          => '',
-                        'server_path'   => $path
+                        'file'        => '',
+                        'server_path' => $path
                     );
                     if (isset($media)) {
                         $file['media'] = $media;
@@ -1265,7 +1278,7 @@ class Assets
                     $new_files[] = $file;
                 }
             }
-        } //end foreach
+        }
 
         return $new_files;
     }
