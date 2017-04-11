@@ -26,6 +26,8 @@ If you are using multiple environments (production, testing, and development), y
 
 It is possible to set the server's environment by defining a server variable. For example, on an Apache server, you can create a `.conf` file containing the command `SetEnv CI_ENV production` (or add the command to your site's existing `.conf` file), which, when enabled, will tell Bonfire that it is running on the production server, and the configuration (e.g. `error_reporting`) will change accordingly.
 
+Due to changes in CodeIgniter, you will also need to add a value for the `base_url` in `application/config/config.php`. This must match the URI you're trying to access Bonfire from. For example, `http://bonfire.dev`.
+
 
 ## Write Permissions
 
