@@ -43,6 +43,7 @@ class Users extends Front_Controller
         $this->load->model('users/user_model');
 
         $this->load->library('users/auth');
+        $this->set_current_user();
 
         $this->lang->load('users');
         $this->siteSettings = $this->settings_lib->find_all();
