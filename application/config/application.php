@@ -1,6 +1,4 @@
 <?php defined('BASEPATH') || exit('No direct script access allowed');
-
-$config['bonfire.installed'] = "1";
 /**
  * Bonfire
  *
