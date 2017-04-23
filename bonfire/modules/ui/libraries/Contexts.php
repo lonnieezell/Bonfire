@@ -39,6 +39,9 @@ class Contexts
     protected static $templateContextMenuExtra       = " data-toggle='dropdown' data-id='{dataId}_menu'";
     protected static $templateContextNavMobileClass  = 'mobile_nav';
 
+    protected static $templateDivider = "<li class='divider'></li>";
+    protected static $templateNavHeader = "<li class='nav-header'>{nav_header}</li>";
+
     /** @var string The class name to attach to the outer ul tag. */
     protected static $outer_class = 'nav';
 
@@ -326,6 +329,8 @@ class Contexts
                     'menus'        => isset($mod_config['menus']) ? $mod_config['menus'] : false,
                     'title'        => isset($mod_config['description']) ? $mod_config['description'] : $module,
                     'weight'       => isset($mod_config['weights'][$context]) ? $mod_config['weights'][$context] : 0,
+                    'divider'      => isset($mod_config['has_divider']) ? $mod_config['has_divider'] : false,
+                    'nav_header'   => isset($mod_config['nav_header']) ? $mod_config['nav_header'] : '',
                 );
 
                 // This is outside the array because the else portion uses the
@@ -365,6 +370,8 @@ class Contexts
                     'menu_topic'   => $menu_topic,
                     'menu_view'    => $config['menus'] && isset($config['menus'][$context]) ?
                         $config['menus'][$context] : '',
+                    'divider'      => $config['divider'],
+                    'nav_header'   => $config['nav_header'],
                 );
             }
         }
@@ -524,7 +531,9 @@ class Contexts
                         $vals['title'],
                         $vals['display_name'],
                         $context,
-                        $vals['menu_view']
+                        $vals['menu_view'],
+                        $vals['divider'],
+                        $vals['nav_header']
                     );
                 }
             } else {
@@ -539,7 +548,9 @@ class Contexts
                             $vals['title'],
                             $vals['display_name'],
                             $context,
-                            $vals['menu_view']
+                            $vals['menu_view'],
+                            $vals['divider'],
+                            $vals['nav_header']
                         );
                     } else {
                         // Otherwise, echo out the sub-menu only. To maintain backwards
@@ -595,7 +606,7 @@ class Contexts
      *
      * @return string The HTML necessary for a single item and its sub-menus.
      */
-    private static function buildItem($module, $title, $display_name, $context, $menu_view = '')
+    private static function buildItem($module, $title, $display_name, $context, $menu_view = '', $divider = false, $nav_header = '')
     {
         // Handle localization of the display name, if needed.
         if (strpos($display_name, 'lang:') === 0) {
@@ -603,8 +614,19 @@ class Contexts
         }
         $displayName = ucwords(str_replace('_', '', $display_name));
 
+        // Add lang for module description menu
+        if (strpos($title, 'lang:') === 0) {
+            $title = lang(str_replace('lang:', '', $title));
+        }
+
+        // Add support for divider and nav-header
+        if (strpos($nav_header, 'lang:') === 0) {
+            $nav_header = lang(str_replace('lang:', '', $nav_header));
+	
+        }
+
         if (empty($menu_view)) {
-            return str_replace(
+            $ret = str_replace(
                 array('{extra}', '{url}', '{title}', '{display}'),
                 array(
                     $module == self::$ci->uri->segment(3) ? 'class="active" ' : '',
@@ -614,10 +636,13 @@ class Contexts
                 ),
                 self::$templateMenu
             );
+            if (! empty($nav_header)) $ret = str_replace('{nav_header}', $nav_header, self::$templateNavHeader) . $ret;
+            if ($divider) $ret = self::$templateDivider . $ret;
+            return $ret;
         }
 
         // Sub Menus?. Only works if it's a valid view…
-        return str_replace(
+        $ret = str_replace(
             array('{submenu_class}', '{url}', '{display}', '{child_class}', '{view}'),
             array(
                 self::$submenu_class,
@@ -632,6 +657,9 @@ class Contexts
             ),
             self::$templateSubMenu
         );
+        if (! empty($nav_header)) $ret = str_replace('{nav_header}', $nav_header, self::$templateNavHeader) . $ret;
+        if ($divider) $ret = self::$templateDivider . $ret;
+        return $ret;
     }
 
     /**

@@ -2076,6 +2076,17 @@ class CI_Email {
 			$this->_send_command('hello');
 			$this->_send_command('starttls');
 
+			//bob: fix domain is not verify when send by SMTP with TLS
+			$contextOptions = array(
+				'ssl' => array(
+					'verify_peer' => false,
+					'verify_peer_name' => false,
+					'allow_self_signed' => true,
+				),
+			);
+			stream_context_set_option($this->_smtp_connect, $contextOptions );
+			//eob: fix domain is not verify when send by SMTP with TLS
+
 			$crypto = stream_socket_enable_crypto($this->_smtp_connect, TRUE, STREAM_CRYPTO_METHOD_TLS_CLIENT);
 
 			if ($crypto !== TRUE)
