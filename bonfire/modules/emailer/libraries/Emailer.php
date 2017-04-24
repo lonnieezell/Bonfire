@@ -219,6 +219,7 @@ class Emailer
         );
         $this->ci->email->clear(true);
         $this->ci->email->set_newline("\r\n");
+        $this->ci->email->set_crlf("\r\n");
         $this->ci->email->to($to);
         $this->ci->email->from($from, settings_item('site.title'));
         $this->ci->email->subject($subject);
@@ -306,6 +307,7 @@ class Emailer
             $this->ci->email->initialize($config_settings);
             $this->ci->email->clear(true);
             $this->ci->email->set_newline("\r\n");
+            $this->ci->email->set_crlf("\r\n");
             $this->ci->email->to($email->to_email);
             $this->ci->email->from($senderEmail, $siteTitle);
             $this->ci->email->subject($email->subject);
