@@ -155,13 +155,13 @@ class Developer extends Admin_Controller
         $output = preg_replace('/<h(1|2)\s*(class="p")?/i', "\n<h\\1", $output);
 
         $output = preg_replace(
-            "/<table class=\"{$tableClass}\">(\s+)<tr><td>(\s+)<h1>PHP Version(.*?)<\/h1>(\s+)<\/td><\/tr>(\s+)<\/table><br \/>/is",
+            "/<table class=\"{$tableClass}\">(\s+)<tr><td>(\s+)<h1>PHP Version(.*?)<\/h1>(\s+)<\/td><\/tr>(\s+)<\/table>/is",
             "<div class='tab-pane active' id='sysinfoVersion'><h3>PHP Version:\\3</h3>",
             $output
         );
 
         $output = preg_replace(
-            "/<table class=\"{$tableClass}\">(\s+)<tr><td>(\s+)This program makes use of the Zend Scripting Language Engine:<br \/>(.*?)<br \/><\/td><\/tr>(\s+)<\/table><br \/>/is",
+            "/<table class=\"{$tableClass}\">(\s+)<tr><td>(\s+)This program makes use of the Zend Scripting Language Engine:<br \/>(.*?)<br \/><\/td><\/tr>(\s+)<\/table>/is",
             "<p>This program makes use of the Zend Scripting Language Engine:<br />\\3</p>",
             $output
         );
