@@ -203,7 +203,30 @@ $view_folder = '';
  * Un-comment the $assign_to_config array below to use this feature
  */
 // $assign_to_config['name_of_config_item'] = 'value of config item';
-
+// Assign to config the browser language
+switch (substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2)){
+    case "fr":
+        $assign_to_config['language'] = 'french';
+        break;
+    case "it":
+        $assign_to_config['language'] = 'italian';
+        break;
+    case "fa":
+        $assign_to_config['language'] = 'persian';
+        break;
+    case "pt":
+        $assign_to_config['language'] = 'portuguese';
+        break;
+    case "ru":
+        $assign_to_config['language'] = 'russian';
+        break;
+    case "es":
+        $assign_to_config['language'] = 'spanish_am';
+        break;
+    default:
+        $assign_to_config['language'] = 'english';
+        break;
+}
 // -----------------------------------------------------------------------------
 // END OF USER CONFIGURABLE SETTINGS. DO NOT EDIT BELOW THIS LINE
 // -----------------------------------------------------------------------------
