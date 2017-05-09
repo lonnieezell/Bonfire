@@ -261,7 +261,23 @@ if (! function_exists('write_config')) {
                 $found = true;
             }
         }
-
+        
+        // Look for in environment
+        if (! $found)  {
+            $checkLocations = array();
+            if (defined('ENVIRONMENT')) {
+                $checkLocations[] = APPPATH . 'config/' . ENVIRONMENT . "/{$file}";
+            }
+            $checkLocations[] = APPPATH . "config/{$file}";
+            foreach ($checkLocations as $location) {
+                if (file_exists($location . '.php')) {
+                    $configFile = $location;
+                    $found = true;
+                    break;
+                }
+            }
+        }
+        
         // Fall back to application directory.
         if (! $found) {
             $configFile = "{$apppath}{$configFile}";
