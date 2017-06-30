@@ -603,6 +603,11 @@ class Contexts
         }
         $displayName = ucwords(str_replace('_', '', $display_name));
 
+        // Add lang for module description menu
+        if (strpos($title, 'lang:') === 0) {
+            $title = lang(str_replace('lang:', '', $title));
+        }
+
         if (empty($menu_view)) {
             return str_replace(
                 array('{extra}', '{url}', '{title}', '{display}'),

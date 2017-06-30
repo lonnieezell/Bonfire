@@ -114,6 +114,7 @@ class Developer extends Admin_Controller
 
             $configs[$module]['version'] = isset($configs[$module]['version']) ? $configs[$module]['version'] : $unsetReplacement;
             $configs[$module]['description'] = isset($configs[$module]['description']) ? $configs[$module]['description'] : $unsetReplacement;
+            if (strpos($configs[$module]['description'], 'lang:') === 0) $configs[$module]['description'] = lang(substr($configs[$module]['description'], 5));
             $configs[$module]['author'] = isset($configs[$module]['author']) ? $configs[$module]['author'] : $unsetReplacement;
         }
 
