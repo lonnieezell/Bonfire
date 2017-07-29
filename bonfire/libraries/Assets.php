@@ -306,6 +306,13 @@ class Assets
         }
         $fileName .= $type == 'module' ? '_mod' : '_combined';
 
+        // Append extra hash to generate different combined filenames for
+        // different $files arrays.
+        // Makes possible to use different css files for different methods/views
+        // within the same module/controller, or even within the same method,
+        // based on arbitrary conditions
+        $fileName = $fileName . '_' . md5(serialize($files));
+
         // Don't add .min to $file_name, because generate_file() will add .min
         // itself. However, it needs to be added to the href attribute below.
         $min = self::$ci->config->item('assets.css_minify') ? '.min' : '';
@@ -708,6 +715,13 @@ class Assets
             $fileName = md5($fileName);
         }
         $fileName .= $scriptType == 'module' ? '_mod' : '_combined';
+
+        // Append extra hash to generate different combined filenames for
+        // different $files arrays.
+        // Makes possible to use different js files for different methods/views
+        // within the same module/controller, or even within the same method,
+        // based on arbitrary conditions
+        $fileName = $fileName . '_' . md5(serialize($files));
 
         // If the file is to be minified, .min must be added to the URL below,
         // but since generate_file() adds .min on its own, it can't be added to
