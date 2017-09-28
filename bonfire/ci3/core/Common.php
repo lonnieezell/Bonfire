@@ -151,7 +151,7 @@ if ( ! function_exists('load_class'))
 		$name = FALSE;
 
 		// Look for the class first in the local application/libraries folder
-        // then in bonfire/libraries folder
+		// then in bonfire/libraries folder
 		// then in the native system/libraries folder
 		foreach (array(APPPATH, BFPATH, BASEPATH) as $path)
 		{
