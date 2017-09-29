@@ -402,13 +402,22 @@ if ( ! is_php('5.4'))
 	$class = ucfirst($RTR->class);
 	$method = $RTR->method;
 
-	if (empty($class) OR ! file_exists(APPPATH.'controllers/'.$RTR->directory.$class.'.php'))
+    if (empty($class) OR (! file_exists(APPPATH.'controllers/'.$RTR->directory.$class.'.php')
+            && ! file_exists(BFPATH.'controllers/'.$RTR->directory.$class.'.php'))
+    )
 	{
 		$e404 = TRUE;
 	}
 	else
 	{
-		require_once(APPPATH.'controllers/'.$RTR->directory.$class.'.php');
+        if (file_exists(APPPATH . 'controllers/' . $RTR->directory . $class . '.php'))
+        {
+            require_once(APPPATH . 'controllers/' . $RTR->directory . $class . '.php');
+        }
+        elseif (file_exists(BFPATH . 'controllers/' . $RTR->directory . $class . '.php'))
+        {
+            require_once(BFPATH . 'controllers/' . $RTR->directory . $class . '.php');
+        }
 
 		if ( ! class_exists($class, FALSE) OR $method[0] === '_' OR method_exists('CI_Controller', $method))
 		{
