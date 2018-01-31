@@ -6,7 +6,7 @@
  * @package   Bonfire\Modules\Builder\Language\Russian
  * @author    Bonfire Dev Team
  * @author    Translator < https://github.com/nkondrashov >
- * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2018, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT The MIT License
  * @link      http://cibonfire.com/docs/builder
 */
