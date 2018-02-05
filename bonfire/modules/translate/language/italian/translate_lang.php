@@ -5,7 +5,7 @@
  *
  * @package   Bonfire\Modules\Translate\Language\Italian
  * @author    Lorenzo Sanzari (ulisse73@quipo.it)
- * @copyright Copyright (c) 2011 - 2015, Bonfire Dev Team
+ * @copyright Copyright (c) 2011 - 2018, Bonfire Dev Team
  * @license   http://opensource.org/licenses/MIT
  * @link      http://cibonfire.com/docs
  */
