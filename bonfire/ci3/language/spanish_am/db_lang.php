@@ -1,4 +1,13 @@
 <?php
+/**
+ * System messages translation for CodeIgniter(tm)
+ *
+ * @author	CodeIgniter community
+ * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license	http://opensource.org/licenses/MIT	MIT License
+ * @link	http://codeigniter.com
+ */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['db_invalid_connection_str'] = 'No se ha podido determinar la configuración de la base de datos basándose en la cadena proporcionada.';
 $lang['db_unable_to_connect'] = 'No se ha podido conectar al servidor de base de datos usando la configuración suministrada.';
