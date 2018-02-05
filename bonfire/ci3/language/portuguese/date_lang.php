@@ -3,7 +3,7 @@
  * System messages translation for CodeIgniter(tm)
  *
  * @author	CodeIgniter community
- * @copyright	Copyright (c) 2014 - 2015, British Columbia Institute of Technology (http://bcit.ca/)
+ * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
  * @license	http://opensource.org/licenses/MIT	MIT License
  * @link	http://codeigniter.com
  */
@@ -64,4 +64,3 @@ $lang['UP12']   = '(UTC +12:00) Fiji, Ilhas Gilbert, Zona de Kamchatka, Nova Zel
 $lang['UP1275'] = '(UTC +12:45) Ilhas Chatham';
 $lang['UP13']   = '(UTC +13:00) Ilhas Fénix, Tonga';
 $lang['UP14']   = '(UTC +14:00) Ilhas da linha';
-

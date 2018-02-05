@@ -1,4 +1,13 @@
 <?php
+/**
+ * System messages translation for CodeIgniter(tm)
+ *
+ * @author	CodeIgniter community
+ * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license	http://opensource.org/licenses/MIT	MIT License
+ * @link	http://codeigniter.com
+ */
+defined('BASEPATH') OR exit('No direct script access allowed');
 
 $lang['ftp_no_connection'] = 'No se pudo localizar una identificación de conexión válida. Por favor, asegúrese de que está conectado antes de realizar cualquier rutina con archivos.';
 $lang['ftp_unable_to_connect'] = 'No se pudo conectar a su servidor FTP con el nombre de host suministrado.';
