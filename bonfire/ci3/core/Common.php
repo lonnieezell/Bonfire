@@ -6,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2014 - 2017, British Columbia Institute of Technology
+ * Copyright (c) 2014 - 2018, British Columbia Institute of Technology
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@
  * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2017, British Columbia Institute of Technology (http://bcit.ca/)
+ * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
  * @license	http://opensource.org/licenses/MIT	MIT License
  * @link	https://codeigniter.com
  * @since	Version 1.0.0
@@ -168,18 +168,18 @@ if ( ! function_exists('load_class'))
 			}
 		}
 
-        // Search in the Bonfire folder first for class extensions.
-        // Note that these classes will have a BF_ prefix, instead of the subclass
-        // prefix (MY_) to allow for graceful extending of child classes in the
-        // application.
-        if (file_exists(BFPATH . $directory . '/BF_' . $class . '.php'))
+    // Search in the Bonfire folder first for class extensions.
+    // Note that these classes will have a BF_ prefix, instead of the subclass
+    // prefix (MY_) to allow for graceful extending of child classes in the
+    // application.
+    if (file_exists(BFPATH . $directory . '/BF_' . $class . '.php'))
+    {
+        $name = 'BF_' . $class;
+        if (class_exists($name, FALSE) === FALSE)
         {
-            $name = 'BF_' . $class;
-            if (class_exists($name, FALSE) === FALSE)
-            {
-                require_once(BFPATH . $directory . '/BF_' . $class . '.php');
-            }
+            require_once(BFPATH . $directory . '/BF_' . $class . '.php');
         }
+    }
 
 		// Is the request a class extension? If so we load it too
 		if (file_exists(APPPATH.$directory.'/'.config_item('subclass_prefix').$class.'.php'))
@@ -420,11 +420,6 @@ if ( ! function_exists('show_error'))
 		if ($status_code < 100)
 		{
 			$exit_status = $status_code + 9; // 9 is EXIT__AUTO_MIN
-			if ($exit_status > 125) // 125 is EXIT__AUTO_MAX
-			{
-				$exit_status = 1; // EXIT_ERROR
-			}
-
 			$status_code = 500;
 		}
 		else
