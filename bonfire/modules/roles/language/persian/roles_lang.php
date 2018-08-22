@@ -20,7 +20,7 @@
  * @package Bonfire\Modules\Roles\Language\Persian
  * @author  Sajjad Servatjoo <sajjad.servatjoo[at]gmail[dot]com>
  * @author  Bonfire Dev Team
- * @link    http://cibonfire.com/docs/bonfire/roles_and_permissions
+ * @link    http://cibonfire.com/docs/developer/roles_and_permissions
  */
 
 $lang['role_intro']         = 'نقش ها به شما امکان می دهند که تعیین کنید کاربران چه کار هایی را میتوانند انجام دهند.';
