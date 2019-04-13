@@ -295,12 +295,13 @@ class BF_Router extends CI_Router
      *
      * @return void
      */
-    public function set_class($class)
-    {
-        $suffix = $this->config->item('controller_suffix');
-        if (strpos($class, $suffix) === false) {
-            $class .= $suffix;
-        }
-        parent::set_class($class);
-    }
+     public function set_class($class)
+     {
+         $suffix = $this->config->item('controller_suffix');
+             if( $suffix && strpos($class, $suffix) === FALSE)
+         {
+             $class .= $suffix;
+         }
+         parent::set_class($class);
+     }
 }
