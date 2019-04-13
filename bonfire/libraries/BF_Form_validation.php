@@ -142,7 +142,7 @@ class BF_Form_validation extends CI_Form_validation
      */
     public function alpha_extra($str)
     {
-        if (preg_match("/^([\.\s-a-z0-9_-])+$/i", $str)) {
+        if (preg_match("/^[a-z0-9]([0-9a-z_-\s])+$/i", $str)) {
             return true;
         }
 
