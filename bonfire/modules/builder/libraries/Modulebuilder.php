@@ -102,6 +102,7 @@ class Modulebuilder
         'portuguese_br',
         'russian',
         'spanish_am',
+        'german',
     );
 
     //--------------------------------------------------------------------------
