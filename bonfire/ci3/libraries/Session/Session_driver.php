@@ -6,7 +6,7 @@
  *
  * This content is released under the MIT License (MIT)
  *
- * Copyright (c) 2014 - 2018, British Columbia Institute of Technology
+ * Copyright (c) 2014 - 2019, British Columbia Institute of Technology
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,8 +29,8 @@
  * @package	CodeIgniter
  * @author	EllisLab Dev Team
  * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
- * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
- * @license	http://opensource.org/licenses/MIT	MIT License
+ * @copyright	Copyright (c) 2014 - 2019, British Columbia Institute of Technology (https://bcit.ca/)
+ * @license	https://opensource.org/licenses/MIT	MIT License
  * @link	https://codeigniter.com
  * @since	Version 3.0.0
  * @filesource
@@ -115,13 +115,13 @@ abstract class CI_Session_driver implements SessionHandlerInterface {
 	/**
 	 * PHP 5.x validate ID
 	 *
-	 * Enforces session.use_strict_mode on PHP 5.x (7+ does it by itself)
+	 * Enforces session.use_strict_mode
 	 *
 	 * @return	void
 	 */
 	public function php5_validate_id()
 	{
-		if (PHP_VERSION_ID < 70000 && isset($_COOKIE[$this->_config['cookie_name']]) && ! $this->validateId($_COOKIE[$this->_config['cookie_name']]))
+		if (isset($_COOKIE[$this->_config['cookie_name']]) && ! $this->validateSessionId($_COOKIE[$this->_config['cookie_name']]))
 		{
 			unset($_COOKIE[$this->_config['cookie_name']]);
 		}
@@ -183,26 +183,5 @@ abstract class CI_Session_driver implements SessionHandlerInterface {
 		}
 
 		return TRUE;
-	}
-
-	// ------------------------------------------------------------------------
-
-	/**
-	 * Fail
-	 *
-	 * Drivers other than the 'files' one don't (need to) use the
-	 * session.save_path INI setting, but that leads to confusing
-	 * error messages emitted by PHP when open() or write() fail,
-	 * as the message contains session.save_path ...
-	 * To work around the problem, the drivers will call this method
-	 * so that the INI is set just in time for the error message to
-	 * be properly generated.
-	 *
-	 * @return	mixed
-	 */
-	protected function _fail()
-	{
-		ini_set('session.save_path', config_item('sess_save_path'));
-		return $this->_failure;
 	}
 }
