@@ -1350,6 +1350,13 @@ class CssRemoveEmptyAtBlocksMinifierFilter extends aCssMinifierFilter
 class CssRemoveCommentsMinifierFilter extends aCssMinifierFilter
 {
     /**
+  	 * Regular expression whitelisting any important comments to preserve.
+  	 *
+  	 * @var string
+  	 */
+  	private $whitelistPattern = '/(^\/\*!|@preserve|copyright|license|author|https?:|www\.)/i';
+
+    /**
      * Implements {@link aCssMinifierFilter::filter()}.
      *
      * @param array $tokens Array of objects of type aCssToken
@@ -1362,8 +1369,11 @@ class CssRemoveCommentsMinifierFilter extends aCssMinifierFilter
         {
             if (get_class($tokens[$i]) === "CssCommentToken")
             {
-                $tokens[$i] = null;
-                $r++;
+              if (!preg_match($this->whitelistPattern, $tokens[$i]->Comment))
+      				{
+      					$tokens[$i] = null;
+      					$r++;
+      				}
             }
         }
         return $r;
