@@ -2,7 +2,7 @@
 /**
  * @package Bonfire\Libraries\CSSMin
  * @link    https://github.com/natxet/CssMin
- * @version 3.0.3
+ * @version 3.0.6
  */
 /**
  * CssMin - A (simple) css minifier with benefits
@@ -470,7 +470,7 @@ class CssWhitesmithsFormatter extends aCssFormatter
             }
             elseif ($class === "CssAtKeyframesStartToken")
             {
-                $r[] = $indent . "@keyframes \"" . $token->Name . "\"";
+                $r[] = $indent . "@keyframes " . $token->Name;
                 $r[] = $this->indent . $indent . "{";
                 $level++;
             }
@@ -498,10 +498,10 @@ class CssWhitesmithsFormatter extends aCssFormatter
                 $r[] = $this->indent . $indent . "{";
                 $level++;
             }
-            elseif ($class == "CssAtFontFaceDeclarationToken"
+            elseif ($class === "CssAtFontFaceDeclarationToken"
                 || $class === "CssAtKeyframesRulesetDeclarationToken"
                 || $class === "CssAtPageDeclarationToken"
-                || $class == "CssAtVariablesDeclarationToken"
+                || $class === "CssAtVariablesDeclarationToken"
                 || $class === "CssRulesetDeclarationToken"
             )
             {
@@ -1350,6 +1350,13 @@ class CssRemoveEmptyAtBlocksMinifierFilter extends aCssMinifierFilter
 class CssRemoveCommentsMinifierFilter extends aCssMinifierFilter
 {
     /**
+  	 * Regular expression whitelisting any important comments to preserve.
+  	 *
+  	 * @var string
+  	 */
+  	private $whitelistPattern = '/(^\/\*!|@preserve|copyright|license|author|https?:|www\.)/i';
+
+    /**
      * Implements {@link aCssMinifierFilter::filter()}.
      *
      * @param array $tokens Array of objects of type aCssToken
@@ -1362,8 +1369,11 @@ class CssRemoveCommentsMinifierFilter extends aCssMinifierFilter
         {
             if (get_class($tokens[$i]) === "CssCommentToken")
             {
-                $tokens[$i] = null;
-                $r++;
+              if (!preg_match($this->whitelistPattern, $tokens[$i]->Comment))
+      				{
+      					$tokens[$i] = null;
+      					$r++;
+      				}
             }
         }
         return $r;
@@ -1657,6 +1667,20 @@ class CssParser
                 }
             }
             $buffer .= $c;
+
+            // Fix case when value of url() contains parentheses, for example: url("data: ... ()")
+      			if ($this->getState() == 'T_URL' && $c == ')') {
+      				$trimmedBuffer = trim($buffer);
+      				if (preg_match('@url\((\s+)?".+@', $trimmedBuffer)
+      					&& !preg_match('@url\((\s+)?".+"\)@', $trimmedBuffer)
+      					|| preg_match('@url\((\s+)?\'.+@', $trimmedBuffer)
+      					&& !preg_match('@url\((\s+)?\'.+\'\)@', $trimmedBuffer)
+      				) {
+      					$p = $c; // Set the parent char
+      					continue;
+      				}
+      			}
+
             // Extended processing only if the current char is a global trigger char
             if (strpos($globalTriggerChars, $c) !== false)
             {
@@ -1845,7 +1869,7 @@ class CssOtbsFormatter extends aCssFormatter
             }
             elseif ($class === "CssAtKeyframesStartToken")
             {
-                $r[] = $indent . "@keyframes \"" . $token->Name . "\" {";
+                $r[] = $indent . "@keyframes " . $token->Name . " {";
                 $level++;
             }
             elseif ($class === "CssAtMediaStartToken")
@@ -2224,8 +2248,9 @@ class CssMin
     {
         // Create the class index for autoloading or including
         $paths = array(dirname(__FILE__));
-        while (list($i, $path) = each($paths))
+        for ($i = 0; $i < count($paths); $i++)
         {
+            $path = $paths[$i];
             $subDirectorys = glob($path . "*", GLOB_MARK | GLOB_ONLYDIR | GLOB_NOSORT);
             if (is_array($subDirectorys))
             {
@@ -2389,7 +2414,7 @@ class CssImportImportsMinifierFilter extends aCssMinifierFilter
                                     $import[$ii]->MediaTypes = $tokens[$i]->MediaTypes;
                                 }
                                 // @import at-rule defineds one or more media types; filter out media types not matching with the  parent @import at-rule
-                                elseif (count($import[$ii]->MediaTypes > 0))
+                                elseif (count($import[$ii]->MediaTypes) > 0)
                                 {
                                     foreach ($import[$ii]->MediaTypes as $index => $mediaType)
                                     {
@@ -4472,7 +4497,7 @@ class CssAtKeyframesStartToken extends aCssAtBlockStartToken
         {
             return "@-moz-keyframes " . $this->Name . " {";
         }
-        return "@" . $this->AtRuleName . " \"" . $this->Name . "\"{";
+        return "@" . $this->AtRuleName . " " . $this->Name . "{";
     }
 }
 
