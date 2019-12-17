@@ -2,7 +2,7 @@
 /**
  * @package Bonfire\Libraries\CSSMin
  * @link    https://github.com/natxet/CssMin
- * @version 3.0.3
+ * @version 3.0.6
  */
 /**
  * CssMin - A (simple) css minifier with benefits
