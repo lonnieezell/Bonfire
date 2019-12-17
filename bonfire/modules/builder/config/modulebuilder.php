@@ -52,6 +52,7 @@ $config['modulebuilder']['languages_available'] = array(
     'portuguese_br',
     'spanish_am',
 	'italian',
+    'german',
 );
 
 // Values below are MySQL database types
