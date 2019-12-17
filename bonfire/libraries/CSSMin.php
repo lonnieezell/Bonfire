@@ -1657,6 +1657,20 @@ class CssParser
                 }
             }
             $buffer .= $c;
+
+            // Fix case when value of url() contains parentheses, for example: url("data: ... ()")
+      			if ($this->getState() == 'T_URL' && $c == ')') {
+      				$trimmedBuffer = trim($buffer);
+      				if (preg_match('@url\((\s+)?".+@', $trimmedBuffer)
+      					&& !preg_match('@url\((\s+)?".+"\)@', $trimmedBuffer)
+      					|| preg_match('@url\((\s+)?\'.+@', $trimmedBuffer)
+      					&& !preg_match('@url\((\s+)?\'.+\'\)@', $trimmedBuffer)
+      				) {
+      					$p = $c; // Set the parent char
+      					continue;
+      				}
+      			}
+
             // Extended processing only if the current char is a global trigger char
             if (strpos($globalTriggerChars, $c) !== false)
             {
